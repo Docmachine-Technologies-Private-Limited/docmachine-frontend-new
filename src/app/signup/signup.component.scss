@@ -1,0 +1,144 @@
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+* {  
+    font-family: 'EuropaNuova-Regular', sans-serif;
+  }
+
+
+.login,
+.image {
+  min-height: 100vh;
+}
+
+.bg-image {
+  background-image: url('../../assets/creative-flat-lay-photo-workspace-desk.jpg');;
+  background-size: cover;
+  background-position: center center;
+}
+
+.display-5 {
+    font-weight: 700;
+    color: white;
+    font-size: 24px;
+}
+
+.btn {
+    background-color: white;
+    color: rgb(99, 99, 99);
+
+}
+
+.bottom-text {
+    font-size: 12px;
+    font-weight: 400;
+    color: #A7A7A7;
+}
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.text-sm {
+    text-decoration: none;
+    color: #9B9B9B !important;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+form {
+    width: 338px !important;
+}
+
+h3 {
+    font-size: 14px;
+    margin-top: 50px;
+    margin-bottom: 30px !important;
+    color: #9B9B9B !important;
+    text-align: center; 
+    border-bottom: 1px solid #9B9B9B; 
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 0.1em;
+    margin-bottom: 20px;
+ } 
+ 
+ h3 span { 
+     padding: 0px 30px 0px 30px;
+     background:rgb(47, 55, 68) 
+ }
+
+ ::placeholder {
+    font-size: 14px;
+    color: #9B9B9B !important;
+  }
+
+ .text-ui {
+    font-size: 16px;
+    font-weight: 700;
+    color: #A7A7A7;
+    margin-bottom: 21px !important;
+    
+ }
+ .bg-dark {
+    background-color: rgb(47, 55, 68) !important;
+    border-radius: 15px;
+ }
+
+ input.email {
+    padding-left: 50px !important;
+    background-image: url('../../assets/ic_mail.png');
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 20px center;
+ }
+
+ input.password {
+    padding-left: 50px !important;
+    background-image: url('../../assets/ic_https.png'),url('../../assets/ic_remove_red_eye.png') !important;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 20px center,95% center;
+ }
+
+//  input.password1 {
+//     // background-image: url('../../assets/ic_remove_red_eye.png');
+//     // background-repeat: no-repeat;
+//     // background-size: 20px 20px;
+//     // background-position: right center;
+//  }
+ 
+
+ input.fullName {
+    padding-left: 50px !important;
+    background-image: url('../../assets/ic_person.png');
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 20px center;
+ }
+
+ input {
+    margin-bottom: 25px;
+ }
+  .reg-sm {
+    height: 40px;
+    font-weight: 700;
+    font-size: 18px;
+    color: #606670;
+  }
+
+  .swg {
+    height: 40px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #4A4A4A;
+    background-image: url('../../assets/google-icon.svg');
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 20px center;
+  }

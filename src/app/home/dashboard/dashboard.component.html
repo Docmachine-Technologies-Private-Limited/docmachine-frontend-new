@@ -1,0 +1,57 @@
+<div class="content-wrap">
+           
+    <main id="content" class="content table-padding" role="main">
+        <button  class="upload-button" [routerLink]="['/home/upload']">Upload New</button>
+        <h3 class="heading">All Documents</h3>
+            <div class="dropdown">
+            Date: <select name="subject" id="subject">
+                <option value="" selected="selected">Today</option>
+                </select>
+            Type: <select name="topic" id="topic">
+                <option value="" selected="selected">All</option>
+                </select>
+            </div>
+        
+        <div class="analytics" style="width: 90%;">
+            <div class="analytics-side">
+                <div class="row">
+                    <div class="col-12 mb-lg padding">
+                        <section class="widget pb-0 box-shadow">
+
+                            <div class="widget-body p-0 support table-wrapper ">
+                                <table class="table table-striped mb-0">
+                                    <thead>
+                                    <tr class="text-muted table-heading">
+                                        <th class="rect"><img src="../../../assets/Rectangle-13.png"></th>
+                                        <th scope="col"><span class=" pl-3">DATE</span></th>
+                                        <th scope="col">SB ID</th>
+                                        <th scope="col">INVOICE NUMBER</th>
+                                        <th scope="col">COMPANY NAME</th>
+                                        <th scope="col">UPLOADED BY</th>
+                                        <th scope="col">AMOUNT</th> 
+                                    </tr>
+                                    </thead>
+                                    <tbody class="text-dark" >
+                                        <tr class="table-row" *ngFor="let data of item">
+                                            <th class="rect"><img src="../../../assets/Rectangle-13.png"></th>
+                                            <th class="pl-4 fw-normal">{{data.sbdate}}</th>
+                                            <td class="sb-no">{{data.sbno}}</td>
+                                            <td>Invoice-01,02</td>
+                                            <td>Random Company</td>
+                                            <td><img class="image" src="../../../assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"><img class="image image2" src="../../../assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"> Lindsey Stroud</td>
+                                            <td>7800</td>
+                                            
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+            
+    </main>
+</div>

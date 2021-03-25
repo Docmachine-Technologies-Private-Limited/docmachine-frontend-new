@@ -1,0 +1,81 @@
+<div class="content-wrap">
+  
+    <main id="content" class="content table-padding" role="main">
+        <h3 class="heading">Upload Documents</h3>
+        <div class="form"  method="POST">
+            <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (sending)="submit($event)"
+            *ngIf="type === 'directive'" [dropzone]="config" class="dropzone dropzone-container" id="dropzone">
+            <p>Drag a document here</p>
+            <p class="or">or</p>
+            <button type="submit">Select</button>
+        </div>
+        <div class="progressbar" *ngIf="uploading">
+            <p>Invoice-001</p>
+            <div class="meter">
+                <span  [style.width]="width+'%'"></span>
+            </div>
+        </div>
+       
+        
+
+
+        <!-- <div style="margin-top: 100px; width: 70%;">
+
+         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div> -->
+        <form class="" [formGroup]="shippingForm" (ngSubmit)="onSubmit()">
+            <div  *ngIf="res" class="field" >
+                <table class="field-table">
+                    <tr class="field-heading">
+                        <td>SBI Number*</td>
+                        <td>SB Date</td>
+                    </tr>
+                    <tr>
+                        <td><input  value="{{res.sbno}}" class="input" type="text" name="user"></td>
+                        <td><input value="{{res.sbdate}}" class="input" type="text" name="email"></td>
+                        <td><button type="submit" class="button">Submit</button></td>
+                    </tr>
+                    
+                </table>
+                <table style="margin-top: 54px; margin-left: -20px; width: 110% !important;" >
+                    <tr class="form-wrapper">
+                        <td class='full-input border1'><label for='mawbno'>MAWB NO</label><input  value="{{res.mawbno}}" class="smalll-input" type="text" name="mawbno" ></td>
+                        <td class='full-input border1'><label for='mawbdate'>MAWB DATE</label><input  value="{{res.mawbdate}}" class="smalll-input" type="text" name="mawbdate"></td>
+                        <td class='full-input border1'><label for='hawbno'>HAWB NO</label><input  value="{{res.hawbno}}" class="smalll-input" type="text" name="hawbno"></td>
+                        <td class='full-input border1'><label for='hawbdate'>HAWB DATE</label><input  value="{{res.hawbdate}}" class="smalll-input" type="text" name="hawbdate"></td>
+                        <td class='full-input border1'><label for='ha'>MAWB NO</label><input  value="{{res.fob}}" class="smalll-input" type="text" name="ha"></td>
+                    </tr>
+                    
+                </table>
+            </div>
+            
+            <div style="margin-top: 150px; width: 90%; margin-left: 40px;" *ngIf="res">
+                <div >  
+                    <div class="tabbed">
+                        
+                            <input *ngFor="let obj of res.invoices;let i = index" [attr.data-index]="i" type="radio" id="{{i+1}}" name="css-tabs" checked>
+                        
+                        
+                        
+                        <ul class="tabs" >
+                            <li class="tab" *ngFor="let obj of res.invoices;let i = index" [attr.data-index]="i"><label for="{{i+1}}">Invoice {{i+1}}</label></li>
+                        </ul>
+                        
+                        <div class="tab-content form-wrapper" *ngFor="let obj of res.invoices;let i = index" [attr.data-index]="i">
+                            <td class='full-input border2'><label for='mawbno'>SNO</label><input value="{{obj.sno}}" class="smalll-input" type="text" name="sno"></td>
+                            <td class='full-input border2'><label for='mawbno'>Invoiceno</label><input value="{{obj.invoiceno}}" class="smalll-input" type="text" name="invoiceno"></td>
+                            <td class='full-input border2'><label for='mawbno'>Amount</label><input value="{{obj.amount}}" class="smalll-input" type="text" name="amount"></td>
+                            <td class='full-input border2'><label for='mawbno'>Currency</label><input value="{{obj.currency}}" class="smalll-input" type="text" name="currency"></td>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+          
+    </main>
+    
+   
+</div>
