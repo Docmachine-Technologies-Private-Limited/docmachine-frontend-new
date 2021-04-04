@@ -6,7 +6,7 @@ import { PageNotFoundComponent } from './shared/components';
 
 import { SignupRoutingModule } from './signup/signup-routing.module';
 import { SigninRoutingModule } from './signIn/signin-routing.module';
-
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 const routes: Routes = [
   {
     path: '',
@@ -14,6 +14,7 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   { path: 'home', loadChildren: '../app/home/home.module#HomeModule'},
+  { path: 'forgotpassword',component: ForgotPasswordComponent, pathMatch: 'full'},
   {
     path: '**',
     component: PageNotFoundComponent  

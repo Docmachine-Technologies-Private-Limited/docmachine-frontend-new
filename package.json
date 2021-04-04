@@ -38,7 +38,9 @@
     "test:watch": "ng test",
     "e2e": "npm run build:prod && cross-env TS_NODE_PROJECT='e2e/tsconfig.e2e.json' mocha --timeout 300000 --require ts-node/register e2e/**/*.e2e.ts",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "electron": "ng build && electron .",
+    "pack": "electron-packager ."
   },
   "dependencies": {
     "@angular/animations": "^11.0.0 || ^12.0.0-0",
@@ -52,6 +54,7 @@
     "awesome-bootstrap-checkbox": "1.0.1",
     "bootstrap": "4.6.0",
     "bootstrap-select": "1.13.18",
+    "electron-packager": "15.2.0",
     "font-awesome": "4.7.0",
     "glyphicons-halflings": "1.9.1",
     "jasny-bootstrap": "4.0.0",
@@ -93,7 +96,7 @@
     "conventional-changelog-cli": "2.1.1",
     "core-js": "3.6.5",
     "cross-env": "7.0.3",
-    "electron": "11.2.0",
+    "electron": "3.1.6",
     "electron-builder": "22.9.1",
     "electron-reload": "1.5.0",
     "eslint": "7.20.0",

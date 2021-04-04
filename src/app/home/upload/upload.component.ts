@@ -4,6 +4,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
+import { NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 // import {ToastrService} from 'ngx-toastr';
 import { DropzoneDirective, DropzoneConfigInterface} from 'ngx-dropzone-wrapper';
 import {Subscription} from 'rxjs';
@@ -14,6 +16,7 @@ import * as $ from 'jquery';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ShippingBill } from '../../../model/shippingBill.model'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { DocumentService } from '../../service/document.service';
 
 @Component({
   selector: 'app-upload',
@@ -33,13 +36,22 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public name;
   public uploading = false;
   public size;
+  public formData;
+  
   private subscription: Subscription;
 
   public config: DropzoneConfigInterface;
   shippingForm: FormGroup;
+  authToken: string;
+  headers: any;
 
-  constructor( @Inject(PLATFORM_ID) public platformId, private formBuilder: FormBuilder, private http: HttpClient) {
-    console.log("hello")
+  constructor( @Inject(PLATFORM_ID) public platformId, private formBuilder: FormBuilder, private http: HttpClient, private documentService: DocumentService,  public router: Router,) {
+    this.loadFromLocalStorage()
+    console.log(this.authToken)
+    this.headers = {
+      Authorization: this.authToken
+    }
+
     
     if (isPlatformBrowser(this.platformId)) {
       this.config = {
@@ -48,6 +60,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
         maxFiles: 5,
         maxFilesize: 5,
         addRemoveLinks: true,
+        headers: this.headers,
         timeout: 120000,
         // autoProcessQueue: false,
         dictDefaultMessage: 'Drag a document here',
@@ -56,7 +69,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       };
     }
    }
-
+   public a = 10;
    width : any=0;
 
   runProgressBar(value){
@@ -67,10 +80,14 @@ export class UploadComponent implements OnInit, AfterViewInit {
           this.isWidthWithinLimit()
        )).subscribe(()=>{
       this.width=this.width+1;
-      console.log(this.width);
        }
     )
     
+  }
+  public loadFromLocalStorage() {
+    const token = localStorage.getItem('token');
+    this.authToken = token;
+    return this.authToken;
   }
 
 
@@ -85,25 +102,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
  
 
   ngOnInit(): void {
-    this.shippingForm = this.formBuilder.group({
-      sbno: '',
-      sbdate: [''],
-      mawbno: [''],
-      mawbdate: [''],
-      hawbno: [''],
-      hawbdate: [''],
-      fob: [''],
-      sno1: [''],
-      invoiceno1: [''],
-      amount1: [''],
-      currency1: [''],
-      password1: [''],
-      sno2: [''],
-      invoiceno2: [''],
-      amount2: [''],
-      currency2: [''],
-      password2: ['']
-  });
+    
     console.log(this);
     this.config = {
       ...this.config
@@ -111,8 +110,35 @@ export class UploadComponent implements OnInit, AfterViewInit {
   }
 
   public onSubmit(e){
-    
-    console.log(this.shippingForm.value)
+    console.log("LENGTH",this.res.invoices.length)
+    console.log(e)
+    console.log(e.form.value['sno1'])
+    let invoices = []
+    for(let i=0; i<this.res.invoices.length; i++) {
+         invoices.push({
+           "sno": e.form.value[`sno${i+1}`],
+           "invoiceno": e.form.value[`invoiceno${i+1}`],
+           "amount": e.form.value[`amount${i+1}`],
+           "currency": e.form.value[`currency${i+1}`]
+         })
+    }
+    console.log(invoices)
+    e.form.value.invoices =  invoices
+    // e.form.value._id = this.res._id
+    console.log(e.form.value)
+    // this.formData = new ShippingBill(e.form.value)
+    // console.log(this.formData)
+    this.documentService.updateMaster(e.form.value,this.res._id)
+            .subscribe(
+                data => {
+                    console.log("king123")
+                    console.log(data)
+                    this.router.navigate(['home/dashboard']);
+                    //this.router.navigate(['/login'], { queryParams: { registered: true }});
+                },
+                error => {
+                    console.log("error")
+                });
   }
 
   public onUploadInit(args: any): void {
@@ -120,9 +146,11 @@ export class UploadComponent implements OnInit, AfterViewInit {
   }
 
   public onUploadError(args: any): void {
+    this.uploading = false;
     console.log('onUploadError:', args, args[1].message);
   }
   public onUploadSuccess(args: any): void {
+    this.uploading = false;
     console.log(args)
     this.res = new ShippingBill(args[1].data)
     console.log(this.res)

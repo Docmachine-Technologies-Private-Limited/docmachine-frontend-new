@@ -1,4 +1,5 @@
 export class ShippingBill {
+    public userId: string;
     public sbno: string;
     public sbdate: string;
     public mawbno: string;
@@ -11,9 +12,11 @@ export class ShippingBill {
     public insurence: string;
     public discount: string
     public com: string;
-    public countryofdischarge: string;
+    public _id: any;
+    public countryOfDischarge: string;
 
     constructor(data: any) {
+        this.userId = data.userId ? data.userId : '';
         this.sbno = data.sbno ? data.sbno : '';
         this.sbdate = data.sbdate ? data.sbdate : '';
         this.mawbno = data.mawbno ? data.mawbno : '';
@@ -25,7 +28,8 @@ export class ShippingBill {
         this.insurence = data.insurence ? data.insurence: '';
         this.discount = data.discount ? data.discount : '';
         this.com = data.com ? data.com: '';
-        this.countryofdischarge = data.countryofdischarge ? data.countryofdischarge : '';
+        this._id = data._id;
+        this.countryOfDischarge = data.countryOfDischarge ? data.countryOfDischarge : '';
     }
 }
 

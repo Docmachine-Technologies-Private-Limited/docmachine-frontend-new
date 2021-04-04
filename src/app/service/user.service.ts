@@ -3,7 +3,21 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
+    public authToken;
     constructor(private http: HttpClient) { }
+
+    public addToken(token) {
+      console.log(token)
+      localStorage.setItem('token', token);
+      this.authToken = token;
+    }
+    public loadFromLocalStorage() {
+      const token = localStorage.getItem('token');
+      this.authToken = token;
+      return this.authToken;
+    }
+
+    
 
     register(user) {
         return this.http.post(`http://localhost:3000/v1/authenticate/signup`, {
@@ -24,10 +38,5 @@ export class UserService {
 
         return this.http.post(`http://localhost:3000/v1/authenticate/login`, null, httpOptions);
       }
-      public master(user) {
-        return this.http.post(`http://localhost:3000/v1/documents/uploadFile`, {
-            "fullName": user.sbno
-      });
-
-      }
+     
 }

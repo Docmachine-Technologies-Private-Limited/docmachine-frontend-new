@@ -10,7 +10,7 @@
             <button type="submit">Select</button>
         </div>
         <div class="progressbar" *ngIf="uploading">
-            <p>Invoice-001</p>
+            <p class="processheading">Invoice-001</p>
             <div class="meter">
                 <span  [style.width]="width+'%'"></span>
             </div>
@@ -23,7 +23,7 @@
 
          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div> -->
-        <form class="" [formGroup]="shippingForm" (ngSubmit)="onSubmit()">
+        <form class="" #values="ngForm" (ngSubmit)="onSubmit(values)">
             <div  *ngIf="res" class="field" >
                 <table class="field-table">
                     <tr class="field-heading">
@@ -31,19 +31,19 @@
                         <td>SB Date</td>
                     </tr>
                     <tr>
-                        <td><input  value="{{res.sbno}}" class="input" type="text" name="user"></td>
-                        <td><input value="{{res.sbdate}}" class="input" type="text" name="email"></td>
+                        <td><input  [(ngModel)]="res.sbno" class="input" type="text" name="sbno"></td>
+                        <td><input [(ngModel)]="res.sbdate" class="input" type="text" name="sbdate"></td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
                     
                 </table>
                 <table style="margin-top: 54px; margin-left: -20px; width: 110% !important;" >
                     <tr class="form-wrapper">
-                        <td class='full-input border1'><label for='mawbno'>MAWB NO</label><input  value="{{res.mawbno}}" class="smalll-input" type="text" name="mawbno" ></td>
-                        <td class='full-input border1'><label for='mawbdate'>MAWB DATE</label><input  value="{{res.mawbdate}}" class="smalll-input" type="text" name="mawbdate"></td>
-                        <td class='full-input border1'><label for='hawbno'>HAWB NO</label><input  value="{{res.hawbno}}" class="smalll-input" type="text" name="hawbno"></td>
-                        <td class='full-input border1'><label for='hawbdate'>HAWB DATE</label><input  value="{{res.hawbdate}}" class="smalll-input" type="text" name="hawbdate"></td>
-                        <td class='full-input border1'><label for='ha'>MAWB NO</label><input  value="{{res.fob}}" class="smalll-input" type="text" name="ha"></td>
+                        <td class='full-input border1'><label for='mawbno'>MAWB NO</label><input  [(ngModel)]="res.mawbno" class="smalll-input" type="text" name="mawbno" ></td>
+                        <td class='full-input border1'><label for='mawbdate'>MAWB DATE</label><input  [(ngModel)]="res.mawbdate" class="smalll-input" type="text" name="mawbdate"></td>
+                        <td class='full-input border1'><label for='hawbno'>HAWB NO</label><input  [(ngModel)]="res.hawbno" class="smalll-input" type="text" name="hawbno"></td>
+                        <td class='full-input border1'><label for='hawbdate'>HAWB DATE</label><input  [(ngModel)]="res.hawbdate" class="smalll-input" type="text" name="hawbdate"></td>
+                        <td class='full-input border1'><label for='ha'>FOB</label><input  [(ngModel)]="res.fob" class="smalll-input" type="text" name="fob"></td>
                     </tr>
                     
                 </table>
@@ -62,10 +62,10 @@
                         </ul>
                         
                         <div class="tab-content form-wrapper" *ngFor="let obj of res.invoices;let i = index" [attr.data-index]="i">
-                            <td class='full-input border2'><label for='mawbno'>SNO</label><input value="{{obj.sno}}" class="smalll-input" type="text" name="sno"></td>
-                            <td class='full-input border2'><label for='mawbno'>Invoiceno</label><input value="{{obj.invoiceno}}" class="smalll-input" type="text" name="invoiceno"></td>
-                            <td class='full-input border2'><label for='mawbno'>Amount</label><input value="{{obj.amount}}" class="smalll-input" type="text" name="amount"></td>
-                            <td class='full-input border2'><label for='mawbno'>Currency</label><input value="{{obj.currency}}" class="smalll-input" type="text" name="currency"></td>
+                            <td class='full-input border2'><label for='mawbno'>SNO</label><input [(ngModel)]="obj.sno" class="smalll-input" type="text" name="sno{{i+1}}"></td>
+                            <td class='full-input border2'><label for='mawbno'>Invoiceno</label><input [(ngModel)]="obj.invoiceno" class="smalll-input" type="text" name="invoiceno{{i+1}}"></td>
+                            <td class='full-input border2'><label for='mawbno'>Amount</label><input [(ngModel)]="obj.amount" class="smalll-input" type="text" name="amount{{i+1}}"></td>
+                            <td class='full-input border2'><label for='mawbno'>Currency</label><input [(ngModel)]="obj.currency" class="smalll-input" type="text" name="currency{{i+1}}"></td>
                         </div>
                         
                         

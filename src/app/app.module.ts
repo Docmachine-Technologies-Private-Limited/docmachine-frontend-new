@@ -16,6 +16,7 @@ import { SignupModule } from './signup/signup.module';
 import { SigninModule } from './signIn/signin.module';
 
 import { AppComponent } from './app.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 //import { SidenavComponent } from './home/sidenav/sidenav.component';
 
 // AoT requires an exported function for factories
@@ -24,7 +25,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 }
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ForgotPasswordComponent],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
