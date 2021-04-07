@@ -23,8 +23,8 @@
 
          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div> -->
-        <form class="" #values="ngForm" (ngSubmit)="onSubmit(values)">
-            <div  *ngIf="res" class="field" >
+        <form *ngIf="sbNo" class="" #values="ngForm" (ngSubmit)="onSubmit(values)">
+            <div  class="field" >
                 <table class="field-table">
                     <tr class="field-heading">
                         <td>SBI Number*</td>
@@ -39,11 +39,11 @@
                 </table>
                 <table style="margin-top: 54px; margin-left: -20px; width: 110% !important;" >
                     <tr class="form-wrapper">
-                        <td class='full-input border1'><label for='mawbno'>MAWB NO</label><input  [(ngModel)]="res.mawbno" class="smalll-input" type="text" name="mawbno" ></td>
-                        <td class='full-input border1'><label for='mawbdate'>MAWB DATE</label><input  [(ngModel)]="res.mawbdate" class="smalll-input" type="text" name="mawbdate"></td>
-                        <td class='full-input border1'><label for='hawbno'>HAWB NO</label><input  [(ngModel)]="res.hawbno" class="smalll-input" type="text" name="hawbno"></td>
-                        <td class='full-input border1'><label for='hawbdate'>HAWB DATE</label><input  [(ngModel)]="res.hawbdate" class="smalll-input" type="text" name="hawbdate"></td>
-                        <td class='full-input border1'><label for='ha'>FOB</label><input  [(ngModel)]="res.fob" class="smalll-input" type="text" name="fob"></td>
+                        <td class='full-input border1'><label for='mawbno'>AD CODE</label><input  [(ngModel)]="res.adCode" class="smalll-input" type="text" name="mawbno" ></td>
+                        <td class='full-input border1'><label for='mawbdate'>FOB VALUE</label><input  [(ngModel)]="res.fobValue" class="smalll-input" type="text" name="mawbdate"></td>
+                        <td class='full-input border1'><label for='hawbno'>IEC CODE</label><input  [(ngModel)]="res.ieccode" class="smalll-input" type="text" name="hawbno"></td>
+                        <td class='full-input border1'><label for='hawbdate'>LEO DATE</label><input  [(ngModel)]="res.leodate" class="smalll-input" type="text" name="hawbdate"></td>
+                        <td class='full-input border1'><label for='ha'>PORT CODE</label><input  [(ngModel)]="res.portCode" class="smalll-input" type="text" name="fob"></td>
                     </tr>
                     
                 </table>
@@ -72,7 +72,39 @@
                     </div>
                 </div>
             </div>
+            
         </form>
+        <form *ngIf="boeNumber" class="" #values="ngForm" (ngSubmit)="onSubmitBoe(values)">
+            <div  class="field" >
+                <table class="field-table">
+                    <tr class="field-heading">
+                        <td>BOE Number*</td>
+                        <td>BOE Date</td>
+                    </tr>
+                    <tr>
+                        <td><input  [(ngModel)]="res.boeNumber" class="input" type="text" name="boeNumber"></td>
+                        <td><input [(ngModel)]="res.boeDate" class="input" type="text" name="boeDate"></td>
+                        <td><button type="submit" class="button">Submit</button></td>
+                    </tr>
+                    
+                </table>
+                <table style="margin-top: 54px; margin-left: -20px; width: 110% !important; margin-bottom: 100px;" >
+                    <tr class="form-wrapper">
+                        <td class='full-input border1'><label for='invoiceNumber'>INVOICE NUMBER</label><input  [(ngModel)]="res.invoiceNumber" class="smalll-input" type="text" name="invoiceNumber" ></td>
+                        <td class='full-input border1'><label for='invoiceAmount'>INVOICE AMOUNT</label><input  [(ngModel)]="res.invoiceAmount" class="smalll-input" type="text" name="invoiceAmount"></td>
+                        <td class='full-input border1'><label for='freightAmount'>FREIGHT AMOUNT</label><input  [(ngModel)]="res.freightAmount" class="smalll-input" type="text" name="freightAmount"></td>
+                        <td class='full-input border1'><label for='freightCurrency'>FREIGHT CURRENCY</label><input  [(ngModel)]="res.freightCurrency" class="smalll-input" type="text" name="freightCurrency"></td>
+                        <td class='full-input border1'><label for='iecCode'>IEC CODE</label><input  [(ngModel)]="res.iecCode" class="smalll-input" type="text" name="iecCode"></td>
+                    </tr>
+                    
+                </table>
+            </div>
+            
+        </form>
+        <div *ngIf="res" style="margin-top: 150px;">
+            <iframe [src]='publicUrl' width="70%" height="500px">
+            </iframe>
+        </div>
         
           
     </main>

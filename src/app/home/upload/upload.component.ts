@@ -1,3 +1,4 @@
+import { BoeBill } from './../../../model/boe.model';
 import {AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
@@ -17,6 +18,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { ShippingBill } from '../../../model/shippingBill.model'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { DocumentService } from '../../service/document.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload',
@@ -37,6 +39,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public uploading = false;
   public size;
   public formData;
+  public publicUrl;
+  public sbNo = false;
+  public boeNumber = false;
   
   private subscription: Subscription;
 
@@ -45,7 +50,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   authToken: string;
   headers: any;
 
-  constructor( @Inject(PLATFORM_ID) public platformId, private formBuilder: FormBuilder, private http: HttpClient, private documentService: DocumentService,  public router: Router,) {
+  constructor( @Inject(PLATFORM_ID) public platformId, private formBuilder: FormBuilder, private http: HttpClient, private documentService: DocumentService,  public router: Router, private sanitizer:DomSanitizer) {
     this.loadFromLocalStorage()
     console.log(this.authToken)
     this.headers = {
@@ -73,8 +78,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
    width : any=0;
 
   runProgressBar(value){
-    
-    timer(0, 100)
+    console.log(value/4000)
+    timer(0, value/4000)
     .pipe(
         takeWhile(() => 
           this.isWidthWithinLimit()
@@ -141,6 +146,24 @@ export class UploadComponent implements OnInit, AfterViewInit {
                 });
   }
 
+  public onSubmitBoe(e){
+    
+    console.log(e.form.value)
+    // this.formData = new ShippingBill(e.form.value)
+    // console.log(this.formData)
+    this.documentService.updateBoe(e.form.value,this.res._id)
+            .subscribe(
+                data => {
+                    console.log("king123")
+                    console.log(data)
+                    this.router.navigate(['home/dashboard']);
+                    //this.router.navigate(['/login'], { queryParams: { registered: true }});
+                },
+                error => {
+                    console.log("error")
+                });
+  }
+
   public onUploadInit(args: any): void {
     console.log('onUploadInit:', args);
   }
@@ -152,7 +175,21 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public onUploadSuccess(args: any): void {
     this.uploading = false;
     console.log(args)
-    this.res = new ShippingBill(args[1].data)
+    console.log(args[1].data.sbno)
+    console.log(args[1].data.boeNumber)
+    this.sbNo
+    if(args[1].data.sbno) {
+      this.res = new ShippingBill(args[1].data)
+      this.sbNo = true;
+      console.log(this.res)
+    }
+    else if(args[1].data.boeNumber) {
+      this.res = new BoeBill(args[1].data)
+      this.boeNumber = true;
+      console.log(this.res)
+    }
+    this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
+    console.log(this.publicUrl)
     console.log(this.res)
 
   }

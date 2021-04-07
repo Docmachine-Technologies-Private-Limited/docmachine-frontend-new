@@ -11,7 +11,13 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardComponent implements OnInit {
   public item;
   public user;
-  constructor(private documentService: DocumentService) { }
+  public selectedRow;
+  public showInvoice;
+  public tableWidth;
+  constructor(private documentService: DocumentService) {
+    this.showInvoice = false;
+    this.tableWidth = '100%';
+   }
 
   ngOnInit(): void {
     this.documentService.getMaster(this.user)
@@ -26,6 +32,11 @@ export class DashboardComponent implements OnInit {
                     console.log("error")
                 });
     
+  }
+  getInvoices(selectedRowValues){
+    
+    return (this.selectedRow = selectedRowValues, this.showInvoice = true, this.tableWidth = '30%');
+
   }
 
 }

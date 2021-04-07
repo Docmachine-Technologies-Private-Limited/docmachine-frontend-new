@@ -1,21 +1,24 @@
 <div class="content-wrap">
            
     <main id="content" class="content table-padding" role="main">
-        <button  class="upload-button" [routerLink]="['/home/upload']">Upload New</button>
-        <h3 class="heading">All Documents</h3>
-            <div class="dropdown">
-            Date: <select name="subject" id="subject">
-                <option value="" selected="selected">Today</option>
-                </select>
-            Type: <select name="topic" id="topic">
-                <option value="" selected="selected">All</option>
-                </select>
-            </div>
+        <div *ngIf="!showInvoice">
+            <button  class="upload-button" [routerLink]="['/home/upload']">Upload New</button>
+            <h3 class="heading">All Documents</h3>
+                <div class="dropdown">
+                    Date: <select name="subject" id="subject">
+                        <option value="" selected="selected">Today</option>
+                        </select>
+                    Type: <select name="topic" id="topic">
+                        <option value="" selected="selected">All</option>
+                        </select>
+                </div>
+        
+        </div>
         
         <div class="analytics" style="width: 90%;">
             <div class="analytics-side">
                 <div class="row">
-                    <div class="col-12 mb-lg padding">
+                    <div *ngIf="!showInvoice" class="col-12 mb-lg padding">
                         <section class="widget pb-0 box-shadow">
 
                             <div class="widget-body p-0 support table-wrapper ">
@@ -32,11 +35,11 @@
                                     </tr>
                                     </thead>
                                     <tbody class="text-dark" >
-                                        <tr class="table-row" *ngFor="let data of item">
+                                        <tr class="table-row" *ngFor="let data of item" (click)="getInvoices({'invoices':data.invoices, 'sbno': data.sbno, 'sbdate': data.sbdate})">
                                             <th class="rect"><img src="../../../assets/Rectangle-13.png"></th>
                                             <th class="pl-4 fw-normal">{{data.sbdate}}</th>
                                             <td class="sb-no">{{data.sbno}}</td>
-                                            <td>Invoice-01,02</td>
+                                            <td> Invoice-<span *ngFor="let data1 of data.invoices;let i = index"> 0{{i+1}}, </span> </td>
                                             <td>Random Company</td>
                                             <td><img class="image" src="../../../assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"><img class="image image2" src="../../../assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"> Lindsey Stroud</td>
                                             <td>7800</td>
@@ -47,6 +50,130 @@
                                 </table>
                             </div>
                         </section>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="showInvoice" class="p-8 bc" style="width: 100%;margin-left: 50px;">
+                <p class="heading bcw" style="font-size: '14px';">All Documents</p>
+                <div class="col-12 mb-lg ph-38"  style="width: 30%; float: 'left';">
+                    
+                    <div id="profile" class="row p-2 bb" *ngFor="let data of item" (click)="getInvoices({'invoices':data.invoices, 'sbno': data.sbno, 'sbdate': data.sbdate})">
+                        <div class="ph-10 fl">
+                            <img class="image" src="../../../assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"><img class="image image2" src="../../../assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px">
+                        </div>
+                        <div class="fr pt-2">
+                            <span class="fl fs16">{{ data.sbno }}</span><span class="fr fs12" style="float: 'right';"> {{ data.sbdate }}</span> 
+                            <p class = "fs14">Continental carriers pvt ltd </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- People collaborated -->
+                <div  style="width: 70%; float: 'right'; background-color: 'white';">
+                    <span style="width: 70%; float: 'left';">People collaborated</span>
+                    <span style="width: 30%; float: 'right';"><span *ngFor="let data of item"><img class="image" src="../../../assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"></span></span>
+                </div>
+                <!-- Invoices -->
+                <div  style="width: 70%; float: 'right'; padding-top: '10px';">
+                    <div style="width: 100%;">
+                        <div style="width: 95%; margin-top: '38px'; background-color: 'white';padding: '12px';">
+                            <div style="width: 100%;">
+                                <span style="width: 70%; float: 'left'; font-size: '20px';">Invoices</span>
+                                <span style="width: 30%; float: 'right'; font-size: '14px';">SP Number:&emsp;{{ selectedRow.sbno }}</span>
+                            </div>
+                            <div style="width: 100%;">
+                                <span style="width: 30%; float: 'right'; font-size: '14px';">SP Date:&emsp;{{ selectedRow.sbdate }}</span>
+                                <!-- <div>SP Number:&emsp;{{ selectedRow.sbno }}</div>
+                                <div>SP Date:&emsp;{{ selectedRow.sbdate }}</div>-->
+                            </div> 
+                            <div class="row" style="width: 100%;">
+                                <div class="col-12 mb-lg padding" style="width: 100%;">
+                                    <section class="widget pb-0 box-shadow">
+
+                                        <div class="widget-body p-0 support table-wrapper ">
+                                            <table class="table table-striped mb-0">
+                                                <thead>
+                                                <tr class="text-muted table-heading fs12">
+                                                    <th class="rect"><img src="../../../assets/Rectangle-13.png"></th>
+                                                    <th scope="col"><span class=" pl-3">Serial Number</span></th>
+                                                    <th scope="col">Invoice Number</th>
+                                                    <th scope="col">Invoice Amount</th>
+                                                    <th scope="col">Currency</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="text-dark" >
+                                                    <tr class="table-row fs12" *ngFor="let data of selectedRow.invoices">
+                                                        <th class="rect"><img src="../../../assets/Rectangle-13.png"></th>
+                                                        <th class="pl-4 fw-normal">{{data.sno}}</th>
+                                                        <td class="sb-no">{{data.invoiceno}}</td>
+                                                        <td>{{data.amount}}</td>
+                                                        <td>{{data.currency}}</td>
+                                                        
+                                                    </tr>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="padding" style="width: 95%; background-color: 'white'; margin-top: '30px';padding: '12px';">
+                        <div style="width: 100%; padding-top: '16px';">
+                            <h1 class="ph-5">Additional Details</h1>
+                            <div class="padding ph-5">
+                                <div>Journal</div>
+                                <div><span>Amount is displayed in your base currency</span><span style="background-color: '#49A2D7';margin-left: '6px'; padding: '2px';">INR</span></div>
+                            </div>
+                            <div class="pt-10 ph-5"><b>Invoice</b></div>
+                            <div class="row" style="width: 80%;">
+                                <div class="col-12 mb-lg padding" style="width: 50%;">
+                                    <section class="widget pb-0 box-shadow">
+
+                                        <div class="widget-body p-0 support table-wrapper ">
+                                            <table class="table table-striped mb-0">
+                                                <thead>
+                                                <tr class="text-muted table-heading fs12">
+                                                    <th scope="col"><span class=" pl-3">AMOUNT</span></th>
+                                                    <th scope="col">DEBT</th>
+                                                    <th scope="col">CREDIT</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="text-dark" >
+                                                    <tr class="table-row fs12">
+                                                        <th class="pl-4 fw-normal" style="align:'right';">Output Cost</th>
+                                                        <td class="sb-no" style="align:'left';">0.00</td>
+                                                        <td style="align:'left';">6,300.00</td>                             
+                                                    </tr> 
+                                                    <tr class="table-row fs12">
+                                                        <th class="pl-4 fw-normal" style="align:'right';">Sales</th>
+                                                        <td class="sb-no" style="align:'left';">0.00</td>
+                                                        <td style="align:'left';">70,000.00</td>                             
+                                                    </tr>
+                                                    <tr class="table-row fs12">
+                                                        <th class="pl-4 fw-normal" style="align:'right';">Accounts Receivables</th>
+                                                        <td class="sb-no" style="align:'left';">62,600.00</td>
+                                                        <td style="align:'left';">0.00</td>                             
+                                                    </tr>
+                                                    <tr class="table-row fs12">
+                                                        <th class="pl-4 fw-normal" style="align:'right';">Output SGST</th>
+                                                        <td class="sb-no" style="align:'left';">0.00</td>
+                                                        <td style="align:'left';">6,300.00</td>                             
+                                                    </tr>
+                                                    <tr class="table-row fs12">
+                                                        <th class="pl-4 fw-normal" style="align:'right';"></th>
+                                                        <td class="sb-no" style="align:'left';"><b>82,600.00</b></td>
+                                                        <td style="align:'left';"><b>82,600.00</b></td>                             
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

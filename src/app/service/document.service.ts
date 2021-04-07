@@ -34,5 +34,16 @@ export class DocumentService {
             "master": user
       },httpOptions);
     }
+    updateBoe(user,_id) {
+      this.loadFromLocalStorage();
+      console.log(this.authToken)
+      const httpOptions = {
+          headers: new HttpHeaders({'Authorization': this.authToken })
+      };
+        return this.http.post(`http://localhost:3000/v1/boe/update`, {
+            "_id": _id,
+            "master": user
+      },httpOptions);
+    }
      
 }

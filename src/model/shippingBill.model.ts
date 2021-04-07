@@ -2,34 +2,62 @@ export class ShippingBill {
     public userId: string;
     public sbno: string;
     public sbdate: string;
-    public mawbno: string;
-    public mawbdate: string;
-    public hawbno: string;
-    public hawbdate: string;
+    public adBillNo: string;
+    public portCode: string;
+    public ieccode: string;
+    public iecName: string;
+    public adCode: string;
+    public leodate: string;
+    public processingStaus: string;
+    public fobCurrency: string;
+    public fobValue: string;
+    public realizedFobCurrency: string;
+    public realizedFobValue: string;
+    public equivalentFobValue: string;
     public invoices: [];
-    public fob: string;
-    public freight: string;
-    public insurence: string;
-    public discount: string
-    public com: string;
+    public freightCurrency: string;
+    public freightValue: string;
+    public realizedfreightCurrency: string;
+    public realizedfreightValue: string;
+    public insuranceCurrency: string;
+    public insuranceValue: string;
+    public realizedInsuranceValue: string;
+    public bankingCharges: string;
+    public expectedPaymentlastdate: string;
+    public AddedDate: string;
+    public modifiedDate: string;
     public _id: any;
-    public countryOfDischarge: string;
+    
 
     constructor(data: any) {
         this.userId = data.userId ? data.userId : '';
         this.sbno = data.sbno ? data.sbno : '';
         this.sbdate = data.sbdate ? data.sbdate : '';
-        this.mawbno = data.mawbno ? data.mawbno : '';
-        this.mawbdate = data.mawbdate ? data.mawbdate : '';
-        this.hawbno = data.hawbno ? data.hawbno : '';
-        this.hawbdate = data.hawbdate ? data.hawbdate : '';
+        this.adBillNo = data.adBillNo ? data.adBillNo : '';
+        this.portCode = data.portCode ? data.portCode : '';
+        this.ieccode = data.ieccode ? data.ieccode : '';
+        this.iecName = data.iecName ? data.iecName : '';
+        this.adCode = data.adCode ? data.adCode : '';
+        this.leodate = data.leodate ? data.leodate : '';
+        this.processingStaus = data.processingStaus ? data.processingStaus : '';
+        this.fobCurrency = data.fobCurrency ? data.fobCurrency : '';
+        this.fobValue = data.fobValue ? data.fobValue : '';
+        this.realizedFobCurrency = data.realizedFobCurrency ? data.realizedFobCurrency : '';
+        this.realizedFobValue = data.realizedFobValue ? data.realizedFobValue : '';
+        this.equivalentFobValue = data.equivalentFobValue ? data.equivalentFobValue : '';
         this.invoices = createInvoice(data.invoices) ? data.invoices : [];
-        this.fob = data.fob ? data.fob : '';
-        this.insurence = data.insurence ? data.insurence: '';
-        this.discount = data.discount ? data.discount : '';
-        this.com = data.com ? data.com: '';
+        this.freightCurrency = data.freightCurrency ? data.freightCurrency : '';
+        this.freightValue = data.freightValue ? data.freightValue: '';
+        this.realizedfreightCurrency = data.realizedfreightCurrency ? data.realizedfreightCurrency : '';
+        this.realizedfreightValue = data.realizedfreightValue ? data.realizedfreightValue: '';
+        this.insuranceCurrency = data.insuranceCurrency ? data.insuranceCurrency : '';
+        this.insuranceValue = data.insuranceValue ? data.insuranceValue: '';
+        this.realizedInsuranceValue = data.realizedInsuranceValue ? data.realizedInsuranceValue : '';
+        this.bankingCharges = data.bankingCharges ? data.bankingCharges: '';
+        this.expectedPaymentlastdate = data.expectedPaymentlastdate ? data.expectedPaymentlastdate: '';
+        this.AddedDate = data.AddedDate ? data.AddedDate : '';
+        this.modifiedDate = data.modifiedDate ? data.modifiedDate: '';
         this._id = data._id;
-        this.countryOfDischarge = data.countryOfDischarge ? data.countryOfDischarge : '';
     }
 }
 
