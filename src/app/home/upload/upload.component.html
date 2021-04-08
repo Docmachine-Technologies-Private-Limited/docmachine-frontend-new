@@ -23,21 +23,23 @@
 
          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div> -->
-        <form *ngIf="sbNo" class="" #values="ngForm" (ngSubmit)="onSubmit(values)">
+        <form class="" *ngIf="sbNo" #values="ngForm" (ngSubmit)="onSubmit(values)" >
             <div  class="field" >
                 <table class="field-table">
                     <tr class="field-heading">
+                        <td>AD BILL NUMBER</td>
                         <td>SBI Number*</td>
                         <td>SB Date</td>
                     </tr>
                     <tr>
+                        <td><input  [(ngModel)]="res.adBillNo" class="input" type="text" name="adBillNo"></td>
                         <td><input  [(ngModel)]="res.sbno" class="input" type="text" name="sbno"></td>
                         <td><input [(ngModel)]="res.sbdate" class="input" type="text" name="sbdate"></td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
                     
                 </table>
-                <table style="margin-top: 54px; margin-left: -20px; width: 110% !important;" >
+                <!-- <table style="margin-top: 54px; margin-left: -20px; width: 110% !important;" >
                     <tr class="form-wrapper">
                         <td class='full-input border1'><label for='mawbno'>AD CODE</label><input  [(ngModel)]="res.adCode" class="smalll-input" type="text" name="mawbno" ></td>
                         <td class='full-input border1'><label for='mawbdate'>FOB VALUE</label><input  [(ngModel)]="res.fobValue" class="smalll-input" type="text" name="mawbdate"></td>
@@ -46,10 +48,45 @@
                         <td class='full-input border1'><label for='ha'>PORT CODE</label><input  [(ngModel)]="res.portCode" class="smalll-input" type="text" name="fob"></td>
                     </tr>
                     
-                </table>
+                </table> -->
+            </div>
+            <div class="sub-table">
+                <div class="sb1">
+                    <tr class="form-wrapper">
+                        <p class="sh1">SB DETAILS</p>
+                        <td class='full-input border1'><label for='portCode'>PORT CODE</label><input  [(ngModel)]="res.portCode" class="smalll-input" type="text" name="portCode" ></td>
+                        <td class='full-input border2'><label for='ieccode'>IEC CODE</label><input  [(ngModel)]="res.ieccode" class="smalll-input" type="text" name="ieccode"></td>
+                        <td class='full-input border3'><label for='iecName'>IEC NAME</label><input  [(ngModel)]="res.iecName" class="smalll-input" type="text" name="iecName"></td> <br>
+                        <td class='full-input border1'><label for='adCode'>AD CODE</label><input  [(ngModel)]="res.adCode" class="smalll-input" type="text" name="adCode" ></td>
+                        <td class='full-input border2'><label for='leodate'>LEO DATE</label><input  [(ngModel)]="res.leodate" class="smalll-input" type="text" name="leodate"></td>
+                        <td class='full-input border3'><label for='processingStaus'>PROCESSING STATUS</label><input  [(ngModel)]="res.processingStaus" class="smalll-input" type="text" name="processingStaus"></td> <br>
+
+                        <p class="sh1">FOB and FREIGHT</p>
+                        <td class='full-input border1'><label for='fobCurrency'>FOB CURRENCY</label><input  [(ngModel)]="res.fobCurrency" class="smalll-input" type="text" name="fobCurrency" ></td>
+                        <td class='full-input border2'><label for='fobValue'>FOB VALUE</label><input  [(ngModel)]="res.fobValue" class="smalll-input" type="text" name="fobValue"></td>
+                        <td class='full-input border3'><label for='realizedFobValue'>REALIZED FOB VALUE</label><input  [(ngModel)]="res.realizedFobValue" class="smalll-input" type="text" name="realizedFobValue"></td> <br>
+                        <td class='full-input border1'><label for='equivalentFobValue'>EQUIVALENT FOB VALUE</label><input  [(ngModel)]="res.equivalentFobValue" class="smalll-input" type="text" name="equivalentFobValue" ></td>
+                        <td class='full-input border2'><label for='freightCurrency'>FREIGHT CURRENCY</label><input  [(ngModel)]="res.freightCurrency" class="smalll-input" type="text" name="freightCurrency"></td>
+                        <td class='full-input border3'><label for='realizedFreightValue'>FREIGHT VALUE</label><input  [(ngModel)]="res.realizedFreightValue" class="smalll-input" type="text" name="realizedFreightValue"></td> <br>
+                        <p class="sh1">INSURANCE</p>
+                        <td class='full-input border2'><label for='insuranceCurrency'>INSURANCE CURRENCY</label><input  [(ngModel)]="res.insuranceCurrency" class="smalll-input" type="text" name="insuranceCurrency" ></td>
+                        <td class='full-input border3'><label for='insuranceValue'>INSURANCE VALUE</label><input  [(ngModel)]="res.insuranceValue" class="smalll-input" type="text" name="insuranceValue"></td>
+                        <td class='full-input border1'><label for='realizedInsuranceValue'>REALIZED INSURANCE VALUE</label><input  [(ngModel)]="res.realizedInsuranceValue" class="smalll-input" type="text" name="realizedInsuranceValue"></td> <br>
+                        <p class="sh1">Additional</p>
+                        <td class='full-input border2'><label for='bankingCharges'>BANKING CHARGES</label><input  [(ngModel)]="res.bankingCharges" class="smalll-input" type="text" name="bankingCharges" ></td>
+                        <td class='full-input border3'><label for='expectedPaymentlastdate'>PAYMENT LAST DATE</label><input  [(ngModel)]="res.expectedPaymentlastdate" class="smalll-input" type="text" name="expectedPaymentlastdate"></td>
+                        <td class='full-input border1'><label for='AddedDate'>ADDED DATE</label><input  [(ngModel)]="res.AddedDate" class="smalll-input" type="text" name="AddedDate"></td> <br>
+                        <td class='full-input border2'><label for='modifiedDate'>MODIFIED DATE</label><input  [(ngModel)]="res.modifiedDate" class="smalll-input" type="text" name="modifiedDate" ></td>
+                        
+                    </tr>
+                </div>
+                <div class="sb2">
+                    <iframe [src]='publicUrl' width="100%" height="700px">
+                    </iframe>
+                </div>
             </div>
             
-            <div style="margin-top: 150px; width: 90%; margin-left: 40px;" *ngIf="res">
+            <div style="margin-top: 74%; width: 73%; margin-left: 20px;" >
                 <div >  
                     <div class="tabbed">
                         
@@ -62,10 +99,9 @@
                         </ul>
                         
                         <div class="tab-content form-wrapper" *ngFor="let obj of res.invoices;let i = index" [attr.data-index]="i">
-                            <td class='full-input border2'><label for='mawbno'>SNO</label><input [(ngModel)]="obj.sno" class="smalll-input" type="text" name="sno{{i+1}}"></td>
-                            <td class='full-input border2'><label for='mawbno'>Invoiceno</label><input [(ngModel)]="obj.invoiceno" class="smalll-input" type="text" name="invoiceno{{i+1}}"></td>
-                            <td class='full-input border2'><label for='mawbno'>Amount</label><input [(ngModel)]="obj.amount" class="smalll-input" type="text" name="amount{{i+1}}"></td>
-                            <td class='full-input border2'><label for='mawbno'>Currency</label><input [(ngModel)]="obj.currency" class="smalll-input" type="text" name="currency{{i+1}}"></td>
+                            <td class='full-input border1'><label for='mawbno'>INVOICE NO</label><input [(ngModel)]="obj.invoiceno" class="smalll-input" type="text" name="invoiceno{{i+1}}"></td>
+                            <td class='full-input border2'><label for='mawbno'>AMOUNT</label><input [(ngModel)]="obj.amount" class="smalll-input" type="text" name="amount{{i+1}}"></td>
+                            <td class='full-input border3'><label for='mawbno'>CURRENCY</label><input [(ngModel)]="obj.currency" class="smalll-input" type="text" name="currency{{i+1}}"></td>
                         </div>
                         
                         
@@ -82,29 +118,59 @@
                         <td>BOE Date</td>
                     </tr>
                     <tr>
-                        <td><input  [(ngModel)]="res.boeNumber" class="input" type="text" name="boeNumber"></td>
-                        <td><input [(ngModel)]="res.boeDate" class="input" type="text" name="boeDate"></td>
+                        <td><input  [(ngModel)]="res.boeNumber" class="input2" type="text" name="boeNumber"></td>
+                        <td><input [(ngModel)]="res.boeDate" class="input2" type="text" name="boeDate"></td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
                     
                 </table>
-                <table style="margin-top: 54px; margin-left: -20px; width: 110% !important; margin-bottom: 100px;" >
+                
+            </div>
+            <div class="sub-table">
+                <div class="sb1">
                     <tr class="form-wrapper">
-                        <td class='full-input border1'><label for='invoiceNumber'>INVOICE NUMBER</label><input  [(ngModel)]="res.invoiceNumber" class="smalll-input" type="text" name="invoiceNumber" ></td>
-                        <td class='full-input border1'><label for='invoiceAmount'>INVOICE AMOUNT</label><input  [(ngModel)]="res.invoiceAmount" class="smalll-input" type="text" name="invoiceAmount"></td>
-                        <td class='full-input border1'><label for='freightAmount'>FREIGHT AMOUNT</label><input  [(ngModel)]="res.freightAmount" class="smalll-input" type="text" name="freightAmount"></td>
-                        <td class='full-input border1'><label for='freightCurrency'>FREIGHT CURRENCY</label><input  [(ngModel)]="res.freightCurrency" class="smalll-input" type="text" name="freightCurrency"></td>
-                        <td class='full-input border1'><label for='iecCode'>IEC CODE</label><input  [(ngModel)]="res.iecCode" class="smalll-input" type="text" name="iecCode"></td>
+                        <p class="sh1">SB DETAILS</p>
+                        <td class='full-input border1'><label for='dischargePort'>DISCHARGE PORT</label><input  [(ngModel)]="res.dischargePort" class="smalll-input" type="text" name="dischargePort" ></td>
+                        <td class='full-input border2'><label for='iecCode'>IEC CODE</label><input  [(ngModel)]="res.iecCode" class="smalll-input" type="text" name="iecCode"></td>
+                        <td class='full-input border3'><label for='iecName'>IEC NAME</label><input  [(ngModel)]="res.iecName" class="smalll-input" type="text" name="iecName"></td> <br>
+                        <td class='full-input border1'><label for='adCode'>AD CODE</label><input  [(ngModel)]="res.adCode" class="smalll-input" type="text" name="adCode" ></td>
+
+                        <p class="sh1">INVOICE DETAILS</p>
+                        <td class='full-input border1'><label for='invoiceNumber'>INVOICE NO</label><input  [(ngModel)]="res.invoiceNumber" class="smalll-input" type="text" name="invoiceNumber" ></td>
+                        <td class='full-input border2'><label for='invoiceAmount'>INVOICE AMOUNT</label><input  [(ngModel)]="res.invoiceAmount" class="smalll-input" type="text" name="invoiceAmount"></td>
+                        <td class='full-input border3'><label for='currency'>CURRENCY</label><input  [(ngModel)]="res.currency" class="smalll-input" type="text" name="currency"></td> <br>
+                        <td class='full-input border1'><label for='settledAmount'>SETTELED AMOIUNT</label><input  [(ngModel)]="res.settledAmount" class="smalll-input" type="text" name="settledAmount" ></td>
+                        <td class='full-input border2'><label for='status'>STATUS</label><input  [(ngModel)]="res.status" class="smalll-input" type="text" name="status"></td><br>
+
+                        <p class="sh1">FOB and FREIGHT</p>
+                        <td class='full-input border2'><label for='freightAmount'>FREIGHT AMOUNT</label><input  [(ngModel)]="res.freightAmount" class="smalll-input" type="text" name="freightAmount" ></td>
+                        <td class='full-input border3'><label for='freightCurrency'>FREIGHT CURRENCY</label><input  [(ngModel)]="res.freightCurrency" class="smalll-input" type="text" name="freightCurrency"></td><br>
+
+                        <p class="sh1">INSURANCE</p>
+                        <td class='full-input border2'><label for='insuranceAmount'>INSURANCE AMOUNT</label><input  [(ngModel)]="res.insuranceAmount" class="smalll-input" type="text" name="insuranceAmount" ></td>
+                        <td class='full-input border3'><label for='insuranceCurrency'>INSURANCE CURRENCY</label><input  [(ngModel)]="res.insuranceCurrency" class="smalll-input" type="text" name="insuranceCurrency"></td>
+                        
+                        <p class="sh1">DISCOUNT </p>
+                        <td class='full-input border2'><label for='discountAmount'>DISCOUNT AMOUNT</label><input  [(ngModel)]="res.discountAmount" class="smalll-input" type="text" name="discountAmount" ></td>
+                        <td class='full-input border3'><label for='discountCurrency'>DISCOUNT CURRENCY</label><input  [(ngModel)]="res.discountCurrency" class="smalll-input" type="text" name="discountCurrency"></td><br>
+
+                        <p class="sh1">MISCELLANEOUS </p>
+                        <td class='full-input border2'><label for='miscellaneousAmount'>MISCELLANEOUS AMOUNT</label><input  [(ngModel)]="res.miscellaneousAmount" class="smalll-input" type="text" name="miscellaneousAmount" ></td>
+                        <td class='full-input border3'><label for='miscellaneousCurrency'>MISCELLANEOUS CURRENCY</label><input  [(ngModel)]="res.miscellaneousCurrency" class="smalll-input" type="text" name="miscellaneousCurrency"></td>
+
+                        <p class="sh1">COMMISSION </p>
+                        <td class='full-input border2'><label for='commissionAmount'>COMMISSION AMOUNT</label><input  [(ngModel)]="res.commissionAmount" class="smalll-input" type="text" name="commissionAmount" ></td>
+                        <td class='full-input border3'><label for='commissionCurrency'>COMMISSION CURRENCY</label><input  [(ngModel)]="res.commissionCurrency" class="smalll-input" type="text" name="commissionCurrency"></td>
                     </tr>
-                    
-                </table>
+                </div>
+                <div class="sb2">
+                    <iframe [src]='publicUrl' width="100%" height="700px">
+                    </iframe>
+                </div>
             </div>
             
         </form>
-        <div *ngIf="res" style="margin-top: 150px;">
-            <iframe [src]='publicUrl' width="70%" height="500px">
-            </iframe>
-        </div>
+    
         
           
     </main>

@@ -19,7 +19,7 @@ export class DocumentService {
       const httpOptions = {
           headers: new HttpHeaders({'Authorization': this.authToken })
       };
-      let url = `http://localhost:3000/v1/master/get`;
+      let url = `https://dm.uipep.com/v1/master/get`;
       return this.http.get(url, httpOptions);
     }
 
@@ -29,7 +29,7 @@ export class DocumentService {
       const httpOptions = {
           headers: new HttpHeaders({'Authorization': this.authToken })
       };
-        return this.http.post(`http://localhost:3000/v1/master/update`, {
+        return this.http.post(`https://dm.uipep.com/v1/master/update`, {
             "_id": _id,
             "master": user
       },httpOptions);
@@ -40,7 +40,7 @@ export class DocumentService {
       const httpOptions = {
           headers: new HttpHeaders({'Authorization': this.authToken })
       };
-        return this.http.post(`http://localhost:3000/v1/boe/update`, {
+        return this.http.post(`https://dm.uipep.com/v1/boe/update`, {
             "_id": _id,
             "master": user
       },httpOptions);

@@ -13,8 +13,8 @@ export class BoeBill {
     public status: string;
     public freightAmount: string;
     public freightCurrency: string;
-    public insurenceAmount: string;
-    public insurenceCurrency: string;
+    public insuranceAmount: string;
+    public insuranceCurrency: string;
     public discountAmount: string;
     public discountCurrency: string;
     public miscellaneousAmount: string;
@@ -39,8 +39,8 @@ export class BoeBill {
         this.status = data.status ? data.status : '';
         this.freightAmount = data.freightAmount ? data.freightAmount : '';
         this.freightCurrency = data.freightCurrency ? data.freightCurrency : '';
-        this.insurenceAmount = data.insurenceAmount ? data.insurenceAmount: '';
-        this.insurenceCurrency = data.insurenceCurrency ? data.insurenceCurrency : '';
+        this.insuranceAmount = data.insuranceAmount ? data.insuranceAmount: '';
+        this.insuranceCurrency = data.insuranceCurrency ? data.insuranceCurrency : '';
         this.discountAmount = data.discountAmount ? data.discountAmount: '';
         this.discountCurrency = data.discountCurrency ? data.discountCurrency : '';
         this.miscellaneousAmount = data.miscellaneousAmount ? data.miscellaneousAmount: '';

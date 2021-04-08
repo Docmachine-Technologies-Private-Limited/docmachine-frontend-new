@@ -20,7 +20,7 @@ export class UserService {
     
 
     register(user) {
-        return this.http.post(`http://localhost:3000/v1/authenticate/signup`, {
+        return this.http.post(`https://dm.uipep.com/v1/authenticate/signup`, {
             "fullName": user.fullName,
             "emailId": user.email,
             "password": user.password,
@@ -36,7 +36,7 @@ export class UserService {
         };
         console.log(httpOptions)
 
-        return this.http.post(`http://localhost:3000/v1/authenticate/login`, null, httpOptions);
+        return this.http.post(`https://dm.uipep.com/v1/authenticate/login`, null, httpOptions);
       }
      
 }

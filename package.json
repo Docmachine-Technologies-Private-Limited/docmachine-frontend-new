@@ -40,7 +40,7 @@
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "lint": "ng lint",
     "electron": "ng build && electron .",
-    "pack": "electron-packager ."
+    "electron:windows": "npm run build:prod && npx electron-builder build --windows"
   },
   "dependencies": {
     "@angular/animations": "^11.0.0 || ^12.0.0-0",

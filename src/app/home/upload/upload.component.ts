@@ -42,7 +42,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public publicUrl;
   public sbNo = false;
   public boeNumber = false;
-  
+ 
   private subscription: Subscription;
 
   public config: DropzoneConfigInterface;
@@ -60,7 +60,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     
     if (isPlatformBrowser(this.platformId)) {
       this.config = {
-        url: `http://localhost:3000/v1/documents/uploadFile`,
+        url: `https://dm.uipep.com/v1/documents/uploadFile`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,
@@ -78,8 +78,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
    width : any=0;
 
   runProgressBar(value){
-    console.log(value/4000)
-    timer(0, value/4000)
+    console.log(value/1500)
+    timer(0, value/2500)
     .pipe(
         takeWhile(() => 
           this.isWidthWithinLimit()
@@ -107,8 +107,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
  
 
   ngOnInit(): void {
-    
-    console.log(this);
+  
     this.config = {
       ...this.config
     };
@@ -177,7 +176,6 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(args)
     console.log(args[1].data.sbno)
     console.log(args[1].data.boeNumber)
-    this.sbNo
     if(args[1].data.sbno) {
       this.res = new ShippingBill(args[1].data)
       this.sbNo = true;

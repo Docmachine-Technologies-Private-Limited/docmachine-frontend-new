@@ -1,9 +1,20 @@
 <div class="content-wrap">
            
     <main id="content" class="content table-padding" role="main">
+        <div *ngIf="showInvoice" style="height: 50px;">
+            <p class="bcw" style="font-size: '14px'; float: left; margin-left: 50px;">All Documents</p>
+            <div style="margin-top: -2%;">
+                <span style="width: 30%; float: right;"><span *ngFor="let data of item"><img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"></span></span>
+
+                <span style="width: 50%; float: right;">People collaborated</span>
+            </div>
+        </div>
         <div *ngIf="!showInvoice">
-            <button  class="upload-button" [routerLink]="['/home/upload']">Upload New</button>
-            <h3 class="heading">All Documents</h3>
+            <div>
+                <button  class="upload-button" [routerLink]="['/home/upload']">Upload New</button>
+                <h3 class="heading">All Documents</h3>
+            </div>
+            
                 <div class="dropdown">
                     Date: <select name="subject" id="subject">
                         <option value="" selected="selected">Today</option>
@@ -25,7 +36,7 @@
                                 <table class="table table-striped mb-0">
                                     <thead>
                                     <tr class="text-muted table-heading">
-                                        <th class="rect"><img src="../../../assets/Rectangle-13.png"></th>
+                                        <th class="rect"><img src="./assets/Rectangle-13.png"></th>
                                         <th scope="col"><span class=" pl-3">DATE</span></th>
                                         <th scope="col">SB ID</th>
                                         <th scope="col">INVOICE NUMBER</th>
@@ -36,12 +47,12 @@
                                     </thead>
                                     <tbody class="text-dark" >
                                         <tr class="table-row" *ngFor="let data of item" (click)="getInvoices({'invoices':data.invoices, 'sbno': data.sbno, 'sbdate': data.sbdate})">
-                                            <th class="rect"><img src="../../../assets/Rectangle-13.png"></th>
+                                            <th class="rect"><img src="./assets/Rectangle-13.png"></th>
                                             <th class="pl-4 fw-normal">{{data.sbdate}}</th>
                                             <td class="sb-no">{{data.sbno}}</td>
                                             <td> Invoice-<span *ngFor="let data1 of data.invoices;let i = index"> 0{{i+1}}, </span> </td>
                                             <td>Random Company</td>
-                                            <td><img class="image" src="../../../assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"><img class="image image2" src="../../../assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"> Lindsey Stroud</td>
+                                            <td><img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"> Lindsey Stroud</td>
                                             <td>7800</td>
                                             
                                         </tr>
@@ -54,12 +65,11 @@
                 </div>
             </div>
             <div *ngIf="showInvoice" class="p-8 bc" style="width: 100%;margin-left: 50px;">
-                <p class="heading bcw" style="font-size: '14px';">All Documents</p>
                 <div class="col-12 mb-lg ph-38"  style="width: 30%; float: 'left';">
                     
                     <div id="profile" class="row p-2 bb" *ngFor="let data of item" (click)="getInvoices({'invoices':data.invoices, 'sbno': data.sbno, 'sbdate': data.sbdate})">
                         <div class="ph-10 fl">
-                            <img class="image" src="../../../assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"><img class="image image2" src="../../../assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px">
+                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px">
                         </div>
                         <div class="fr pt-2">
                             <span class="fl fs16">{{ data.sbno }}</span><span class="fr fs12" style="float: 'right';"> {{ data.sbdate }}</span> 
@@ -68,10 +78,7 @@
                     </div>
                 </div>
                 <!-- People collaborated -->
-                <div  style="width: 70%; float: 'right'; background-color: 'white';">
-                    <span style="width: 70%; float: 'left';">People collaborated</span>
-                    <span style="width: 30%; float: 'right';"><span *ngFor="let data of item"><img class="image" src="../../../assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"></span></span>
-                </div>
+                
                 <!-- Invoices -->
                 <div  style="width: 70%; float: 'right'; padding-top: '10px';">
                     <div style="width: 100%;">
@@ -93,7 +100,7 @@
                                             <table class="table table-striped mb-0">
                                                 <thead>
                                                 <tr class="text-muted table-heading fs12">
-                                                    <th class="rect"><img src="../../../assets/Rectangle-13.png"></th>
+                                                    <th class="rect"><img src="./assets/Rectangle-13.png"></th>
                                                     <th scope="col"><span class=" pl-3">Serial Number</span></th>
                                                     <th scope="col">Invoice Number</th>
                                                     <th scope="col">Invoice Amount</th>
@@ -102,7 +109,7 @@
                                                 </thead>
                                                 <tbody class="text-dark" >
                                                     <tr class="table-row fs12" *ngFor="let data of selectedRow.invoices">
-                                                        <th class="rect"><img src="../../../assets/Rectangle-13.png"></th>
+                                                        <th class="rect"><img src="./assets/Rectangle-13.png"></th>
                                                         <th class="pl-4 fw-normal">{{data.sno}}</th>
                                                         <td class="sb-no">{{data.invoiceno}}</td>
                                                         <td>{{data.amount}}</td>
