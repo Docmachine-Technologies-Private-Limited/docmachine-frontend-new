@@ -7,6 +7,10 @@ import { PageNotFoundComponent } from './shared/components';
 import { SignupRoutingModule } from './signup/signup-routing.module';
 import { SigninRoutingModule } from './signIn/signin-routing.module';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { CreateTeamComponent } from './create-team/create-team.component';
+import { AddMemberComponent } from './add-member/add-member.component';
+
+import { CreateTeam1Component } from './create-team1/create-team1.component';
 const routes: Routes = [
   {
     path: '',
@@ -15,6 +19,9 @@ const routes: Routes = [
   },
   { path: 'home', loadChildren: '../app/home/home.module#HomeModule'},
   { path: 'forgotpassword',component: ForgotPasswordComponent, pathMatch: 'full'},
+  //{ path: 'createTeam',component: CreateTeamComponent, pathMatch: 'full'},
+  { path: 'createTeam',component: CreateTeam1Component, pathMatch: 'full'},
+  { path: 'addMember',component: AddMemberComponent, pathMatch: 'full'},
   {
     path: '**',
     component: PageNotFoundComponent  

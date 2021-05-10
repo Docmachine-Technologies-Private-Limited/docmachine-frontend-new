@@ -38,5 +38,83 @@ export class UserService {
 
         return this.http.post(`https://dm.uipep.com/v1/authenticate/login`, null, httpOptions);
       }
+
+    public creatTeam(team) {
+      this.loadFromLocalStorage();
+      console.log(this.authToken)
+      const httpOptions = {
+          headers: new HttpHeaders({'Authorization': this.authToken })
+      };
+        return this.http.post(`http://localhost:3000/v1/team/post`, {
+            "team": team
+      },httpOptions);
+    }
+
+    public creatBene(bene) {
+      this.loadFromLocalStorage();
+      console.log(this.authToken)
+      const httpOptions = {
+          headers: new HttpHeaders({'Authorization': this.authToken })
+      };
+        return this.http.post(`http://localhost:3000/v1/bene/post`, {
+            "bene": bene
+      },httpOptions);
+    }
+
+
+    getBene(boeNumber) {
+      this.loadFromLocalStorage();
+      console.log(this.authToken)
+      const httpOptions = {
+          headers: new HttpHeaders({'Authorization': this.authToken })
+      };
+        return this.http.post(`http://localhost:3000/v1/bene/get`, {
+            "boeNumber": boeNumber
+      },httpOptions);
+    }
+    getSingleBene(id) {
+      this.loadFromLocalStorage();
+      console.log(this.authToken)
+      const httpOptions = {
+          headers: new HttpHeaders({'Authorization': this.authToken })
+      };
+        return this.http.post(`http://localhost:3000/v1/bene/getSingleBene`, {
+            "id": id
+      },httpOptions);
+    }
+
+    updateBene(id,bene) {
+      this.loadFromLocalStorage();
+      console.log(this.authToken)
+      const httpOptions = {
+          headers: new HttpHeaders({'Authorization': this.authToken })
+      };
+        return this.http.post(`http://localhost:3000/v1/bene/update`, {
+            "id": id,
+            "bene":bene
+      },httpOptions);
+    }
+
+    public addMemeber(id,member) {
+      this.loadFromLocalStorage();
+      console.log(this.authToken)
+      const httpOptions = {
+          headers: new HttpHeaders({'Authorization': this.authToken })
+      };
+        return this.http.post(`http://localhost:3000/v1/member/post`, {
+            "id": id,
+            "member": member
+      },httpOptions);
+    }
+    public getMemeber(id) {
+      this.loadFromLocalStorage();
+      console.log(this.authToken)
+      const httpOptions = {
+          headers: new HttpHeaders({'Authorization': this.authToken })
+      };
+        return this.http.post(`http://localhost:3000/v1/member/get`, {
+            "teamId": id
+      },httpOptions);
+    }
      
 }

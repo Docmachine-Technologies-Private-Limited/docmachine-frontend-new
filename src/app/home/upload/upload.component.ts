@@ -42,6 +42,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public publicUrl;
   public sbNo = false;
   public boeNumber = false;
+  public override = false;
+  public message = '';
  
   private subscription: Subscription;
 
@@ -60,7 +62,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     
     if (isPlatformBrowser(this.platformId)) {
       this.config = {
-        url: `https://dm.uipep.com/v1/documents/uploadFile`,
+        url: `http://localhost:3000/v1/documents/uploadFile`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,
@@ -131,8 +133,24 @@ export class UploadComponent implements OnInit, AfterViewInit {
     // e.form.value._id = this.res._id
     console.log(e.form.value)
     // this.formData = new ShippingBill(e.form.value)
-    // console.log(this.formData)
-    this.documentService.updateMaster(e.form.value,this.res._id)
+    // console.log(this.formData
+    if(this.message == 'This file already uploaded') {
+      console.log("inside file already exist")
+      this.documentService.updateMasterBySb(e.form.value,e.form.value.sbno)
+            .subscribe(
+                data => {
+                    console.log("king123")
+                    console.log(data)
+                    this.message = ''
+                    this.router.navigate(['home/dashboard']);
+                    //this.router.navigate(['/login'], { queryParams: { registered: true }});
+                },
+                error => {
+                    console.log("error")
+                });
+    }
+    else {
+      this.documentService.updateMaster(e.form.value,this.res._id)
             .subscribe(
                 data => {
                     console.log("king123")
@@ -143,6 +161,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
                 error => {
                     console.log("error")
                 });
+    }
+    
   }
 
   public onSubmitBoe(e){
@@ -150,17 +170,35 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(e.form.value)
     // this.formData = new ShippingBill(e.form.value)
     // console.log(this.formData)
-    this.documentService.updateBoe(e.form.value,this.res._id)
+    if(this.message == 'This file already uploaded') {
+      console.log("inside file already exist")
+      this.documentService.updateBoeByBoe(e.form.value,e.form.value.boeNumber)
             .subscribe(
                 data => {
                     console.log("king123")
                     console.log(data)
+                    this.message = ''
                     this.router.navigate(['home/dashboard']);
                     //this.router.navigate(['/login'], { queryParams: { registered: true }});
                 },
                 error => {
                     console.log("error")
                 });
+    }
+    else {
+      this.documentService.updateBoe(e.form.value,this.res._id)
+      .subscribe(
+          data => {
+              console.log("king123")
+              console.log(data)
+              this.router.navigate(['home/dashboard']);
+              //this.router.navigate(['/login'], { queryParams: { registered: true }});
+          },
+          error => {
+              console.log("error")
+          });
+    }
+   
   }
 
   public onUploadInit(args: any): void {
@@ -176,7 +214,22 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(args)
     console.log(args[1].data.sbno)
     console.log(args[1].data.boeNumber)
-    if(args[1].data.sbno) {
+    if(args[1].message == 'This file already uploaded') {
+      this.message = args[1].message
+      this.override = true;
+      if(args[1].data.sbno) {
+        this.res = new ShippingBill(args[1].data)
+        this.sbNo = true;
+        console.log(this.res)
+      }
+      else if(args[1].data.boeNumber) {
+        this.res = new BoeBill(args[1].data)
+        this.boeNumber = true;
+        console.log(this.res)
+      }
+      
+    }
+    else if(args[1].data.sbno) {
       this.res = new ShippingBill(args[1].data)
       this.sbNo = true;
       console.log(this.res)
@@ -217,6 +270,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
     if (isPlatformBrowser(this.platformId)) {
       this.filePreview();
     }
+  }
+  public onOverride() {
+    this.override = false;
   }
 
   public filePreview() {

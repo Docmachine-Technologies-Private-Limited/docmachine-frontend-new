@@ -41,7 +41,7 @@
                     </li>
                     <li class="">
                         <!-- an example of nested submenu. basic bootstrap collapse component -->
-                        <a class="sidebar-content">
+                        <a class="sidebar-content" [routerLink]="['/home/manageUser']">
                             <span class="icon side-icon">
                                 <img src="./assets/single-neutral-circle.png">
                             </span>
@@ -68,11 +68,20 @@
                     </li>
                     <li class="">
                         <!-- an example of nested submenu. basic bootstrap collapse component -->
-                        <a class="sidebar-content">
+                        <a class="sidebar-content" >
                             <span class="icon side-icon">
                                 <img src="./assets/briefcase.png">
                             </span>
                             Manage Reports
+                        </a>
+                    </li>
+                    <li class="">
+                        <!-- an example of nested submenu. basic bootstrap collapse component -->
+                        <a class="sidebar-content" [routerLink]="['/home/manageCustomer']">
+                            <span class="icon side-icon">
+                                <img src="./assets/briefcase.png">
+                            </span>
+                            Manage Customer
                         </a>
                     </li>
                     <li class="">

@@ -25,9 +25,10 @@ export class SigninComponent implements OnInit {
             .subscribe(
                 data => {
                     console.log("king123")
+                    console.log(data['result'])
                     console.log(data['result'].token)
                     this.userService.addToken(data['result'].token);
-                    this.router.navigate(['/home/dashboard']);
+                    this.router.navigate(['/createTeam']);
                 },
                 error => {
                     console.log("error")

@@ -201,7 +201,7 @@ a:hover {
   background: #F8FAFD;
   height: 112px;
   padding: 13px;
-  width: 72%;
+  width: 69%;
   padding-left: 0px !important;
   margin: 0px !important;
   border: 1px solid #EBEEFE;
@@ -330,15 +330,16 @@ label {
 }
 
 .sb1 {
-  width: 52%;  
+  //width: 52%;  
   float: left;
   background-color: #F8FAFD; 
   border: 1px solid #EBEEFE;
+  margin-right: 10px;
+  padding-right: 10px;
 }
 .sb2 {
-  width: 40%; 
-  float: right; 
-  margin-right: 90px;
+  //width: 40%; 
+  float: left;
 }
 
 .sh1 {
