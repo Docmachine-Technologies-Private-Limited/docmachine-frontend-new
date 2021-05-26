@@ -2,14 +2,16 @@ import { InwardRemittanceComponent } from './yesBank/inwardRemittance/inwardRemi
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {CommonModule} from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { UploadComponent } from './upload/upload.component';
-import { DropzoneModule, DropzoneConfigInterface,
-  DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
+import {
+  DropzoneModule, DropzoneConfigInterface,
+  DROPZONE_CONFIG
+} from 'ngx-dropzone-wrapper';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AgainstAdvanceComponent } from './yesBank/against-advance/against-advance.component';
 import { RequestLetterComponent } from './yesBank/request-letter/request-letter.component';
@@ -21,6 +23,9 @@ import { CreateBeneComponent } from './create-bene/create-bene.component';
 import { ManageCustomerComponent } from './manage-customer/manage-customer.component';
 import { EditBeneComponent } from './edit-bene/edit-bene.component';
 import { ManageUserComponent } from './manage-user/manage-user.component';
+import { DashboardTaskComponent } from './dashboard-task/dashboard-task.component';
+import { RequestComponent } from './request/request.component';
+import { EditCompanyComponent } from './edit-company/edit-company.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -36,7 +41,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
 // import {SharedProfileModule} from '../freelancerprofile/shared.profile.module';
 
 @NgModule({
-  declarations: [SidenavComponent, DashboardComponent, UploadComponent, InwardRemittanceComponent, AgainstAdvanceComponent, RequestLetterComponent, LetterOfCreditComponent, LetterOfCreditImportComponent, A2cumAplicationComponent, AdvanceRemitanceComponent, CreateBeneComponent, ManageCustomerComponent, EditBeneComponent, ManageUserComponent],
+  declarations: [SidenavComponent, DashboardComponent, UploadComponent, InwardRemittanceComponent, AgainstAdvanceComponent, RequestLetterComponent, LetterOfCreditComponent, LetterOfCreditImportComponent,
+    A2cumAplicationComponent, AdvanceRemitanceComponent, CreateBeneComponent, ManageCustomerComponent, EditBeneComponent, ManageUserComponent, DashboardTaskComponent, RequestComponent, EditCompanyComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -45,7 +51,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     MatProgressBarModule,
     MatTabsModule,
     // BrowserModule,
-   
+
     // SharedProjectsModule,
     // SharedProfileModule,
     ReactiveFormsModule,
@@ -53,27 +59,30 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
       {
         path: '', component: SidenavComponent,
         children: [
-          { path: 'dashboard', component: DashboardComponent, pathMatch: 'full'},
-          { path:'upload', component: UploadComponent, pathMatch: 'full'},
-          { path:'manageCustomer', component: ManageCustomerComponent, pathMatch: 'full'},
-          { path:'createBene', component: CreateBeneComponent, pathMatch: 'full'},
-          { path:'inwardRemittance/:boeNumber', component: InwardRemittanceComponent, pathMatch: 'full'},
-          { path:'againstAdvance', component: AgainstAdvanceComponent, pathMatch: 'full'},
-          { path:'requestLetter', component: RequestLetterComponent, pathMatch: 'full'},
-          { path:'letterOfCredit', component: LetterOfCreditComponent, pathMatch: 'full'},
-          { path:'letterOfCreditImport', component: LetterOfCreditImportComponent, pathMatch: 'full'},
-          { path:'a2cumApplication', component: A2cumAplicationComponent, pathMatch: 'full'},
-          { path:'advanceRemittance', component: AdvanceRemitanceComponent, pathMatch: 'full'},
-          { path:'editBene/:id', component: EditBeneComponent, pathMatch: 'full'},
-          { path:'manageUser', component: ManageUserComponent, pathMatch: 'full'},
+          { path: 'dashboard', component: DashboardComponent, pathMatch: 'full' },
+          { path: 'dashboardTask', component: DashboardTaskComponent, pathMatch: 'full' },
+          { path: 'upload', component: UploadComponent, pathMatch: 'full' },
+          { path: 'manageCustomer', component: ManageCustomerComponent, pathMatch: 'full' },
+          { path: 'createBene', component: CreateBeneComponent, pathMatch: 'full' },
+          { path: 'inwardRemittance/:boeNumber', component: InwardRemittanceComponent, pathMatch: 'full' },
+          { path: 'againstAdvance', component: AgainstAdvanceComponent, pathMatch: 'full' },
+          { path: 'requestLetter', component: RequestLetterComponent, pathMatch: 'full' },
+          { path: 'letterOfCredit', component: LetterOfCreditComponent, pathMatch: 'full' },
+          { path: 'letterOfCreditImport', component: LetterOfCreditImportComponent, pathMatch: 'full' },
+          { path: 'a2cumApplication', component: A2cumAplicationComponent, pathMatch: 'full' },
+          { path: 'advanceRemittance', component: AdvanceRemitanceComponent, pathMatch: 'full' },
+          { path: 'editBene/:id', component: EditBeneComponent, pathMatch: 'full' },
+          { path: 'manageUser', component: ManageUserComponent, pathMatch: 'full' },
+          { path: 'requestLetter1', component: RequestComponent, pathMatch: 'full' },
+          { path: 'account', component: EditCompanyComponent, pathMatch: 'full' },
         ]
       },
     ])
   ],
   providers: [
   ],
-  schemas:[CUSTOM_ELEMENTS_SCHEMA],
-//   exports: [SharedProjectsModule]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  //   exports: [SharedProjectsModule]
   exports: [
     MatProgressBarModule,
     MatTabsModule

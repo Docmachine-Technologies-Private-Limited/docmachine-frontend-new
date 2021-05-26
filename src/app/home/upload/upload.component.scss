@@ -201,7 +201,7 @@ a:hover {
   background: #F8FAFD;
   height: 112px;
   padding: 13px;
-  width: 69%;
+  width: 72%;
   padding-left: 0px !important;
   margin: 0px !important;
   border: 1px solid #EBEEFE;
@@ -239,7 +239,7 @@ a:hover {
   display: inline-block;
   padding: 3px;
   height: 74px;
-  width: 177px;
+  width: 150px;
   background-color: white;
   border-radius: 5px;
   box-shadow: 4px 4px 8px 4px #EEEEFA;;
@@ -265,7 +265,7 @@ a:hover {
 }
 
 .smalll-input {
-  width: 160px !important;
+  width: 140px !important;
   outline: none;
   border: none;
   display:block;
@@ -330,16 +330,15 @@ label {
 }
 
 .sb1 {
-  //width: 52%;  
+  width: 50%;  
   float: left;
   background-color: #F8FAFD; 
   border: 1px solid #EBEEFE;
-  margin-right: 10px;
-  padding-right: 10px;
 }
 .sb2 {
-  //width: 40%; 
-  float: left;
+  width: 39%; 
+  float: right; 
+  margin-right: 90px;
 }
 
 .sh1 {

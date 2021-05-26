@@ -696,4 +696,92 @@ label {
     margin-top: 20px;
   }
 
+.at {
+  font-size: 16px;
+  padding-right: 20px;
+  padding-left: 10px;
+}
+
+.ctb {
+  font-size: 13px;
+  margin-left: 210px;
+  background-color: #49A2D7;
+  padding: 5px;
+  color: white;
+  border-radius: 4px;
+}
+
+.radio1 [type="radio"] {
+  /* hiding the inputs */
+    display: inline-block;
+    height: 17px;
+    width: 17px;
+    color: #49A2D7;
+    margin-bottom: 10px;
+  }
+
+  .radio1 input[type="radio"]:checked + input {
+    background-color:#bfb;
+    border-color: #4c4;
+  }
+
+  .label1 {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding-right: 12px;
+    color: #606670;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;	
+    transition: all 0.3s;
+    margin-left: 30px;
+  }
+
+  .radio1 {
+    margin-top: 20px;
+  }
+
+  .stp1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .stp2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .stp3 {
+    color: #4A4A4A;
+    font-size: 14px;
+  }
+
+  .of1 {
+    height:290px;
+    width:200px;
+    border:1px solid #ccc;
+    font:16px/26px Georgia, Garamond, Serif;
+    overflow:auto;
+  }
+
+  /* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
  
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: grey; 
+}

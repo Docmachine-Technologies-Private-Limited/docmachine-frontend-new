@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   public import = false;
   Ax1: boolean;
   Ax2: boolean;
+  step1: any;
   constructor(private documentService: DocumentService) {
     this.showInvoice = false;
     this.tableWidth = '100%';
@@ -26,28 +27,28 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.documentService.getMaster(this.user)
-            .subscribe(
-                data => {
-                    console.log("king123")
-                    console.log(data['data'])
-                    this.item1 = data['data']
-                    //this.router.navigate(['/login'], { queryParams: { registered: true }});
-                },
-                error => {
-                    console.log("error")
-                });
+      .subscribe(
+        data => {
+          console.log("king123")
+          console.log(data['data'])
+          this.item1 = data['data']
+          //this.router.navigate(['/login'], { queryParams: { registered: true }});
+        },
+        error => {
+          console.log("error")
+        });
 
     this.documentService.getBoe(this.user)
-              .subscribe(
-                  data => {
-                      console.log("king123")
-                      console.log(data['data'])
-                      this.item2= data['data']
-                      //this.router.navigate(['/login'], { queryParams: { registered: true }});
-                  },
-                  error => {
-                      console.log("error")
-                  });
+      .subscribe(
+        data => {
+          console.log("king123")
+          console.log(data['data'])
+          this.item2 = data['data']
+          //this.router.navigate(['/login'], { queryParams: { registered: true }});
+        },
+        error => {
+          console.log("error")
+        });
 
   }
   getInvoices(selectedRowValues) {
@@ -68,6 +69,9 @@ export class DashboardComponent implements OnInit {
   }
   withBill() {
     this.Ax2 = !this.Ax2
+  }
+  onNewTrans() {
+    this.step1 = !this.step1;
   }
 
 }
