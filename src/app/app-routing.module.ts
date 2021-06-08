@@ -18,15 +18,15 @@ const routes: Routes = [
     redirectTo: 'signup',
     pathMatch: 'full'
   },
-  { path: 'home', loadChildren: '../app/home/home.module#HomeModule'},
-  { path: 'forgotpassword',component: ForgotPasswordComponent, pathMatch: 'full'},
-  { path: 'updatePassword/:id',component: UpdatePasswordComponent, pathMatch: 'full'},
+  { path: 'home', loadChildren: '../app/home/home.module#HomeModule' },
+  { path: 'forgotpassword', component: ForgotPasswordComponent, pathMatch: 'full' },
+  { path: 'updatePassword/:id', component: UpdatePasswordComponent, pathMatch: 'full' },
   //{ path: 'createTeam',component: CreateTeamComponent, pathMatch: 'full'},
-  { path: 'createTeam',component: CreateTeam1Component, pathMatch: 'full'},
-  { path: 'addMember',component: AddMemberComponent, pathMatch: 'full'},
+  { path: 'createTeam', component: CreateTeam1Component, pathMatch: 'full' },
+  { path: 'addMember', component: AddMemberComponent, pathMatch: 'full' },
   {
     path: '**',
-    component: PageNotFoundComponent  
+    component: PageNotFoundComponent
   }
 ];
 

@@ -1,10 +1,10 @@
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import {ActivatedRoute} from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { UserService } from './../service/user.service';
-import { DropzoneDirective, DropzoneConfigInterface} from 'ngx-dropzone-wrapper';
-import {AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
-import {isPlatformBrowser, isPlatformServer} from '@angular/common';
+import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 @Component({
   selector: 'app-add-member',
@@ -14,12 +14,12 @@ import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 export class AddMemberComponent implements OnInit, AfterViewInit {
   @Input() que: any;
   @Input() entities: any;
-  @ViewChild('inputName', {static: true}) public inputRef: ElementRef;
+  @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
   public type: string = 'directive';
   public disabled: boolean = false;
-  @ViewChild(DropzoneDirective, {static: true}) directiveRef?: DropzoneDirective;
+  @ViewChild(DropzoneDirective, { static: true }) directiveRef?: DropzoneDirective;
   memeberForm: FormGroup;
-  id:any;
+  id: any;
   item: Object;
   item1: Object;
   authToken: any;
@@ -29,18 +29,18 @@ export class AddMemberComponent implements OnInit, AfterViewInit {
 
   public config: DropzoneConfigInterface;
 
-  constructor(@Inject(PLATFORM_ID) public platformId,private route:ActivatedRoute,private formBuilder: FormBuilder,private userService: UserService,) { 
+  constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder, private userService: UserService,) {
     this.loadFromLocalStorage()
     console.log(this.authToken)
     this.headers = {
-      id:this.id,
+      id: this.id,
       Authorization: this.authToken,
     }
 
-    
+
     if (isPlatformBrowser(this.platformId)) {
       this.config = {
-        url: `http://localhost:3000/v1/member/uploadImage`,
+        url: `https://dm.uipep.com/v1/member/uploadImage`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,
@@ -62,21 +62,21 @@ export class AddMemberComponent implements OnInit, AfterViewInit {
     this.memeberForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
       email: ['', [Validators.required, Validators.minLength(6)]]
-  });
+    });
 
-  this.userService.getMemeber(this.id)
+    this.userService.getMemeber(this.id)
       .subscribe(
-          data => {
-              console.log("king123")
-              console.log(data)
-              this.item1 = data['data']
-              console.log(this.item1['length'])
-              //this.router.navigate(['/addMember'],{ queryParams: { id:data['data']._id } })
-              
-          },
-          error => {
-              console.log("error")
-          });
+        data => {
+          console.log("king123")
+          console.log(data)
+          this.item1 = data['data']
+          console.log(this.item1['length'])
+          //this.router.navigate(['/addMember'],{ queryParams: { id:data['data']._id } })
+
+        },
+        error => {
+          console.log("error")
+        });
 
 
 
@@ -112,7 +112,7 @@ export class AddMemberComponent implements OnInit, AfterViewInit {
     //     this.boeNumber = true;
     //     console.log(this.res)
     //   }
-      
+
     // }
     // else if(args[1].data.sbno) {
     //   this.res = new ShippingBill(args[1].data)
@@ -131,21 +131,21 @@ export class AddMemberComponent implements OnInit, AfterViewInit {
   }
   onSubmit() {
     console.log(this.memeberForm.value)
-    this.memeberForm.value.imageUrl = this.img 
+    this.memeberForm.value.imageUrl = this.img
     console.log(this.memeberForm.value)
-    this.userService.addMemeber(this.id,this.memeberForm.value)
+    this.userService.addMemeber(this.id, this.memeberForm.value)
       .subscribe(
-          data => {
-              console.log("king123")
-              console.log(data)
-              this.item = data
-              this.ngOnInit()
-              //this.router.navigate(['/addMember'],{ queryParams: { id:data['data']._id } })
-              
-          },
-          error => {
-              console.log("error")
-          });
+        data => {
+          console.log("king123")
+          console.log(data)
+          this.item = data
+          this.ngOnInit()
+          //this.router.navigate(['/addMember'],{ queryParams: { id:data['data']._id } })
+
+        },
+        error => {
+          console.log("error")
+        });
   }
   public loadFromLocalStorage() {
     const token = localStorage.getItem('token');
@@ -155,10 +155,10 @@ export class AddMemberComponent implements OnInit, AfterViewInit {
 
 
   ngAfterViewInit() {
-  //   window['sidebarInit']();
-  //   if (isPlatformBrowser(this.platformId)) {
-  //     this.filePreview();
-  //   }
-   }
+    //   window['sidebarInit']();
+    //   if (isPlatformBrowser(this.platformId)) {
+    //     this.filePreview();
+    //   }
+  }
 
 }

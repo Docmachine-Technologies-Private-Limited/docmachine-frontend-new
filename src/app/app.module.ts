@@ -8,8 +8,10 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
-import { DropzoneModule, DropzoneConfigInterface,
-  DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
+import {
+  DropzoneModule, DropzoneConfigInterface,
+  DROPZONE_CONFIG
+} from 'ngx-dropzone-wrapper';
 
 // NG Translate
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -62,4 +64,4 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

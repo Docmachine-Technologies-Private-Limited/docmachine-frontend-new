@@ -11,11 +11,11 @@ import jwt_decode from 'jwt-decode';
 })
 export class UpdatePasswordComponent implements OnInit {
   resetForm: FormGroup;
-  message:any;
+  message: any;
   token: any;
   email: any;
   toggle: boolean;
-  constructor(private formBuilder: FormBuilder,private userService: UserService,
+  constructor(private formBuilder: FormBuilder, private userService: UserService,
     private router: Router, private route: ActivatedRoute) { }
   ngOnInit(): void {
     this.token = this.route.snapshot.params['id'];
@@ -25,26 +25,26 @@ export class UpdatePasswordComponent implements OnInit {
     this.resetForm = this.formBuilder.group({
       password1: ['', [Validators.required, Validators.minLength(6)]],
       password2: ['', [Validators.required, Validators.minLength(6)]]
-  });
+    });
   }
   onSubmit() {
     console.log(this.resetForm.value)
     console.log(this.token)
-    if(true) {
-      this.userService.updatePsw(this.resetForm.value,this.email)
-            .subscribe(
-                data => {
-                    console.log("king123")
-                    console.log(data)
-                    if(data['success']==true) {
-                      this.toggle = true;
-                    }
-                    //this.message = data['message']
-                   // 
-                },
-                error => {
-                    console.log("error")
-                });
+    if (true) {
+      this.userService.updatePsw(this.resetForm.value, this.email)
+        .subscribe(
+          data => {
+            console.log("king123")
+            console.log(data)
+            if (data['success'] == true) {
+              this.toggle = true;
+            }
+            //this.message = data['message']
+            // 
+          },
+          error => {
+            console.log("error")
+          });
     }
   }
 

@@ -1,19 +1,17 @@
-
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
-import { UserService } from './../service/user.service';
+import { UserService } from './../../service/user.service';
 import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
-
 @Component({
-  selector: 'app-create-team1',
-  templateUrl: './create-team1.component.html',
-  styleUrls: ['./create-team1.component.scss']
+  selector: 'app-edit-company',
+  templateUrl: './edit-company.component.html',
+  styleUrls: ['../../../sass/application.scss', './edit-company.component.scss']
 })
-export class CreateTeam1Component implements OnInit, AfterViewInit {
+export class EditCompanyComponent implements OnInit, AfterViewInit {
   @Input() que: any;
   @Input() entities: any;
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
@@ -59,6 +57,21 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
+
+    this.userService.getTeam()
+      .subscribe(
+        data => {
+          console.log("king123")
+          console.log(data['data'][0])
+          this.item = data['data'][0]
+          console.log(this.item)
+          //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
+
+        },
+        error => {
+          console.log("error")
+        });
+
     this.loginForm = this.formBuilder.group({
       teamName: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
       iec: ['', Validators.required],
@@ -116,16 +129,17 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     }
   }
 
-  onSubmit() {
-    this.loginForm.value.file = this.file
-    this.userService.creatTeam(this.loginForm.value)
+  onSubmit(values) {
+    console.log(values.form.value)
+    values.form.value.file = this.item.file
+    values.form.value.member = this.item.member
+    console.log(values.form.value)
+    this.userService.updateTeam(values.form.value)
       .subscribe(
         data => {
           console.log("king123")
-          console.log(data['data']._id)
-          this.item = data
-          this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
-
+          console.log(data['data'])
+          this.router.navigate(['/home/dashboard']);
         },
         error => {
           console.log("error")
