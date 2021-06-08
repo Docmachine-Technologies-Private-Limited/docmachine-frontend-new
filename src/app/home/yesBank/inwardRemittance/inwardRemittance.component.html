@@ -1,0 +1,589 @@
+<div class="content-wrap">
+  <main id="content" class="content table-padding bc" role="main">
+    <div id="mainId" class="bc">
+      <div id="first" class="bc">
+        <div style="margin-left: 230px; width: 535px">
+          <p class="heading">
+            Request Letter cum FEMA Declaration- DIRECT /ADVANCE Imports
+          </p>
+        </div>
+        <div style="margin-left: 40px; margin-top: 20px" class="bc">
+          <p>Date:</p>
+          <p style="margin-bottom: 2px">
+            To, <br />
+            The Manager <br />
+            YES Bank Ltd., <br />
+            Branch address
+          </p>
+          <input class="ind" type="text" />
+          <p style="margin-top: 10px">
+            We authorize the bank to remit as per the details specified below:
+          </p>
+        </div>
+        <div style="margin-left: 30px" class="bc">
+          <table style="width: 60%">
+            <tr style="border: none">
+              <td class="wtd" style="border: none; width: 60%">
+                <b>Type of Import Remittance:</b>
+              </td>
+              <td class="wtd1" style="border: 1px solid black; width: 300px">
+                Advance Remittance
+              </td>
+            </tr>
+            <tr style="border: none">
+              <td class="wtd" style="border: none; width: 60%">
+                (Select any one from drop down option)
+              </td>
+              <td class="wtd1" style="border: 1px solid black; width: 300px">
+                Direct Import Remittance
+              </td>
+            </tr>
+          </table>
+          <br />
+          <table style="width: 60%">
+            <tr style="border: none">
+              <td class="wtd" style="border: none; width: 60%">
+                <b>Details of drawal of Foreign Exchange:</b>
+              </td>
+              <td
+                class="wtd1"
+                style="border: 1px solid black; width: 300px; width: 30%"
+              >
+                Telegraphic Transfer (TT)
+              </td>
+            </tr>
+            <tr style="border: none">
+              <td class="wtd" style="border: none; width: 60%">
+                (Select any one from drop down option)
+              </td>
+              <td
+                class="wtd1"
+                style="border: 1px solid black; width: 300px; width: 30%"
+              >
+                Demand Draft (DD)
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div
+          style="
+            float: left;
+            display: block;
+            width: 73%;
+            margin-top: 30px;
+            margin-left: 43px;
+          "
+          class="bc"
+        >
+          <p style="margin-bottom: 0px"><b>Foreign Currency:</b></p>
+          <table>
+            <tr>
+              <td class="wtd">Foreign Currency</td>
+              <td class="wtd1">
+                <p>
+                  {{ item2.currency }}
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd">Foreign Currency Amount in figures</td>
+              <td class="wtd1">
+                <p>
+                  {{ item2.amount }}
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd">Foreign Currency in words</td>
+              <td class="wtd1">
+                <p>
+                  {{ item2.amount | numberToWords: item2.amount }}
+                </p>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div
+          style="
+            float: left;
+            display: block;
+            width: 73%;
+            margin-top: 30px;
+            margin-left: 43px;
+          "
+          class="bc"
+        >
+          <p style="margin-bottom: 0px"><b>Details of the Applicant::</b></p>
+          <table>
+            <tr>
+              <td class="wtd">Name of the Applicant</td>
+              <td class="wtd1">
+                <p>{{ applicant.fullName }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd">Applicant’s Customer ID</td>
+              <td class="wtd1"><p>46464646644546565</p></td>
+            </tr>
+            <tr>
+              <td class="wtd" class="wtd">Applicant Email ID</td>
+              <td class="wtd1">
+                <p>
+                  {{ applicant.emailId }}
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd">Applicant contact number</td>
+              <td class="wtd1">45646546546</td>
+            </tr>
+          </table>
+        </div>
+        <div
+          style="
+            float: left;
+            display: block;
+            width: 73%;
+            margin-top: 30px;
+            margin-left: 43px;
+          "
+          class="bc"
+        >
+          <p style="margin-bottom: 0px"><b>Beneficiary Details:</b></p>
+          <table>
+            <tr>
+              <td class="wtd">Beneficiary’s name and address</td>
+              <td class="wtd1">
+                <p>
+                  {{ benneDetail.beneName }},
+                  {{ benneDetail.beneAdrs }}
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd">
+                Beneficiary’s Bank Name (in case of <br />
+                Telegraphic Transfer)
+              </td>
+              <td class="wtd1">
+                <p>{{ benneDetail.beneBankName }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd">
+                Beneficiary’s A/c Number (in case of <br />
+                Telegraphic Transfer)
+              </td>
+              <td class="wtd1">
+                <p>{{ benneDetail.beneAccNo }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd">
+                Beneficiary’s Bank Address including <br />
+                Country (in case of Telegraphic Transfer)
+              </td>
+              <td class="wtd1">
+                <p>{{ benneDetail.beneBankAdress }}</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div id="second" class="bc">
+        <div
+          style="
+            float: left;
+            display: block;
+            width: 73%;
+            margin-top: 30px;
+            margin-left: 43px;
+          "
+          class="bc"
+        >
+          <table>
+            <tr>
+              <td class="wtd" class="wtd">Beneficiary’s bank’s (any one)</td>
+              <td class="wtd1">
+                <span
+                  >SWIFT code*
+                  <label style="text-decoration: underline">{{
+                    benneDetail.beneBankSwiftCode
+                  }}</label>
+                </span>
+                <br />
+                <span>*Mandatory for all remittances</span> <br />
+                <span
+                  >Sort Code
+                  <label style="text-decoration: underline" for="">{{
+                    benneDetail.sortCode
+                  }}</label> </span
+                ><br />
+                <span
+                  >IBAN*
+                  <label style="text-decoration: underline" for="">{{
+                    benneDetail.iban
+                  }}</label> </span
+                ><br />
+                <span
+                  >* Mandatory for remittances to Middle-East countries and
+                  Europe</span
+                >
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd" class="wtd">
+                Intermediary Bank details (if applicable)
+              </td>
+              <td class="wtd1">
+                <span
+                  >SWIFT code**
+                  <label style="text-decoration: underline" for="">{{
+                    benneDetail.interBankSwiftCode
+                  }}</label>
+                </span>
+                <br />
+                <span class="spl"
+                  >Intermediary Bank Name (if any)
+                  <label style="text-decoration: underline" for="">{{
+                    benneDetail.interBankName
+                  }}</label>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd">
+                Correspondent Bank charges borne by <br />
+                (select any one)
+              </td>
+              <td class="wtd1">
+                [ &nbsp;&nbsp;] Beneficiary (BEN) [&nbsp;&nbsp; ] Principal
+                protect <br />
+                [&nbsp;&nbsp; ] Remitter (REM)
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd" class="wtd">
+                Purpose of Remittance (the details to be <br />
+                mentioned in swift message for <br />
+                beneficiary’s information)
+              </td>
+              <td class="wtd1">
+                [ &nbsp;&nbsp;] Raw Material [ &nbsp;&nbsp;] Capital goods
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd" class="wtd">Description of Goods</td>
+              <td class="wtd1"><input type="text" /></td>
+            </tr>
+          </table>
+        </div>
+        <div
+          style="
+            float: left;
+            display: block;
+            width: 73%;
+            margin-top: 10px;
+            margin-left: 43px;
+          "
+          class="bc"
+        >
+          <p style="margin-bottom: 0px"><b>Import Particulars:</b></p>
+          <table class="table1">
+            <tr>
+              <td colspan="4"><b>Invoice details</b></td>
+              <td class="wtd2" rowspan="2">
+                Quantity <br />
+                of Goods
+              </td>
+              <td class="wtd2" rowspan="2">
+                Description <br />
+                of Goods <br />
+                (HS Code if <br />
+                available)
+              </td>
+              <td class="wtd2" rowspan="2">
+                Country <br />
+                of <br />
+                Origin
+              </td>
+              <td class="wtd2" rowspan="2">
+                Mode of <br />
+                Shipment <br />
+                (Air, Sea, <br />
+                Post, Rail, <br />
+                Road <br />
+                transport <br />
+                etc.)
+              </td>
+              <td class="wtd2" rowspan="2">
+                Date of <br />
+                Shipment <br />
+                (If not <br />
+                known <br />
+                approx.)
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd2">
+                No.& <br />
+                Date
+              </td>
+              <td class="wtd2" class="wtd">
+                Terms <br />
+                (CIF/FOB <br />
+                etc)
+              </td>
+              <td class="wtd2">Currency</td>
+              <td class="wtd2">Amount</td>
+            </tr>
+            <tr>
+              <td class="wtd7"><input type="text" value="{{ 1 }}" /></td>
+              <td class="wtd7"><input type="text" value="" /></td>
+              <td class="wtd7">
+                <input type="text" value="{{ item.currency }}" />
+              </td>
+              <td class="wtd7"><input type="text" value="" /></td>
+              <td class="wtd7"><input type="text" value="{{ 65666 }}" /></td>
+              <td class="wtd7"><input type="text" /></td>
+              <td class="wtd7"><input type="text" /></td>
+              <td class="wtd7"><input type="text" /></td>
+              <td class="wtd7"><input type="text" /></td>
+            </tr>
+          </table>
+        </div>
+        <div
+          style="float: left; display: block; width: 73%; margin-left: 43px"
+          class="bc"
+        >
+          <p>
+            I / We authorize you to debit Current account /Cash Credit account /
+            EEFC Account No.
+            <span><input type="text" name="" id="" /></span> for (currency)<span
+              ><input type="text" name="" id=""
+            /></span>
+            (amount) <span><input type="text" name="" id="" /></span>and /or
+            balance amount from Current Account /Cash Credit account / EEFC A/c
+            No. <span><input type="text" name="" id="" /></span>for
+            (currency)<span><input type="text" name="" id="" /></span>
+            (amount)<span><input type="text" name="" id="" /></span>and charges
+            from account <span><input type="text" name="" id="" /></span>
+          </p>
+        </div>
+        <div
+          style="
+            float: left;
+            display: block;
+            width: 73%;
+            margin-top: 10px;
+            margin-left: 43px;
+          "
+          class="bc"
+        >
+          <p style="margin-bottom: 0px">
+            <b
+              >Details of Forward Contract(s), if any, booked against this
+              payment is/are as follows –</b
+            >
+          </p>
+          <table>
+            <tr>
+              <td class="wtd4">
+                <b
+                  >Forward Contract No. & <br />
+                  Date</b
+                >
+              </td>
+              <td class="wtd4">
+                <b
+                  >Forward Contract <br />
+                  Currency &Amount</b
+                >
+              </td>
+              <td class="wtd4">
+                <b
+                  >Amount to be Utilized for <br />
+                  this remittance</b
+                >
+              </td>
+              <td class="wtd4"><b>Due Date of the Contract</b></td>
+            </tr>
+            <tr>
+              <td class="wtd1"><input type="text" /></td>
+              <td class="wtd1"><input type="text" /></td>
+              <td class="wtd1"><input type="text" /></td>
+              <td class="wtd1"><input type="text" /></td>
+            </tr>
+          </table>
+        </div>
+        <div
+          style="float: left; display: block; width: 73%; margin-left: 43px"
+          class="bc"
+        >
+          <p>
+            We undertake that we shall make the physical import within 6 months
+            from the date of remittance (36 months in the case of Capital goods)
+            and evidence of import will be furnished within 15 days from the
+            date of physical import (applicable for advance payment)
+          </p>
+        </div>
+        <div
+          style="float: left; display: block; width: 73%; margin-left: 43px"
+          class="bc"
+        >
+          <p style="margin-bottom: 0px"><b>Declaration cum Undertaking:</b></p>
+          <p>
+            The goods imported by us are (Tick the appropriate box): <br />
+            <span style="height: 5px; width: 10px; border: 1px solid black"
+              >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span
+            >
+            Not covered under prohibited or restricted list and are freely
+            importable as per Foreign Trade Policy 2015-2020 <br />
+            and amendments there to till date. <br />
+            <span style="height: 5px; width: 10px; border: 1px solid black"
+              >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span
+            >
+            Restricted for import as per Foreign Trade Policy 2015-2020 and
+            amendments there to till date and original exchange control copy of
+            the license issued by D.G.F.T. is enclosed.
+          </p>
+        </div>
+      </div>
+
+      <div id="third" class="bc">
+        <div
+          style="float: left; display: block; width: 78%; margin-left: 43px"
+          class="bc"
+        >
+          <p>
+            I/We hereby declare that: <br />
+            1.&nbsp;&nbsp;&nbsp;&nbsp; The import license against which the
+            remittance is sought is/are valid & has/have not been cancelled by
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DGFT <br />
+            2.&nbsp;&nbsp;&nbsp;&nbsp; That goods to which the application
+            relates have been/will be imported into
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;India on our account <br />
+            3.&nbsp;&nbsp;&nbsp;&nbsp; The import is on behalf of @
+            <input class="ins" type="text" /> and <br />
+            4.&nbsp;&nbsp;&nbsp;&nbsp; The invoice value of goods which is
+            declared on this form is the real value of the goods imported/to be
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imported into India
+            <br />
+            5.&nbsp;&nbsp;&nbsp;&nbsp;If the import has been made: (Tick the
+            appropriate box and fill the appropriate details) <br />
+            <span style="margin-left: 30px"
+              >a.&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;] Details of BOE given
+              below :</span
+            >
+          </p>
+          <table class="table2">
+            <tr>
+              <td class="wtd6">Currency</td>
+              <td class="wtd6">Bill Amount</td>
+              <td class="wtd6">BOE No.</td>
+              <td class="wtd6">
+                BOE <br />
+                Amount
+              </td>
+              <td class="wtd6">Date of BOE</td>
+              <td class="wtd8">
+                AD Code (used for <br />
+                BOE Mandatory if <br />
+                other than YBL)
+              </td>
+              <td class="wtd6">
+                Port <br />
+                Loading and <br />
+                Discharge
+              </td>
+            </tr>
+            <tr>
+              <td class="wtd7">
+                <input type="text" value="{{ item.currency }}" />
+              </td>
+              <td class="wtd7"><input type="text" /></td>
+              <td class="wtd7">
+                <input type="text" value="{{ item.boeNumber }}" />
+              </td>
+              <td class="wtd7"><input type="text" /></td>
+              <td class="wtd7">
+                <input type="text" value="{{ item.boeDate }}" />
+              </td>
+              <td class="wtd7">
+                <input type="text" value="{{ item.adCode }}" />
+              </td>
+              <td class="wtd7">
+                <input type="text" value="{{ item.dischargePort }}" />
+              </td>
+            </tr>
+          </table>
+          <span style="margin-left: 30px"
+            >b.&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;] We undertake to produce
+            within 3 months to the authorized dealer the evidence of imports
+            made. :</span
+          >
+          <p>
+            @ Where the import is on behalf of Central/State Government
+            Department or a company owned by Central/State Government/Statutory
+            Corporation, Local Body etc, the name of the Government Department,
+            Corporation etc. should be stated.
+            <br />
+            <br />
+            I/We hereby further declare that the transaction the details of
+            which are specifically mentioned in this request letter does not
+            involve, and is not designed for the purpose of any contravention or
+            evasion of the provisions of the FEMA Act 1999 or of any rules,
+            regulation, notification, direction or order made there under. I /We
+            also hereby agree and undertake to give such information/documents
+            as will reasonably satisfy you about this transaction in terms of
+            the above declaration. I/We also understand that if I/We refuse to
+            comply with any such requirement or make only unsatisfactory
+            compliance therewith, the bank shall refuse in writing to undertake
+            the transaction and shall if it has reason to believe that any
+            contravention/evasion is contemplated by me/us report the matter to
+            Reserve Bank of India. I/We further declare that the undersigned
+            has/have the authority to give this declaration and undertaking on
+            behalf of the company.
+            <br />
+            <br />
+
+            I/we also declare that the transaction does not have linkage with
+            any Specially Designated Nationals and Blocked Persons
+            (SDN)/countries listed under OFAC in any manner. If the transaction
+            involves linkage with any Specially Designated Nationals and Blocked
+            Persons (SDN)/countries listed under OFAC in any manner, I/we
+            undertake not to hold YES Bank Limited responsible for any of its
+            action or inaction in respect of the OFAC-linked transactions.
+          </p>
+          <div style="float: left">
+            <p>
+              Thanking You <br />
+              Warm Regards <br />
+              Authorized Signatory <br />
+              Company Stamp / Seal
+            </p>
+          </div>
+          <div style="float: right; margin-right: 40px">
+            <p>
+              Date: <input class="ind" type="text" /> <br />
+              Place: <input class="ind" type="text" />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="
+        float: left;
+        display: block;
+        width: 78%;
+        margin-top: 40px;
+        margin-left: 43px;
+      "
+    >
+      <div title="Share As PDF" (click)="exportAsPDF('MyDIv')">Download</div>
+    </div>
+  </main>
+</div>
