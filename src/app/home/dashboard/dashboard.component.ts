@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
             .subscribe(
                 data => {
                     console.log("king123")
-                    console.log(data['data'])
+                    console.log(data)
                     this.item1 = data['data']
                     //this.router.navigate(['/login'], { queryParams: { registered: true }});
                 },

@@ -20,7 +20,7 @@ export class UserService {
     
 
     register(user) {
-        return this.http.post(`https://dm.uipep.com/v1/authenticate/signup`, {
+        return this.http.post(`http://localhost:3000/v1/authenticate/signup`, {
             "fullName": user.fullName,
             "emailId": user.email,
             "password": user.password,
@@ -36,8 +36,27 @@ export class UserService {
         };
         console.log(httpOptions)
 
-        return this.http.post(`https://dm.uipep.com/v1/authenticate/login`, null, httpOptions);
+        return this.http.post(`http://localhost:3000/v1/authenticate/login`, null, httpOptions);
       }
+
+    public updatePsw(data,email) {
+      
+
+      return this.http.put(`http://localhost:3000/v1/authenticate/updatepsw`, {
+        newPassword:data.password1,
+        emailId: email
+
+      });
+    }
+
+
+    public forgotpsw(loginData) {
+      
+
+      return this.http.put(`http://localhost:3000/v1/authenticate/forgotpsw`, {
+        emailId:loginData.emailId
+      });
+    }
 
     public creatTeam(team) {
       this.loadFromLocalStorage();
@@ -47,6 +66,17 @@ export class UserService {
       };
         return this.http.post(`http://localhost:3000/v1/team/post`, {
             "team": team
+      },httpOptions);
+    }
+
+    public getUser() {
+      this.loadFromLocalStorage();
+      console.log(this.authToken)
+      const httpOptions = {
+          headers: new HttpHeaders({'Authorization': this.authToken })
+      };
+        return this.http.post(`http://localhost:3000/v1/team/getUser`, {
+            "team": "team"
       },httpOptions);
     }
 

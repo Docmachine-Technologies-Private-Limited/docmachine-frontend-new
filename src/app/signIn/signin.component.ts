@@ -28,7 +28,22 @@ export class SigninComponent implements OnInit {
                     console.log(data['result'])
                     console.log(data['result'].token)
                     this.userService.addToken(data['result'].token);
-                    this.router.navigate(['/createTeam']);
+                    this.userService.getUser().subscribe(
+                      data1 => {
+                          console.log("king123")
+                          console.log(data1)
+                          console.log(data1['data'][0].companyId)
+                          if(data1['data'][0].companyId) {
+                            this.router.navigate(['/home/dashboard']);
+                          }
+                          else {
+                            this.router.navigate(['createTeam']);
+                          }
+                      },
+                      error1 => {
+                          console.log("error")
+                      });
+                   // 
                 },
                 error => {
                     console.log("error")

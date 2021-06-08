@@ -29,7 +29,7 @@ export class SignupComponent implements OnInit {
                 data => {
                     console.log("king123")
                     console.log(data)
-                    //this.router.navigate(['/login'], { queryParams: { registered: true }});
+                    this.router.navigate(['/login'], { queryParams: { registered: true }});
                 },
                 error => {
                     console.log("error")

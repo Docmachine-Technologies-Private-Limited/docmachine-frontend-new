@@ -23,6 +23,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { CreateTeamComponent } from './create-team/create-team.component';
 import { CreateTeam1Component } from './create-team1/create-team1.component';
 import { AddMemberComponent } from './add-member/add-member.component';
+import { UpdatePasswordComponent } from './update-password/update-password.component';
 //import { SidenavComponent } from './home/sidenav/sidenav.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -37,7 +38,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 }
 
 @NgModule({
-  declarations: [AppComponent, ForgotPasswordComponent, CreateTeamComponent, CreateTeam1Component, AddMemberComponent],
+  declarations: [AppComponent, ForgotPasswordComponent, CreateTeamComponent, CreateTeam1Component, AddMemberComponent, UpdatePasswordComponent],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
