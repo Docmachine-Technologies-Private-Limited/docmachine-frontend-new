@@ -31,9 +31,8 @@ table {
 
 .table-padding {
   background: white !important;
-  padding-left: 11% !important;
   width: 104%;
-  padding-top: 3.8%;
+  margin-top: 68px;
 }
 
 .upload-button {
@@ -133,8 +132,7 @@ p.fs14 {
   z-index: 5000;
   transform: scale(1, 1);
   display: grid;
-  grid-template-columns: 25% 70%;
-  width: 100.8%;
+  grid-template-columns: 25.2% 70%;
 }
 .p-20 {
   padding: 20px !important;
@@ -435,9 +433,13 @@ p.fs14 {
   background-color: white;
   height: 100%;
   padding: 1% 0;
-  padding-left: 24px;
+  padding-left: 30px;
   margin-left: -30px;
   width: 109%;
+}
+
+.tabs label {
+  font-size: 16px;
 }
 
 .tab > label {
@@ -610,11 +612,13 @@ select:focus {
 }
 
 .form-wrapper1 div td {
-  width: 250px;
+  width: 30%;
+  height: 5.5%;
 }
 
 .form-wrapper1.td {
   width: 100%;
+  width: 7%;
 }
 .full-input {
   margin-left: 18px;
@@ -821,7 +825,7 @@ table tbody {
   align-items: center;
   height: 170vh;
   border-right: 0.3px solid rgba(0, 0, 0, 0.2);
-  padding-left: 6%;
+  margin-left: 27px;
 }
 
 /*PROFILE CLASSSSS*/
@@ -845,13 +849,10 @@ table tbody {
 }
 
 .table_top {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 25.8% 36% 36%;
   border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
-  width: 87.5vw;
-  display: flex;
   align-items: center;
-  padding-top: 0.5%;
 }
 
 .invoices_tab {
@@ -870,7 +871,7 @@ table tbody {
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 0 3%;
+  background-color: white;
 }
 
 .invoice_head {
@@ -878,7 +879,6 @@ table tbody {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2%;
   padding-left: 5%;
 }
 

@@ -76,32 +76,31 @@
           class="bc"
         >
           <p style="margin-bottom: 0px"><b>Foreign Currency:</b></p>
-          <table>
-            <tr>
-              <td class="wtd">Foreign Currency</td>
-              <td class="wtd1">
-                <p>
-                  {{ item2.currency }}
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td class="wtd">Foreign Currency Amount in figures</td>
-              <td class="wtd1">
-                <p>
-                  {{ item2.amount }}
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td class="wtd">Foreign Currency in words</td>
-              <td class="wtd1">
-                <p>
-                  {{ item2.amount | numberToWords: item2.amount }}
-                </p>
-              </td>
-            </tr>
-          </table>
+          <div>
+            <p style="display: table; border: 0.7px solid black">
+              <span style="display: table-cell">Foreign Currency</span>
+
+              <span style="display: table-cell">
+                {{ item2.currency }}
+              </span>
+            </p>
+            <p style="display: table">
+              <span style="display: table-cell"
+                >Foreign Currency Amount in figures</span
+              >
+
+              <span style="display: table-cell">
+                {{ item2.amount }}
+              </span>
+            </p>
+            <p style="display: table">
+              <span style="display: table-cell">Foreign Currency in words</span>
+
+              <span style="display: table-cell">
+                {{ item2.amount | numberToWords: item2.amount }}
+              </span>
+            </p>
+          </div>
         </div>
         <div
           style="
@@ -202,7 +201,7 @@
           "
           class="bc"
         >
-          <table>
+          <table style="border-collapse: collapse">
             <tr>
               <td class="wtd" class="wtd">Beneficiary’s bank’s (any one)</td>
               <td class="wtd1">
@@ -477,7 +476,7 @@
               below :</span
             >
           </p>
-          <table class="table2">
+          <table style="border-collapse: collapse" class="table2">
             <tr>
               <td class="wtd6">Currency</td>
               <td class="wtd6">Bill Amount</td>
@@ -583,7 +582,11 @@
         margin-left: 43px;
       "
     >
-      <div title="Share As PDF" (click)="exportAsPDF('MyDIv')">Download</div>
+      <div title="Share As PDF" (click)="exportAsPDF('MyDiv') && submitTask()">
+        Download
+      </div>
     </div>
   </main>
 </div>
+
+<!-- exportAsPDF('MyDIv') -->

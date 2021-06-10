@@ -1,16 +1,22 @@
-<div class="content-wrap">
+<div style="margin-left: 210px" class="content-wrap">
   <main id="content" class="content table-padding" role="main">
     <div *ngIf="documentService.showInvoice" class="table_top">
       <div
         style="
-          width: 74.5%;
+          width: 100%;
           border-right: 0.5px solid rgba(0, 0, 0, 0.2);
           height: 100%;
+          padding-top: 2.3%;
         "
       >
         <p
           class="bcw"
-          style="font-size: '14px'; float: left; margin-left: 50px"
+          style="
+            font-size: '14px';
+            float: left;
+            margin-left: 50px;
+            font-weight: 500;
+          "
         >
           All Documents
         </p>
@@ -18,9 +24,9 @@
       <!----style="height: 35px; font-weight: 400"-->
 
       <div style="width: 100%; font-weight: 300; padding-left: 1%">
-        <span>People colaborated</span>
+        <span style="font-weight: 400">People colaborated</span>
       </div>
-      <div style="width: 100%">
+      <div style="width: 100%; padding-right: 4%">
         <span
           *ngFor="let data of item1 | slice: 0:3; let i = index"
           style="float: right; margin-right: 3%"
@@ -39,10 +45,12 @@
         flex-direction: rows;
         justify-content: space-between;
         align-items: center;
-        padding: 0.8% 5%;
-        padding-left: 3%;
+        padding-top: 0.8%;
+        padding-left: 1%;
+        padding-bottom: 0.8%;
         border: 0.5px solid rgba(0, 0, 0, 0.2);
-        width: 98%;
+        margin-left: 40px;
+        width: 94%;
       "
       *ngIf="!documentService.showInvoice"
     >
@@ -329,8 +337,8 @@
                     style="
                       background-color: white;
                       width: 100%;
-                      padding-top: 2%;
-                      box-shadow: 0 0px 6px rgba(0, 0, 0, 0.4);
+                      height: 100vh;
+                      padding-right: 60px;
                     "
                   >
                     <div class="serial_detail">
@@ -339,24 +347,31 @@
                           width: 100%;
                           float: 'right';
                           font-size: '14px';
-                          padding-right: 12%;
+                          margin-top: 18.77px;
+                          color: black;
                         "
                         >SB NUMBER:&emsp;{{ selectedRow.pi_poNo }}</span
                       >
                     </div>
                     <div class="invoice_head">
-                      <div style="width: 100%; padding-left: 9%">
+                      <div style="width: 100%">
                         <span
-                          style="width: 65%; float: 'left'; font-size: '20px'"
+                          style="
+                            width: 65%;
+                            float: 'left';
+                            font-size: '20px';
+                            font-weight: 500;
+                          "
                           >PI/PO DETAILS</span
                         >
                       </div>
-                      <div style="width: 100%; padding-right: 13%">
+                      <div style="width: 100%">
                         <span
                           style="
                             float: 'right';
                             font-weight: 500;
                             font-size: '14px';
+                            color: black;
                           "
                           >SHIPPING BILL DATE:&emsp;{{
                             selectedRow.sbdate
@@ -369,8 +384,13 @@
                     <div class="row" style="width: 100%">
                       <div class="col-12 mb-lg padding" style="width: 100%">
                         <section
+                          style="
+                            padding-left: 45px;
+                            display: grid;
+                            grid-template-columns: 33% 33% 33%;
+                            margin-top: 3%;
+                          "
                           class="widget pb-0 box-shadow"
-                          style="padding-left: 12%"
                         >
                           <!-- <div class="widget-body p-0 support table-wrapper "
                                                         style="overflow: hidden !important;">
@@ -401,111 +421,323 @@
                                                             </tbody>
                                                         </table>
                                                     </div> -->
-                          <tr style="width: 100%" class="form-wrapper1">
-                            <div>
-                              <td class="full-input border1">
-                                <label for="portCode">PI/PO NO.</label
-                                ><input
-                                  class="smalll-input"
-                                  type="text"
-                                  name="portCode"
-                                  placeholder="{{ selectedRow.pi_poNo }}"
-                                  disabled
-                                />
-                              </td>
-                              <td class="full-input border2">
-                                <label for="ieccode">Benne Name</label
-                                ><input
-                                  class="smalll-input"
-                                  type="text"
-                                  name="ieccode"
-                                  placeholder="{{ selectedRow.benneName }}"
-                                  disabled
-                                />
-                              </td>
-                              <td class="full-input border3">
-                                <label for="iecName">Currency</label
-                                ><input
-                                  class="smalll-input"
-                                  type="text"
-                                  name="iecName"
-                                  placeholder="{{ selectedRow.currency }}"
-                                  disabled
-                                />
-                              </td>
-                            </div>
-                            <br />
-                            <div>
-                              <td class="full-input border1">
-                                <label for="adCode">Amount</label
-                                ><input
-                                  class="smalll-input"
-                                  type="text"
-                                  name="adCode"
-                                  placeholder="{{ selectedRow.amount }}"
-                                  disabled
-                                />
-                              </td>
-                              <td class="full-input border2">
-                                <label for="leodate">LEO DATE</label
-                                ><input
-                                  class="smalll-input"
-                                  type="text"
-                                  name="leodate"
-                                  placeholder="{{ selectedRow.incoterm }}"
-                                  disabled
-                                />
-                              </td>
-                              <td class="full-input border3">
-                                <label for="processingStaus"
-                                  >Last Day Of Shipment</label
-                                ><input
-                                  class="smalll-input"
-                                  type="text"
-                                  name="processingStaus"
-                                  placeholder="{{
-                                    selectedRow.lastDayShipment
-                                  }}"
-                                  disabled
-                                />
-                              </td>
-                            </div>
 
-                            <br />
-                            <div>
-                              <td class="full-input border1">
-                                <label for="fobCurrency">Payment Term</label
-                                ><input
-                                  class="smalll-input"
-                                  type="text"
-                                  name="fobCurrency"
-                                  placeholder="{{ selectedRow.paymentTerm }}"
-                                  disabled
-                                />
-                              </td>
-                              <td class="full-input border2">
-                                <label for="fobValue">PC Ref No.</label
-                                ><input
-                                  class="smalll-input"
-                                  type="text"
-                                  name="fobValue"
-                                  placeholder="{{ selectedRow.pcRefNo }}"
-                                  disabled
-                                />
-                              </td>
-                              <td class="full-input border3">
-                                <label for="realizedFobValue">Due Date</label
-                                ><input
-                                  class="smalll-input"
-                                  type="text"
-                                  name="realizedFobValue"
-                                  placeholder="10/11/2021"
-                                  disabled
-                                />
-                              </td>
+                          <div
+                            style="
+                              width: 94%;
+                              margin-bottom: 24px;
+                              border-radius: 8px;
+                              box-shadow: 4px 4px 8px 4px #eeeefa;
+
+                              border-left: 3px solid #e7845f;
+                            "
+                          >
+                            <div
+                              style="
+                                height: 100px;
+                                padding-top: 5%;
+                                padding-bottom: 17px;
+                                padding-left: 3%;
+                              "
+                            >
+                              <label
+                                style="
+                                  color: #72768a !important;
+                                  font-size: 102%;
+                                "
+                                >PI/PO NO.</label
+                              >
+                              <p
+                                style="
+                                  margin-left: 5%;
+                                  color: #000000;
+                                  font-size: 102%;
+                                "
+                              >
+                                {{ selectedRow.pi_poNo }}
+                              </p>
                             </div>
-                            <br />
-                          </tr>
+                          </div>
+                          <div
+                            style="
+                              width: 94%;
+                              margin-bottom: 24px;
+                              border-radius: 8px;
+                              box-shadow: 4px 4px 8px 4px #eeeefa;
+                              border-left: 3px solid #5fe6e7;
+                            "
+                          >
+                            <div
+                              style="
+                                height: 100px;
+                                padding-top: 14px;
+                                padding-bottom: 17px;
+                                padding-left: 3%;
+                              "
+                            >
+                              <label
+                                style="
+                                  color: #72768a !important;
+                                  font-size: 102%;
+                                "
+                                >Benne Name</label
+                              >
+                              <p
+                                style="
+                                  margin-left: 5%;
+                                  color: #000000;
+                                  font-size: 102%;
+                                "
+                              >
+                                {{ selectedRow.benneName }}
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            style="
+                              width: 94%;
+                              margin-bottom: 24px;
+                              border-radius: 8px;
+                              box-shadow: 4px 4px 8px 4px #eeeefa;
+                              border-left: 3px solid #e7845f;
+                            "
+                          >
+                            <div
+                              style="
+                                height: 100px;
+                                padding-top: 14px;
+                                padding-bottom: 17px;
+                                padding-left: 3%;
+                              "
+                            >
+                              <label
+                                style="
+                                  color: #72768a !important;
+                                  font-size: 102%;
+                                "
+                                >Currency</label
+                              >
+                              <p
+                                style="
+                                  margin-left: 5%;
+                                  color: #000000;
+                                  font-size: 102%;
+                                "
+                              >
+                                {{ selectedRow.currency }}
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            style="
+                              width: 94%;
+                              margin-bottom: 24px;
+                              border-radius: 8px;
+                              box-shadow: 4px 4px 8px 4px #eeeefa;
+                              border-left: 3px solid #e7845f;
+                            "
+                          >
+                            <div
+                              style="
+                                height: 100px;
+                                padding-top: 14px;
+                                padding-bottom: 17px;
+                                padding-left: 3%;
+                              "
+                            >
+                              <label
+                                style="
+                                  color: #72768a !important;
+                                  font-size: 102%;
+                                "
+                                >Amount</label
+                              >
+                              <p
+                                style="
+                                  margin-left: 5%;
+                                  color: #000000;
+                                  font-size: 102%;
+                                "
+                              >
+                                {{ selectedRow.amount }}
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            style="
+                              width: 94%;
+                              margin-bottom: 24px;
+                              border-radius: 8px;
+                              box-shadow: 4px 4px 8px 4px #eeeefa;
+                              border-left: 3px solid #5fe6e7;
+                            "
+                          >
+                            <div
+                              style="
+                                height: 100px;
+                                padding-top: 14px;
+                                padding-bottom: 17px;
+                                padding-left: 3%;
+                              "
+                            >
+                              <label
+                                style="
+                                  color: #72768a !important;
+                                  font-size: 102%;
+                                "
+                                >LEO DATE</label
+                              >
+                              <p
+                                style="
+                                  margin-left: 5%;
+                                  color: #000000;
+                                  font-size: 102%;
+                                "
+                              >
+                                {{ selectedRow.incoterm }}
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            style="
+                              width: 94%;
+                              margin-bottom: 24px;
+                              border-radius: 8px;
+                              box-shadow: 4px 4px 8px 4px #eeeefa;
+                              border-left: 3px solid #e7845f;
+                            "
+                          >
+                            <div
+                              style="
+                                height: 100px;
+                                padding-top: 14px;
+                                padding-bottom: 17px;
+                                padding-left: 3%;
+                              "
+                            >
+                              <label
+                                style="
+                                  color: #72768a !important;
+                                  font-size: 102%;
+                                "
+                                >Last Day Of Shipment</label
+                              >
+                              <p
+                                style="
+                                  margin-left: 5%;
+                                  color: #000000;
+                                  font-size: 102%;
+                                "
+                              >
+                                {{ selectedRow.lastDayShipment }}
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            style="
+                              width: 94%;
+                              margin-bottom: 24px;
+                              border-radius: 8px;
+                              box-shadow: 4px 4px 8px 4px #eeeefa;
+                              border-left: 3px solid #e7845f;
+                            "
+                          >
+                            <div
+                              style="
+                                height: 100px;
+                                padding-top: 14px;
+                                padding-bottom: 17px;
+                                padding-left: 3%;
+                              "
+                            >
+                              <label
+                                style="
+                                  color: #72768a !important;
+                                  font-size: 102%;
+                                "
+                                >Payment Term</label
+                              >
+                              <p
+                                style="
+                                  margin-left: 5%;
+                                  color: #000000;
+                                  font-size: 102%;
+                                "
+                              >
+                                {{ selectedRow.paymentTerm }}
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            style="
+                              width: 94%;
+                              margin-bottom: 24px;
+                              border-radius: 8px;
+                              box-shadow: 4px 4px 8px 4px #eeeefa;
+                              border-left: 3px solid #5fe6e7;
+                            "
+                          >
+                            <div
+                              style="
+                                height: 100px;
+                                padding-top: 14px;
+                                padding-bottom: 17px;
+                                padding-left: 3%;
+                              "
+                            >
+                              <label
+                                style="
+                                  color: #72768a !important;
+                                  font-size: 102%;
+                                "
+                                >PC Ref No.</label
+                              >
+                              <p
+                                style="
+                                  margin-left: 5%;
+                                  color: #000000;
+                                  font-size: 102%;
+                                "
+                              >
+                                {{ selectedRow.pcRefNo }}
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            style="
+                              width: 94%;
+                              margin-bottom: 24px;
+                              border-radius: 8px;
+                              box-shadow: 4px 4px 8px 4px #eeeefa;
+                              border-left: 3px solid #e7845f;
+                            "
+                          >
+                            <div
+                              style="
+                                height: 100px;
+                                padding-top: 14px;
+                                padding-bottom: 17px;
+                                padding-left: 3%;
+                              "
+                            >
+                              <label
+                                style="
+                                  color: #72768a !important;
+                                  font-size: 102%;
+                                "
+                                >Due Date</label
+                              >
+                              <p
+                                style="
+                                  margin-left: 5%;
+                                  color: #000000;
+                                  font-size: 102%;
+                                "
+                              >
+                                {{ selectedRow.dueDate }}
+                              </p>
+                            </div>
+                          </div>
                         </section>
                       </div>
                     </div>

@@ -89,6 +89,7 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
     dlnk.click();
     // this.downloading = false;
     // this.backupClicked = false;
+    console.log("DLINK", dlnk);
   }
 
   exportAsPDF(div_id) {
@@ -110,16 +111,18 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
         template:
           "./app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs",
       })
-      .subscribe((data) => {
-        if (data && data.success) {
-          console.log(data);
-          this.downloadPDF(data);
-          this.submitTask();
-        }
-      });
+      .subscribe(
+        (data) => {
+          if (data && data.success) {
+            console.log(data);
+            this.downloadPDF(data);
+          }
+        },
+        (err) => console.log("Error", err)
+      );
   }
 
-  submitTask() {
+  async submitTask() {
     this.newTask.completed = true;
     console.log(this.newTask);
     if (this.item2.completed === false && this.item2.draft === undefined) {
