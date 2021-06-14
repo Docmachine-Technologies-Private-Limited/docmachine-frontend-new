@@ -44,7 +44,7 @@ export class OutwardRemittanceComponent implements OnInit {
   ngOnInit(): void {
     this.documentService.getPipo().subscribe(
       (res: any) => {
-        console.log(res), (this.item1 = res.data);
+        console.log("HEre Response", res), (this.item1 = res.data);
       },
       (err) => console.log(err)
     );

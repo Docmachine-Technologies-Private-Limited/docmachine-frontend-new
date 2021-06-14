@@ -74,4 +74,14 @@ export class DashboardComponent implements OnInit {
   onNewTrans() {
     this.step1 = !this.step1;
   }
+
+  dropMeDown(down, up) {
+    document.getElementById(up).style.display = "none";
+    document.getElementById(down).style.display = "inline";
+  }
+
+  dropOff(down, up) {
+    document.getElementById(up).style.display = "inline";
+    document.getElementById(down).style.display = "none";
+  }
 }

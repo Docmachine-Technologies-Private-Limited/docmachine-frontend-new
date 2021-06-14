@@ -1,4 +1,4 @@
-<div style="margin-top: 67px" class="content-wrap">
+<div style="margin-top: 67px; width: 89%" class="content-wrap">
   <main id="content" class="table-padding" role="main">
     <div *ngIf="documentService.showInvoice" class="table_top">
       <div
@@ -10,14 +10,21 @@
       >
         <p
           class="bcw"
-          style="font-size: '14px'; float: left; margin-left: 50px"
+          style="
+            font-size: '14px';
+            float: left;
+            margin-left: 50px;
+            color: #323e4a;
+          "
         >
           All Documents
         </p>
       </div>
       <!----style="height: 35px; font-weight: 400"-->
 
-      <div style="width: 100%; font-weight: 300; padding-left: 1%">
+      <div
+        style="width: 100%; font-weight: 300; padding-left: 1%; color: #323e4a"
+      >
         <span>People colaborated</span>
       </div>
       <div style="width: 100%">
@@ -39,28 +46,93 @@
         flex-direction: rows;
         justify-content: space-between;
         align-items: center;
-        padding: 0.8% 5%;
-        padding-left: 3%;
+        padding: 0.8% 0;
         border: 0.5px solid rgba(0, 0, 0, 0.2);
-        width: 94%;
+        width: 100%;
+        margin-left: 26px;
       "
       *ngIf="!documentService.showInvoice"
     >
-      <div style="display: flex; align-items: center">
+      <div style="display: flex; align-items: center; margin-left: 12px">
         <h3 class="heading">All Documents</h3>
+
+        <div style="display: flex; margin-left: 16px; align-items: center">
+          <div
+            (mouseover)="dropMeDown('up', 'down')"
+            (mouseout)="dropOff('up', 'down')"
+            class="customDropdown"
+          >
+            <span>Customer </span>
+            <span class="dropIco"
+              ><i id="down" class="fas fa-angle-down"></i>
+              <i id="up" style="display: none" class="fas fa-angle-up"></i>
+            </span>
+            <div class="dropdown-content">
+              <p><a href="">India</a></p>
+              <p><a href="">California</a></p>
+              <p><a href="">United States</a></p>
+            </div>
+          </div>
+          <div
+            (mouseover)="dropMeDown('up1', 'down1')"
+            (mouseout)="dropOff('up1', 'down1')"
+            class="customDropdown"
+          >
+            <span style="color: #323e4a !important">View All</span>
+            <span class="dropIco"
+              ><i id="down1" class="fas fa-angle-down"></i>
+              <i id="up1" style="display: none" class="fas fa-angle-up"></i>
+            </span>
+            <div class="dropdown-content">
+              <p><a href="">Shipping Bills</a></p>
+              <p><a href="">PI/PO</a></p>
+            </div>
+          </div>
+          <div
+            (mouseover)="dropMeDown('up2', 'down2')"
+            (mouseout)="dropOff('up2', 'down2')"
+            class="customDropdown"
+          >
+            <span style="color: #323e4a !important">Status</span>
+            <span class="dropIco"
+              ><i id="down2" class="fas fa-angle-down"></i>
+              <i id="up2" style="display: none" class="fas fa-angle-up"></i>
+            </span>
+            <div class="dropdown-content">
+              <p><a href="">Completed</a></p>
+              <p><a href="">Pending</a></p>
+            </div>
+          </div>
+          <div
+            (mouseover)="dropMeDown('up3', 'down3')"
+            (mouseout)="dropOff('up3', 'down3')"
+            class="customDropdown"
+          >
+            <span style="color: #323e4a !important">Last Updated</span>
+            <span class="dropIco"
+              ><i id="down3" class="fas fa-angle-down"></i>
+              <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+            </span>
+            <div class="dropdown-content">
+              <p><a href="">Completed</a></p>
+              <p><a href="">Pending</a></p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="dropdown">
-        Date:
-        <select name="subject" id="subject">
-          <option value="" selected="selected">Today</option>
-        </select>
-        Type:
-        <select name="topic" id="topic">
-          <option value="" selected="selected">All</option>
-        </select>
-      </div>
-      <div style="padding-top: 0.7%">
+      <div style="padding-top: 0.7%; display: flex; align-items: center">
+        <div
+          style="
+            width: 110px;
+            margin-right: 25px;
+            display: flex;
+            justify-content: space-between;
+          "
+          class="customDropdown"
+        >
+          <span>Filter </span> <span><i class="fas fa-filter"></i></span>
+        </div>
         <button class="upload-button" [routerLink]="['/home/upload']">
           Upload New
         </button>
@@ -81,7 +153,7 @@
           >
             <section
               style="width: 100%; margin-left: 0"
-              class="widget pb-0 box-shadow"
+              class="pb-0 box-shadow"
             >
               <div
                 style="margin: 0 -2%"
@@ -1064,3 +1136,17 @@
     </div>
   </main>
 </div>
+
+<!----------------CUSTOM DROP DOWN----------
+
+
+
+<div class="customDropdown">
+            <span>Customer</span>
+            <div class="dropdown-content">
+              <p><a href="">India</a></p>
+              <p><a href="">California</a></p>
+              <p><a href="">United States</a></p>
+            </div>
+          </div>
+-->

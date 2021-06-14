@@ -28,19 +28,34 @@
     </div>
 </div> -->
 
-<div class="container-fluid">
+<div
+  style="padding-right: 0 !important; overflow: hidden"
+  class="container-fluid"
+>
   <div style="display: flex; width: 100%" class="row no-gutter">
     <!-- The image half -->
 
     <!-- The content half -->
-    <div class="bg-dark" style="float: left; width: 50%">
-      >
+    <div
+      class="bg-dark"
+      style="
+        float: left;
+        width: 58%;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      "
+    >
+      <div style="margin-top: 5%; width: 90%; text-align: right">
+        <p style="cursor: pointer" class="leftl" [routerLink]="['/signup']">
+          Signup
+        </p>
+      </div>
       <div class="login d-flex align-items-center py-5">
         <!-- Demo content-->
         <div class="container">
-          <div class="row">
+          <div class="row" style="padding-left: 14%">
             <div class="col-lg-10 col-xl-9 mx-auto">
-              <p class="leftl" [routerLink]="['/signup']">Signup</p>
               <h6 class="display-5">Login</h6>
               <p class="mb-4 text-ui">
                 Use your email and password to access your account
@@ -117,14 +132,13 @@
     <div
       class="parent"
       style="
-        float: right;
-        width: 50%;
-        height: 100vh;
+        width: 42%;
         display: flex;
-        padding-top: 1%;
+        justify-content: center;
+        align-items: center;
       "
     >
-      <img class="image1" src="./assets/Image.png" />
+      <img style="width: 100%" class="image1" src="./assets/Image.png" />
       <img
         class="image2"
         src="./assets/LogoFinal.png"

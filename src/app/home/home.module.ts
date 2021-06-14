@@ -30,6 +30,7 @@ import { EditCompanyComponent } from "./edit-company/edit-company.component";
 import { OutwardRemittanceComponent } from "./outward-remittance/outward-remittance.component";
 import { NumberToWordsPipe } from "./pipe/number-to-words.pipe";
 import { FbgWavierComponent } from "./axisBank/fbg-wavier/fbg-wavier.component";
+import { TestComponent } from "./test/test/test.component";
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -66,6 +67,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     OutwardRemittanceComponent,
     NumberToWordsPipe,
     FbgWavierComponent,
+    TestComponent,
   ],
   imports: [
     CommonModule,
@@ -170,6 +172,10 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             path: "fbg-wavier",
             component: FbgWavierComponent,
             pathMatch: "full",
+          },
+          {
+            path: "test",
+            component: TestComponent,
           },
         ],
       },

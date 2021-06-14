@@ -24,7 +24,9 @@
       <!----style="height: 35px; font-weight: 400"-->
 
       <div style="width: 100%; font-weight: 300; padding-left: 1%">
-        <span style="font-weight: 400">People colaborated</span>
+        <span style="font-weight: 400; color: #323e4a !important"
+          >People colaborated</span
+        >
       </div>
       <div style="width: 100%; padding-right: 4%">
         <span
@@ -58,7 +60,7 @@
         <h3 class="heading">All Documents</h3>
       </div>
 
-      <div class="dropdown">
+      <!-- <div class="dropdown">
         Date:
         <select name="subject" id="subject">
           <option value="" selected="selected">Today</option>
@@ -67,7 +69,7 @@
         <select name="topic" id="topic">
           <option value="" selected="selected">All</option>
         </select>
-      </div>
+      </div> -->
       <div style="padding-top: 0.7%">
         <button class="upload-button" [routerLink]="['/home/upload']">
           Upload New
@@ -98,15 +100,30 @@
                 <table style="width: 100%" class="table table-striped mb-0">
                   <thead style="width: 100%">
                     <tr class="text-muted table-heading">
-                      <th class="rect">
+                      <th style="width: 8%" class="rect">
                         <img src="./assets/Rectangle-13.png" />
                       </th>
-                      <th scope="col"><span class="pl-3">DATE</span></th>
-                      <th scope="col">PI/PO no.</th>
-                      <th scope="col">INVOICE NUMBER</th>
-                      <th scope="col">COMPANY NAME</th>
-                      <th scope="col">UPLOADED BY</th>
-                      <th scope="col">AMOUNT</th>
+                      <th style="text-align: left; width: 20%" scope="col">
+                        <span style="margin-left: 42%">DATE</span>
+                      </th>
+                      <th
+                        style="text-align: left; padding-left: 8%; width: 20%"
+                        scope="col"
+                      >
+                        PI/PO no.
+                      </th>
+                      <th
+                        style="text-align: left; padding-left: 8%; width: 20%"
+                        scope="col"
+                      >
+                        UPLOADED BY
+                      </th>
+                      <th
+                        style="text-align: left; padding-left: 8%; width: 20%"
+                        scope="col"
+                      >
+                        AMOUNT
+                      </th>
                     </tr>
                   </thead>
                   <tbody class="text-dark">
@@ -117,20 +134,27 @@
                         getInvoices(data, i) && getTransactions(data.pi_poNo)
                       "
                     >
-                      <th class="rect">
+                      <th style="width: 8%" class="rect">
                         <img src="./assets/Rectangle-13.png" />
                       </th>
-                      <th class="pl-4 fw-normal">{{ data.sbdate }}</th>
-                      <td class="sb-no">{{ data.pi_poNo }}</td>
-                      <td>
-                        Invoice-<span
-                          *ngFor="let data1 of data.invoices; let i = index"
-                        >
-                          0{{ i + 1 }},
-                        </span>
+                      <th
+                        style="text-align: left; width: 20%"
+                        class="pl-4 fw-normal"
+                      >
+                        <strong style="margin-left: 40%">
+                          {{ data.date }}
+                        </strong>
+                      </th>
+                      <td
+                        style="text-align: left; padding-left: 8%; width: 20%"
+                        class="sb-no"
+                      >
+                        {{ data.pi_poNo }}
                       </td>
-                      <td>Random Company</td>
-                      <td>
+
+                      <td
+                        style="text-align: left; padding-left: 8%; width: 20%"
+                      >
                         <img
                           class="image"
                           src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
@@ -143,9 +167,13 @@
                           width="30px"
                         />
 
-                        Lindsey Stroud
+                        {{ data.benneName }}
                       </td>
-                      <td>7800</td>
+                      <td
+                        style="text-align: left; padding-left: 8%; width: 20%"
+                      >
+                        {{ data.amount }}
+                      </td>
                     </tr>
                     <tr
                       class="table-row"
@@ -157,25 +185,6 @@
                       <th class="rect">
                         <img src="./assets/Rectangle-13.png" />
                       </th>
-                      <th class="pl-4 fw-normal">{{ data.boeDate }}</th>
-                      <td class="sb-no">{{ data.boeNumber }}</td>
-                      <td>Invoice-1</td>
-                      <td>Random Company</td>
-                      <td>
-                        <img
-                          class="image"
-                          src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                          height="30px"
-                          width="30px"
-                        /><img
-                          class="image image2"
-                          src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                          height="30px"
-                          width="30px"
-                        />
-                        Lindsey Stroud
-                      </td>
-                      <td>7800</td>
                     </tr>
                   </tbody>
                 </table>
@@ -204,22 +213,24 @@
               <img
                 class="image"
                 src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                height="30px"
-                width="30px"
+                height="60px"
+                width="60px"
               /><img
                 class="image image2"
                 src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                height="30px"
-                width="30px"
+                height="60px"
+                width="60px"
               />
             </div>
-            <div class="" style="width: 100%; padding: 3%">
+            <div class="" style="width: 100%; padding: 1% 3%">
               <!-----class="fr pt-2"-->
-              <span class="fl fs16">{{ data.pi_poNo }}</span
+              <span style="font-size: 17px; color: #323e4a" class="fl fs16">{{
+                data.pi_poNo
+              }}</span
               ><span class="fr fs12" style="float: 'right'">
-                {{ data.sbdate }}</span
+                {{ data.date }}</span
               >
-              <p class="fs14">Continental carriers pvt ltd</p>
+              <p class="fs14">{{ data.benneName }}</p>
             </div>
           </div>
           <div
@@ -371,11 +382,10 @@
                             float: 'right';
                             font-weight: 500;
                             font-size: '14px';
+                            margin-right: 20px;
                             color: black;
                           "
-                          >SHIPPING BILL DATE:&emsp;{{
-                            selectedRow.sbdate
-                          }}</span
+                          >SHIPPING BILL DATE:&emsp;{{ selectedRow.date }}</span
                         >
                       </div>
                       <!-- <div>SP Number:&emsp;{{ selectedRow.sbno }}</div>
