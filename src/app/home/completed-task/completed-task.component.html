@@ -1,0 +1,17 @@
+<div class="content-wrap">
+  
+    <main id="content" class="content table-padding" role="main">
+        <div >
+            <p>Setup: 3 Preview</p>
+            <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button>
+            <button class="button1" style="margin-bottom: 40px;">Send it via Email</button>
+            <div>
+              <iframe [src]="url" height="500px" width="400px"></iframe>
+              <iframe [src]="pipoUrl" height="500px" width="400px"></iframe>
+            </div> <br>
+            <button class="button1" style="margin-right: 10px; margin-top: 20px;" [routerLink]="['/home/advance-outward-remittance']">Done</button>
+          </div>
+    </main>
+    
+   
+</div>

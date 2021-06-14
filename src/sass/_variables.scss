@@ -24,15 +24,15 @@ $gray-300: #d6dee5 !default;
 $gray-400: #c1ccd3 !default;
 $gray-500: #a3aeb7 !default;
 $gray-600: #798892 !default;
-$gray-700: #495057 !default;
-$gray-750: #F6F6E9 !default;
+$gray-700: rgba(73, 85, 7) !default;
+$gray-750: #f6f6e9 !default;
 $gray-800: #3c484f !default;
 $gray-900: #29323a !default;
 $black: #000 !default;
 $gray-light: $gray-100 !default;
 
 $blue: #005792 !default;
-$skyblue: #1A86D0 !default;
+$skyblue: #1a86d0 !default;
 $indigo: #7f3ddb !default;
 $purple: #9964e3 !default;
 $pink: #e54e9a !default;
@@ -40,25 +40,25 @@ $red: #fd5f00 !default;
 $orange: #ff7d47 !default;
 $yellow: #fda700 !default;
 $green: #68ca66 !default;
-$teal: #21AE8C !default;
+$teal: #21ae8c !default;
 $cyan: #17a2b8 !default;
 
 $theme-colors: (
-        primary: $blue,
-        secondary: $gray-600,
-        success: $teal,
-        primary-light: #dee4ee,
-        success-light: #ecfaec,
-        info-light: #f2fafa,
-        warning-light: #fdf7e6,
-        danger-light: #fff2ef,
-        info: $skyblue,
-        warning: $yellow,
-        danger: $red,
-        dark: $gray-800,
-        inverse: #002B49,
-        gray: #d7dfe6,
-        default: #e9ecef
+  primary: $blue,
+  secondary: $gray-600,
+  success: $teal,
+  primary-light: #dee4ee,
+  success-light: #ecfaec,
+  info-light: #f2fafa,
+  warning-light: #fdf7e6,
+  danger-light: #fff2ef,
+  info: $skyblue,
+  warning: $yellow,
+  danger: $red,
+  dark: $gray-800,
+  inverse: #002b49,
+  gray: #d7dfe6,
+  default: #e9ecef,
 );
 
 //== Scaffolding
@@ -105,7 +105,7 @@ $sidebar-width: 220px + $sidebar-slim-scroll-width !default;
 $sidebar-transition-time: 0.3s !default;
 
 $sidebar-action-bg: #042338 !default;
-$sidebar-bg-color: #002B49 !default;
+$sidebar-bg-color: #002b49 !default;
 $sidebar-color: #c2c2c2 !default;
 $sidebar-white-color: #6c757d !default;
 $sidebar-first-color: #004472 !default;
@@ -136,7 +136,7 @@ $sidebar-border-color: darken($sidebar-ul-background, 2%);
 $navbar-height: 60px !default;
 $navbar-font-size: 13px !default;
 $navbar-bg: transparent;
-$navbar-shadow: 4px 4px 30px 0px rgba(75,102,171,0.2);
+$navbar-shadow: 4px 4px 30px 0px rgba(75, 102, 171, 0.2);
 
 $chat-sidebar-width: 270px + $sidebar-slim-scroll-width !default;
 
@@ -161,9 +161,9 @@ $screen-lg-height: 670px !default;
 $widget-padding-vertical: 20px !default;
 $widget-padding-horizontal: 20px !default;
 $widget-bg-color: $white;
-$widget-shadow-color: 75,102,171;
-$widget-shadow: 4px 4px 30px 0px rgba(75,102,171,0.2);
-$widget-card-shadow: 4px 4px 10px 0px rgba(75,102,171,0.2);
+$widget-shadow-color: 75, 102, 171;
+$widget-shadow: 4px 4px 30px 0px rgba(75, 102, 171, 0.2);
+$widget-card-shadow: 4px 4px 10px 0px rgba(75, 102, 171, 0.2);
 
 $widget-shadow-designated: -1px 0 8px rgba(0, 0, 0, 0.2);
 $widget-border-radius: $border-radius-lg;
@@ -241,8 +241,8 @@ $navbar-dashboard-link-disabled-bg: transparent !default;
 // Navbar brand label
 $navbar-dashboard-brand-color: $navbar-dashboard-link-color !default;
 $navbar-dashboard-brand-hover-color: darken(
-                $navbar-dashboard-brand-color,
-                10%
+  $navbar-dashboard-brand-color,
+  10%
 ) !default;
 $navbar-dashboard-brand-hover-bg: transparent !default;
 

@@ -6,14 +6,11 @@ import { FormGroup, FormControl } from "@angular/forms";
 import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
-  selector: "app-axisbank",
-  templateUrl: "./inwardRemittance.component.html",
-  styleUrls: [
-    "../../../../sass/application.scss",
-    "./inwardRemittance.component.scss",
-  ],
+  selector: 'app-inward-remittance-boe',
+  templateUrl: './inward-remittance-boe.component.html',
+  styleUrls: ["../../../../sass/application.scss",'./inward-remittance-boe.component.scss']
 })
-export class InwardRemittanceComponent implements OnInit, OnDestroy {
+export class InwardRemittanceBoeComponent implements OnInit {
   item: any;
   item2: any = [];
   public data1;
@@ -46,8 +43,8 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
   }
 
   newTask = {
-    pi_poNo: "",
-    pipoDetail: [],
+    boeNumber: "",
+    boeDetail: [],
     beneDetail: [],
     completed: false,
     url : ""
@@ -68,13 +65,13 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
   }
 
   getPipoDetaile() {
-    this.documentService.getPipoByPipoNo(this.id)
+    this.documentService.getBoeByBoe(this.id)
     .subscribe(
         data => {
             console.log("king123")
             console.log(data)
-            console.log(data['data'][0])
-            this.item2= data['data'][0]
+            console.log(data['data'])
+            this.item2= data['data']
             this.getBeneDetaile()
             //this.router.navigate(['/login'], { queryParams: { registered: true }});
         },
@@ -94,11 +91,11 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
     console.log("inside")
     console.log(this.item2)
     const data: any = await this.userService.getBeneByName(
-      this.item2.benneName
+      this.item2.beneName
     );
     this.benneDetail = data.data;
-    this.newTask.pi_poNo = this.item2.pi_poNo;
-    this.newTask.pipoDetail = this.item2;
+    this.newTask.boeNumber = this.item2.boeNumber;
+    this.newTask.boeDetail = this.item2;
     this.newTask.beneDetail = this.benneDetail;
     this.newTask.completed = false;
     console.log("bene", this.benneDetail)
@@ -182,6 +179,7 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log(this.newTask)
   
       if (!this.data5) {
         this.documentService.addTask(this.newTask).subscribe(
@@ -195,4 +193,5 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
 
     
   }
+
 }

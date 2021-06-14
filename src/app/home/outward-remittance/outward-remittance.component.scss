@@ -31,8 +31,8 @@ table {
 
 .table-padding {
   background: white !important;
-  padding-left: 0px !important;
-  width: 100%;
+  padding-left: 11% !important;
+  width: 104%;
   padding-top: 3.8%;
 }
 
@@ -42,7 +42,7 @@ table {
   border: none;
   float: right;
   margin-top: -12px;
-  margin-right: 38%;
+  margin-right: 15%;
   height: 42px;
   width: 160px;
   background-color: #49a2d7;
@@ -134,8 +134,7 @@ p.fs14 {
   transform: scale(1, 1);
   display: grid;
   grid-template-columns: 25% 70%;
-  width: 100%;
-  height: 100vh;
+  width: 100.8%;
 }
 .p-20 {
   padding: 20px !important;
@@ -438,6 +437,7 @@ p.fs14 {
   padding: 1% 0;
   padding-left: 24px;
   margin-left: -30px;
+  width: 109%;
 }
 
 .tab > label {
@@ -463,7 +463,6 @@ p.fs14 {
   display: none;
   color: #777;
   background: #f8fafd;
-  padding: 13px;
   // padding-left: 0px !important;
   // padding-top: 0px !important;
   margin: 10px !important;

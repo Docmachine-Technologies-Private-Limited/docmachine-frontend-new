@@ -1,55 +1,29 @@
-import { UserService } from "./../../../service/user.service";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { DocumentService } from "./../../../service/document.service";
+import { DocumentService } from "../../../service/document.service";
+import { UserService } from "../../../service/user.service";
 
 @Component({
-  selector: "app-advance-remitance",
-  templateUrl: "./advance-remitance.component.html",
-  styleUrls: [
-    "../../../../sass/application.scss",
-    "./advance-remitance.component.scss",
-  ],
+  selector: "app-fbg-wavier",
+  templateUrl: "./fbg-wavier.component.html",
+  styleUrls: ["./fbg-wavier.component.scss"],
 })
-export class AdvanceRemitanceComponent implements OnInit {
+export class FbgWavierComponent implements OnInit {
   item: any;
   item2: any;
+  public applicant: any = [];
+  public benneDetail: any = [];
+  public submitted = false;
+  public pipoDetail: any = [];
 
   constructor(
     private route: ActivatedRoute,
     private documentService: DocumentService,
     private userService: UserService
   ) {}
-  public boeNumber;
   ngOnInit(): void {
-    this.boeNumber = this.route.snapshot.params["boeNumber"];
-    console.log(this.boeNumber);
-
-    this.documentService.getBoeByBoe(this.boeNumber).subscribe(
-      (data) => {
-        console.log("king123");
-        console.log(data["data"]);
-        this.item = data["data"];
-        //this.router.navigate(['/login'], { queryParams: { registered: true }});
-      },
-      (error) => {
-        console.log("error");
-      }
-    );
-
-    this.userService.getBene(this.boeNumber).subscribe(
-      (data) => {
-        console.log("king123");
-        console.log(data["data"]);
-        this.item2 = data["data"];
-        //this.router.navigate(['/login'], { queryParams: { registered: true }});
-      },
-      (error) => {
-        console.log("error");
-      }
-    );
-
-    console.log("THis is the data", this.documentService.pdfData);
+    // this.getPipoDetail();
+    this.pipoDetail = this.documentService.pdfData;
   }
 
   public downloadPDF(data) {
