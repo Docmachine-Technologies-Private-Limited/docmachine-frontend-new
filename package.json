@@ -57,6 +57,7 @@
     "bootstrap": "4.6.0",
     "bootstrap-select": "1.13.18",
     "electron-packager": "15.2.0",
+    "file-saver": "2.0.5",
     "font-awesome": "4.7.0",
     "glyphicons-halflings": "1.9.1",
     "jasny-bootstrap": "4.0.0",

@@ -173,7 +173,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
-            path: "fbg-wavier",
+            path: "fbg-wavier/:boeNumber",
             component: FbgWavierComponent,
             pathMatch: "full",
           },

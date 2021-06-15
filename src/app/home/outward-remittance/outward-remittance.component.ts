@@ -102,12 +102,20 @@ export class OutwardRemittanceComponent implements OnInit {
   // }
 
   viewTask(data) {
+    console.log(data)
     if(!data.completed) {
       this.documentService.task = data
       this.documentService.draft = true;
-      data.pipoDetail["_id"] = data._id;
+      //data.pipoDetail["_id"] = data._id;
       this.documentService.pdfData = data.pipoDetail;
-      this.router.navigateByUrl(`/home/inwardRemittance/${data.pi_poNo}`);
+      if (parseInt(this.selectedRow.amount) < 200000) {
+        this.documentService.pdfData = this.selectedRow;
+        this.router.navigateByUrl(`/home/inwardRemittance/${data.pi_poNo}`);
+      } else {
+        console.log(this.selectedDoc);
+        this.router.navigateByUrl(`/home/fbg-wavier/${data.pi_poNo}`);
+        
+      }
       
     } else {
       this.router.navigateByUrl(`/home/completedTask/${data._id}`);
@@ -116,19 +124,16 @@ export class OutwardRemittanceComponent implements OnInit {
   }
 
   showThisPdf(piPo) {
+    this.documentService.draft = false;
     if (parseInt(this.selectedRow.amount) < 200000) {
       this.documentService.pdfData = this.selectedRow;
       this.router.navigateByUrl(`/home/inwardRemittance/${piPo}`);
     } else {
       console.log(this.selectedDoc);
-      if (this.selectedDoc === "bankDocument") {
-        this.documentService.pdfData = this.selectedRow;
-        this.router.navigateByUrl(`/home/inwardRemittance/${piPo}`);
-      } else if (this.selectedDoc === "FBG") {
-        this.documentService.pdfData = this.selectedRow;
+      
 
-        this.router.navigateByUrl(`/home/fbg-wavier`);
-      }
+      this.router.navigateByUrl(`/home/fbg-wavier/${piPo}`);
+      
     }
   }
 }

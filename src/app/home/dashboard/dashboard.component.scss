@@ -33,7 +33,6 @@ table {
   background: white !important;
   padding-left: 0px !important;
   width: 100%;
-  padding-top: 3.8%;
 }
 
 .upload-button {
@@ -605,7 +604,7 @@ select:focus {
 }
 
 .form-wrapper1 {
-  display: flex;
+  //display: flex;
   flex-direction: column;
   width: 100%;
 }

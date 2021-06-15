@@ -1,6 +1,7 @@
 <div class="content-wrap">
   <main id="content" class="content table-padding bc" role="main">
-    <div id="mainId" class="bc" *ngIf="!data6">
+    
+    <div id="mainId" class="bc" *ngIf="!done">
       <div id="first" class="bc">
         <div style="margin-left: 230px; width: 535px">
           <p class="heading">
@@ -15,7 +16,18 @@
             YES Bank Ltd., <br />
             Branch address
           </p>
-          <input class="ind" type="text" />
+          <p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  border-bottom: 1px solid black;
+                  width: 200px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p>
           <p style="margin-top: 10px">
             We authorize the bank to remit as per the details specified below:
           </p>
@@ -28,7 +40,7 @@
             </div>
             
             <div class="flex-child green">
-              <p *ngIf="item2.pi_poNo" style="border: 1px solid black;">Advance Remittance</p>
+              <p  style="border: 1px solid black;">Advance Remittance</p>
             </div>
             
           </div>
@@ -169,7 +181,13 @@
             </tr>
             <tr>
               <td class="wtd">Applicant contact number</td>
-              <td class="wtd1">45646546546</td>
+              <td class="wtd1"><p style="
+                  display: inline-block;
+                  outline: none;
+                "
+                contenteditable="true">
+                    8100081881
+                  </p></td>
             </tr>
           </table>
         </div>
@@ -285,7 +303,11 @@
                     <p
                     style="
                     display: inline-block;
-                    outline: none;
+                      outline: none;
+                      border-bottom: 1px solid black;
+                      width: 200px;
+                      height: 20px;
+                      margin-bottom: 0px;
                     "
                     contenteditable="true"
                     >
@@ -297,9 +319,20 @@
                 ><br />
                 <span
                   >IBAN*
-                  <label style="text-decoration: underline" for="">{{
-                    benneDetail.iban
-                  }}</label> </span
+                  <label style="text-decoration: underline" for=""><p
+                      style="
+                      display: inline-block;
+                      outline: none;
+                      border-bottom: 1px solid black;
+                      width: 200px;
+                      height: 20px;
+                      margin-bottom: 0px;
+                      "
+                      contenteditable="true"
+                      > {{
+                          benneDetail.iban
+                        }}
+                    </p></label> </span
                 ><br />
                 <span
                   >* Mandatory for remittances to Middle-East countries and
@@ -314,16 +347,38 @@
               <td class="wtd1">
                 <span
                   >SWIFT code**
-                  <label style="text-decoration: underline" for="">{{
-                    benneDetail.interBankSwiftCode
-                  }}</label>
+                  <label style="text-decoration: underline" for=""><p
+                      style="
+                      display: inline-block;
+                      outline: none;
+                      border-bottom: 1px solid black;
+                      width: 200px;
+                      height: 20px;
+                      margin-bottom: 0px;
+                      "
+                      contenteditable="true"
+                      > {{
+                          benneDetail.interBankSwiftCode
+                        }}
+                    </p></label>
                 </span>
                 <br />
                 <span class="spl"
                   >Intermediary Bank Name (if any)
-                  <label style="text-decoration: underline" for="">{{
-                    benneDetail.interBankName
-                  }}</label>
+                  <label style="text-decoration: underline" for=""><p
+                      style="
+                      display: inline-block;
+                      outline: none;
+                      border-bottom: 1px solid black;
+                      width: 200px;
+                      height: 20px;
+                      margin-bottom: 0px;
+                      "
+                      contenteditable="true"
+                      > {{
+                          benneDetail.interBankName
+                        }}
+                    </p></label>
                 </span>
               </td>
             </tr>
@@ -350,7 +405,18 @@
             </tr>
             <tr>
               <td class="wtd" class="wtd">Description of Goods</td>
-              <td class="wtd1"><input type="text" /></td>
+              <td class="wtd1"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  border-bottom: 1px solid black;
+                  width: 200px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p></td>
             </tr>
           </table>
         </div>
@@ -414,17 +480,113 @@
               <td class="wtd2">Amount</td>
             </tr>
             <tr>
-              <td class="wtd7"><input type="text" value="{{ 1 }}" /></td>
-              <td class="wtd7"><input type="text" value="" /></td>
+              <td class="wtd7"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 100px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 1
+                </p></td>
+              <td class="wtd7"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 100px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > hahah
+                </p></td>
               <td class="wtd7">
-                <input type="text" value="" />
+                  <p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 100px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > {{
+                      item2.currency
+                    }}
+                </p>
               </td>
-              <td class="wtd7"><input type="text" value="" /></td>
-              <td class="wtd7"><input type="text" value="{{ 65666 }}" /></td>
-              <td class="wtd7"><input type="text" /></td>
-              <td class="wtd7"><input type="text" /></td>
-              <td class="wtd7"><input type="text" /></td>
-              <td class="wtd7"><input type="text" /></td>
+              <td class="wtd7"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 100px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > {{
+                      item2.amount
+                    }}
+                </p></td>
+              <td class="wtd7"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 100px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p></td>
+              <td class="wtd7"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 100px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p></td>
+              <td class="wtd7"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 100px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p></td>
+              <td class="wtd7"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 100px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > {{
+                      item2.currency
+                    }}
+                </p></td>
+              <td class="wtd7"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 100px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p></td>
             </tr>
           </table>
         </div>
@@ -435,15 +597,91 @@
           <p>
             I / We authorize you to debit Current account /Cash Credit account /
             EEFC Account No.
-            <span><input type="text" name="" id="" /></span> for (currency)<span
-              ><input type="text" name="" id=""
-            /></span>
-            (amount) <span><input type="text" name="" id="" /></span>and /or
+            <span><p
+              style="
+              display: inline-block;
+              outline: none;
+              border-bottom: 1px solid black;
+              width: 200px;
+              height: 20px;
+              margin-bottom: 0px;
+              "
+              contenteditable="true"
+              > 
+            </p></span> for (currency)<span
+              ><p
+              style="
+              display: inline-block;
+              outline: none;
+              border-bottom: 1px solid black;
+              width: 200px;
+              height: 20px;
+              margin-bottom: 0px;
+              "
+              contenteditable="true"
+              > 
+            </p></span>
+            (amount) <span><p
+              style="
+              display: inline-block;
+              outline: none;
+              border-bottom: 1px solid black;
+              width: 200px;
+              height: 20px;
+              margin-bottom: 0px;
+              "
+              contenteditable="true"
+              > 
+            </p></span>and /or
             balance amount from Current Account /Cash Credit account / EEFC A/c
-            No. <span><input type="text" name="" id="" /></span>for
-            (currency)<span><input type="text" name="" id="" /></span>
-            (amount)<span><input type="text" name="" id="" /></span>and charges
-            from account <span><input type="text" name="" id="" /></span>
+            No. <span><p
+              style="
+              display: inline-block;
+              outline: none;
+              border-bottom: 1px solid black;
+              width: 200px;
+              height: 20px;
+              margin-bottom: 0px;
+              "
+              contenteditable="true"
+              > 
+            </p></span>for
+            (currency)<span><p
+              style="
+              display: inline-block;
+              outline: none;
+              border-bottom: 1px solid black;
+              width: 200px;
+              height: 20px;
+              margin-bottom: 0px;
+              "
+              contenteditable="true"
+              > 
+            </p></span>
+            (amount)<span><p
+              style="
+              display: inline-block;
+              outline: none;
+              border-bottom: 1px solid black;
+              width: 200px;
+              height: 20px;
+              margin-bottom: 0px;
+              "
+              contenteditable="true"
+              > 
+            </p></span>and charges
+            from account <span><p
+              style="
+              display: inline-block;
+              outline: none;
+              border-bottom: 1px solid black;
+              width: 200px;
+              height: 20px;
+              margin-bottom: 0px;
+              "
+              contenteditable="true"
+              > 
+            </p></span>
           </p>
         </div>
         <div
@@ -485,10 +723,50 @@
               <td class="wtd4"><b>Due Date of the Contract</b></td>
             </tr>
             <tr>
-              <td class="wtd1"><input type="text" /></td>
-              <td class="wtd1"><input type="text" /></td>
-              <td class="wtd1"><input type="text" /></td>
-              <td class="wtd1"><input type="text" /></td>
+              <td class="wtd1"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 200px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p></td>
+              <td class="wtd1"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 200px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p></td>
+              <td class="wtd1"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 200px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p></td>
+              <td class="wtd1"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 200px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p></td>
             </tr>
           </table>
         </div>
@@ -540,7 +818,18 @@
             relates have been/will be imported into
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;India on our account <br />
             3.&nbsp;&nbsp;&nbsp;&nbsp; The import is on behalf of @
-            <input class="ins" type="text" /> and <br />
+            <p
+              style="
+              display: inline-block;
+              outline: none;
+              border-bottom: 1px solid black;
+              width: 300px;
+              height: 20px;
+              margin-bottom: 0px;
+              "
+              contenteditable="true"
+              > 
+            </p> and <br />
             4.&nbsp;&nbsp;&nbsp;&nbsp; The invoice value of goods which is
             declared on this form is the real value of the goods imported/to be
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imported into India
@@ -551,7 +840,6 @@
               >a.&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;] Details of BOE given
               below :</span
             >
-          </p>
           <table class="table2">
             <tr>
               <td class="wtd6">Currency</td>
@@ -575,21 +863,91 @@
             </tr>
             <tr>
               <td class="wtd7">
-                <input type="text" value="" />
+                  <p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 80px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > {{item2.currency}}
+                </p>
               </td>
-              <td class="wtd7"><input type="text" /></td>
+              <td class="wtd7"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 80px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > {{item2.amount}}
+                </p></td>
               <td class="wtd7">
-                <input type="text" value="" />
+                  <p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 80px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p>
               </td>
-              <td class="wtd7"><input type="text" /></td>
+              <td class="wtd7"><p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 80px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p></td>
               <td class="wtd7">
-                <input type="text" value="" />
+                  <p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 90px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  >
+                </p>
               </td>
               <td class="wtd7">
-                <input type="text" value="" />
+                  <p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 80px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p>
               </td>
               <td class="wtd7">
-                <input type="text" value="" />
+                  <p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  width: 110px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p>
               </td>
             </tr>
           </table>
@@ -640,14 +998,37 @@
             </p>
           </div>
           <div style="float: right; margin-right: 40px">
-            <p>
-              Date: <input class="ind" type="text" /> <br />
-              Place: <input class="ind" type="text" />
-            </p>
+            
+              Date: <p
+              style="
+              display: inline-block;
+              outline: none;
+              width: 100px;
+              border-bottom: 1px solid black;
+              height: 20px;
+              margin-bottom: 0px;
+              "
+              contenteditable="true"
+              >
+            </p> <br />
+              Place: <p
+                  style="
+                  display: inline-block;
+                  outline: none;
+                  border-bottom: 1px solid black;
+                  width: 100px;
+                  height: 20px;
+                  margin-bottom: 0px;
+                  "
+                  contenteditable="true"
+                  > 
+                </p>
           </div>
         </div>
       </div>
-      <div
+      
+    </div>
+    <div *ngIf="!done"
       style="
         float: left;
         display: block;
@@ -655,21 +1036,24 @@
         margin-top: 40px;
         margin-left: 43px;
       "
-    >
+      >
       <div class="button1" title="Share As PDF" (click)="exportAsPDF('MyDIv')">Proceed to Preview</div>
-    </div>
     </div>
 
     
-    <div *ngIf="data5">
+    <div *ngIf="done">
       <p>Setup: 3 Preview</p>
       <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button>
       <button class="button1" style="margin-bottom: 40px;">Send it via Email</button>
       <div>
         <iframe [src]="data6" height="500px" width="400px"></iframe>
+        <iframe [src]="doc" height="500px" width="400px"></iframe>
       </div><br>
-      <button class="button1" style="margin-right: 10px;" [routerLink]="['/home/advance-outward-remittance']">Done</button>
+      <button class="button1" style="margin-right: 10px;" (click)="edit()" >Edit</button>
+      <button class="button1" style="margin-right: 10px;" (click)="submitTask()">Done</button>
       
     </div>
   </main>
 </div>
+
+<!-- exportAsPDF('MyDIv') -->

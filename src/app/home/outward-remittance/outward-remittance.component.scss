@@ -22,7 +22,7 @@
 
 table {
   margin-left: 29px;
-  width: 96% !important;
+  width: 98% !important;
 }
 
 .box-shadow {
@@ -31,9 +31,8 @@ table {
 
 .table-padding {
   background: white !important;
-  padding-left: 11% !important;
   width: 104%;
-  padding-top: 3.8%;
+  margin-top: 68px;
 }
 
 .upload-button {
@@ -42,7 +41,7 @@ table {
   border: none;
   float: right;
   margin-top: -12px;
-  margin-right: 15%;
+  margin-right: 30px;
   height: 42px;
   width: 160px;
   background-color: #49a2d7;
@@ -133,8 +132,7 @@ p.fs14 {
   z-index: 5000;
   transform: scale(1, 1);
   display: grid;
-  grid-template-columns: 25% 70%;
-  width: 100.8%;
+  grid-template-columns: 28% 70%;
 }
 .p-20 {
   padding: 20px !important;
@@ -435,9 +433,13 @@ p.fs14 {
   background-color: white;
   height: 100%;
   padding: 1% 0;
-  padding-left: 24px;
+  padding-left: 30px;
   margin-left: -30px;
   width: 109%;
+}
+
+.tabs label {
+  font-size: 16px;
 }
 
 .tab > label {
@@ -499,7 +501,6 @@ p.fs14 {
   margin-right: 5%;
   top: 50%;
   left: 50%;
-  width: 1070px;
   height: 316px;
   background-color: white;
   border: 1px dashed rgba(0, 0, 0, 0.4);
@@ -529,7 +530,7 @@ p.fs14 {
   font-family: "Poppins", sans-serif !important;
   font-weight: 600;
   border: none;
-  margin-left: 42.5%;
+  margin-left: 36.5%;
   height: 42px;
   cursor: pointer;
   width: 160px;
@@ -610,11 +611,13 @@ select:focus {
 }
 
 .form-wrapper1 div td {
-  width: 250px;
+  width: 30%;
+  height: 5.5%;
 }
 
 .form-wrapper1.td {
   width: 100%;
+  width: 7%;
 }
 .full-input {
   margin-left: 18px;
@@ -812,7 +815,7 @@ table tbody {
   cursor: pointer;
 }
 
-/*SIDE PEOPLE LIST*/
+//SIDE PEOPLE LIST
 
 .side_document_list {
   background-color: white;
@@ -821,10 +824,10 @@ table tbody {
   align-items: center;
   height: 170vh;
   border-right: 0.3px solid rgba(0, 0, 0, 0.2);
-  padding-left: 6%;
+  margin-left: 27px;
 }
 
-/*PROFILE CLASSSSS*/
+//PROFILE CLASSSSS/
 .profile_class {
   display: flex;
   width: 100%;
@@ -845,13 +848,10 @@ table tbody {
 }
 
 .table_top {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 28.55% 33% 36%;
   border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
-  width: 87.5vw;
-  display: flex;
   align-items: center;
-  padding-top: 0.5%;
 }
 
 .invoices_tab {
@@ -870,7 +870,7 @@ table tbody {
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 0 3%;
+  background-color: white;
 }
 
 .invoice_head {
@@ -878,7 +878,6 @@ table tbody {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2%;
   padding-left: 5%;
 }
 

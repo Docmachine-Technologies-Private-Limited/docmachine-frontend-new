@@ -105,16 +105,26 @@ export class DirectImportPaymentComponent implements OnInit {
   // }
 
   viewTask(data) {
-    data.pipoDetail["draft"] = true;
-    data.pipoDetail["_id"] = data._id;
-    this.documentService.pdfData = data.pipoDetail;
-    this.router.navigateByUrl(`/home/inwardRemittance/${data.pi_poNo}`);
+    // data.pipoDetail["draft"] = true;
+    // data.pipoDetail["_id"] = data._id;
+    // this.documentService.pdfData = data.pipoDetail;
+    // this.router.navigateByUrl(`/home/inwardRemittance/${data.pi_poNo}`);
     console.log("PIPO NO", data);
+    if(!data.completed) {
+      this.documentService.task = data
+      this.documentService.draft = true;
+      //data.pipoDetail["_id"] = data._id;
+      this.documentService.pdfData = data.pipoDetail;
+      this.router.navigateByUrl(`/home/inwardRemittanceBoe/${data.boeNumber}`);
+      
+    } else {
+      this.router.navigateByUrl(`/home/completedTask/${data._id}`);
+    }
   }
 
   showThisPdf(piPo) {
-    
-        this.router.navigateByUrl(`/home/inwardRemittanceBoe/${piPo}`);
+    this.documentService.draft = false;
+    this.router.navigateByUrl(`/home/inwardRemittanceBoe/${piPo}`);
       
   }
 

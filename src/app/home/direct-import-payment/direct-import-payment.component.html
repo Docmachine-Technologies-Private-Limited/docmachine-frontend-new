@@ -1,9 +1,82 @@
-<div class="content-wrap">
+<div style="margin-left: 210px" class="content-wrap">
     <main id="content" class="content table-padding" role="main">
-      
+      <div *ngIf="showInvoice" class="table_top">
+        <div
+          style="
+            width: 100%;
+            border-right: 0.5px solid rgba(0, 0, 0, 0.2);
+            height: 100%;
+            padding-top: 2.3%;
+          "
+        >
+          <p
+            class="bcw"
+            style="
+              font-size: '14px';
+              float: left;
+              margin-left: 50px;
+              font-weight: 500;
+            "
+          >
+            All Documents
+          </p>
+        </div>
+        <!----style="height: 35px; font-weight: 400"-->
+  
+        <div style="width: 100%; font-weight: 300; padding-left: 1%">
+          <span style="font-weight: 400">People colaborated</span>
+        </div>
+        <div style="width: 100%; padding-right: 4%">
+          <span
+            *ngFor="let data of item1 | slice: 0:3; let i = index"
+            style="float: right; margin-right: 3%"
+            ><img
+              class="image"
+              src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
+              height="30px"
+              width="30px"
+          /></span>
+          <!-------style="padding-left: 1%" class="pc1"-->
+        </div>
+      </div>
+      <div
+        style="
+          display: flex;
+          flex-direction: rows;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: 0.8%;
+          padding-left: 1%;
+          padding-bottom: 0.8%;
+          border: 0.5px solid rgba(0, 0, 0, 0.2);
+          margin-left: 40px;
+          width: 94%;
+        "
+        *ngIf="!showInvoice"
+      >
+        <div style="display: flex; align-items: center">
+          <h3 class="heading">All Documents</h3>
+        </div>
+  
+        <div class="dropdown">
+          Date:
+          <select name="subject" id="subject">
+            <option value="" selected="selected">Today</option>
+          </select>
+          Type:
+          <select name="topic" id="topic">
+            <option value="" selected="selected">All</option>
+          </select>
+        </div>
+        <div style="padding-top: 0.7%">
+          <button class="upload-button" [routerLink]="['/home/upload']">
+            Upload New
+          </button>
+        </div>
+      </div>
       
   
-      <div class="analytics" style="margin-top: 50px;">
+      <div class="analytics" >
         <div
           *ngIf="!showInvoice"
           style="width: 100%"
@@ -23,7 +96,7 @@
                   style="margin: 0 -2%"
                   class="widget-body p-0 support table-wrapper"
                 >
-                  <table style="width: 65%; margin-left: 15%;" class="table table-striped mb-0">
+                  <table style="width: 65%; margin-left: 9%;" class="table table-striped mb-0">
                     <thead style="width: 100%">
                       <tr class="text-muted table-heading">
                     
