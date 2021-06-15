@@ -13,7 +13,7 @@
             * Collapsing - navigation automatically collapse when mouse leaves it and expand when enters.
             * Static - stays always open.
         -->
-    <nav id="sidebar" class="sidebar" role="navigation" style="overflow: auto;">
+    <nav id="sidebar" class="sidebar" role="navigation" style="overflow: auto">
       <!-- need this .js class to initiate slimscroll -->
       <div class="js-sidebar-content">
         <header class="logo d-none d-md-block">
@@ -56,88 +56,142 @@
               Dashboard
             </a>
           </li>
-          <li class="" *ngIf="!mt" (click)="manageTask()">
+          <li
+            style="cursor: pointer"
+            class=""
+            *ngIf="!mt"
+            (click)="manageTask()"
+          >
             <!-- an example of nested submenu. basic bootstrap collapse component -->
             <a class="sidebar-content"  style="cursor: pointer;">
               <span class="icon side-icon">
                 <img src="./assets/content-paper-edit.png" />
               </span>
               Manage Tasks
+              <span
+                style="
+                  margin-left: 7%;
+                  position: absolute;
+                  transform: translate(0, 3px);
+                "
+                ><i
+                  style="font-size: 20px"
+                  *ngIf="!mt"
+                  class="fas fa-angle-down"
+                ></i>
+              </span>
             </a>
           </li>
           <li class="manage-li" *ngIf="mt">
             <!-- an example of nested submenu. basic bootstrap collapse component -->
-            <a class="manage-content" (click)="manageTask()" style="cursor: pointer;">
+            <a
+              style="cursor: pointer"
+              class="manage-content"
+              (click)="manageTask()"
+            >
               <span class="icon side-icon">
                 <img src="./assets/content-paper-edit.png" />
               </span>
               Manage Tasks
+              <span
+                style="
+                  margin-left: 7%;
+                  position: absolute;
+                  transform: translate(0, 3px);
+                "
+              >
+                <i
+                  style="font-size: 20px"
+                  *ngIf="mt"
+                  class="fas fa-angle-up"
+                ></i
+              ></span>
             </a>
-            <div class="main11" >
-              <a (click)="newTask()"> New Task </a>
+            <div class="main11">
+              <a style="cursor: pointer" (click)="newTask()">
+                New Task
+                <span style="margin-left: 14%"
+                  ><i *ngIf="!nt" class="fas fa-angle-down"></i>
+                  <i *ngIf="nt" class="fas fa-angle-up"></i
+                ></span>
+              </a>
               <div class="main1" *ngIf="nt">
-                <a (click)="export()"> Exports </a>
+                <a style="cursor: pointer" (click)="export()"> Exports </a>
                 <div class="main2" *ngIf="exp">
-                  <a>Shipping Bill</a>
-                  <a>PI/PO</a>
-                  <a>Commercial Invoice</a>
-                  <a>Transport Document</a>
-                  <a>Master Sales Agreement</a>
-                  <a>Debit Notes</a>
-                  <a>Credit Notes</a>
-                  <a>Upload EDPMS</a>
-                  <a>Softex</a>
+                  <a style="cursor: pointer">Shipping Bill</a>
+                  <a style="cursor: pointer">PI/PO</a>
+                  <a style="cursor: pointer">Commercial Invoice</a>
+                  <a style="cursor: pointer">Transport Document</a>
+                  <a style="cursor: pointer">Master Sales Agreement</a>
+                  <a style="cursor: pointer">Debit Notes</a>
+                  <a style="cursor: pointer">Credit Notes</a>
+                  <a style="cursor: pointer">Upload EDPMS</a>
+                  <a style="cursor: pointer">Softex</a>
                 </div>
-                <a (click)="inward()"> Inward Remittance </a>
+                <a style="cursor: pointer" (click)="inward()">
+                  Inward Remittance
+                </a>
                 <div class="main2" *ngIf="inw">
-                  <a>Commercial Invoice</a>
-                  <a>PI/PO</a>
-                  <a>Master Sales Agreement</a>
+                  <a style="cursor: pointer">Commercial Invoice</a>
+                  <a style="cursor: pointer">PI/PO</a>
+                  <a style="cursor: pointer">Master Sales Agreement</a>
                 </div>
-                <a (click)="import()"> Imports </a>
+                <a style="cursor: pointer" (click)="import()"> Imports </a>
                 <div class="main2" *ngIf="imp">
-                  <a [routerLink]="['/home/advance-outward-remittance']"
+                  <a
+                    style="cursor: pointer"
+                    [routerLink]="['/home/advance-outward-remittance']"
                     >Advance Outward Remittance</a
                   >
                   <a
-                  [routerLink]="['/home/direct-import-payment']"
-                  >Direct Import Payment</a>
-                  <a>Bill Under Collection</a>
-                  <a>Buyers Credit Request</a>
-                  <a>LC Insurance</a>
-                  <a>BOE Submission to Bank</a>
-                  <a>FBG Waiver</a>
+                    style="cursor: pointer"
+                    [routerLink]="['/home/direct-import-payment']"
+                    >Direct Import Payment</a
+                  >
+                  <a style="cursor: pointer">Bill Under Collection</a>
+                  <a style="cursor: pointer">Buyers Credit Request</a>
+                  <a style="cursor: pointer">LC Insurance</a>
+                  <a style="cursor: pointer">BOE Submission to Bank</a>
+                  <a style="cursor: pointer">FBG Waiver</a>
                 </div>
-                <a (click)="outward()"> Outward Remittance </a>
+                <a style="cursor: pointer" (click)="outward()">
+                  Outward Remittance
+                </a>
                 <div class="main2" *ngIf="out">
-                  <a>Bill of entry Management</a>
-                  <a>PI/PO</a>
-                  <a>Shipping Bill Management</a>
-                  <a>Transport Document</a>
-                  <a>Invoice Management</a>
+                  <a style="cursor: pointer">Bill of entry Management</a>
+                  <a style="cursor: pointer">PI/PO</a>
+                  <a style="cursor: pointer">Shipping Bill Management</a>
+                  <a style="cursor: pointer">Transport Document</a>
+                  <a style="cursor: pointer">Invoice Management</a>
                 </div>
-                <a (click)="others()"> Others </a>
+                <a style="cursor: pointer" (click)="others()"> Others </a>
                 <div class="main2" *ngIf="others">
-                  <a>GR Waiver</a>
-                  <a>Writeoff</a>
-                  <a>EEFC conversion request</a>
-                  <a>Net Off/Set Off</a>
+                  <a style="cursor: pointer">GR Waiver</a>
+                  <a style="cursor: pointer">Writeoff</a>
+                  <a style="cursor: pointer">EEFC conversion request</a>
+                  <a style="cursor: pointer">Net Off/Set Off</a>
                 </div>
               </div>
-              <a (click)="newTask()"> Completed Task </a>
-              <a (click)="newTask()"> Draft </a>
+              <a style="cursor: pointer" (click)="newTask()">
+                Completed Task
+              </a>
+              <a style="cursor: pointer" (click)="newTask()"> Draft </a>
             </div>
           </li>
           <li class="">
             <!-- an example of nested submenu. basic bootstrap collapse component -->
-            <a [routerLink]="['/home/upload']" class="sidebar-content">
+            <a
+              [routerLink]="['/home/upload']"
+              style="cursor: pointer"
+              class="sidebar-content"
+            >
               <span class="icon side-icon">
                 <img src="./assets/briefcase.png" />
               </span>
               Upload Documents
             </a>
           </li>
-          <li class="">
+          <li class="" style="cursor: pointer">
             <!-- an example of nested submenu. basic bootstrap collapse component -->
             <a class="sidebar-content" [routerLink]="['/home/manageUser']">
               <span class="icon side-icon">
@@ -147,7 +201,7 @@
             </a>
           </li>
 
-          <li class="">
+          <li style="cursor: pointer" class="">
             <!-- an example of nested submenu. basic bootstrap collapse component -->
             <a class="sidebar-content">
               <span class="icon side-icon">
@@ -156,7 +210,7 @@
               Transaction
             </a>
           </li>
-          <li class="">
+          <li style="cursor: pointer" class="">
             <!-- an example of nested submenu. basic bootstrap collapse component -->
             <a class="sidebar-content" [routerLink]="['/home/manageCustomer']">
               <span class="icon side-icon">
@@ -186,7 +240,7 @@
         </ul>
 
         <h5 class="sidebar-nav-title sidebar-title">SUPPORT</h5>
-        <ul class="sidebar-nav">
+        <ul style="cursor: pointer" class="sidebar-nav">
           <li class="">
             <!-- an example of nested submenu. basic bootstrap collapse component -->
             <a class="sidebar-content">
@@ -196,7 +250,7 @@
               Need Help?
             </a>
           </li>
-          <li class="">
+          <li style="cursor: pointer" class="">
             <!-- an example of nested submenu. basic bootstrap collapse component -->
             <a class="sidebar-content">
               <span class="icon side-icon">
@@ -228,7 +282,7 @@
 
         <h5 class="sidebar-nav-title sidebar-title">SETTING</h5>
         <ul class="sidebar-nav">
-          <li class="">
+          <li style="cursor: pointer" class="">
             <!-- an example of nested submenu. basic bootstrap collapse component -->
             <a class="sidebar-content" [routerLink]="['/home/account']">
               <span class="icon side-icon">
@@ -237,7 +291,7 @@
               Account
             </a>
           </li>
-          <li class="">
+          <li style="cursor: pointer" class="">
             <!-- an example of nested submenu. basic bootstrap collapse component -->
             <a class="sidebar-content" (click)="logout()">
               <span class="icon side-icon">
@@ -281,45 +335,54 @@
       style="width: 88.2vw; position: fixed"
     >
       <div
+        style="display: grid; grid-template-columns: 70% 15% 15%"
         class="container-fluid contain-fluid"
-        style="border-bottom: 0.3px solid rgba(0, 0, 0, 0.2)"
       >
         <!-- .navbar-header contains links seen on xs & sm screens -->
 
         <!-- this part is hidden for xs screens -->
-        <div style="width: 75%">
+        <div style="width: 100%" class="">
           <!-- search form! link it to your search server -->
-          <form class="" role="search">
-            <div class="form-group">
+          <form style="width: 100%" class="" role="search">
+            <div style="width: 100%" class="form-group">
               <div
-                class="input-group input-group-no-border ml-4"
                 style="width: 100%"
+                class="input-group input-group-no-border ml-4"
               >
                 <input
                   id="main-search"
                   type="text"
                   placeholder="Type to search. . ."
-                  style="width: 100%"
+                  style="width: 98%"
                 />
               </div>
             </div>
           </form>
         </div>
-        <select class="dropdown" name="cars" id="cars">
-          <option value="volvo">English</option>
-          <option value="saab">Hindi</option>
-          <option value="opel">Kannada</option>
-          <option value="audi">Tamil</option>
-        </select>
-        <span class="icon">
-          <img src="./assets/Rectangle-7.png" />
-        </span>
-        <span class="icon">
-          <img src="./assets/Shape-2.png" />
-        </span>
-        <span class="icon">
-          <img src="./assets/cog-grey.png" />
-        </span>
+        <div style="display: flex; justify-content: center; width: 100%">
+          <select
+            style="cursor: pointer"
+            class="dropdown"
+            name="cars"
+            id="cars"
+          >
+            <option value="volvo">English</option>
+            <option value="saab">Hindi</option>
+            <option value="opel">Kannada</option>
+            <option value="audi">Tamil</option>
+          </select>
+        </div>
+        <div style="display: flex; justify-content: center; width: 100%">
+          <span style="margin-right: 20%" class="icon">
+            <img src="./assets/Rectangle-7.png" />
+          </span>
+          <span style="margin-right: 20%" class="icon">
+            <img src="./assets/Shape-2.png" />
+          </span>
+          <span style="margin-right: 20%" class="icon">
+            <img src="./assets/cog-grey.png" />
+          </span>
+        </div>
       </div>
     </nav>
     <router-outlet></router-outlet>

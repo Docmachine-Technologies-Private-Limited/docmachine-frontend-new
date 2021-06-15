@@ -40,10 +40,12 @@ export class SigninComponent implements OnInit {
               }
             },
             error1 => {
+              console.log(error1)
               console.log("error")
             });
         },
         error => {
+          console.log(error)
           console.log("error")
         });
   }

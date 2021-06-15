@@ -71,6 +71,8 @@ a {
 }
 .bg-dark {
   background-color: rgb(255, 255, 255) !important;
+  display: flex;
+  justify-content: center;
 }
 
 input.email {
