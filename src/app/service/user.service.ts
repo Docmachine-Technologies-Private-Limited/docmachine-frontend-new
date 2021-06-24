@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 @Injectable({ providedIn: "root" })
 export class UserService {
   public authToken;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public addToken(token) {
     console.log(token);
@@ -167,7 +167,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `http://dm.uipep.com/v1/bene/update`,
+      `https://dm.uipep.com/v1/bene/update`,
       {
         id: id,
         bene: bene,
@@ -183,7 +183,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `http://dm.uipep.com/v1/member/post`,
+      `https://dm.uipep.com/v1/member/post`,
       {
         id: id,
         member: member,
@@ -256,6 +256,6 @@ export class UserService {
         { beneName: name },
         httpOptions
       ).toPromise();
-      
+
   }
 }

@@ -28,44 +28,33 @@
     </div>
 </div> -->
 
-<div
-  style="width: 100%; padding-right: 0 !important;"
-  class="container-fluid"
->
+<div style="width: 100%; padding-right: 0 !important;" class="container-fluid">
   <div style="display: flex; width: 100%" class="row no-gutter">
     <!-- The image half -->
 
     <!-- The content half -->
-    <div
-      class="bg-dark"
-      style="
+    <div class="bg-dark" style="
         float: left;
         width: 58%;
         display: flex;
         flex-direction: column;
         height: 100vh;
-      "
-    >
-      <div
-        style="
+      ">
+      <div style="
           margin-top: 5%;
           width: 90%;
           text-align: right;
           padding-top: 4%;
           z-index: 1000;
-        "
-      >
+        ">
         <p style="cursor: pointer" class="leftl" [routerLink]="['/login']">
           Login
         </p>
       </div>
-      <div
-        style="margin-top: -11%"
-        class="login d-flex align-items-center py-5"
-      >
+      <div style="margin-top: -11%" class="login d-flex align-items-center py-5">
         <!-- Demo content-->
         <div class="container">
-          <div style="padding-left: 14%" class="row">
+          <div class="row">
             <div class="col-lg-10 col-xl-9 mx-auto">
               <h6 class="display-5">Signup</h6>
               <p class="mb-4 text-ui">
@@ -75,31 +64,19 @@
               <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                 <div class="form-group mb-3">
                   <label>Name</label>
-                  <input
-                    id="fullName"
-                    type="name"
-                    formControlName="fullName"
-                    placeholder="Your Full Name"
-                    required=""
-                    autofocus=""
-                    class="
+                  <input id="fullName" type="name" formControlName="fullName" placeholder="Your Full Name" required=""
+                    autofocus="" class="
                       form-control
                       rounded-pill
                       border-0
                       shadow-sm
                       px-4
                       fullName
-                    "
-                  />
+                    " />
                 </div>
                 <div class="form-group mb-3">
                   <label>Email</label>
-                  <input
-                    id="inputEmail"
-                    formControlName="email"
-                    type="email"
-                    placeholder="Your Email"
-                    required=""
+                  <input id="inputEmail" formControlName="email" type="email" placeholder="Your Email" required=""
                     class="
                       form-control
                       rounded-pill
@@ -107,19 +84,13 @@
                       shadow-sm
                       px-4
                       email
-                    "
-                  />
+                    " />
                 </div>
 
                 <div class="form-group mb-3">
                   <label>Password</label>
-                  <input
-                    formControlName="password"
-                    id="password"
-                    type="password"
-                    placeholder="Your Password"
-                    required=""
-                    class="
+                  <input formControlName="password" id="password" type="password" placeholder="Your Password"
+                    required="" class="
                       form-control
                       rounded-pill
                       border-0
@@ -127,19 +98,13 @@
                       px-4
                       password
                       password1
-                    "
-                  />
+                    " />
                 </div>
 
                 <div class="form-group mb-3">
                   <label>Email</label>
-                  <input
-                    formControlName="confirmPassword"
-                    id="password"
-                    type="password"
-                    placeholder="Confirm Your Password"
-                    required=""
-                    class="
+                  <input formControlName="confirmPassword" id="password" type="password"
+                    placeholder="Confirm Your Password" required="" class="
                       form-control
                       rounded-pill
                       border-0
@@ -147,8 +112,7 @@
                       px-4
                       password
                       password1
-                    "
-                  />
+                    " />
                 </div>
                 <p class="text-muted mb-4 bottom-text">
                   You continuing, you agree to DocMachine
@@ -165,21 +129,14 @@
       </div>
     </div>
     <!-- End -->
-    <div
-      class="parent"
-      style="
+    <div class="parent" style="
         width: 42%;
         display: flex;
         justify-content: center;
         align-items: center;
-      "
-    >
+      ">
       <img style="width: 100%" class="image1" src="./assets/Image.png" />
-      <img
-        class="image2"
-        src="./assets/LogoFinal.png"
-        style="width: 299px; height: 92px"
-      />
+      <img class="image2" src="./assets/LogoFinal.png" style="width: 299px; height: 92px" />
     </div>
   </div>
 </div>

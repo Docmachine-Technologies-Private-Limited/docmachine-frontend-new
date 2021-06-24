@@ -8,13 +8,13 @@ import { DomSanitizer } from "@angular/platform-browser";
 @Component({
   selector: 'app-inward-remittance-boe',
   templateUrl: './inward-remittance-boe.component.html',
-  styleUrls: ["../../../../sass/application.scss",'./inward-remittance-boe.component.scss']
+  styleUrls: ["../../../../sass/application.scss", './inward-remittance-boe.component.scss']
 })
 export class InwardRemittanceBoeComponent implements OnInit {
   item: any;
   item2: any = [];
 
-  public FileSaver = require('file-saver');
+
   public data1;
   public data2;
   public data3;
@@ -53,8 +53,8 @@ export class InwardRemittanceBoeComponent implements OnInit {
     boeDetails: [],
     beneDetail: [],
     completed: false,
-    url : "",
-    doc:""
+    url1: "",
+    doc: ""
   };
 
   async ngOnInit(): Promise<void> {
@@ -82,21 +82,21 @@ export class InwardRemittanceBoeComponent implements OnInit {
 
   getPipoDetaile() {
     this.documentService.getBoeByBoe(this.id)
-    .subscribe(
+      .subscribe(
         data => {
-            console.log("king123")
-            console.log(data)
-            console.log(data['data'])
-            this.item2= data['data']
-            this.doc = data['data']['doc']
-            this.doc1 = this.sanitizer.bypassSecurityTrustResourceUrl(
-              this.doc
-            );
-            this.getBeneDetaile()
-            //this.router.navigate(['/login'], { queryParams: { registered: true }});
+          console.log("king123")
+          console.log(data)
+          console.log(data['data'])
+          this.item2 = data['data']
+          this.doc = data['data']['doc']
+          this.doc1 = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.doc
+          );
+          this.getBeneDetaile()
+          //this.router.navigate(['/login'], { queryParams: { registered: true }});
         },
         error => {
-            console.log("error")
+          console.log("error")
         });
     console.log("pipo", this.item2)
   }
@@ -123,7 +123,7 @@ export class InwardRemittanceBoeComponent implements OnInit {
   }
 
   public downloadPDF() {
-     console.log("DATA",this.data4)
+    console.log("DATA", this.data4)
     const link: any = document.createElement("a");
     link.id = "dwnldLnk";
     link.style = "display:none;";
@@ -133,16 +133,13 @@ export class InwardRemittanceBoeComponent implements OnInit {
     console.log(dlnk)
     console.log(dlnk.href)
     dlnk.download = this.data4.filename;
-    
+
     dlnk.click();
     //this.submitTask()
     // this.downloading = false;
     // this.backupClicked = false;
   }
 
-  public download() {
-    this.FileSaver.saveAs('https://storage.googleapis.com/doc-machine-bucket1/proforma-invoice-template.pdf', 'jj.pdf');
-  }
 
   exportAsPDF(div_id) {
     const height =
@@ -172,7 +169,7 @@ export class InwardRemittanceBoeComponent implements OnInit {
           this.data6 = this.sanitizer.bypassSecurityTrustResourceUrl(
             this.data5
           );
-          this.newTask.url = this.data5;
+          this.newTask.url1 = this.data5;
           this.done = true;
           //this.downloadPDF(data);
         }
@@ -186,46 +183,48 @@ export class InwardRemittanceBoeComponent implements OnInit {
   async submitTask() {
     this.newTask.completed = true;
     console.log(this.newTask);
-    
+
+    console.log("shshsh")
+    if (this.documentService.draft === false) {
       console.log("shshsh")
-      if (this.documentService.draft === false) {
-        console.log("shshsh")
-        this.documentService.addTask(this.newTask).subscribe(
-          (res) => {
-            console.log("Transaction Saved");
-            
-            this.submitted = true;
-            this.router.navigate(["/home/direct-import-payment"]);
-          },
-          (err) => console.log("Error saving the transaction")
-        );
-      } else if (this.documentService.draft === true) {
-        console.log("hhhh")
-        this.documentService.completeTask({ _id: this.documentService.task._id, task:this.newTask }).subscribe(
-          (res) =>{console.log("COMPLETED") 
-          this.router.navigate(["/home/direct-import-payment"])},
-          (err) => console.log("ERROR")
-        );
-      }
-    
+      this.documentService.addTask(this.newTask).subscribe(
+        (res) => {
+          console.log("Transaction Saved");
+
+          this.submitted = true;
+          this.router.navigate(["/home/direct-import-payment"]);
+        },
+        (err) => console.log("Error saving the transaction")
+      );
+    } else if (this.documentService.draft === true) {
+      console.log("hhhh")
+      this.documentService.completeTask({ _id: this.documentService.task._id, task: this.newTask }).subscribe(
+        (res) => {
+          console.log("COMPLETED")
+          this.router.navigate(["/home/direct-import-payment"])
+        },
+        (err) => console.log("ERROR")
+      );
+    }
+
   }
 
   ngOnDestroy() {
     console.log(this.newTask)
     console.log(this.documentService.draft)
     console.log(this.submitted)
-  
-      if (this.documentService.draft === false && this.submitted === false) {
-        this.documentService.addTask(this.newTask).subscribe(
-          (res) => {
-            console.log("Saved as draft");
-            //window.alert("Transcation Saved as draft");
-          },
-          (err) => console.log("Cant save as draft")
-        );
-      }
 
-    
+    if (this.documentService.draft === false && this.submitted === false) {
+      this.documentService.addTask(this.newTask).subscribe(
+        (res) => {
+          console.log("Saved as draft");
+          //window.alert("Transcation Saved as draft");
+        },
+        (err) => console.log("Cant save as draft")
+      );
+    }
+
+
   }
 
 }

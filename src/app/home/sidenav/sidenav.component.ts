@@ -16,13 +16,16 @@ export class SidenavComponent implements OnInit {
   out: any;
   others: boolean;
   nt: boolean;
+  billuc: boolean;
+  lc1: boolean;
+  nonlc1: boolean;
 
   constructor(
     public router: Router,
     public authservice: AuthenticateService,
     public authGuard: AuthGuard,
     private documentService: DocumentService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     let token = this.authGuard.loadFromLocalStorage();
@@ -66,5 +69,14 @@ export class SidenavComponent implements OnInit {
 
   public other() {
     this.others = !this.others;
+  }
+  public buc() {
+    this.billuc = !this.billuc;
+  }
+  public lc() {
+    this.lc1 = !this.lc1;
+  }
+  public nonLc() {
+    this.nonlc1 = !this.nonlc1;
   }
 }
