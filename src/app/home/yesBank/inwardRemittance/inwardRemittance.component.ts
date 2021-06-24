@@ -54,7 +54,8 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
     pipoDetail: [],
     beneDetail: [],
     completed: false,
-    url1 : ""
+    url1 : "",
+    file : "advance"
   };
 
   async ngOnInit(): Promise<void> {

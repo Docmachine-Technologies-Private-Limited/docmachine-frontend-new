@@ -1,14 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { DocumentService } from "../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 
 @Component({
-  selector: "app-outward-remittance",
-  templateUrl: "./outward-remittance.component.html",
-  styleUrls: [ "./outward-remittance.component.scss"],
+  selector: 'app-lc-isurence',
+  templateUrl: './lc-isurence.component.html',
+  styleUrls: ['./lc-isurence.component.scss']
 })
-export class OutwardRemittanceComponent implements OnInit {
+export class LcIsurenceComponent implements OnInit {
   public item1;
   public item2;
   public user;
@@ -37,12 +37,23 @@ export class OutwardRemittanceComponent implements OnInit {
     pcRefNo: new FormControl(""),
   });
   url: any;
+  file: any;
   constructor(
     public documentService: DocumentService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
+    console.log("hello")
+  }
 
   ngOnInit(): void {
+    //window.location.reload();
+    
+    this.route.params.subscribe(params => {
+      this.file = this.route.snapshot.params['file'];
+      this.showInvoice = false;
+      console.log("hello")
+    });
     this.documentService.getPipo().subscribe(
       (res: any) => {
         console.log("HEre Response", res), (this.item1 = res.data);
@@ -52,7 +63,7 @@ export class OutwardRemittanceComponent implements OnInit {
   }
 
   getTransactions(selectedRowValues) {
-    this.documentService.getTask({ pi_poNo: selectedRowValues, file:"advance" }).subscribe(
+    this.documentService.getTask({ pi_poNo: selectedRowValues, file:this.file }).subscribe(
       (res: any) => {
         this.allTransactions = res.task;
         console.log("ALL TRANSACTIONS", this.allTransactions);
@@ -108,13 +119,12 @@ export class OutwardRemittanceComponent implements OnInit {
       this.documentService.draft = true;
       //data.pipoDetail["_id"] = data._id;
       this.documentService.pdfData = data.pipoDetail;
-      if (parseInt(this.selectedRow.amount) < 200000) {
-        this.documentService.pdfData = this.selectedRow;
-        this.router.navigateByUrl(`/home/inwardRemittance/${data.pi_poNo}`);
-      } else {
-        console.log(this.selectedDoc);
-        this.router.navigateByUrl(`/home/fbg-wavier/${data.pi_poNo}`);
-        
+      if(this.file=="inland") {
+        this.router.navigate(['home/letterOfCredit',{pipo: data.pi_poNo, file:this.file}]);
+      }
+      else if(this.file=="import") {
+        this.router.navigate(['home/letterOfCreditImport',{pipo: data.pi_poNo, file:this.file}]);
+
       }
       
     } else {
@@ -124,16 +134,18 @@ export class OutwardRemittanceComponent implements OnInit {
   }
 
   showThisPdf(piPo) {
+    console.log("hello")
     this.documentService.draft = false;
-    if (parseInt(this.selectedRow.amount) < 200000) {
-      this.documentService.pdfData = this.selectedRow;
-      this.router.navigateByUrl(`/home/inwardRemittance/${piPo}`);
-    } else {
-      console.log(this.selectedDoc);
-      
-
-      this.router.navigateByUrl(`/home/fbg-wavier/${piPo}`);
-      
+    if(this.file=="inland") {
+      console.log("hello1")
+      this.router.navigate(['home/letterOfCredit',{pipo: piPo, file:this.file}]);
     }
+    else if(this.file=="import") {
+      console.log("hello2")
+      this.router.navigate(['home/letterOfCreditImport',{pipo: piPo, file:this.file}]);
+
+    }
+    
   }
+
 }

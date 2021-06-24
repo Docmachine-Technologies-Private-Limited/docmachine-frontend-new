@@ -1,14 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { DocumentService } from "../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 
 @Component({
-  selector: "app-outward-remittance",
-  templateUrl: "./outward-remittance.component.html",
-  styleUrls: [ "./outward-remittance.component.scss"],
+  selector: 'app-bill-under-collection',
+  templateUrl: './bill-under-collection.component.html',
+  styleUrls: ['./bill-under-collection.component.scss']
 })
-export class OutwardRemittanceComponent implements OnInit {
+export class BillUnderCollectionComponent implements OnInit {
   public item1;
   public item2;
   public user;
@@ -37,12 +37,23 @@ export class OutwardRemittanceComponent implements OnInit {
     pcRefNo: new FormControl(""),
   });
   url: any;
+  file: any;
   constructor(
     public documentService: DocumentService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
+    console.log("hello")
+  }
 
   ngOnInit(): void {
+    //window.location.reload();
+    
+    this.route.params.subscribe(params => {
+      this.file = this.route.snapshot.params['file'];
+      this.showInvoice = false;
+      console.log("hello")
+    });
     this.documentService.getPipo().subscribe(
       (res: any) => {
         console.log("HEre Response", res), (this.item1 = res.data);
@@ -52,7 +63,7 @@ export class OutwardRemittanceComponent implements OnInit {
   }
 
   getTransactions(selectedRowValues) {
-    this.documentService.getTask({ pi_poNo: selectedRowValues, file:"advance" }).subscribe(
+    this.documentService.getTask({ pi_poNo: selectedRowValues, file:this.file }).subscribe(
       (res: any) => {
         this.allTransactions = res.task;
         console.log("ALL TRANSACTIONS", this.allTransactions);
@@ -108,15 +119,7 @@ export class OutwardRemittanceComponent implements OnInit {
       this.documentService.draft = true;
       //data.pipoDetail["_id"] = data._id;
       this.documentService.pdfData = data.pipoDetail;
-      if (parseInt(this.selectedRow.amount) < 200000) {
-        this.documentService.pdfData = this.selectedRow;
-        this.router.navigateByUrl(`/home/inwardRemittance/${data.pi_poNo}`);
-      } else {
-        console.log(this.selectedDoc);
-        this.router.navigateByUrl(`/home/fbg-wavier/${data.pi_poNo}`);
-        
-      }
-      
+      this.router.navigate(['home/paymentAcceptance',{pipo: data.pi_poNo, file:this.file}]);
     } else {
       this.router.navigateByUrl(`/home/completedTask/${data._id}`);
     }
@@ -125,15 +128,8 @@ export class OutwardRemittanceComponent implements OnInit {
 
   showThisPdf(piPo) {
     this.documentService.draft = false;
-    if (parseInt(this.selectedRow.amount) < 200000) {
-      this.documentService.pdfData = this.selectedRow;
-      this.router.navigateByUrl(`/home/inwardRemittance/${piPo}`);
-    } else {
-      console.log(this.selectedDoc);
-      
-
-      this.router.navigateByUrl(`/home/fbg-wavier/${piPo}`);
-      
-    }
+    this.router.navigate(['home/paymentAcceptance',{pipo: piPo, file:this.file}]);
+    
   }
+
 }

@@ -6,11 +6,11 @@ import { FormGroup, FormControl } from "@angular/forms";
 import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
-  selector: "app-fbg-wavier",
-  templateUrl: "./fbg-wavier.component.html",
-  styleUrls: ['../../../../sass/application.scss',"./fbg-wavier.component.scss"],
+  selector: 'app-trade-request-letter',
+  templateUrl: './trade-request-letter.component.html',
+  styleUrls: ['../../../../sass/application.scss','./trade-request-letter.component.scss']
 })
-export class FbgWavierComponent implements OnInit, OnDestroy {
+export class TradeRequestLetterComponent implements OnInit, OnDestroy {
   item: any;
   item2: any = [];
   public data1;
@@ -33,6 +33,8 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
   doc: any;
   item3: any;
   letterHead: any;
+  file: string;
+  arr: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -55,14 +57,20 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
     beneDetail: [],
     completed: false,
     url1 : "",
-    url2 : ""
+    url2 : "",
+    file : "buyerCredit"
   };
 
   async ngOnInit(): Promise<void> {
-    this.id = this.route.snapshot.params['boeNumber'];
+    
+    this.id = this.route.snapshot.paramMap.get('id');
+    //this.file = this.route.snapshot.paramMap.get('file')
     console.log(this.id)
+    console.log(this.file)
+    //this.newTask.file = this.file;
     await this.getUserDetail();
-    this.getPipoDetaile();
+    
+    //this.getPipoDetaile();
     this.userService.getTeam()
       .subscribe(
         data => {
@@ -71,6 +79,8 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
           this.item3 = data['data'][0]
           console.log(this.item3)
           this.letterHead = data['data'][0].file[0]["Letter Head"]
+          this.arr=this.item3.gst.split('');
+          console.log(this.arr)
           //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
 
         },
@@ -85,37 +95,38 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
     console.log("DRAFT ", this.newTask);
   }
 
-  getPipoDetaile() {
-    this.documentService.getPipoByPipoNo(this.id)
-    .subscribe(
-        data => {
-            console.log("king123")
-            console.log(data)
-            console.log(data['data'][0])
-            this.item2= data['data'][0]
-            this.doc = this.sanitizer.bypassSecurityTrustResourceUrl(
-              data['data'][0]['doc']
-            );
-            this.getBeneDetaile()
-            //this.router.navigate(['/login'], { queryParams: { registered: true }});
-        },
-        error => {
-            console.log("error")
-        });
-    console.log("pipo", this.item2)
-  }
+  // getPipoDetaile() {
+  //   this.documentService.getPipoByPipoNo(this.id)
+  //   .subscribe(
+  //       data => {
+  //           console.log("king123")
+  //           console.log(data)
+  //           console.log(data['data'][0])
+  //           this.item2= data['data'][0]
+  //           this.doc = this.sanitizer.bypassSecurityTrustResourceUrl(
+  //             data['data'][0]['doc']
+  //           );
+  //           this.getBeneDetaile()
+  //           //this.router.navigate(['/login'], { queryParams: { registered: true }});
+  //       },
+  //       error => {
+  //           console.log("error")
+  //       });
+  //   console.log("pipo", this.item2)
+  // }
 
   async getUserDetail() {
     const data: any = await this.userService.getUserDetail();
     this.applicant = data.result;
     console.log("applicant", this.applicant)
+    this.getBeneDetaile()
   }
 
   async getBeneDetaile() {
     console.log("inside")
     console.log(this.item2)
     const data: any = await this.userService.getBeneByName(
-      this.item2.benneName
+      this.id 
     );
     this.benneDetail = data.data;
     this.newTask.pi_poNo = this.item2.pi_poNo;
@@ -138,15 +149,6 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
     dlnk.download = this.data4.filename;
     dlnk.click();
 
-    console.log("DATA",this.data7)
-    const link1: any = document.createElement("a");
-    link1.id = "dwnldLnk";
-    link1.style = "display:none;";
-    document.body.appendChild(link1);
-    const dlnk1: any = document.getElementById("dwnldLnk");
-    dlnk1.href = this.data7.file;
-    dlnk1.download = this.data7.filename;
-    dlnk1.click();
     //this.submitTask()
     // this.downloading = false;
     // this.backupClicked = false;
@@ -154,11 +156,11 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
   }
 
   exportAsPDF(div_id) {
-    const height = Math.round($("#mainId1").outerHeight() * 0.0104166667 * 10) / 10;
-    console.log($("#mainId1").html());
+    const height = Math.round($("#mainId").outerHeight() * 0.0104166667 * 10) / 10;
+    console.log($("#mainId").html());
     this.documentService
       .getPDF({
-        data: $("#mainId1").html(),
+        data: $("#mainId").html(),
         filename: "Final Report",
         format: {
           paperWidth: 7,
@@ -180,38 +182,9 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
           this.data6 = this.sanitizer.bypassSecurityTrustResourceUrl(
             this.data5
           );
+          this.done = true
           this.newTask.url1 = this.data5;
-          const height1 = Math.round($("#mainId2").outerHeight() * 0.0104166667 * 10) / 10;
-          this.documentService
-          .getPDF({
-            data: $("#mainId2").html(),
-            filename: "Final Report",
-            format: {
-              paperWidth: 7,
-              paperHeight: height1 + 5,
-              marginTop: 0,
-              marginBottom: 0,
-              marginLeft: 0,
-              marginRight: 0,
-            },
-            template:
-              "./app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs",
-          })
-          .subscribe((data1) => {
-            if (data1 && data1.success) {
-              console.log(data1);
-              this.data7 = data1
-              this.data8 = data1.file.replace('application/octet-stream', 'application/pdf')
-              console.log(this.data8)
-              this.data9 = this.sanitizer.bypassSecurityTrustResourceUrl(
-                this.data8
-              );
-              this.newTask.url2 = this.data8;
-              //this.submitTask()
-              this.done = true
-              //this.downloadPDF(data);
-            }
-          });
+         
           
           //this.downloadPDF(data);
         }
@@ -226,14 +199,15 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
     this.newTask.completed = true;
     console.log(this.newTask);
     
-      console.log("shshsh")
+      console.log(this.documentService.draft)
       if (this.documentService.draft === false) {
         console.log("shshsh")
         this.documentService.addTask(this.newTask).subscribe(
           (res) => {
             console.log("Transaction Saved");
             this.submitted = true;
-            this.router.navigate(["/home/advance-outward-remittance"]); 
+            
+            this.router.navigate(["/home/buyerCredit"]); 
           },
           (err) => console.log("Error saving the transaction")
         );
@@ -242,12 +216,13 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
         this.documentService.completeTask({ _id: this.documentService.task._id, task:this.newTask }).subscribe(
           (res) => {
             console.log("COMPLETED");
-            this.router.navigate(["/home/advance-outward-remittance"]); 
+            this.router.navigate(["/home/buyerCredit"]);
           } ,
           (err) => console.log("ERROR")
         );
       }
     
+
   }
 
   ngOnDestroy() {
@@ -268,4 +243,5 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
 
     
   }
+
 }

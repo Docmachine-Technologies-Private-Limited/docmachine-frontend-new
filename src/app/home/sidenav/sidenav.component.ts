@@ -16,6 +16,10 @@ export class SidenavComponent implements OnInit {
   out: any;
   others: boolean;
   nt: boolean;
+  billuc: boolean;
+  lc1: boolean;
+  nonlc1: boolean;
+  lcI: boolean;
 
   constructor(
     public router: Router,
@@ -66,5 +70,50 @@ export class SidenavComponent implements OnInit {
 
   public other() {
     this.others = !this.others;
+  }
+
+  public buc() {
+    this.billuc = !this.billuc;
+  }
+  public lc() {
+    this.lc1 = !this.lc1;
+  }
+  public nonLc() {
+    this.nonlc1 = !this.nonlc1;
+  }
+
+  public lcIsurence() {
+    this.lcI = !this.lcI
+  }
+
+  lcSight() {
+    console.log("lcSight")
+    
+    this.router.navigate(["/home/bill-under-collection/lcSight"])
+  }
+  
+  lcUsance() {
+    console.log("lcUsance")
+    this.router.navigate(["/home/bill-under-collection/lcUsance"])
+  }
+  nonlcSight() {
+    console.log("nonlcSight")
+    this.router.navigate(["/home/bill-under-collection/nonlcSight"])
+
+  }
+  nonlcUsance() {
+    console.log("nonlcUsance")
+    this.router.navigate(["/home/bill-under-collection/nonlcUsance"])
+
+  }
+
+  lcInland() {
+    console.log("nonlcUsance")
+    this.router.navigate(["/home/lc-isurence/inland"])
+  }
+  
+  lcImport() {
+    console.log("nonlcUsance")
+    this.router.navigate(["/home/lc-isurence/import"])
   }
 }

@@ -29,10 +29,18 @@ import { RequestComponent } from "./request/request.component";
 import { EditCompanyComponent } from "./edit-company/edit-company.component";
 import { OutwardRemittanceComponent } from "./outward-remittance/outward-remittance.component";
 import { NumberToWordsPipe } from "./pipe/number-to-words.pipe";
-import { FbgWavierComponent } from "./axisBank/fbg-wavier/fbg-wavier.component";
+import { FbgWavierComponent } from "./yesBank/advance-fbg-wavier/fbg-wavier.component";
 import { DirectImportPaymentComponent } from './direct-import-payment/direct-import-payment.component';
 import { CompletedTaskComponent } from './completed-task/completed-task.component';
 import { InwardRemittanceBoeComponent } from './yesBank/inward-remittance-boe/inward-remittance-boe.component';
+import { PaymentAcceptanceLetterComponent } from './yesBank/payment-acceptance-letter/payment-acceptance-letter.component';
+import { BillUnderCollectionComponent } from './bill-under-collection/bill-under-collection.component';
+import { LcIsurenceComponent } from './lc-isurence/lc-isurence.component';
+import { TradeRequestLetterComponent } from './yesBank/trade-request-letter/trade-request-letter.component';
+import { BuyersCreditRequestComponent } from './buyers-credit-request/buyers-credit-request.component';
+import { FbgBuyerComponent } from './fbg-waiver/fbg-buyer.component';
+import { FbgBuyerFileComponent } from './yesBank/fbg-waiver-file/fbg-buyer-file.component';
+// import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -41,12 +49,12 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   maxFilesize: 3,
   createImageThumbnails: true,
 };
+
 // import {LocalStorageService} from '../../shared/services/localstorage.service';
 // import {SharedProjectsModule} from '../../shared/shared.projects.module';
 // import {ProposalsService} from '../../shared/services/proposals.service';
 // import {CommentsService} from '../../shared/services/comments.service';
 // import {SharedProfileModule} from '../freelancerprofile/shared.profile.module';
-
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -72,6 +80,13 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DirectImportPaymentComponent,
     CompletedTaskComponent,
     InwardRemittanceBoeComponent,
+    PaymentAcceptanceLetterComponent,
+    BillUnderCollectionComponent,
+    LcIsurenceComponent,
+    TradeRequestLetterComponent,
+    BuyersCreditRequestComponent,
+    FbgBuyerComponent,
+    FbgBuyerFileComponent,
   ],
   imports: [
     CommonModule,
@@ -173,7 +188,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
-            path: "fbg-wavier/:boeNumber",
+            path: "fbg-wavier/:id",
             component: FbgWavierComponent,
             pathMatch: "full",
           },
@@ -190,6 +205,41 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
           {
             path: "inwardRemittanceBoe/:boeNumber",
             component: InwardRemittanceBoeComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "paymentAcceptance",
+            component: PaymentAcceptanceLetterComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "bill-under-collection/:file",
+            component: BillUnderCollectionComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "lc-isurence/:file",
+            component: LcIsurenceComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "tradeRequestLetter/:id",
+            component: TradeRequestLetterComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "buyerCredit",
+            component: BuyersCreditRequestComponent,
+            pathMatch: "full",
+          }, 
+          {
+            path: "fbgWaiver",
+            component: FbgBuyerComponent,
+            pathMatch: "full",
+          }, 
+          {
+            path: "fbg-wavier-file/:id",
+            component: FbgBuyerFileComponent,
             pathMatch: "full",
           },
         ],

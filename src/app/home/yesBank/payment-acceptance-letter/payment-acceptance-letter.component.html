@@ -1,6 +1,220 @@
 <div class="content-wrap">
     <main id="content" class="content table-padding bc" role="main">
-      <div id="mainId" class="bc" *ngIf="!done">
+      <div style="border-bottom: 1px solid black;" *ngIf="!done">
+        Payment / Acceptance letter
+      </div>
+      
+      <div id="mainId1" class="bc" *ngIf="!done">
+        <div >
+            <div style="text-align: center">
+                <br />
+              <b><span style="border-bottom: 1px solid black;"> Payment / Acceptance letter for Import bills</span></b> 
+            </div>
+          <div  class="pdf_heading" >
+            
+            <img src="{{letterHead}}" height="100px" width="100%" >
+          </div>
+          <div style="text-align: right">
+            Date: <span
+            style="
+            outline: none;
+              display: inline-block;
+              width: 160px;
+              border-bottom: 1px solid black;
+            "
+            contenteditable="true"
+          ></span>
+          </div>
+          <p style="display: table; width: 240px; margin-top: -15px;">
+            
+            To, <br />
+            Yes Bank Ltd,
+            <br />
+            <span
+              style="
+              outline: none;
+                display: inline-block;
+                width: 160px;
+                border-bottom: 1px solid black;
+              "
+              contenteditable="true"
+            ></span>
+            <label for="">Branch</label>
+          </p>
+  
+          <br />
+          <div>
+            
+            
+            <div>
+              <p>Payment/ Acceptance and release of document received under your bill reference no <span
+                style="
+                outline: none;
+                  display: inline-block;
+                  width: 160px;
+                  border-bottom: 1px solid black;
+                "
+                contenteditable="true"
+              ></span>and
+                authorization to pay on due date of documents<span
+                style="
+                outline: none;
+                  display: inline-block;
+                  width: 240px;
+                  border-bottom: 1px solid black;
+                "
+                contenteditable="true"
+              ></span>.</p>
+              <br />
+              <p>
+                We accept the document and authorize you to debit our EEFC account no./Current account no./Cash
+                Credit account no.(<span style="outline: none; display: inline-block; width: 250px; border-bottom: 1px solid black;"
+                contenteditable="true"></span>) for<span style="outline: none; display: inline-block; width: 250px; border-bottom: 1px solid black;"
+                contenteditable="true"></span>(Amount of the bill
+                inclusive of foreign bank charges, if applicable) and account no.<span style="outline: none; display: inline-block; width: 250px; border-bottom: 1px solid black;"
+                contenteditable="true"></span> for
+                our charges (In case payment is through EEFC Account).
+              </p>
+              
+            </div>
+            <br />
+            <br>
+            <div>
+                The details of Forward Contract(s), if any, booked against this payment is/are as follows –
+                <table>
+                    <tr>
+                      <td class="wtd4">
+                        <b
+                          >Forward Contract No. & <br />
+                          Date</b
+                        >
+                      </td>
+                      <td class="wtd4">
+                        <b
+                          >Forward Contract <br />
+                          Currency &Amount</b
+                        >
+                      </td>
+                      <td class="wtd4">
+                        <b
+                          >Amount to be Utilized for <br />
+                          this remittance</b
+                        >
+                      </td>
+                      <td class="wtd4"><b>Due Date of the Contract</b></td>
+                    </tr>
+                    <tr>
+                      <td class="wtd1"><p
+                          style="
+                          display: inline-block;
+                          outline: none;
+                          width: 200px;
+                          height: 20px;
+                          margin-bottom: 0px;
+                          "
+                          contenteditable="true"
+                          > 
+                        </p></td>
+                      <td class="wtd1"><p
+                          style="
+                          display: inline-block;
+                          outline: none;
+                          width: 200px;
+                          height: 20px;
+                          margin-bottom: 0px;
+                          "
+                          contenteditable="true"
+                          > 
+                        </p></td>
+                      <td class="wtd1"><p
+                          style="
+                          display: inline-block;
+                          outline: none;
+                          width: 200px;
+                          height: 20px;
+                          margin-bottom: 0px;
+                          "
+                          contenteditable="true"
+                          > 
+                        </p></td>
+                      <td class="wtd1"><p
+                          style="
+                          display: inline-block;
+                          outline: none;
+                          width: 200px;
+                          height: 20px;
+                          margin-bottom: 0px;
+                          "
+                          contenteditable="true"
+                          > 
+                        </p></td>
+                    </tr>
+                  </table>
+
+            </div>
+            <div>
+              <b> Declaration cum undertaking:  </b> 
+              <p>
+                The goods imported by us are (Pls. select any one): <br>
+                [ ] Not covered under prohibited or restricted list and are freely importable as per Foreign Trade Policy
+                amended from time to time. <br>
+                [ ] Restricted for import as per Foreign Trade Policy amended from time to time and original exchange
+                control copy of the license issued by D.G.F.T. is enclosed. <br> <br>
+                We undertake that evidence of import (Bill of entry details or Courier Bill of Entry or CA certificate in
+                case of Non Physical import) will be furnished within 3 months from the date payment. <br> <br>
+                I/We hereby declare that the above transaction does not involve, and is not designed for the purpose of
+                any contravention or evasion of the provisions of the FEMA Act 1999 or of any rule, regulation,
+                notification, direction or order made there under. I/ We also hereby agree and undertake to give such
+                information/ documents as will reasonably satisfy you about this transaction in terms of the above
+                declaration. I/ We also undertake that if I/ we refuse to comply with any such requirements or make
+                only unsatisfactory compliance therewith, the bank shall refuse in writing to undertake the transaction
+                and shall if it has reason to believe that any contravention /evasion is contemplated by me /us report
+                the matter to Reserve Bank Of India.  <br> <br>
+                *I / We further declare that the undersigned has/have the authority to give this declaration and
+                undertaking on behalf of the firm/company. <br> <br>
+
+                <b>Document Attached:</b> <br>
+                [ ] Accepted Bill of Exchange in case of a Usance Bill <br>
+                [ ] Original License (Exchange control copy), If applicable 
+              </p>
+            </div>
+            
+            <div>
+                <div style="text-align: right">
+                    Date: <span
+                    style="
+                    outline: none;
+                        display: inline-block;
+                        width: 160px;
+                        border-bottom: 1px solid black;
+                    "
+                    contenteditable="true"
+                    ></span> <br>
+                    Place: <span
+                    style="
+                    outline: none;
+                        display: inline-block;
+                        width: 160px;
+                        border-bottom: 1px solid black;
+                    "
+                    contenteditable="true"
+                    ></span>
+                </div>
+              <p style="margin-top: -45px;">
+                Thanking you. <br />
+                Authorized Signatory, <br />
+                Company Stamp / Seal
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br> <br> <br>
+      <div style="border-bottom: 1px solid black;" *ngIf="!done">
+        ADVANCE Outward
+      </div>
+      
+      <div id="mainId2" class="bc" *ngIf="!done">
         <div id="first" class="bc">
           <div style="margin-left: 230px; width: 535px">
             <p class="heading">
@@ -16,17 +230,17 @@
               Branch address
             </p>
             <p
-                  style="
-                  display: inline-block;
-                  outline: none;
-                  border-bottom: 1px solid black;
-                  width: 200px;
-                  height: 20px;
-                  margin-bottom: 0px;
-                  "
-                  contenteditable="true"
-                  > 
-                </p>
+                    style="
+                    display: inline-block;
+                    outline: none;
+                    border-bottom: 1px solid black;
+                    width: 200px;
+                    height: 20px;
+                    margin-bottom: 0px;
+                    "
+                    contenteditable="true"
+                    > 
+                  </p>
             <p style="margin-top: 10px">
               We authorize the bank to remit as per the details specified below:
             </p>
@@ -39,7 +253,7 @@
               </div>
               
               <div class="flex-child green">
-                <p  style="border: 1px solid black;">Dirct Import Remitance</p>
+                <p  style="border: 1px solid black;">Advance Remittance</p>
               </div>
               
             </div>
@@ -62,7 +276,7 @@
               </tr>
             </table> -->
             <br>
-            <table style="width: 60%">
+            <table style="width: 79%">
               <tr style="border: none">
                 <td class="wtd" style="border: none; width: 60%">
                   <b>Details of drawal of Foreign Exchange:</b>
@@ -121,7 +335,7 @@
                   outline: none;
                 "
                 contenteditable="true">
-                    {{ item2.invoiceAmount }}
+                    {{ item2.amount }}
                   </p>
                 </td>
               </tr>
@@ -132,7 +346,7 @@
                   display: inline-block;
                   outline: none;
                 " contenteditable="true">
-                    {{ item2.invoiceAmount | numberToWords: item2.invoiceAmount }}
+                    {{ item2.amount | numberToWords: item2.amount }}
                   </p>
                 </td>
               </tr>
@@ -526,7 +740,7 @@
                     "
                     contenteditable="true"
                     > {{
-                        item2.invoiceAmount
+                        item2.amount
                       }}
                   </p></td>
                 <td class="wtd7"><p
@@ -883,7 +1097,7 @@
                     margin-bottom: 0px;
                     "
                     contenteditable="true"
-                    > {{item2.invoiceAmount}}
+                    > {{item2.amount}}
                   </p></td>
                 <td class="wtd7">
                     <p
@@ -895,7 +1109,7 @@
                     margin-bottom: 0px;
                     "
                     contenteditable="true"
-                    > {{item2.boeNumber}}
+                    > 
                   </p>
                 </td>
                 <td class="wtd7"><p
@@ -919,7 +1133,7 @@
                     margin-bottom: 0px;
                     "
                     contenteditable="true"
-                    > {{item2.boeDate}}
+                    >
                   </p>
                 </td>
                 <td class="wtd7">
@@ -932,7 +1146,7 @@
                     margin-bottom: 0px;
                     "
                     contenteditable="true"
-                    > {{item2.adCode}}
+                    > 
                   </p>
                 </td>
                 <td class="wtd7">
@@ -945,8 +1159,7 @@
                     margin-bottom: 0px;
                     "
                     contenteditable="true"
-                    > {{item2.dischargePort
-                    }}
+                    > 
                   </p>
                 </td>
               </tr>
@@ -1036,9 +1249,10 @@
           margin-top: 40px;
           margin-left: 43px;
         "
-      >
+        >
         <div class="button1" title="Share As PDF" (click)="exportAsPDF('MyDIv')">Proceed to Preview</div>
       </div>
+  
       
       <div *ngIf="done">
         <p>Setup: 3 Preview</p>
@@ -1046,12 +1260,14 @@
         <button class="button1" style="margin-bottom: 40px;">Send it via Email</button>
         <div>
           <iframe [src]="data6" height="500px" width="400px"></iframe>
-          <iframe [src]="doc1" height="500px" width="400px"></iframe>
+          <iframe [src]="data9" height="500px" width="400px"></iframe>
+          <iframe [src]="doc" height="500px" width="400px"></iframe>
         </div><br>
         <button class="button1" style="margin-right: 10px;" (click)="edit()" >Edit</button>
-      <button class="button1" style="margin-right: 10px;" (click)="submitTask()">Done</button>
-        <!-- <button (click)="download()">Download</button> -->
+        <button class="button1" style="margin-right: 10px;" (click)="submitTask()">Done</button>
+        
       </div>
+      
     </main>
-  </div>
+</div>
   

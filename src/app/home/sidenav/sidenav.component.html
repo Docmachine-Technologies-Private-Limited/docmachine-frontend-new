@@ -148,11 +148,27 @@
                     [routerLink]="['/home/direct-import-payment']"
                     >Direct Import Payment</a
                   >
-                  <a style="cursor: pointer">Bill Under Collection</a>
-                  <a style="cursor: pointer">Buyers Credit Request</a>
-                  <a style="cursor: pointer">LC Insurance</a>
+                  <a style="cursor: pointer" (click)="buc()">Bill Under Collection</a>
+                  <div class="main2" *ngIf="billuc">
+                    <a style="cursor: pointer" (click)="lc()">LC</a>
+                    <div class="main2" *ngIf="lc1">
+                      <a style="cursor: pointer" (click)="lcSight()">Sight</a>
+                      <a style="cursor: pointer"  (click)="lcUsance()">Usance</a>
+                    </div>
+                    <a style="cursor: pointer" (click)="nonLc()">Non LC</a>
+                    <div class="main2" *ngIf="nonlc1">
+                      <a style="cursor: pointer" (click)="nonlcSight()">Sight</a>
+                      <a style="cursor: pointer"  (click)="nonlcUsance()">Usance</a>
+                    </div>
+                  </div>
+                  <a style="cursor: pointer" [routerLink]="['/home/buyerCredit']">Buyers Credit Request</a>
+                  <a style="cursor: pointer" (click)="lcIsurence()">LC Isurance</a>
+                  <div class="main2" *ngIf="lcI">
+                    <a style="cursor: pointer" (click)="lcInland()">Inland</a>
+                    <a style="cursor: pointer"  (click)="lcImport()">Import</a>
+                  </div>
                   <a style="cursor: pointer">BOE Submission to Bank</a>
-                  <a style="cursor: pointer">FBG Waiver</a>
+                  <a style="cursor: pointer" [routerLink]="['/home/fbgWaiver']">FBG Waiver</a>
                 </div>
                 <a style="cursor: pointer" (click)="outward()">
                   Outward Remittance

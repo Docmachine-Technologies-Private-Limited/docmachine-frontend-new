@@ -21,6 +21,9 @@ export class CompletedTaskComponent implements OnInit {
   item: any;
   data3: any;
   durl1: any;
+  value1: any;
+  value2: any;
+  buyer: boolean;
 
   constructor(private route: ActivatedRoute,private documentService: DocumentService, private sanitizer: DomSanitizer,public router: Router,) { }
 
@@ -42,10 +45,29 @@ export class CompletedTaskComponent implements OnInit {
         this.url2 = this.sanitizer.bypassSecurityTrustResourceUrl(
           res['task'][0]['url2']
         );
-        this.data5 = res['task'][0]['pipoDetail']['doc']
+        this.value1 = res['task'][0]['boeDetails'];
+        this.value2 = res['task'][0]['pipoDetail'];
+        console.log(this.value1)
+        console.log(this.value2)
+        if(res['task'][0]['pipoDetail']=== undefined && res['task'][0]['boeDetails']) {
+          console.log("shhshshsh888")
+         
+          this.data5 = res['task'][0]['boeDetails']['doc']
+        } 
+        
+        else if(res['task'][0]['boeDetails']=== undefined && res['task'][0]['pipoDetail']) {
+          console.log("shhshshsh888")
+          
+          this.data5 = res['task'][0]['pipoDetail']['doc']
+        }
+        else if(res['task'][0]['pipoDetail']=== undefined && res['task'][0]['pipoDetail']=== undefined) {
+          this.buyer = true;
+          this.data5 = undefined;
+        }
+        
         console.log(this.data5)
         this.pipoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-          res['task'][0]['pipoDetail']['doc']
+          this.data5
         );
       },
       (err) => console.log(err)
@@ -106,7 +128,29 @@ export class CompletedTaskComponent implements OnInit {
     this.router.navigateByUrl("/home/direct-import-payment");
    }
    else if(this.item.pi_poNo) {
-    this.router.navigateByUrl("/home/advance-outward-remittance");
+     console.log(this.item.file)
+     if(this.item.file == "advance"){
+      this.router.navigateByUrl("/home/advance-outward-remittance");
+     }
+     else if(this.item.file == "lcSight") {
+      this.router.navigate(['home/bill-under-collection',this.item.file]);
+     }
+     else if(this.item.file == "lcUsance") {
+      this.router.navigate(['home/bill-under-collection',this.item.file]);
+     }
+      else if(this.item.file == "nonlcSight") {
+        this.router.navigate(['home/bill-under-collection',this.item.file]);
+      }
+      else if(this.item.file == "nonlcUsance") {
+        this.router.navigate(['home/bill-under-collection',this.item.file]);
+      }
+      else if(this.item.file == "inland" || this.item.file == "import") {
+        this.router.navigate(['home/lc-isurence',this.item.file]);
+      }
+
+      else if(this.item.file == "buyerCredit") {
+        this.router.navigate(['home/buyerCredit']);
+      }
    }
  }
 

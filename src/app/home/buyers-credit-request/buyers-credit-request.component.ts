@@ -1,14 +1,15 @@
 import { Component, OnInit } from "@angular/core";
 import { DocumentService } from "../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
+import { UserService } from "../../service/user.service";
 
 @Component({
-  selector: "app-outward-remittance",
-  templateUrl: "./outward-remittance.component.html",
-  styleUrls: [ "./outward-remittance.component.scss"],
+  selector: 'app-buyers-credit-request',
+  templateUrl: './buyers-credit-request.component.html',
+  styleUrls: ['./buyers-credit-request.component.scss']
 })
-export class OutwardRemittanceComponent implements OnInit {
+export class BuyersCreditRequestComponent implements OnInit {
   public item1;
   public item2;
   public user;
@@ -37,22 +38,40 @@ export class OutwardRemittanceComponent implements OnInit {
     pcRefNo: new FormControl(""),
   });
   url: any;
+  file: any;
+  beneDetail: any;
   constructor(
     public documentService: DocumentService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute,
+    private userService: UserService,
+  ) {
+    console.log("hello")
+  }
 
   ngOnInit(): void {
+    //window.location.reload();
+    
+    this.route.params.subscribe(params => {
+      this.file = this.route.snapshot.params['file'];
+      this.showInvoice = false;
+      console.log("hello")
+    });
     this.documentService.getPipo().subscribe(
       (res: any) => {
         console.log("HEre Response", res), (this.item1 = res.data);
       },
       (err) => console.log(err)
     );
-  }
+    this.userService.getBene(1).subscribe(
+      (res: any) => {
+        (this.beneDetail = res.data),
+          console.log("Benne Detail", this.beneDetail);
+      },
+      (err) => console.log("Error", err)
+    );
 
-  getTransactions(selectedRowValues) {
-    this.documentService.getTask({ pi_poNo: selectedRowValues, file:"advance" }).subscribe(
+    this.documentService.getBcTask({  file:"buyerCredit" }).subscribe(
       (res: any) => {
         this.allTransactions = res.task;
         console.log("ALL TRANSACTIONS", this.allTransactions);
@@ -60,6 +79,16 @@ export class OutwardRemittanceComponent implements OnInit {
       (err) => console.log(err)
     );
   }
+
+  // getTransactions(selectedRowValues) {
+  //   this.documentService.getLcTask({ pi_poNo: selectedRowValues, file:this.file }).subscribe(
+  //     (res: any) => {
+  //       this.allTransactions = res.task;
+  //       console.log("ALL TRANSACTIONS", this.allTransactions);
+  //     },
+  //     (err) => console.log(err)
+  //   );
+  // }
 
   getInvoices(selectedRowValues, i) {
     console.log("SELECTED", selectedRowValues);
@@ -103,37 +132,24 @@ export class OutwardRemittanceComponent implements OnInit {
 
   viewTask(data) {
     console.log(data)
+    console.log(data.beneDetail.beneName)
     if(!data.completed) {
       this.documentService.task = data
       this.documentService.draft = true;
       //data.pipoDetail["_id"] = data._id;
       this.documentService.pdfData = data.pipoDetail;
-      if (parseInt(this.selectedRow.amount) < 200000) {
-        this.documentService.pdfData = this.selectedRow;
-        this.router.navigateByUrl(`/home/inwardRemittance/${data.pi_poNo}`);
-      } else {
-        console.log(this.selectedDoc);
-        this.router.navigateByUrl(`/home/fbg-wavier/${data.pi_poNo}`);
-        
-      }
-      
+      this.router.navigate(['home/tradeRequestLetter', data.beneDetail.beneName]);
     } else {
       this.router.navigateByUrl(`/home/completedTask/${data._id}`);
     }
     
   }
 
-  showThisPdf(piPo) {
+  showThisPdf() {
     this.documentService.draft = false;
-    if (parseInt(this.selectedRow.amount) < 200000) {
-      this.documentService.pdfData = this.selectedRow;
-      this.router.navigateByUrl(`/home/inwardRemittance/${piPo}`);
-    } else {
-      console.log(this.selectedDoc);
-      
-
-      this.router.navigateByUrl(`/home/fbg-wavier/${piPo}`);
-      
-    }
+    console.log(this.selectedDoc)
+    this.router.navigate(['home/tradeRequestLetter',this.selectedDoc]);
+    
   }
+
 }

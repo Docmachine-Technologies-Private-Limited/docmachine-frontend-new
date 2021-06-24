@@ -4,11 +4,11 @@ import { FormGroup, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: "app-outward-remittance",
-  templateUrl: "./outward-remittance.component.html",
-  styleUrls: [ "./outward-remittance.component.scss"],
+  selector: 'app-fbg-buyer',
+  templateUrl: './fbg-buyer.component.html',
+  styleUrls: ['./fbg-buyer.component.scss']
 })
-export class OutwardRemittanceComponent implements OnInit {
+export class FbgBuyerComponent implements OnInit {
   public item1;
   public item2;
   public user;
@@ -52,7 +52,7 @@ export class OutwardRemittanceComponent implements OnInit {
   }
 
   getTransactions(selectedRowValues) {
-    this.documentService.getTask({ pi_poNo: selectedRowValues, file:"advance" }).subscribe(
+    this.documentService.getTask({ pi_poNo: selectedRowValues, file:"fbgBuyer" }).subscribe(
       (res: any) => {
         this.allTransactions = res.task;
         console.log("ALL TRANSACTIONS", this.allTransactions);
@@ -108,16 +108,9 @@ export class OutwardRemittanceComponent implements OnInit {
       this.documentService.draft = true;
       //data.pipoDetail["_id"] = data._id;
       this.documentService.pdfData = data.pipoDetail;
-      if (parseInt(this.selectedRow.amount) < 200000) {
-        this.documentService.pdfData = this.selectedRow;
-        this.router.navigateByUrl(`/home/inwardRemittance/${data.pi_poNo}`);
-      } else {
-        console.log(this.selectedDoc);
-        this.router.navigateByUrl(`/home/fbg-wavier/${data.pi_poNo}`);
-        
+      this.router.navigateByUrl(`/home/fbg-wavier-file/${data.pi_poNo}`);
       }
-      
-    } else {
+      else {
       this.router.navigateByUrl(`/home/completedTask/${data._id}`);
     }
     
@@ -125,15 +118,7 @@ export class OutwardRemittanceComponent implements OnInit {
 
   showThisPdf(piPo) {
     this.documentService.draft = false;
-    if (parseInt(this.selectedRow.amount) < 200000) {
-      this.documentService.pdfData = this.selectedRow;
-      this.router.navigateByUrl(`/home/inwardRemittance/${piPo}`);
-    } else {
-      console.log(this.selectedDoc);
-      
-
-      this.router.navigateByUrl(`/home/fbg-wavier/${piPo}`);
-      
-    }
+    this.router.navigateByUrl(`/home/fbg-wavier-file/${piPo}`);
+    
   }
 }
