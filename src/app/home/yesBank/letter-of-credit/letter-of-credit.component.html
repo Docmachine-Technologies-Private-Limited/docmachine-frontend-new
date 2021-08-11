@@ -1,76 +1,118 @@
 <div class="content-wrap">
 
     <main id="content" class="content table-padding bc" role="main">
-        <div id="mainId" class="bc">
-            <div id="first" class="bc">
-                <div style="margin-left: 15%; ">
-                    <p class="heading1" style="margin-bottom: 0px !important;">Application for issue of Irrevocable Documentary Letter of Credit – Inland<br> </p>
-                    <p style="margin-left:8%"> (All Pages to be signed along with Company stamp)</p>
+        <div id="mainId" class="bc" *ngIf="!done">
+            <div id="first" class="bc" style="width: 75%;">
+                <div style="margin-left: 40px;"  class="pdf_heading" >
+                    <p style="text-align: center; width: 100%;">Application for issue of Irrevocable Documentary Letter of Credit – Inland<br> 
+                   (All Pages to be signed along with Company stamp)</p>
                 </div>
-                <div style="margin-left: 40px; margin-top: 20px; width: 70%;" class="bc">
-                    <div style="float: right; width:80%; text-align:right">Date: <input type="text"></div>
-                    <div style="float: left; width:80%; margin-top: -20px;" >To, <br>
-                        The Manager <br>
-                        YES Bank Ltd., <br>
-                        Branch address</div>
-                    <input class="ind" type="text">
+                <div style="text-align: right; margin-left: 40px;">
+                Date: <span
+                style="
+                outline: none;
+                    display: inline-block;
+                    width: 100px;
+                    border-bottom: 1px solid black;
+                    text-align: left;
+                "
+                contenteditable="true"
+                ></span>
+                </div>
+                <p style="display: table; width: 240px; margin-left: 40px;">
+                To, <br>
+                    The Manager <br>
+                    YES Bank Ltd., <br>
+                    Branch address
+                    <span
+                    style="
+                    outline: none;
+                        display: inline-block;
+                        width: 160px;
+                        border-bottom: 1px solid black;
+                    "
+                    contenteditable="true"
+                    ></span>
+                </p>
+                  
+               
+                <div style="margin-left: 40px; margin-top: 20px;" class="bc">
+                    
                     <p style="margin-top: 10px;">We request you to open an irrevocable letter of credit as per details given below:
                     </p>
                     <table>
                         <tr>
                             <td class="lc">Date and place of expiry</td>
-                            <td class="wtd1">Date : <input type="text" style="border: none; border-bottom: 1px solid black; width: 100px;">Place :<input type="text" style="border: none; border-bottom: 1px solid black; width: 100px;"></td>
+                            <td class="wtd1">Date : <span style="outline: none;display: inline-block;width: 80px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span>Place :<span style="outline: none;display: inline-block;width: 80px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span></td>
                         </tr>
                         <tr>
                             <td class="lc">Name and address of the <br>
                                     applicant</td>
-                            <td class="wtd1">Name <input type="text" style="border: none; border-bottom: 1px solid black; width: 300px;"> <br>
-                                Adress<input type="text" style="border: none; border-bottom: 1px solid black; width: 300px;"> <br>
-                                <input type="text" style="border: none; border-bottom: 1px solid black; width: 350px;"></td>
+                            <td class="wtd1">Name <span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                                contenteditable="true">   {{applicant.fullName}} </span>  <br>
+                                Adress  <span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                                contenteditable="true">  {{item3.adress}}</span> <br>
+                                <span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span></td>
                         </tr>
                         <tr>
                             <td class="lc">Name and address of the <br>
                                 beneficiary</td>
-                            <td class="sl1">Name <input type="text" style="border: none; border-bottom: 1px solid black; width: 300px;"> <br>
-                                Adress<input type="text" style="border: none; border-bottom: 1px solid black; width: 300px;"> <br>
-                                <input type="text" style="border: none; border-bottom: 1px solid black; width: 350px;"></td>
+                            <td class="sl1">Name <span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                                contenteditable="true">   {{benneDetail.beneName}}</span> <br>
+                                Adress  <span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                                contenteditable="true">  {{ benneDetail.beneAdrs }}</span> <br>
+                                <span style="outline: none;display: inline-block;width: 350px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span></td>
                         </tr>
                         <tr>
                             <td class="lc">LC currency and amount</td>
-                            <td class="wtd1">(In figures) <input type="text" style="border: none; border-bottom: 1px solid black; width: 300px;"> <br>
-                                (In words)<input type="text" style="border: none; border-bottom: 1px solid black; width: 300px;"></td>
+                            <td class="wtd1">(In figures) <span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span> <br>
+                                (In words)<span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span> <br></td>
                            
                         </tr>
                         <tr >
                             <td class="lc">Credit amount tolerance</td>
-                            <td class="wtd1">+/- ____ %</td>
+                            <td class="wtd1">+/-<span style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span> %</td>
                             
                         </tr>
                         <tr>
                             <td class="lc">LC to be transmitted vide <br>
                                 SFMS</td>
                             <td class="wtd1">State the IFSC code , Name and Address of Advising Bank) <br>
-                                Bank Name <input type="text" style="border: none; border-bottom: 1px solid black; width: 300px;"> <br>
-                                Bank Adress<input type="text" style="border: none; border-bottom: 1px solid black; width: 300px;"> <br>
-                                IFSC Code: <input type="text" style="border: none; border-bottom: 1px solid black; width: 300px;"></td>
+                                Bank Name <span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span> <br>
+                                Bank Adress<span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span><br>
+                                IFSC Code: <span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span> <br></td>
                         </tr>
                         <tr >
                             <td class="lc">Credit available by <br>
                                 (Please tick any one) <br>
                                 Credit available with</td>
                             <td class="wtd1">State the IFSC code , Name and Address of Advising Bank) <br>
-                                □ Any Bank  □ Negotiation restricted to <input type="text" style="border: none; border-bottom: 1px solid black; width: 100px;">(Bank <br>
+                                □ Any Bank  □ Negotiation restricted to <span style="outline: none;display: inline-block;width: 100px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span>(Bank <br>
                                 Name, Address, IFSC Code)</td>
                         </tr>
                         <tr >
                             <td class="lc">Drafts at (Pls. Tick one)</td>
                             <td class="wtd1">□ At SIGHT<br> <br>
-                                □ At USANCE <input type="text" style="border: none; border-bottom: 1px solid black; width: 50px;">days from <input type="text" style="border: none; border-bottom: 1px solid black; width: 100px;">(Pls. specify)</td>
+                                □ At USANCE <span style="outline: none;display: inline-block;width: 100px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span>(Pls. specify) <br></td>
                         </tr>
                         <tr >
                             <td class="lc">PO/PI/Contract/Indent <br>
                                 reference</td>
-                            <td class="wtd1">Date : <input type="text" style="border: none; border-bottom: 1px solid black; width: 100px;">Place :<input type="text" style="border: none; border-bottom: 1px solid black; width: 100px;"></td>
+                            <td class="wtd1">Date : <span style="outline: none;display: inline-block;width: 100px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span>Place :<span style="outline: none;display: inline-block;width: 100px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span></td>
                         </tr>
                         <tr >
                             <td class="lc">Partial shipments (Pls. <br>
@@ -84,15 +126,21 @@
                         </tr>
                         <tr >
                             <td class="lc">Shipment from</td>
-                            <td class="wtd1"></td>
+                            <td class="wtd1"><span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span></td>
                         </tr>
                         <tr >
                             <td class="lc">Shipment to</td>
-                            <td class="wtd1"><input type="text" style="border: none; border-bottom: 1px solid black; width: 200px;">Via <input type="text" style="border: none; border-bottom: 1px solid black; width: 200px;"></td>
+                            <td class="wtd1"><span style="outline: none;display: inline-block;width: 200px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span>Via <span style="outline: none;display: inline-block;width: 200px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span></td>
                         </tr>
                         <tr >
                             <td class="lc">Latest date of shipment</td>
-                            <td class="wtd1"><input type="text" style="border: none; border-bottom: 1px solid black; width: 50px;">dd<input type="text" style="border: none; border-bottom: 1px solid black; width: 50px;">mm<input type="text" style="border: none; border-bottom: 1px solid black; width: 100px;">yyyy</td>
+                            <td class="wtd1"><span style="outline: none;display: inline-block;width: 50px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span>dd<span style="outline: none;display: inline-block;width: 50px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span>mm<span style="outline: none;display: inline-block;width: 90px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span>yyyy <br></td>
                         </tr>
                         
     
@@ -101,32 +149,40 @@
                         <tr>
                             <td class="lc">Quantity and description <br>
                                 of goods</td>
-                            <td class="wtd1"></td>
+                            <td ><span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span></td>
                         </tr>
                         <tr>
                             <td class="lc">Contract terms (Pls. tick <br>
                                 one INCO Term) If any <br>
                                 other please specify with <br>
                                 place</td>
-                            <td class="wtd1">□ Ex works □ FOB □ FCA □ CIP □ CFR □ CPT □ CIF □ Any other <br>
-                                <input type="text" style="border: none; border-bottom: 1px solid black; width: 100px;"></td>
+                            <td >□ Ex works □ FOB □ FCA □ CIP □ CFR □ CPT □ CIF □ Any other <br>
+                                <span style="outline: none;display: inline-block;width: 100px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span></td>
                         </tr>
                         <tr>
                             <td class="lc">Presentation Period</td>
-                            <td class="wtd1"><input type="text" style="border: none; border-bottom: 1px solid black; width: 200px;">days from shipment</td>
+                            <td ><span style="outline: none;display: inline-block;width: 200px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span>days from shipment</td>
                         </tr>
                     </table>
                     <p>
-                        <b>For Margin:</b> □ Account no. <input type="text" style="border: none; border-bottom: 1px solid black; width: 300px;">
+                        <b>For Margin:</b> □ Account no. <span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                        contenteditable="true"></span>
                     </p>
                     <p style="margin-left: 60px;">
-                        □ Existing FD no.<input type="text" style="border: none; border-bottom: 1px solid black; width: 300px;"> to be utilized.
+                        □ Existing FD no.<span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                        contenteditable="true"></span> to be utilized.
                     </p>
                     <p>
-                       <b>Line limit to be utilized:</b> <input type="text" style="border: none; border-bottom: 1px solid black; width: 400px;">
+                       <b>Line limit to be utilized:</b> <span style="outline: none;display: inline-block;width: 400px;border-bottom: 1px solid black;"
+                       contenteditable="true"></span>
                     </p>
                     <p style="margin-left: 20px;">
-                        □ Signed Commercial Invoice(s) in ______ original and _____ copies. <br> <br>
+                        □ Signed Commercial Invoice(s) in <span style="outline: none;display: inline-block;width: 50px;border-bottom: 1px solid black;"
+                        contenteditable="true"></span> original and <span style="outline: none;display: inline-block;width: 50px;border-bottom: 1px solid black;"
+                        contenteditable="true"></span> copies. <br> <br>
                         □ Original Lorry receipt/ Railway receipt consigned to YES Bank Ltd account applicant showing
                         that the goods have been dispatched and marked ‘freight to pay/freight prepaid’ and mentioning
                         our LC number and date. Lorry receipt /Railway receipt should have two parallel lines across it
@@ -135,16 +191,22 @@
                         □ Inland transit Insurance policy, for at least the invoice value of the goods plus 10 pct endorsed in
                         blank, covering Inland transit risk as per Inland transit clauses (a), SRCC as per institute strike
                         clauses (cargo) with claims payable irrespective of percentage, should accompany the transport
-                        documents. Insurance to cover risk from supplier’s warehouse to opener warehouse at ______________________. <br> <br>
+                        documents. Insurance to cover risk from supplier’s warehouse to opener warehouse at<span style="outline: none;display: inline-block;width: 150px;border-bottom: 1px solid black;"
+                        contenteditable="true"></span>. <br> <br>
                         □ Insurance covered by applicant <br> <br>
                         A certificate from the beneficiary certifying that they have Faxed, immediately on dispatch,
                         details of dispatch covering (a) Name of the carrier (b) Railway receipt no. or Lorry receipt no.(c)
-                        Place of taking in charge (d) Place of final destination , to _________________________(Name and
-                        Address of the Insurance company) quoting Insurance policy number ________________________
-                        dated ______________________. <br> <br>
+                        Place of taking in charge (d) Place of final destination , to <span style="outline: none;display: inline-block;width: 150px;border-bottom: 1px solid black;"
+                        contenteditable="true"></span>(Name and
+                        Address of the Insurance company) quoting Insurance policy number <span style="outline: none;display: inline-block;width: 150px;border-bottom: 1px solid black;"
+                        contenteditable="true"></span>
+                        dated <span style="outline: none;display: inline-block;width: 150px;border-bottom: 1px solid black;"
+                        contenteditable="true"></span>. <br> <br>
                         □ In case of Open Insurance policy, we hereby confirm that: <br>
-                        “There is sufficient balance available in the Insurance policy no.___________________dated
-                        ______________, to cover the shipment under the LC and we will take care of necessary periodic
+                        “There is sufficient balance available in the Insurance policy no.<span style="outline: none;display: inline-block;width: 150px;border-bottom: 1px solid black;"
+                        contenteditable="true"></span>dated
+                        <span style="outline: none;display: inline-block;width: 100px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span>, to cover the shipment under the LC and we will take care of necessary periodic
                         declarations to be made to the Insurance Company, if any required regarding the shipments
                         covered under this LC.” <br> <br>
 
@@ -154,10 +216,12 @@
                     <p>
                        <b>Additional conditions:</b>  <br> 
                        1. Applicant bank charges to applicant account beneficiary bank charges to beneficiary account <br>
-                       2. Any other please specify <input type="text" style="border: none; border-bottom: 1px solid black; width: 400px;">
+                       2. Any other please specify <span style="outline: none;display: inline-block;width: 400px;border-bottom: 1px solid black;"
+                       contenteditable="true"></span> <br>
                        Other instructions: <br>
-                       _________________________________________________________________________________ <br>
-                       _____________________________________________________________________________________
+                       <span style="outline: none;display: inline-block;width: 700px;border-bottom: 1px solid black;"
+                                contenteditable="true"></span><br>
+                       _____________________________________________________________________________________________________________________         
                     </p>
                     <p>
                         <b>We hereby agree and undertake as follows:</b> <br>
@@ -168,7 +232,8 @@
                         the continuing agreement and indemnity signed in your favour from time to time. <br>
                         3. We confirm we have not opened any other letter of credit against the said order with any other
                           bank. <br>
-                        4. We authorize you to debit our current account no _____________________for all charges in
+                        4. We authorize you to debit our current account no <span style="outline: none;display: inline-block;width: 300px;border-bottom: 1px solid black;"
+                        contenteditable="true"></span>for all charges in
                         connection with the issue of this Letter of Credit (unless otherwise specified elsewhere in this
                         application) <br>
                         5. In case of transmission vide SFMS, we shall not hold YES Bank liable for any delay, charges,
@@ -190,18 +255,23 @@
                     </p>
                     <table>
                         <tr>
-                        <td><input style="width: 25px; border: none;" id="digit1" type="text" maxlength="1" onkeypress="return isNumberKey(event)" onkeyup ="moveToNextInputDigit(this)"></td>
-                        <td><input style="width: 25px; border: none;" id="digit2" type="text" maxlength="1" onkeypress="return isNumberKey(event)" onkeyup ="moveToNextInputDigit(this)"></td> 
-                        <td><input style="width: 25px; border: none;"  id="digit3" type="text" maxlength="1" onkeypress="return isNumberKey(event)" onkeyup ="moveToNextInputDigit(this)"></td>
-                        <td><input style="width: 25px; border: none;" id="digit4" type="text" maxlength="1" onkeypress="return isNumberKey(event)" onkeyup ="moveToNextInputDigit(this)"></td>
-                        <td><input style="width: 25px; border: none;" id="digit5" type="text" maxlength="1" onkeypress="return isNumberKey(event)" onkeyup ="moveToNextInputDigit(this)"></td> 
-                        <td><input style="width: 25px; border: none;" id="digit6" type="text" maxlength="1" onkeypress="return isNumberKey(event)" onkeyup ="moveToNextInputDigit(this)"></td>
-                        <td><input style="width: 25px; border: none;" id="digit7" type="text" maxlength="1" onkeypress="return isNumberKey(event)" onkeyup ="moveToNextInputDigit(this)"></td>
-                        <td><input style="width: 25px; border: none;" id="digit8" type="text" maxlength="1" onkeypress="return isNumberKey(event)" onkeyup ="moveToNextInputDigit(this)"></td>
-                        <td><input style="width: 25px; border: none;" id="digit9" type="text" maxlength="1" onkeypress="return isNumberKey(event)" onkeyup ="moveToNextInputDigit(this)"></td>
-                        <td><input style="width: 25px; border: none;" id="digit10" type="text"maxlength="1" onkeypress="return isNumberKey(event)" onkeyup ="moveToNextInputDigit(this)"></td>
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[0]}}</span></td>
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[1]}}</span></td> 
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[2]}}</span></td>
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[3]}}</span></td>
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[4]}}</span></td> 
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[5]}}</span></td>
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[6]}}</span></td>
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[7]}}</span></td> 
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[8]}}</span></td>
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[9]}}</span></td>
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[10]}}</span></td> 
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[11]}}</span></td>
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[12]}}</span></td>
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[13]}}</span></td> 
+                        <td class="gst"><span style="outline: none;display: inline-block;width: 20px;"contenteditable="true">{{arr[14]}}</span></td>
                         </tr> 
-                        </table>
+                    </table>
                 </div>
                
                 
@@ -223,8 +293,10 @@
                     </div> <br>
                     <div>
                         <p>
-                            Date: <input class="ind" type="text"> <br>
-                            Place: <input class="ind" type="text">
+                            Date: <span style="outline: none;display: inline-block;width: 100px;border-bottom: 1px solid black;"
+                            contenteditable="true"></span> <br>
+                            Place: <span style="outline: none;display: inline-block;width: 100px;border-bottom: 1px solid black;"
+                            contenteditable="true"></span>
                         </p>
                     </div>
     
@@ -233,10 +305,30 @@
             
         </div>
         
-
-        <div style="float: left; display: block; width: 78%; margin-top: 40px; margin-left: 43px;">
-            <div title="Share As PDF" (click)="exportAsPDF('MyDIv');">Download</div>
+        <div *ngIf="!done"
+            style="
+            float: left;
+            display: block;
+            width: 78%;
+            margin-top: 40px;
+            margin-left: 43px;
+            "
+        >
+        <div class="button1" title="Share As PDF" (click)="exportAsPDF('MyDIv')">Proceed to Preview</div>
         </div>
+      
+      <div *ngIf="done">
+        <p>Setup: 3 Preview</p>
+        <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button>
+        <button class="button1" style="margin-bottom: 40px;">Send it via Email</button>
+        <div>
+          <iframe [src]="data6" height="500px" width="400px"></iframe>
+          <iframe [src]="doc" height="500px" width="400px"></iframe>
+        </div><br>
+        <button class="button1" style="margin-right: 10px;" (click)="edit()" >Edit</button>
+      <button class="button1" style="margin-right: 10px;" (click)="submitTask()">Done</button>
+        <!-- <button (click)="download()">Download</button> -->
+      </div>
 
     </main>
 

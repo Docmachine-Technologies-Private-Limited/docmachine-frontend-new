@@ -75,7 +75,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public benneDetail: any = [];
   private subscription: Subscription;
   public selectedBenne = "";
-  public beneSelect1 :  string;
+  public beneSelect1: string;
   public selectCombo;
 
   public config: DropzoneConfigInterface;
@@ -85,16 +85,18 @@ export class UploadComponent implements OnInit, AfterViewInit {
   headers: any;
 
   piPoForm = new FormGroup({
-    pi_poNo: new FormControl(""),
-    benneName: new FormControl(""),
-    currency: new FormControl(""),
-    amount: new FormControl(""),
-    incoterm: new FormControl(""),
-    lastDayShipment: new FormControl(""),
-    paymentTerm: new FormControl(""),
-    pcRefNo: new FormControl(""),
-    date: new FormControl(""),
-    dueDate: new FormControl(""),
+    pi_poNo: new FormControl("", [
+      Validators.required,
+      Validators.minLength(4)]),
+    benneName: new FormControl("", Validators.required),
+    currency: new FormControl("", Validators.required),
+    amount: new FormControl("", Validators.required),
+    incoterm: new FormControl("", Validators.required),
+    lastDayShipment: new FormControl("", Validators.required),
+    paymentTerm: new FormControl("", Validators.required),
+    pcRefNo: new FormControl("", Validators.required),
+    date: new FormControl("", Validators.required),
+    dueDate: new FormControl("", Validators.required),
   });
   pipourl1: any;
 

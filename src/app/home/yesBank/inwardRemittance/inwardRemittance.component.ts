@@ -54,7 +54,10 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
     pipoDetail: [],
     beneDetail: [],
     completed: false,
-    url1 : ""
+    url1: "",
+    file: "advance",
+    bank: "yesBank",
+    ca: false
   };
 
   async ngOnInit(): Promise<void> {
@@ -82,21 +85,21 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
 
   getPipoDetaile() {
     this.documentService.getPipoByPipoNo(this.id)
-    .subscribe(
+      .subscribe(
         data => {
-            console.log("king123")
-            console.log(data)
-            console.log(data['data'][0])
-            this.item2= data['data'][0]
-            this.doc = this.sanitizer.bypassSecurityTrustResourceUrl(
-              data['data'][0]['doc']
-            );
-            this.getBeneDetaile()
+          console.log("king123")
+          console.log(data)
+          console.log(data['data'][0])
+          this.item2 = data['data'][0]
+          this.doc = this.sanitizer.bypassSecurityTrustResourceUrl(
+            data['data'][0]['doc']
+          );
+          this.getBeneDetaile()
 
-            //this.router.navigate(['/login'], { queryParams: { registered: true }});
+          //this.router.navigate(['/login'], { queryParams: { registered: true }});
         },
         error => {
-            console.log("error")
+          console.log("error")
         });
     console.log("pipo", this.item2)
   }
@@ -122,7 +125,7 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
   }
 
   public downloadPDF() {
-     console.log("DATA",this.data4)
+    console.log("DATA", this.data4)
     const link: any = document.createElement("a");
     link.id = "dwnldLnk";
     link.style = "display:none;";
@@ -132,7 +135,7 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
     console.log(dlnk)
     console.log(dlnk.href)
     dlnk.download = this.data4.filename;
-    
+
     dlnk.click();
     //this.submitTask()
     // this.downloading = false;
@@ -179,29 +182,31 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
   async submitTask() {
     this.newTask.completed = true;
     console.log(this.newTask);
-    
-      console.log("shshsh")
-      console.log(this.documentService.draft)
-      if (this.documentService.draft === false) {
-        console.log("shshsh")
-        this.documentService.addTask(this.newTask).subscribe(
-          (res) => {
-            console.log("Transaction Saved");
-            this.submitted = true;
-            this.router.navigate(["/home/advance-outward-remittance"]);
 
-          },
-          (err) => console.log("Error saving the transaction")
-        );
-      } else if (this.documentService.draft === true) {
-        console.log("hhhh")
-        this.documentService.completeTask({ _id: this.documentService.task._id, task:this.newTask }).subscribe(
-          (res) => {console.log("COMPLETED");
-          this.router.navigate(["/home/advance-outward-remittance"]); },
-          (err) => console.log("ERROR")
-        );
-      }
-    
+    console.log("shshsh")
+    console.log(this.documentService.draft)
+    if (this.documentService.draft === false) {
+      console.log("shshsh")
+      this.documentService.addTask(this.newTask).subscribe(
+        (res) => {
+          console.log("Transaction Saved");
+          this.submitted = true;
+          this.router.navigate(["/home/advance-outward-remittance"]);
+
+        },
+        (err) => console.log("Error saving the transaction")
+      );
+    } else if (this.documentService.draft === true) {
+      console.log("hhhh")
+      this.documentService.completeTask({ _id: this.documentService.task._id, task: this.newTask }).subscribe(
+        (res) => {
+          console.log("COMPLETED");
+          this.router.navigate(["/home/advance-outward-remittance"]);
+        },
+        (err) => console.log("ERROR")
+      );
+    }
+
   }
 
 
@@ -210,19 +215,19 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    
+
     console.log("Inside draft");
     console.log(this.data5);
-      if (this.documentService.draft===false && this.submitted === false) {
-        this.documentService.addTask(this.newTask).subscribe(
-          (res) => {
-            console.log("Saved as draft");
-            //window.alert("Transcation Saved as draft");
-          },
-          (err) => console.log("Cant save as draft")
-        );
-      }
+    if (this.documentService.draft === false && this.submitted === false) {
+      this.documentService.addTask(this.newTask).subscribe(
+        (res) => {
+          console.log("Saved as draft");
+          //window.alert("Transcation Saved as draft");
+        },
+        (err) => console.log("Cant save as draft")
+      );
+    }
 
-    
+
   }
 }

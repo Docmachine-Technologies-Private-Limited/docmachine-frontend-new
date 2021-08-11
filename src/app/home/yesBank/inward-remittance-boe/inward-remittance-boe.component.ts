@@ -10,7 +10,7 @@ import { DomSanitizer } from "@angular/platform-browser";
   templateUrl: './inward-remittance-boe.component.html',
   styleUrls: ["../../../../sass/application.scss", './inward-remittance-boe.component.scss']
 })
-export class InwardRemittanceBoeComponent implements OnInit {
+export class InwardRemittanceBoeComponent implements OnInit, OnDestroy {
   item: any;
   item2: any = [];
 
@@ -54,7 +54,10 @@ export class InwardRemittanceBoeComponent implements OnInit {
     beneDetail: [],
     completed: false,
     url1: "",
-    doc: ""
+    doc: "",
+    file: "boe",
+    bank: "yesBank",
+    ca: false
   };
 
   async ngOnInit(): Promise<void> {
@@ -111,7 +114,7 @@ export class InwardRemittanceBoeComponent implements OnInit {
     console.log("inside")
     console.log(this.item2)
     const data: any = await this.userService.getBeneByName(
-      this.item2.beneName
+      this.item2.benneName
     );
     this.benneDetail = data.data;
     this.newTask.boeNumber = this.item2.boeNumber;

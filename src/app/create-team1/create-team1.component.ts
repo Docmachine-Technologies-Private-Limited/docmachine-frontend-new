@@ -1,13 +1,12 @@
 
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from './../service/user.service';
 import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-
-
+import { ToastrService } from 'ngx-toastr';
+import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
 @Component({
   selector: 'app-create-team1',
   templateUrl: './create-team1.component.html',
@@ -32,7 +31,10 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   roundSealDone = false;
   forSealDone = false;
   public config: DropzoneConfigInterface;
-  constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder, private userService: UserService, private router: Router) {
+  submitted: boolean = false;
+  isDisabled: boolean = false;
+  constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
+    private userService: UserService, private router: Router, private toastr: ToastrService) {
     this.loadFromLocalStorage()
     console.log(this.authToken)
     this.headers = {
@@ -59,20 +61,48 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
+
     this.loginForm = this.formBuilder.group({
-      teamName: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-      iec: ['', Validators.required],
+      teamName: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9]+$"), (Validators.minLength(3))]],
+      iec: ['', [Validators.required, Validators.pattern("^[0-9]{10}"), Validators.maxLength(10)]],
       adress: ['', Validators.required],
       phone: ['', Validators.required],
       caEmail: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
       chaEmail: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-      gst: ['', Validators.required],
-      acNo: ['', Validators.required],
-      letterHead: ['', Validators.required],
-      roundSeal: ['', Validators.required],
-      forSeal: ['', Validators.required],
+      gst: ['', [Validators.required, Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+){15}$"), Validators.maxLength(15)]],
+      bankDetails: new FormArray([this.initCourse()])
     });
   }
+
+  initCourse() {
+    return new FormGroup({
+      bank: new FormControl(''),
+      bicAddress: new FormControl(''),
+      accNumber: new FormControl(''),
+      accType: new FormControl(''),
+      currency: new FormControl('')
+    });
+  }
+
+  initProduct() {
+    return new FormGroup({
+      product: new FormControl('')
+    });
+  }
+
+  getCourses(form) {
+    return form.get('bankDetails').controls;
+  }
+
+  // getProducts(form) {
+  //   return form.get('products').controls;
+  // }
+
+  onAddCourse() {
+    const control = this.loginForm.get('bankDetails') as FormArray;
+    control.push(this.initCourse());
+  }
+
 
   public onUploadInit(args: any): void {
     console.log('onUploadInit:', args);
@@ -116,18 +146,40 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     }
   }
 
+  get f() { return this.loginForm.controls; }
+
   onSubmit() {
+    console.log(this.loginForm.value)
+    console.log("1")
+    this.submitted = true
+    this.isDisabled = true;
+    if (this.loginForm.invalid) {
+      this.toastr.error('Invalid inputs, please check!');
+      console.log("2")
+      this.isDisabled = false;
+      return;
+    }
+    // if (!this.file) {
+    //   this.toastr.error('Invalid inputs, please check again!');
+    //   console.log("2")
+    //   this.isDisabled = false;
+    //   return;
+    // }
+    console.log("3")
     this.loginForm.value.file = this.file
+    console.log(this.loginForm.value)
     this.userService.creatTeam(this.loginForm.value)
       .subscribe(
         data => {
           console.log("king123")
           console.log(data['data']._id)
           this.item = data
+          this.toastr.success('Company details uploaded successfully!');
           this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
 
         },
         error => {
+          this.toastr.error('something wrong, please check the details!');
           console.log("error")
         });
   }

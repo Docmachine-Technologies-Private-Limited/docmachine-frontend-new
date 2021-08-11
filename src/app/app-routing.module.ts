@@ -15,7 +15,7 @@ import { UpdatePasswordComponent } from "./update-password/update-password.compo
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "signup",
+    redirectTo: "login",
     pathMatch: "full",
   },
   { path: "home", loadChildren: "../app/home/home.module#HomeModule" },
@@ -47,4 +47,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

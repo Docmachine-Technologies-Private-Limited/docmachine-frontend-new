@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html style="background-color: #f8fafd">
 
-<body style="">
+<body>
   <!--------style="    position: fixed;
       top: 0;
       bottom: 0;
@@ -24,7 +24,7 @@
         <br />
         <div style="margin-top: 20px">
           <img class="manager" src="./assets/images/ff0edd8c8896c06617bb7763087ad238ad16b269.png" alt="" />
-          <h5 class="name">Justin Hamilton</h5>
+          <h5 class="name">{{name}}</h5>
           <h6 class="side-name">Manager</h6>
         </div>
       </header>
@@ -35,10 +35,39 @@
 
       <!-- every .sidebar-nav may have a title -->
       <h5 class="sidebar-nav-title sidebar-title">MENU</h5>
-      <ul class="sidebar-nav">
+      <ul *ngIf="role == 'ca'" class="sidebar-nav">
         <li class="">
           <!-- an example of nested submenu. basic bootstrap collapse component -->
-          <a (click)="hideIncoice()" [routerLink]="['/home/dashboard']" class="sidebar-content">
+          <a (click)="hideIncoice()" [routerLink]="['/home/caDocuments/all']" class="sidebar-content">
+            <span class="icon side-icon">
+              <img src="./assets/layout-dashboard.png" />
+            </span>
+            All Document
+          </a>
+        </li>
+
+        <li class="">
+          <a [routerLink]="['/home/caDocuments/pending']" style="cursor: pointer" class="sidebar-content">
+            <span class="icon side-icon">
+              <img src="./assets/briefcase.png" />
+            </span>
+            Pending
+          </a>
+        </li>
+        <li class="">
+          <a [routerLink]="['/home/caDocuments/completed']" style="cursor: pointer" class="sidebar-content">
+            <span class="icon side-icon">
+              <img src="./assets/briefcase.png" />
+            </span>
+            Completed
+          </a>
+        </li>
+
+      </ul>
+      <ul *ngIf="role != 'ca'" class="sidebar-nav">
+        <li class="">
+          <!-- an example of nested submenu. basic bootstrap collapse component -->
+          <a (click)="hideIncoice()" [routerLink]="['/home/dashboardNew']" class="sidebar-content">
             <span class="icon side-icon">
               <img src="./assets/layout-dashboard.png" />
             </span>
@@ -93,14 +122,10 @@
                 <a style="cursor: pointer">Upload EDPMS</a>
                 <a style="cursor: pointer">Softex</a>
               </div>
-              <a style="cursor: pointer" (click)="inward()">
+              <a style="cursor: pointer" [routerLink]="['/home/inwardRemmitance']">
                 Inward Remittance
               </a>
-              <div class="main2" *ngIf="inw">
-                <a style="cursor: pointer">Commercial Invoice</a>
-                <a style="cursor: pointer">PI/PO</a>
-                <a style="cursor: pointer">Master Sales Agreement</a>
-              </div>
+
               <a style="cursor: pointer" (click)="import()"> Imports </a>
               <div class="main2" *ngIf="imp">
                 <a style="cursor: pointer" [routerLink]="['/home/advance-outward-remittance']">Advance Outward
@@ -110,30 +135,28 @@
                 <div class="main2" *ngIf="billuc">
                   <a style="cursor: pointer" (click)="lc()">LC</a>
                   <div class="main2" *ngIf="lc1">
-                    <a style="cursor: pointer">Sight</a>
-                    <a style="cursor: pointer">Usance</a>
+                    <a style="cursor: pointer" (click)="lcSight()">Sight</a>
+                    <a style="cursor: pointer" (click)="lcUsance()">Usance</a>
                   </div>
                   <a style="cursor: pointer" (click)="nonLc()">Non LC</a>
                   <div class="main2" *ngIf="nonlc1">
-                    <a style="cursor: pointer">Sight</a>
-                    <a style="cursor: pointer">Usance</a>
+                    <a style="cursor: pointer" (click)="nonlcSight()">Sight</a>
+                    <a style="cursor: pointer" (click)="nonlcUsance()">Usance</a>
                   </div>
                 </div>
-                <a style="cursor: pointer">Buyers Credit Request</a>
-                <a style="cursor: pointer">LC Insurance</a>
+                <a style="cursor: pointer" [routerLink]="['/home/buyerCredit']">Buyers Credit Request</a>
+                <a style="cursor: pointer" (click)="lcIsurence()">LC Isurance</a>
+                <div class="main2" *ngIf="lcI">
+                  <a style="cursor: pointer" (click)="lcInland()">Inland</a>
+                  <a style="cursor: pointer" (click)="lcImport()">Import</a>
+                </div>
                 <a style="cursor: pointer">BOE Submission to Bank</a>
-                <a style="cursor: pointer">FBG Waiver</a>
+                <a style="cursor: pointer" [routerLink]="['/home/fbgWaiver']">FBG Waiver</a>
               </div>
-              <a style="cursor: pointer" (click)="outward()">
+              <a style="cursor: pointer" (click)="outward()" [routerLink]="['/home/outwardRemitance']">
                 Outward Remittance
               </a>
-              <div class="main2" *ngIf="out">
-                <a style="cursor: pointer">Bill of entry Management</a>
-                <a style="cursor: pointer">PI/PO</a>
-                <a style="cursor: pointer">Shipping Bill Management</a>
-                <a style="cursor: pointer">Transport Document</a>
-                <a style="cursor: pointer">Invoice Management</a>
-              </div>
+
               <a style="cursor: pointer" (click)="other()"> Others </a>
               <div class="main2" *ngIf="others">
                 <a style="cursor: pointer">GR Waiver</a>
@@ -142,10 +165,10 @@
                 <a style="cursor: pointer">Net Off/Set Off</a>
               </div>
             </div>
-            <a style="cursor: pointer" (click)="newTask()">
+            <a style="cursor: pointer" (click)="newTask()" [routerLink]="['/home/tasks/completed']">
               Completed Task
             </a>
-            <a style="cursor: pointer" (click)="newTask()"> Draft </a>
+            <a style="cursor: pointer" (click)="newTask()" [routerLink]="['/home/tasks/pending']"> Draft </a>
           </div>
         </li>
         <li class="">
@@ -185,24 +208,46 @@
             Manage Customer
           </a>
         </li>
-        <!-- <li class="">
-                        <a class="collapsed" href="#sidebar-ui" data-toggle="collapse" data-parent="#sidebar">
-                            <span class="icon">
-                                <i class="fi flaticon-layers"></i>
-                            </span>
-                            UI Elements
-                            <i class="toggle fa fa-angle-down"></i>
-                        </a>
-                        <ul id="sidebar-ui"
-                            class="collapse ">
-                            <li class=""><a href="icons.html">Icons</a>
-                            </li>
-                            <li class=""><a
-                                    href="charts.html">Charts</a></li>
-                            <li class=""><a
-                                    href="maps_google.html">Google Maps</a></li>
-                        </ul>
-                    </li> -->
+
+        <li style="cursor: pointer" class="" *ngIf="!view" (click)="viewDocument()">
+          <!-- an example of nested submenu. basic bootstrap collapse component -->
+          <a class="sidebar-content" style="cursor: pointer;">
+            <span class="icon side-icon">
+              <img src="./assets/content-paper-edit.png" />
+            </span>
+            View Document
+            <span style="
+                          margin-left: 7%;
+                          position: absolute;
+                          transform: translate(0, 3px);
+                        "><i style="font-size: 20px" *ngIf="!view" class="fas fa-angle-down"></i>
+            </span>
+          </a>
+        </li>
+        <li class="manage-li" *ngIf="view">
+          <!-- an example of nested submenu. basic bootstrap collapse component -->
+          <a style="cursor: pointer" class="manage-content" (click)="viewDocument()">
+            <span class="icon side-icon">
+              <img src="./assets/content-paper-edit.png" />
+            </span>
+            View Document
+            <span style="
+                          margin-left: 7%;
+                          position: absolute;
+                          transform: translate(0, 3px);
+                        ">
+              <i style="font-size: 20px" *ngIf="view" class="fas fa-angle-up"></i></span>
+          </a>
+          <div class="main11">
+            <a style="cursor: pointer" [routerLink]="['/home/viewDocument/sb']">
+              Shipping Bill
+            </a>
+            <a style="cursor: pointer" [routerLink]="['/home/viewDocument/boe']">
+              BOE Documents
+            </a>
+            <a style="cursor: pointer" [routerLink]="['/home/viewDocument/pipo']"> PI/PO Documents </a>
+          </div>
+        </li>
       </ul>
 
       <h5 class="sidebar-nav-title sidebar-title">SUPPORT</h5>

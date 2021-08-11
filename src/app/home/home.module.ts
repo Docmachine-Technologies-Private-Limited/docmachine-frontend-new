@@ -27,12 +27,32 @@ import { ManageUserComponent } from "./manage-user/manage-user.component";
 import { DashboardTaskComponent } from "./dashboard-task/dashboard-task.component";
 import { RequestComponent } from "./request/request.component";
 import { EditCompanyComponent } from "./edit-company/edit-company.component";
-import { OutwardRemittanceComponent } from "./outward-remittance/outward-remittance.component";
+import { OutwardRemittanceComponent } from "./advance-outward-remittance/outward-remittance.component";
 import { NumberToWordsPipe } from "./pipe/number-to-words.pipe";
-import { FbgWavierComponent } from "./axisBank/fbg-wavier/fbg-wavier.component";
+import { FbgWavierComponent } from "./yesBank/advance-fbg-wavier/fbg-wavier.component";
 import { DirectImportPaymentComponent } from './direct-import-payment/direct-import-payment.component';
 import { CompletedTaskComponent } from './completed-task/completed-task.component';
 import { InwardRemittanceBoeComponent } from './yesBank/inward-remittance-boe/inward-remittance-boe.component';
+import { PaymentAcceptanceLetterComponent } from './yesBank/payment-acceptance-letter/payment-acceptance-letter.component';
+import { BillUnderCollectionComponent } from './bill-under-collection/bill-under-collection.component';
+import { LcIsurenceComponent } from './lc-isurence/lc-isurence.component';
+import { TradeRequestLetterComponent } from './yesBank/trade-request-letter/trade-request-letter.component';
+import { BuyersCreditRequestComponent } from './buyers-credit-request/buyers-credit-request.component';
+import { FbgBuyerComponent } from './fbg-waiver/fbg-buyer.component';
+import { FbgBuyerFileComponent } from './yesBank/fbg-waiver-file/fbg-buyer-file.component';
+import { ViewDocumentComponent } from './view-document/view-document.component';
+import { AdvanceRemitanceFbgComponent } from './axisBank/advance-remitance-fbg/advance-remitance-fbg.component';
+import { DirectImportAxisComponent } from './axisBank/direct-import-axis/direct-import-axis.component';
+import { BuyersCreditAxisComponent } from './axisBank/buyers-credit-axis/buyers-credit-axis.component';
+import { DashboardNewComponent } from './dashboard-new/dashboard-new.component';
+import { LetterOfCreditImportAxisComponent } from './axisBank/letter-of-credit-import-axis/letter-of-credit-import-axis.component';
+import { OutwardRemComponent } from './outward-rem/outward-rem.component';
+import { A2cumApplicationYesBankComponent } from './yesBank/a2cum-application-yes-bank/a2cum-application-yes-bank.component';
+import { CaDocumentsComponent } from './ca-documents/ca-documents.component';
+import { AllTaskComponent } from './all-task/all-task.component';
+import { InwardRemmitanceComponent } from './inward-remmitance/inward-remmitance.component';
+import { InwardRemmitancep0103Component } from './yesBank/inward-remmitancep0103/inward-remmitancep0103.component';
+// import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -41,12 +61,12 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   maxFilesize: 3,
   createImageThumbnails: true,
 };
+
 // import {LocalStorageService} from '../../shared/services/localstorage.service';
 // import {SharedProjectsModule} from '../../shared/shared.projects.module';
 // import {ProposalsService} from '../../shared/services/proposals.service';
 // import {CommentsService} from '../../shared/services/comments.service';
 // import {SharedProfileModule} from '../freelancerprofile/shared.profile.module';
-
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -72,6 +92,25 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DirectImportPaymentComponent,
     CompletedTaskComponent,
     InwardRemittanceBoeComponent,
+    PaymentAcceptanceLetterComponent,
+    BillUnderCollectionComponent,
+    LcIsurenceComponent,
+    TradeRequestLetterComponent,
+    BuyersCreditRequestComponent,
+    FbgBuyerComponent,
+    FbgBuyerFileComponent,
+    ViewDocumentComponent,
+    AdvanceRemitanceFbgComponent,
+    DirectImportAxisComponent,
+    BuyersCreditAxisComponent,
+    DashboardNewComponent,
+    LetterOfCreditImportAxisComponent,
+    OutwardRemComponent,
+    A2cumApplicationYesBankComponent,
+    CaDocumentsComponent,
+    AllTaskComponent,
+    InwardRemmitanceComponent,
+    InwardRemmitancep0103Component
   ],
   imports: [
     CommonModule,
@@ -98,6 +137,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
           {
             path: "dashboardTask",
             component: DashboardTaskComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "dashboardNew",
+            component: DashboardNewComponent,
             pathMatch: "full",
           },
           { path: "upload", component: UploadComponent, pathMatch: "full" },
@@ -137,12 +181,22 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
+            path: "letterOfCreditImportAxis",
+            component: LetterOfCreditImportAxisComponent,
+            pathMatch: "full",
+          },
+          {
             path: "a2cumApplication",
             component: A2cumAplicationComponent,
             pathMatch: "full",
           },
           {
-            path: "advance-remittance",
+            path: "a2cumApplicationYesbank",
+            component: A2cumApplicationYesBankComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "advance-remittance/:boeNumber",
             component: AdvanceRemitanceComponent,
             pathMatch: "full",
           },
@@ -173,8 +227,18 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
-            path: "fbg-wavier/:boeNumber",
+            path: "fbg-wavier/:id",
             component: FbgWavierComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "advance-remittance-fbg/:id",
+            component: AdvanceRemitanceFbgComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "direct-import-axis/:boeNumber",
+            component: DirectImportAxisComponent,
             pathMatch: "full",
           },
           {
@@ -192,6 +256,76 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             component: InwardRemittanceBoeComponent,
             pathMatch: "full",
           },
+          {
+            path: "paymentAcceptance",
+            component: PaymentAcceptanceLetterComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "bill-under-collection/:file",
+            component: BillUnderCollectionComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "lc-isurence/:file",
+            component: LcIsurenceComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "tradeRequestLetter/:id",
+            component: TradeRequestLetterComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "buyersCreditAxis/:id",
+            component: BuyersCreditAxisComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "buyerCredit",
+            component: BuyersCreditRequestComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "fbgWaiver",
+            component: FbgBuyerComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "fbg-wavier-file/:id",
+            component: FbgBuyerFileComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "viewDocument/:file",
+            component: ViewDocumentComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "outwardRemitance",
+            component: OutwardRemComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "inwardRemmitance",
+            component: InwardRemmitanceComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "caDocuments/:file",
+            component: CaDocumentsComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "tasks/:file",
+            component: AllTaskComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "inwardRemmitancep0103",
+            component: InwardRemmitancep0103Component,
+            pathMatch: "full",
+          },
         ],
       },
     ]),
@@ -201,4 +335,4 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   //   exports: [SharedProjectsModule]
   exports: [MatProgressBarModule, MatTabsModule],
 })
-export class HomeModule {}
+export class HomeModule { }

@@ -7,7 +7,7 @@ import "rxjs/add/operator/map";
 export class DocumentService {
   authToken: string;
   public headers;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   public loadFromLocalStorage() {
     const token = localStorage.getItem("token");
     this.authToken = token;
@@ -116,6 +116,21 @@ export class DocumentService {
     );
   }
 
+  getMasterBySb(sbno) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `https://dm.uipep.com/v1/master/getMasterBySb`,
+      {
+        sbno: sbno,
+      },
+      httpOptions
+    );
+  }
+
   public getPDF(data): Observable<any> {
     console.log("inside service");
     const httpOptions = {
@@ -178,7 +193,7 @@ export class DocumentService {
     );
   }
 
-  getTask(data) {
+  getPipoTask(data) {
     console.log("I am in service calling transacytions");
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -186,11 +201,12 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/task/get",
+      "https://dm.uipep.com/v1/task/getPipo",
       data,
       httpOptions
     );
   }
+
   getBoeTask(data) {
     console.log("I am in service calling transacytions");
     this.loadFromLocalStorage();
@@ -201,6 +217,118 @@ export class DocumentService {
     return this.http.post(
       "https://dm.uipep.com/v1/task/getBoeTask",
       data,
+      httpOptions
+    );
+  }
+
+  getSbTask(data) {
+    console.log("I am in service calling transacytions");
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      "https://dm.uipep.com/v1/task/getSbTask",
+      data,
+      httpOptions
+    );
+  }
+
+  getPipoInwardTask(data) {
+    console.log("I am in service calling transacytions");
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      "https://dm.uipep.com/v1/task/getPipoInwardTask",
+      data,
+      httpOptions
+    );
+  }
+
+  getLcTask(data) {
+    console.log("I am in service calling transacytions");
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      "https://dm.uipep.com/v1/task/getLcTask",
+      data,
+      httpOptions
+    );
+  }
+
+  getAllTask(data) {
+    console.log("I am in service calling transacytions");
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      "https://dm.uipep.com/v1/task/getAllTask",
+      data,
+      httpOptions
+    );
+  }
+
+  getTask(data) {
+    console.log("I am in service calling transacytions");
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      "https://dm.uipep.com/v1/task/getTask",
+      data,
+      httpOptions
+    );
+  }
+
+  getPipoCaTask(data) {
+    console.log("I am in service calling transacytions");
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      "https://dm.uipep.com/v1/task/getPipoCaTask",
+      data,
+      httpOptions
+    );
+  }
+
+  getBcTask(data) {
+    console.log("I am in service calling transacytions");
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      "https://dm.uipep.com/v1/task/getBcTask",
+      data,
+      httpOptions
+    );
+  }
+
+  getCaTask(data) {
+    console.log("I am in service calling transacytions");
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      "https://dm.uipep.com/v1/task/getCaTask",
+      "data",
       httpOptions
     );
   }
@@ -228,6 +356,20 @@ export class DocumentService {
 
     return this.http.post(
       "https://dm.uipep.com/v1/task/complete",
+      data,
+      httpOptions
+    );
+  }
+
+  taskEmail(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.post(
+      "https://dm.uipep.com/v1/task/taskEmail",
       data,
       httpOptions
     );

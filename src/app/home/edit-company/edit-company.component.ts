@@ -1,10 +1,11 @@
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from './../../service/user.service';
 import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-company',
@@ -30,7 +31,23 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   roundSealDone = false;
   forSealDone = false;
   public config: DropzoneConfigInterface;
-  constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder, private userService: UserService, private router: Router) {
+  letterHead1: any;
+  roundSeal1: any;
+  forSeal1: any;
+  fs: boolean = true;
+  rs: boolean = true;
+  lh: boolean = true;
+  editable: boolean = false;
+  isItem: boolean = false;
+  submitted: boolean;
+  isDisabled: boolean;
+  file1: any;
+  bankDetails: any;
+  Details: any;
+  details: any;
+  i: number;
+  constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
+    private userService: UserService, private router: Router, private toastr: ToastrService) {
     this.loadFromLocalStorage()
     console.log(this.authToken)
     this.headers = {
@@ -64,7 +81,21 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
           console.log("king123")
           console.log(data['data'][0])
           this.item = data['data'][0]
+          this.isItem = true
           console.log(this.item)
+          this.letterHead1 = data['data'][0].file[0]["Letter Head"]
+          this.roundSeal1 = data['data'][0].file[1]["Round Seal"]
+          this.forSeal1 = data['data'][0].file[2]["For Seal"]
+          this.file1 = data['data'][0].file
+          this.details = data['data'][0].bankDetails
+          if (this.details.length > 1) {
+            console.log("1")
+            this.i = 1
+            for (let j = 1; j < this.details.length; j++) {
+              this.onAddCourse()
+            }
+
+          }
           //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
 
         },
@@ -72,19 +103,62 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
           console.log("error")
         });
 
+    // this.menuForm = new FormGroup({
+    //   name: new FormControl('', [
+    //     Validators.required,
+    //     Validators.maxLength(100)
+    //   ]),
+    //   description: new FormControl('', Validators.maxLength(255)),
+    //   price: new FormControl('', [Validators.required, Validators.min(0)]),
+    //   courses: new FormArray([this.initCourse()])
+    // });
+
     this.loginForm = this.formBuilder.group({
-      teamName: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-      iec: ['', Validators.required],
+      teamName: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9]+$")]],
+      iec: ['', [Validators.required, Validators.pattern("^(0|[1-9][0-9]*)$"), Validators.maxLength(10)]],
       adress: ['', Validators.required],
       phone: ['', Validators.required],
       caEmail: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
       chaEmail: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-      gst: ['', Validators.required],
-      acNo: ['', Validators.required],
-      letterHead: ['', Validators.required],
-      roundSeal: ['', Validators.required],
-      forSeal: ['', Validators.required],
+      gst: ['', [Validators.required, Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+){15}$"), Validators.maxLength(15)]],
+      bankDetails: new FormArray([this.initCourse()])
     });
+
+
+  }
+
+  initCourse() {
+    return new FormGroup({
+      bank: new FormControl(''),
+      bicAddress: new FormControl(''),
+      accNumber: new FormControl(''),
+      accType: new FormControl(''),
+      currency: new FormControl('')
+    });
+  }
+
+  initProduct() {
+    return new FormGroup({
+      product: new FormControl('')
+    });
+  }
+
+  getCourses(form) {
+    return form.get('bankDetails').controls;
+  }
+
+  // getProducts(form) {
+  //   return form.get('products').controls;
+  // }
+
+  onAddCourse() {
+    const control = this.loginForm.get('bankDetails') as FormArray;
+    control.push(this.initCourse());
+    if (this.i >= this.details.length) {
+      this.details.push([])
+    }
+    this.i++
+
   }
 
   public onUploadInit(args: any): void {
@@ -119,29 +193,53 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   public sending(args: any, value) {
     args[2].append('fileType', value);
     if (value == 'Letter Head') {
+      this.lh = false
       this.letterHead = true;
     }
     else if (value == 'Round Seal') {
+      this.rs = false
       this.roundSeal = true;
     }
     else {
+      this.fs = false
       this.forSeal = true;
     }
   }
+  get f() { return this.loginForm.controls; }
 
-  onSubmit(values) {
-    console.log(values.form.value)
-    values.form.value.file = this.item.file
-    values.form.value.member = this.item.member
-    console.log(values.form.value)
-    this.userService.updateTeam(values.form.value)
+  onSubmit() {
+    console.log("1")
+    console.log(this.loginForm.value)
+    this.submitted = true
+    this.isDisabled = true;
+    if (this.loginForm.invalid) {
+      this.toastr.error('Invalid inputs, please check!');
+      console.log("2")
+      this.isDisabled = false;
+      return;
+    }
+    if (this.file.length > 0) {
+      console.log("11")
+      this.loginForm.value.file = this.file
+    }
+    else {
+      console.log("12")
+      console.log(this.file1)
+      this.loginForm.value.file = this.file1
+    }
+
+    this.loginForm.value.member = this.item.member
+    console.log(this.loginForm.value)
+    this.userService.updateTeam(this.loginForm.value)
       .subscribe(
         data => {
           console.log("king123")
           console.log(data['data'])
-          this.router.navigate(['/home/dashboard']);
+          this.toastr.success('Company details updated successfully.');
+          this.router.navigate(['/home/dashboardNew']);
         },
         error => {
+          this.toastr.error('Invalid inputs, please check!');
           console.log("error")
         });
   }
@@ -151,6 +249,9 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
     return this.authToken;
   }
 
+  edit() {
+    this.editable = true;
+  }
 
   ngAfterViewInit() {
     //   window['sidebarInit']();

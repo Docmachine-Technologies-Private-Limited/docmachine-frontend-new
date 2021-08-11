@@ -1,0 +1,86 @@
+<div style="margin-left: 210px" class="content-wrap">
+    <main id="content" class="content table-padding" role="main">
+
+
+        <div>
+            <section style="margin-top: 40px; margin-left: 43px;" *ngIf="!step1">
+                <h3 class="heading">Buyers Credit Request </h3>
+                <div style="float: left; margin-top: 20px;">
+                    <span class="at" style="
+                    border-right: 1px solid black;
+                    color: #49a2d7;
+                    ">All Transaction</span>
+                    <span class="at">Tasks</span>
+                </div>
+                <div style="margin-right: 80px;float: right;margin-top: 20px;">
+                    <span class="ctb" (click)="onNewTrans()">Create New Transaction</span>
+                </div>
+            </section>
+            <table class="table table-striped mb-0"
+                style="margin-left: 40px; float: left; margin-top: 20px; width: 92%;" *ngIf="!step1">
+                <thead>
+                    <tr class="text-muted table-heading">
+                        <th scope="col">Date</th>
+                        <th scope="col">Detail</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Download</th>
+                    </tr>
+                </thead>
+                <tbody class="text-dark">
+                    <tr *ngFor="let task of allTransactions" class="table-row" (click)="viewTask(task)">
+                        <th class="pl-4 fw-normal">
+                            {{ task.transactionDate }}
+                        </th>
+                        <td class="sb-no">Submitted to Yes bank</td>
+                        <td *ngIf="task.completed === true">
+                            Completed
+                        </td>
+                        <td *ngIf="task.completed === false">
+                            Pending
+                        </td>
+
+                        <td>Download & Share icon</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="radio1" *ngIf="step1" style="
+                margin-left: 10px;
+                padding: 4% 0;
+                padding-left: 3%;
+            ">
+                <p class="stp1">Setup: 1</p>
+                <p class="stp2">Create Transaction:</p>
+                <p class="stp3">Select a bank*</p>
+
+                <input type="radio" id="options1" class="circular_input" [(ngModel)]="myRadio" value="yesBank">
+                <label class="label1" for="male">Yes Bank</label><br />
+                <input type="radio" id="options2" class="circular_input" [(ngModel)]="myRadio" value="axisBank">
+                <label class="label1" for="female">Axis Bank</label><br />
+                <input type="radio" name="bank" value="Any Bank" class="circular_input" />
+                <label class="label1" for="female">Any Bank</label><br /> <br>
+                <p>Select a Bene</p>
+                <select style="border: 0.5px solid black" [(ngModel)]="selectedDoc">
+                    <option value="">Select Bene Name</option>
+                    <option *ngFor="let bene of beneDetail" [value]="bene.beneName">
+                        {{ bene.beneName }}
+                    </option>
+
+
+                </select>
+
+
+                <div style="
+                display: flex;
+                width: 100%;
+                margin-top: 5%;
+                justify-content: left;
+                ">
+                    <button (click)="showThisPdf()" class="opt" style="margin-right: 1%">
+                        Generate Document
+                    </button>
+                    <button class="opt">Assign Task</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

@@ -18,24 +18,55 @@
                                 <div class="form-group mb-3">
                                     <label>Company Name</label>
                                     <input formControlName="teamName" placeholder="Company name/ Team name" required=""
-                                        class="form-control rounded-pill">
+                                        class="form-control rounded-pill"
+                                        [ngClass]="{ 'is-invalid': submitted && f.teamName.errors }">
+                                    <div *ngIf="submitted && f.teamName.errors" class="invalid-feedback">
+                                        <div *ngIf="f.teamName.errors.required" style="margin-left: 15px;">Company Name
+                                            Required</div>
+                                        <div *ngIf="f.teamName.errors.pattern" style="margin-left: 15px;">Company Name
+                                            should be
+                                            alphanumerics </div>
+                                        <div *ngIf="f.teamName.errors.minlength" style="margin-left: 15px;">
+                                            Company name should contains more than 3 Letter.
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label>Importer exporter code (IEC)</label>
+                                    <label>*Importer exporter code (IEC)</label>
                                     <input formControlName="iec" placeholder="Ex: ESEIEC." required=""
-                                        class="form-control rounded-pill password password1">
+                                        class="form-control rounded-pill password password1"
+                                        [ngClass]="{ 'is-invalid': submitted && f.iec.errors }">
+                                    <div *ngIf="submitted && f.iec.errors" class="invalid-feedback">
+                                        <div *ngIf="f.iec.errors.required" style="margin-left: 15px;">IEC Required</div>
+                                        <div *ngIf="f.iec.errors.minlength" style="margin-left: 15px;">ICE should
+                                            contains 10 letters</div>
+                                        <div *ngIf="f.iec.errors.maxlength" style="margin-left: 15px;">ICE should
+                                            contains 10 letters</div>
+                                        <div *ngIf="f.iec.errors.pattern" style="margin-left: 15px;">IEC should be
+                                            numerics with 10 letters EX: 1212121212</div>
+                                    </div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label>Company Address</label>
                                     <input formControlName="adress" placeholder="Ex: street address, City. PIN"
-                                        required="" class="form-control rounded-pill password password1">
+                                        class="form-control rounded-pill password password1"
+                                        [ngClass]="{ 'is-invalid': submitted && f.adress.errors }">
+                                    <div *ngIf="submitted && f.adress.errors" class="invalid-feedback">
+                                        <div *ngIf="f.adress.errors.required" style="margin-left: 15px;">Address
+                                            Required</div>
+                                    </div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label>Contact Phone number</label>
                                     <input formControlName="phone" id="password1" type=""
                                         placeholder="Ex: +91 95023 23352" required=""
-                                        class="form-control rounded-pill password password1">
+                                        class="form-control rounded-pill password password1"
+                                        [ngClass]="{ 'is-invalid': submitted && f.phone.errors }">
+                                    <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
+                                        <div *ngIf="f.phone.errors.required" style="margin-left: 15px;">Phone number
+                                            Required</div>
+                                    </div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label>CA email id</label>
@@ -43,24 +74,86 @@
                                         15B,annual statutory auditor certificate, write off etc.,</p>
                                     <input formControlName="caEmail" id="password1" type=""
                                         placeholder="Ex: example@gmail.com" required=""
-                                        class="form-control rounded-pill password password1">
+                                        class="form-control rounded-pill password password1"
+                                        [ngClass]="{ 'is-invalid': submitted && f.caEmail.errors }">
+                                    <div *ngIf="submitted && f.caEmail.errors" class="invalid-feedback">
+                                        <div *ngIf="f.caEmail.errors.required" style="margin-left: 15px;">CA Email is
+                                            Required</div>
+                                        <div *ngIf="f.caEmail.errors.pattern" style="margin-left: 15px;">CA Email should
+                                            be Email EX: example@email.com</div>
+                                    </div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label>CHA email id</label>
                                     <input formControlName="chaEmail" id="password1" type=""
                                         placeholder="Ex: example@gmail.com" required=""
-                                        class="form-control rounded-pill password password1">
+                                        class="form-control rounded-pill password password1"
+                                        [ngClass]="{ 'is-invalid': submitted && f.chaEmail.errors }">
+                                    <div *ngIf="submitted && f.chaEmail.errors" class="invalid-feedback">
+                                        <div *ngIf="f.chaEmail.errors.required" style="margin-left: 15px;">CHA Email is
+                                            Required</div>
+                                        <div *ngIf="f.chaEmail.errors.pattern" style="margin-left: 15px;">CHA Email
+                                            should be Email EX: example@email.com</div>
+                                    </div>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label>GSTIN</label>
+                                    <label>*GSTIN</label>
                                     <input formControlName="gst" id="password1" type="" placeholder="GSTIN" required=""
-                                        class="form-control rounded-pill password password1">
+                                        class="form-control rounded-pill password password1"
+                                        [ngClass]="{ 'is-invalid': submitted && f.gst.errors }">
+                                    <div *ngIf="submitted && f.gst.errors" class="invalid-feedback">
+                                        <div *ngIf="f.gst.errors.required" style="margin-left: 15px;">GSTIN Required
+                                        </div>
+                                        <div *ngIf="f.gst.errors.minlength" style="margin-left: 15px;">GSTIN should
+                                            contains 15 letters</div>
+                                        <div *ngIf="f.gst.errors.maxlength" style="margin-left: 15px;">GSTIN
+                                            should
+                                            contains 15 letters only</div>
+                                        <div *ngIf="f.gst.errors.pattern" style="margin-left: 15px;">GSTIN should be
+                                            alphanumerics with 15 letters EX: ABC12365AB12345</div>
+                                    </div>
+
                                 </div>
-                                <div class="form-group mb-3">
-                                    <label>Account Number</label>
-                                    <input formControlName="acNo" id="inputEmail" type="email"
-                                        placeholder="Ex: CC/OD/PC/PCFC/EBRD/BP/EEFC-USD/EUR/GBP/CHF/JPY ETC" required=""
-                                        class="form-control rounded-pill email">
+                                <div class="form-group mb-3" formArrayName="bankDetails">
+                                    <label>Bank Details</label>
+                                    <div *ngFor="let course of getCourses(loginForm); let i = index"
+                                        [formGroupName]="i">
+                                        <div class="bankClass">
+                                            <label class="bank">*Bank Name</label>
+                                            <input formControlName="bank" id="password1" type="" placeholder="bank name"
+                                                class="form-control rounded-pill password password1">
+
+
+                                            <label class="bank">Bic Address</label>
+                                            <input formControlName="bicAddress" id="password1" type=""
+                                                placeholder="Bic address"
+                                                class="form-control rounded-pill password password1">
+
+
+                                            <label class="bank">Account Number</label>
+                                            <input formControlName="accNumber" id="password1" type=""
+                                                placeholder="Account number"
+                                                class="form-control rounded-pill password password1">
+
+
+                                            <label class="bank">Account Type</label>
+                                            <input formControlName="accType" id="password1" type=""
+                                                placeholder="Account Type"
+                                                class="form-control rounded-pill password password1">
+
+
+                                            <label class="bank">Currency Type</label>
+                                            <input formControlName="currency" id="password1" type=""
+                                                placeholder="currency"
+                                                class="form-control rounded-pill password password1">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12" style="margin-bottom: 12px;">
+                                    <button class="rounded-pill add" type="button" (click)="onAddCourse()">
+                                        Add Another Bank
+                                    </button>
                                 </div>
 
                                 <div class="form-group mb-3">
@@ -110,7 +203,8 @@
                                     </form>
                                 </div>
 
-                                <button type="submit" class="btn">Get Started</button>
+                                <button type="submit" class="btn" [class.disable]="isDisabled"
+                                    [disabled]="isDisabled">Get Started</button>
                             </form>
 
                         </div>

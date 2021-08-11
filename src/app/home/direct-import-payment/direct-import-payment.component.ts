@@ -25,6 +25,7 @@ export class DirectImportPaymentComponent implements OnInit {
   Ax1: boolean;
   Ax2: boolean;
   step1: any;
+  myRadio: any;
 
   piPoForm = new FormGroup({
     pi_poNo: new FormControl(""),
@@ -39,7 +40,7 @@ export class DirectImportPaymentComponent implements OnInit {
   constructor(
     public documentService: DocumentService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.documentService.getBoe(1).subscribe(
@@ -110,13 +111,19 @@ export class DirectImportPaymentComponent implements OnInit {
     // this.documentService.pdfData = data.pipoDetail;
     // this.router.navigateByUrl(`/home/inwardRemittance/${data.pi_poNo}`);
     console.log("PIPO NO", data);
-    if(!data.completed) {
+    if (!data.completed) {
       this.documentService.task = data
       this.documentService.draft = true;
       //data.pipoDetail["_id"] = data._id;
       this.documentService.pdfData = data.pipoDetail;
-      this.router.navigateByUrl(`/home/inwardRemittanceBoe/${data.boeNumber}`);
-      
+      if (data.bank == 'yesBank') {
+        this.router.navigateByUrl(`/home/inwardRemittanceBoe/${data.boeNumber}`);
+      }
+      else if (data.bank == 'axisBank') {
+        this.router.navigateByUrl(`/home/direct-import-axis/${data.boeNumber}`);
+      }
+
+
     } else {
       this.router.navigateByUrl(`/home/completedTask/${data._id}`);
     }
@@ -124,8 +131,14 @@ export class DirectImportPaymentComponent implements OnInit {
 
   showThisPdf(piPo) {
     this.documentService.draft = false;
-    this.router.navigateByUrl(`/home/inwardRemittanceBoe/${piPo}`);
-      
+    if (this.myRadio == 'axisBank') {
+      console.log("h");
+      this.router.navigateByUrl(`/home/direct-import-axis/${piPo}`);
+
+    }
+    else if (this.myRadio == 'yesBank') {
+      this.router.navigateByUrl(`/home/inwardRemittanceBoe/${piPo}`);
+    }
   }
 
 }

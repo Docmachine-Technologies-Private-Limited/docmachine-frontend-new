@@ -27,6 +27,7 @@
 }
 .image2 {
   position: absolute;
+  margin-top: 50%;
 }
 
 .display-5 {
@@ -131,10 +132,23 @@ label {
 }
 
 .leftl {
-  text-align: end;
-  color: #606670;
-  font-size: 18;
+  border: none;
+  font-size: 16px;
   font-weight: 600;
   margin-top: 25px;
   margin-bottom: 50px;
+}
+
+.btn1 {
+  min-width: 100px;
+  height: 40px;
+  border-radius: 20px;
+  background-color: #51aee5;
+  font-size: 12px;
+  color: #ffffff;
+  outline: none;
+} 
+
+.disable {
+ background-color: #6cc9ff;
 }

@@ -3,7 +3,9 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Injectable({ providedIn: "root" })
 export class UserService {
+  public role;
   public authToken;
+  public name;
   constructor(private http: HttpClient) { }
 
   public addToken(token) {
@@ -23,6 +25,7 @@ export class UserService {
       emailId: user.email,
       password: user.password,
       confirmPassword: user.confirmPassword,
+      role: user.role
     });
   }
   public login(loginData) {

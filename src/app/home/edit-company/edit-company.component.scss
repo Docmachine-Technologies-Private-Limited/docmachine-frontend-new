@@ -100,7 +100,7 @@ label {
     background-color: #51AEE5;
     font-size: 12px;
     color: #ffffff;
-
+    margin-left: 20px;
 }
 
 
@@ -170,4 +170,22 @@ label {
     font-weight: 400;
     margin-top: -37px;
     margin-left: 25px;
+}
+
+.bankClass {
+  padding: 10px;
+  border: 1px solid rgb(156, 155, 155);
+  border-radius: 20px;
+  margin-bottom: 5px;
+}
+
+.bank {
+  font-size: 12px;
+}
+
+.add {
+    color: white;
+    background: #3b3b3b;
+    outline: none;
+    border: none;
 }

@@ -41,7 +41,7 @@
           width: 94%;
         " *ngIf="!showInvoice">
       <div style="display: flex; align-items: center">
-        <h3 class="heading">All Documents</h3>
+        <h3 class="heading">Direct Import Payment</h3>
       </div>
 
       <div class="dropdown">
@@ -464,9 +464,11 @@
                           <p class="stp2">Create Transaction:</p>
                           <p class="stp3">Select a bank*</p>
 
-                          <input type="radio" name="bank" value="Yes Bank" class="circular_input" />
+                          <input type="radio" id="options1" class="circular_input" [(ngModel)]="myRadio"
+                            value="yesBank">
                           <label class="label1" for="male">Yes Bank</label><br />
-                          <input type="radio" name="bank" class="circular_input" value="Axis Bank" />
+                          <input type="radio" id="options2" class="circular_input" [(ngModel)]="myRadio"
+                            value="axisBank">
                           <label class="label1" for="female">Axis Bank</label><br />
                           <input type="radio" name="bank" value="Any Bank" class="circular_input" />
                           <label class="label1" for="female">Any Bank</label><br />

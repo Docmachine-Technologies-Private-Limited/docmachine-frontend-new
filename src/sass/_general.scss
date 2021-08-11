@@ -17,8 +17,17 @@ html {
 
 body{
   font-weight: $font-weight-base;
-  overflow-x: hidden;
+  overflow-x:hidden;
 }
+
+body ::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+
+
+/* Optional: show position indicator in red */
+
+
 
 th{
   font-weight: $font-weight-semi-bold;

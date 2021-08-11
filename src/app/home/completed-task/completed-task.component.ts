@@ -23,6 +23,9 @@ export class CompletedTaskComponent implements OnInit {
   durl1: any;
   value1: any;
   value2: any;
+  buyer: boolean;
+  caDone1 = 'no'
+  caUrl: any;
 
   constructor(private route: ActivatedRoute, private documentService: DocumentService, private sanitizer: DomSanitizer, public router: Router,) { }
 
@@ -37,6 +40,13 @@ export class CompletedTaskComponent implements OnInit {
         this.item = res['task'][0]
         this.data3 = res['task'][0]['url1']
         this.data4 = res['task'][0]['url2']
+        if (res['task'][0]['ca'] == true) {
+          this.caDone1 = 'yes';
+          this.caUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+            res['task'][0]['caUrl']
+          );
+        }
+
         this.url1 = this.sanitizer.bypassSecurityTrustResourceUrl(
           res['task'][0]['url1']
         );
@@ -48,14 +58,26 @@ export class CompletedTaskComponent implements OnInit {
         this.value2 = res['task'][0]['pipoDetail'];
         console.log(this.value1)
         console.log(this.value2)
-        if (res['task'][0]['pipoDetail'] === undefined) {
+        if (res['task'][0]['pipoDetail'] === undefined && res['task'][0]['boeDetails'] && res['task'][0]['sbDetails'] === undefined) {
           console.log("shhshshsh888")
+
           this.data5 = res['task'][0]['boeDetails']['doc']
         }
 
-        else if (res['task'][0]['boeDetails'] === undefined) {
+        else if (res['task'][0]['boeDetails'] === undefined && res['task'][0]['pipoDetail'] && res['task'][0]['sbDetails'] === undefined) {
           console.log("shhshshsh888")
+
           this.data5 = res['task'][0]['pipoDetail']['doc']
+        }
+        else if (res['task'][0]['boeDetails'] === undefined && res['task'][0]['pipoDetail'] === undefined && res['task'][0]['sbDetails']) {
+          console.log("shhshshsh888")
+
+          this.data5 = res['task'][0]['sbDetails']['doc']
+        }
+
+        else if (res['task'][0]['pipoDetail'] === undefined && res['task'][0]['pipoDetail'] === undefined) {
+          this.buyer = true;
+          this.data5 = undefined;
         }
 
         console.log(this.data5)
@@ -109,19 +131,49 @@ export class CompletedTaskComponent implements OnInit {
       dlnk1.click();
 
     }
-
-
-    //this.submitTask()
-    // this.downloading = false;
-    // this.backupClicked = false;
   }
+
 
   public done() {
     if (this.item.boeNumber) {
       this.router.navigateByUrl("/home/direct-import-payment");
     }
     else if (this.item.pi_poNo) {
-      this.router.navigateByUrl("/home/advance-outward-remittance");
+      console.log(this.item.file)
+      if (this.item.file == "advance") {
+        this.router.navigateByUrl("/home/advance-outward-remittance");
+      }
+      else if (this.item.file == "lcSight") {
+        this.router.navigate(['home/bill-under-collection', this.item.file]);
+      }
+      else if (this.item.file == "lcUsance") {
+        this.router.navigate(['home/bill-under-collection', this.item.file]);
+      }
+      else if (this.item.file == "nonlcSight") {
+        this.router.navigate(['home/bill-under-collection', this.item.file]);
+      }
+      else if (this.item.file == "nonlcUsance") {
+        this.router.navigate(['home/bill-under-collection', this.item.file]);
+      }
+      else if (this.item.file == "inland" || this.item.file == "import") {
+        this.router.navigate(['home/lc-isurence', this.item.file]);
+      }
+
+      else if (this.item.file == "buyerCredit") {
+        this.router.navigate(['home/buyerCredit']);
+      }
+      else if (this.item.file == "fbgBuyer") {
+        this.router.navigate(['home/fbgWaiver']);
+      }
+      else if (this.item.file.startsWith("S0") || this.item.file.startsWith("S1")) {
+        this.router.navigate(['home/outwardRemitance']);
+      }
+      else if (this.item.file.startsWith("P0") || this.item.file.startsWith("P1")) {
+        this.router.navigate(['home/inwardRemmitance']);
+      }
+    }
+    if (this.item.sbno) {
+      this.router.navigateByUrl("/home/inwardRemmitance");
     }
   }
 

@@ -1,4 +1,4 @@
-import { UserService } from "./../../../service/user.service";
+import { UserService } from "../../../service/user.service";
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import { DocumentService } from "../../../service/document.service";
@@ -6,11 +6,11 @@ import { FormGroup, FormControl } from "@angular/forms";
 import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
-  selector: "app-fbg-wavier",
-  templateUrl: "./fbg-wavier.component.html",
-  styleUrls: ['../../../../sass/application.scss',"./fbg-wavier.component.scss"],
+  selector: 'app-fbg-buyer-file',
+  templateUrl: './fbg-buyer-file.component.html',
+  styleUrls: ['../../../../sass/application.scss', './fbg-buyer-file.component.scss']
 })
-export class FbgWavierComponent implements OnInit, OnDestroy {
+export class FbgBuyerFileComponent implements OnInit, OnDestroy {
   item: any;
   item2: any = [];
   public data1;
@@ -54,12 +54,15 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
     pipoDetail: [],
     beneDetail: [],
     completed: false,
-    url1 : "",
-    url2 : ""
+    url1: "",
+    url2: "",
+    file: "fbgBuyer",
+    bank: "yesBank",
+    ca: false
   };
 
   async ngOnInit(): Promise<void> {
-    this.id = this.route.snapshot.params['boeNumber'];
+    this.id = this.route.snapshot.params['id'];
     console.log(this.id)
     await this.getUserDetail();
     this.getPipoDetaile();
@@ -77,30 +80,31 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
         error => {
           console.log("error")
         });
-    
 
-    
-     
+
+
+
     console.log("DRAFT ", this.item2);
     console.log("DRAFT ", this.newTask);
   }
 
   getPipoDetaile() {
     this.documentService.getPipoByPipoNo(this.id)
-    .subscribe(
+      .subscribe(
         data => {
-            console.log("king123")
-            console.log(data)
-            console.log(data['data'][0])
-            this.item2= data['data'][0]
-            this.doc = this.sanitizer.bypassSecurityTrustResourceUrl(
-              data['data'][0]['doc']
-            );
-            this.getBeneDetaile()
-            //this.router.navigate(['/login'], { queryParams: { registered: true }});
+          console.log("king123")
+          console.log(data)
+          console.log(data['data'][0])
+          this.item2 = data['data'][0]
+          this.doc = this.sanitizer.bypassSecurityTrustResourceUrl(
+            data['data'][0]['doc']
+          );
+          console.log(this.doc)
+          this.getBeneDetaile()
+          //this.router.navigate(['/login'], { queryParams: { registered: true }});
         },
         error => {
-            console.log("error")
+          console.log("error")
         });
     console.log("pipo", this.item2)
   }
@@ -126,7 +130,7 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
   }
 
   public downloadPDF() {
-    console.log("DATA",this.data4)
+    console.log("DATA", this.data4)
     const link: any = document.createElement("a");
     link.id = "dwnldLnk";
     link.style = "display:none;";
@@ -138,27 +142,19 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
     dlnk.download = this.data4.filename;
     dlnk.click();
 
-    console.log("DATA",this.data7)
-    const link1: any = document.createElement("a");
-    link1.id = "dwnldLnk";
-    link1.style = "display:none;";
-    document.body.appendChild(link1);
-    const dlnk1: any = document.getElementById("dwnldLnk");
-    dlnk1.href = this.data7.file;
-    dlnk1.download = this.data7.filename;
-    dlnk1.click();
+
     //this.submitTask()
     // this.downloading = false;
     // this.backupClicked = false;
-   // console.log("DLINK", dlnk);
+    // console.log("DLINK", dlnk);
   }
 
   exportAsPDF(div_id) {
-    const height = Math.round($("#mainId1").outerHeight() * 0.0104166667 * 10) / 10;
-    console.log($("#mainId1").html());
+    const height = Math.round($("#mainId").outerHeight() * 0.0104166667 * 10) / 10;
+    console.log($("#mainId").html());
     this.documentService
       .getPDF({
-        data: $("#mainId1").html(),
+        data: $("#mainId").html(),
         filename: "Final Report",
         format: {
           paperWidth: 7,
@@ -181,73 +177,42 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
             this.data5
           );
           this.newTask.url1 = this.data5;
-          const height1 = Math.round($("#mainId2").outerHeight() * 0.0104166667 * 10) / 10;
-          this.documentService
-          .getPDF({
-            data: $("#mainId2").html(),
-            filename: "Final Report",
-            format: {
-              paperWidth: 7,
-              paperHeight: height1 + 5,
-              marginTop: 0,
-              marginBottom: 0,
-              marginLeft: 0,
-              marginRight: 0,
-            },
-            template:
-              "./app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs",
-          })
-          .subscribe((data1) => {
-            if (data1 && data1.success) {
-              console.log(data1);
-              this.data7 = data1
-              this.data8 = data1.file.replace('application/octet-stream', 'application/pdf')
-              console.log(this.data8)
-              this.data9 = this.sanitizer.bypassSecurityTrustResourceUrl(
-                this.data8
-              );
-              this.newTask.url2 = this.data8;
-              //this.submitTask()
-              this.done = true
-              //this.downloadPDF(data);
-            }
-          });
-          
-          //this.downloadPDF(data);
+          this.done = true
+
         }
       });
   }
 
   edit() {
-    this.done =false;
+    this.done = false;
   }
 
   async submitTask() {
     this.newTask.completed = true;
     console.log(this.newTask);
-    
+
+    console.log("shshsh")
+    if (this.documentService.draft === false) {
       console.log("shshsh")
-      if (this.documentService.draft === false) {
-        console.log("shshsh")
-        this.documentService.addTask(this.newTask).subscribe(
-          (res) => {
-            console.log("Transaction Saved");
-            this.submitted = true;
-            this.router.navigate(["/home/advance-outward-remittance"]); 
-          },
-          (err) => console.log("Error saving the transaction")
-        );
-      } else if (this.documentService.draft === true) {
-        console.log("hhhh")
-        this.documentService.completeTask({ _id: this.documentService.task._id, task:this.newTask }).subscribe(
-          (res) => {
-            console.log("COMPLETED");
-            this.router.navigate(["/home/advance-outward-remittance"]); 
-          } ,
-          (err) => console.log("ERROR")
-        );
-      }
-    
+      this.documentService.addTask(this.newTask).subscribe(
+        (res) => {
+          console.log("Transaction Saved");
+          this.submitted = true;
+          this.router.navigate(["/home/advance-outward-remittance"]);
+        },
+        (err) => console.log("Error saving the transaction")
+      );
+    } else if (this.documentService.draft === true) {
+      console.log("hhhh")
+      this.documentService.completeTask({ _id: this.documentService.task._id, task: this.newTask }).subscribe(
+        (res) => {
+          console.log("COMPLETED");
+          this.router.navigate(["/home/advance-outward-remittance"]);
+        },
+        (err) => console.log("ERROR")
+      );
+    }
+
   }
 
   ngOnDestroy() {
@@ -255,17 +220,17 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
     console.log(this.newTask)
     console.log(this.documentService.draft)
     console.log(this.submitted)
-      if (this.documentService.draft === false && this.submitted === false) {
-        console.log()
-        this.documentService.addTask(this.newTask).subscribe(
-          (res) => {
-            console.log("Saved as draft");
-           // window.alert("Transcation Saved as draft");
-          },
-          (err) => console.log("Cant save as draft")
-        );
-      }
+    if (this.documentService.draft === false && this.submitted === false) {
+      console.log()
+      this.documentService.addTask(this.newTask).subscribe(
+        (res) => {
+          console.log("Saved as draft");
+          // window.alert("Transcation Saved as draft");
+        },
+        (err) => console.log("Cant save as draft")
+      );
+    }
 
-    
+
   }
 }
