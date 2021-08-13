@@ -124,7 +124,7 @@
                                                 type="" placeholder="Type the bank name to search"
                                                 class="form-control rounded-pill password password1"
                                                 (input)="searchData($event.target.value)"
-                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bank').errors?.required }">
+                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bank').errors }">
                                             <div *ngIf="submitted && g.controls[i].get('bank').errors"
                                                 class="invalid-feedback">
 
@@ -143,10 +143,10 @@
 
 
                                             <label class="bank">Bic Address</label>
-                                            <input formControlName="bicAddress" id="password1" type=""
+                                            <input formControlName="bicAddress" type=""
                                                 style="text-transform: uppercase !important" placeholder="Bic address"
                                                 class="form-control rounded-pill password password1"
-                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bicAddress').errors?.required }">
+                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bicAddress').errors }">
                                             <div *ngIf="submitted && g.controls[i].get('bicAddress').errors"
                                                 class="invalid-feedback">
                                                 <div *ngIf="g.controls[i].get('bicAddress').errors?.required"

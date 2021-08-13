@@ -230,7 +230,7 @@
                                                         placeholder="Type the bank name to search"
                                                         class="form-control rounded-pill password password1"
                                                         (input)="searchData($event.target.value, i)"
-                                                        [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bank').errors?.required }">
+                                                        [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bank').errors }">
                                                     <div *ngIf="submitted && g.controls[i].get('bank').errors"
                                                         class="invalid-feedback">
                                                         <div *ngIf="g.controls[i].get('bank').errors?.required "
@@ -253,7 +253,7 @@
                                                         style="text-transform: uppercase;" id="password1" type=""
                                                         placeholder="Bic address"
                                                         class="form-control rounded-pill password password1"
-                                                        [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bicAddress').errors?.required }">
+                                                        [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bicAddress').errors}">
                                                     <div *ngIf="submitted && g.controls[i].get('bicAddress').errors"
                                                         class="invalid-feedback">
                                                         <div *ngIf="g.controls[i].get('bicAddress').errors?.pattern"
@@ -271,7 +271,6 @@
                                                             address should contains 11 Letters.
                                                         </div>
                                                     </div>
-
 
                                                     <label class="bank">Account Number</label>
                                                     <input [(ngModel)]="course.accNumber" formControlName="accNumber"
