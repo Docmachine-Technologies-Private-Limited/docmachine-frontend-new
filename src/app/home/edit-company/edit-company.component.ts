@@ -6,7 +6,8 @@ import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
-
+import * as data from '../../bank.json';
+import * as data1 from '../../currency.json';
 @Component({
   selector: 'app-edit-company',
   templateUrl: './edit-company.component.html',
@@ -46,6 +47,19 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   Details: any;
   details: any;
   i: number;
+  k = 2;
+  showLess = false;
+  jsondata: any;
+  dataJson: any;
+  bankName = [];
+  currencyName = [];
+  toggle: boolean;
+  dataJson1: any;
+  jsondata1: any;
+  toggle1: boolean;
+  value = 100;
+  value1: any;
+
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private router: Router, private toastr: ToastrService) {
     this.loadFromLocalStorage()
@@ -74,7 +88,10 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-
+    this.jsondata = data['default'];
+    this.dataJson = data['default']
+    this.jsondata1 = data1['default'];
+    this.dataJson1 = data1['default']
     this.userService.getTeam()
       .subscribe(
         data => {
@@ -121,19 +138,19 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
       caEmail: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
       chaEmail: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
       gst: ['', [Validators.required, Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+){15}$"), Validators.maxLength(15)]],
-      bankDetails: new FormArray([this.initCourse()])
+      bankDetails: new FormArray([this.initCourse()], Validators.required)
     });
 
 
   }
 
   initCourse() {
-    return new FormGroup({
-      bank: new FormControl(''),
-      bicAddress: new FormControl(''),
-      accNumber: new FormControl(''),
-      accType: new FormControl(''),
-      currency: new FormControl('')
+    return this.formBuilder.group({
+      bank: ['', Validators.required],
+      bicAddress: ['', [Validators.required, Validators.pattern("^[A-Za-z]{6}[A-Za-z0-9]{5}$"), Validators.maxLength(11)]],
+      accNumber: ['', [Validators.required, Validators.pattern("^[0-9]{3,34}")]],
+      accType: ['', Validators.required],
+      currency: ['', Validators.required],
     });
   }
 
@@ -141,6 +158,10 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
     return new FormGroup({
       product: new FormControl('')
     });
+  }
+
+  get g(): FormArray {
+    return this.loginForm.get('bankDetails') as FormArray;
   }
 
   getCourses(form) {
@@ -243,10 +264,72 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
           console.log("error")
         });
   }
+  searchData(e, i) {
+    this.value = i
+    this.toggle = true;
+    console.log(e)
+    this.jsondata = []
+    for (let data of this.dataJson) {
+      if (data.bank.toLowerCase().includes(e.toLowerCase())) {
+        this.jsondata.push(data)
+      }
+
+
+    }
+  }
+
+  searchCurrency(e, i) {
+    this.value1 = i
+    this.toggle1 = true;
+    console.log(e)
+    this.jsondata1 = []
+    for (let data of this.dataJson1) {
+      if (data.currency.toLowerCase().includes(e.toLowerCase())) {
+        console.log('1')
+        this.jsondata1.push(data)
+      }
+
+
+    }
+    console.log(this.jsondata1)
+    console.log(this.currencyName.length)
+  }
+
   public loadFromLocalStorage() {
     const token = localStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
+  }
+
+  bankClick(e, i) {
+    this.details[i].bank = e
+    //console.log(this.bankName)
+    this.toggle = false;
+  }
+
+  currencyClick(e, i) {
+    this.details[i].currency = e
+    //console.log(this.currencyName)
+    this.toggle1 = false;
+  }
+
+  modo(e, i) {
+    console.log(e)
+    if (e === 'OD-over draft' || e === 'CC- cash credit' || e === 'CA-Current account') {
+      this.details[i].currency = "INR"
+    }
+  }
+
+  showMore() {
+    this.k = this.k + 2
+    if (this.k >= this.details.length) {
+      this.showLess = true
+    }
+  }
+
+  lessShow() {
+    this.k = 2;
+    this.showLess = false
   }
 
   edit() {

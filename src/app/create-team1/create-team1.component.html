@@ -120,32 +120,122 @@
                                         [formGroupName]="i">
                                         <div class="bankClass">
                                             <label class="bank">*Bank Name</label>
-                                            <input formControlName="bank" id="password1" type="" placeholder="bank name"
-                                                class="form-control rounded-pill password password1">
+                                            <input [(ngModel)]="bankName[i]" formControlName="bank" id="password1"
+                                                type="" placeholder="Type the bank name to search"
+                                                class="form-control rounded-pill password password1"
+                                                (input)="searchData($event.target.value)"
+                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bank').errors?.required }">
+                                            <div *ngIf="submitted && g.controls[i].get('bank').errors"
+                                                class="invalid-feedback">
+
+                                                <div *ngIf="g.controls[i].get('bank').errors?.required "
+                                                    style="margin-left: 15px;">Bank Name
+                                                    Required
+                                                </div>
+                                            </div>
+                                            <div *ngIf='toggle' style="margin-left: 20px;">
+                                                <table *ngIf='bankName.length == i+1'>
+                                                    <tr *ngFor="let bankName of jsondata"
+                                                        (click)=bankClick(bankName.bank,i)>{{bankName.bank}}</tr>
+                                                </table>
+                                            </div>
+
 
 
                                             <label class="bank">Bic Address</label>
                                             <input formControlName="bicAddress" id="password1" type=""
-                                                placeholder="Bic address"
-                                                class="form-control rounded-pill password password1">
+                                                style="text-transform: uppercase !important" placeholder="Bic address"
+                                                class="form-control rounded-pill password password1"
+                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bicAddress').errors?.required }">
+                                            <div *ngIf="submitted && g.controls[i].get('bicAddress').errors"
+                                                class="invalid-feedback">
+                                                <div *ngIf="g.controls[i].get('bicAddress').errors?.required"
+                                                    style="margin-left: 15px;">BIC
+                                                    address
+                                                    Required
+                                                </div>
+                                                <div *ngIf="g.controls[i].get('bicAddress').errors?.pattern"
+                                                    style="margin-left: 15px;">BIC
+                                                    address should be alphanumerics Ex: ABCABCA12ABC
+                                                </div>
+                                                <div *ngIf="g.controls[i].get('bicAddress').errors?.maxlength"
+                                                    style="margin-left: 15px;">
+                                                    BIC
+                                                    address should contains 11 Letters.
+                                                </div>
+                                            </div>
 
 
                                             <label class="bank">Account Number</label>
                                             <input formControlName="accNumber" id="password1" type=""
                                                 placeholder="Account number"
-                                                class="form-control rounded-pill password password1">
+                                                class="form-control rounded-pill password password1"
+                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('accNumber').errors }">
+                                            <div *ngIf="submitted && g.controls[i].get('accNumber').errors"
+                                                class="invalid-feedback">
+                                                <div *ngIf="g.controls[i].get('accNumber').errors?.required"
+                                                    style="margin-left: 15px;">
+                                                    Account number
+                                                    Required
+                                                </div>
+                                                <div *ngIf="g.controls[i].get('accNumber').errors?.pattern"
+                                                    style="margin-left: 15px;">
+                                                    Account number should be number
+                                                </div>
+                                            </div>
 
 
                                             <label class="bank">Account Type</label>
-                                            <input formControlName="accType" id="password1" type=""
-                                                placeholder="Account Type"
-                                                class="form-control rounded-pill password password1">
+                                            <!-- <input formControlName="accType" id="password1" type=""
+                                                placeholder="Account Type"> -->
+                                            <select class="form-control rounded-pill password password1"
+                                                formControlName="accType"
+                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('accType').errors }"
+                                                (change)="modo($event.target.value, i)">
+                                                <option value="">Choose Account Type</option>
+                                                <option value="OD-over draft">OD-over draft</option>
+                                                <option value="CC- cash credit">CC- cash credit</option>
+                                                <option value="CA-Current account">CA-Current account</option>
+                                                <option value="EEFC - Exchange earner Foreign currency">EEFC -
+                                                    Exchange earner Foreign currency</option>
+                                                <option value="PCFC- packing credit Foreign currency">PCFC- packing
+                                                    credit Foreign currency</option>
+                                                <option value="EBRD- Bill discounting account)">EBRD- Bill
+                                                    discounting account)</option>
+                                            </select>
+                                            <div *ngIf="submitted && g.controls[i].get('accType').errors"
+                                                class="invalid-feedback">
+                                                <div *ngIf="g.controls[i].get('accType').errors.required"
+                                                    style="margin-left: 15px;">
+                                                    Account type is required
+                                                </div>
+                                            </div>
 
 
                                             <label class="bank">Currency Type</label>
-                                            <input formControlName="currency" id="password1" type=""
+                                            <!-- <input formControlName="currency" id="password1" type=""
                                                 placeholder="currency"
-                                                class="form-control rounded-pill password password1">
+                                                class="form-control rounded-pill password password1"> -->
+                                            <input [(ngModel)]="currencyName[i]" formControlName="currency"
+                                                id="password1" type="" placeholder="Type the currency name to search"
+                                                class="form-control rounded-pill password password1"
+                                                (input)="searchCurrency($event.target.value)"
+                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('currency').errors }">
+                                            <div *ngIf="submitted && g.controls[i].get('currency').errors"
+                                                class="invalid-feedback">
+                                                <div *ngIf="g.controls[i].get('currency').errors.required"
+                                                    style="margin-left: 15px;">
+                                                    Currency Type is required
+                                                </div>
+                                            </div>
+                                            <div *ngIf='toggle1' style="margin-left: 20px;">
+                                                <table *ngIf='currencyName.length == i+1'>
+                                                    <tr *ngFor="let currencyName of jsondata1"
+                                                        (click)=currencyClick(currencyName.value,i)>
+                                                        {{currencyName.currency}}</tr>
+                                                </table>
+                                            </div>
+
 
                                         </div>
                                     </div>

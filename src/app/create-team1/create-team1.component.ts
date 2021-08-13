@@ -7,6 +7,8 @@ import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_I
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
+import * as data from '../bank.json';
+import * as data1 from '../currency.json';
 @Component({
   selector: 'app-create-team1',
   templateUrl: './create-team1.component.html',
@@ -33,6 +35,15 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   public config: DropzoneConfigInterface;
   submitted: boolean = false;
   isDisabled: boolean = false;
+  jsondata: any;
+  dataJson: any;
+  bankName = [];
+  currencyName = [];
+  toggle: boolean;
+  dataJson1: any;
+  jsondata1: any;
+  toggle1: boolean;
+
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private router: Router, private toastr: ToastrService) {
     this.loadFromLocalStorage()
@@ -61,7 +72,10 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-
+    this.jsondata = data['default'];
+    this.dataJson = data['default']
+    this.jsondata1 = data1['default'];
+    this.dataJson1 = data1['default']
     this.loginForm = this.formBuilder.group({
       teamName: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9]+$"), (Validators.minLength(3))]],
       iec: ['', [Validators.required, Validators.pattern("^[0-9]{10}"), Validators.maxLength(10)]],
@@ -70,17 +84,17 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
       caEmail: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
       chaEmail: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
       gst: ['', [Validators.required, Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+){15}$"), Validators.maxLength(15)]],
-      bankDetails: new FormArray([this.initCourse()])
+      bankDetails: new FormArray([this.initCourse()], Validators.required)
     });
   }
 
   initCourse() {
-    return new FormGroup({
-      bank: new FormControl(''),
-      bicAddress: new FormControl(''),
-      accNumber: new FormControl(''),
-      accType: new FormControl(''),
-      currency: new FormControl('')
+    return this.formBuilder.group({
+      bank: ['', Validators.required],
+      bicAddress: ['', [Validators.required, Validators.pattern("^[A-Za-z]{6}[A-Za-z0-9]{5}$"), Validators.maxLength(11)]],
+      accNumber: ['', [Validators.required, Validators.pattern("^[0-9]{3,34}")]],
+      accType: ['', Validators.required],
+      currency: ['', Validators.required],
     });
   }
 
@@ -99,6 +113,8 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   // }
 
   onAddCourse() {
+    this.currencyName.push('')
+    this.bankName.push('')
     const control = this.loginForm.get('bankDetails') as FormArray;
     control.push(this.initCourse());
   }
@@ -148,6 +164,10 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
 
   get f() { return this.loginForm.controls; }
 
+  get g(): FormArray {
+    return this.loginForm.get('bankDetails') as FormArray;
+  }
+
   onSubmit() {
     console.log(this.loginForm.value)
     console.log("1")
@@ -159,12 +179,12 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
       this.isDisabled = false;
       return;
     }
-    // if (!this.file) {
-    //   this.toastr.error('Invalid inputs, please check again!');
-    //   console.log("2")
-    //   this.isDisabled = false;
-    //   return;
-    // }
+    if (!this.file) {
+      this.toastr.error('Invalid inputs, please check again!');
+      console.log("2")
+      this.isDisabled = false;
+      return;
+    }
     console.log("3")
     this.loginForm.value.file = this.file
     console.log(this.loginForm.value)
@@ -183,13 +203,65 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
           console.log("error")
         });
   }
+
+  searchData(e) {
+    this.toggle = true;
+    console.log(e)
+    this.jsondata = []
+    for (let data of this.dataJson) {
+      if (data.bank.toLowerCase().includes(e.toLowerCase())) {
+        this.jsondata.push(data)
+      }
+
+
+    }
+  }
+
+  searchCurrency(e) {
+    this.toggle1 = true;
+    console.log(e)
+    this.jsondata1 = []
+    for (let data of this.dataJson1) {
+      if (data.currency.toLowerCase().includes(e.toLowerCase())) {
+        console.log('1')
+        this.jsondata1.push(data)
+      }
+
+
+    }
+    console.log(this.jsondata1)
+    console.log(this.currencyName.length)
+  }
+
   public loadFromLocalStorage() {
     const token = localStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }
 
+  bankClick(e, i) {
+    this.bankName[i] = e
+    console.log(this.bankName)
+    this.toggle = false;
 
+  }
+
+  currencyClick(e, i) {
+    this.currencyName[i] = e
+    console.log(this.currencyName)
+
+    this.toggle1 = false;
+
+
+  }
+
+  modo(e, i) {
+    console.log(e)
+    if (e === 'OD-over draft' || e === 'CC- cash credit' || e === 'CA-Current account') {
+      this.currencyName[i] = "INR"
+    }
+
+  }
   ngAfterViewInit() {
     //   window['sidebarInit']();
     //   if (isPlatformBrowser(this.platformId)) {
