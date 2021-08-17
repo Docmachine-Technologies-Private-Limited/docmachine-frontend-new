@@ -119,13 +119,16 @@
                                     <div *ngFor="let course of getCourses(loginForm); let i = index"
                                         [formGroupName]="i">
                                         <div class="bankClass">
+
                                             <label class="bank">*Bank Name</label>
+                                            <a *ngIf='i>0' (click)='removeAddress(i)'
+                                                style="float: right; color: red;">Remove</a>
                                             <input [(ngModel)]="bankName[i]" formControlName="bank" id="password1"
                                                 type="" placeholder="Type the bank name to search"
                                                 class="form-control rounded-pill password password1"
-                                                (input)="searchData($event.target.value)"
-                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bank').errors?.required }">
-                                            <div *ngIf="submitted && g.controls[i].get('bank').errors"
+                                                (input)="searchData($event.target.value, i)"
+                                                [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('bank').errors}">
+                                            <div *ngIf="submitted1 && g.controls[i].get('bank').errors"
                                                 class="invalid-feedback">
 
                                                 <div *ngIf="g.controls[i].get('bank').errors?.required "
@@ -134,7 +137,7 @@
                                                 </div>
                                             </div>
                                             <div *ngIf='toggle' style="margin-left: 20px;">
-                                                <table *ngIf='bankName.length == i+1'>
+                                                <table *ngIf='x == i'>
                                                     <tr *ngFor="let bankName of jsondata"
                                                         (click)=bankClick(bankName.bank,i)>{{bankName.bank}}</tr>
                                                 </table>
@@ -146,8 +149,8 @@
                                             <input formControlName="bicAddress" id="password1" type=""
                                                 style="text-transform: uppercase !important" placeholder="Bic address"
                                                 class="form-control rounded-pill password password1"
-                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bicAddress').errors?.required }">
-                                            <div *ngIf="submitted && g.controls[i].get('bicAddress').errors"
+                                                [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('bicAddress').errors }">
+                                            <div *ngIf="submitted1 && g.controls[i].get('bicAddress').errors"
                                                 class="invalid-feedback">
                                                 <div *ngIf="g.controls[i].get('bicAddress').errors?.required"
                                                     style="margin-left: 15px;">BIC
@@ -170,8 +173,8 @@
                                             <input formControlName="accNumber" id="password1" type=""
                                                 placeholder="Account number"
                                                 class="form-control rounded-pill password password1"
-                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('accNumber').errors }">
-                                            <div *ngIf="submitted && g.controls[i].get('accNumber').errors"
+                                                [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('accNumber').errors }">
+                                            <div *ngIf="submitted1 && g.controls[i].get('accNumber').errors"
                                                 class="invalid-feedback">
                                                 <div *ngIf="g.controls[i].get('accNumber').errors?.required"
                                                     style="margin-left: 15px;">
@@ -190,7 +193,7 @@
                                                 placeholder="Account Type"> -->
                                             <select class="form-control rounded-pill password password1"
                                                 formControlName="accType"
-                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('accType').errors }"
+                                                [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('accType').errors }"
                                                 (change)="modo($event.target.value, i)">
                                                 <option value="">Choose Account Type</option>
                                                 <option value="OD-over draft">OD-over draft</option>
@@ -203,7 +206,7 @@
                                                 <option value="EBRD- Bill discounting account)">EBRD- Bill
                                                     discounting account)</option>
                                             </select>
-                                            <div *ngIf="submitted && g.controls[i].get('accType').errors"
+                                            <div *ngIf="submitted1 && g.controls[i].get('accType').errors"
                                                 class="invalid-feedback">
                                                 <div *ngIf="g.controls[i].get('accType').errors.required"
                                                     style="margin-left: 15px;">
@@ -219,9 +222,9 @@
                                             <input [(ngModel)]="currencyName[i]" formControlName="currency"
                                                 id="password1" type="" placeholder="Type the currency name to search"
                                                 class="form-control rounded-pill password password1"
-                                                (input)="searchCurrency($event.target.value)"
-                                                [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('currency').errors }">
-                                            <div *ngIf="submitted && g.controls[i].get('currency').errors"
+                                                (input)="searchCurrency($event.target.value,i)"
+                                                [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('currency').errors }">
+                                            <div *ngIf="submitted1 && g.controls[i].get('currency').errors"
                                                 class="invalid-feedback">
                                                 <div *ngIf="g.controls[i].get('currency').errors.required"
                                                     style="margin-left: 15px;">
@@ -229,10 +232,10 @@
                                                 </div>
                                             </div>
                                             <div *ngIf='toggle1' style="margin-left: 20px;">
-                                                <table *ngIf='currencyName.length == i+1'>
+                                                <table *ngIf='y == i'>
                                                     <tr *ngFor="let currencyName of jsondata1"
                                                         (click)=currencyClick(currencyName.value,i)>
-                                                        {{currencyName.currency}}</tr>
+                                                        {{currencyName.value}}</tr>
                                                 </table>
                                             </div>
 
@@ -241,7 +244,7 @@
                                     </div>
                                 </div>
                                 <div class="row col-md-12" style="margin-bottom: 12px;">
-                                    <button class="rounded-pill add" type="button" (click)="onAddCourse()">
+                                    <button class="rounded-pill add" type="button" (click)="onAddCourse(loginForm)">
                                         Add Another Bank
                                     </button>
                                 </div>

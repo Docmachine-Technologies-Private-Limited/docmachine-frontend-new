@@ -200,3 +200,12 @@ label {
     outline: none;
     border: none;
 }
+
+tr {
+  cursor: pointer;
+
+}
+
+tr:hover {
+  background-color: #44c0fa;
+}

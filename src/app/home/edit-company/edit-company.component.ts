@@ -59,6 +59,7 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   toggle1: boolean;
   value = 100;
   value1: any;
+  submitted1: boolean;
 
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private router: Router, private toastr: ToastrService) {
@@ -109,7 +110,7 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
             console.log("1")
             this.i = 1
             for (let j = 1; j < this.details.length; j++) {
-              this.onAddCourse()
+              this.onAddCourse(1)
             }
 
           }
@@ -172,13 +173,35 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   //   return form.get('products').controls;
   // }
 
-  onAddCourse() {
-    const control = this.loginForm.get('bankDetails') as FormArray;
-    control.push(this.initCourse());
-    if (this.i >= this.details.length) {
-      this.details.push([])
+  onAddCourse(a) {
+    console.log(a)
+    if (a === 1) {
+      console.log(a)
+      const control = this.loginForm.get('bankDetails') as FormArray;
+      control.push(this.initCourse());
+      if (this.i >= this.details.length) {
+        this.details.push([])
+      }
+      this.i++
     }
-    this.i++
+    else {
+      console.log(a)
+
+      if (a.controls.bankDetails.invalid) {
+        this.submitted1 = true
+        this.toastr.error('You can add another bank after filling first one!');
+        console.log("2")
+        this.isDisabled = false;
+        return;
+      }
+      const control = this.loginForm.get('bankDetails') as FormArray;
+      control.push(this.initCourse());
+      if (this.i >= this.details.length) {
+        this.details.push([])
+      }
+      this.i++
+    }
+
 
   }
 
@@ -232,6 +255,7 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
     console.log("1")
     console.log(this.loginForm.value)
     this.submitted = true
+    this.submitted1 = true
     this.isDisabled = true;
     if (this.loginForm.invalid) {
       this.toastr.error('Invalid inputs, please check!');

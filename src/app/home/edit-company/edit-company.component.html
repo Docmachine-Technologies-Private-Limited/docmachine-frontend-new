@@ -230,8 +230,8 @@
                                                         placeholder="Type the bank name to search"
                                                         class="form-control rounded-pill password password1"
                                                         (input)="searchData($event.target.value, i)"
-                                                        [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bank').errors?.required }">
-                                                    <div *ngIf="submitted && g.controls[i].get('bank').errors"
+                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('bank').errors?.required }">
+                                                    <div *ngIf="submitted1 && g.controls[i].get('bank').errors"
                                                         class="invalid-feedback">
                                                         <div *ngIf="g.controls[i].get('bank').errors?.required "
                                                             style="margin-left: 15px;">Bank Name
@@ -253,8 +253,8 @@
                                                         style="text-transform: uppercase;" id="password1" type=""
                                                         placeholder="Bic address"
                                                         class="form-control rounded-pill password password1"
-                                                        [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('bicAddress').errors?.required }">
-                                                    <div *ngIf="submitted && g.controls[i].get('bicAddress').errors"
+                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('bicAddress').errors?.required }">
+                                                    <div *ngIf="submitted1 && g.controls[i].get('bicAddress').errors"
                                                         class="invalid-feedback">
                                                         <div *ngIf="g.controls[i].get('bicAddress').errors?.pattern"
                                                             style="margin-left: 15px;">BIC
@@ -277,8 +277,8 @@
                                                     <input [(ngModel)]="course.accNumber" formControlName="accNumber"
                                                         id="password1" type="" placeholder="Account number"
                                                         class="form-control rounded-pill password password1"
-                                                        [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('accNumber').errors }">
-                                                    <div *ngIf="submitted && g.controls[i].get('accNumber').errors"
+                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('accNumber').errors }">
+                                                    <div *ngIf="submitted1 && g.controls[i].get('accNumber').errors"
                                                         class="invalid-feedback">
                                                         <div *ngIf="g.controls[i].get('accNumber').errors?.required"
                                                             style="margin-left: 15px;">
@@ -297,7 +297,7 @@
                                                         class="form-control rounded-pill password password1"
                                                         formControlName="accType"
                                                         (change)="modo($event.target.value, i)"
-                                                        [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('accType').errors }">
+                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('accType').errors }">
                                                         <option value="" [selected]="!course.accType">Choose Account
                                                             Type</option>
                                                         <option value="OD-over draft"
@@ -322,7 +322,7 @@
                                                             EBRD- Bill
                                                             discounting account</option>
                                                     </select>
-                                                    <div *ngIf="submitted && g.controls[i].get('accType').errors"
+                                                    <div *ngIf="submitted1 && g.controls[i].get('accType').errors"
                                                         class="invalid-feedback">
                                                         <div *ngIf="g.controls[i].get('accType').errors.required"
                                                             style="margin-left: 15px;">
@@ -338,8 +338,8 @@
                                                         placeholder="Type the currency name to search"
                                                         class="form-control rounded-pill password password1"
                                                         (input)="searchCurrency($event.target.value,i)"
-                                                        [ngClass]="{ 'is-invalid': submitted && g.controls[i].get('currency').errors }">
-                                                    <div *ngIf="submitted && g.controls[i].get('currency').errors"
+                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('currency').errors }">
+                                                    <div *ngIf="submitted1 && g.controls[i].get('currency').errors"
                                                         class="invalid-feedback">
                                                         <div *ngIf="g.controls[i].get('currency').errors.required"
                                                             style="margin-left: 15px;">
@@ -359,7 +359,8 @@
                                             </div>
                                         </div>
                                         <div *ngIf="editable" class="row col-md-12" style="margin-bottom: 12px;">
-                                            <button class="rounded-pill add" type="button" (click)="onAddCourse()">
+                                            <button class="rounded-pill add" type="button"
+                                                (click)="onAddCourse(loginForm)">
                                                 Add Another Bank
                                             </button>
                                         </div>
