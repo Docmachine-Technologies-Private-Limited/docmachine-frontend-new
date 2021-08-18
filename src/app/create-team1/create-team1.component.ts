@@ -43,6 +43,10 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   dataJson1: any;
   jsondata1: any;
   toggle1: boolean;
+  submitted1: boolean;
+  control: FormArray;
+  x: any;
+  y: any;
 
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private router: Router, private toastr: ToastrService) {
@@ -86,6 +90,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
       gst: ['', [Validators.required, Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+){15}$"), Validators.maxLength(15)]],
       bankDetails: new FormArray([this.initCourse()], Validators.required)
     });
+
   }
 
   initCourse() {
@@ -112,11 +117,37 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   //   return form.get('products').controls;
   // }
 
-  onAddCourse() {
+  onAddCourse(e) {
+
+    if (e.controls.bankDetails.invalid) {
+      this.submitted1 = true
+      this.toastr.error('You can add another bank after filling first one!');
+      console.log("2")
+      this.isDisabled = false;
+      return;
+    }
+    console.log("fffff")
     this.currencyName.push('')
     this.bankName.push('')
-    const control = this.loginForm.get('bankDetails') as FormArray;
+    const control = this.loginForm.controls.bankDetails as FormArray;
     control.push(this.initCourse());
+    this.isDisabled = false;
+  }
+
+  removeAddress(i) {
+    console.log(i)
+    //console.log(this.control)
+    let control1 = this.loginForm.controls.bankDetails as FormArray;
+    console.log(control1)
+    console.log(control1.length)
+    console.log(this.bankName)
+    console.log(this.currencyName)
+    control1.removeAt(i);
+    this.bankName.splice(i, 1)
+    this.currencyName.splice(i, 1)
+    console.log(this.bankName)
+    console.log(this.currencyName)
+    console.log(control1.length)
   }
 
 
@@ -172,6 +203,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     console.log(this.loginForm.value)
     console.log("1")
     this.submitted = true
+    this.submitted1 = true
     this.isDisabled = true;
     if (this.loginForm.invalid) {
       this.toastr.error('Invalid inputs, please check!');
@@ -179,8 +211,8 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
       this.isDisabled = false;
       return;
     }
-    if (!this.file) {
-      this.toastr.error('Invalid inputs, please check again!');
+    if (this.file.length < 3) {
+      this.toastr.error('Invalid inputs, please upload all the file!');
       console.log("2")
       this.isDisabled = false;
       return;
@@ -204,7 +236,8 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
         });
   }
 
-  searchData(e) {
+  searchData(e, i) {
+    this.x = i
     this.toggle = true;
     console.log(e)
     this.jsondata = []
@@ -217,7 +250,8 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     }
   }
 
-  searchCurrency(e) {
+  searchCurrency(e, i) {
+    this.y = i
     this.toggle1 = true;
     console.log(e)
     this.jsondata1 = []

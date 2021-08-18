@@ -59,6 +59,8 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   toggle1: boolean;
   value = 100;
   value1: any;
+  submitted1: boolean;
+  z: any;
 
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private router: Router, private toastr: ToastrService) {
@@ -105,11 +107,13 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
           this.forSeal1 = data['data'][0].file[2]["For Seal"]
           this.file1 = data['data'][0].file
           this.details = data['data'][0].bankDetails
+          this.z = this.details.length
+          console.log(this.z)
           if (this.details.length > 1) {
             console.log("1")
             this.i = 1
             for (let j = 1; j < this.details.length; j++) {
-              this.onAddCourse()
+              this.onAddCourse(1)
             }
 
           }
@@ -172,14 +176,56 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   //   return form.get('products').controls;
   // }
 
-  onAddCourse() {
-    const control = this.loginForm.get('bankDetails') as FormArray;
-    control.push(this.initCourse());
-    if (this.i >= this.details.length) {
-      this.details.push([])
+  onAddCourse(a) {
+    console.log(a)
+    if (a === 1) {
+      console.log(a)
+      let control = this.loginForm.controls.bankDetails as FormArray;
+      control.push(this.initCourse());
+      if (this.i >= this.details.length) {
+        this.details.push([])
+      }
+      this.i++
     }
-    this.i++
+    else {
+      console.log(a)
 
+      if (a.controls.bankDetails.invalid) {
+        this.submitted1 = true
+        this.toastr.error('You can add another bank after filling first one!');
+        console.log("2")
+        this.isDisabled = false;
+        return;
+      }
+
+      const control = this.loginForm.get('bankDetails') as FormArray;
+      control.push(this.initCourse());
+      if (this.i >= this.details.length) {
+        this.details.push([])
+      }
+      this.z++
+      this.i++
+    }
+
+
+  }
+
+  removeAddress(i) {
+    console.log(i)
+    //console.log(this.control)
+    let control1 = this.loginForm.controls.bankDetails as FormArray;
+    console.log(control1)
+    console.log(control1.length)
+    console.log(this.bankName)
+    console.log(this.currencyName)
+    control1.removeAt(i);
+    this.details.splice(i, 1)
+    this.bankName.splice(i, 1)
+    this.currencyName.splice(i, 1)
+    console.log(this.bankName)
+    console.log(this.currencyName)
+    console.log(control1.length)
+    this.z = this.z - 1
   }
 
   public onUploadInit(args: any): void {
@@ -232,6 +278,7 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
     console.log("1")
     console.log(this.loginForm.value)
     this.submitted = true
+    this.submitted1 = true
     this.isDisabled = true;
     if (this.loginForm.invalid) {
       this.toastr.error('Invalid inputs, please check!');

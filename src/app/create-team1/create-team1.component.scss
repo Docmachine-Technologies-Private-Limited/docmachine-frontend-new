@@ -195,8 +195,17 @@ label {
 }
 
 .add {
-    color: white;
-    background: #3b3b3b;
-    outline: none;
-    border: none;
+  cursor: pointer;
+  color: white;
+  background: #3b3b3b;
+  outline: none;
+  border: none;
+}
+
+tr {
+  cursor: pointer;
+}
+
+tr:hover {
+  background-color: #44c0fa;
 }
