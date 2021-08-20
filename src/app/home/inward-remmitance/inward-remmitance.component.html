@@ -3,10 +3,41 @@
 
 
 
+        <div style="
+                display: flex;
+                flex-direction: rows;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 0.8%;
+                padding-left: 1%;
+                padding-bottom: 0.8%;
+                border: 0.5px solid rgba(0, 0, 0, 0.2);
+                margin-left: 40px;
+                width: 94%;
+              " *ngIf="!showInvoice">
+            <div style="display: flex; align-items: center">
+                <h3 class="heading">Inward Remittance</h3>
+            </div>
 
+            <div class="dropdown">
+                Date:
+                <select name="subject" id="subject">
+                    <option value="" selected="selected">Today</option>
+                </select>
+                Type:
+                <select name="topic" id="topic">
+                    <option value="" selected="selected">All</option>
+                </select>
+            </div>
+            <div style="padding-top: 0.7%">
+                <button class="upload-button" [routerLink]="['/home/upload']">
+                    Upload New
+                </button>
+            </div>
+        </div>
 
         <div class="analytics">
-            <div *ngIf="!selectPurpose" style="margin: 50px;">
+            <div *ngIf="!selectPurpose" style="margin: 20px 50px;">
                 <p class="stp3">Select a Purpose code*</p>
 
                 <div *ngIf="!purposeSelect">
