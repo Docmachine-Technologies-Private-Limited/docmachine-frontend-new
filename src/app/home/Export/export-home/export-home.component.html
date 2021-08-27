@@ -1,0 +1,106 @@
+<div style="margin-left: 210px" class="content-wrap">
+    <main id="content" class="content table-padding" role="main">
+
+
+
+        <div style="
+                display: flex;
+                flex-direction: rows;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 0.8%;
+                padding-left: 1%;
+                padding-bottom: 0.8%;
+                border: 0.5px solid rgba(0, 0, 0, 0.2);
+                margin-left: 40px;
+                width: 94%;
+              " *ngIf="!showInvoice">
+            <div style="display: flex; align-items: center">
+                <h3 class="heading">Inward Remittance Disposal</h3>
+            </div>
+
+            <div class="dropdown">
+                Date:
+                <select name="subject" id="subject">
+                    <option value="" selected="selected">Today</option>
+                </select>
+                Type:
+                <select name="topic" id="topic">
+                    <option value="" selected="selected">All</option>
+                </select>
+            </div>
+            <div style="padding-top: 0.7%">
+                <button class="upload-button" [routerLink]="['/home/upload']">
+                    Upload New
+                </button>
+            </div>
+        </div>
+
+        <div class="analytics" *ngIf="proceed">
+            <div *ngIf="!selectPurpose" style="margin: 20px 50px;">
+                <p class="stp3">Select a Purpose code*</p>
+
+                <div *ngIf="!purposeSelect">
+                    <input style="width: 50%; margin-top: 20px; margin-bottom: 20px;"
+                        placeholder="Search purpose code,group name or description" class="form-control" type="text"
+                        (input)="searchData($event.target.value)">
+                    <div *ngIf="pgNumber != 0">
+                        Matching Result <br>
+                        Number of Purpose Group = {{ pgNumber }} <br>
+                        Number of Purpose Code or Description = {{ pcNumber }}
+                    </div>
+
+                    <div *ngIf="selectedPurpose.length>0" style="margin-bottom: 20px;">
+                        Selected Purpose Code
+                        <br>
+
+                        <tr *ngFor="let code of selectedPurpose; let i = index">{{code}} <b (click)="removeClick(i)"
+                                style="color: red;">Remove</b> <br>
+                        </tr>
+                        <button class="button1" (click)="proceedClick()">Proceed</button>
+                    </div>
+                    <table class="table table-striped mb-0"
+                        style="margin-left: 0px;border-bottom: 0.5px solid rgb(228, 227, 227);">
+                        <thead style="width: 100%; font-size: 10px; font-weight: 300;">
+                            <tr class="text-muted table-heading">
+                                <th scope="col" style="width: 17%; border: 0.1px solid #d3d3d3;">
+                                    Purpose Group Name
+                                </th>
+                                <th scope="col" style="width: 13%; border: 0.1px solid #d3d3d3;">
+                                    PurposeCode</th>
+                                <th scope="col" style="width: 60%; border: 0.1px solid #d3d3d3;">
+                                    Description</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-dark">
+                            <tr class="table-row" style="font-size: 12px;"
+                                *ngFor="let purposeRow of purposeRows; let i = index">
+                                <td class="columH" *ngFor="let column of purposeRow;  let j = index"
+                                    [ngClass]='onClass(column.text)' [attr.rowSpan]="column.rowSpan"
+                                    style="vertical-align: top !important;"
+                                    (click)='purposeClick(purposeRow[j]["text"], purposeRow[j+1]["text"])'>
+                                    {{column.text}}
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="analytics" *ngIf="!proceed" style="margin-left: 50px;">
+            <h1>Flexible Boxes</h1>
+
+            <div class="flex-container">
+                <div *ngFor="let code of selectedPurpose; let i = index">{{code}}</div>
+
+            </div>
+
+            <p>Try to resize the browser window.</p>
+            <p>A container with "flex-wrap: nowrap;" will never wrap its items.</p>
+            <p><strong>Note:</strong> Flexbox is not supported in Internet Explorer 10 or earlier versions.</p>
+        </div>
+    </main>
+</div>

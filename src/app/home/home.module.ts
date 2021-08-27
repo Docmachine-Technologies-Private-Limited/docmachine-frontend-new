@@ -52,6 +52,7 @@ import { CaDocumentsComponent } from './ca-documents/ca-documents.component';
 import { AllTaskComponent } from './all-task/all-task.component';
 import { InwardRemmitanceComponent } from './inward-remmitance/inward-remmitance.component';
 import { InwardRemmitancep0103Component } from './yesBank/inward-remmitancep0103/inward-remmitancep0103.component';
+import { ExportHomeComponent } from './Export/export-home/export-home.component';
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -110,7 +111,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     CaDocumentsComponent,
     AllTaskComponent,
     InwardRemmitanceComponent,
-    InwardRemmitancep0103Component
+    InwardRemmitancep0103Component,
+    ExportHomeComponent
   ],
   imports: [
     CommonModule,
@@ -324,6 +326,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
           {
             path: "inwardRemmitancep0103",
             component: InwardRemmitancep0103Component,
+            pathMatch: "full",
+          },
+          {
+            path: "exportHome",
+            component: ExportHomeComponent,
             pathMatch: "full",
           },
         ],

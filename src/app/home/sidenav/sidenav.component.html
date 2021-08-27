@@ -112,15 +112,9 @@
             <div class="main1" *ngIf="nt">
               <a style="cursor: pointer" (click)="export()"> Exports </a>
               <div class="main2" *ngIf="exp">
-                <a style="cursor: pointer">Shipping Bill</a>
-                <a style="cursor: pointer">PI/PO</a>
-                <a style="cursor: pointer">Commercial Invoice</a>
-                <a style="cursor: pointer">Transport Document</a>
-                <a style="cursor: pointer">Master Sales Agreement</a>
-                <a style="cursor: pointer">Debit Notes</a>
-                <a style="cursor: pointer">Credit Notes</a>
-                <a style="cursor: pointer">Upload EDPMS</a>
-                <a style="cursor: pointer">Softex</a>
+                <a style="cursor: pointer" [routerLink]="['/home/exportHome']">Inward Remittance Disposal</a>
+                <a style="cursor: pointer" [routerLink]="['/home/inwardRemmitance']">Bill Lodgement</a>
+
               </div>
               <a style="cursor: pointer" [routerLink]="['/home/inwardRemmitance']">
                 Inward Remittance

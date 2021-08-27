@@ -185,94 +185,78 @@
         "purpose": [
             {
                 "code": "P0201",
-                "description": "Payments for surplus freight/passenger fare by foreign shipping companies operating in India"
+                "description": "Receipts of surplus freight/passenger fare by Indian shipping companies operating abroad"
             },
             {
                 "code": "P0202",
-                "description": "Payment for operating expenses of Indian shipping companies operating abroad"
-            },
-            {
-                "code": "P0203",
-                "description": "Freight on imports – Shipping companies"
-            },
-            {
-                "code": "P0204",
-                "description": "Freight on exports – Shipping companies"
+                "description": "Receipts on account of operating expenses of Foreign shipping companies operating in India"
             },
             {
                 "code": "P0205",
-                "description": "Operational leasing/Rental of Vessels (with crew) –Shipping companies"
-            },
-            {
-                "code": "P0206",
-                "description": "Booking of passages abroad – Shipping companies"
+                "description": "Receipts on account of operational leasing (with crew) – Shipping companies"
             },
             {
                 "code": "P0207",
-                "description": "Payments for surplus freight/passenger fare by foreign Airlines companies operating in India"
+                "description": "Receipts of surplus freight/passenger fare by Indian Airlines companies operating abroad."
             },
             {
                 "code": "P0208",
-                "description": "Operating expenses of Indian Airlines companies operating abroad"
-            },
-            {
-                "code": "P0209",
-                "description": "Freight on imports – Airlines companies"
-            },
-            {
-                "code": "P0210",
-                "description": "Freight on exports – Airlines companies"
+                "description": "Receipt on account of operating expenses of Foreign Airlines companies operating in India"
             },
             {
                 "code": "P0211",
-                "description": "Operational leasing / Rental of Vessels (with crew) – Airline companies"
-            },
-            {
-                "code": "P0212",
-                "description": "Booking of passages abroad – Airlines companies"
+                "description": "Receipt on account of operational leasing (with crew) – Airlines companies"
             },
             {
                 "code": "P0214",
-                "description": "Payments on account of stevedoring, demurrage, port handling charges etc. (Shipping Companies)"
+                "description": "Receipts on account of other transportation services (stevedoring, demurrage, port handling charges etc).(Shipping Companies)"
             },
             {
                 "code": "P0215",
-                "description": "Payments on account of stevedoring, demurrage, port handling charges etc. (Airlines Companies)"
+                "description": "Receipts on account of other transportation services (stevedoring, demurrage, port handling charges etc).( Airlines companies)"
             },
             {
                 "code": "P0216",
-                "description": "Payments for Passenger – Shipping companies"
+                "description": "Receipts of freight fare -Shipping companies operating abroad"
             },
             {
                 "code": "P0217",
-                "description": "Other payments by Shipping companies"
+                "description": "Receipts of passenger fare by Indian Shipping companies operating abroad"
             },
             {
                 "code": "P0218",
-                "description": "Payments for Passenger – Airlines companies"
+                "description": "Other receipts by Shipping companies"
             },
             {
                 "code": "P0219",
-                "description": "Other payments by Airlines companies"
+                "description": "Receipts of freight fare by Indian Airlines companies operating abroad"
             },
             {
                 "code": "P0220",
-                "description": "Payments on account of freight under other modes of transport (Internal waterways, Roadways, Railways, Pipeline transports and others)"
+                "description": "Receipts of passenger fare –Airlines"
             },
             {
                 "code": "P0221",
-                "description": "Payments on account of passenger fare under other modes of transport (Internal waterways, Roadways, Railways, Pipeline transports and others)"
+                "description": "Other receipts by Airlines companies"
             },
             {
                 "code": "P0222",
-                "description": "Postal & Courier services by Air"
+                "description": "Receipts on account of freights under other modes of transport (Internal Waterways, Roadways, Railways, Pipeline transports and Others)"
             },
             {
                 "code": "P0223",
-                "description": "Postal & Courier services by Sea"
+                "description": "Receipts on account of passenger fare under other modes of transport (Internal Waterways, Roadways, Railways, Pipeline transports and Others)"
             },
             {
                 "code": "P0224",
+                "description": "Postal & Courier services by Air"
+            },
+            {
+                "code": "P0225",
+                "description": "Postal & Courier services by Sea"
+            },
+            {
+                "code": "P0226",
                 "description": "Postal & Courier services by Others"
             }
         ]
@@ -282,20 +266,40 @@
         "purpose": [
             {
                 "code": "P0301",
+                "description": "Purchases towards travel (Includes purchases of foreign TCs, currency notes etc over the counter, by hotels, Emporiums, institutions etc. as well as amount received by TT/SWIFT transfers or debit to Non-Resident account)."
+            },
+            {
+                "code": "P0302",
                 "description": "Business travel"
+            },
+            {
+                "code": "P0304",
+                "description": "Travel for medical treatment including TCs purchased by hospitals"
+            },
+            {
+                "code": "P0305",
+                "description": "Travel for education including TCs purchased by educational institutions"
+            },
+            {
+                "code": "P0306",
+                "description": "Other travel receipts"
+            },
+            {
+                "code": "P0308",
+                "description": "Foreign Currencies/TCs surrendered by returning Indian tourists."
             }
         ]
     },
     {
-        "groupname": "Construction Services",
+        "groupname": "Construction",
         "purpose": [
             {
                 "code": "P0501",
-                "description": "Construction of projects abroad by Indian companies including import of goods at project site abroad"
+                "description": "Receipts on account of services relating to cost of construction of projects in India"
             },
             {
                 "code": "P0502",
-                "description": "Cost of construction etc. of projects executed by foreign companies in India."
+                "description": "Receipts on account of construction works carried out abroad by Indian Companies"
             }
         ]
     },
@@ -311,6 +315,10 @@
                 "description": "Freight insurance – relating to import & export of goods"
             },
             {
+                "code": "P0603",
+                "description": "Other general insurance premium including reinsurance premium; and term life insurance premium"
+            },
+            {
                 "code": "P0605",
                 "description": "Auxiliary services including commission on insurance"
             },
@@ -320,23 +328,23 @@
             },
             {
                 "code": "P0608",
-                "description": "Life insurance settlement of Claims"
+                "description": "Life insurance claim settlements (excluding term insurance) received by residents in India"
             },
             {
                 "code": "P0609",
-                "description": "Standardized guarantee services"
+                "description": "Standardised guarantee services"
             },
             {
                 "code": "P0610",
-                "description": "Premium of pension funds"
+                "description": "Premium for pension funds"
             },
             {
                 "code": "P0611",
-                "description": "Periodic pension entitlements e.g. monthly quarterly or yearly payments of pension amounts by Indian Pension Fund Companies"
+                "description": "Periodic pension entitlements e.g. monthly quarterly or yearly payments of pension amounts by Indian Pension Fund Companies."
             },
             {
                 "code": "P0612",
-                "description": "Invoking of standardized guarantees"
+                "description": "Invoking of standardised guarantees"
             }
         ]
     },
@@ -345,7 +353,7 @@
         "purpose": [
             {
                 "code": "P0701",
-                "description": "Financial intermediation, except investment banking - Bank charges, collection charges, LC charges etc."
+                "description": "Financial intermediation except investment banking – Bank charges, collection charges, LC charges, etc."
             },
             {
                 "code": "P0702",
@@ -366,7 +374,7 @@
             },
             {
                 "code": "P0802",
-                "description": "Software consultancy / implementation"
+                "description": "Software consultancy/implementation (other than those covered in SOFTEX form)"
             },
             {
                 "code": "P0803",
@@ -382,11 +390,11 @@
             },
             {
                 "code": "P0806",
-                "description": "Other information services- Subscription to newspapers, periodicals"
+                "description": "Other information services- Subscription to newspapers, periodicals, etc."
             },
             {
                 "code": "P0807",
-                "description": "Off-site software imports"
+                "description": "Off-site Software Exports"
             },
             {
                 "code": "P0808",
@@ -394,12 +402,12 @@
             },
             {
                 "code": "P0809",
-                "description": "Satellite services including space shuttle and rockets etc."
+                "description": "Satellite services including space shuttle and rockets, etc."
             }
         ]
     },
     {
-        "groupname": "Charges for the use of intellectual property (not included elsewhere)",
+        "groupname": "Charges for the use of intellectual property n.i.e",
         "purpose": [
             {
                 "code": "P0901",
@@ -407,7 +415,7 @@
             },
             {
                 "code": "P0902",
-                "description": "Payment for use, through licensing arrangements, of produced originals orprototypes (such as manuscripts and films), patents, copyrights, trademarks andindustrial processes etc."
+                "description": "Receipts for use, through licensing arrangements, of produced originals or prototypes (such as manuscripts and films), patents, copyrights, trademarks, industrial processes, franchises etc."
             }
         ]
     },
@@ -452,11 +460,7 @@
             },
             {
                 "code": "P1011",
-                "description": "Payments for maintenance of offices abroad"
-            },
-            {
-                "code": "P1012",
-                "description": "Payments for maintenance of offices abroad"
+                "description": "Inward remittance for maintenance of offices in India"
             },
             {
                 "code": "P1013",
@@ -528,33 +532,12 @@
                 "description": "Recreation and sporting activities services"
             },
             {
-                "code": "P1109",
-                "description": "Other Personal, Cultural & Recreational services"
-            }
-        ]
-    },
-    {
-        "groupname": "Personal, Cultural & Recreational services",
-        "purpose": [
-            {
-                "code": "P1101",
-                "description": "Audio-visual and related services like Motion picture and video tape production, distribution and projection services."
+                "code": "P1107",
+                "description": "Educational services (e.g. fees received for correspondence courses offered to non-resident by Indian institutions)"
             },
             {
-                "code": "P1103",
-                "description": "Radio and television production, distribution and transmission services"
-            },
-            {
-                "code": "P1104",
-                "description": "Entertainment services"
-            },
-            {
-                "code": "P1105",
-                "description": "Museums, library and archival services"
-            },
-            {
-                "code": "P1106",
-                "description": "Recreation and sporting activities services"
+                "code": "P1108",
+                "description": "Health Service (Receipts on account of services provided by Indian hospitals, doctors, nurses, paramedical and similar services etc. rendered remotely or on-site)"
             },
             {
                 "code": "P1109",
@@ -567,11 +550,11 @@
         "purpose": [
             {
                 "code": "P1201",
-                "description": "Maintenance of Indian embassies abroad"
+                "description": "Maintenance of foreign embassies in India"
             },
             {
                 "code": "P1202",
-                "description": "Remittances by foreign embassies in India"
+                "description": "Maintenance of international institutions such as offices of IMF mission, World Bank, UNICEF etc. in India."
             }
         ]
     },
@@ -580,19 +563,27 @@
         "purpose": [
             {
                 "code": "P1301",
-                "description": "Remittance for family maintenance and savings"
+                "description": "Inward remittance from Indian non-residents towards family maintenance and savings"
+            },
+            {
+                "code": "P1302",
+                "description": "Personal gifts and donations"
+            },
+            {
+                "code": "P1303",
+                "description": "Donations to religious and charitable institutions in India"
             },
             {
                 "code": "P1304",
-                "description": "Remittance towards grants and donations to other governments and charitable institutions established by the governments."
-            },
-            {
-                "code": "P1305",
-                "description": "Contributions/donation by the Government to international institutions"
+                "description": "Grants and donations to governments and charitable institutions established by the governments"
             },
             {
                 "code": "P1306",
-                "description": "Remittance towards payment / refund of taxes."
+                "description": "Receipts / Refund of taxes"
+            },
+            {
+                "code": "P1307",
+                "description": "Receipts on account of migrant transfers including Personal Effects"
             }
         ]
     },
@@ -604,36 +595,36 @@
                 "description": "Compensation of employees"
             },
             {
-                "code": "P1402",
-                "description": "Remittance towards interest on Non-Resident deposits (FCNR(B)/NR(E)RA, etc.)"
-            },
-            {
                 "code": "P1403",
-                "description": "Remittance towards interest on loans from Non-Residents(ST/MT/LT loans) e.g. External Commercial Borrowing, Trade Credits etc."
+                "description": "Inward remittance towards interest on loans extended to non-residents (ST/MT/LT loans)"
             },
             {
                 "code": "P1405",
-                "description": "Remittances towards interest payment by Ads on their own account (to VOSTRO a/cholders or the OD on NOSTRO a/c)"
+                "description": "Inward remittance towards interest receipts of ADs on their own account (on investments.)"
             },
             {
                 "code": "P1408",
-                "description": "Remittance of profit by FDI enterprises in India (by branches of foreign companies including bank branches)"
+                "description": "Inward remittance of profit by branches of Indian FDI Enterprises (including bank branches) operating abroad."
             },
             {
                 "code": "P1409",
-                "description": "Remittances of dividends by FDI enterprises in India (other than branches) on equity and investment fund shares"
+                "description": "Inward remittance of dividends (on equity and investment fund shares) by Indian FDI Enterprises, other than branches, operating abroad"
             },
             {
                 "code": "P1410",
-                "description": "Payment of interest by FDI enterprises in India to their Parent company abroad"
+                "description": "Inward remittance on account of interest payment by Indian FDI enterprises operating abroad to their Parent company in India."
             },
             {
                 "code": "P1411",
-                "description": "Remittance of interest income on account of Portfolio Investment in India"
+                "description": "Inward remittance of interest income on account of Portfolio Investment made abroad by India"
             },
             {
                 "code": "P1412",
-                "description": "Remittance of dividends on account of Portfolio Investment in India on equity ad investment fund shares"
+                "description": "Inward remittance of dividends on account of Portfolio Investment made abroad by India on equity and investment fund shares"
+            },
+            {
+                "code": "P1499",
+                "description": "Other income receipts"
             }
         ]
     },
@@ -642,36 +633,32 @@
         "purpose": [
             {
                 "code": "P1501",
-                "description": "Refunds / rebates / reduction in invoice value on account of exports"
+                "description": "Refunds / rebates on account of imports"
             },
             {
                 "code": "P1502",
-                "description": "Reversal of wrong entries, refunds of amount remitted for non-exports"
+                "description": "Reversal of wrong entries, refunds of amount remitted for non-imports"
             },
             {
                 "code": "P1503",
-                "description": "Payments by residents for international bidding"
-            },
-            {
-                "code": "P1504",
-                "description": "Notional sales when export bills negotiated/purchased/discounted are dishonored/crystallized/cancelled and reversed from suspense account"
+                "description": "Remittances (receipts) by residents under international bidding process."
             },
             {
                 "code": "P1505",
-                "description": "Deemed imports (exports between SEZ, EPZs and Domestic tariff areas)"
+                "description": "Deemed Exports ( exports between SEZ, EPZs and Domestic Tariff Areas)"
             }
         ]
     },
     {
-        "groupname": "Maintenance and repairservice i.e.",
+        "groupname": "Maintenance and repair services n.i.e",
         "purpose": [
             {
                 "code": "P1601",
-                "description": "Payment on account of maintenance and repair services rendered for Vessels, ships, boats, warships, etc."
+                "description": "Receipts on account of maintenance and repair services rendered for Vessels, Ships, Boats, Warships, etc."
             },
             {
                 "code": "P1602",
-                "description": "Payment on account of maintenance and repair services rendered for air-crafts, space shuttles, rockets, military aircrafts, helicopters, etc."
+                "description": "Receipts of maintenance and repair services rendered for aircrafts, Space shuttles, Rockets, military aircrafts, etc."
             }
         ]
     },

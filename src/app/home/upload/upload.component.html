@@ -1,10 +1,21 @@
 <div class="content-wrap">
   <main id="content" class="content table-padding" role="main">
     <h3 class="heading">Upload Documents</h3>
-    <p *ngIf="documentType === ''" style="color: blue; margin-left: 34%">
-      Select Your Document type to continue uploading.
+    <p style="color: rgb(0, 0, 0);margin-left: 40px">
+      Choose the type of document
     </p>
-    <select [(ngModel)]="documentType" style="margin-left: 42%; margin-bottom: 3%" name="" id="">
+    <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
+      <option value="">Document Type</option>
+      <option value="import">Import</option>
+      <option value="export">Export</option>
+    </select>
+
+
+    <p style="color: rgb(0, 0, 0); margin-left: 40px;">
+      Choose the type of export document
+
+    </p>
+    <select [(ngModel)]="documentType" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
       <option value="">Document Type</option>
       <option value="Shipping Bill">Shipping Bill</option>
       <option value="BOE">BOE</option>

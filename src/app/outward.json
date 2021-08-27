@@ -494,35 +494,6 @@
         ]
     },
     {
-        "groupname": "Personal, Cultural & Recreational services",
-        "purpose": [
-            {
-                "code": "S1101",
-                "description": "Audio-visual and related services like Motion picture and video tape production, distribution and projection services."
-            },
-            {
-                "code": "S1103",
-                "description": "Radio and television production, distribution and transmission services"
-            },
-            {
-                "code": "S1104",
-                "description": "Entertainment services"
-            },
-            {
-                "code": "S1105",
-                "description": "Museums, library and archival services"
-            },
-            {
-                "code": "S1106",
-                "description": "Recreation and sporting activities services"
-            },
-            {
-                "code": "S1109",
-                "description": "Other Personal, Cultural & Recreational services"
-            }
-        ]
-    },
-    {
         "groupname": "Govt. not included elsewhere",
         "purpose": [
             {

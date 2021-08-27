@@ -70,6 +70,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public override = false;
   public message = "";
   public documentType = "";
+  public documentType1 = "";
   public piPoUrl;
   public selectedDocumentType;
   public benneDetail: any = [];
@@ -174,6 +175,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
     this.authToken = token;
     return this.authToken;
   }
+
+
 
   isWidthWithinLimit() {
     if (this.width === 100) {

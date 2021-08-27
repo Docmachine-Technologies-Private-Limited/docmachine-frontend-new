@@ -1,15 +1,16 @@
 import { Component, OnInit } from "@angular/core";
-import { DocumentService } from "../../service/document.service";
+import { DocumentService } from "../../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
-import * as data from '../../inward.json';
+import * as data from '../../../inward.json';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-inward-remmitance',
-  templateUrl: './inward-remmitance.component.html',
-  styleUrls: ['./inward-remmitance.component.scss']
+  selector: 'app-export-home',
+  templateUrl: './export-home.component.html',
+  styleUrls: ['./export-home.component.scss']
 })
-export class InwardRemmitanceComponent implements OnInit {
+export class ExportHomeComponent implements OnInit {
   public item1;
   public item2;
   public user;
@@ -30,6 +31,7 @@ export class InwardRemmitanceComponent implements OnInit {
   myRadio: any;
   purposeSelect = false;
   selectPurpose = false
+  public selectedPurpose: any = [];
 
 
   piPoForm = new FormGroup({
@@ -55,10 +57,12 @@ export class InwardRemmitanceComponent implements OnInit {
   selectedRowSb: boolean = false;
   item3: any;
   selectedSb: boolean;
+  proceed: boolean = true;
   constructor(
     public documentService: DocumentService,
     private router: Router,
     private route: ActivatedRoute,
+    private toastr: ToastrService
   ) {
     console.log("hello")
   }
@@ -292,26 +296,17 @@ export class InwardRemmitanceComponent implements OnInit {
     console.log(e)
     console.log(f)
     if (e.startsWith("P0") || e.startsWith("P1")) {
-      if (e == "P0103") {
-        this.purposeSelect = true
-        this.selectPurpose = true
-        this.selectedPipo = true
-      }
-      if (e == "P0102") {
-        this.purposeSelect = true
-        this.selectPurpose = true
-        this.selectedSb = true
-      }
-
-
-
-      this.purposeCode = e
-      this.detail = f
-
+      this.selectedPurpose.push(e)
+      this.toastr.info(`Purpose code added`);
     }
+
     // this.select = true;
     // this.purposeCode = e
     // this.detail = f
+  }
+
+  removeClick(i) {
+    this.selectedPurpose.splice(i, 1)
   }
 
   onChange() {
@@ -320,7 +315,20 @@ export class InwardRemmitanceComponent implements OnInit {
     this.purposeSelect = false
   }
 
+  proceedClick() {
+    console.log("gggg")
+    this.proceed = false
+  }
 
+  onClass(e) {
+    if (e == "P0102" || e == "P0103" || e == "P0104" || e == "P0105" || e == "P0107" || e == "P0801" || e == "P0802" || e == "P0803" || e == "P01P0804" || e == "P0805" || e == "P0806" || e == "P1002" || e == "P1003" || e == "P1004" || e == "P1005" || e == "P1006" || e == "P1007" || e == "P1008" || e == "P1009" || e == "P1011" || e == "P1012" || e == "P1013" || e == "P1019") {
+      return "class1"
+    }
+    else {
+      return "class2"
+    }
+  }
 
 }
+
 

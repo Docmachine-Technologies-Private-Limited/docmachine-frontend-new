@@ -37,7 +37,7 @@ export class SignupComponent implements OnInit {
       this.isDisabled = false;
       return;
     }
-    this.registerForm.value.role = 'ca'
+    this.registerForm.value.role = 'manager'
     console.log(this.registerForm.value)
     this.userService.register(this.registerForm.value)
       .subscribe(
