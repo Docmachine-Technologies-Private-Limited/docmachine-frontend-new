@@ -972,3 +972,20 @@ input {
     border: 1px solid #DEDEDE;
 
 }
+
+.flex-container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.flex-container > div {
+  background-color: #f1f1f1;
+  width: 130px;
+  margin: 10px;
+  text-align: center;
+  font-size: 24px;
+}
+
+.my_class {
+    background-color: #0e8cd4 !important;
+}

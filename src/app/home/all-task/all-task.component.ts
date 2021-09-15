@@ -20,7 +20,7 @@ export class AllTaskComponent implements OnInit {
   public showInvoice;
   public tableWidth;
   public export = false;
-  public import = false;
+  public import = true;
   public lastIndex;
   public showPdf = false;
   public greaterAmount = 0;
@@ -70,6 +70,13 @@ export class AllTaskComponent implements OnInit {
       (res: any) => {
         console.log("HEre Response", res), (this.item1 = res.task);
         console.log(this.item1)
+      },
+      (err) => console.log(err)
+    );
+    this.documentService.getAllExport("hhh").subscribe(
+      (res: any) => {
+        console.log("HEre Response", res), (this.item2 = res.data);
+        console.log(this.item2)
       },
       (err) => console.log(err)
     );
@@ -181,6 +188,22 @@ export class AllTaskComponent implements OnInit {
       }
     }
 
+  }
+
+  viewExportTask(data) {
+    console.log(data)
+    this.router.navigateByUrl(`/home/completedExport/${data._id}`);
+  }
+
+  import1() {
+    this.import = !this.import
+    this.export = !this.export
+  }
+
+  export1() {
+    console.log("inside export")
+    this.import = !this.import
+    this.export = !this.export
   }
 
 

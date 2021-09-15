@@ -58,7 +58,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
 
     if (isPlatformBrowser(this.platformId)) {
       this.config = {
-        url: `https://beta.dm.uipep.com/v1/member/uploadImage`, //`https://beta.dm.uipep.com/v1/member/uploadImage`
+        url: `https://dm.uipep.com/v1/member/uploadImage`, //`https://dm.uipep.com/v1/member/uploadImage`
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,
@@ -81,12 +81,12 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     this.jsondata1 = data1['default'];
     this.dataJson1 = data1['default']
     this.loginForm = this.formBuilder.group({
-      teamName: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9]+$"), (Validators.minLength(3))]],
+      teamName: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9 _]+$"), (Validators.minLength(3))]],
       iec: ['', [Validators.required, Validators.pattern("^[0-9]{10}"), Validators.maxLength(10)]],
       adress: ['', Validators.required],
       phone: ['', Validators.required],
-      caEmail: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-      chaEmail: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+      caEmail: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")]],
+      chaEmail: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")]],
       gst: ['', [Validators.required, Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+){15}$"), Validators.maxLength(15)]],
       bankDetails: new FormArray([this.initCourse()], Validators.required)
     });

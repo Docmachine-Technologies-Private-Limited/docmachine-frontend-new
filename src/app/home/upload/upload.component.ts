@@ -16,6 +16,7 @@ import { timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { NgForm } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { ToastrService } from 'ngx-toastr';
 // import {ToastrService} from 'ngx-toastr';
 import {
   DropzoneDirective,
@@ -100,6 +101,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
     dueDate: new FormControl("", Validators.required),
   });
   pipourl1: any;
+  thirdParty: boolean = false;
+  item3: any;
+  pipoArray: any = [];
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -108,7 +112,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
     private documentService: DocumentService,
     public router: Router,
     private sanitizer: DomSanitizer,
-    private userService: UserService
+    private userService: UserService,
+    private toastr: ToastrService
   ) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -119,7 +124,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     if (isPlatformBrowser(this.platformId)) {
       console.log("asdkhsajvdsug");
       this.config = {
-        url: `https://beta.dm.uipep.com/v1/documents/uploadFile`,
+        url: `https://dm.uipep.com/v1/documents/uploadFile`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,
@@ -134,7 +139,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
           '<div  class="dz-preview dz-file-preview" style="text-align: right; margin-right:3px;">\n <div class="dz-image" style="text-align: right; margin-right:3px;"> <img data-dz-thumbnail /></div>\n <div class="dz-details">\n    <div class="dz-size"><span data-dz-size></span></div>\n    <div class="dz-filename"><span data-dz-name></span></div>\n  </div>\n  <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>\n  <div class="dz-error-message"><span data-dz-errormessage></span></div>\n  <div class="dz-success-mark">\n    <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">\n      <title>Check</title>\n      <defs></defs>\n      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">\n        <path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>\n      </g>\n    </svg>\n  </div>\n  <div class="dz-error-mark">\n    <i style="color: red; text-align: center;font-size: 30px;" class="fa fa-exclamation-circle"></i>\n  </div>\n</div>',
       };
       this.config1 = {
-        url: `https://beta.dm.uipep.com/v1/member/uploadImage`,
+        url: `https://dm.uipep.com/v1/member/uploadImage`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,
@@ -196,6 +201,12 @@ export class UploadComponent implements OnInit, AfterViewInit {
     };
 
     console.log("DOCUMENT TYPE", this.documentType);
+    this.documentService.getPipo().subscribe(
+      (res: any) => {
+        console.log("HEre Response", res), (this.item3 = res.data);
+      },
+      (err) => console.log(err)
+    );
   }
 
   public onSubmit(e) {
@@ -228,7 +239,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
             console.log("king123");
             console.log("DATA", data);
             this.message = "";
-            this.router.navigate(["home/dashboard"]);
+            this.router.navigate(["home/dashboardNew"]);
             //this.router.navigate(['/login'], { queryParams: { registered: true }});
           },
           (error) => {
@@ -240,7 +251,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
         (data) => {
           console.log("king123");
           console.log(data);
-          this.router.navigate(["home/dashboard"]);
+          this.router.navigate(["home/dashboardNew"]);
           //this.router.navigate(['/login'], { queryParams: { registered: true }});
         },
         (error) => {
@@ -252,6 +263,18 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
   public submitType() {
     console.log("This is the document type", this.documentType);
+  }
+
+  changeCheckbox(value) {
+    let j = this.pipoArray.indexOf(value)
+    if (j == -1) {
+      this.pipoArray.push(value)
+    }
+    else {
+      this.pipoArray.splice(j, 1)
+    }
+
+    console.log(this.pipoArray)
   }
 
   public onSubmitBoe(e) {
@@ -270,7 +293,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
             console.log("king123");
             console.log(data);
             this.message = "";
-            this.router.navigate(["home/dashboard"]);
+            this.router.navigate(["home/dashboardNew"]);
             //this.router.navigate(['/login'], { queryParams: { registered: true }});
           },
           (error) => {
@@ -284,7 +307,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
         (data) => {
           console.log("king123");
           console.log(data);
-          this.router.navigate(["home/dashboard"]);
+          this.router.navigate(["home/dashboardNew"]);
           //this.router.navigate(['/login'], { queryParams: { registered: true }});
         },
         (error) => {
@@ -301,7 +324,19 @@ export class UploadComponent implements OnInit, AfterViewInit {
     this.documentService.addPipo(this.piPoForm.value).subscribe(
       (res) => {
         console.log("Pipo Added Successfully");
-        this.router.navigateByUrl("/home/dashboard");
+        this.router.navigateByUrl("/home/dashboardNew");
+      },
+      (err) => console.log("Error adding pipo")
+    );
+  }
+  onSubmitThird(e) {
+    e.form.value.pipo = this.pipoArray;
+    e.form.value.doc = this.pipourl1
+    this.documentService.addThird(e.form.value).subscribe(
+      (res) => {
+        this.toastr.success(`Third party Document Added Successfully`);
+        console.log("Third party Document Added Successfully");
+        this.router.navigateByUrl("/home/dashboardNew");
       },
       (err) => console.log("Error adding pipo")
     );
@@ -346,7 +381,13 @@ export class UploadComponent implements OnInit, AfterViewInit {
         console.log(this.res);
       } else {
         // this.res = new BoeBill(args[1].data);
-        this.pIpO = true;
+        if (this.documentType === 'PI/PO') {
+          this.pIpO = true;
+        }
+        else if (this.documentType === 'thirdParty') {
+          this.thirdParty = true;
+        }
+
         console.log(this.res);
       }
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(

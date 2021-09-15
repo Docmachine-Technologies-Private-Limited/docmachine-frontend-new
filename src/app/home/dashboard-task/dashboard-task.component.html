@@ -1,8 +1,8 @@
 <div class="content-wrap">
 
     <main id="content" class="content table-padding" role="main">
-        <div>
-            <div class="div1" style="float: left; width: 50%;">
+        <div style="display: flex; align-items: center;">
+            <div class="div1" style="flex-direction:row; width: 50%;">
                 <p class="heading" style="float: left;">OutStanding BOE</p>
                 <p class="icon" style="float: right;"></p>
                 <table class="table " style="width: 95%;">
@@ -47,7 +47,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="div2" style="float: left;">
+            <div class="div2" style="flex-direction:row;">
                 <p class="heading" style="margin-left: 20px;">Report</p>
                 <div>
                     <div style="float: left; margin-left: 20px;">
@@ -68,12 +68,9 @@
                     </div>
                 </div>
             </div>
-            <div>
-
-            </div>
         </div>
-        <div>
-            <div class="div1" style="float: left; width: 50%; margin-right: 500px; margin-top: 40px;">
+        <div style="display: flex; align-items: center;">
+            <div class="div1" style="flex-direction:row; width: 50%; margin-top: 40px;">
                 <p class="heading" style="float: left;">OutStanding SB</p>
                 <p class="icon" style="float: right;"></p>
                 <table class="table " style="width: 95%;">
@@ -119,8 +116,8 @@
                 </table>
             </div>
         </div>
-        <div style="margin-top: 40px;">
-            <div class="div1" style="float: left; width: 42%; margin-top: 40px;">
+        <div style="margin-top: 40px; display: flex; align-items: center;">
+            <div class="div1" style="flex-direction:row; width: 42%; margin-top: 40px;">
                 <p class="heading" style="float: left;">Complaince: Bill of entry pending for payment >180 days</p>
                 <p class="icon" style="float: right;"></p>
                 <table class="table " style="width: 95%;">
@@ -160,7 +157,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="div1" style="float: left; width: 42%; margin-top: 40px;">
+            <div class="div1" style="flex-direction:row; width: 42%; margin-top: 40px;">
                 <p class="heading" style="float: left;">Shipping Bills above 21 days to be submitted to AD
                 </p>
                 <p class="icon" style="float: right;"></p>
@@ -203,31 +200,46 @@
             </div>
         </div>
         <div>
-            <div style="width: 588px;">
-                <div style="float: left; margin-top: -37px; margin-bottom:5px; margin-left: 20px;">
+            <div style="width: 600px;  display: flex; align-items: center; margin-top: 30px;">
+                <div style="flex-direction:row; margin-bottom:5px; margin-left: 20px; width: 50%;">
                     <span class="task">8 task completed out of 10</span>
                 </div>
-                <div style="float: right; margin-top: -37px; margin-bottom: 5px; margin-left: 20px;">
+                <div style="flex-direction:row; margin-bottom: 5px; width: 50%; text-align: right;">
                     Show: <span class="task1">This week</span>
                 </div>
             </div>
-            <div class="container1" style="margin: 82% 0px 0px 20px; ">
+            <div class="container1" style="margin-left: 20px;">
                 <div class="skill1 html1">80%</div>
             </div>
         </div>
         <div style="margin: 20px;">
             <p>23 December, Sunday - 30 December, Sunday</p>
         </div>
-        <div class="smalldiv" style="width: 588px;">
-            <p class="cl1">Send BOE for Nikhil by Sunday <span style="text-align: right; margin-left: 280px;"
-                    class="cl2">Reminder</span></p>
-            <p class="cl3">Due date: <span style="text-align: right; margin-left: 30px;" class="cl4">December 20,
-                    2018</span></p>
-            <img src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="35px" width="35px"
-                style="border-radius: 50%; margin-bottom: 10px;"> <span class="cl5">Nicci Troiani</span> <span
-                style="margin-left: 357px;"><button class="completed">Completed</button></span>
+        <div *ngFor='let item of item1;let i = index'>
+            <div class="smalldiv" style="width: 588px;">
+
+                <p class="cl3">Date: <span style="text-align: right; margin-left: 10px;"
+                        class="cl4">{{item.date}}</span></p>
+                <p class="cl3" *ngIf='item.task[0].sbNumbers'>SB Numbers: <span
+                        style="text-align: right; margin-left: 10px;" class="cl4"
+                        *ngFor='let sb of item.task[0].sbNumbers; let j = index'>{{sb }}</span></p>
+                <p class="cl3" *ngIf='item.task[0].tryNumbers'>Tri Numbers: <span
+                        style="text-align: right; margin-left: 10px;" class="cl4"
+                        *ngFor='let sb of item.task[0].tryNumbers; let j = index'>{{sb}}</span></p>
+                Enter the BankRef Number to complete the Task<br>
+                <form (ngSubmit)="onSubmit($event, item)" style="margin-bottom: 10px;">
+                    <input style="border-radius: 14px;outline: none;border: 1px solid #9d9494;" name="player" value="">
+                    <button class="completed" style="margin-left: 10px;">Submit</button>
+                </form>
+
+
+                <img src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="35px" width="35px"
+                    style="border-radius: 50%; margin-bottom: 10px;"> <span class="cl5">Nicci Troiani</span>
+
+            </div>
         </div>
-        <div class="smalldiv" style="width: 588px;">
+
+        <!-- <div class="smalldiv" style="width: 588px;">
             <p class="cl1">Send BOE for Nikhil by Sunday <span style="text-align: right; margin-left: 280px;"
                     class="cl2">Reminder</span></p>
             <p class="cl3">Due date: <span style="text-align: right; margin-left: 30px;" class="cl4">December 20,
@@ -244,7 +256,7 @@
             <img src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="35px" width="35px"
                 style="border-radius: 50%; margin-bottom: 10px;"> <span class="cl5">Nicci Troiani</span> <span
                 style="margin-left: 357px;"><button class="completed">Completed</button></span>
-        </div>
+        </div> -->
 
     </main>
 </div>

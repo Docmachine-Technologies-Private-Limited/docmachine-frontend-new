@@ -40,7 +40,7 @@ export class AddMemberComponent implements OnInit, AfterViewInit {
 
     if (isPlatformBrowser(this.platformId)) {
       this.config = {
-        url: `https://beta.dm.uipep.com/v1/member/uploadImage`,
+        url: `https://dm.uipep.com/v1/member/uploadImage`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,

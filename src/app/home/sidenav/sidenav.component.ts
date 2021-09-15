@@ -26,6 +26,7 @@ export class SidenavComponent implements OnInit {
   role: any;
   id: any;
   name: any;
+  ct: boolean;
 
   constructor(
     public router: Router,
@@ -105,6 +106,10 @@ export class SidenavComponent implements OnInit {
 
   public lcIsurence() {
     this.lcI = !this.lcI
+  }
+
+  onCompletedTask() {
+    this.ct = !this.ct
   }
 
   lcSight() {

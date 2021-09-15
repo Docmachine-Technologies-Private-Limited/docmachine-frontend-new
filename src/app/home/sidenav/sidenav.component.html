@@ -67,7 +67,7 @@
       <ul *ngIf="role != 'ca'" class="sidebar-nav">
         <li class="">
           <!-- an example of nested submenu. basic bootstrap collapse component -->
-          <a (click)="hideIncoice()" [routerLink]="['/home/dashboardNew']" class="sidebar-content">
+          <a (click)="hideIncoice()" [routerLink]="['/home/dashboardTask']" class="sidebar-content">
             <span class="icon side-icon">
               <img src="./assets/layout-dashboard.png" />
             </span>
@@ -113,8 +113,8 @@
               <a style="cursor: pointer" (click)="export()"> Exports </a>
               <div class="main2" *ngIf="exp">
                 <a style="cursor: pointer" [routerLink]="['/home/exportHome']">Inward Remittance Disposal</a>
-                <a style="cursor: pointer" [routerLink]="['/home/inwardRemmitance']">Bill Lodgement</a>
-
+                <a style="cursor: pointer" [routerLink]="['/home/billLodgement']">Bill Lodgement</a>
+                <a style="cursor: pointer" [routerLink]="['/home/packingCreditRequest']">Packing Credit Request</a>
               </div>
               <a style="cursor: pointer" [routerLink]="['/home/inwardRemmitance']">
                 Inward Remittance
@@ -159,9 +159,10 @@
                 <a style="cursor: pointer">Net Off/Set Off</a>
               </div>
             </div>
-            <a style="cursor: pointer" (click)="newTask()" [routerLink]="['/home/tasks/completed']">
+            <a style="cursor: pointer" [routerLink]="['/home/tasks/completed']">
               Completed Task
             </a>
+
             <a style="cursor: pointer" (click)="newTask()" [routerLink]="['/home/tasks/pending']"> Draft </a>
           </div>
         </li>
