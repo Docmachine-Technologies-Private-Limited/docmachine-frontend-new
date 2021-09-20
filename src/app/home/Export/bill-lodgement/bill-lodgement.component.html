@@ -39,9 +39,13 @@
 
         <div class="analytics" style="margin-left: 50px;">
 
-
-
             <div>
+                <div style="margin: 10px;">
+                    <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
+                        style="width: 20px; height: 20px;"><span style="margin-left: 10px;"
+                        [routerLink]="['/home/dashboardTask']">Back</span>
+                </div>
+
                 <!-- P0102 -->
 
                 <div *ngIf='!isGenerate'>
@@ -81,6 +85,12 @@
                                     style="margin-left: 10px;">No</span>
                             </div>
                         </div>
+                        <div style="margin: 10px 12px;" *ngIf='Question7 === "yes"'>
+                            <!-- //If Yes -->
+                            Enter LC Number <br>
+                            <input type="text" (keyup)="change1($event)">
+                        </div>
+
                         <div class="form-group">
                             <div class="form-group col-md-12">
                                 <label>With Scrutiny?</label>
@@ -629,7 +639,7 @@
                                     <p style="margin-bottom: 0px;">
                                         GSTIN Registration no.
                                     </p>
-                                    <div>
+                                    <div *ngIf='arr.length == 15'>
                                         <span
                                             style="outline: none;display: inline-block;width: 20px; border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
                                             contenteditable="true">{{arr[0]}}</span><span

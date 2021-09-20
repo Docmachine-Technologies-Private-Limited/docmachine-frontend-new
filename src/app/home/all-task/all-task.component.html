@@ -74,7 +74,23 @@
                                     </thead>
                                     <tbody *ngFor="let data of item2; let i = index" class="text-dark">
 
-                                        <tr class="table-row" (click)='viewExportTask(data)'>
+                                        <tr class="table-row" *ngIf='data.completed == "yes" && completed'
+                                            (click)='viewExportTask(data)'>
+                                            <th class="rect">
+                                                <img src="./assets/Rectangle-13.png" />
+                                            </th>
+                                            <th class="pl-4 fw-normal">{{data.date}}</th>
+                                            <td class="sb-no">{{data.task.length }}</td>
+                                            <td>
+                                                {{data.fileType}}
+                                            </td>
+                                            <td>Yes Bank</td>
+                                            <td>
+                                                {{data.completed}}
+                                            </td>
+                                        </tr>
+                                        <tr class="table-row" *ngIf='data.completed == "no" && pending'
+                                            (click)='viewExportPendingTask(data)'>
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>

@@ -163,7 +163,7 @@
               Completed Task
             </a>
 
-            <a style="cursor: pointer" (click)="newTask()" [routerLink]="['/home/tasks/pending']"> Draft </a>
+            <a style="cursor: pointer" [routerLink]="['/home/tasks/pending']"> Draft </a>
           </div>
         </li>
         <li class="">
@@ -372,7 +372,9 @@
       </div>
     </div>
   </nav>
-  <router-outlet></router-outlet>
+  <router-outlet>
+    <app-confirm-dialog></app-confirm-dialog>
+  </router-outlet>
   <!-- <div class="content-wrap">
            
             <main id="content" class="content" role="main">

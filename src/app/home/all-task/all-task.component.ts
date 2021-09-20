@@ -66,13 +66,6 @@ export class AllTaskComponent implements OnInit {
       }
 
     });
-    this.documentService.getAllTask("hhh").subscribe(
-      (res: any) => {
-        console.log("HEre Response", res), (this.item1 = res.task);
-        console.log(this.item1)
-      },
-      (err) => console.log(err)
-    );
     this.documentService.getAllExport("hhh").subscribe(
       (res: any) => {
         console.log("HEre Response", res), (this.item2 = res.data);
@@ -80,6 +73,14 @@ export class AllTaskComponent implements OnInit {
       },
       (err) => console.log(err)
     );
+    this.documentService.getAllTask("hhh").subscribe(
+      (res: any) => {
+        console.log("HEre Response", res), (this.item1 = res.task);
+        console.log(this.item1)
+      },
+      (err) => console.log(err)
+    );
+
   }
 
 
@@ -193,6 +194,21 @@ export class AllTaskComponent implements OnInit {
   viewExportTask(data) {
     console.log(data)
     this.router.navigateByUrl(`/home/completedExport/${data._id}`);
+  }
+
+  viewExportPendingTask(data) {
+    this.documentService.draft = true
+    this.documentService.task = data
+    if (data.fileType == 'BL') {
+      this.router.navigateByUrl(`/home/billLodgement`);
+    }
+    else if (data.fileType == 'PCR') {
+      this.router.navigateByUrl(`/home/packingCreditRequest`);
+    }
+    else if (data.fileType == 'IRD') {
+      this.router.navigateByUrl(`/home/exportHome`);
+    }
+
   }
 
   import1() {

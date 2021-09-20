@@ -37,6 +37,11 @@
         </div>
 
         <div class="analytics" *ngIf="proceed">
+            <div style="margin: 20px 50px;">
+                <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
+                    style="width: 20px; height: 20px;"><span style="margin-left: 10px;"
+                    [routerLink]="['/home/dashboardTask']">Back</span>
+            </div>
             <div *ngIf="!selectPurpose" style="margin: 20px 50px;">
                 <p class="stp3">Select a Purpose code*</p>
 

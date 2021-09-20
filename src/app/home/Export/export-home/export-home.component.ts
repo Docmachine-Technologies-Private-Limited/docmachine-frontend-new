@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { DocumentService } from "../../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
@@ -6,13 +6,14 @@ import * as data from '../../../inward.json';
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "../../../service/user.service";
+import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
 
 @Component({
   selector: 'app-export-home',
   templateUrl: './export-home.component.html',
   styleUrls: ['./export-home.component.scss']
 })
-export class ExportHomeComponent implements OnInit {
+export class ExportHomeComponent implements OnInit, OnDestroy {
   public item1;
   public item2;
   public user;
@@ -107,13 +108,19 @@ export class ExportHomeComponent implements OnInit {
   isDone: boolean;
   arr: any;
   item5: any;
+  isDoneAll: any;
+  draftPipo: any = [];
+  ir: string = 'no';
+  draftSb: any = [];
+  drafttry: any = [];
   constructor(
     public documentService: DocumentService,
     private router: Router,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private confirmDialogService: ConfirmDialogService
   ) {
     console.log("hello")
   }
@@ -167,6 +174,220 @@ export class ExportHomeComponent implements OnInit {
         error => {
           console.log("error")
         });
+
+    if (this.documentService.draft) {
+      console.log('inside')
+      this.proceed = false
+      this.c = this.documentService.task.task[0].purposeCode;
+      let newArray = [];
+      let i = 0;
+      for (let value of this.documentService.task.task) {
+
+        newArray.push(value.purposeCode)
+
+        if (value.purposeCode != "P0102" && value.purposeCode != "P0104" && value.purposeCode != "P0105" && value.purposeCode != "P0107") {
+          //*ngIf='c != "P0102" && c != "P0104" && c != "P0105" && c != "P0107"'
+          console.log('jdhdhjdhj')
+          if (value.pipoUrls && !value.generateDoc1) {
+            this.zToggle[i] = false
+            this.generatePurpose[i] = value.purposeCode;
+            let gene = []
+            for (let value1 of value.pipoUrls) {
+              gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
+                value1.changingThisBreaksApplicationSecurity
+              ))
+            }
+            this.draftPipo[i] = value.pipoNumbers
+            this.mainDoc[i] = gene
+
+          }
+          else if (value.pipoUrls && value.generateDoc1) {
+            this.zToggle[i] = true
+            this.generatePurpose[i] = value.purposeCode;
+            this.donePurpose[i] = value.purposeCode;
+            let gene = []
+            for (let value1 of value.pipoUrls) {
+              gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
+                value1.changingThisBreaksApplicationSecurity
+              ))
+            }
+            this.mainDoc[i] = gene
+
+            if (value.generateDoc1) {
+              console.log('hshshsh')
+              this.data7[i] = this.sanitizer.bypassSecurityTrustResourceUrl(
+                value.generateDoc1.changingThisBreaksApplicationSecurity
+              )
+            }
+          }
+        }
+
+        else if (value.purposeCode == "P0102" || value.purposeCode == "P0104" || value.purposeCode == "P0105" || value.purposeCode == "P0107") {
+          //*ngIf='c != "P0102" && c != "P0104" && c != "P0105" && c != "P0107"'
+          console.log('hhhhh')
+          if (value.lodgeDone == 'no') {
+            if (!value.generateDoc1) {
+              if (value.ir == 'yes') {
+                this.sbPurpose1[i] = value.purposeCode;
+              }
+              this.zToggle[i] = false
+              this.sbPurpose[i] = value.purposeCode;
+              if (value.sbUrls) {
+                let gene = []
+                for (let value1 of value.sbUrls) {
+                  gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
+                    value1.changingThisBreaksApplicationSecurity
+                  ))
+                }
+                this.draftSb[i] = value.sbNumbers
+                this.mainDoc1[i] = gene
+              }
+
+              if (value.tryUrls) {
+                let gene1 = []
+                for (let value1 of value.tryUrls) {
+                  gene1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
+                    value1.changingThisBreaksApplicationSecurity
+                  ))
+                }
+                this.drafttry[i] = value.tryNumbers
+                this.mainDoc3[i] = gene1
+              }
+            }
+            else if (value.generateDoc1) {
+              this.sbPurpose[i] = value.purposeCode;
+              this.doneSbPurpose[i] = value.purposeCode;
+              console.log('ggggg')
+              this.zToggle[i] = true
+
+              if (value.sbUrls) {
+                let gene = []
+                for (let value1 of value.sbUrls) {
+                  gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
+                    value1.changingThisBreaksApplicationSecurity
+                  ))
+                }
+                this.draftSb[i] = value.sbNumbers
+                this.mainDoc1[i] = gene
+              }
+
+              if (value.tryUrls) {
+                let gene1 = []
+                for (let value1 of value.tryUrls) {
+                  gene1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
+                    value1.changingThisBreaksApplicationSecurity
+                  ))
+                }
+                this.drafttry[i] = value.tryNumbers
+                this.mainDoc3[i] = gene1
+
+                if (value.generateDoc1) {
+                  console.log('hshshsh')
+                  this.data8[i] = this.sanitizer.bypassSecurityTrustResourceUrl(
+                    value.generateDoc1.changingThisBreaksApplicationSecurity
+                  )
+                }
+                if (value.ir == 'yes') {
+                  if (value.generateDoc2) {
+                    console.log('hshshsh')
+                    this.dataImport[i] = this.sanitizer.bypassSecurityTrustResourceUrl(
+                      value.generateDoc1.changingThisBreaksApplicationSecurity
+                    )
+                  }
+
+                  this.sbPurposeDone1[i] = value.purposeCode
+                }
+
+              }
+            }
+          }
+          if (value.lodgeDone == 'yes') {
+            if (!value.generateDoc1) {
+              if (value.ir == 'yes') {
+                this.sbPurpose1[i] = value.purposeCode;
+              }
+              this.zToggle[i] = false
+              this.sbPurpose[i] = value.purposeCode;
+              if (value.sbUrls) {
+                let gene = []
+                for (let value1 of value.sbUrls) {
+                  gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
+                    value1.changingThisBreaksApplicationSecurity
+                  ))
+                }
+                this.draftSb[i] = value.sbNumbers
+                this.mainDoc1[i] = gene
+              }
+
+              if (value.tryUrls) {
+                let gene1 = []
+                for (let value1 of value.tryUrls) {
+                  gene1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
+                    value1.changingThisBreaksApplicationSecurity
+                  ))
+                }
+                this.drafttry[i] = value.tryNumbers
+                this.mainDoc3[i] = gene1
+              }
+            }
+            else if (value.generateDoc1) {
+              this.sbPurpose[i] = value.purposeCode;
+              this.doneSbPurpose[i] = value.purposeCode;
+              console.log('ggggg')
+              this.zToggle[i] = true
+
+              if (value.sbUrls) {
+                let gene = []
+                for (let value1 of value.sbUrls) {
+                  gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
+                    value1.changingThisBreaksApplicationSecurity
+                  ))
+                }
+                this.draftSb[i] = value.sbNumbers
+                this.mainDoc1[i] = gene
+              }
+
+              if (value.tryUrls) {
+                let gene1 = []
+                for (let value1 of value.tryUrls) {
+                  gene1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
+                    value1.changingThisBreaksApplicationSecurity
+                  ))
+                }
+                this.drafttry[i] = value.tryNumbers
+                this.mainDoc3[i] = gene1
+
+                if (value.generateDoc1) {
+                  console.log('hshshsh')
+                  this.data8[i] = this.sanitizer.bypassSecurityTrustResourceUrl(
+                    value.generateDoc1.changingThisBreaksApplicationSecurity
+                  )
+                }
+                if (value.ir == 'yes') {
+                  if (value.generateDoc2) {
+                    console.log('hshshsh')
+                    this.dataImport[i] = this.sanitizer.bypassSecurityTrustResourceUrl(
+                      value.generateDoc1.changingThisBreaksApplicationSecurity
+                    )
+                  }
+
+                  this.sbPurposeDone1[i] = value.purposeCode
+                }
+
+              }
+            }
+          }
+
+        }
+
+        i++
+      }
+      this.selectedPurpose = newArray
+
+    }
+    else {
+      this.Question5 = '';
+    }
   }
 
   changeCheckbox(value) {
@@ -276,92 +497,6 @@ export class ExportHomeComponent implements OnInit {
 
 
 
-  onExport() {
-    this.export = !this.export;
-  }
-
-  onImport() {
-    this.import = !this.import;
-  }
-  exBill() {
-    this.Ax1 = !this.Ax1;
-  }
-  withBill() {
-    this.Ax2 = !this.Ax2;
-  }
-
-  onNewTrans() {
-    this.step1 = !this.step1;
-  }
-
-  toggleStep1() {
-    this.step1 = false;
-    this.showPdf = false;
-  }
-
-
-
-  viewTask(data) {
-    console.log(data)
-    if (!data.completed) {
-      console.log(data.bank)
-      this.documentService.task = data
-      this.documentService.draft = true;
-      //data.pipoDetail["_id"] = data._id;
-      this.documentService.pdfData = data.pipoDetail;
-
-      // if (this.purposeCode == 'P0103') {
-      //   if (this.myRadio == 'axisBank') {
-      //     this.router.navigate(['home/inwardRemmitancep0103', { sbno: data.pi_poNo, file: data.file, detail: this.detail }]);
-      //   }
-      //   else if (this.myRadio == 'yesBank') {
-      //     this.router.navigate(['home/inwardRemmitancep0103', { sbno: data.pi_poNo, file: data.file, detail: this.detail }]);
-      //   }
-
-      // }
-      // if (this.purposeCode == 'P0103') {
-      //   if (this.myRadio == 'axisBank') {
-      //     this.router.navigate(['home/requestLetter', { sbno: data.sbno, file: data.file, detail: this.detail }]);
-      //   }
-      //   else if (this.myRadio == 'yesBank') {
-      //     this.router.navigate(['home/requestLetter', { sbno: data.sbno, file: data.file, detail: this.detail }]);
-      //   }
-
-      // }
-
-
-
-
-    } else {
-      this.router.navigateByUrl(`/home/completedTask/${data._id}`);
-    }
-
-  }
-
-  showThisPdf(sbno) {
-    this.documentService.task = ''
-    this.documentService.draft = false;
-    console.log("hello1")
-    // if (this.purposeCode == "P0102") {
-    //   if (this.myRadio == 'axisBank') {
-    //     this.router.navigate(['home/requestLetter', { sbno: sbno, file: this.purposeCode, detail: this.detail }]);
-    //   }
-    //   else if (this.myRadio == 'yesBank') {
-    //     this.router.navigate(['home/requestLetter', { sbno: sbno, file: this.purposeCode, detail: this.detail }]);
-    //   }
-    // }
-    // else if (this.purposeCode == "P0103") {
-    //   if (this.myRadio == 'axisBank') {
-    //     this.router.navigate(['home/inwardRemmitancep0103', { sbno: sbno, file: this.purposeCode, detail: this.detail }]);
-    //   }
-    //   else if (this.myRadio == 'yesBank') {
-    //     this.router.navigate(['home/inwardRemmitancep0103', { sbno: sbno, file: this.purposeCode, detail: this.detail }]);
-    //   }
-    // }
-
-
-
-  }
   generateDoc(code, j) {
     this.generate = true
     this.generatePurpose[j] = code;
@@ -377,6 +512,12 @@ export class ExportHomeComponent implements OnInit {
       }
     }
     this.mainDoc[j] = generateDoc1
+
+    this.newTask[j] = {
+      pipoNumbers: this.pipoArray,
+      pipoUrls: this.mainDoc[j],
+      purposeCode: code
+    }
     console.log(this.doc)
     console.log(this.generate1)
     console.log(this.c)
@@ -386,8 +527,10 @@ export class ExportHomeComponent implements OnInit {
     console.log(code, j)
     this.generate = true
     this.sbPurpose[j] = code;
+    this.ir = this.Question5
     if (this.Question5 == 'yes') {
       console.log("shdhshs")
+
       this.sbPurpose1[j] = code;
     }
     let generateDoc2: any = [];
@@ -416,6 +559,29 @@ export class ExportHomeComponent implements OnInit {
       this.mainDoc3[j] = generateDoc3
     }
 
+    if (this.Question2 == 'yes') {
+      this.newTask[j] = {
+        sbNumbers: this.sbArray,
+        sbUrls: this.mainDoc1[j],
+        tryNumbers: this.tryArray,
+        tryUrls: this.mainDoc3[j],
+        purposeCode: code,
+        lodgeDone: 'no',
+        ir: this.ir
+      }
+    }
+    else if (this.Question2 == 'no') {
+      this.newTask[j] = {
+        sbNumbers: this.sbArray,
+        sbUrls: this.mainDoc1[j],
+        purposeCode: code,
+        lodgeDone: 'no',
+        ir: this.ir
+      }
+    }
+
+
+
     console.log(this.mainDoc1[j])
     console.log(this.generate1)
     console.log(this.c)
@@ -423,7 +589,8 @@ export class ExportHomeComponent implements OnInit {
 
   generateDoc2(code, j) {
     console.log(code, j)
-    this.generate = true
+    this.generate = true;
+    this.ir = this.Question4
     if (this.Question4 == 'yes') {
       this.importPurpose[j] = code;
     }
@@ -444,15 +611,27 @@ export class ExportHomeComponent implements OnInit {
       }
     }
 
-    console.log(this.importPurpose[j])
-    console.log(this.sbPurpose[j])
     this.mainDoc2[j] = generateDoc2
-    console.log(this.mainDoc2[j])
-    console.log(this.generate1)
-    console.log(this.c)
+
+    this.newTask[j] = {
+      tryNumbers: this.tryArray,
+      tryUrls: this.mainDoc2[j],
+      purposeCode: code,
+      lodgeDone: 'yes',
+      ir: this.ir,
+      br: 'yes'
+    }
+
+
+
   }
 
   exportAsPDF(code, i) {
+    if (this.documentService.draft == true) {
+      if (this.documentService.task.task[i].pipoUrls) {
+        this.pipoArray = this.documentService.task.task[i].pipoNumbers
+      }
+    }
     this.donePurpose[i] = code;
     const height =
       Math.round($("#mainId").outerHeight() * 0.0104166667 * 10) / 10;
@@ -510,19 +689,41 @@ export class ExportHomeComponent implements OnInit {
 
   doneDox() {
 
-    console.log(this.newTask)
-    this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'IRD' }).subscribe(
-      (res) => {
-        this.toastr.success('Task saved successfully!');
-        console.log("Transaction Saved");
-        this.router.navigate(["/home/dashboardNew"]);
+    if (this.documentService.draft) {
+      this.documentService.updateExportTask({ task: this.newTask, completed: 'yes', fileType: 'IRD' }, this.documentService.task._id).subscribe(
+        (data) => {
+          console.log("king123");
+          console.log(data);
+          this.documentService.draft = false
+          this.documentService.task.id = ''
+          this.isDoneAll = true
+          this.toastr.success('Task saved as completed successfully!');
+          this.router.navigate(["/home/dashboardTask"]);
+          //this.router.navigate(['/login'], { queryParams: { registered: true }});
+        },
+        (error) => {
+          console.log("error");
+        }
+      );
+    }
+    else {
+      console.log(this.newTask)
+      this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'IRD' }).subscribe(
+        (res) => {
+          this.isDoneAll = true
+          this.toastr.success('Task saved successfully!');
+          console.log("Transaction Saved");
+          this.router.navigate(["/home/dashboardNew"]);
 
-      },
-      (err) => {
-        this.toastr.error('Error!');
-        console.log("Error saving the transaction")
-      }
-    );
+        },
+        (err) => {
+          this.toastr.error('Error!');
+          console.log("Error saving the transaction")
+        }
+      );
+    }
+
+
   }
 
   exportAsPDF1(code, i) {
@@ -599,16 +800,35 @@ export class ExportHomeComponent implements OnInit {
                   this.done = true;
 
                   //this.downloadPDF(data);
+                  if (this.Question2 == 'yes') {
+                    this.newTask[i] = {
+                      sbNumbers: this.sbArray,
+                      sbUrls: this.mainDoc1[i],
+                      tryNumbers: this.tryArray,
+                      tryUrls: this.mainDoc3[i],
+                      purposeCode: code,
+                      generateDoc1: this.data8[i],
+                      generateDoc2: this.dataImport[i],
+                      lodgeDone: 'no',
+                      ir: 'yes'
+                    }
+                  }
+                  else if (this.Question2 == 'no') {
+                    this.newTask[i] = {
+                      sbNumbers: this.sbArray,
+                      sbUrls: this.mainDoc1[i],
+                      tryNumbers: this.tryArray,
+                      tryUrls: this.mainDoc3[i],
+                      purposeCode: code,
+                      generateDoc1: this.data8[i],
+                      generateDoc2: this.dataImport[i],
+                      lodgeDone: 'no',
+                      ir: 'yes'
+                    }
+                  }
+
                 }
-                this.newTask[i] = {
-                  sbNumbers: this.sbArray,
-                  sbUrls: this.mainDoc1[i],
-                  tryNumbers: this.tryArray,
-                  tryUrls: this.mainDoc3[i],
-                  purposeCode: code,
-                  generateDoc1: this.data8[i],
-                  generateDoc2: this.dataImport[i]
-                }
+
               });
 
             console.log(this.newTask[i])
@@ -621,7 +841,9 @@ export class ExportHomeComponent implements OnInit {
               tryNumbers: this.tryArray,
               tryUrls: this.mainDoc3[i],
               purposeCode: code,
-              generateDoc1: this.data8[i]
+              generateDoc1: this.data8[i],
+              lodgeDone: 'no',
+              ir: 'no'
             }
             console.log(this.newTask[i])
           }
@@ -681,7 +903,10 @@ export class ExportHomeComponent implements OnInit {
             tryNumbers: this.tryArray,
             tryUrls: this.mainDoc2[i],
             purposeCode: code,
-            generateDoc1: this.data9[i]
+            generateDoc1: this.data9[i],
+            lodgeDone: 'yes',
+            ir: 'no',
+            br: 'yes'
           }
           let allTrue = true;
           for (let value of this.zToggle) {
@@ -693,10 +918,12 @@ export class ExportHomeComponent implements OnInit {
         }
       });
   }
+
   change(e) {
     console.log(e.target.value);
     this.bankRef = e.target.value
   }
+
   sendMail(j, code) {
     let val = {
       file: this.bankRef
@@ -708,11 +935,13 @@ export class ExportHomeComponent implements OnInit {
         if (this.Question4 == 'no') {
           this.mailArray[j] = code
           this.newTask[j] = {
-
             tryNumbers: this.tryArray,
             tryUrls: this.mainDoc2[j],
             purposeCode: code,
-            bankRef: this.bankRef
+            bankRef: this.bankRef,
+            lodgeDone: 'yes',
+            ir: 'no',
+            br: 'yes'
           }
           this.zToggle[j] = true;
           let allTrue = true;
@@ -727,7 +956,10 @@ export class ExportHomeComponent implements OnInit {
           this.mailArray[j] = code
           this.newTask[j] = {
             purposeCode: code,
-            bankRef: this.bankRef
+            bankRef: this.bankRef,
+            lodgeDone: 'yes',
+            ir: 'no',
+            br: 'no'
           }
           this.zToggle[j] = true;
           let allTrue = true;
@@ -788,6 +1020,7 @@ export class ExportHomeComponent implements OnInit {
     console.log("gggg")
     this.proceed = false
     this.c = this.selectedPurpose[0];
+    let i = 0
     for (let value of this.selectedPurpose) {
       this.generatePurpose.push('')
       this.donePurpose.push('');
@@ -798,6 +1031,10 @@ export class ExportHomeComponent implements OnInit {
       this.doneImportPurpose.push('');
       this.zToggle.push(false)
       this.mailArray.push('')
+      this.newTask[i] = {
+        purposeCode: value
+      }
+      i++
     }
     this.z = this.selectedPurpose.length
   }
@@ -837,6 +1074,49 @@ export class ExportHomeComponent implements OnInit {
   downloadPDF() {
 
   }
+
+  ngOnDestroy() {
+    console.log("Inside draft");
+
+    if (!this.isDoneAll && !this.proceed && !this.documentService.draft) {
+      console.log('hhhhh')
+      this.confirmDialogService.confirmThis('Do you want to save this task?', () => {
+        if (this.isDone) {
+          this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'IRD' }).subscribe(
+            (res) => {
+              this.toastr.success('Saved the transaction as completed');
+              console.log("Transaction Saved");
+              //this.router.navigate(["/home/dashboardNew"]);
+
+            },
+            (err) => {
+              this.toastr.error('Error!');
+              console.log("Error saving the transaction")
+            }
+          );
+        }
+        else {
+          this.documentService.addExportTask({ task: this.newTask, completed: 'no', fileType: 'IRD' }).subscribe(
+            (res) => {
+              this.toastr.success('Saved the transaction in draft');
+              console.log("Transaction Saved");
+              //this.router.navigate(["/home/dashboardNew"]);
+
+            },
+            (err) => {
+              this.toastr.error('Error!');
+              console.log("Error saving the transaction")
+            }
+          );
+        }
+
+      }, () => {
+        console.log("no");
+      });
+    }
+
+  }
+
 
 }
 

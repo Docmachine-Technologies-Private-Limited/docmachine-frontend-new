@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { DocumentService } from "../../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
@@ -6,13 +6,14 @@ import * as data from '../../../inward.json';
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "../../../service/user.service";
+import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
 
 @Component({
   selector: 'app-bill-lodgement',
   templateUrl: './bill-lodgement.component.html',
   styleUrls: ['./bill-lodgement.component.scss']
 })
-export class BillLodgementComponent implements OnInit {
+export class BillLodgementComponent implements OnInit, OnDestroy {
   public item1;
   public item2;
   public user;
@@ -30,7 +31,7 @@ export class BillLodgementComponent implements OnInit {
   public Question2 = '';
   public Question3 = '';
   public Question4 = '';
-  public Question5 = '';
+  public Question5 = 'yes';
   public Question6 = '';
   public Question7 = '';
   public Question8 = '';
@@ -96,7 +97,7 @@ export class BillLodgementComponent implements OnInit {
   doneImportPurpose: any = [];
   mainDoc: any = [];
   mainDoc1: any;
-  mainDoc2: any = [];
+  mainDoc2: any;
   mainDoc3: any;
   doc1: boolean;
   data8: any;
@@ -117,14 +118,17 @@ export class BillLodgementComponent implements OnInit {
   withDiscount: any;
   scrutiny: any;
   item5: any;
-  arr: any;
+  arr: any = [];
+  LcNumber: any = '';
+  isDoneAll: boolean;
   constructor(
     public documentService: DocumentService,
     private router: Router,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private confirmDialogService: ConfirmDialogService
   ) {
     console.log("hello")
   }
@@ -135,6 +139,7 @@ export class BillLodgementComponent implements OnInit {
     this.jsondata = data['default'];
     console.log(this.jsondata[0].purpose)
     this.dataJson = this.jsondata
+
 
 
     this.route.params.subscribe(params => {
@@ -172,6 +177,48 @@ export class BillLodgementComponent implements OnInit {
         error => {
           console.log("error")
         });
+
+    if (this.documentService.draft) {
+      this.generate = true
+      this.isGenerate = true;
+      console.log(this.documentService.task)
+      console.log(this.documentService.task.task[0])
+      if (this.documentService.task.task[0].ir == 'yes') {
+        console.log('hhghgghhg')
+        this.Question5 == this.documentService.task.task[0].ir
+      }
+      else if (this.documentService.task.task[0].ir == 'no') {
+        this.Question5 == this.documentService.task.task[0].ir
+      }
+      if (this.documentService.task.task[0].sbUrls) {
+        let k = 0;
+        let gene = []
+
+        for (let value of this.documentService.task.task[0].sbUrls) {
+          let r = value.changingThisBreaksApplicationSecurity
+          gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(r))
+          k++
+        }
+        this.mainDoc1 = gene
+        this.sbArray = this.documentService.task.task[0].sbNumbers
+      }
+      if (this.documentService.task.task[0].tryUrls) {
+        let h = 0;
+        let gene = []
+        for (let value of this.documentService.task.task[0].tryUrls) {
+          gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
+            value.changingThisBreaksApplicationSecurity
+          ))
+          h++
+        }
+        this.mainDoc3 = gene
+        this.tryArray = this.documentService.task.task[0].tryNumbers
+      }
+    }
+    else {
+      this.Question5 = '';
+    }
+
   }
 
   changeCheckbox1(value) {
@@ -214,7 +261,8 @@ export class BillLodgementComponent implements OnInit {
       }
     }
     this.mainDoc1 = generateDoc2
-
+    console.log(this.mainDoc1)
+    console.log(generateDoc2)
     let generateDoc3: any = [];
     if (this.Question2 == 'yes') {
       for (let item of this.item4) {
@@ -226,9 +274,23 @@ export class BillLodgementComponent implements OnInit {
           }
         }
       }
+
       this.mainDoc3 = generateDoc3
     }
-
+    this.newTask[0] = {
+      sbNumbers: this.sbArray,
+      sbUrls: this.mainDoc1,
+      tryNumbers: this.tryArray,
+      tryUrls: this.mainDoc3,
+      purposeCode: '',
+      isLc: this.lc,
+      LcNumber: this.LcNumber,
+      withScrutiny: this.scrutiny,
+      withDiscount: this.withDiscount,
+      bankRef: '',
+      advanceRef: this.advanceRef,
+      ir: this.Question5
+    }
     console.log(this.generate1)
     console.log(this.c)
   }
@@ -242,23 +304,42 @@ export class BillLodgementComponent implements OnInit {
 
   doneDox() {
     console.log(this.newTask)
+    if (this.documentService.draft) {
+      this.documentService.updateExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' }, this.documentService.task._id).subscribe(
+        (data) => {
+          console.log("king123");
+          console.log(data);
+          this.documentService.draft = false
+          this.documentService.task.id = ''
+          this.isDoneAll = true
+          this.router.navigate(["/home/dashboardTask"]);
+          //this.router.navigate(['/login'], { queryParams: { registered: true }});
+        },
+        (error) => {
+          console.log("error");
+        }
+      );
+    }
+    else {
+      this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' }).subscribe(
+        (res) => {
+          this.isDoneAll = true
+          this.toastr.success('Task saved successfully!');
+          console.log("Transaction Saved");
+          this.router.navigate(["/home/dashboardTask"]);
 
-    this.documentService.addExportTask({ task: this.newTask, completed: 'no', fileType: 'BL' }).subscribe(
-      (res) => {
-        this.toastr.success('Task saved successfully!');
-        console.log("Transaction Saved");
-        this.router.navigate(["/home/dashboardNew"]);
+        },
+        (err) => {
+          this.toastr.error('Error!');
+          console.log("Error saving the transaction")
+        }
+      );
+    }
 
-      },
-      (err) => {
-        this.toastr.error('Error!');
-        console.log("Error saving the transaction")
-      }
-    );
+
   }
 
   exportAsPDF1() {
-
     if (this.Question7 == 'yes') {
       this.lc = 'lc'
     }
@@ -370,13 +451,15 @@ export class BillLodgementComponent implements OnInit {
                           tryUrls: this.mainDoc3,
                           purposeCode: '',
                           isLc: this.lc,
+                          LcNumber: this.LcNumber,
                           withScrutiny: this.scrutiny,
                           withDiscount: this.withDiscount,
                           bankRef: '',
                           advanceRef: this.advanceRef,
                           generateDoc1: this.data8,
                           generateDoc2: this.billOfCredit,
-                          generateDoc3: this.dataImport
+                          generateDoc3: this.dataImport,
+                          ir: this.Question5
                         }
                         //this.downloadPDF(data);
                       }
@@ -394,12 +477,14 @@ export class BillLodgementComponent implements OnInit {
                     tryUrls: this.mainDoc3,
                     purposeCode: '',
                     isLc: this.lc,
+                    LcNumber: this.LcNumber,
                     withScrutiny: this.scrutiny,
                     withDiscount: this.withDiscount,
                     advanceRef: this.advanceRef,
                     generateDoc1: this.data8,
                     generateDoc2: this.billOfCredit,
-                    bankRef: ''
+                    bankRef: '',
+                    ir: this.Question5
                   }
                 }
               }
@@ -441,10 +526,64 @@ export class BillLodgementComponent implements OnInit {
     this.advanceRef = e.target.value
   }
 
+  change1(e) {
+    console.log(e.target.value);
+    this.LcNumber = e.target.value
+  }
+
   edit() {
 
   }
+
+  // showDialog(): any {
+  //   console.log('hhhhhh')
+  //   this.confirmDialogService.confirmThis('Are you sure to delete ?', () => {
+  //     alert('Yes clicked');
+  //   }, () => {
+  //     alert('No clicked');
+  //   });
+  // }
   downloadPDF() {
+
+  }
+
+  ngOnDestroy() {
+    console.log("Inside draft");
+    if (!this.isDoneAll && this.generate) {
+      this.confirmDialogService.confirmThis('Do you want to save this task?', () => {
+        if (this.isProceed) {
+          this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' }).subscribe(
+            (res) => {
+              this.toastr.success('Saved the transaction as completed');
+              console.log("Transaction Saved");
+              //this.router.navigate(["/home/dashboardNew"]);
+
+            },
+            (err) => {
+              this.toastr.error('Error!');
+              console.log("Error saving the transaction")
+            }
+          );
+        }
+        else {
+          this.documentService.addExportTask({ task: this.newTask, completed: 'no', fileType: 'BL' }).subscribe(
+            (res) => {
+              this.toastr.success('Saved the transaction in draft');
+              console.log("Transaction Saved");
+              //this.router.navigate(["/home/dashboardNew"]);
+
+            },
+            (err) => {
+              this.toastr.error('Error!');
+              console.log("Error saving the transaction")
+            }
+          );
+        }
+
+      }, () => {
+        console.log("no");
+      });
+    }
 
   }
 

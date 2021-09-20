@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { DocumentService } from "../../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
@@ -6,13 +6,14 @@ import * as data from '../../../inward.json';
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "../../../service/user.service";
+import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
 
 @Component({
   selector: 'app-packing-credit',
   templateUrl: './packing-credit.component.html',
   styleUrls: ['./packing-credit.component.scss']
 })
-export class PackingCreditComponent implements OnInit {
+export class PackingCreditComponent implements OnInit, OnDestroy {
   public item1;
   public item2;
   public user;
@@ -96,7 +97,7 @@ export class PackingCreditComponent implements OnInit {
   doneImportPurpose: any = [];
   mainDoc: any = [];
   mainDoc1: any;
-  mainDoc2: any = [];
+  mainDoc2: any;
   mainDoc3: any;
   doc1: boolean;
   data8: any;
@@ -116,15 +117,17 @@ export class PackingCreditComponent implements OnInit {
   lc: any;
   withDiscount: any;
   scrutiny: any;
-  arr: any;
+  arr: any = [];
   totalAmount: any;
+  isDoneAll: boolean;
   constructor(
     public documentService: DocumentService,
     private router: Router,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private confirmDialogService: ConfirmDialogService
   ) {
     console.log("hello")
   }
@@ -179,6 +182,23 @@ export class PackingCreditComponent implements OnInit {
         error => {
           console.log("error")
         });
+
+    if (this.documentService.task) {
+      this.generate = true
+      this.isGenerate = true;
+      if (this.documentService.task.task[0].pipoUrls) {
+        let k = 0;
+        let gene = []
+
+        for (let value of this.documentService.task.task[0].pipoUrls) {
+          let r = value.changingThisBreaksApplicationSecurity
+          gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(r))
+          k++
+        }
+        this.mainDoc1 = gene
+        this.pipoArray = this.documentService.task.task[0].pipoNumbers
+      }
+    }
   }
 
   changeCheckbox1(value) {
@@ -212,19 +232,22 @@ export class PackingCreditComponent implements OnInit {
 
     let generateDoc2: any = [];
     let amount = 0
-    for (let item of this.item1) {
-      for (let sb of this.pipoArray) {
-        if (item.pi_poNo === sb) {
-          generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(
-            item.doc
-          ))
-          amount = amount + parseInt(item.amount)
+    if (this.Question1 == 'no') {
+      for (let item of this.item1) {
+        for (let sb of this.pipoArray) {
+          if (item.pi_poNo === sb) {
+            generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(
+              item.doc
+            ))
+            amount = amount + parseInt(item.amount)
+          }
         }
       }
+      this.totalAmount = amount
+      console.log(this.totalAmount)
+      this.mainDoc1 = generateDoc2
     }
-    this.totalAmount = amount
-    console.log(this.totalAmount)
-    this.mainDoc1 = generateDoc2
+
     if (this.Question1 == 'no') {
       console.log('hhshshs')
       if (this.Question2 == 'fob') {
@@ -241,6 +264,13 @@ export class PackingCreditComponent implements OnInit {
       this.totalAmount = ''
     }
 
+    this.newTask[0] = {
+      pipoNumbers: this.pipoArray,
+      pipoUrls: this.mainDoc1,
+      purposeCode: '',
+      bankRef: '',
+      amount: this.totalAmount
+    }
     console.log(this.totalAmount)
   }
 
@@ -252,23 +282,42 @@ export class PackingCreditComponent implements OnInit {
 
   doneDox() {
     console.log(this.newTask)
+    if (this.documentService.draft) {
+      this.documentService.updateExportTask({ task: this.newTask, completed: 'yes', fileType: 'PCR' }, this.documentService.task._id).subscribe(
+        (data) => {
+          console.log("king123");
+          console.log(data);
+          this.documentService.draft = false
+          this.documentService.task.id = ''
+          this.isDoneAll = true
+          this.toastr.success('Task saved as completed successfully!');
+          this.router.navigate(["/home/dashboardTask"]);
+          //this.router.navigate(['/login'], { queryParams: { registered: true }});
+        },
+        (error) => {
+          console.log("error");
+        }
+      );
+    }
+    else {
+      this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'PCR' }).subscribe(
+        (res) => {
+          this.isDoneAll = true
+          this.toastr.success('Task saved successfully!');
+          console.log("Transaction Saved");
+          this.router.navigate(["/home/dashboardTask"]);
 
-    this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'PCR' }).subscribe(
-      (res) => {
-        this.toastr.success('Task saved successfully!');
-        console.log("Transaction Saved");
-        this.router.navigate(["/home/dashboardTask"]);
+        },
+        (err) => {
+          this.toastr.error('Error!');
+          console.log("Error saving the transaction")
+        }
+      );
+    }
 
-      },
-      (err) => {
-        this.toastr.error('Error!');
-        console.log("Error saving the transaction")
-      }
-    );
   }
 
   exportAsPDF1() {
-
     if (this.Question7 == 'yes') {
       this.lc = 'lc'
     }
@@ -316,7 +365,8 @@ export class PackingCreditComponent implements OnInit {
             pipoUrls: this.mainDoc1,
             purposeCode: '',
             bankRef: '',
-            generateDoc1: this.data8
+            generateDoc1: this.data8,
+            amount: this.totalAmount
           }
           this.isProceed = true
 
@@ -351,7 +401,46 @@ export class PackingCreditComponent implements OnInit {
 
   }
 
+  ngOnDestroy() {
+    console.log("Inside draft");
 
+    if (!this.isDoneAll && this.generate && !this.documentService.draft) {
+      this.confirmDialogService.confirmThis('Do you want to save this task?', () => {
+        if (this.isProceed) {
+          this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'PCR' }).subscribe(
+            (res) => {
+              this.toastr.success('Saved the transaction as completed');
+              console.log("Transaction Saved");
+              //this.router.navigate(["/home/dashboardNew"]);
+
+            },
+            (err) => {
+              this.toastr.error('Error!');
+              console.log("Error saving the transaction")
+            }
+          );
+        }
+        else {
+          this.documentService.addExportTask({ task: this.newTask, completed: 'no', fileType: 'PCR' }).subscribe(
+            (res) => {
+              this.toastr.success('Saved the transaction as draft');
+              console.log("Transaction Saved");
+              //this.router.navigate(["/home/dashboardNew"]);
+
+            },
+            (err) => {
+              this.toastr.error('Error!');
+              console.log("Error saving the transaction")
+            }
+          );
+        }
+
+      }, () => {
+        console.log("no");
+      });
+    }
+
+  }
 
 
 

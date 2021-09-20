@@ -40,6 +40,7 @@ export class CompletedExportComponent implements OnInit {
   src: any;
   docArray1: any = [];
   docArray2: any = [];
+  docArray3: any = [];
   pipoArray: any = [];
   tryArray: any = [];
   sbArray: any = [];
@@ -77,7 +78,14 @@ export class CompletedExportComponent implements OnInit {
               this.taskArray[i].generateDoc2.changingThisBreaksApplicationSecurity
             )
           }
+          if (item.generateDoc3) {
+            console.log('aaaa')
+            this.docArray3[i] = this.sanitizer.bypassSecurityTrustResourceUrl(
+              this.taskArray[i].generateDoc3.changingThisBreaksApplicationSecurity
+            )
+          }
           if (item.pipoUrls) {
+            console.log('fff')
             let j = 0;
             let gene = []
             for (let value of item.pipoUrls) {

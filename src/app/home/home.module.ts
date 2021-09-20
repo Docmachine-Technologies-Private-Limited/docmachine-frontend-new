@@ -56,6 +56,9 @@ import { ExportHomeComponent } from './Export/export-home/export-home.component'
 import { BillLodgementComponent } from './Export/bill-lodgement/bill-lodgement.component';
 import { CompletedExportComponent } from './Export/completed-export/completed-export.component';
 import { PackingCreditComponent } from './Export/packing-credit/packing-credit.component';
+import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
+
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -118,7 +121,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ExportHomeComponent,
     BillLodgementComponent,
     CompletedExportComponent,
-    PackingCreditComponent
+    PackingCreditComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
@@ -127,6 +131,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DragDropModule,
     MatProgressBarModule,
     MatTabsModule,
+
     // BrowserModule,
 
     // SharedProjectsModule,
@@ -358,9 +363,9 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
       },
     ]),
   ],
-  providers: [],
+  providers: [ConfirmDialogService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //   exports: [SharedProjectsModule]
-  exports: [MatProgressBarModule, MatTabsModule],
+  exports: [MatProgressBarModule, MatTabsModule, ConfirmDialogComponent],
 })
 export class HomeModule { }

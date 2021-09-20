@@ -24,7 +24,7 @@ export class DashboardTaskComponent implements OnInit {
 
         for (let value of this.item) {
 
-          if (!value.task[0].bankRef) {
+          if (!value.task[0].bankRef && value.completed == 'yes') {
             this.item1.push(value)
           }
 
