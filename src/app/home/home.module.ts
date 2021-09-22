@@ -59,6 +59,7 @@ import { PackingCreditComponent } from './Export/packing-credit/packing-credit.c
 import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
 
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { PipoDocumentsComponent } from './pipo-documents/pipo-documents.component';
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -122,7 +123,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     BillLodgementComponent,
     CompletedExportComponent,
     PackingCreditComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    PipoDocumentsComponent
   ],
   imports: [
     CommonModule,
@@ -357,6 +359,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
           {
             path: "packingCreditRequest",
             component: PackingCreditComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "pipoDoc",
+            component: PipoDocumentsComponent,
             pathMatch: "full",
           },
         ],

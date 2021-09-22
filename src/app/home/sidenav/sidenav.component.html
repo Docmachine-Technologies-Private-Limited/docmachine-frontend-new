@@ -74,97 +74,56 @@
             Dashboard
           </a>
         </li>
-        <li style="cursor: pointer" class="" *ngIf="!mt" (click)="manageTask()">
+        <li style="cursor: pointer" class="" (click)="manageTask()">
           <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a class="sidebar-content" style="cursor: pointer;">
             <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
             </span>
-            Manage Tasks
+            Import
             <span style="
-                  margin-left: 7%;
+                  margin-left: 55%;
                   position: absolute;
                   transform: translate(0, 3px);
-                "><i style="font-size: 20px" *ngIf="!mt" class="fas fa-angle-down"></i>
+                "><i style="font-size: 18px" *ngIf="!mt" class="fas fa-angle-right"></i><i style="font-size: 18px"
+                *ngIf="mt" class="fas fa-angle-down"></i>
             </span>
           </a>
         </li>
         <li class="manage-li" *ngIf="mt">
           <!-- an example of nested submenu. basic bootstrap collapse component -->
-          <a style="cursor: pointer" class="manage-content" (click)="manageTask()">
+
+          <div class="main11" style=" color: #fff;">
+            <div style="cursor: pointer; height: 30px; padding-top: 5px;" (click)="newTask()"
+              [ngClass]="status ? 'b-color' : 'nothing'">
+              <span style="margin-left: 50px; font-size: 14px; ">PI/PO <i style="font-size: 14px; margin-left: 48%;"
+                  *ngIf="status" class="fas fa-plus-circle"></i></span>
+            </div>
+            <div style="cursor: pointer; height: 30px; padding-top: 5px;" [ngClass]="status2 ? 'b-color' : 'nothing'">
+              <span style="margin-left: 50px; font-size: 14px;">Credit Notes</span>
+            </div>
+
+            <div style="cursor: pointer; height: 30px; padding-top: 5px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+              <span style="margin-left: 50px; font-size: 14px;">Debit notes</span>
+            </div>
+
+          </div>
+        </li>
+        <li style="cursor: pointer" class="">
+          <!-- an example of nested submenu. basic bootstrap collapse component -->
+          <a class="sidebar-content" style="cursor: pointer;">
             <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
             </span>
-            Manage Tasks
+            Export
             <span style="
-                  margin-left: 7%;
-                  position: absolute;
-                  transform: translate(0, 3px);
-                ">
-              <i style="font-size: 20px" *ngIf="mt" class="fas fa-angle-up"></i></span>
+                          margin-left: 55%;
+                          position: absolute;
+                          transform: translate(0, 3px);
+                        "><i style="font-size: 18px" *ngIf="!mt" class="fas fa-angle-right"></i><i
+                style="font-size: 18px" *ngIf="mt" class="fas fa-angle-down"></i>
+            </span>
           </a>
-          <div class="main11">
-            <a style="cursor: pointer" (click)="newTask()">
-              New Task
-              <span style="margin-left: 14%"><i *ngIf="!nt" class="fas fa-angle-down"></i>
-                <i *ngIf="nt" class="fas fa-angle-up"></i></span>
-            </a>
-            <div class="main1" *ngIf="nt">
-              <a style="cursor: pointer" (click)="export()"> Exports </a>
-              <div class="main2" *ngIf="exp">
-                <a style="cursor: pointer" [routerLink]="['/home/exportHome']">Inward Remittance Disposal</a>
-                <a style="cursor: pointer" [routerLink]="['/home/billLodgement']">Bill Lodgement</a>
-                <a style="cursor: pointer" [routerLink]="['/home/packingCreditRequest']">Packing Credit Request</a>
-              </div>
-              <a style="cursor: pointer" [routerLink]="['/home/inwardRemmitance']">
-                Inward Remittance
-              </a>
-
-              <a style="cursor: pointer" (click)="import()"> Imports </a>
-              <div class="main2" *ngIf="imp">
-                <a style="cursor: pointer" [routerLink]="['/home/advance-outward-remittance']">Advance Outward
-                  Remittance</a>
-                <a style="cursor: pointer" [routerLink]="['/home/direct-import-payment']">Direct Import Payment</a>
-                <a style="cursor: pointer" (click)="buc()">Bill Under Collection</a>
-                <div class="main2" *ngIf="billuc">
-                  <a style="cursor: pointer" (click)="lc()">LC</a>
-                  <div class="main2" *ngIf="lc1">
-                    <a style="cursor: pointer" (click)="lcSight()">Sight</a>
-                    <a style="cursor: pointer" (click)="lcUsance()">Usance</a>
-                  </div>
-                  <a style="cursor: pointer" (click)="nonLc()">Non LC</a>
-                  <div class="main2" *ngIf="nonlc1">
-                    <a style="cursor: pointer" (click)="nonlcSight()">Sight</a>
-                    <a style="cursor: pointer" (click)="nonlcUsance()">Usance</a>
-                  </div>
-                </div>
-                <a style="cursor: pointer" [routerLink]="['/home/buyerCredit']">Buyers Credit Request</a>
-                <a style="cursor: pointer" (click)="lcIsurence()">LC Isurance</a>
-                <div class="main2" *ngIf="lcI">
-                  <a style="cursor: pointer" (click)="lcInland()">Inland</a>
-                  <a style="cursor: pointer" (click)="lcImport()">Import</a>
-                </div>
-                <a style="cursor: pointer">BOE Submission to Bank</a>
-                <a style="cursor: pointer" [routerLink]="['/home/fbgWaiver']">FBG Waiver</a>
-              </div>
-              <a style="cursor: pointer" (click)="outward()" [routerLink]="['/home/outwardRemitance']">
-                Outward Remittance
-              </a>
-
-              <a style="cursor: pointer" (click)="other()"> Others </a>
-              <div class="main2" *ngIf="others">
-                <a style="cursor: pointer">GR Waiver</a>
-                <a style="cursor: pointer">Writeoff</a>
-                <a style="cursor: pointer">EEFC conversion request</a>
-                <a style="cursor: pointer">Net Off/Set Off</a>
-              </div>
-            </div>
-            <a style="cursor: pointer" [routerLink]="['/home/tasks/completed']">
-              Completed Task
-            </a>
-
-            <a style="cursor: pointer" [routerLink]="['/home/tasks/pending']"> Draft </a>
-          </div>
         </li>
         <li class="">
           <!-- an example of nested submenu. basic bootstrap collapse component -->

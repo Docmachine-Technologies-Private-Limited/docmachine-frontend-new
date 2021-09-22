@@ -27,6 +27,7 @@ export class SidenavComponent implements OnInit {
   id: any;
   name: any;
   ct: boolean;
+  status: boolean;
 
   constructor(
     public router: Router,
@@ -68,10 +69,12 @@ export class SidenavComponent implements OnInit {
 
   public viewDocument() {
     this.view = !this.view;
+
   }
 
   public newTask() {
-    this.nt = !this.nt;
+    this.status = true;
+    this.router.navigate(["home/pipoDoc"]);
   }
 
   public export() {
