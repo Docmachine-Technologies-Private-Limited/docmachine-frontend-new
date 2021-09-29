@@ -247,7 +247,7 @@
 
       <h5 class="sidebar-nav-title sidebar-title">SETTING</h5>
       <ul class="sidebar-nav">
-        <li *ngIf="role == '!ca'" style="cursor: pointer" class="">
+        <li *ngIf="role != 'ca'" style="cursor: pointer" class="">
           <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a class="sidebar-content" [routerLink]="['/home/account']">
             <span class="icon side-icon">

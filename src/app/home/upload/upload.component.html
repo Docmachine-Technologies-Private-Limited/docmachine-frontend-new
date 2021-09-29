@@ -1,36 +1,104 @@
 <div class="content-wrap">
   <main id="content" class="content table-padding" role="main">
-    <div style="margin: -20px 0px 10px 36px;">
-      <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
-        style="width: 20px; height: 20px;"><span style="margin-left: 10px;"
-        [routerLink]="['/home/dashboardTask']">Back</span>
-    </div>
-    <h3 class="heading">Upload Documents</h3>
-    <p style="color: rgb(0, 0, 0);margin-left: 40px">
+
+    <h3 class="heading">New Perfoma invoice/ Purchase Order</h3>
+    <!-- <p style="color: rgb(0, 0, 0);margin-left: 40px">
       Choose the type of document
     </p>
     <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
       <option value="">Document Type</option>
       <option value="import">Import</option>
       <option value="export">Export</option>
-    </select>
+    </select> -->
 
 
-    <p style="color: rgb(0, 0, 0); margin-left: 40px;">
+    <!-- <p style="color: rgb(0, 0, 0); margin-left: 40px;">
       Choose the type of export document
 
-    </p>
-    <select [(ngModel)]="documentType" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
+    </p> -->
+    <!-- <select [(ngModel)]="documentType" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
       <option value="">Document Type</option>
       <option value="Shipping Bill">Shipping Bill</option>
       <option value="BOE">BOE</option>
       <option value="PI/PO">PI/PO</option>
       <option value="thirdParty">Tri Party Document</option>
-    </select>
-    <p id="uploadError" style="color: red; display: none; margin-left: 34%">
-      Select Document type and try uploading again!
-    </p>
-    <div *ngIf="documentType === 'Shipping Bill' || documentType === 'BOE'" class="form" method="POST">
+    </select> -->
+    <div style="display: flex; align-items: center; margin-left: 30px;">
+      <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Beneficiary Name*</label>
+      <div class="customDropdown" style="flex-direction:row; ">
+        <span style="color: #323e4a !important; min-width: 150px;">{{beneValue}}</span>
+        <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+          <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+        </span>
+        <div class="dropdown-content" style="margin-top: -2px;">
+          <p *ngFor="let bene of benneDetail" (click)='clickBene(bene.beneName)'><a>{{bene.beneName}}</a></p>
+          <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p>
+        </div>
+      </div>
+    </div>
+
+
+    <div style="margin-top: 40px; margin-left: 33px;">
+      <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
+      <div style="display: flex; align-items: center;">
+        <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [(ngModel)]="documentType"
+          value="PI">
+        <label style="flex-direction:row;" class="label1" for="male">Performa Invoice</label>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <input type="radio" style="flex-direction:row;" id="options2" class="circular_input" [(ngModel)]="documentType"
+          value="PO">
+        <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
+      </div>
+    </div>
+    <!-- <div style="margin-top: 40px; margin-left: 33px;">
+      <span style="color: #303030; font-size: 20px;">Payment Terms*</span>
+      <form class="" [formGroup]="payment" (ngSubmit)="onSubmitPayment()">
+        <div formArrayName="paymentTerm">
+          <div *ngFor="let course of getCourses(payment); let i = index" [formGroupName]="i"
+            style="display: flex; align-items: center;">
+            <div style="flex-direction:row; margin-right: 20px;">
+              <span style="color: #707683; font-size: 14px;">Date</span> <br>
+              <input formControlName="date"
+                style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px;">
+            </div>
+            <div style="flex-direction:row;border-radius: 5px;">
+              <span style="color: #707683; font-size: 14px;">Description</span> <br>
+              <input formControlName="description"
+                style="outline: none; border: 1px solid #DEDEDE; width: 200px; border-radius: 5px;">
+            </div>
+            <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
+              <span style="color: #707683; font-size: 14px;">Type</span> <br>
+              <select name="" id="" formControlName="type"
+                style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
+                <option value="">Select</option>
+                <option value="Advance Payment">Advance Payment</option>
+                <option value="Letter of Credit">Letter of Credit</option>
+                <option value="Collection Bill">Collection Bill</option>
+                <option value="Direct Import">Direct Import</option>
+              </select>
+            </div>
+            <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
+              <span style="color: #707683; font-size: 14px;">Amount</span> <br>
+              <input formControlName="amount"
+                style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px;">
+            </div>
+          </div>
+        </div>
+        <div class="row col-md-12" style="margin-top: 10px;">
+          <span (click)="onAddCourse(payment)" style="font-size: 12px; color: #303030;"><i style="font-size: 14px;"
+              class="fas fa-plus-circle"></i> Add New
+            Row </span>
+        </div>
+
+
+
+      </form>
+    </div> -->
+
+
+
+    <div *ngIf="documentType === 'Shipping Bill' || documentType === 'BOE' " class="form" method="POST">
       <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
         (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config" class="dropzone dropzone-container"
         id="dropzone" />
@@ -41,7 +109,8 @@
       <p>Maximum Size: 5MB</p>
     </div>
 
-    <div *ngIf="documentType === 'PI/PO' || documentType === 'thirdParty'" class="form" method="POST">
+    <div *ngIf="documentType === 'PI' || documentType === 'PO' || documentType === 'thirdParty'" class="form"
+      method="POST">
       <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
         (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config1" class="dropzone dropzone-container"
         id="dropzone" />
@@ -376,10 +445,10 @@
     <form *ngIf="pIpO && !override" class="" [formGroup]="piPoForm" (ngSubmit)="onSubmitPipo()">
       <!----------      "-->
       <div style="
-          width: 70%;
+          width: 80%;
           display: flex;
           justify-content: center;
-          margin-left: 5%;
+          margin-left: 2%;
         " class="field">
         <table style="width: 70%" class="field-table">
           <tr class="field-heading">
@@ -401,61 +470,78 @@
       </div>
 
       <div class="sub-table">
-        <div style="padding: 5% 0" class="sb1">
+        <div style="padding: 2% 0" class="sb1">
           <tr style="width: 100%" class="form-wrapper">
-            <td style="width: 256px; height: 86px; margin-bottom: 4%" class="full-input border2">
-              <label for="iecCode">Beneficiary Name</label>
-              <select name="" id="" formControlName="benneName">
-                <option value="">Select Bene Name</option>
-                <option *ngFor="let bene of benneDetail" [value]="bene.beneName">
-                  {{ bene.beneName }}
-                </option>
-              </select>
-            </td>
-            <td style="width: 256px; height: 86px; margin-bottom: 4%" class="full-input border3">
+            <div style="margin-left: 18px; margin-bottom: 10px;">
+
+              <span style="font-size: 20px; color: #606670; margin-bottom: 5px;">Invoice Amount</span> <br>
+              <input class="inputAmount" type="text" formControlName="amount" />
+            </div>
+
+
+            <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border3">
               <label for="iecName">Currency</label><input class="form-control smalll-input" type="text"
                 formControlName="currency" />
             </td>
 
-            <td style="width: 256px; height: 86px; margin-bottom: 4%" class="full-input border1">
-              <label for="adCode">Amount</label><input class="form-control smalll-input" type="text"
-                formControlName="amount" />
-            </td>
-            <td style="width: 256px; height: 86px; margin-bottom: 4%" class="full-input border2">
-              <label for="iecCode">Payment Term</label>
-              <select name="" formControlName="paymentTerm">
-                <option value="">Select A option</option>
-                <option value="advancePayment">
-                  Advance Payment
-                </option>
-                <option value="paymentAfterShipment">
-                  Payment After Shipment
-                </option>
-                <option value="throughLc">
-                  Through LC
-                </option>
-              </select>
-            </td>
-            <br />
-            <td style="width: 256px; height: 86px; margin-bottom: 4%" class="full-input border1">
+
+            <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
               <label for="invoiceNumber">Incoterm</label><input class="form-control smalll-input" type="text"
                 formControlName="incoterm" />
             </td>
-            <td style="width: 256px; height: 86px; margin-bottom: 4%" class="full-input border2">
+            <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border2">
               <label for="invoiceAmount">Last Day Of Shipment</label><input class="form-control smalll-input"
-                type="text" formControlName="lastDayShipment" />
+                type="text" formControlName="lastDayShipment" placeholder="dd/mm/yyyy" />
             </td>
 
-
-            <br />
-            <td style="width: 256px; height: 86px; margin-bottom: 4%" class="full-input border1">
+            <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
               <label for="settledAmount">PC Ref No</label><input class="form-control smalll-input" type="text"
                 formControlName="pcRefNo" />
             </td>
-            <td style="width: 256px; height: 86px; margin-bottom: 4%" class="full-input border1">
+            <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
               <label for="settledAmount">Due Date</label><input class="form-control smalll-input" type="text"
-                formControlName="dueDate" />
-            </td>
+                formControlName="dueDate" placeholder="dd/mm/yyyy" />
+            </td> <br>
+            <span style="color: #303030; font-size: 20px;">Payment Terms*</span>
+            <div formArrayName="paymentTerm">
+
+              <div *ngFor="let course of getCourses(piPoForm); let i = index" [formGroupName]="i"
+                style="display: flex;">
+                <div style="flex-direction:row; margin-right: 20px;">
+                  <span style="color: #707683; font-size: 14px;">Date</span> <br>
+                  <input formControlName="date"
+                    style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px;">
+                </div>
+                <div style="flex-direction:row;border-radius: 5px;">
+                  <span style="color: #707683; font-size: 14px;">Description</span> <br>
+                  <input formControlName="description"
+                    style="outline: none; border: 1px solid #DEDEDE; width: 200px; border-radius: 5px;">
+                </div>
+                <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
+                  <span style="color: #707683; font-size: 14px;">Type</span> <br>
+                  <select name="" id="" formControlName="type"
+                    style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
+                    <option value="">Select</option>
+                    <option value="Advance Payment">Advance Payment</option>
+                    <option value="Letter of Credit">Letter of Credit</option>
+                    <option value="Collection Bill">Collection Bill</option>
+                    <option value="Direct Import">Direct Import</option>
+                  </select>
+                </div>
+                <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
+                  <span style="color: #707683; font-size: 14px;">Amount</span> <br>
+                  <input formControlName="amount"
+                    style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px;">
+                </div>
+                <a *ngIf='i>0' (click)='removeAddress(i)'><i style="margin-top: 30px; " class="fas fa-times"></i></a>
+
+              </div>
+            </div>
+            <div class="row col-md-12" style="margin-top: 10px; margin-bottom: 10px;">
+              <span (click)="onAddCourse(piPoForm)" style="font-size: 12px; color: #303030;"><i style="font-size: 14px;"
+                  class="fas fa-plus-circle"></i> Add New
+                Row </span>
+            </div>
           </tr>
         </div>
         <div class="sb2">
@@ -505,5 +591,98 @@
         </div>
       </div>
     </form>
+    <ng-template #content let-modal>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row no-gutter">
+            <!-- The image half -->
+            <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
+
+
+            <!-- The content half -->
+            <div class="col-md-7 bg-dark">
+              <div class="login d-flex py-5" style="padding: 0px !important;">
+                <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button> -->
+                <!-- Demo content-->
+                <div class="container">
+                  <div class="row">
+                    <div class="col-lg-10 col-xl-7 mrg">
+                      <h6 class="display-5">Create New Beneficiary/ Customer</h6>
+                      <form [formGroup]="loginForm" (ngSubmit)="onSubmitBene()" class="form11">
+                        <div class="form-group mb-3">
+                          <label class="plable">Name</label>
+                          <input formControlName="beneName" placeholder="Beneficiary/ Customer name" required=""
+                            class="form-control rounded-pill pinput">
+                        </div>
+                        <div class="form-group mb-3">
+                          <label class="plable">Address</label>
+                          <input formControlName="beneAdrs" placeholder="Ex: street address, City. PIN" required=""
+                            class="form-control rounded-pill password password1 pinput">
+                        </div>
+                        <div class="form-group mb-3">
+                          <label class="plable">Bank Name</label>
+                          <input formControlName="beneBankName" id="password1" type="" placeholder="Ex: 23489234324"
+                            required="" class="form-control rounded-pill pinput">
+                        </div>
+                        <div class="form-group mb-3">
+                          <label class="plable">Account No</label>
+                          <input formControlName="beneAccNo" id="password1" type="" placeholder="Ex: 23489234324"
+                            required="" class="form-control rounded-pill pinput">
+                        </div>
+                        <div class="form-group mb-3">
+                          <label class="plable">IBAN</label>
+                          <p class="sl">* Mandatory for remittances to Middle-East countries and Europe</p>
+                          <input formControlName="iban" id="password1" type="" placeholder="Ex: 238923 23423423"
+                            required="" class="form-control rounded-pill pinput">
+                        </div>
+                        <div class="form-group mb-3">
+                          <label class="plable">Beneficiary’s bank’s (any one) SWIFT code**</label>
+                          <input formControlName="beneBankSwiftCode" type="" placeholder="Ex: 1234566" required=""
+                            class="form-control rounded-pill pinput">
+                        </div>
+                        <div class="form-group mb-3">
+                          <label class="plable">Beneficiary’s bank’s address including country</label>
+                          <input formControlName="beneBankAdress" id="inputEmail" type="text"
+                            placeholder="Ex: street address, City. PIN" required=""
+                            class="form-control rounded-pill email pinput">
+                        </div>
+
+                        <div class="form-group mb-3">
+                          <label class="plable">Intermediary Bank details (if applicable) SWIFT code**</label>
+                          <input formControlName="interBankSwiftCode"
+                            placeholder="Ex: CC/OD/PC/PCFC/EBRD/BP/EEFC-USD/EUR/GBP/CHF/JPY ETC" required=""
+                            class="form-control rounded-pill pinput">
+                        </div>
+                        <div class="form-group mb-3">
+                          <label class="plable">Intermediary Bank Name (if any)</label>
+                          <input formControlName="interBankName" id="inputEmail" type="text"
+                            placeholder="Ex: Western union" required="" class="form-control rounded-pill pinput">
+                        </div>
+
+                        <div class="form-group mb-3">
+                          <label class="plable">Sort Code</label>
+                          <input formControlName="sortCode" placeholder="Ex: ESEIEC." required=""
+                            class="form-control rounded-pill pinput">
+                        </div>
+
+                        <button type="submit" class="btn11">Create</button>
+                      </form>
+
+                    </div>
+                  </div>
+                </div><!-- End -->
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </ng-template>
+
   </main>
 </div>

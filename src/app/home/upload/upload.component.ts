@@ -14,7 +14,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
-import { NgForm } from "@angular/forms";
+import { FormArray, NgForm } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from 'ngx-toastr';
 // import {ToastrService} from 'ngx-toastr';
@@ -42,6 +42,8 @@ import {
 import { DocumentService } from "../../service/document.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "../../service/user.service";
+import { MatSelectModule } from '@angular/material/select';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: "app-upload",
@@ -85,25 +87,47 @@ export class UploadComponent implements OnInit, AfterViewInit {
   shippingForm: FormGroup;
   authToken: string;
   headers: any;
+  closeResult: string;
 
   piPoForm = new FormGroup({
     pi_poNo: new FormControl("", [
       Validators.required,
       Validators.minLength(4)]),
-    benneName: new FormControl("", Validators.required),
     currency: new FormControl("", Validators.required),
     amount: new FormControl("", Validators.required),
     incoterm: new FormControl("", Validators.required),
     lastDayShipment: new FormControl("", Validators.required),
-    paymentTerm: new FormControl("", Validators.required),
+    paymentTerm: new FormArray([this.initCourse()], Validators.required),
     pcRefNo: new FormControl("", Validators.required),
     date: new FormControl("", Validators.required),
     dueDate: new FormControl("", Validators.required),
   });
+
+
+  // payment = this.formBuilder.group({
+  //   paymentTerm: new FormArray([this.initCourse()], Validators.required)
+  // });
+
+  loginForm = this.formBuilder.group({
+    beneName: ['', Validators.required],
+    beneAdrs: ['', Validators.required],
+    beneBankName: ['', Validators.required],
+    beneAccNo: ['', Validators.required],
+    beneBankAdress: ['', Validators.required],
+    beneBankSwiftCode: ['', Validators.required],
+    sortCode: ['', Validators.required],
+    iban: ['', Validators.required],
+    interBankSwiftCode: ['', Validators.required],
+    interBankName: ['', Validators.required],
+  });
+
   pipourl1: any;
   thirdParty: boolean = false;
   item3: any;
   pipoArray: any = [];
+  beneValue: any = 'Select Beneficiary';
+  document: any;
+  file: any;
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -113,7 +137,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
     public router: Router,
     private sanitizer: DomSanitizer,
     private userService: UserService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private modalService: NgbModal,
+    private route: ActivatedRoute,
   ) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -192,6 +218,10 @@ export class UploadComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+
+    this.file = this.route.snapshot.paramMap.get('file')
+    console.log(this.file)
+    console.log(this.route.snapshot.paramMap.get('document'))
     this.config = {
       ...this.config,
     };
@@ -200,6 +230,13 @@ export class UploadComponent implements OnInit, AfterViewInit {
       ...this.config1,
     };
 
+    this.userService.getBene(1).subscribe(
+      (res: any) => {
+        (this.benneDetail = res.data),
+          console.log("Benne Detail", this.benneDetail);
+      },
+      (err) => console.log("Error", err)
+    );
     console.log("DOCUMENT TYPE", this.documentType);
     this.documentService.getPipo().subscribe(
       (res: any) => {
@@ -320,6 +357,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public onSubmitPipo() {
     console.log(this.piPoForm.value);
     this.piPoForm.value.doc = this.pipourl1
+    this.piPoForm.value.file = this.file
+    this.piPoForm.value.document = this.documentType
+    this.piPoForm.value.benneName = this.beneValue
     console.log(this.piPoForm.value);
     this.documentService.addPipo(this.piPoForm.value).subscribe(
       (res) => {
@@ -381,7 +421,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
         console.log(this.res);
       } else {
         // this.res = new BoeBill(args[1].data);
-        if (this.documentType === 'PI/PO') {
+        if (this.documentType === 'PI' || this.documentType === 'PO') {
           this.pIpO = true;
         }
         else if (this.documentType === 'thirdParty') {
@@ -407,13 +447,14 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
     console.log("Selected Document type", this.selectedDocumentType);
   }
+
   submit(e) {
     if (this.documentType !== "") {
       console.log("ajbkab");
       this.uploading = true;
       console.log(e[0].size);
       this.size = this.formatBytes(e[0].size);
-      document.getElementById("uploadError").style.display = "none";
+      //document.getElementById("uploadError").style.display = "none";
 
       this.runProgressBar(e[0].size);
     } else {
@@ -451,6 +492,64 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
   public beneSelect(e) {
     console.log(e)
+  }
+
+
+
+  initCourse() {
+    return this.formBuilder.group({
+      date: ['', Validators.required],
+      description: ['', [Validators.required, Validators.maxLength(11)]],
+      type: ['', [Validators.required]],
+      amount: ['', Validators.required]
+    });
+  }
+
+  initProduct() {
+    return new FormGroup({
+      product: new FormControl('')
+    });
+  }
+
+  getCourses(form) {
+    return form.get('paymentTerm').controls;
+  }
+
+  // getProducts(form) {
+  //   return form.get('products').controls;
+  // }
+
+  onAddCourse(e) {
+
+    // if (e.controls.bankDetails.invalid) {
+    //   //this.submitted1 = true
+    //   this.toastr.error('You can add another bank after filling first one!');
+    //   console.log("2")
+    //   //this.isDisabled = false;
+    //   return;
+    // }
+    console.log("fffff")
+    // this.currencyName.push('')
+    // this.bankName.push('')
+    const control = this.piPoForm.controls.paymentTerm as FormArray;
+    control.push(this.initCourse());
+    //this.isDisabled = false;
+  }
+
+  removeAddress(i) {
+    // console.log(i)
+    // //console.log(this.control)
+    let control1 = this.piPoForm.controls.paymentTerm as FormArray;
+    // console.log(control1)
+    // console.log(control1.length)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    control1.removeAt(i);
+    // this.bankName.splice(i, 1)
+    // this.currencyName.splice(i, 1)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    // console.log(control1.length)
   }
 
   public filePreview() {
@@ -492,5 +591,55 @@ export class UploadComponent implements OnInit, AfterViewInit {
         dropzoneInstance.emit("complete", mockFile);
       });
     }
+  }
+
+  clickBene(value) {
+    console.log('hhddh')
+    this.beneValue = value
+  }
+
+  open(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    console.log('ddhdhdhh')
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  onSubmitBene() {
+    console.log(this.loginForm.value)
+
+    this.beneValue = this.loginForm.value.beneName
+    this.userService.creatBene(this.loginForm.value)
+      .subscribe(
+        data => {
+          console.log("king123")
+          console.log(data)
+          this.userService.getBene(1).subscribe(
+            (res: any) => {
+              (this.benneDetail = res.data),
+                console.log("Benne Detail", this.benneDetail);
+              this.toastr.success("New Beneficiary added successfully")
+              this.modalService.dismissAll();
+            },
+            (err) => console.log("Error", err)
+          );
+
+
+        },
+        error => {
+          console.log("error")
+        });
   }
 }

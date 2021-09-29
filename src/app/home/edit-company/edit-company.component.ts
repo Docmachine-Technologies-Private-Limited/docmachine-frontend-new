@@ -214,17 +214,10 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
     console.log(i)
     //console.log(this.control)
     let control1 = this.loginForm.controls.bankDetails as FormArray;
-    console.log(control1)
-    console.log(control1.length)
-    console.log(this.bankName)
-    console.log(this.currencyName)
     control1.removeAt(i);
     this.details.splice(i, 1)
     this.bankName.splice(i, 1)
     this.currencyName.splice(i, 1)
-    console.log(this.bankName)
-    console.log(this.currencyName)
-    console.log(control1.length)
     this.z = this.z - 1
   }
 

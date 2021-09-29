@@ -60,6 +60,7 @@ import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
 
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { PipoDocumentsComponent } from './pipo-documents/pipo-documents.component';
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -124,7 +125,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     CompletedExportComponent,
     PackingCreditComponent,
     ConfirmDialogComponent,
-    PipoDocumentsComponent
+    PipoDocumentsComponent,
   ],
   imports: [
     CommonModule,
@@ -133,6 +134,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DragDropModule,
     MatProgressBarModule,
     MatTabsModule,
+
 
     // BrowserModule,
 
@@ -370,7 +372,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
       },
     ]),
   ],
-  providers: [ConfirmDialogService],
+  providers: [ConfirmDialogService, NgbModal],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //   exports: [SharedProjectsModule]
   exports: [MatProgressBarModule, MatTabsModule, ConfirmDialogComponent],
