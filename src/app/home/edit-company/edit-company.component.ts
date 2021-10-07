@@ -200,9 +200,14 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
 
       const control = this.loginForm.get('bankDetails') as FormArray;
       control.push(this.initCourse());
-      if (this.i >= this.details.length) {
-        this.details.push([])
-      }
+      console.log(this.details)
+      console.log(this.details.length)
+      console.log(this.i)
+
+      console.log("this.details")
+      this.details.push([])
+      console.log(this.details)
+
       this.z++
       this.i++
     }

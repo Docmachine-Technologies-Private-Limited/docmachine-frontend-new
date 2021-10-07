@@ -58,6 +58,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public disabled: boolean = false;
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
+  docu: any;
   public urls: any = [];
   chosenMod: string = "";
   public data1: any = [];
@@ -126,8 +127,16 @@ export class UploadComponent implements OnInit, AfterViewInit {
   item3: any;
   pipoArray: any = [];
   beneValue: any = 'Select Beneficiary';
+  pipoValue: any = 'Select PI/PO'
   document: any;
   file: any;
+  arrayData: any = [];
+  other: boolean;
+  pipoArr: any = [];
+  pubUrl: any;
+  pipoOut: string;
+  beneOut: string;
+
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -219,9 +228,23 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
+    console.log(this.route.snapshot.paramMap.get('document'))
     this.file = this.route.snapshot.paramMap.get('file')
     console.log(this.file)
-    console.log(this.route.snapshot.paramMap.get('document'))
+    this.docu = this.route.snapshot.paramMap.get('document')
+    if (this.docu == 'sb') {
+      this.documentType = 'Shipping Bill'
+    }
+    else if (this.docu == 'boe') {
+      this.documentType = 'boe'
+      this.pipoOut = this.route.snapshot.paramMap.get('pipo')
+      this.beneOut = this.route.snapshot.paramMap.get('bene')
+      let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
+      this.arrayData.push(x)
+      this.pipoArr.push(this.pipoOut)
+
+    }
+    //console.log(this.route.snapshot.paramMap.get('document'))
     this.config = {
       ...this.config,
     };
@@ -317,7 +340,10 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public onSubmitBoe(e) {
     console.log(this.selectCombo)
     console.log("asjbakujfbkasjfbkuh");
+    console.log(this.pubUrl)
+    console.log(this.documentType)
     console.log(e.form.value);
+    e.form.value.pipo = this.pipoArr
     // this.formData = new ShippingBill(e.form.value)
     // console.log(this.formData)
     if (this.message == "This file already uploaded") {
@@ -330,7 +356,26 @@ export class UploadComponent implements OnInit, AfterViewInit {
             console.log("king123");
             console.log(data);
             this.message = "";
-            this.router.navigate(["home/dashboardNew"]);
+            this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+              .subscribe(
+                data => {
+                  //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                  console.log("king123")
+                  console.log(data)
+                  this.toastr.success('Boe added successfully.');
+                  this.router.navigate(["home/dashboardNew"]);
+
+                  // this.docTog = false
+                  // this.toggle = false
+                  // this.toggle2 = false
+                  // this.toastr.success('Company details updated sucessfully.');
+                  // this.router.navigate(['/home/dashboardNew']);
+                },
+                error => {
+                  // this.toastr.error('Invalid inputs, please check!');
+                  console.log("error")
+                });
+
             //this.router.navigate(['/login'], { queryParams: { registered: true }});
           },
           (error) => {
@@ -339,12 +384,30 @@ export class UploadComponent implements OnInit, AfterViewInit {
         );
     } else {
       console.log("jhsfjavfjhavfkhvfhavkashfbjh");
-
+      e.form.value.pipo = this.pipoArr
       this.documentService.updateBoe(e.form.value, this.res._id).subscribe(
         (data) => {
           console.log("king123");
           console.log(data);
-          this.router.navigate(["home/dashboardNew"]);
+          this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+            .subscribe(
+              data => {
+                //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                console.log("king123")
+                console.log(data)
+                this.toastr.success('Boe added successfully.');
+                this.router.navigate(["home/dashboardNew"]);
+                // this.docTog = false
+                // this.toggle = false
+                // this.toggle2 = false
+                // this.toastr.success('Company details updated sucessfully.');
+                // this.router.navigate(['/home/dashboardNew']);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+
           //this.router.navigate(['/login'], { queryParams: { registered: true }});
         },
         (error) => {
@@ -356,8 +419,14 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
   public onSubmitPipo() {
     console.log(this.piPoForm.value);
-    this.piPoForm.value.doc = this.pipourl1
+
     this.piPoForm.value.file = this.file
+    if (this.documentType == 'PI') {
+      this.piPoForm.value.doc = this.pipourl1
+    }
+    else if (this.documentType == 'PO') {
+      this.piPoForm.value.doc1 = this.pipourl1
+    }
     this.piPoForm.value.document = this.documentType
     this.piPoForm.value.benneName = this.beneValue
     console.log(this.piPoForm.value);
@@ -427,9 +496,30 @@ export class UploadComponent implements OnInit, AfterViewInit {
         else if (this.documentType === 'thirdParty') {
           this.thirdParty = true;
         }
+        else {
+          this.other = true
+          this.userService.updateManyPipo(this.pipoArr, this.documentType, args[1].data)
+            .subscribe(
+              data => {
+                //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                console.log("king123")
+                console.log(data)
+                this.toastr.success('PI/PO updated successfully.');
+                // this.docTog = false
+                // this.toggle = false
+                // this.toggle2 = false
+                // this.toastr.success('Company details updated successfully.');
+                // this.router.navigate(['/home/dashboardNew']);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+        }
 
         console.log(this.res);
       }
+      this.pubUrl = args[1].publicUrl
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
         args[1].publicUrl
       );
@@ -480,12 +570,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
-    window["sidebarInit"]();
-    if (isPlatformBrowser(this.platformId)) {
-      this.filePreview();
-    }
-  }
+
   public onOverride() {
     this.override = false;
   }
@@ -552,50 +637,73 @@ export class UploadComponent implements OnInit, AfterViewInit {
     // console.log(control1.length)
   }
 
-  public filePreview() {
-    console.log("inside");
-    const images = this.que.selectedFiles;
-    // is images a true array and not empty
-    if (Array.isArray(images) && images.length > 0) {
-      images.forEach((image) => {
-        // cuting out the extension from filename
-        let extension: any = image.fileName.split(".");
-        extension = extension
-          .slice(extension.length - 1, extension.length)
-          .join(".");
-        const { accepted, size, height, width, type, dataURL, upload } =
-          image.file;
-        const mockFile = {
-          accepted,
-          size,
-          type,
-          dataURL: dataURL || image.location,
-          name: upload.filename,
-        };
-        const dropzoneInstance = this.directiveRef.dropzone();
-        console.log(dropzoneInstance);
-        dropzoneInstance.emit("addedfile", mockFile);
-        dropzoneInstance.options.maxFiles = 5;
-        dropzoneInstance.createThumbnailFromUrl(
-          mockFile,
-          image.file.width || "400",
-          image.file.height || "400",
-          "contain",
-          true,
-          function (thumbnail) {
-            dropzoneInstance.files.push(thumbnail);
-            dropzoneInstance.emit("thumbnail", mockFile, thumbnail);
-          },
-          "anonymous"
-        );
-        dropzoneInstance.emit("complete", mockFile);
-      });
-    }
-  }
+  // public filePreview() {
+  //   console.log("inside");
+  //   const images = this.que.selectedFiles;
+  //   // is images a true array and not empty
+  //   if (Array.isArray(images) && images.length > 0) {
+  //     images.forEach((image) => {
+  //       // cuting out the extension from filename
+  //       let extension: any = image.fileName.split(".");
+  //       extension = extension
+  //         .slice(extension.length - 1, extension.length)
+  //         .join(".");
+  //       const { accepted, size, height, width, type, dataURL, upload } =
+  //         image.file;
+  //       const mockFile = {
+  //         accepted,
+  //         size,
+  //         type,
+  //         dataURL: dataURL || image.location,
+  //         name: upload.filename,
+  //       };
+  //       const dropzoneInstance = this.directiveRef.dropzone();
+  //       console.log(dropzoneInstance);
+  //       dropzoneInstance.emit("addedfile", mockFile);
+  //       dropzoneInstance.options.maxFiles = 5;
+  //       dropzoneInstance.createThumbnailFromUrl(
+  //         mockFile,
+  //         image.file.width || "400",
+  //         image.file.height || "400",
+  //         "contain",
+  //         true,
+  //         function (thumbnail) {
+  //           dropzoneInstance.files.push(thumbnail);
+  //           dropzoneInstance.emit("thumbnail", mockFile, thumbnail);
+  //         },
+  //         "anonymous"
+  //       );
+  //       dropzoneInstance.emit("complete", mockFile);
+  //     });
+  //   }
+  // }
 
   clickBene(value) {
     console.log('hhddh')
     this.beneValue = value
+  }
+  clickPipo(a, b, c) {
+    let x = a + "-" + b + "-" + c
+    let j = this.arrayData.indexOf(x)
+    if (j == -1) {
+      this.arrayData.push(x)
+      this.pipoArr.push(b)
+    }
+    else {
+      console.log("x")
+    }
+
+
+
+
+    console.log(this.arrayData)
+
+
+  }
+
+  removePipo(i) {
+    this.arrayData.splice(i, 1)
+    this.pipoArr.splice(i, 1)
   }
 
   open(content) {
@@ -641,5 +749,12 @@ export class UploadComponent implements OnInit, AfterViewInit {
         error => {
           console.log("error")
         });
+  }
+
+  ngAfterViewInit() {
+    // window["sidebarInit"]();
+    // if (isPlatformBrowser(this.platformId)) {
+    //   this.filePreview();
+    // }
   }
 }

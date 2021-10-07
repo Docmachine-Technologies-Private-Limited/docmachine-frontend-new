@@ -103,6 +103,64 @@ export class UserService {
     );
   }
 
+  updatePipo(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `https://dm.uipep.com/v1/pipo/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
+
+  updateSinglePipo(id, file, doc) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(file)
+    console.log(id)
+    console.log(doc)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `https://dm.uipep.com/v1/pipo/updateSingle`,
+      {
+        id: id,
+        file: file,
+        doc: doc
+      },
+      httpOptions
+    );
+  }
+
+  updateManyPipo(pipo, file, doc) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(file)
+    console.log(pipo)
+    console.log(doc)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `https://dm.uipep.com/v1/pipo/updateMany`,
+      {
+        pipo: pipo,
+        file: file,
+        doc: doc
+      },
+      httpOptions
+    );
+  }
+
   public getUser() {
     this.loadFromLocalStorage();
     console.log(this.authToken);
