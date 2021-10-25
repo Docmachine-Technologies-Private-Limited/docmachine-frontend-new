@@ -34,6 +34,9 @@ export class PaymentAcceptanceLetterComponent implements OnInit, OnDestroy {
   item3: any;
   letterHead: any;
   file: string;
+  amount: any;
+  words: any;
+  pipoValue: any = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -64,8 +67,18 @@ export class PaymentAcceptanceLetterComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
 
-    this.id = this.route.snapshot.paramMap.get('pipo');
-    this.file = this.route.snapshot.paramMap.get('file')
+    //this.id = this.route.snapshot.paramMap.get('pipo');
+    this.file = this.route.snapshot.paramMap.get('file');
+    this.id = this.route.snapshot.params['boeNumber'];
+    this.amount = this.route.snapshot.params['amount']
+    console.log(this.route.snapshot.params['pipo'])
+    this.words = this.route.snapshot.params['pipo']
+    console.log(this.words)
+    console.log(this.id)
+    this.pipoValue = this.words.split(',')
+    console.log(this.words[0])
+    console.log(this.pipoValue)
+    this.id = this.pipoValue[0]
     console.log(this.id)
     console.log(this.file)
     this.newTask.file = this.file;

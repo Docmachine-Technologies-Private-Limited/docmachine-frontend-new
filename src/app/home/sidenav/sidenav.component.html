@@ -75,7 +75,6 @@
           </a>
         </li>
         <li style="cursor: pointer" class="" (click)="manageTask()">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a class="sidebar-content" style="cursor: pointer;">
             <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
@@ -91,7 +90,6 @@
           </a>
         </li>
         <li class="manage-li" *ngIf="mt">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
 
           <div class="main11" style=" color: #fff;">
             <div style="cursor: pointer; height: 30px; padding-top: 5px;" (click)="newTask()"
@@ -109,8 +107,39 @@
 
           </div>
         </li>
-        <li style="cursor: pointer" class="">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
+
+        <!-- <li class="manage-li" *ngIf="mt">
+
+          <div class="main11" style=" color: #fff; margin-left: 5px;">
+            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px; "
+                [routerLink]="['/home/advance-outward-remittance']">Advance Outward
+                Remittance </span>
+            </div>
+            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px;" [routerLink]="['/home/direct-import-payment']">Direct
+                Import Payment</span>
+            </div>
+
+            <div class="hoverClass" style="cursor: pointer; padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px;" (click)="buc()">Bills Under Collection</span>
+              <div *ngIf="billuc" style="margin-left: 60px;">
+                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="lcSight()">Sight</a>
+                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="lcUsance()">Usance</a>
+              </div>
+            </div>
+            <div class="hoverClass" style="cursor: pointer; padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 13px;" (click)="buc1()">Bills Under LC</span> <br>
+              <div *ngIf="billuc1" style="margin-left: 60px;">
+                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="nonlcSight()">Sight</a>
+                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="nonlcUsance()">Usance</a>
+              </div>
+            </div>
+
+          </div>
+        </li> -->
+
+        <li style="cursor: pointer" class="" (click)="exportTask()">
           <a class="sidebar-content" style="cursor: pointer;">
             <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
@@ -120,13 +149,217 @@
                           margin-left: 55%;
                           position: absolute;
                           transform: translate(0, 3px);
-                        "><i style="font-size: 18px" *ngIf="!mt" class="fas fa-angle-right"></i><i
-                style="font-size: 18px" *ngIf="mt" class="fas fa-angle-down"></i>
+                        "><i style="font-size: 18px" *ngIf="!mt2" class="fas fa-angle-right"></i><i
+                style="font-size: 18px" *ngIf="mt2" class="fas fa-angle-down"></i>
             </span>
           </a>
         </li>
+        <!-- <li class="manage-li" *ngIf="mt2">
+
+          <div class="main11" style=" color: #fff; margin-left: 5px;">
+            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px; " [routerLink]="['/home/exportHome']">Inward Remittance
+                Disposal</span>
+            </div>
+            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px;" [routerLink]="['/home/billLodgement']">Bill Under
+                Collection</span>
+            </div>
+            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px;" [routerLink]="['/home/billLodgement']">Bill Under
+                LC</span>
+            </div>
+
+            <div class="hoverClass" style="cursor: pointer; padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px;" [routerLink]="['/home/packingCreditRequest']">Packing
+                Credit Request</span>
+
+            </div>
+            <div class="hoverClass" style="cursor: pointer; padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px;" [routerLink]="['/home/packingCreditRequest']">Direct
+                Dispatch</span>
+
+            </div>
+
+          </div>
+        </li> -->
+
+
+
+        <li style="cursor: pointer" class="" *ngIf="!mt1" (click)="manageTask1()">
+          <a class="sidebar-content" style="cursor: pointer;">
+            <span class="icon side-icon">
+              <img src="./assets/content-paper-edit.png" />
+            </span>
+            Manage Tasks
+            <span style="
+                                  margin-left: 7%;
+                                  position: absolute;
+                                  transform: translate(0, 3px);
+                                "><i style="font-size: 20px; margin-left: 50px;" *ngIf="!mt"
+                class="fas fa-angle-right"></i>
+            </span>
+          </a>
+        </li>
+
+        <li class="manage-li" *ngIf="mt1">
+          <a style="cursor: pointer" class="manage-content" (click)="manageTask1()">
+            <span class="icon side-icon">
+              <img src="./assets/content-paper-edit.png" />
+            </span>
+            Manage Tasks
+            <span style="
+                                  margin-left: 7%;
+                                  position: absolute;
+                                  transform: translate(0, 3px);
+                                ">
+              <i style="font-size: 20px" *ngIf="mt" class="fas fa-angle-up"></i></span>
+          </a>
+          <div class="main11" style="margin-left: 50px;">
+            <a style="cursor: pointer" (click)="newTask1()">
+              New Task
+              <span style="margin-left: 14%"><i *ngIf="!nt1" class="fas fa-angle-down"></i>
+                <i *ngIf="nt" class="fas fa-angle-up"></i></span>
+            </a>
+            <div class="main1" *ngIf="nt1">
+              <a style="cursor: pointer" (click)="export()"> Exports </a>
+              <div class="main2" *ngIf="exp">
+                <a style="cursor: pointer" [routerLink]="['/home/exportHome']">Inward Remittance Disposal</a>
+                <a style="cursor: pointer" [routerLink]="['/home/billLodgement']">Bill Lodgement</a>
+                <a style="cursor: pointer" [routerLink]="['/home/packingCreditRequest']">Packing Credit Request</a>
+              </div>
+              <a style="cursor: pointer" [routerLink]="['/home/inwardRemmitance']">
+                Inward Remittance
+              </a>
+
+              <a style="cursor: pointer" (click)="import()"> Imports </a>
+              <div class="main2" *ngIf="imp">
+                <a style="cursor: pointer" [routerLink]="['/home/advance-outward-remittance']">Advance Outward
+                  Remittance</a>
+                <a style="cursor: pointer" [routerLink]="['/home/direct-import-payment']">Direct Import Payment</a>
+                <a style="cursor: pointer" (click)="buc()">Bills Under Collection</a>
+                <div class="main2" *ngIf="billuc">
+
+                  <a style="cursor: pointer" (click)="lcSight()">Sight</a>
+                  <a style="cursor: pointer" (click)="lcUsance()">Usance</a>
+
+
+                </div>
+                <a style="cursor: pointer" (click)="buc1()">Bills Under LC</a>
+                <div class="main2" *ngIf="billuc1">
+
+                  <a style="cursor: pointer" (click)="nonlcSight()">Sight</a>
+                  <a style="cursor: pointer" (click)="nonlcUsance()">Usance</a>
+                </div>
+                <a style="cursor: pointer" [routerLink]="['/home/buyerCredit']">Buyers Credit Request</a>
+                <a style="cursor: pointer" (click)="lcIsurence()">LC Issuance</a>
+                <div class="main2" *ngIf="lcI">
+                  <a style="cursor: pointer" (click)="lcInland()">Inland</a>
+                  <a style="cursor: pointer" (click)="lcImport()">Import</a>
+                </div>
+                <a style="cursor: pointer">BOE Submission to Bank</a>
+                <a style="cursor: pointer" [routerLink]="['/home/fbgWaiver']">FBG Waiver</a>
+              </div>
+              <a style="cursor: pointer" (click)="outward()" [routerLink]="['/home/outwardRemitance']">
+                Outward Remittance
+              </a>
+
+              <a style="cursor: pointer" (click)="other()"> Others </a>
+              <div class="main2" *ngIf="others">
+                <a style="cursor: pointer">GR Waiver</a>
+                <a style="cursor: pointer">Writeoff</a>
+                <a style="cursor: pointer">EEFC conversion request</a>
+                <a style="cursor: pointer">Net Off/Set Off</a>
+              </div>
+            </div>
+            <a style="cursor: pointer" [routerLink]="['/home/tasks/completed']">
+              Completed Task
+            </a>
+
+            <a style="cursor: pointer" [routerLink]="['/home/tasks/pending']"> Draft </a>
+          </div>
+        </li>
+        <!-- <li class="" style="cursor: pointer">
+          <a class="sidebar-content" [routerLink]="['/home/outwardRemitance']">
+            <span class="icon side-icon">
+              <img src="./assets/content-paper-edit.png" />
+            </span>
+            Outward Remittance non Imports
+          </a>
+        </li>
+        <li class="" style="cursor: pointer">
+          <a class="sidebar-content" [routerLink]="['/home/inwardRemmitance']">
+            <span class="icon side-icon">
+              <img src="./assets/content-paper-edit.png" />
+            </span>
+            Inward Remittance
+          </a>
+        </li>
+
+        <li style="cursor: pointer" class="" (click)="idpmsTask()">
+          <a class="sidebar-content" style="cursor: pointer;">
+            <span class="icon side-icon">
+              <img src="./assets/content-paper-edit.png" />
+            </span>
+            IDPMS
+            <span style="
+                                  margin-left: 55%;
+                                  position: absolute;
+                                  transform: translate(0, 3px);
+                                "><i style="font-size: 18px" *ngIf="!mt3" class="fas fa-angle-right"></i><i
+                style="font-size: 18px" *ngIf="mt3" class="fas fa-angle-down"></i>
+            </span>
+          </a>
+        </li>
+        <li class="manage-li" *ngIf="mt3">
+
+          <div class="main11" style=" color: #fff; margin-left: 5px;">
+            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px;">Upload Latest File</span>
+            </div>
+            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px;">Upload Advance Remittance</span>
+            </div>
+            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px;">Create Match</span>
+            </div>
+
+
+          </div>
+        </li>
+
+        <li style="cursor: pointer" class="" (click)="edpmsTask()">
+          <a class="sidebar-content" style="cursor: pointer;">
+            <span class="icon side-icon">
+              <img src="./assets/content-paper-edit.png" />
+            </span>
+            EDPMS
+            <span style="
+                                          margin-left: 55%;
+                                          position: absolute;
+                                          transform: translate(0, 3px);
+                                        "><i style="font-size: 18px" *ngIf="!mt4" class="fas fa-angle-right"></i><i
+                style="font-size: 18px" *ngIf="mt4" class="fas fa-angle-down"></i>
+            </span>
+          </a>
+        </li>
+        <li class="manage-li" *ngIf="mt4">
+          <div class="main11" style=" color: #fff; margin-left: 5px;">
+            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px;">Upload Latest File</span>
+            </div>
+            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px;">Upload Advance Remittance</span>
+            </div>
+            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px;">Create Match</span>
+            </div>
+
+
+          </div>
+        </li> -->
+
         <li class="">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a [routerLink]="['/home/upload']" style="cursor: pointer" class="sidebar-content">
             <span class="icon side-icon">
               <img src="./assets/briefcase.png" />
@@ -135,7 +368,6 @@
           </a>
         </li>
         <li class="" style="cursor: pointer">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a class="sidebar-content" [routerLink]="['/home/manageUser']">
             <span class="icon side-icon">
               <img src="./assets/single-neutral-circle.png" />
@@ -145,7 +377,6 @@
         </li>
 
         <li style="cursor: pointer" class="">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a class="sidebar-content">
             <span class="icon side-icon">
               <img src="./assets/briefcase.png" />
@@ -154,7 +385,6 @@
           </a>
         </li>
         <li style="cursor: pointer" class="">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a class="sidebar-content" [routerLink]="['/home/manageCustomer']">
             <span class="icon side-icon">
               <img src="./assets/briefcase.png" />
@@ -164,7 +394,6 @@
         </li>
 
         <li style="cursor: pointer" class="" *ngIf="!view" (click)="viewDocument()">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a class="sidebar-content" style="cursor: pointer;">
             <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
@@ -179,7 +408,6 @@
           </a>
         </li>
         <li class="manage-li" *ngIf="view">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a style="cursor: pointer" class="manage-content" (click)="viewDocument()">
             <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
@@ -207,7 +435,6 @@
       <h5 class="sidebar-nav-title sidebar-title">SUPPORT</h5>
       <ul style="cursor: pointer" class="sidebar-nav">
         <li class="">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a class="sidebar-content">
             <span class="icon side-icon">
               <img src="./assets/question-circle.png" />
@@ -216,7 +443,6 @@
           </a>
         </li>
         <li style="cursor: pointer" class="">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a class="sidebar-content">
             <span class="icon side-icon">
               <img src="./assets/email-action-unread.png" />
@@ -225,24 +451,6 @@
           </a>
         </li>
 
-        <!-- <li class="">
-                        <a class="collapsed" href="#sidebar-ui" data-toggle="collapse" data-parent="#sidebar">
-                            <span class="icon">
-                                <i class="fi flaticon-layers"></i>
-                            </span>
-                            UI Elements
-                            <i class="toggle fa fa-angle-down"></i>
-                        </a>
-                        <ul id="sidebar-ui"
-                            class="collapse ">
-                            <li class=""><a href="icons.html">Icons</a>
-                            </li>
-                            <li class=""><a
-                                    href="charts.html">Charts</a></li>
-                            <li class=""><a
-                                    href="maps_google.html">Google Maps</a></li>
-                        </ul>
-                    </li> -->
       </ul>
 
       <h5 class="sidebar-nav-title sidebar-title">SETTING</h5>

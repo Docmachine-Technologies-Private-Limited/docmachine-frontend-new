@@ -1060,6 +1060,20 @@ table tbody {
   color: RGB(255, 255, 255);
 }
 
+.button2 {
+  font-family: 'Nunito Sans', sans-serif !important;
+  min-width: 100px;
+  padding: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: #86ceff;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  height: 25px;
+  color: RGB(255, 255, 255);
+}
+
 .heading1 {
   font-family: "EuropaNuova-Regular", sans-serif !important;
   font-size: 20px;
@@ -1396,4 +1410,68 @@ table tbody {
 }
 .form5 button:active {
   border: 0;
+}
+
+
+.customfile1 {
+    content: 'Choose File';
+    border: none !important;
+
+    outline: none !important;
+    color: transparent;
+  height: 52px;
+  width: 138px;
+  background-color: #EAEAEA;
+  box-shadow: 0px 4px 4px -2px #D5D7DD !important;
+  border-radius: 8px;
+  text-align: center;
+  align-items: center;
+
+}
+.customfile1::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.customfile1::placeholder {
+  font-family: 'Poppins', sans-serif !important;
+    color: #606670 !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+}
+
+.customfile1::before {
+  content: 'Choose File';
+  display: inline-block;
+  color: #606670;
+  height: 30px;
+  width: 138px;
+  margin-top: 12px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-align: center;
+  align-items: center;
+  vertical-align: center;
+}
+.customfile1:hover::before {
+  border-color: black;
+}
+.customfile1:active {
+  outline: 0;
+}
+.customfile1:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
+}
+
+input {
+    box-shadow: none !important;
+    border: 1px solid #DEDEDE;
+
+}
+
+.subInput {
+  width: 150px;
+  border: 1px solid rgb(196, 196, 196);
+  border-radius: 20px;
 }

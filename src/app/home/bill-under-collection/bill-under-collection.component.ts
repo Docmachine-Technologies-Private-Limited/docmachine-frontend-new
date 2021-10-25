@@ -25,20 +25,23 @@ export class BillUnderCollectionComponent implements OnInit {
   Ax1: boolean;
   Ax2: boolean;
   step1: any;
-
-  piPoForm = new FormGroup({
-    pi_poNo: new FormControl(""),
-    benneName: new FormControl(""),
-    currency: new FormControl(""),
-    amount: new FormControl(""),
-    incoterm: new FormControl(""),
-    lastDayShipment: new FormControl(""),
-    paymentTerm: new FormControl(""),
-    pcRefNo: new FormControl(""),
-  });
+  outTog: boolean = false;
+  pipoValue = 'Select PI/PO'
+  arrayData: any = [];
+  pipoArr: any = [];
+  bene: string;
+  beneArray: any = [];
+  alertToggle: any;
+  amount: any;
+  amountArray: any = [];
+  amountArray1: any = [];
   url: any;
   file: any;
   doc: string;
+  popo: string;
+  pipo: string;
+  myRadio: any;
+  file1: any;
   constructor(
     public documentService: DocumentService,
     private router: Router,
@@ -73,6 +76,36 @@ export class BillUnderCollectionComponent implements OnInit {
     });
 
 
+    this.file = this.route.snapshot.paramMap.get('file')
+    this.bene = this.route.snapshot.paramMap.get('bene')
+    this.amount = parseInt(this.route.snapshot.paramMap.get('amount'))
+    this.pipo = this.route.snapshot.paramMap.get('pipo')
+    if (this.file == 'nonlcUsance') {
+      this.file1 = 'Non LC Usance'
+    }
+    else if (this.file == 'nonlcSight') {
+      this.file1 = 'Non LC Sight'
+    }
+    else if (this.file == 'lcSight') {
+      this.file1 = 'LC Sight'
+    }
+    else if (this.file == 'lcUsance') {
+      this.file1 = 'LC Usance'
+    }
+
+    if (this.pipo) {
+      console.log(this.pipo)
+      this.pipoValue = 'Select PI/PO'
+      this.arrayData.push("PI" + "-" + this.pipo + "-" + this.bene)
+      this.beneArray.push(this.bene)
+      this.beneArray.push(this.bene)
+      this.pipoArr.push(this.pipo)
+      this.amountArray.push(this.amount)
+      this.outTog = true
+    }
+
+
+
 
     this.documentService.getPipo().subscribe(
       (res: any) => {
@@ -103,6 +136,73 @@ export class BillUnderCollectionComponent implements OnInit {
       (this.greaterAmount = parseInt(this.selectedRow.amount))
     );
   }
+
+
+  clickPipo(a, b, c, d) {
+    let x = a + "-" + b + "-" + c
+    if (this.arrayData.length > 0) {
+      if (c == this.beneArray[0]) {
+
+        let j = this.arrayData.indexOf(x)
+        if (j == -1) {
+
+          this.arrayData.push(x)
+          this.pipoArr.push(b)
+          this.beneArray.push(c)
+          let l = parseInt(d)
+          this.amountArray.push(l)
+          //this.amount = this.amount + parseInt(d)
+        }
+        else {
+          console.log("x")
+        }
+
+        console.log(this.arrayData)
+      }
+      else {
+        this.alertToggle = true
+        setTimeout(() => {
+          console.log('hi')
+          this.alertToggle = false
+        }, 5000);
+        return
+      }
+    }
+    else {
+      //this.amount = this.amount + parseInt(d)
+      this.arrayData.push(x)
+      this.pipoArr.push(b)
+      this.beneArray.push(c)
+      let l = parseInt(d)
+      this.amountArray.push(l)
+    }
+
+
+
+
+
+  }
+
+  amountFun(a, b) {
+    console.log('shshshh')
+    this.amountArray1[b] = parseInt(a)
+    let z = 0;
+    for (let value of this.amountArray1) {
+      z = z + value
+    }
+    this.amount = z
+    console.log(this.amountArray1)
+    console.log(this.amount)
+    console.log('shshshh')
+  }
+
+  removePipo(i) {
+    this.arrayData.splice(i, 1)
+    this.pipoArr.splice(i, 1)
+    this.beneArray.splice(i, 1)
+    this.amount = this.amount - this.amountArray[i]
+  }
+
 
   onExport() {
     this.export = !this.export;
@@ -149,6 +249,28 @@ export class BillUnderCollectionComponent implements OnInit {
   showThisPdf(piPo) {
     this.documentService.draft = false;
     this.router.navigate(['home/paymentAcceptance', { pipo: piPo, file: this.file }]);
+
+  }
+
+  showThisPdf1(piPo) {
+    this.documentService.draft = false;
+    console.log(this.myRadio)
+    if (this.myRadio == 'axisBank') {
+      console.log("h");
+      this.router.navigate(['home/paymentAcceptance', {
+        pipo: this.pipoArr,
+        amount: this.amount,
+        file: this.file
+      }]);
+    }
+    else {
+      this.router.navigate(['home/paymentAcceptance', {
+        pipo: this.pipoArr,
+        amount: this.amount,
+        file: this.file
+      }]);
+
+    }
 
   }
 

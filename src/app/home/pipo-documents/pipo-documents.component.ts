@@ -103,6 +103,12 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   pipoDoc: any = 'a';
   viewData: any;
   closeResult: string;
+  buttonToggle: any = false;
+  letterToggle: boolean;
+  uploadIsurance: boolean;
+  lcNumber: any;
+  lcAmount: any;
+  lcCurrency: any;
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -171,6 +177,21 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
 
 
 
+  }
+
+  lcFun(a) {
+    console.log('s')
+    this.lcNumber = a
+  }
+
+  amountFun(a) {
+    console.log('l')
+    this.lcAmount = a
+  }
+
+  currencyFun(a) {
+    console.log('r')
+    this.lcCurrency = a
   }
 
   public loadFromLocalStorage() {
@@ -320,6 +341,60 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     this.showPdf = false;
   }
 
+  openDoc(a) {
+    console.log(a)
+    if (a == 'Advance Payment') {
+      this.router.navigate(['home/advance-outward-remittance', {
+        file: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+      }]);
+    }
+    else if (a == 'Collection Bill') {
+      this.buttonToggle = !this.buttonToggle
+
+    }
+    else if (a == 'Letter of Credit') {
+      this.letterToggle = !this.letterToggle
+      this.uploadIsurance = false
+
+    }
+  }
+
+  openSubDoc(a) {
+    console.log(a)
+    if (a == 'usance') {
+      console.log(a)
+      this.router.navigate(['home/bill-under-collection', {
+        file: "nonlcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+      }]);
+    }
+    else if (a == 'sight') {
+      console.log(a)
+      this.router.navigate(['home/bill-under-collection', {
+        file: "nonlcSight", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+      }]);
+    }
+  }
+
+  openSubLetter(a) {
+    if (a == 'yes') {
+      console.log(a)
+      // this.router.navigate(['home/bill-under-collection', {
+      //   file: "nonlcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+      // }]);
+      this.uploadIsurance = !this.uploadIsurance
+      this.letterToggle = !this.letterToggle
+    }
+    else if (a == 'no') {
+      console.log(a)
+      // this.router.navigate(['home/bill-under-collection', {
+      //   file: "nonlcSight", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+      // }]);
+      this.router.navigate(['home/lc-isurence', {
+        file: "import", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+      }]);
+    }
+  }
+
   // getTrasactions() {
   //   const data: any = this.documentService.getTask();
   //   this.allTransactions = data.task;
@@ -426,10 +501,21 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   }
 
   viewClick(a) {
-    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-      this.pipoData[a]
-    );
-    console.log(this.viewData)
+    if (a == 'lcIssuance') {
+      console.log(this.pipoData[a].doc)
+      console.log(this.pipoData[a])
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.pipoData[a].doc
+      );
+      console.log(this.viewData)
+    }
+    else {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.pipoData[a]
+      );
+      console.log(this.viewData)
+    }
+
   }
 
   onSubmitPipo1() {
@@ -509,24 +595,56 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
           });
     }
     else if (this.upfile != 'PO' && this.upfile != 'PO') {
-      console.log(args[1].data)
-      this.userService.updateSinglePipo(this.id, this.pipoDoc, args[1].data)
-        .subscribe(
-          data => {
-            this.pipoData[`${this.pipoDoc}`] = args[1].data
-            console.log("king123")
-            console.log(data['data'])
-            this.toastr.success('PI/PO updated successfully.');
-            this.docTog = false
-            this.toggle = false
-            this.toggle2 = false
-            // this.toastr.success('Company details updated successfully.');
-            // this.router.navigate(['/home/dashboardNew']);
-          },
-          error => {
-            // this.toastr.error('Invalid inputs, please check!');
-            // console.log("error")
-          });
+      if (this.uploadIsurance) {
+        this.pipoDoc = 'lcIssuance'
+        let data = {
+          lcNumber: this.lcNumber,
+          lcAmount: this.lcAmount,
+          lcCurrency: this.lcCurrency,
+          doc: args[1].data
+        }
+        this.userService.updateSinglePipo(this.id, this.pipoDoc, data)
+          .subscribe(
+            data => {
+              this.pipoData[`${this.pipoDoc}`] = args[1].data
+              console.log("king123")
+              console.log(data['data'])
+              this.toastr.success('PI/PO updated successfully.');
+              this.docTog = false
+              this.toggle = false
+              this.toggle2 = false
+              this.uploadIsurance = false
+              // this.toastr.success('Company details updated successfully.');
+              // this.router.navigate(['/home/dashboardNew']);
+            },
+            error => {
+              // this.toastr.error('Invalid inputs, please check!');
+              console.log("error")
+            });
+
+
+      }
+      else {
+        console.log(args[1].data)
+        this.userService.updateSinglePipo(this.id, this.pipoDoc, args[1].data)
+          .subscribe(
+            data => {
+              this.pipoData[`${this.pipoDoc}`] = args[1].data
+              console.log("king123")
+              console.log(data['data'])
+              this.toastr.success('PI/PO updated successfully.');
+              this.docTog = false
+              this.toggle = false
+              this.toggle2 = false
+              // this.toastr.success('Company details updated successfully.');
+              // this.router.navigate(['/home/dashboardNew']);
+            },
+            error => {
+              // this.toastr.error('Invalid inputs, please check!');
+              // console.log("error")
+            });
+      }
+
     }
 
   }

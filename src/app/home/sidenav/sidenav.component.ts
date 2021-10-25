@@ -28,6 +28,15 @@ export class SidenavComponent implements OnInit {
   name: any;
   ct: boolean;
   status: boolean = false;
+  status1: boolean = false;
+  status2: boolean = false;
+  status3: boolean = false;
+  mt1: any;
+  mt2: any;
+  nt1: boolean;
+  billuc1: boolean;
+  mt3: boolean;
+  mt4: any;
 
   constructor(
     public router: Router,
@@ -67,14 +76,35 @@ export class SidenavComponent implements OnInit {
     this.mt = !this.mt;
   }
 
+  public manageTask1() {
+    this.mt1 = !this.mt1;
+  }
+
   public viewDocument() {
     this.view = !this.view;
 
   }
 
+  public exportTask() {
+    this.mt2 = !this.mt2;
+  }
+
+  public idpmsTask() {
+    this.mt3 = !this.mt3;
+  }
+
+  public edpmsTask() {
+    this.mt4 = !this.mt4;
+  }
+
   public newTask() {
     this.status = !this.status;
     this.router.navigate(["home/pipoDoc"]);
+  }
+
+  public newTask1() {
+    this.nt1 = !this.nt1;
+    //this.router.navigate(["home/pipoDoc"]);
   }
 
   public export() {
@@ -100,6 +130,11 @@ export class SidenavComponent implements OnInit {
   public buc() {
     this.billuc = !this.billuc;
   }
+
+  public buc1() {
+    this.billuc1 = !this.billuc1;
+
+  }
   public lc() {
     this.lc1 = !this.lc1;
   }
@@ -117,32 +152,50 @@ export class SidenavComponent implements OnInit {
 
   lcSight() {
     console.log("lcSight")
+    this.router.navigate(['home/bill-under-collection', {
+      file: "lcSight"
+    }]);
 
-    this.router.navigate(["/home/bill-under-collection/lcSight"])
+    //this.router.navigate(["/home/bill-under-collection/lcSight"])
   }
 
   lcUsance() {
     console.log("lcUsance")
-    this.router.navigate(["/home/bill-under-collection/lcUsance"])
+    //this.router.navigate(["/home/bill-under-collection/lcUsance"])
+    this.router.navigate(['home/bill-under-collection', {
+      file: "lcUsance"
+    }]);
   }
   nonlcSight() {
     console.log("nonlcSight")
-    this.router.navigate(["/home/bill-under-collection/nonlcSight"])
+    //this.router.navigate(["/home/bill-under-collection/nonlcSight"])
+    this.router.navigate(['home/bill-under-collection', {
+      file: "nonlcSight"
+    }]);
 
   }
   nonlcUsance() {
     console.log("nonlcUsance")
-    this.router.navigate(["/home/bill-under-collection/nonlcUsance"])
+    //this.router.navigate(["/home/bill-under-collection/nonlcUsance"])
+    this.router.navigate(['home/bill-under-collection', {
+      file: "nonlcUsance"
+    }]);
 
   }
 
   lcInland() {
     console.log("nonlcUsance")
-    this.router.navigate(["/home/lc-isurence/inland"])
+    this.router.navigate(['home/lc-isurence', {
+      file: "inland"
+    }]);
+    //this.router.navigate(["/home/lc-isurence/inland"])
   }
 
   lcImport() {
     console.log("nonlcUsance")
-    this.router.navigate(["/home/lc-isurence/import"])
+    this.router.navigate(['home/lc-isurence', {
+      file: "import"
+    }]);
+    //this.router.navigate(["/home/lc-isurence/import"])
   }
 }

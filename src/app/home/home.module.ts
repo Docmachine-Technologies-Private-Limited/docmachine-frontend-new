@@ -173,7 +173,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
-            path: "inwardRemittance/:boeNumber",
+            path: "inwardRemittance",
             component: InwardRemittanceComponent,
             pathMatch: "full",
           },
@@ -213,7 +213,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
-            path: "advance-remittance/:boeNumber",
+            path: "advance-remittance",
             component: AdvanceRemitanceComponent,
             pathMatch: "full",
           },
@@ -244,12 +244,12 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
-            path: "fbg-wavier/:id",
+            path: "fbg-wavier",
             component: FbgWavierComponent,
             pathMatch: "full",
           },
           {
-            path: "advance-remittance-fbg/:id",
+            path: "advance-remittance-fbg",
             component: AdvanceRemitanceFbgComponent,
             pathMatch: "full",
           },
@@ -279,12 +279,12 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
-            path: "bill-under-collection/:file",
+            path: "bill-under-collection",
             component: BillUnderCollectionComponent,
             pathMatch: "full",
           },
           {
-            path: "lc-isurence/:file",
+            path: "lc-isurence",
             component: LcIsurenceComponent,
             pathMatch: "full",
           },
