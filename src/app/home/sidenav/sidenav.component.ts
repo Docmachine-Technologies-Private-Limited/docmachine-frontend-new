@@ -4,6 +4,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DocumentService } from "../../service/document.service";
 import { UserService } from "../../service/user.service";
+import { ToastrService } from "ngx-toastr";
 @Component({
   selector: "app-sidenav",
   templateUrl: "./sidenav.component.html",
@@ -44,6 +45,7 @@ export class SidenavComponent implements OnInit {
     public authGuard: AuthGuard,
     private documentService: DocumentService,
     public userService: UserService,
+    private toastr: ToastrService
   ) { }
 
   async ngOnInit() {
@@ -197,5 +199,25 @@ export class SidenavComponent implements OnInit {
       file: "import"
     }]);
     //this.router.navigate(["/home/lc-isurence/import"])
+  }
+
+  removeTwo() {
+    this.userService.delete('this.authcode')
+      .subscribe(
+        data => {
+          console.log("king123")
+          console.log(data)
+
+          if (data['status'] == 200) {
+            this.toastr.success(data['message']);
+          }
+          else {
+            this.toastr.error(data['message']);
+          }
+        },
+        error => {
+          this.toastr.error('something wrong, please check the details!');
+          console.log("error")
+        });
   }
 }

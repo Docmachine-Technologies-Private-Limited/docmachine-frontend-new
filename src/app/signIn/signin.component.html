@@ -33,7 +33,7 @@
     <!-- The image half -->
 
     <!-- The content half -->
-    <div class="bg-dark" style="
+    <div *ngIf='!qr' class="bg-dark" style="
         float: left;
         width: 58%;
         display: flex;
@@ -46,14 +46,14 @@
           Signup
         </button>
       </div>
-      <div class="login d-flex align-items-center py-5">
+      <div class="login d-flex align-items-center">
         <!-- Demo content-->
         <div class="container">
           <div class="row">
             <div class="col-lg-10 col-xl-9 mx-auto">
               <h6 class="display-5">Login</h6>
               <p class="mb-4 text-ui">
-                Use your email and password to access your account
+                Use your email, password and Google Authenticator OTP to access your account
               </p>
               <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" style="margin-bottom: 20px;">
                 <div class="form-group mb-3">
@@ -91,6 +91,14 @@
                       than 6 letter</div>
                   </div>
                 </div>
+                <div class="form-group mb-3" *ngIf='otp'>
+                  <label for="">Enter the OTP</label>
+                  <input id="password1" placeholder="Enter the OTP" required=""
+                    class="form-control rounded-pill border-0 shadow-sm px-4 password1"
+                    (input)='inputFun($event.target.value)' />
+                </div>
+
+
                 <p class="text-muted mb-4 bottom-text">
                   You continuing, you agree to DocMachine
                   <a href="">Term of service</a> we will manage information as
@@ -111,6 +119,35 @@
           </div>
         </div>
         <!-- End -->
+      </div>
+    </div>
+    <div *ngIf='qr' class="bg-dark" style="
+            float: left;
+            width: 58%;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+          ">
+      <div *ngIf="!tfa.secret" style="margin-top: 50px;">
+
+        <span *ngIf="!!tfa.tempSecret">
+
+          <p style="text-align: center;">Scan the QR code and enter the secret key Using Google Authenticator
+            Application</p>
+          <img [src]="tfa.dataURL" alt="" class="img-thumbnail" style="display:block;margin:auto">
+
+          <p style="text-align: center;">Auth Type - Time Based - OTP</p>
+
+          <form class="form-group" (ngSubmit)="confirm()" #otpForm="ngForm" style="text-align: -webkit-center;">
+            <input name="authcode" #iauthcode="ngModel"
+              class="form-control rounded-pill border-0 shadow-sm px-4 password1" maxlength="6"
+              placeholder="Enter the Auth Code" id="authcode" autocomplete="off" [(ngModel)]="authcode" required>
+            <br>
+            <button type="Submit" class="btn btn-lg btn-primary btn-block btn-signin"
+              [disabled]="iauthcode?.errors?.required">Submit</button>
+          </form>
+          <p class="text-danger" style="text-align:center;" *ngIf="errorMessage">{{errorMessage}}</p>
+        </span>
       </div>
     </div>
     <!-- End -->

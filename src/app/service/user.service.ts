@@ -20,7 +20,7 @@ export class UserService {
   }
 
   register(user) {
-    return this.http.post(`https://dm.uipep.com/v1/authenticate/signup`, {
+    return this.http.post(`http://localhost:3000/v1/authenticate/signup`, {
       fullName: user.fullName,
       emailId: user.email,
       password: user.password,
@@ -39,21 +39,21 @@ export class UserService {
     console.log(httpOptions);
 
     return this.http.post(
-      `https://dm.uipep.com/v1/authenticate/login`,
+      `http://localhost:3000/v1/authenticate/login`,
       null,
       httpOptions
     );
   }
 
   public updatePsw(data, email) {
-    return this.http.put(`https://dm.uipep.com/v1/authenticate/updatepsw`, {
+    return this.http.put(`http://localhost:3000/v1/authenticate/updatepsw`, {
       newPassword: data.password1,
       emailId: email,
     });
   }
 
   public forgotpsw(loginData) {
-    return this.http.put(`https://dm.uipep.com/v1/authenticate/forgotpsw`, {
+    return this.http.put(`http://localhost:3000/v1/authenticate/forgotpsw`, {
       emailId: loginData.emailId,
     });
   }
@@ -65,9 +65,39 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/team/post`,
+      `http://localhost:3000/v1/team/post`,
       {
         team: team,
+      },
+      httpOptions
+    );
+  }
+
+  verify(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      "http://localhost:3000/v1/otp/verify",
+      {
+        data: data,
+      },
+      httpOptions
+    );
+  }
+
+  delete(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      "http://localhost:3000/v1/otp/delete",
+      {
+        data: data,
       },
       httpOptions
     );
@@ -80,7 +110,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/team/get`,
+      `http://localhost:3000/v1/team/get`,
       {
         team: "team",
       },
@@ -95,7 +125,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/team/update`,
+      `http://localhost:3000/v1/team/update`,
       {
         team: team,
       },
@@ -112,7 +142,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/update`,
+      `http://localhost:3000/v1/pipo/update`,
       {
         pipo: pipo,
         id: id
@@ -131,7 +161,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/updateSingle`,
+      `http://localhost:3000/v1/pipo/updateSingle`,
       {
         id: id,
         file: file,
@@ -151,7 +181,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/updateMany`,
+      `http://localhost:3000/v1/pipo/updateMany`,
       {
         pipo: pipo,
         file: file,
@@ -168,7 +198,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/team/getUser`,
+      `http://localhost:3000/v1/team/getUser`,
       {
         team: "team",
       },
@@ -183,7 +213,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/bene/post`,
+      `http://localhost:3000/v1/bene/post`,
       {
         bene: bene,
       },
@@ -198,7 +228,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/bene/get`,
+      `http://localhost:3000/v1/bene/get`,
       {
         boeNumber: boeNumber,
       },
@@ -212,7 +242,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/bene/getSingleBene`,
+      `http://localhost:3000/v1/bene/getSingleBene`,
       {
         id: id,
       },
@@ -228,7 +258,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/bene/update`,
+      `http://localhost:3000/v1/bene/update`,
       {
         id: id,
         bene: bene,
@@ -244,7 +274,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/member/post`,
+      `http://localhost:3000/v1/member/post`,
       {
         id: id,
         member: member,
@@ -259,7 +289,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/member/get`,
+      `http://localhost:3000/v1/member/get`,
       {
         teamId: id,
       },
@@ -274,7 +304,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/post`,
+      `http://localhost:3000/v1/pipo/post`,
       { pipo: pipo },
       httpOptions
     );
@@ -288,7 +318,7 @@ export class UserService {
     };
 
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/get`,
+      `http://localhost:3000/v1/pipo/get`,
       { pi_poNo: pipoNumber },
       httpOptions
     );
@@ -301,7 +331,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http
-      .get(`https://dm.uipep.com/v1/user/profile`, httpOptions)
+      .get(`http://localhost:3000/v1/user/profile`, httpOptions)
       .toPromise();
   }
 
@@ -313,7 +343,7 @@ export class UserService {
     };
     return this.http
       .post(
-        `https://dm.uipep.com/v1/bene/getByName`,
+        `http://localhost:3000/v1/bene/getByName`,
         { beneName: name },
         httpOptions
       ).toPromise();
