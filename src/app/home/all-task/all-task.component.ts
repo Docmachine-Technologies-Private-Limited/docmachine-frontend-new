@@ -13,7 +13,7 @@ import { UserService } from "../../service/user.service";
 })
 export class AllTaskComponent implements OnInit {
 
-  public item1;
+  public item1:any;
   public item2;
   public user;
   public selectedRow;

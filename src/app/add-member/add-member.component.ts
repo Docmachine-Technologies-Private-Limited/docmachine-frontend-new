@@ -21,7 +21,7 @@ export class AddMemberComponent implements OnInit, AfterViewInit {
   memeberForm: FormGroup;
   id: any;
   item: Object;
-  item1: Object;
+  item1: any;
   authToken: any;
   headers: any;
   img: any;

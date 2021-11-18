@@ -231,7 +231,7 @@
                                                         id="password1" type=""
                                                         placeholder="Type the bank name to search"
                                                         class="form-control rounded-pill password password1"
-                                                        (input)="searchData($event.target.value, i)"
+                                                        (input)="searchData($any($event.target).value, i)"
                                                         [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('bank').errors?.required }">
                                                     <div *ngIf="submitted1 && g.controls[i].get('bank').errors"
                                                         class="invalid-feedback">
@@ -298,7 +298,7 @@
                                                     <select [(ngModel)]="details[i].accType"
                                                         class="form-control rounded-pill password password1"
                                                         formControlName="accType"
-                                                        (change)="modo($event.target.value, i)"
+                                                        (change)="modo($any($event.target).value, i)"
                                                         [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('accType').errors }">
                                                         <option value="" [selected]="!details[i].accType">Choose Account
                                                             Type</option>
@@ -340,7 +340,7 @@
                                                         id="password1" type=""
                                                         placeholder="Type the currency name to search"
                                                         class="form-control rounded-pill password password1"
-                                                        (input)="searchCurrency($event.target.value,i)"
+                                                        (input)="searchCurrency($any($event.target).value,i)"
                                                         [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('currency').errors }">
                                                     <div *ngIf="submitted1 && g.controls[i].get('currency').errors"
                                                         class="invalid-feedback">

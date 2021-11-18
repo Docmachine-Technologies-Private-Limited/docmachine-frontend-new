@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AxisbankComponent } from './axisbank.component';
+import { InwardRemittanceComponent } from './inwardRemittance.component';
 
 describe('AxisbankComponent', () => {
-  let component: AxisbankComponent;
-  let fixture: ComponentFixture<AxisbankComponent>;
+  let component: InwardRemittanceComponent;
+  let fixture: ComponentFixture<InwardRemittanceComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AxisbankComponent ]
+      declarations: [ InwardRemittanceComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AxisbankComponent);
+    fixture = TestBed.createComponent(InwardRemittanceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

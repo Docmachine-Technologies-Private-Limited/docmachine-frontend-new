@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import {ConfirmDialogComponent} from './confirm-dialog.component';
 import {ConfirmDialogService} from './confirm-dialog.service';
+import {RouterModule} from "@angular/router";
 
 @NgModule({
     declarations: [
@@ -11,6 +12,7 @@ import {ConfirmDialogService} from './confirm-dialog.service';
     ],
     imports: [
         BrowserModule,
+      RouterModule,
         CommonModule
     ],
     exports: [

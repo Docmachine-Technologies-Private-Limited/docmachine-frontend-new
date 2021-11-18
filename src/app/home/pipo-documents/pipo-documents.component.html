@@ -294,15 +294,15 @@
                                         <div style="display: flex;">
                                             <div>
                                                 LC Number: <input class="subInput" type="text"
-                                                    (input)='lcFun($event.target.value)'>
+                                                    (input)='lcFun($any($event.target).value)'>
                                             </div>
                                             <div>
                                                 Amount: <input class="subInput" type="text"
-                                                    (input)='amountFun($event.target.value)'>
+                                                    (input)='amountFun($any($event.target).value)'>
                                             </div>
                                             <div>
                                                 Currency: <input class="subInput" type="text"
-                                                    (input)='currencyFun($event.target.value)'>
+                                                    (input)='currencyFun($any($event.target).value)'>
                                             </div>
                                         </div>
                                         <form method="POST" style="margin-top: 10px; margin-bottom: 10px;">
@@ -883,7 +883,7 @@
                                                 <div
                                                     style="flex-direction:row; margin-right: 20px; border-radius: 5px; width: 200px;">
                                                     <span style="color: #707683; font-size: 14px;">Type</span> <br>
-                                                    
+
                                                     <a
                                                         style="outline: none; border: 1px solid #DEDEDE; width: 150px; border-radius: 5px; height: 30px; background-color: #E9E9E9; padding: 5px;">{{course.type}}</a>
                                                 </div>
@@ -909,7 +909,7 @@
                             <!----------------ADD A DOCUMENT ----------------------------------------->
                             <div class="tab-content form-wrapper" [attr.data-index]="2" style="
                                                             background-color: white;
-                                                            width: 96%; 
+                                                            width: 96%;
                                                             height: 150vh;
                                                             ">
                                 <div *ngIf='!docTog'>
@@ -995,7 +995,7 @@
                             </div>
                             <div class="tab-content form-wrapper" [attr.data-index]="3" style="
                                                             background-color: white;
-                                                            width: 96%; 
+                                                            width: 96%;
                                                             height: 150vh;
                                                             ">
                                 <div style="display: flex;">

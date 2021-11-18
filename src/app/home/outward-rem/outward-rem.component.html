@@ -78,7 +78,7 @@
                             <p class="fs14">Continental carriers pvt ltd</p>
                         </div>
                     </div>
-                    <div id="profile" class="" *ngFor="let data of item2; let i = inde" (click)="getInvoices(data,i)">
+                    <div id="profile" class="" *ngFor="let data of item2; let i = index" (click)="getInvoices(data,i)">
                         <!------class="row p-2 bb hhu"-->
                         <div class="ph-10 fl">
                             <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
@@ -95,7 +95,7 @@
                             <p class="fs14">Continental carriers pvt ltd</p>
                         </div>
                     </div>
-                    <div id="profile" class="" *ngFor="let data of item2; let i = inde" (click)="getInvoices(data,i)">
+                    <div id="profile" class="" *ngFor="let data of item2; let i = index" (click)="getInvoices(data,i)">
                         <!------class="row p-2 bb hhu"-->
                         <div class="ph-10 fl">
                             <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
@@ -211,9 +211,9 @@
                                                                             <td class="sb-no">{{data.invoiceno}}</td>
                                                                             <td>{{data.amount}}</td>
                                                                             <td>{{data.currency}}</td>
-        
+
                                                                         </tr>
-        
+
                                                                     </tbody>
                                                                 </table>
                                                             </div> -->
@@ -223,7 +223,7 @@
                                       margin-bottom: 24px;
                                       border-radius: 8px;
                                       box-shadow: 4px 4px 8px 4px #eeeefa;
-        
+
                                       border-left: 3px solid #e7845f;
                                     ">
                                                         <div style="
@@ -740,7 +740,7 @@
                                                             style="width: 100%; margin-top: 20px; margin-bottom: 20px;"
                                                             placeholder="Search purpose code,group name or description"
                                                             class="form-control" type="text"
-                                                            (input)="searchData($event.target.value)">
+                                                            (input)="searchData($any($event.target).value)">
                                                         <div *ngIf="pgNumber != 0">
                                                             Matching Result <br>
                                                             Number of Purpose Group = {{ pgNumber }} <br>

@@ -134,7 +134,7 @@
               <p class="fs14">Continental carriers pvt ltd</p>
             </div>
           </div>
-          <div id="profile" class="" *ngFor="let data of item2; let i = inde" (click)="getInvoices(data,i)">
+          <div id="profile" class="" *ngFor="let data of item2; let i = index" (click)="getInvoices(data,i)">
             <!------class="row p-2 bb hhu"-->
             <div class="ph-10 fl">
               <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
@@ -149,7 +149,7 @@
               <p class="fs14">Continental carriers pvt ltd</p>
             </div>
           </div>
-          <div id="profile" class="" *ngFor="let data of item2; let i = inde" (click)="getInvoices(data,i)">
+          <div id="profile" class="" *ngFor="let data of item2; let i = index" (click)="getInvoices(data,i)">
             <!------class="row p-2 bb hhu"-->
             <div class="ph-10 fl">
               <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
@@ -841,7 +841,7 @@
             <label>LC Amount</label>
             <input type="text" name="" id=""
               style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px; width:100px; margin-top: -2px;"
-              (input)='amountFun($event.target.value, i)'>
+              (input)='amountFun($any($event.target).value, i)'>
           </div>
 
         </div>

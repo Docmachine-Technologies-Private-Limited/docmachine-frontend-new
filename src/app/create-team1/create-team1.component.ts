@@ -8,7 +8,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
 import * as data from '../bank.json';
-import * as data1 from '../currency.json';
+import * as data1 from './../currency.json';
 @Component({
   selector: 'app-create-team1',
   templateUrl: './create-team1.component.html',

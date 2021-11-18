@@ -48,7 +48,7 @@
                 <div *ngIf="!purposeSelect">
                     <input style="width: 50%; margin-top: 20px; margin-bottom: 20px;"
                         placeholder="Search purpose code,group name or description" class="form-control" type="text"
-                        (input)="searchData($event.target.value)">
+                        (input)="searchData($any($event.target).value)">
                     <div *ngIf="pgNumber != 0">
                         Matching Result <br>
                         Number of Purpose Group = {{ pgNumber }} <br>

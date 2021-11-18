@@ -63,7 +63,7 @@ export class SigninComponent implements OnInit {
                     console.log("king123")
                     // console.log(data['result'])
                     // if (data['result']) {
-                    //   
+                    //
                     //   if (data['result']['role'] == 'ca') {
                     //     this.userService.role = data['result']['role']
                     //     this.router.navigate(['/home/caDocuments/all'])
@@ -143,7 +143,7 @@ export class SigninComponent implements OnInit {
 
   }
 
-  inputFun(a) {
+  inputFun(a:any) {
     this.submitted = false
     this.isDisabled = false;
     this.value = a

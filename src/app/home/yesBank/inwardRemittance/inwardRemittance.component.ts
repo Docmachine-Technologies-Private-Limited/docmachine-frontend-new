@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import { DocumentService } from "../../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { DomSanitizer } from "@angular/platform-browser";
-import { Console } from "console";
+
 
 @Component({
   selector: "app-axisbank",
