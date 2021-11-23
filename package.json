@@ -10,7 +10,8 @@
     "dev:ssr": "ng run angular-ssr-docker:serve-ssr",
     "serve:ssr": "node dist/angular-ssr-docker/server/main.js",
     "build:ssr": "ng build && ng run angular-ssr-docker:server",
-    "prerender": "ng run angular-ssr-docker:prerender"
+    "prerender": "ng run angular-ssr-docker:prerender",
+    "build-server-prod": "ng build --configuration=production && ng serve --configuration=production"
   },
   "private": true,
   "dependencies": {
