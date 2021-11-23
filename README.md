@@ -1,34 +1,27 @@
-# Angular SSR with Angular Universal and Deploy with Docker
+# Dm
 
-### How to run?
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.3.
 
-1. Clone the project
-2. Open terminal in the project and start JSON server
-    ```shell
-    json-server --watch db.json
-    ```
-3. Open another terminal in same project and run the application
+## Development server
 
-   ```
-   npm run dev:ssr
-   ```
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-### Deploy with docker
+## Code scaffolding
 
-1. Build the application, use `sudo` if necessary
-    ```shell
-      ng build --configuration=dev && ng run pdts:server
-    ```
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-2. Build Docker images
+## Build
 
-    ```shell
-      docker build -t angular_ssr_docker .
-    ```
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-3. Run the image
+## Running unit tests
 
-    ```shell
-    docker run -p 4000:4000 angular_ssr_docker
-    ```
-4. Go to http://localhost:4000 to browse the application
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

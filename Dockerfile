@@ -1,11 +1,13 @@
-
-## Use Node Slim image
-FROM node:14-slim
-
-## Copy source code
+FROM alpine as node
+RUN apk add --update nodejs npm
+WORKDIR /app
 COPY . .
-RUN npm install --unsafe-perm
-RUN npm run build-server-prod
-## Start the application
-#CMD ["node", "dist/angular-ssr-docker/server/main.js"]
-EXPOSE 4200
+#RUN npm install
+RUN npm run prod
+
+# stage 2
+FROM nginx:alpine
+COPY --from=node /app/dist/dm /usr/share/nginx/html
+COPY --from=node /app/.nginx/nginx.conf /etc/nginx/nginx.conf
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
