@@ -109,6 +109,8 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   lcNumber: any;
   lcAmount: any;
   lcCurrency: any;
+  buttonToggle1: any;
+  buyer: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -282,6 +284,11 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     this.pipoNo = selectedRowValues.pi_poNo
     this.beneValue = this.pipoData.benneName
     this.docTog = false
+    this.buttonToggle = false
+    this.buttonToggle1 = false
+    this.buyer = false
+    this.letterToggle = false
+    this.uploadIsurance = false
     if (this.pipoData.document == 'PO') {
       this.pipourl1 = selectedRowValues.doc1
     }
@@ -348,15 +355,43 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
         file: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
       }]);
     }
+    else if (a == 'Direct Import') {
+      console.log('hello')
+      this.router.navigate(['home/direct-import-payment', {
+        file: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+      }]);
+    }
     else if (a == 'Collection Bill') {
       this.buttonToggle = !this.buttonToggle
 
     }
     else if (a == 'Letter of Credit') {
-      this.letterToggle = !this.letterToggle
-      this.uploadIsurance = false
+      if (this.pipoData.lcIssuance && this.pipoData.lcIssuance1) {
+        this.buttonToggle1 = !this.buttonToggle1
+        console.log('dhhh')
+        // this.router.navigate(['home/bill-under-collection', {
+        //   file: "nonlcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+        // }]);
+      }
+      else if (this.pipoData.lcIssuance) {
+        this.buttonToggle1 = !this.buttonToggle1
+        console.log('2232')
+      }
+      else if (this.pipoData.lcIssuance1 && !this.pipoData.lcIssuance) {
+        this.uploadIsurance = !this.uploadIsurance
+        this.letterToggle = false
+      }
+      else {
+        this.letterToggle = !this.letterToggle
+        this.uploadIsurance = false
+      }
+
 
     }
+  }
+
+  changeCheckbox() {
+    this.buyer = !this.buyer
   }
 
   openSubDoc(a) {
@@ -371,6 +406,33 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
       console.log(a)
       this.router.navigate(['home/bill-under-collection', {
         file: "nonlcSight", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+      }]);
+    }
+  }
+
+  openSubDoc1(a) {
+    console.log(a)
+    if (a == 'usance' && !this.buyer) {
+      console.log(a)
+      this.router.navigate(['home/bill-under-collection', {
+        file: "lcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount, buyer: false
+      }]);
+    }
+    else if (a == 'sight' && !this.buyer) {
+      console.log(a)
+      this.router.navigate(['home/bill-under-collection', {
+        file: "lcSight", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount, buyer: false
+      }]);
+    }
+    else if (a == 'usance' && this.buyer) {
+      this.router.navigate(['home/bill-under-collection', {
+        file: "lcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount, buyer: true
+      }]);
+
+    }
+    else if (a == 'sight' && this.buyer) {
+      this.router.navigate(['home/bill-under-collection', {
+        file: "lcSight", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount, buyer: true
       }]);
     }
   }

@@ -61,6 +61,7 @@ import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { PipoDocumentsComponent } from './pipo-documents/pipo-documents.component';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { BuyersLodgeComponent } from './yesBank/buyers-lodge/buyers-lodge.component';
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -126,6 +127,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     PackingCreditComponent,
     ConfirmDialogComponent,
     PipoDocumentsComponent,
+    BuyersLodgeComponent,
   ],
   imports: [
     CommonModule,
@@ -254,7 +256,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
-            path: "direct-import-axis/:boeNumber",
+            path: "direct-import-axis",
             component: DirectImportAxisComponent,
             pathMatch: "full",
           },
@@ -269,7 +271,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
-            path: "inwardRemittanceBoe/:boeNumber",
+            path: "inwardRemittanceBoe",
             component: InwardRemittanceBoeComponent,
             pathMatch: "full",
           },
@@ -361,6 +363,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
           {
             path: "packingCreditRequest",
             component: PackingCreditComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "BuyersLodge",
+            component: BuyersLodgeComponent,
             pathMatch: "full",
           },
           {

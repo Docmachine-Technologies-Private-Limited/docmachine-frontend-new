@@ -32,6 +32,9 @@ export class InwardRemittanceBoeComponent implements OnInit, OnDestroy {
   doc1: any;
   done: boolean;
   item3: any;
+  amount: any;
+  words: any;
+  pipoValue: any = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -62,7 +65,15 @@ export class InwardRemittanceBoeComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.id = this.route.snapshot.params['boeNumber'];
+    this.amount = this.route.snapshot.params['amount']
+    console.log(this.route.snapshot.params['pipo'])
+    this.words = this.route.snapshot.params['pipo']
+    console.log(this.words)
     console.log(this.id)
+    this.pipoValue = this.words.split(',')
+    console.log(this.words[0])
+    console.log(this.pipoValue)
+    this.id = this.pipoValue[0]
     await this.getUserDetail();
     this.getPipoDetaile();
     console.log("DRAFT ", this.item2);

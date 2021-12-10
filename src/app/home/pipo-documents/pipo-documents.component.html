@@ -275,6 +275,20 @@
                                             style="height: 30px !important; margin-right: 5px;"
                                             (click)=openDoc(pay.type)>{{pay.type}}</button>
                                     </div>
+                                    <div *ngIf='buttonToggle1' style="margin: 13px 0px 10px 30px;">
+
+                                        <div style="margin-left:10px" class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox"
+                                                    (change)=changeCheckbox()>
+                                                With Buyer's Credit
+                                            </label>
+                                        </div>
+                                        <button class="button2" style="height: 30px !important; margin-right: 5px;"
+                                            (click)='openSubDoc1("usance")'>Usance</button>
+                                        <button class="button2" style="height: 30px !important; margin-right: 5px;"
+                                            (click)='openSubDoc1("sight")'>Sight</button>
+                                    </div>
                                     <div *ngIf='buttonToggle' style="margin: 13px 0px 10px 30px;">
                                         <button class="button2" style="height: 30px !important; margin-right: 5px;"
                                             (click)='openSubDoc("usance")'>Usance</button>

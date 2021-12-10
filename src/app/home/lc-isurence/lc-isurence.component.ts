@@ -244,25 +244,45 @@ export class LcIsurenceComponent implements OnInit {
   }
 
   showThisPdf(piPo) {
+
     console.log("hello")
     this.documentService.draft = false;
+    let a = [];
+    a.push(piPo)
+    this.pipoArr = a;
     if (this.file == "inland") {
       console.log("hello1")
       if (this.myRadio == 'axisBank') {
-        this.router.navigate(['home/letterOfCreditInlandAxis', { pipo: piPo, file: this.file }]);
+        this.router.navigate(['home/letterOfCreditInlandAxis', {
+          pipo: this.pipoArr,
+          amount: this.selectedRow.amount,
+          file: this.file
+        }]);
       }
       else if (this.myRadio == 'yesBank') {
-        this.router.navigate(['home/letterOfCredit', { pipo: piPo, file: this.file }]);
+        this.router.navigate(['home/letterOfCredit', {
+          pipo: this.pipoArr,
+          amount: this.selectedRow.amount,
+          file: this.file
+        }]);
       }
     }
     else if (this.file == "import") {
       console.log("hello2")
       if (this.myRadio == 'axisBank') {
         console.log("h");
-        this.router.navigate(['home/letterOfCreditImportAxis', { pipo: piPo, file: this.file }]);
+        this.router.navigate(['home/letterOfCreditImportAxis', {
+          pipo: this.pipoArr,
+          amount: this.selectedRow.amount,
+          file: this.file
+        }]);
       }
       else if (this.myRadio == 'yesBank') {
-        this.router.navigate(['home/letterOfCreditImport', { pipo: piPo, file: this.file }]);
+        this.router.navigate(['home/letterOfCreditImport', {
+          pipo: this.pipoArr,
+          amount: this.selectedRow.amount,
+          file: this.file
+        }]);
       }
 
     }

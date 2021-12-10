@@ -95,6 +95,8 @@ export class SigninComponent implements OnInit {
                 });
             }
             else {
+              console.log(data)
+              console.log("error")
               this.toastr.error('Login unsuccessful!, Please check the details');
               this.isDisabled = false;
             }
@@ -143,7 +145,7 @@ export class SigninComponent implements OnInit {
 
   }
 
-  inputFun(a:any) {
+  inputFun(a: any) {
     this.submitted = false
     this.isDisabled = false;
     this.value = a
