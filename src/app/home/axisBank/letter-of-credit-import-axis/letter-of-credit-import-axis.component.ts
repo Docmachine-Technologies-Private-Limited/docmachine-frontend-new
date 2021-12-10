@@ -36,6 +36,9 @@ export class LetterOfCreditImportAxisComponent implements OnInit, OnDestroy {
   letterHead: any;
   file: string;
   arr: any;
+  words: any;
+  amount: any;
+  pipoValue: any = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -66,8 +69,17 @@ export class LetterOfCreditImportAxisComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
 
-    this.id = this.route.snapshot.paramMap.get('pipo');
-    this.file = this.route.snapshot.paramMap.get('file')
+    this.file = this.route.snapshot.paramMap.get('file');
+    this.id = this.route.snapshot.params['boeNumber'];
+    this.amount = this.route.snapshot.params['amount']
+    console.log(this.route.snapshot.params['pipo'])
+    this.words = this.route.snapshot.params['pipo']
+    console.log(this.words)
+    console.log(this.id)
+    this.pipoValue = this.words.split(',')
+    console.log(this.words[0])
+    console.log(this.pipoValue)
+    this.id = this.pipoValue[0]
     console.log(this.id)
     console.log(this.file)
     this.newTask.file = this.file;
@@ -205,8 +217,19 @@ export class LetterOfCreditImportAxisComponent implements OnInit, OnDestroy {
         (res) => {
           console.log("Transaction Saved");
           this.submitted = true;
+          this.userService.updateManyPipo(this.pipoValue, 'lcIssuance1', this.newTask.url1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data)
+                this.router.navigate(["/home/lc-isurence"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
 
-          this.router.navigate(["/home/lc-isurence", this.file]);
+
         },
         (err) => console.log("Error saving the transaction")
       );
@@ -215,7 +238,18 @@ export class LetterOfCreditImportAxisComponent implements OnInit, OnDestroy {
       this.documentService.completeTask({ _id: this.documentService.task._id, task: this.newTask }).subscribe(
         (res) => {
           console.log("COMPLETED");
-          this.router.navigate(["/home/lc-isurence", this.file]);
+          this.userService.updateManyPipo(this.pipoValue, 'lcIssuance1', this.newTask.url1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data)
+                this.router.navigate(["/home/lc-isurence"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+          //this.router.navigate(["/home/lc-isurence", this.file]);
         },
         (err) => console.log("ERROR")
       );

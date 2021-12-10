@@ -209,7 +209,18 @@ export class DirectImportAxisComponent implements OnInit, OnDestroy {
           console.log("Transaction Saved");
 
           this.submitted = true;
-          this.router.navigate(["/home/direct-import-payment"]);
+          this.userService.updateManyPipo(this.pipoValue, 'directImport', this.newTask.url1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data)
+                this.router.navigate(["/home/direct-import-payment"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+          //this.router.navigate(["/home/direct-import-payment"]);
         },
         (err) => console.log("Error saving the transaction")
       );
@@ -218,7 +229,18 @@ export class DirectImportAxisComponent implements OnInit, OnDestroy {
       this.documentService.completeTask({ _id: this.documentService.task._id, task: this.newTask }).subscribe(
         (res) => {
           console.log("COMPLETED")
-          this.router.navigate(["/home/direct-import-payment"])
+          this.userService.updateManyPipo(this.pipoValue, 'directImport', this.newTask.url1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data)
+                this.router.navigate(["/home/direct-import-payment"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+          //this.router.navigate(["/home/direct-import-payment"])
         },
         (err) => console.log("ERROR")
       );
