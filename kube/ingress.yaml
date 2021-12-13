@@ -1,0 +1,56 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: docmachine-ingress
+  annotations:
+    # specify the name of the global IP address resource to be associated with the HTTP(S) Load Balancer.
+    kubernetes.io/ingress.global-static-ip-name: docmachine-gke-external-ip
+    # add an annotation indicating the issuer to use.
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    # controls whether the ingress is modified ‘in-place’,
+    # or a new one is created specifically for the HTTP01 challenge.
+    acme.cert-manager.io/http01-edit-in-place: "true"
+  labels:
+    app: docmachine
+    app.kubernetes.io/component: jenkins-master
+    app.kubernetes.io/name: jenkins
+  finalizers:
+    - networking.gke.io/ingress-finalizer-V2
+  ownerReferences:
+    - apiVersion: app.k8s.io/v1beta1
+      blockOwnerDeletion: true
+      kind: Application
+      name: jenkins
+      uid: 10565eeb-13a2-42a1-91fa-9d4b3b3a80e4
+spec:
+  tls: # < placing a host in the TLS config will indicate a certificate should be created
+  - hosts:
+    - docmachine.in
+    - api.docmachine.in
+    secretName: docmachine-cert-secret # < cert-manager will store the created certificate in this secret
+  - hosts:
+    - jenkins.docmachine.in
+    secretName: docmachine-jenkins-cert-secret
+  rules:
+  - host: docmachine.in
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: docmachine-service
+          servicePort: 80
+  - host: api.docmachine.in
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: docmachinebackend
+          servicePort: 3000
+  - host: jenkins.docmachine.in
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          serviceName: jenkins-jenkins-ui
+          servicePort: 8080

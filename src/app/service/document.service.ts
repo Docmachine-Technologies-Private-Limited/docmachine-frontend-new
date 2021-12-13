@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
-import "rxjs/add/operator/map";
 
 @Injectable({ providedIn: "root" })
 export class DocumentService {
@@ -137,8 +136,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http
-      .post(`https://dm.uipep.com/v1/pdf/generate`, data, httpOptions)
-      .map((res) => res);
+      .post(`https://dm.uipep.com/v1/pdf/generate`, data, httpOptions);
   }
 
   addPipo(pipo) {
