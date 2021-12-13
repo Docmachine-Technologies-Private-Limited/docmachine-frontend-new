@@ -275,6 +275,20 @@
                                             style="height: 30px !important; margin-right: 5px;"
                                             (click)=openDoc(pay.type)>{{pay.type}}</button>
                                     </div>
+                                    <div *ngIf='buttonToggle1' style="margin: 13px 0px 10px 30px;">
+
+                                        <div style="margin-left:10px" class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox"
+                                                    (change)=changeCheckbox()>
+                                                With Buyer's Credit
+                                            </label>
+                                        </div>
+                                        <button class="button2" style="height: 30px !important; margin-right: 5px;"
+                                            (click)='openSubDoc1("usance")'>Usance</button>
+                                        <button class="button2" style="height: 30px !important; margin-right: 5px;"
+                                            (click)='openSubDoc1("sight")'>Sight</button>
+                                    </div>
                                     <div *ngIf='buttonToggle' style="margin: 13px 0px 10px 30px;">
                                         <button class="button2" style="height: 30px !important; margin-right: 5px;"
                                             (click)='openSubDoc("usance")'>Usance</button>
@@ -597,6 +611,149 @@
                                         </div>
                                     </div>
 
+                                    <div *ngIf='pipoData.directImport'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        &nbsp;
+                                    </div>
+                                    <div *ngIf='pipoData.directImport' style="display: flex;">
+                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        </div>
+                                        <div style="align-items: center; width: 68%;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                Direct Import Transaction</p>
+                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                Submitted
+                                                on 13th
+                                                Oct 2021</p>
+
+                                        </div>
+                                        <div style="align-items: center; width: 14%;">
+                                            <button class="button1"
+                                                (click)='viewClick("directImport"); open(content)'>View</button>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf='pipoData.advanceOutward'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        &nbsp;
+                                    </div>
+                                    <div *ngIf='pipoData.advanceOutward' style="display: flex;">
+                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        </div>
+                                        <div style="align-items: center; width: 68%;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                Advance Outward Transaction</p>
+                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                Submitted
+                                                on 13th
+                                                Oct 2021</p>
+
+                                        </div>
+                                        <div style="align-items: center; width: 14%;">
+                                            <button class="button1"
+                                                (click)='viewClick("advanceOutward"); open(content)'>View</button>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf='pipoData.nonlcUsance'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        &nbsp;
+                                    </div>
+                                    <div *ngIf='pipoData.nonlcUsance' style="display: flex;">
+                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        </div>
+                                        <div style="align-items: center; width: 68%;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                Bill Under Collection Usance Transaction</p>
+                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                Submitted
+                                                on 13th
+                                                Oct 2021</p>
+
+                                        </div>
+                                        <div style="align-items: center; width: 14%;">
+                                            <button class="button1"
+                                                (click)='viewClick("nonlcUsance"); open(content)'>View</button>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf='pipoData.nonlcSight'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        &nbsp;
+                                    </div>
+                                    <div *ngIf='pipoData.nonlcSight' style="display: flex;">
+                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        </div>
+                                        <div style="align-items: center; width: 68%;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                Bill Under Collection Sight Transaction</p>
+                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                Submitted
+                                                on 13th
+                                                Oct 2021</p>
+
+                                        </div>
+                                        <div style="align-items: center; width: 14%;">
+                                            <button class="button1"
+                                                (click)='viewClick("nonlcSight"); open(content)'>View</button>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf='pipoData.lcSight'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        &nbsp;
+                                    </div>
+                                    <div *ngIf='pipoData.lcSight' style="display: flex;">
+                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        </div>
+                                        <div style="align-items: center; width: 68%;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                Letter of Credit Sight Transaction</p>
+                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                Submitted
+                                                on 13th
+                                                Oct 2021</p>
+
+                                        </div>
+                                        <div style="align-items: center; width: 14%;">
+                                            <button class="button1"
+                                                (click)='viewClick("lcSight"); open(content)'>View</button>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf='pipoData.lcUsance'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        &nbsp;
+                                    </div>
+                                    <div *ngIf='pipoData.lcUsance' style="display: flex;">
+                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        </div>
+                                        <div style="align-items: center; width: 68%;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                Letter of Credit Usance Transaction</p>
+                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                Submitted
+                                                on 13th
+                                                Oct 2021</p>
+
+                                        </div>
+                                        <div style="align-items: center; width: 14%;">
+                                            <button class="button1"
+                                                (click)='viewClick("lcUsance"); open(content)'>View</button>
+                                        </div>
+                                    </div>
                                     <!-- <div *ngIf='pipoData.deliveryOrder'
                                         style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;

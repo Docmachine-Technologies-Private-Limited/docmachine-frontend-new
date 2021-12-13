@@ -32,6 +32,9 @@ export class InwardRemittanceBoeComponent implements OnInit, OnDestroy {
   doc1: any;
   done: boolean;
   item3: any;
+  amount: any;
+  words: any;
+  pipoValue: any = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -62,7 +65,15 @@ export class InwardRemittanceBoeComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.id = this.route.snapshot.params['boeNumber'];
+    this.amount = this.route.snapshot.params['amount']
+    console.log(this.route.snapshot.params['pipo'])
+    this.words = this.route.snapshot.params['pipo']
+    console.log(this.words)
     console.log(this.id)
+    this.pipoValue = this.words.split(',')
+    console.log(this.words[0])
+    console.log(this.pipoValue)
+    this.id = this.pipoValue[0]
     await this.getUserDetail();
     this.getPipoDetaile();
     console.log("DRAFT ", this.item2);
@@ -195,7 +206,18 @@ export class InwardRemittanceBoeComponent implements OnInit, OnDestroy {
           console.log("Transaction Saved");
 
           this.submitted = true;
-          this.router.navigate(["/home/direct-import-payment"]);
+          this.userService.updateManyPipo(this.pipoValue, 'directImport', this.newTask.url1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data)
+                this.router.navigate(["/home/direct-import-payment"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+          //this.router.navigate(["/home/direct-import-payment"]);
         },
         (err) => console.log("Error saving the transaction")
       );
@@ -204,7 +226,18 @@ export class InwardRemittanceBoeComponent implements OnInit, OnDestroy {
       this.documentService.completeTask({ _id: this.documentService.task._id, task: this.newTask }).subscribe(
         (res) => {
           console.log("COMPLETED")
-          this.router.navigate(["/home/direct-import-payment"])
+          this.userService.updateManyPipo(this.pipoValue, 'directImport', this.newTask.url1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data)
+                this.router.navigate(["/home/direct-import-payment"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+          //this.router.navigate(["/home/direct-import-payment"])
         },
         (err) => console.log("ERROR")
       );

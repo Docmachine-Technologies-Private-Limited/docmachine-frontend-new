@@ -254,8 +254,19 @@ export class PaymentAcceptanceLetterComponent implements OnInit, OnDestroy {
         (res) => {
           console.log("Transaction Saved");
           this.submitted = true;
+          this.userService.updateManyPipo(this.pipoValue, this.newTask.file, this.newTask.url1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data)
+                this.router.navigate(["/home/bill-under-collection"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
 
-          this.router.navigate(["/home/bill-under-collection", this.file]);
+          //this.router.navigate(["/home/bill-under-collection", this.file]);
         },
         (err) => console.log("Error saving the transaction")
       );
@@ -264,7 +275,18 @@ export class PaymentAcceptanceLetterComponent implements OnInit, OnDestroy {
       this.documentService.completeTask({ _id: this.documentService.task._id, task: this.newTask }).subscribe(
         (res) => {
           console.log("COMPLETED");
-          this.router.navigate(["/home/bill-under-collection", this.file]);
+          this.userService.updateManyPipo(this.pipoValue, this.newTask.file, this.newTask.url1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data)
+                this.router.navigate(["/home/bill-under-collection"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+          //this.router.navigate(["/home/bill-under-collection", this.file]);
         },
         (err) => console.log("ERROR")
       );

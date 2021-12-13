@@ -247,14 +247,22 @@ export class BillUnderCollectionComponent implements OnInit {
   }
 
   showThisPdf(piPo) {
+    let a = [];
+    a.push(piPo)
+    this.pipoArr = a;
     this.documentService.draft = false;
-    this.router.navigate(['home/paymentAcceptance', { pipo: piPo, file: this.file }]);
+    this.router.navigate(['home/paymentAcceptance', {
+      pipo: this.pipoArr,
+      amount: this.selectedRow.amount,
+      file: this.file
+    }]);
 
   }
 
   showThisPdf1(piPo) {
     this.documentService.draft = false;
     console.log(this.myRadio)
+
     if (this.myRadio == 'axisBank') {
       console.log("h");
       this.router.navigate(['home/paymentAcceptance', {

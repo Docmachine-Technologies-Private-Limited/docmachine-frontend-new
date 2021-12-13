@@ -100,6 +100,7 @@ export class DocumentService {
       httpOptions
     );
   }
+
   getBoeByBoe(boeNumber) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -110,6 +111,36 @@ export class DocumentService {
       `https://dm.uipep.com/v1/boe/getBoeByBoe`,
       {
         boeNumber: boeNumber,
+      },
+      httpOptions
+    );
+  }
+
+  getBoeByBene(bene) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `https://dm.uipep.com/v1/boe/getBoeByBene`,
+      {
+        bene: bene,
+      },
+      httpOptions
+    );
+  }
+
+  getPipoByBene(bene) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `https://dm.uipep.com/v1/pipo/getPipoByBene`,
+      {
+        bene: bene,
       },
       httpOptions
     );

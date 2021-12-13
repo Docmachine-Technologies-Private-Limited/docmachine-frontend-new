@@ -1,6 +1,6 @@
 <div style="margin-left: 210px" class="content-wrap">
   <main id="content" class="content table-padding" role="main">
-    <div *ngIf="showInvoice" class="table_top">
+    <div *ngIf="showInvoice && !outTog" class="table_top">
       <div style="
             width: 100%;
             border-right: 0.5px solid rgba(0, 0, 0, 0.2);
@@ -39,7 +39,7 @@
           border: 0.5px solid rgba(0, 0, 0, 0.2);
           margin-left: 40px;
           width: 94%;
-        " *ngIf="!showInvoice">
+        " *ngIf="!showInvoice && !outTog">
       <div style="display: flex; align-items: center">
         <h3 class="heading">Direct Import Payment</h3>
       </div>
@@ -63,7 +63,7 @@
 
 
     <div class="analytics">
-      <div *ngIf="!showInvoice" style="width: 100%" class="analytics-side">
+      <div *ngIf="!showInvoice && !outTog" style="width: 100%" class="analytics-side">
         <div style="width: 100%" class="row">
           <div style="width: 100%; margin: 0 -1.5%" *ngIf="!showInvoice" class="col-12 mb-lg padding">
             <section style="width: 85%; margin-left: 0" class="widget pb-0 box-shadow">
@@ -531,6 +531,90 @@
         </div>
       </div>
 
+    </div>
+
+    <div *ngIf='outTog'>
+      <h3 class="heading">New Direct Import - Step 1 - Create transaction</h3>
+      <div style="display: flex; align-items: center; margin-left: 67px;">
+        <label style="flex-direction:row; font-size: 20px; color: RGB(48, 48, 48); margin-right: 30px;">Select
+          PIPO*</label>
+        <div class="customDropdown" style="flex-direction:row; ">
+          <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
+          <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+          </span>
+          <div class="dropdown-content" style="margin-top: -2px;">
+            <p *ngFor="let bene of item1" (click)='clickPipo("PI",bene.pi_poNo,bene.benneName, bene.amount  )'>
+              <a> PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
+            </p>
+            <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
+          </div>
+        </div>
+        <div *ngIf='alertToggle' style="color: red;">
+          You can't add PI/PO with different Beneficiary Name
+        </div>
+      </div>
+      <div style="margin-left: 224px;">
+
+        <p *ngFor='let data of arrayData; let i = index' class="arrayData">
+          {{data}} <i style="float: right; margin: 4px 10px;" (click)='removePipo(i)' class="fas fa-times"></i>
+        </p>
+
+      </div>
+
+      <div style=" margin-left: 67px; margin-top: 30px;">
+        <p style="font-size: 20px; color: RGB(96, 102, 112); font-weight: 400;">Invoice Amount in USD (Amount mentioned
+          while uploading Performa Invoice)</p>
+        <div *ngFor="let bene of pipoArr; let i = index" style="display: flex; margin-bottom: 20px;">
+          <div style="margin-right: 20px;">
+            <label>Invoice Number</label>
+            <span
+              style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px;">{{bene}}</span>
+
+          </div>
+          <div style="margin-right: 20px;">
+            <label>Total Amount</label>
+            <span
+              style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px;">{{amountArray[i]}}</span>
+
+          </div>
+          <div style="margin-right: 20px;">
+            <label>Balance</label>
+            <span
+              style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px;">{{amountArray[i]}}</span>
+
+          </div>
+          <div style="margin-right: 20px;">
+            <label>Remittance Amount</label>
+            <input type="text" name="" id=""
+              style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px; width:100px; margin-top: -2px;"
+              (input)='amountFun($any($event.target).value, i)'>
+          </div>
+
+        </div>
+
+        Total Amout
+        <p
+          style="border: 1px solid RGBA(0, 0, 0, 0.05); height: 37px; border-radius: 20px; width: 40%; color: RGB(165, 170, 179); padding: 5px; ">
+          {{amount}} <span style="float: right;">USD</span></p>
+      </div>
+
+
+      <div style=" margin-left: 67px; margin-top: 30px;">
+        <p style="color: RGB(74, 74, 74); font-size: 14px;">Select a bank*</p>
+
+        <input type="radio" id="options1" class="circular_input" [(ngModel)]="myRadio" value="yesBank">
+        <label class="label1" for="male">Yes Bank</label><br />
+        <input type="radio" id="options2" class="circular_input" [(ngModel)]="myRadio" value="axisBank">
+        <label class="label1" for="female">Axis Bank</label><br />
+        <input type="radio" name="bank" value="Any Bank" class="circular_input" />
+        <label class="label1" for="female">Any Bank</label><br />
+      </div>
+
+      <button
+        style="width: 70px; height: 30px; border: none; background-color: #49a2d7; outline: none; color: white; margin-left: 70px; border-radius: 20px; margin-top: 20px;"
+        (click)='showThisPdf1("aa")'>
+        Next </button>
     </div>
   </main>
 </div>

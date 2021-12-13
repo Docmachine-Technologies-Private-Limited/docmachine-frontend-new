@@ -42,7 +42,7 @@
     "messenger": "0.0.9",
     "ngx-cookie-service": "^12.0.3",
     "ngx-dropzone-wrapper": "10.0.1",
-    "ngx-toastr": "^14.2.0",
+    "ngx-toastr": "14.2.1",
     "nodejs": "0.0.0",
     "owl.carousel": "2.3.4",
     "pace-js": "1.2.4",

@@ -202,7 +202,18 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
         (res) => {
           console.log("Transaction Saved");
           this.submitted = true;
-          this.router.navigate(["/home/advance-outward-remittance"]);
+          this.userService.updateManyPipo(this.pipoValue, 'advanceOutward', this.newTask.url1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data)
+                this.router.navigate(["/home/advance-outward-remittance"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+          //this.router.navigate(["/home/advance-outward-remittance"]);
 
         },
         (err) => console.log("Error saving the transaction")

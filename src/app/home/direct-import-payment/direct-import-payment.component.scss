@@ -913,3 +913,89 @@ table tbody {
   border: none;
   color: white;
 }
+
+.heading {
+  font-family: "EuropaNuova-Regular", sans-serif !important;
+  font-size: 20px;
+  font-weight: 400;
+  color: #323E4A;
+  padding-bottom: 30px !important;
+  margin-bottom: 25px !important;
+  padding-left: 70px;
+  border-bottom: 1px solid #eaedf3;
+  padding-top: 20px;
+}
+
+
+.customDropdown {
+  position: relative;
+  display: inline-block;
+  padding-left: 12px;
+  padding-right: 10px;
+  padding-top: 5px;
+  height: 32px;
+  border-radius: 2px;
+  margin-right: 12px;
+  cursor: pointer;
+  width: 300px;
+  border: 1px solid #C6CBD4;
+}
+
+// .customDropdown:hover {
+//   border: 1px solid #4b74ff;
+//   color: #4b74ff;
+// }
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 300px;
+  z-index: 1;
+  border-radius: 6px;
+  color: #333333;
+  font-size: 14px;
+  transform: translate(-14px, 4px);
+}
+
+
+
+.dropdown-content p {
+  cursor: pointer;
+  padding: 0px 16px;
+  margin-bottom: 0px;
+  transition: 0.4s ease;
+  background: white;
+}
+
+.dropdown-content p:hover {
+  background-color: rgba(191, 187, 187, 0.556);
+  font-weight: 600;
+}
+
+.customDropdown .dropIco {
+  margin-left: 7px;
+}
+
+.dropdown-content p a {
+  text-decoration: none;
+  color: black;
+}
+
+.customDropdown:hover .dropdown-content {
+  display: block;
+}
+
+.customDropdown:hover .dropdown-content {
+  display: block;
+}
+
+.arrayData {
+  margin-bottom: 2px;
+  width: 32%;
+  padding-left: 10px;
+  background-color: RGB(73, 162, 215);
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+}

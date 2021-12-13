@@ -36,6 +36,7 @@ export class UserService {
           "Bearer " + btoa(loginData.email + ":" + loginData.password),
       }),
     };
+    console.log('httpOptions');
     console.log(httpOptions);
 
     return this.http.post(
