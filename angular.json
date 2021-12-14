@@ -1,12 +1,12 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
-    "analytics": false
+    "analytics": "74278e4c-d316-4e71-a94f-15041965c7c0"
   },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-ssr-docker": {
+    "dm": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/angular-ssr-docker/browser",
+            "outputPath": "dist/dm",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -34,9 +34,7 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
-              "src/styles.scss",
-              "node_modules/ngx-toastr/toastr.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -77,10 +75,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "angular-ssr-docker:build:production"
+              "browserTarget": "dm:build:production"
             },
             "development": {
-              "browserTarget": "angular-ssr-docker:build:development"
+              "browserTarget": "dm:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -88,7 +86,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-ssr-docker:build"
+            "browserTarget": "dm:build"
           }
         },
         "test": {
@@ -104,74 +102,13 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
-              "src/styles.scss",
-              "node_modules/ngx-toastr/toastr.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "dist/angular-ssr-docker/server",
-            "main": "server.ts",
-            "tsConfig": "tsconfig.server.json",
-            "inlineStyleLanguage": "scss"
-          },
-          "configurations": {
-            "production": {
-              "outputHashing": "media",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ]
-            },
-            "development": {
-              "optimization": false,
-              "sourceMap": false,
-              "extractLicenses": false
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve-ssr": {
-          "builder": "@nguniversal/builders:ssr-dev-server",
-          "configurations": {
-            "development": {
-              "browserTarget": "angular-ssr-docker:build:development",
-              "serverTarget": "angular-ssr-docker:server:development"
-            },
-            "production": {
-              "browserTarget": "angular-ssr-docker:build:production",
-              "serverTarget": "angular-ssr-docker:server:production"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "prerender": {
-          "builder": "@nguniversal/builders:prerender",
-          "options": {
-            "routes": [
-              "/"
-            ]
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "angular-ssr-docker:build:production",
-              "serverTarget": "angular-ssr-docker:server:production"
-            },
-            "development": {
-              "browserTarget": "angular-ssr-docker:build:development",
-              "serverTarget": "angular-ssr-docker:server:development"
-            }
-          },
-          "defaultConfiguration": "production"
         }
       }
     }
   },
-  "defaultProject": "angular-ssr-docker"
+  "defaultProject": "dm"
 }

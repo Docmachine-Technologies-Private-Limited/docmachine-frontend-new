@@ -16,11 +16,11 @@ import { Subject } from 'rxjs';
             type: 'confirm',
             text: message,
             yesFn(): any {
-                    that.subject.next(); // This will close the modal
+                    that.subject.next(true); // This will close the modal
                     yesFn();
                 },
             noFn(): any {
-                that.subject.next();
+                that.subject.next(true);
                 noFn();
             }
         });

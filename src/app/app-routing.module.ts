@@ -21,7 +21,7 @@ const routes: Routes = [
     redirectTo: "login",
     pathMatch: "full",
   },
-  { path: "home", loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
+  { path: "home", loadChildren: () => import('../app/home/home.module').then(mod => mod.HomeModule) },
   {
     path: "forgotpassword",
     component: ForgotPasswordComponent,

@@ -1,13 +1,13 @@
+#FROM alpine as node
+#RUN apk add --update nodejs npm
+#WORKDIR /app
+#COPY . .
+#RUN npm install
+#RUN npm run prod
 
-## Use Node Slim image
-FROM node:14-slim
+# stage 2
+FROM nginx:alpine
+COPY /dist/dm /usr/share/nginx/html
+COPY /.nginx/nginx.conf /etc/nginx/nginx.conf
 
-## Copy source code
-COPY . .
-RUN ng build --configuration=production
-RUN ng serve --configuration=production
-## Start the application
-#CMD ["node", "dist/angular-ssr-docker/server/main.js"]
-EXPOSE 4200
-
-#new commit
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
