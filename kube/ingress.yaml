@@ -26,16 +26,18 @@ spec:
   tls: # < placing a host in the TLS config will indicate a certificate should be created
   - hosts:
     - docmachine.in
+    - beta.docmachine.in
     - api.docmachine.in
     secretName: docmachine-cert-secret # < cert-manager will store the created certificate in this secret
   - hosts:
     - jenkins.docmachine.in
     secretName: docmachine-jenkins-cert-secret
   rules:
-  - host: docmachine.in
+  - host: beta.docmachine.in
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
           serviceName: docmachine-service
           servicePort: 80
