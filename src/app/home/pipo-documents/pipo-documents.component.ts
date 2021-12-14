@@ -155,26 +155,43 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.file = this.route.snapshot.params['file'];
-      this.documentService.getPipo().subscribe(
+    this.id = this.route.snapshot.params['id'];
+    if (this.id) {
+      this.documentService.getPipoByPipoNo(this.id)
+        .subscribe(
+          data => {
+            console.log("king123")
+            console.log(data)
+            console.log(data['data'][0])
+
+          },
+          error => {
+            console.log("error")
+          });
+    }
+    else {
+      this.route.params.subscribe(params => {
+        this.file = this.route.snapshot.params['id'];
+        this.documentService.getPipo().subscribe(
+          (res: any) => {
+            console.log("HEre Response", res), (this.item1 = res.data);
+          },
+          (err) => console.log(err)
+        );
+
+        this.showInvoice = false;
+        console.log("hello")
+      });
+
+      this.userService.getBene(1).subscribe(
         (res: any) => {
-          console.log("HEre Response", res), (this.item1 = res.data);
+          (this.benneDetail = res.data),
+            console.log("Benne Detail", this.benneDetail);
         },
-        (err) => console.log(err)
+        (err) => console.log("Error", err)
       );
+    }
 
-      this.showInvoice = false;
-      console.log("hello")
-    });
-
-    this.userService.getBene(1).subscribe(
-      (res: any) => {
-        (this.benneDetail = res.data),
-          console.log("Benne Detail", this.benneDetail);
-      },
-      (err) => console.log("Error", err)
-    );
 
 
 
@@ -272,6 +289,12 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   }
 
   getInvoices(selectedRowValues, i) {
+    console.log(selectedRowValues.pi_poNo)
+    this.router.navigate(['home/pipoDoc', {
+      id: selectedRowValues.pi_poNo,
+      page: 'details',
+      index: i
+    }]);
     console.log("SELECTED", selectedRowValues);
     console.log("INDEX", i);
     console.log(selectedRowValues.doc);

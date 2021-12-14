@@ -253,7 +253,7 @@ export class BuyersCreditRequestComponent implements OnInit {
         this.router.navigate(['home/tradeRequestLetter', data.beneDetail.beneName]);
       }
       else if (data.bank == 'axisBank') {
-        this.router.navigate(['home//buyersCreditAxis', data.beneDetail.beneName]);
+        this.router.navigate(['home/buyersCreditAxis', data.beneDetail.beneName]);
       }
 
 
@@ -266,13 +266,21 @@ export class BuyersCreditRequestComponent implements OnInit {
   showThisPdf() {
     this.documentService.draft = false;
     console.log(this.selectedDoc)
-
+    console.log(this.pipoArr)
     if (this.myRadio == 'axisBank') {
       console.log("h");
-      this.router.navigate(['home//buyersCreditAxis', this.selectedDoc]);
+      this.router.navigate(['home/buyersCreditAxis', {
+        pipo: this.pipoArr,
+        amount: this.selectedDoc
+      }]);
+      //this.router.navigate(['home/buyersCreditAxis', this.selectedDoc]);
     }
     else {
-      this.router.navigate(['home/tradeRequestLetter', this.selectedDoc]);
+      //this.router.navigate(['home/tradeRequestLetter', this.selectedDoc]);
+      this.router.navigate(['home/tradeRequestLetter', {
+        pipo: this.pipoArr,
+        amount: this.selectedDoc
+      }]);
     }
 
   }

@@ -89,7 +89,7 @@
             </span>
           </a>
         </li>
-        <li class="manage-li" *ngIf="mt">
+        <!-- <li class="manage-li" *ngIf="mt">
 
           <div class="main11" style=" color: #fff;">
             <div style="cursor: pointer; height: 30px; padding-top: 5px;" (click)="newTask()"
@@ -106,9 +106,9 @@
             </div>
 
           </div>
-        </li>
+        </li> -->
 
-        <!-- <li class="manage-li" *ngIf="mt">
+        <li class="manage-li" *ngIf="mt">
 
           <div class="main11" style=" color: #fff; margin-left: 5px;">
             <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
@@ -137,7 +137,7 @@
             </div>
 
           </div>
-        </li> -->
+        </li>
 
         <li style="cursor: pointer" class="" (click)="exportTask()">
           <a class="sidebar-content" style="cursor: pointer;">
@@ -154,7 +154,7 @@
             </span>
           </a>
         </li>
-        <!-- <li class="manage-li" *ngIf="mt2">
+        <li class="manage-li" *ngIf="mt2">
 
           <div class="main11" style=" color: #fff; margin-left: 5px;">
             <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
@@ -182,11 +182,11 @@
             </div>
 
           </div>
-        </li> -->
+        </li>
 
 
 
-        <li style="cursor: pointer" class="" *ngIf="!mt1" (click)="manageTask1()">
+        <!-- <li style="cursor: pointer" class="" *ngIf="!mt1" (click)="manageTask1()">
           <a class="sidebar-content" style="cursor: pointer;">
             <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
@@ -278,8 +278,8 @@
 
             <a style="cursor: pointer" [routerLink]="['/home/tasks/pending']"> Draft </a>
           </div>
-        </li>
-        <!-- <li class="" style="cursor: pointer">
+        </li> -->
+        <li class="" style="cursor: pointer">
           <a class="sidebar-content" [routerLink]="['/home/outwardRemitance']">
             <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
@@ -357,7 +357,7 @@
 
 
           </div>
-        </li> -->
+        </li>
 
         <li class="">
           <a [routerLink]="['/home/upload']" style="cursor: pointer" class="sidebar-content">

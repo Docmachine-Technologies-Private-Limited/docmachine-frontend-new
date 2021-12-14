@@ -35,6 +35,9 @@ export class TradeRequestLetterComponent implements OnInit, OnDestroy {
   letterHead: any;
   file: string;
   arr: any;
+  words: any;
+  amount: any;
+  pipoValue: any = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -63,8 +66,16 @@ export class TradeRequestLetterComponent implements OnInit, OnDestroy {
   };
 
   async ngOnInit(): Promise<void> {
-
-    this.id = this.route.snapshot.paramMap.get('id');
+    this.file = this.route.snapshot.paramMap.get('file');
+    console.log(this.route.snapshot.params['pipo'])
+    this.words = this.route.snapshot.params['pipo']
+    console.log(this.words)
+    console.log(this.id)
+    this.pipoValue = this.words.split(',')
+    console.log(this.words[0])
+    console.log(this.pipoValue)
+    this.id = this.pipoValue[0]
+    console.log(this.id)
     //this.file = this.route.snapshot.paramMap.get('file')
     console.log(this.id)
     console.log(this.file)

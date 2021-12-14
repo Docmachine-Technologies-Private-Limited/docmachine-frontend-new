@@ -291,12 +291,12 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
-            path: "tradeRequestLetter/:id",
+            path: "tradeRequestLetter",
             component: TradeRequestLetterComponent,
             pathMatch: "full",
           },
           {
-            path: "buyersCreditAxis/:id",
+            path: "buyersCreditAxis",
             component: BuyersCreditAxisComponent,
             pathMatch: "full",
           },

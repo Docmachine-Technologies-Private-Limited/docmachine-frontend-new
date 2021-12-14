@@ -29,6 +29,8 @@ import { CreateTeam1Component } from "./create-team1/create-team1.component";
 import { AddMemberComponent } from "./add-member/add-member.component";
 import { UpdatePasswordComponent } from "./update-password/update-password.component";
 import {RouterModule} from "@angular/router";
+import { PowerAdminComponent } from './power-admin/power-admin.component';
+import { NewUserComponent } from './new-user/new-user.component';
 //import { SidenavComponent } from './home/sidenav/sidenav.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -50,6 +52,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     CreateTeam1Component,
     AddMemberComponent,
     UpdatePasswordComponent,
+    PowerAdminComponent,
+    NewUserComponent,
   ],
   imports: [
     BrowserModule,

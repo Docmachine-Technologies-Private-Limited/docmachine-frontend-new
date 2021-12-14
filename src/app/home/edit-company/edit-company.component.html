@@ -49,7 +49,7 @@
                                                     Required</div>
                                                 <div *ngIf="f.iec.errors.minlength" style="margin-left: 15px;">ICE
                                                     should
-                                                    contains only 10 letters</div>
+                                                    contains only 10 numbers</div>
                                                 <div *ngIf="f.iec.errors.maxlength" style="margin-left: 15px;">ICE
                                                     should
                                                     contains 10 letters</div>
@@ -57,7 +57,7 @@
                                                     be
                                                     numerics with 10 letters EX: 1212121212</div>
                                             </div>
-                                            <span *ngIf="!editable" name="iec" placeholder="Ex: ESEIEC." required=""
+                                            <span *ngIf="!editable" name="iec" placeholder="Ex: 1212121212" required=""
                                                 class="form-control rounded-pill">{{item.iec}}</span>
                                         </div>
                                         <div class="form-group mb-3">
