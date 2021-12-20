@@ -23,7 +23,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    let url = `https://dm.uipep.com/v1/master/get`;
+    let url = `http://localhost:3000/v1/master/get`;
     return this.http.get(url, httpOptions);
   }
 
@@ -33,7 +33,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    let url = `https://dm.uipep.com/v1/boe/get`;
+    let url = `http://localhost:3000/v1/boe/get`;
     return this.http.get(url, httpOptions);
   }
 
@@ -44,7 +44,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/master/update`,
+      `http://localhost:3000/v1/master/update`,
       {
         _id: _id,
         master: user,
@@ -60,7 +60,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/master/updateBySb`,
+      `http://localhost:3000/v1/master/updateBySb`,
       {
         _id: _id,
         master: user,
@@ -76,7 +76,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/boe/update`,
+      `http://localhost:3000/v1/boe/update`,
       {
         _id: _id,
         master: user,
@@ -92,7 +92,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/boe/updateByBoe`,
+      `http://localhost:3000/v1/boe/updateByBoe`,
       {
         _id: _id,
         master: user,
@@ -108,7 +108,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/boe/getBoeByBoe`,
+      `http://localhost:3000/v1/boe/getBoeByBoe`,
       {
         boeNumber: boeNumber,
       },
@@ -123,7 +123,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/boe/getBoeByBene`,
+      `http://localhost:3000/v1/boe/getBoeByBene`,
       {
         bene: bene,
       },
@@ -138,7 +138,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/getPipoByBene`,
+      `http://localhost:3000/v1/pipo/getPipoByBene`,
       {
         bene: bene,
       },
@@ -153,7 +153,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/master/getMasterBySb`,
+      `http://localhost:3000/v1/master/getMasterBySb`,
       {
         sbno: sbno,
       },
@@ -167,7 +167,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http
-      .post(`https://dm.uipep.com/v1/pdf/generate`, data, httpOptions);
+      .post(`http://localhost:3000/v1/pdf/generate`, data, httpOptions);
   }
 
   addPipo(pipo) {
@@ -178,7 +178,7 @@ export class DocumentService {
     };
 
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/post`,
+      `http://localhost:3000/v1/pipo/post`,
       { pipo: pipo },
       httpOptions
     );
@@ -191,7 +191,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
 
-    return this.http.get(`https://dm.uipep.com/v1/pipo/get`, httpOptions);
+    return this.http.get(`http://localhost:3000/v1/pipo/get`, httpOptions);
   }
   getPipoByPipoNo(id) {
     this.loadFromLocalStorage();
@@ -200,7 +200,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/getSinglePipo`,
+      `http://localhost:3000/v1/pipo/getSinglePipo`,
       {
         id: id,
       },
@@ -216,7 +216,7 @@ export class DocumentService {
     };
 
     return this.http.post(
-      `https://dm.uipep.com/v1/third/post`,
+      `http://localhost:3000/v1/third/post`,
       { third: pipo },
       httpOptions
     );
@@ -229,7 +229,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
 
-    return this.http.get(`https://dm.uipep.com/v1/third/get`, httpOptions);
+    return this.http.get(`http://localhost:3000/v1/third/get`, httpOptions);
   }
   getThirdByThirdValue(id) {
     this.loadFromLocalStorage();
@@ -238,7 +238,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/third/getSingleThird`,
+      `http://localhost:3000/v1/third/getSingleThird`,
       {
         id: id,
       },
@@ -254,7 +254,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/task/post`,
+      `http://localhost:3000/v1/task/post`,
       data,
       httpOptions
     );
@@ -270,7 +270,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/task/getPipo",
+      "http://localhost:3000/v1/task/getPipo",
       data,
       httpOptions
     );
@@ -284,7 +284,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/task/getBoeTask",
+      "http://localhost:3000/v1/task/getBoeTask",
       data,
       httpOptions
     );
@@ -298,7 +298,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/task/getSbTask",
+      "http://localhost:3000/v1/task/getSbTask",
       data,
       httpOptions
     );
@@ -312,7 +312,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/task/getPipoInwardTask",
+      "http://localhost:3000/v1/task/getPipoInwardTask",
       data,
       httpOptions
     );
@@ -326,7 +326,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/task/getLcTask",
+      "http://localhost:3000/v1/task/getLcTask",
       data,
       httpOptions
     );
@@ -340,7 +340,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/task/getAllTask",
+      "http://localhost:3000/v1/task/getAllTask",
       data,
       httpOptions
     );
@@ -354,7 +354,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/task/getTask",
+      "http://localhost:3000/v1/task/getTask",
       data,
       httpOptions
     );
@@ -368,7 +368,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/task/getPipoCaTask",
+      "http://localhost:3000/v1/task/getPipoCaTask",
       data,
       httpOptions
     );
@@ -382,7 +382,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/task/getBcTask",
+      "http://localhost:3000/v1/task/getBcTask",
       data,
       httpOptions
     );
@@ -396,7 +396,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/task/getCaTask",
+      "http://localhost:3000/v1/task/getCaTask",
       "data",
       httpOptions
     );
@@ -410,7 +410,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/task/getOne",
+      "http://localhost:3000/v1/task/getOne",
       data,
       httpOptions
     );
@@ -424,7 +424,7 @@ export class DocumentService {
     };
 
     return this.http.post(
-      "https://dm.uipep.com/v1/task/complete",
+      "http://localhost:3000/v1/task/complete",
       data,
       httpOptions
     );
@@ -438,7 +438,7 @@ export class DocumentService {
     };
 
     return this.http.post(
-      "https://dm.uipep.com/v1/task/taskEmail",
+      "http://localhost:3000/v1/task/taskEmail",
       data,
       httpOptions
     );
@@ -452,7 +452,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/exportTask/post`,
+      `http://localhost:3000/v1/exportTask/post`,
       {
         task: data,
       },
@@ -468,7 +468,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.get(
-      `https://dm.uipep.com/v1/exportTask/get`,
+      `http://localhost:3000/v1/exportTask/get`,
       httpOptions
     );
   }
@@ -481,7 +481,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      'https://dm.uipep.com/v1/exportTask/getOne',
+      'http://localhost:3000/v1/exportTask/getOne',
       data,
       httpOptions
     );
@@ -495,7 +495,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      'https://dm.uipep.com/v1/exportTask/getFromType',
+      'http://localhost:3000/v1/exportTask/getFromType',
       data,
       httpOptions
     );
@@ -508,7 +508,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/exportTask/update`,
+      `http://localhost:3000/v1/exportTask/update`,
       {
         id: _id,
         task: user,
@@ -525,7 +525,7 @@ export class DocumentService {
     };
 
     return this.http.post(
-      "https://dm.uipep.com/v1/task/exportEmail",
+      "http://localhost:3000/v1/task/exportEmail",
       data,
       httpOptions
     );

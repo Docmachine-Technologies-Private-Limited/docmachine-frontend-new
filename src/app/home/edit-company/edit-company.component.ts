@@ -72,7 +72,7 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
 
     if (isPlatformBrowser(this.platformId)) {
       this.config = {
-        url: `https://dm.uipep.com/v1/member/uploadImage`,
+        url: `http://localhost:3000/v1/member/uploadImage`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,

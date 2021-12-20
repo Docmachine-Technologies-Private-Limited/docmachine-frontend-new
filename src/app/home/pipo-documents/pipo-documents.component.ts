@@ -134,7 +134,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
       console.log("asdkhsajvdsug");
 
       this.config1 = {
-        url: `https://dm.uipep.com/v1/member/uploadImage`,
+        url: `http://localhost:3000/v1/member/uploadImage`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,
