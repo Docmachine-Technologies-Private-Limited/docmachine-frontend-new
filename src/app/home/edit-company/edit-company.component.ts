@@ -8,6 +8,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import * as data from '../../bank.json';
 import * as data1 from '../../currency.json';
+import { AppConfig } from 'src/app/app.config';
 @Component({
   selector: 'app-edit-company',
   templateUrl: './edit-company.component.html',
@@ -61,10 +62,13 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   value1: any;
   submitted1: boolean;
   z: any;
+  api_base: any;
 
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
-    private userService: UserService, private router: Router, private toastr: ToastrService) {
+    private userService: UserService, private router: Router, private toastr: ToastrService, public appconfig: AppConfig) {
     this.loadFromLocalStorage()
+    this.api_base = appconfig.apiUrl;
+    console.log(this.api_base)
     console.log(this.authToken)
     this.headers = {
       Authorization: this.authToken,
@@ -72,7 +76,7 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
 
     if (isPlatformBrowser(this.platformId)) {
       this.config = {
-        url: `https://dm.uipep.com/v1/member/uploadImage`,
+        url: `${this.api_base}/member/uploadImage`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,

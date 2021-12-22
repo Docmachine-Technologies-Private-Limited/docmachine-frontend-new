@@ -25,7 +25,9 @@
         <div style="margin-top: 20px">
           <img class="manager" src="./assets/images/ff0edd8c8896c06617bb7763087ad238ad16b269.png" alt="" />
           <h5 class="name">{{name}}</h5>
-          <h6 class="side-name">Manager</h6>
+          <h6 class="side-name" *ngIf="role == 'admin'">Admin</h6>
+          <h6 class="side-name" *ngIf="role == 'manager'">Manager</h6>
+          <h6 class="side-name" *ngIf="role == 'ca'">CA</h6>
         </div>
       </header>
       <!-- seems like lots of recent admin template have this feature of user info in the sidebar.
@@ -35,6 +37,28 @@
 
       <!-- every .sidebar-nav may have a title -->
       <h5 class="sidebar-nav-title sidebar-title">MENU</h5>
+      <ul *ngIf="role == 'admin'" class="sidebar-nav">
+        <li class="">
+          <!-- an example of nested submenu. basic bootstrap collapse component -->
+          <a (click)="hideIncoice()" [routerLink]="['/home/powerAdmin/pending']" class="sidebar-content">
+            <span class="icon side-icon">
+              <img src="./assets/layout-dashboard.png" />
+            </span>
+            Admin User List
+          </a>
+        </li>
+
+        <li class="">
+          <a [routerLink]="['/home/powerAdmin/approved']" style="cursor: pointer" class="sidebar-content">
+            <span class="icon side-icon">
+              <img src="./assets/briefcase.png" />
+            </span>
+            Approved
+          </a>
+        </li>
+
+
+      </ul>
       <ul *ngIf="role == 'ca'" class="sidebar-nav">
         <li class="">
           <!-- an example of nested submenu. basic bootstrap collapse component -->
@@ -64,7 +88,7 @@
         </li>
 
       </ul>
-      <ul *ngIf="role != 'ca'" class="sidebar-nav">
+      <ul *ngIf="role == 'manager'" class="sidebar-nav">
         <li class="">
           <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a (click)="hideIncoice()" [routerLink]="['/home/dashboardTask']" class="sidebar-content">
@@ -111,6 +135,9 @@
         <li class="manage-li" *ngIf="mt">
 
           <div class="main11" style=" color: #fff; margin-left: 5px;">
+            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
+              <span style="margin-left: 50px; font-size: 12px; " [routerLink]="['/home/pipoDoc']">PIPO </span>
+            </div>
             <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
               <span style="margin-left: 50px; font-size: 12px; "
                 [routerLink]="['/home/advance-outward-remittance']">Advance Outward
@@ -432,6 +459,7 @@
         </li>
       </ul>
 
+
       <h5 class="sidebar-nav-title sidebar-title">SUPPORT</h5>
       <ul style="cursor: pointer" class="sidebar-nav">
         <li class="">
@@ -455,7 +483,7 @@
 
       <h5 class="sidebar-nav-title sidebar-title">SETTING</h5>
       <ul class="sidebar-nav">
-        <li *ngIf="role != 'ca'" style="cursor: pointer" class="">
+        <li *ngIf="role == 'manager'" style="cursor: pointer" class="">
           <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a class="sidebar-content" [routerLink]="['/home/account']">
             <span class="icon side-icon">

@@ -1,12 +1,16 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-
+import { AppConfig } from '../../app/app.config';
 @Injectable({ providedIn: "root" })
 export class UserService {
   public role;
   public authToken;
   public name;
-  constructor(private http: HttpClient) { }
+  api_base: string;
+  constructor(private http: HttpClient, public appconfig: AppConfig) {
+    this.api_base = appconfig.apiUrl;
+    console.log(this.api_base)
+  }
 
   public addToken(token) {
     console.log(token);
@@ -20,7 +24,7 @@ export class UserService {
   }
 
   register(user) {
-    return this.http.post(`https://dm.uipep.com/v1/authenticate/signup`, {
+    return this.http.post(`${this.api_base}/authenticate/signup`, {
       fullName: user.fullName,
       emailId: user.email,
       password: user.password,
@@ -40,23 +44,42 @@ export class UserService {
     console.log(httpOptions);
 
     return this.http.post(
-      `https://dm.uipep.com/v1/authenticate/login`,
+      `${this.api_base}/authenticate/login`,
       null,
       httpOptions
     );
   }
 
   public updatePsw(data, email) {
-    return this.http.put(`https://dm.uipep.com/v1/authenticate/updatepsw`, {
+    return this.http.put(`${this.api_base}/authenticate/updatepsw`, {
       newPassword: data.password1,
       emailId: email,
     });
   }
 
+  public updateOneUser(data, value, emailId) {
+    return this.http.put(`${this.api_base}/authenticate/updateOneUser`, {
+      id: data,
+      data: value,
+      emailId: emailId
+    });
+  }
+
+  public updateEmail(data, email) {
+    return this.http.put(`${this.api_base}/authenticate/updateemail`, {
+      data: data,
+      emailId: email,
+    });
+  }
+
   public forgotpsw(loginData) {
-    return this.http.put(`https://dm.uipep.com/v1/authenticate/forgotpsw`, {
+    return this.http.put(`${this.api_base}/authenticate/forgotpsw`, {
       emailId: loginData.emailId,
     });
+  }
+
+  public getAllUser() {
+    return this.http.get(`${this.api_base}/authenticate/getAllUser`).toPromise();
   }
 
   public creatTeam(team) {
@@ -66,7 +89,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/team/post`,
+      `${this.api_base}/team/post`,
       {
         team: team,
       },
@@ -81,7 +104,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/otp/verify",
+      `${this.api_base}/otp/verify`,
       {
         data: data,
       },
@@ -96,7 +119,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "https://dm.uipep.com/v1/otp/delete",
+      `${this.api_base}/otp/delete`,
       {
         data: data,
       },
@@ -111,7 +134,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/team/get`,
+      `${this.api_base}/team/get`,
       {
         team: "team",
       },
@@ -126,7 +149,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/team/update`,
+      `${this.api_base}/team/update`,
       {
         team: team,
       },
@@ -143,7 +166,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/update`,
+      `${this.api_base}/pipo/update`,
       {
         pipo: pipo,
         id: id
@@ -162,7 +185,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/updateSingle`,
+      `${this.api_base}/pipo/updateSingle`,
       {
         id: id,
         file: file,
@@ -182,7 +205,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/updateMany`,
+      `${this.api_base}/pipo/updateMany`,
       {
         pipo: pipo,
         file: file,
@@ -199,7 +222,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/team/getUser`,
+      `${this.api_base}/team/getUser`,
       {
         team: "team",
       },
@@ -214,7 +237,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/bene/post`,
+      `${this.api_base}/bene/post`,
       {
         bene: bene,
       },
@@ -229,7 +252,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/bene/get`,
+      `${this.api_base}/bene/get`,
       {
         boeNumber: boeNumber,
       },
@@ -243,7 +266,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/bene/getSingleBene`,
+      `${this.api_base}/bene/getSingleBene`,
       {
         id: id,
       },
@@ -259,7 +282,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/bene/update`,
+      `${this.api_base}/bene/update`,
       {
         id: id,
         bene: bene,
@@ -275,7 +298,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/member/post`,
+      `${this.api_base}/member/post`,
       {
         id: id,
         member: member,
@@ -290,7 +313,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/member/get`,
+      `${this.api_base}/member/get`,
       {
         teamId: id,
       },
@@ -305,7 +328,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/post`,
+      `${this.api_base}/pipo/post`,
       { pipo: pipo },
       httpOptions
     );
@@ -319,7 +342,7 @@ export class UserService {
     };
 
     return this.http.post(
-      `https://dm.uipep.com/v1/pipo/get`,
+      `${this.api_base}/pipo/get`,
       { pi_poNo: pipoNumber },
       httpOptions
     );
@@ -332,7 +355,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http
-      .get(`https://dm.uipep.com/v1/user/profile`, httpOptions)
+      .get(`${this.api_base}/user/profile`, httpOptions)
       .toPromise();
   }
 
@@ -344,7 +367,7 @@ export class UserService {
     };
     return this.http
       .post(
-        `https://dm.uipep.com/v1/bene/getByName`,
+        `${this.api_base}/bene/getByName`,
         { beneName: name },
         httpOptions
       ).toPromise();

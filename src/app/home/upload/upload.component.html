@@ -51,14 +51,15 @@
             <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
           </div>
         </div>
-      </div>
-      <div style="margin-left: 185px;">
+        <div style="margin-left: 155px;">
 
-        <p *ngFor='let data of arrayData; let i = index' class="arrayData">
-          {{data}} <i style="float: right; margin: 4px 10px;" (click)='removePipo(i)' class="fas fa-times"></i>
-        </p>
+          <p *ngFor='let data of arrayData; let i = index' class="arrayData">
+            {{data}} <i style="float: right; margin: 4px 10px;" (click)='removePipo(i)' class="fas fa-times"></i>
+          </p>
 
+        </div>
       </div>
+
     </div>
     <div *ngIf='docu == "sb" || docu == "boe"' style="margin-bottom: 20px;">
       <div style="display: flex; align-items: center; margin-left: 30px;">

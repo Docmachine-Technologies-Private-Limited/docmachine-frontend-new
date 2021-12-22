@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
 import * as data from '../bank.json';
 import * as data1 from './../currency.json';
+import { AppConfig } from '../app.config';
 @Component({
   selector: 'app-create-team1',
   templateUrl: './create-team1.component.html',
@@ -47,10 +48,13 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   control: FormArray;
   x: any;
   y: any;
+  api_base: any;
 
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
-    private userService: UserService, private router: Router, private toastr: ToastrService) {
+    private userService: UserService, private router: Router, private toastr: ToastrService, public appconfig: AppConfig) {
     this.loadFromLocalStorage()
+    this.api_base = appconfig.apiUrl;
+    console.log(this.api_base)
     console.log(this.authToken)
     this.headers = {
       Authorization: this.authToken,
@@ -58,7 +62,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
 
     if (isPlatformBrowser(this.platformId)) {
       this.config = {
-        url: `https://dm.uipep.com/v1/member/uploadImage`, //`https://dm.uipep.com/v1/member/uploadImage`
+        url: `${this.api_base}/member/uploadImage`, //`${this.api_base}/member/uploadImage`
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,

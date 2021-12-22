@@ -62,6 +62,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { PipoDocumentsComponent } from './pipo-documents/pipo-documents.component';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { BuyersLodgeComponent } from './yesBank/buyers-lodge/buyers-lodge.component';
+import { PowerAdminComponent } from './power-admin/power-admin.component';
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -128,6 +129,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ConfirmDialogComponent,
     PipoDocumentsComponent,
     BuyersLodgeComponent,
+    PowerAdminComponent,
   ],
   imports: [
     CommonModule,
@@ -373,6 +375,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
           {
             path: "pipoDoc",
             component: PipoDocumentsComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "powerAdmin/:file",
+            component: PowerAdminComponent,
             pathMatch: "full",
           },
         ],

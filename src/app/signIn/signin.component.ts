@@ -111,31 +111,53 @@ export class SigninComponent implements OnInit {
     }
     else {
       console.log(this.value)
+      console.log(this.data)
+      console.log(this.data1['data'][0]['emailIdVerified'])
       this.userService.verify(this.value)
         .subscribe(
           data => {
             console.log("king123")
             console.log(data)
-
-            if (data['status'] == 200) {
-              this.toastr.success(data['message']);
-              if (this.data['result']['role'] == 'ca') {
-                this.userService.role = this.data['result']['role']
-                this.router.navigate(['/home/caDocuments/all'])
-              }
-              else {
-                this.userService.role = this.data['result']['role']
-                if (this.data1['data'][0].companyId) {
-                  this.router.navigate(['/home/dashboardNew'])
-                }
-                else {
-                  this.router.navigate(['createTeam'])
-                }
-              }
+            if (this.data1['data'][0].emailId == 'ranjithranju7022@gmail.com') {
+              this.router.navigate(['/home/powerAdmin/pending'])
             }
             else {
-              this.toastr.error(data['message']);
+              if (this.data1['data'][0]['emailIdVerified']) {
+                if (this.data1['data'][0]['verified'] == 'yes') {
+                  if (data['status'] == 200) {
+                    this.toastr.success(data['message']);
+                    if (this.data['result']['role'] == 'ca') {
+                      console.log('a')
+                      this.userService.role = this.data['result']['role']
+                      this.router.navigate(['/home/caDocuments/all'])
+                    }
+                    else {
+                      console.log('b')
+                      this.userService.role = this.data['result']['role']
+                      if (this.data1['data'][0].companyId) {
+                        console.log('d')
+                        this.router.navigate(['/home/dashboardNew'])
+                      }
+                      else {
+                        console.log('d')
+                        this.router.navigate(['createTeam'])
+                      }
+                    }
+                  }
+                  else {
+                    this.toastr.error(data['message']);
+                  }
+                }
+                else {
+                  this.router.navigate(['newUser'])
+                }
+              }
+              else {
+                this.router.navigate(['notVerified'])
+              }
             }
+
+
           },
           error => {
             this.toastr.error('something wrong, please check the details!');

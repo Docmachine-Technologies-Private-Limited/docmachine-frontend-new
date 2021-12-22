@@ -22,6 +22,7 @@ import {
 
 import { isPlatformBrowser, isPlatformServer } from "@angular/common";
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AppConfig } from "src/app/app.config";
 
 
 @Component({
@@ -111,6 +112,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   lcCurrency: any;
   buttonToggle1: any;
   buyer: boolean;
+  api_base: any;
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -122,8 +124,10 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private toastr: ToastrService,
     private modalService: NgbModal,
+    public appconfig: AppConfig
   ) {
-
+    this.api_base = appconfig.apiUrl;
+    console.log(this.api_base)
     this.loadFromLocalStorage();
     console.log(this.authToken);
     this.headers = {
@@ -134,7 +138,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
       console.log("asdkhsajvdsug");
 
       this.config1 = {
-        url: `https://dm.uipep.com/v1/member/uploadImage`,
+        url: `${this.api_base}/member/uploadImage`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,
@@ -156,32 +160,48 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
+    console.log('sjsj')
+    console.log(this.id)
     if (this.id) {
+      this.documentService.getPipo().subscribe(
+        (res: any) => {
+          console.log("HEre Response", res), (this.item1 = res.data);
+        },
+        (err) => console.log(err)
+      );
+
       this.documentService.getPipoByPipoNo(this.id)
         .subscribe(
           data => {
+            let index = this.route.snapshot.params['index'];
             console.log("king123")
             console.log(data)
             console.log(data['data'][0])
-
+            this.getInvoices(data['data'][0], index)
           },
           error => {
             console.log("error")
           });
     }
     else {
-      this.route.params.subscribe(params => {
-        this.file = this.route.snapshot.params['id'];
-        this.documentService.getPipo().subscribe(
-          (res: any) => {
-            console.log("HEre Response", res), (this.item1 = res.data);
-          },
-          (err) => console.log(err)
-        );
+      // this.route.params.subscribe(params => {
+      //   this.file = this.route.snapshot.params['id'];
+      //   this.documentService.getPipo().subscribe(
+      //     (res: any) => {
+      //       console.log("HEre Response", res), (this.item1 = res.data);
+      //     },
+      //     (err) => console.log(err)
+      //   );
 
-        this.showInvoice = false;
-        console.log("hello")
-      });
+      //   this.showInvoice = false;
+      //   console.log("hello")
+      // });
+      this.documentService.getPipo().subscribe(
+        (res: any) => {
+          console.log("HEre Response", res), (this.item1 = res.data);
+        },
+        (err) => console.log(err)
+      );
 
       this.userService.getBene(1).subscribe(
         (res: any) => {
@@ -190,11 +210,9 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
         },
         (err) => console.log("Error", err)
       );
+
+
     }
-
-
-
-
 
   }
 
@@ -290,6 +308,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
 
   getInvoices(selectedRowValues, i) {
     console.log(selectedRowValues.pi_poNo)
+    this.showInvoice = true
     this.router.navigate(['home/pipoDoc', {
       id: selectedRowValues.pi_poNo,
       page: 'details',

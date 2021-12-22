@@ -5,6 +5,7 @@ import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { UserService } from "../../service/user.service";
+import { AppConfig } from "src/app/app.config";
 
 @Component({
   selector: 'app-ca-documents',
@@ -44,10 +45,13 @@ export class CaDocumentsComponent implements OnInit, AfterViewInit {
   authToken: any;
   public config: DropzoneConfigInterface;
   data: any;
+  api_base: any;
   constructor(
     public documentService: DocumentService,
-    @Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder, private userService: UserService, private router: Router) {
+    @Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder, private userService: UserService, private router: Router, public appconfig: AppConfig) {
     this.loadFromLocalStorage()
+    this.api_base = appconfig.apiUrl;
+    console.log(this.api_base)
     console.log(this.authToken)
     this.headers = {
       Authorization: this.authToken,
@@ -55,7 +59,7 @@ export class CaDocumentsComponent implements OnInit, AfterViewInit {
 
     if (isPlatformBrowser(this.platformId)) {
       this.config = {
-        url: `https://dm.uipep.com/v1/member/uploadImage`, //`https://dm.uipep.com/v1/member/uploadImage`
+        url: `${this.api_base}/member/uploadImage`, //`${this.api_base}/member/uploadImage`
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,

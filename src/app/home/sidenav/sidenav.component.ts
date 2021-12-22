@@ -38,6 +38,7 @@ export class SidenavComponent implements OnInit {
   billuc1: boolean;
   mt3: boolean;
   mt4: any;
+  val: Object;
 
   constructor(
     public router: Router,
@@ -53,11 +54,20 @@ export class SidenavComponent implements OnInit {
     this.id = await this.userService.getUserDetail();
     console.log(this.id)
     this.name = this.id.result.fullName
-    this.role = this.id.result.role
-    console.log(this.name)
-    const data1: any = this.userService.getUserDetail();
+    if (this.id.result.emailId == 'ranjithranju7022@gmail.com') {
+      this.role = 'admin'
 
-    console.log(data1.result)
+    }
+    else {
+      this.role = this.id.result.role
+      console.log(this.name)
+    }
+
+
+
+    // const data1: any = this.userService.getUserDetail();
+
+    // console.log(data1.result)
     let token = this.authGuard.loadFromLocalStorage();
     if (!token) {
       this.router.navigate(["login"]);

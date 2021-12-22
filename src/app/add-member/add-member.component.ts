@@ -5,6 +5,7 @@ import { UserService } from './../service/user.service';
 import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { AppConfig } from '../../app/app.config';
 
 @Component({
   selector: 'app-add-member',
@@ -28,9 +29,12 @@ export class AddMemberComponent implements OnInit, AfterViewInit {
   toggle = false;
 
   public config: DropzoneConfigInterface;
+  api_base: string;
 
-  constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder, private userService: UserService,) {
+  constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder, private userService: UserService, public appconfig: AppConfig) {
     this.loadFromLocalStorage()
+    this.api_base = appconfig.apiUrl;
+    console.log(this.api_base)
     console.log(this.authToken)
     this.headers = {
       id: this.id,
@@ -40,7 +44,7 @@ export class AddMemberComponent implements OnInit, AfterViewInit {
 
     if (isPlatformBrowser(this.platformId)) {
       this.config = {
-        url: `https://dm.uipep.com/v1/member/uploadImage`,
+        url: `${this.api_base}/member/uploadImage`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,
