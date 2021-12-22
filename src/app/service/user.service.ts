@@ -6,6 +6,7 @@ export class UserService {
   public role;
   public authToken;
   public name;
+  private projectUrl= window.location.protocol + "//" + window.location.host;
   constructor(private http: HttpClient) { }
 
   public addToken(token) {
@@ -29,6 +30,7 @@ export class UserService {
     });
   }
   public login(loginData) {
+    console.log(this.projectUrl)
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",

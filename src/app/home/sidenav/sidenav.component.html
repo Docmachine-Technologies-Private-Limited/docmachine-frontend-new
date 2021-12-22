@@ -91,96 +91,81 @@
 
                         </div>
                         <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
-                        <div style="cursor: pointer; height: 30px; margin-top: -6px;" (click)="newTask()" [ngClass]="status ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 50px; font-size: 12px; ">PI/PO <i style="font-size: 14px; margin-left: 48%;"
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newTask()" [ngClass]="status ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; font-size: 12px; display: inline;">PI/PO <i style="font-size: 12px; margin-left: 48%;"
                   *ngIf="status" class="fas fa-plus-circle"></i></span>
                         </div>
-                        <div style="cursor: pointer; height: 30px; padding-top: 5px;" [ngClass]="status2 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status2 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 50px; font-size: 12px;">Credit Notes</span>
                         </div>
 
-                        <div style="cursor: pointer; height: 30px; padding-top: 5px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 50px; font-size: 12px;">Debit notes</span>
                         </div>
 
-                        <div style="cursor: pointer; height: 30px; padding-top: 5px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 50px; font-size: 12px;">Insurance Documents</span>
                         </div>
 
-                        <div style="cursor: pointer; height: 30px; padding-top: 5px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 50px; font-size: 12px;">Letter of credit (LC)</span>
                         </div>
 
-                        <div style="cursor: pointer; height: 30px; padding-top: 5px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 50px; font-size: 12px;">Master service agree</span>
                         </div>
 
-                        <div style="cursor: pointer; height: 30px; padding-top: 5px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 50px; font-size: 12px;">
                               Tri party agreements</span>
                         </div>
 
-                        <div style="cursor: pointer; height: 30px; padding-top: 5px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 50px; font-size: 12px;">Opinion Reports</span>
                         </div>
 
-                        <div style="height: 30px; padding-top: 5px; font-size: 10px;">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
                             <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Transactions</span>
 
                         </div>
                         <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
 
-                        <div style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 50px; font-size: 12px;">Debit notes</span>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                            <span style="margin-left: 50px; font-size: 12px; " [routerLink]="['/home/advance-outward-remittance']">Advance Outward Remittance </span>
                         </div>
 
-                        <div style="cursor: pointer; height: 30px; padding-top: 5px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 50px; font-size: 12px;">Advanced Outward rem</span>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                            <span style="margin-left: 50px; font-size: 12px;" [routerLink]="['/home/direct-import-payment']">Direct
+              Import Payment</span>
                         </div>
 
-                        <div style="cursor: pointer; height: 30px; padding-top: 5px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 50px; font-size: 12px;">
-                              Bill Under Collection</span>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                            <span style="margin-left: 50px; font-size: 12px;" (click)="buc()">Bills Under Collection</span>
+                            <div *ngIf="billuc" style="margin-left: 60px;">
+                                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="lcSight()">Sight</a>
+                                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="lcUsance()">Usance</a>
+                            </div>
                         </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                            <span style="margin-left: 50px; font-size: 13px;" (click)="buc1()">Bills Under LC</span> <br>
+                            <div *ngIf="billuc1" style="margin-left: 60px;">
+                                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="nonlcSight()">Sight</a>
+                                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="nonlcUsance()">Usance</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!--
+                <li class="manage-li" *ngIf="mt">
 
-                        <div style="cursor: pointer; height: 30px; padding-top: 5px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 50px; font-size: 12px;">Bill Under LC</span>
-                        </div>
+                    <div class="main11" style=" color: #fff; margin-left: 5px;">
+
+
+
 
 
                     </div>
-                </li>
-
-                <!-- <li class="manage-li" *ngIf="mt">
-
-          <div class="main11" style=" color: #fff; margin-left: 5px;">
-            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
-              <span style="margin-left: 50px; font-size: 12px; "
-                [routerLink]="['/home/advance-outward-remittance']">Advance Outward
-                Remittance </span>
-            </div>
-            <div class="hoverClass" style="cursor: pointer;  padding-top: 5px;">
-              <span style="margin-left: 50px; font-size: 12px;" [routerLink]="['/home/direct-import-payment']">Direct
-                Import Payment</span>
-            </div>
-
-            <div class="hoverClass" style="cursor: pointer; padding-top: 5px;">
-              <span style="margin-left: 50px; font-size: 12px;" (click)="buc()">Bills Under Collection</span>
-              <div *ngIf="billuc" style="margin-left: 60px;">
-                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="lcSight()">Sight</a>
-                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="lcUsance()">Usance</a>
-              </div>
-            </div>
-            <div class="hoverClass" style="cursor: pointer; padding-top: 5px;">
-              <span style="margin-left: 50px; font-size: 13px;" (click)="buc1()">Bills Under LC</span> <br>
-              <div *ngIf="billuc1" style="margin-left: 60px;">
-                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="nonlcSight()">Sight</a>
-                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="nonlcUsance()">Usance</a>
-              </div>
-            </div>
-
-          </div>
-        </li> -->
+                </li> -->
 
                 <li style="cursor: pointer" class="" (click)="exportTask()">
                     <a class="sidebar-content" style="cursor: pointer;">
