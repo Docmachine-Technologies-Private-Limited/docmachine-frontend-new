@@ -33,17 +33,9 @@
         <!-- The image half -->
 
         <!-- The content half -->
-        <div *ngIf='!qr' class="bg-dark" style="
-        float: left;
-        width: 58%;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      ">
+        <div *ngIf='!qr' class="bg-dark">
             <div style="margin-top: 5%; width: 90%; text-align: right">
-                <button style="cursor: pointer" class="leftl btn1" [class.disable]="isVisible" [disabled]="isVisible" (click)="onSignup()">
-          Signup
-        </button>
+                <button style="cursor: pointer" class="leftl btn1" [class.disable]="isVisible" [disabled]="isVisible" (click)="onSignup()">Signup</button>
             </div>
             <div class="login d-flex align-items-center">
                 <!-- Demo content-->
@@ -57,14 +49,7 @@
                             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" style="margin-bottom: 20px;">
                                 <div class="form-group mb-3">
                                     <label for="inputEmail">Email</label>
-                                    <input formControlName="email" id="inputEmail" type="email" placeholder="Your Email" required="" class="
-                      form-control
-                      rounded-pill
-                      border-0
-                      shadow-sm
-                      px-4
-                      email
-                    " [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                                    <input formControlName="email" id="inputEmail" type="email" placeholder="Your Email" required="" class="form-control rounded-pill border-0 shadow-sm px-4 email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
                                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                                         <div *ngIf="f.email.errors.required" style="margin-left: 15px;">Email is required</div>
                                         <div *ngIf="f.email.errors.pattern" style="margin-left: 15px;">Not an Email</div>
@@ -147,7 +132,7 @@
         justify-content: center;
       ">
             <img style="width: 100%" class="image1" src="./assets/Image.png" />
-            <img class="image2" src="./assets/LogoFinal.png" style="width: 299px; height: 92px" />
+            <img class="image2" src="./assets/LogoFinal.png" />
         </div>
     </div>
 </div>
