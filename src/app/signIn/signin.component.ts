@@ -136,7 +136,7 @@ export class SigninComponent implements OnInit {
                       this.userService.role = this.data['result']['role']
                       if (this.data1['data'][0].companyId) {
                         console.log('d')
-                        this.router.navigate(['/home/dashboardNew'])
+                        this.router.navigate(['/home/dashboardTask'])
                       }
                       else {
                         console.log('d')

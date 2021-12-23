@@ -1,33 +1,3 @@
-<!-- <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
-    <div class="card card0 border-0">
-        <div class="row d-flex">
-            <div class="col-lg-6">
-                <div class="card1 pb-5">
-                    <div class="row"> <img src="https://i.imgur.com/CXQmsmF.png" class="logo"> </div>
-                    <div class="row px-3 justify-content-center mt-4 mb-5 border-line"> <img src="https://i.imgur.com/uNGdWHi.png" class="image"> </div>
-                </div>
-            </div>
-            <div class="col-lg-6" style="background: rgb(44, 42, 48);">
-                <div class="card2 card border-0 px-4 py-5" style="background: rgb(44, 42, 48);">
-                    <h4 class="heading mb-5 text-center"> <b> Signup Into Your Account </b></h4>
-                    <h6 class="sideheading">Please create your account by filling below <br> details</h6>
-                    <div class="row px-3"> <label class="mb-1">
-                    </label> <input class="mb-4" type="text" name="fullName" placeholder="Full Name"> </div>
-                    <div class="row px-3"> <label class="mb-1">
-                        </label> <input class="mb-4" type="text" name="email" placeholder="Email"> </div>
-                    <div class="row px-3"> <label class="mb-1">
-                        </label> <input class="mb-4" type="password" name="password" placeholder="Password"> </div>
-                    <div class="row px-3"> <label class="mb-1">
-                        </label> <input type="password" name="confirmPassword" placeholder="Confirm Password"> </div>
-
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
 <div style="padding-right: 0 !important; overflow: hidden" class="container-fluid">
     <div style="display: flex; width: 100%" class="row no-gutter">
         <!-- The image half -->
@@ -41,23 +11,29 @@
         height: 100%;
       ">
             <div style="margin-top: 5%; width: 90%; text-align: right">
-                <button style="cursor: pointer" class="leftl btn1" [class.disable]="isVisible" [disabled]="isVisible" (click)="onSignup()">
-          Signup
-        </button>
+                <button style="cursor: pointer" class="leftl btn1" [class.disable]="isVisible" [disabled]="isVisible"
+                    (click)="onSignup()">
+                    Signup
+                </button>
             </div>
             <div class="login d-flex align-items-center">
                 <!-- Demo content-->
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-10 col-xl-9 mx-auto">
-                            <h6 class="display-5">Login</h6>
+                            <div style="display: flex;">
+                                <h6 class="display-5">Login</h6> <span
+                                    style="margin-top: 6px; margin-left: 10px; font-size: 20px; color: #606670;">DEV</span>
+                            </div>
+
                             <p class="mb-4 text-ui">
                                 Use your email, password and Google Authenticator OTP to access your account
                             </p>
                             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" style="margin-bottom: 20px;">
                                 <div class="form-group mb-3">
                                     <label for="inputEmail">Email</label>
-                                    <input formControlName="email" id="inputEmail" type="email" placeholder="Your Email" required="" class="
+                                    <input formControlName="email" id="inputEmail" type="email" placeholder="Your Email"
+                                        required="" class="
                       form-control
                       rounded-pill
                       border-0
@@ -66,14 +42,17 @@
                       email
                     " [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
                                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                                        <div *ngIf="f.email.errors.required" style="margin-left: 15px;">Email is required</div>
-                                        <div *ngIf="f.email.errors.pattern" style="margin-left: 15px;">Not an Email</div>
+                                        <div *ngIf="f.email.errors.required" style="margin-left: 15px;">Email is
+                                            required</div>
+                                        <div *ngIf="f.email.errors.pattern" style="margin-left: 15px;">Not an Email
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label for="password1">Password</label>
-                                    <input formControlName="password" id="password1" type="password" placeholder="Your Password" required="" class="
+                                    <input formControlName="password" id="password1" type="password"
+                                        placeholder="Your Password" required="" class="
                       form-control
                       rounded-pill
                       border-0
@@ -83,25 +62,32 @@
                       password1
                     " [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
                                     <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                                        <div *ngIf="f.password.errors.required" style="margin-left: 15px;">Please enter password</div>
-                                        <div *ngIf="f.password.errors.minlength" style="margin-left: 15px;">Password should be more than 6 letter</div>
+                                        <div *ngIf="f.password.errors.required" style="margin-left: 15px;">Please enter
+                                            password</div>
+                                        <div *ngIf="f.password.errors.minlength" style="margin-left: 15px;">Password
+                                            should be more than 6 letter</div>
                                     </div>
                                 </div>
                                 <div class="form-group mb-3" *ngIf='otp'>
                                     <label for="password2">Enter the OTP</label>
-                                    <input id="password2" placeholder="Enter the OTP" required="" class="form-control rounded-pill border-0 shadow-sm px-4 password1" (input)='inputFun($any($event.target).value)' />
+                                    <input id="password2" placeholder="Enter the OTP" required=""
+                                        class="form-control rounded-pill border-0 shadow-sm px-4 password1"
+                                        (input)='inputFun($any($event.target).value)' />
                                 </div>
 
 
                                 <p class="text-muted mb-4 bottom-text">
                                     You continuing, you agree to DocMachine
-                                    <a href="">Term of service</a> we will manage information as described in our <a href="">privacy policy agrement</a>
+                                    <a href="">Term of service</a> we will manage information as described in our <a
+                                        href="">privacy policy agrement</a>
                                 </p>
                                 <div>
-                                    <button type="submit" class="btn btn-block mb-2 rounded-pill shadow-sm reg-sm" style="float: left" [class.disable]="isDisabled" [disabled]="isDisabled">
-                    Sign in
-                  </button>
-                                    <p href="#" class="text-sm" style="float: left; margin-top: 10px; margin-left: 10px" [routerLink]="['/forgotpassword']">
+                                    <button type="submit" class="btn btn-block mb-2 rounded-pill shadow-sm reg-sm"
+                                        style="float: left" [class.disable]="isDisabled" [disabled]="isDisabled">
+                                        Sign in
+                                    </button>
+                                    <p href="#" class="text-sm" style="float: left; margin-top: 10px; margin-left: 10px"
+                                        [routerLink]="['/forgotpassword']">
                                         Forgot Password?
                                     </p>
                                 </div>
@@ -123,21 +109,23 @@
 
                 <span *ngIf="!!tfa.tempSecret">
 
-          <p style="text-align: center;">Scan the QR code and enter the secret key Using Google Authenticator
-            Application</p>
-          <img [src]="tfa.dataURL" alt="" class="img-thumbnail" style="display:block;margin:auto">
+                    <p style="text-align: center;">Scan the QR code and enter the secret key Using Google Authenticator
+                        Application</p>
+                    <img [src]="tfa.dataURL" alt="" class="img-thumbnail" style="display:block;margin:auto">
 
-          <p style="text-align: center;">Auth Type - Time Based - OTP</p>
+                    <p style="text-align: center;">Auth Type - Time Based - OTP</p>
 
-          <form class="form-group" (ngSubmit)="confirm()" #otpForm="ngForm" style="text-align: -webkit-center;">
-            <input name="authcode" #iauthcode="ngModel"
-              class="form-control rounded-pill border-0 shadow-sm px-4 password1" maxlength="6"
-              placeholder="Enter the Auth Code" id="authcode" autocomplete="off" [(ngModel)]="authcode" required>
-            <br>
-            <button type="Submit" class="btn btn-lg btn-primary btn-block btn-signin"
-              [disabled]="iauthcode?.errors?.required">Submit</button>
-          </form>
-        </span>
+                    <form class="form-group" (ngSubmit)="confirm()" #otpForm="ngForm"
+                        style="text-align: -webkit-center;">
+                        <input name="authcode" #iauthcode="ngModel"
+                            class="form-control rounded-pill border-0 shadow-sm px-4 password1" maxlength="6"
+                            placeholder="Enter the Auth Code" id="authcode" autocomplete="off" [(ngModel)]="authcode"
+                            required>
+                        <br>
+                        <button type="Submit" class="btn btn-lg btn-primary btn-block btn-signin"
+                            [disabled]="iauthcode?.errors?.required">Submit</button>
+                    </form>
+                </span>
             </div>
         </div>
         <!-- End -->
