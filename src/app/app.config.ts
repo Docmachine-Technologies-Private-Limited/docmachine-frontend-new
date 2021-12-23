@@ -24,13 +24,13 @@ export class AppConfig {
         if (window.location.hostname === 'localhost') {
             this.apiUrl = `http://localhost:3000/v1`;
         } else if (window.location.hostname.indexOf('beta') === 0) {
-            this.apiUrl = window.location.protocol + '//api.' + window.location.hostname + '/v1';
+            this.apiUrl = window.location.protocol + '//betaapi.' + 'docmachine.in' + '/v1';
         }
-        else if (window.location.hostname.indexOf('demo') === 0) {
-            this.apiUrl = window.location.protocol + '//api.' + window.location.hostname + '/v1';
+        else if (window.location.hostname.indexOf('dev') === 0) {
+            this.apiUrl = window.location.protocol + '//devapi.' + 'docmachine.in' + '/v1';
         }
-        else if (window.location.hostname.indexOf('live') === 0) {
-            this.apiUrl = window.location.protocol + '//api.' + window.location.hostname + '/v1';
+        else if (window.location.hostname.indexOf('docmachine') === 0) {
+            this.apiUrl = window.location.protocol + '//api.' + 'docmachine.in' + '/v1';
         }
 
         // else if (window.location.hostname.indexOf('qa') > -1) {

@@ -1,76 +1,67 @@
 <div style="margin-top: 67px; width: 89%; overflow-y: overlay;" class="content-wrap">
     <main id="content" class="table-padding" role="main" style="overflow-y: auto;">
         <div *ngIf="!showInvoice">
-            <div style="
-                    margin-top: 30px;
-                    display: flex;
-                    flex-direction: rows;
-                    align-items: center;
-                    padding: 0.8% 0;
-                    border: 0.5px solid rgba(0, 0, 0, 0.2);
-                    width: 100%;
-                    margin-left: 26px;">
+            <div
+                style="margin-top: 30px; display: flex; flex-direction: rows; align-items: center; padding: 0.8% 0; border: 0.5px solid rgba(0, 0, 0, 0.2); width: 100%;margin-left: 26px;">
                 <div style="display: flex; align-items: center; margin-left: 12px">
-
-
                     <div style="display: flex; margin-left: 16px; align-items: center">
-                        <div class="customDropdown">
-                            <span style="color: #323e4a !important">Import </span>
+                        <div class="customDropdown" style="width: 90px; border: 1px solid #4b74ff; font-size: 14px;">
+                            <span style="color: #4b74ff !important; ">Import </span>
                             <span class="dropIco"><i id="down" class="fas fa-angle-down"></i>
                                 <i id="up" style="display: none" class="fas fa-angle-up"></i>
                             </span>
-                            <div class="dropdown-content">
+                            <div class="dropdown-content" style="min-width: 90px;">
                                 <p><a href="">Import</a></p>
                                 <p><a href="">Export</a></p>
                             </div>
                         </div>
-                        <div class="customDropdown">
-                            <span style="color: #323e4a !important">PI/PO </span>
+                        <div class="customDropdown" style="width: 80px; border: 1px solid #4b74ff; font-size: 14px;">
+                            <span style="color: #4b74ff !important">PI/PO </span>
                             <span class="dropIco"><i id="down" class="fas fa-angle-down"></i>
                                 <i id="up" style="display: none" class="fas fa-angle-up"></i>
                             </span>
-                            <div class="dropdown-content">
+                            <div class="dropdown-content" style="min-width: 80px;">
                                 <p><a href="">PI/PO</a></p>
                                 <p><a href="">BOE</a></p>
                             </div>
                         </div>
-                        <div class="customDropdown">
+                        <div class="customDropdown" style="width:125px; font-size: 14px;">
                             <span style="color: #323e4a !important">Customer </span>
                             <span class="dropIco"><i id="down" class="fas fa-angle-down"></i>
                                 <i id="up" style="display: none" class="fas fa-angle-up"></i>
                             </span>
-                            <div class="dropdown-content">
+                            <div class="dropdown-content" style="min-width: 125px;">
                                 <p><a href="">India</a></p>
                                 <p><a href="">California</a></p>
                                 <p><a href="">United States</a></p>
                             </div>
                         </div>
-                        <div class="customDropdown">
+                        <div class="customDropdown" style="width: 102px;">
                             <span style="color: #323e4a !important">View All</span>
                             <span class="dropIco"><i id="down1" class="fas fa-angle-down"></i>
                                 <i id="up1" style="display: none" class="fas fa-angle-up"></i>
                             </span>
-                            <div class="dropdown-content">
+                            <div class="dropdown-content" style="min-width: 123px;">
                                 <p><a href="">Shipping Bills</a></p>
                                 <p><a href="">PI/PO</a></p>
                             </div>
                         </div>
-                        <div class="customDropdown">
+                        <div class="customDropdown" style="width: 91px;">
                             <span style="color: #323e4a !important">Status</span>
                             <span class="dropIco"><i id="down2" class="fas fa-angle-down"></i>
                                 <i id="up2" style="display: none" class="fas fa-angle-up"></i>
                             </span>
-                            <div class="dropdown-content">
+                            <div class="dropdown-content" style="min-width: 115px;">
                                 <p><a href="">Completed</a></p>
                                 <p><a href="">Pending</a></p>
                             </div>
                         </div>
-                        <div class="customDropdown">
+                        <div class="customDropdown" style="width: 150px;">
                             <span style="color: #323e4a !important">Last Updated</span>
                             <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
                                 <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                             </span>
-                            <div class="dropdown-content">
+                            <div class="dropdown-content" style="min-width:150px;">
                                 <p><a href="">Completed</a></p>
                                 <p><a href="">Pending</a></p>
                             </div>
@@ -84,9 +75,9 @@
                                 <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
                             <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
                                     class="fas fa-angle-down"></i>
-                                <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                                <!-- <i id="up3" style="display: none" class="fas fa-angle-up"></i> -->
                             </span>
-                            <div style="min-width: 200px; margin-left: -92px;" class="dropdown-content1">
+                            <div style="min-width: 200px; margin-left: -92px; z-index: 1;" class="dropdown-content1">
                                 <p><a>New Credit Note</a></p>
                                 <p (click)='pipoClick()'><a>New PI/PO</a></p>
                                 <p><a>New Debit Note</a></p>
@@ -96,58 +87,53 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
-            <div style="width: 100%" class="analytics-side">
-                <div style="width: 100%" class="row">
-                    <div style="width: 100%; margin: 0 -1.5%" class="col-12 mb-lg padding">
-                        <section style="width: 90%; margin-left: 56px" class="pb-0 box-shadow">
-                            <div style="margin: 0 -2%" class="widget-body p-0 support table-wrapper">
-                                <table style="width: 100%; margin-left: 29px;" class="table table-striped mb-0">
-                                    <thead style="width: 100%">
-                                        <tr class="text-muted table-heading" style="font-size: 15px;">
+        </div>
+        <div style="width: 100%" class="analytics-side">
+            <div style="width: 100%" class="row">
+                <div style="width: 100%; margin:5%; left: -70px; top:-60px" class="col-12 mb-lg padding">
+                    <section style="width: 90%; margin-left: 56px" class="pb-0 box-shadow">
+                        <div style="margin: 0 -2%" class="widget-body p-0 support table-wrapper">
+                            <table style="width: 100%; margin-left: 29px;" class="table table-striped mb-0">
+                                <thead style="width: 100%">
+                                    <tr class="text-muted table-heading" style="font-size: 15px;">
 
-                                            <th scope="col">DATE</th>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">INVOICE NUMBER</th>
-                                            <th scope="col">CUSTOMER NAME</th>
-                                            <th scope="col">UPLOADED BY</th>
-                                            <th scope="col">AMOUNT</th>
-                                            <th scope="col">STATUS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of item1; let i = index" (click)="
-                                                                                                    getInvoices(data, i)
-                                                                                                ">
-                                            <td>
-                                                {{data.date}}
-                                            </td>
-                                            <td class="sb-no">{{data.pi_poNo}}</td>
-                                            <td> <span *ngIf='data.document == "PI"'> Performa Invoice</span> <span
-                                                    *ngIf='data.document != "PI"'> Purchase Order</span></td>
-                                            <td>
-                                                {{data.benneName}}
-                                            </td>
-                                            <td>
-                                                <img class="image"
-                                                    src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                    height="30px" width="30px" /><img class="image image2"
-                                                    src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                    height="30px" width="30px" />
+                                        <th scope="col">DATE</th>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">INVOICE NUMBER</th>
+                                        <th scope="col">CUSTOMER NAME</th>
+                                        <th scope="col">UPLOADED BY</th>
+                                        <th scope="col">AMOUNT</th>
+                                        <th scope="col">STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-dark">
+                                    <tr class="table-row" *ngFor="let data of item1; let i = index"
+                                        (click)="getInvoices(data, i)">
+                                        <td>
+                                            {{data.date}}
+                                        </td>
+                                        <td class="sb-no">{{data.pi_poNo}}</td>
+                                        <td> <span *ngIf='data.document == "PI"'> Performa Invoice</span> <span
+                                                *ngIf='data.document != "PI"'> Purchase Order</span></td>
+                                        <td>
+                                            {{data.benneName}}
+                                        </td>
+                                        <td>
+                                            <img class="image"
+                                                src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
+                                                height="30px" width="30px" /><img class="image image2"
+                                                src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
+                                                height="30px" width="30px" /> Lindsey Stroud
+                                        </td>
+                                        <td>{{data.amount}}</td>
+                                        <td style="color:#F5A623;">Pending Action</td>
+                                    </tr>
 
-                                                Lindsey Stroud
-                                            </td>
-                                            <td>{{data.amount}}</td>
-                                            <td style="color:#F5A623;">Pending Action</td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </section>
-                    </div>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -164,7 +150,8 @@
                                 class="fas fa-angle-down"></i>
                             <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                         </span>
-                        <div class="dropdown-content1" style="min-width: 200px; margin-left: -92px;">
+                        <div class="dropdown-content1"
+                            style="min-width: 200px; margin-left: -92px; font-family: Poppins,sans-serif; font-size: 15px;">
                             <p><a>New Credit Note</a></p>
                             <p (click)='pipoClick()'><a>New PI/PO</a></p>
                             <p><a>New Debit Note</a></p>
@@ -364,11 +351,9 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
-                                                Upload
-                                                Purchase Order</p>
+                                                Upload Purchase Order</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                Submitted on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -383,11 +368,9 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
-                                                Uploaded
-                                                Purchase Order</p>
+                                                Uploaded Purchase Order</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                Submitted on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -409,9 +392,7 @@
 
                                                 Performa Invoice Not Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -425,12 +406,9 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
-                                                Uploaded
-                                                Performa Invoice</p>
+                                                Uploaded Performa Invoice</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -450,9 +428,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 BL Copy Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -473,9 +449,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 LC Issuance Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -496,9 +470,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Commercial Invoice Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -520,9 +492,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Agreement Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -544,9 +514,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Debit Note Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -568,9 +536,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Credit Note Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -592,9 +558,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 High Sea Service Copy Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -616,9 +580,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 LC Copy Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -640,9 +602,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Direct Import Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -664,9 +624,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Advance Outward Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -688,9 +646,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Bill Under Collection Usance Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -712,9 +668,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Bill Under Collection Sight Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -736,9 +690,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Letter of Credit Sight Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -760,9 +712,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Letter of Credit Usance Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -807,9 +757,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Delivery Order Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -830,9 +778,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Insurance Copy Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -853,9 +799,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Bill Of Exchange Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -877,9 +821,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Opinion report Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -901,9 +843,7 @@
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 15 CA/CB uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                                Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -919,8 +859,7 @@
                                     <div style="margin-left: 20px;">
                                         <p
                                             style="color: RGB(50, 62, 74); font-size: 16px; margin-bottom: 15px; margin-top: 15px;">
-                                            Below
-                                            are the steps still to complete</p>
+                                            Below are the steps still to complete</p>
                                         <div>
                                             <span><i class="fas fa-circle"></i></span>
                                             <span
@@ -1569,7 +1508,8 @@
                                             <iframe [src]='viewData' width="400px" height="500px"> </iframe>
                                         </div>
                                     </div>
-                                </div><!-- End -->
+                                </div>
+                                <!-- End -->
 
                             </div>
                         </div>

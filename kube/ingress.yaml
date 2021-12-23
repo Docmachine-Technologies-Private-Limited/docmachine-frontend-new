@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: docmachine-ingress
   annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
     # specify the name of the global IP address resource to be associated with the HTTP(S) Load Balancer.
     kubernetes.io/ingress.global-static-ip-name: docmachine-gke-external-ip
     # add an annotation indicating the issuer to use.
@@ -27,13 +28,32 @@ spec:
   - hosts:
     - docmachine.in
     - beta.docmachine.in
+    - dev.docmachine.in
     - api.docmachine.in
+    - betaapi.docmachine.in
+    - devapi.docmachine.in
     secretName: docmachine-cert-secret # < cert-manager will store the created certificate in this secret
   - hosts:
     - jenkins.docmachine.in
     secretName: docmachine-jenkins-cert-secret
   rules:
   - host: beta.docmachine.in
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          serviceName: docmachine-beta-service
+          servicePort: 82
+  - host: dev.docmachine.in
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          serviceName: docmachine-dev-service
+          servicePort: 83
+  - host: docmachine.in
     http:
       paths:
       - path: /
@@ -48,6 +68,20 @@ spec:
         backend:
           serviceName: docmachinebackend
           servicePort: 3000
+  - host: betaapi.docmachine.in
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: docmachinebackendbeta
+          servicePort: 3002
+  - host: devapi.docmachine.in
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: docmachinebackenddev
+          servicePort: 3003
   - host: jenkins.docmachine.in
     http:
       paths:

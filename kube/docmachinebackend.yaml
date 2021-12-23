@@ -18,7 +18,7 @@ spec:
         app: docmachinebackend
     spec:
       containers:
-      - image: gcr.io/focused-album-308314/doc-machine-backend:latest
+      - image: gcr.io/focused-album-308314/doc-machine-backend:v1.9.0
         imagePullPolicy: Always
         name: doc-machine-backend
         resources: {}
@@ -26,6 +26,9 @@ spec:
         terminationMessagePolicy: File
         ports: 
         - containerPort: 3000
+        env:
+        - name: deployment
+          value: prod
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
