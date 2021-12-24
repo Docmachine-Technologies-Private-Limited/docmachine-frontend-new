@@ -10,6 +10,10 @@
     font-family: "Poppins", sans-serif;
 }
 
+.login {
+    margin-top: -40px;
+}
+
 .login,
 .image {
     min-height: 100vh;
@@ -31,6 +35,8 @@
 
 .image2 {
     position: absolute;
+    width: 299px;
+    height: 92px;
 }
 
 .display-5 {
@@ -38,6 +44,7 @@
     color: #606670;
     font-size: 32px;
     margin-bottom: 12px;
+    margin-top: 60px
 }
 
 .bottom-text {
@@ -77,7 +84,8 @@ a {
 .bg-dark {
     background-color: rgb(255, 255, 255) !important;
     display: flex;
-    justify-content: center;
+    margin-top: -100px;
+    // justify-content: center;
 }
 
 input.email {
@@ -144,7 +152,7 @@ label {
     background-color: #51aee5;
     font-size: 12px;
     color: #ffffff;
-    outline: none;
+    // outline: none;
 }
 
 .leftl {
@@ -153,41 +161,47 @@ label {
     font-weight: 600;
     margin-top: 25px;
     margin-bottom: 50px;
+    cursor: pointer;
+    margin-top: 60px;
 }
 
 .disable {
     background-color: #6cc9ff;
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1023px) {
     .bg-dark {
         float: none;
         height: 100%;
         width: 100%;
         padding-left: 10px;
-        margin-top: -10px;
-        margin-left: 50px;
+        // margin-top: -420px;
+        margin-left: 65px;
     }
     .image1 {
         width: 100%;
         display: none;
     }
     .image2 {
-        margin-top: -500px;
+        margin-top: -1535px;
         z-index: 1;
-        margin-left: 160px;
+        margin-left: 150px;
+    }
+    .signup2 {
+        margin-top: 100px;
     }
     .display-5 {
         font-weight: 500;
         color: #606670;
-        font-size: 32px;
+        font-size: 40px;
         margin-bottom: 12px;
-        // margin-top: 10px;
+        // margin-top: -1460px;
+        top: -100px;
     }
     input {
         box-shadow: none !important;
         border: 1px solid #dedede !important;
-        width: 452px;
+        width: 552px;
         height: 40px;
     }
     form {
@@ -200,5 +214,114 @@ label {
         background-color: #51aee5;
         font-size: 15px;
         color: #ffffff;
+    }
+    .leftl {
+        margin-top: 130px;
+        margin-left: 520px;
+    }
+    .form2 {
+        margin-top: -300px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .bg-dark {
+        float: none;
+        height: 100%;
+        width: 100%;
+        // padding-left: 10px;
+        margin-left: 45px;
+    }
+    .image1 {
+        width: 100%;
+        display: none;
+    }
+    .image2 {
+        margin-top: -1550px;
+        z-index: 1;
+        margin-left: 200px;
+    }
+    .display-5 {
+        font-weight: 500;
+        color: #606670;
+        font-size: 40px;
+        margin-bottom: 12px;
+    }
+    input {
+        box-shadow: none !important;
+        border: 1px solid #dedede !important;
+        width: 420px;
+        height: 40px;
+    }
+    form {
+        margin-top: -20px;
+    }
+    .btn {
+        width: 200px;
+        height: 40px;
+        border-radius: 20px;
+        background-color: #51aee5;
+        font-size: 15px;
+        color: #ffffff;
+    }
+    .leftl {
+        margin-top: 125px;
+        margin-left: 380px;
+    }
+    .form2 {
+        margin-top: -250px;
+        margin-left: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .bg-dark {
+        float: none;
+        height: 100%;
+        width: 100%;
+        // padding-left: 10px;
+        margin-left: 20px;
+    }
+    .image1 {
+        width: 100%;
+        display: none;
+    }
+    .image2 {
+        margin-top: -1550px;
+        z-index: 1;
+        margin-left: 160px;
+        height: 80px;
+        width: 240px;
+    }
+    .display-5 {
+        font-weight: 500;
+        color: #606670;
+        font-size: 40px;
+        margin-bottom: 12px;
+    }
+    input {
+        box-shadow: none !important;
+        border: 1px solid #dedede !important;
+        width: 320px;
+        height: 40px;
+    }
+    form {
+        margin-top: -20px;
+    }
+    .btn {
+        width: 200px;
+        height: 40px;
+        border-radius: 20px;
+        background-color: #51aee5;
+        font-size: 15px;
+        color: #ffffff;
+    }
+    .leftl {
+        margin-top: 130px;
+        margin-left: 310px;
+    }
+    .form2 {
+        margin-top: -260px;
+        margin-left: 10px;
     }
 }
