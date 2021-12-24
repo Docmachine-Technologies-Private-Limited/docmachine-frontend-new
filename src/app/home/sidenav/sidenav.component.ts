@@ -54,9 +54,8 @@ export class SidenavComponent implements OnInit {
     this.id = await this.userService.getUserDetail();
     console.log(this.id)
     this.name = this.id.result.fullName
-    if (this.id.result.emailId == 'ranjithranju7022@gmail.com') {
+    if (this.id.result.emailId == 'tramsdocmachine@gmail.com' || this.id.result.emailId == 'docmachinetec@gmail.com' || this.id.result.emailId == 'fintech.innovations2021@gmail.com') {
       this.role = 'admin'
-
     }
     else {
       this.role = this.id.result.role

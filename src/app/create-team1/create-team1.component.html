@@ -34,7 +34,7 @@
 
                                 <div class="form-group mb-3">
                                     <label>*Importer exporter code (IEC)</label>
-                                    <input formControlName="iec" placeholder="Ex: ESEIEC." required=""
+                                    <input formControlName="iec" placeholder="Ex: 12121ABVEW." required=""
                                         class="form-control rounded-pill password password1"
                                         [ngClass]="{ 'is-invalid': submitted && f.iec.errors }">
                                     <div *ngIf="submitted && f.iec.errors" class="invalid-feedback">
@@ -44,7 +44,7 @@
                                         <div *ngIf="f.iec.errors.maxlength" style="margin-left: 15px;">ICE should
                                             contains 10 letters</div>
                                         <div *ngIf="f.iec.errors.pattern" style="margin-left: 15px;">IEC should be
-                                            numerics with 10 letters EX: 1212121212</div>
+                                            alphanumerics with 10 letters EX: 12121ABVEW</div>
                                     </div>
                                 </div>
                                 <div class="form-group mb-3">
@@ -59,13 +59,21 @@
                                 </div>
                                 <div class="form-group mb-3">
                                     <label>Contact Phone number</label>
-                                    <input formControlName="phone" id="password1" type=""
-                                        placeholder="Ex: +91 95023 23352" required=""
-                                        class="form-control rounded-pill password password1"
+                                    <input formControlName="phone" id="password1" type="" placeholder="Ex: 9502323352"
+                                        required="" class="form-control rounded-pill password password1"
                                         [ngClass]="{ 'is-invalid': submitted && f.phone.errors }">
                                     <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
                                         <div *ngIf="f.phone.errors.required" style="margin-left: 15px;">Phone number
                                             Required</div>
+                                        <div *ngIf="f.phone.errors.minlength" style="margin-left: 15px;">Phone number
+                                            should
+                                            contains 10 Numbers</div>
+                                        <div *ngIf="f.phone.errors.maxlength" style="margin-left: 15px;">Phone number
+                                            should
+                                            contains 10 letters</div>
+                                        <div *ngIf="f.phone.errors.pattern" style="margin-left: 15px;">Phone number
+                                            should be
+                                            numerics with 10 letters EX: 9111122222</div>
                                     </div>
                                 </div>
                                 <div class="form-group mb-3">
@@ -110,7 +118,7 @@
                                             should
                                             contains 15 letters only</div>
                                         <div *ngIf="f.gst.errors.pattern" style="margin-left: 15px;">GSTIN should be
-                                            alphanumerics with 15 letters EX: ABC12365AB12345</div>
+                                            alphanumerics with 15 letters EX: 22AAAAA0000A1Z5</div>
                                     </div>
 
                                 </div>
@@ -159,7 +167,7 @@
                                                 </div>
                                                 <div *ngIf="g.controls[i].get('bicAddress').errors?.pattern"
                                                     style="margin-left: 15px;">BIC
-                                                    address should be alphanumerics Ex: ABCABCA12ABC
+                                                    address should be alphanumerics Ex: ABCABCA12AB
                                                 </div>
                                                 <div *ngIf="g.controls[i].get('bicAddress').errors?.maxlength"
                                                     style="margin-left: 15px;">

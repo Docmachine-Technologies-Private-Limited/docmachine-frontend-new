@@ -4,7 +4,8 @@ metadata:
   name: docmachine-ingress
   annotations:
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/cors-allow-origin: "https://docmachine.in,https://beta.docmachine.in,https://dev.docmachine.in,https://api.docmachine.in,https://betaapi.docmachine.in,https://devapi.docmachine.in"
+    nginx-ingress.kubernetes.io/cors-reflect-subdomains: "https://docmachine.in,https://beta.docmachine.in,https://dev.docmachine.in,https://api.docmachine.in,https://betaapi.docmachine.in,https://devapi.docmachine.in"
+    # nginx.ingress.kubernetes.io/cors-allow-origin: "https://docmachine.in,https://beta.docmachine.in,https://dev.docmachine.in,https://api.docmachine.in,https://betaapi.docmachine.in,https://devapi.docmachine.in"
     nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS, DELETE"
     nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,X-CustomHeader,X-LANG,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,X-Api-Key,X-Device-Id,Access-Control-Allow-Origin"
     # specify the name of the global IP address resource to be associated with the HTTP(S) Load Balancer.
@@ -68,6 +69,7 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
           serviceName: docmachinebackend
           servicePort: 3000
@@ -75,6 +77,7 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
           serviceName: docmachinebackendbeta
           servicePort: 3002
@@ -82,6 +85,7 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
           serviceName: docmachinebackenddev
           servicePort: 3003

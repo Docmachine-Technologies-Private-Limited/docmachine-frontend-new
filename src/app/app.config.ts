@@ -22,7 +22,7 @@ export class AppConfig {
 
     public getConstants() {
         if (window.location.hostname === 'localhost') {
-            this.apiUrl = `http://localhost:3000/v1`;
+            this.apiUrl = `https://localhost:3000/v1`;
         } else if (window.location.hostname.indexOf('beta') === 0) {
             this.apiUrl = window.location.protocol + '//betaapi.' + 'docmachine.in' + '/v1';
         }

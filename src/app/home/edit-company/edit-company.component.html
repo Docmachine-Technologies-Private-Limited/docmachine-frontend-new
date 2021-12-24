@@ -41,7 +41,7 @@
                                         <div class="form-group mb-3">
                                             <label>*Importer exporter code (IEC)</label>
                                             <input *ngIf="editable" [(ngModel)]="item.iec" formControlName="iec"
-                                                placeholder="Ex: ESEIEC." required=""
+                                                placeholder="Ex: 12121ABVEW." required=""
                                                 class="form-control rounded-pill password password1"
                                                 [ngClass]="{ 'is-invalid': submitted && f.iec.errors }">
                                             <div *ngIf="submitted && f.iec.errors" class="invalid-feedback">
@@ -55,7 +55,7 @@
                                                     contains 10 letters</div>
                                                 <div *ngIf="f.iec.errors.pattern" style="margin-left: 15px;">IEC should
                                                     be
-                                                    numerics with 10 letters EX: 1212121212</div>
+                                                    numerics with 10 letters EX: 12121ABVEW</div>
                                             </div>
                                             <span *ngIf="!editable" name="iec" placeholder="Ex: 1212121212" required=""
                                                 class="form-control rounded-pill">{{item.iec}}</span>
@@ -84,6 +84,18 @@
                                                 <div *ngIf="f.phone.errors.required" style="margin-left: 15px;">Phone
                                                     number
                                                     Required</div>
+                                                <div *ngIf="f.phone.errors.minlength" style="margin-left: 15px;">Phone
+                                                    Number
+                                                    should
+                                                    contains only 10 numbers</div>
+                                                <div *ngIf="f.phone.errors.maxlength" style="margin-left: 15px;">Phone
+                                                    Number
+                                                    should
+                                                    contains 10 letters</div>
+                                                <div *ngIf="f.phone.errors.pattern" style="margin-left: 15px;">Phone
+                                                    Number should
+                                                    be
+                                                    numerics with 10 letters EX: 9111122222</div>
                                             </div>
                                             <span *ngIf="!editable" name="phone" id="password1" type=""
                                                 placeholder="Ex: +91 95023 23352" required=""
@@ -148,7 +160,7 @@
                                                     contains 15 letters only</div>
                                                 <div *ngIf="f.gst.errors.pattern" style="margin-left: 15px;">GSTIN
                                                     should be
-                                                    alphanumerics with 15 letters EX: ABC12365AB12345</div>
+                                                    alphanumerics with 15 letters EX: 22AAAAA0000A1Z5</div>
                                             </div>
                                             <span *ngIf="!editable" name="gst" id="password1" type=""
                                                 placeholder="GSTIN" required=""
@@ -260,7 +272,7 @@
                                                         class="invalid-feedback">
                                                         <div *ngIf="g.controls[i].get('bicAddress').errors?.pattern"
                                                             style="margin-left: 15px;">BIC
-                                                            address should be alphanumerics Ex: ABCABCA12ABC
+                                                            address should be alphanumerics Ex: ABCABCA12AB
                                                         </div>
                                                         <div *ngIf="g.controls[i].get('bicAddress').errors?.required"
                                                             style="margin-left: 15px;">BIC

@@ -145,3 +145,51 @@ button:focus {
     background-color: #51AEE5;
     color: white;
 }
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .enter {
+        font-size: 14px;
+        font-weight: 500;
+        color: #606670;
+        margin-top: 15px !important;
+        margin-bottom: 10px !important;
+        text-align: center;
+    }
+    .login-form{ 
+        width: 280px;
+        margin:auto;
+        margin-top: 15%;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .enter {
+        font-size: 14px;
+        font-weight: 500;
+        color: #606670;
+        margin-top: 15px !important;
+        margin-bottom: 10px !important;
+        text-align: center;
+    }
+    .login-form{ 
+        width: 260px;
+        margin:auto;
+        margin-top: 15%;
+    }
+}
+
+@media (max-width: 480px) {
+    .enter {
+        font-size: 14px;
+        font-weight: 500;
+        color: #606670;
+        margin-top: 15px !important;
+        margin-bottom: 10px !important;
+        text-align: center;
+    }
+    .login-form{ 
+        width: 250px;
+        margin:auto;
+        margin-top: 15%;
+    }
+}

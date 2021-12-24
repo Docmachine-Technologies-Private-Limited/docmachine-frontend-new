@@ -118,7 +118,7 @@ export class SigninComponent implements OnInit {
           data => {
             console.log("king123")
             console.log(data)
-            if (this.data1['data'][0].emailId == 'ranjithranju7022@gmail.com') {
+            if (this.data1['data'][0].emailId == 'docmachinetec@gmail.com' || this.data1['data'][0].emailId == 'tramsdocmachine@gmail.com' || this.data1['data'][0].emailId == 'fintech.innovations2021@gmail.com') {
               this.router.navigate(['/home/powerAdmin/pending'])
             }
             else {
