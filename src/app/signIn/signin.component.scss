@@ -164,6 +164,14 @@
         background-color: #6cc9ff;
     }
 
+    .mainClass {
+        float: left;
+        width: 58%;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
     @media (min-width: 768px) and (max-width: 1024px) {
         .bg-dark {
             float: none;
@@ -211,6 +219,9 @@
             font-weight: 400;
             color: #606670;
             width: 390px;
+        }
+        .mainClass {
+            width: 90%;
         }
     }
 
@@ -263,6 +274,9 @@
             font-weight: 400;
             color: #606670;
             width: 360px;
+        }
+        .mainClass {
+            width: 90%;
         }
     }
 
@@ -326,5 +340,8 @@
             font-weight: 400;
             color: #606670;
             width: 334px;
+        }
+        .mainClass {
+            width: 90%;
         }
     }

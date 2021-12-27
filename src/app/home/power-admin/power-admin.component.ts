@@ -41,7 +41,7 @@ export class PowerAdminComponent implements OnInit {
         this.pending = false;
         let x: any = [];
         for (let value of this.val['data']) {
-          if (value['emailId'] != 'tramsdocmachine@gmail.com' && value['emailId'] != 'docmachinetec@gmail.com' && value['emailId'] != 'docmachinetec@gmail.com') {
+          if (value['emailId'] != 'tramsdocmachine@gmail.com' && value['emailId'] != 'docmachinetec@gmail.com' && value['emailId'] != 'fintech.innovations2021@gmail.com') {
             if (value['verified'] == 'yes') {
               x.push(value)
             }
@@ -56,7 +56,7 @@ export class PowerAdminComponent implements OnInit {
         console.log("hello2")
         let x: any = [];
         for (let value of this.val['data']) {
-          if (value['emailId'] != 'tramsdocmachine@gmail.com' && value['emailId'] != 'docmachinetec@gmail.com' && value['emailId'] != 'docmachinetec@gmail.com') {
+          if (value['emailId'] != 'tramsdocmachine@gmail.com' && value['emailId'] != 'docmachinetec@gmail.com' && value['emailId'] != 'fintech.innovations2021@gmail.com') {
             if (value['verified'] == 'no') {
               x.push(value)
             }
@@ -69,7 +69,7 @@ export class PowerAdminComponent implements OnInit {
     });
 
     for (let value of this.val['data']) {
-      if (value['emailId'] != 'tramsdocmachine@gmail.com' && value['emailId'] != 'docmachinetec@gmail.com' && value['emailId'] != 'docmachinetec@gmail.com') {
+      if (value['emailId'] != 'tramsdocmachine@gmail.com' && value['emailId'] != 'docmachinetec@gmail.com' && value['emailId'] != 'fintech.innovations2021@gmail.com') {
         if (value['verified'] == 'no') {
           this.value.push(value)
         }

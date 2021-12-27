@@ -17,7 +17,7 @@
                         <div class="col-lg-10 col-xl-9 mx-auto">
                             <div style="display: flex;">
                                 <h6 class="display-5">Login</h6> <span
-                                    style="margin-top: 6px; margin-left: 10px; font-size: 20px; color: #ff3d3d;">DEV</span>
+                                    style="margin-top: 6px; margin-left: 10px; font-size: 20px; color: #ff3d3d;">DEMO</span>
                             </div>
 
                             <p class="mb-4 text-ui">
@@ -86,13 +86,7 @@
                 <!-- End -->
             </div>
         </div>
-        <div *ngIf='qr' class="bg-dark" style="
-            float: left;
-            width: 58%;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-          ">
+        <div *ngIf='qr' class="bg-dark mainClass">
             <div *ngIf="!tfa.secret" style="margin-top: 50px;">
 
                 <span *ngIf="!!tfa.tempSecret">
