@@ -25,13 +25,16 @@ export class UserService {
 
   register(user) {
     return this.http.post(`${this.api_base}/authenticate/signup`, {
-      fullName: user.fullName,
-      emailId: user.email,
-      password: user.password,
-      confirmPassword: user.confirmPassword,
-      role: user.role
+      user: user
     });
   }
+
+  deleteUser(id) {
+    return this.http.post(`${this.api_base}/authenticate/deleteUser`, {
+      id: id
+    });
+  }
+
   public login(loginData) {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -259,6 +262,7 @@ export class UserService {
       httpOptions
     );
   }
+
   getSingleBene(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -289,6 +293,100 @@ export class UserService {
       },
       httpOptions
     );
+  }
+
+  getBeneByName(name) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http
+      .post(
+        `${this.api_base}/bene/getByName`,
+        { beneName: name },
+        httpOptions
+      ).toPromise();
+
+  }
+
+
+
+  public creatBuyer(buyer) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/buyer/post`,
+      {
+        buyer: buyer,
+      },
+      httpOptions
+    );
+  }
+
+  getBuyer(boeNumber) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/buyer/get`,
+      {
+        boeNumber: boeNumber,
+      },
+      httpOptions
+    );
+  }
+
+  getSingleBuyer(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/buyer/getSingleBuyer`,
+      {
+        id: id,
+      },
+      httpOptions
+    );
+  }
+
+  updateBuyer(id, buyer) {
+    console.log("BENNNE", buyer);
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/buyer/update`,
+      {
+        id: id,
+        buyer: buyer,
+      },
+      httpOptions
+    );
+  }
+
+  getBuyerByName(name) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http
+      .post(
+        `${this.api_base}/buyer/getByName`,
+        { buyerName: name },
+        httpOptions
+      ).toPromise();
+
   }
 
   public addMemeber(id, member) {
@@ -359,18 +457,5 @@ export class UserService {
       .toPromise();
   }
 
-  getBeneByName(name) {
-    this.loadFromLocalStorage();
-    console.log(this.authToken);
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    return this.http
-      .post(
-        `${this.api_base}/bene/getByName`,
-        { beneName: name },
-        httpOptions
-      ).toPromise();
 
-  }
 }

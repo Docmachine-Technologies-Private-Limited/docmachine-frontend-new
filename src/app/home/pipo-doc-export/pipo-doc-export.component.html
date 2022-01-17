@@ -140,7 +140,7 @@
 
 
         <div *ngIf="showInvoice && !toggle">
-            <div class="table_top" style="margin-top: 0px">
+            <div class="table_top" style="margin-top: 0px;">
                 <div style="width: 70%;border-right: 0.5px solid rgba(0, 0, 0, 0.2); margin-left: 40px;">
                     <span style="color: RGB(50, 62, 74); font-size: 14px;">PI / PO Documents</span>
                     <div style="background-color: #49A2D7; float: right;" class="customDropdown">
@@ -242,33 +242,25 @@
                                             <i class="fas fa-lightbulb"></i>
                                         </div>
                                         <div style="align-items: center; font-size: 13px;">
-                                            <a style="margin-bottom: 5px;"> As per payment terms you need submit a
-                                                Advance remittance against the import.
-                                                Create a transaction to submit advance remmitance to bank to process the
+                                            <a style="margin-bottom: 5px;"> As per payment terms you need create a
+                                                Inward Remittance Disposal against the Export.
+                                                Create a transaction to submit swift copy to bank to process the
                                                 amount</a> <br>
-                                            <a>Your PI/PO invoice exceeds 2L USD which you are required to submit a
-                                                FBG
-                                                document. as you have mentioned you dont have
-                                                FBG document while submitting the PI/PO you need to submit FBG waiver as
-                                                well
-                                                along with the Advance remmitance
-                                                transaction.</a>
+
 
                                         </div>
 
                                     </div>
                                     <div style="margin: 13px 0px 10px 30px; display: flex;">
                                         <div *ngFor="let pay of payTerm;">
-                                            <div *ngIf='pay.type == "Direct Import"'>
+                                            <div *ngIf='pay.type == "Advance Payment"'>
+
 
                                                 <button class="button1"
                                                     style="height: 30px !important; margin-right: 5px;"
-                                                    (click)=openDoc(pay.type)>{{pay.type}}</button>
-                                                <button class="button1"
-                                                    style="height: 30px !important; margin-right: 5px;"
-                                                    (click)=openDoc(pay.type)>Buyer’s Credit</button>
+                                                    (click)=openDoc(pay.type)>Inward Remittance Disposal</button>
                                             </div>
-                                            <div *ngIf='pay.type != "Direct Import"'>
+                                            <div *ngIf='pay.type != "Advance Payment"'>
 
                                                 <button class="button1"
                                                     style="height: 30px !important; margin-right: 5px;"
@@ -864,7 +856,7 @@
                                             <span><i class="fas fa-circle"></i></span>
                                             <span
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
-                                                Create Advance remittance against imports (Swift copy)</span>
+                                                Create Inward Remittance disposal</span>
                                         </div>
                                         <div
                                             style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
@@ -874,7 +866,7 @@
                                             <span><i class="fas fa-circle"></i></span>
                                             <span
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
-                                                Upload Advance remittance agaist imports (Ref copy)</span>
+                                                Upload swift copy</span>
                                         </div>
                                         <div
                                             style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
@@ -884,9 +876,7 @@
                                             <span><i class="fas fa-circle"></i></span>
                                             <span
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
-                                                BL Copy/ Airway Bill & Commercial invoice & Shipping bill / Bill of
-                                                Entry
-                                                (BOE)</span>
+                                                Upload Bank credit Advice Copy and provide reference number</span>
                                         </div>
                                         <div
                                             style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
@@ -897,7 +887,29 @@
                                             <span><i class="fas fa-circle"></i></span>
                                             <span
                                                 style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
-                                                Submit to Bank (BOE with PI)</span>
+                                                Create Bill Lodgement</span>
+                                        </div>
+                                        <div
+                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
+                                            &nbsp;
+                                        </div>
+
+                                        <div>
+                                            <span><i class="fas fa-circle"></i></span>
+                                            <span
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                                Bill lodgement reference number and advice copy</span>
+                                        </div>
+                                        <div
+                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
+                                            &nbsp;
+                                        </div>
+
+                                        <div>
+                                            <span><i class="fas fa-circle"></i></span>
+                                            <span
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                                EBRC- Export Realisation certificate.</span>
                                         </div>
                                         <div
                                             style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">

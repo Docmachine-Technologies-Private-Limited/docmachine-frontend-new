@@ -38,6 +38,7 @@ export class SignupComponent implements OnInit {
       return;
     }
     this.registerForm.value.role = 'manager'
+    this.registerForm.value.verified = 'no'
     console.log(this.registerForm.value)
     this.userService.register(this.registerForm.value)
       .subscribe(

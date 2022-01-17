@@ -74,11 +74,12 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public pIpO = false;
   public override = false;
   public message = "";
-  public documentType = "Document Type";
+  public documentType = "";
   public documentType1 = "";
   public piPoUrl;
   public selectedDocumentType;
   public benneDetail: any = [];
+  public buyerDetail: any = [];
   private subscription: Subscription;
   public selectedBenne = "";
   public beneSelect1: string;
@@ -123,11 +124,17 @@ export class UploadComponent implements OnInit, AfterViewInit {
     interBankName: ['', Validators.required],
   });
 
+  buyerForm = this.formBuilder.group({
+    buyerName: ['', Validators.required],
+    buyerAdrs: ['', Validators.required]
+  });
+
   pipourl1: any;
   thirdParty: boolean = false;
   item3: any;
   pipoArray: any = [];
   beneValue: any = 'Select Beneficiary';
+  buyerValue: any = 'Select Buyer';
   pipoValue: any = 'Select PI/PO'
   document: any;
   file: any;
@@ -214,6 +221,14 @@ export class UploadComponent implements OnInit, AfterViewInit {
       },
       (err) => console.log("Error", err)
     );
+
+    this.userService.getBuyer(1).subscribe(
+      (res: any) => {
+        (this.buyerDetail = res.data),
+          console.log("Benne Detail", this.buyerDetail);
+      },
+      (err) => console.log("Error", err)
+    );
   }
   public loadFromLocalStorage() {
     const token = localStorage.getItem("token");
@@ -266,6 +281,13 @@ export class UploadComponent implements OnInit, AfterViewInit {
       },
       (err) => console.log("Error", err)
     );
+    this.userService.getBuyer(1).subscribe(
+      (res: any) => {
+        (this.buyerDetail = res.data),
+          console.log("Benne Detail", this.buyerDetail);
+      },
+      (err) => console.log("Error", err)
+    );
     console.log("DOCUMENT TYPE", this.documentType);
     this.documentService.getPipo().subscribe(
       (res: any) => {
@@ -281,6 +303,12 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(e);
     console.log(e.form.value["sno1"]);
     let invoices = [];
+    if (this.file) {
+      e.form.value.file = this.file
+    }
+    else {
+      e.form.value.file = this.documentType1
+    }
     for (let i = 0; i < this.res.invoices.length; i++) {
       invoices.push({
         sno: e.form.value[`sno${i + 1}`],
@@ -350,6 +378,12 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(this.documentType)
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr
+    if (this.file) {
+      e.form.value.file = this.file
+    }
+    else {
+      e.form.value.file = this.documentType1
+    }
     // this.formData = new ShippingBill(e.form.value)
     // console.log(this.formData)
     if (this.message == "This file already uploaded") {
@@ -425,16 +459,34 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
   public onSubmitPipo() {
     console.log(this.piPoForm.value);
+    if (this.file) {
+      if (this.file == 'import') {
+        this.piPoForm.value.benneName = this.beneValue
+      }
+      else if (this.file == 'export') {
+        this.piPoForm.value.buyerName = this.buyerValue
+      }
+      this.piPoForm.value.file = this.file
 
-    this.piPoForm.value.file = this.file
+    }
+    else {
+      this.piPoForm.value.file = this.documentType1
+    }
+
     if (this.documentType == 'PI') {
       this.piPoForm.value.doc = this.pipourl1
     }
     else if (this.documentType == 'PO') {
       this.piPoForm.value.doc1 = this.pipourl1
     }
+    if (this.documentType1 == 'import') {
+      this.piPoForm.value.benneName = this.beneValue
+    }
+    else if (this.documentType1 == 'export') {
+      this.piPoForm.value.buyerName = this.buyerValue
+    }
     this.piPoForm.value.document = this.documentType
-    this.piPoForm.value.benneName = this.beneValue
+
     console.log(this.piPoForm.value);
     this.documentService.addPipo(this.piPoForm.value).subscribe(
       (res) => {
@@ -688,6 +740,11 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log('hhddh')
     this.beneValue = value
   }
+
+  clickBuyer(value) {
+    console.log('hhddh')
+    this.buyerValue = value
+  }
   clickPipo(a, b, c) {
     let x = a + "-" + b + "-" + c
     let j = this.arrayData.indexOf(x)
@@ -720,6 +777,14 @@ export class UploadComponent implements OnInit, AfterViewInit {
     });
   }
 
+  open1(content1) {
+    this.modalService.open(content1, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
   private getDismissReason(reason: any): string {
     console.log('ddhdhdhh')
     if (reason === ModalDismissReasons.ESC) {
@@ -745,6 +810,32 @@ export class UploadComponent implements OnInit, AfterViewInit {
               (this.benneDetail = res.data),
                 console.log("Benne Detail", this.benneDetail);
               this.toastr.success("New Beneficiary added successfully")
+              this.modalService.dismissAll();
+            },
+            (err) => console.log("Error", err)
+          );
+
+
+        },
+        error => {
+          console.log("error")
+        });
+  }
+
+  onSubmitBuyer() {
+    console.log(this.buyerForm.value)
+
+    this.buyerValue = this.buyerForm.value.buyerName
+    this.userService.creatBuyer(this.buyerForm.value)
+      .subscribe(
+        data => {
+          console.log("king123")
+          console.log(data)
+          this.userService.getBuyer(1).subscribe(
+            (res: any) => {
+              (this.buyerDetail = res.data),
+                console.log("Buyer Detail", this.buyerDetail);
+              this.toastr.success("New Buyer added successfully")
               this.modalService.dismissAll();
             },
             (err) => console.log("Error", err)

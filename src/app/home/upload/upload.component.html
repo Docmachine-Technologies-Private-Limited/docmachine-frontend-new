@@ -16,11 +16,13 @@
       </select>
 
 
-      <p style="color: rgb(0, 0, 0); margin-left: 40px;">
-        Choose the type of export document
+      <p *ngIf='documentType1 == "import" || documentType1 == "export"' style="color: rgb(0, 0, 0); margin-left: 40px;">
+        Now you selected {{documentType1}}, select Type of {{documentType1}} document in the
+        following dropdown
 
       </p>
-      <select [(ngModel)]="documentType" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
+      <select *ngIf='documentType1 == "import"' [(ngModel)]="documentType" style=" margin-bottom: 3%; margin-left: 40px"
+        name="" id="">
         <option value="">Document Type</option>
 
         <option value="boe">BOE</option>
@@ -36,22 +38,78 @@
         <option value="insuranceCopy">Insurance Copy</option>
         <option value="deliveryOrder">Delivery Order</option>
       </select>
-      <div *ngIf='documentType != "PI" && documentType != "PO"'
-        style="display: flex; align-items: center; margin-left: 30px;">
-        <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
-        <div class="customDropdown" style="flex-direction:row; ">
-          <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
-          <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
-            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-          </span>
-          <div class="dropdown-content" style="margin-top: -2px;">
-            <p *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.benneName )'>
-              <a> PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
-            </p>
-            <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
+      <select *ngIf='documentType1 == "export"' [(ngModel)]="documentType" style=" margin-bottom: 3%; margin-left: 40px"
+        name="" id="">
+        <option value="">Document Type</option>
+
+        <option value="sb">Shipping Bill</option>
+        <option value="PO">PO</option>
+        <option value="PI">PI</option>
+        <option value="thirdParty">Tri Party Document</option>
+        <option value="debitNote">Debit Note</option>
+        <option value="creditNote">Credit Note</option>
+        <option value="blCopy">BL Copy</option>
+        <option value="agreement">Agreement</option>
+        <option value="opinionReport">Opinion Report</option>
+        <option value="lcCopy">LC Copy</option>
+        <option value="insuranceCopy">Insurance Copy</option>
+        <option value="deliveryOrder">Delivery Order</option>
+      </select>
+      <div
+        *ngIf='documentType == "PI" && documentType1 == "import" || documentType == "PO" && documentType1 == "import"'>
+        <div style="display: flex; align-items: center; margin-left: 30px;">
+          <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Beneficiary
+            Name*</label>
+          <div class="customDropdown" style="flex-direction:row; ">
+            <span style="color: #323e4a !important; min-width: 150px;">{{beneValue}}</span>
+            <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+              <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+            </span>
+            <div class="dropdown-content" style="margin-top: -2px;">
+              <p *ngFor="let bene of benneDetail" (click)='clickBene(bene.beneName)'><a>{{bene.beneName}}</a></p>
+              <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p>
+            </div>
           </div>
         </div>
-        <div style="margin-left: 155px;">
+
+      </div>
+      <div
+        *ngIf='documentType == "PI" && documentType1 == "export" || documentType == "PO" && documentType1 == "export"'>
+        <div style="display: flex; align-items: center; margin-left: 30px;">
+          <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Buyer’s
+            Name*</label>
+          <div class="customDropdown" style="flex-direction:row; ">
+            <span style="color: #323e4a !important; min-width: 150px;">{{buyerValue}}</span>
+            <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+              <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+            </span>
+            <div class="dropdown-content" style="margin-top: -2px;">
+              <p *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'><a>{{buyer.buyerName}}</a></p>
+              <p style="border: 1px solid #EAEDF3;" (click)="open1(content1)"><a>Add New Buyer</a></p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div *ngIf='documentType'>
+        <div *ngIf='documentType != "PI" && documentType != "PO"'
+          style="display: flex; align-items: center; margin-left: 30px;">
+          <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
+          <div class="customDropdown" style="flex-direction:row; ">
+            <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
+            <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+              <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+            </span>
+            <div class="dropdown-content" style="margin-top: -2px;">
+              <p *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.benneName )'>
+                <a> PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
+              </p>
+              <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
+            </div>
+          </div> <br>
+
+        </div>
+        <div style="margin-left: 185px;" *ngIf='documentType != "PI" && documentType != "PO"'>
 
           <p *ngFor='let data of arrayData; let i = index' class="arrayData">
             {{data}} <i style="float: right; margin: 4px 10px;" (click)='removePipo(i)' class="fas fa-times"></i>
@@ -59,6 +117,7 @@
 
         </div>
       </div>
+
 
     </div>
     <div *ngIf='docu == "sb" || docu == "boe"' style="margin-bottom: 20px;">
@@ -76,17 +135,18 @@
             <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
           </div>
         </div>
-      </div>
-      <div style="margin-left: 185px;">
+      </div> <br>
 
-        <p *ngFor='let data of arrayData; let i = index' class="arrayData">
-          {{data}} <i style="float: right; margin: 4px 10px;" (click)='removePipo(i)' class="fas fa-times"></i>
-        </p>
+    </div>
+    <div *ngIf='docu == "sb" || docu == "boe"' style="margin-left: 185px;">
 
-      </div>
+      <p *ngFor='let data of arrayData; let i = index' class="arrayData">
+        {{data}} <i style="float: right; margin: 4px 10px;" (click)='removePipo(i)' class="fas fa-times"></i>
+      </p>
+
     </div>
 
-    <div *ngIf='docu == "pipo"'>
+    <div *ngIf='docu == "pipo" && file =="import"'>
       <div style="display: flex; align-items: center; margin-left: 30px;">
         <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Beneficiary
           Name*</label>
@@ -98,6 +158,37 @@
           <div class="dropdown-content" style="margin-top: -2px;">
             <p *ngFor="let bene of benneDetail" (click)='clickBene(bene.beneName)'><a>{{bene.beneName}}</a></p>
             <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p>
+          </div>
+        </div>
+      </div>
+
+
+      <div style="margin-top: 40px; margin-left: 33px;">
+        <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
+        <div style="display: flex; align-items: center;">
+          <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
+            [(ngModel)]="documentType" value="PI">
+          <label style="flex-direction:row;" class="label1" for="male">Performa Invoice</label>
+        </div>
+        <div style="display: flex; align-items: center;">
+          <input type="radio" style="flex-direction:row;" id="options2" class="circular_input"
+            [(ngModel)]="documentType" value="PO">
+          <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
+        </div>
+      </div>
+    </div>
+    <div *ngIf='docu == "pipo" && file =="export"'>
+      <div style="display: flex; align-items: center; margin-left: 30px;">
+        <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Buyer’s
+          Name*</label>
+        <div class="customDropdown" style="flex-direction:row; ">
+          <span style="color: #323e4a !important; min-width: 150px;">{{buyerValue}}</span>
+          <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+          </span>
+          <div class="dropdown-content" style="margin-top: -2px;">
+            <p *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'><a>{{buyer.buyerName}}</a></p>
+            <p style="border: 1px solid #EAEDF3;" (click)="open1(content1)"><a>Add New Buyer</a></p>
           </div>
         </div>
       </div>
@@ -539,7 +630,8 @@
                   <input formControlName="description"
                     style="outline: none; border: 1px solid #DEDEDE; width: 200px; border-radius: 5px;">
                 </div>
-                <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
+                <div *ngIf='documentType1 =="import"'
+                  style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                   <span style="color: #707683; font-size: 14px;">Type</span> <br>
                   <select name="" id="" formControlName="type"
                     style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
@@ -548,6 +640,18 @@
                     <option value="Letter of Credit">Letter of Credit</option>
                     <option value="Collection Bill">Collection Bill</option>
                     <option value="Direct Import">Direct Import</option>
+                  </select>
+                </div>
+                <div *ngIf='documentType1 =="export"'
+                  style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
+                  <span style="color: #707683; font-size: 14px;">Type</span> <br>
+                  <select name="" id="" formControlName="type"
+                    style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
+                    <option value="">Select</option>
+                    <option value="Advance Payment">Advance Payment</option>
+                    <option value="Letter of Credit">Letter of Credit</option>
+                    <option value="Collection Bill">Collection Bill</option>
+                    <option value="Direct Import">Direct Dispatch</option>
                   </select>
                 </div>
                 <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
@@ -690,6 +794,52 @@
                             class="form-control rounded-pill pinput">
                         </div>
 
+                        <button type="submit" class="btn11">Create</button>
+                      </form>
+
+                    </div>
+                  </div>
+                </div><!-- End -->
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </ng-template>
+    <ng-template #content1 let-modal>
+
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row no-gutter">
+            <!-- The image half -->
+            <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
+
+
+            <!-- The content half -->
+            <div class="col-md-7 bg-dark">
+              <div class="login d-flex py-5" style="padding: 0px !important;">
+                <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                      <span aria-hidden="true">&times;</span>
+                    </button> -->
+                <!-- Demo content-->
+                <div class="container">
+                  <div class="row">
+                    <div class="col-lg-10 col-xl-7 mrg">
+                      <h6 class="display-5">Create New Buyer’s</h6>
+                      <form [formGroup]="buyerForm" (ngSubmit)="onSubmitBuyer()" class="form11">
+                        <div class="form-group mb-3">
+                          <label class="plable">Name</label>
+                          <input formControlName="buyerName" placeholder="Buyer Name" required=""
+                            class="form-control rounded-pill pinput">
+                        </div>
+                        <div class="form-group mb-3">
+                          <label class="plable">Address</label>
+                          <input formControlName="buyerAdrs" placeholder="Ex: street address, City. PIN" required=""
+                            class="form-control rounded-pill password password1 pinput">
+                        </div>
                         <button type="submit" class="btn11">Create</button>
                       </form>
 

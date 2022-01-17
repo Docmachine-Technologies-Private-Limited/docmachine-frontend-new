@@ -89,6 +89,14 @@ spec:
         backend:
           serviceName: docmachinebackenddev
           servicePort: 3003
+  - host: chromium.docmachine.in
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          serviceName: chromium
+          servicePort: 9222
   - host: jenkins.docmachine.in
     http:
       paths:

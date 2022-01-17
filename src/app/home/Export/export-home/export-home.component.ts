@@ -113,6 +113,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   ir: string = 'no';
   draftSb: any = [];
   drafttry: any = [];
+  bankArray: any = [];
+  bankToggle: boolean;
+  bankValue: any;
+  bank: any = [];
+  allBank: any = [];
+  newBankArray: any = [];
+  credit: any;
+  charge: any;
   constructor(
     public documentService: DocumentService,
     private router: Router,
@@ -166,7 +174,18 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           this.item5 = data['data'][0]
           console.log(this.item5)
           this.arr = this.item5.gst.split('');
-          console.log(this.arr)
+          this.bankArray = this.item5.bankDetails
+          for (let value of this.bankArray) {
+            this.allBank.push(value.bank)
+          }
+          console.log(this.allBank)
+          this.bank = this.allBank.filter(function (item, index, inputArray) {
+            return inputArray.indexOf(item) == index;
+          });
+          console.log(this.bank)
+
+
+
           //this.letterHead = data['data'][0].file[0]["Letter Head"]
           //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
 
@@ -924,6 +943,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.bankRef = e.target.value
   }
 
+
   sendMail(j, code) {
     let val = {
       file: this.bankRef
@@ -1080,41 +1100,65 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
     if (!this.isDoneAll && !this.proceed && !this.documentService.draft) {
       console.log('hhhhh')
-      this.confirmDialogService.confirmThis('Do you want to save this task?', () => {
-        if (this.isDone) {
-          this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'IRD' }).subscribe(
-            (res) => {
-              this.toastr.success('Saved the transaction as completed');
-              console.log("Transaction Saved");
-              //this.router.navigate(["/home/dashboardNew"]);
+      // this.confirmDialogService.confirmThis('Do you want to save this task?', () => {
+      //   if (this.isDone) {
+      //     this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'IRD' }).subscribe(
+      //       (res) => {
+      //         this.toastr.success('Saved the transaction as completed');
+      //         console.log("Transaction Saved");
+      //         //this.router.navigate(["/home/dashboardNew"]);
 
-            },
-            (err) => {
-              this.toastr.error('Error!');
-              console.log("Error saving the transaction")
-            }
-          );
-        }
-        else {
-          this.documentService.addExportTask({ task: this.newTask, completed: 'no', fileType: 'IRD' }).subscribe(
-            (res) => {
-              this.toastr.success('Saved the transaction in draft');
-              console.log("Transaction Saved");
-              //this.router.navigate(["/home/dashboardNew"]);
+      //       },
+      //       (err) => {
+      //         this.toastr.error('Error!');
+      //         console.log("Error saving the transaction")
+      //       }
+      //     );
+      //   }
+      //   else {
+      //     this.documentService.addExportTask({ task: this.newTask, completed: 'no', fileType: 'IRD' }).subscribe(
+      //       (res) => {
+      //         this.toastr.success('Saved the transaction in draft');
+      //         console.log("Transaction Saved");
+      //         //this.router.navigate(["/home/dashboardNew"]);
 
-            },
-            (err) => {
-              this.toastr.error('Error!');
-              console.log("Error saving the transaction")
-            }
-          );
-        }
+      //       },
+      //       (err) => {
+      //         this.toastr.error('Error!');
+      //         console.log("Error saving the transaction")
+      //       }
+      //     );
+      //   }
 
-      }, () => {
-        console.log("no");
-      });
+      // }, () => {
+      //   console.log("no");
+      // });
     }
 
+  }
+
+  setradio(a) {
+    console.log(a)
+    this.bankToggle = true
+    this.bankValue = a
+
+    for (let value of this.bankArray) {
+      if (value.bank == a) {
+        this.newBankArray.push(value)
+      }
+    }
+  }
+
+  creditTo(a) {
+    var n = a.accNumber
+    this.credit = n.split("");
+    console.log(this.credit)
+  }
+
+  chargesTo(a) {
+    var n = a.accNumber
+    this.charge = n.split("");
+    console.log(this.charge)
   }
 
 

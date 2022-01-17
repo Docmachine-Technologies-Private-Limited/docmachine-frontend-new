@@ -39,6 +39,7 @@ export class SidenavComponent implements OnInit {
   mt3: boolean;
   mt4: any;
   val: Object;
+  customer: any;
 
   constructor(
     public router: Router,
@@ -115,7 +116,7 @@ export class SidenavComponent implements OnInit {
 
   public newTask1() {
     this.nt1 = !this.nt1;
-    //this.router.navigate(["home/pipoDoc"]);
+    this.router.navigate(["home/pipoDocExport"]);
   }
 
   public export() {
@@ -159,6 +160,10 @@ export class SidenavComponent implements OnInit {
 
   onCompletedTask() {
     this.ct = !this.ct
+  }
+
+  customerClick() {
+    this.customer = !this.customer
   }
 
   lcSight() {

@@ -227,24 +227,14 @@
                                 <div
                                     *ngIf='Question2 === "no" || Question2 === "yes" && Question5=="yes" || Question5=="no" '>
                                     Select a bank*
-                                    <div style="display: flex; align-items: center;">
+                                    <div *ngFor='let value of bankArray' style="display: flex; align-items: center;">
                                         <input style="flex-direction:row;" type="radio" id="options1"
                                             class="circular_input" (ngModel)="myRadio" value="yesBank">
-                                        <label style="flex-direction:row;" class="label1" for="male">Yes
-                                            Bank</label>
+                                        <label style="flex-direction:row;" class="label1"
+                                            for="male">{{value.bank}}</label>
                                     </div>
-                                    <div style="display: flex; align-items: center;">
-                                        <input type="radio" style="flex-direction:row;" id="options2"
-                                            class="circular_input" (ngModel)="myRadio" value="axisBank">
-                                        <label class="label1" style="flex-direction:row;" for="female">Axis Bank</label>
-                                    </div>
+                                    <br>
 
-                                    <div style="display: flex; align-items: center;">
-                                        <input type="radio" style="flex-direction:row;" name="bank" value="Any Bank"
-                                            class="circular_input" />
-                                        <label class="label1" style="flex-direction:row;" for="female">Any
-                                            Bank</label><br />
-                                    </div> <br> <br>
                                     <button class="opt" style="margin-right: 1%" (click)='generateDoc1(code,j)'>
                                         Generate Document
                                     </button>
@@ -485,13 +475,12 @@
                                             <p class="heading">Request Letter for Export Bill Processing</p>
                                         </div>
                                         <div style="margin-left: 40px; margin-top: 20px; width: 75%;" class="bc">
-                                            <div style=" text-align:right">Date: <span
-                                                    style="
-                                                                                                                        outline: none;
-                                                                                                                          display: inline-block;
-                                                                                                                          width: 150px;
-                                                                                                                          border-bottom: 1px solid black;
-                                                                                                                        " contenteditable="true"></span>
+                                            <div style=" text-align:right">Date: <span style="
+                                                        outline: none;
+                                                            display: inline-block;
+                                                            width: 150px;
+                                                            border-bottom: 1px solid black;
+                                                        " contenteditable="true"></span>
                                             </div>
                                             <div style="width:80%; margin-top: -20px;">To, <br>
                                                 The Manager <br>
@@ -1295,24 +1284,29 @@
                             </div> <br>
 
                             Select a bank*
-                            <div style="display: flex; align-items: center;">
+                            <div *ngFor='let value of bank' style="display: flex; align-items: center;">
                                 <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
-                                    (ngModel)="myRadio" value="yesBank">
-                                <label style="flex-direction:row;" class="label1" for="male">Yes
-                                    Bank</label>
+                                    (ngModel)="myRadio" value="value.bank" (click)="setradio(value)" s>
+                                <label style="flex-direction:row;" class="label1" for="male">{{value}}</label>
                             </div>
-                            <div style="display: flex; align-items: center;">
-                                <input type="radio" style="flex-direction:row;" id="options2" class="circular_input"
-                                    (ngModel)="myRadio" value="axisBank">
-                                <label class="label1" style="flex-direction:row;" for="female">Axis Bank</label>
+                            <br>
+                            <div *ngIf='bankToggle'>
+                                Credit to {{bankValue}}*
+                                <div *ngFor='let value of newBankArray' style="display: flex; align-items: center;">
+                                    <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
+                                        (ngModel)="myRadio" value="value.bank" (click)="creditTo(value)">
+                                    <label style="flex-direction:row;" class="label1"
+                                        for="male">{{value.bank}}-{{value.accType}}</label>
+                                </div> <br>
+                                Charges to {{bankValue}}*
+                                <div *ngFor='let value of newBankArray' style="display: flex; align-items: center;">
+                                    <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
+                                        (ngModel)="myRadio" value="value.bank" (click)="chargesTo(value)">
+                                    <label style="flex-direction:row;" class="label1"
+                                        for="male">{{value.bank}}-{{value.accType}}</label>
+                                </div> <br>
                             </div>
 
-                            <div style="display: flex; align-items: center;">
-                                <input type="radio" style="flex-direction:row;" name="bank" value="Any Bank"
-                                    class="circular_input" />
-                                <label class="label1" style="flex-direction:row;" for="female">Any
-                                    Bank</label><br />
-                            </div> <br> <br>
 
                             <button class="opt" style="margin-right: 1%" (click)='generateDoc(code,j)'>
                                 Generate Document
@@ -1323,312 +1317,607 @@
                         <div *ngIf='code === c && generatePurpose[j] == code'>
 
                             <div id="mainId" class="bc" *ngIf="donePurpose[j] != code">
-                                <div id="first" class="bc">
-                                    <div style="width: 85%;">
-                                        <p class="heading" style="text-align: center;">Application for receipt of
-                                            Export
-                                            Advance
-                                            payment</p>
-                                        <p class="heading" style="text-align: center;">(to be printed on company
-                                            letter
-                                            head
-                                            and
-                                            signed by
-                                            authorized signatory/ies as per Bank records)</p>
-                                    </div>
-                                    <div style="margin-left: 20px; margin-top: 20px; width: 85%;" class="bc">
-                                        <div style=" text-align:right">Date: <span
-                                                style="
-                                                                                                                                                outline: none;
-                                                                                                                                                  display: inline-block;
-                                                                                                                                                  width: 150px;
-                                                                                                                                                  border-bottom: 1px solid black;
-                                                                                                                                                "
-                                                contenteditable="true"></span>
-                                        </div>
-                                        <div style="width:80%; margin-top: -20px; font-size: 14px;">To, <br>
-                                            The Assistant General Manager/Chief Manager/Branch Manager <br>
+                                <div>
+                                    <div style="display: flex;">
+                                        <div style="width: 68%;">
                                             <span
-                                                style=" outline: none;display: inline-block;width: 150px;border-bottom: 1px solid black;"
-                                                contenteditable="true"></span> Branch (Branch code_______) <br>
-                                            State Bank of India<br>
+                                                style="color: rgb(41 17 139);  font-size: 22px; font-weight: 600;">DISPOSAL
+                                                INSTRUCTION FOR <br>
+                                                FOREIGN INWARD REMITTANCE</span> <br>
                                             <span
-                                                style=" outline: none;display: inline-block;width: 150px;border-bottom: 1px solid black;"
-                                                contenteditable="true"></span><br>
-                                            Bengaluru
+                                                style="color: rgb(136, 136, 136); font-size: 18px; font-weight: 500;">(To
+                                                be completed by the
+                                                applicant
+                                                in block
+                                                letters)</span>
                                         </div>
-                                        <br>
-                                        <div style="margin-top: 10px;">Dear Sir/Madam, <br>
-                                            We have received a foreign inward remittance from our buyer, details of
-                                            which
-                                            are as
-                                            under:
-                                            <br>
+                                        <div style="text-align: end;">
+                                            <img width="250px" height="80px"
+                                                src="https://seeklogo.com/images/F/federal-bank-logo-270CCA189E-seeklogo.com.png"
+                                                alt="">
                                         </div>
+                                    </div>
+                                    <table style="width: 94%;">
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td
+                                                style="border: 1px solid black; width: 180px; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                BRANCH NAME</td>
+                                            <td style="border: 1px solid black; font-weight: 500;" colspan="15"><span
+                                                    style="width: 180px; outline: none;"
+                                                    contenteditable="true">KOZHIKODE</span></td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td
+                                                style="border: 1px solid black; width: 180px; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Remittance Type ()</td>
+                                            <td style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;"
+                                                colspan="6">
+                                                <span style="width: 180px; outline: none;" contenteditable="true">
+                                                    Advance
+                                                    Remittance <br> against Export</span>
+                                            </td>
+                                            <td style="border: 1px solid black; font-weight: 500;" colspan="2">✔</td>
+                                            <td style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;"
+                                                colspan="5">
+                                                Other Inward Remittances <br>
+                                                (Except FCNR B)
+                                            </td>
+                                            <td style="border: 1px solid black; font-weight: 500;" colspan="2"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td
+                                                style="border: 1px solid black; width: 180px; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Beneficiary’s Name</td>
+                                            <td style="border: 1px solid black; font-weight: 500;" colspan="14">
+                                                {{item5.teamName}}</td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td
+                                                style="border: 1px solid black; width: 180px; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Account Number</td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[0]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[1]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[2]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[3]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[4]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[5]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[6]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[7]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[8]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[9]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[10]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[11]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[12]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 40px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[13]}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td style="border: 1px solid black; width: 180px; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;"
+                                                colspan="3">Line of Business <br>
+                                                <span>(Applicable for Trade customers only)</span>
+                                            </td>
+                                            <td style="border: 1px solid black; font-weight: 500;" colspan="3"><span
+                                                    style="outline: none;" contenteditable="true">Export</span></td>
+                                            <td style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;"
+                                                colspan="6">
+                                                Commodity/
+                                                Service dealt with <br>
+                                                <span
+                                                    style="outline: none; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;"
+                                                    contenteditable="true">(Applicable for Trade customers only)</span>
+                                            </td>
+                                            <td style="border: 1px solid black; font-weight: 500;" colspan="3"></td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;"
+                                                colspan="15">I/
+                                                We authorize you to credit the foreign Inward Remittance
+                                                received in my/ our favor as per below
+                                                mentioned details:</td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td
+                                                style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Bill Currency
+                                            </td>
+                                            <td style="border: 1px solid black; font-weight: 500;">USD</td>
+                                            <td style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;"
+                                                rowspan="2" colspan="4">Bill Amount <br>
+                                                (in words)</td>
+                                            <td style="border: 1px solid black; font-weight: 500;" rowspan="2"
+                                                colspan="9"></td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td
+                                                style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Bill Amount <br>
+                                                (in figures)</td>
+                                            <td style="border: 1px solid black; font-weight: 500;">65656.55</td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;" colspan="14">M/S.
+                                                REGENCY ENTERPRISES</td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td
+                                                style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Remitters’
+                                                Address</td>
+                                            <td style="border: 1px solid black; font-weight: 500;" colspan="14">P O BOX
+                                                NO : 40056 <br>
+                                                DOM BUILDING <br>
+                                                AL QUOZ - 4, DUBAI</td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td
+                                                style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Purpose of <br>
+                                                Remittance</td>
+                                            <td style="border: 1px solid black; font-weight: 500;" colspan="5"> ADVANCE
+                                                AGAINST <br>
+                                                EXPORT</td>
+                                            <td style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;"
+                                                colspan="5">
+                                                Purpose Code</td>
+                                            <td style="border: 1px solid black; font-weight: 500;" colspan="4">P0103
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table style="width: 94%;">
 
-                                        <table>
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;">Currency and amount of
-                                                    inward
-                                                    remittance
-                                                </td>
-                                                <td class="border1" style="width: 50%;"><span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;">Remitter name and country
-                                                    (should match with incoming MT103 payment SWIFT message)</td>
-                                                <td class="border1" style="width: 50%;"><span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;">(should match with incoming
-                                                    MT103
-                                                    payment
-                                                    SWIFT message)
-                                                    Buyer and Consignee details (name and address):
-                                                    (If this is a Third Party payment, submit requisite
-                                                    documentation
-                                                    such
-                                                    as
-                                                    Tripartite agreement, documentary evidence showing relationship
-                                                    between
-                                                    the various entities, etc.)</td>
-                                                <td class="border1" style="width: 50%;"><span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;">Sales Contract ref. no.,
-                                                    date
-                                                    and
-                                                    validity
-                                                    (both in terms of
-                                                    date
-                                                    and
-                                                    amount/s)</td>
-                                                <td class="border1" style="width: 50%;"><span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;" rowspan="2">If there is no
-                                                    Sales
-                                                    contract in
-                                                    place,</td>
-                                                <td style="width: 50%;">Purchase Order ref. no/s. and date/s:<span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
-                                            <tr class="border1">
 
-                                                <td class="border1" style="width: 50%;">Proforma Invoice ref. no/s.
-                                                    and
-                                                    date/s:<span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td style="border: 1px solid black; width: 180px; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;"
+                                                colspan="8">If the remittance represents advance against
+                                                <br>
+                                                exports (P0103), please mention the <br>
+                                                expected date of shipment
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td style="border: 1px solid black; width: 42px; color: rgb(0,31,95);"
+                                                colspan="16">Details of accounts for
+                                                crediting the received
+                                                amount</td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td style="border: 1px solid black; ; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;"
+                                                rowspan="5">
+                                                Conversion <br>
+                                                details (strike <br>
+                                                whichever is <br>
+                                                not applicable)</td>
+                                            <td
+                                                style="border: 1px solid black; ; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Convert 100%
+                                                into INR and
+                                                credit A/c</td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
 
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;">Commodity description (brief
-                                                    description of
-                                                    goods)</td>
-                                                <td class="border1" style="width: 50%;"><span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;">Country of Origin of Goods
-                                                </td>
-                                                <td class="border1" style="width: 50%;"><span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;">Port of loading</td>
-                                                <td class="border1" style="width: 50%;"><span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;">Port of discharge</td>
-                                                <td class="border1" style="width: 50%;"><span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;">Expected date of shipment
-                                                </td>
-                                                <td class="border1" style="width: 50%;"><span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;">Account/s to be credited
-                                                    <br>
-                                                    (mention A/C type and A/C no.)
-                                                </td>
-                                                <td class="border1" style="width: 50%;"><span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;">Details of Forward
-                                                    Contract/s to
-                                                    be
-                                                    utilized
-                                                    (if any)</td>
-                                                <td class="border1" style="width: 50%;"><br><br><br><br>If Forward
-                                                    Contract/s is/are
-                                                    being utilized,
-                                                    we
-                                                    confirm that this/ese
-                                                    Forward Contract/s was/were booked against the above referenced
-                                                    Sales Contract/s, and/or Purchase Order/s and for the same
-                                                    Buyer/Importer
-                                                </td>
-                                            </tr>
-                                            <tr class="border1">
-                                                <td class="border1" style="width: 50%;">Ref. no. of eForex or Dealer
-                                                    Room
-                                                    booking
-                                                    (if any)</td>
-                                                <td class="border1" style="width: 50%;"><span
-                                                        style="outline: none;display: inline-block;width: 200px;"
-                                                        contenteditable="true"></span>
-                                                </td>
-                                            </tr>
+                                            <td style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;"
+                                                rowspan="2">
+                                                Convert % in to INR &amp;
+                                                credit A/c
+                                                Balance % to be
+                                                credited to *EEFC/ RFC/DDA
+                                                A/c</td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
 
-                                        </table>
-                                        <br>
-                                        <div>
-                                            Further, we submit as under: <br>
-                                            1. We confirm that this remittance is towards Advance payment for
-                                            exports
-                                            and
-                                            that goods
-                                            have
-                                            NOT been shipped as on
-                                            date. <br>
-                                            2. We declare that the remitter has sent the amount for specific purpose
-                                            of
-                                            Export of
-                                            goods as
-                                            detailed above and under
-                                            the Sales <br>
-                                            Contract/s or Purchase Order/s (PO) and Proforma Invoice/s (PI) ref.
-                                            no/s.
-                                            as
-                                            detailed
-                                            above.
-                                            3. We hereby undertake the responsibility to export the goods as per the
-                                            date/s
-                                            mentioned above,
-                                            and documents related
-                                            to the
-                                            export would be submitted to your branch within 21 days from the date of
-                                            shipment. <br>
-                                            4. We undertake to ensure that documents are routed through one AD bank
-                                            only.
-                                            <br>
-                                            5. We confirm that product pricing is in consonance with prevailing
-                                            International
-                                            prices. <br>
-                                            6. In the event of exporter’s (our) inability to make shipment
-                                            (partly/fully)
-                                            within one
-                                            year
-                                            from date of receipt of
-                                            the first advance
-                                            payment, we shall ensure no remittance towards refund or unutilized
-                                            portion
-                                            of
-                                            advance
-                                            payment
-                                            or towards payment of
-                                            interest
-                                            will be made without prior approval of the Reserve Bank of India (RBI).
-                                            <br>
-                                            7. We undertake to ensure compliance of all regulatory and other
-                                            regulations
-                                            and
-                                            guidelines in
-                                            force issued by RBI,
-                                            DGFT, Customs
-                                            authorities, FEDAI, SBI, and any other regulatory/government agency as
-                                            at
-                                            the
-                                            time of
-                                            the
-                                            transaction. <br>
-                                            8. We agree to accept the rate of exchange ruling on the day that the
-                                            documents
-                                            are
-                                            processed by
-                                            your authorized
-                                            office/s and
-                                            undertake to agree to any consequent adjustment in the rupee equivalent
-                                            if
-                                            the
-                                            proceeds
-                                            have
-                                            been credited/paid to us.
-                                            However
-                                            the same shall not apply wherein there is utilization of Forward
-                                            Contract/s
-                                            and/or
-                                            booking has
-                                            been done on eForex
-                                            platform or
-                                            through Dealing Room of SBI. <br>
-                                            9. We confirm compliance of instructions issued by RBI in Master
-                                            Directions
-                                            –
-                                            Export of
-                                            Goods
-                                            and Services (FED Master
-                                            Direction no.
-                                            16/2015-16-C2- Receipt of Advance against exports). <br>
-                                            10. This is NOT a Merchanting Trade transaction. Goods would be shipped
-                                            from
-                                            India only.
-                                            <br>
-                                            <br>
-                                            I/We further declare that the undersigned has the authority to give
-                                            declaration
-                                            and
-                                            undertaking
-                                            on behalf of the
-                                            company. <br> <br>
-                                            Thanking you <br>
-                                            Yours faithfully
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+
+                                            <td
+                                                style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Credit 100% to
+                                                EEFC/RFC/DDA A/c*</td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[0]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[1]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[2]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[3]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[4]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[5]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[6]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[7]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[8]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[9]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[10]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[11]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[12]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{credit[13]}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+
+                                            <td
+                                                style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Credit to my
+                                                PCFC A/c</td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+
+                                            <td style="border: 1px solid black; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;"
+                                                colspan="2">
+                                                Details of accounts for debiting the charges <br>
+                                                (if different from above accounts)</td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[0]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[1]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[2]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[3]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[4]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[5]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[6]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[7]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[8]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[9]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[10]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[11]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[12]}}</span>
+                                            </td>
+                                            <td style="border: 1px solid black; width: 42px;"><span
+                                                    style="outline: none;" contenteditable="true">{{charge[13]}}</span>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                    <p style="color: rgb(0,31,95); font-weight: 500; width: 94%;">*WE AUTHORISE
+                                        YOU TO CONVERT
+                                        THE UNUTILISED
+                                        PORTION OF CAPTIONED INWARD REMITTANCE CREDITED
+                                        IN OUR EEFC/RFC ACCOUNT IF ANY PART OF IT REMAINS UNUTILISED TILL THE LAST DAY
+                                        OF THE NEXT MONTH
+                                        AT THE BEST POSSIBLE RATE</p>
+                                    <table style="border: 1px solid black; width: 94%;">
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td
+                                                style="border: 1px solid black; width: 150px; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Forward Contract <br>
+                                                Number</td>
+                                            <td style="border: 1px solid black;  width: 150px;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td
+                                                style="border: 1px solid black;  width: 150px; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Booking Date</td>
+                                            <td style="border: 1px solid black;  "><span style="outline: none;"
+                                                    contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td
+                                                style="border: 1px solid black; width: 150px; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Forward Contract <br>
+                                                Number</td>
+                                            <td style="border: 1px solid black;  width: 150px;"></td>
+                                            <td
+                                                style="border: 1px solid black;  width: 150px; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Due Date</td>
+                                            <td style="border: 1px solid black;font-weight: 500;"></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                            <td style="border: 1px solid black; font-weight: 500;"><span
+                                                    style="outline: none;" contenteditable="true"></span></td>
+                                        </tr>
+                                        <tr style="border: 1px solid black; font-weight: 500;">
+                                            <td
+                                                style="border: 1px solid black; width: 150px; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Amount to be utilized</td>
+                                            <td style="border: 1px solid black; width: 150px;"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                            <td
+                                                style="border: 1px solid black; width: 150px; color: rgb(0,31,95); background-color: rgb(219,228,240); font-weight: 500;">
+                                                Exchange rate as per
+                                                FWC</td>
+                                            <td style="border: 1px solid black; font-weight: 500;" colspan="8"><span
+                                                    style="outline: none;" contenteditable="true"></span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div style="margin-top: 20px; display: flex;">
+                                        <div style="font-weight: 500; color: rgb(0,31,95); width: 50%;">
+                                            Date 11.11.2021
+                                        </div>
+                                        <div style="font-weight: 500; color: rgb(0,31,95);;">
+                                            Signature of Beneficiary / POA (or) Mandate Holder / <br>
+                                            Guardian in case of Minor / Authorised Signatory <br>
+                                            with Company/Firm’s Seal
                                         </div>
 
                                     </div>
-
                                 </div>
-
-
 
                             </div>
 
 
                             <div *ngIf="donePurpose[j] != code" style="
-                                        float: left;
+                                        
                                         display: block;
                                         width: 78%;
                                         margin-top: 40px;

@@ -22,14 +22,12 @@ import {
 import { isPlatformBrowser, isPlatformServer } from "@angular/common";
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from "src/app/app.config";
-
-
 @Component({
-  selector: 'app-pipo-documents',
-  templateUrl: './pipo-documents.component.html',
-  styleUrls: ["../../../sass/application.scss", './pipo-documents.component.scss']
+  selector: 'app-pipo-doc-export',
+  templateUrl: './pipo-doc-export.component.html',
+  styleUrls: ["../../../sass/application.scss", "./pipo-doc-export.component.scss"]
 })
-export class PipoDocumentsComponent implements OnInit, AfterViewInit {
+export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
@@ -37,7 +35,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   @ViewChild("inputName", { static: true }) public inputRef: ElementRef;
   public type: string = "directive";
   public item1 = [];
-  public item
+  public item;
   public item2;
   public user;
   public selectedRow;
@@ -166,9 +164,9 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
         (res: any) => {
           console.log("HEre Response", res);
           this.item = res.data;
-          console.log(this.item)
           for (let value of this.item) {
-            if (value['file'] == 'import') {
+            if (value['file'] == 'export') {
+              console.log('a')
               this.item1.push(value)
             }
           }
@@ -206,10 +204,8 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
         (res: any) => {
           console.log("HEre Response", res);
           this.item = res.data;
-          console.log(this.item)
           for (let value of this.item) {
-            console.log(value)
-            if (value['file'] == 'import') {
+            if (value['file'] == 'export') {
               console.log('a')
               this.item1.push(value)
             }
@@ -324,7 +320,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   getInvoices(selectedRowValues, i) {
     console.log(selectedRowValues.pi_poNo)
     this.showInvoice = true
-    this.router.navigate(['home/pipoDoc', {
+    this.router.navigate(['home/pipoDocExport', {
       id: selectedRowValues.pi_poNo,
       page: 'details',
       index: i
@@ -381,7 +377,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
 
   pipoClick() {
     console.log("upload")
-    this.router.navigate(['home/upload', { file: 'import', document: 'pipo' }]);
+    this.router.navigate(['home/upload', { file: 'export', document: 'pipo' }]);
   }
 
   selectDoc(a) {
@@ -408,43 +404,41 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   openDoc(a) {
     console.log(a)
     if (a == 'Advance Payment') {
-      this.router.navigate(['home/advance-outward-remittance', {
-        file: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
-      }]);
+      this.router.navigate(['home/exportHome']);
     }
-    else if (a == 'Direct Import') {
-      console.log('hello')
-      this.router.navigate(['home/direct-import-payment', {
-        file: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
-      }]);
-    }
+    // else if (a == 'Direct Import') {
+    //   console.log('hello')
+    //   this.router.navigate(['home/direct-import-payment', {
+    //     file: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+    //   }]);
+    // }
     else if (a == 'Collection Bill') {
-      this.buttonToggle = !this.buttonToggle
+      this.router.navigate(['home/billLodgement']);
 
     }
-    else if (a == 'Letter of Credit') {
-      if (this.pipoData.lcIssuance && this.pipoData.lcIssuance1) {
-        this.buttonToggle1 = !this.buttonToggle1
-        console.log('dhhh')
-        // this.router.navigate(['home/bill-under-collection', {
-        //   file: "nonlcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
-        // }]);
-      }
-      else if (this.pipoData.lcIssuance) {
-        this.buttonToggle1 = !this.buttonToggle1
-        console.log('2232')
-      }
-      else if (this.pipoData.lcIssuance1 && !this.pipoData.lcIssuance) {
-        this.uploadIsurance = !this.uploadIsurance
-        this.letterToggle = false
-      }
-      else {
-        this.letterToggle = !this.letterToggle
-        this.uploadIsurance = false
-      }
+    // else if (a == 'Letter of Credit') {
+    //   if (this.pipoData.lcIssuance && this.pipoData.lcIssuance1) {
+    //     this.buttonToggle1 = !this.buttonToggle1
+    //     console.log('dhhh')
+    //     // this.router.navigate(['home/bill-under-collection', {
+    //     //   file: "nonlcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+    //     // }]);
+    //   }
+    //   else if (this.pipoData.lcIssuance) {
+    //     this.buttonToggle1 = !this.buttonToggle1
+    //     console.log('2232')
+    //   }
+    //   else if (this.pipoData.lcIssuance1 && !this.pipoData.lcIssuance) {
+    //     this.uploadIsurance = !this.uploadIsurance
+    //     this.letterToggle = false
+    //   }
+    //   else {
+    //     this.letterToggle = !this.letterToggle
+    //     this.uploadIsurance = false
+    //   }
 
 
-    }
+    // }
   }
 
   changeCheckbox() {

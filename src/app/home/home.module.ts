@@ -63,8 +63,11 @@ import { PipoDocumentsComponent } from './pipo-documents/pipo-documents.componen
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { BuyersLodgeComponent } from './yesBank/buyers-lodge/buyers-lodge.component';
 import { PowerAdminComponent } from './power-admin/power-admin.component';
+import { PipoDocExportComponent } from './pipo-doc-export/pipo-doc-export.component';
+import { EditBuyerComponent } from './edit-buyer/edit-buyer.component';
+import { TestComponent } from './test/test/test.component';
+import { HelpComponent } from './help/help.component';
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
-
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
   url: "https://httpbin.org/post",
@@ -130,6 +133,10 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     PipoDocumentsComponent,
     BuyersLodgeComponent,
     PowerAdminComponent,
+    PipoDocExportComponent,
+    EditBuyerComponent,
+    TestComponent,
+    HelpComponent
   ],
   imports: [
     CommonModule,
@@ -167,7 +174,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
           },
           { path: "upload", component: UploadComponent, pathMatch: "full" },
           {
-            path: "manageCustomer",
+            path: "manageCustomer/:id",
             component: ManageCustomerComponent,
             pathMatch: "full",
           },
@@ -224,6 +231,16 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
           {
             path: "editBene/:id",
             component: EditBeneComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "editBuyer/:id",
+            component: EditBuyerComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "test",
+            component: TestComponent,
             pathMatch: "full",
           },
 
@@ -378,8 +395,18 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
+            path: "pipoDocExport",
+            component: PipoDocExportComponent,
+            pathMatch: "full",
+          },
+          {
             path: "powerAdmin/:file",
             component: PowerAdminComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "help",
+            component: HelpComponent,
             pathMatch: "full",
           },
         ],

@@ -33,6 +33,7 @@ import { NewUserComponent } from './new-user/new-user.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { NotVerifiedComponent } from './not-verified/not-verified.component';
 import { AppConfig } from '../app/app.config';
+import { MembersigninComponent } from './membersignin/membersignin.component';
 
 //import { SidenavComponent } from './home/sidenav/sidenav.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -58,6 +59,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     NewUserComponent,
     VerifyEmailComponent,
     NotVerifiedComponent,
+    MembersigninComponent,
   ],
   imports: [
     BrowserModule,

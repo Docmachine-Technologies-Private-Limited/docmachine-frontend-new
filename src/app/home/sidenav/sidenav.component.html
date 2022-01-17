@@ -23,11 +23,12 @@
 
         <br />
         <div style="margin-top: 20px">
-          <img class="manager" src="./assets/images/ff0edd8c8896c06617bb7763087ad238ad16b269.png" alt="" />
+          <img class="manager" src="./assets/newPerson.png" alt="" />
           <h5 class="name">{{name}}</h5>
           <h6 class="side-name" *ngIf="role == 'admin'">Admin</h6>
           <h6 class="side-name" *ngIf="role == 'manager'">Manager</h6>
           <h6 class="side-name" *ngIf="role == 'ca'">CA</h6>
+          <h6 class="side-name" *ngIf="role == 'member'">Member</h6>
         </div>
       </header>
       <!-- seems like lots of recent admin template have this feature of user info in the sidebar.
@@ -54,6 +55,14 @@
               <img src="./assets/briefcase.png" />
             </span>
             Approved
+          </a>
+        </li>
+        <li class="">
+          <a [routerLink]="['/home/powerAdmin/declined']" style="cursor: pointer" class="sidebar-content">
+            <span class="icon side-icon">
+              <img src="./assets/briefcase.png" />
+            </span>
+            Declined
           </a>
         </li>
 
@@ -85,7 +94,7 @@
         </li>
 
       </ul>
-      <ul *ngIf="role != 'ca'" class="sidebar-nav">
+      <ul *ngIf="role != 'ca' && role != 'admin'" class="sidebar-nav">
         <li class="">
           <!-- an example of nested submenu. basic bootstrap collapse component -->
           <a (click)="hideIncoice()" [routerLink]="['/home/dashboardTask']" class="sidebar-content">
@@ -218,8 +227,7 @@
           <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
         </div>
         <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
-        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" (click)="newTask()"
-          [ngClass]="status ? 'b-color' : 'nothing'">
+        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" (click)="newTask1()">
           <span style="margin-left: 50px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO
             <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
             </i>
@@ -476,7 +484,7 @@
         </span> Upload Documents
       </a>
     </li>
-    <li class="" style="cursor: pointer">
+    <li class="" style="cursor: pointer" *ngIf="role == 'manager'">
       <a class="sidebar-content" [routerLink]="['/home/manageUser']">
         <span class="icon side-icon">
           <img src="./assets/single-neutral-circle.png" />
@@ -491,13 +499,19 @@
         </span> Transaction
       </a>
     </li>
-    <li style="cursor: pointer" class="">
-      <a class="sidebar-content" [routerLink]="['/home/manageCustomer']">
+    <li style="cursor: pointer">
+      <a class="sidebar-content" (click)="customerClick()">
         <span class="icon side-icon">
           <img src="./assets/briefcase.png" />
         </span> Manage Customer
       </a>
+      <div class="main11" style="margin-left: 50px;" *ngIf="customer">
+        <a style="cursor: pointer; color: white;" [routerLink]="['/home/manageCustomer/import']">Import</a>
+        <a style="cursor: pointer; color: white;" [routerLink]="['/home/manageCustomer/export']">Export</a>
+      </div>
     </li>
+    <!-- [routerLink]="['/home/manageCustomer']" -->
+
 
     <li style="cursor: pointer" class="" *ngIf="!view" (click)="viewDocument()">
       <a class="sidebar-content" style="cursor: pointer;">
@@ -539,7 +553,7 @@
     <h5 class="sidebar-nav-title sidebar-title">SUPPORT</h5>
     <ul style="cursor: pointer" class="sidebar-nav">
       <li class="">
-        <a class="sidebar-content">
+        <a class="sidebar-content" [routerLink]="['/home/help']">
           <span class="icon side-icon">
             <img src="./assets/question-circle.png" />
           </span> Need Help?
