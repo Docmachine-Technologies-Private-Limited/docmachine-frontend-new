@@ -16,6 +16,7 @@ import { NewUserComponent } from "./new-user/new-user.component";
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { NotVerifiedComponent } from "./not-verified/not-verified.component";
 import { MembersigninComponent } from "./membersignin/membersignin.component";
+import { PdfComponent } from "./pdf/pdf.component";
 
 const routes: Routes = [
   {
@@ -45,11 +46,11 @@ const routes: Routes = [
   { path: "newUser", component: NewUserComponent, pathMatch: "full" },
   { path: "notVerified", component: NotVerifiedComponent, pathMatch: "full" },
   { path: "membersignin/:id", component: MembersigninComponent, pathMatch: "full" },
-
+  { path: "pdf", component: PdfComponent, pathMatch: "full" },
   {
     path: "**",
     component: PageNotFoundComponent,
-  },
+  }
 ];
 
 @NgModule({

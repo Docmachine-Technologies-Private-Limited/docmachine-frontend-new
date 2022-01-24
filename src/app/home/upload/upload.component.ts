@@ -254,7 +254,12 @@ export class UploadComponent implements OnInit, AfterViewInit {
     this.docu = this.route.snapshot.paramMap.get('document')
 
     if (this.docu == 'sb') {
-      this.documentType = 'Shipping Bill'
+      this.documentType = 'sb'
+      this.pipoOut = this.route.snapshot.paramMap.get('pipo')
+      this.beneOut = this.route.snapshot.paramMap.get('bene')
+      let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
+      this.arrayData.push(x)
+      this.pipoArr.push(this.pipoOut)
     }
     else if (this.docu == 'boe') {
       this.documentType = 'boe'

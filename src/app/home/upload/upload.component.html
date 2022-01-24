@@ -210,7 +210,7 @@
     </div>
 
 
-    <div *ngIf="documentType === 'Shipping Bill' || documentType === 'boe' " class="form" method="POST">
+    <div *ngIf="documentType === 'sb' || documentType === 'boe' " class="form" method="POST">
       <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
         (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config" class="dropzone dropzone-container"
         id="dropzone" />

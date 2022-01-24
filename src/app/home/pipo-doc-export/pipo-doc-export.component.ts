@@ -379,6 +379,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     console.log("upload")
     this.router.navigate(['home/upload', { file: 'export', document: 'pipo' }]);
   }
+  shippingClick() {
+    this.router.navigate(['home/upload', { file: 'import', document: 'sb', pipo: this.pipoData.pi_poNo, bene: this.pipoData.buyerName }]);
+  }
 
   selectDoc(a) {
     if (a != 'Shipping Bill' && a != 'Bill of Entry') {
@@ -387,7 +390,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       this.upfile = 'a'
     }
     else if (a == 'Shipping Bill') {
-      this.router.navigate(['home/upload', { file: 'import', document: 'sb' }]);
+      this.router.navigate(['home/upload', { file: 'import', document: 'sb', pipo: this.pipoData.pi_poNo, bene: this.pipoData.buyerName }]);
     }
     else if (a == 'Bill of Entry') {
       this.router.navigate(['home/upload', { file: 'import', document: 'boe', pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName }]);
