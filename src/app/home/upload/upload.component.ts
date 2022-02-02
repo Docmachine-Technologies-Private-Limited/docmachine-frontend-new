@@ -252,8 +252,12 @@ export class UploadComponent implements OnInit, AfterViewInit {
     this.file = this.route.snapshot.paramMap.get('file')
     console.log(this.file)
     this.docu = this.route.snapshot.paramMap.get('document')
+    if (this.docu == 'pipo') {
+      this.documentType1 = this.route.snapshot.paramMap.get('file')
+    }
 
     if (this.docu == 'sb') {
+      this.documentType1 = 'export'
       this.documentType = 'sb'
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
@@ -262,6 +266,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.pipoArr.push(this.pipoOut)
     }
     else if (this.docu == 'boe') {
+      this.documentType1 = 'import'
       this.documentType = 'boe'
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')

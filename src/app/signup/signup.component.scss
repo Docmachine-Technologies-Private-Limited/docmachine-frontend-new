@@ -11,7 +11,8 @@
 }
 
 .login {
-    margin-top: -40px;
+    margin-top: -130px;
+    margin-left: 50px;
 }
 
 .login,
@@ -174,52 +175,64 @@ label {
 }
 
 .topclass {
-    margin-top: 40px;
+    margin-top:40px;
     width: 90%;
     text-align: right;
     padding-top: 4%;
     z-index: 1000;
 }
-
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1024px) {
     .bg-dark {
         float: none;
         height: 100%;
         width: 100%;
         padding-left: 10px;
-        // margin-top: -420px;
-        margin-left: 65px;
+        margin-top: -10px;
+        margin-left: 50px;
     }
     .image1 {
         width: 100%;
         display: none;
     }
+    
     .image2 {
-        display: none;
-        margin-top: -1535px;
+        margin-top: -2070px;
         z-index: 1;
-        margin-left: 150px;
+        margin-left: 200px;
+        width: 270px;
+        height: 88px;
+        // margin-bottom: 50px;
     }
-    .image3 {
-        display: block;
-        width: 200px;
-        height: 65px;
+
+    .login {
+        margin-top: -250px;
+        margin-left: 10px;
     }
-    .signup2 {
-        margin-top: 100px;
+
+    .form-element {
+        width: 1000px !important;
+        align-items: center !important;
     }
+
+    .leftl {
+        height: 40px;
+        width: 80px;
+        font-size: 14PX;
+        margin-top: 0px;
+        margin-right: -170px;
+    }
+
     .display-5 {
         font-weight: 500;
         color: #606670;
-        font-size: 40px;
+        font-size: 32px;
         margin-bottom: 12px;
-        // margin-top: -1460px;
-        top: -100px;
+        // margin-top: 10px;
     }
     input {
         box-shadow: none !important;
         border: 1px solid #dedede !important;
-        width: 552px;
+        width: 452px;
         height: 40px;
     }
     form {
@@ -233,26 +246,15 @@ label {
         font-size: 15px;
         color: #ffffff;
     }
-    .leftl {
-        margin-top: 10px;
-        margin-left: 100px;
-    }
-    .form2 {
-        margin-top: -300px;
-    }
     .bottom-text {
-        width: 300px;
+        font-size: 12px;
+        font-weight: 400;
+        color: #606670;
+        width: 390px;
     }
-
-    .topclass {
-        margin-top: 180px;
-        text-align: right;
-        padding-top: 4%;
-        z-index: 1000;
-        display: flex;
-        margin-bottom: 40px;
+    .mainClass {
+        width: 90%;
     }
-
 }
 
 @media (min-width: 481px) and (max-width: 767px) {
@@ -260,39 +262,51 @@ label {
         float: none;
         height: 100%;
         width: 100%;
-        // padding-left: 10px;
-        margin-left: 45px;
+        margin-top: 10px;
+        margin-left: 25px;
     }
     .image1 {
-        width: 100%;
+        // width: 100%;
         display: none;
     }
     .image2 {
-        display: none;
-        margin-top: -1550px;
+        margin-top: -740px;
         z-index: 1;
         margin-left: 200px;
+        width: 270px;
+        height: 88px;
+        // margin-bottom: 50px;
     }
-    .image3 {
-        display: block;
-        width: 200px;
-        height: 65px;
+
+    .login {
+        margin-top: 100px;
+        margin-left: 10px;
     }
+
+    .leftl {
+        height: 40px;
+        width: 80px;
+        font-size: 14PX;
+        margin-top: 0px;
+        margin-right: -170px;
+    }
+
     .display-5 {
         font-weight: 500;
         color: #606670;
-        font-size: 40px;
+        font-size: 32px;
         margin-bottom: 12px;
+        margin-top: 40px;
     }
     input {
         box-shadow: none !important;
         border: 1px solid #dedede !important;
-        width: 420px;
+        width: 410px;
         height: 40px;
     }
-    form {
-        margin-top: -20px;
-    }
+    // form {
+    //     margin-top: 10px;
+    // }
     .btn {
         width: 200px;
         height: 40px;
@@ -301,24 +315,14 @@ label {
         font-size: 15px;
         color: #ffffff;
     }
-    .leftl {
-        margin-top: 10px;
-        margin-left: 30px;
-    }
-    .form2 {
-        margin-top: -250px;
-        margin-left: 40px;
-    }
     .bottom-text {
-        width: 300px;
+        font-size: 12px;
+        font-weight: 400;
+        color: #606670;
+        width: 360px;
     }
-    .topclass {
-        margin-top: 120px;
-        text-align: right;
-        padding-top: 4%;
-        z-index: 1000;
-        display: flex;
-        margin-bottom: 40px;
+    .mainClass {
+        width: 90%;
     }
 }
 
@@ -327,38 +331,50 @@ label {
         float: none;
         height: 100%;
         width: 100%;
-        // padding-left: 10px;
-        margin-left: 20px;
-    }
-    .image2 {
-        display: none;
-        margin-top: -1550px;
-        z-index: 1;
-        margin-left: 200px;
-    }
-    .image3 {
-        display: block;
-         width: 200px;
-        height: 65px;
+        margin-top: -50px;
+        margin-left: 15px;
     }
     .image1 {
-        width: 100%;
+        // width: 100%;
         display: none;
     }
+    .image2 {
+        margin-top: -990px;
+        z-index: 1;
+        margin-left: 180px;
+        width: 270px;
+        height: 88px;
+        // margin-bottom: 50px;
+    }
+
+    .login {
+        margin-top: 100px;
+        margin-left: 10px;
+    }
+
+    .leftl {
+        height: 40px;
+        width: 80px;
+        font-size: 14PX;
+        margin-top: 50px;
+        margin-right: -147px;
+    }
+    
     .display-5 {
         font-weight: 500;
         color: #606670;
-        font-size: 40px;
+        font-size: 24px;
         margin-bottom: 12px;
+        margin-top: 6px;
+    }
+    form {
+        margin-top: -10px;
     }
     input {
         box-shadow: none !important;
         border: 1px solid #dedede !important;
-        width: 320px;
-        height: 40px;
-    }
-    form {
-        margin-top: -20px;
+        width: 300px;
+        height: 30px;
     }
     .btn {
         width: 200px;
@@ -369,23 +385,24 @@ label {
         color: #ffffff;
     }
     .leftl {
-        margin-top: 10px;
-        margin-left: 30px;
+        height: 40px;
+        width: 80px;
+        font-size: 14PX;
+        margin-top: 20px;
     }
-    .form2 {
-        margin-top: -260px;
-        margin-left: 10px;
+    .mb-4 {
+        font-size: 12px;
+    }
+    .text-muted {
+        margin-left: -1px;
     }
     .bottom-text {
-        width: 300px;
+        font-size: 12px;
+        font-weight: 400;
+        color: #606670;
+        width: 334px;
     }
-    .topclass {
-        margin-top: 120px;
-        text-align: right;
-        padding-top: 4%;
-        z-index: 1000;
-        display: flex;
-        margin-bottom: 105px;
-
+    .mainClass {
+        width: 90%;
     }
 }

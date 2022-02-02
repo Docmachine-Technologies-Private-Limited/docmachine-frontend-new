@@ -1329,6 +1329,17 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       this.documentService.updateExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' }, this.documentService.task._id).subscribe(
         (data) => {
           console.log("king123");
+          // this.userService.updateManyPipo(this.pipoValue, 'billUnderCollection', this.newTask.url1)
+          //   .subscribe(
+          //     data => {
+          //       console.log("king123")
+          //       console.log(data)
+          //       this.router.navigate(["/home/advance-outward-remittance"]);
+          //     },
+          //     error => {
+          //       // this.toastr.error('Invalid inputs, please check!');
+          //       console.log("error")
+          //     });
           console.log(data);
           this.documentService.draft = false
           this.documentService.task.id = ''
@@ -1345,6 +1356,17 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' }).subscribe(
         (res) => {
           this.isDoneAll = true
+          // this.userService.updateManyPipo(this.pipoValue, 'billUnderCollection', this.newTask.url1)
+          //   .subscribe(
+          //     data => {
+          //       console.log("king123")
+          //       console.log(data)
+          //       this.router.navigate(["/home/advance-outward-remittance"]);
+          //     },
+          //     error => {
+          //       // this.toastr.error('Invalid inputs, please check!');
+          //       console.log("error")
+          //     });
           this.toastr.success('Task saved successfully!');
           console.log("Transaction Saved");
           this.router.navigate(["/home/dashboardTask"]);
@@ -1355,6 +1377,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           console.log("Error saving the transaction")
         }
       );
+
     }
 
 
