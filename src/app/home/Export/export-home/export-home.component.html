@@ -2140,30 +2140,42 @@
                                                 <div *ngIf='code === c && generatePurpose[j] == code'>
 
                                                         <div id="mainId" class="bc" *ngIf="donePurpose[j] != code">
-                                                                <iframe [src]="value" frameborder="0" height="600px"
-                                                                        width="400px"></iframe>
+                                                                <iframe [src]="value" frameborder="0"
+                                                                        [ngClass]="bgColor ? 'sizes' : 'sizem'"></iframe>
 
                                                         </div> <br>
-
-                                                        PI/PO Documents <br>
-                                                        <div style="display: flex; align-items: center;">
-                                                                <iframe style="flex-direction:row;"
-                                                                        *ngFor="let pipo of mainDoc[j]" [src]="pipo"
-                                                                        height="500px" width="400px"></iframe>
-                                                        </div>
-
-
-                                                        <div *ngIf="donePurpose[j] != code" style="
-                                        
-                                        display: block;
-                                        width: 78%;
-                                        margin-top: 40px;
-                                        margin-left: 43px;">
-                                                                <div class="button1" title="Share As PDF"
-                                                                        (click)="doneDox()">Done
+                                                        <div *ngIf='newDone'>
+                                                                PI/PO Documents <br>
+                                                                <div style="display: flex; align-items: center;">
+                                                                        <iframe style="flex-direction:row;"
+                                                                                *ngFor="let pipo of mainDoc[j]"
+                                                                                [src]="pipo" height="600px"
+                                                                                width="500px"></iframe>
                                                                 </div>
+
                                                         </div>
-                                                        <div *ngIf="donePurpose[j] == code">
+
+
+                                                        <div *ngIf="donePurpose[j] != code"
+                                                                style="display: block; width: 78%;  margin-top: 40px; margin-left: 43px;">
+                                                                <button *ngIf='newDone' class="button1"
+                                                                        style="margin-right: 10px;" title="Share As PDF"
+                                                                        (click)="doneDox()">Done
+                                                                </button>
+                                                                <button *ngIf='newDone' class="button1"
+                                                                        style="margin-right: 10px;"
+                                                                        (click)="hidePreview()">Edit</button>
+                                                                <button *ngIf='!newDone' class="button1"
+                                                                        style="margin-right: 10px; margin-bottom: 30px;"
+                                                                        (click)="showPreview()">Proceed
+                                                                        to Preview</button>
+                                                                <!-- <div *ngIf='!newDone' class="button1"
+                                                                        title="Share As PDF" (click)="showPreview()">
+                                                                        Proceed
+                                                                        to Preview
+                                                                </div> -->
+                                                        </div>
+                                                        <!-- <div *ngIf="donePurpose[j] == code">
                                                                 <p>Setup: 3 Preview</p>
                                                                 <button class="button1" style="margin-right: 10px;"
                                                                         (click)="downloadPDF()">Download</button>
@@ -2179,8 +2191,8 @@
                                                                 <div style="display: flex; align-items: center;">
                                                                         <iframe style="flex-direction:row;"
                                                                                 *ngFor="let pipo of mainDoc[j]"
-                                                                                [src]="pipo" height="500px"
-                                                                                width="400px"></iframe>
+                                                                                [src]="pipo" height="600px"
+                                                                                width="500px"></iframe>
                                                                 </div> <br> <br>
 
                                                                 <button class="button1" style="margin-right: 10px;"
@@ -2188,7 +2200,7 @@
                                                                 <button class="button1" style="margin-right: 10px;"
                                                                         *ngIf="isDone" (click)="doneDox()">Done</button>
 
-                                                        </div>
+                                                        </div> -->
 
                                                 </div>
 

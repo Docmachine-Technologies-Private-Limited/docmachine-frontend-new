@@ -13,7 +13,7 @@ import { UserService } from "../../service/user.service";
 })
 export class AllTaskComponent implements OnInit {
 
-  public item1:any;
+  public item1: any;
   public item2;
   public user;
   public selectedRow;
@@ -221,9 +221,5 @@ export class AllTaskComponent implements OnInit {
     this.import = !this.import
     this.export = !this.export
   }
-
-
-
-
 
 }

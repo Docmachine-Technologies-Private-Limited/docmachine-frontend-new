@@ -203,7 +203,7 @@ export class UserService {
     console.log(this.authToken);
     console.log(file)
     console.log(pipo)
-    console.log(doc)
+    // console.log(doc)
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
@@ -442,6 +442,20 @@ export class UserService {
     return this.http.post(
       `${this.api_base}/pipo/get`,
       { pi_poNo: pipoNumber },
+      httpOptions
+    );
+  }
+
+  getManyPipo(pipoNumber) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.post(
+      `${this.api_base}/pipo/getMany`,
+      { pipo: pipoNumber },
       httpOptions
     );
   }

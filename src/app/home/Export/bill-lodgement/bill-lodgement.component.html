@@ -64,16 +64,46 @@
                         <div class="form-group">
                             <div class="form-group col-md-12">
                                 <label>Against Advance Receipt?</label>
-                                <input type="radio" name="Question6" [(ngModel)]="Question6" value="yes"> <span
-                                    style="margin-left: 10px;">Yes</span> <br>
+                                <input type="radio" name="Question6" [(ngModel)]="Question6" value="yes"
+                                    (change)="hello()"> <span style="margin-left: 10px;">Yes</span> <br>
                                 <input type="radio" name="Question6" [(ngModel)]="Question6" value="no"> <span
                                     style="margin-left: 10px;">No</span>
                             </div>
                         </div>
                         <div style="margin: 10px 12px;" *ngIf='Question6 === "yes"'>
-                            <!-- //If Yes -->
                             Enter Advance reference Number <br>
-                            <input type="text" (keyup)="change($event)">
+                            <form class="" [formGroup]="advanceForm" (ngSubmit)="onSubmit()">
+                                <div formArrayName="advance">
+
+                                    <div *ngFor="let course of getCourses(advanceForm); let i = index"
+                                        [formGroupName]="i" style="margin-bottom: 10px;">
+                                        {{sbArray[i]}} <br>
+                                        <div formArrayName='value'>
+                                            <div *ngFor="let subgroup of course.controls.value.controls; let idx = index;"
+                                                [formGroupName]="idx" style="flex-direction:row; margin-right: 15px;">
+                                                <span style="color: #707683; font-size: 14px;">{{idx+1}}</span>
+                                                <input formControlName="valueInternal"
+                                                    style="outline: none; border: 1px solid #DEDEDE; width: 150px; border-radius: 5px; margin-left: 15px;">
+                                                <input style="display: none;" type="text" formControlName="sb"
+                                                    [(ngModel)]="sbArray[i]">
+
+                                            </div>
+                                            <span (click)="onAddCourse1(i)" style="font-size: 12px; color: #303030;"><i
+                                                    style="font-size: 14px;" class="fas fa-plus-circle"></i> Add
+                                                New
+                                                Row </span>
+
+                                            <!-- <a *ngIf='i>0' (click)='removeAddress(i)'><i style="margin-top: 17px;" class="fas fa-times"></i></a> -->
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </form>
+                            <!-- //If Yes -->
+
+                            <!-- <input type="text" (keyup)="change($event)"> -->
                         </div>
 
                         <div class="form-group">
@@ -148,7 +178,7 @@
                         </div>
 
 
-                        <div *ngIf='Question2 === "no" || Question2 === "yes" && Question5=="yes" || Question5=="no" '
+                        <div *ngIf='Question2 === "no" || Question2 === "yes" && Question5=="yes" || Question5=="no" ||  Question5=="yes"'
                             style="margin-left: 10px;">
                             Select a bank*
                             <div *ngFor='let value of bank' style="display: flex; align-items: center;">
@@ -718,14 +748,15 @@
                                 </div>
 
                             </div> -->
-                            <iframe [src]="value" frameborder="0" height="600px" width="400px"></iframe>
+                            <iframe [src]="value" frameborder="0" [ngClass]="bgColor ? 'sizes' : 'sizem'"></iframe>
                             <br>
-                            SB Documents
-                            <div style="display: flex; align-items: center;">
-                                <iframe style="flex-direction:row;" *ngFor="let pipo of mainDoc1" [src]="pipo"
-                                    height="500px" width="400px"></iframe>
-                            </div> <br>
-
+                            <div *ngIf='newDone'>
+                                SB Documents
+                                <div style="display: flex; align-items: center;">
+                                    <iframe style="flex-direction:row;" *ngFor="let pipo of mainDoc1" [src]="pipo"
+                                        height="500px" width="400px"></iframe>
+                                </div> <br>
+                            </div>
 
                         </div>
 
@@ -866,7 +897,7 @@
 
                         <h1 *ngIf="isProceed == false && Question5 == 'yes'">Invoice Reduction</h1>
                         <div id="mainId1" class="bc" *ngIf="isProceed == false && Question5 == 'yes'">
-                            <div id="first" class="bc">
+                            <!-- <div id="first" class="bc">
 
                                 <div style="margin-left: 40px; margin-top: 20px; width: 75%;" class="bc">
 
@@ -1058,8 +1089,115 @@
                                     </p>
                                 </div>
 
-                            </div>
+                            </div> -->
+                            <table>
+                                <tr style="border: 0.5px solid black;">
+                                    <td style="border: 0.5px solid black;">
+                                        SL NO
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Invoice Date
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Invoice No
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Port Code
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Shipping <br>
+                                        Bill No
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Shipping <br>
+                                        Bill Date
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Invoice Value
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Damage <br>
+                                        Deduction
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Value to be <br>
+                                        Realised
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Forex Advice No
+                                    </td>
+                                </tr>
+                                <tr *ngFor='let value of invoiceArr; let i = index;' style="border: 0.5px solid black;">
+                                    <td style="border: 0.5px solid black;">
+                                        {{i+1}}
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        {{value.pipoValue.date}}
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        {{value.pipoValue.pi_poNo}}
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        {{value.portCode}}
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        {{value.sbno}}
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        {{value.sbdate}}
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        {{value.pipoValue.amount}}
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        <input type="text" style="width: 100px; border: none;"
+                                            (input)="searchData($any($event.target).value, i)">
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
 
+                                        <input type="text" style="width: 100px; border: none;" [(ngModel)]="amArr[i]">
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        {{value.advance}}
+                                    </td>
+                                </tr>
+                                <!-- <tr style="border: 0.5px solid black;">
+                                    <td style="border: 0.5px solid black;">
+                                        SL NO
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Invoice Date
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Invoice No
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Port Code
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Shipping <br>
+                                        Bill No
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Shipping <br>
+                                        Bill Date
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Invoice Value
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Damage <br>
+                                        Deduction
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Value to be <br>
+                                        Realised
+                                    </td>
+                                    <td style="border: 0.5px solid black;">
+                                        Forex Advice No
+                                    </td>
+                                </tr> -->
+                            </table>
 
 
                         </div>
@@ -1070,9 +1208,14 @@
                                                                             width: 78%;
                                                                             margin-top: 40px;
                                                                             margin-left: 43px;display: flex; align-items: center;">
-                            <div style="flex-direction:row;" class="button1" title="Share As PDF" (click)="doneDox()">
-                                Done</div> <Button style="flex-direction:row; margin-left: 10px;" (click)='onBack()'
-                                class="button1">Back</Button>
+                            <button *ngIf='newDone' class="button1" style="margin-right: 10px;" title="Share As PDF"
+                                (click)="doneDox()">Done
+                            </button>
+                            <button *ngIf='newDone' class="button1" style="margin-right: 10px;"
+                                (click)="hidePreview()">Edit</button>
+                            <button *ngIf='!newDone' class="button1" style="margin-right: 10px; margin-bottom: 30px;"
+                                (click)="showPreview()">Proceed
+                                to Preview</button>
                         </div>
                         <div *ngIf="isProceed == true">
                             <p>Setup: 3 Preview</p>
