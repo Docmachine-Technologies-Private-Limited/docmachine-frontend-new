@@ -14,12 +14,31 @@
     margin-top: -130px;
     margin-left: 50px;
 }
+// .image2 {
+//     position: absolute !important;
+//     margin-top: -5% !important;
+//     width: 299px;
+//     height: 92px;
+// }
 
 .login,
 .image {
     min-height: 100vh;
     cursor: pointer;
 }
+
+.eye{
+        
+    margin-top: -30px;
+    margin-bottom: 30px;
+    margin-left: 393px;
+    width: 20px;
+    height: 20px;
+    }
+
+.fa{
+    color: #dfe2e6;
+   }
 
 .parent {
     position: relative;
@@ -104,7 +123,7 @@ input.email {
 
 input.password {
     padding-left: 50px !important;
-    background-image: url("../../assets/Suche.png"), url("../../assets/Suche-1.png") !important;
+    background-image: url("../../assets/Suche.png") !important;
     background-repeat: no-repeat;
     background-size: 17.5px 12px;
     background-position: 20px center, 95% center;
@@ -376,6 +395,7 @@ label {
         width: 300px;
         height: 30px;
     }
+    
     .btn {
         width: 200px;
         height: 40px;

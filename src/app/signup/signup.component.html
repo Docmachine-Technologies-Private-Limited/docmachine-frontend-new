@@ -1,3 +1,6 @@
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div style="width: 100%; padding-right: 0 !important;" class="container-fluid">
   <div style="display: flex; width: 100%" class="row no-gutter">
     <!-- The image half -->
@@ -61,7 +64,7 @@
 
                   <div class="form-group mb-3">
                     <label>Password</label>
-                    <input formControlName="password" id="password" type="password" placeholder="Your Password"
+                    <input [type]="password" formControlName="password" id="password" type="password" placeholder="Your Password"
                       required="" class="
                       form-control
                       rounded-pill
@@ -71,6 +74,10 @@
                       password
                       password1
                     " [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                    <div (click)="onClick()" class="eye">
+                      <i class="fa fa-eye" aria-hidden="true" *ngIf="!show"></i>
+                        <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show"></i>
+                    </div>
                     <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                       <div *ngIf="f.password.errors.required" style="margin-left: 15px;">Please enter password</div>
                       <div *ngIf="f.password.errors.minlength" style="margin-left: 15px;">Password should be more than 6
@@ -80,7 +87,7 @@
 
                   <div class="form-group mb-3">
                     <label>Confirm Password</label>
-                    <input formControlName="confirmPassword" id="password" type="password"
+                    <input [type]="password1" formControlName="confirmPassword" id="password" type="password"
                       placeholder="Confirm Your Password" required="" class="
                       form-control
                       rounded-pill
@@ -90,6 +97,10 @@
                       password
                       password1
                     " [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" />
+                    <div (click)="onClick1()" class="eye">
+                      <i class="fa fa-eye" aria-hidden="true" *ngIf="!show1"></i>
+                        <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show1"></i>
+                    </div>
                     <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
                       <div *ngIf="f.confirmPassword.errors.required" style="margin-left: 15px;">Please enter confirm
                         password

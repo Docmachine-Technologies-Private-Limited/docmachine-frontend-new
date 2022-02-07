@@ -1,3 +1,5 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div style="padding-right: 0 !important; overflow: hidden" class="container-fluid">
     <div style="display: flex; width: 100%" class="row no-gutter">
         <!-- The image half -->
@@ -39,7 +41,7 @@
 
                                 <div class="form-group mb-3">
                                     <label for="password1">Password</label>
-                                    <input formControlName="password" id="password1" type="password"
+                                    <input  [type]="password"  formControlName="password" id="password1" type="password"
                                         placeholder="Your Password" required="" class="
                       form-control
                       rounded-pill
@@ -47,8 +49,15 @@
                       shadow-sm
                       px-4
                       password
-                      password1
-                    " [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                      password1" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                    <div (click)="onClick()" class="eye">
+                      <i class="fa fa-eye" aria-hidden="true" *ngIf="!show"></i>
+                        <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show"></i>
+                    </div>
+                    <!-- <button (click)="onClick()" class="eye">
+                        <i class="fa fa-eye" aria-hidden="true" *ngIf="!show"></i>
+                        <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show"></i>
+                      </button> -->
                                     <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                                         <div *ngIf="f.password.errors.required" style="margin-left: 15px;">Please enter
                                             password</div>

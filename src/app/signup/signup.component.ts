@@ -12,6 +12,10 @@ import { ToastrService } from 'ngx-toastr';
 
 
 export class SignupComponent implements OnInit {
+  password;
+  password1;
+  show = false;
+  show1 = false;
   isDisabled: boolean = false;
   isVisible: boolean = false;
   submitted = false;
@@ -20,6 +24,7 @@ export class SignupComponent implements OnInit {
     private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
+    this.password = 'password';
     this.registerForm = this.formBuilder.group({
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
@@ -29,6 +34,24 @@ export class SignupComponent implements OnInit {
 
   }
   get f() { return this.registerForm.controls; }
+  onClick() {
+    if (this.password === 'password') {
+      this.password = 'text';
+      this.show = true;
+    } else {
+      this.password = 'password';
+      this.show = false;
+    }
+  }
+  onClick1() {
+    if (this.password1 === 'password') {
+      this.password1 = 'text';
+      this.show1 = true;
+    } else {
+      this.password1 = 'password';
+      this.show1 = false;
+    }
+  }
   onSubmit() {
     this.submitted = true
     this.isDisabled = true;
