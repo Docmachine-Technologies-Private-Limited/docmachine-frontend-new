@@ -12,8 +12,8 @@ import { ToastrService } from 'ngx-toastr';
 
 
 export class SignupComponent implements OnInit {
-  password;
-  password1;
+  password = 'password';
+  password1 = 'password';
   show = false;
   show1 = false;
   isDisabled: boolean = false;
@@ -34,6 +34,8 @@ export class SignupComponent implements OnInit {
 
   }
   get f() { return this.registerForm.controls; }
+
+
   onClick() {
     if (this.password === 'password') {
       this.password = 'text';
@@ -42,6 +44,8 @@ export class SignupComponent implements OnInit {
       this.password = 'password';
       this.show = false;
     }
+    console.log(this.show,"hi------");
+    console.log(this.show1,"hiiii1----");
   }
   onClick1() {
     if (this.password1 === 'password') {

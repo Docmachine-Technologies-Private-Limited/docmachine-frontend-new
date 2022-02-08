@@ -99,7 +99,7 @@
                     " [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" />
                     <div (click)="onClick1()" class="eye">
                       <i class="fa fa-eye" aria-hidden="true" *ngIf="!show1"></i>
-                        <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show1"></i>
+                      <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show1"></i>
                     </div>
                     <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
                       <div *ngIf="f.confirmPassword.errors.required" style="margin-left: 15px;">Please enter confirm
