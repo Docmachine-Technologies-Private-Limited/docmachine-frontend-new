@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html style="background-color: #f8fafd">
-
-<body>
+  
+  <body>
+    
   <!--------style="    position: fixed;
       top: 0;
       bottom: 0;
@@ -14,6 +15,8 @@
             * Collapsing - navigation automatically collapse when mouse leaves it and expand when enters.
             * Static - stays always open.
         -->
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">     
   <nav id="sidebar" class="sidebar" role="navigation" style="overflow: auto">
     <!-- need this .js class to initiate slimscroll -->
     <div class="js-sidebar-content">
@@ -485,7 +488,7 @@
     <li class="">
       <a [routerLink]="['/home/upload']" style="cursor: pointer" class="sidebar-content">
         <span class="icon side-icon">
-          <img src="./assets/briefcase.png" />
+          <img src="./assets/content-paper-edit.png" />
         </span> Upload Documents
       </a>
     </li>
@@ -507,7 +510,7 @@
     <li style="cursor: pointer">
       <a class="sidebar-content" (click)="customerClick()">
         <span class="icon side-icon">
-          <img src="./assets/briefcase.png" />
+          <img src="./assets/manage1.png" style="margin-left: -2px;" />
         </span> Manage Customer
       </a>
       <div class="main11" style="margin-left: 50px;" *ngIf="customer">
@@ -543,7 +546,7 @@
                         ">
           <i style="font-size: 20px" *ngIf="view" class="fas fa-angle-up"></i></span>
       </a>
-      <div class="main11" style="margin-left: 50px;">
+      <div class="main11" style="margin-left: 50px; font-size:12px">
         <a style="cursor: pointer" [routerLink]="['/home/viewDocument/sb']">
           Shipping Bill
         </a>
@@ -567,14 +570,16 @@
       <li style="cursor: pointer" class="">
         <a class="sidebar-content">
           <span class="icon side-icon">
-            <img src="./assets/email-action-unread.png" />
-          </span> Contact Us
+            
+            <img src="./assets/m1.png" style="margin-left: -1px;" >
+            
+          </span>Contact Us
         </a>
       </li>
 
     </ul>
 
-    <h5 class="sidebar-nav-title sidebar-title">SETTING</h5>
+    <h5 class="sidebar-nav-title sidebar-title">SETTINGS</h5>
     <ul class="sidebar-nav">
       <li *ngIf="role != 'ca'" style="cursor: pointer" class="">
         <!-- an example of nested submenu. basic bootstrap collapse component -->
@@ -588,7 +593,7 @@
         <!-- an example of nested submenu. basic bootstrap collapse component -->
         <a class="sidebar-content" (click)="removeTwo()">
           <span class="icon side-icon">
-            <img src="./assets/logout-1.png" />
+            <img src="./assets/g.png" style="margin-left: -3px;"/>
           </span> Remove Mobile
         </a>
       </li>

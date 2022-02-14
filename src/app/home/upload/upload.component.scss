@@ -27,7 +27,35 @@
   align-items: center;
   padding-top: 2%;
 }
+material-icons.color_white {color: #ffffff;}
+.close-button{
+  float: right;
+  top:-24px;
+  right:-24px;
+}
 
+//if you want some css animation
+.close-icon {
+  transition: 1s ease-in-out;
+}
+
+.close-icon:hover {
+  transform: rotate(180deg);
+}
+
+//To place the x mark outside of the container
+::ng-deep .icon-outside .close-button{
+  float: right;
+  top:-52px;
+  right:-52px;
+}
+
+::ng-deep .icon-outside .mat-dialog-container {
+ overflow: unset
+}
+.close{
+  border: none;
+}
 .form h5 {
   color: rgba(0, 0, 0, 0.8);
   margin-bottom: 1px;

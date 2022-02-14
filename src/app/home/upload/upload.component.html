@@ -1,27 +1,32 @@
 <div class="content-wrap">
   <main id="content" class="content table-padding" role="main">
+    <div style="margin-top: -30px; margin-bottom: 7px;">
+      <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
+          style="width: 20px; height: 20px; margin-left: 26px; "><span style="margin-left: 9px;"
+          [routerLink]="['/home/dashboardTask']">Back</span>
+  </div>
 
     <h3 class="heading" *ngIf='docu == "pipo"'>New Perfoma invoice/ Purchase Order</h3>
     <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
     <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
-    <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" '>Upload Document</h3>
+    <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' >Upload Document</h3>
     <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' style="margin-bottom: 20px;">
-      <p style="color: rgb(0, 0, 0);margin-left: 40px">
+      <p style="color: rgb(0, 0, 0);margin-left: 30px">
         Choose the type of document
       </p>
-      <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
+      <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 30px" name="" id="">
         <option value="">Document Type</option>
         <option value="import">Import</option>
         <option value="export">Export</option>
       </select>
 
 
-      <p *ngIf='documentType1 == "import" || documentType1 == "export"' style="color: rgb(0, 0, 0); margin-left: 40px;">
+      <p *ngIf='documentType1 == "import" || documentType1 == "export"' style="color: rgb(0, 0, 0); margin-left: 30px;">
         Now you selected {{documentType1}}, select Type of {{documentType1}} document in the
         following dropdown
 
       </p>
-      <select *ngIf='documentType1 == "import"' [(ngModel)]="documentType" style=" margin-bottom: 3%; margin-left: 40px"
+      <select *ngIf='documentType1 == "import"' [(ngModel)]="documentType" style=" margin-bottom: 3%; margin-left: 30px"
         name="" id="">
         <option value="">Document Type</option>
 
@@ -58,7 +63,7 @@
       <div
         *ngIf='documentType == "PI" && documentType1 == "import" || documentType == "PO" && documentType1 == "import"'>
         <div style="display: flex; align-items: center; margin-left: 30px;">
-          <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Beneficiary
+          <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 32px;">Beneficiary
             Name*</label>
           <div class="customDropdown" style="flex-direction:row; ">
             <span style="color: #323e4a !important; min-width: 150px;">{{beneValue}}</span>
@@ -729,14 +734,19 @@
             <!-- The content half -->
             <div class="col-md-7 bg-dark">
               <div class="login d-flex py-5" style="padding: 0px !important;">
-                <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                  <span aria-hidden="true">&times;</span>
-                </button> -->
+                
                 <!-- Demo content-->
                 <div class="container">
                   <div class="row">
+                    <button type="button" class="close btn btn-outline-light " style="margin-left:430px; max-width: 20px;max-height: 20px ;" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                      <span aria-hidden="true" >&times;</span>
+                    </button>
+                    
                     <div class="col-lg-10 col-xl-7 mrg">
+                      
                       <h6 class="display-5">Create New Beneficiary/ Customer</h6>
+                      
+                      
                       <form [formGroup]="loginForm" (ngSubmit)="onSubmitBene()" class="form11">
                         <div class="form-group mb-3">
                           <label class="plable">Name</label>

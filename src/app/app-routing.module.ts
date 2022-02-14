@@ -9,6 +9,8 @@ import { SigninRoutingModule } from "./signIn/signin-routing.module";
 import { ForgotPasswordComponent } from "./forgot-password/forgot-password.component";
 import { CreateTeamComponent } from "./create-team/create-team.component";
 import { AddMemberComponent } from "./add-member/add-member.component";
+import {MatDialogModule} from '@angular/material/dialog';
+
 
 import { CreateTeam1Component } from "./create-team1/create-team1.component";
 import { UpdatePasswordComponent } from "./update-password/update-password.component";
@@ -58,6 +60,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" }),
     SignupRoutingModule,
     SigninRoutingModule,
+    MatDialogModule
   ],
   exports: [RouterModule],
 })

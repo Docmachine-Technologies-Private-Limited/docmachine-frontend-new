@@ -35,6 +35,7 @@ import { NotVerifiedComponent } from './not-verified/not-verified.component';
 import { AppConfig } from '../app/app.config';
 import { MembersigninComponent } from './membersignin/membersignin.component';
 import { PdfComponent } from './pdf/pdf.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 //import { SidenavComponent } from './home/sidenav/sidenav.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {

@@ -1,5 +1,12 @@
 <div class="content-wrap">
+  
   <main id="content" class="content table-padding" role="main">
+    <!-- <h1>hhi</h1> -->
+    <div style="margin-top: -30px; margin-bottom: 5px;">
+      <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
+          style="width: 20px; height: 20px; margin-left: 62px; "><span style="margin-left: 9px;"
+          [routerLink]="['/home/dashboardTask']">Back</span>
+  </div>
     <div>
       <div *ngIf='file == "import"'>
         <button class="upload-button" (click)="open(content)">
