@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { DocumentService } from "../../../service/document.service";
 import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import * as data from '../../../inward.json';
@@ -7,6 +7,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "../../../service/user.service";
 import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import * as XLSX from 'xlsx';
 import {
   FormBuilder,
   FormGroup,
@@ -21,7 +22,9 @@ import {
   styleUrls: ['./bill-lodgement.component.scss']
 })
 export class BillLodgementComponent implements OnInit, OnDestroy {
+  @ViewChild('table1') table: ElementRef;
   public item1;
+  public itemArray;
   public item2;
   public user;
   public selectedRow;
@@ -151,6 +154,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   });
   sbDataArray: any = [];
   invoiceArr: any[];
+  filterToggle = false;
   constructor(
     public documentService: DocumentService,
     private router: Router,
@@ -259,6 +263,39 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     else {
       this.Question5 = '';
     }
+
+  }
+
+  searchData1(a) {
+    console.log(a)
+    console.log(a.length)
+    if (a.length > 0) {
+      let arr = []
+      for (let value of this.item1) {
+        if (value.buyerName.toLowerCase().includes(a) || value.sbno.includes(a)) {
+          console.log(value.buyerName)
+          arr.push(value)
+        }
+
+      }
+      this.itemArray = arr
+      this.filterToggle = true
+    }
+    else {
+      this.filterToggle = false
+      console.log("else")
+    }
+
+  }
+
+  fireEvent() {
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    console.log(wb)
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    console.log(wb)
+    /* save to file */
+    XLSX.writeFile(wb, 'SheetJS.xlsx');
 
   }
 
@@ -393,7 +430,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     let pipoValue
     let value
     let buyerValue
-    for (let item of this.item1) {
+    for (let item of this.itemArray) {
 
       for (let sb of this.sbArray) {
         if (item.sbno === sb) {
@@ -413,6 +450,11 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
     let invoicearray = []
     this.Question5 = 'no'
+    this.sbDataArray.forEach((value, index) => {
+      for (let a of value.pipo) {
+        this.arrayPipo.push(a)
+      }
+    });
     if (this.Question6 == 'yes') {
       let adArr = []
       for (let x of this.advanceForm.value.advance) {
@@ -472,13 +514,13 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         console.log(invoicearray)
         this.invoiceArr = invoicearray
         this.Question5 = 'yes'
-      }, 2000);
+      }, 8000);
 
     }
 
 
     console.log('Rajuuuuu', pipoValue)
-    this.arrayPipo = value
+    //this.arrayPipo = value
     this.mainDoc1 = generateDoc2
     console.log(this.mainDoc1)
     console.log(generateDoc2)
@@ -601,12 +643,18 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
   searchData(a, i) {
     console.log(i)
+    console.log(a)
     var reg = /^\d+$/;
     let x = reg.test(a)
     console.log(x)
     if (x) {
       this.amArr[i] = this.amArr[i] - a;
+      this.invoiceArr[i].pipoValue['damage'] = a
+      this.invoiceArr[i].pipoValue['realized'] = this.amArr[i]
     }
+    console.log(this.invoiceArr)
+
+
 
     console.log(a)
     console.log(this.amArr)
@@ -1634,6 +1682,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
   doneDox() {
     console.log(this.newTask)
+    console.log(this.invoiceArr)
     if (this.documentService.draft) {
       this.documentService.updateExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' }, this.documentService.task._id).subscribe(
         (data) => {
@@ -1646,9 +1695,29 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
             .subscribe(
               data => {
                 console.log("king123")
-                console.log(data)
-                this.toastr.success('Task saved as completed successfully!');
-                this.router.navigate(["/home/dashboardTask"]);
+                console.log(data);
+                if (this.Question5 == 'yes') {
+                  this.userService.updateManyPipo(this.arrayPipo, 'invoiceReduction', this.invoiceArr)
+                    .subscribe(
+                      data1 => {
+                        console.log("king123")
+                        console.log(data1);
+                        this.toastr.success('Task saved as completed successfully!');
+                        this.router.navigate(["/home/dashboardTask"]);
+                        //this.router.navigate(["/home/advance-outward-remittance"]);
+                      },
+                      error => {
+                        // this.toastr.error('Invalid inputs, please check!');
+                        console.log("error")
+                      });
+                }
+                else {
+                  this.toastr.success('Task saved as completed successfully!');
+                  this.router.navigate(["/home/dashboardTask"]);
+                }
+
+                // this.toastr.success('Task saved as completed successfully!');
+                // this.router.navigate(["/home/dashboardTask"]);
                 //this.router.navigate(["/home/advance-outward-remittance"]);
               },
               error => {
@@ -1667,15 +1736,32 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' }).subscribe(
         (res) => {
           this.isDoneAll = true
-          this.toastr.success('Task saved successfully!');
+          //this.toastr.success('Task saved successfully!');
           console.log("Transaction Saved");
           this.userService.updateManyPipo(this.arrayPipo, 'billUnder', this.newTask[0].generateDoc1)
             .subscribe(
               data => {
                 console.log("king123")
                 console.log(data)
-                this.toastr.success('Task saved as completed successfully!');
-                this.router.navigate(["/home/dashboardTask"]);
+                if (this.Question5 == 'yes') {
+                  this.userService.updateManyPipo(this.arrayPipo, 'invoiceReduction', this.invoiceArr)
+                    .subscribe(
+                      data1 => {
+                        console.log("king123")
+                        console.log(data1);
+                        this.toastr.success('Task saved as completed successfully!');
+                        this.router.navigate(["/home/dashboardTask"]);
+                        //this.router.navigate(["/home/advance-outward-remittance"]);
+                      },
+                      error => {
+                        // this.toastr.error('Invalid inputs, please check!');
+                        console.log("error")
+                      });
+                }
+                else {
+                  this.toastr.success('Task saved as completed successfully!');
+                  this.router.navigate(["/home/dashboardTask"]);
+                }
                 //this.router.navigate(["/home/advance-outward-remittance"]);
               },
               error => {

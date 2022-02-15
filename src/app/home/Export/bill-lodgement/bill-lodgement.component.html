@@ -51,14 +51,22 @@
                 <div *ngIf='!isGenerate'>
 
                     <div>
-                        <label style="margin-left:10px"> Select Shipping Bill number*</label>
-                        <div style="margin-left:10px" s class="form-check" *ngFor="let item of item1; let i = index;">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" (change)="changeCheckbox1(item.sbno)">
-                                {{item.sbno}}
-                            </label>
+                        <input style="width: 50%; margin-top: 20px; margin-bottom: 20px;"
+                            placeholder="Search for Buyer name or Shipping Bill Number to select Shipping Bill"
+                            class="form-control" type="text" (input)="searchData1($any($event.target).value)">
+                        <div *ngIf='filterToggle'>
+                            <label style="margin-left:10px"> Select Shipping Bill number*</label>
+                            <div style="margin-left:10px" s class="form-check"
+                                *ngFor="let item of itemArray; let i = index;">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox"
+                                        (change)="changeCheckbox1(item.sbno)">
+                                    {{item.sbno}} - {{item.buyerName}}
+                                </label>
+                            </div>
+                            <br>
                         </div>
-                        <br>
+
 
 
                         <div class="form-group">
@@ -182,7 +190,7 @@
                             style="margin-left: 10px;">
                             Select a bank*
                             <div *ngFor='let value of bank' style="display: flex; align-items: center;">
-                                <input style="flex-direction:row;" type="radio" class="circular_input"
+                                <input style="flex-direction:row;" type="radio" class="circular_input" [value]="value"
                                     (ngModel)="myRadio" (click)="setradio(value)">
                                 <label style="flex-direction:row;" class="label1" for="male">{{value}}</label>
                             </div>
@@ -191,8 +199,8 @@
 
                                 Charges to {{bankValue}}*
                                 <div *ngFor='let value of newBankArray' style="display: flex; align-items: center;">
-                                    <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
-                                        (click)="chargesTo(value)">
+                                    <input style="flex-direction:row;" [value]="value" type="radio" id="options1"
+                                        class="circular_input" (click)="chargesTo(value)">
                                     <label style="flex-direction:row;" class="label1"
                                         for="male">{{value.bank}}-{{value.accType}}</label>
                                 </div> <br>
@@ -1090,7 +1098,7 @@
                                 </div>
 
                             </div> -->
-                            <table>
+                            <table #table1>
                                 <tr style="border: 0.5px solid black;">
                                     <td style="border: 0.5px solid black;">
                                         SL NO
@@ -1150,12 +1158,16 @@
                                         {{value.pipoValue.amount}}
                                     </td>
                                     <td style="border: 0.5px solid black;">
-                                        <input type="text" style="width: 100px; border: none;"
-                                            (input)="searchData($any($event.target).value, i)">
+                                        <span contenteditable="true"
+                                            (input)="searchData($any($event.target).innerHTML, i)"
+                                            style="width: 100px; border: none;  outline: none;"></span>
+                                        <!-- <input type="text" style="width: 100px; border: none;"
+                                            (input)="searchData($any($event.target), i)"> -->
                                     </td>
                                     <td style="border: 0.5px solid black;">
-
-                                        <input type="text" style="width: 100px; border: none;" [(ngModel)]="amArr[i]">
+                                        <span style="width: 100px; border: none;  outline: none;"
+                                            contenteditable="true">{{amArr[i]}}</span>
+                                        <!-- <input type="text" style="width: 100px; border: none; outline: none;" [(ngModel)]="amArr[i]"> -->
                                     </td>
                                     <td style="border: 0.5px solid black;">
                                         {{value.advance}}
@@ -1199,7 +1211,7 @@
                                 </tr> -->
                             </table>
 
-
+                            <!-- <button (click)="fireEvent()">Button</button> -->
                         </div>
                         <div *ngIf="isProceed == false"
                             style="

@@ -23,7 +23,8 @@
                                             <input *ngIf="editable" [(ngModel)]="item.teamName"
                                                 formControlName="teamName" placeholder="Company name/ Team name"
                                                 required="" class="form-control rounded-pill"
-                                                [ngClass]="{ 'is-invalid': submitted && f.teamName.errors }">
+                                                [ngClass]="{ 'is-invalid': submitted && f.teamName.errors }"
+                                                autocomplete="off">
                                             <div *ngIf="submitted && f.teamName.errors" class="invalid-feedback">
                                                 <div *ngIf="f.teamName.errors.required" style="margin-left: 15px;">
                                                     Company Name
@@ -43,7 +44,8 @@
                                             <input *ngIf="editable" [(ngModel)]="item.iec" formControlName="iec"
                                                 placeholder="Ex: 12121ABVEW." required=""
                                                 class="form-control rounded-pill password password1"
-                                                [ngClass]="{ 'is-invalid': submitted && f.iec.errors }">
+                                                [ngClass]="{ 'is-invalid': submitted && f.iec.errors }"
+                                                autocomplete="off">
                                             <div *ngIf="submitted && f.iec.errors" class="invalid-feedback">
                                                 <div *ngIf="f.iec.errors.required" style="margin-left: 15px;">IEC
                                                     Required</div>
@@ -65,7 +67,8 @@
                                             <input *ngIf="editable" [(ngModel)]="item.adress" formControlName="adress"
                                                 placeholder="Ex: street address, City. PIN" required=""
                                                 class="form-control rounded-pill password password1"
-                                                [ngClass]="{ 'is-invalid': submitted && f.adress.errors }">
+                                                [ngClass]="{ 'is-invalid': submitted && f.adress.errors }"
+                                                autocomplete="off">
                                             <div *ngIf="submitted && f.adress.errors" class="invalid-feedback">
                                                 <div *ngIf="f.adress.errors.required" style="margin-left: 15px;">Address
                                                     Required</div>
@@ -79,7 +82,8 @@
                                             <input *ngIf="editable" [(ngModel)]="item.phone" formControlName="phone"
                                                 id="password1" type="" placeholder="Ex: +91 95023 23352" required=""
                                                 class="form-control rounded-pill password password1"
-                                                [ngClass]="{ 'is-invalid': submitted && f.phone.errors }">
+                                                [ngClass]="{ 'is-invalid': submitted && f.phone.errors }"
+                                                autocomplete="off">
                                             <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
                                                 <div *ngIf="f.phone.errors.required" style="margin-left: 15px;">Phone
                                                     number
@@ -109,7 +113,8 @@
                                             <input *ngIf="editable" [(ngModel)]="item.caEmail" formControlName="caEmail"
                                                 id="password1" type="" placeholder="Ex: example@gmail.com" required=""
                                                 class="form-control rounded-pill password password1"
-                                                [ngClass]="{ 'is-invalid': submitted && f.caEmail.errors }">
+                                                [ngClass]="{ 'is-invalid': submitted && f.caEmail.errors }"
+                                                autocomplete="off">
                                             <div *ngIf="submitted && f.caEmail.errors" class="invalid-feedback">
                                                 <div *ngIf="f.caEmail.errors.required" style="margin-left: 15px;">CA
                                                     Email is
@@ -128,7 +133,8 @@
                                                 formControlName="chaEmail" id="password1" type=""
                                                 placeholder="Ex: example@gmail.com" required=""
                                                 class="form-control rounded-pill password password1"
-                                                [ngClass]="{ 'is-invalid': submitted && f.chaEmail.errors }">
+                                                [ngClass]="{ 'is-invalid': submitted && f.chaEmail.errors }"
+                                                autocomplete="off">
                                             <div *ngIf="submitted && f.chaEmail.errors" class="invalid-feedback">
                                                 <div *ngIf="f.chaEmail.errors.required" style="margin-left: 15px;">CHA
                                                     Email is
@@ -147,7 +153,8 @@
                                             <input *ngIf="editable" [(ngModel)]="item.gst" formControlName="gst"
                                                 id="password1" type="" placeholder="GSTIN" required=""
                                                 class="form-control rounded-pill password password1"
-                                                [ngClass]="{ 'is-invalid': submitted && f.gst.errors }">
+                                                [ngClass]="{ 'is-invalid': submitted && f.gst.errors }"
+                                                autocomplete="off">
                                             <div *ngIf="submitted && f.gst.errors" class="invalid-feedback">
                                                 <div *ngIf="f.gst.errors.required" style="margin-left: 15px;">GSTIN
                                                     Required
@@ -185,6 +192,175 @@
                                                 required="" class="form-control rounded-pill email"> {{item.acNo}}
                                             </span>
                                         </div> -->
+                                        <div *ngIf="!editable && item.location" class="form-group mb-3">
+                                            <label>Location</label>
+                                            <div *ngFor="let course of item.location.slice(0,l); let i = index"
+                                                style="margin-bottom: 10px;">
+
+
+                                                <span id="password1" type="" placeholder="bank name"
+                                                    class="form-control rounded-pill password password1">
+                                                    {{course.loc}}</span>
+
+
+                                            </div>
+                                            <div style="text-align: end;">
+                                                <a *ngIf="!showLessLoc && item.location.length >2" (click)=showMoreLoc()
+                                                    style="color: rgb(100, 100, 100);">Show More
+                                                    Location>></a>
+                                                <a *ngIf="showLessLoc" (click)=lessShowLoc()
+                                                    style="color: rgb(100, 100, 100);">Show Less Location<< </a>
+                                            </div>
+
+                                        </div>
+                                        <div *ngIf="editable && item.location" class="form-group mb-3"
+                                            formArrayName="location">
+                                            <label>Location</label>
+                                            <div *ngFor="let course of getLoc(loginForm); let i = index"
+                                                [formGroupName]="i">
+
+
+                                                <input [(ngModel)]="location[i].loc" formControlName="loc"
+                                                    id="password1" type="" placeholder="Location"
+                                                    style="margin-bottom: 10px;"
+                                                    class="form-control rounded-pill password password1"
+                                                    [ngClass]="{ 'is-invalid': submitted1 && b.controls[i].get('loc').errors?.required }"
+                                                    autocomplete="off">
+                                                <i style="margin: -39px -18px; float: right;" *ngIf='p>1'
+                                                    (click)='removeLoc(i)' class="fas fa-times"></i>
+                                                <div *ngIf="submitted1 && b.controls[i].get('loc').errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="b.controls[i].get('loc').errors?.required "
+                                                        style="margin-left: 15px;">Location Required
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div *ngIf="editable && item.location" class="row col-md-12"
+                                            style="margin-bottom: 12px;">
+                                            <button class="rounded-pill add" type="button"
+                                                (click)="onAddCourseLoc(loginForm)">
+                                                Add Another Location
+                                            </button>
+                                        </div>
+
+                                        <div *ngIf="editable && !item.location" class="form-group mb-3"
+                                            formArrayName="location">
+                                            <label>Location</label>
+                                            <div *ngFor="let course of getLoc(loginForm); let i = index"
+                                                [formGroupName]="i">
+
+
+                                                <input formControlName="loc" id="password1" type=""
+                                                    placeholder="Location" style="margin-bottom: 10px;"
+                                                    class="form-control rounded-pill password password1"
+                                                    [ngClass]="{ 'is-invalid': submitted1 && b.controls[i].get('loc').errors?.required }"
+                                                    autocomplete="off">
+                                                <i style="margin: -39px -18px; float: right;" *ngIf='i>0'
+                                                    (click)='removeAddressLoc(i)' class="fas fa-times"></i>
+                                                <div *ngIf="submitted1 && b.controls[i].get('loc').errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="b.controls[i].get('loc').errors?.required "
+                                                        style="margin-left: 15px;">Location Required
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div *ngIf="editable && !item.location" class="row col-md-12"
+                                            style="margin-bottom: 12px;">
+                                            <button class="rounded-pill add" type="button"
+                                                (click)="onAddCourseLoc1(loginForm)">
+                                                Add Another Location
+                                            </button>
+                                        </div>
+
+                                        <div *ngIf="editable && !item.commodity" class="form-group mb-3"
+                                            formArrayName="commodity">
+                                            <label>Commodity</label>
+                                            <div *ngFor="let course of getCom(loginForm); let i = index"
+                                                [formGroupName]="i">
+
+
+                                                <input formControlName="como" id="password1" type=""
+                                                    placeholder="Commodity" style="margin-bottom: 10px;"
+                                                    class="form-control rounded-pill password password1"
+                                                    [ngClass]="{ 'is-invalid': submitted1 && c.controls[i].get('como').errors?.required }"
+                                                    autocomplete="off">
+                                                <i style="margin: -39px -18px; float: right;" *ngIf='i>0'
+                                                    (click)='removeAddressCom(i)' class="fas fa-times"></i>
+                                                <div *ngIf="submitted1 && c.controls[i].get('como').errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="c.controls[i].get('como').errors?.required "
+                                                        style="margin-left: 15px;">Location Required
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div *ngIf="editable && !item.commodity" class="row col-md-12"
+                                            style="margin-bottom: 12px;">
+                                            <button class="rounded-pill add" type="button"
+                                                (click)="onAddCourseLCom1(loginForm)">
+                                                Add Another Commodity
+                                            </button>
+                                        </div>
+
+
+                                        <div *ngIf="!editable && item.commodity" class="form-group mb-3">
+                                            <label>Commodity</label>
+                                            <div *ngFor="let course of item.commodity.slice(0,m); let i = index"
+                                                style="margin-bottom: 10px;">
+
+
+                                                <span id="password1" type="" placeholder="bank name"
+                                                    class="form-control rounded-pill password password1">
+                                                    {{course.como}}</span>
+
+
+                                            </div>
+                                            <div style="text-align: end;">
+                                                <a *ngIf="!showLessCom && item.commodity.length >2"
+                                                    (click)=showMoreCom() style="color: rgb(100, 100, 100);">Show More
+                                                    Commodity>></a>
+                                                <a *ngIf="showLessCom" (click)=lessShowCom()
+                                                    style="color: rgb(100, 100, 100);">Show Less Commodity<< </a>
+                                            </div>
+
+                                        </div>
+                                        <div *ngIf="editable && item.commodity" class="form-group mb-3"
+                                            formArrayName="commodity">
+                                            <label>Commodity</label>
+                                            <div *ngFor="let course of getCom(loginForm); let i = index"
+                                                [formGroupName]="i">
+
+
+                                                <input [(ngModel)]="commodity[i].como" formControlName="como"
+                                                    id="password1" type="" placeholder="Commodity"
+                                                    style="margin-bottom: 10px;"
+                                                    class="form-control rounded-pill password password1"
+                                                    [ngClass]="{ 'is-invalid': submitted1 && c.controls[i].get('com').errors?.required }"
+                                                    autocomplete="off">
+                                                <i style="margin: -39px -18px; float: right;" *ngIf='p>1'
+                                                    (click)='removeLoc(i)' class="fas fa-times"></i>
+                                                <div *ngIf="submitted1 && c.controls[i].get('com').errors"
+                                                    class="invalid-feedback">
+                                                    <div *ngIf="c.controls[i].get('com').errors?.required "
+                                                        style="margin-left: 15px;">Commodity Required
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div *ngIf="editable && item.commodity" class="row col-md-12"
+                                            style="margin-bottom: 12px;">
+                                            <button class="rounded-pill add" type="button"
+                                                (click)="onAddCourseCom(loginForm)">
+                                                Add Another Commodity
+                                            </button>
+                                        </div>
+
 
                                         <div *ngIf="!editable" class="form-group mb-3">
                                             <label>Bank Details</label>
@@ -244,7 +420,8 @@
                                                         placeholder="Type the bank name to search"
                                                         class="form-control rounded-pill password password1"
                                                         (input)="searchData($any($event.target).value, i)"
-                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('bank').errors?.required }">
+                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('bank').errors?.required }"
+                                                        autocomplete="off">
                                                     <div *ngIf="submitted1 && g.controls[i].get('bank').errors"
                                                         class="invalid-feedback">
                                                         <div *ngIf="g.controls[i].get('bank').errors?.required "
@@ -267,7 +444,8 @@
                                                         formControlName="bicAddress" style="text-transform: uppercase;"
                                                         id="password1" type="" placeholder="Bic address"
                                                         class="form-control rounded-pill password password1"
-                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('bicAddress').errors?.required }">
+                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('bicAddress').errors?.required }"
+                                                        autocomplete="off">
                                                     <div *ngIf="submitted1 && g.controls[i].get('bicAddress').errors"
                                                         class="invalid-feedback">
                                                         <div *ngIf="g.controls[i].get('bicAddress').errors?.pattern"
@@ -291,7 +469,8 @@
                                                         formControlName="accNumber" id="password1" type=""
                                                         placeholder="Account number"
                                                         class="form-control rounded-pill password password1"
-                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('accNumber').errors }">
+                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('accNumber').errors }"
+                                                        autocomplete="off">
                                                     <div *ngIf="submitted1 && g.controls[i].get('accNumber').errors"
                                                         class="invalid-feedback">
                                                         <div *ngIf="g.controls[i].get('accNumber').errors?.required"
@@ -353,7 +532,8 @@
                                                         placeholder="Type the currency name to search"
                                                         class="form-control rounded-pill password password1"
                                                         (input)="searchCurrency($any($event.target).value,i)"
-                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('currency').errors }">
+                                                        [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('currency').errors }"
+                                                        autocomplete="off">
                                                     <div *ngIf="submitted1 && g.controls[i].get('currency').errors"
                                                         class="invalid-feedback">
                                                         <div *ngIf="g.controls[i].get('currency').errors.required"

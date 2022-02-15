@@ -129,6 +129,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   jstoday = '';
   today = new Date();
   buyerAds: any;
+  itemArray: any[];
+  filterToggle: boolean;
   constructor(
     public documentService: DocumentService,
     private router: Router,
@@ -156,6 +158,20 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       this.showInvoice = false;
       console.log("hello")
     });
+    this.documentService.getPipo().subscribe(
+      (res: any) => {
+        console.log("HEre Response", res), (this.item3 = res.data);
+        let value1 = []
+        for (let value of this.item3) {
+          if (value.file == 'export') {
+            value1.push(value)
+          }
+        }
+        this.item3 = value1
+        console.log('Export Pipo', this.item3)
+      },
+      (err) => console.log(err)
+    );
     this.documentService.getMaster(1).subscribe(
       (res: any) => {
         console.log(res), (this.item1 = res.data);
@@ -163,12 +179,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       (err) => console.log(err)
     );
 
-    this.documentService.getPipo().subscribe(
-      (res: any) => {
-        console.log("HEre Response", res), (this.item3 = res.data);
-      },
-      (err) => console.log(err)
-    );
     this.documentService.getThird().subscribe(
       (res: any) => {
         console.log("HEre Response Third", res), (this.item4 = res.data);
@@ -501,6 +511,30 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.purposeFun()
   }
 
+  searchData2(a) {
+    console.log(a)
+    console.log(a.length)
+    console.log(this.item3)
+    if (a.length > 0) {
+      let arr = []
+      for (let value of this.item3) {
+        if (value.buyerName.toLowerCase().includes(a) || value.pi_poNo.includes(a)) {
+          console.log(value.buyerName)
+          arr.push(value)
+        }
+
+      }
+
+      this.itemArray = arr
+      this.filterToggle = true
+    }
+    else {
+      this.filterToggle = false
+      console.log("else")
+    }
+
+  }
+
 
   purposeFun() {
     this.purposeRows = [];
@@ -541,10 +575,10 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(this.item3[0])
     let generateDoc1: any = [];
     let pipo = false;
-    let pipoValue = this.item3[0]
+    let pipoValue = this.itemArray[0]
     let buyerValue
     console.log(pipoValue)
-    for (let item of this.item3) {
+    for (let item of this.itemArray) {
       for (let pipo of this.pipoArray) {
         console.log("item.doc")
 

@@ -105,6 +105,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     pcRefNo: new FormControl("", Validators.required),
     date: new FormControl("", Validators.required),
     dueDate: new FormControl("", Validators.required),
+    location: new FormControl("", Validators.required)
   });
 
 
@@ -140,6 +141,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   document: any;
   file: any;
   arrayData: any = [];
+  comoData: any = [];
   other: boolean;
   pipoArr: any = [];
   pubUrl: any;
@@ -147,6 +149,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
   beneOut: string;
   api_base: any;
   mainBene: any;
+  location: any;
+  commodity: any;
 
 
   constructor(
@@ -264,7 +268,21 @@ export class UploadComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.userService.getTeam()
+      .subscribe(
+        data => {
+          console.log("llllllllllllllllllllllllllllllll")
+          console.log(data['data'][0])
+          this.location = data['data'][0]['location']
+          this.commodity = data['data'][0]['commodity']
+          console.log(this.location)
+          console.log(this.commodity)
+          //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
 
+        },
+        error => {
+          console.log("error")
+        });
     console.log(this.route.snapshot.paramMap.get('document'))
     this.file = this.route.snapshot.paramMap.get('file')
     console.log(this.file)
@@ -494,6 +512,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       }
       else if (this.file == 'export') {
         this.piPoForm.value.buyerName = this.buyerValue
+        this.piPoForm.value.commodity = this.comoData
       }
       this.piPoForm.value.file = this.file
 
@@ -513,6 +532,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     }
     else if (this.documentType1 == 'export') {
       this.piPoForm.value.buyerName = this.buyerValue
+      this.piPoForm.value.commodity = this.comoData
     }
     this.piPoForm.value.document = this.documentType
 
@@ -774,6 +794,14 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log('hhddh')
     this.buyerValue = value
   }
+
+  clickComo(a) {
+    let j = this.comoData.indexOf(a)
+    if (j == -1) {
+      this.comoData.push(a)
+    }
+  }
+
   clickPipo(a, b, c) {
     this.mainBene = c
     let x = a + "-" + b + "-" + c
@@ -797,6 +825,10 @@ export class UploadComponent implements OnInit, AfterViewInit {
   removePipo(i) {
     this.arrayData.splice(i, 1)
     this.pipoArr.splice(i, 1)
+  }
+
+  removeComo(i) {
+    this.comoData.splice(i, 1)
   }
 
   open(content) {

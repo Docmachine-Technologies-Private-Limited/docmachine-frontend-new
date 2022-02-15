@@ -92,9 +92,23 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
       caEmail: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")]],
       chaEmail: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")]],
       gst: ['', [Validators.required, Validators.pattern("^([0][1-9]|[1-2][0-9]|[3][0-7])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$"), Validators.maxLength(15)]],
+      location: new FormArray([this.initLocation()]),
+      commodity: new FormArray([this.initComo()]),
       bankDetails: new FormArray([this.initCourse()], Validators.required)
     });
 
+  }
+
+  initLocation() {
+    return this.formBuilder.group({
+      loc: ['']
+    });
+  }
+
+  initComo() {
+    return this.formBuilder.group({
+      como: ['']
+    });
   }
 
   initCourse() {
@@ -115,6 +129,14 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
 
   getCourses(form) {
     return form.get('bankDetails').controls;
+  }
+
+  getCoursesLoc(form) {
+    return form.get('location').controls;
+  }
+
+  getCoursesCom(form) {
+    return form.get('commodity').controls;
   }
 
   // getProducts(form) {
@@ -138,6 +160,36 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     this.isDisabled = false;
   }
 
+  onAddCourseLoc(e) {
+
+    if (e.controls.location.invalid) {
+      this.submitted1 = true
+      this.toastr.error('You can add another bank after filling first one!');
+      console.log("2")
+      this.isDisabled = false;
+      return;
+    }
+    console.log("fffff")
+    const control = this.loginForm.controls.location as FormArray;
+    control.push(this.initLocation());
+    this.isDisabled = false;
+  }
+
+  onAddCourseCom(e) {
+
+    if (e.controls.commodity.invalid) {
+      this.submitted1 = true
+      this.toastr.error('You can add another bank after filling first one!');
+      console.log("2")
+      this.isDisabled = false;
+      return;
+    }
+    console.log("fffff")
+    const control = this.loginForm.controls.commodity as FormArray;
+    control.push(this.initComo());
+    this.isDisabled = false;
+  }
+
   removeAddress(i) {
     console.log(i)
     //console.log(this.control)
@@ -149,6 +201,34 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     control1.removeAt(i);
     this.bankName.splice(i, 1)
     this.currencyName.splice(i, 1)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    // console.log(control1.length)
+  }
+
+  removeAddressLoc(i) {
+    console.log(i)
+    //console.log(this.control)
+    let control1 = this.loginForm.controls.location as FormArray;
+    // console.log(control1)
+    // console.log(control1.length)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    control1.removeAt(i);
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    // console.log(control1.length)
+  }
+
+  removeAddressCom(i) {
+    console.log(i)
+    //console.log(this.control)
+    let control1 = this.loginForm.controls.commodity as FormArray;
+    // console.log(control1)
+    // console.log(control1.length)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    control1.removeAt(i);
     // console.log(this.bankName)
     // console.log(this.currencyName)
     // console.log(control1.length)
@@ -201,6 +281,14 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
 
   get g(): FormArray {
     return this.loginForm.get('bankDetails') as FormArray;
+  }
+
+  get h(): FormArray {
+    return this.loginForm.get('location') as FormArray;
+  }
+
+  get c(): FormArray {
+    return this.loginForm.get('commodity') as FormArray;
   }
 
   onSubmit() {
