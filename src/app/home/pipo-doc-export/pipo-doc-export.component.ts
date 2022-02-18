@@ -121,6 +121,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   location: any;
   loc: any;
   loc1: boolean;
+  public optionsVisibility: any = [];
+
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
