@@ -52,6 +52,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   public greaterAmount = 0;
   public selectedDoc = "";
   public allTransactions: any = [];
+  public optionsVisibility: any = [];
+
   Ax1: boolean;
   Ax2: boolean;
   step1: any;
@@ -121,6 +123,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   location: any;
   loc: any;
   loc1: boolean;
+  item4 : any;
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -234,6 +237,39 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         },
         (err) => console.log(err)
       );
+
+      let arrayMain = []
+          this.documentService.getMaster(1).subscribe(
+            (res: any) => {
+              console.log(res), (this.item4 = res.data);
+              console.log("hello the")
+              for (let value1 of this.item1) {
+                for (let value2 of this.item4) {
+                  for (let a of value2.pipo) {
+                    if (a == value1.pi_poNo) {
+                      const newVal = { ...value1 };
+                      newVal['sbno'] = value2.sbno
+                      newVal['sbdate'] = value2.sbdate
+                      newVal['portCode'] = value2.portCode
+                      newVal['region'] = value2.countryOfFinaldestination
+                      newVal['fobValue'] = value2.fobValue
+
+                      // console.log("Hello Ranjit", a);
+                      // value1.sbno = value2.sbno
+                      // value1.sbdate = value2.sbdate
+                      arrayMain.push(newVal)
+                      // console.log("hello Sj", value2);
+                    }
+                  }
+                }
+              }
+              console.log("Hello There", arrayMain);
+              this.item1 = arrayMain
+
+            },
+            (err) => console.log(err)
+          );
+
 
 
 
@@ -390,7 +426,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
   getInvoices(selectedRowValues, i) {
     console.log(selectedRowValues.pi_poNo)
-    this.showInvoice = true
+    // this.showInvoice = true
     this.router.navigate(['home/pipoDocExport', {
       id: selectedRowValues.pi_poNo,
       page: 'details',
@@ -440,7 +476,6 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     }
     return (
       (this.selectedRow = selectedRowValues),
-      (this.showInvoice = true),
       (this.tableWidth = "30%"),
       (this.greaterAmount = parseInt(this.selectedRow.amount))
     );
@@ -659,6 +694,39 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   //   }
 
   // }
+
+  hide(){
+    this.showInvoice = true
+  }
+
+
+  toSave(data , index) {
+    this.optionsVisibility[index] = false;
+    console.log(data)
+    this.userService.updatePipo(this.pipoData, this.id)
+          .subscribe(
+            data => {
+              console.log("king123")
+              console.log(data['data'])
+              this.toastr.success('PI/PO updated successfully.');
+              // this.docTog = false
+              // this.toggle = false
+              // this.toggle2 = false
+              // this.uploadIsurance = false
+              // this.toastr.success('Company details updated successfully.');
+              // this.router.navigate(['/home/dashboardNew']);
+            },
+            error => {
+              // this.toastr.error('Invalid inputs, please check!');
+              console.log("error")
+            });
+
+  }
+
+  toEdit(index){
+    this.optionsVisibility[index] = true;
+    this.toastr.warning('PI/PO Is In Edit Mode');
+  }
 
 
   onSubmitPipo() {
@@ -992,4 +1060,7 @@ export class ModalContentComponent1 implements OnInit {
     XLSX.writeFile(wb, 'SheetJS.xlsx');
 
   }
+
+
 }
+
