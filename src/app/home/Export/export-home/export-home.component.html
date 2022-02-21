@@ -2079,19 +2079,26 @@
                                         <!-- other -->
                                         <div *ngFor="let code of selectedPurpose; let j = index">
                                                 <div *ngIf='code === c && generatePurpose[j] != code'>
-
-                                                        Select PI/PO numbers*
-                                                        <div class="form-check"
-                                                                *ngFor="let item of item3; let i = index;">
-                                                                <label class="form-check-label">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                                (change)="changeCheckbox(item.pi_poNo)">
-                                                                        {{item.pi_poNo}} [Amount: {{item.amount}}, Date:
-                                                                        {{item.date}}, Bene Name:
-                                                                        {{item.benneName}}, Payment Term:
-                                                                        {{item.paymentTerm}} ]
-                                                                </label>
-                                                        </div> <br>
+                                                        <input style="width: 50%; margin-top: 20px; margin-bottom: 20px;"
+                                                                placeholder="Search for Buyer name or PI/PO Number to select PI/PO"
+                                                                class="form-control" type="text"
+                                                                (input)="searchData2($any($event.target).value)">
+                                                        <span *ngIf='filterToggle'>Select PI/PO numbers*</span>
+                                                        <div *ngIf='filterToggle'>
+                                                                <div class="form-check"
+                                                                        *ngFor="let item of itemArray; let i = index;">
+                                                                        <label class="form-check-label">
+                                                                                <input class="form-check-input"
+                                                                                        type="checkbox"
+                                                                                        (change)="changeCheckbox(item.pi_poNo)">
+                                                                                {{item.pi_poNo}} [Amount:
+                                                                                {{item.amount}}, Date:
+                                                                                {{item.date}}, Buyer Name:
+                                                                                {{item.buyerName}}]
+                                                                        </label>
+                                                                </div>
+                                                        </div>
+                                                        <br>
 
                                                         Select a bank*
                                                         <div *ngFor='let value of bank'
@@ -2140,30 +2147,42 @@
                                                 <div *ngIf='code === c && generatePurpose[j] == code'>
 
                                                         <div id="mainId" class="bc" *ngIf="donePurpose[j] != code">
-                                                                <iframe [src]="value" frameborder="0" height="600px"
-                                                                        width="400px"></iframe>
+                                                                <iframe [src]="value" frameborder="0"
+                                                                        [ngClass]="bgColor ? 'sizes' : 'sizem'"></iframe>
 
                                                         </div> <br>
-
-                                                        PI/PO Documents <br>
-                                                        <div style="display: flex; align-items: center;">
-                                                                <iframe style="flex-direction:row;"
-                                                                        *ngFor="let pipo of mainDoc[j]" [src]="pipo"
-                                                                        height="500px" width="400px"></iframe>
-                                                        </div>
-
-
-                                                        <div *ngIf="donePurpose[j] != code" style="
-                                        
-                                        display: block;
-                                        width: 78%;
-                                        margin-top: 40px;
-                                        margin-left: 43px;">
-                                                                <div class="button1" title="Share As PDF"
-                                                                        (click)="doneDox()">Done
+                                                        <div *ngIf='newDone'>
+                                                                PI/PO Documents <br>
+                                                                <div style="display: flex; align-items: center;">
+                                                                        <iframe style="flex-direction:row;"
+                                                                                *ngFor="let pipo of mainDoc[j]"
+                                                                                [src]="pipo" height="600px"
+                                                                                width="500px"></iframe>
                                                                 </div>
+
                                                         </div>
-                                                        <div *ngIf="donePurpose[j] == code">
+
+
+                                                        <div *ngIf="donePurpose[j] != code"
+                                                                style="display: block; width: 78%;  margin-top: 40px; margin-left: 43px;">
+                                                                <button *ngIf='newDone' class="button1"
+                                                                        style="margin-right: 10px;" title="Share As PDF"
+                                                                        (click)="doneDox()">Done
+                                                                </button>
+                                                                <button *ngIf='newDone' class="button1"
+                                                                        style="margin-right: 10px;"
+                                                                        (click)="hidePreview()">Edit</button>
+                                                                <button *ngIf='!newDone' class="button1"
+                                                                        style="margin-right: 10px; margin-bottom: 30px;"
+                                                                        (click)="showPreview()">Proceed
+                                                                        to Preview</button>
+                                                                <!-- <div *ngIf='!newDone' class="button1"
+                                                                        title="Share As PDF" (click)="showPreview()">
+                                                                        Proceed
+                                                                        to Preview
+                                                                </div> -->
+                                                        </div>
+                                                        <!-- <div *ngIf="donePurpose[j] == code">
                                                                 <p>Setup: 3 Preview</p>
                                                                 <button class="button1" style="margin-right: 10px;"
                                                                         (click)="downloadPDF()">Download</button>
@@ -2179,8 +2198,8 @@
                                                                 <div style="display: flex; align-items: center;">
                                                                         <iframe style="flex-direction:row;"
                                                                                 *ngFor="let pipo of mainDoc[j]"
-                                                                                [src]="pipo" height="500px"
-                                                                                width="400px"></iframe>
+                                                                                [src]="pipo" height="600px"
+                                                                                width="500px"></iframe>
                                                                 </div> <br> <br>
 
                                                                 <button class="button1" style="margin-right: 10px;"
@@ -2188,7 +2207,7 @@
                                                                 <button class="button1" style="margin-right: 10px;"
                                                                         *ngIf="isDone" (click)="doneDox()">Done</button>
 
-                                                        </div>
+                                                        </div> -->
 
                                                 </div>
 

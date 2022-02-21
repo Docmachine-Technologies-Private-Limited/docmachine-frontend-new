@@ -11,6 +11,10 @@ import jwt_decode from 'jwt-decode';
 })
 export class UpdatePasswordComponent implements OnInit {
   resetForm: FormGroup;
+  show = false;
+  show1 = false;
+  password = 'password';
+  password1 = 'password';
   message: any;
   token: any;
   email: any;
@@ -45,6 +49,26 @@ export class UpdatePasswordComponent implements OnInit {
           error => {
             console.log("error")
           });
+    }
+  }
+  onClick() {
+    if (this.password === 'password') {
+      this.password = 'text';
+      this.show = true;
+    } else {
+      this.password = 'password';
+      this.show = false;
+    }
+    console.log(this.show,"hi------");
+    console.log(this.show1,"hiiii1----");
+  }
+  onClick1() {
+    if (this.password1 === 'password') {
+      this.password1 = 'text';
+      this.show1 = true;
+    } else {
+      this.password1 = 'password';
+      this.show1 = false;
     }
   }
 

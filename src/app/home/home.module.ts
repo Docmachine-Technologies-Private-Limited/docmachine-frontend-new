@@ -64,9 +64,11 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { BuyersLodgeComponent } from './yesBank/buyers-lodge/buyers-lodge.component';
 import { PowerAdminComponent } from './power-admin/power-admin.component';
 import { PipoDocExportComponent } from './pipo-doc-export/pipo-doc-export.component';
+import { ModalContentComponent1 } from './pipo-doc-export/pipo-doc-export.component';
 import { EditBuyerComponent } from './edit-buyer/edit-buyer.component';
 import { TestComponent } from './test/test/test.component';
 import { HelpComponent } from './help/help.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -134,6 +136,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     BuyersLodgeComponent,
     PowerAdminComponent,
     PipoDocExportComponent,
+    ModalContentComponent1,
     EditBuyerComponent,
     TestComponent,
     HelpComponent
@@ -146,12 +149,12 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     MatProgressBarModule,
     MatTabsModule,
 
-
     // BrowserModule,
 
     // SharedProjectsModule,
     // SharedProfileModule,
     ReactiveFormsModule,
+
     RouterModule.forChild([
       {
         path: "",
@@ -412,7 +415,9 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
         ],
       },
     ]),
+    ModalModule.forRoot(),
   ],
+  entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //   exports: [SharedProjectsModule]

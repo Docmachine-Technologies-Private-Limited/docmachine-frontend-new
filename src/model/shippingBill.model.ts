@@ -26,8 +26,12 @@ export class ShippingBill {
     public expectedPaymentlastdate: string;
     public AddedDate: string;
     public modifiedDate: string;
+    public exporterLocationCode: string;
+    public countryOfFinaldestination: string;
+    public consigneeName: string;
+    public exchangeRate: string
     public _id: any;
-    
+
 
     constructor(data: any) {
         this.userId = data.userId ? data.userId : '';
@@ -47,16 +51,20 @@ export class ShippingBill {
         this.equivalentFobValue = data.equivalentFobValue ? data.equivalentFobValue : '';
         this.invoices = createInvoice(data.invoices) ? data.invoices : [];
         this.freightCurrency = data.freightCurrency ? data.freightCurrency : '';
-        this.freightValue = data.freightValue ? data.freightValue: '';
+        this.freightValue = data.freightValue ? data.freightValue : '';
         this.realizedfreightCurrency = data.realizedfreightCurrency ? data.realizedfreightCurrency : '';
-        this.realizedfreightValue = data.realizedfreightValue ? data.realizedfreightValue: '';
+        this.realizedfreightValue = data.realizedfreightValue ? data.realizedfreightValue : '';
         this.insuranceCurrency = data.insuranceCurrency ? data.insuranceCurrency : '';
-        this.insuranceValue = data.insuranceValue ? data.insuranceValue: '';
+        this.insuranceValue = data.insuranceValue ? data.insuranceValue : '';
         this.realizedInsuranceValue = data.realizedInsuranceValue ? data.realizedInsuranceValue : '';
-        this.bankingCharges = data.bankingCharges ? data.bankingCharges: '';
-        this.expectedPaymentlastdate = data.expectedPaymentlastdate ? data.expectedPaymentlastdate: '';
+        this.bankingCharges = data.bankingCharges ? data.bankingCharges : '';
+        this.expectedPaymentlastdate = data.expectedPaymentlastdate ? data.expectedPaymentlastdate : '';
         this.AddedDate = data.AddedDate ? data.AddedDate : '';
-        this.modifiedDate = data.modifiedDate ? data.modifiedDate: '';
+        this.modifiedDate = data.modifiedDate ? data.modifiedDate : '';
+        this.exporterLocationCode = data.exporterLocationCode ? data.exporterLocationCode : '';
+        this.countryOfFinaldestination = data.countryOfFinaldestination ? data.countryOfFinaldestination : '';
+        this.consigneeName = data.consigneeName ? data.consigneeName : '';
+        this.exchangeRate = data.exchangeRate ? data.exchangeRate : '';
         this._id = data._id;
     }
 }
@@ -77,10 +85,10 @@ class Invoice {
 
 function createInvoice(data) {
     let invoice = [];
-    for(let i in data) {
+    for (let i in data) {
         invoice.push(new Invoice(i))
     }
     return invoice;
-    
+
 }
 

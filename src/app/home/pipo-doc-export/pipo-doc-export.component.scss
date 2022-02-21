@@ -22,7 +22,7 @@
 }
 
 table {
-    width: 96% !important;
+    width: 250% !important;
 }
 
 .box-shadow {
@@ -426,7 +426,7 @@ p.fs14 {
 }
 
 .tabbed {
-    overflow-x: hidden;
+    // overflow-x: hidden;
     /* so we could easily hide the radio inputs */
     background-color: #f8fafd;
     display: flex;
@@ -1485,4 +1485,30 @@ input {
     width: 150px;
     border: 1px solid rgb(196, 196, 196);
     border-radius: 20px;
+}
+
+.arrayData {
+    margin-bottom: 2px;
+    width: 32%;
+    padding-left: 10px;
+    background-color: RGB(73, 162, 215);
+    border-radius: 20px;
+    color: white;
+    font-size: 14px;
+}
+
+.savBtn {
+    background-color: #49A2D7;
+    color: white;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    width: 60px;
+}
+
+.tblInput {
+    border: 1px solid #e3e6ee;
+    border-radius: 3px;
+    width: 180px;
 }

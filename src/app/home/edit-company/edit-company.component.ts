@@ -63,6 +63,16 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   submitted1: boolean;
   z: any;
   api_base: any;
+  l: number = 2;
+  showLessLoc: boolean;
+  m: number = 2;
+  showLessCom: boolean;
+  location: any;
+  commodity: any;
+  x: number;
+  y: number;
+  p: any;
+  q: any;
 
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private router: Router, private toastr: ToastrService, public appconfig: AppConfig) {
@@ -111,6 +121,8 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
           this.forSeal1 = data['data'][0].file[2]["For Seal"]
           this.file1 = data['data'][0].file
           this.details = data['data'][0].bankDetails
+          this.location = data['data'][0].location
+          this.commodity = data['data'][0].commodity
           this.z = this.details.length
           console.log(this.z)
           if (this.details.length > 1) {
@@ -121,6 +133,32 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
             }
 
           }
+          if (this.item.location) {
+            this.p = this.location.length
+            if (this.location.length > 1) {
+              console.log("1")
+              this.x = 1
+              for (let j = 1; j < this.location.length; j++) {
+                this.onAddCourseLoc(1)
+              }
+
+            }
+          }
+
+          if (this.item.commodity) {
+            this.q = this.commodity.length
+            if (this.commodity.length > 1) {
+              console.log("1")
+              this.y = 1
+              for (let j = 1; j < this.commodity.length; j++) {
+                this.onAddCourseCom(1)
+              }
+
+            }
+          }
+
+
+
           //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
 
         },
@@ -146,10 +184,24 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
       caEmail: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")]],
       chaEmail: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")]],
       gst: ['', [Validators.required, Validators.pattern("^([0][1-9]|[1-2][0-9]|[3][0-7])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$"), Validators.maxLength(15)]],
+      location: new FormArray([this.initLocation()]),
+      commodity: new FormArray([this.initComo()]),
       bankDetails: new FormArray([this.initCourse()], Validators.required)
     });
 
 
+  }
+
+  initLocation() {
+    return this.formBuilder.group({
+      loc: ['']
+    });
+  }
+
+  initComo() {
+    return this.formBuilder.group({
+      como: ['']
+    });
   }
 
   initCourse() {
@@ -172,8 +224,24 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
     return this.loginForm.get('bankDetails') as FormArray;
   }
 
+  get b(): FormArray {
+    return this.loginForm.get('location') as FormArray;
+  }
+
+  get c(): FormArray {
+    return this.loginForm.get('commodity') as FormArray;
+  }
+
   getCourses(form) {
     return form.get('bankDetails').controls;
+  }
+
+  getLoc(form) {
+    return form.get('location').controls;
+  }
+
+  getCom(form) {
+    return form.get('commodity').controls;
   }
 
   // getProducts(form) {
@@ -219,6 +287,141 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
 
   }
 
+  onAddCourseLoc(a) {
+    console.log(a)
+    if (a === 1) {
+      console.log(a)
+      let control = this.loginForm.controls.location as FormArray;
+      control.push(this.initLocation());
+      if (this.x >= this.location.length) {
+        this.location.push([])
+      }
+      this.x++
+    }
+    else {
+      console.log(a)
+
+      if (a.controls.location.invalid) {
+        this.submitted1 = true
+        this.toastr.error('You can add another bank after filling first one!');
+        console.log("2")
+        this.isDisabled = false;
+        return;
+      }
+
+      const control = this.loginForm.get('location') as FormArray;
+      control.push(this.initLocation());
+      // console.log(this.details)
+      // console.log(this.details.length)
+      // console.log(this.i)
+
+      // console.log("this.details")
+      this.location.push([])
+      console.log(this.details)
+
+      this.p++
+      this.x++
+    }
+
+
+  }
+
+  onAddCourseCom(a) {
+    console.log(a)
+    if (a === 1) {
+      console.log(a)
+      let control = this.loginForm.controls.commodity as FormArray;
+      control.push(this.initComo());
+      if (this.y >= this.commodity.length) {
+        this.commodity.push([])
+      }
+      this.y++
+    }
+    else {
+      console.log(a)
+
+      if (a.controls.commodity.invalid) {
+        this.submitted1 = true
+        this.toastr.error('You can add another bank after filling first one!');
+        console.log("2")
+        this.isDisabled = false;
+        return;
+      }
+
+      const control = this.loginForm.get('commodity') as FormArray;
+      control.push(this.initComo());
+      console.log(this.details)
+      console.log(this.details.length)
+      console.log(this.i)
+
+      console.log("this.details")
+      this.commodity.push([])
+      console.log(this.commodity)
+
+      this.q++
+      this.y++
+    }
+
+
+  }
+
+  onAddCourseLoc1(e) {
+
+    if (e.controls.location.invalid) {
+      this.submitted1 = true
+      this.toastr.error('You can add another bank after filling first one!');
+      console.log("2")
+      this.isDisabled = false;
+      return;
+    }
+    console.log("fffff")
+    const control = this.loginForm.controls.location as FormArray;
+    control.push(this.initLocation());
+    this.isDisabled = false;
+  }
+
+  onAddCourseLCom1(e) {
+
+    if (e.controls.location.invalid) {
+      this.submitted1 = true
+      this.toastr.error('You can add another bank after filling first one!');
+      console.log("2")
+      this.isDisabled = false;
+      return;
+    }
+    console.log("fffff")
+    const control = this.loginForm.controls.commodity as FormArray;
+    control.push(this.initComo());
+    this.isDisabled = false;
+  }
+
+  removeAddressLoc(i) {
+    console.log(i)
+    //console.log(this.control)
+    let control1 = this.loginForm.controls.location as FormArray;
+    // console.log(control1)
+    // console.log(control1.length)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    control1.removeAt(i);
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    // console.log(control1.length)
+  }
+
+  removeAddressCom(i) {
+    console.log(i)
+    //console.log(this.control)
+    let control1 = this.loginForm.controls.commodity as FormArray;
+    // console.log(control1)
+    // console.log(control1.length)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    control1.removeAt(i);
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    // console.log(control1.length)
+  }
   removeAddress(i) {
     console.log(i)
     //console.log(this.control)
@@ -228,6 +431,24 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
     this.bankName.splice(i, 1)
     this.currencyName.splice(i, 1)
     this.z = this.z - 1
+  }
+
+  removeLoc(i) {
+    console.log(i)
+    //console.log(this.control)
+    let control1 = this.loginForm.controls.location as FormArray;
+    control1.removeAt(i);
+    this.location.splice(i, 1)
+    this.p = this.p - 1
+  }
+
+  removeCom(i) {
+    console.log(i)
+    //console.log(this.control)
+    let control1 = this.loginForm.controls.commodity as FormArray;
+    control1.removeAt(i);
+    this.commodity.splice(i, 1)
+    this.q = this.q - 1
   }
 
   public onUploadInit(args: any): void {
@@ -376,9 +597,33 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
     }
   }
 
+  showMoreLoc() {
+    this.l = this.l + 2
+    if (this.l >= this.item.location.length) {
+      this.showLessLoc = true
+    }
+  }
+
+  showMoreCom() {
+    this.m = this.m + 2
+    if (this.m >= this.item.commodity.length) {
+      this.showLessCom = true
+    }
+  }
+
   lessShow() {
     this.k = 2;
     this.showLess = false
+  }
+
+  lessShowLoc() {
+    this.l = 2;
+    this.showLessLoc = false
+  }
+
+  lessShowCom() {
+    this.m = 2;
+    this.showLessCom = false
   }
 
   edit() {

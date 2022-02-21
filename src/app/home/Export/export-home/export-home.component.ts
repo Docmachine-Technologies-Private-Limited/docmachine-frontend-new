@@ -8,6 +8,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "../../../service/user.service";
 import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-export-home',
@@ -123,6 +124,13 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   credit: any;
   charge: any;
   value: any;
+  newDone = false;
+  bgColor = false
+  jstoday = '';
+  today = new Date();
+  buyerAds: any;
+  itemArray: any[];
+  filterToggle: boolean;
   constructor(
     public documentService: DocumentService,
     private router: Router,
@@ -133,6 +141,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     private confirmDialogService: ConfirmDialogService
   ) {
     console.log("hello")
+    this.jstoday = formatDate(this.today, 'dd.MM.yyyy', 'en-US', '+0530');
+    console.log(this.jstoday)
   }
 
   ngOnInit(): void {
@@ -148,6 +158,20 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       this.showInvoice = false;
       console.log("hello")
     });
+    this.documentService.getPipo().subscribe(
+      (res: any) => {
+        console.log("HEre Response", res), (this.item3 = res.data);
+        let value1 = []
+        for (let value of this.item3) {
+          if (value.file == 'export') {
+            value1.push(value)
+          }
+        }
+        this.item3 = value1
+        console.log('Export Pipo', this.item3)
+      },
+      (err) => console.log(err)
+    );
     this.documentService.getMaster(1).subscribe(
       (res: any) => {
         console.log(res), (this.item1 = res.data);
@@ -155,18 +179,17 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       (err) => console.log(err)
     );
 
-    this.documentService.getPipo().subscribe(
-      (res: any) => {
-        console.log("HEre Response", res), (this.item3 = res.data);
-      },
-      (err) => console.log(err)
-    );
     this.documentService.getThird().subscribe(
       (res: any) => {
         console.log("HEre Response Third", res), (this.item4 = res.data);
       },
       (err) => console.log(err)
     );
+
+    let date = ['27-JAN-21', '29-JAN-2021', '31-JAN-2021']
+    const myArray = date[0].split(" ");
+
+
 
     this.userService.getTeam()
       .subscribe(
@@ -475,6 +498,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       }
 
     }
+
     console.log(this.jsondata.length)
     this.pgNumber = this.jsondata.length
     this.pcNumber = 0;
@@ -486,6 +510,31 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     // console.log(this.jsondata)
     this.purposeFun()
   }
+
+  searchData2(a) {
+    console.log(a)
+    console.log(a.length)
+    console.log(this.item3)
+    if (a.length > 0) {
+      let arr = []
+      for (let value of this.item3) {
+        if (value.buyerName.toLowerCase().includes(a) || value.pi_poNo.includes(a)) {
+          console.log(value.buyerName)
+          arr.push(value)
+        }
+
+      }
+
+      this.itemArray = arr
+      this.filterToggle = true
+    }
+    else {
+      this.filterToggle = false
+      console.log("else")
+    }
+
+  }
+
 
   purposeFun() {
     this.purposeRows = [];
@@ -518,27 +567,36 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
 
 
-  generateDoc(code, j) {
+  async generateDoc(code, j) {
+
     this.generate = true
     this.generatePurpose[j] = code;
     console.log(this.item3)
     console.log(this.item3[0])
     let generateDoc1: any = [];
     let pipo = false;
-    let pipoValue = this.item3[0]
+    let pipoValue = this.itemArray[0]
+    let buyerValue
     console.log(pipoValue)
-    for (let item of this.item3) {
+    for (let item of this.itemArray) {
       for (let pipo of this.pipoArray) {
         console.log("item.doc")
 
         if (item.pi_poNo === pipo) {
-
+          buyerValue = item.buyerName
           generateDoc1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
             item.doc1
           ))
         }
       }
     }
+
+    console.log(buyerValue)
+    const data: any = await this.userService.getBuyerByName(
+      buyerValue
+    );
+    console.log('shshhss', data.data)
+    this.buyerAds = data.data.buyerAdrs
     console.log(pipo)
     console.log(pipoValue)
     this.mainDoc[j] = generateDoc1
@@ -557,8 +615,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       pipoNumbers: this.pipoArray,
       pipoUrls: this.mainDoc[j],
       purposeCode: code,
-      generateDoc1: this.value
     }
+    console.log(this.newTask)
     // this.newTask[i] = {
     //   pipoNumbers: this.pipoArray,
     //   pipoUrls: this.mainDoc[i],
@@ -593,7 +651,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     const pages = pdfDoc.getPages()
     const firstpage = pages[0]
     const textField = form.createTextField('best.text')
-    textField.setText('')
+    textField.setText('KOZHIKODE')
     textField.addToPage(firstpage, {
       x: 150, y: 728, width: 400,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
@@ -760,7 +818,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     })
 
     const text23Field = form.createTextField('best.text23')
-    text23Field.setText('')
+    text23Field.setText(this.buyerAds)
     text23Field.addToPage(firstpage, {
       x: 150, y: 500, width: 400,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
@@ -1595,18 +1653,25 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
-
+    const textc5Field1 = form.createTextField('best.textc5y')
+    textc5Field1.setText(this.jstoday)
+    textc5Field1.addToPage(firstpage, {
+      x: 50, y: 52, width: 100,
+      height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
 
 
     const pdfBytes = await pdfDoc.save()
-    console.log(pdfBytes, "pdf")
-    console.log(pdfBytes, "pdf")
+    //console.log(pdfBytes, "pdf")
+    //console.log(pdfBytes, "pdf")
     var base64String = this._arrayBufferToBase64(pdfBytes)
 
-    console.log(base64String);
+    //console.log(base64String);
     const x = 'data:application/pdf;base64,' + base64String;
-    console.log(x);
+    //console.log(x);
     this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
+    this.newTask[0].generateDoc1 = x
+    console.log('jhshshjshj', this.newTask[0])
     // const link: any = document.createElement("a");
     // link.id = "dwnldLnk";
     // link.style = "display:none;";
@@ -1797,12 +1862,26 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       this.documentService.updateExportTask({ task: this.newTask, completed: 'yes', fileType: 'IRD' }, this.documentService.task._id).subscribe(
         (data) => {
           console.log("king123");
-          console.log(data);
+          console.log(this.newTask);
+          console.log("data");
           this.documentService.draft = false
           this.documentService.task.id = ''
           this.isDoneAll = true
-          this.toastr.success('Task saved as completed successfully!');
-          this.router.navigate(["/home/dashboardTask"]);
+          console.log("advanceOutward")
+          this.userService.updateManyPipo(this.newTask[0]['pipoNumbers'], 'advanceOutward', this.newTask[0].generateDoc1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data)
+                this.toastr.success('Task saved as completed successfully!');
+                this.router.navigate(["/home/dashboardTask"]);
+                //this.router.navigate(["/home/advance-outward-remittance"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+
           //this.router.navigate(['/login'], { queryParams: { registered: true }});
         },
         (error) => {
@@ -1812,12 +1891,25 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
     else {
       console.log(this.newTask)
+      console.log("advanceOutward")
       this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'IRD' }).subscribe(
         (res) => {
           this.isDoneAll = true
-          this.toastr.success('Task saved successfully!');
-          console.log("Transaction Saved");
-          this.router.navigate(["/home/dashboardNew"]);
+          console.log("advanceOutward")
+          this.userService.updateManyPipo(this.newTask[0]['pipoNumbers'], 'advanceOutward', this.newTask[0].generateDoc1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data)
+                this.toastr.success('Task saved as completed successfully!');
+                //this.router.navigate(["/home/dashboardTask"]);
+                //this.router.navigate(["/home/advance-outward-remittance"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+
 
         },
         (err) => {
@@ -2028,6 +2120,15 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.bankRef = e.target.value
   }
 
+  showPreview() {
+    this.bgColor = true
+    this.newDone = true
+  }
+  hidePreview() {
+    this.bgColor = false
+    this.newDone = false
+  }
+
 
   sendMail(j, code) {
     let val = {
@@ -2226,12 +2327,20 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(a)
     this.bankToggle = true
     this.bankValue = a
-
-    for (let value of this.bankArray) {
+    this.newBankArray = []
+    this.bankArray.forEach((value, index) => {
+      console.log('shshsh')
       if (value.bank == a) {
         this.newBankArray.push(value)
       }
-    }
+
+    });
+
+    // for (let value of this.bankArray) {
+
+    // }
+    console.log(a)
+
   }
 
   creditTo(a) {

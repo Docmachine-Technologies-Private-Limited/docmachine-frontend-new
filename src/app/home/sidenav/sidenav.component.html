@@ -1,320 +1,289 @@
 <!DOCTYPE html>
 <html style="background-color: #f8fafd">
-  
-  <body>
-    
-  <!--------style="    position: fixed;
+
+<body>
+    <!--------style="    position: fixed;
       top: 0;
       bottom: 0;
       left: 0;
       right: 0;
       padding-right: 2%;"-->
-  <!--
+    <!--
           Main sidebar seen on the left. may be static or collapsing depending on selected state.
 
             * Collapsing - navigation automatically collapse when mouse leaves it and expand when enters.
             * Static - stays always open.
         -->
+    <nav id="sidebar" class="sidebar" role="navigation" style="overflow: auto; ">
+        <!-- need this .js class to initiate slimscroll -->
+        <div class="js-sidebar-content">
+            <header class="logo d-none d-md-block">
+                <img class="mlogo" src="./assets/images/4693153098166e9bee9edab630a8e9d70f5545b6.png" width="133px" height="46px" />
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">     
-  <nav id="sidebar" class="sidebar" role="navigation" style="overflow: auto">
-    <!-- need this .js class to initiate slimscroll -->
-    <div class="js-sidebar-content">
-      <header class="logo d-none d-md-block">
-        <img class="mlogo" src="./assets/images/4693153098166e9bee9edab630a8e9d70f5545b6.png" width="133px"
-          height="46px" />
-
-        <br />
-        <div style="margin-top: 20px">
-          <img class="manager" src="./assets/newPerson.png" alt=""/>
-          <h5 class="name">{{name}}</h5>
-          <h6 class="side-name" *ngIf="role == 'admin'">Admin</h6>
-          <h6 class="side-name" *ngIf="role == 'manager'">Manager</h6>
-          <h6 class="side-name" *ngIf="role == 'ca'">CA</h6>
-          <h6 class="side-name" *ngIf="role == 'member'">Member</h6>
-        </div>
-      </header>
-      <!-- seems like lots of recent admin template have this feature of user info in the sidebar.
+                <br />
+                <div style="margin-top: 20px">
+                    <img class="manager" src="./assets/newPerson.png" alt="" />
+                    <h5 class="name">{{name}}</h5>
+                    <h6 class="side-name" *ngIf="role == 'admin'">Admin</h6>
+                    <h6 class="side-name" *ngIf="role == 'manager'">Manager</h6>
+                    <h6 class="side-name" *ngIf="role == 'ca'">CA</h6>
+                    <h6 class="side-name" *ngIf="role == 'member'">Member</h6>
+                </div>
+            </header>
+            <!-- seems like lots of recent admin template have this feature of user info in the sidebar.
                      looks good, so adding it and enhancing with notifications -->
 
-      <!-- main notification links are placed inside of .sidebar-nav -->
+            <!-- main notification links are placed inside of .sidebar-nav -->
 
-      <!-- every .sidebar-nav may have a title -->
-      <h5 class="sidebar-nav-title sidebar-title">MENU</h5>
-      <ul *ngIf="role == 'admin'" class="sidebar-nav">
-        <li class="">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
-          <a (click)="hideIncoice()" [routerLink]="['/home/powerAdmin/pending']" class="sidebar-content">
-            <span class="icon side-icon">
+            <!-- every .sidebar-nav may have a title -->
+            <h5 class="sidebar-nav-title sidebar-title">MENU</h5>
+            <ul *ngIf="role == 'admin'" class="sidebar-nav">
+                <li class="">
+                    <!-- an example of nested submenu. basic bootstrap collapse component -->
+                    <a (click)="hideIncoice()" [routerLink]="['/home/powerAdmin/pending']" class="sidebar-content">
+                        <span class="icon side-icon">
               <img src="./assets/layout-dashboard.png" />
-            </span>
-            Admin User List
-          </a>
-        </li>
+            </span> Admin User List
+                    </a>
+                </li>
 
-        <li class="">
-          <a [routerLink]="['/home/powerAdmin/approved']" style="cursor: pointer" class="sidebar-content">
-            <span class="icon side-icon">
-              <img src="./assets/briefcase.png"/>
-            </span>
-            Approved
-          </a>
-        </li>
-        <li class="">
-          <a [routerLink]="['/home/powerAdmin/declined']" style="cursor: pointer" class="sidebar-content">
-            <span class="icon side-icon">
+                <li class="">
+                    <a [routerLink]="['/home/powerAdmin/approved']" style="cursor: pointer" class="sidebar-content">
+                        <span class="icon side-icon">
               <img src="./assets/briefcase.png" />
-            </span>
-            Declined
-          </a>
-        </li>
+            </span> Approved
+                    </a>
+                </li>
+                <li class="">
+                    <a [routerLink]="['/home/powerAdmin/declined']" style="cursor: pointer" class="sidebar-content">
+                        <span class="icon side-icon">
+              <img src="./assets/briefcase.png" />
+            </span> Declined
+                    </a>
+                </li>
 
 
-      </ul>
-      <ul *ngIf="role == 'ca'" class="sidebar-nav">
-        <li class="">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
-          <a (click)="hideIncoice()" [routerLink]="['/home/caDocuments/all']" class="sidebar-content">
-            <span class="icon side-icon">
+            </ul>
+            <ul *ngIf="role == 'ca'" class="sidebar-nav">
+                <li class="">
+                    <!-- an example of nested submenu. basic bootstrap collapse component -->
+                    <a (click)="hideIncoice()" [routerLink]="['/home/caDocuments/all']" class="sidebar-content">
+                        <span class="icon side-icon">
               <img src="./assets/layout-dashboard.png" />
             </span> All Document
-          </a>
-        </li>
+                    </a>
+                </li>
 
-        <li class="">
-          <a [routerLink]="['/home/caDocuments/pending']" style="cursor: pointer" class="sidebar-content">
-            <span class="icon side-icon">
+                <li class="">
+                    <a [routerLink]="['/home/caDocuments/pending']" style="cursor: pointer" class="sidebar-content">
+                        <span class="icon side-icon">
               <img src="./assets/briefcase.png" />
             </span> Pending
-          </a>
-        </li>
-        <li class="">
-          <a [routerLink]="['/home/caDocuments/completed']" style="cursor: pointer" class="sidebar-content">
-            <span class="icon side-icon">
+                    </a>
+                </li>
+                <li class="">
+                    <a [routerLink]="['/home/caDocuments/completed']" style="cursor: pointer" class="sidebar-content">
+                        <span class="icon side-icon">
               <img src="./assets/briefcase.png" />
             </span> Completed
-          </a>
-        </li>
+                    </a>
+                </li>
 
-      </ul>
-      <ul *ngIf="role != 'ca' && role != 'admin'" class="sidebar-nav">
-        <li class="">
-          <!-- an example of nested submenu. basic bootstrap collapse component -->
-          <a (click)="hideIncoice()" [routerLink]="['/home/dashboardTask']" class="sidebar-content">
-            <span class="icon side-icon">
+            </ul>
+            <ul *ngIf="role != 'ca' && role != 'admin'" class="sidebar-nav">
+                <li class="">
+                    <!-- an example of nested submenu. basic bootstrap collapse component -->
+                    <a (click)="hideIncoice()" [routerLink]="['/home/dashboardTask']" class="sidebar-content">
+                        <span class="icon side-icon">
               <img src="./assets/layout-dashboard.png" />
             </span> Dashboard
-          </a>
-        </li>
-        <li style="cursor: pointer" (click)="manageTask()">
-          <a class="sidebar-content" style="cursor: pointer;">
-            <span class="icon side-icon">
+                    </a>
+                </li>
+                <li style="cursor: pointer" (click)="manageTask()">
+                    <a class="sidebar-content" style="cursor: pointer;">
+                        <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
             </span> Import
-            <span style="margin-left: 55%; position: absolute;
+                        <span style="margin-left: 55%; position: absolute;
                             transform:translate(0, 3px);">
               <i style="font-size: 18px" *ngIf="!mt" class="fas fa-angle-right"></i>
               <i style="font-size: 18px" *ngIf="mt" class="fas fa-angle-down"></i>
             </span>
-          </a>
-        </li>
-        <li class="manage-li" *ngIf="mt">
-          <div class="main11" style=" color: #fff;">
-            <div style="height: 30px; padding-top: 5px; font-size: 10px;">
-              <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
-            </div>
-            <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
-            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" (click)="newTask()"
-              [ngClass]="status ? 'b-color' : 'nothing'">
-              <span style="margin-left: 50px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO
+                    </a>
+                </li>
+                <li class="manage-li" *ngIf="mt">
+                    <div class="main11" style=" color: #fff;">
+                        <div style="height: 30px; padding-top: 5px; font-size: 10px;">
+                            <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
+                        </div>
+                        <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" (click)="newTask()" [ngClass]="status ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO
                 <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
                 </i>
               </span>
-            </div>
-            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;"
-              [ngClass]="status2 ? 'b-color' : 'nothing'">
-              <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Credit Notes</span>
-            </div>
+                        </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" [ngClass]="status2 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Credit Notes</span>
+                        </div>
 
-            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-              [ngClass]="status3 ? 'b-color' : 'nothing'">
-              <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">Debit notes</span>
-            </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">Debit notes</span>
+                        </div>
 
-            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-              [ngClass]="status3 ? 'b-color' : 'nothing'">
-              <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Insurance Documents</span>
-            </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Insurance Documents</span>
+                        </div>
 
-            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-              [ngClass]="status3 ? 'b-color' : 'nothing'">
-              <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">Letter of credit (LC)</span>
-            </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">Letter of credit (LC)</span>
+                        </div>
 
-            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-              [ngClass]="status3 ? 'b-color' : 'nothing'">
-              <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Master service agree</span>
-            </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Master service agree</span>
+                        </div>
 
-            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-              [ngClass]="status3 ? 'b-color' : 'nothing'">
-              <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">
                 Tri party agreements</span>
-            </div>
+                        </div>
 
-            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-              [ngClass]="status3 ? 'b-color' : 'nothing'">
-              <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Opinion Reports</span>
-            </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Opinion Reports</span>
+                        </div>
 
-            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
-              <span style="margin-left: 50px; font-size: 10px; line-height: 30px; color: #9ba4b0">Transactions</span>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                            <span style="margin-left: 50px; font-size: 10px; line-height: 30px; color: #9ba4b0">Transactions</span>
 
-            </div>
-            <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
+                        </div>
+                        <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
 
-            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-12px;"
-              [routerLink]="['/home/advance-outward-remittance']">
-              <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Advance Outward Remittance </span>
-            </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-12px;" [routerLink]="['/home/advance-outward-remittance']">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Advance Outward Remittance </span>
+                        </div>
 
-            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-              [routerLink]="['/home/direct-import-payment']">
-              <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Direct Import Payment
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [routerLink]="['/home/direct-import-payment']">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Direct Import Payment
               </span>
-            </div>
+                        </div>
 
-            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="buc()">
-              <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Bills Under Collection</span>
-            </div>
-        <li style="list-style: none;">
-          <div *ngIf="billuc" style="margin: -10px 0px 10px 70px;">
-            <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="lcSight()">Sight</a>
-            <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="lcUsance()">Usance</a>
-          </div>
-        </li>
-        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="buc1()">
-          <span style="margin-left: 50px; font-size: 13px; line-height: 30px;">Bills Under LC</span>
-        </div>
-        <li>
-          <div *ngIf="billuc1" style="margin: -10px 0px 10px 70px;">
-            <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="nonlcSight()">Sight</a>
-            <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="nonlcUsance()">Usance</a>
-          </div>
-        </li>
-    </div>
-    </li>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="buc()">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Bills Under Collection</span>
+                        </div>
+                        <li style="list-style: none;">
+                            <div *ngIf="billuc" style="margin: -10px 0px 10px 70px;">
+                                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="lcSight()">Sight</a>
+                                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="lcUsance()">Usance</a>
+                            </div>
+                        </li>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="buc1()">
+                            <span style="margin-left: 50px; font-size: 13px; line-height: 30px;">Bills Under LC</span>
+                        </div>
+                        <li>
+                            <div *ngIf="billuc1" style="margin: -10px 0px 10px 70px;">
+                                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="nonlcSight()">Sight</a>
+                                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="nonlcUsance()">Usance</a>
+                            </div>
+                        </li>
+                    </div>
+                </li>
 
-    <!--
+                <!--
                 <li class="manage-li" *ngIf="mt">
                     <div class="main11" style=" color: #fff; margin-left: 5px;"></div>
                 </li> -->
 
-    <li style="cursor: pointer" class="" (click)="exportTask()">
-      <a class="sidebar-content" style="cursor: pointer;">
-        <span class="icon side-icon">
+                <li style="cursor: pointer" class="" (click)="exportTask()">
+                    <a class="sidebar-content" style="cursor: pointer;">
+                        <span class="icon side-icon">
           <img src="./assets/content-paper-edit.png" />
         </span> Export
-        <span style="
+                        <span style="
                           margin-left: 55%;
                           position: absolute;
                           transform: translate(0, 3px);
                         "><i style="font-size: 18px" *ngIf="!mt2" class="fas fa-angle-right"></i><i
             style="font-size: 18px" *ngIf="mt2" class="fas fa-angle-down"></i>
         </span>
-      </a>
-    </li>
-    <li class="manage-li" *ngIf="mt2">
-      <div class="main11" style=" color: #fff;">
-        <div style="height: 30px; padding-top: 5px; font-size: 10px;">
-          <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
-        </div>
-        <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
-        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" (click)="newTask1()">
-          <span style="margin-left: 50px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO
+                    </a>
+                </li>
+                <li class="manage-li" *ngIf="mt2">
+                    <div class="main11" style=" color: #fff;">
+                        <div style="height: 30px; padding-top: 5px; font-size: 10px;">
+                            <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
+                        </div>
+                        <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" (click)="newTask1()">
+                            <span style="margin-left: 50px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO
             <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
             </i>
           </span>
-        </div>
-        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;"
-          [ngClass]="status2 ? 'b-color' : 'nothing'">
-          <span style="margin-left: 50px; line-height: 30px; font-size: 12px;"
-            [routerLink]="['/home/viewDocument/sb']">Shipping Bill</span>
-        </div>
-        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;"
-          [ngClass]="status2 ? 'b-color' : 'nothing'">
-          <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Credit Notes</span>
-        </div>
+                        </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" [ngClass]="status2 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/viewDocument/sb']">Shipping Bill</span>
+                        </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" [ngClass]="status2 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Credit Notes</span>
+                        </div>
 
-        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-          [ngClass]="status3 ? 'b-color' : 'nothing'">
-          <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">Debit notes</span>
-        </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">Debit notes</span>
+                        </div>
 
-        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-          [ngClass]="status3 ? 'b-color' : 'nothing'">
-          <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Insurance Documents</span>
-        </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Insurance Documents</span>
+                        </div>
 
-        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-          [ngClass]="status3 ? 'b-color' : 'nothing'">
-          <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">Letter of credit (LC)</span>
-        </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">Letter of credit (LC)</span>
+                        </div>
 
-        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-          [ngClass]="status3 ? 'b-color' : 'nothing'">
-          <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Master service agree</span>
-        </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Master service agree</span>
+                        </div>
 
-        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-          [ngClass]="status3 ? 'b-color' : 'nothing'">
-          <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">
             Tri party agreements</span>
-        </div>
+                        </div>
 
-        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"
-          [ngClass]="status3 ? 'b-color' : 'nothing'">
-          <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Opinion Reports</span>
-        </div>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Opinion Reports</span>
+                        </div>
 
-        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
-          <span style="margin-left: 50px; font-size: 10px; line-height: 30px; color: #9ba4b0">Transactions</span>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                            <span style="margin-left: 50px; font-size: 10px; line-height: 30px; color: #9ba4b0">Transactions</span>
 
-        </div>
-        <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
+                        </div>
+                        <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
 
-        <div class="main11" style=" color: #fff;">
-          <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-12px;">
-            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;"
-              [routerLink]="['/home/exportHome']">Inward Remittance
+                        <div class="main11" style=" color: #fff;">
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-12px;">
+                                <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/exportHome']">Inward Remittance
               Disposal</span>
-          </div>
-          <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
-            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;"
-              [routerLink]="['/home/billLodgement']">Bill Under
+                            </div>
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                                <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/billLodgement']">Bill Under
               Collection</span>
-          </div>
-          <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
-            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;"
-              [routerLink]="['/home/billLodgement']">Bill Under
+                            </div>
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                                <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/billLodgement']">Bill Under
               LC</span>
-          </div>
+                            </div>
 
-          <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
-            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;"
-              [routerLink]="['/home/packingCreditRequest']">Packing Credit Request</span>
-          </div>
-          <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
-            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;"
-              [routerLink]="['/home/packingCreditRequest']">Direct Dispatch</span>
-          </div>
-        </div>
-      </div>
-    </li>
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                                <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packingCreditRequest']">Packing Credit Request</span>
+                            </div>
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                                <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packingCreditRequest']">Direct Dispatch</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
 
 
 
-    <!-- <li style="cursor: pointer" class="" *ngIf="!mt1" (click)="manageTask1()">
+                <!-- <li style="cursor: pointer" class="" *ngIf="!mt1" (click)="manageTask1()">
           <a class="sidebar-content" style="cursor: pointer;">
             <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
@@ -405,7 +374,7 @@
             <a style="cursor: pointer" [routerLink]="['/home/tasks/pending']"> Draft </a>
           </div>
         </li> -->
-    <!-- <li class="" style="cursor: pointer">
+                <!-- <li class="" style="cursor: pointer">
           <a class="sidebar-content" [routerLink]="['/home/outwardRemitance']">
             <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
@@ -422,7 +391,7 @@
           </a>
         </li> -->
 
-    <!-- <li style="cursor: pointer" class="" (click)="idpmsTask()">
+                <!-- <li style="cursor: pointer" class="" (click)="idpmsTask()">
           <a class="sidebar-content" style="cursor: pointer;">
             <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
@@ -485,128 +454,126 @@
           </div>
         </li> -->
 
-    <li class="">
-      <a [routerLink]="['/home/upload']" style="cursor: pointer" class="sidebar-content">
-        <span class="icon side-icon">
-          <img src="./assets/content-paper-edit.png" />
+                <li class="">
+                    <a [routerLink]="['/home/upload']" style="cursor: pointer" class="sidebar-content">
+                        <span class="icon side-icon">
+          <img src="./assets/briefcase.png" />
         </span> Upload Documents
-      </a>
-    </li>
-    <li class="" style="cursor: pointer" *ngIf="role == 'manager'">
-      <a class="sidebar-content" [routerLink]="['/home/manageUser']">
-        <span class="icon side-icon">
+                    </a>
+                </li>
+                <li class="" style="cursor: pointer" *ngIf="role == 'manager'">
+                    <a class="sidebar-content" [routerLink]="['/home/manageUser']">
+                        <span class="icon side-icon">
           <img src="./assets/single-neutral-circle.png" />
         </span> Manage User
-      </a>
-    </li>
+                    </a>
+                </li>
 
-    <li style="cursor: pointer" class="">
-      <a class="sidebar-content">
-        <span class="icon side-icon">
+                <li style="cursor: pointer" class="">
+                    <a class="sidebar-content">
+                        <span class="icon side-icon">
           <img src="./assets/briefcase.png" />
         </span> Transaction
-      </a>
-    </li>
-    <li style="cursor: pointer">
-      <a class="sidebar-content" (click)="customerClick()">
-        <span class="icon side-icon">
-          <img src="./assets/manage1.png" style="margin-left: -2px;" />
+                    </a>
+                </li>
+                <li style="cursor: pointer">
+                    <a class="sidebar-content" (click)="customerClick()">
+                        <span class="icon side-icon">
+          <img src="./assets/briefcase.png" />
         </span> Manage Customer
-      </a>
-      <div class="main11" style="margin-left: 50px;" *ngIf="customer">
-        <a style="cursor: pointer; color: white;" [routerLink]="['/home/manageCustomer/import']">Import</a>
-        <a style="cursor: pointer; color: white;" [routerLink]="['/home/manageCustomer/export']">Export</a>
-      </div>
-    </li>
-    <!-- [routerLink]="['/home/manageCustomer']" -->
+                    </a>
+                    <div class="main11" style="margin-left: 50px;" *ngIf="customer">
+                        <a style="cursor: pointer; color: white;" [routerLink]="['/home/manageCustomer/import']">Import</a>
+                        <a style="cursor: pointer; color: white;" [routerLink]="['/home/manageCustomer/export']">Export</a>
+                    </div>
+                </li>
+                <!-- [routerLink]="['/home/manageCustomer']" -->
 
 
-    <li style="cursor: pointer" class="" *ngIf="!view" (click)="viewDocument()">
-      <a class="sidebar-content" style="cursor: pointer;">
-        <span class="icon side-icon">
+                <li style="cursor: pointer" class="" *ngIf="!view" (click)="viewDocument()">
+                    <a class="sidebar-content" style="cursor: pointer;">
+                        <span class="icon side-icon">
           <img src="./assets/content-paper-edit.png" />
         </span> View Document
-        <span style="
+                        <span style="
                           margin-left: 7%;
                           position: absolute;
                           transform: translate(0, 3px);
                         "><i style="font-size: 20px" *ngIf="!view" class="fas fa-angle-down"></i>
         </span>
-      </a>
-    </li>
-    <li class="manage-li" *ngIf="view">
-      <a style="cursor: pointer" class="manage-content" (click)="viewDocument()">
-        <span class="icon side-icon">
+                    </a>
+                </li>
+                <li class="manage-li" *ngIf="view">
+                    <a style="cursor: pointer" class="manage-content" (click)="viewDocument()">
+                        <span class="icon side-icon">
           <img src="./assets/content-paper-edit.png" />
         </span> View Document
-        <span style="
+                        <span style="
                           margin-left: 7%;
                           position: absolute;
                           transform: translate(0, 3px);
                         ">
           <i style="font-size: 20px" *ngIf="view" class="fas fa-angle-up"></i></span>
-      </a>
-      <div class="main11" style="margin-left: 50px; font-size:12px">
-        <a style="cursor: pointer" [routerLink]="['/home/viewDocument/sb']">
+                    </a>
+                    <div class="main11" style="margin-left: 50px;">
+                        <a style="cursor: pointer" [routerLink]="['/home/viewDocument/sb']">
           Shipping Bill
         </a>
-        <a style="cursor: pointer" [routerLink]="['/home/viewDocument/boe']">
+                        <a style="cursor: pointer" [routerLink]="['/home/viewDocument/boe']">
           BOE Documents
         </a>
-        <a style="cursor: pointer" [routerLink]="['/home/viewDocument/pipo']"> PI/PO Documents </a>
-      </div>
-    </li>
-    </ul>
+                        <a style="cursor: pointer" [routerLink]="['/home/viewDocument/pipo']"> PI/PO Documents </a>
+                    </div>
+                </li>
+            </ul>
 
-    <h5 class="sidebar-nav-title sidebar-title">SUPPORT</h5>
-    <ul style="cursor: pointer" class="sidebar-nav">
-      <li class="">
-        <a class="sidebar-content" [routerLink]="['/home/help']">
-          <span class="icon side-icon">
+            <h5 class="sidebar-nav-title sidebar-title">SUPPORT</h5>
+            <ul style="cursor: pointer" class="sidebar-nav">
+                <li class="">
+                    <a class="sidebar-content" [routerLink]="['/home/help']">
+                        <span class="icon side-icon">
             <img src="./assets/question-circle.png" />
           </span> Need Help?
-        </a>
-      </li>
-      <li style="cursor: pointer" class="">
-        <a class="sidebar-content">
-          <span class="icon side-icon">
-            
-            <img src="./assets/m1.png" style="margin-left: -1px;" >
-            
-          </span>Contact Us
-        </a>
-      </li>
+                    </a>
+                </li>
+                <li style="cursor: pointer" class="">
+                    <a class="sidebar-content">
+                        <span class="icon side-icon">
+            <img src="./assets/email-action-unread.png" />
+          </span> Contact Us
+                    </a>
+                </li>
 
-    </ul>
+            </ul>
 
-    <h5 class="sidebar-nav-title sidebar-title">SETTINGS</h5>
-    <ul class="sidebar-nav">
-      <li *ngIf="role != 'ca'" style="cursor: pointer" class="">
-        <!-- an example of nested submenu. basic bootstrap collapse component -->
-        <a class="sidebar-content" [routerLink]="['/home/account']">
-          <span class="icon side-icon">
+            <h5 class="sidebar-nav-title sidebar-title">SETTING</h5>
+            <ul class="sidebar-nav">
+                <li *ngIf="role != 'ca'" style="cursor: pointer" class="">
+                    <!-- an example of nested submenu. basic bootstrap collapse component -->
+                    <a class="sidebar-content" [routerLink]="['/home/account']">
+                        <span class="icon side-icon">
             <img src="./assets/cog.png" />
           </span> Account
-        </a>
-      </li>
-      <li style="cursor: pointer" class="">
-        <!-- an example of nested submenu. basic bootstrap collapse component -->
-        <a class="sidebar-content" (click)="removeTwo()">
-          <span class="icon side-icon">
-            <img src="./assets/g.png" style="margin-left: -3px;"/>
+                    </a>
+                </li>
+                <li style="cursor: pointer" class="">
+                    <!-- an example of nested submenu. basic bootstrap collapse component -->
+                    <a class="sidebar-content" (click)="removeTwo()">
+                        <span class="icon side-icon">
+            <img src="./assets/logout-1.png" />
           </span> Remove Mobile
-        </a>
-      </li>
-      <li style="cursor: pointer" class="">
-        <!-- an example of nested submenu. basic bootstrap collapse component -->
-        <a class="sidebar-content" (click)="logout()">
-          <span class="icon side-icon">
+                    </a>
+                </li>
+                <li style="cursor: pointer" class="">
+                    <!-- an example of nested submenu. basic bootstrap collapse component -->
+                    <a class="sidebar-content" (click)="logout()">
+                        <span class="icon side-icon">
             <img src="./assets/logout-1.png" />
           </span> Log Out
-        </a>
-      </li>
+                    </a>
+                </li>
 
-      <!-- <li class="">
+                <!-- <li class="">
                         <a class="collapsed" href="#sidebar-ui" data-toggle="collapse" data-parent="#sidebar">
                             <span class="icon">
                                 <i class="fi flaticon-layers"></i>
@@ -624,56 +591,56 @@
                                     href="maps_google.html">Google Maps</a></li>
                         </ul>
                     </li> -->
-    </ul>
-    <footer>
-      <h5 class="footer-heading">DocMachine 2020.</h5>
-      <p class="footer-content">
-        Created with love for the community <br /> of designers and project managers.
-      </p>
-    </footer>
-    </div>
-  </nav>
-  <!-- This is the white navigation bar seen on the top. A bit enhanced BS navbar. See .page-controls in _base.scss. -->
-  <nav class="page-controls navbar navbar-dashboard nav-bar" style="width: 88.2vw; position: fixed">
-    <div style="display: grid; grid-template-columns: 70% 15% 15%" class="container-fluid contain-fluid">
-      <!-- .navbar-header contains links seen on xs & sm screens -->
+            </ul>
+            <footer>
+                <h5 class="footer-heading">DocMachine 2020.</h5>
+                <p class="footer-content">
+                    Created with love for the community <br /> of designers and project managers.
+                </p>
+            </footer>
+        </div>
+    </nav>
+    <!-- This is the white navigation bar seen on the top. A bit enhanced BS navbar. See .page-controls in _base.scss. -->
+    <nav class="page-controls navbar navbar-dashboard nav-bar" style="width: 88.2vw; position: fixed; top:-1px">
+        <div style="display: grid; grid-template-columns: 70% 15% 15%" class="container-fluid contain-fluid">
+            <!-- .navbar-header contains links seen on xs & sm screens -->
 
-      <!-- this part is hidden for xs screens -->
-      <div style="width: 100%" class="">
-        <!-- search form! link it to your search server -->
-        <form style="width: 100%" class="" role="search">
-          <div style="width: 100%" class="form-group">
-            <div style="width: 100%" class="input-group input-group-no-border ml-4">
-              <input id="main-search" type="text" placeholder="Type to search. . ." style="width: 98%" />
+            <!-- this part is hidden for xs screens -->
+            <div style="width: 100%" class="">
+                <!-- search form! link it to your search server -->
+                <form style="width: 100%" class="" role="search">
+                    <div style="width: 100%" class="form-group">
+                        <div style="width: 100%" class="input-group input-group-no-border ml-4">
+                            <input id="main-search" type="text" placeholder="Type to search. . ." style="width: 98%" />
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div>
-        </form>
-      </div>
-      <div style="display: flex; justify-content: center; width: 100%">
-        <select style="cursor: pointer" class="dropdown" name="cars" id="cars">
+            <div style="display: flex; justify-content: center; width: 100%">
+                <select style="cursor: pointer" class="dropdown" name="cars" id="cars">
           <option value="volvo">English</option>
           <option value="saab">Hindi</option>
           <option value="opel">Kannada</option>
           <option value="audi">Tamil</option>
         </select>
-      </div>
-      <div style="display: flex; justify-content: center; width: 100%">
-        <span style="margin-right: 20%" class="icon">
+            </div>
+            <div style="display: flex; justify-content: center; width: 100%">
+                <span style="margin-right: 20%" class="icon">
           <img src="./assets/Rectangle-7.png" />
         </span>
-        <span style="margin-right: 20%" class="icon">
+                <span style="margin-right: 20%" class="icon">
           <img src="./assets/Shape-2.png" />
         </span>
-        <span style="margin-right: 20%" class="icon">
+                <span style="margin-right: 20%" class="icon">
           <img src="./assets/cog-grey.png" />
         </span>
-      </div>
-    </div>
-  </nav>
-  <router-outlet>
-    <app-confirm-dialog></app-confirm-dialog>
-  </router-outlet>
-  <!-- <div class="content-wrap">
+            </div>
+        </div>
+    </nav>
+    <router-outlet>
+        <app-confirm-dialog></app-confirm-dialog>
+    </router-outlet>
+    <!-- <div class="content-wrap">
 
             <main id="content" class="content" role="main">
 
@@ -754,10 +721,10 @@
 
             </main>
         </div> -->
-  <!-- The Loader. Is shown when pjax happens -->
-  <div class="loader-wrap hiding hide">
-    <i class="fa fa-circle-o-notch fa-spin-fast"></i>
-  </div>
+    <!-- The Loader. Is shown when pjax happens -->
+    <div class="loader-wrap hiding hide">
+        <i class="fa fa-circle-o-notch fa-spin-fast"></i>
+    </div>
 </body>
 
 </html>

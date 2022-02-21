@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Inject,
@@ -22,16 +23,19 @@ import {
 import { isPlatformBrowser, isPlatformServer } from "@angular/common";
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from "src/app/app.config";
+import * as XLSX from 'xlsx';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 @Component({
   selector: 'app-pipo-doc-export',
   templateUrl: './pipo-doc-export.component.html',
   styleUrls: ["../../../sass/application.scss", "./pipo-doc-export.component.scss"]
 })
 export class PipoDocExportComponent implements OnInit, AfterViewInit {
-
+  bsModalRef: BsModalRef;
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
-
+  @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild("inputName", { static: true }) public inputRef: ElementRef;
   public type: string = "directive";
   public item1 = [];
@@ -48,6 +52,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   public greaterAmount = 0;
   public selectedDoc = "";
   public allTransactions: any = [];
+  public optionsVisibility: any = [];
+
   Ax1: boolean;
   Ax2: boolean;
   step1: any;
@@ -71,7 +77,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     pi_poNo: new FormControl("", [
       Validators.required,
       Validators.minLength(4)]),
-    benneName: new FormControl("", Validators.required),
+    buyerName: new FormControl("", Validators.required),
     currency: new FormControl("", Validators.required),
     amount: new FormControl("", Validators.required),
     incoterm: new FormControl("", Validators.required),
@@ -80,6 +86,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     pcRefNo: new FormControl("", Validators.required),
     date: new FormControl("", Validators.required),
     dueDate: new FormControl("", Validators.required),
+    location: new FormControl("", Validators.required),
   });
   pipoData: any;
   payTerm: any;
@@ -110,6 +117,13 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   buttonToggle1: any;
   buyer: boolean;
   api_base: any;
+  invoiceArr: any = [];
+  commodity: any;
+  commoArray: any = [];
+  location: any;
+  loc: any;
+  loc1: boolean;
+  item4 : any;
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -121,7 +135,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private toastr: ToastrService,
     private modalService: NgbModal,
-    public appconfig: AppConfig
+    public appconfig: AppConfig,
+    private changeDetectorRef: ChangeDetectorRef,
+    private modalService1: BsModalService
   ) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base)
@@ -152,6 +168,14 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     }
   }
 
+  openModalWithComponent(a) {
+    this.invoiceArr = this.pipoData[a]
+    const initialState = {
+      list: this.invoiceArr
+    };
+    this.bsModalRef = this.modalService1.show(ModalContentComponent1, { initialState, class: 'modal-lg' });
+    this.bsModalRef.content.closeBtnName = 'Close';
+  }
 
 
 
@@ -214,16 +238,81 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         (err) => console.log(err)
       );
 
-      this.userService.getBene(1).subscribe(
-        (res: any) => {
-          (this.benneDetail = res.data),
-            console.log("Benne Detail", this.benneDetail);
-        },
-        (err) => console.log("Error", err)
-      );
+      let arrayMain = []
+          this.documentService.getMaster(1).subscribe(
+            (res: any) => {
+              console.log(res), (this.item4 = res.data);
+              console.log("hello the")
+              for (let value1 of this.item1) {
+                for (let value2 of this.item4) {
+                  for (let a of value2.pipo) {
+                    if (a == value1.pi_poNo) {
+                      const newVal = { ...value1 };
+                      newVal['sbno'] = value2.sbno
+                      newVal['sbdate'] = value2.sbdate
+                      newVal['portCode'] = value2.portCode
+                      newVal['region'] = value2.countryOfFinaldestination
+                      newVal['fobValue'] = value2.fobValue
+
+                      // console.log("Hello Ranjit", a);
+                      // value1.sbno = value2.sbno
+                      // value1.sbdate = value2.sbdate
+                      arrayMain.push(newVal)
+                      // console.log("hello Sj", value2);
+                    }
+                  }
+                }
+              }
+              console.log("Hello There", arrayMain);
+              this.item1 = arrayMain
+
+            },
+            (err) => console.log(err)
+          );
+
+
+
 
 
     }
+    this.userService.getBuyer(1).subscribe(
+      (res: any) => {
+        (this.benneDetail = res.data),
+          console.log("Benne Detail", this.benneDetail);
+
+      },
+      (err) => console.log("Error", err)
+    );
+
+    this.userService.getTeam()
+      .subscribe(
+        data => {
+          console.log("llllllllllllllllllllllllllllllll")
+          console.log(data['data'][0])
+          this.location = data['data'][0]['location']
+          this.commodity = data['data'][0]['commodity']
+          console.log(this.location)
+          console.log(this.commodity)
+          //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
+
+        },
+        error => {
+          console.log("error")
+        });
+
+  }
+
+  fireEvent() {
+    this.changeDetectorRef.detectChanges();
+
+    console.log(this.table)
+    // const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+    // const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    // console.log(wb)
+    // XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // console.log(wb)
+    // /* save to file */
+    // XLSX.writeFile(wb, 'SheetJS.xlsx');
 
   }
 
@@ -262,7 +351,13 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.toggle = true
     this.toggle2 = true
     console.log(a)
+    this.beneValue = this.pipoData.buyerName
 
+    this.commoArray = this.pipoData.commodity
+    console.log(this.commoArray)
+    this.loc = this.pipoData.location
+    this.loc1 = true
+    console.log(this.loc)
     if (a == 'PI') {
       if (this.pipoData.doc) {
         this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -317,9 +412,21 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.beneValue = value
   }
 
+  removeComo(i) {
+    this.commoArray.splice(i, 1)
+  }
+
+  clickComo(value) {
+    console.log('hhddh')
+    let j = this.commoArray.indexOf(value)
+    if (j == -1) {
+      this.commoArray.push(value)
+    }
+  }
+
   getInvoices(selectedRowValues, i) {
     console.log(selectedRowValues.pi_poNo)
-    this.showInvoice = true
+    // this.showInvoice = true
     this.router.navigate(['home/pipoDocExport', {
       id: selectedRowValues.pi_poNo,
       page: 'details',
@@ -369,7 +476,6 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     }
     return (
       (this.selectedRow = selectedRowValues),
-      (this.showInvoice = true),
       (this.tableWidth = "30%"),
       (this.greaterAmount = parseInt(this.selectedRow.amount))
     );
@@ -589,6 +695,39 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
   // }
 
+  hide(){
+    this.showInvoice = true
+  }
+
+
+  toSave(data , index) {
+    this.optionsVisibility[index] = false;
+    console.log(data)
+    this.userService.updatePipo(this.pipoData, this.id)
+          .subscribe(
+            data => {
+              console.log("king123")
+              console.log(data['data'])
+              this.toastr.success('PI/PO updated successfully.');
+              // this.docTog = false
+              // this.toggle = false
+              // this.toggle2 = false
+              // this.uploadIsurance = false
+              // this.toastr.success('Company details updated successfully.');
+              // this.router.navigate(['/home/dashboardNew']);
+            },
+            error => {
+              // this.toastr.error('Invalid inputs, please check!');
+              console.log("error")
+            });
+
+  }
+
+  toEdit(index){
+    this.optionsVisibility[index] = true;
+    this.toastr.warning('PI/PO Is In Edit Mode');
+  }
+
 
   onSubmitPipo() {
 
@@ -597,7 +736,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.piPoForm.value.doc = this.pipourl1
     this.piPoForm.value.file = this.file1
     this.piPoForm.value.document = this.documentType
-    this.piPoForm.value.benneName = this.beneValue
+    this.piPoForm.value.buyerName = this.beneValue
     console.log(this.piPoForm.value);
     this.userService.updatePipo(this.piPoForm.value, this.id)
       .subscribe(
@@ -624,6 +763,10 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         this.pipoData[a].doc
       );
       console.log(this.viewData)
+    }
+    else if (a == 'invoiceReduction') {
+      console.log(this.pipoData[a])
+      this.invoiceArr = this.pipoData[a]
     }
     else {
       this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -766,7 +909,18 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   }
 
   open(content) {
+    this.changeDetectorRef.detectChanges();
+
+    console.log(this.table)
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  open1(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -791,3 +945,122 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     // }
   }
 }
+
+
+@Component({
+  selector: 'modal-content',
+  template: `
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">{{title}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <table #table>
+        <tr style="border: 0.5px solid black;">
+            <td style="border: 0.5px solid black;">
+                SL NO
+            </td>
+            <td style="border: 0.5px solid black;">
+                Invoice Date
+            </td>
+            <td style="border: 0.5px solid black;">
+                Invoice No
+            </td>
+            <td style="border: 0.5px solid black;">
+                Port Code
+            </td>
+            <td style="border: 0.5px solid black;">
+                Shipping <br>
+                Bill No
+            </td>
+            <td style="border: 0.5px solid black;">
+                Shipping <br>
+                Bill Date
+            </td>
+            <td style="border: 0.5px solid black;">
+                Invoice Value
+            </td>
+            <td style="border: 0.5px solid black;">
+                Damage <br>
+                Deduction
+            </td>
+            <td style="border: 0.5px solid black;">
+                Value to be <br>
+                Realised
+            </td>
+            <td style="border: 0.5px solid black;">
+                Forex Advice No
+            </td>
+        </tr>
+        <tr *ngFor='let value of invoiceArray; let i = index;' style="border: 0.5px solid black;">
+            <td style="border: 0.5px solid black;">
+                {{i+1}}
+            </td>
+            <td style="border: 0.5px solid black;">
+                {{value.pipoValue.date}}
+            </td>
+            <td style="border: 0.5px solid black;">
+                {{value.pipoValue.pi_poNo}}
+            </td>
+            <td style="border: 0.5px solid black;">
+                {{value.portCode}}
+            </td>
+            <td style="border: 0.5px solid black;">
+                {{value.sbno}}
+            </td>
+            <td style="border: 0.5px solid black;">
+                {{value.sbdate}}
+            </td>
+            <td style="border: 0.5px solid black;">
+                {{value.pipoValue.amount}}
+            </td>
+            <td style="border: 0.5px solid black;">
+                {{value.pipoValue.damage}}
+            </td>
+            <td style="border: 0.5px solid black;">
+                {{value.pipoValue.realized}}
+            </td>
+            <td style="border: 0.5px solid black;">
+                {{value.advance}}
+            </td>
+        </tr>
+    </table>
+    <button style="font-family: 'Nunito Sans', sans-serif !important; min-width: 160px; margin-top: 20px; padding: 6px; font-size: 12px; font-weight: 700; background-color: RGB(81, 174, 229); border-radius: 20px; border: none; outline: none; height: 35px; color: RGB(255, 255, 255);" type="button" class="btn btn-default" (click)="fireEvent()">Download Invoice</button>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">{{closeBtnName}}</button>
+    </div>
+  `
+})
+
+export class ModalContentComponent1 implements OnInit {
+  title: string;
+  closeBtnName: string;
+  invoiceArray = []
+  list: any[] = [];
+  @ViewChild('table', { static: true }) table: ElementRef;
+
+
+  constructor(public bsModalRef: BsModalRef) { }
+
+  ngOnInit() {
+    console.log(this.table);
+    console.log(this.list);
+    this.invoiceArray = this.list;
+  }
+  fireEvent() {
+
+    console.log(this.table)
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    console.log(wb)
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    console.log(wb)
+    /* save to file */
+    XLSX.writeFile(wb, 'SheetJS.xlsx');
+
+  }
+
+
+}
+

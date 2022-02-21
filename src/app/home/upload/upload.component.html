@@ -108,27 +108,86 @@
             </div>
           </div>
         </div>
-
-      </div>
-      <div *ngIf='documentType'>
-        <div *ngIf='documentType != "PI" && documentType != "PO"'
-          style="display: flex; align-items: center; margin-left: 30px;">
-          <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
-          <div class="customDropdown" style="flex-direction:row; ">
-            <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
+        <br>
+        <div style="display: flex; align-items: center; margin-left: 30px;">
+          <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Choose
+            Commodity</label>
+          <div class="customDropdown" style="flex-direction:row; width: 252px;">
+            <span style="color: #323e4a !important; min-width: 150px;">Choose Commodity</span>
             <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
               <i id="up3" style="display: none" class="fas fa-angle-up"></i>
             </span>
             <div class="dropdown-content" style="margin-top: -2px;">
-              <p *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.benneName )'>
-                <a> PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
-              </p>
-              <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
+              <p *ngFor="let buyer of commodity" (click)='clickComo(buyer.como)'><a>{{buyer.como}}</a></p>
             </div>
-          </div> <br>
+          </div>
+        </div>
+
+        <div style="margin-left: 250px;">
+          <p *ngFor='let data of comoData; let i = index' class="arrayData" style="width: 23% !important;">
+            {{data}} <i style="float: right; margin: 4px 10px;" (click)='removeComo(i)' class="fas fa-times"></i>
+          </p>
+        </div>
+
+
+      </div>
+      <div *ngIf='documentType' style="">
+        <div *ngIf='documentType != "PI" && documentType != "PO"'
+          style="display: flex; align-items: center; margin-left: 30px;">
+
+          <div *ngIf='documentType == "boe"'>
+            <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
+            <div class="customDropdown" style="flex-direction:row; ">
+              <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
+              <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+                <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+              </span>
+              <div class="dropdown-content" style="margin-top: -2px;">
+                <p *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.benneName )'>
+                  <a *ngIf='bene.file == "import"'> PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
+                </p>
+                <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
+              </div>
+            </div>
+          </div>
+          <div *ngIf='documentType == "sb"'>
+            <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
+            <div class="customDropdown" style="flex-direction:row; ">
+              <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
+              <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+                <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+              </span>
+              <div class="dropdown-content" style="margin-top: -2px;">
+                <p *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.buyerName )'>
+                  <a *ngIf='bene.file == "export"'> PI-{{bene.pi_poNo}}-{{bene.buyerName}}</a>
+                </p>
+                <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
+              </div>
+            </div>
+          </div>
+          <div *ngIf='documentType != "sb" && documentType != "boe" && documentType != "PO" && documentType != "PI" '>
+            <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
+            <div class="customDropdown" style="flex-direction:row; ">
+              <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
+              <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+                <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+              </span>
+              <div class="dropdown-content" style="margin-top: -2px;">
+                <p *ngFor="let bene of item3">
+                  <a *ngIf='bene.file == "export"' (click)='clickPipo("PI",bene.pi_poNo,bene.buyerName )'>
+                    PI-{{bene.pi_poNo}}-{{bene.buyerName}}</a>
+                  <a *ngIf='bene.file == "import"' (click)='clickPipo("PI",bene.pi_poNo,bene.benneName )'>
+                    PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
+                </p>
+                <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
+              </div>
+            </div>
+          </div>
+
+
 
         </div>
-        <div style="margin-left: 185px;" *ngIf='documentType != "PI" && documentType != "PO"'>
+        <div style="margin-left: 35px;" *ngIf='documentType != "PI" && documentType != "PO"'>
 
           <p *ngFor='let data of arrayData; let i = index' class="arrayData">
             {{data}} <i style="float: right; margin: 4px 10px;" (click)='removePipo(i)' class="fas fa-times"></i>
@@ -139,7 +198,7 @@
 
 
     </div>
-    <div *ngIf='docu == "sb" || docu == "boe"' style="margin-bottom: 20px;">
+    <div *ngIf='docu == "boe"' style="">
       <div style="display: flex; align-items: center; margin-left: 30px;">
         <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
         <div class="customDropdown" style="flex-direction:row; ">
@@ -149,7 +208,25 @@
           </span>
           <div class="dropdown-content" style="margin-top: -2px;">
             <p *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.benneName )'>
-              <a> PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
+              <a *ngIf='bene.file == "import"'> PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
+            </p>
+            <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div *ngIf='docu == "sb"' style="margin-bottom: 20px;">
+      <div style="display: flex; align-items: center; margin-left: 30px;">
+        <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
+        <div class="customDropdown" style="flex-direction:row; ">
+          <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
+          <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+          </span>
+          <div class="dropdown-content" style="margin-top: -2px;">
+            <p *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.buyerName )'>
+              <a *ngIf='bene.file == "export"'> PI-{{bene.pi_poNo}}-{{bene.buyerName}}</a>
             </p>
             <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
           </div>
@@ -187,7 +264,7 @@
         <div style="display: flex; align-items: center;">
           <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
             [(ngModel)]="documentType" value="PI">
-          <label style="flex-direction:row;" class="label1" for="male">Performa Invoice</label>
+          <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
         </div>
         <div style="display: flex; align-items: center;">
           <input type="radio" style="flex-direction:row;" id="options2" class="circular_input"
@@ -211,6 +288,26 @@
           </div>
         </div>
       </div>
+      <br>
+      <div style="display: flex; align-items: center; margin-left: 30px;">
+        <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Choose
+          Commodity</label>
+        <div class="customDropdown" style="flex-direction:row; width: 252px;">
+          <span style="color: #323e4a !important; min-width: 150px;">Choose Commodity</span>
+          <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+          </span>
+          <div class="dropdown-content" style="margin-top: -2px;">
+            <p *ngFor="let buyer of commodity" (click)='clickComo(buyer.como)'><a>{{buyer.como}}</a></p>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-left: 250px;">
+        <p *ngFor='let data of comoData; let i = index' class="arrayData" style="width: 23% !important;">
+          {{data}} <i style="float: right; margin: 4px 10px;" (click)='removeComo(i)' class="fas fa-times"></i>
+        </p>
+      </div>
 
 
       <div style="margin-top: 40px; margin-left: 33px;">
@@ -218,7 +315,7 @@
         <div style="display: flex; align-items: center;">
           <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
             [(ngModel)]="documentType" value="PI">
-          <label style="flex-direction:row;" class="label1" for="male">Performa Invoice</label>
+          <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
         </div>
         <div style="display: flex; align-items: center;">
           <input type="radio" style="flex-direction:row;" id="options2" class="circular_input"
@@ -229,9 +326,19 @@
     </div>
 
 
-    <div *ngIf="documentType === 'sb' || documentType === 'boe' " class="form" method="POST">
+    <div *ngIf="documentType === 'sb'" class="form" method="POST">
       <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
         (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config" class="dropzone dropzone-container"
+        id="dropzone" />
+      <i class="fas fa-file-upload"></i>
+      <h5>Drag and Drop files here</h5>
+      <p>Files Supported: PDF, XSLS, Image, Scanner</p>
+      <button type="submit">Choose File</button>
+      <p>Maximum Size: 5MB</p>
+    </div>
+    <div *ngIf="documentType === 'boe' " class="form" method="POST">
+      <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
+        (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config2" class="dropzone dropzone-container"
         id="dropzone" />
       <i class="fas fa-file-upload"></i>
       <h5>Drag and Drop files here</h5>
@@ -390,9 +497,26 @@
               <label for="modifiedDate">MODIFIED DATE</label><input [(ngModel)]="res.modifiedDate" class="smalll-input"
                 type="text" name="modifiedDate" />
             </td>
+            <td class="full-input border2">
+              <label for="exporterLocationCode">EXPORTER LOCATION CODE</label><input
+                [(ngModel)]="res.exporterLocationCode" class="smalll-input" type="text" name="exporterLocationCode" />
+            </td>
+            <td class="full-input border2">
+              <label for="countryOfFinaldestination">COUNTRY OF FINAL DESTINATION</label><input
+                [(ngModel)]="res.countryOfFinaldestination" class="smalll-input" type="text"
+                name="countryOfFinaldestination" />
+            </td>
+            <td class="full-input border2">
+              <label for="consigneeName">CONSIGNEE NAME</label><input [(ngModel)]="res.consigneeName"
+                class="smalll-input" type="text" name="consigneeName" />
+            </td>
+            <td class="full-input border2">
+              <label for="exchangeRate">EXCHANGE RATE</label><input [(ngModel)]="res.exchangeRate" class="smalll-input"
+                type="text" name="exchangeRate" />
+            </td>
             <br />
             <br />
-            <p class="sh1">Bene Details</p>
+            <!-- <p class="sh1">Bene Details</p>
             <td class="full-input border2">
               <label for="bankingCharges">Bene Name</label><select name="beneName" ngModel>
                 <option value="">Select Bene Name</option>
@@ -400,7 +524,7 @@
                   {{ bene.beneName }}
                 </option>
               </select>
-            </td>
+            </td> -->
 
 
           </tr>
@@ -557,7 +681,7 @@
             </td>
 
             <br />
-            <p class="sh1">Bene Details</p>
+            <!-- <p class="sh1">Bene Details</p>
             <td class="full-input border2">
               <label for="bankingCharges">Bene Name</label><select name="beneName" ngModel>
                 <option value="">Select Bene Name</option>
@@ -565,7 +689,7 @@
                   {{ bene.beneName }}
                 </option>
               </select>
-            </td>
+            </td> -->
           </tr>
         </div>
         <div class="sb2">
@@ -634,6 +758,17 @@
               <label for="settledAmount">Due Date</label><input class="form-control smalll-input" type="text"
                 formControlName="dueDate" placeholder="dd/mm/yyyy" />
             </td> <br>
+            <td class="full-input border2" style="width: 206px;">
+              <label for="location">Location</label><select formControlName="location" ngModel>
+                <option value="">Select Location</option>
+                <option *ngFor="let bene of location" [value]="bene.loc">
+                  {{ bene.loc }}
+                </option>
+              </select>
+            </td>
+
+
+            <br>
             <span style="color: #303030; font-size: 20px;">Payment Terms*</span>
             <div formArrayName="paymentTerm">
 
@@ -649,7 +784,7 @@
                   <input formControlName="description"
                     style="outline: none; border: 1px solid #DEDEDE; width: 200px; border-radius: 5px;">
                 </div>
-                <div *ngIf='documentType1 =="import"'
+                <div *ngIf='documentType1 == "import"'
                   style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                   <span style="color: #707683; font-size: 14px;">Type</span> <br>
                   <select name="" id="" formControlName="type"

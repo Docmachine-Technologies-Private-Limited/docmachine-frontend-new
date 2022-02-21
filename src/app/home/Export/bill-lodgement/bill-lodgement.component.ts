@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { DocumentService } from "../../../service/document.service";
-import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import * as data from '../../../inward.json';
 import { ToastrService } from 'ngx-toastr';
@@ -8,6 +7,14 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "../../../service/user.service";
 import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import * as XLSX from 'xlsx';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl,
+  FormArray
+} from "@angular/forms";
 
 @Component({
   selector: 'app-bill-lodgement',
@@ -15,7 +22,9 @@ import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
   styleUrls: ['./bill-lodgement.component.scss']
 })
 export class BillLodgementComponent implements OnInit, OnDestroy {
+  @ViewChild('table1') table: ElementRef;
   public item1;
+  public itemArray;
   public item2;
   public user;
   public selectedRow;
@@ -108,12 +117,13 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   item4: any;
   bankRef: any;
   newTask: any = [];
+  Task: any = [];
   z: any;
   zToggle: any = [];
   isDone: boolean;
   isGenerate: boolean = false;
   isProceed: boolean = false;
-  advanceRef: any;
+  advanceRef: any = '';
   billOfCredit: any;
   lc: any;
   withDiscount: any;
@@ -131,6 +141,20 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   credit: any;
   charge: any;
   value: any;
+  bgColor: boolean;
+  newDone: boolean;
+  arrayPipo: any = [];
+  myArr: any = [];
+  str: string;
+  dateArray: any = [];
+  buyerAds: any;
+  amArr: any = [];
+  advanceForm = new FormGroup({
+    advance: new FormArray([this.initCourse()], Validators.required)
+  });
+  sbDataArray: any = [];
+  invoiceArr: any[];
+  filterToggle = false;
   constructor(
     public documentService: DocumentService,
     private router: Router,
@@ -138,9 +162,11 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private userService: UserService,
-    private confirmDialogService: ConfirmDialogService
+    private confirmDialogService: ConfirmDialogService,
+    private formBuilder: FormBuilder,
   ) {
     console.log("hello")
+    // this.onAddCourse("e")
   }
 
   ngOnInit(): void {
@@ -240,6 +266,39 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
   }
 
+  searchData1(a) {
+    console.log(a)
+    console.log(a.length)
+    if (a.length > 0) {
+      let arr = []
+      for (let value of this.item1) {
+        if (value.buyerName.toLowerCase().includes(a) || value.sbno.includes(a)) {
+          console.log(value.buyerName)
+          arr.push(value)
+        }
+
+      }
+      this.itemArray = arr
+      this.filterToggle = true
+    }
+    else {
+      this.filterToggle = false
+      console.log("else")
+    }
+
+  }
+
+  fireEvent() {
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    console.log(wb)
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    console.log(wb)
+    /* save to file */
+    XLSX.writeFile(wb, 'SheetJS.xlsx');
+
+  }
+
   changeCheckbox1(value) {
     let j = this.sbArray.indexOf(value)
     if (j == -1) {
@@ -250,6 +309,18 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     }
 
     console.log(this.sbArray)
+  }
+
+  hello() {
+    // for (let value of this.sbArray) {
+    //   this.onAddCourse(value)
+    // }
+    for (var i = 1; i < this.sbArray.length; i++) {
+      //binary += String.fromCharCode(bytes[i]);
+      this.onAddCourse(i)
+    }
+    console.log()
+    console.log("ssjskskssk")
   }
 
   changeCheckbox2(value) {
@@ -264,21 +335,192 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     console.log(this.tryArray)
   }
 
-  generateDoc1() {
+
+
+  initCourse() {
+    return this.formBuilder.group({
+      value: new FormArray([this.initCourse1()], Validators.required)
+    });
+  }
+
+  initCourse1() {
+    return this.formBuilder.group({
+      valueInternal: ['', Validators.required],
+      sb: ['', Validators.required]
+    });
+  }
+
+
+
+  getCourses(form) {
+
+    return form.get('advance').controls;
+  }
+
+
+
+  // getProducts(form) {
+  //   return form.get('products').controls;
+  // }
+
+  onAddCourse(e) {
+
+    // if (e.controls.bankDetails.invalid) {
+    //   //this.submitted1 = true
+    //   this.toastr.error('You can add another bank after filling first one!');
+    //   console.log("2")
+    //   //this.isDisabled = false;
+    //   return;
+    // }
+    console.log("fffff")
+    // this.currencyName.push('')
+    // this.bankName.push('')
+    const control = this.advanceForm.controls.advance as FormArray;
+    control.push(this.initCourse());
+    //this.isDisabled = false;
+  }
+
+  onAddCourse1(e) {
+
+    // if (e.controls.bankDetails.invalid) {
+    //   //this.submitted1 = true
+    //   this.toastr.error('You can add another bank after filling first one!');
+    //   console.log("2")
+    //   //this.isDisabled = false;
+    //   return;
+    // }
+    console.log("fffff")
+    console.log(e)
+    // this.currencyName.push('')
+    // this.bankName.push('') .controls.contacts
+    console.log(this.advanceForm.controls.advance['controls'][e].controls.value)
+    // console.log(this.advanceForm.controls.advance[e].controls.value)
+    // console.log(this.advanceForm.controls.advance[e])
+    const control = this.advanceForm.controls.advance['controls'][e].controls.value as FormArray;
+    control.push(this.initCourse1());
+    //this.isDisabled = false;
+  }
+
+  removeAddress(i) {
+    // console.log(i)
+    // //console.log(this.control)
+    let control1 = this.advanceForm.controls.advance as FormArray;
+    // console.log(control1)
+    // console.log(control1.length)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    control1.removeAt(i);
+    // this.bankName.splice(i, 1)
+    // this.currencyName.splice(i, 1)
+    // console.log(this.bankName)
+    // console.log(this.currencyName)
+    // console.log(control1.length)
+  }
+
+  onSubmit() {
+    console.log(this.advanceForm.value);
+  }
+
+  async generateDoc1() {
     //console.log(code, j)
     this.generate = true
     this.isGenerate = true;
 
     let generateDoc2: any = [];
-    for (let item of this.item1) {
+    let pipoValue
+    let value
+    let buyerValue
+    for (let item of this.itemArray) {
+
       for (let sb of this.sbArray) {
         if (item.sbno === sb) {
+          pipoValue = item
+          value = item.pipo
+          buyerValue = item.buyerName
+          this.dateArray.push(item.sbdate)
+          this.sbDataArray.push(item)
+          console.log('value', value)
           generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(
             item.doc
           ))
         }
       }
     }
+    let mainArr = []
+
+    let invoicearray = []
+    this.Question5 = 'no'
+    this.sbDataArray.forEach((value, index) => {
+      for (let a of value.pipo) {
+        this.arrayPipo.push(a)
+      }
+    });
+    if (this.Question6 == 'yes') {
+      let adArr = []
+      for (let x of this.advanceForm.value.advance) {
+        for (let z of x.value) {
+          adArr.push(z)
+        }
+      }
+      console.log(adArr)
+
+      this.sbDataArray.forEach((value, index) => {
+        this.userService.getManyPipo(value.pipo)
+          .subscribe(
+            data => {
+              console.log("king123")
+              console.log(data)
+              for (let item of data['data']) {
+                console.log(item)
+                const newVal = { ...value };
+                newVal['pipoValue'] = item
+                mainArr.push(newVal)
+                console.log('fggfgfgf', mainArr)
+              }
+              //this.getBeneDetaile()
+              //this.router.navigate(['/login'], { queryParams: { registered: true }});
+            },
+            error => {
+              console.log("error")
+            });
+
+      });
+      setTimeout(() => {
+        console.log('sjjssjjsjsjsjsjsjsjsjsjsjssjsjjsjsjsjsjsjs')
+        console.log(mainArr)
+        console.log(this.advanceForm.value);
+
+
+        mainArr.forEach((value1, index) => {
+          console.log('shshsh')
+          console.log(this.advanceForm.value.advance)
+          for (let a of adArr) {
+            if (a.sb == value1.sbno) {
+              const newVal = { ...value1 };
+              newVal['advance'] = a.valueInternal
+              invoicearray.push(newVal)
+            }
+
+          }
+          console.log('aajsjss')
+        });
+        let amountArr = []
+        for (let item of invoicearray) {
+          amountArr.push(item.pipoValue.amount)
+        }
+        console.log(amountArr)
+        this.amArr = amountArr
+        console.log('111111111111111111111111111111111111111111111111111111111111111')
+        console.log(invoicearray)
+        this.invoiceArr = invoicearray
+        this.Question5 = 'yes'
+      }, 8000);
+
+    }
+
+
+    console.log('Rajuuuuu', pipoValue)
+    //this.arrayPipo = value
     this.mainDoc1 = generateDoc2
     console.log(this.mainDoc1)
     console.log(generateDoc2)
@@ -287,6 +529,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       for (let item of this.item4) {
         for (let sb of this.tryArray) {
           if (item.thirdNumber === sb) {
+
             generateDoc3.push(this.sanitizer.bypassSecurityTrustResourceUrl(
               item.doc
             ))
@@ -294,8 +537,17 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         }
       }
 
-      this.mainDoc3 = generateDoc3
+
     }
+    console.log(buyerValue)
+    const data: any = await this.userService.getBuyerByName(
+      buyerValue
+    );
+    console.log('shshhss', data.data)
+    this.buyerAds = data.data.buyerAdrs
+
+    console.log('89999999999999999999999999999', this.buyerAds)
+    this.mainDoc3 = generateDoc3
     this.newTask[0] = {
       sbNumbers: this.sbArray,
       sbUrls: this.mainDoc1,
@@ -310,9 +562,29 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       advanceRef: this.advanceRef,
       ir: this.Question5
     }
+
+    //let date = ['31-JAN-21', '29-AUG-21', '01-FEB-20'];
+    // const myArray = date[0].split('-');
+    // console.log(myArray);
+    // let str = '';
+    for (let value of this.dateArray) {
+      this.getProper(value);
+    }
+    this.myArr.sort(function (a, b) {
+      a = a.split('-').reverse().join('');
+      b = b.split('-').reverse().join('');
+      return a > b ? 1 : a < b ? -1 : 0;
+
+      // return a.localeCompare(b);         // <-- alternative 
+
+    });
+    console.log('Datesss', this.myArr);
+    console.log(this.myArr[0])
+    console.log(this.myArr[this.myArr.length - 1])
+
     console.log(this.generate1)
     console.log(this.c)
-    this.fillForm()
+    this.fillForm(pipoValue)
     this.newTask[0] = {
       sbNumbers: this.sbArray,
       sbUrls: this.mainDoc1,
@@ -325,12 +597,70 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       withDiscount: this.withDiscount,
       bankRef: '',
       advanceRef: this.advanceRef,
-      generateDoc1: this.value,
       ir: this.Question5
     }
   }
 
-  async fillForm() {
+  getProper(a) {
+    const myArray = a.split('-');
+    myArray.forEach((value, index) => {
+      if (index == 0) {
+        this.str = value + '.';
+      } else if (index == 1) {
+        if (value.toUpperCase() == 'JAN') {
+          this.str = this.str + '01.';
+        } else if (value.toUpperCase() == 'FEB') {
+          this.str = this.str + '02.';
+        } else if (value.toUpperCase() == 'MAR') {
+          this.str = this.str + '03.';
+        } else if (value.toUpperCase() == 'APR') {
+          this.str = this.str + '04.';
+        } else if (value.toUpperCase() == 'MAY') {
+          this.str = this.str + '05.';
+        } else if (value.toUpperCase() == 'JUN') {
+          this.str = this.str + '06.';
+        } else if (value.toUpperCase() == 'JUL') {
+          this.str = this.str + '07.';
+        } else if (value.toUpperCase() == 'AUG') {
+          this.str = this.str + '08.';
+        } else if (value.toUpperCase() == 'SEP') {
+          this.str = this.str + '09.';
+        } else if (value.toUpperCase() == 'OCT') {
+          this.str = this.str + '10.';
+        } else if (value.toUpperCase() == 'NOV') {
+          this.str = this.str + '11.';
+        } else if (value.toUpperCase() == 'DEC') {
+          this.str = this.str + '12.';
+        }
+      } else if (index == 2) {
+        this.str = this.str + '20' + value;
+      }
+    });
+    this.myArr.push(this.str);
+    this.str = '';
+    console.log(this.str);
+  }
+
+  searchData(a, i) {
+    console.log(i)
+    console.log(a)
+    var reg = /^\d+$/;
+    let x = reg.test(a)
+    console.log(x)
+    if (x) {
+      this.amArr[i] = this.amArr[i] - a;
+      this.invoiceArr[i].pipoValue['damage'] = a
+      this.invoiceArr[i].pipoValue['realized'] = this.amArr[i]
+    }
+    console.log(this.invoiceArr)
+
+
+
+    console.log(a)
+    console.log(this.amArr)
+  }
+
+  async fillForm(a) {
     const formUrl = './../../assets/billUnder.pdf'
 
     const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
@@ -400,7 +730,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     //exporter
 
     const text6 = form.createTextField('favorite5')
-    text6.setText("")
+    text6.setText(this.item5.teamName)
     text6.addToPage(firstpage, {
       x: 18,
       y: 684,
@@ -411,7 +741,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text7 = form.createTextField('favorite6')
-    text7.setText("")
+    text7.setText(this.item5.adress)
     text7.addToPage(firstpage, {
       x: 18,
       y: 665,
@@ -468,7 +798,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     //buyer
 
     const text12 = form.createTextField('favorite11')
-    text12.setText("")
+    text12.setText(a.buyerName)
     text12.addToPage(firstpage, {
       x: 320,
       y: 684,
@@ -479,7 +809,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text13 = form.createTextField('favorite12')
-    text13.setText("")
+    text13.setText(this.buyerAds)
     text13.addToPage(firstpage, {
       x: 320,
       y: 665,
@@ -921,7 +1251,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text41 = form.createTextField('favorite40')
-    text41.setText("")
+    text41.setText(`${this.myArr[0]}  to  ${this.myArr[this.myArr.length - 1]}`)
+    // console.log(this.myArr[0])
+    // console.log(this.myArr[this.myArr.length - 1])
     text41.addToPage(firstpage, {
       x: 388,
       y: 126,
@@ -931,7 +1263,31 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       // backgroundColor: rgb(255, 255, 255)
     })
 
+
+    // const texta41 = form.createTextField('favorite404')
+    // texta41.setText(`${this.myArr.length}`)
+    // // console.log(this.myArr[0])
+    // // console.log(this.myArr[this.myArr.length - 1])
+    // texta41.addToPage(firstpage, {
+    //   x: 266,
+    //   y: 106,
+    //   width: 188,
+    //   height: 18,
+    //   borderWidth: 0,
+    //   // backgroundColor: rgb(255, 255, 255)
+    // })
+
     //table1
+    const text421 = form.createTextField('favorite411')
+    text421.setText(`${this.myArr.length}`)
+    text421.addToPage(firstpage, {
+      x: 228,
+      y: 108,
+      width: 10,
+      height: 16,
+      borderWidth: 0,
+      // backgroundColor: rgb(255, 255, 255)
+    })
 
     const text42 = form.createTextField('favorite41')
     text42.setText("")
@@ -1135,7 +1491,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
 
     const text60 = form.createTextField('favorite59')
-    text60.setText("")
+    text60.setText(this.charge[0])
     text60.addToPage(firstpage, {
       x: 135,
       y: 10,
@@ -1146,7 +1502,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text61 = form.createTextField('favorite60')
-    text61.setText("")
+    text61.setText(this.charge[1])
     text61.addToPage(firstpage, {
       x: 167,
       y: 10,
@@ -1157,7 +1513,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text62 = form.createTextField('favorite61')
-    text62.setText("")
+    text62.setText(this.charge[2])
     text62.addToPage(firstpage, {
       x: 201,
       y: 10,
@@ -1168,7 +1524,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text63 = form.createTextField('favorite62')
-    text63.setText("")
+    text63.setText(this.charge[3])
     text63.addToPage(firstpage, {
       x: 235,
       y: 10,
@@ -1179,7 +1535,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text64 = form.createTextField('favorite63')
-    text64.setText("")
+    text64.setText(this.charge[4])
     text64.addToPage(firstpage, {
       x: 266,
       y: 10,
@@ -1190,7 +1546,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text65 = form.createTextField('favorite64')
-    text65.setText("")
+    text65.setText(this.charge[5])
     text65.addToPage(firstpage, {
       x: 300,
       y: 10,
@@ -1201,7 +1557,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text66 = form.createTextField('favorite65')
-    text66.setText("")
+    text66.setText(this.charge[6])
     text66.addToPage(firstpage, {
       x: 331,
       y: 10,
@@ -1212,7 +1568,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text67 = form.createTextField('favorite66')
-    text67.setText("")
+    text67.setText(this.charge[7])
     text67.addToPage(firstpage, {
       x: 363,
       y: 10,
@@ -1223,7 +1579,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text68 = form.createTextField('favorite67')
-    text68.setText("")
+    text68.setText(this.charge[8])
     text68.addToPage(firstpage, {
       x: 397,
       y: 10,
@@ -1234,7 +1590,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text69 = form.createTextField('favorite68')
-    text69.setText("")
+    text69.setText(this.charge[9])
     text69.addToPage(firstpage, {
       x: 434,
       y: 10,
@@ -1245,7 +1601,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text70 = form.createTextField('favorite69')
-    text70.setText("")
+    text70.setText(this.charge[10])
     text70.addToPage(firstpage, {
       x: 469,
       y: 10,
@@ -1256,7 +1612,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text71 = form.createTextField('favorite70')
-    text71.setText("")
+    text71.setText(this.charge[11])
     text71.addToPage(firstpage, {
       x: 501,
       y: 10,
@@ -1267,7 +1623,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text72 = form.createTextField('favorite71')
-    text72.setText("")
+    text72.setText(this.charge[12])
     text72.addToPage(firstpage, {
       x: 534,
       y: 10,
@@ -1278,7 +1634,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text73 = form.createTextField('favorite72')
-    text73.setText("")
+    text73.setText(this.charge[13])
     text73.addToPage(firstpage, {
       x: 565,
       y: 10,
@@ -1297,6 +1653,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     const x = 'data:application/pdf;base64,' + base64String;
     console.log(x);
     this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
+    this.newTask[0].generateDoc1 = x
     // const link: any = document.createElement("a");
     // link.id = "dwnldLnk";
     // link.style = "display:none;";
@@ -1325,6 +1682,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
   doneDox() {
     console.log(this.newTask)
+    console.log(this.invoiceArr)
     if (this.documentService.draft) {
       this.documentService.updateExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' }, this.documentService.task._id).subscribe(
         (data) => {
@@ -1344,7 +1702,40 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           this.documentService.draft = false
           this.documentService.task.id = ''
           this.isDoneAll = true
-          this.router.navigate(["/home/dashboardTask"]);
+          this.userService.updateManyPipo(this.arrayPipo, 'billUnder', this.newTask[0].generateDoc1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data);
+                if (this.Question5 == 'yes') {
+                  this.userService.updateManyPipo(this.arrayPipo, 'invoiceReduction', this.invoiceArr)
+                    .subscribe(
+                      data1 => {
+                        console.log("king123")
+                        console.log(data1);
+                        this.toastr.success('Task saved as completed successfully!');
+                        this.router.navigate(["/home/dashboardTask"]);
+                        //this.router.navigate(["/home/advance-outward-remittance"]);
+                      },
+                      error => {
+                        // this.toastr.error('Invalid inputs, please check!');
+                        console.log("error")
+                      });
+                }
+                else {
+                  this.toastr.success('Task saved as completed successfully!');
+                  this.router.navigate(["/home/dashboardTask"]);
+                }
+
+                // this.toastr.success('Task saved as completed successfully!');
+                // this.router.navigate(["/home/dashboardTask"]);
+                //this.router.navigate(["/home/advance-outward-remittance"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+          //this.router.navigate(["/home/dashboardTask"]);
           //this.router.navigate(['/login'], { queryParams: { registered: true }});
         },
         (error) => {
@@ -1356,20 +1747,39 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' }).subscribe(
         (res) => {
           this.isDoneAll = true
-          // this.userService.updateManyPipo(this.pipoValue, 'billUnderCollection', this.newTask.url1)
-          //   .subscribe(
-          //     data => {
-          //       console.log("king123")
-          //       console.log(data)
-          //       this.router.navigate(["/home/advance-outward-remittance"]);
-          //     },
-          //     error => {
-          //       // this.toastr.error('Invalid inputs, please check!');
-          //       console.log("error")
-          //     });
-          this.toastr.success('Task saved successfully!');
+          //this.toastr.success('Task saved successfully!');
           console.log("Transaction Saved");
-          this.router.navigate(["/home/dashboardTask"]);
+          this.userService.updateManyPipo(this.arrayPipo, 'billUnder', this.newTask[0].generateDoc1)
+            .subscribe(
+              data => {
+                console.log("king123")
+                console.log(data)
+                if (this.Question5 == 'yes') {
+                  this.userService.updateManyPipo(this.arrayPipo, 'invoiceReduction', this.invoiceArr)
+                    .subscribe(
+                      data1 => {
+                        console.log("king123")
+                        console.log(data1);
+                        this.toastr.success('Task saved as completed successfully!');
+                        this.router.navigate(["/home/dashboardTask"]);
+                        //this.router.navigate(["/home/advance-outward-remittance"]);
+                      },
+                      error => {
+                        // this.toastr.error('Invalid inputs, please check!');
+                        console.log("error")
+                      });
+                }
+                else {
+                  this.toastr.success('Task saved as completed successfully!');
+                  this.router.navigate(["/home/dashboardTask"]);
+                }
+                //this.router.navigate(["/home/advance-outward-remittance"]);
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+          //this.router.navigate(["/home/dashboardTask"]);
 
         },
         (err) => {
@@ -1568,6 +1978,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   change(e) {
     console.log(e.target.value);
     this.advanceRef = e.target.value
+
   }
 
   change1(e) {
@@ -1636,11 +2047,14 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     this.bankToggle = true
     this.bankValue = a
 
-    for (let value of this.bankArray) {
+    this.newBankArray = []
+    this.bankArray.forEach((value, index) => {
+      console.log('shshsh')
       if (value.bank == a) {
         this.newBankArray.push(value)
       }
-    }
+
+    });
   }
 
   creditTo(a) {
@@ -1655,9 +2069,13 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     console.log(this.charge)
   }
 
-
-
-
-
+  showPreview() {
+    this.bgColor = true
+    this.newDone = true
+  }
+  hidePreview() {
+    this.bgColor = false
+    this.newDone = false
+  }
 
 }

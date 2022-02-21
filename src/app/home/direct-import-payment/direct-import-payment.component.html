@@ -23,8 +23,8 @@
             </div>
             <div style="width: 100%; padding-right: 4%">
                 <span *ngFor="let data of item1 | slice: 0:3; let i = index" style="float: right; margin-right: 3%"><img
-            class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
-            width="30px" /></span>
+                        class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
+                        width="30px" /></span>
                 <!-------style="padding-left: 1%" class="pc1"-->
             </div>
         </div>
@@ -47,16 +47,16 @@
             <div class="dropdown">
                 Date:
                 <select name="subject" id="subject">
-          <option value="" selected="selected">Today</option>
-        </select> Type:
+                    <option value="" selected="selected">Today</option>
+                </select> Type:
                 <select name="topic" id="topic">
-          <option value="" selected="selected">All</option>
-        </select>
+                    <option value="" selected="selected">All</option>
+                </select>
             </div>
             <div style="padding-top: 0.7%">
                 <button class="upload-button" [routerLink]="['/home/upload']">
-          Upload New
-        </button>
+                    Upload New
+                </button>
             </div>
         </div>
 
@@ -104,17 +104,22 @@
             <div *ngIf="showInvoice" class="p-8 bc" style="padding-left: 0.8%">
                 <div class="side_document_list">
                     <!---class="col-12 mb-lg ph-38"-->
-                    <div id="profile" class="profile_class" *ngFor="let data of item1; let i = index" [ngClass]="lastIndex == i ? 'activeBtn' : ''" (click)="getInvoices(data, i) && getTransactions(data.boeNumber)">
+                    <div id="profile" class="profile_class" *ngFor="let data of item1; let i = index"
+                        [ngClass]="lastIndex == i ? 'activeBtn' : ''"
+                        (click)="getInvoices(data, i) && getTransactions(data.boeNumber)">
                         <!----------class="row p-2 bb hhu"-->
                         <div class="" style="display: flex">
                             <!-----------class="ph-10 fl"-->
-                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"
-                            />
+                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
+                                height="30px" width="30px" /><img class="image image2"
+                                src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
+                                width="30px" />
                         </div>
                         <div class="" style="width: 100%; padding: 3%">
                             <!-----class="fr pt-2"-->
-                            <span class="fl fs16">{{ data.boeNumber }}</span><span class="fr fs12" style="float: 'right'">
-                {{ data.boeDate }}</span>
+                            <span class="fl fs16">{{ data.boeNumber }}</span><span class="fr fs12"
+                                style="float: 'right'">
+                                {{ data.boeDate }}</span>
                             <p class="fs14">Continental carriers pvt ltd</p>
                         </div>
                     </div>
@@ -167,7 +172,8 @@
                                         </div>
                                         <div class="invoice_head">
                                             <div style="width: 100%; padding-left: 9%">
-                                                <span style="width: 65%; float: 'left'; font-size: '20px'">PI/PO DETAILS</span>
+                                                <span style="width: 65%; float: 'left'; font-size: '20px'">PI/PO
+                                                    DETAILS</span>
                                             </div>
                                             <div style="width: 100%; padding-right: 13%">
                                                 <span style="
@@ -175,8 +181,8 @@
                             font-weight: 500;
                             font-size: '14px';
                           ">SHIPPING BILL DATE:&emsp;{{
-                          selectedRow.sbdate
-                          }}</span>
+                                                    selectedRow.sbdate
+                                                    }}</span>
                                             </div>
                                             <!-- <div>SP Number:&emsp;{{ selectedRow.sbno }}</div>
                                                                 <div>SP Date:&emsp;{{ selectedRow.sbdate }}</div>-->
@@ -188,25 +194,38 @@
                                                     <tr style="width: 100%" class="form-wrapper1">
                                                         <div>
                                                             <td class="full-input border1">
-                                                                <label for="portCode">PI/PO NO.</label><input class="smalll-input" type="text" name="portCode" placeholder="{{ selectedRow.pi_poNo }}" disabled />
+                                                                <label for="portCode">PI/PO NO.</label><input
+                                                                    class="smalll-input" type="text" name="portCode"
+                                                                    placeholder="{{ selectedRow.pi_poNo }}" disabled />
                                                             </td>
                                                             <td class="full-input border2">
-                                                                <label for="ieccode">Benne Name</label><input class="smalll-input" type="text" name="ieccode" placeholder="{{ selectedRow.benneName }}" disabled />
+                                                                <label for="ieccode">Benne Name</label><input
+                                                                    class="smalll-input" type="text" name="ieccode"
+                                                                    placeholder="{{ selectedRow.benneName }}"
+                                                                    disabled />
                                                             </td>
                                                             <td class="full-input border3">
-                                                                <label for="iecName">Currency</label><input class="smalll-input" type="text" name="iecName" placeholder="{{ selectedRow.currency }}" disabled />
+                                                                <label for="iecName">Currency</label><input
+                                                                    class="smalll-input" type="text" name="iecName"
+                                                                    placeholder="{{ selectedRow.currency }}" disabled />
                                                             </td>
                                                         </div>
                                                         <br />
                                                         <div>
                                                             <td class="full-input border1">
-                                                                <label for="adCode">Amount</label><input class="smalll-input" type="text" name="adCode" placeholder="{{ selectedRow.amount }}" disabled />
+                                                                <label for="adCode">Amount</label><input
+                                                                    class="smalll-input" type="text" name="adCode"
+                                                                    placeholder="{{ selectedRow.amount }}" disabled />
                                                             </td>
                                                             <td class="full-input border2">
-                                                                <label for="leodate">LEO DATE</label><input class="smalll-input" type="text" name="leodate" placeholder="{{ selectedRow.incoterm }}" disabled />
+                                                                <label for="leodate">LEO DATE</label><input
+                                                                    class="smalll-input" type="text" name="leodate"
+                                                                    placeholder="{{ selectedRow.incoterm }}" disabled />
                                                             </td>
                                                             <td class="full-input border3">
-                                                                <label for="processingStaus">Last Day Of Shipment</label><input class="smalll-input" type="text" name="processingStaus" placeholder="{{
+                                                                <label for="processingStaus">Last Day Of
+                                                                    Shipment</label><input class="smalll-input"
+                                                                    type="text" name="processingStaus" placeholder="{{
                                     selectedRow.lastDayShipment
                                   }}" disabled />
                                                             </td>
@@ -215,13 +234,21 @@
                                                         <br />
                                                         <div>
                                                             <td class="full-input border1">
-                                                                <label for="fobCurrency">Payment Term</label><input class="smalll-input" type="text" name="fobCurrency" placeholder="{{ selectedRow.paymentTerm }}" disabled />
+                                                                <label for="fobCurrency">Payment Term</label><input
+                                                                    class="smalll-input" type="text" name="fobCurrency"
+                                                                    placeholder="{{ selectedRow.paymentTerm }}"
+                                                                    disabled />
                                                             </td>
                                                             <td class="full-input border2">
-                                                                <label for="fobValue">PC Ref No.</label><input class="smalll-input" type="text" name="fobValue" placeholder="{{ selectedRow.pcRefNo }}" disabled />
+                                                                <label for="fobValue">PC Ref No.</label><input
+                                                                    class="smalll-input" type="text" name="fobValue"
+                                                                    placeholder="{{ selectedRow.pcRefNo }}" disabled />
                                                             </td>
                                                             <td class="full-input border3">
-                                                                <label for="realizedFobValue">Due Date</label><input class="smalll-input" type="text" name="realizedFobValue" placeholder="10/11/2021" disabled />
+                                                                <label for="realizedFobValue">Due Date</label><input
+                                                                    class="smalll-input" type="text"
+                                                                    name="realizedFobValue" placeholder="10/11/2021"
+                                                                    disabled />
                                                             </td>
                                                         </div>
                                                         <br />
@@ -232,8 +259,9 @@
                                     </div>
                                     <div *ngIf="selectedRow.boeNumber" style="width: 98%; background-color: 'white'">
                                         <div style="width: 100%; margin-top: 10px">
-                                            <span style="width: 35%; float: 'right'; font-size: '14px'">BOE NUMBER:&emsp;{{
-                        selectedRow.boeNumber }}</span>
+                                            <span style="width: 35%; float: 'right'; font-size: '14px'">BOE
+                                                NUMBER:&emsp;{{
+                                                selectedRow.boeNumber }}</span>
                                         </div>
                                         <div style="width: 100%">
                                             <span style="
@@ -243,8 +271,9 @@
                           margin-top: 20px;
                           padding-left: 25px;
                         ">SB DETAILS</span>
-                                            <span style="width: 35%; float: 'right'; font-size: '14px'">BOE DATE:&emsp;{{ selectedRow.boeDate
-                        }}</span>
+                                            <span style="width: 35%; float: 'right'; font-size: '14px'">BOE
+                                                DATE:&emsp;{{ selectedRow.boeDate
+                                                }}</span>
                                             <!-- <div>SP Number:&emsp;{{ selectedRow.sbno }}</div>
                                                                   <div>SP Date:&emsp;{{ selectedRow.sbdate }}</div>-->
                                         </div>
@@ -253,78 +282,131 @@
                                                 <section class="widget pb-0 box-shadow">
                                                     <tr class="form-wrapper1">
                                                         <td class="full-input border1">
-                                                            <label for="dischargePort">DISCHARGE PORT</label><input [(ngModel)]="selectedRow.dischargePort" class="smalll-input" type="text" name="dischargePort" />
+                                                            <label for="dischargePort">DISCHARGE PORT</label><input
+                                                                [(ngModel)]="selectedRow.dischargePort"
+                                                                class="smalll-input" type="text" name="dischargePort" />
                                                         </td>
                                                         <td class="full-input border2">
-                                                            <label for="iecCode">IEC CODE</label><input [(ngModel)]="selectedRow.iecCode" class="smalll-input" type="text" name="iecCode" />
+                                                            <label for="iecCode">IEC CODE</label><input
+                                                                [(ngModel)]="selectedRow.iecCode" class="smalll-input"
+                                                                type="text" name="iecCode" />
                                                         </td>
                                                         <td class="full-input border3">
-                                                            <label for="iecName">IEC NAME</label><input [(ngModel)]="selectedRow.iecName" class="smalll-input" type="text" name="iecName" />
+                                                            <label for="iecName">IEC NAME</label><input
+                                                                [(ngModel)]="selectedRow.iecName" class="smalll-input"
+                                                                type="text" name="iecName" />
                                                         </td>
                                                         <br />
                                                         <td class="full-input border1">
-                                                            <label for="adCode">AD CODE</label><input [(ngModel)]="selectedRow.adCode" class="smalll-input" type="text" name="adCode" />
+                                                            <label for="adCode">AD CODE</label><input
+                                                                [(ngModel)]="selectedRow.adCode" class="smalll-input"
+                                                                type="text" name="adCode" />
                                                         </td>
 
                                                         <p class="sh1">INVOICE DETAILS</p>
                                                         <td class="full-input border1">
-                                                            <label for="invoiceNumber">INVOICE NO</label><input [(ngModel)]="selectedRow.invoiceNumber" class="smalll-input" type="text" name="invoiceNumber" />
+                                                            <label for="invoiceNumber">INVOICE NO</label><input
+                                                                [(ngModel)]="selectedRow.invoiceNumber"
+                                                                class="smalll-input" type="text" name="invoiceNumber" />
                                                         </td>
                                                         <td class="full-input border2">
-                                                            <label for="invoiceAmount">INVOICE AMOUNT</label><input [(ngModel)]="selectedRow.invoiceAmount" class="smalll-input" type="text" name="invoiceAmount" />
+                                                            <label for="invoiceAmount">INVOICE AMOUNT</label><input
+                                                                [(ngModel)]="selectedRow.invoiceAmount"
+                                                                class="smalll-input" type="text" name="invoiceAmount" />
                                                         </td>
                                                         <td class="full-input border3">
-                                                            <label for="currency">CURRENCY</label><input [(ngModel)]="selectedRow.currency" class="smalll-input" type="text" name="currency" />
+                                                            <label for="currency">CURRENCY</label><input
+                                                                [(ngModel)]="selectedRow.currency" class="smalll-input"
+                                                                type="text" name="currency" />
                                                         </td>
                                                         <br />
                                                         <td class="full-input border1">
-                                                            <label for="settledAmount">SETTELED AMOIUNT</label><input [(ngModel)]="selectedRow.settledAmount" class="smalll-input" type="text" name="settledAmount" />
+                                                            <label for="settledAmount">SETTELED AMOIUNT</label><input
+                                                                [(ngModel)]="selectedRow.settledAmount"
+                                                                class="smalll-input" type="text" name="settledAmount" />
                                                         </td>
                                                         <td class="full-input border2">
-                                                            <label for="status">STATUS</label><input [(ngModel)]="selectedRow.status" class="smalll-input" type="text" name="status" />
+                                                            <label for="status">STATUS</label><input
+                                                                [(ngModel)]="selectedRow.status" class="smalll-input"
+                                                                type="text" name="status" />
                                                         </td>
                                                         <br />
 
                                                         <p class="sh1">FOB and FREIGHT</p>
                                                         <td class="full-input border2">
-                                                            <label for="freightAmount">FREIGHT AMOUNT</label><input [(ngModel)]="selectedRow.freightAmount" class="smalll-input" type="text" name="freightAmount" />
+                                                            <label for="freightAmount">FREIGHT AMOUNT</label><input
+                                                                [(ngModel)]="selectedRow.freightAmount"
+                                                                class="smalll-input" type="text" name="freightAmount" />
                                                         </td>
                                                         <td class="full-input border3">
-                                                            <label for="freightCurrency">FREIGHT CURRENCY</label><input [(ngModel)]="selectedRow.freightCurrency" class="smalll-input" type="text" name="freightCurrency" />
+                                                            <label for="freightCurrency">FREIGHT CURRENCY</label><input
+                                                                [(ngModel)]="selectedRow.freightCurrency"
+                                                                class="smalll-input" type="text"
+                                                                name="freightCurrency" />
                                                         </td>
                                                         <br />
 
                                                         <p class="sh1">INSURANCE</p>
                                                         <td class="full-input border2">
-                                                            <label for="insuranceAmount">INSURANCE AMOUNT</label><input [(ngModel)]="selectedRow.insuranceAmount" class="smalll-input" type="text" name="insuranceAmount" />
+                                                            <label for="insuranceAmount">INSURANCE AMOUNT</label><input
+                                                                [(ngModel)]="selectedRow.insuranceAmount"
+                                                                class="smalll-input" type="text"
+                                                                name="insuranceAmount" />
                                                         </td>
                                                         <td class="full-input border3">
-                                                            <label for="insuranceCurrency">INSURANCE CURRENCY</label><input [(ngModel)]="selectedRow.insuranceCurrency" class="smalll-input" type="text" name="insuranceCurrency" />
+                                                            <label for="insuranceCurrency">INSURANCE
+                                                                CURRENCY</label><input
+                                                                [(ngModel)]="selectedRow.insuranceCurrency"
+                                                                class="smalll-input" type="text"
+                                                                name="insuranceCurrency" />
                                                         </td>
 
                                                         <p class="sh1">DISCOUNT</p>
                                                         <td class="full-input border2">
-                                                            <label for="discountAmount">DISCOUNT AMOUNT</label><input [(ngModel)]="selectedRow.discountAmount" class="smalll-input" type="text" name="discountAmount" />
+                                                            <label for="discountAmount">DISCOUNT AMOUNT</label><input
+                                                                [(ngModel)]="selectedRow.discountAmount"
+                                                                class="smalll-input" type="text"
+                                                                name="discountAmount" />
                                                         </td>
                                                         <td class="full-input border3">
-                                                            <label for="discountCurrency">DISCOUNT CURRENCY</label><input [(ngModel)]="selectedRow.discountCurrency" class="smalll-input" type="text" name="discountCurrency" />
+                                                            <label for="discountCurrency">DISCOUNT
+                                                                CURRENCY</label><input
+                                                                [(ngModel)]="selectedRow.discountCurrency"
+                                                                class="smalll-input" type="text"
+                                                                name="discountCurrency" />
                                                         </td>
                                                         <br />
 
                                                         <p class="sh1">MISCELLANEOUS</p>
                                                         <td class="full-input border2">
-                                                            <label for="miscellaneousAmount">MISCELLANEOUS AMOUNT</label><input [(ngModel)]="selectedRow.miscellaneousAmount" class="smalll-input" type="text" name="miscellaneousAmount" />
+                                                            <label for="miscellaneousAmount">MISCELLANEOUS
+                                                                AMOUNT</label><input
+                                                                [(ngModel)]="selectedRow.miscellaneousAmount"
+                                                                class="smalll-input" type="text"
+                                                                name="miscellaneousAmount" />
                                                         </td>
                                                         <td class="full-input border3">
-                                                            <label for="miscellaneousCurrency">MISCELLANEOUS CURRENCY</label><input [(ngModel)]="selectedRow.miscellaneousCurrency" class="smalll-input" type="text" name="miscellaneousCurrency" />
+                                                            <label for="miscellaneousCurrency">MISCELLANEOUS
+                                                                CURRENCY</label><input
+                                                                [(ngModel)]="selectedRow.miscellaneousCurrency"
+                                                                class="smalll-input" type="text"
+                                                                name="miscellaneousCurrency" />
                                                         </td>
 
                                                         <p class="sh1">COMMISSION</p>
                                                         <td class="full-input border2">
-                                                            <label for="commissionAmount">COMMISSION AMOUNT</label><input [(ngModel)]="selectedRow.commissionAmount" class="smalll-input" type="text" name="commissionAmount" />
+                                                            <label for="commissionAmount">COMMISSION
+                                                                AMOUNT</label><input
+                                                                [(ngModel)]="selectedRow.commissionAmount"
+                                                                class="smalll-input" type="text"
+                                                                name="commissionAmount" />
                                                         </td>
                                                         <td class="full-input border3">
-                                                            <label for="commissionCurrency">COMMISSION CURRENCY</label><input [(ngModel)]="selectedRow.commissionCurrency" class="smalll-input" type="text" name="commissionCurrency" />
+                                                            <label for="commissionCurrency">COMMISSION
+                                                                CURRENCY</label><input
+                                                                [(ngModel)]="selectedRow.commissionCurrency"
+                                                                class="smalll-input" type="text"
+                                                                name="commissionCurrency" />
                                                         </td>
                                                     </tr>
                                                 </section>
@@ -376,7 +458,8 @@
                                                             <span class="at">Tasks</span>
                                                         </div>
                                                         <div style="height: 100%">
-                                                            <span class="ctb" (click)="onNewTrans()">Create New Transaction</span>
+                                                            <span class="ctb" (click)="onNewTrans()">Create New
+                                                                Transaction</span>
                                                         </div>
                                                     </section>
                                                     <table class="table table-striped mb-0">
@@ -389,7 +472,8 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody class="text-dark">
-                                                            <tr *ngFor="let task of allTransactions" class="table-row" (click)="viewTask(task)">
+                                                            <tr *ngFor="let task of allTransactions" class="table-row"
+                                                                (click)="viewTask(task)">
                                                                 <th class="pl-4 fw-normal">
                                                                     {{ task.transactionDate }}
                                                                 </th>
@@ -418,11 +502,14 @@
                                                     <p class="stp2">Create Transaction:</p>
                                                     <p class="stp3">Select a bank*</p>
 
-                                                    <input type="radio" id="options1" class="circular_input" [(ngModel)]="myRadio" value="yesBank">
+                                                    <input type="radio" id="options1" class="circular_input"
+                                                        [(ngModel)]="myRadio" value="yesBank">
                                                     <label class="label1" for="male">Yes Bank</label><br />
-                                                    <input type="radio" id="options2" class="circular_input" [(ngModel)]="myRadio" value="axisBank">
+                                                    <input type="radio" id="options2" class="circular_input"
+                                                        [(ngModel)]="myRadio" value="axisBank">
                                                     <label class="label1" for="female">Axis Bank</label><br />
-                                                    <input type="radio" name="bank" value="Any Bank" class="circular_input" />
+                                                    <input type="radio" name="bank" value="Any Bank"
+                                                        class="circular_input" />
                                                     <label class="label1" for="female">Any Bank</label><br />
 
                                                     <!--------------OTIONS ---------------->
@@ -452,14 +539,15 @@
                           </div> -->
                                                     <div *ngIf="greaterAmount > 200000">
                                                         <p>Select a document</p>
-                                                        <select style="border: 0.5px solid black" [(ngModel)]="selectedDoc">
-                              <option value="">Select a type</option>
-                              <option value="bankDocument">
-                                Request Letter cum FEMA Declaration- DIRECT
-                                /ADVANCE Imports
-                              </option>
-                              <option value="FBG">FBG Document</option>
-                            </select>
+                                                        <select style="border: 0.5px solid black"
+                                                            [(ngModel)]="selectedDoc">
+                                                            <option value="">Select a type</option>
+                                                            <option value="bankDocument">
+                                                                Request Letter cum FEMA Declaration- DIRECT
+                                                                /ADVANCE Imports
+                                                            </option>
+                                                            <option value="FBG">FBG Document</option>
+                                                        </select>
                                                     </div>
                                                     <div style="
                               display: flex;
@@ -467,9 +555,10 @@
                               margin-top: 5%;
                               justify-content: left;
                             ">
-                                                        <button (click)="showThisPdf(selectedRow.boeNumber)" class="opt" style="margin-right: 1%">
-                              Generate Document
-                            </button>
+                                                        <button (click)="showThisPdf(selectedRow.boeNumber)" class="opt"
+                                                            style="margin-right: 1%">
+                                                            Generate Document
+                                                        </button>
                                                         <button class="opt">Assign Task</button>
                                                     </div>
                                                 </div>
@@ -489,14 +578,15 @@
             <h3 class="heading">New Direct Import - Step 1 - Create transaction</h3>
             <div style="display: flex; align-items: center; margin-left: 67px;">
                 <label style="flex-direction:row; font-size: 20px; color: RGB(48, 48, 48); margin-right: 30px;">Select
-          PIPO*</label>
+                    PIPO*</label>
                 <div class="customDropdown" style="flex-direction:row; ">
                     <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
-            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-          </span>
+                        <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                    </span>
                     <div class="dropdown-content" style="margin-top: -2px;">
-                        <p *ngFor="let bene of item1" (click)='clickPipo("PI",bene.pi_poNo,bene.benneName, bene.amount  )'>
+                        <p *ngFor="let bene of item1"
+                            (click)='clickPipo("PI",bene.pi_poNo,bene.benneName, bene.amount  )'>
                             <a> PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
                         </p>
                         <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
@@ -509,38 +599,46 @@
             <div style="margin-left: 224px;">
 
                 <p *ngFor='let data of arrayData; let i = index' class="arrayData">
-                    {{data}} <i style="float: right; margin: 4px 10px;" (click)='removePipo(i)' class="fas fa-times"></i>
+                    {{data}} <i style="float: right; margin: 4px 10px;" (click)='removePipo(i)'
+                        class="fas fa-times"></i>
                 </p>
 
             </div>
 
             <div style=" margin-left: 67px; margin-top: 30px;">
-                <p style="font-size: 20px; color: RGB(96, 102, 112); font-weight: 400;">Invoice Amount in USD (Amount mentioned while uploading Performa Invoice)</p>
+                <p style="font-size: 20px; color: RGB(96, 102, 112); font-weight: 400;">Invoice Amount in USD (Amount
+                    mentioned while uploading Proforma Invoice)</p>
                 <div *ngFor="let bene of pipoArr; let i = index" style="display: flex; margin-bottom: 20px;">
                     <div style="margin-right: 20px;">
                         <label>Invoice Number</label>
-                        <span style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px;">{{bene}}</span>
+                        <span
+                            style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px;">{{bene}}</span>
 
                     </div>
                     <div style="margin-right: 20px;">
                         <label>Total Amount</label>
-                        <span style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px;">{{amountArray[i]}}</span>
+                        <span
+                            style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px;">{{amountArray[i]}}</span>
 
                     </div>
                     <div style="margin-right: 20px;">
                         <label>Balance</label>
-                        <span style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px;">{{amountArray[i]}}</span>
+                        <span
+                            style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px;">{{amountArray[i]}}</span>
 
                     </div>
                     <div style="margin-right: 20px;">
                         <label>Remittance Amount</label>
-                        <input type="text" name="" id="" style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px; width:100px; margin-top: -2px;" (input)='amountFun($any($event.target).value, i)'>
+                        <input type="text" name="" id=""
+                            style="font-size: 14px; padding: 5px; border: 1px solid rgb(107, 107, 107); border-radius: 20px; width:100px; margin-top: -2px;"
+                            (input)='amountFun($any($event.target).value, i)'>
                     </div>
 
                 </div>
 
                 Total Amout
-                <p style="border: 1px solid RGBA(0, 0, 0, 0.05); height: 37px; border-radius: 20px; width: 40%; color: RGB(165, 170, 179); padding: 5px; ">
+                <p
+                    style="border: 1px solid RGBA(0, 0, 0, 0.05); height: 37px; border-radius: 20px; width: 40%; color: RGB(165, 170, 179); padding: 5px; ">
                     {{amount}} <span style="float: right;">USD</span></p>
             </div>
 
@@ -556,8 +654,10 @@
                 <label class="label1" for="female">Any Bank</label><br />
             </div>
 
-            <button style="width: 70px; height: 30px; border: none; background-color: #49a2d7; outline: none; color: white; margin-left: 70px; border-radius: 20px; margin-top: 20px;" (click)='showThisPdf1("aa")'>
-        Next </button>
+            <button
+                style="width: 70px; height: 30px; border: none; background-color: #49a2d7; outline: none; color: white; margin-left: 70px; border-radius: 20px; margin-top: 20px;"
+                (click)='showThisPdf1("aa")'>
+                Next </button>
         </div>
     </main>
 </div>
