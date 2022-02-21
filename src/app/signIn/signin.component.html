@@ -6,7 +6,7 @@
 
         <!-- The content half -->
         <div *ngIf='!qr' class="bg-dark">
-            <div style="margin-top: 5%; width: 90%; text-align: right">
+            <div style="margin-top: 3%; width: 90%; text-align: right">
                 <button style="cursor: pointer" class="leftl btn1" [class.disable]="isVisible" [disabled]="isVisible"
                     (click)="onSignup()">
                     Signup
@@ -29,7 +29,7 @@
                                 <div class="form-group mb-3">
                                     <label for="inputEmail">Email</label>
                                     <input formControlName="email" id="inputEmail" type="email" placeholder="Your Email"
-                                        required="" class="form-control rounded-pill border-0 shadow-sm px-4 email"
+                                        required="" autocomplete="off" class="form-control rounded-pill border-0 shadow-sm px-4 email"
                                         [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
                                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                                         <div *ngIf="f.email.errors.required" style="margin-left: 15px;">Email is
@@ -42,7 +42,7 @@
                                 <div class="form-group mb-3">
                                     <label for="password1">Password</label>
                                     <input  [type]="password"  formControlName="password" id="password1" type="password"
-                                        placeholder="Your Password" required="" class="
+                                        placeholder="Your Password" autocomplete="off" required="" class="
                       form-control
                       rounded-pill
                       border-0
@@ -73,17 +73,17 @@
                                 </div>
 
 
-                                <p class="text-muted mb-4 bottom-text">
+                                <p class="text-muted mb-4 bottom-text ml-2">
                                     You continuing, you agree to DocMachine
                                     <a href="">Term of service</a> we will manage information as described in our <a
                                         href="">privacy policy agrement</a>
                                 </p>
                                 <div>
                                     <button type="submit" class="btn btn-block mb-2 rounded-pill shadow-sm reg-sm"
-                                        style="float: left" [class.disable]="isDisabled" [disabled]="isDisabled">
-                                        Sign in
+                                        style="float: left; margin-top: 20px;" [class.disable]="isDisabled" [disabled]="isDisabled">
+                                        Login
                                     </button>
-                                    <p href="#" class="text-sm" style="float: left; margin-top: 10px; margin-left: 10px"
+                                    <p href="#" class="text-sm" style="float: left; margin-top: 30px; margin-left: 23px"
                                         [routerLink]="['/forgotpassword']">
                                         Forgot Password?
                                     </p>

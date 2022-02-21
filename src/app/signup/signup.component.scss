@@ -60,14 +60,16 @@
 }
 
 .image3 {
-    display: none;
+    display:none;
+    margin-top: 45% !important;
+
 }
 
 .display-5 {
-    font-weight: 500;
+    font-weight: 400;
     color: #606670;
     font-size: 32px;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     margin-top: 60px
 }
 
@@ -77,6 +79,7 @@
     color: #606670;
     width: 422px;
     margin-left: 20px;
+
 }
 
 a {
@@ -174,22 +177,23 @@ label {
     background-color: #51aee5;
     font-size: 12px;
     color: #ffffff;
+    margin-top: 15px;
 }
 
 .btn1 {
     min-width: 100px;
     height: 40px;
-    border-radius: 20px;
-    background-color: #51aee5;
-    font-size: 12px;
-    color: #ffffff;
-    // outline: none;
+    background-color: white;
+    font-size: 18px;
+    font-weight: 600(semibold);
+    color: #606670;
+    outline: none;
 }
 
 .leftl {
     border: none;
-    font-size: 16px;
-    font-weight: 600;
+    // font-size: 16px;
+    // font-weight: 600;
     margin-top: 25px;
     margin-bottom: 50px;
     cursor: pointer;
