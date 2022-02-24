@@ -342,7 +342,7 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="discountAllowed" type="text" placeholder="DISCOUNT ALLOWED/USD" [(ngModel)]="data.discountAllowed">
+                                                <input class="tblInput form-control" name="discountAllowed" type="number" placeholder="DISCOUNT ALLOWED/USD" [(ngModel)]="data.discountAllowed">
                                             </div>
                                         </td>
 
@@ -353,7 +353,7 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="damagesUSD" type="text" placeholder="DAMAGES/USD" [(ngModel)]="data.damagesUSD">
+                                                <input class="tblInput form-control" name="damagesUSD" type="number" placeholder="DAMAGES/USD" [(ngModel)]="data.damagesUSD">
                                             </div>
                                         </td>
 
@@ -364,19 +364,21 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="goodsShortageUSD" type="text" placeholder="GOODS SHORTAGE /USD" [(ngModel)]="data.goodsShortageUSD">
+                                                <input class="tblInput form-control" name="goodsShortageUSD" type="number" placeholder="GOODS SHORTAGE /USD" [(ngModel)]="data.goodsShortageUSD">
                                             </div>
                                         </td>
 
                                         <td>
 
-                                            <div *ngIf="!optionsVisibility[i]">
-                                                {{data.xyz}}
+
+                                            <div>
+                                                <!-- *ngIf="!optionsVisibility[i]" -->
+                                                {{data.discountAllowed + data.damagesUSD + data.goodsShortageUSD}}
                                             </div>
 
-                                            <div *ngIf="optionsVisibility[i]">
+                                            <!-- <div *ngIf="optionsVisibility[i]">
                                                 <input class="tblInput form-control" name="xyz" type="text" placeholder="X+Y+Z" [(ngModel)]="data.xyz">
-                                            </div>
+                                            </div> -->
                                         </td>
 
                                         <td>
@@ -1900,3 +1902,4 @@
         </ng-template>
     </main>
 </div>
+y
