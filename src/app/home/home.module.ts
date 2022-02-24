@@ -69,6 +69,7 @@ import { EditBuyerComponent } from './edit-buyer/edit-buyer.component';
 import { TestComponent } from './test/test/test.component';
 import { HelpComponent } from './help/help.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { TermsAndConditionComponent } from './terms-and-condition/terms-and-condition.component';
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -139,7 +140,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ModalContentComponent1,
     EditBuyerComponent,
     TestComponent,
-    HelpComponent
+    HelpComponent,
+    TermsAndConditionComponent
   ],
   imports: [
     CommonModule,
@@ -412,6 +414,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             component: HelpComponent,
             pathMatch: "full",
           },
+          {
+            path: "t&c",
+            component:TermsAndConditionComponent,
+            pathMatch: "full",
+          }
         ],
       },
     ]),
