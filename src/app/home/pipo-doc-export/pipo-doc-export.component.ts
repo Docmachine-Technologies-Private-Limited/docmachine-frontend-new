@@ -225,11 +225,16 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
             }
           }
           console.log("Hello There", arrayMain);
-          this.item1 = arrayMain
+          if (arrayMain.length > 0) {
+            this.item1 = arrayMain
+          }
+
 
         },
         (err) => console.log(err)
       );
+
+
 
       this.documentService.getPipoByPipoNo(this.id)
         .subscribe(
@@ -297,7 +302,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
             }
           }
           console.log("Hello There", arrayMain);
-          this.item1 = arrayMain
+          if (arrayMain.length > 0) {
+            this.item1 = arrayMain
+          }
 
         },
         (err) => console.log(err)

@@ -1,7 +1,8 @@
 <div style="margin-top: 67px; width: 89%; overflow-y: overlay;" class="content-wrap">
     <main id="content" class="table-padding" role="main" style="overflow-y: auto;">
         <div *ngIf="!showInvoice">
-            <div style="margin-top: 30px; display: flex; flex-direction: rows; align-items: center; padding: 0.8% 0; border: 0.5px solid rgba(0, 0, 0, 0.2); width: 100%;margin-left: 26px;">
+            <div
+                style="margin-top: 30px; display: flex; flex-direction: rows; align-items: center; padding: 0.8% 0; border: 0.5px solid rgba(0, 0, 0, 0.2); width: 100%;margin-left: 26px;">
                 <div style="display: flex; align-items: center; margin-left: 12px">
                     <div style="display: flex; margin-left: 16px; align-items: center">
                         <div class="customDropdown" style="width: 90px; border: 1px solid #4b74ff; font-size: 14px;">
@@ -69,7 +70,8 @@
                             <span>Filter </span> <span><i class="fas fa-filter"></i></span>
                         </div>
                         <div style="background-color: #49A2D7;" class="customDropdown">
-                            <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
+                            <span
+                                style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
                                 <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
                             <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
                                     class="fas fa-angle-down"></i>
@@ -139,13 +141,15 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-dark">
-                                    <tr class="table-row" *ngFor="let data of item1; let i = index" (click)="getInvoices(data, i)">
+                                    <tr class="table-row" *ngFor="let data of item1; let i = index"
+                                        (click)="getInvoices(data, i)">
                                         <td>
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.date}}
                                             </div>
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="date" type="text" placeholder="Date" [(ngModel)]="data.date">
+                                                <input class="tblInput form-control" name="date" type="text"
+                                                    placeholder="Date" [(ngModel)]="data.date">
                                             </div>
                                         </td>
                                         <td class="sb-no" (click)=" hide()">{{data.pi_poNo}}</td>
@@ -185,7 +189,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="commodity" type="text" placeholder="Commodity" [(ngModel)]="data.commodity">
+                                                <input class="tblInput form-control" name="commodity" type="text"
+                                                    placeholder="Commodity" [(ngModel)]="data.commodity">
                                             </div>
                                         </td>
                                         <td>
@@ -199,7 +204,8 @@
                                                 {{data.ttDate}}
                                             </div>
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="ttDate" type="text" placeholder="TT Date" [(ngModel)]="data.ttDate">
+                                                <input class="tblInput form-control" name="ttDate" type="text"
+                                                    placeholder="TT Date" [(ngModel)]="data.ttDate">
                                             </div>
                                         </td>
                                         <td>
@@ -209,7 +215,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="ttUSD" type="text" placeholder="TT USD" [(ngModel)]="data.ttUSD">
+                                                <input class="tblInput form-control" name="ttUSD" type="text"
+                                                    placeholder="TT USD" [(ngModel)]="data.ttUSD">
                                             </div>
                                         </td>
 
@@ -220,7 +227,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="recDate" type="text" placeholder="Received Date" [(ngModel)]="data.recDate">
+                                                <input class="tblInput form-control" name="recDate" type="text"
+                                                    placeholder="Received Date" [(ngModel)]="data.recDate">
                                             </div>
 
                                         </td>
@@ -232,7 +240,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="recUSD" type="text" placeholder="Received USD" [(ngModel)]="data.recUSD">
+                                                <input class="tblInput form-control" name="recUSD" type="text"
+                                                    placeholder="Received USD" [(ngModel)]="data.recUSD">
                                             </div>
                                         </td>
                                         <td>
@@ -242,7 +251,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="commission" type="text" placeholder="Commission" [(ngModel)]="data.commission">
+                                                <input class="tblInput form-control" name="commission" type="text"
+                                                    placeholder="Commission" [(ngModel)]="data.commission">
                                             </div>
                                         </td>
 
@@ -253,7 +263,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="conversionDate" type="text" placeholder="Conversion Date" [(ngModel)]="data.conversionDate">
+                                                <input class="tblInput form-control" name="conversionDate" type="text"
+                                                    placeholder="Conversion Date" [(ngModel)]="data.conversionDate">
                                             </div>
                                         </td>
 
@@ -264,7 +275,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="conversionRate" type="text" placeholder="Conversion Rate" [(ngModel)]="data.conversionRate">
+                                                <input class="tblInput form-control" name="conversionRate" type="text"
+                                                    placeholder="Conversion Rate" [(ngModel)]="data.conversionRate">
                                             </div>
                                         </td>
 
@@ -275,7 +287,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="convertedAmount" type="text" placeholder="Converted Amount" [(ngModel)]="data.convertedAmount">
+                                                <input class="tblInput form-control" name="convertedAmount" type="text"
+                                                    placeholder="Converted Amount" [(ngModel)]="data.convertedAmount">
                                             </div>
                                         </td>
 
@@ -286,7 +299,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="firxNumber" type="text" placeholder="FIRX NUMBER/ID" [(ngModel)]="data.firxNumber">
+                                                <input class="tblInput form-control" name="firxNumber" type="text"
+                                                    placeholder="FIRX NUMBER/ID" [(ngModel)]="data.firxNumber">
                                             </div>
                                         </td>
 
@@ -301,7 +315,8 @@
                                                 {{data.sbdate}}
                                             </div>
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="invoiceValueUSD" type="text" placeholder="INVOICE VALUE - USD" [(ngModel)]="data.sbdate">
+                                                <input class="tblInput form-control" name="invoiceValueUSD" type="text"
+                                                    placeholder="INVOICE VALUE - USD" [(ngModel)]="data.sbdate">
                                             </div>
                                         </td>
 
@@ -312,7 +327,9 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="invoiceValueUSD" type="text" placeholder="INVOICE VALUE - USD" [(ngModel)]="data.invoiceValueUSD">
+                                                <input class="tblInput form-control" name="invoiceValueUSD" type="text"
+                                                    placeholder="INVOICE VALUE - USD"
+                                                    [(ngModel)]="data.invoiceValueUSD">
                                             </div>
                                         </td>
 
@@ -323,7 +340,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="exchRate" type="text" placeholder="EXCH. RATE" [(ngModel)]="data.exchRate">
+                                                <input class="tblInput form-control" name="exchRate" type="text"
+                                                    placeholder="EXCH. RATE" [(ngModel)]="data.exchRate">
                                             </div>
                                         </td>
 
@@ -342,7 +360,9 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="discountAllowed" type="number" placeholder="DISCOUNT ALLOWED/USD" [(ngModel)]="data.discountAllowed">
+                                                <input class="tblInput form-control input5" name="discountAllowed"
+                                                    type="number" placeholder="DISCOUNT ALLOWED/USD"
+                                                    [(ngModel)]="data.discountAllowed">
                                             </div>
                                         </td>
 
@@ -353,7 +373,9 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="damagesUSD" type="number" placeholder="DAMAGES/USD" [(ngModel)]="data.damagesUSD">
+                                                <input class="tblInput form-control input5" name="damagesUSD"
+                                                    type="number" placeholder="DAMAGES/USD"
+                                                    [(ngModel)]="data.damagesUSD">
                                             </div>
                                         </td>
 
@@ -364,7 +386,9 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="goodsShortageUSD" type="number" placeholder="GOODS SHORTAGE /USD" [(ngModel)]="data.goodsShortageUSD">
+                                                <input class="tblInput form-control input5" name="goodsShortageUSD"
+                                                    type="number" placeholder="GOODS SHORTAGE /USD"
+                                                    [(ngModel)]="data.goodsShortageUSD">
                                             </div>
                                         </td>
 
@@ -388,7 +412,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="waa" type="text" placeholder="W-AA" [(ngModel)]="data.waa">
+                                                <input class="tblInput form-control" name="waa" type="text"
+                                                    placeholder="W-AA" [(ngModel)]="data.waa">
                                             </div>
                                         </td>
 
@@ -399,7 +424,9 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="creditNoteStatus" type="text" placeholder="CREDIT NOTE STATUS" [(ngModel)]="data.creditNoteStatus">
+                                                <input class="tblInput form-control" name="creditNoteStatus" type="text"
+                                                    placeholder="CREDIT NOTE STATUS"
+                                                    [(ngModel)]="data.creditNoteStatus">
                                             </div>
                                         </td>
 
@@ -410,7 +437,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="egmNO" type="text" placeholder="EGM NO" [(ngModel)]="data.egmNO">
+                                                <input class="tblInput form-control" name="egmNO" type="text"
+                                                    placeholder="EGM NO" [(ngModel)]="data.egmNO">
                                             </div>
                                         </td>
 
@@ -421,7 +449,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="egmDate" type="text" placeholder="EGM DATE" [(ngModel)]="data.egmDate">
+                                                <input class="tblInput form-control" name="egmDate" type="text"
+                                                    placeholder="EGM DATE" [(ngModel)]="data.egmDate">
                                             </div>
                                         </td>
 
@@ -432,7 +461,9 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="statusOfRodtep" type="text" placeholder="STATUS OF RODTEP/MEIS/ROSCTL APPLICATION" [(ngModel)]="data.statusOfRodtep">
+                                                <input class="tblInput form-control" name="statusOfRodtep" type="text"
+                                                    placeholder="STATUS OF RODTEP/MEIS/ROSCTL APPLICATION"
+                                                    [(ngModel)]="data.statusOfRodtep">
                                             </div>
                                         </td>
 
@@ -443,7 +474,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="rodtepAmount" type="text" placeholder="RODTEP AMOUNT" [(ngModel)]="data.rodtepAmount">
+                                                <input class="tblInput form-control" name="rodtepAmount" type="text"
+                                                    placeholder="RODTEP AMOUNT" [(ngModel)]="data.rodtepAmount">
                                             </div>
                                         </td>
 
@@ -454,7 +486,8 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="escriptNote" type="text" placeholder="ESCRIPT NOTE" [(ngModel)]="data.escriptNote">
+                                                <input class="tblInput form-control" name="escriptNote" type="text"
+                                                    placeholder="ESCRIPT NOTE" [(ngModel)]="data.escriptNote">
                                             </div>
                                         </td>
 
@@ -465,7 +498,9 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="docSubmissionInBank" type="text" placeholder="STATUS OF DOC SUBMISSION IN BANK" [(ngModel)]="data.docSubmissionInBank">
+                                                <input class="tblInput form-control" name="docSubmissionInBank"
+                                                    type="text" placeholder="STATUS OF DOC SUBMISSION IN BANK"
+                                                    [(ngModel)]="data.docSubmissionInBank">
                                             </div>
                                         </td>
 
@@ -476,7 +511,9 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="statusOfBankReco" type="text" placeholder="STATUS OF BANK RECO." [(ngModel)]="data.statusOfBankReco">
+                                                <input class="tblInput form-control" name="statusOfBankReco" type="text"
+                                                    placeholder="STATUS OF BANK RECO."
+                                                    [(ngModel)]="data.statusOfBankReco">
                                             </div>
                                         </td>
 
@@ -487,7 +524,9 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="firxNumberSettledAgainst" type="text" placeholder="FIRX NUMBER SETTLED AGAINST" [(ngModel)]="data.firxNumberSettledAgainst">
+                                                <input class="tblInput form-control" name="firxNumberSettledAgainst"
+                                                    type="text" placeholder="FIRX NUMBER SETTLED AGAINST"
+                                                    [(ngModel)]="data.firxNumberSettledAgainst">
                                             </div>
                                         </td>
 
@@ -498,12 +537,15 @@
                                             </div>
 
                                             <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="balanceIfAny" type="text" placeholder="BALANCE IF ANY" [(ngModel)]="data.balanceIfAny">
+                                                <input class="tblInput form-control" name="balanceIfAny" type="text"
+                                                    placeholder="BALANCE IF ANY" [(ngModel)]="data.balanceIfAny">
                                             </div>
                                         </td>
                                         <td>
-                                            <button class="savBtn" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)">Save</button>
-                                            <button class="savBtn" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">Edit</button>
+                                            <button class="savBtn" *ngIf="optionsVisibility[i]"
+                                                (click)="toSave(data, i)">Save</button>
+                                            <button class="savBtn" *ngIf="!optionsVisibility[i]"
+                                                (click)="toEdit(i)">Edit</button>
                                         </td>
                                     </tr>
 
@@ -527,7 +569,8 @@
                                 class="fas fa-angle-down"></i>
                             <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                         </span>
-                        <div class="dropdown-content1" style="min-width: 200px; margin-left: -92px; font-family: Poppins,sans-serif; font-size: 15px;">
+                        <div class="dropdown-content1"
+                            style="min-width: 200px; margin-left: -92px; font-family: Poppins,sans-serif; font-size: 15px;">
                             <p><a>New Credit Note</a></p>
                             <p (click)='pipoClick()'><a>New PI/PO</a></p>
                             <p><a>New Debit Note</a></p>
@@ -542,8 +585,10 @@
                     <span style="font-size: 16px; color: RGB(50, 62, 74);">{{pipoNo}}</span>
                 </div>
                 <div style="width: 100%; margin-right: 10%">
-                    <i style="font-size: 18px; color: rgb(227, 227, 227); margin-left: 10px; float: right; padding-top: 3px;" class="fas fa-plus-circle"></i>
-                    <span *ngFor="let data of item1 | slice: 0:3; let i = index" style="float: right; margin-left: 10px;"><img class="image"
+                    <i style="font-size: 18px; color: rgb(227, 227, 227); margin-left: 10px; float: right; padding-top: 3px;"
+                        class="fas fa-plus-circle"></i>
+                    <span *ngFor="let data of item1 | slice: 0:3; let i = index"
+                        style="float: right; margin-left: 10px;"><img class="image"
                             src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="25px"
                             width="25px" /></span>
                     <!-------style="padding-left: 1%" class="pc1"-->
@@ -553,17 +598,21 @@
             <div class="p-8 bc">
                 <div class="side_document_list">
                     <!---class="col-12 mb-lg ph-38"-->
-                    <div id="profile" class="profile_class" *ngFor="let data of item1; let i = index" [ngClass]="lastIndex == i ? 'activeBtn' : ''" (click)="getInvoices(data, i)">
+                    <div id="profile" class="profile_class" *ngFor="let data of item1; let i = index"
+                        [ngClass]="lastIndex == i ? 'activeBtn' : ''" (click)="getInvoices(data, i)">
                         <!----------class="row p-2 bb hhu"-->
                         <div class="" style="display: flex; padding-top: 10px;">
                             <!-----------class="ph-10 fl"-->
-                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"
-                            />
+                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
+                                height="30px" width="30px" /><img class="image image2"
+                                src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
+                                width="30px" />
                         </div>
                         <div class="" style="width: 100%; padding: 3%">
                             <!-----class="fr pt-2"-->
                             <span class="fl fs16" style="color: RGB(50, 62, 74); font-size: 16px;">{{ data.pi_poNo
-                                }}</span><span class="fr fs12" style="float: right; color: RGB(141, 151, 165); font-size: 12px;">
+                                }}</span><span class="fr fs12"
+                                style="float: right; color: RGB(141, 151, 165); font-size: 12px;">
                                 {{ data.date }}</span>
                             <p style="color: RGB(81, 96, 109); font-size: 14px;">Continental carriers pvt ltd</p>
                         </div>
@@ -585,7 +634,8 @@
                                         <li class="tab" [attr.data-index]="1" style="border-right: 1px solid black;">
                                             <label for="1">Details</label>
                                         </li>
-                                        <li class="tab" [attr.data-index]="2" style="border-right: 1px solid black; padding-left: 10px;">
+                                        <li class="tab" [attr.data-index]="2"
+                                            style="border-right: 1px solid black; padding-left: 10px;">
                                             <label for="2"> Documents</label>
                                         </li>
                                         <li class="tab" [attr.data-index]="3">
@@ -606,7 +656,8 @@
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12);">
                                     <div style="display: flex;">
 
-                                        <div style="display: flex; align-items: center; color: #49A2D7; margin: 15px;font-size: 16px; ">
+                                        <div
+                                            style="display: flex; align-items: center; color: #49A2D7; margin: 15px;font-size: 16px; ">
                                             <i class="fas fa-lightbulb"></i>
                                         </div>
                                         <div style="align-items: center; font-size: 13px;">
@@ -624,11 +675,15 @@
                                             <div *ngIf='pay.type == "Advance Payment"'>
 
 
-                                                <button class="button1" style="height: 30px !important; margin-right: 5px;" (click)=openDoc(pay.type)>Inward Remittance Disposal</button>
+                                                <button class="button1"
+                                                    style="height: 30px !important; margin-right: 5px;"
+                                                    (click)=openDoc(pay.type)>Inward Remittance Disposal</button>
                                             </div>
                                             <div *ngIf='pay.type != "Advance Payment"'>
 
-                                                <button class="button1" style="height: 30px !important; margin-right: 5px;" (click)=openDoc(pay.type)>{{pay.type}}</button>
+                                                <button class="button1"
+                                                    style="height: 30px !important; margin-right: 5px;"
+                                                    (click)=openDoc(pay.type)>{{pay.type}}</button>
                                             </div>
 
                                         </div>
@@ -643,35 +698,47 @@
                                                 With Buyer's Credit
                                             </label>
                                         </div>
-                                        <button class="button2" style="height: 30px !important; margin-right: 5px;" (click)='openSubDoc1("usance")'>Usance</button>
-                                        <button class="button2" style="height: 30px !important; margin-right: 5px;" (click)='openSubDoc1("sight")'>Sight</button>
+                                        <button class="button2" style="height: 30px !important; margin-right: 5px;"
+                                            (click)='openSubDoc1("usance")'>Usance</button>
+                                        <button class="button2" style="height: 30px !important; margin-right: 5px;"
+                                            (click)='openSubDoc1("sight")'>Sight</button>
                                     </div>
                                     <div *ngIf='buttonToggle' style="margin: 13px 0px 10px 30px;">
-                                        <button class="button2" style="height: 30px !important; margin-right: 5px;" (click)='openSubDoc("usance")'>Usance</button>
-                                        <button class="button2" style="height: 30px !important; margin-right: 5px;" (click)='openSubDoc("sight")'>Sight</button>
+                                        <button class="button2" style="height: 30px !important; margin-right: 5px;"
+                                            (click)='openSubDoc("usance")'>Usance</button>
+                                        <button class="button2" style="height: 30px !important; margin-right: 5px;"
+                                            (click)='openSubDoc("sight")'>Sight</button>
                                     </div>
                                     <div *ngIf='letterToggle' style="margin: 10px 0px 10px 30px;">
 
                                         Do you have LC Issuance Copy? <br>
-                                        <button class="button2" style="height: 30px !important; margin-right: 5px;" (click)='openSubLetter("yes")'>Yes</button>
-                                        <button class="button2" style="height: 30px !important; margin-right: 5px;" (click)='openSubLetter("no")'>No, Create</button>
+                                        <button class="button2" style="height: 30px !important; margin-right: 5px;"
+                                            (click)='openSubLetter("yes")'>Yes</button>
+                                        <button class="button2" style="height: 30px !important; margin-right: 5px;"
+                                            (click)='openSubLetter("no")'>No, Create</button>
 
                                     </div>
                                     <div style="margin-left: 30px;" *ngIf='uploadIsurance'>
                                         <div style="display: flex;">
                                             <div>
-                                                LC Number: <input class="subInput" type="text" (input)='lcFun($any($event.target).value)'>
+                                                LC Number: <input class="subInput" type="text"
+                                                    (input)='lcFun($any($event.target).value)'>
                                             </div>
                                             <div>
-                                                Amount: <input class="subInput" type="text" (input)='amountFun($any($event.target).value)'>
+                                                Amount: <input class="subInput" type="text"
+                                                    (input)='amountFun($any($event.target).value)'>
                                             </div>
                                             <div>
-                                                Currency: <input class="subInput" type="text" (input)='currencyFun($any($event.target).value)'>
+                                                Currency: <input class="subInput" type="text"
+                                                    (input)='currencyFun($any($event.target).value)'>
                                             </div>
                                         </div>
                                         <form method="POST" style="margin-top: 10px; margin-bottom: 10px;">
                                             <div>
-                                                <input class="customfile1" (error)="onUploadError($event)" placeholder="Choose File" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" *ngIf="type === 'directive'" [dropzone]="config1">
+                                                <input class="customfile1" (error)="onUploadError($event)"
+                                                    placeholder="Choose File" (init)="onUploadInit($event)"
+                                                    (success)="onUploadSuccess($event)" *ngIf="type === 'directive'"
+                                                    [dropzone]="config1">
                                                 <!--<p class="choose">Choose File</p> -->
 
                                             </div>
@@ -684,7 +751,8 @@
                                 </div>
 
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12);">
-                                    <p style="color: RGB(50, 62, 74); font-size: 16px; margin-left: 20px;margin-bottom: 15px; margin-top: 6px;">
+                                    <p
+                                        style="color: RGB(50, 62, 74); font-size: 16px; margin-left: 20px;margin-bottom: 15px; margin-top: 6px;">
                                         Activity</p>
 
                                     <div *ngIf='!pipoData.doc1' style="display: flex;">
@@ -692,7 +760,8 @@
                                             <i class="fas fa-circle" style="color: #636363;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Upload Purchase Order</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -708,7 +777,8 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Uploaded Purchase Order</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -719,7 +789,8 @@
                                         </div>
                                     </div>
 
-                                    <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='documentType == "PO"' style="display: flex;">
@@ -727,7 +798,8 @@
                                             <i class="fas fa-circle" style="color: #636363;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
 
                                                 Proforma Invoice Not Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
@@ -743,7 +815,8 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Uploaded Proforma Invoice</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -753,7 +826,8 @@
                                             <button class="button1" (click)='toggleClick("PI")'>View/ Edit</button>
                                         </div>
                                     </div>
-                                    <div *ngIf='pipoData.blCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.blCopy'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.blCopy' style="display: flex;">
@@ -761,17 +835,20 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 BL Copy Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("blCopy"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("blCopy"); open(content)'>View</button>
                                         </div>
                                     </div>
-                                    <div *ngIf='pipoData.lcIssuance' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.lcIssuance'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.lcIssuance' style="display: flex;">
@@ -779,17 +856,20 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 LC Issuance Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("lcIssuance"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("lcIssuance"); open(content)'>View</button>
                                         </div>
                                     </div>
-                                    <div *ngIf='pipoData.commercialInvoice' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.commercialInvoice'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.commercialInvoice' style="display: flex;">
@@ -797,18 +877,21 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Commercial Invoice Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("commercialInvoice"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("commercialInvoice"); open(content)'>View</button>
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.agreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.agreement'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.agreement' style="display: flex;">
@@ -816,18 +899,21 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Agreement Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("agreement"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("agreement"); open(content)'>View</button>
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.debitNote' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.debitNote'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.debitNote' style="display: flex;">
@@ -835,18 +921,21 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Debit Note Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("debitNote"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("debitNote"); open(content)'>View</button>
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.creditNote' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.creditNote'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.creditNote' style="display: flex;">
@@ -854,18 +943,21 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Credit Note Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("creditNote"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("creditNote"); open(content)'>View</button>
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.hssAgreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.hssAgreement'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.hssAgreement' style="display: flex;">
@@ -873,18 +965,21 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 High Sea Service Copy Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("hssAgreement"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("hssAgreement"); open(content)'>View</button>
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.lcCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.lcCopy'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.lcCopy' style="display: flex;">
@@ -892,18 +987,21 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 LC Copy Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("lcCopy"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("lcCopy"); open(content)'>View</button>
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.directImport' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.directImport'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.directImport' style="display: flex;">
@@ -911,18 +1009,21 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Direct Import Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("directImport"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("directImport"); open(content)'>View</button>
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.advanceOutward' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.advanceOutward'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.advanceOutward' style="display: flex;">
@@ -930,18 +1031,21 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Inward Remittance Disposal Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("advanceOutward"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("advanceOutward"); open(content)'>View</button>
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.nonlcUsance' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.nonlcUsance'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.nonlcUsance' style="display: flex;">
@@ -949,19 +1053,22 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Bill Under Collection Usance Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("nonlcUsance"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("nonlcUsance"); open(content)'>View</button>
                                         </div>
                                     </div>
 
 
-                                    <div *ngIf='pipoData.billUnder' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.billUnder'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.billUnder' style="display: flex;">
@@ -969,19 +1076,22 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Bill Under Collection Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("billUnder"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("billUnder"); open(content)'>View</button>
                                         </div>
                                     </div>
 
 
-                                    <div *ngIf='pipoData.invoiceReduction' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.invoiceReduction'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.invoiceReduction' style="display: flex;">
@@ -989,19 +1099,22 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Invoice Reduction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='openModalWithComponent("invoiceReduction");'>View</button>
+                                            <button class="button1"
+                                                (click)='openModalWithComponent("invoiceReduction");'>View</button>
                                         </div>
                                     </div>
 
 
-                                    <div *ngIf='pipoData.nonlcSight' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.nonlcSight'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.nonlcSight' style="display: flex;">
@@ -1009,18 +1122,21 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Bill Under Collection Sight Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("nonlcSight"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("nonlcSight"); open(content)'>View</button>
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.lcSight' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.lcSight'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.lcSight' style="display: flex;">
@@ -1028,18 +1144,21 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Letter of Credit Sight Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("lcSight"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("lcSight"); open(content)'>View</button>
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.lcUsance' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.lcUsance'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.lcUsance' style="display: flex;">
@@ -1047,14 +1166,16 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Letter of Credit Usance Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("lcUsance"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("lcUsance"); open(content)'>View</button>
                                         </div>
                                     </div>
                                     <!-- <div *ngIf='pipoData.deliveryOrder'
@@ -1081,7 +1202,8 @@
                                         </div>
                                     </div> -->
 
-                                    <div *ngIf='pipoData.deliveryOrder' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.deliveryOrder'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.deliveryOrder' style="display: flex;">
@@ -1089,17 +1211,20 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Delivery Order Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("deliveryOrder"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("deliveryOrder"); open(content)'>View</button>
                                         </div>
                                     </div>
-                                    <div *ngIf='pipoData.insuranceCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.insuranceCopy'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.insuranceCopy' style="display: flex;">
@@ -1107,17 +1232,20 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Insurance Copy Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("insuranceCopy"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("insuranceCopy"); open(content)'>View</button>
                                         </div>
                                     </div>
-                                    <div *ngIf='pipoData.billOfExchange' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.billOfExchange'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.billOfExchange' style="display: flex;">
@@ -1125,18 +1253,21 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Bill Of Exchange Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("billOfExchange"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("billOfExchange"); open(content)'>View</button>
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.opinionReport' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.opinionReport'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.opinionReport' style="display: flex;">
@@ -1144,18 +1275,21 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 Opinion report Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("opinionReport"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("opinionReport"); open(content)'>View</button>
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.caCb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                    <div *ngIf='pipoData.caCb'
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.caCb' style="display: flex;">
@@ -1163,14 +1297,16 @@
                                             <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                            <p
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
                                                 15 CA/CB uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("caCb"); open(content)'>View</button>
+                                            <button class="button1"
+                                                (click)='viewClick("caCb"); open(content)'>View</button>
                                         </div>
                                     </div>
 
@@ -1179,63 +1315,77 @@
                                 </div>
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12);">
                                     <div style="margin-left: 20px;">
-                                        <p style="color: RGB(50, 62, 74); font-size: 16px; margin-bottom: 15px; margin-top: 15px;">
+                                        <p
+                                            style="color: RGB(50, 62, 74); font-size: 16px; margin-bottom: 15px; margin-top: 15px;">
                                             Below are the steps still to complete</p>
                                         <div>
                                             <span><i class="fas fa-circle"></i></span>
-                                            <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                            <span
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
                                                 Create Inward Remittance disposal</span>
                                         </div>
-                                        <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
+                                        <div
+                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
                                             &nbsp;
                                         </div>
                                         <div>
                                             <span><i class="fas fa-circle"></i></span>
-                                            <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                            <span
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
                                                 Upload swift copy</span>
                                         </div>
-                                        <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
+                                        <div
+                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
                                             &nbsp;
                                         </div>
                                         <div>
                                             <span><i class="fas fa-circle"></i></span>
-                                            <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                            <span
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
                                                 Upload Bank credit Advice Copy and provide reference number</span>
                                         </div>
-                                        <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
+                                        <div
+                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
                                             &nbsp;
                                         </div>
 
                                         <div>
                                             <span><i class="fas fa-circle"></i></span>
-                                            <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                            <span
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
                                                 Create Bill Lodgement</span>
                                         </div>
-                                        <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
+                                        <div
+                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
                                             &nbsp;
                                         </div>
 
                                         <div>
                                             <span><i class="fas fa-circle"></i></span>
-                                            <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                            <span
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
                                                 Bill lodgement reference number and advice copy</span>
                                         </div>
-                                        <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
+                                        <div
+                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
                                             &nbsp;
                                         </div>
 
                                         <div>
                                             <span><i class="fas fa-circle"></i></span>
-                                            <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                            <span
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
                                                 EBRC- Export Realisation certificate.</span>
                                         </div>
-                                        <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
+                                        <div
+                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
                                             &nbsp;
                                         </div>
 
                                         <div>
                                             <span><i class="fas fa-circle"></i></span>
-                                            <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                            <span
+                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
                                                 All done</span>
                                         </div>
                                     </div>
@@ -1245,27 +1395,45 @@
                                 </div>
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12); margin-bottom: 20px;">
                                     <div style="margin-left: 20px;">
-                                        <p style="color: RGB(50, 62, 74); font-size: 16px; margin-bottom: 15px; margin-top: 15px; ">
+                                        <p
+                                            style="color: RGB(50, 62, 74); font-size: 16px; margin-bottom: 15px; margin-top: 15px; ">
                                             PI/ PO Master details</p>
-                                        <td style="width: 180px; height: 86px; margin-bottom: 4%" class="full-input border1">
-                                            <label for="invoiceNumber">Amount</label><span class="form-control smalll-input" type="text">{{pipoData.amount}}</span>
+                                        <td style="width: 180px; height: 86px; margin-bottom: 4%"
+                                            class="full-input border1">
+                                            <label for="invoiceNumber">Amount</label><span
+                                                class="form-control smalll-input" type="text">{{pipoData.amount}}</span>
                                         </td>
-                                        <td style="width: 180px; height: 86px; margin-bottom: 4%" class="full-input border2">
-                                            <label for="invoiceAmount">Currency</label><span class="form-control smalll-input" type="text">{{pipoData.currency}}</span>
+                                        <td style="width: 180px; height: 86px; margin-bottom: 4%"
+                                            class="full-input border2">
+                                            <label for="invoiceAmount">Currency</label><span
+                                                class="form-control smalll-input"
+                                                type="text">{{pipoData.currency}}</span>
                                         </td>
 
-                                        <td style="width: 180px; height: 86px; margin-bottom: 4%" class="full-input border1">
-                                            <label for="settledAmount">Incoterm</label><span class="form-control smalll-input" type="text">{{pipoData.incoterm}}</span>
+                                        <td style="width: 180px; height: 86px; margin-bottom: 4%"
+                                            class="full-input border1">
+                                            <label for="settledAmount">Incoterm</label><span
+                                                class="form-control smalll-input"
+                                                type="text">{{pipoData.incoterm}}</span>
                                         </td>
 
-                                        <td style="width: 180px; height: 86px; margin-bottom: 4%" class="full-input border1">
-                                            <label for="invoiceNumber">PC Ref. No</label><span class="form-control smalll-input" type="text">{{pipoData.pcRefNo}}</span>
+                                        <td style="width: 180px; height: 86px; margin-bottom: 4%"
+                                            class="full-input border1">
+                                            <label for="invoiceNumber">PC Ref. No</label><span
+                                                class="form-control smalll-input"
+                                                type="text">{{pipoData.pcRefNo}}</span>
                                         </td>
-                                        <td style="width: 180px; height: 86px; margin-bottom: 4%" class="full-input border2">
-                                            <label for="invoiceAmount">Last Day Of Shipment</label><span class="form-control smalll-input" type="text">{{pipoData.lastDayShipment}}</span>
+                                        <td style="width: 180px; height: 86px; margin-bottom: 4%"
+                                            class="full-input border2">
+                                            <label for="invoiceAmount">Last Day Of Shipment</label><span
+                                                class="form-control smalll-input"
+                                                type="text">{{pipoData.lastDayShipment}}</span>
                                         </td><br>
-                                        <td style="width: 180px; height: 86px; margin-bottom: 4%" class="full-input border2">
-                                            <label for="invoiceAmount">Location</label><span class="form-control smalll-input" type="text">{{pipoData.location}}</span>
+                                        <td style="width: 180px; height: 86px; margin-bottom: 4%"
+                                            class="full-input border2">
+                                            <label for="invoiceAmount">Location</label><span
+                                                class="form-control smalll-input"
+                                                type="text">{{pipoData.location}}</span>
                                         </td><br>
 
                                         <p style="color: RGB(48, 48, 48); font-size: 20px; margin-bottom: 0px;">
@@ -1282,14 +1450,19 @@
                                                     <td style="color: #707683; font-size: 14px;">Type</td>
                                                     <td style="color: #707683; font-size: 14px;">Amount</td>
                                                 </tr>
-                                                <tr *ngFor="let course of payTerm; let i = index" style="height: 30px !important;">
-                                                    <td style="outline: none; border: 1px solid #DEDEDE; width: 30px; border-radius: 5px; padding: 5px; margin-right: 10px;">
+                                                <tr *ngFor="let course of payTerm; let i = index"
+                                                    style="height: 30px !important;">
+                                                    <td
+                                                        style="outline: none; border: 1px solid #DEDEDE; width: 30px; border-radius: 5px; padding: 5px; margin-right: 10px;">
                                                         {{course.date}}</td>
-                                                    <td style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px; padding: 5px;">
+                                                    <td
+                                                        style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px; padding: 5px;">
                                                         {{course.description}}</td>
-                                                    <td style="outline: none; border: 1px solid #DEDEDE; width: 60px; border-radius: 5px; height: 30px; background-color: #FAFAFA; padding: 5px;">
+                                                    <td
+                                                        style="outline: none; border: 1px solid #DEDEDE; width: 60px; border-radius: 5px; height: 30px; background-color: #FAFAFA; padding: 5px;">
                                                         {{course.type}}</td>
-                                                    <td style="outline: none; border: 1px solid #DEDEDE; width: 30px; border-radius: 5px; padding: 5px;">
+                                                    <td
+                                                        style="outline: none; border: 1px solid #DEDEDE; width: 30px; border-radius: 5px; padding: 5px;">
                                                         {{course.amount}}</td>
                                                 </tr>
                                             </table>
@@ -1347,10 +1520,12 @@
                                             Document
                                         </div>
                                         <div style="background-color: #49A2D7;" class="customDropdown">
-                                            <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
+                                            <span
+                                                style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
                                                 <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Attach a
                                                 Document</span>
-                                            <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
+                                            <span class="dropIco"
+                                                style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
                                                     class="fas fa-angle-down"></i>
                                                 <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                                             </span>
@@ -1386,13 +1561,15 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr class="table-row" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
+                                                <tr class="table-row"
+                                                    style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
                                                     <td style="padding: 0px 35px;">Dec 14, 2018</td>
                                                     <td class="sb-no">Shipping Bill</td>
                                                     <td>SN565656</td>
                                                     <td style="padding: 0px 35px;">View</td>
                                                 </tr>
-                                                <tr class="table-row" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
+                                                <tr class="table-row"
+                                                    style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
                                                     <td style="padding: 0px 35px;">Dec 14, 2018</td>
                                                     <td class="sb-no">Bill of Entry</td>
                                                     <td>454544545</td>
@@ -1404,7 +1581,9 @@
                                 </div>
                                 <div *ngIf='docTog'>
                                     <div style="width: 94% !important; height: 100%;" class="form5" method="POST">
-                                        <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" *ngIf="type === 'directive'" [dropzone]="config1" class="dropzone dropzone-container" id="dropzone" />
+                                        <input (error)="onUploadError($event)" (init)="onUploadInit($event)"
+                                            (success)="onUploadSuccess($event)" *ngIf="type === 'directive'"
+                                            [dropzone]="config1" class="dropzone dropzone-container" id="dropzone" />
                                         <i class="fas fa-file-upload"></i>
                                         <h5>Drag and Drop files here</h5>
                                         <p>Files Supported: PDF, XSLS, Image, Scanner</p>
@@ -1422,11 +1601,13 @@
                                                             height: 150vh;
                                                             ">
                                 <div style="display: flex;">
-                                    <div style="width: 54%; font-size: 16px; padding-left: 20px; color: RGB(73, 162, 215);">
+                                    <div
+                                        style="width: 54%; font-size: 16px; padding-left: 20px; color: RGB(73, 162, 215);">
                                         All Transaction
                                     </div>
                                     <div style="background-color: #49A2D7;" class="customDropdown">
-                                        <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
+                                        <span
+                                            style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
                                             <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Create New
                                             Transaction</span>
                                         <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i
@@ -1453,13 +1634,15 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="table-row" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
+                                            <tr class="table-row"
+                                                style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
                                                 <td style="padding: 0px 35px;">Dec 14, 2018</td>
                                                 <td class="sb-no">Submitted to Bank</td>
                                                 <td>Emailed</td>
                                                 <td style="padding: 0px 35px;">View</td>
                                             </tr>
-                                            <tr class="table-row" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
+                                            <tr class="table-row"
+                                                style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
                                                 <td style="padding: 0px 35px;">Dec 14, 2018</td>
                                                 <td class="sb-no">Draft waiting for submission</td>
                                                 <td>Draft</td>
@@ -1480,7 +1663,9 @@
             <div *ngIf='toggle1'>
                 <h3 class="heading1">Upload Perfoma invoice</h3>
                 <div class="form5" method="POST">
-                    <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" *ngIf="type === 'directive'" [dropzone]="config1" class="dropzone dropzone-container" id="dropzone" />
+                    <input (error)="onUploadError($event)" (init)="onUploadInit($event)"
+                        (success)="onUploadSuccess($event)" *ngIf="type === 'directive'" [dropzone]="config1"
+                        class="dropzone dropzone-container" id="dropzone" />
                     <i class="fas fa-file-upload"></i>
                     <h5>Drag and Drop files here</h5>
                     <p>Files Supported: PDF, XSLS, Image, Scanner</p>
@@ -1505,11 +1690,13 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <input class="form-control input2" type="text" formControlName="pi_poNo" [(ngModel)]="pipoData.pi_poNo" />
+                                    <input class="form-control input2" type="text" formControlName="pi_poNo"
+                                        [(ngModel)]="pipoData.pi_poNo" />
                                 </td>
 
                                 <td>
-                                    <input class="form-control input2" type="date" formControlName="date" [(ngModel)]="pipoData.date" style="width: 7100%0%" />
+                                    <input class="form-control input2" type="date" formControlName="date"
+                                        [(ngModel)]="pipoData.date" style="width: 7100%0%" />
                                 </td>
                                 <!-- <td><button type="submit" class="button">Submit</button></td> -->
                             </tr>
@@ -1524,42 +1711,59 @@
                                     <span style="font-size: 20px; color: #606670; margin-bottom: 5px;">Invoice
                                         Amount</span>
                                     <br>
-                                    <input class="inputAmount" type="text" formControlName="amount" [(ngModel)]="pipoData.amount" />
+                                    <input class="inputAmount" type="text" formControlName="amount"
+                                        [(ngModel)]="pipoData.amount" />
                                 </div>
 
-                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border3">
-                                    <label for="iecName">Currency</label><input class="form-control smalll-input" type="text" formControlName="currency" [(ngModel)]="pipoData.currency" />
+                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;"
+                                    class="full-input border3">
+                                    <label for="iecName">Currency</label><input class="form-control smalll-input"
+                                        type="text" formControlName="currency" [(ngModel)]="pipoData.currency" />
                                 </td>
 
 
-                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
-                                    <label for="invoiceNumber">Incoterm</label><input class="form-control smalll-input" type="text" formControlName="incoterm" [(ngModel)]="pipoData.incoterm" />
+                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;"
+                                    class="full-input border1">
+                                    <label for="invoiceNumber">Incoterm</label><input class="form-control smalll-input"
+                                        type="text" formControlName="incoterm" [(ngModel)]="pipoData.incoterm" />
                                 </td>
-                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border2">
-                                    <label for="invoiceAmount">Last Day Of Shipment</label><input class="form-control smalll-input" type="text" formControlName="lastDayShipment" placeholder="dd/mm/yy" [(ngModel)]="pipoData.lastDayShipment" />
+                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;"
+                                    class="full-input border2">
+                                    <label for="invoiceAmount">Last Day Of Shipment</label><input
+                                        class="form-control smalll-input" type="text" formControlName="lastDayShipment"
+                                        placeholder="dd/mm/yy" [(ngModel)]="pipoData.lastDayShipment" />
                                 </td>
 
-                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
-                                    <label for="settledAmount">PC Ref No</label><input class="form-control smalll-input" type="text" formControlName="pcRefNo" [(ngModel)]="pipoData.pcRefNo" />
+                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;"
+                                    class="full-input border1">
+                                    <label for="settledAmount">PC Ref No</label><input class="form-control smalll-input"
+                                        type="text" formControlName="pcRefNo" [(ngModel)]="pipoData.pcRefNo" />
                                 </td>
-                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
-                                    <label for="settledAmount">Due Date</label><input class="form-control smalll-input" type="text" formControlName="dueDate" placeholder="dd/mm/yy" [(ngModel)]="pipoData.dueDate" />
+                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;"
+                                    class="full-input border1">
+                                    <label for="settledAmount">Due Date</label><input class="form-control smalll-input"
+                                        type="text" formControlName="dueDate" placeholder="dd/mm/yy"
+                                        [(ngModel)]="pipoData.dueDate" />
                                 </td>
 
                                 <span style="color: hsl(0, 0%, 19%); font-size: 20px;">Payment Terms*</span>
                                 <div formArrayName="paymentTerm">
-                                    <div *ngFor="let course of getCourses(piPoForm); let i = index" [formGroupName]="i" style="display: flex;">
+                                    <div *ngFor="let course of getCourses(piPoForm); let i = index" [formGroupName]="i"
+                                        style="display: flex;">
                                         <div style="flex-direction:row; margin-right: 20px;">
                                             <span style="color: #707683; font-size: 14px;">Date</span> <br>
-                                            <input formControlName="date" [(ngModel)]="payTerm[i].date" style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px;">
+                                            <input formControlName="date" [(ngModel)]="payTerm[i].date"
+                                                style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px;">
                                         </div>
                                         <div style="flex-direction:row;border-radius: 5px;">
                                             <span style="color: #707683; font-size: 14px;">Description</span> <br>
-                                            <input formControlName="description" [(ngModel)]="payTerm[i].description" style="outline: none; border: 1px solid #DEDEDE; width: 200px; border-radius: 5px;">
+                                            <input formControlName="description" [(ngModel)]="payTerm[i].description"
+                                                style="outline: none; border: 1px solid #DEDEDE; width: 200px; border-radius: 5px;">
                                         </div>
                                         <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                                             <span style="color: #707683; font-size: 14px;">Type</span> <br>
-                                            <select name="" id="" formControlName="type" style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
+                                            <select name="" id="" formControlName="type"
+                                                style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
                                                 <option value="" [selected]="!payTerm[i].type">Select</option>
                                                 <option value="Advance Payment"
                                                     [selected]="payTerm[i].type === 'Advance Payment'">
@@ -1580,7 +1784,8 @@
                                         </div>
                                         <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                                             <span style="color: #707683; font-size: 14px;">Amount</span> <br>
-                                            <input formControlName="amount" [(ngModel)]="payTerm[i].amount" style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px;">
+                                            <input formControlName="amount" [(ngModel)]="payTerm[i].amount"
+                                                style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px;">
                                         </div>
                                         <a *ngIf='z>1' (click)='removeAddress(i)'><i style="margin-top: 30px; "
                                                 class="fas fa-times"></i></a>
@@ -1598,7 +1803,8 @@
                             <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                         </div>
 
-                        <button type="submit" class="button22">Update</button> <span class="button22" (click)='cancel()' style="margin-left: 20px;"> Cancel </span>
+                        <button type="submit" class="button22">Update</button> <span class="button22" (click)='cancel()'
+                            style="margin-left: 20px;"> Cancel </span>
                     </div>
                 </form>
             </div>
@@ -1644,17 +1850,20 @@
                 </div>
                 <div style="margin-left: 277px;">
                     <p *ngFor='let data of commoArray; let i = index' class="arrayData" style="width: 23% !important;">
-                        {{data}} <i style="float: right; margin: 4px 10px;" (click)='removeComo(i)' class="fas fa-times"></i>
+                        {{data}} <i style="float: right; margin: 4px 10px;" (click)='removeComo(i)'
+                            class="fas fa-times"></i>
                     </p>
                 </div>
                 <div style="margin-top: 40px; margin-left: 30px;">
                     <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
                     <div style="display: flex; align-items: center;">
-                        <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [(ngModel)]="documentType" value="PI">
+                        <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
+                            [(ngModel)]="documentType" value="PI">
                         <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
                     </div>
                     <div style="display: flex; align-items: center;">
-                        <input type="radio" style="flex-direction:row;" id="options2" class="circular_input" [(ngModel)]="documentType" value="PO">
+                        <input type="radio" style="flex-direction:row;" id="options2" class="circular_input"
+                            [(ngModel)]="documentType" value="PO">
                         <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
                     </div>
                 </div>
@@ -1674,11 +1883,13 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <input class="form-control input2" type="text" formControlName="pi_poNo" [(ngModel)]="pipoData.pi_poNo" />
+                                    <input class="form-control input2" type="text" formControlName="pi_poNo"
+                                        [(ngModel)]="pipoData.pi_poNo" />
                                 </td>
 
                                 <td>
-                                    <input class="form-control input2" type="date" formControlName="date" [(ngModel)]="pipoData.date" style="width: 7100%0%" />
+                                    <input class="form-control input2" type="date" formControlName="date"
+                                        [(ngModel)]="pipoData.date" style="width: 7100%0%" />
                                 </td>
                                 <!-- <td><button type="submit" class="button">Submit</button></td> -->
                             </tr>
@@ -1693,30 +1904,45 @@
                                     <span style="font-size: 20px; color: #606670; margin-bottom: 5px;">Invoice
                                         Amount</span>
                                     <br>
-                                    <input class="inputAmount" type="text" formControlName="amount" [(ngModel)]="pipoData.amount" />
+                                    <input class="inputAmount" type="text" formControlName="amount"
+                                        [(ngModel)]="pipoData.amount" />
                                 </div>
 
-                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border3">
-                                    <label for="iecName">Currency</label><input class="form-control smalll-input" type="text" formControlName="currency" [(ngModel)]="pipoData.currency" />
+                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;"
+                                    class="full-input border3">
+                                    <label for="iecName">Currency</label><input class="form-control smalll-input"
+                                        type="text" formControlName="currency" [(ngModel)]="pipoData.currency" />
                                 </td>
 
 
-                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
-                                    <label for="invoiceNumber">Incoterm</label><input class="form-control smalll-input" type="text" formControlName="incoterm" [(ngModel)]="pipoData.incoterm" />
+                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;"
+                                    class="full-input border1">
+                                    <label for="invoiceNumber">Incoterm</label><input class="form-control smalll-input"
+                                        type="text" formControlName="incoterm" [(ngModel)]="pipoData.incoterm" />
                                 </td>
-                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border2">
-                                    <label for="invoiceAmount">Last Day Of Shipment</label><input class="form-control smalll-input" type="text" formControlName="lastDayShipment" placeholder="dd/mm/yy" [(ngModel)]="pipoData.lastDayShipment" />
+                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;"
+                                    class="full-input border2">
+                                    <label for="invoiceAmount">Last Day Of Shipment</label><input
+                                        class="form-control smalll-input" type="text" formControlName="lastDayShipment"
+                                        placeholder="dd/mm/yy" [(ngModel)]="pipoData.lastDayShipment" />
                                 </td>
 
-                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
-                                    <label for="settledAmount">PC Ref No</label><input class="form-control smalll-input" type="text" formControlName="pcRefNo" [(ngModel)]="pipoData.pcRefNo" />
+                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;"
+                                    class="full-input border1">
+                                    <label for="settledAmount">PC Ref No</label><input class="form-control smalll-input"
+                                        type="text" formControlName="pcRefNo" [(ngModel)]="pipoData.pcRefNo" />
                                 </td>
-                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
-                                    <label for="settledAmount">Due Date</label><input class="form-control smalll-input" type="text" formControlName="dueDate" placeholder="dd/mm/yy" [(ngModel)]="pipoData.dueDate" />
+                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;"
+                                    class="full-input border1">
+                                    <label for="settledAmount">Due Date</label><input class="form-control smalll-input"
+                                        type="text" formControlName="dueDate" placeholder="dd/mm/yy"
+                                        [(ngModel)]="pipoData.dueDate" />
                                 </td>
-                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
+                                <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;"
+                                    class="full-input border1">
                                     <label for="settledAmount">Location</label>
-                                    <select name="" id="" formControlName="location" style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
+                                    <select name="" id="" formControlName="location"
+                                        style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
 
                                         <option *ngFor="let bene of location" [value]="bene.loc"
                                             [selected]="loc === 'Mumbai'">
@@ -1727,18 +1953,22 @@
                                 <br>
                                 <span style="color: hsl(0, 0%, 19%); font-size: 20px;">Payment Terms*</span>
                                 <div formArrayName="paymentTerm">
-                                    <div *ngFor="let course of getCourses(piPoForm); let i = index" [formGroupName]="i" style="display: flex;">
+                                    <div *ngFor="let course of getCourses(piPoForm); let i = index" [formGroupName]="i"
+                                        style="display: flex;">
                                         <div style="flex-direction:row; margin-right: 20px;">
                                             <span style="color: #707683; font-size: 14px;">Date</span> <br>
-                                            <input formControlName="date" [(ngModel)]="payTerm[i].date" style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px;">
+                                            <input formControlName="date" [(ngModel)]="payTerm[i].date"
+                                                style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px;">
                                         </div>
                                         <div style="flex-direction:row;border-radius: 5px;">
                                             <span style="color: #707683; font-size: 14px;">Description</span> <br>
-                                            <input formControlName="description" [(ngModel)]="payTerm[i].description" style="outline: none; border: 1px solid #DEDEDE; width: 200px; border-radius: 5px;">
+                                            <input formControlName="description" [(ngModel)]="payTerm[i].description"
+                                                style="outline: none; border: 1px solid #DEDEDE; width: 200px; border-radius: 5px;">
                                         </div>
                                         <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                                             <span style="color: #707683; font-size: 14px;">Type</span> <br>
-                                            <select name="" id="" formControlName="type" style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
+                                            <select name="" id="" formControlName="type"
+                                                style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
                                                 <option value="" [selected]="!payTerm[i].type">Select</option>
                                                 <option value="Advance Payment"
                                                     [selected]="payTerm[i].type === 'Advance Payment'">
@@ -1760,7 +1990,8 @@
                                         </div>
                                         <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                                             <span style="color: #707683; font-size: 14px;">Amount</span> <br>
-                                            <input formControlName="amount" [(ngModel)]="payTerm[i].amount" style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px;">
+                                            <input formControlName="amount" [(ngModel)]="payTerm[i].amount"
+                                                style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px;">
                                         </div>
                                         <a *ngIf='z>1' (click)='removeAddress(i)'><i style="margin-top: 30px; "
                                                 class="fas fa-times"></i></a>
@@ -1776,7 +2007,8 @@
                         </div>
 
 
-                        <button type="submit" class="button22">Update</button> <span class="button22" (click)='cancel()' style="margin-left: 20px;"> Cancel </span>
+                        <button type="submit" class="button22">Update</button> <span class="button22" (click)='cancel()'
+                            style="margin-left: 20px;"> Cancel </span>
                     </div>
                 </form>
             </div>
