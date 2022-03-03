@@ -70,6 +70,9 @@ import { TestComponent } from './test/test/test.component';
 import { HelpComponent } from './help/help.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TermsAndConditionComponent } from './terms-and-condition/terms-and-condition.component';
+import { CreditNoteComponent } from './credit-note/credit-note.component';
+import { DebitNoteComponent } from './debit-note/debit-note.component';
+import { InsuranceDocumentComponent } from './insurance-document/insurance-document.component'
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -141,7 +144,10 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     EditBuyerComponent,
     TestComponent,
     HelpComponent,
-    TermsAndConditionComponent
+    TermsAndConditionComponent,
+    CreditNoteComponent,
+    DebitNoteComponent,
+    InsuranceDocumentComponent
   ],
   imports: [
     CommonModule,
@@ -418,7 +424,23 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             path: "t&c",
             component:TermsAndConditionComponent,
             pathMatch: "full",
-          }
+          },
+          {
+            path: "creditNote",
+            component: CreditNoteComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "debitNote",
+            component: DebitNoteComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "insuranceDocument",
+            component: InsuranceDocumentComponent,
+            pathMatch: "full"
+          },
+
         ],
       },
     ]),

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ToastrService } from 'ngx-toastr';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-home',
@@ -16,8 +17,10 @@ export class SignupComponent implements OnInit {
   isVisible: boolean = false;
   submitted = false;
   registerForm: FormGroup;
+  closeResult: string;
+  checked: boolean = false;
   constructor(private formBuilder: FormBuilder, private userService: UserService,
-    private router: Router, private toastr: ToastrService) { }
+    private router: Router, private toastr: ToastrService, private modalService: NgbModal,) { }
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
@@ -27,47 +30,83 @@ export class SignupComponent implements OnInit {
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
     });
 
+
+
   }
   get f() { return this.registerForm.controls; }
-  onSubmit() {
-    this.submitted = true
-    this.isDisabled = true;
-    if (this.registerForm.invalid) {
-      this.toastr.error('Invalid inputs, please check again!');
-      this.isDisabled = false;
-      return;
-    }
-    this.registerForm.value.role = 'manager'
-    this.registerForm.value.verified = 'no'
-    console.log(this.registerForm.value)
-    this.userService.register(this.registerForm.value)
-      .subscribe(
-        data => {
-          console.log("king123")
-          console.log(data)
-          this.toastr.success('User Created Successful!');
-          this.router.navigate(['/login'], { queryParams: { registered: true } });
-        },
-        error => {
-          this.isDisabled = false;
-          console.log(error)
-          if (error.error == 'Both password should be same') {
-            this.toastr.error('Registration unsuccessful!, Both password should be same');
-          }
-          else if (error.error == 'Email ID already exist') {
-            this.toastr.error('Registration unsuccessful!, Email already exist');
-          }
-          else {
-            this.toastr.error('Registration unsuccessful!, please check the details');
-          }
 
-          console.log("error")
-        });
+
+  onSubmit() {
+
+    if(this.checked){
+      this.submitted = true
+      this.isDisabled = true;
+      if (this.registerForm.invalid) {
+        this.toastr.error('Invalid inputs, please check again!');
+        this.isDisabled = false;
+        return;
+      }
+      this.registerForm.value.role = 'manager'
+      this.registerForm.value.verified = 'no'
+      console.log(this.registerForm.value)
+      this.userService.register(this.registerForm.value)
+        .subscribe(
+          data => {
+            console.log("king123")
+            console.log(data)
+            this.toastr.success('User Created Successful!');
+            this.router.navigate(['/login'], { queryParams: { registered: true } });
+          },
+          error => {
+            this.isDisabled = false;
+            console.log(error)
+            if (error.error == 'Both password should be same') {
+              this.toastr.error('Registration unsuccessful!, Both password should be same');
+            }
+            else if (error.error == 'Email ID already exist') {
+              this.toastr.error('Registration unsuccessful!, Email already exist');
+            }
+            else {
+              this.toastr.error('Registration unsuccessful!, please check the details');
+            }
+
+            console.log("error")
+          });
+    }
+    else{
+      this.toastr.error("You Need To Agree For Terms And Condition");
+    }
+
   }
 
   onLogin() {
     this.isVisible = true;
     this.router.navigate(['/login']);
+  }
+
+  open(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  getDismissReason(reason: any): string {
+    console.log('ddhdhdhh')
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  onCheck(event){
+    console.log(this.checked," not loged")
+    this.checked =  !this.checked
+    console.log(this.checked,"loged")
   }
 
 }

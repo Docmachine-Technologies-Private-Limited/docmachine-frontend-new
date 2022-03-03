@@ -1,26 +1,28 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { observable, Observable, of } from 'rxjs';
 import { AppConfig } from '../../app/app.config';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class DocumentService {
   authToken: string;
   public headers;
   api_base: string;
   constructor(private http: HttpClient, public appconfig: AppConfig) {
     this.api_base = appconfig.apiUrl;
-    console.log(this.api_base)
+    console.log(this.api_base);
   }
   public loadFromLocalStorage() {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }
   showInvoice = false;
   draft;
-  task
+  task;
   pdfData: any = [];
+  item2: any;
+  item1: any;
 
   getMaster(user) {
     this.loadFromLocalStorage();
@@ -31,6 +33,44 @@ export class DocumentService {
     let url = `${this.api_base}/master/get`;
     return this.http.get(url, httpOptions);
   }
+
+  // getMaster1(): Observable<any[]> {
+  //   let arrayMain = [];
+  //   this.getMaster(1).subscribe(
+  //     (res: any) => {
+  //      let data:[] = res.data;
+  //       console.log('hello the');
+  //       // data.sort((a:any,b:any)=> a.);
+  //       for (let value1 of data) {
+  //         for (let value2 of this.item2) {
+  //           for (let a of value2.pipo) {
+  //             if (a == value1.pi_poNo) {
+  //               const newVal = { ...value1 };
+  //               newVal['sbno'] = value2.sbno;
+  //               newVal['sbdate'] = value2.sbdate;
+  //               newVal['portCode'] = value2.portCode;
+  //               newVal['region'] = value2.countryOfFinaldestination;
+  //               newVal['fobValue'] = value2.fobValue;
+
+  //               // console.log("Hello Ranjit", a);
+  //               // value1.sbno = value2.sbno
+  //               // value1.sbdate = value2.sbdate
+  //               arrayMain.push(newVal);
+  //               // console.log("hello Sj", value2);
+  //             }
+  //           }
+  //         }
+  //       }
+  //       console.log('Hello There', arrayMain);
+  //       if (arrayMain.length > 0) {
+  //         this.item1 = arrayMain;
+  //       }
+
+  //     },
+  //     (err) => console.log(err)
+  //   );
+  //   return of(arrayMain);
+  // }
 
   getBoe(user) {
     this.loadFromLocalStorage();
@@ -167,12 +207,11 @@ export class DocumentService {
   }
 
   public getPDF(data): Observable<any> {
-    console.log("inside service");
+    console.log('inside service');
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http
-      .post(`${this.api_base}/pdf/generate`, data, httpOptions);
+    return this.http.post(`${this.api_base}/pdf/generate`, data, httpOptions);
   }
 
   addPipo(pipo) {
@@ -252,173 +291,143 @@ export class DocumentService {
   }
 
   addTask(data) {
-    console.log("I am in service");
+    console.log('I am in service');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      `${this.api_base}/task/post`,
-      data,
-      httpOptions
-    );
+    return this.http.post(`${this.api_base}/task/post`, data, httpOptions);
   }
 
-
-
   getPipoTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      "${this.api_base}/task/getPipo",
-      data,
-      httpOptions
-    );
+    return this.http.post('${this.api_base}/task/getPipo', data, httpOptions);
   }
 
   getBoeTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "${this.api_base}/task/getBoeTask",
+      '${this.api_base}/task/getBoeTask',
       data,
       httpOptions
     );
   }
 
   getSbTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      "${this.api_base}/task/getSbTask",
-      data,
-      httpOptions
-    );
+    return this.http.post('${this.api_base}/task/getSbTask', data, httpOptions);
   }
 
   getPipoInwardTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "${this.api_base}/task/getPipoInwardTask",
+      '${this.api_base}/task/getPipoInwardTask',
       data,
       httpOptions
     );
   }
 
   getLcTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      "${this.api_base}/task/getLcTask",
-      data,
-      httpOptions
-    );
+    return this.http.post('${this.api_base}/task/getLcTask', data, httpOptions);
   }
 
   getAllTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "${this.api_base}/task/getAllTask",
+      '${this.api_base}/task/getAllTask',
       data,
       httpOptions
     );
   }
 
   getTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      "${this.api_base}/task/getTask",
-      data,
-      httpOptions
-    );
+    return this.http.post('${this.api_base}/task/getTask', data, httpOptions);
   }
 
   getPipoCaTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "${this.api_base}/task/getPipoCaTask",
+      '${this.api_base}/task/getPipoCaTask',
       data,
       httpOptions
     );
   }
 
   getBcTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      "${this.api_base}/task/getBcTask",
-      data,
-      httpOptions
-    );
+    return this.http.post('${this.api_base}/task/getBcTask', data, httpOptions);
   }
 
   getCaTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      "${this.api_base}/task/getCaTask",
-      "data",
+      '${this.api_base}/task/getCaTask',
+      'data',
       httpOptions
     );
   }
 
   getOneTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      "${this.api_base}/task/getOne",
-      data,
-      httpOptions
-    );
+    return this.http.post('${this.api_base}/task/getOne', data, httpOptions);
   }
 
   completeTask(data) {
@@ -428,11 +437,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
 
-    return this.http.post(
-      "${this.api_base}/task/complete",
-      data,
-      httpOptions
-    );
+    return this.http.post('${this.api_base}/task/complete', data, httpOptions);
   }
 
   taskEmail(data) {
@@ -442,15 +447,11 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
 
-    return this.http.post(
-      "${this.api_base}/task/taskEmail",
-      data,
-      httpOptions
-    );
+    return this.http.post('${this.api_base}/task/taskEmail', data, httpOptions);
   }
 
   addExportTask(data) {
-    console.log("I am in service");
+    console.log('I am in service');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -466,20 +467,17 @@ export class DocumentService {
   }
 
   getAllExport(data) {
-    console.log("I am in service");
+    console.log('I am in service');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.get(
-      `${this.api_base}/exportTask/get`,
-      httpOptions
-    );
+    return this.http.get(`${this.api_base}/exportTask/get`, httpOptions);
   }
 
   getOneExportTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -493,7 +491,7 @@ export class DocumentService {
   }
 
   getTypeExportTask(data) {
-    console.log("I am in service calling transacytions");
+    console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -530,11 +528,9 @@ export class DocumentService {
     };
 
     return this.http.post(
-      "${this.api_base}/task/exportEmail",
+      '${this.api_base}/task/exportEmail',
       data,
       httpOptions
     );
   }
-
-
 }
