@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { DocumentService } from 'src/app/service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { UserService } from './../../service/user.service'
 
 @Component({
   selector: 'app-insurance-document',
@@ -14,24 +16,29 @@ export class InsuranceDocumentComponent implements OnInit {
   public item1 = [];
   public viewData : any;
   public closeResult: string;
+  public optionsVisibility: any = [];
+  public pipoData: any;
+  public id: any;
 
   constructor(
     private documentService : DocumentService,
     private sanitizer: DomSanitizer,
     private modalService: NgbModal,
+    private toastr: ToastrService,
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
-    this.documentService.getPipo().subscribe(
+    this.documentService.getInsurance().subscribe(
       (res: any) => {
         console.log('HEre Response', res);
         this.item = res.data;
         for (let value of this.item) {
-          if (value['file'] == 'export') {
-            console.log('a');
-            this.item1.push(value);
-            console.log(this.item1)
-          }
+          for(let value1 of value.pipo){
+            const newVal = { ...value };
+                newVal['pipo1'] = value1
+                this.item1.push(newVal)
+              }
         }
       },
       (err) => console.log(err)
@@ -65,8 +72,31 @@ private getDismissReason(reason: any): string {
   viewID(a){
   console.log(666666666666666, a)
   this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-    a['insuranceCopy']
+    a['doc']
   );
+  }
+
+  toSave(data, index){
+    this.optionsVisibility[index] = false;
+    console.log(data);
+    this.documentService.updateInsurance(data, data._id ).subscribe(
+      (data) => {
+        console.log('king123');
+        this.toastr.success('PI/PO updated successfully.');
+        console.log(data)
+      },
+      (error) => {
+        // this.toastr.error('Invalid inputs, please check!');
+        console.log('error');
+      }
+    );
+
+
+  }
+
+  toEdit(index){
+    this.optionsVisibility[index] = true;
+    this.toastr.warning('PI/PO Is In Edit Mode');
   }
 
 }

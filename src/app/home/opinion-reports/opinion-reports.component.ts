@@ -6,11 +6,11 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../service/user.service'
 
 @Component({
-  selector: 'app-credit-note',
-  templateUrl: './credit-note.component.html',
-  styleUrls: ['./credit-note.component.scss']
+  selector: 'app-opinion-reports',
+  templateUrl: './opinion-reports.component.html',
+  styleUrls: ['./opinion-reports.component.scss']
 })
-export class CreditNoteComponent implements OnInit {
+export class OpinionReportsComponent implements OnInit {
 
   public item : any;
   public item1 = [];
@@ -29,7 +29,7 @@ export class CreditNoteComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.documentService.getCredit().subscribe(
+    this.documentService.getOpinionReport().subscribe(
       (res: any) => {
         console.log('HEre Response', res);
         this.item = res.data;
@@ -44,45 +44,46 @@ export class CreditNoteComponent implements OnInit {
       (err) => console.log(err)
       );
 
-}
-openCreditNote(content){
-      this.modalService
-      .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
+  }
+
+  openLetterOfCredit(content){
+    this.modalService
+    .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
+    .result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
 }
 
 private getDismissReason(reason: any): string {
-  console.log('ddhdhdhh');
-  if (reason === ModalDismissReasons.ESC) {
-    return 'by pressing ESC';
-  } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-    return 'by clicking on a backdrop';
-  } else {
-    return `with: ${reason}`;
-  }
+console.log('ddhdhdhh');
+if (reason === ModalDismissReasons.ESC) {
+  return 'by pressing ESC';
+} else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+  return 'by clicking on a backdrop';
+} else {
+  return `with: ${reason}`;
+}
 }
 
-viewCN(a){
-  console.log(666666666666666, a)
-  this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-    a['doc']
-  );
+viewLC(a){
+console.log(666666666666666, a)
+this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+  a['doc']
+);
 }
 
 toSave(data, index){
   this.optionsVisibility[index] = false;
   console.log(data);
-  this.documentService.updateCredit(data, data._id ).subscribe(
+  this.documentService.updateOpinionReport(data, data._id ).subscribe(
     (data) => {
       console.log('king123');
-      this.toastr.success('PI/PO updated successfully.');
+      this.toastr.success('Opinion Report updated successfully.');
 
     },
     (error) => {

@@ -15,7 +15,7 @@
   ">
             <!-- *ngIf="!showInvoice" -->
             <div style="display: flex; align-items: center">
-                <h3 class="heading">Debit Note Documents</h3>
+                <h3 class="heading">Insurance Documents</h3>
                 <!-- {{doc}} -->
             </div>
 
@@ -53,9 +53,11 @@
                                             </th>
                                             <th scope="col"><span class="pl-3">DATE</span></th>
                                             <th scope="col">PI/PO no.</th>
-                                            <th scope="col">Amount</th>
-                                            <th scope="col">Consignee Name</th>
-                                            <th scope="col">Debit Note</th>
+                                            <th scope="col">Insurance No.</th>
+                                            <th scope="col">Insurance Amount</th>
+                                            <th scope="col">Currency</th>
+                                            <th scope="col">Buyer Name</th>
+                                            <th scope="col">Insurance Doc</th>
 
                                         </tr>
                                     </thead>
@@ -69,14 +71,41 @@
                                             </th>
                                             <th class="pl-4 fw-normal">{{ data.date }}</th>
 
-                                            <td class="sb-no"> {{ data.pi_poNo }} </td>
-
+                                            <td class="sb-no"> {{ data.pipo1 }} </td>
                                             <td>
-                                                {{data.amount}}
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.insuranceNumber}}
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="insuranceNumber" type="text" placeholder="Insurance Document Number" [(ngModel)]="data.insuranceNumber">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.insuranceAmount}}
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="insuranceAmount" type="text" placeholder="Insurance Amount" [(ngModel)]="data.insuranceAmount">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.currency}}
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="currency" type="text" placeholder="Currency" [(ngModel)]="data.currency">
+                                                </div>
                                             </td>
                                             <td>{{data.buyerName}}</td>
                                             <td (click)=" openInsuranceDoc(content); viewID(data)">
                                                 view
+                                            </td>
+                                            <td>
+                                                <button class="savBtn" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)">Save</button>
+                                                <button class="savBtn" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">Edit</button>
                                             </td>
                                         </tr>
 

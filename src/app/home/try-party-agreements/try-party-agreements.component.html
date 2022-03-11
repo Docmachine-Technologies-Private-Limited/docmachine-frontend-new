@@ -2,36 +2,36 @@
     <main id="content" class="content table-padding" role="main">
 
         <div style="
-        display: flex;
-        flex-direction: rows;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 0.8%;
-        padding-left: 1%;
-        padding-bottom: 0.8%;
-        border: 0.5px solid rgba(0, 0, 0, 0.2);
-        margin-left: 40px;
-        width: 94%;
-    ">
+    display: flex;
+    flex-direction: rows;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.8%;
+    padding-left: 1%;
+    padding-bottom: 0.8%;
+    border: 0.5px solid rgba(0, 0, 0, 0.2);
+    margin-left: 40px;
+    width: 94%;
+">
             <!-- *ngIf="!showInvoice" -->
             <div style="display: flex; align-items: center">
-                <h3 class="heading">Debit Note Documents</h3>
+                <h3 class="heading">Tri-Party Agreement Documents</h3>
                 <!-- {{doc}} -->
             </div>
 
             <div class="dropdown">
                 Date:
                 <select name="subject" id="subject">
-                <option value="" selected="selected">Today</option>
-            </select> Type:
+            <option value="" selected="selected">Today</option>
+        </select> Type:
                 <select name="topic" id="topic">
-                <option value="" selected="selected">All</option>
-            </select>
+            <option value="" selected="selected">All</option>
+        </select>
             </div>
             <div style="padding-top: 0.7%">
                 <button class="upload-button" [routerLink]="['/home/upload']">
-                Upload New
-            </button>
+            Upload New
+        </button>
             </div>
         </div>
 
@@ -53,11 +53,11 @@
                                             </th>
                                             <th scope="col"><span class="pl-3">DATE</span></th>
                                             <th scope="col">PI/PO no.</th>
-                                            <th scope="col">Debit Note No.</th>
-                                            <th scope="col">Total Debit Amount</th>
+                                            <th scope="col">Tri-Party Agreement No.</th>
+                                            <th scope="col">Tri-Party Agreement Amount</th>
                                             <th scope="col">Currency</th>
                                             <th scope="col">Buyer Name</th>
-                                            <th scope="col">Debit Note</th>
+                                            <th scope="col">Tri Party</th>
 
                                         </tr>
                                     </thead>
@@ -65,30 +65,30 @@
                                         <tr class="table-row" *ngFor="let data of item1; let i = index">
 
                                             <!-- (click)="
-                                            getInvoices(data, i) && getTransactions(data.pi_poNo) -->
+                                        getInvoices(data, i) && getTransactions(data.pi_poNo) -->
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
                                             <th class="pl-4 fw-normal">{{ data.date }}</th>
 
-                                            <td class="sb-no"> {{ data.pipo1 }} </td>
+                                            <td class="sb-no"> {{ data.pipo }} </td>
 
                                             <td>
                                                 <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.debitNoteNumber}}
+                                                    {{data.triPartyAgreementNumber}}
                                                 </div>
 
                                                 <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="debitNoteNumber" type="text" placeholder="Debit Note Number" [(ngModel)]="data.debitNoteNumber">
+                                                    <input class="tblInput form-control" name="triPartyAgreement" type="text" placeholder="Tri-Party Agreement Number" [(ngModel)]="data.triPartyAgreementNumber">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.totalDebitAmount}}
+                                                    {{data.triPartyAgreementAmount}}
                                                 </div>
 
                                                 <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="totalDebitAmount" type="text" placeholder="Total Debit Amount" [(ngModel)]="data.totalDebitAmount">
+                                                    <input class="tblInput form-control" name="triPartyAgreementAmount" type="text" placeholder="Tri Party Agreement Amount" [(ngModel)]="data.triPartyAgreementAmount">
                                                 </div>
                                             </td>
                                             <td>
@@ -97,12 +97,11 @@
                                                 </div>
 
                                                 <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="currency" type="text" placeholder="Currency" [(ngModel)]="data.currency">
+                                                    <input class="tblInput form-control" name="currency" type="text" placeholder="currency" [(ngModel)]="data.currency">
                                                 </div>
                                             </td>
-
                                             <td>{{data.buyerName}}</td>
-                                            <td (click)=" openDebitNote(content); viewDN(data)">
+                                            <td (click)=" openLetterOfCredit(content); viewLC(data)">
                                                 view
                                             </td>
                                             <td>

@@ -72,7 +72,11 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TermsAndConditionComponent } from './terms-and-condition/terms-and-condition.component';
 import { CreditNoteComponent } from './credit-note/credit-note.component';
 import { DebitNoteComponent } from './debit-note/debit-note.component';
-import { InsuranceDocumentComponent } from './insurance-document/insurance-document.component'
+import { InsuranceDocumentComponent } from './insurance-document/insurance-document.component';
+import {LetterOfCreditExportLCComponent} from './letter-of-credit-export-lc/letter-of-credit-export-lc.component';
+import { MasterServiceComponent } from './master-service/master-service.component';
+import { TryPartyAgreementsComponent } from './try-party-agreements/try-party-agreements.component';
+import { OpinionReportsComponent } from './opinion-reports/opinion-reports.component'
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -147,7 +151,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     TermsAndConditionComponent,
     CreditNoteComponent,
     DebitNoteComponent,
-    InsuranceDocumentComponent
+    InsuranceDocumentComponent,
+    LetterOfCreditExportLCComponent,
+    MasterServiceComponent,
+    TryPartyAgreementsComponent,
+    OpinionReportsComponent
   ],
   imports: [
     CommonModule,
@@ -440,7 +448,26 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             component: InsuranceDocumentComponent,
             pathMatch: "full"
           },
-
+          {
+            path: "letterOfCredit-LC",
+            component: LetterOfCreditExportLCComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "master-services",
+            component: MasterServiceComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "try-Party",
+            component: TryPartyAgreementsComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "opinion-report",
+            component: OpinionReportsComponent,
+            pathMatch: "full"
+          },
         ],
       },
     ]),

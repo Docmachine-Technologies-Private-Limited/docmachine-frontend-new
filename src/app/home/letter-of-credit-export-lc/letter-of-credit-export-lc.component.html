@@ -2,36 +2,36 @@
     <main id="content" class="content table-padding" role="main">
 
         <div style="
-        display: flex;
-        flex-direction: rows;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 0.8%;
-        padding-left: 1%;
-        padding-bottom: 0.8%;
-        border: 0.5px solid rgba(0, 0, 0, 0.2);
-        margin-left: 40px;
-        width: 94%;
-    ">
+      display: flex;
+      flex-direction: rows;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0.8%;
+      padding-left: 1%;
+      padding-bottom: 0.8%;
+      border: 0.5px solid rgba(0, 0, 0, 0.2);
+      margin-left: 40px;
+      width: 94%;
+  ">
             <!-- *ngIf="!showInvoice" -->
             <div style="display: flex; align-items: center">
-                <h3 class="heading">Debit Note Documents</h3>
+                <h3 class="heading">Letter Of Credit Documents</h3>
                 <!-- {{doc}} -->
             </div>
 
             <div class="dropdown">
                 Date:
                 <select name="subject" id="subject">
-                <option value="" selected="selected">Today</option>
-            </select> Type:
+              <option value="" selected="selected">Today</option>
+          </select> Type:
                 <select name="topic" id="topic">
-                <option value="" selected="selected">All</option>
-            </select>
+              <option value="" selected="selected">All</option>
+          </select>
             </div>
             <div style="padding-top: 0.7%">
                 <button class="upload-button" [routerLink]="['/home/upload']">
-                Upload New
-            </button>
+              Upload New
+          </button>
             </div>
         </div>
 
@@ -53,8 +53,8 @@
                                             </th>
                                             <th scope="col"><span class="pl-3">DATE</span></th>
                                             <th scope="col">PI/PO no.</th>
-                                            <th scope="col">Debit Note No.</th>
-                                            <th scope="col">Total Debit Amount</th>
+                                            <th scope="col">Letter Of Credit No.</th>
+                                            <th scope="col">Letter Of Credit Amount</th>
                                             <th scope="col">Currency</th>
                                             <th scope="col">Buyer Name</th>
                                             <th scope="col">Debit Note</th>
@@ -65,7 +65,7 @@
                                         <tr class="table-row" *ngFor="let data of item1; let i = index">
 
                                             <!-- (click)="
-                                            getInvoices(data, i) && getTransactions(data.pi_poNo) -->
+                                          getInvoices(data, i) && getTransactions(data.pi_poNo) -->
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
@@ -75,20 +75,20 @@
 
                                             <td>
                                                 <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.debitNoteNumber}}
+                                                    {{data.letterOfCreditNumber}}
                                                 </div>
 
                                                 <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="debitNoteNumber" type="text" placeholder="Debit Note Number" [(ngModel)]="data.debitNoteNumber">
+                                                    <input class="tblInput form-control" name="letterOfCreditNumber" type="text" placeholder="Letter Of Credit Number" [(ngModel)]="data.letterOfCreditNumber">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.totalDebitAmount}}
+                                                    {{data.letterOfCreditAmount}}
                                                 </div>
 
                                                 <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="totalDebitAmount" type="text" placeholder="Total Debit Amount" [(ngModel)]="data.totalDebitAmount">
+                                                    <input class="tblInput form-control" name="letterOfCreditAmount" type="text" placeholder="Letter Of Credit Amount" [(ngModel)]="data.letterOfCreditAmount">
                                                 </div>
                                             </td>
                                             <td>
@@ -100,9 +100,8 @@
                                                     <input class="tblInput form-control" name="currency" type="text" placeholder="Currency" [(ngModel)]="data.currency">
                                                 </div>
                                             </td>
-
                                             <td>{{data.buyerName}}</td>
-                                            <td (click)=" openDebitNote(content); viewDN(data)">
+                                            <td (click)=" openLetterOfCredit(content); viewLC(data)">
                                                 view
                                             </td>
                                             <td>

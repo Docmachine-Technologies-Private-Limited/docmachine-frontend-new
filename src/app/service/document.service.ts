@@ -290,6 +290,383 @@ export class DocumentService {
     );
   }
 
+  updateThird(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/third/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
+
+  // Get Credit Api
+
+  addCredit(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.post(
+      `${this.api_base}/credit/post`,
+      { credit: pipo },
+      httpOptions
+    );
+  }
+
+  getCredit() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/credit/get`, httpOptions);
+  }
+
+  getCreditByCreditValue(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/credit/getSingleCredit`,
+      {
+        id: id,
+      },
+      httpOptions
+    );
+  }
+
+  updateCredit(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/credit/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
+
+
+  // Get Debit Api
+
+  addDebit(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.post(
+      `${this.api_base}/debit/post`,
+      { debit: pipo },
+      httpOptions
+    );
+  }
+
+  getDebit() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/debit/get`, httpOptions);
+  }
+
+  getDebitByDebitValue(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/debit/getSingleDebit`,
+      {
+        id: id,
+      },
+      httpOptions
+    );
+  }
+
+  updateDebit(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/debit/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
+
+  // Get Insurance Api
+
+  addInsurance(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.post(
+      `${this.api_base}/insurance/post`,
+      { insurance: pipo },
+      httpOptions
+    );
+  }
+
+  getInsurance() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/insurance/get`, httpOptions);
+  }
+
+  getInsuranceByInsuranceValue(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/insurance/getSingleInsurance`,
+      {
+        id: id,
+      },
+      httpOptions
+    );
+  }
+
+  updateInsurance(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/insurance/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
+
+   // Get LetterLC Api
+
+   addLetterLC(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.post(
+      `${this.api_base}/letterLC/post`,
+      { letterLC: pipo },
+      httpOptions
+    );
+  }
+
+  getLetterLC() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/letterLC/get`, httpOptions);
+  }
+
+  getLetterLCByLetterLCValue(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/letterLC/getSingleLetterLC`,
+      {
+        id: id,
+      },
+      httpOptions
+    );
+  }
+
+  updateLetterLC(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/letterLC/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
+
+   // Get Master Service Api
+
+   addMasterService(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.post(
+      `${this.api_base}/masterService/post`,
+      { masterService: pipo },
+      httpOptions
+    );
+  }
+
+  getMasterService() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/masterService/get`, httpOptions);
+  }
+
+  getMasterSerByMasterSerValue(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/masterService/getSingleMasterService`,
+      {
+        id: id,
+      },
+      httpOptions
+    );
+  }
+
+  updateMasterService(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/masterService/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
+
+
+   // Get Opinion Report Api
+
+   addOpinionReport(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.post(
+      `${this.api_base}/opinionReport/post`,
+      { opinionReport: pipo },
+      httpOptions
+    );
+  }
+
+  getOpinionReport() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/opinionReport/get`, httpOptions);
+  }
+
+  getOpinionByOpinionValue(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/opinionReport/getSingleCredit`,
+      {
+        id: id,
+      },
+      httpOptions
+    );
+  }
+
+  updateOpinionReport(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/opinionReport/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
+
+
+
+
   addTask(data) {
     console.log('I am in service');
     this.loadFromLocalStorage();

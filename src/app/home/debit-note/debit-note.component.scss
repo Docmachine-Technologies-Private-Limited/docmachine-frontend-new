@@ -100,3 +100,19 @@ table {
     color: #ffffff;
     // justify-content: center;
 }
+
+.tblInput {
+    border: 1px solid #e3e6ee;
+    border-radius: 3px;
+    width: 180px;
+}
+
+.savBtn {
+    background-color: #49A2D7;
+    color: white;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    width: 60px;
+}

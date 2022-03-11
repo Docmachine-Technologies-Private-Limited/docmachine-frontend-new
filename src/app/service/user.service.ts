@@ -218,6 +218,25 @@ export class UserService {
     );
   }
 
+  updateManyPipo1(pipo, file) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(file)
+    console.log(pipo)
+    // console.log(doc)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/pipo/updateMany1`,
+      {
+        pipo: pipo,
+        file: file
+      },
+      httpOptions
+    );
+  }
+
   public getUser() {
     this.loadFromLocalStorage();
     console.log(this.authToken);

@@ -451,7 +451,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
           this.pipoData.doc
         );
       } else {
-        this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(  
+        this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
           this.pipourl11
         );
       }
@@ -855,9 +855,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
   toSave(data, index) {
     this.optionsVisibility[index] = false;
-    console.log('555555555555550', data);
-    console.log('6666666666666', this.pipoData);
-    console.log('777777777', this.pipoData.damagesUSD);
+    // console.log('555555555555550', data);
+    // console.log('6666666666666', this.pipoData);
+    // console.log('777777777', this.pipoData.damagesUSD);
 
     this.userService.updatePipo(this.pipoData, this.id).subscribe(
       (data) => {

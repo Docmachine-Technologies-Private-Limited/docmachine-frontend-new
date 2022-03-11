@@ -133,6 +133,12 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
   pipourl1: any;
   thirdParty: boolean = false;
+  creditNote: boolean = false;
+  debitNote: boolean = false;
+  insuranceCopy: boolean = false;
+  lcCopy: boolean = false;
+  agreement: boolean = false;
+  opinionReport: boolean = false;
   item3: any;
   pipoArray: any = [];
   beneValue: any = 'Select Beneficiary';
@@ -151,6 +157,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   mainBene: any;
   location: any;
   commodity: any;
+  currency : any;
 
 
   constructor(
@@ -336,6 +343,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     this.documentService.getPipo().subscribe(
       (res: any) => {
         console.log("HEre Response", res), (this.item3 = res.data);
+
       },
       (err) => console.log(err)
     );
@@ -365,6 +373,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     e.form.value.invoices = invoices;
     e.form.value.buyerName = this.mainBene;
     e.form.value.pipo = this.pipoArr
+
     // e.form.value._id = this.res._id
     console.log(e.form.value);
     // this.formData = new ShippingBill(e.form.value)
@@ -545,14 +554,227 @@ export class UploadComponent implements OnInit, AfterViewInit {
       (err) => console.log("Error adding pipo")
     );
   }
+
   onSubmitThird(e) {
-    e.form.value.pipo = this.pipoArray;
-    e.form.value.doc = this.pipourl1
+    console.log(e.form.value);
+    e.form.value.pipo = this.pipoArr;
+    e.form.value.doc = this.pipourl1;
+    e.form.value.buyerName = this.mainBene;
+    console.log(e.form.value);
     this.documentService.addThird(e.form.value).subscribe(
       (res) => {
         this.toastr.success(`Third party Document Added Successfully`);
         console.log("Third party Document Added Successfully");
-        this.router.navigateByUrl("/home/dashboardNew");
+        // this.router.navigateByUrl("/home/dashboardNew");
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+            .subscribe(
+              data => {
+                //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                console.log("king123")
+                console.log(data)
+
+                this.router.navigateByUrl("/home/try-Party");
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+      },
+      (err) => console.log("Error adding pipo")
+    );
+  }
+
+  onSubmitCredit(e){
+    console.log(e.form.value);
+    e.form.value.pipo = this.pipoArr;
+    e.form.value.doc = this.pipourl1;
+    e.form.value.buyerName = this.mainBene;
+    console.log(e.form.value);
+    this.documentService.addCredit(e.form.value).subscribe(
+      (res) => {
+        this.toastr.success(`Credit Note Document Added Successfully`);
+        console.log("Credit Note Document Added Successfully");
+
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+            .subscribe(
+              data => {
+                //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                console.log("king123")
+                console.log(data)
+
+                this.router.navigateByUrl("/home/creditNote");
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+        // this.router.navigateByUrl("/home/dashboardNew");
+      },
+      (err) => console.log("Error adding pipo")
+    );
+  }
+
+  // Debit Note Submit button
+
+  onSubmitDebit(e){
+    console.log(e.form.value);
+    e.form.value.pipo = this.pipoArr;
+    e.form.value.doc = this.pipourl1;
+    e.form.value.buyerName = this.mainBene;
+    // e.form.value.currency = this.currency;
+    console.log(e.form.value);
+    this.documentService.addDebit(e.form.value).subscribe(
+      (res) => {
+        this.toastr.success(`Debit Note Document Added Successfully`);
+        console.log("Credit Note Document Added Successfully");
+
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+            .subscribe(
+              data => {
+                //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                console.log("king123")
+                console.log(data)
+
+                this.router.navigateByUrl("/home/debitNote");
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+        // this.router.navigateByUrl("/home/dashboardNew");
+      },
+      (err) => console.log("Error adding pipo")
+    );
+
+  }
+
+  onSubmitInsurance(e){
+    console.log(e.form.value);
+    console.log(e.form.value);
+    e.form.value.pipo = this.pipoArr;
+    e.form.value.doc = this.pipourl1;
+    e.form.value.buyerName = this.mainBene;
+    // e.form.value.currency = this.currency;
+    console.log(e.form.value);
+    this.documentService.addInsurance(e.form.value).subscribe(
+      (res) => {
+        this.toastr.success(`Insurance Document Added Successfully`);
+        console.log("Credit Note Document Added Successfully");
+
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+            .subscribe(
+              data => {
+                //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                console.log("king123")
+                console.log(data)
+
+                this.router.navigateByUrl("/home/insuranceDocument");
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+        // this.router.navigateByUrl("/home/dashboardNew");
+      },
+      (err) => console.log("Error adding pipo")
+    );
+
+  }
+
+  onSubmitLetterLC(e){
+
+    console.log(e.form.value);
+    console.log(e.form.value);
+    e.form.value.pipo = this.pipoArr;
+    e.form.value.doc = this.pipourl1;
+    e.form.value.buyerName = this.mainBene;
+    // e.form.value.currency = this.currency;
+    console.log(e.form.value);
+    this.documentService.addLetterLC(e.form.value).subscribe(
+      (res) => {
+        this.toastr.success(`Letter Of Credit Document Added Successfully`);
+        console.log("Letter of Credit Document Added Successfully");
+
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+            .subscribe(
+              data => {
+                //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                console.log("king123")
+                console.log(data)
+
+                this.router.navigateByUrl("/home/letterOfCredit-LC");
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+        // this.router.navigateByUrl("/home/dashboardNew");
+      },
+      (err) => console.log("Error adding pipo")
+    );
+
+  }
+
+  onSubmitMasterService(e){
+    console.log(e.form.value);
+    console.log(e.form.value);
+    e.form.value.pipo = this.pipoArr;
+    e.form.value.doc = this.pipourl1;
+    e.form.value.buyerName = this.mainBene;
+    // e.form.value.currency = this.currency;
+    console.log(e.form.value);
+    this.documentService.addMasterService(e.form.value).subscribe(
+      (res) => {
+        this.toastr.success(`Master Service Document Added Successfully`);
+        console.log("Master Service Document Added Successfully");
+
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+            .subscribe(
+              data => {
+                //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                console.log("king123")
+                console.log(data)
+
+                this.router.navigateByUrl("/home/master-services");
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+        // this.router.navigateByUrl("/home/dashboardNew");
+      },
+      (err) => console.log("Error adding pipo")
+    );
+  }
+
+
+  onSubmitOpinionReport(e){
+    console.log(e.form.value);
+    console.log(e.form.value);
+    e.form.value.pipo = this.pipoArr;
+    e.form.value.doc = this.pipourl1;
+    e.form.value.buyerName = this.mainBene;
+    // e.form.value.currency = this.currency;
+    console.log(e.form.value);
+    this.documentService.addOpinionReport(e.form.value).subscribe(
+      (res) => {
+        this.toastr.success(`Opinion Report Document Added Successfully`);
+        console.log("Opinion Report Document Added Successfully");
+
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+            .subscribe(
+              data => {
+                //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                console.log("king123")
+                console.log(data)
+
+                this.router.navigateByUrl("/home/opinion-report");
+              },
+              error => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log("error")
+              });
+        // this.router.navigateByUrl("/home/dashboardNew");
       },
       (err) => console.log("Error adding pipo")
     );
@@ -602,6 +824,24 @@ export class UploadComponent implements OnInit, AfterViewInit {
         }
         else if (this.documentType === 'thirdParty') {
           this.thirdParty = true;
+        }
+        else if (this.documentType === 'creditNote'){
+          this.creditNote = true;
+        }
+        else if (this.documentType === 'debitNote'){
+          this.debitNote = true;
+        }
+        else if (this.documentType === 'insuranceCopy'){
+          this.insuranceCopy = true;
+        }
+        else if (this.documentType === 'lcCopy'){
+          this.lcCopy = true;
+        }
+        else if (this.documentType === 'agreement'){
+          this.agreement = true;
+        }
+        else if (this.documentType === 'opinionReport'){
+          this.opinionReport = true;
         }
         else {
           this.other = true
