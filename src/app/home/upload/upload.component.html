@@ -743,24 +743,30 @@
         <form *ngIf="thirdParty && !override" class="" #values="ngForm" (ngSubmit)="onSubmitThird(values)">
             <!----------      "-->
             <div style="
-              width: 70%;
+              width: 82%;
               display: flex;
               justify-content: center;
-              margin-left: 5%;
+              margin-left: 3%;
             " class="field">
-                <table style="width: 70%" class="field-table">
+                <table style="width: 82%" class="field-table">
                     <tr class="field-heading">
                         <td>Tri Party Number*</td>
 
                         <td>Tri Party Amount</td>
+
+                        <td>Currency</td>
                     </tr>
-                    <tr>
+                    <tr style="margin-left: -10%;">
                         <td>
                             <input ngModel class="form-control input2" type="text" name="triPartyAgreementNumber" />
                         </td>
 
                         <td>
                             <input ngModel class="form-control input2" style="width: 7100%0%" name="triPartyAgreementAmount" />
+                        </td>
+
+                        <td>
+                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -788,17 +794,20 @@
         <form *ngIf="creditNote && !override" class="" #values="ngForm" (ngSubmit)="onSubmitCredit(values)">
 
             <div style="
-            width: 70%;
+            width: 82%;
             display: flex;
             justify-content: center;
-            margin-left: 5%;
+            margin-left: 3%;
           " class="field">
-                <table style="width: 70%" class="field-table">
+                <table style="width: 82%" class="field-table">
                     <tr class="field-heading">
 
                         <td>Credit Note Number*</td>
 
                         <td>Credit Note Amount</td>
+
+                        <td>Currency
+                            <td>
                     </tr>
                     <tr>
                         <td>
@@ -807,6 +816,9 @@
 
                         <td>
                             <input ngModel class="form-control input2" style="width: 7100%0%" name="creditNoteAmount" />
+                        </td>
+                        <td>
+                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -826,17 +838,20 @@
         <form *ngIf="debitNote && !override" class="" #values="ngForm" (ngSubmit)="onSubmitDebit(values)">
 
             <div style="
-  width: 70%;
+  width: 82%;
   display: flex;
   justify-content: center;
-  margin-left: 5%;
+  margin-left: 3%;
 " class="field">
-                <table style="width: 70%" class="field-table">
+                <table style="width: 82%" class="field-table">
                     <tr class="field-heading">
 
                         <td>Debit Note Number*</td>
 
                         <td>Debit Note Amount</td>
+
+                        <td>Currency
+                            <td>
                     </tr>
                     <tr>
                         <td>
@@ -845,6 +860,9 @@
 
                         <td>
                             <input ngModel class="form-control input2" style="width: 7100%0%" name="totalDebitAmount" />
+                        </td>
+                        <td>
+                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -864,17 +882,19 @@
         <form *ngIf="insuranceCopy && !override" class="" #values="ngForm" (ngSubmit)="onSubmitInsurance(values)">
 
             <div style="
-width: 70%;
+width: 82%;
 display: flex;
 justify-content: center;
-margin-left: 5%;
+margin-left: 3%;
 " class="field">
-                <table style="width: 70%" class="field-table">
+                <table style="width:82%" class="field-table">
                     <tr class="field-heading">
 
                         <td>Insurance Number*</td>
 
                         <td>Insurance Amount</td>
+
+                        <td>Currency</td>
                     </tr>
                     <tr>
                         <td>
@@ -883,6 +903,10 @@ margin-left: 5%;
 
                         <td>
                             <input ngModel class="form-control input2" style="width: 7100%0%" name="insuranceAmount" />
+                        </td>
+
+                        <td>
+                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -902,17 +926,19 @@ margin-left: 5%;
         <form *ngIf="lcCopy && !override" class="" #values="ngForm" (ngSubmit)="onSubmitLetterLC(values)">
 
             <div style="
-width: 70%;
+width: 82%;
 display: flex;
 justify-content: center;
-margin-left: 5%;
+margin-left: 3%;
 " class="field">
-                <table style="width: 70%" class="field-table">
+                <table style="width: 82%" class="field-table">
                     <tr class="field-heading">
 
                         <td>Letter Of Credit Number*</td>
 
                         <td>Letter Of Credit Amount</td>
+
+                        <td>Currency</td>
                     </tr>
                     <tr>
                         <td>
@@ -921,6 +947,10 @@ margin-left: 5%;
 
                         <td>
                             <input ngModel class="form-control input2" style="width: 7100%0%" name="letterOfCreditAmount" />
+                        </td>
+
+                        <td>
+                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -940,17 +970,19 @@ margin-left: 5%;
         <form *ngIf="agreement && !override" class="" #values="ngForm" (ngSubmit)="onSubmitMasterService(values)">
 
             <div style="
-width: 70%;
+width: 82%;
 display: flex;
 justify-content: center;
-margin-left: 5%;
+margin-left: 3%;
 " class="field">
-                <table style="width: 70%" class="field-table">
+                <table style="width: 82%" class="field-table">
                     <tr class="field-heading">
 
                         <td>Master Service Number*</td>
 
                         <td>Master Service Amount</td>
+
+                        <td>Currency</td>
                     </tr>
                     <tr>
                         <td>
@@ -959,6 +991,10 @@ margin-left: 5%;
 
                         <td>
                             <input ngModel class="form-control input2" style="width: 7100%0%" name="masterServiceAmount" />
+                        </td>
+
+                        <td>
+                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -978,17 +1014,19 @@ margin-left: 5%;
         <form *ngIf="opinionReport && !override" class="" #values="ngForm" (ngSubmit)="onSubmitOpinionReport(values)">
 
             <div style="
-width: 70%;
+width: 82%;
 display: flex;
 justify-content: center;
-margin-left: 5%;
+margin-left: 3%;
 " class="field">
-                <table style="width: 70%" class="field-table">
+                <table style="width: 82%" class="field-table">
                     <tr class="field-heading">
 
                         <td>Opinion Report Number*</td>
 
                         <td>Opinion Report Amount</td>
+
+                        <td>Currency</td>
                     </tr>
                     <tr>
                         <td>
@@ -997,6 +1035,10 @@ margin-left: 5%;
 
                         <td>
                             <input ngModel class="form-control input2" style="width: 7100%0%" name="opinionReportAmount" />
+                        </td>
+
+                        <td>
+                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
