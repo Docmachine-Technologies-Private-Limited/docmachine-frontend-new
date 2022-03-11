@@ -266,6 +266,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
   }
 
+  hide(){
+    this.isGenerate = !this.isGenerate
+  }
+
   searchData1(a) {
     console.log(a)
     console.log(a.length)

@@ -10,9 +10,9 @@
     <div>
       <div *ngIf='file == "import"'>
         <button class="upload-button" (click)="open(content)">
-          Add Beneficiary +
+          Add New Customer<span>+</span>
         </button>
-        <h3 class="heading">Beneficiary details</h3>
+        <h4 class="heading">Beneficiary / Customer details </h4>
       </div>
       <div *ngIf='file == "export"'>
         <button class="upload-button" (click)="open1(content1)">
@@ -47,7 +47,7 @@
                         <td>{{ data.iban }}</td>
                         <td>{{ data.sortCode }}</td>
                         <td class="three" [routerLink]="'/home/editBene/' + data._id">
-                          <img style="width: 10px; width: 10px" src="../../../assets/3-dots.png" alt="" />
+                          <img width="18px" src="../../../assets/dot3.png" alt="" />
                         </td>
                       </tr>
                     </tbody>

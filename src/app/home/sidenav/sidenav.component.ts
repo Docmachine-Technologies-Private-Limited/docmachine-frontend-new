@@ -11,7 +11,7 @@ import { ToastrService } from "ngx-toastr";
   styleUrls: ["../../../sass/application.scss", "./sidenav.component.scss"],
 })
 export class SidenavComponent implements OnInit {
-  mt: boolean;
+  // mt: boolean;
   exp: boolean;
   inw: boolean;
   imp: any;
@@ -22,7 +22,7 @@ export class SidenavComponent implements OnInit {
   lc1: boolean;
   nonlc1: boolean;
   lcI: boolean;
-  view: boolean;
+  view: boolean = false;
   applicant: any;
   role: any;
   id: any;
@@ -32,6 +32,21 @@ export class SidenavComponent implements OnInit {
   status1: boolean = false;
   status2: boolean = false;
   status3: boolean = false;
+  status4: boolean = false;
+  status5: boolean = false;
+  status6: boolean = false;
+  status7: boolean = false;
+  status8: boolean = false;
+  status9: boolean = false;
+  status10: boolean = false;
+  status11: boolean = false;
+  status12: boolean = false;
+  status13: boolean = false;
+  status14: boolean = false;
+  status15: boolean = false;
+  status16: boolean = false;
+  status17: boolean = false;
+  status18: boolean = false;
   mt1: any;
   mt2: any;
   nt1: boolean;
@@ -84,9 +99,9 @@ export class SidenavComponent implements OnInit {
     this.router.navigate(["login"]);
   }
 
-  public manageTask() {
-    this.mt = !this.mt;
-  }
+  // public manageTask() {
+  //   this.mt = !this.mt;
+  // }
 
   public manageTask1() {
     this.mt1 = !this.mt1;
@@ -112,6 +127,249 @@ export class SidenavComponent implements OnInit {
   public newTask() {
     this.status = !this.status;
     this.router.navigate(["home/pipoDoc"]);
+  }
+  public newTask4(){
+    this.status4 = true;
+    this.status5  = false;
+    this.status6    = false;
+    this.status7    = false;
+    this.status8    = false;
+    this.status9    = false;
+    this.status10   = false;
+    this.status11   = false;
+    this.status12   = false;
+    this.status13   = false;
+    this.status14   = false;
+    this.status15   = false;
+    this.status16   = false;
+    this.status17   = false;
+    this.status18   = false;
+
+  }
+  public newTask5(){
+    this.status5 = true;
+  this.status4  = false;
+  this.status6    = false;
+  this.status7    = false;
+  this.status8    = false;
+  this.status9    = false;
+  this.status10   = false;
+  this.status11   = false;
+  this.status12   = false;
+  this.status13   = false;
+  this.status14   = false;
+  this.status15   = false;
+  this.status16   = false;
+  this.status17   = false;
+  this.status18   = false;
+  }
+  public newTask6(){
+    this.status6 = true;
+    this.status4  = false;
+  this.status5    = false;
+  this.status7    = false;
+  this.status8    = false;
+  this.status9    = false;
+  this.status10   = false;
+  this.status11   = false;
+  this.status12   = false;
+  this.status13   = false;
+  this.status14   = false;
+  this.status15   = false;
+  this.status16   = false;
+  this.status17   = false;
+  this.status18   = false;
+  }
+  public newTask7(){
+    this.status7 = true;
+    this.status4  = false;
+    this.status5    = false;
+    this.status6    = false;
+    this.status8    = false;
+    this.status9    = false;
+    this.status10   = false;
+    this.status11   = false;
+    this.status12   = false;
+    this.status13   = false;
+    this.status14   = false;
+    this.status15   = false;
+    this.status16   = false;
+    this.status17   = false;
+    this.status18   = false;
+  }
+  public newTask8(){
+    this.status8 = true;
+    this.status4  = false;
+    this.status5    = false;
+    this.status6    = false;
+    this.status7    = false;
+    this.status9    = false;
+    this.status10   = false;
+    this.status11   = false;
+    this.status12   = false;
+    this.status13   = false;
+    this.status14   = false;
+    this.status15   = false;
+    this.status16   = false;
+    this.status17   = false;
+    this.status18   = false;
+    
+  }
+  public newTask9(){
+    this.status9 = true;
+    this.status4  = false;
+    this.status5    = false;
+    this.status6    = false;
+    this.status7    = false;
+    this.status8    = false;
+    this.status10   = false;
+    this.status11   = false;
+    this.status12   = false;
+    this.status13   = false;
+    this.status14   = false;
+    this.status15   = false;
+    this.status16   = false;
+    this.status17   = false;
+    this.status18   = false;
+  }
+  public newTask10(){
+    this.status10 = !this.status10;
+    this.status4  = false;
+    this.status5    = false;
+    this.status6    = false;
+    this.status7    = false;
+    this.status8    = false;
+    this.status9   = false;
+    this.status11   = false;
+    this.status12   = false;
+    this.status13   = false;
+    this.status14   = false;
+    this.status15   = false;
+    this.status16   = false;
+    this.status17   = false;
+    this.status18   = false;
+  }
+  public newTask11(){
+    this.status11 = true;
+    this.status4  = false;
+    this.status5    = false;
+    this.status6    = false;
+    this.status7    = false;
+    this.status8    = false;
+    this.status9   = false;
+    this.status10   = false;
+    this.status12   = false;
+    this.status13   = false;
+    this.status14   = false;
+    this.status15   = false;
+    this.status16   = false;
+    this.status17   = false;
+    this.status18   = false;
+  }
+  public newTask12(){
+    this.status12 = true;
+    this.status4  = false;
+    this.status5    = false;
+    this.status6    = false;
+    this.status7    = false;
+    this.status8    = false;
+    this.status9   = false;
+    this.status11   = false;
+    this.status10   = false;
+    this.status13   = false;
+    this.status14   = false;
+    this.status15   = false;
+    this.status16   = false;
+    this.status17   = false;
+    this.status18   = false;
+  }
+  public newTask13(){
+    this.status13 = true;
+    this.status4  = false;
+    this.status5    = false;
+    this.status6    = false;
+    this.status7    = false;
+    this.status8    = false;
+    this.status9   = false;
+    this.status11   = false;
+    this.status10   = false;
+    this.status12   = false;
+    this.status14   = false;
+    this.status15   = false;
+    this.status16   = false;
+    this.status17   = false;
+    this.status18   = false;
+  }
+  public newTask14(){
+    this.status14 = true;
+    this.status4  = false;
+    this.status5    = false;
+    this.status6    = false;
+    this.status7    = false;
+    this.status8    = false;
+    this.status9   = false;
+    this.status11   = false;
+    this.status10   = false;
+    this.status12   = false;
+    this.status13   = false;
+    this.status15   = false;
+    this.status16   = false;
+    this.status17   = false;
+    this.status18   = false;
+  }
+  public newTask15(){
+    this.status15 = true;
+    this.status4  = false;
+    this.status5    = false;
+    this.status6    = false;
+    this.status7    = false;
+    this.status8    = false;
+    this.status9   = false;
+    this.status11   = false;
+    this.status10   = false;
+    this.status12   = false;
+    this.status13   = false;
+    this.status14   = false;
+    this.status16   = false;
+    this.status17   = false;
+    this.status18   = false;
+  }
+  public newTask16(){
+    this.status16 = true;
+    this.status4  = false;
+    this.status5    = false;
+    this.status6    = false;
+    this.status7    = false;
+    this.status8    = false;
+    this.status9   = false;
+    this.status11   = false;
+    this.status10   = false;
+    this.status12   = false;
+    this.status13   = false;
+    this.status14   = false;
+    this.status15   = false;
+    this.status17   = false;
+    this.status18   = false;
+  }
+  public newTask17(){
+    this.status16 = !this.status16;
+  }
+  public newTask18(){
+    this.status18 = true;
+    this.status4  = false;
+    this.status5    = false;
+    this.status6    = false;
+    this.status7    = false;
+    this.status8    = false;
+    this.status9   = false;
+    this.status11   = false;
+    this.status10   = false;
+    this.status12   = false;
+    this.status13   = false;
+    this.status14   = false;
+    this.status15   = false;
+    this.status17   = false;
+    this.status16   = false;
   }
 
   public newTask1() {

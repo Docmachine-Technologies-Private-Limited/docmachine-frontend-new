@@ -14,7 +14,7 @@
         height: 100vh;
       ">
       <div class="topclass">
-        <img class="image3" src="./assets/LogoFinal.png" />
+        <!-- <img class="image3" src="./assets/LogoFinal.png" /> -->
         <button class="leftl btn1" [class.disable]="isVisible" [disabled]="isVisible" (click)="onLogin()">
           Login
         </button>
@@ -47,7 +47,7 @@
                   </div>
                   <div class="form-group mb-3">
                     <label>Email</label>
-                    <input id="inputEmail" formControlName="email" autocomplete="off" type="email" placeholder="Your Email" required=""
+                    <input id="inputEmail" type="email"  formControlName="email"   placeholder="Your Email" required=""
                       class="
                       form-control
                       rounded-pill
@@ -55,7 +55,7 @@
                       shadow-sm
                       px-4
                       email
-                    " [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                    " [ngClass]="{ 'is-invalid': submitted && f.email.errors }"  autocomplete="off"/>
                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                       <div *ngIf="f.email.errors.required" style="margin-left: 15px;">Email is required</div>
                       <div *ngIf="f.email.errors.pattern" style="margin-left: 15px;">Not an Email</div>
@@ -79,8 +79,8 @@
                         <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show"></i>
                     </div>
                     <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                      <div *ngIf="f.password.errors.required" style="margin-left: 15px;">Please enter password</div>
-                      <div *ngIf="f.password.errors.minlength" style="margin-left: 15px;">Password should be more than 6
+                      <div *ngIf="f.password.errors.required" style="margin-left: 15px; margin-top: -16px;">Please enter password</div>
+                      <div *ngIf="f.password.errors.minlength" style="margin-left: 15px; margin-top: -16px;">Password should be more than 6
                         letter</div>
                     </div>
                   </div>
@@ -102,15 +102,15 @@
                       <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show1"></i>
                     </div>
                     <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
-                      <div *ngIf="f.confirmPassword.errors.required" style="margin-left: 15px;">Please enter confirm
+                      <div *ngIf="f.confirmPassword.errors.required" style="margin-left: 15px; margin-top: -16px;">Please enter confirm
                         password
                       </div>
-                      <div *ngIf="f.confirmPassword.errors.minlength" style="margin-left: 15px;">Password should be more
+                      <div *ngIf="f.confirmPassword.errors.minlength" style="margin-left: 15px; margin-top: -16px;">Password should be more
                         than 6 letter</div>
                     </div>
                   </div>
                   <p class="text-muted mb-4 bottom-text ml-2">
-                    You continuing, you agree to DocMachine
+                    By continuing, you agree to DocMachine
                     <a href="">Term of service</a> we will manage information as described in our <a href="">privacy
                       policy agrement</a>
                   </p>

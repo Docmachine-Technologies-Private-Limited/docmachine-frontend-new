@@ -57,13 +57,14 @@
     position: absolute;
     width: 299px;
     height: 92px;
+    margin-top: -16.7% !important;
 }
 
-.image3 {
-    display:none;
-    margin-top: 45% !important;
+// .image3 {
+//     display:none;
+//     margin-top: 30% !important;
 
-}
+// }
 
 .display-5 {
     font-weight: 400;
@@ -174,6 +175,7 @@ label {
     width: 160px;
     height: 40px;
     border-radius: 20px;
+    box-shadow: #51aee5 -2px 21px 20px -15px !important;
     background-color: #51aee5;
     font-size: 12px;
     color: #ffffff;

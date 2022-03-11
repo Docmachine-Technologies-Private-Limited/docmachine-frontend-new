@@ -16,7 +16,10 @@ import { AppConfig } from '../app.config';
   styleUrls: ['./create-team1.component.scss']
 })
 export class CreateTeam1Component implements OnInit, AfterViewInit {
+  
   @Input() que: any;
+
+
   @Input() entities: any;
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
   public type: string = 'directive';
@@ -49,6 +52,8 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   x: any;
   y: any;
   api_base: any;
+  dynamicVariable = false;
+  modo1: any=['choose Account type'];
 
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private router: Router, private toastr: ToastrService, public appconfig: AppConfig) {
@@ -116,7 +121,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
       bank: ['', Validators.required],
       bicAddress: ['', [Validators.required, Validators.pattern("^[A-Za-z]{6}[A-Za-z0-9]{5}$"), Validators.maxLength(11)]],
       accNumber: ['', [Validators.required, Validators.pattern("^[0-9]{3,34}")]],
-      accType: ['', Validators.required],
+      // accType: ['', Validators.required],
       currency: ['', Validators.required],
     });
   }
@@ -126,8 +131,10 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
       product: new FormControl('')
     });
   }
+  
+  
 
-  getCourses(form) {
+  getCourses(form): any {
     return form.get('bankDetails').controls;
   }
 
@@ -158,6 +165,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     const control = this.loginForm.controls.bankDetails as FormArray;
     control.push(this.initCourse());
     this.isDisabled = false;
+    this.modo1.push('Choose Account Type');
   }
 
   onAddCourseLoc(e) {
@@ -188,6 +196,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     const control = this.loginForm.controls.commodity as FormArray;
     control.push(this.initComo());
     this.isDisabled = false;
+    
   }
 
   removeAddress(i) {
@@ -292,6 +301,8 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
+    
+    console.log(this.loginForm.value.bankDetails)
     console.log(this.loginForm.value)
     console.log("1")
     this.submitted = true
@@ -303,15 +314,26 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
       this.isDisabled = false;
       return;
     }
-    if (this.file.length < 3) {
-      this.toastr.error('Invalid inputs, please upload all the file!');
-      console.log("2")
-      this.isDisabled = false;
-      return;
-    }
+
+    // uncomment bellow code to work of upload files
+    // if (this.file.length < 3) {
+    //   this.toastr.error('Invalid inputs, please upload all the file!');
+    //   console.log("2")
+    //   this.isDisabled = false;
+    //   return;
+    // }
     console.log("3")
     this.loginForm.value.file = this.file
     console.log(this.loginForm.value)
+   
+    let array1=[]
+    this.loginForm.value.bankDetails.forEach((value, index) => {
+      const newVal = { ...value };
+      newVal['accType']=this.modo1[index]
+      array1.push(newVal)
+     
+  });
+  this.loginForm.value.bankDetails=array1
     this.userService.creatTeam(this.loginForm.value)
       .subscribe(
         data => {
@@ -383,6 +405,8 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
 
   modo(e, i) {
     console.log(e)
+    this.modo1[i]=e
+    // this.modo1[i+1]='choose Account Type'
     if (e === 'OD-over draft' || e === 'CC- cash credit' || e === 'CA-Current account') {
       this.currencyName[i] = "INR"
     }

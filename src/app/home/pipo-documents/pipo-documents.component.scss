@@ -1,6 +1,36 @@
 * {
     font-family: "Poppins", sans-serif;
 }
+// .fa-circle {
+//     font-size: 24px;
+//     color: #dfd9df;
+//     margin-left: 34px;
+// }
+// .fa-check-circle{
+//     font-size: 22px;
+//     color: #49A2D7;
+    
+// }
+
+.arrow {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-top: 2px solid #C6CBD4;
+    border-right: 2px solid #C6CBD4;
+  }
+  
+  .arrow-top {
+    transform: rotate(-45deg);
+    margin-left: 8px;
+    
+  }
+  .arrow-top:hover{
+  transform: rotate(135deg);	
+  border-top: 2px solid #49a2d7;
+  border-right: 2px solid #49a2d7;
+  }
+  
 
 .heading {
     font-family: "Poppins", sans-serif;
@@ -16,7 +46,7 @@
 
 .table-heading {
     font-family: "Poppins", sans-serif;
-    font-weight: 500;
+    font-weight: 400;
     color: #747474;
     //opacity: 50%;
 }
@@ -88,6 +118,7 @@ th,
 td {
     //height: 55px;
     vertical-align: middle !important;
+    text-align: center;
 }
 
 th {
@@ -448,9 +479,10 @@ p.fs14 {
     //margin-bottom: 0px !important;
     background-color: white;
     height: 100%;
+    min-width: 110%;
     padding: 1% 0;
     padding-left: 24px;
-    margin-left: -30px;
+    margin-left: -24px;
 }
 
 .tab>label {
@@ -646,12 +678,13 @@ select:focus {
 }
 
 .smalll-input {
-    width: 160px !important;
+    width: 96% !important;
     outline: none;
+    margin-left: 4px;
     border: none;
     display: block;
     border-radius: 4px;
-    border: 1px solid #d5dbe8;
+    border: 1px solid #dedede;
     height: 35px;
 }
 
@@ -973,10 +1006,20 @@ table tbody {
     color: white;
 }
 
-.customDropdown {
+// .dropdown-content p  {
+//     cursor: pointer;
+//     padding: 4px 6px;
+//     transition: 0.4s ease;
+// }
+
+// .dropdown-content p:hover {
+//     background-color: #49a2d7;
+    
+// }
+
+.customDropdown  {
     position: relative;
     display: inline-block;
-    border: 1px solid rgba(0, 0, 0, 0.4);
     font-size: 14px;
     padding-left: 12px;
     padding-right: 10px;
@@ -989,32 +1032,39 @@ table tbody {
 }
 
 .customDropdown:hover {
-    border: 1px solid #4b74ff;
-    color: #4b74ff;
-    z-index: 1;
+    border: 1px solid #4b74ff !important;
+    color: #4b74ff !important;
+
 }
+
 
 .dropdown-content {
     display: none;
     position: relative;
-    background-color: #f9f9f9;
-    min-width: 70px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+   
+    // min-width: 70px;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     z-index: 1;
     border-radius: 6px;
     transform: translate(-14px, 4px);
     // height: 150px;
 }
 
-.dropdown-content p {
+.dropdown-content  a {
+    display: inline-block;
     cursor: pointer;
     padding: 4px 6px;
+    min-width: 70px;
+    color: black;
     transition: 0.4s ease;
 }
 
-.dropdown-content p:hover {
-    background-color: rgba(191, 187, 187, 0.556);
+.dropdown-content  a:hover {
+    background-color: #49a2d7;
+    color: white;
 }
+
 
 .customDropdown .dropIco {
     margin-left: 7px;
@@ -1074,9 +1124,10 @@ table tbody {
     font-weight: 700;
     background-color: RGB(81, 174, 229);
     border-radius: 20px;
+    margin-bottom: 13px;
     border: none;
     outline: none;
-    height: 35px;
+    height: 40px;
     color: RGB(255, 255, 255);
 }
 
@@ -1136,7 +1187,7 @@ table tbody {
     transform: translate(-14px, 4px);
 }
 
-.dropdown-content2 p {
+.dropdown-content2 a {
     cursor: pointer;
     padding: 0px 16px;
     margin-bottom: 0px;
@@ -1144,7 +1195,7 @@ table tbody {
     background: white;
 }
 
-.dropdown-content2 p:hover {
+.dropdown-content2 a:hover {
     background-color: rgba(191, 187, 187, 0.556);
     font-weight: 600;
 }
@@ -1153,7 +1204,7 @@ table tbody {
     margin-left: 7px;
 }
 
-.dropdown-content2 p a {
+.dropdown-content2  a {
     text-decoration: none;
     color: black;
 }
@@ -1168,6 +1219,7 @@ table tbody {
 
 .fas {
     font-family: "Font Awesome 5 Free" !important;
+    
 }
 
 .display-5 {
@@ -1457,7 +1509,7 @@ table tbody {
     margin-top: 12px;
     outline: none;
     white-space: nowrap;
-    -webkit-user-select: none;
+    // -webkit-user-select: none;
     cursor: pointer;
     text-align: center;
     align-items: center;

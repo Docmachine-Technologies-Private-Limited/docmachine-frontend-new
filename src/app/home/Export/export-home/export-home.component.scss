@@ -519,14 +519,18 @@ table tbody {
 }
 
 .opt {
-  background-color: #49a2d7;
-  padding: 0 1%;
-  height: 25px;
-  min-width: 100px;
-  box-shadow: 4px 0px 7px #109cf1;
-  border: none;
-  color: white;
-  border-radius: 20px;
+  font-family: 'Nunito Sans', sans-serif !important;
+    min-width: 160px;
+    padding: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    background-color: RGB(81, 174, 229);
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    height: 40px;
+    margin-left: 30px;
+    color: RGB(255, 255, 255);
 }
 
 input ::placeholder {

@@ -17,6 +17,7 @@ import { takeWhile } from "rxjs/operators";
 import { FormArray, NgForm } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from 'ngx-toastr';
+import * as data1 from '../../currency.json';
 // import {ToastrService} from 'ngx-toastr';
 import {
   DropzoneDirective,
@@ -84,11 +85,23 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public selectedBenne = "";
   public beneSelect1: string;
   public selectCombo;
+  currencyName = [];
+  currencyName1 = [];
+  dataJson1: any;
+  jsondata1: any;
+  toggle1: boolean;
+  y: any;
+  dataJson2: any;
+  jsondata2: any;
+  toggle2: boolean;
+  z: any;
 
   public config: DropzoneConfigInterface;
   public config1: DropzoneConfigInterface;
   public config2: DropzoneConfigInterface;
   shippingForm: FormGroup;
+  // loginForm: FormGroup;
+  public submitted = false;
   authToken: string;
   headers: any;
   closeResult: string;
@@ -105,7 +118,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
     pcRefNo: new FormControl("", Validators.required),
     date: new FormControl("", Validators.required),
     dueDate: new FormControl("", Validators.required),
-    location: new FormControl("", Validators.required)
+    location: new FormControl("", Validators.required),
+    beneName: new FormControl("",Validators.required)
   });
 
 
@@ -151,10 +165,17 @@ export class UploadComponent implements OnInit, AfterViewInit {
   mainBene: any;
   location: any;
   commodity: any;
+  isDisabled: boolean;
 
-
+  // ngOnInit() {
+  //   this.loginForm = this.formBuilder.group({
+  //     name:['',Validators.required]
+  //   });
+  // }
+  get f(){return this.loginForm.controls;}
   constructor(
     @Inject(PLATFORM_ID) public platformId,
+    
     private formBuilder: FormBuilder,
     private http: HttpClient,
     private documentService: DocumentService,
@@ -268,6 +289,10 @@ export class UploadComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.jsondata1 = data1['default'];
+    this.dataJson1 = data1['default']
+    this.jsondata2 = data1['default'];
+    this.dataJson2 = data1['default']
     this.userService.getTeam()
       .subscribe(
         data => {
@@ -418,7 +443,55 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
     console.log(this.pipoArray)
   }
+ 
+  searchCurrency(e, i) {
+    this.y = i
+    this.toggle1 = true;
+    console.log(e)
+    this.jsondata1 = []
+    for (let data of this.dataJson1) {
+      if (data.currency.toLowerCase().includes(e.toLowerCase())) {
+        console.log('1')
+        this.jsondata1.push(data)
+      }
 
+
+    }
+    console.log(this.jsondata1)
+    console.log(this.currencyName.length)
+  }
+  currencyClick(e, i) {
+    this.currencyName[i] = e
+    console.log(this.currencyName)
+
+    this.toggle1 = false;
+
+
+  }
+  searchCurrency1(e, i) {
+    this.z = i
+    this.toggle2 = true;
+    console.log(e)
+    this.jsondata2 = []
+    for (let data of this.dataJson2) {
+      if (data.currency.toLowerCase().includes(e.toLowerCase())) {
+        console.log('1')
+        this.jsondata2.push(data)
+      }
+
+
+    }
+    console.log(this.jsondata2)
+    console.log(this.currencyName1.length)
+  }
+  currencyClick1(e, j) {
+    this.currencyName1[j] = e
+    console.log(this.currencyName1)
+
+    this.toggle2 = false;
+
+
+  }
   public onSubmitBoe(e) {
     console.log(this.selectCombo)
     console.log("asjbakujfbkasjfbkuh");
@@ -529,7 +602,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     else if (this.documentType == 'PO') {
       this.piPoForm.value.doc1 = this.pipourl1
     }
-    if (this.documentType1 == 'import') {
+    if (this.documentType1 == 'import' ) {
       this.piPoForm.value.benneName = this.beneValue
     }
     else if (this.documentType1 == 'export') {
@@ -542,7 +615,23 @@ export class UploadComponent implements OnInit, AfterViewInit {
     this.documentService.addPipo(this.piPoForm.value).subscribe(
       (res) => {
         console.log("Pipo Added Successfully");
-        this.router.navigateByUrl("/home/dashboardNew");
+        if (this.documentType1 == 'import' && this.documentType == 'PI'){
+        this.router.navigateByUrl("/home/pipoDoc");}
+        else if( this.documentType1 == 'import' && this.documentType == 'PO'){
+          this.router.navigateByUrl("/home/pipoDoc");
+        }
+        else if (this.documentType1 == 'export' && this.documentType == 'PI') {
+          this.router.navigateByUrl("/home/pipoDocExport");
+        }
+        else if (this.documentType1 == 'export' && this.documentType == 'PO') {
+          this.router.navigateByUrl("/home/pipoDocExport");
+        }
+        else if (this.documentType1 == 'export' && this.documentType == 'PO') {
+          this.router.navigateByUrl("/home/pipoDocExport");
+        }
+        else{
+          this.router.navigateByUrl("/home/dashboardNew");
+        }
       },
       (err) => console.log("Error adding pipo")
     );
@@ -861,6 +950,19 @@ export class UploadComponent implements OnInit, AfterViewInit {
   }
 
   onSubmitBene() {
+    
+    this.isDisabled = true;
+    console.log(this.loginForm.value);
+
+        // stop here if form is invalid
+         if (this.loginForm.invalid) {
+          this.isDisabled = false;
+          this.submitted = true;
+           
+             return;
+
+         }
+   
     console.log(this.loginForm.value)
 
     this.beneValue = this.loginForm.value.beneName
@@ -884,6 +986,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
         error => {
           console.log("error")
         });
+        
   }
 
   onSubmitBuyer() {

@@ -1,26 +1,26 @@
 <div class="content-wrap">
   
   <main id="content" class="content table-padding" role="main">
-    <div class="container1">
+    <div class="container1" id="myDiv">
       <div class="tip">
-        <h6>Upload Document/Add new PIPO</h6>
+        <p >Edit Proforma invoice/ Purchase Order</p>
       </div>
       <div class="tipright">
         <div class="tip1">
         <img src="../../../assets/idea.png" style="height: 30px;width: 30px; margin-left: 1150px; margin-top: -5px;">
         <p style="color:#49A2D7;font-weight: 400;font-size: 13px;font-family: Europa; margin-left: 3px;">Page Tips <span>
           <img src="../../../assets/Rectangle-7.png" style="height: 20px; width: 1px; color: #EAEDF3;"></span></p>
-        <img src="../../../assets/cross.png" style="height: 20px; width: 20px; margin-left: 5px;"  alt="">
+        <img src="../../../assets/cross.png" style="height: 20px; width: 20px; margin-left: 5px;" class="close" onclick="document.getElementById('myDiv').style.display='none'" alt="">
         </div>
       </div>
      </div>
-    <div style="margin-top: 5px; margin-bottom: 7px;">
+    <!-- <div >
       <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
-          style="width: 20px; height: 20px; margin-left: 26px; margin-top: 5px; "><span style="margin-left: 9px;"
+          style="width: 20px; height: 20px; margin-left: 29px;margin-bottom: 10px; margin-top: 6px; "><span style="margin-left: 5px ;margin-bottom: 10px;"
           [routerLink]="['/home/dashboardTask']">Back</span>
-  </div>
+  </div> -->
 
-    <h3 class="heading" *ngIf='docu == "pipo"'>New Perfoma invoice/ Purchase Order</h3>
+    <h3 class="heading" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
     <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
     <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
     <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' >Upload Document</h3>
@@ -76,49 +76,50 @@
       </select>
       <div
         *ngIf='documentType == "PI" && documentType1 == "import" || documentType == "PO" && documentType1 == "import"'>
-        <div style="display: flex; align-items: center; margin-left: 30px;">
-          <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 32px;">Beneficiary
+        <div style="display: flex; align-items: center; margin-left: 23px !important; ">
+          <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px !important; "> Beneficiary
             Name*</label>
-          <div class="customDropdown" style="flex-direction:row; ">
-            <span style="color: #323e4a !important; min-width: 150px;">{{beneValue}}</span>
+          <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
+            <span style="color: #323e4a !important; min-width: 250px;">{{beneValue}}</span>
             <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
               <i id="up3" style="display: none" class="fas fa-angle-up"></i>
             </span>
-            <div class="dropdown-content" style="margin-top: -2px;">
-              <p *ngFor="let bene of benneDetail" (click)='clickBene(bene.beneName)'><a>{{bene.beneName}}</a></p>
-              <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p>
+            <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
+              <a style="min-width:100%;" *ngFor="let bene of benneDetail" (click)='clickBene(bene.beneName)'>{{bene.beneName}}</a>
+              <a style="border: 1px solid #EAEDF3;min-width:100%;" (click)="open(content)">Add New Beneficiary</a>
             </div>
           </div>
         </div>
 
       </div>
+      <label *ngIf='documentType == "PI" && documentType1 == "export" || documentType == "PO" && documentType1 == "export"' style="flex-direction:row; font-size: 20px; color: #303030;margin-left: 22px !important; margin-top: -22px;  ">Buyer’s
+        Name*</label>
       <div
         *ngIf='documentType == "PI" && documentType1 == "export" || documentType == "PO" && documentType1 == "export"'>
-        <div style="display: flex; align-items: center; margin-left: 30px;">
-          <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Buyer’s
-            Name*</label>
-          <div class="customDropdown" style="flex-direction:row; ">
+        <div style="display: flex; align-items: center; margin-left: 23px;">
+        
+          <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px; border: 1px solid #C6CBD4; flex-direction:row; ">
             <span style="color: #323e4a !important; min-width: 150px;">{{buyerValue}}</span>
             <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
               <i id="up3" style="display: none" class="fas fa-angle-up"></i>
             </span>
-            <div class="dropdown-content" style="margin-top: -2px;">
-              <p *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'><a>{{buyer.buyerName}}</a></p>
-              <p style="border: 1px solid #EAEDF3;" (click)="open1(content1)"><a>Add New Buyer</a></p>
+            <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
+              <a style="min-width:100%;" *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'>{{buyer.buyerName}}</a>
+              <a style="border: 1px solid #EAEDF3;min-width:100%;" (click)="open1(content1)">Add New Buyer</a>
             </div>
           </div>
         </div>
-        <br>
-        <div style="display: flex; align-items: center; margin-left: 30px;">
-          <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Choose
+        
+        <div style="display: flex; align-items: center; margin-left: 23px;">
+          <label style="flex-direction:row; font-size: 20px; color: #303030;margin-right: 50px !important; ">Choose
             Commodity</label>
-          <div class="customDropdown" style="flex-direction:row; width: 252px;">
+          <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;">
             <span style="color: #323e4a !important; min-width: 150px;">Choose Commodity</span>
             <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
               <i id="up3" style="display: none" class="fas fa-angle-up"></i>
             </span>
-            <div class="dropdown-content" style="margin-top: -2px;">
-              <p *ngFor="let buyer of commodity" (click)='clickComo(buyer.como)'><a>{{buyer.como}}</a></p>
+            <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
+              <a style="min-width:100%;" *ngFor="let buyer of commodity" (click)='clickComo(buyer.como)'>{{buyer.como}}</a>
             </div>
           </div>
         </div>
@@ -131,54 +132,57 @@
 
 
       </div>
-      <div *ngIf='documentType' style="">
+      <div *ngIf='documentType' >
         <div *ngIf='documentType != "PI" && documentType != "PO"'
           style="display: flex; align-items: center; margin-left: 30px;">
 
           <div *ngIf='documentType == "boe"'>
-            <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
-            <div class="customDropdown" style="flex-direction:row; ">
+            <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PIPO*</label>
+            <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
               <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
               <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                 <i id="up3" style="display: none" class="fas fa-angle-up"></i>
               </span>
-              <div class="dropdown-content" style="margin-top: -2px;">
-                <p *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.benneName )'>
-                  <a *ngIf='bene.file == "import"'> PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
-                </p>
+              <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
+                <div *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.benneName )'> 
+                 <a *ngIf='bene.file == "import"'> PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
+                </div>
+                
                 <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
               </div>
             </div>
           </div>
           <div *ngIf='documentType == "sb"'>
-            <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
-            <div class="customDropdown" style="flex-direction:row; ">
+            <div style="display: flex; align-items: center; margin-left: 23px;">
+            <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PIPO*</label>
+            <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
               <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
               <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                 <i id="up3" style="display: none" class="fas fa-angle-up"></i>
               </span>
-              <div class="dropdown-content" style="margin-top: -2px;">
-                <p *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.buyerName )'>
-                  <a *ngIf='bene.file == "export"'> PI-{{bene.pi_poNo}}-{{bene.buyerName}}</a>
-                </p>
+              <div class="dropdown-content" style="min-width:200px; margin-right:-26px;"  >
+                 <div *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.buyerName )'>
+                  <a style="min-width:100%;" *ngIf='bene.file == "export"' > PI-{{bene.pi_poNo}}-{{bene.buyerName}}</a>
+                </div>
                 <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
               </div>
             </div>
           </div>
+          </div>
           <div *ngIf='documentType != "sb" && documentType != "boe" && documentType != "PO" && documentType != "PI" '>
-            <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
-            <div class="customDropdown" style="flex-direction:row; ">
+            <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PIPO*</label>
+            <div class="customDropdown" style="width: 300px; margin-bottom: 10px; border: 1px solid #C6CBD4; flex-direction:row; ">
               <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
               <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                 <i id="up3" style="display: none" class="fas fa-angle-up"></i>
               </span>
-              <div class="dropdown-content" style="margin-top: -2px;">
-                <p *ngFor="let bene of item3">
-                  <a *ngIf='bene.file == "export"' (click)='clickPipo("PI",bene.pi_poNo,bene.buyerName )'>
+              <div class="dropdown-content" style=" min-width: 200px;margin-right:-26px;" >
+                 <div *ngFor="let bene of item3"> 
+                  <a style="min-width:100%;" *ngIf='bene.file == "export"' (click)='clickPipo("PI",bene.pi_poNo,bene.buyerName )'>
                     PI-{{bene.pi_poNo}}-{{bene.buyerName}}</a>
-                  <a *ngIf='bene.file == "import"' (click)='clickPipo("PI",bene.pi_poNo,bene.benneName )'>
+                  <a style="min-width:100%;" *ngIf='bene.file == "import"' (click)='clickPipo("PI",bene.pi_poNo,bene.benneName )'>
                     PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
-                </p>
+                  </div>
                 <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
               </div>
             </div>
@@ -198,18 +202,20 @@
 
 
     </div>
-    <div *ngIf='docu == "boe"' style="">
-      <div style="display: flex; align-items: center; margin-left: 30px;">
-        <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
-        <div class="customDropdown" style="flex-direction:row; ">
+    <div *ngIf='docu == "boe"'>
+      <div style="display: flex; align-items: center; margin-left: 23px;">
+        <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PIPO*</label>
+        <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;">
           <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
           <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
             <i id="up3" style="display: none" class="fas fa-angle-up"></i>
           </span>
-          <div class="dropdown-content" style="margin-top: -2px;">
-            <p *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.benneName )'>
+          <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
+            <div *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.benneName )'>
+            
               <a *ngIf='bene.file == "import"'> PI-{{bene.pi_poNo}}-{{bene.benneName}}</a>
-            </p>
+            
+          </div>
             <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
           </div>
         </div>
@@ -217,8 +223,8 @@
 
     </div>
     <div *ngIf='docu == "sb"' style="margin-bottom: 20px;">
-      <div style="display: flex; align-items: center; margin-left: 30px;">
-        <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
+      <div style="display: flex; align-items: center; margin-left: 23px;">
+        <label style="flex-direction:row; font-size: 20px; color: #303030;">Select PIPO*</label>
         <div class="customDropdown" style="flex-direction:row; ">
           <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
           <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
@@ -243,23 +249,23 @@
     </div>
 
     <div *ngIf='docu == "pipo" && file =="import"'>
-      <div style="display: flex; align-items: center; margin-left: 30px;">
-        <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Beneficiary
+      <div style="display: flex; align-items: center; margin-left: 23px;">
+        <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px !important; ">Beneficiary
           Name*</label>
-        <div class="customDropdown" style="flex-direction:row; ">
-          <span style="color: #323e4a !important; min-width: 150px;">{{beneValue}}</span>
+        <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
+          <span style="color: #323e4a !important; max-width: 250px;">{{beneValue}}</span>
           <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
             <i id="up3" style="display: none" class="fas fa-angle-up"></i>
           </span>
-          <div class="dropdown-content" style="margin-top: -2px;">
-            <p *ngFor="let bene of benneDetail" (click)='clickBene(bene.beneName)'><a>{{bene.beneName}}</a></p>
-            <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p>
+          <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
+            <a style="min-width:100%;" *ngFor="let bene of benneDetail" (click)='clickBene(bene.beneName)'>{{bene.beneName}}</a>
+            <a style="min-width:100%; border-top: 2px solid #e5e7ec;"  (click)="open(content)">Add New Beneficiary</a>
           </div>
         </div>
       </div>
 
 
-      <div style="margin-top: 40px; margin-left: 33px;">
+      <div style="margin-top: 40px; margin-left: 30px;">
         <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
         <div style="display: flex; align-items: center;">
           <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
@@ -310,7 +316,7 @@
       </div>
 
 
-      <div style="margin-top: 40px; margin-left: 33px;">
+      <div style="margin-top: 40px; margin-left: 30px;">
         <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
         <div style="display: flex; align-items: center;">
           <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
@@ -400,7 +406,7 @@
               <input [(ngModel)]="res.sbno" class="input" type="text" name="sbno" />
             </td>
             <td>
-              <input [(ngModel)]="res.sbdate" class="input" type="text" name="sbdate" />
+              <input [(ngModel)]="res.sbdate" class="input" type="date" name="sbdate" />
             </td>
             <td><button type="submit" class="button">Submit</button></td>
           </tr>
@@ -428,7 +434,7 @@
                 name="adCode" />
             </td>
             <td class="full-input border2">
-              <label for="leodate">LEO DATE</label><input [(ngModel)]="res.leodate" class="smalll-input" type="text"
+              <label for="leodate">LEO DATE</label><input [(ngModel)]="res.leodate" class="smalll-input" type="date"
                 name="leodate" />
             </td>
             <td class="full-input border3">
@@ -485,17 +491,17 @@
             </td>
             <td class="full-input border3">
               <label for="expectedPaymentlastdate">PAYMENT LAST DATE</label><input
-                [(ngModel)]="res.expectedPaymentlastdate" class="smalll-input" type="text"
+                [(ngModel)]="res.expectedPaymentlastdate" class="smalll-input" type="date"
                 name="expectedPaymentlastdate" />
             </td>
             <td class="full-input border1">
               <label for="AddedDate">ADDED DATE</label><input [(ngModel)]="res.AddedDate" class="smalll-input"
-                type="text" name="AddedDate" />
+              type="date" name="AddedDate" />
             </td>
             <br />
             <td class="full-input border2">
               <label for="modifiedDate">MODIFIED DATE</label><input [(ngModel)]="res.modifiedDate" class="smalll-input"
-                type="text" name="modifiedDate" />
+              type="date" name="modifiedDate" />
             </td>
             <td class="full-input border2">
               <label for="exporterLocationCode">EXPORTER LOCATION CODE</label><input
@@ -576,7 +582,7 @@
               <input [(ngModel)]="res.boeNumber" class="input2" type="text" name="boeNumber" />
             </td>
             <td>
-              <input [(ngModel)]="res.boeDate" class="input2" type="text" name="boeDate" />
+              <input [(ngModel)]="res.boeDate" class="input2" type="date" name="boeDate" />
             </td>
             <td><button type="submit" class="button">Submit</button></td>
           </tr>
@@ -701,9 +707,9 @@
     <form *ngIf="pIpO && !override" class="" [formGroup]="piPoForm" (ngSubmit)="onSubmitPipo()">
       <!----------      "-->
       <div style="
-          width: 80%;
+          width: 82%;
           display: flex;
-          justify-content: center;
+          /* justify-content: center; */
           margin-left: 2%;
         " class="field">
         <table style="width: 70%" class="field-table">
@@ -720,7 +726,7 @@
             <td>
               <input class="form-control input2" type="date" formControlName="date" style="width: 7100%0%" />
             </td>
-            <td><button type="submit" class="button">Submit</button></td>
+            <td><button type="submit"  class="button">Submit</button></td>
           </tr>
         </table>
       </div>
@@ -728,39 +734,49 @@
       <div class="sub-table">
         <div style="padding: 2% 0" class="sb1">
           <tr style="width: 100%" class="form-wrapper">
-            <div style="margin-left: 18px; margin-bottom: 10px;">
+            <div style="margin-left: 8px; margin-bottom: 10px;">
 
-              <span style="font-size: 20px; color: #606670; margin-bottom: 5px;">Invoice Amount</span> <br>
+              <span style="font-size: 23px; color: #606670; margin-bottom: 20px;">Invoice Amount</span> <br>
               <input class="inputAmount" type="text" formControlName="amount" />
             </div>
 
 
-            <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border3">
-              <label for="iecName">Currency</label><input class="form-control smalll-input" type="text"
-                formControlName="currency" />
-            </td>
+            <td *ngFor="let course of getCourses(piPoForm); let i = index" style="width: 206px; height: 76px; margin-bottom: 4%; margin-right: 20px; margin-left: 8px;" class="full-input border3">
+              <label for="iecName" style="text-align: left;">Currency</label><input class="form-control smalll-input" type="text"
+                formControlName="currency" [(ngModel)]="currencyName[i]"
+                (input)="searchCurrency($any($event.target).value,i)"  />
+                <div *ngIf='toggle1' class="currencydrop" style="margin-left: 50px;width: 75px ; padding-left: 5px;
+                    background: white;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;z-index: 1;
+                    border-radius: 6px;transform: translate(-14px, 4px);">
+                                        <table *ngIf='y == i'>
+                                            <tr *ngFor="let currencyName of jsondata1 "
+                                                (click)="currencyClick(currencyName.value,i)">
+                                                {{currencyName.value}}</tr>
+                                        </table>
+                                    </div>
+                                  </td>
 
 
-            <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
-              <label for="invoiceNumber">Incoterm</label><input class="form-control smalll-input" type="text"
+            <td style="width: 206px; height: 76px; margin-bottom: 4%; margin-right: 20px;margin-left: 8px; " class="full-input border1">
+              <label for="invoiceNumber" style="text-align: left;">Incoterm</label><input class="form-control smalll-input" type="text"
                 formControlName="incoterm" />
             </td>
-            <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border2">
-              <label for="invoiceAmount">Last Day Of Shipment</label><input class="form-control smalll-input"
-                type="text" formControlName="lastDayShipment" placeholder="dd/mm/yyyy" />
+            <td style="width: 206px; height: 76px; margin-bottom: 4%; margin-right: 20px;margin-left: 8px;" class="full-input border2">
+              <label for="invoiceAmount" style="text-align: left;">Last Day Of Shipment</label><input class="form-control smalll-input"
+              type="date" formControlName="lastDayShipment" placeholder="dd/mm/yyyy" />
             </td>
 
-            <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
-              <label for="settledAmount">PC Ref No</label><input class="form-control smalll-input" type="text"
+            <td style="width: 206px; height: 76px; margin-bottom: 4%; margin-right: 20px; margin-left: 8px;" class="full-input border1">
+              <label for="settledAmount" style="text-align: left;">PC Ref No</label><input class="form-control smalll-input" type="text"
                 formControlName="pcRefNo" />
             </td>
-            <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
-              <label for="settledAmount">Due Date</label><input class="form-control smalll-input" type="text"
+            <td style="width: 206px; height: 76px; margin-bottom: 4%; margin-right: 20px;margin-left: 8px;" class="full-input border1">
+              <label for="settledAmount" style="text-align: left;">Due Date</label><input class="form-control smalll-input" type="date"
                 formControlName="dueDate" placeholder="dd/mm/yyyy" />
             </td> <br>
-            <td class="full-input border2" style="width: 206px;">
-              <label for="location">Location</label><select formControlName="location" ngModel>
-                <option value="">Select Location</option>
+            <td class="full-input border2" style="width: 206px; height: 76px; margin-left: 8px;">
+              <label for="location" style="text-align: left;">Location</label><select formControlName="location" ngModel style="border-color: #dedede; width: 96%; height: 35px;  border-radius: 4px; margin-left: 4px;">
+                <option value="" >Select Location</option>
                 <option *ngFor="let bene of location" [value]="bene.loc">
                   {{ bene.loc }}
                 </option>
@@ -769,56 +785,73 @@
 
 
             <br>
-            <span style="color: #303030; font-size: 20px;">Payment Terms*</span>
+            <span style="color: #303030; font-size: 20px; margin-left: 8px; margin-top: 20px;">Payment Terms*</span>
             <div formArrayName="paymentTerm">
 
               <div *ngFor="let course of getCourses(piPoForm); let i = index" [formGroupName]="i"
-                style="display: flex;">
-                <div style="flex-direction:row; margin-right: 20px;">
+                style="display: flex; padding:1">
+                <div style="flex-direction:row; margin-right: 20px;margin-left: 14px;">
                   <span style="color: #707683; font-size: 14px;">Date</span> <br>
-                  <input formControlName="date"
-                    style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px;">
+                  <input formControlName="date" type="date"
+                    style="outline: none; border: 1px solid #DEDEDE; width: 130px;height: 40px; border-radius: 5px; font-size: 12px;
+                    color: #A5AAB3; padding-left: 5px;">
                 </div>
-                <div style="flex-direction:row;border-radius: 5px;">
-                  <span style="color: #707683; font-size: 14px;">Description</span> <br>
-                  <input formControlName="description"
-                    style="outline: none; border: 1px solid #DEDEDE; width: 200px; border-radius: 5px;">
-                </div>
+                
                 <div *ngIf='documentType1 == "import"'
                   style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                   <span style="color: #707683; font-size: 14px;">Type</span> <br>
-                  <select name="" id="" formControlName="type"
-                    style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
-                    <option value="">Select</option>
-                    <option value="Advance Payment">Advance Payment</option>
-                    <option value="Letter of Credit">Letter of Credit</option>
-                    <option value="Collection Bill">Collection Bill</option>
+                  <select  formControlName="type"
+                    style="outline: none; border: none; background: #f9f8f8;margin-left: -16px; width: 200px; border-radius: 5px; height: 40px; ">
+                    <option id="aaa" value="" style="border: none;">Select</option>
+                    <option value="Advance Payment" >Advance Payment</option>
+                    <option value="Letter of Credit" >Letter of Credit</option>
+                    <option value="Collection Bill" >Collection Bill</option>
                     <option value="Direct Import">Direct Import</option>
                   </select>
                 </div>
                 <div *ngIf='documentType1 =="export"'
                   style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                   <span style="color: #707683; font-size: 14px;">Type</span> <br>
-                  <select name="" id="" formControlName="type"
-                    style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
-                    <option value="">Select</option>
-                    <option value="Advance Payment">Advance Payment</option>
+                  <select name=""  formControlName="type"
+                    style="outline: none; border: none; background: #f9f8f8;margin-left: -16px;  width: 100px; border-radius: 5px; height: 40px;">
+                    <option id="aaa" value=""style="border:none">Select</option>
+                    <option value="Advance Payment" >Advance Payment</option>
                     <option value="Letter of Credit">Letter of Credit</option>
-                    <option value="Collection Bill">Collection Bill</option>
+                    <option value="Collection Bill" >Collection Bill</option>
                     <option value="Direct Import">Direct Dispatch</option>
                   </select>
                 </div>
-                <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
-                  <span style="color: #707683; font-size: 14px;">Amount</span> <br>
-                  <input formControlName="amount"
-                    style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px;">
+                <div style="flex-direction:row;border-radius: 5px; margin-right: 20px;">
+                  <span style="color: #707683; font-size: 14px;">Currency</span> <br>
+                  <input formControlName="description" [(ngModel)]="currencyName1[i]"
+                  (input)="searchCurrency1($any($event.target).value,i)"
+                    style="outline: none; border: 1px solid #DEDEDE; width: 120px;height: 40px; border-radius: 5px; font-size: 12px;
+                    color: #A5AAB3;padding-left: 5px;">
+                    <div *ngIf='toggle2' class="currencydrop" style="margin-left: 50px;width: 75px ; padding-left: 5px;
+                    position: relative;background: white;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;z-index: 1;
+                    border-radius: 6px;transform: translate(-14px, 4px);">
+                                        <table *ngIf='z == i'>
+                                            <tr *ngFor="let currencyName1 of jsondata1"
+                                                (click)=currencyClick1(currencyName1.value,i)>
+                                                {{currencyName1.value}}</tr>
+                                        </table>
+                                    </div>
                 </div>
+                <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
+                  <span style="color: #707683; font-size: 14px; text-align: center;">Amount</span> <br>
+                  <input formControlName="amount"
+                    style="outline: none; border-style: none;  height: 40px; width: 80px; border-radius: 5px; font-size: 12px;
+                    color: #A5AAB3; ">
+                    
+                </div>
+                
+               
                 <a *ngIf='i>0' (click)='removeAddress(i)'><i style="margin-top: 30px; " class="fas fa-times"></i></a>
 
               </div>
             </div>
             <div class="row col-md-12" style="margin-top: 10px; margin-bottom: 10px;">
-              <span (click)="onAddCourse(piPoForm)" style="font-size: 12px; color: #303030;"><i style="font-size: 14px;"
+              <span (click)="onAddCourse(piPoForm)" style="font-size: 12px; color: #303030; margin-left: 12px;"><i style="font-size: 14px;"
                   class="fas fa-plus-circle"></i> Add New
                 Row </span>
             </div>
@@ -871,8 +904,8 @@
         </div>
       </div>
     </form>
-    <ng-template #content let-modal>
-
+    <ng-template #content let-modal style="width: 140%;">
+     
       <div class="modal-body">
         <div class="container-fluid">
           <div class="row no-gutter">
@@ -888,7 +921,7 @@
                 <div class="container">
                   <div class="row">
                     <button type="button" class="close btn btn-outline-light " style="margin-left:430px; max-width: 20px;max-height: 20px ;" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                      <span aria-hidden="true" >&times;</span>
+                      <span aria-hidden="true" > <img src="../../../assets/cross.png" style="height: 20px; width: 20px; margin-left: 150px;"   alt=""></span>
                     </button>
                     
                     <div class="col-lg-10 col-xl-7 mrg">
@@ -899,61 +932,90 @@
                       <form [formGroup]="loginForm" (ngSubmit)="onSubmitBene()" class="form11">
                         <div class="form-group mb-3">
                           <label class="plable">Name</label>
-                          <input formControlName="beneName" placeholder="Beneficiary/ Customer name" required=""
-                            class="form-control rounded-pill pinput">
+                          <input formControlName="beneName" placeholder="Beneficiary/ Customer name" required=""  [ngClass]="{ 'is-invalid': submitted && f.beneName.errors }"
+                          class="form-control rounded-pill pinput">
+                          <div *ngIf="submitted && f.beneName.errors" class="invalid-feedback">
+                            <div *ngIf="f.beneName.errors.required">Name is required</div>
+                            </div>
                         </div>
                         <div class="form-group mb-3">
                           <label class="plable">Address</label>
-                          <input formControlName="beneAdrs" placeholder="Ex: street address, City. PIN" required=""
+                          <input formControlName="beneAdrs" placeholder="Ex: street address, City. PIN" required="" [ngClass]="{ 'is-invalid': submitted && f.beneAdrs.errors }"
                             class="form-control rounded-pill password password1 pinput">
+                            <div *ngIf="submitted && f.beneAdrs.errors" class="invalid-feedback">
+                            <div *ngIf="f.beneAdrs.errors.required">Address is required</div>
+                            </div>
                         </div>
                         <div class="form-group mb-3">
                           <label class="plable">Bank Name</label>
                           <input formControlName="beneBankName" id="password1" type="" placeholder="Ex: 23489234324"
-                            required="" class="form-control rounded-pill pinput">
+                            required="" [ngClass]=" { 'is-invalid': submitted && f.beneBankName.errors }" class="form-control rounded-pill pinput">
+                              <div *ngIf="submitted && f.beneBankName.errors" class="invalid-feedback">
+                              <div *ngIf="f.beneBankName.errors.required">Bank Name is required</div>
+                              </div>
                         </div>
                         <div class="form-group mb-3">
                           <label class="plable">Account No</label>
                           <input formControlName="beneAccNo" id="password1" type="" placeholder="Ex: 23489234324"
-                            required="" class="form-control rounded-pill pinput">
+                            required="" [ngClass]="{ 'is-invalid': submitted && f.beneAccNo.errors }" class="form-control rounded-pill pinput">
+                            <div *ngIf="submitted && f.beneAccNo.errors" class="invalid-feedback">
+                              <div *ngIf="f.beneAccNo.errors.required">Account No is required</div>
+                              </div>
                         </div>
                         <div class="form-group mb-3">
                           <label class="plable">IBAN</label>
                           <p class="sl">* Mandatory for remittances to Middle-East countries and Europe</p>
                           <input formControlName="iban" id="password1" type="" placeholder="Ex: 238923 23423423"
-                            required="" class="form-control rounded-pill pinput">
+                            required="" [ngClass]="{ 'is-invalid': submitted && f.iban.errors }"  class="form-control rounded-pill pinput">
+                            <div *ngIf="submitted && f.iban.errors" class="invalid-feedback">
+                              <div *ngIf="f.iban.errors.required">IBAN is required</div>
+                              </div>
                         </div>
                         <div class="form-group mb-3">
                           <label class="plable">Beneficiary’s bank’s (any one) SWIFT code**</label>
-                          <input formControlName="beneBankSwiftCode" type="" placeholder="Ex: 1234566" required=""
-                            class="form-control rounded-pill pinput">
+                          <input formControlName="beneBankSwiftCode" type="" placeholder="Ex: 1234566" required="" [ngClass]="{ 'is-invalid': submitted && f.beneBankSwiftCode.errors }"  class="form-control rounded-pill pinput">
+                          <div *ngIf="submitted && f.beneBankSwiftCode.errors" class="invalid-feedback">
+                            <div *ngIf="f.beneBankSwiftCode.errors.required">Beneficiary’s bank’s (any one) SWIFT code is required</div>
+                            </div>
                         </div>
                         <div class="form-group mb-3">
                           <label class="plable">Beneficiary’s bank’s address including country</label>
                           <input formControlName="beneBankAdress" id="inputEmail" type="text"
-                            placeholder="Ex: street address, City. PIN" required=""
+                            placeholder="Ex: street address, City. PIN" required="" [ngClass]="{ 'is-invalid': submitted && f.beneBankAdress.errors }"
                             class="form-control rounded-pill email pinput">
+                            <div *ngIf="submitted && f.beneBankAdress.errors" class="invalid-feedback">
+                              <div *ngIf="f.beneBankAdress.errors.required">Beneficiary’s bank’s address including country is required</div>
+                              </div>
                         </div>
 
                         <div class="form-group mb-3">
                           <label class="plable">Intermediary Bank details (if applicable) SWIFT code**</label>
                           <input formControlName="interBankSwiftCode"
-                            placeholder="Ex: CC/OD/PC/PCFC/EBRD/BP/EEFC-USD/EUR/GBP/CHF/JPY ETC" required=""
+                            placeholder="Ex: CC/OD/PC/PCFC/EBRD/BP/EEFC-USD/EUR/GBP/CHF/JPY ETC" required="" [ngClass]="{ 'is-invalid': submitted && f.beneName.errors }"
                             class="form-control rounded-pill pinput">
+                            <div *ngIf="submitted && f.interBankSwiftCode.errors" class="invalid-feedback">
+                              <div *ngIf="f.interBankSwiftCode.errors.required">Intermediary Bank details  SWIFT code is required</div>
+                              </div>
                         </div>
                         <div class="form-group mb-3">
                           <label class="plable">Intermediary Bank Name (if any)</label>
                           <input formControlName="interBankName" id="inputEmail" type="text"
-                            placeholder="Ex: Western union" required="" class="form-control rounded-pill pinput">
+                            placeholder="Ex: Western union" required="" [ngClass]="{ 'is-invalid': submitted && f.interBankName.errors }" class="form-control rounded-pill pinput">
+                            <div *ngIf="submitted && f.interBankName.errors" class="invalid-feedback">
+                              <div *ngIf="f.interBankName.errors.required">Intermediary Bank Name is required</div>
+                              </div>
                         </div>
 
                         <div class="form-group mb-3">
                           <label class="plable">Sort Code</label>
-                          <input formControlName="sortCode" placeholder="Ex: ESEIEC." required=""
+                          <input formControlName="sortCode" placeholder="Ex: ESEIEC." required="" [ngClass]="{ 'is-invalid': submitted && f.sortCode.errors }"
                             class="form-control rounded-pill pinput">
+                            <div *ngIf="submitted && f.sortCode.errors" class="invalid-feedback">
+                              <div *ngIf="f.sortCode.errors.required">Sort Codee is required</div>
+                              </div>
                         </div>
 
-                        <button type="submit" class="btn11">Create</button>
+                        <button type="submit" class="btn11" [class.disable]="isDisabled" [disabled]="isDisabled">Create</button>
                       </form>
 
                     </div>

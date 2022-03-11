@@ -26,6 +26,7 @@ import { AppConfig } from "src/app/app.config";
 import * as XLSX from 'xlsx';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+
 @Component({
   selector: 'app-pipo-doc-export',
   templateUrl: './pipo-doc-export.component.html',
@@ -44,6 +45,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   public user;
   public selectedRow;
   public showInvoice = false;
+  public showInvoice1 = true;
   public tableWidth;
   public export = false;
   public import = false;
@@ -264,7 +266,10 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
                 }
               }
               console.log("Hello There", arrayMain);
-              this.item1 = arrayMain
+              if(arrayMain.length>0){
+                this.item1 = arrayMain
+              }
+              
 
             },
             (err) => console.log(err)
@@ -696,8 +701,20 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   // }
 
   hide(){
-    this.showInvoice = true
+    this.showInvoice = !this.showInvoice
   }
+  hide1(){
+  
+   this.showInvoice=true;
+   this.toggle=false;
+   this.toggle2=false;
+  }
+  hide2(){
+    this.showInvoice=true;
+    this.toggle=false;
+    this.toggle1=false;
+  }
+ 
 
 
   toSave(data , index) {

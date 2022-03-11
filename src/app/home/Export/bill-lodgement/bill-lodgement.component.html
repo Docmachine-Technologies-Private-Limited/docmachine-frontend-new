@@ -40,11 +40,11 @@
         <div class="analytics" style="margin-left: 50px;">
 
             <div>
-                <div style="margin: 10px;">
+                <!-- <div style="margin: 10px;">
                     <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
                         style="width: 20px; height: 20px;"><span style="margin-left: 10px;"
                         [routerLink]="['/home/dashboardTask']">Back</span>
-                </div>
+                </div> -->
 
                 <!-- P0102 -->
 
@@ -224,43 +224,22 @@
                                 </div>
                                 <div style="margin-left: 40px; margin-top: 20px; width: 85%;" class="bc">
                                     <div style=" text-align:right">Date: <span
-                                            style="
-                                                                                                                                    outline: none;
-                                                                                                                                      display: inline-block;
-                                                                                                                                      width: 150px;
-                                                                                                                                      border-bottom: 1px solid black;
-                                                                                                                                    "
-                                            contenteditable="true"></span>
+                                            style="outline: none;  display: inline-block;width: 150px;border-bottom: 1px solid black;"contenteditable="true"></span>
                                     </div>
                                     <div style="width:80%; margin-top: -20px;">To, <br>
                                         The Manager <br>
                                         YES Bank Ltd., <br>
                                         Branch address</div>
                                     <span
-                                        style="
-                                                                                                                                    outline: none;
-                                                                                                                                      display: inline-block;
-                                                                                                                                      width: 150px;
-                                                                                                                                      border-bottom: 1px solid black;
-                                                                                                                                    "
+                                        style="outline: none;display: inline-block;width: 150px;border-bottom: 1px solid black;"
                                         contenteditable="true"></span> <br>
                                     <div style="margin-top: 10px;">Dear Sir/Madam, <br>
                                         Export Documents for □ Purchase □ Negotiation □ Discounting □ Collection
                                         □ Rupee Advance <br>
                                         Bill amount<span
-                                            style="
-                                                                                                                                        outline: none;
-                                                                                                                                          display: inline-block;
-                                                                                                                                          width: 150px;
-                                                                                                                                          border-bottom: 1px solid black;
-                                                                                                                                        "
+                                            style="outline: none;display: inline-block;width: 150px;border-bottom: 1px solid black;"
                                             contenteditable="true"></span>Tenor <span
-                                            style="
-                                                                                                                                                    outline: none;
-                                                                                                                                                      display: inline-block;
-                                                                                                                                                      width: 160px;
-                                                                                                                                                      border-bottom: 1px solid black;
-                                                                                                                                                    "
+                                            style="outline: none;display: inline-block;width: 160px;border-bottom: 1px solid black;"
                                             contenteditable="true"></span></div>
                                     <br>
                                     <table>
@@ -286,11 +265,7 @@
                                         <tr class="border1">
                                             <td class="wtd3 border1">Original</td>
                                             <td class="wtd3 border1"><span
-                                                    style="
-                                                                                                                                                outline: none;
-                                                                                                                                                  display: inline-block;
-                                                                                                                                                  width: 90px;
-                                                                                                                                                "
+                                                    style="outline: none;display: inline-block;width: 90px;"
                                                     contenteditable="true"></span></td>
                                             <td class="wtd3 border1"><span
                                                     style="outline: none;display: inline-block;width: 90px;"
@@ -902,9 +877,10 @@
 
                         </div> -->
 
-
+                        
                         <h1 *ngIf="isProceed == false && Question5 == 'yes'">Invoice Reduction</h1>
                         <div id="mainId1" class="bc" *ngIf="isProceed == false && Question5 == 'yes'">
+                            
                             <!-- <div id="first" class="bc">
 
                                 <div style="margin-left: 40px; margin-top: 20px; width: 75%;" class="bc">
@@ -1099,6 +1075,11 @@
 
                             </div> -->
                             <table #table1>
+                                <!-- <div style="margin: 10px;">
+                                    <img src="../../../assets/back.png"  (click)="hide()"
+                                        style="width: 20px; height: 20px;"><span style="margin-left: 10px;"
+                                        >Back</span>
+                                </div> -->
                                 <tr style="border: 0.5px solid black;">
                                     <td style="border: 0.5px solid black;">
                                         SL NO
@@ -1214,12 +1195,7 @@
                             <!-- <button (click)="fireEvent()">Button</button> -->
                         </div>
                         <div *ngIf="isProceed == false"
-                            style="
-                                                                            float: left;
-                                                                            display: block;
-                                                                            width: 78%;
-                                                                            margin-top: 40px;
-                                                                            margin-left: 43px;display: flex; align-items: center;">
+                            style="float: left;display: block;width: 78%;margin-top: 40px;margin-left: 43px;display: flex; align-items: center;">
                             <button *ngIf='newDone' class="button1" style="margin-right: 10px;" title="Share As PDF"
                                 (click)="doneDox()">Done
                             </button>
@@ -1228,6 +1204,7 @@
                             <button *ngIf='!newDone' class="button1" style="margin-right: 10px; margin-bottom: 30px;"
                                 (click)="showPreview()">Proceed
                                 to Preview</button>
+                                <button *ngIf='!newDone' class="button1" style="margin-right: 10px; margin-top: -28px;" (click)="hide()">back</button>
                         </div>
                         <div *ngIf="isProceed == true">
                             <p>Setup: 3 Preview</p>

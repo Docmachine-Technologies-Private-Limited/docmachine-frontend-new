@@ -100,6 +100,11 @@ export class ViewDocumentComponent implements OnInit {
 
   }
 
+  hide(){
+    this.sb = true;
+    this.showInvoice = false;
+  }
+
   getTransactions(selectedRowValues) {
     this.documentService.getTask({ pi_poNo: selectedRowValues, file: "advance" }).subscribe(
       (res: any) => {

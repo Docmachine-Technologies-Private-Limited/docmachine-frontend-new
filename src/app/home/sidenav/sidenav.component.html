@@ -91,7 +91,7 @@
 
             </ul>
             <ul *ngIf="role != 'ca' && role != 'admin'" class="sidebar-nav">
-                <li class="">
+                <li class="" (click)="newTask5()" [ngClass]="status5 ? 'b-color1' : 'nothing'">
                     <!-- an example of nested submenu. basic bootstrap collapse component -->
                     <a (click)="hideIncoice()" [routerLink]="['/home/dashboardTask']" class="sidebar-content">
                         <span class="icon side-icon">
@@ -99,19 +99,19 @@
             </span> Dashboard
                     </a>
                 </li>
-                <li style="cursor: pointer" (click)="manageTask()">
+                <li style="cursor: pointer"  (click)="newTask4()" [ngClass]="status4 ? 'b-color1' : 'nothing'">
                     <a class="sidebar-content" style="cursor: pointer;">
                         <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
             </span> Import
                         <span style="margin-left: 55%; position: absolute;
                             transform:translate(0, 3px);">
-              <i style="font-size: 18px" *ngIf="!mt" class="fas fa-angle-right"></i>
-              <i style="font-size: 18px" *ngIf="mt" class="fas fa-angle-down"></i>
+              <i style="font-size: 18px" *ngIf="!status4" class="fas fa-angle-right"></i>
+              <i style="font-size: 18px" *ngIf="status4" class="fas fa-angle-down"></i>
             </span>
                     </a>
                 </li>
-                <li class="manage-li" *ngIf="mt">
+                <li class="manage-li" *ngIf="status4"  >
                     <div class="main11" style=" color: #fff;">
                         <div style="height: 30px; padding-top: 5px; font-size: 10px;">
                             <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
@@ -193,7 +193,7 @@
                     <div class="main11" style=" color: #fff; margin-left: 5px;"></div>
                 </li> -->
 
-                <li style="cursor: pointer" class="" (click)="exportTask()">
+                <li style="cursor: pointer" class="" (click)="exportTask()" (click)="newTask7()" [ngClass]="status7 ? 'b-color1' : 'nothing'">
                     <a class="sidebar-content" style="cursor: pointer;">
                         <span class="icon side-icon">
           <img src="./assets/content-paper-edit.png" />
@@ -202,12 +202,12 @@
                           margin-left: 55%;
                           position: absolute;
                           transform: translate(0, 3px);
-                        "><i style="font-size: 18px" *ngIf="!mt2" class="fas fa-angle-right"></i><i
-            style="font-size: 18px" *ngIf="mt2" class="fas fa-angle-down"></i>
+                        "><i style="font-size: 18px" *ngIf="!status7" class="fas fa-angle-right"></i><i
+            style="font-size: 18px" *ngIf="status7" class="fas fa-angle-down"></i>
         </span>
                     </a>
                 </li>
-                <li class="manage-li" *ngIf="mt2">
+                <li class="manage-li" *ngIf="status7">
                     <div class="main11" style=" color: #fff;">
                         <div style="height: 30px; padding-top: 5px; font-size: 10px;">
                             <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
@@ -454,14 +454,14 @@
           </div>
         </li> -->
 
-                <li class="">
+                <li  (click)="newTask6()" [ngClass]="status6 ? 'b-color1' : 'nothing'">
                     <a [routerLink]="['/home/upload']" style="cursor: pointer" class="sidebar-content">
                         <span class="icon side-icon">
           <img src="./assets/briefcase.png" />
         </span> Upload Documents
                     </a>
                 </li>
-                <li class="" style="cursor: pointer" *ngIf="role == 'manager'">
+                <li class="" style="cursor: pointer" *ngIf="role == 'manager'" (click)="newTask8()" [ngClass]="status8 ? 'b-color1' : 'nothing'">
                     <a class="sidebar-content" [routerLink]="['/home/manageUser']">
                         <span class="icon side-icon">
           <img src="./assets/single-neutral-circle.png" />
@@ -469,74 +469,76 @@
                     </a>
                 </li>
 
-                <li style="cursor: pointer" class="">
+                <li style="cursor: pointer" class="" (click)="newTask9()" [ngClass]="status9 ? 'b-color1' : 'nothing'">
                     <a class="sidebar-content">
                         <span class="icon side-icon">
           <img src="./assets/briefcase.png" />
         </span> Transaction
                     </a>
                 </li>
-                <li style="cursor: pointer">
+                <li style="cursor: pointer" (click)="newTask10()" [ngClass]="status10 ? 'b-color1' : 'nothing'">
                     <a class="sidebar-content" (click)="customerClick()">
                         <span class="icon side-icon">
           <img src="./assets/briefcase.png" />
         </span> Manage Customer
                     </a>
-                    <div class="main11" style="margin-left: 50px;" *ngIf="customer">
-                        <a style="cursor: pointer; color: white;" [routerLink]="['/home/manageCustomer/import']">Import</a>
-                        <a style="cursor: pointer; color: white;" [routerLink]="['/home/manageCustomer/export']">Export</a>
-                    </div>
+                    
                 </li>
+                <div  class="main11" style="margin-left: 50px;" *ngIf="status10">
+                    <a style="cursor: pointer; color: white;" (click)="newTask17()" [ngClass]="status17 ? 'b-color' : 'nothing'" [routerLink]="['/home/manageCustomer/import']">Import</a>
+                    <a style="cursor: pointer; color: white;" (click)="newTask18()" [ngClass]="status18 ? 'b-color' : 'nothing'" [routerLink]="['/home/manageCustomer/export']">Export</a>
+                </div>
                 <!-- [routerLink]="['/home/manageCustomer']" -->
 
 
-                <li style="cursor: pointer" class="" *ngIf="!view" (click)="viewDocument()">
-                    <a class="sidebar-content" style="cursor: pointer;">
+                <li style="cursor: pointer"  class="manage-content" class="" *ngIf="!status11" (click)="viewDocument()" (click)="newTask11()" [ngClass]="status11 ? 'b-color1' : 'nothing'"  >
+                    <a class="sidebar-content" style="cursor: pointer;" >
                         <span class="icon side-icon">
           <img src="./assets/content-paper-edit.png" />
         </span> View Document
                         <span style="
-                          margin-left: 7%;
+                          margin-left: 27%;
                           position: absolute;
                           transform: translate(0, 3px);
-                        "><i style="font-size: 20px" *ngIf="!view" class="fas fa-angle-down"></i>
+                        "><i style="font-size: 20px" *ngIf="!status11" class="fas fa-angle-right"></i>
         </span>
                     </a>
                 </li>
-                <li class="manage-li" *ngIf="view">
-                    <a style="cursor: pointer" class="manage-content" (click)="viewDocument()">
+                <li class="manage-li" *ngIf="status11" (click)="viewDocument()">
+                    <a style="cursor: pointer"   (click)="viewDocument()" (click)="newTask11()" [ngClass]="status11 ? 'b-color1' : 'nothing'" >
                         <span class="icon side-icon">
-          <img src="./assets/content-paper-edit.png" />
-        </span> View Document
+          <img src="./assets/content-paper-edit.png" style="margin-left: 16px;" />
+        </span> <span > View Document</span>
                         <span style="
-                          margin-left: 7%;
+                          margin-left: 27%;
                           position: absolute;
                           transform: translate(0, 3px);
                         ">
-          <i style="font-size: 20px" *ngIf="view" class="fas fa-angle-up"></i></span>
+          <i style="font-size: 20px ;margin-left: -11px;" *ngIf="status11" class="fas fa-angle-down"  ></i></span>
                     </a>
                     <div class="main11" style="margin-left: 50px;">
                         <a style="cursor: pointer" [routerLink]="['/home/viewDocument/sb']">
-          Shipping Bill
-        </a>
+                         Shipping Bill
+                        </a>
                         <a style="cursor: pointer" [routerLink]="['/home/viewDocument/boe']">
-          BOE Documents
-        </a>
+                         BOE Documents
+                        </a>
                         <a style="cursor: pointer" [routerLink]="['/home/viewDocument/pipo']"> PI/PO Documents </a>
                     </div>
                 </li>
             </ul>
+            
 
             <h5 class="sidebar-nav-title sidebar-title">SUPPORT</h5>
             <ul style="cursor: pointer" class="sidebar-nav">
-                <li class="">
+                <li class="" (click)="newTask12()" [ngClass]="status12 ? 'b-color1' : 'nothing'">
                     <a class="sidebar-content" [routerLink]="['/home/help']">
                         <span class="icon side-icon">
             <img src="./assets/question-circle.png" />
           </span> Need Help?
                     </a>
                 </li>
-                <li style="cursor: pointer" class="">
+                <li style="cursor: pointer" class="" (click)="newTask13()" [ngClass]="status13 ? 'b-color1' : 'nothing'">
                     <a class="sidebar-content">
                         <span class="icon side-icon">
             <img src="./assets/email-action-unread.png" />
@@ -548,7 +550,7 @@
 
             <h5 class="sidebar-nav-title sidebar-title">SETTING</h5>
             <ul class="sidebar-nav">
-                <li *ngIf="role != 'ca'" style="cursor: pointer" class="">
+                <li *ngIf="role != 'ca'" style="cursor: pointer" class="" (click)="newTask14()" [ngClass]="status14 ? 'b-color1' : 'nothing'">
                     <!-- an example of nested submenu. basic bootstrap collapse component -->
                     <a class="sidebar-content" [routerLink]="['/home/account']">
                         <span class="icon side-icon">
@@ -556,15 +558,15 @@
           </span> Account
                     </a>
                 </li>
-                <li style="cursor: pointer" class="">
+                <li style="cursor: pointer" class="" (click)="newTask15()" [ngClass]="status15 ? 'b-color1' : 'nothing'">
                     <!-- an example of nested submenu. basic bootstrap collapse component -->
                     <a class="sidebar-content" (click)="removeTwo()">
                         <span class="icon side-icon">
-            <img src="./assets/logout-1.png" />
+            <img src="./assets/g.png" />
           </span> Remove Mobile
                     </a>
                 </li>
-                <li style="cursor: pointer" class="">
+                <li style="cursor: pointer" class="" (click)="newTask16()" [ngClass]="status16 ? 'b-color1' : 'nothing'">
                     <!-- an example of nested submenu. basic bootstrap collapse component -->
                     <a class="sidebar-content" (click)="logout()">
                         <span class="icon side-icon">

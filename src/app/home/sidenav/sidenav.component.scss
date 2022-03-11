@@ -73,7 +73,7 @@ footer {
   padding-left: 35px !important;
   margin-right: 15px !important;
   color: #fff !important;
-  background-color: #49a2d7 !important;
+  // background-color: #49a2d7 !important;
   border-radius: 5px;
 }
 
@@ -87,9 +87,6 @@ footer {
   color: #ffffff !important;
 }
 
-.main11 {
-  font-size: 10px;
-}
 
 .main1 {
   font-size: 10px;
@@ -103,6 +100,12 @@ footer {
 
 .main11 a {
   margin-top: 10px;
+  display: block;
+  text-decoration: none;
+  font-size: 13px;
+}
+.main11 a:hover{
+  color: #0D3855;
 }
             
 
@@ -228,6 +231,9 @@ a {
 .b-color {
   background-color: #0D3855;
   color: #49A2D7;
+}
+.b-color1{
+  background-color: #49A2D7;
 }
 
 .hoverClass:hover {

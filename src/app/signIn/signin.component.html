@@ -59,9 +59,9 @@
                         <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show"></i>
                       </button> -->
                                     <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                                        <div *ngIf="f.password.errors.required" style="margin-left: 15px;">Please enter
+                                        <div *ngIf="f.password.errors.required" style="margin-left: 15px; margin-top: -16px;">Please enter
                                             password</div>
-                                        <div *ngIf="f.password.errors.minlength" style="margin-left: 15px;">Password
+                                        <div *ngIf="f.password.errors.minlength" style="margin-left: 15px; margin-top: -16px;">Password
                                             should be more than 6 letter</div>
                                     </div>
                                 </div>
@@ -74,7 +74,7 @@
 
 
                                 <p class="text-muted mb-4 bottom-text ml-2">
-                                    You continuing, you agree to DocMachine
+                                    By continuing, you agree to DocMachine
                                     <a href="">Term of service</a> we will manage information as described in our <a
                                         href="">privacy policy agrement</a>
                                 </p>
