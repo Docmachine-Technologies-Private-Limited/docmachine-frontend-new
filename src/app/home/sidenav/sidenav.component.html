@@ -99,7 +99,7 @@
             </span> Dashboard
                     </a>
                 </li>
-                <li style="cursor: pointer"  (click)="newTask4()" [ngClass]="status4 ? 'b-color1' : 'nothing'">
+                <li style="cursor: pointer" (click)="newTask4()" [ngClass]="status4 ? 'b-color1' : 'nothing'">
                     <a class="sidebar-content" style="cursor: pointer;">
                         <span class="icon side-icon">
               <img src="./assets/content-paper-edit.png" />
@@ -111,7 +111,7 @@
             </span>
                     </a>
                 </li>
-                <li class="manage-li" *ngIf="status4"  >
+                <li class="manage-li" *ngIf="status4">
                     <div class="main11" style=" color: #fff;">
                         <div style="height: 30px; padding-top: 5px; font-size: 10px;">
                             <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
@@ -276,6 +276,9 @@
                             </div>
                             <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub13()" [ngClass]="new13 ? 'b-color' : 'nothing'">
                                 <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packingCreditRequest']">Direct Dispatch</span>
+                            </div>
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                                <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/inwardRemittanceAdvice']">Inward Remittance Advice</span>
                             </div>
                         </div>
                     </div>
@@ -482,17 +485,17 @@
           <img src="./assets/briefcase.png" />
         </span> Manage Customer
                     </a>
-                    
+
                 </li>
-                <div  class="main11" style="margin-left: 50px;" *ngIf="status10">
+                <div class="main11" style="margin-left: 50px;" *ngIf="status10">
                     <a style="cursor: pointer; color: white;" (click)="newTask17()" [ngClass]="status17 ? 'b-color' : 'nothing'" [routerLink]="['/home/manageCustomer/import']">Import</a>
                     <a style="cursor: pointer; color: white;" (click)="newTask18()" [ngClass]="status18 ? 'b-color' : 'nothing'" [routerLink]="['/home/manageCustomer/export']">Export</a>
                 </div>
                 <!-- [routerLink]="['/home/manageCustomer']" -->
 
 
-                <li style="cursor: pointer"  class="manage-content" class="" *ngIf="!status11" (click)="viewDocument()" (click)="newTask11()" [ngClass]="status11 ? 'b-color1' : 'nothing'"  >
-                    <a class="sidebar-content" style="cursor: pointer;" >
+                <li style="cursor: pointer" class="manage-content" class="" *ngIf="!status11" (click)="viewDocument()" (click)="newTask11()" [ngClass]="status11 ? 'b-color1' : 'nothing'">
+                    <a class="sidebar-content" style="cursor: pointer;">
                         <span class="icon side-icon">
           <img src="./assets/content-paper-edit.png" />
         </span> View Document
@@ -505,10 +508,10 @@
                     </a>
                 </li>
                 <li class="manage-li" *ngIf="status11" (click)="viewDocument()">
-                    <a style="cursor: pointer"   (click)="viewDocument()" (click)="newTask11()" [ngClass]="status11 ? 'b-color1' : 'nothing'" >
+                    <a style="cursor: pointer" (click)="viewDocument()" (click)="newTask11()" [ngClass]="status11 ? 'b-color1' : 'nothing'">
                         <span class="icon side-icon">
           <img src="./assets/content-paper-edit.png" style="margin-left: 16px;" />
-        </span> <span > View Document</span>
+        </span> <span> View Document</span>
                         <span style="
                           margin-left: 27%;
                           position: absolute;
@@ -527,7 +530,7 @@
                     </div>
                 </li>
             </ul>
-            
+
 
             <h5 class="sidebar-nav-title sidebar-title">SUPPORT</h5>
             <ul style="cursor: pointer" class="sidebar-nav">

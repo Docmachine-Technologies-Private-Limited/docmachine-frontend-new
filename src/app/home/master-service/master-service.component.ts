@@ -83,7 +83,7 @@ toSave(data, index){
   this.documentService.updateMasterService(data, data._id ).subscribe(
     (data) => {
       console.log('king123');
-      this.toastr.success('Master Service updated successfully.');
+      this.toastr.success('Master Service Row Is Updated Successfully.');
 
     },
     (error) => {
@@ -97,6 +97,6 @@ toSave(data, index){
 
 toEdit(index){
   this.optionsVisibility[index] = true;
-  this.toastr.warning('Master Service Is In Edit Mode');
+  this.toastr.warning('Master Service Row Is In Edit Mode');
 }
 }

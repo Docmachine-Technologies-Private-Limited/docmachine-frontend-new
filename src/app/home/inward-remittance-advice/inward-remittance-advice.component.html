@@ -1,0 +1,308 @@
+<div style="margin-left: 210px" class="content-wrap">
+    <main id="content" class="content table-padding" role="main">
+
+        <div style="
+  display: flex;
+  flex-direction: rows;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.8%;
+  padding-left: 1%;
+  padding-bottom: 0.8%;
+  border: 0.5px solid rgba(0, 0, 0, 0.2);
+  margin-left: 40px;
+  width: 94%;
+">
+            <!-- *ngIf="!showInvoice" -->
+            <div style="display: flex; align-items: center">
+                <h3 class="heading">Inward Remittance Advice</h3>
+                <!-- {{doc}} -->
+            </div>
+
+            <div class="dropdown">
+                Date:
+                <select name="subject" id="subject">
+          <option value="" selected="selected">Today</option>
+      </select> Type:
+                <select name="topic" id="topic">
+          <option value="" selected="selected">All</option>
+      </select>
+            </div>
+            <div style="padding-top: 0.7%">
+                <button class="upload-button" [routerLink]="['/home/upload']">
+          Upload New
+      </button>
+            </div>
+        </div>
+
+
+        <div class="analytics">
+            <div style="width: 100%" class="analytics-side">
+                <!-- *ngIf="!showInvoice" -->
+                <div style="width: 100%" class="row">
+                    <div style="width: 100%; margin: 0 -1.5%" class="col-12 mb-lg padding">
+                        <!-- *ngIf="!showInvoice" -->
+                        <section style="width: 200%; margin-left: 60px" class="widget pb-0 box-shadow">
+                            <div style="margin: 0 -2%" class="widget-body p-0 support table-wrapper">
+                                <table style="width: 100%" class="table table-striped mb-0">
+                                    <!-- *ngIf='pipo' -->
+                                    <thead style="width: 100%">
+                                        <tr class="text-muted table-heading">
+                                            <th class="rect">
+                                                <img src="./assets/Rectangle-13.png" />
+                                            </th>
+                                            <th scope="col"><span class="pl-3">TT DATE</span></th>
+                                            <th scope="col">PI/PO no.</th>
+                                            <th scope="col">Party Name</th>
+                                            <th scope="col">TT Amount USD</th>
+                                            <th scope="col">From</th>
+                                            <th scope="col">Branch</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Recieved Date</th>
+                                            <th scope="col">Recieved Amount USD</th>
+                                            <th scope="col">Commission/Bank Charges</th>
+                                            <th scope="col">Conversion Date</th>
+                                            <th scope="col">Conversion Rate</th>
+                                            <th scope="col">Converted Amount</th>
+                                            <th scope="col">FIRX Number/ID</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-dark">
+                                        <tr class="table-row" *ngFor="" ; let i=i ndex>
+                                            <!-- *ngFor="let data of item1; " -->
+
+                                            <!-- (click)="
+                                      getInvoices(data, i) && getTransactions(data.pi_poNo) -->
+                                            <th class="rect">
+                                                <img src="./assets/Rectangle-13.png" />
+                                            </th>
+                                            <th class="pl-4 fw-normal">
+                                                <!-- {{ data.date }} -->
+                                                <div *ngIf="!optionsVisibility">
+                                                    <!-- [i] -->
+                                                    <!-- {{data.opinionReportAmount}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="date" type="text" placeholder="Date">
+                                                    <!-- [(ngModel)]="data.opinionReportAmount" -->
+                                                </div>
+                                            </th>
+
+                                            <td class="sb-no">
+                                                <!-- {{ data.pipo }}  -->
+                                                <div *ngIf="!optionsVisibility">
+                                                    <!-- [i] -->
+                                                    <!-- {{data.opinionReportAmount}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="partyName" type="text" placeholder="Party Name">
+                                                    <!-- [(ngModel)]="data.opinionReportAmount" -->
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div *ngIf="!optionsVisibility">
+                                                    <!-- [i] -->
+                                                    <!-- {{data.opinionReportNumber}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="ttAmount" type="text" placeholder="TT Amount">
+                                                    <!-- [(ngModel)]="data.opinionReportNumber" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility">
+                                                    <!-- [i] -->
+                                                    <!-- {{data.opinionReportAmount}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="from" type="text" placeholder="From">
+                                                    <!-- [(ngModel)]="data.opinionReportAmount" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <!-- {{data.currency}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="branch" type="text" placeholder="Branch">
+                                                    <!-- [(ngModel)]="data.currency" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <!-- {{data.buyerName}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="description" type="text" placeholder="Description">
+                                                    <!-- [(ngModel)]="data.currency" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <!-- {{data.buyerName}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="recievedDate" type="text" placeholder="Recieved Date">
+                                                    <!-- [(ngModel)]="data.currency" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <!-- {{data.buyerName}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="recievedAmount" type="text" placeholder="Recieved Amount USD">
+                                                    <!-- [(ngModel)]="data.currency" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <!-- {{data.buyerName}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="commissionAmount" type="text" placeholder="Commission/Bank Charges">
+                                                    <!-- [(ngModel)]="data.currency" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <!-- {{data.buyerName}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="conversionDate" type="text" placeholder="Conversion Date">
+                                                    <!-- [(ngModel)]="data.currency" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <!-- {{data.buyerName}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="conversionRate" type="text" placeholder="Conversion Rate">
+                                                    <!-- [(ngModel)]="data.currency" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <!-- {{data.buyerName}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="convertedAmount" type="text" placeholder="Converted Amount">
+                                                    <!-- [(ngModel)]="data.currency" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility">
+                                                    <!-- [i] -->
+
+                                                    <!-- {{data.buyerName}} -->
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility">
+                                                    <!-- [i] -->
+                                                    <input class="tblInput form-control" name="firxNumber" type="text" placeholder="FIRX Number/ID">
+                                                    <!-- [(ngModel)]="data.currency" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button class="savBtn" (click)="toSave()">Save</button>
+                                                <!-- *ngIf="optionsVisibility[i]" (click)="toSave(data, i)" -->
+                                                <button class="savBtn" (click)="toEdit()">Edit</button>
+                                                <!-- *ngIf="!optionsVisibility[i]" (click)="toEdit(i)" -->
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #content let-modal>
+
+            <div class="modal-body">
+                <div class="row no-gutter">
+                    <!-- The image half -->
+                    <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
+
+
+                    <!-- The content half -->
+                    <div class="col-md-7" style="margin: 10px;">
+                        <div class="login d-flex py-5" style="padding: 0px !important;">
+
+                            <!-- Demo content-->
+                            <div class="container popup">
+                                <div class="row">
+                                    <div class="col-lg-10 col-xl-7 mrg">
+                                        <h6 class="display-6">Debit Note</h6>
+
+                                        <iframe width="315%" height="500px"></iframe>
+                                        <!-- [src]="viewData" -->
+                                        <button type="submit" style="margin-left: 250px;" class="submitBTN" (click)="modal.dismiss('Cross click')">OK</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End -->
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </ng-template>

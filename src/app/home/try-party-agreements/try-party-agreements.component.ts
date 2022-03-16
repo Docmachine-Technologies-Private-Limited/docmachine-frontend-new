@@ -83,7 +83,7 @@ toSave(data, index){
   this.documentService.updateThird(data, data._id ).subscribe(
     (data) => {
       console.log('king123');
-      this.toastr.success('Tri-Party Agreement updated successfully.');
+      this.toastr.success('Tri-Party Agreement Row Is Updated Successfully.');
 
     },
     (error) => {
@@ -97,6 +97,6 @@ toSave(data, index){
 
 toEdit(index){
   this.optionsVisibility[index] = true;
-  this.toastr.warning('Tri-Party Agreement Is In Edit Mode');
+  this.toastr.warning('Tri-Party Agreement Row Is In Edit Mode');
 }
 }

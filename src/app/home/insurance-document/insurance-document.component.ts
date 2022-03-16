@@ -82,7 +82,7 @@ private getDismissReason(reason: any): string {
     this.documentService.updateInsurance(data, data._id ).subscribe(
       (data) => {
         console.log('king123');
-        this.toastr.success('PI/PO updated successfully.');
+        this.toastr.success('Insurance Document Row Is Updated Successfully.');
         console.log(data)
       },
       (error) => {
@@ -96,7 +96,7 @@ private getDismissReason(reason: any): string {
 
   toEdit(index){
     this.optionsVisibility[index] = true;
-    this.toastr.warning('PI/PO Is In Edit Mode');
+    this.toastr.warning('Insurance Document Row Is In Edit Mode');
   }
 
 }

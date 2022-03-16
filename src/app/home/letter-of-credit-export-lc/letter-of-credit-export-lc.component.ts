@@ -83,7 +83,7 @@ toSave(data, index){
   this.documentService.updateLetterLC(data, data._id ).subscribe(
     (data) => {
       console.log('king123');
-      this.toastr.success('LetterLC Updated Successfully.');
+      this.toastr.success('LetterLC Row Is Updated Successfully.');
 
     },
     (error) => {
@@ -97,6 +97,6 @@ toSave(data, index){
 
 toEdit(index){
   this.optionsVisibility[index] = true;
-  this.toastr.warning('LetterLC Is In Edit Mode');
+  this.toastr.warning('LetterLC Row Is In Edit Mode');
 }
 }
