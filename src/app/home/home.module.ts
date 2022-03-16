@@ -77,6 +77,7 @@ import {LetterOfCreditExportLCComponent} from './letter-of-credit-export-lc/lett
 import { MasterServiceComponent } from './master-service/master-service.component';
 import { TryPartyAgreementsComponent } from './try-party-agreements/try-party-agreements.component';
 import { OpinionReportsComponent } from './opinion-reports/opinion-reports.component';
+import { InwardRemittanceAdviceComponent } from './inward-remittance-advice/inward-remittance-advice.component';
 import { FilternewPipe } from './filterpipo/filternew.pipe';
 
 import { FilterdatePipe } from './datefilter/filterdate.pipe';
@@ -160,10 +161,9 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     MasterServiceComponent,
     TryPartyAgreementsComponent,
     OpinionReportsComponent,
+    InwardRemittanceAdviceComponent,
     FilternewPipe,
-   
     FilterdatePipe,
-    
   ],
   imports: [
     CommonModule,
@@ -474,6 +474,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
           {
             path: "opinion-report",
             component: OpinionReportsComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "inwardRemittanceAdvice",
+            component: InwardRemittanceAdviceComponent,
             pathMatch: "full"
           },
         ],

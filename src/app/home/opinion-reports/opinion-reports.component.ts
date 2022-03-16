@@ -83,7 +83,7 @@ toSave(data, index){
   this.documentService.updateOpinionReport(data, data._id ).subscribe(
     (data) => {
       console.log('king123');
-      this.toastr.success('Opinion Report updated successfully.');
+      this.toastr.success('Opinion Report Row Is Updated Successfully.');
 
     },
     (error) => {
@@ -97,6 +97,6 @@ toSave(data, index){
 
 toEdit(index){
   this.optionsVisibility[index] = true;
-  this.toastr.warning('PI/PO Is In Edit Mode');
+  this.toastr.warning('Opinion Report Row Is In Edit Mode');
 }
 }

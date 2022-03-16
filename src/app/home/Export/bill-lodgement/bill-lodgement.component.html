@@ -23,8 +23,7 @@
                 Date:
                 <select name="subject" id="subject">
                     <option value="" selected="selected">Today</option>
-                </select>
-                Type:
+                </select> Type:
                 <select name="topic" id="topic">
                     <option value="" selected="selected">All</option>
                 </select>
@@ -56,7 +55,7 @@
                           <div
                             *ngIf='documentType == "PI" && documentType1 == "export" || documentType == "PO" && documentType1 == "export"'>
                             <div style="display: flex; align-items: center; margin-left: 23px;">
-                            
+
                               <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px; border: 1px solid #C6CBD4; flex-direction:row; ">
                                 <span style="color: #323e4a !important; min-width: 150px;">{{buyerValue}}</span>
                                 <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
@@ -82,7 +81,7 @@
                                 <option value="">location</option>
                                 <option *ngFor="let item of item7; let i = index;" style="color: black;"> {{item.loc}}</option>
                             </select>
-                            
+
                             <select (change)="searchData1($any($event.target).value)" style="border: 1px solid #C6CBD4;
                             color: black;
                             padding: 4px;
@@ -916,10 +915,10 @@
 
                         </div> -->
 
-                        
+
                         <h1 *ngIf="isProceed == false && Question5 == 'yes'">Invoice Reduction</h1>
                         <div id="mainId1" class="bc" *ngIf="isProceed == false && Question5 == 'yes'">
-                            
+
                             <!-- <div id="first" class="bc">
 
                                 <div style="margin-left: 40px; margin-top: 20px; width: 75%;" class="bc">

@@ -84,7 +84,7 @@ toSave(data, index){
   this.documentService.updateDebit(data, data._id ).subscribe(
     (data) => {
       console.log('king123');
-      this.toastr.success('Debit Note updated successfully.');
+      this.toastr.success('Debit Note Row Is Updated Successfully.');
 
     },
     (error) => {
@@ -98,6 +98,6 @@ toSave(data, index){
 
 toEdit(index){
   this.optionsVisibility[index] = true;
-  this.toastr.warning('PI/PO Is In Edit Mode');
+  this.toastr.warning('Debit Note Row Is In Edit Mode');
 }
 }
