@@ -11,14 +11,34 @@
 }
 
 .login {
-    margin-top: -40px;
+    margin-top: -130px;
+    margin-left: 50px;
 }
+// .image2 {
+//     position: absolute !important;
+//     margin-top: -5% !important;
+//     width: 299px;
+//     height: 92px;
+// }
 
 .login,
 .image {
     min-height: 100vh;
     cursor: pointer;
 }
+
+.eye{
+        
+    margin-top: -30px;
+    margin-bottom: 30px;
+    margin-left: 393px;
+    width: 20px;
+    height: 20px;
+    }
+
+.fa{
+    color: #dfe2e6;
+   }
 
 .parent {
     position: relative;
@@ -37,17 +57,20 @@
     position: absolute;
     width: 299px;
     height: 92px;
+    margin-top: -16.7% !important;
 }
 
-.image3 {
-    display: none;
-}
+// .image3 {
+//     display:none;
+//     margin-top: 30% !important;
+
+// }
 
 .display-5 {
-    font-weight: 500;
+    font-weight: 400;
     color: #606670;
     font-size: 32px;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     margin-top: 60px
 }
 
@@ -67,6 +90,7 @@
     color: #606670;
     width: 422px;
     margin-left: 20px;
+
 }
 
 a {
@@ -113,11 +137,18 @@ input.email {
 
 input.password {
     padding-left: 50px !important;
-    background-image: url("../../assets/Suche.png"), url("../../assets/Suche-1.png") !important;
+    background-image: url("../../assets/Suche.png") !important;
     background-repeat: no-repeat;
     background-size: 17.5px 12px;
     background-position: 20px center, 95% center;
     padding-top: 0px;
+}
+
+.image2 {
+    position: absolute;
+    margin-top: -2.5%;
+    width: 299px;
+    height: 92px;
 }
 
 input.fullName {
@@ -154,19 +185,21 @@ label {
     width: 160px;
     height: 40px;
     border-radius: 20px;
+    box-shadow: #51aee5 -2px 21px 20px -15px !important;
     background-color: #51aee5;
     font-size: 12px;
     color: #ffffff;
+    margin-top: 15px;
 }
 
 .btn1 {
     min-width: 100px;
     height: 40px;
-    border-radius: 20px;
-    background-color: #51aee5;
-    font-size: 12px;
-    color: #ffffff;
-    // outline: none;
+    background-color: white;
+    font-size: 18px;
+    font-weight: 600(semibold);
+    color: #606670;
+    outline: none;
 }
 
 .btn2 {
@@ -180,8 +213,8 @@ label {
 
 .leftl {
     border: none;
-    font-size: 16px;
-    font-weight: 600;
+    // font-size: 16px;
+    // font-weight: 600;
     margin-top: 25px;
     margin-bottom: 50px;
     cursor: pointer;
@@ -193,141 +226,64 @@ label {
 }
 
 .topclass {
-    margin-top: 40px;
+    margin-top:40px;
     width: 90%;
     text-align: right;
     padding-top: 4%;
     z-index: 1000;
 }
-
-// popup styling
-.popup {
-    width: 260px;
-}
-
-.submitBTN {
-    margin-top: 10px;
-    width: 160px;
-    height: 40px;
-    border: 2px white solid;
-    border-radius: 20px;
-    background-color: #51AEE5;
-    font-size: 12px;
-    color: #ffffff;
-    // justify-content: center;
-}
-
-span.cls_002 {
-    font-family: Arial, serif;
-    font-size: 6.5px;
-    color: rgb(255, 255, 255);
-    font-weight: normal;
-    font-style: normal;
-    text-decoration: none
-}
-
-div.cls_002 {
-    font-family: Arial, serif;
-    font-size: 6.5px;
-    color: rgb(255, 255, 255);
-    font-weight: normal;
-    font-style: normal;
-    text-decoration: none
-}
-
-span.cls_003 {
-    font-family: Arial, serif;
-    font-size: 16.0px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    font-style: normal;
-    text-decoration: none
-}
-
-div.cls_003 {
-    font-family: Arial, serif;
-    font-size: 16.0px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    font-style: normal;
-    text-decoration: none
-}
-
-span.cls_005 {
-    font-family: Arial, serif;
-    font-size: 10.0px;
-    color: rgb(0, 0, 0);
-    font-weight: normal;
-    font-style: normal;
-    text-decoration: none
-}
-
-div.cls_005 {
-    font-family: Arial, serif;
-    font-size: 10.0px;
-    color: rgb(0, 0, 0);
-    font-weight: normal;
-    font-style: normal;
-    text-decoration: none
-}
-
-span.cls_004 {
-    font-family: Arial, serif;
-    font-size: 10.0px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    font-style: normal;
-    text-decoration: none
-}
-
-div.cls_004 {
-    font-family: Arial, serif;
-    font-size: 10.0px;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    font-style: normal;
-    text-decoration: none
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1024px) {
     .bg-dark {
         float: none;
         height: 100%;
         width: 100%;
         padding-left: 10px;
-        // margin-top: -420px;
-        margin-left: 65px;
+        margin-top: -10px;
+        margin-left: 50px;
     }
     .image1 {
         width: 100%;
         display: none;
     }
+    
     .image2 {
-        display: none;
-        margin-top: -1535px;
+        margin-top: -2070px;
         z-index: 1;
-        margin-left: 150px;
+        margin-left: 200px;
+        width: 270px;
+        height: 88px;
+        // margin-bottom: 50px;
     }
-    .image3 {
-        display: block;
-        width: 200px;
-        height: 65px;
+
+    .login {
+        margin-top: -250px;
+        margin-left: 10px;
     }
-    .signup2 {
-        margin-top: 100px;
+
+    .form-element {
+        width: 1000px !important;
+        align-items: center !important;
     }
+
+    .leftl {
+        height: 40px;
+        width: 80px;
+        font-size: 14PX;
+        margin-top: 0px;
+        margin-right: -170px;
+    }
+
     .display-5 {
         font-weight: 500;
         color: #606670;
-        font-size: 40px;
+        font-size: 32px;
         margin-bottom: 12px;
-        // margin-top: -1460px;
-        top: -100px;
+        // margin-top: 10px;
     }
     .input {
         box-shadow: none !important;
         border: 1px solid #dedede !important;
-        width: 552px;
+        width: 452px;
         height: 40px;
     }
     form {
@@ -341,23 +297,14 @@ div.cls_004 {
         font-size: 15px;
         color: #ffffff;
     }
-    .leftl {
-        margin-top: 10px;
-        margin-left: 100px;
-    }
-    .form2 {
-        margin-top: -300px;
-    }
     .bottom-text {
-        width: 300px;
+        font-size: 12px;
+        font-weight: 400;
+        color: #606670;
+        width: 390px;
     }
-    .topclass {
-        margin-top: 180px;
-        text-align: right;
-        padding-top: 4%;
-        z-index: 1000;
-        display: flex;
-        margin-bottom: 40px;
+    .mainClass {
+        width: 90%;
     }
 }
 
@@ -366,39 +313,51 @@ div.cls_004 {
         float: none;
         height: 100%;
         width: 100%;
-        // padding-left: 10px;
-        margin-left: 45px;
+        margin-top: 10px;
+        margin-left: 25px;
     }
     .image1 {
-        width: 100%;
+        // width: 100%;
         display: none;
     }
     .image2 {
-        display: none;
-        margin-top: -1550px;
+        margin-top: -740px;
         z-index: 1;
         margin-left: 200px;
+        width: 270px;
+        height: 88px;
+        // margin-bottom: 50px;
     }
-    .image3 {
-        display: block;
-        width: 200px;
-        height: 65px;
+
+    .login {
+        margin-top: 100px;
+        margin-left: 10px;
     }
+
+    .leftl {
+        height: 40px;
+        width: 80px;
+        font-size: 14PX;
+        margin-top: 0px;
+        margin-right: -170px;
+    }
+
     .display-5 {
         font-weight: 500;
         color: #606670;
-        font-size: 40px;
+        font-size: 32px;
         margin-bottom: 12px;
+        margin-top: 40px;
     }
     .input {
         box-shadow: none !important;
         border: 1px solid #dedede !important;
-        width: 420px;
+        width: 410px;
         height: 40px;
     }
-    form {
-        margin-top: -20px;
-    }
+    // form {
+    //     margin-top: 10px;
+    // }
     .btn {
         width: 200px;
         height: 40px;
@@ -407,24 +366,14 @@ div.cls_004 {
         font-size: 15px;
         color: #ffffff;
     }
-    .leftl {
-        margin-top: 10px;
-        margin-left: 30px;
-    }
-    .form2 {
-        margin-top: -250px;
-        margin-left: 40px;
-    }
     .bottom-text {
-        width: 300px;
+        font-size: 12px;
+        font-weight: 400;
+        color: #606670;
+        width: 360px;
     }
-    .topclass {
-        margin-top: 120px;
-        text-align: right;
-        padding-top: 4%;
-        z-index: 1000;
-        display: flex;
-        margin-bottom: 40px;
+    .mainClass {
+        width: 90%;
     }
 }
 
@@ -433,42 +382,52 @@ div.cls_004 {
         float: none;
         height: 100%;
         width: 100%;
-        // padding-left: 10px;
-        margin-left: 20px;
-    }
-    .image2 {
-        display: none;
-        margin-top: -1550px;
-        z-index: 1;
-        margin-left: 200px;
-    }
-    .image3 {
-        display: block;
-        width: 200px;
-        height: 65px;
+        margin-top: -50px;
+        margin-left: 15px;
     }
     .image1 {
-        width: 100%;
+        // width: 100%;
         display: none;
     }
+    .image2 {
+        margin-top: -990px;
+        z-index: 1;
+        margin-left: 180px;
+        width: 270px;
+        height: 88px;
+        // margin-bottom: 50px;
+    }
+
+    .login {
+        margin-top: 100px;
+        margin-left: 10px;
+    }
+
+    .leftl {
+        height: 40px;
+        width: 80px;
+        font-size: 14PX;
+        margin-top: 50px;
+        margin-right: -147px;
+    }
+    
     .display-5 {
         font-weight: 500;
         color: #606670;
-        font-size: 40px;
+        font-size: 24px;
         margin-bottom: 12px;
+        margin-top: 6px;
+    }
+    form {
+        margin-top: -10px;
     }
     .input {
         box-shadow: none !important;
         border: 1px solid #dedede !important;
-        width: 320px;
-        height: 40px;
+        width: 300px;
+        height: 30px;
     }
-    .checkbox {
-        margin-right: 10px;
-    }
-    form {
-        margin-top: -20px;
-    }
+    
     .btn {
         width: 200px;
         height: 40px;
@@ -478,22 +437,24 @@ div.cls_004 {
         color: #ffffff;
     }
     .leftl {
-        margin-top: 10px;
-        margin-left: 30px;
+        height: 40px;
+        width: 80px;
+        font-size: 14PX;
+        margin-top: 20px;
     }
-    .form2 {
-        margin-top: -260px;
-        margin-left: 10px;
+    .mb-4 {
+        font-size: 12px;
+    }
+    .text-muted {
+        margin-left: -1px;
     }
     .bottom-text {
-        width: 300px;
+        font-size: 12px;
+        font-weight: 400;
+        color: #606670;
+        width: 334px;
     }
-    .topclass {
-        margin-top: 120px;
-        text-align: right;
-        padding-top: 4%;
-        z-index: 1000;
-        display: flex;
-        margin-bottom: 105px;
+    .mainClass {
+        width: 90%;
     }
 }

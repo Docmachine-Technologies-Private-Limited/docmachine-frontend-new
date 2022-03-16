@@ -1,3 +1,6 @@
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div style="width: 100%; padding-right: 0 !important;" class="container-fluid">
     <div style="display: flex; width: 100%" class="row no-gutter">
         <!-- The image half -->
@@ -10,26 +13,27 @@
         flex-direction: column;
         height: 100vh;
       ">
-            <div class="topclass">
-                <img class="image3" src="./assets/LogoFinal.png" />
-                <button class="leftl btn1" [class.disable]="isVisible" [disabled]="isVisible" (click)="onLogin()">
+      <div class="topclass">
+        <!-- <img class="image3" src="./assets/LogoFinal.png" /> -->
+        <button class="leftl btn1" [class.disable]="isVisible" [disabled]="isVisible" (click)="onLogin()">
           Login
         </button>
-            </div>
-            <div class="login d-flex align-items-center py-5">
-                <!-- Demo content-->
-                <div class="container">
-                    <div class="row">
-                        <div class="form2">
-                            <div class="col-lg-10 col-xl-9 mx-auto">
-                                <h6 class="display-5">Signup</h6>
-                                <p class="mb-4 text-ui">
-                                    Give us some of your information to get access to DocMachine.
-                                </p>
-                                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-                                    <div class="form-group mb-3">
-                                        <label>Name</label>
-                                        <input id="fullName" type="name" formControlName="fullName" placeholder="Your Full Name" required="" autofocus="" class="
+      </div>
+      <div class="login d-flex align-items-center py-5">
+        <!-- Demo content-->
+        <div class="container">
+          <div class="row">
+            <div class="form2">
+              <div class="col-lg-10 col-xl-9 mx-auto form-element">
+                <h6 class="display-5">Signup</h6>
+                <p class="mb-4 text-ui">
+                  Give us some of your information to get access to DocMachine.
+                </p>
+                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                  <div class="form-group mb-3">
+                    <label>Name</label>
+                    <input id="fullName" type="name" autocomplete="off" formControlName="fullName" placeholder="Your Full Name" required=""
+                      autofocus="" class="
                       form-control
                       rounded-pill
                       border-0
@@ -38,30 +42,31 @@
                       fullName
                       input
                     " [ngClass]="{ 'is-invalid': submitted && f.fullName.errors }" />
-                                        <div *ngIf="submitted && f.fullName.errors" class="invalid-feedback">
-                                            <div *ngIf="f.fullName.errors.required" style="margin-left: 15px;">Name is required</div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Email</label>
-                                        <input id="inputEmail" formControlName="email" type="email" placeholder="Your Email" required="" class="
+                    <div *ngIf="submitted && f.fullName.errors" class="invalid-feedback">
+                      <div *ngIf="f.fullName.errors.required" style="margin-left: 15px;">Name is required</div>
+                    </div>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label>Email</label>
+                    <input id="inputEmail" type="email"  formControlName="email"   placeholder="Your Email" required=""
+                      class="
                       form-control
                       rounded-pill
                       border-0
                       shadow-sm
                       px-4
                       email
-                      input
-                    " [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
-                                        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                                            <div *ngIf="f.email.errors.required" style="margin-left: 15px;">Email is required</div>
-                                            <div *ngIf="f.email.errors.pattern" style="margin-left: 15px;">Not an Email</div>
-                                        </div>
-                                    </div>
+                    " [ngClass]="{ 'is-invalid': submitted && f.email.errors }"  autocomplete="off"/>
+                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                      <div *ngIf="f.email.errors.required" style="margin-left: 15px;">Email is required</div>
+                      <div *ngIf="f.email.errors.pattern" style="margin-left: 15px;">Not an Email</div>
+                    </div>
+                  </div>
 
-                                    <div class="form-group mb-3">
-                                        <label>Password</label>
-                                        <input formControlName="password" id="password" type="password" placeholder="Your Password" required="" class="
+                  <div class="form-group mb-3">
+                    <label>Password</label>
+                    <input [type]="password" formControlName="password" autocomplete="off" id="password" type="password" placeholder="Your Password"
+                      required="" class="
                       form-control
                       rounded-pill
                       border-0
@@ -71,16 +76,21 @@
                       password1
                       input
                     " [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-                                        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                                            <div *ngIf="f.password.errors.required" style="margin-left: 15px;">Please enter password</div>
-                                            <div *ngIf="f.password.errors.minlength" style="margin-left: 15px;">Password should be more than 6 letter
-                                            </div>
-                                        </div>
-                                    </div>
+                    <div (click)="onClick()" class="eye">
+                      <i class="fa fa-eye" aria-hidden="true" *ngIf="!show"></i>
+                        <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show"></i>
+                    </div>
+                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                      <div *ngIf="f.password.errors.required" style="margin-left: 15px; margin-top: -16px;">Please enter password</div>
+                      <div *ngIf="f.password.errors.minlength" style="margin-left: 15px; margin-top: -16px;">Password should be more than 6
+                        letter</div>
+                    </div>
+                  </div>
 
-                                    <div class="form-group mb-3">
-                                        <label>Confirm Password</label>
-                                        <input formControlName="confirmPassword" id="password" type="password" placeholder="Confirm Your Password" required="" class="
+                  <div class="form-group mb-3">
+                    <label>Confirm Password</label>
+                    <input [type]="password1" formControlName="confirmPassword" autocomplete="off" id="password" type="password"
+                      placeholder="Confirm Your Password" required="" class="
                       form-control
                       rounded-pill
                       border-0
@@ -90,15 +100,21 @@
                       password1
                       input
                     " [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" />
-                                        <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
-                                            <div *ngIf="f.confirmPassword.errors.required" style="margin-left: 15px;">Please enter confirm password
-                                            </div>
-                                            <div *ngIf="f.confirmPassword.errors.minlength" style="margin-left: 15px;">Password should be more than 6 letter</div>
-                                        </div>
-                                    </div>
-                                    <p class="text-muted mb-4 bottom-text">
-                                        <input formControlName="termsAndCondition" type="checkbox" required="" class="checkbox" (change)="onCheck($event)" /> You continuing, you agree to DocMachine
-                                        <a (click)="open(content)">Term of service</a> we will manage information as described in our <a href="">privacy
+                    <div (click)="onClick1()" class="eye">
+                      <i class="fa fa-eye" aria-hidden="true" *ngIf="!show1"></i>
+                      <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show1"></i>
+                    </div>
+                    <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
+                      <div *ngIf="f.confirmPassword.errors.required" style="margin-left: 15px; margin-top: -16px;">Please enter confirm
+                        password
+                      </div>
+                      <div *ngIf="f.confirmPassword.errors.minlength" style="margin-left: 15px; margin-top: -16px;">Password should be more
+                        than 6 letter</div>
+                    </div>
+                  </div>
+                  <p class="text-muted mb-4 bottom-text ml-2">
+                    By continuing, you agree to DocMachine
+                    <a href="">Term of service</a> we will manage information as described in our <a href="">privacy
                       policy agrement</a>
                                     </p>
 

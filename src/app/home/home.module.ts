@@ -76,7 +76,11 @@ import { InsuranceDocumentComponent } from './insurance-document/insurance-docum
 import {LetterOfCreditExportLCComponent} from './letter-of-credit-export-lc/letter-of-credit-export-lc.component';
 import { MasterServiceComponent } from './master-service/master-service.component';
 import { TryPartyAgreementsComponent } from './try-party-agreements/try-party-agreements.component';
-import { OpinionReportsComponent } from './opinion-reports/opinion-reports.component'
+import { OpinionReportsComponent } from './opinion-reports/opinion-reports.component';
+import { FilternewPipe } from './filterpipo/filternew.pipe';
+
+import { FilterdatePipe } from './datefilter/filterdate.pipe';
+
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -155,7 +159,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     LetterOfCreditExportLCComponent,
     MasterServiceComponent,
     TryPartyAgreementsComponent,
-    OpinionReportsComponent
+    OpinionReportsComponent,
+    FilternewPipe,
+   
+    FilterdatePipe,
+    
   ],
   imports: [
     CommonModule,

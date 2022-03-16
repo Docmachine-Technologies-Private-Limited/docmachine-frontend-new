@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConfig } from '../environments/environment';
+
+
 import '../sass/application.scss';
 @Component({
   selector: 'app-root' ,

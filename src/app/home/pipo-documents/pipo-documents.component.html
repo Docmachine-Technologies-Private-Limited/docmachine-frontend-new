@@ -1,88 +1,114 @@
-<div style="margin-top: 67px; width: 89%; overflow-y: overlay;" class="content-wrap">
+<div style="margin-top: 36px; width: 89%; overflow-y: overlay;" class="content-wrap">
     <main id="content" class="table-padding" role="main" style="overflow-y: auto;">
         <div *ngIf="!showInvoice">
             <div
-                style="margin-top: 30px; display: flex; flex-direction: rows; align-items: center; padding: 0.8% 0; border: 0.5px solid rgba(0, 0, 0, 0.2); width: 100%;margin-left: 26px;">
-                <div style="display: flex; align-items: center; margin-left: 12px">
+                style="margin-top: 30px; display: flex; flex-direction: rows; align-items: center; padding: 0.8% 0; border: 0.5px solid #e3e6ee; width: 100%;margin-left: 26px;">
+                <div style="display: flex; align-items: center; margin-left: 22px">
                     <div style="display: flex; margin-left: 16px; align-items: center">
-                        <div class="customDropdown" style="width: 90px; border: 1px solid #4b74ff; font-size: 14px;">
-                            <span style="color: #4b74ff !important; ">Import </span>
+                        <!-- <div class="customDropdown" style="width: 90px; border: 1px solid #C6CBD4; font-size: 14px;">
+                            <span >Import </span>
+                            <!-- <span class="arrow arrow-top" ></span> 
                             <span class="dropIco"><i id="down" class="fas fa-angle-down"></i>
                                 <i id="up" style="display: none" class="fas fa-angle-up"></i>
                             </span>
-                            <div class="dropdown-content" style="min-width: 90px;">
-                                <p><a>Import</a></p>
-                                <p><a>Export</a></p>
+                            <div class="dropdown-content" style="min-width: 90px;" >
+                                <a style="min-width: 90px;">Import</a>
+                                <a style="min-width: 90px;">Export</a>
                             </div>
-                        </div>
-                        <div class="customDropdown" style="width: 80px; border: 1px solid #4b74ff; font-size: 14px;">
-                            <span style="color: #4b74ff !important">PI/PO </span>
-                            <span class="dropIco"><i id="down" class="fas fa-angle-down"></i>
-                                <i id="up" style="display: none" class="fas fa-angle-up"></i>
+                        </div> -->
+                        <div class="customDropdown" style="width: 80px; border: 1px solid #C6CBD4; font-size: 14px;">
+                            <span>PI/PO </span>
+                            <!-- <span class="arrow arrow-top" ></span> -->
+                            <span class="dropIco"><i id="down" style="display: none" class="fas fa-angle-up"></i>
+                                <i id="up"  class="fas fa-angle-down"></i>
                             </span>
                             <div class="dropdown-content" style="min-width: 80px;">
-                                <p><a>PI/PO</a></p>
-                                <p><a>BOE</a></p>
+                                <a style="min-width: 80px;">PI/PO</a>
+                                <a style="min-width: 80px;">BOE</a>
                             </div>
                         </div>
-                        <div class="customDropdown" style="width:125px; font-size: 14px;">
-                            <span style="color: #323e4a !important">Customer </span>
-                            <span class="dropIco"><i id="down" class="fas fa-angle-down"></i>
-                                <i id="up" style="display: none" class="fas fa-angle-up"></i>
+                        <div class="customDropdown" style="width:125px; font-size: 14px;border: 1px solid #C6CBD4;">
+                            <span >Customer </span>
+                            <!-- <span class="arrow arrow-top" style="margin-left: 20px !important;" ></span> -->
+                            <span class="dropIco"><i id="down" style="margin-left: 12px;"class="fas fa-angle-down"></i>
                             </span>
                             <div class="dropdown-content" style="min-width: 125px;">
-                                <p><a>India</a></p>
-                                <p><a>California</a></p>
-                                <p><a>United States</a></p>
+                                <a style="min-width: 125px;">India</a>
+                                <a style="min-width: 125px;">California</a>
+                                <a style="min-width: 125px;">United States</a>
                             </div>
                         </div>
-                        <div class="customDropdown" style="width: 102px;">
-                            <span style="color: #323e4a !important">View All</span>
-                            <span class="dropIco"><i id="down1" class="fas fa-angle-down"></i>
+                        <div class="customDropdown" style="width: 123px; border: 1px solid #C6CBD4;">
+                            <span >View All</span>
+                            <!-- <span class="arrow arrow-top" style="margin-left: 40px !important;" ></span> -->
+                            <span class="dropIco"><i id="down1" style="margin-left: 27px;" class="fas fa-angle-down"></i>
                                 <i id="up1" style="display: none" class="fas fa-angle-up"></i>
                             </span>
                             <div class="dropdown-content" style="min-width: 123px;">
-                                <p><a>Shipping Bills</a></p>
-                                <p><a>PI/PO</a></p>
+                                <a style="min-width: 123px;">Shipping Bills</a>
+                                <a style="min-width: 123px;">PI/PO</a>
                             </div>
                         </div>
-                        <div class="customDropdown" style="width: 91px;">
-                            <span style="color: #323e4a !important">Status</span>
-                            <span class="dropIco"><i id="down2" class="fas fa-angle-down"></i>
+                        <div class="customDropdown" style="width: 115px; border: 1px solid #C6CBD4;">
+                            <span >Status</span>
+                            <!-- <span class="arrow arrow-top" ></span> -->
+                            <span class="dropIco"><i id="down2" style="margin-left: 27px;"class="fas fa-angle-down"></i>
                                 <i id="up2" style="display: none" class="fas fa-angle-up"></i>
                             </span>
                             <div class="dropdown-content" style="min-width: 115px;">
-                                <p><a>Completed</a></p>
-                                <p><a>Pending</a></p>
+                                <a style="min-width: 115px;">Completed</a>
+                                <a style="min-width: 115px;">Pending</a>
                             </div>
                         </div>
-                        <div class="customDropdown" style="width: 150px;">
-                            <span style="color: #323e4a !important">Last Updated</span>
-                            <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
+                        <div class="customDropdown" style="width: 150px; border: 1px solid #C6CBD4;">
+                            <span >Last Updated</span>
+                            <!-- <span class="arrow arrow-top" ></span> -->
+                            <span class="dropIco"><i id="down3" style="margin-left: 17px;" class="fas fa-angle-down"></i>
                                 <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                             </span>
                             <div class="dropdown-content" style="min-width:150px;">
-                                <p><a>Completed</a></p>
-                                <p><a>Pending</a></p>
+                                <a style="min-width:150px;">Completed</a>
+                                <a style="min-width:150px;">Pending</a>
                             </div>
                         </div>
-                        <div class="customDropdown" style="margin-left: 60px;">
+                        <div class="customDropdown"  style="margin-left: 282px; margin-right: 5px; border: 1px solid #C6CBD4;">
                             <span>Filter </span> <span><i class="fas fa-filter"></i></span>
                         </div>
-                        <div style="background-color: #49A2D7;" class="customDropdown">
+
+                        
+                        <!-- <div style="background-color: #49A2D7; margin-left: 19px;" class="customDropdown2" >
                             <span
-                                style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
+                                style="color: #ffffff !important; padding-right: 5px;  border-right: 1px solid #ffffff;">
                                 <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
                             <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
                                     class="fas fa-angle-down"></i>
-                                <!-- <i id="up3" style="display: none" class="fas fa-angle-up"></i> -->
+                                 <i id="up3" style="display: none" class="fas fa-angle-up"></i> 
                             </span>
-                            <div style="min-width: 200px; margin-left: -92px; z-index: 1;" class="dropdown-content1">
+                            <div  class="dropdown-content2" style="min-width:10px;">
                                 <p><a>New Credit Note</a></p>
-                                <p (click)='pipoClick()'><a>New PI/PO</a></p>
+                               <p> <a (click)='pipoClick()'>New PI/PO</a></p>
                                 <p><a>New Debit Note</a></p>
-                                <p><a>New Issuance Document</a></p>
+                                <p> <a>New Issuance Document</a></p>
                                 <p><a>New Letter of Credit</a></p>
+                            </div>
+                        </div> -->
+                        <div class="customDropdown" style="width: 102px; margin-left: 10px; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
+                            <span
+                                style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
+                                <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
+                            <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
+                                <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                            </span> -->
+                            <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3"
+                                class="fas fa-angle-down"></i>
+                             <i id="up3" style="display: none" class="fas fa-angle-up"></i> 
+                        </span>
+                            <div class="dropdown-content" style="min-width:200px; margin-left: -95px;">
+                                <a style="min-width:200px;">New Credit Note</a>
+                                <a (click)='pipoClick()' style="min-width:200px;">New PI/PO</a>
+                                <a style="min-width:200px;">New Debit Note</a>
+                                <a style="min-width:200px;">New Insurance Document</a>
+                                <a style="min-width:200px;">New Letter of Credit</a>
                             </div>
                         </div>
                     </div>
@@ -90,25 +116,25 @@
             </div>
         </div>
         <div style="width: 100%" class="analytics-side" *ngIf="!showInvoice">
-            <div style="width: 100%" class="row">
+            <div style="width: 100% ; margin-left: 22px;" class="row">
                 <div style="width: 100%; margin:5%; left: -70px; top:-60px" class="col-12 mb-lg padding">
-                    <section style="width: 90%; margin-left: 56px" class="pb-0 box-shadow">
-                        <div style="margin: 0 -2%" class="widget-body p-0 support table-wrapper">
-                            <table style="width: 100%; margin-left: 29px;" class="table table-striped mb-0">
-                                <thead style="width: 100%">
-                                    <tr class="text-muted table-heading" style="font-size: 15px;">
-
+                    <section style="width: 100%;" class="pb-0 box-shadow">
+                        <div style="margin-left:-7px;margin-right:30px;" class="widget-body p-0 support table-wrapper">
+                            <table style="width: 100%; margin-left: 29px; font-weight: 100 !important;" class="table table-striped mb-0">
+                                <thead style="width: 100%;font-weight: 100 !important;">
+                                    <tr class="text-muted table-heading" style="font-size: 15px; font-weight: 100 !important; ">
+                                    
                                         <th scope="col">DATE</th>
                                         <th scope="col">ID</th>
                                         <th scope="col">INVOICE NUMBER</th>
-                                        <th scope="col">CUSTOMER NAME</th>
+                                        <th scope="col">CUSTOMER NAMES</th>
                                         <th scope="col">UPLOADED BY</th>
                                         <th scope="col">AMOUNT</th>
                                         <th scope="col">STATUS</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-dark">
-                                    <tr class="table-row" *ngFor="let data of item1; let i = index"
+                                    <tr class="table-row" *ngFor="let data of item1; let i = index"  
                                         (click)="getInvoices(data, i)">
                                         <td>
                                             {{data.date}}
@@ -140,10 +166,11 @@
 
 
         <div *ngIf="showInvoice && !toggle">
-            <div class="table_top" style="margin-top: 0px">
+            <div class="table_top" style="margin-top: 28px">
                 <div style="width: 70%;border-right: 0.5px solid rgba(0, 0, 0, 0.2); margin-left: 40px;">
                     <span style="color: RGB(50, 62, 74); font-size: 14px;">PI / PO Documents</span>
-                    <div style="background-color: #49A2D7; float: right;" class="customDropdown">
+                    
+                    <!-- <div style="background-color: #49A2D7; float: right;" class="customDropdown">
                         <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
                             <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
                         <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
@@ -158,7 +185,28 @@
                             <p><a>New Issuance Document</a></p>
                             <p><a>New Letter of Credit</a></p>
                         </div>
+                    </div> -->
+
+                    <div class="customDropdown" style="width: 102px; margin-bottom: 5px; float: right; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
+                        <span
+                            style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
+                            <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
+                        <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
+                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                        </span> -->
+                        <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3"
+                            class="fas fa-angle-down"></i>
+                         <i id="up3" style="display: none" class="fas fa-angle-up"></i> 
+                    </span>
+                        <div class="dropdown-content" style="min-width:200px; margin-left: -95px;">
+                            <a style="min-width:200px;">New Credit Note</a>
+                            <a (click)='pipoClick()' style="min-width:200px;">New PI/PO</a>
+                            <a style="min-width:200px;">New Debit Note</a>
+                            <a style="min-width:200px;">New Insurance Document</a>
+                            <a style="min-width:200px;">New Letter of Credit</a>
+                        </div>
                     </div>
+
                 </div>
                 <!----style="height: 35px; font-weight: 400"-->
 
@@ -166,12 +214,14 @@
                     <span style="font-size: 16px; color: RGB(50, 62, 74);">{{pipoNo}}</span>
                 </div>
                 <div style="width: 100%; margin-right: 10%">
-                    <i style="font-size: 18px; color: rgb(227, 227, 227); margin-left: 10px; float: right; padding-top: 3px;"
-                        class="fas fa-plus-circle"></i>
+                    <!-- <i style="font-size: 18px; color: rgb(227, 227, 227); margin-left: 10px; float: right; padding-top: 3px;"
+                        class="fas fa-plus-circle"></i> -->
+                        <img src="./assets/circulplus.png" style=" margin-left: 10px; float: right; height:25px;
+                        width:25px ;cursor: pointer;" alt="">
                     <span *ngFor="let data of item1 | slice: 0:3; let i = index"
-                        style="float: right; margin-left: 10px;"><img class="image"
-                            src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="25px"
-                            width="25px" /></span>
+                        style="float: right; cursor: pointer; margin-left: 10px;"><img class="image"
+                            src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="24px"
+                            width="24px" /></span>
                     <!-------style="padding-left: 1%" class="pc1"-->
                 </div>
             </div>
@@ -232,17 +282,17 @@
 
                             <!---------------------DETAILS------------------->
                             <div class="tab-content form-wrapper" [attr.data-index]="1" style="background-color: white;
-                                                            width: 98%; height: 150vh;">
+                                                            width: 103%; margin-left: 5px; height: 150vh;">
 
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12);">
                                     <div style="display: flex;">
 
                                         <div
                                             style="display: flex; align-items: center; color: #49A2D7; margin: 15px;font-size: 16px; ">
-                                            <i class="fas fa-lightbulb"></i>
+                                            <img src="../../../assets/bulb-50.png">
                                         </div>
-                                        <div style="align-items: center; font-size: 13px;">
-                                            <a style="margin-bottom: 5px;"> As per payment terms you need submit a
+                                        <div style="align-items: center; font-size: 13px; color: black; font-weight: 400;">
+                                            <a style="margin-bottom: 5px; margin-top: 5px;"> As per payment terms you need submit a
                                                 Advance remittance against the import.
                                                 Create a transaction to submit advance remmitance to bank to process the
                                                 amount</a> <br>
@@ -262,17 +312,17 @@
                                             <div *ngIf='pay.type == "Direct Import"'>
 
                                                 <button class="button1"
-                                                    style="height: 30px !important; margin-right: 5px;"
+                                                    style="height: 39px !important; margin-left: 42px; padding: 0px 38px;"
                                                     (click)=openDoc(pay.type)>{{pay.type}}</button>
                                                 <button class="button1"
-                                                    style="height: 30px !important; margin-right: 5px;"
+                                                    style="height: 39px !important; margin-left: 42px; padding: 0px 38px;"
                                                     (click)=openDoc(pay.type)>Buyer’s Credit</button>
                                             </div>
                                             <div *ngIf='pay.type != "Direct Import"'>
 
                                                 <button class="button1"
-                                                    style="height: 30px !important; margin-right: 5px;"
-                                                    (click)=openDoc(pay.type)>{{pay.type}}</button>
+                                                    style="height: 39px !important; margin-left: 42px; padding: 0px 38px;"
+                                                    (click)=openDoc(pay.type)>Create {{pay.type}}</button>
                                             </div>
 
                                         </div>
@@ -341,16 +391,16 @@
 
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12);">
                                     <p
-                                        style="color: RGB(50, 62, 74); font-size: 16px; margin-left: 20px;margin-bottom: 15px; margin-top: 6px;">
+                                        style="color: RGB(50, 62, 74);font-weight: 400; font-size: 16px; margin-left: 51px;margin-bottom: 15px; margin-top: 6px;">
                                         Activity</p>
 
                                     <div *ngIf='!pipoData.doc1' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-circle" style="color: #636363;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Upload Purchase Order</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -362,12 +412,12 @@
                                     </div>
 
                                     <div *ngIf='pipoData.doc1' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left:52px;">
+                                            <i class="fas fa-check-circle" style="font-size: 24px;  color: #49A2D7;" ></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Uploaded Purchase Order</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -379,16 +429,16 @@
                                     </div>
 
                                     <div
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='documentType == "PO"' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-circle" style="color: #636363;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left:52px;">
+                                            <i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; ">
 
                                                 Proforma Invoice Not Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
@@ -400,12 +450,12 @@
                                         </div>
                                     </div>
                                     <div *ngIf='documentType != "PO"' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left:52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Uploaded Proforma Invoice</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -416,16 +466,16 @@
                                         </div>
                                     </div>
                                     <div *ngIf='pipoData.blCopy'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.blCopy' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 BL Copy Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -437,16 +487,16 @@
                                         </div>
                                     </div>
                                     <div *ngIf='pipoData.lcIssuance'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.lcIssuance' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 LC Issuance Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -458,16 +508,16 @@
                                         </div>
                                     </div>
                                     <div *ngIf='pipoData.commercialInvoice'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.commercialInvoice' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Commercial Invoice Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -480,16 +530,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.agreement'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.agreement' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7 ; font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Agreement Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -502,16 +552,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.debitNote'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.debitNote' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Debit Note Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -524,16 +574,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.creditNote'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.creditNote' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Credit Note Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -546,16 +596,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.hssAgreement'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.hssAgreement' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 High Sea Service Copy Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -568,16 +618,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.lcCopy'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.lcCopy' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 LC Copy Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -590,16 +640,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.directImport'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.directImport' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Direct Import Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -612,16 +662,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.advanceOutward'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.advanceOutward' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Advance Outward Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -634,16 +684,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.nonlcUsance'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.nonlcUsance' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Bill Under Collection Usance Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -656,16 +706,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.nonlcSight'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.nonlcSight' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Bill Under Collection Sight Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -678,16 +728,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.lcSight'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.lcSight' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Letter of Credit Sight Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -700,16 +750,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.lcUsance'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.lcUsance' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Letter of Credit Usance Transaction</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -745,16 +795,16 @@
                                     </div> -->
 
                                     <div *ngIf='pipoData.deliveryOrder'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.deliveryOrder' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84); font-weight: 400;font-size: 14px; margin-bottom: -4px;">
                                                 Delivery Order Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -766,16 +816,16 @@
                                         </div>
                                     </div>
                                     <div *ngIf='pipoData.insuranceCopy'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.insuranceCopy' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Insurance Copy Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -787,16 +837,16 @@
                                         </div>
                                     </div>
                                     <div *ngIf='pipoData.boe'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.boe' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Bill Of Exchange Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -809,16 +859,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.opinionReport'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.opinionReport' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Opinion report Uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -831,16 +881,16 @@
                                     </div>
 
                                     <div *ngIf='pipoData.caCb'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
                                     <div *ngIf='pipoData.caCb' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                                style="color: RGBA(0, 0, 0, 0.84); font-weight: 400;font-size: 14px; margin-bottom: -4px;">
                                                 15 CA/CB uploaded</p>
                                             <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                 Submitted on 13th Oct 2021</p>
@@ -858,56 +908,56 @@
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12);">
                                     <div style="margin-left: 20px;">
                                         <p
-                                            style="color: RGB(50, 62, 74); font-size: 16px; margin-bottom: 15px; margin-top: 15px;">
+                                            style="color: RGB(50, 62, 74);font-weight: 400; font-size: 16px; margin-bottom: 15px; margin-left: 33px ; margin-top: 15px;">
                                             Below are the steps still to complete</p>
                                         <div>
-                                            <span><i class="fas fa-circle"></i></span>
+                                            <span><i  class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;" ></i></span>
                                             <span
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                                style="color: RGBA(0, 0, 0, 0.84); font-weight: 400;font-size: 14px; margin-bottom: 0px;">
                                                 Create Advance remittance against imports (Swift copy)</span>
                                         </div>
                                         <div
-                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
+                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
                                         <div>
-                                            <span><i class="fas fa-circle"></i></span>
+                                            <span><i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;"></i></span>
                                             <span
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: 0px;">
                                                 Upload Advance remittance agaist imports (Ref copy)</span>
                                         </div>
                                         <div
-                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
+                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
                                         <div>
-                                            <span><i class="fas fa-circle"></i></span>
+                                            <span><i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;"></i></span>
                                             <span
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: 0px;">
                                                 BL Copy/ Airway Bill & Commercial invoice & Shipping bill / Bill of
                                                 Entry
                                                 (BOE)</span>
                                         </div>
                                         <div
-                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
+                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
                                         <div>
-                                            <span><i class="fas fa-circle"></i></span>
+                                            <span><i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;"></i></span>
                                             <span
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                                style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: 0px;">
                                                 Submit to Bank (BOE with PI)</span>
                                         </div>
                                         <div
-                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 8px; height: 30px;">
+                                            style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
                                         <div>
-                                            <span><i class="fas fa-circle"></i></span>
+                                            <span><i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;"></i></span>
                                             <span
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: 0px;">
+                                                style="color: RGBA(0, 0, 0, 0.84); font-weight: 400; font-size: 14px; margin-bottom: 0px;">
                                                 All done</span>
                                         </div>
                                     </div>
@@ -916,64 +966,65 @@
 
                                 </div>
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12); margin-bottom: 20px;">
-                                    <div style="margin-left: 20px;">
+                                    <div style="margin-left: 51px;">
                                         <p
-                                            style="color: RGB(50, 62, 74); font-size: 16px; margin-bottom: 15px; margin-top: 15px; ">
+                                            style="color: RGB(50, 62, 74); font-weight: 400;font-size: 16px; margin-bottom: 15px; margin-top: 25px; ">
                                             PI/ PO Master details</p>
-                                        <td style="width: 180px; height: 86px; margin-bottom: 4%"
+                                        <td style="width: 206px; height: 76px; margin-bottom: 4% ;margin-right:15px;"
                                             class="full-input border1">
-                                            <label for="invoiceNumber">Amount</label><span
+                                            <label for="invoiceNumber" style="text-align: left;">Amount</label><span style="text-align: left;" 
                                                 class="form-control smalll-input" type="text">{{pipoData.amount}}</span>
                                         </td>
-                                        <td style="width: 180px; height: 86px; margin-bottom: 4%"
+                                        <td style="width: 206px; height: 76px; margin-bottom: 4%;margin-right:15px"
                                             class="full-input border2">
-                                            <label for="invoiceAmount">Currency</label><span
+                                            <label for="invoiceAmount"style="text-align: left;" >Currency</label><span style="text-align: left;"
                                                 class="form-control smalll-input"
                                                 type="text">{{pipoData.currency}}</span>
                                         </td>
 
-                                        <td style="width: 180px; height: 86px; margin-bottom: 4%"
+                                        <td style="width: 206px; height: 76px; margin-bottom: 4% ;margin-right:15px"
                                             class="full-input border1">
-                                            <label for="settledAmount">Incoterm</label><span
+                                            <label for="settledAmount" style="text-align: left;">Incoterm</label><span style="text-align: left;"
                                                 class="form-control smalll-input"
                                                 type="text">{{pipoData.incoterm}}</span>
                                         </td>
 
-                                        <td style="width: 180px; height: 86px; margin-bottom: 4%"
+                                        <td style="width: 206px; height: 76px; margin-bottom: 4% ;margin-right:15px"
                                             class="full-input border1">
-                                            <label for="invoiceNumber">PC Ref. No</label><span
+                                            <label for="invoiceNumber" style="text-align: left;">PC Ref. No</label><span style="text-align: left;"
                                                 class="form-control smalll-input"
                                                 type="text">{{pipoData.pcRefNo}}</span>
                                         </td>
-                                        <td style="width: 180px; height: 86px; margin-bottom: 4%"
+                                        <td style="width: 206px; height: 76px; margin-bottom: 4% ;margin-right:15px"
                                             class="full-input border2">
-                                            <label for="invoiceAmount">Last Day Of Shipment</label><span
+                                            <label for="invoiceAmount" style="text-align: left;">Last Day Of Shipment</label><span style="text-align: left;"
                                                 class="form-control smalll-input"
                                                 type="text">{{pipoData.lastDayShipment}}</span>
                                         </td><br>
 
-                                        <p style="color: RGB(48, 48, 48); font-size: 20px;">PaymentTerm*</p>
+                                        <p style="color: RGB(48, 48, 48); font-size: 20px; margin-left: 4px;">PaymentTerm*</p>
                                         <div>
-                                            <table style="border-collapse: separate;">
+                                            <table style="border-collapse: separate; border-spacing: 15px; margin-left: -10px; width: 100%;">
                                                 <tr style="height: 30px !important;">
-                                                    <td style="color: #707683; font-size: 14px;">Date</td>
-                                                    <td style="color: #707683; font-size: 14px;">Description</td>
-                                                    <td style="color: #707683; font-size: 14px;">Type</td>
-                                                    <td style="color: #707683; font-size: 14px;">Amount</td>
+                                                    <td style="color: #707683; font-size: 14px;text-align: left; ">Date</td>
+                                                    <td style="color: #707683; font-size: 14px;text-align: left;">Type</td>
+                                                    <td style="color: #707683; font-size: 14px;text-align: left; ">Currency</td>
+                                                    <td style="color: #707683; font-size: 14px;text-align: center; ">Amount</td>
                                                 </tr>
                                                 <tr *ngFor="let course of payTerm; let i = index"
                                                     style="height: 30px !important;">
                                                     <td
-                                                        style="outline: none; border: 1px solid #DEDEDE; width: 30px; border-radius: 5px; padding: 5px; margin-right: 10px;">
+                                                        style="outline: none; font-size: 12px; border: 1px solid #DEDEDE; width: 15%; border-radius: 5px; padding: 10px; margin-right: 10px; text-align: left;">
                                                         {{course.date}}</td>
+                                                    
                                                     <td
-                                                        style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px; padding: 5px;">
+                                                        style="outline: none; font-size: 12px; background:#DEDEDE; width: 25%;  border-radius: 5px; height: 30px;  padding: 10px; text-align: left;">
+                                                        {{course.type}}</td>
+                                                        <td
+                                                        style="outline: none; font-size: 12px; border: 1px solid #DEDEDE; width: 40%;  border-radius: 5px; padding: 10px; text-align: left;">
                                                         {{course.description}}</td>
                                                     <td
-                                                        style="outline: none; border: 1px solid #DEDEDE; width: 60px; border-radius: 5px; height: 30px; background-color: #FAFAFA; padding: 5px;">
-                                                        {{course.type}}</td>
-                                                    <td
-                                                        style="outline: none; border: 1px solid #DEDEDE; width: 30px; border-radius: 5px; padding: 5px;">
+                                                        style="outline: none; font-size: 12px; border: 1px solid #DEDEDE; width: 20%; border-radius: 5px; padding: 10px; text-align: center;">
                                                         {{course.amount}}</td>
                                                 </tr>
                                             </table>
@@ -1021,15 +1072,17 @@
                             <!----------------ADD A DOCUMENT ----------------------------------------->
                             <div class="tab-content form-wrapper" [attr.data-index]="2" style="
                                                             background-color: white;
-                                                            width: 96%;
+                                                            width: 103%;
+                                                            margin-left: 5px;
                                                             height: 150vh;
                                                             ">
                                 <div *ngIf='!docTog'>
                                     <div style="display: flex;">
-                                        <div style="width: 60%; font-size: 20px; padding-left: 20px; color: black;">
+                                        <div style="width: 54%; font-size: 17px; padding-left: 30px; margin-left:20px; margin-top:25px; margin-bottom:20px; color: RGB(73, 162, 215);">
                                             Document
                                         </div>
-                                        <div style="background-color: #49A2D7;" class="customDropdown">
+
+                                        <!-- <div style="background-color: #49A2D7;" class="customDropdown">
                                             <span
                                                 style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
                                                 <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Attach a
@@ -1040,7 +1093,7 @@
                                                 <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                                             </span>
                                             <div class="dropdown-content1" style="min-width: 220px; margin-left: 0px;">
-                                                <!-- <p (click)='selectDoc("Shipping Bill")'><a>New Shipping Bill</a></p> -->
+                                                //<p (click)='selectDoc("Shipping Bill")'><a>New Shipping Bill</a></p>
                                                 <p (click)='selectDoc("Bill of Entry")'><a>New Bill of Entry</a></p>
                                                 <p (click)='selectDoc("blCopy")'><a>New Airway Bill/BL Copy</a></p>
                                                 <p (click)='selectDoc("commercialInvoice")'><a>New Commercial
@@ -1058,32 +1111,64 @@
                                                 <p (click)='selectDoc("caCb")'><a>15 CA/CB</a></p>
                                                 <p (click)='selectDoc("caCertificate")'><a>CA Certificate</a></p>
                                             </div>
+                                        </div>  -->
+
+                                    <div class="customDropdown" style="width: 206px; height: 42px;float: right;margin-left: 172px;
+                                     padding-top: 10px; background-color: #49A2D7;border: 1px solid #49A2D7 !important;border-radius: 5px;margin-top: 20px;
+                                     margin-bottom: 20px;">
+                                        <span
+                                            style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
+                                            <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Attach a
+                                            Document</span>
+                                        <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
+                                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                                        </span> -->
+                                        <span class="dropIco" style="margin-left: 10px;margin-top: 10px; color: #ffffff !important;"><i id="down3"
+                                            class="fas fa-angle-down"></i>
+                                         <i id="up3" style="display: none" class="fas fa-angle-up"></i> 
+                                    </span>
+                                        <div class="dropdown-content" style="min-width:200px; margin-right: 0px; margin-left: 7px;
+                                        margin-top: 5px;">
+                                            <a style="min-width:100%;" (click)='selectDoc("Shipping Bill")'>New Shipping Bill</a>
+                                            <a style="min-width:100%;" (click)='selectDoc("blCopy")'>New Bill of Entry</a>
+                                            <a style="min-width:100%;" (click)='selectDoc("agreement")'>Agreement</a>
+                                            <a style="min-width:100%;" (click)='selectDoc("lcCopy")'>Lc Copy</a>
+                                            <a style="min-width:100%;" (click)='selectDoc("deliveryOrder")'>Delivery Order</a>
+                                            <a style="min-width:100%;" (click)='selectDoc("insuranceCopy")'>Insurance Copy</a>
+                                            <a style="min-width:100%;" (click)='selectDoc("billOfExchange")'>Bill of Exchange</a>
+                                            <a style="min-width:100%;" (click)='selectDoc("tryPartyAgreement")'>Tri Party Agreement</a>
+                                            <a style="min-width:100%;" (click)='selectDoc("opinionReport")'>Opinion Report</a>
+                                            <a style="min-width:100%;" (click)='selectDoc("caCb")'>15 CA/CB</a>
+                                            <a style="min-width:100%;" (click)='selectDoc("caCertificate")'>CA Certificate</a>
                                         </div>
+
                                     </div>
-                                    <div style="width: 94%; margin-left: 20px;">
+                                    </div>
+                                    <div style="width: 100%; margin-left: 20px;">
                                         <table>
-                                            <thead style="background-color: RGB(243, 243, 243);height: 30px; ">
-                                                <tr style="opacity: 50%; font-size: 14px; ">
-                                                    <td style="padding: 0px 35px;">DATE</td>
+                                            
+                                            <thead style="height: 54px; ">
+                                                <tr style="opacity: 50%; font-size: 14px; color:black !important; font-weight: 300 !important; padding: 20px; border-bottom: 1px solid rgb(236 236 236);" >
+                                                    <td style="padding: 20px 35px;  ">DATE</td>
                                                     <td>DOCUMENT NAME</td>
                                                     <td>DOCUMENT NUMBER</td>
-                                                    <td style="padding: 0px 35px;">PREVIEW</td>
+                                                    <td style="padding: 20px 35px;">PREVIEW</td>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr class="table-row"
                                                     style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
-                                                    <td style="padding: 0px 35px;">Dec 14, 2018</td>
+                                                    <td style="padding: 20px 35px;">Dec 14, 2018</td>
                                                     <td class="sb-no">Shipping Bill</td>
                                                     <td>SN565656</td>
-                                                    <td style="padding: 0px 35px;">View</td>
+                                                    <td style="padding: 20px 35px;">View</td>
                                                 </tr>
                                                 <tr class="table-row"
                                                     style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
-                                                    <td style="padding: 0px 35px;">Dec 14, 2018</td>
+                                                    <td style="padding: 20px 35px;">Dec 14, 2018</td>
                                                     <td class="sb-no">Bill of Entry</td>
                                                     <td>454544545</td>
-                                                    <td style="padding: 0px 35px;">View</td>
+                                                    <td style="padding: 20px 35px;">View</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1107,15 +1192,17 @@
                             </div>
                             <div class="tab-content form-wrapper" [attr.data-index]="3" style="
                                                             background-color: white;
-                                                            width: 96%;
+                                                            width: 103%;
+                                                            margin-left: 5px;
                                                             height: 150vh;
                                                             ">
                                 <div style="display: flex;">
                                     <div
-                                        style="width: 54%; font-size: 16px; padding-left: 20px; color: RGB(73, 162, 215);">
-                                        All Transaction
+                                    style="width: 54%; font-size: 17px; padding-left: 30px; margin-left:20px; margin-top:25px; margin-bottom:20px; color: RGB(73, 162, 215);">
+                                        All Transactions
                                     </div>
-                                    <div style="background-color: #49A2D7;" class="customDropdown">
+                                   
+                                    <!-- <div style="background-color: #49A2D7;" class="customDropdown">
                                         <span
                                             style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
                                             <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Create New
@@ -1132,31 +1219,53 @@
                                             <p><a>Buyers Credit Request</a></p>
                                         </div>
                                     </div>
+                                     -->
+                                     <div class="customDropdown" style="width: 236px;height: 42px;float: right;margin-left: 142px;padding-top: 10px;background-color: #49A2D7;border: 1px solid #49A2D7 !important;border-radius: 5px;margin-top: 20px;margin-bottom: 20px;">
+                                        <span
+                                            style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
+                                            <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Create New
+                                            Transaction</span>
+                                        <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
+                                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                                        </span> -->
+                                        <span class="dropIco" style="margin-left: 10px;margin-top: 10px; color: #ffffff !important;"><i id="down3"
+                                            class="fas fa-angle-down"></i>
+                                         <i id="up3" style="display: none" class="fas fa-angle-up"></i> 
+                                    </span>
+                                        <div class="dropdown-content" style="min-width:250px; margin-left: -12px;
+                                        margin-top: 5px;">
+                                            <a style="min-width:100%;" (click)="openDoc('Advance Payment')">Advance Outward Remittance</a>
+                                            <a style="min-width:100%;" (click)="openDoc('Direct Import')">Direct Import Payment</a>
+                                            <a style="min-width:100%;">Bill Under Collection</a>
+                                            <a style="min-width:100%;">Buyers Credit Request</a>
+                                            
+                                        </div>
+                                    </div>
                                 </div>
-                                <div style="width: 94%; margin-left: 20px;">
+                                <div style="width: 100%; ; margin-left: 20px;">
                                     <table>
-                                        <thead style="background-color: RGB(243, 243, 243);height: 30px; ">
-                                            <tr style="opacity: 50%; font-size: 14px; ">
-                                                <td style="padding: 0px 35px;">DATE</td>
+                                        <thead style="height: 54px; ">
+                                            <tr style="opacity: 50%; font-size: 14px; color:black !important; font-weight: 300 !important; padding: 20px; border-bottom: 1px solid rgb(236 236 236);; ">
+                                                <td style="padding: 20px 35px;">DATE</td>
                                                 <td>DETAIL</td>
                                                 <td>STATUS</td>
-                                                <td style="padding: 0px 35px;">DOWNLOAD</td>
+                                                <td style="padding: 20px 35px;">DOWNLOAD</td>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="table-row"
                                                 style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
-                                                <td style="padding: 0px 35px;">Dec 14, 2018</td>
+                                                <td style="padding: 20px 35px;">Dec 14, 2018</td>
                                                 <td class="sb-no">Submitted to Bank</td>
                                                 <td>Emailed</td>
-                                                <td style="padding: 0px 35px;">View</td>
+                                                <td style="padding: 20px 35px;">View</td>
                                             </tr>
                                             <tr class="table-row"
                                                 style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
-                                                <td style="padding: 0px 35px;">Dec 14, 2018</td>
+                                                <td style="padding: 20px 35px;">Dec 14, 2018</td>
                                                 <td class="sb-no">Draft waiting for submission</td>
                                                 <td>Draft</td>
-                                                <td style="padding: 0px 35px;">View</td>
+                                                <td style="padding: 20px 35px;">View</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -1196,7 +1305,7 @@
                             <tr class="field-heading">
                                 <td style="height: 30px !important;">PI/PO Number*</td>
 
-                                <td style="height: 30px !important;">Date</td>
+                                <td style="height: 30px !important;">PI/PO Date</td>
                             </tr>
                             <tr>
                                 <td>
@@ -1364,7 +1473,7 @@
                             <tr class="field-heading">
                                 <td style="height: 30px !important;">PI/PO Number*</td>
 
-                                <td style="height: 30px !important;">Date</td>
+                                <td style="height: 30px !important;">PI/PO Date</td>
                             </tr>
                             <tr>
                                 <td>

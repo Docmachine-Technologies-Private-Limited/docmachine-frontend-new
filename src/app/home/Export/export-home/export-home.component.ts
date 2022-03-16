@@ -131,6 +131,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   buyerAds: any;
   itemArray: any[];
   filterToggle: boolean;
+  e: boolean;
+  d: boolean;
+  
   constructor(
     public documentService: DocumentService,
     private router: Router,
@@ -2220,6 +2223,21 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.purposeCode = ''
     this.detail = ''
     this.purposeSelect = false
+  }
+  hide(){
+    this.proceed = true;
+    this.c = false;
+  }
+  hide1( code ,j){
+    code === this.c;
+    this.sbPurpose[j] != code
+    this.importPurpose[j] !=code
+    this.noImportPurpose[j] !=code 
+    this.mailArray[j] !=code
+    code !== this.c
+   this.importPurpose[j] != code
+  //  this.doneImportPurpose[j] == code
+
   }
 
   proceedClick() {

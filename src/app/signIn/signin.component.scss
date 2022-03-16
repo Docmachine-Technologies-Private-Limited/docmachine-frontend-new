@@ -30,16 +30,17 @@
 
     .image2 {
         position: absolute;
-        margin-top: 50%;
+        margin-top: 44%;
         width: 299px;
         height: 92px
     }
-
+    
     .display-5 {
-        font-weight: 500;
+        font-weight: 400;
         color: #606670;
         font-size: 32px;
         margin-bottom: 12px;
+        
     }
 
     .bottom-text {
@@ -59,9 +60,9 @@
 
     .text-sm {
         text-decoration: none;
-        color: #000000 !important;
+        color: #444343 !important;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 500;
     }
 
      ::placeholder {
@@ -96,12 +97,24 @@
 
     input.password {
         padding-left: 50px !important;
-        background-image: url("../../assets/Suche.png"), url("../../assets/Suche-1.png") !important;
+        background-image: url("../../assets/Suche.png");
         background-repeat: no-repeat;
         background-size: 17.5px 12px;
         background-position: 20px center, 95% center;
         padding-top: 0px;
     }
+    .eye{
+        
+        margin-top: -30px;
+        margin-bottom: 30px;
+        margin-left: 393px;
+        width: 20px;
+        height: 20px;
+        }
+
+    .fa{
+        color: #dfe2e6;
+       }
 
     input.fullName {
         padding-left: 50px !important;
@@ -137,26 +150,31 @@
         width: 160px;
         height: 40px;
         border-radius: 20px;
-        background-color: #51aee5;
+        box-shadow: #51aee5 -2px 21px 20px -15px;
+        background-color: #43adeb;
         font-size: 12px;
         color: #ffffff;
+        font-weight: 500;
     }
 
     .leftl {
         border: none;
-        font-size: 16px;
-        font-weight: 600;
-        margin-top: 25px;
+        // font-size: 18px;
+        // font-weight: 600;
+        margin-top: 10px;
         margin-bottom: 50px;
+        cursor: pointer;
+        
     }
 
     .btn1 {
         min-width: 100px;
         height: 40px;
-        border-radius: 20px;
-        background-color: #51aee5;
-        font-size: 12px;
-        color: #ffffff;
+        // border-radius: 20px;
+        background-color: white;
+        font-size: 18px;
+        font-weight: 600(semibold);
+        color: #606670;
         outline: none;
     }
 

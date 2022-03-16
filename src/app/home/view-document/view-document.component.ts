@@ -3,6 +3,18 @@ import { DocumentService } from "../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
+import * as xlsx from 'xlsx';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  
+  ElementRef,
+  Inject,
+  Input,
+  
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'app-view-document',
@@ -10,6 +22,9 @@ import { DomSanitizer } from "@angular/platform-browser";
   styleUrls: ['./view-document.component.scss']
 })
 export class ViewDocumentComponent implements OnInit {
+  @ViewChild('epltable', { static: false }) epltable: ElementRef;
+  @ViewChild('table', { static: false }) table: ElementRef;
+  @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
   public item1;
   public item2;
   public user;
@@ -98,6 +113,18 @@ export class ViewDocumentComponent implements OnInit {
 
 
 
+  }
+  exportToExcel() {
+    const ws: xlsx.WorkSheet =   
+    xlsx.utils.table_to_sheet(this.epltable.nativeElement);
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, 'epltable.xlsx');
+   }
+
+  hide(){
+    this.sb = true;
+    this.showInvoice = false;
   }
 
   getTransactions(selectedRowValues) {

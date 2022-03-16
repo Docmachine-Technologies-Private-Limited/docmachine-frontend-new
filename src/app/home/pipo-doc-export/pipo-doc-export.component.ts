@@ -30,6 +30,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from 'src/app/app.config';
 import * as XLSX from 'xlsx';
+import * as xlsx from 'xlsx';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { data } from 'jquery';
@@ -45,6 +46,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   bsModalRef: BsModalRef;
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
+  @ViewChild('epltable', { static: false }) epltable: ElementRef;
   @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
   public type: string = 'directive';
@@ -54,6 +56,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   public user;
   public selectedRow;
   public showInvoice = false;
+  public showInvoice1 = true;
   public tableWidth;
   public export = false;
   public import = false;
@@ -78,6 +81,13 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   docu: any;
   pipoNo: any;
   toggle: boolean = false;
+  nameSearch : string ='';
+  Comoval: any = 'Commodity';
+  nameSearch1 : string ='';
+  Locaval: any = 'Location';
+  nameSearch2 : string = '';
+  startDate :any = '';
+  endDate : any = '';
 
   public config: DropzoneConfigInterface;
   public config1: DropzoneConfigInterface;
@@ -138,6 +148,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   loc1: boolean;
   item4: any;
   viewData1: any;
+  obj: any;
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -181,7 +192,18 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       };
     }
   }
-
+  
+  // pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+  // public date1: Date = new Date("2000-01-01");
+  // public date2: Date = new Date();
+  // changeFirstInput(e){
+  //   this.date1 = e.target.value;
+  //   console.log(this.obj.filter(data => new Date(data.date.replace(this.pattern,'$3-$2-$1')) >= new Date(this.date1) && new Date(data.date.replace(this.pattern,'$3-$2-$1')) <= new Date(this.date2)  ));;
+  // }
+  // changeSecondInput(e){
+  //  this.date2 = e.target.value;
+  //  console.log(this.obj.filter(data => new Date(data.date.replace(this.pattern,'$3-$2-$1')) >= new Date(this.date1) && new Date(data.date.replace(this.pattern,'$3-$2-$1')) <= new Date(this.date2) ));;
+  // } 
   openModalWithComponent(a) {
     this.invoiceArr = this.pipoData[a];
     const initialState = {
@@ -285,47 +307,45 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         (err) => console.log(err)
       );
 
-      // this.documentService.getMaster1().subscribe(
-      //   (data) => {
-      //     console.log("Fresh Data" ,data);
-      //   },
-      //   (error) => {}
-      // );
+      let arrayMain = []
+          this.documentService.getMaster(1).subscribe(
+            (res: any) => {
+              console.log(res), (this.item4 = res.data);
+              console.log("hello the")
+              for (let value1 of this.item1) {
+                for (let value2 of this.item4) {
+                  for (let a of value2.pipo) {
+                    if (a == value1.pi_poNo) {
+                      const newVal = { ...value1 };
+                      newVal['sbno'] = value2.sbno
+                      newVal['sbdate'] = value2.sbdate
+                      newVal['portCode'] = value2.portCode
+                      newVal['region'] = value2.countryOfFinaldestination
+                      newVal['fobValue'] = value2.fobValue
 
-      // let arrayMain = []
-      // this.documentService.getMaster(1).subscribe(
+                      // console.log("Hello Ranjit", a);
+                      // value1.sbno = value2.sbno
+                      // value1.sbdate = value2.sbdate
+                      arrayMain.push(newVal)
+                      // console.log("hello Sj", value2);
+                    }
+                  }
+                }
+              }
+              console.log("Hello There", arrayMain);
+              if(arrayMain.length>0){
+                this.item1 = arrayMain
+              }
+              
 
-      //   (res: any) => {
-      //     console.log(res), (this.item4 = res.data);
-      //     console.log("hello the")
-      //     for (let value1 of this.item1) {
-      //       for (let value2 of this.item4) {
-      //         for (let a of value2.pipo) {
-      //           if (a == value1.pi_poNo) {
-      //             const newVal = { ...value1 };
-      //             newVal['sbno'] = value2.sbno
-      //             newVal['sbdate'] = value2.sbdate
-      //             newVal['portCode'] = value2.portCode
-      //             newVal['region'] = value2.countryOfFinaldestination
-      //             newVal['fobValue'] = value2.fobValue
+            },
+            (err) => console.log(err)
+          );
 
-      //             // console.log("Hello Ranjit", a);
-      //             // value1.sbno = value2.sbno
-      //             // value1.sbdate = value2.sbdate
-      //             arrayMain.push(newVal)
-      //             // console.log("hello Sj", value2);
-      //           }
-      //         }
-      //       }
-      //     }
-      //     console.log("Hello There", arrayMain);
-      //     if (arrayMain.length > 0) {
-      //       this.item1 = arrayMain
-      //     }
 
-      //   },
-      //   (err) => console.log(err)
-      // );
+
+
+
     }
     this.userService.getBuyer(1).subscribe(
       (res: any) => {
@@ -350,7 +370,16 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       }
     );
   }
+  clickBuyer(value) {
+    let commoArray = []
+    console.log('hhddh')
+    this.Comoval = value
 
+  }
+  clickloca( value){
+  this.Locaval = value
+  }
+  
   getMaster() {
     let arrayMain = []
     this.documentService.getMaster(1).subscribe(
@@ -848,10 +877,24 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
   // }
 
+  hide3(){
+    this.showInvoice = !this.showInvoice
+  }
+  hide1(){
+  
+   this.showInvoice=true;
+   this.toggle=false;
+   this.toggle2=false;
+  }
+  hide2(){
+    this.showInvoice=true;
+    this.toggle=false;
+    this.toggle1=false;}
   hide(data, i) {
     this.showInvoice = true;
     this.getInvoices(data, i);
   }
+ 
 
   toSave(data, index) {
     this.optionsVisibility[index] = false;
@@ -957,6 +1000,15 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   cancel() {
     this.toggle = false;
   }
+
+  exportToExcel() {
+    const ws: xlsx.WorkSheet =   
+    xlsx.utils.table_to_sheet(this.epltable.nativeElement);
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, 'epltable.xlsx');
+   }
+  
 
   public onUploadInit(args: any): void {
     console.log('onUploadInit:', args);
@@ -1205,6 +1257,8 @@ export class ModalContentComponent1 implements OnInit {
   invoiceArray = [];
   list: any[] = [];
   @ViewChild('table', { static: true }) table: ElementRef;
+  epltable: any;
+  static epltable: any;
 
   constructor(public bsModalRef: BsModalRef) {}
 
@@ -1212,7 +1266,11 @@ export class ModalContentComponent1 implements OnInit {
     console.log(this.table);
     console.log(this.list);
     this.invoiceArray = this.list;
+    
   }
+ 
+  
+
   fireEvent() {
     console.log(this.table);
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(

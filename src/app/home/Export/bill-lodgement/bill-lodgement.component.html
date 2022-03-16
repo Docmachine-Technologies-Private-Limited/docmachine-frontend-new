@@ -40,17 +40,56 @@
         <div class="analytics" style="margin-left: 50px;">
 
             <div>
-                <div style="margin: 10px;">
+                <!-- <div style="margin: 10px;">
                     <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
                         style="width: 20px; height: 20px;"><span style="margin-left: 10px;"
                         [routerLink]="['/home/dashboardTask']">Back</span>
-                </div>
+                </div> -->
 
                 <!-- P0102 -->
 
                 <div *ngIf='!isGenerate'>
 
                     <div>
+                        <!-- <label *ngIf='documentType == "PI" && documentType1 == "export" || documentType == "PO" && documentType1 == "export"' style="flex-direction:row; font-size: 20px; color: #303030;margin-left: 22px !important; margin-top: -22px;  ">Buyer’s
+                            Name*</label>
+                          <div
+                            *ngIf='documentType == "PI" && documentType1 == "export" || documentType == "PO" && documentType1 == "export"'>
+                            <div style="display: flex; align-items: center; margin-left: 23px;">
+                            
+                              <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px; border: 1px solid #C6CBD4; flex-direction:row; ">
+                                <span style="color: #323e4a !important; min-width: 150px;">{{buyerValue}}</span>
+                                <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+                                  <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                                </span>
+                                <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
+                                  <a style="min-width:100%;" *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'>{{buyer.buyerName}}</a>
+                                  <a style="border: 1px solid #EAEDF3;min-width:100%;" (click)="open1(content1)">Add New Buyer</a>
+                                </div>
+                              </div>
+                            </div> -->
+                            <select style="border: 1px solid #C6CBD4;
+                            color: black;
+                            padding: 4px;
+                            font-weight: 100 ; margin-right: 5px; font-size: 14px;" (change)="searchData1($any($event.target).value)">
+                                <option value="">commodity</option>
+                                <option *ngFor="let item of item6; let i = index;" style="color: black;"> {{item.como}}</option>
+                            </select>
+                            <select style="border: 1px solid #C6CBD4;
+                            color: black;
+                            padding: 4px;
+                            font-weight: 100 ; margin-right: 5px; font-size: 14px;" (change)="searchData1($any($event.target).value)" >
+                                <option value="">location</option>
+                                <option *ngFor="let item of item7; let i = index;" style="color: black;"> {{item.loc}}</option>
+                            </select>
+                            
+                            <select (change)="searchData1($any($event.target).value)" style="border: 1px solid #C6CBD4;
+                            color: black;
+                            padding: 4px;
+                            font-weight: 100 ; margin-right: 5px; font-size: 14px;">
+                                <option value="">BuyerName</option>
+                                <option *ngFor="let item of buyerDetail ; let i = index;" style="color: black;" > {{item.buyerName}}</option>
+                            </select>
                         <input style="width: 50%; margin-top: 20px; margin-bottom: 20px;"
                             placeholder="Search for Buyer name or Shipping Bill Number to select Shipping Bill"
                             class="form-control" type="text" (input)="searchData1($any($event.target).value)">
@@ -61,7 +100,7 @@
                                 <label class="form-check-label">
                                     <input class="form-check-input" type="checkbox"
                                         (change)="changeCheckbox1(item.sbno)">
-                                    {{item.sbno}} - {{item.buyerName}}
+                                        {{item.buyerName}} {{item.como}}
                                 </label>
                             </div>
                             <br>
@@ -224,43 +263,22 @@
                                 </div>
                                 <div style="margin-left: 40px; margin-top: 20px; width: 85%;" class="bc">
                                     <div style=" text-align:right">Date: <span
-                                            style="
-                                                                                                                                    outline: none;
-                                                                                                                                      display: inline-block;
-                                                                                                                                      width: 150px;
-                                                                                                                                      border-bottom: 1px solid black;
-                                                                                                                                    "
-                                            contenteditable="true"></span>
+                                            style="outline: none;  display: inline-block;width: 150px;border-bottom: 1px solid black;"contenteditable="true"></span>
                                     </div>
                                     <div style="width:80%; margin-top: -20px;">To, <br>
                                         The Manager <br>
                                         YES Bank Ltd., <br>
                                         Branch address</div>
                                     <span
-                                        style="
-                                                                                                                                    outline: none;
-                                                                                                                                      display: inline-block;
-                                                                                                                                      width: 150px;
-                                                                                                                                      border-bottom: 1px solid black;
-                                                                                                                                    "
+                                        style="outline: none;display: inline-block;width: 150px;border-bottom: 1px solid black;"
                                         contenteditable="true"></span> <br>
                                     <div style="margin-top: 10px;">Dear Sir/Madam, <br>
                                         Export Documents for □ Purchase □ Negotiation □ Discounting □ Collection
                                         □ Rupee Advance <br>
                                         Bill amount<span
-                                            style="
-                                                                                                                                        outline: none;
-                                                                                                                                          display: inline-block;
-                                                                                                                                          width: 150px;
-                                                                                                                                          border-bottom: 1px solid black;
-                                                                                                                                        "
+                                            style="outline: none;display: inline-block;width: 150px;border-bottom: 1px solid black;"
                                             contenteditable="true"></span>Tenor <span
-                                            style="
-                                                                                                                                                    outline: none;
-                                                                                                                                                      display: inline-block;
-                                                                                                                                                      width: 160px;
-                                                                                                                                                      border-bottom: 1px solid black;
-                                                                                                                                                    "
+                                            style="outline: none;display: inline-block;width: 160px;border-bottom: 1px solid black;"
                                             contenteditable="true"></span></div>
                                     <br>
                                     <table>
@@ -286,11 +304,7 @@
                                         <tr class="border1">
                                             <td class="wtd3 border1">Original</td>
                                             <td class="wtd3 border1"><span
-                                                    style="
-                                                                                                                                                outline: none;
-                                                                                                                                                  display: inline-block;
-                                                                                                                                                  width: 90px;
-                                                                                                                                                "
+                                                    style="outline: none;display: inline-block;width: 90px;"
                                                     contenteditable="true"></span></td>
                                             <td class="wtd3 border1"><span
                                                     style="outline: none;display: inline-block;width: 90px;"
@@ -902,9 +916,10 @@
 
                         </div> -->
 
-
+                        
                         <h1 *ngIf="isProceed == false && Question5 == 'yes'">Invoice Reduction</h1>
                         <div id="mainId1" class="bc" *ngIf="isProceed == false && Question5 == 'yes'">
+                            
                             <!-- <div id="first" class="bc">
 
                                 <div style="margin-left: 40px; margin-top: 20px; width: 75%;" class="bc">
@@ -1099,6 +1114,11 @@
 
                             </div> -->
                             <table #table1>
+                                <!-- <div style="margin: 10px;">
+                                    <img src="../../../assets/back.png"  (click)="hide()"
+                                        style="width: 20px; height: 20px;"><span style="margin-left: 10px;"
+                                        >Back</span>
+                                </div> -->
                                 <tr style="border: 0.5px solid black;">
                                     <td style="border: 0.5px solid black;">
                                         SL NO
@@ -1214,12 +1234,7 @@
                             <!-- <button (click)="fireEvent()">Button</button> -->
                         </div>
                         <div *ngIf="isProceed == false"
-                            style="
-                                                                            float: left;
-                                                                            display: block;
-                                                                            width: 78%;
-                                                                            margin-top: 40px;
-                                                                            margin-left: 43px;display: flex; align-items: center;">
+                            style="float: left;display: block;width: 78%;margin-top: 40px;margin-left: 43px;display: flex; align-items: center;">
                             <button *ngIf='newDone' class="button1" style="margin-right: 10px;" title="Share As PDF"
                                 (click)="doneDox()">Done
                             </button>
@@ -1228,6 +1243,7 @@
                             <button *ngIf='!newDone' class="button1" style="margin-right: 10px; margin-bottom: 30px;"
                                 (click)="showPreview()">Proceed
                                 to Preview</button>
+                                <button *ngIf='!newDone' class="button1" style="margin-right: 10px; margin-top: -28px;" (click)="hide()">back</button>
                         </div>
                         <div *ngIf="isProceed == true">
                             <p>Setup: 3 Preview</p>

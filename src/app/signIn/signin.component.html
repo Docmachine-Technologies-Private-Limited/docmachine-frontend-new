@@ -1,10 +1,12 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div style="padding-right: 0 !important; overflow: hidden" class="container-fluid">
     <div style="display: flex; width: 100%" class="row no-gutter">
         <!-- The image half -->
 
         <!-- The content half -->
         <div *ngIf='!qr' class="bg-dark">
-            <div style="margin-top: 5%; width: 90%; text-align: right">
+            <div style="margin-top: 3%; width: 90%; text-align: right">
                 <button style="cursor: pointer" class="leftl btn1" [class.disable]="isVisible" [disabled]="isVisible"
                     (click)="onSignup()">
                     Signup
@@ -27,7 +29,7 @@
                                 <div class="form-group mb-3">
                                     <label for="inputEmail">Email</label>
                                     <input formControlName="email" id="inputEmail" type="email" placeholder="Your Email"
-                                        required="" class="form-control rounded-pill border-0 shadow-sm px-4 email"
+                                        required="" autocomplete="off" class="form-control rounded-pill border-0 shadow-sm px-4 email"
                                         [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
                                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                                         <div *ngIf="f.email.errors.required" style="margin-left: 15px;">Email is
@@ -39,20 +41,27 @@
 
                                 <div class="form-group mb-3">
                                     <label for="password1">Password</label>
-                                    <input formControlName="password" id="password1" type="password"
-                                        placeholder="Your Password" required="" class="
+                                    <input  [type]="password"  formControlName="password" id="password1" type="password"
+                                        placeholder="Your Password" autocomplete="off" required="" class="
                       form-control
                       rounded-pill
                       border-0
                       shadow-sm
                       px-4
                       password
-                      password1
-                    " [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                      password1" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                    <div (click)="onClick()" class="eye">
+                      <i class="fa fa-eye" aria-hidden="true" *ngIf="!show"></i>
+                        <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show"></i>
+                    </div>
+                    <!-- <button (click)="onClick()" class="eye">
+                        <i class="fa fa-eye" aria-hidden="true" *ngIf="!show"></i>
+                        <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show"></i>
+                      </button> -->
                                     <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                                        <div *ngIf="f.password.errors.required" style="margin-left: 15px;">Please enter
+                                        <div *ngIf="f.password.errors.required" style="margin-left: 15px; margin-top: -16px;">Please enter
                                             password</div>
-                                        <div *ngIf="f.password.errors.minlength" style="margin-left: 15px;">Password
+                                        <div *ngIf="f.password.errors.minlength" style="margin-left: 15px; margin-top: -16px;">Password
                                             should be more than 6 letter</div>
                                     </div>
                                 </div>
@@ -64,17 +73,17 @@
                                 </div>
 
 
-                                <p class="text-muted mb-4 bottom-text">
-                                    You continuing, you agree to DocMachine
+                                <p class="text-muted mb-4 bottom-text ml-2">
+                                    By continuing, you agree to DocMachine
                                     <a href="">Term of service</a> we will manage information as described in our <a
                                         href="">privacy policy agrement</a>
                                 </p>
                                 <div>
                                     <button type="submit" class="btn btn-block mb-2 rounded-pill shadow-sm reg-sm"
-                                        style="float: left" [class.disable]="isDisabled" [disabled]="isDisabled">
-                                        Sign in
+                                        style="float: left; margin-top: 20px;" [class.disable]="isDisabled" [disabled]="isDisabled">
+                                        Login
                                     </button>
-                                    <p href="#" class="text-sm" style="float: left; margin-top: 10px; margin-left: 10px"
+                                    <p href="#" class="text-sm" style="float: left; margin-top: 30px; margin-left: 23px"
                                         [routerLink]="['/forgotpassword']">
                                         Forgot Password?
                                     </p>

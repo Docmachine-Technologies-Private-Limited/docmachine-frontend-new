@@ -10,6 +10,8 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./signin.component.scss']
 })
 export class SigninComponent implements OnInit {
+  password;
+  show = false;
   loginForm: FormGroup;
   isDisabled: boolean = false;
   isVisible: boolean = false;
@@ -25,6 +27,7 @@ export class SigninComponent implements OnInit {
     private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
+    this.password = 'password';
 
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
@@ -32,7 +35,20 @@ export class SigninComponent implements OnInit {
     });
 
   }
+  
+
+
   get f() { return this.loginForm.controls; }
+
+  onClick() {
+    if (this.password === 'password') {
+      this.password = 'text';
+      this.show = true;
+    } else {
+      this.password = 'password';
+      this.show = false;
+    }
+  }
 
   onSubmit() {
     if (!this.value) {
@@ -178,6 +194,7 @@ export class SigninComponent implements OnInit {
     this.router.navigate(['/signup'])
 
   }
+  
 
   confirm() {
     console.log(this.authcode)

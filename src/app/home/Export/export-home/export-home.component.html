@@ -16,7 +16,7 @@
                 width: 94%;
                 " *ngIf="!showInvoice">
                         <div style="display: flex; align-items: center">
-                                <h3 class="heading">Inward Remittance Disposal</h3>
+                                <h3 class="heading" style="margin-left: 24px;">Inward Remittance Disposal</h3>
                         </div>
 
                         <div class="dropdown">
@@ -37,11 +37,11 @@
                 </div>
 
                 <div class="analytics" *ngIf="proceed">
-                        <div style="margin: 20px 50px;">
+                        <!-- <div style="margin: 20px 50px;">
                                 <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
                                         style="width: 20px; height: 20px;"><span style="margin-left: 10px;"
                                         [routerLink]="['/home/dashboardTask']">Back</span>
-                        </div>
+                        </div> -->
                         <div *ngIf="!selectPurpose" style="margin: 20px 50px;">
                                 <p class="stp3">Select a Purpose code*</p>
 
@@ -103,56 +103,63 @@
 
                 </div>
                 <div class="analytics" *ngIf="!proceed" style="margin-left: 50px;">
-
-
-                        <div class="flex-container">
+                        
+                       
+                        <div class="flex-container" style="margin-left: 20px;">
                                 <div *ngFor="let code of selectedPurpose; let i = index"
                                         [ngClass]="{'my_class': c === code}" (click)="tabClick(code,i)">
                                         {{code}}</div>
 
                         </div>
+                        
                         <div *ngIf='c'>
+                                
                                 <div *ngIf='c == "P0102" || c == "P0104" || c == "P0105" || c == "P0107"'>
                                         <!-- P0102 -->
                                         <div *ngFor="let code of selectedPurpose; let j = index">
-                                                <div
-                                                        *ngIf='code === c && sbPurpose[j] != code && importPurpose[j] != code && noImportPurpose[j] != code && mailArray[j] != code'>
+                                                  
+                                                <div *ngIf='code === c && sbPurpose[j] != code && importPurpose[j] != code && noImportPurpose[j] != code && mailArray[j] != code'>
                                                         <div class="form-group">
+                                                                <div style="margin-left: 29px;">
+                                                                        <img src="../../../assets/back.png" (click)="hide()"
+                                                                                style="width: 20px; height: 20px;"><span style="margin-left: 10px;" (click)="hide()"
+                                                                                >Back</span>
+                                                                           </div>
                                                                 <div class="form-group col-md-12">
-                                                                        <label>Is Lodgement already done?</label>
-                                                                        <input type="radio" name="Question1"
+                                                                        <label style="margin-left: 12px;">Is Lodgement already done?</label>
+                                                                        <input type="radio" name="Question1" style="margin-left: 25px;"
                                                                                 [(ngModel)]="Question1" value="yes">
                                                                         <span style="margin-left: 10px;">Yes</span> <br>
-                                                                        <input type="radio" name="Question1"
+                                                                        <input type="radio" name="Question1" style="margin-left: 25px;"
                                                                                 [(ngModel)]="Question1" value="no">
                                                                         <span style="margin-left: 10px;">No</span>
                                                                 </div>
 
                                                         </div>
-                                                        <div *ngIf='Question1 === "yes"'>
-                                                                Select bank reference number
-                                                                <input type="text" (keyup)="change($event)">
+                                                        <div *ngIf='Question1 === "yes"' style="margin-left: 12px;">
+                                                                <span style="margin-left: 20px;"> bank reference number</span>
+                                                                <input type="text" (keyup)="change($event)" style="margin-left: 25px;">
                                                                 <br>
 
                                                                 <div class="form-group">
                                                                         <div class="form-group col-md-12">
-                                                                                <label>Is Buyer remitter
+                                                                                <label style="margin-left: 1px;">Is Buyer remitter
                                                                                         different?</label>
-                                                                                <input type="radio" name="Question3"
+                                                                                <input type="radio" name="Question3" style="margin-left: 15px;"
                                                                                         [(ngModel)]="Question3"
                                                                                         value="yes"> <span
                                                                                         style="margin-left: 10px;">Yes</span>
                                                                                 <br>
-                                                                                <input type="radio" name="Question3"
+                                                                                <input type="radio" name="Question3" style="margin-left: 15px;"
                                                                                         [(ngModel)]="Question3"
                                                                                         value="no"> <span
                                                                                         style="margin-left: 10px;">No</span>
                                                                         </div>
 
                                                                 </div>
-                                                                <div *ngIf="Question3 == 'yes'">
+                                                                <div *ngIf="Question3 == 'yes'" style="margin-left: 12px;">
 
-                                                                        Select Tri party agreement
+                                                                        <span style="margin-left: 10px;"> Tri party agreement </span>
                                                                         <div style="margin-left:10px" s
                                                                                 class="form-check"
                                                                                 *ngFor="let item of item4; let i = index;">
@@ -169,19 +176,19 @@
 
                                                                         <div class="form-group">
                                                                                 <div class="form-group col-md-12">
-                                                                                        <label>Is Invoice
+                                                                                        <label style="margin-left: -7px;">Is Invoice
                                                                                                 reduction?</label>
                                                                                         <input type="radio"
                                                                                                 name="Question4"
                                                                                                 [(ngModel)]="Question4"
-                                                                                                value="yes">
+                                                                                                value="yes" style="margin-left: 5px;">
                                                                                         <span
                                                                                                 style="margin-left: 10px;">Yes</span>
                                                                                         <br>
                                                                                         <input type="radio"
                                                                                                 name="Question4"
                                                                                                 [(ngModel)]="Question4"
-                                                                                                value="no">
+                                                                                                value="no" style="margin-left: 5px;">
                                                                                         <span
                                                                                                 style="margin-left: 10px;">No</span>
                                                                                 </div>
@@ -191,7 +198,8 @@
 
 
                                                                                 <button class="opt"
-                                                                                        style="margin-right: 1%"
+                                                                                        style="margin-left: 10px;
+                                                                                        width: 200px;"
                                                                                         (click)='generateDoc2(code,j)'>
                                                                                         Generate Invoice Reduction
                                                                                 </button>
@@ -214,7 +222,7 @@
                                                                 </div>
                                                         </div>
                                                         <div *ngIf='Question1 === "no"'>
-                                                                <label style="margin-left:10px"> Select Shipping Bill
+                                                                <label style="margin-left:25px"> Select Shipping Bill
                                                                         number*</label>
                                                                 <div style="margin-left:10px" s class="form-check"
                                                                         *ngFor="let item of item1; let i = index;">
@@ -228,16 +236,16 @@
                                                                 <br>
                                                                 <div class="form-group">
                                                                         <div class="form-group col-md-12">
-                                                                                <label>Is Buyer remitter
+                                                                                <label style="margin-left: 10px;">Is Buyer remitter
                                                                                         different?</label>
                                                                                 <input type="radio" name="Question2"
                                                                                         [(ngModel)]="Question2"
-                                                                                        value="yes"> <span
+                                                                                        value="yes" style="margin-left: 25px;"> <span
                                                                                         style="margin-left: 10px;">Yes</span>
                                                                                 <br>
                                                                                 <input type="radio" name="Question2"
                                                                                         [(ngModel)]="Question2"
-                                                                                        value="no"> <span
+                                                                                        value="no" style="margin-left: 25px;"> <span
                                                                                         style="margin-left: 10px;">No</span>
                                                                         </div>
                                                                 </div>
@@ -261,15 +269,15 @@
 
                                                                 <div class="form-group">
                                                                         <div class="form-group col-md-12">
-                                                                                <label>Is Invoice reduction?</label>
+                                                                                <label style="margin-left:10px">Is Invoice reduction?</label>
                                                                                 <input type="radio" name="Question5"
                                                                                         [(ngModel)]="Question5"
-                                                                                        value="yes"> <span
+                                                                                        value="yes" style="margin-left: 25px;"> <span
                                                                                         style="margin-left: 10px;">Yes</span>
                                                                                 <br>
                                                                                 <input type="radio" name="Question5"
                                                                                         [(ngModel)]="Question5"
-                                                                                        value="no"> <span
+                                                                                        value="no" style="margin-left: 25px;"> <span
                                                                                         style="margin-left: 10px;">No</span>
                                                                         </div>
 
@@ -278,15 +286,15 @@
 
                                                                 <div
                                                                         *ngIf='Question2 === "no" || Question2 === "yes" && Question5=="yes" || Question5=="no" '>
-                                                                        Select a bank*
+                                                                       <span style="margin-left: 28px;"> Select a bank*</span>
                                                                         <div *ngFor='let value of bankArray'
                                                                                 style="display: flex; align-items: center;">
                                                                                 <input style="flex-direction:row;"
                                                                                         type="radio" id="options1"
                                                                                         class="circular_input"
                                                                                         (ngModel)="myRadio"
-                                                                                        value="yesBank">
-                                                                                <label style="flex-direction:row;"
+                                                                                        value="yesBank" style="margin-left:41">
+                                                                                <label style="flex-direction:row; "
                                                                                         class="label1"
                                                                                         for="male">{{value.bank}}</label>
                                                                         </div>
@@ -310,6 +318,12 @@
                                                                                 class="bc">
 
                                                                                 <div style="width:80%;">
+                                                                                        <!-- <div style="margin-left: 29px;">
+                                                                                                <img src="../../../assets/back.png" (click)="hide1( code,j)"
+                                                                                                        style="width: 20px; height: 20px;"><span style="margin-left: 10px;" (click)="hide()"
+                                                                                                        >Back</span>
+                                                                                                   </div> -->
+
                                                                                         Our Ref No.: <span
                                                                                                 style="outline: none; display: inline-block;width: 150px;"
                                                                                                 contenteditable="true"></span>
@@ -1659,6 +1673,7 @@
                                                                                         class="bc">
 
                                                                                         <div style="width:80%;">
+                                                                                                
                                                                                                 Our Ref No.: <span
                                                                                                         style="outline: none; display: inline-block;width: 150px;"
                                                                                                         contenteditable="true"></span>
@@ -2079,7 +2094,12 @@
                                         <!-- other -->
                                         <div *ngFor="let code of selectedPurpose; let j = index">
                                                 <div *ngIf='code === c && generatePurpose[j] != code'>
-                                                        <input style="width: 50%; margin-top: 20px; margin-bottom: 20px;"
+                                                        <div style="margin-left: 29px; margin-top: 10px;">
+                                                                <img src="../../../assets/back.png" (click)="hide()"
+                                                                        style="width: 20px; height: 20px;"><span style="margin-left: 10px;" (click)="hide()"
+                                                                        >Back</span>
+                                                                   </div>
+                                                        <input style="width: 50%; margin-top: 10px; margin-left: 30px; margin-bottom: 10px;"
                                                                 placeholder="Search for Buyer name or PI/PO Number to select PI/PO"
                                                                 class="form-control" type="text"
                                                                 (input)="searchData2($any($event.target).value)">
@@ -2099,10 +2119,11 @@
                                                                 </div>
                                                         </div>
                                                         <br>
+                                                        
 
-                                                        Select a bank*
+                                                       <span style="margin-left: 30px;">Select a bank*</span> 
                                                         <div *ngFor='let value of bank'
-                                                                style="display: flex; align-items: center;">
+                                                                style="display: flex; align-items: center; margin-left: 40px;">
                                                                 <input style="flex-direction:row;" type="radio"
                                                                         id="options1" class="circular_input"
                                                                         (ngModel)="myRadio" value="value.bank"
@@ -2112,9 +2133,9 @@
                                                         </div>
                                                         <br>
                                                         <div *ngIf='bankToggle'>
-                                                                Credit to {{bankValue}}*
+                                                               <span style="margin-left: 30px;"> Credit to {{bankValue}}*</span>
                                                                 <div *ngFor='let value of newBankArray'
-                                                                        style="display: flex; align-items: center;">
+                                                                        style="display: flex; align-items: center; margin-left: 40px;">
                                                                         <input style="flex-direction:row;" type="radio"
                                                                                 id="options1" class="circular_input"
                                                                                 (ngModel)="myRadio" value="value.bank"
@@ -2123,9 +2144,9 @@
                                                                                 class="label1"
                                                                                 for="male">{{value.bank}}-{{value.accType}}</label>
                                                                 </div> <br>
-                                                                Charges to {{bankValue}}*
+                                                                <span style="margin-left: 30px;"> to {{bankValue}}*</span>
                                                                 <div *ngFor='let value of newBankArray'
-                                                                        style="display: flex; align-items: center;">
+                                                                        style="display: flex; align-items: center; margin-left: 40px;">
                                                                         <input style="flex-direction:row;" type="radio"
                                                                                 id="options1" class="circular_input"
                                                                                 (ngModel)="myRadio" value="value.bank"

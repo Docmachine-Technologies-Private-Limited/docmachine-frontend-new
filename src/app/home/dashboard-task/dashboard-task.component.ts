@@ -10,6 +10,10 @@ export class DashboardTaskComponent implements OnInit {
   item: any;
   item1: any = [];
   playerName: any;
+  nt:boolean;
+  nt2:boolean;
+  nt3:boolean;
+  nt4:boolean;
 
   constructor(public documentService: DocumentService) { }
 
@@ -33,6 +37,18 @@ export class DashboardTaskComponent implements OnInit {
       },
       (err) => console.log(err)
     );
+  }
+  public manage1Task() {
+    this.nt = !this.nt;
+  }
+  public manage2Task() {
+    this.nt2 = !this.nt2;
+  }
+  public manage3Task(){
+    this.nt3 = !this.nt3;
+  }
+  public manage4Task(){
+    this.nt4 = !this.nt4;
   }
   onSubmit(a, b) {
     console.log(a.target.player.value)

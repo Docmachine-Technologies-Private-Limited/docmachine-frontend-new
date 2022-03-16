@@ -33,7 +33,7 @@ input {
 
 .display-5 {
     width: 472px;
-    font-weight: 700;
+    font-weight: 400;
     color: #606670;
     font-size: 24px;
     border-bottom: 4px solid #49A2D7;
@@ -74,13 +74,13 @@ input {
     margin-bottom: 30px;
     color:#606670;
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 400;
 }
 
 label {
     color: #606670;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 400;
     margin-left: 5px;
 }
 
@@ -89,8 +89,11 @@ label {
     width: 160px;
     height: 40px;
     border-radius: 20px;
+    box-shadow: #51aee5 -2px 21px 20px -15px !important;
     background-color: #51AEE5;
     font-size: 12px;
     color: #ffffff;
 
+
 }
+

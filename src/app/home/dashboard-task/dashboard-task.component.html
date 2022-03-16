@@ -3,7 +3,10 @@
     <main id="content" class="content table-padding" role="main">
         <div style="display: flex; align-items: center;">
             <div class="div1" style="flex-direction:row; width: 50%;">
-                <p class="heading" style="float: left;">OutStanding BOE</p>
+                <p class="heading" style="float: left;" (click)="manage1Task()">OutStanding BOE
+                    <i style="margin-left: 515px;"  *ngIf="!nt" class="fa fa-chevron-circle-up"></i>
+                    <i style="margin-left: 515px;" *ngIf="nt" class="fa fa-chevron-circle-down"></i>
+                </p>
                 <p class="icon" style="float: right;"></p>
                 <table class="table " style="width: 95%;">
                     <thead>
@@ -51,7 +54,7 @@
                 <p class="heading" style="margin-left: 20px;">Report</p>
                 <div>
                     <div style="float: left; margin-left: 20px;">
-                        <img class="image" src="../../../assets/ic_mail-1.png" alt="">
+                        <img src="../../../assets/recieve1.png" alt="" style="height: 50px; width: 50px; line-height: 7px;">
                     </div>
                     <div style="float: left; margin-left: 20px; padding-right: 130px;">
                         <p style="margin-bottom: 0px;" class="text1">Total Received</p>
@@ -60,7 +63,7 @@
                 </div>
                 <div>
                     <div style="float: left; margin-left: 20px;">
-                        <img class="image1" src="../../../assets/ic_mail-1.png" alt="">
+                        <img src="../../../assets/recieve.png" alt="" style="height: 50px; width: 50px; ">
                     </div>
                     <div style="float: left; margin-left: 20px;">
                         <p style="margin-bottom: 0px;" class="text1">Total Payable</p>
@@ -71,7 +74,10 @@
         </div>
         <div style="display: flex; align-items: center;">
             <div class="div1" style="flex-direction:row; width: 50%; margin-top: 40px;">
-                <p class="heading" style="float: left;">OutStanding SB</p>
+                <p class="heading" style="float: left;" (click)="manage2Task()">OutStanding SB
+                    <i  *ngIf="!nt2" class="fa fa-chevron-circle-up"></i>
+                    <i  *ngIf="nt2" class="fa fa-chevron-circle-down"></i>
+                </p>
                 <p class="icon" style="float: right;"></p>
                 <table class="table " style="width: 95%;">
                     <thead>
@@ -118,7 +124,10 @@
         </div>
         <div style="margin-top: 40px; display: flex; align-items: center;">
             <div class="div1" style="flex-direction:row; width: 42%; margin-top: 40px;">
-                <p class="heading" style="float: left;">Complaince: Bill of entry pending for payment >180 days</p>
+                <p class="heading" style="float: left;" (click)="manage3Task()">Complaince: Bill of entry pending for payment >180 days
+                    <i style="margin-left: 120px;"  *ngIf="!nt3" class="fa fa-chevron-circle-up"></i>
+                    <i style="margin-left: 120px;" *ngIf="nt3" class="fa fa-chevron-circle-down"></i>
+                </p>
                 <p class="icon" style="float: right;"></p>
                 <table class="table " style="width: 95%;">
                     <thead>
@@ -158,7 +167,9 @@
                 </table>
             </div>
             <div class="div1" style="flex-direction:row; width: 42%; margin-top: 40px;">
-                <p class="heading" style="float: left;">Shipping Bills above 21 days to be submitted to AD
+                <p class="heading" style="float: left;" (click)="manage4Task()" >Shipping Bills above 21 days to be submitted to AD
+                    <i style="margin-left: 156px;"  *ngIf="!nt4" class="fa fa-chevron-circle-up"></i>
+                    <i style="margin-left: 156px;" *ngIf="nt4" class="fa fa-chevron-circle-down"></i>  
                 </p>
                 <p class="icon" style="float: right;"></p>
                 <table class="table " style="width: 95%;">
