@@ -69,6 +69,18 @@ import { EditBuyerComponent } from './edit-buyer/edit-buyer.component';
 import { TestComponent } from './test/test/test.component';
 import { HelpComponent } from './help/help.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { TermsAndConditionComponent } from './terms-and-condition/terms-and-condition.component';
+import { CreditNoteComponent } from './credit-note/credit-note.component';
+import { DebitNoteComponent } from './debit-note/debit-note.component';
+import { InsuranceDocumentComponent } from './insurance-document/insurance-document.component';
+import {LetterOfCreditExportLCComponent} from './letter-of-credit-export-lc/letter-of-credit-export-lc.component';
+import { MasterServiceComponent } from './master-service/master-service.component';
+import { TryPartyAgreementsComponent } from './try-party-agreements/try-party-agreements.component';
+import { OpinionReportsComponent } from './opinion-reports/opinion-reports.component';
+import { FilternewPipe } from './filterpipo/filternew.pipe';
+
+import { FilterdatePipe } from './datefilter/filterdate.pipe';
+
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -139,7 +151,19 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ModalContentComponent1,
     EditBuyerComponent,
     TestComponent,
-    HelpComponent
+    HelpComponent,
+    TermsAndConditionComponent,
+    CreditNoteComponent,
+    DebitNoteComponent,
+    InsuranceDocumentComponent,
+    LetterOfCreditExportLCComponent,
+    MasterServiceComponent,
+    TryPartyAgreementsComponent,
+    OpinionReportsComponent,
+    FilternewPipe,
+   
+    FilterdatePipe,
+    
   ],
   imports: [
     CommonModule,
@@ -411,6 +435,46 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             path: "help",
             component: HelpComponent,
             pathMatch: "full",
+          },
+          {
+            path: "t&c",
+            component:TermsAndConditionComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "creditNote",
+            component: CreditNoteComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "debitNote",
+            component: DebitNoteComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "insuranceDocument",
+            component: InsuranceDocumentComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "letterOfCredit-LC",
+            component: LetterOfCreditExportLCComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "master-services",
+            component: MasterServiceComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "try-Party",
+            component: TryPartyAgreementsComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "opinion-report",
+            component: OpinionReportsComponent,
+            pathMatch: "full"
           },
         ],
       },

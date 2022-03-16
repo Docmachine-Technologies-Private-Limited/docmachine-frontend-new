@@ -58,7 +58,12 @@
                     <option value="" selected="selected">All</option>
                 </select>
             </div>
+            <button (click)="exportToExcel()"  style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
+                        background-color: #49A2D7;
+                        border: none;
+                        border-radius: 5px;">Export To Excel</button>
             <div style="padding-top: 0.7%">
+                
                 <button class="upload-button" [routerLink]="['/home/upload']">
                     Upload New
                 </button>
@@ -66,7 +71,7 @@
         </div>
 
 
-        <div class="analytics">
+        <div class="analytics" #epltable>
             <div *ngIf="!showInvoice" style="width: 100%" class="analytics-side">
                 <div style="width: 100%" class="row">
                     <div style="width: 100%; margin: 0 -1.5%" *ngIf="!showInvoice" class="col-12 mb-lg padding">

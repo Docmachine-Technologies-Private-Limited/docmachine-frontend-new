@@ -74,6 +74,16 @@
     margin-top: 60px
 }
 
+.display-6 {
+    text-align: center;
+    width: 580%;
+    font-weight: 600;
+    color: #606670;
+    font-size: 22px;
+    margin-bottom: 12px;
+    margin-top: 60px
+}
+
 .bottom-text {
     font-size: 12px;
     font-weight: 400;
@@ -157,7 +167,7 @@ input.fullName {
     color: #606670;
 }
 
-input {
+.input {
     box-shadow: none !important;
     border: 1px solid #dedede !important;
     width: 432px;
@@ -190,6 +200,15 @@ label {
     font-weight: 600(semibold);
     color: #606670;
     outline: none;
+}
+
+.btn2 {
+    width: 160px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #51aee5;
+    font-size: 12px;
+    color: #ffffff;
 }
 
 .leftl {
@@ -261,7 +280,7 @@ label {
         margin-bottom: 12px;
         // margin-top: 10px;
     }
-    input {
+    .input {
         box-shadow: none !important;
         border: 1px solid #dedede !important;
         width: 452px;
@@ -330,7 +349,7 @@ label {
         margin-bottom: 12px;
         margin-top: 40px;
     }
-    input {
+    .input {
         box-shadow: none !important;
         border: 1px solid #dedede !important;
         width: 410px;
@@ -402,7 +421,7 @@ label {
     form {
         margin-top: -10px;
     }
-    input {
+    .input {
         box-shadow: none !important;
         border: 1px solid #dedede !important;
         width: 300px;

@@ -36,6 +36,7 @@ import { AppConfig } from '../app/app.config';
 import { MembersigninComponent } from './membersignin/membersignin.component';
 import { PdfComponent } from './pdf/pdf.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 //import { SidenavComponent } from './home/sidenav/sidenav.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -74,6 +75,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     DragDropModule,
     SharedModule,
     SignupModule,
+    BsDatepickerModule.forRoot(),
     SigninModule,
     AppRoutingModule,
     TranslateModule.forRoot({

@@ -2,11 +2,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div style="width: 100%; padding-right: 0 !important;" class="container-fluid">
-  <div style="display: flex; width: 100%" class="row no-gutter">
-    <!-- The image half -->
+    <div style="display: flex; width: 100%" class="row no-gutter">
+        <!-- The image half -->
 
-    <!-- The content half -->
-    <div class="bg-dark" style="
+        <!-- The content half -->
+        <div class="bg-dark" style="
         float: left;
         width: 58%;
         display: flex;
@@ -40,6 +40,7 @@
                       shadow-sm
                       px-4
                       fullName
+                      input
                     " [ngClass]="{ 'is-invalid': submitted && f.fullName.errors }" />
                     <div *ngIf="submitted && f.fullName.errors" class="invalid-feedback">
                       <div *ngIf="f.fullName.errors.required" style="margin-left: 15px;">Name is required</div>
@@ -73,6 +74,7 @@
                       px-4
                       password
                       password1
+                      input
                     " [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
                     <div (click)="onClick()" class="eye">
                       <i class="fa fa-eye" aria-hidden="true" *ngIf="!show"></i>
@@ -96,6 +98,7 @@
                       px-4
                       password
                       password1
+                      input
                     " [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" />
                     <div (click)="onClick1()" class="eye">
                       <i class="fa fa-eye" aria-hidden="true" *ngIf="!show1"></i>
@@ -113,27 +116,60 @@
                     By continuing, you agree to DocMachine
                     <a href="">Term of service</a> we will manage information as described in our <a href="">privacy
                       policy agrement</a>
-                  </p>
+                                    </p>
 
-                  <button type="submit" class="btn" style="margin-bottom: 20px" [class.disable]="isDisabled"
-                    [disabled]="isDisabled">Register</button>
-                </form>
-              </div>
+                                    <button type="submit" class="btn" style="margin-bottom: 20px" [class.disable]="isDisabled" [disabled]="isDisabled">Register</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End -->
             </div>
-          </div>
         </div>
         <!-- End -->
-      </div>
-    </div>
-    <!-- End -->
-    <div class="parent" style="
+        <div class="parent" style="
         width: 42%;
         display: flex;
         justify-content: center;
         align-items: center;
       ">
-      <img style="width: 100%" class="image1" src="./assets/Image.png" />
-      <img class="image2" src="./assets/LogoFinal.png" />
+            <img style="width: 100%" class="image1" src="./assets/Image.png" />
+            <img class="image2" src="./assets/LogoFinal.png" />
+        </div>
     </div>
-  </div>
 </div>
+
+<ng-template #content let-modal>
+
+    <div class="modal-body">
+        <div class="row no-gutter">
+            <!-- The image half -->
+            <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
+
+
+            <!-- The content half -->
+            <div class="col-md-7 bg-dark" style="margin: 10px;">
+                <div class="login d-flex py-5" style="padding: 0px !important;">
+
+                    <!-- Demo content-->
+                    <div class="container popup">
+                        <div class="row">
+                            <div class="col-lg-10 col-xl-7 mrg">
+                                <h6 class="display-6">SOFTWARE LICENSE AGREEMENT</h6>
+
+                                <iframe src="./../../assets/T&C.html" width="580%" height="500px"></iframe>
+                                <button type="submit" style="margin-left: 250px;" class="submitBTN" (click)="modal.dismiss('Cross click')">OK</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</ng-template>

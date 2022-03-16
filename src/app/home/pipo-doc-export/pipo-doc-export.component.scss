@@ -2,6 +2,22 @@
     font-family: "Poppins", sans-serif;
 }
 
+
+input[type="date"]::before {
+	color: #999999;
+	content: attr(placeholder);
+}
+input[type="date"] {
+	color: #ffffff;
+}
+input[type="date"]:focus,
+input[type="date"]:valid {
+	color: #666666;
+}
+input[type="date"]:focus::before,
+input[type="date"]:valid::before {
+	content: "" !important;
+}
  #container{ 
     overflow: scroll;
     overflow-x: auto; 
@@ -1614,4 +1630,62 @@ input {
     border: 1px solid #e3e6ee;
     border-radius: 3px;
     width: 180px;
+}
+
+// .input5::-webkit-outer-spin-button,
+// .input5::-webkit-inner-spin-button {
+//     -webkit-appearance: none;
+//     margin: 0;
+// }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+
+/* Firefox */
+
+// input[type=number] {
+//   -moz-appearance: textfield;
+// }
+#container {
+    overflow: scroll;
+    overflow-x: auto;
+}
+
+#container::-webkit-scrollbar {
+    width: 0px;
+}
+
+#container::-webkit-scrollbar-track {
+    background-color: #f0f5f5;
+}
+
+#container::-webkit-scrollbar-thumb {
+    background: #ccc;
+}
+
+.submitBTN {
+    margin-top: 10px;
+    width: 160px;
+    height: 40px;
+    border: 2px white solid;
+    border-radius: 20px;
+    background-color: #51AEE5;
+    font-size: 12px;
+    color: #ffffff;
+    // justify-content: center;
+}
+
+.display-6 {
+    text-align: center;
+    // width: 330%;
+    font-weight: 600;
+    color: #606670;
+    font-size: 22px;
+    margin-bottom: 12px;
+    margin-top: 20px
 }

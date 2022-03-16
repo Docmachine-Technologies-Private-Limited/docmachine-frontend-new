@@ -47,6 +47,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   public Question8 = '';
   public Question9 = '';
   public Question10 = '';
+  public buyerDetail: any = [];
+  buyerValue: any = 'Select Buyer';
   public allTransactions: any = [];
   public generateIndex;
   lodgement1: any;
@@ -155,6 +157,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   sbDataArray: any = [];
   invoiceArr: any[];
   filterToggle = false;
+  item6: any;
+  item7: any;
   constructor(
     public documentService: DocumentService,
     private router: Router,
@@ -173,10 +177,17 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     //window.location.reload();
     console.log(data['default'])
     this.jsondata = data['default'];
-    console.log(this.jsondata[0].purpose)
+    console.log("testing buyer1",this.jsondata[0].purpose)
     this.dataJson = this.jsondata
-
-
+    
+    this.userService.getBuyer(1).subscribe(
+      (res: any) => {
+        (this.buyerDetail = res.data),
+          console.log("Benne Detail4", this.buyerDetail);
+      },
+      (err) => console.log("Error", err)
+    );
+   
 
     this.route.params.subscribe(params => {
       this.file = this.route.snapshot.params['file'];
@@ -185,7 +196,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     });
     this.documentService.getMaster(1).subscribe(
       (res: any) => {
-        console.log(res), (this.item1 = res.data);
+        
+        console.log("getbuyer",res), (this.item1 = res.data);
+        // console.log("hiiiiiiiiiii",this.itemArray)
       },
       (err) => console.log(err)
     );
@@ -201,16 +214,22 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       .subscribe(
         data => {
           console.log("king123")
-          console.log(data['data'][0])
+          console.log( data['data'][0])
           this.item5 = data['data'][0]
-          console.log(this.item5)
+          console.log( this.item5)
+          this.item6 = this.item5.commodity;
+          console.log("comodity data",this.item6)
+          this.item7 = this.item5.location;
+          console.log ("loc",this.item7)
+         
+          
           this.arr = this.item5.gst.split('');
-          console.log(this.arr)
+          console.log( "testing buyer", this.arr)
           this.bankArray = this.item5.bankDetails
           for (let value of this.bankArray) {
             this.allBank.push(value.bank)
           }
-          console.log(this.allBank)
+          console.log("aaa", this.allBank)
           this.bank = this.allBank.filter(function (item, index, inputArray) {
             return inputArray.indexOf(item) == index;
           });
@@ -273,14 +292,21 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   searchData1(a) {
     console.log(a)
     console.log(a.length)
+    console.log("hiiiiiiiiii",this.item1)
     if (a.length > 0) {
       let arr = []
-      for (let value of this.item1) {
-        if (value.buyerName.toLowerCase().includes(a) || value.sbno.includes(a)) {
-          console.log(value.buyerName)
+      for (let value of this.buyerDetail) {
+        if (value.buyerName.toLowerCase().includes(a)) {
+          console.log("buyer",value.buyerName)
           arr.push(value)
         }
 
+      }
+      for (let value of this.item6){
+        if(value.como.toLowerCase().includes(a)){
+          console.log("como",value.como)
+          arr.push(value)
+        }
       }
       this.itemArray = arr
       this.filterToggle = true
@@ -441,6 +467,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           pipoValue = item
           value = item.pipo
           buyerValue = item.buyerName
+          console.log("heyyy",item.buyerName)
           this.dateArray.push(item.sbdate)
           this.sbDataArray.push(item)
           console.log('value', value)

@@ -47,6 +47,7 @@ export class SidenavComponent implements OnInit {
   status16: boolean = false;
   status17: boolean = false;
   status18: boolean = false;
+  status19: boolean = false;
   mt1: any;
   mt2: any;
   nt1: boolean;
@@ -55,6 +56,20 @@ export class SidenavComponent implements OnInit {
   mt4: any;
   val: Object;
   customer: any;
+  new:  boolean = false;
+  new1: boolean = false;
+  new2: boolean = false;
+  new3: boolean = false;
+  new4: boolean = false;
+  new5: boolean = false;
+  new7: boolean = false;
+  new6: boolean = false;
+  new8: boolean = false;
+  new9: boolean = false;
+  new10: boolean = false;
+  new11: boolean = false;
+  new12: boolean = false;
+  new13: boolean = false;
 
   constructor(
     public router: Router,
@@ -123,11 +138,12 @@ export class SidenavComponent implements OnInit {
   public edpmsTask() {
     this.mt4 = !this.mt4;
   }
-
+  //export dropdown highlight
   public newTask() {
     this.status = !this.status;
     this.router.navigate(["home/pipoDoc"]);
   }
+  
   public newTask4(){
     this.status4 = true;
     this.status5  = false;
@@ -361,7 +377,7 @@ export class SidenavComponent implements OnInit {
     this.status6    = false;
     this.status7    = false;
     this.status8    = false;
-    this.status9   = false;
+    this.status9   =  false;
     this.status11   = false;
     this.status10   = false;
     this.status12   = false;
@@ -371,10 +387,233 @@ export class SidenavComponent implements OnInit {
     this.status17   = false;
     this.status16   = false;
   }
+  public newTask19(){
+    this.status2 = !this.status2;
+  }
+ //export dropdown highlite
 
   public newTask1() {
     this.nt1 = !this.nt1;
     this.router.navigate(["home/pipoDocExport"]);
+    this.new = true;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new6 = false;
+    this.new7 = false;
+    this.new8 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new13 = false;
+  }
+  public newSub1() {
+    this.new1 = true;
+    this.new = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new6 = false;
+    this.new7 = false;
+    this.new8 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new13 = false;
+  }
+  public newSub2() {
+    this.new2 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new6 = false;
+    this.new7 = false;
+    this.new8 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new13 = false;
+  }
+  public newSub3() {
+    this.new3 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new6 = false;
+    this.new7 = false;
+    this.new8 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new13 = false;
+
+  }
+  public newSub4() {
+    this.new4 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new5 = false;
+    this.new6 = false;
+    this.new7 = false;
+    this.new8 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new13 = false;
+  }
+  public newSub5() {
+    this.new5 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new6 = false;
+    this.new7 = false;
+    this.new8 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new13 = false;
+    
+  }
+  public newSub6() {
+    this.new6 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new8 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new13 = false;
+
+  }
+  public newSub7() {
+    this.new7 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new6 = false;
+    this.new8 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new13 = false;
+  }
+  public newSub8() {
+    this.new8 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new13 = false;
+  }
+  public newSub9() {
+    this.new9 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new8 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new13 = false;
+  }
+  public newSub10() {
+    this.new10 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new8 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new13 = false;
+  }
+  public newSub11() {
+    this.new11 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new8 = false;
+    this.new12 = false;
+    this.new13 = false;
+  }
+  public newSub12() {
+    this.new12 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new8 = false;
+    this.new13 = false;
+  }
+  public newSub13() {
+    this.new13 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
   }
 
   public export() {

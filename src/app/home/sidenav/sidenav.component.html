@@ -213,42 +213,42 @@
                             <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
                         </div>
                         <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" (click)="newTask1()">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" [ngClass]="new ? 'b-color' : 'nothing'" (click)="newTask1()">
                             <span style="margin-left: 50px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO
             <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
             </i>
           </span>
                         </div>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" [ngClass]="status2 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" (click)="newSub1()" [ngClass]="new1 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/viewDocument/sb']">Shipping Bill</span>
                         </div>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" [ngClass]="status2 ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Credit Notes</span>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" (click)="newSub2()" [ngClass]="new2 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/creditNote']">Credit Notes</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">Debit notes</span>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub3()" [ngClass]="new3? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; font-size: 12px; line-height: 30px;" [routerLink]="['/home/debitNote']">Debit notes</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Insurance Documents</span>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub4()" [ngClass]="new4 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/insuranceDocument']">Insurance Documents</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">Letter of credit (LC)</span>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub5()" [ngClass]="new5 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; font-size: 12px; line-height: 30px;" [routerLink]="['/home/letterOfCredit-LC']">Letter of credit (LC)</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Master service agree</span>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"(click)="newSub6()" [ngClass]="new6 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/master-services']">Master service agree</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 50px; font-size: 12px; line-height: 30px;">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub7()" [ngClass]="new7? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; font-size: 12px; line-height: 30px;" [routerLink]="['/home/try-Party']">
             Tri party agreements</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="status3 ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">Opinion Reports</span>
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub8()" [ngClass]="new8 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/opinion-report']">Opinion Reports</span>
                         </div>
 
                         <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
@@ -258,23 +258,23 @@
                         <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
 
                         <div class="main11" style=" color: #fff;">
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-12px;">
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-12px;" (click)="newSub9()" [ngClass]="new9 ? 'b-color' : 'nothing'">
                                 <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/exportHome']">Inward Remittance
               Disposal</span>
                             </div>
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub10()" [ngClass]="new10 ? 'b-color' : 'nothing'">
                                 <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/billLodgement']">Bill Under
               Collection</span>
                             </div>
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub11()" [ngClass]="new11 ? 'b-color' : 'nothing'">
                                 <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/billLodgement']">Bill Under
               LC</span>
                             </div>
 
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub12()" [ngClass]="new12 ? 'b-color' : 'nothing'">
                                 <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packingCreditRequest']">Packing Credit Request</span>
                             </div>
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub13()" [ngClass]="new13 ? 'b-color' : 'nothing'">
                                 <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packingCreditRequest']">Direct Dispatch</span>
                             </div>
                         </div>
@@ -543,6 +543,13 @@
                         <span class="icon side-icon">
             <img src="./assets/email-action-unread.png" />
           </span> Contact Us
+                    </a>
+                </li>
+                <li style="cursor: pointer" class="">
+                    <a class="sidebar-content" [routerLink]="['/home/t&c']">
+                        <span class="icon side-icon">
+          <img src="./assets/email-action-unread.png" />
+        </span> Terms & Condition
                     </a>
                 </li>
 
