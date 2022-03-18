@@ -1,4 +1,5 @@
 import { BoeBill } from "./../../../model/boe.model";
+import {IRAdvice} from "./../../../model/irAdvice.model";
 import {
   AfterViewInit,
   Component,
@@ -72,6 +73,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   public publicUrl;
   public sbNo = false;
   public boeNumber = false;
+  public billNo = false;
   public pIpO = false;
   public override = false;
   public message = "";
@@ -155,6 +157,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   agreement: boolean = false;
   opinionReport: boolean = false;
   item3: any;
+  item4: any;
   pipoArray: any = [];
   beneValue: any = 'Select Beneficiary';
   buyerValue: any = 'Select Buyer';
@@ -173,6 +176,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
   location: any;
   commodity: any;
   isDisabled: boolean;
+  origin: any = [];
+  item5: any;
 
   // ngOnInit() {
   //   this.loginForm = this.formBuilder.group({
@@ -235,7 +240,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
           '<div  class="dz-preview dz-file-preview" style="text-align: right; margin-right:3px;">\n <div class="dz-image" style="text-align: right; margin-right:3px;"> <img data-dz-thumbnail /></div>\n <div class="dz-details">\n    <div class="dz-size"><span data-dz-size></span></div>\n    <div class="dz-filename"><span data-dz-name></span></div>\n  </div>\n  <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>\n  <div class="dz-error-message"><span data-dz-errormessage></span></div>\n  <div class="dz-success-mark">\n    <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">\n      <title>Check</title>\n      <defs></defs>\n      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">\n        <path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>\n      </g>\n    </svg>\n  </div>\n  <div class="dz-error-mark">\n    <i style="color: red; text-align: center;font-size: 30px;" class="fa fa-exclamation-circle"></i>\n  </div>\n</div>',
       };
       this.config3 = {
-        url: `${this.api_base}/documents/uploadFile`,
+        url: `${this.api_base}/documents/uploadFile2`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,
@@ -358,6 +363,16 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.pipoArr.push(this.pipoOut)
 
     }
+    else if (this.docu == 'irAdvice'){
+      this.documentType1 = 'export'
+      this.documentType = 'irAdvice'
+      this.documentType1 = 'export'
+      this.pipoOut = this.route.snapshot.paramMap.get('pipo')
+      this.beneOut = this.route.snapshot.paramMap.get('bene')
+      let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
+      this.arrayData.push(x)
+      this.pipoArr.push(this.pipoOut)
+    }
     //console.log(this.route.snapshot.paramMap.get('document'))
     this.config = {
       ...this.config,
@@ -366,6 +381,10 @@ export class UploadComponent implements OnInit, AfterViewInit {
     this.config1 = {
       ...this.config1,
     };
+
+    this.config3 = {
+      ...this.config3,
+    }
 
     this.userService.getBene(1).subscribe(
       (res: any) => {
@@ -389,6 +408,65 @@ export class UploadComponent implements OnInit, AfterViewInit {
       },
       (err) => console.log(err)
     );
+    this.documentService.getIrAdvice(1).subscribe(
+      (res: any) => {
+        console.log("SJSJSJSJ", res), (this.item4 = res.data);
+
+      },
+      (err) => console.log(err)
+    );
+
+    this.documentService.getMaster(1).subscribe((res: any) => {
+      console.log("Master Data File", res);
+      (this.item5 = res.data);
+      this.item5.forEach((element, i) => {
+        this.origin[i] = element.countryOfFinaldestination
+      })
+      console.log("Master Country", this.origin)
+  },
+    (err) => console.log(err)
+    );
+  }
+
+  onSubmitIrAdvice(e){
+    console.log("shailendra jain ", e.form.value)
+    // console.log("hshshshshs", this.origin);
+    // e.form.value.pipo = this.pipoArr;
+    // e.form.value.doc = this.pipourl1;
+    // e.form.value.buyerName = this.mainBene;
+
+    if (this.message == "This file already uploaded") {
+      console.log("inside file already exist");
+      this.documentService
+        .updateByIrAdvice(e.form.value, e.form.value.billNo)
+        .subscribe(
+          (data) => {
+            console.log(".kjsakjsdkdsjYYYYY");
+            console.log("king123");
+            console.log("DATA", data);
+            this.message = "";
+            this.router.navigate(["home/inwardRemittanceAdvice"]);
+            //this.router.navigate(['/login'], { queryParams: { registered: true }});
+          },
+          (error) => {
+            console.log("error");
+          }
+        );
+    } else {
+      this.documentService.updateIrAdvice(e.form.value, this.res._id).subscribe(
+        (data) => {
+          console.log(e.form.value);
+          console.log("king123");
+          console.log(data);
+          this.router.navigate(["home/inwardRemittanceAdvice"]);
+          //this.router.navigate(['/login'], { queryParams: { registered: true }});
+        },
+        (error) => {
+          console.log("error");
+        }
+      );
+    }
+
   }
 
   public onSubmit(e) {
@@ -415,6 +493,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     e.form.value.invoices = invoices;
     e.form.value.buyerName = this.mainBene;
     e.form.value.pipo = this.pipoArr
+
 
     // e.form.value._id = this.res._id
     console.log(e.form.value);
@@ -912,6 +991,10 @@ export class UploadComponent implements OnInit, AfterViewInit {
           this.res = new BoeBill(args[1].data);
           this.boeNumber = true;
           console.log(this.res);
+        }else if (args[1].data.billNo){
+          this.res = new IRAdvice(args[1].data);
+          this.billNo = true;
+          console.log(this.res);
         }
       } else if (args[1].data.sbno) {
         console.log("Here data type", args[1].data);
@@ -924,7 +1007,13 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.res = new BoeBill(args[1].data);
         this.boeNumber = true;
         console.log(this.res);
-      } else {
+      } else if (args[1].data.billNo) {
+        console.log("Here data type", args[1].data);
+        this.res = new IRAdvice(args[1].data);
+        this.billNo = true;
+        console.log(this.res);
+      }
+      else {
         // this.res = new BoeBill(args[1].data);
         if (this.documentType === 'PI' || this.documentType === 'PO') {
           this.pIpO = true;

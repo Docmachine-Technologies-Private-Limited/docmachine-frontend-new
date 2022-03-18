@@ -24,6 +24,53 @@ export class DocumentService {
   item2: any;
   item1: any;
 
+  // Inward inwardRemittance Advice
+
+  getIrAdvice(user){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({Authorization : this.authToken}),
+    };
+    let url = `${this.api_base}/irAdvice/get`;
+    return this.http.get(url, httpOptions);
+  }
+
+  updateIrAdvice(user, _id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/irAdvice/update`,
+      {
+        _id: _id,
+        master: user,
+      },
+      httpOptions
+    );
+  }
+
+  updateByIrAdvice(user, _id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/irAdvice/updateByIrAdvice`,
+      {
+        _id: _id,
+        master: user,
+      },
+      httpOptions
+    );
+  }
+
+
+
+
   getMaster(user) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

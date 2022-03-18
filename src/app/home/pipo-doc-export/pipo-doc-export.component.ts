@@ -192,7 +192,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       };
     }
   }
-  
+
   // pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
   // public date1: Date = new Date("2000-01-01");
   // public date2: Date = new Date();
@@ -203,7 +203,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   // changeSecondInput(e){
   //  this.date2 = e.target.value;
   //  console.log(this.obj.filter(data => new Date(data.date.replace(this.pattern,'$3-$2-$1')) >= new Date(this.date1) && new Date(data.date.replace(this.pattern,'$3-$2-$1')) <= new Date(this.date2) ));;
-  // } 
+  // }
   openModalWithComponent(a) {
     this.invoiceArr = this.pipoData[a];
     const initialState = {
@@ -336,7 +336,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
               if(arrayMain.length>0){
                 this.item1 = arrayMain
               }
-              
+
 
             },
             (err) => console.log(err)
@@ -379,7 +379,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   clickloca( value){
   this.Locaval = value
   }
-  
+
+
   getMaster() {
     let arrayMain = []
     this.documentService.getMaster(1).subscribe(
@@ -612,6 +613,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     console.log('upload');
     this.router.navigate(['home/upload', { file: 'export', document: 'pipo' }]);
   }
+
   shippingClick() {
     this.router.navigate([
       'home/upload',
@@ -881,7 +883,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.showInvoice = !this.showInvoice
   }
   hide1(){
-  
+
    this.showInvoice=true;
    this.toggle=false;
    this.toggle2=false;
@@ -894,7 +896,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.showInvoice = true;
     this.getInvoices(data, i);
   }
- 
+
 
   toSave(data, index) {
     this.optionsVisibility[index] = false;
@@ -1002,13 +1004,13 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet =   
+    const ws: xlsx.WorkSheet =
     xlsx.utils.table_to_sheet(this.epltable.nativeElement);
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'epltable.xlsx');
    }
-  
+
 
   public onUploadInit(args: any): void {
     console.log('onUploadInit:', args);
@@ -1266,10 +1268,10 @@ export class ModalContentComponent1 implements OnInit {
     console.log(this.table);
     console.log(this.list);
     this.invoiceArray = this.list;
-    
+
   }
- 
-  
+
+
 
   fireEvent() {
     console.log(this.table);
