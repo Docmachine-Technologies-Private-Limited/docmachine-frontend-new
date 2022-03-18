@@ -76,7 +76,7 @@ export class ViewDocumentComponent implements OnInit {
         this.sb = true;
         this.documentService.getMaster(1).subscribe(
           (res: any) => {
-            console.log(res), (this.item1 = res.data);
+            console.log(res,"SHIPPING DATA"), (this.item1 = res.data);
           },
           (err) => console.log(err)
         );

@@ -8,6 +8,7 @@ import { UserService } from "../../../service/user.service";
 import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import * as XLSX from 'xlsx';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   FormBuilder,
   FormGroup,
@@ -23,8 +24,10 @@ import {
 })
 export class BillLodgementComponent implements OnInit, OnDestroy {
   @ViewChild('table1') table: ElementRef;
+  closeResult: string;
   public item1;
-  public itemArray;
+  public itemArray = [];
+  public itemArray1 = [];
   public item2;
   public user;
   public selectedRow;
@@ -49,6 +52,13 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   public Question10 = '';
   public buyerDetail: any = [];
   buyerValue: any = 'Select Buyer';
+  nameSearch : string ='';
+  nameSearch1 : string ='';
+  nameSearch2 : string = '';
+  startDate : any = '';
+  endDate: any = '';
+  pipo = false;
+  ship = false;
   public allTransactions: any = [];
   public generateIndex;
   lodgement1: any;
@@ -159,6 +169,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   filterToggle = false;
   item6: any;
   item7: any;
+  item: any;
   constructor(
     public documentService: DocumentService,
     private router: Router,
@@ -166,6 +177,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private userService: UserService,
+    private modalService: NgbModal,
     private confirmDialogService: ConfirmDialogService,
     private formBuilder: FormBuilder,
   ) {
@@ -179,6 +191,25 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     this.jsondata = data['default'];
     console.log("testing buyer1",this.jsondata[0].purpose)
     this.dataJson = this.jsondata
+
+  //Shipping bill API
+    this.documentService.getMaster(1).subscribe(
+      (res: any) => {
+        console.log(res,"SHIPPING DATA"), (this.item2 = res.data);
+        console.log("shipping bill",this.item2)
+      },
+      (err) => console.log(err)
+    );
+    //PI/PO API
+    this.documentService.getPipo().subscribe(
+      (res: any) => {
+        console.log('HEre Response', res);
+        (this.item = res.data),
+        console.log("pipo",this.item)
+        },
+      (err) => console.log(err)
+    );
+  
     
     this.userService.getBuyer(1).subscribe(
       (res: any) => {
@@ -289,6 +320,51 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     this.isGenerate = !this.isGenerate
   }
 
+  addTofilter(event ,i){
+    let removeArray =[];
+     this.pipo=true;
+     this.ship=false;
+     this.itemArray1 = []
+    if(event.target.checked){
+      
+       this.itemArray.push(this.item[i])
+    }
+    else{
+    if(this.itemArray.length){
+      this.itemArray.forEach(element => {
+        if(element._id != this.item[i]._id){
+          removeArray.push(element);
+        }
+      });
+      this.itemArray=removeArray;
+    }
+    }
+  console.log("test",this.itemArray);
+  }
+
+  addTofilter1(event ,i){
+    let removeArray  = []
+      this.ship = true;
+      this.pipo = false;
+      this.itemArray=[];
+    if(event.target.checked){
+      
+       this.itemArray1.push(this.item2[i])
+    }
+    else{
+      if(this.itemArray1.length){
+        this.itemArray1.forEach(element => {
+          if(element._id != this.item2[i]._id){
+            removeArray.push(element);
+          }
+        });
+        this.itemArray1=removeArray;
+      }
+      }
+  console.log("test",this.itemArray1);
+  }
+
+
   searchData1(a) {
     console.log(a)
     console.log(a.length)
@@ -309,6 +385,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         }
       }
       this.itemArray = arr
+      this.itemArray1 = arr
       this.filterToggle = true
     }
     else {
@@ -2004,6 +2081,30 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       },
       (err) => console.log("ERROR")
     );
+  }
+  open(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  open1(content1) {
+    this.modalService.open(content1, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  private getDismissReason(reason: any): string {
+    console.log('ddhdhdhh')
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   change(e) {

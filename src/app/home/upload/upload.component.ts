@@ -161,7 +161,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
   pipoArray: any = [];
   beneValue: any = 'Select Beneficiary';
   buyerValue: any = 'Select Buyer';
-  pipoValue: any = 'Select PI/PO'
+  pipoValue: any = 'Select PI/PO';
+  payment: any = 'select Type';
   document: any;
   file: any;
   arrayData: any = [];
@@ -337,7 +338,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
         });
     console.log(this.route.snapshot.paramMap.get('document'))
     this.file = this.route.snapshot.paramMap.get('file')
-    console.log(this.file)
+    console.log("checking",this.file)
     this.docu = this.route.snapshot.paramMap.get('document')
     if (this.docu == 'pipo') {
       this.documentType1 = this.route.snapshot.paramMap.get('file')
@@ -1224,6 +1225,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
   clickBene(value) {
     console.log('hhddh')
     this.beneValue = value
+  }
+  clickpay(value){
+    this.payment=value
   }
 
   clickBuyer(value) {

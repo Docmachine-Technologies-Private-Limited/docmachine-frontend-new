@@ -88,7 +88,7 @@
                             <option *ngFor="let bene of location" >{{ bene.loc }}</option>
                         </select>
                         <input  type="date" placeholder="Start Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;"
-                 [(ngModel)]="startDate" required/>
+                        [(ngModel)]="startDate" required/>
                         <input type="date" placeholder="End Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;" [(ngModel)]="endDate"  required/>
                         
                         <!-- <select [(ngModel)]="nameSearch2" style="border: 1px solid #C6CBD4;
@@ -117,12 +117,12 @@
                              <i id="up3" style="display: none" class="fas fa-angle-up"></i> 
                         </span>
                             <div class="dropdown-content" style="min-width:200px; margin-left: -95px;">
-                                <a style="min-width:200px;">New Credit Note</a>
-                                <a (click)='pipoClick()' style="min-width:200px;">New PI/PO</a>
-                                <a (click)='shippingClick()' style="min-width:200px;" >New Shipping Bill</a>
-                                <a style="min-width:200px;">New Debit Note</a>
-                                <a style="min-width:200px;">New Issuance Document</a>
-                                <a style="min-width:200px;">New Letter of Credit</a>
+                                <a style="min-width:200px;" (click)="newCredit()">New Credit Note</a>
+                                <a style="min-width:200px;" (click)='newPipo()'>New PI/PO</a>
+                                <a style="min-width:200px;" (click)='newShipping()'>New Shipping Bill</a>
+                                <a style="min-width:200px;" (click)="newDebit()">New Debit Note</a>
+                                <a style="min-width:200px;" (click)="newInsurance()">New Insurance Document</a>
+                                <a style="min-width:200px;" (click)="newLoc()">New Letter of Credit</a>
                             </div>
                         </div>
                         <button (click)="exportToExcel()"  style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
@@ -610,7 +610,7 @@
                     </span>
                         <div class="dropdown-content" style="min-width:200px; margin-left: -95px;">
                             <a style="min-width:200px;">New Credit Note</a>
-                            <a (click)='pipoClick()' style="min-width:200px;">New PI/PO</a>
+                            <a (click)='newPipo()' style="min-width:200px;">New PI/PO</a>
                             <a style="min-width:200px;">New Debit Note</a>
                             <a style="min-width:200px;">New Insurance Document</a>
                             <a style="min-width:200px;">New Letter of Credit</a>
@@ -1462,7 +1462,7 @@
                                             </div>
                                         </div> -->
 
-                                        <div class="customDropdown" style="width: 206px; height: 42px;float: right;margin-left: 172px;
+                                        <div class="customDropdown" style="width: 240px; height: 42px;float: right;margin-left: 172px;
                                      padding-top: 10px; background-color: #49A2D7;border: 1px solid #49A2D7 !important;border-radius: 5px;margin-top: 20px;
                                      margin-bottom: 20px;">
                                         <span
@@ -1566,7 +1566,7 @@
                                             <p><a>Buyers Credit Request</a></p>
                                         </div>
                                     </div> -->
-                                    <div class="customDropdown" style="width: 236px;height: 42px;float: right;margin-left: 142px;padding-top: 10px;background-color: #49A2D7;border: 1px solid #49A2D7 !important;border-radius: 5px;margin-top: 20px;margin-bottom: 20px;">
+                                    <div class="customDropdown" style="width:260px;height: 42px;float: right;margin-left: 142px;padding-top: 10px;background-color: #49A2D7;border: 1px solid #49A2D7 !important;border-radius: 5px;margin-top: 20px;margin-bottom: 20px;">
                                         <span
                                             style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
                                             <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Create New
@@ -1592,7 +1592,7 @@
                                     <table>
                                         <thead style="height: 54px; ">
                                             <tr style="opacity: 50%; font-size: 14px; color:black !important; font-weight: 300 !important; padding: 20px; border-bottom: 1px solid rgb(236 236 236);; ">
-                                                <td style="padding: 20px 35px;">DATE</td>
+                                                <td style="padding: 20px 35px !important;">DATE</td>
                                                 <td>DETAIL</td>
                                                 <td>STATUS</td>
                                                 <td style="padding: 20px 35px;">DOWNLOAD</td>
@@ -1600,13 +1600,13 @@
                                         </thead>
                                         <tbody>
                                             <tr class="table-row" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
-                                                <td style="padding: 20x 35px;">Dec 14, 2018</td>
+                                                <td style="padding: 20x 35px !important; padding-left: 35px;">Dec 14, 2018</td>
                                                 <td class="sb-no">Submitted to Bank</td>
                                                 <td>Emailed</td>
                                                 <td style="padding: 20px 35px;">View</td>
                                             </tr>
                                             <tr class="table-row" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);;">
-                                                <td style="padding: 20px 35px;">Dec 14, 2018</td>
+                                                <td style="padding: 20px 35px !important;">Dec 14, 2018</td>
                                                 <td class="sb-no">Draft waiting for submission</td>
                                                 <td>Draft</td>
                                                 <td style="padding: 20px 35px;">View</td>
@@ -1654,7 +1654,7 @@
                             <tr class="field-heading">
                                 <td style="height: 30px !important;">PI/PO Number*</td>
 
-                                <td style="height: 30px !important;">Date</td>
+                                <td style="height: 30px !important;">PI/PO Date</td>
                             </tr>
                             <tr>
                                 <td>
@@ -1758,7 +1758,7 @@
             <div *ngIf='toggle2'>
                 <div>
                     <img src="../../../assets/back.png" 
-                        style="width: 20px; height: 20px; margin-left: 22px;margin-bottom: 10px; margin-top: 6px;  " (click)=" hide1()"><span style="margin-left: 5px ;margin-bottom: 10px;" (click)=" hide1()"
+                        style="width: 20px; height: 20px; margin-left: 40px;margin-bottom: 10px; margin-top: 6px;  " (click)=" hide1()"><span style="margin-left: 5px ;margin-bottom: 10px;" (click)=" hide1()"
                         >Back</span>
                 </div>
                 <h3 class="heading1">Edit Proforma invoice/ Purchase Order</h3>

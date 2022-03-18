@@ -70,6 +70,7 @@ export class SidenavComponent implements OnInit {
   new11: boolean = false;
   new12: boolean = false;
   new13: boolean = false;
+  new14: boolean;
 
   constructor(
     public router: Router,
@@ -409,8 +410,10 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new13 = false;
+    this.new14 = false;
   }
   public newSub1() {
+    this.router.navigate(["/home/viewDocument/sb'"]);
     this.new1 = true;
     this.new = false;
     this.new2 = false;
@@ -425,8 +428,11 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new13 = false;
+    this.new14 = false;
+
   }
   public newSub2() {
+    this.router.navigate(["/home/creditNote"]);
     this.new2 = true;
     this.new = false;
     this.new1 = false;
@@ -441,8 +447,10 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new13 = false;
+    this.new14 = false;
   }
   public newSub3() {
+    this.router.navigate(["/home/debitNote"]);
     this.new3 = true;
     this.new = false;
     this.new1 = false;
@@ -457,9 +465,11 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new13 = false;
+    this.new14 = false;
 
   }
   public newSub4() {
+    this.router.navigate(["home/insuranceDocument"]);
     this.new4 = true;
     this.new = false;
     this.new1 = false;
@@ -474,8 +484,10 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new13 = false;
+    this.new14 = false;
   }
   public newSub5() {
+    this.router.navigate(["home/pipoDocExport"]);
     this.new5 = true;
     this.new = false;
     this.new1 = false;
@@ -490,9 +502,11 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new13 = false;
+    this.new14 = false;
     
   }
   public newSub6() {
+    this.router.navigate(["/home/master-services"]);
     this.new6 = true;
     this.new = false;
     this.new1 = false;
@@ -507,9 +521,11 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new13 = false;
+    this.new14 = false;
 
   }
   public newSub7() {
+    this.router.navigate(["/home/try-Party"]);
     this.new7 = true;
     this.new = false;
     this.new1 = false;
@@ -524,8 +540,10 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new13 = false;
+    this.new14 = false;
   }
   public newSub8() {
+    this.router.navigate(["/home/opinion-report"]);
     this.new8 = true;
     this.new = false;
     this.new1 = false;
@@ -539,8 +557,10 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new13 = false;
+    this.new14 = false;
   }
   public newSub9() {
+    this.router.navigate(["/home/exportHome"]);
     this.new9 = true;
     this.new = false;
     this.new1 = false;
@@ -554,8 +574,10 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new13 = false;
+    this.new14 = false;
   }
   public newSub10() {
+    this.router.navigate(["/home/billLodgement"]);
     this.new10 = true;
     this.new = false;
     this.new1 = false;
@@ -569,8 +591,10 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new13 = false;
+    this.new14 = false;
   }
   public newSub11() {
+    this.router.navigate(["/home/billLodgement"]);
     this.new11 = true;
     this.new = false;
     this.new1 = false;
@@ -584,8 +608,10 @@ export class SidenavComponent implements OnInit {
     this.new8 = false;
     this.new12 = false;
     this.new13 = false;
+    this.new14 = false;
   }
   public newSub12() {
+    this.router.navigate(["/home/packingCreditRequest"]);
     this.new12 = true;
     this.new = false;
     this.new1 = false;
@@ -599,8 +625,10 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new8 = false;
     this.new13 = false;
+    this.new14 = false;
   }
   public newSub13() {
+    this.router.navigate(["/home/packingCreditRequest"]);
     this.new13 = true;
     this.new = false;
     this.new1 = false;
@@ -614,6 +642,24 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
+    this.new14 = false;
+  }
+  public newSub14() {
+    this.router.navigate(["/home/inwardRemittanceAdvice"]);
+    this.new14 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13= false;
   }
 
   public export() {

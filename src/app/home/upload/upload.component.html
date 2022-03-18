@@ -15,15 +15,16 @@
      </div> -->
 
 
-        <h3 class="heading" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
-        <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
-        <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
-        <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" '>Upload Document</h3>
-        <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' style="margin-bottom: 20px;">
-            <p style="color: rgb(0, 0, 0);margin-left: 40px">
-                Choose the type of document
-            </p>
-            <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
+      <h3 class="heading" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
+      <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
+      <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
+      <h3 class="heading" *ngIf='docu == "debitNote"'>Upload debitNote</h3>
+      <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" '>Upload Document</h3>
+      <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' style="margin-bottom: 20px;">
+          <p style="color: rgb(0, 0, 0);margin-left: 40px">
+              Choose the type of document
+          </p>
+          <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
       <option value="">Document Type</option>
       <option value="import">Import</option>
       <option value="export">Export</option>
@@ -277,36 +278,36 @@
 
 
 
-            <div style="margin-top: 40px; margin-left: 33px;">
-                <span style="color: #303030; font-size: 20px; margin-left: -6px;">Choose the type of document *</span>
-                <div style="display: flex; align-items: center;">
-                    <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [(ngModel)]="documentType" value="PI">
-                    <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
-                </div>
-                <div style="display: flex; align-items: center;">
-                    <input type="radio" style="flex-direction:row;" id="options2" class="circular_input" [(ngModel)]="documentType" value="PO">
-                    <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
-                </div>
-            </div>
-        </div>
-        <div *ngIf='docu == "pipo" && file =="export"'>
-            <div style="display: flex; align-items: center; margin-left: 30px;">
-                <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Buyer’s
+          <div style="margin-top: 40px; margin-left: 33px;">
+              <span style="color: #303030; font-size: 20px; margin-left: -6px;">Choose the type of document *</span>
+              <div style="display: flex; align-items: center;">
+                  <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [(ngModel)]="documentType" value="PI">
+                  <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
+              </div>
+              <div style="display: flex; align-items: center;">
+                  <input type="radio" style="flex-direction:row;" id="options2" class="circular_input" [(ngModel)]="documentType" value="PO">
+                  <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
+              </div>
+          </div>
+      </div>
+      <div *ngIf='docu == "pipo" && file =="export"'>
+          <div style="display: flex; align-items: center; margin-left: 30px;">
+              <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px; margin-left: -9.2px;" >Buyer’s
         Name*</label>
                 <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px; border: 1px solid #C6CBD4; flex-direction:row; ">
                     <span style="color: #323e4a !important; min-width: 150px;">{{buyerValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
           <i id="up3" style="display: none" class="fas fa-angle-up"></i>
         </span>
-                    <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
-                        <div *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'><a style="min-width:100%;">{{buyer.buyerName}}</a></div>
-                        <div style="border: 1px solid #EAEDF3; min-width:100%;" (click)="open1(content1)"><a style="min-width:100%;">Add New Buyer</a></div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div style="display: flex; align-items: center; margin-left: 30px;">
-                <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Choose
+                  <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
+                      <div  *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'><a style="min-width:100%;">{{buyer.buyerName}}</a></div>
+                      <div style="border: 1px solid #EAEDF3; min-width:100%;" (click)="open1(content1)"><a style="min-width:100%;">Add New Buyer</a></div>
+                  </div>
+              </div>
+          </div>
+          <br>
+          <div style="display: flex; align-items: center; margin-left: 30px;">
+              <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px; margin-left: -9.2px;">Choose
         Commodity</label>
                 <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px; border: 1px solid #C6CBD4; flex-direction:row; ">
                     <span style="min-width:100%;" style="color: #323e4a !important; min-width: 150px;">Choose Commodity</span>
@@ -326,18 +327,18 @@
             </div>
 
 
-            <div style="margin-top: 40px; margin-left: 33px;">
-                <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
-                <div style="display: flex; align-items: center;">
-                    <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [(ngModel)]="documentType" value="PI">
-                    <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
-                </div>
-                <div style="display: flex; align-items: center;">
-                    <input type="radio" style="flex-direction:row;" id="options2" class="circular_input" [(ngModel)]="documentType" value="PO">
-                    <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
-                </div>
-            </div>
-        </div>
+          <div style="margin-top: 40px; margin-left: 28px;">
+              <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
+              <div style="display: flex; align-items: center;">
+                  <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [(ngModel)]="documentType" value="PI">
+                  <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
+              </div>
+              <div style="display: flex; align-items: center;">
+                  <input type="radio" style="flex-direction:row;" id="options2" class="circular_input" [(ngModel)]="documentType" value="PO">
+                  <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
+              </div>
+          </div>
+      </div>
 
 
         <div *ngIf="documentType === 'sb'" class="form" method="POST">
@@ -859,10 +860,30 @@
                     <option value="Collection Bill" >Collection Bill</option>
                     <option value="Direct Import">Direct Import</option>
                   </select>
-                                </div>
-                                <div *ngIf='documentType1 =="export"' style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
-                                    <span style="color: #707683; font-size: 14px;">Type</span> <br>
-                                    <select name="" formControlName="type" style="outline: none; border: none; background: #f9f8f8;margin-left: -16px; width: 200px; border-radius: 5px; height: 40px; ">
+                </div>
+                <!-- <div *ngIf='documentType1 == "import"'
+                style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
+                <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Type</label>
+                <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
+                  <span style="color: #323e4a !important; min-width: 150px;">{{payment}}</span>
+                  <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+                    <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                  </span>
+                  <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
+                    <a style="min-width:100%;" (click)="clickpay'Advance Payment')">Advance Payment</a>
+                    <a style="min-width:100%;">Letter of Credit</a>
+                    <a style="min-width:100%;">Collection Billt</a>
+                    <a style="min-width:100%;">Direct Importt</a>
+
+                    <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p>
+                  </div>
+                </div>
+                </div> -->
+                <div *ngIf='documentType1 =="export"'
+                  style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
+                  <span style="color: #707683; font-size: 14px;">Type</span> <br>
+                  <select name=""  formControlName="type"
+                  style="outline: none; border: none; background: #f9f8f8;margin-left: -16px; width: 200px; border-radius: 5px; height: 40px; ">
                   <option id="aaa" value="" style="border: none;">Select</option>
                     <option value="Advance Payment" >Advance Payment</option>
                     <option value="Letter of Credit">Letter of Credit</option>

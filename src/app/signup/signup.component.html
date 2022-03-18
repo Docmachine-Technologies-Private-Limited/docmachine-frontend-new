@@ -50,13 +50,8 @@
                     <label>Email</label>
                     <input id="inputEmail" type="email"  formControlName="email"   placeholder="Your Email" required=""
                       class="
-                      form-control
-                      rounded-pill
-                      border-0
-                      shadow-sm
-                      px-4
-                      email
-                    " [ngClass]="{ 'is-invalid': submitted && f.email.errors }"  autocomplete="off"/>
+                      form-control rounded-pill border-0 shadow-sm px-4 email input"
+                     [ngClass]="{ 'is-invalid': submitted && f.email.errors }"  autocomplete="off"/>
                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                       <div *ngIf="f.email.errors.required" style="margin-left: 15px;">Email is required</div>
                       <div *ngIf="f.email.errors.pattern" style="margin-left: 15px;">Not an Email</div>
@@ -112,11 +107,12 @@
                         than 6 letter</div>
                     </div>
                   </div>
-                  <p class="text-muted mb-4 bottom-text ml-2">
-                    By continuing, you agree to DocMachine
-                    <a href="">Term of service</a> we will manage information as described in our <a href="">privacy
-                      policy agrement</a>
-                                    </p>
+                  <p class="text-muted mb-4 bottom-text">
+                    <input formControlName="termsAndCondition" type="checkbox" required="" class="checkbox" (change)="onCheck($event)" /> By continuing, you agree to DocMachine
+                    <a (click)="open(content)">Term of service</a> we will manage information as described in our <a href="">privacy
+  policy agrement</a>
+
+                    </p>
 
                                     <button type="submit" class="btn" style="margin-bottom: 20px" [class.disable]="isDisabled" [disabled]="isDisabled">Register</button>
                                 </form>
@@ -149,6 +145,7 @@
 
 
             <!-- The content half -->
+            <!-- DB_URL=mongodb://localhost:27017/docMachine -->
             <div class="col-md-7 bg-dark" style="margin: 10px;">
                 <div class="login d-flex py-5" style="padding: 0px !important;">
 
