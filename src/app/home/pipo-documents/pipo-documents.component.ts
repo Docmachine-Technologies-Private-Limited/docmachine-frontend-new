@@ -334,7 +334,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     console.log(selectedRowValues.doc);
     this.pipoData = selectedRowValues
     this.payTerm = this.pipoData.paymentTerm
-    console.log(this.pipoData)
+    console.log(this.pipoData ,"payment check")
     console.log(this.pipoData.paymentTerm)
     this.documentType = this.pipoData.document
     this.lastIndex = i;

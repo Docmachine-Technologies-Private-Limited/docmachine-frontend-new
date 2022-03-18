@@ -76,6 +76,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   file: any;
   doc: string;
   pipo: boolean;
+  debitNote: boolean;
   boe: boolean;
   sb: boolean;
   docu: any;
@@ -247,15 +248,17 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         (res: any) => {
           console.log('HEre Response', res);
           this.item = res.data;
+          
           for (let value of this.item) {
             if (value['file'] == 'export') {
-              console.log('a');
+              console.log('avvvvvvvvvv');
               this.item1.push(value);
+              console.log("pipoamani",this.item1)
             }
           }
           this.getMaster();
         },
-        (err) => console.log(err)
+        (err) => console.log(err,"**********")
       );
 
 
@@ -607,21 +610,32 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       (this.greaterAmount = parseInt(this.selectedRow.amount))
     );
   }
-
-  pipoClick() {
+  newCredit(){
+    this.router.navigate(['home/upload', { file: 'export', document: 'creditNote' }]);
+  }
+  newPipo() {
     console.log('upload');
     this.router.navigate(['home/upload', { file: 'export', document: 'pipo' }]);
   }
-  shippingClick() {
+  newShipping() {
     this.router.navigate([
       'home/upload',
       {
-        file: 'import',
+        // file: 'export',
         document: 'sb',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
+        // pipo: this.pipoData.pi_poNo,
+        // bene: this.pipoData.buyerName,
       },
     ]);
+  }
+  newDebit(){
+    this.router.navigate(['home/upload', { file: 'export', document: 'debitNote' }]);
+  }
+  newInsurance(){
+    this.router.navigate(['home/upload', { file: 'export', document: 'pipo' }]);
+  }
+  newLoc(){
+    this.router.navigate(['home/upload', { file: 'export', document: 'pipo' }]);
   }
 
   selectDoc(a) {

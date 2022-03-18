@@ -81,6 +81,9 @@ import { InwardRemittanceAdviceComponent } from './inward-remittance-advice/inwa
 import { FilternewPipe } from './filterpipo/filternew.pipe';
 
 import { FilterdatePipe } from './datefilter/filterdate.pipe';
+import { FilteraPipe } from './Export/filtera/filtera.pipe';
+import { FilterbPipe } from './Export/filterb/filterb.pipe';
+
 
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -164,6 +167,9 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     InwardRemittanceAdviceComponent,
     FilternewPipe,
     FilterdatePipe,
+    
+    FilteraPipe,
+    FilterbPipe,
   ],
   imports: [
     CommonModule,
