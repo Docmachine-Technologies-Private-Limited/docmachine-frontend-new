@@ -2,64 +2,62 @@
     font-family: "Poppins", sans-serif;
 }
 
-
 input[type="date"]::before {
-	color: #999999;
-	content: attr(placeholder);
+    color: #999999;
+    content: attr(placeholder);
 }
+
 input[type="date"] {
-	color: #ffffff;
+    color: #ffffff;
 }
+
 input[type="date"]:focus,
 input[type="date"]:valid {
-	color: #666666;
+    color: #666666;
 }
+
 input[type="date"]:focus::before,
 input[type="date"]:valid::before {
-	content: "" !important;
+    content: "" !important;
 }
- #container{ 
+
+#container {
     overflow: scroll;
-    overflow-x: auto; 
-    
-    
-   }
+    overflow-x: auto;
+}
+
 #container::-webkit-scrollbar {
-    width: 0px; 
+    width: 0px;
     height: 20px;
 }
+
 #container::-webkit-scrollbar-track {
     background-color: #f0f5f5;
 }
+
 #container::-webkit-scrollbar-thumb {
-    background:#ccc;
-    }
+    background: #ccc;
+}
 
 //     #vertical{
-        
-//         overflow-y:scroll;  
+//         overflow-y:scroll;
 //     }
 // /* width */
 // #vertical::-webkit-scrollbar {
 //     width: 10px;
 //   }
-  
 //   /* Track */
 //   #vertical::-webkit-scrollbar-track {
-//     background: #f1f1f1; 
+//     background: #f1f1f1;
 //   }
-   
 //   /* Handle */
 //   #vertical::-webkit-scrollbar-thumb {
-//     background: #888; 
+//     background: #888;
 //   }
-  
 //   /* Handle on hover */
 //   #vertical::-webkit-scrollbar-thumb:hover {
-//     background: #555; 
+//     background: #555;
 //   }
-
-
 .dropdown {
     font-size: 14px;
     font-weight: 400;
@@ -1039,13 +1037,11 @@ table tbody {
 //     cursor: pointer;
 //     z-index: 1;
 // }
-
 // .customDropdown:hover {
 //     border: 1px solid #4b74ff;
 //     color: #4b74ff;
 //     z-index: 1;
 // }
-
 // .dropdown-content {
 //     display: none;
 //     position: relative;
@@ -1057,36 +1053,29 @@ table tbody {
 //     transform: translate(-14px, 4px);
 //     // height: 150px;
 // }
-
 // .dropdown-content p {
 //     cursor: pointer;
 //     padding: 4px 6px;
 //     transition: 0.4s ease;
 // }
-
 // .dropdown-content p:hover {
 //     background-color: rgba(191, 187, 187, 0.556);
 // }
-
 // .customDropdown .dropIco {
 //     margin-left: 7px;
 // }
-
 // .dropdown-content p a {
 //     text-decoration: none;
 //     color: black;
 //     padding: 6px 10px;
 // }
-
 // .customDropdown:hover .dropdown-content {
 //     display: block;
 // }
-
 // .customDropdown:hover .dropdown-content {
 //     display: block;
 // }
-
-.customDropdown  {
+.customDropdown {
     position: relative;
     display: inline-block;
     font-size: 14px;
@@ -1103,15 +1092,65 @@ table tbody {
 .customDropdown:hover {
     border: 1px solid #4b74ff !important;
     color: #4b74ff !important;
-
 }
 
+.customDropdown3 {
+    position: relative;
+    display: inline-block;
+    font-size: 14px;
+    padding-left: 12px;
+    padding-right: 10px;
+    padding-top: 5px;
+    height: 32px;
+    border-radius: 2px;
+    margin-right: 12px;
+    cursor: pointer;
+    z-index: 1;
+}
 
+.customDropdown3:hover {
+    border: 1px solid #4b74ff !important;
+    color: #4b74ff !important;
+}
+
+// .dropdown-content3 {
+//     display: none;
+//     position: relative;
+//     min-width: 100px;
+//     background: white;
+//     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+//     z-index: 1;
+//     border-radius: 6px;
+//     transform: translate(-14px, 4px);
+//     // height: 150px;
+// }
+// .dropdown-content3 a {
+//     display: inline-block;
+//     cursor: pointer;
+//     padding: 4px 6px;
+//     min-width: 70px;
+//     color: black;
+//     transition: 0.4s ease;
+// }
+// .dropdown-content3 a:hover {
+//     background-color: #49a2d7;
+//     color: white;
+// }
+// .customDropdown3 .dropIco {
+//     margin-left: 7px;
+// }
+// .dropdown-content3 p a {
+//     text-decoration: none;
+//     color: black;
+//     padding: 6px 10px;
+// }
+// .customDropdown3:hover .dropdown-content {
+//     display: block;
+// }
 .dropdown-content {
     display: none;
     position: relative;
-   
-    // min-width: 70px;
+    min-width: 80px;
     background: white;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     z-index: 1;
@@ -1120,7 +1159,7 @@ table tbody {
     // height: 150px;
 }
 
-.dropdown-content  a {
+.dropdown-content a {
     display: inline-block;
     cursor: pointer;
     padding: 4px 6px;
@@ -1129,11 +1168,10 @@ table tbody {
     transition: 0.4s ease;
 }
 
-.dropdown-content  a:hover {
+.dropdown-content a:hover {
     background-color: #49a2d7;
     color: white;
 }
-
 
 .customDropdown .dropIco {
     margin-left: 7px;

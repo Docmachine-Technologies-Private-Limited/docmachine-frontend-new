@@ -15,16 +15,17 @@
      </div> -->
 
 
-      <h3 class="heading" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
-      <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
-      <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
-      <h3 class="heading" *ngIf='docu == "debitNote"'>Upload debitNote</h3>
-      <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" '>Upload Document</h3>
-      <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' style="margin-bottom: 20px;">
-          <p style="color: rgb(0, 0, 0);margin-left: 40px">
-              Choose the type of document
-          </p>
-          <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
+        <h3 class="heading" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
+        <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
+        <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
+        <h3 class="heading" *ngIf='docu == "debitNote"'>Upload Debit Note File</h3>
+        <h3 class="heading" *ngIf='docu == "irAdvice"'>Upload Forex Advice Documnet</h3>
+        <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" && docu != "irAdvice" && docu != "debitNote" '>Upload Document</h3>
+        <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb"' style="margin-bottom: 20px;">
+            <p style="color: rgb(0, 0, 0);margin-left: 40px">
+                Choose the type of document
+            </p>
+            <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
       <option value="">Document Type</option>
       <option value="import">Import</option>
       <option value="export">Export</option>
@@ -80,13 +81,14 @@
       <option value="insuranceCopy">Insurance Copy</option>
       <option value="deliveryOrder">Delivery Order</option>
       <option value="irAdvice">Inward Remittance Advice</option>
+      <option value="excelSheet">Upload Excel Sheet</option>
     </select>
             <div *ngIf='documentType == "PI" && documentType1 == "import" || documentType == "PO" && documentType1 == "import"'>
                 <div style="display: flex; align-items: center; margin-left: 23px !important; ">
                     <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px !important; "> Beneficiary
         Name*</label>
                     <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
-                        <span style="color: #323e4a !important; min-width: 250px;">{{beneValue}}</span>
+                        <span style="color: black !important; min-width: 250px;">{{beneValue}}</span>
                         <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
           <i id="up3" style="display: none" class="fas fa-angle-up"></i>
         </span>
@@ -104,24 +106,33 @@
             <div *ngIf='documentType == "PI" && documentType1 == "export" || documentType == "PO" && documentType1 == "export"'>
                 <div style="display: flex; align-items: center; margin-left: 23px;">
 
-                    <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px; border: 1px solid #C6CBD4; flex-direction:row; ">
-                        <span style="color: #323e4a !important; min-width: 150px;">{{buyerValue}}</span>
+                    <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px; flex-direction:row; ">
+                        <span style="color: Black !important; min-width: 150px;">{{buyerValue}}</span>
                         <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                   <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                 </span>
                         <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
                             <a style="min-width:100%;" *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'>{{buyer.buyerName}}</a>
-                            <a style="border: 1px solid #EAEDF3;min-width:100%;" (click)="open1(content1)">Add New Buyer</a>
+                            <a style="min-width:100%;" (click)="open1(content1)">Add New Buyer</a>
                         </div>
                     </div>
+
+                    <!-- <select style="border: 1px solid #C6CBD4;
+                        color: black;
+                        padding: 4px;
+                        font-weight: 100 ; margin-left:20px; font-size: 14px; border-radius: 2px;">
+                            <option >{{buyerValue}}</option>
+                            <option *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'>{{buyer.buyerName}}</option>
+                            <option ><a style="border: 1px solid #EAEDF3;min-width:100%;" (click)="open1(content1)">Add New Buyer</a></option>
+                </select> -->
                 </div>
 
                 <br>
                 <div style="display: flex; align-items: center; margin-left: 23px;">
                     <label style="flex-direction:row; font-size: 20px;  color: #303030;margin-right: 50px !important; ">Choose
                   Commodity</label>
-                    <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;">
-                        <span style="color: #323e4a !important; min-width: 150px;">Choose Commodity</span>
+                    <div class="customDropdown" style="width: 300px; flex-direction:row;">
+                        <span style="color: Black !important; min-width: 150px;">Choose Commodity</span>
                         <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                     <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                   </span>
@@ -129,6 +140,14 @@
                             <a style="min-width:100%;" *ngFor="let buyer of commodity" (click)='clickComo(buyer.como)'>{{buyer.como}}</a>
                         </div>
                     </div>
+
+                    <!-- <select style="border: 1px solid #C6CBD4;
+                        color: black;
+                        padding: 4px;
+                        font-weight: 100 ; margin-left:20px; font-size: 14px; border-radius: 2px;">
+                            <option >Choose Commodity</option>
+                            <option *ngFor="let buyer of commodity" (click)='clickComo(buyer.como)'>{{buyer.como}}</option>
+               </select> -->
                 </div>
 
 
@@ -145,8 +164,8 @@
 
                     <div *ngIf='documentType == "boe"'>
                         <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PIPO*</label>
-                        <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
-                            <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
+                        <div class="customDropdown" style="width: 300px; flex-direction:row; ">
+                            <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                             <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                     <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                   </span>
@@ -163,8 +182,8 @@
                     <div *ngIf='documentType == "sb"'>
                         <div style="display: flex; align-items: center; margin-left: 23px;">
                             <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PIPO*</label>
-                            <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
-                                <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
+                            <div class="customDropdown" style="width: 300px; flex-direction:row; ">
+                                <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                                 <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                     <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                   </span>
@@ -180,8 +199,8 @@
 
                     <div *ngIf='documentType != "sb" && documentType != "boe" && documentType != "PO" && documentType != "PI" '>
                         <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PIPO*</label>
-                        <div class="customDropdown" style="width: 300px; margin-bottom: 10px; border: 1px solid #C6CBD4; flex-direction:row; ">
-                            <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
+                        <div class="customDropdown" style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                            <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                             <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                     <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                   </span>
@@ -212,8 +231,8 @@
         <div *ngIf='docu == "boe"'>
             <div style="display: flex; align-items: center; margin-left: 23px;">
                 <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PIPO*</label>
-                <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;">
-                    <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
+                <div class="customDropdown" style="width: 300px; flex-direction:row;">
+                    <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
               <i id="up3" style="display: none" class="fas fa-angle-up"></i>
             </span>
@@ -233,7 +252,7 @@
             <div style="display: flex; align-items: center; margin-left: 30px;">
                 <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
                 <div class="customDropdown" style="flex-direction:row; ">
-                    <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
+                    <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
           <i id="up3" style="display: none" class="fas fa-angle-up"></i>
         </span>
@@ -264,8 +283,8 @@
             <div style="display: flex; align-items: center; margin-left: 23px;">
                 <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px !important; ">Beneficiary
             Name*</label>
-                <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
-                    <span style="color: #323e4a !important; max-width: 250px;">{{beneValue}}</span>
+                <div class="customDropdown" style="width: 300px; flex-direction:row; ">
+                    <span style="color: black !important; max-width: 250px;">{{beneValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
               <i id="up3" style="display: none" class="fas fa-angle-up"></i>
             </span>
@@ -278,39 +297,47 @@
 
 
 
-          <div style="margin-top: 40px; margin-left: 33px;">
-              <span style="color: #303030; font-size: 20px; margin-left: -6px;">Choose the type of document *</span>
-              <div style="display: flex; align-items: center;">
-                  <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [(ngModel)]="documentType" value="PI">
-                  <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
-              </div>
-              <div style="display: flex; align-items: center;">
-                  <input type="radio" style="flex-direction:row;" id="options2" class="circular_input" [(ngModel)]="documentType" value="PO">
-                  <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
-              </div>
-          </div>
-      </div>
-      <div *ngIf='docu == "pipo" && file =="export"'>
-          <div style="display: flex; align-items: center; margin-left: 30px;">
-              <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px; margin-left: -9.2px;" >Buyer’s
+            <div style="margin-top: 40px; margin-left: 33px;">
+                <span style="color: #303030; font-size: 20px; margin-left: -6px;">Choose the type of document *</span>
+                <div style="display: flex; align-items: center;">
+                    <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [(ngModel)]="documentType" value="PI">
+                    <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <input type="radio" style="flex-direction:row;" id="options2" class="circular_input" [(ngModel)]="documentType" value="PO">
+                    <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
+                </div>
+            </div>
+        </div>
+        <div *ngIf='docu == "pipo" && file =="export"'>
+            <div style="display: flex; align-items: center; margin-left: 30px;">
+                <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px; margin-left: -9.2px;">Buyer’s
         Name*</label>
-                <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px; border: 1px solid #C6CBD4; flex-direction:row; ">
-                    <span style="color: #323e4a !important; min-width: 150px;">{{buyerValue}}</span>
+                <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px;">
+                    <span style="color: black !important; min-width: 150px; z-index: 1;">{{buyerValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
           <i id="up3" style="display: none" class="fas fa-angle-up"></i>
         </span>
-                  <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
-                      <div  *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'><a style="min-width:100%;">{{buyer.buyerName}}</a></div>
-                      <div style="border: 1px solid #EAEDF3; min-width:100%;" (click)="open1(content1)"><a style="min-width:100%;">Add New Buyer</a></div>
-                  </div>
-              </div>
-          </div>
-          <br>
-          <div style="display: flex; align-items: center; margin-left: 30px;">
-              <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px; margin-left: -9.2px;">Choose
+                    <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
+                        <div *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'><a style="min-width:100%;">{{buyer.buyerName}}</a></div>
+                        <div style=" min-width:100%;" (click)="open1(content1)"><a style="min-width:100%;">Add New Buyer</a></div>
+                    </div>
+                </div>
+                <!-- <select style="border: 1px solid #C6CBD4;
+                        color: black;
+                        padding: 4px;
+                        font-weight: 100 ; margin-right: 5px; font-size: 14px; border-radius: 2px;">
+                            <option >{{buyerValue}}</option>
+                            <option *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'>{{buyer.buyerName}}</option>
+                            <option ><div style="border: 1px solid #EAEDF3; min-width:100%;" (click)="open1(content1)"><a style="min-width:100%;">Add New Buyer</a></div></option>
+                </select> -->
+            </div>
+            <br>
+            <div style="display: flex; align-items: center; margin-left: 30px;">
+                <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px; margin-left: -9.2px;">Choose
         Commodity</label>
-                <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px; border: 1px solid #C6CBD4; flex-direction:row; ">
-                    <span style="min-width:100%;" style="color: #323e4a !important; min-width: 150px;">Choose Commodity</span>
+                <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px; flex-direction:row; ">
+                    <span style="min-width:100%;" style="color: black !important; min-width: 150px;">Choose Commodity</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
           <i id="up3" style="display: none" class="fas fa-angle-up"></i>
         </span>
@@ -318,6 +345,13 @@
                         <div *ngFor="let buyer of commodity" (click)='clickComo(buyer.como)'><a style="min-width:100%;">{{buyer.como}}</a></div>
                     </div>
                 </div>
+                <!-- <select style="border: 1px solid #C6CBD4;
+                        color: black;
+                        padding: 4px;
+                        font-weight: 100 ; margin-right: 5px; font-size: 14px; border-radius: 2px;">
+                            <option >Choose Commodity</option>
+                            <option *ngFor="let buyer of commodity"><div (click)='clickComo(buyer.como)'><a style="min-width:100%;"></a></div>{{buyer.como}}</option>
+               </select> -->
             </div>
 
             <div style="margin-left: 250px;">
@@ -327,18 +361,21 @@
             </div>
 
 
-          <div style="margin-top: 40px; margin-left: 28px;">
-              <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
-              <div style="display: flex; align-items: center;">
-                  <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [(ngModel)]="documentType" value="PI">
-                  <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
-              </div>
-              <div style="display: flex; align-items: center;">
-                  <input type="radio" style="flex-direction:row;" id="options2" class="circular_input" [(ngModel)]="documentType" value="PO">
-                  <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
-              </div>
-          </div>
-      </div>
+            <div style="margin-top: 40px; margin-left: 28px;">
+                <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
+                <div style="display: flex; align-items: center;">
+                    <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [(ngModel)]="documentType" value="PI">
+                    <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <input type="radio" style="flex-direction:row;" id="options2" class="circular_input" [(ngModel)]="documentType" value="PO">
+                    <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf='docu == "debitNote" && file =="export"'></div>
+        <div *ngIf='docu == "irAdvice" && file =="export"'></div>
 
 
         <div *ngIf="documentType === 'sb'" class="form" method="POST">
@@ -403,7 +440,7 @@
                 This Forex Bill Number is already exist, Do you want to override the changes?
             </h1>
             <button (click)="onOverride()" style="margin-right: 5px">Yes</button>
-            <button [routerLink]="['/home/dashboard']">No</button>
+            <button [routerLink]="['/home/inwardRemittanceAdvice']">No</button>
         </div>
 
 
@@ -731,7 +768,7 @@
                         <br />
                         <td class="full-input border1" style="width: 206px;">
                             <label for="location">Location</label>
-                            <select name="location" ngModel>
+                            <select name="location" ngModel placeholder="Location">
                                     <option value="">Select Location</option>
                                     <option *ngFor="let bene of location" [value]="bene.loc">
                                       {{ bene.loc }}
@@ -752,8 +789,8 @@
                             <label for="location">Origin</label>
                             <select name="origin" ngModel>
                                     <option value="">Select Origin</option>
-                                    <option *ngFor="let from of origin" [value]="from.from">
-                                      {{ from.from }}
+                                    <option *ngFor="let ori of origin" [value]="ori">
+                                      {{ ori }}
                                     </option>
                                   </select>
                         </td>
@@ -860,8 +897,8 @@
                     <option value="Collection Bill" >Collection Bill</option>
                     <option value="Direct Import">Direct Import</option>
                   </select>
-                </div>
-                <!-- <div *ngIf='documentType1 == "import"'
+                                </div>
+                                <!-- <div *ngIf='documentType1 == "import"'
                 style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                 <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Type</label>
                 <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
@@ -879,11 +916,9 @@
                   </div>
                 </div>
                 </div> -->
-                <div *ngIf='documentType1 =="export"'
-                  style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
-                  <span style="color: #707683; font-size: 14px;">Type</span> <br>
-                  <select name=""  formControlName="type"
-                  style="outline: none; border: none; background: #f9f8f8;margin-left: -16px; width: 200px; border-radius: 5px; height: 40px; ">
+                                <div *ngIf='documentType1 =="export"' style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
+                                    <span style="color: #707683; font-size: 14px;">Type</span> <br>
+                                    <select name="" formControlName="type" style="outline: none; border: none; background: #f9f8f8;margin-left: -16px; width: 200px; border-radius: 5px; height: 40px; ">
                   <option id="aaa" value="" style="border: none;">Select</option>
                     <option value="Advance Payment" >Advance Payment</option>
                     <option value="Letter of Credit">Letter of Credit</option>

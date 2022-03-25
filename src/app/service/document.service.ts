@@ -68,6 +68,35 @@ export class DocumentService {
     );
   }
 
+  getIrAdviceByIrAdvice(billNo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/irAdvice/getIrAdviceByIrAdvice`,
+      {
+        billNo: billNo,
+      },
+      httpOptions
+    );
+  }
+
+  getIrAdviceByBillNo( billNo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/irAdvice/getIrAdviceByBillNo`,
+      {
+        billNo: billNo,
+      },
+      httpOptions
+    );
+  }
 
 
 

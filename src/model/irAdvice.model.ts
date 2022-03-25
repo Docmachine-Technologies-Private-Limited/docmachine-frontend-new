@@ -10,6 +10,13 @@ export class IRAdvice {
   public commision: string;
   public recievedDate: string;
   public conversionDate: string;
+  public origin: string;
+  public location: string;
+  public commodity: string;
+  public buyerName: string;
+  public doc: string;
+  public pipo: string;
+  public _id: string;
 
 
 constructor(data: any) {
@@ -23,7 +30,13 @@ constructor(data: any) {
   this.amount = data.amount ? data.amount : '';
   this.commision = data.commision ? data.commision : '';
   this.recievedDate = data.recievedDate ? data.recievedDate : '';
-  this.conversionDate = data.recievedDate ? data.recievedDate : '';
-
+  this.conversionDate = data.conversionDate ? data.conversionDate : '';
+  this.origin = data.origin ? data.origin : '';
+  this.location = data.location ? data.location : '';
+  this.commodity = data.commodity ? data.commodity : '';
+  // this.buyerName = data.buyerName ? data.buyerName : '';
+  this.pipo = data.pipo ? data.pipo : '';
+  this.doc = data.doc ? data.doc : '';
+  this._id = data._id;
 }
 }

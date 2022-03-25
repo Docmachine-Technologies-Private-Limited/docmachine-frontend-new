@@ -13,6 +13,8 @@
     margin-left: 40px;
     width: 94%;
 ">
+
+
             <!-- *ngIf="!showInvoice" -->
             <div style="display: flex; align-items: center">
                 <h3 class="heading">Opinion Report Documents</h3>
@@ -28,7 +30,13 @@
             <option value="" selected="selected">All</option>
         </select>
             </div>
+
             <div style="padding-top: 0.7%">
+
+                <button style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
+              background-color: #49A2D7;
+              border: none;
+              border-radius: 5px;" (click)="exportToExcel()">Export To Excel</button>
                 <button class="upload-button" [routerLink]="['/home/upload']">
             Upload New
         </button>
@@ -36,7 +44,7 @@
         </div>
 
 
-        <div class="analytics">
+        <div class="analytics" #epltable>
             <div style="width: 100%" class="analytics-side">
                 <!-- *ngIf="!showInvoice" -->
                 <div style="width: 100%" class="row">
@@ -135,7 +143,7 @@
                             <div class="container popup">
                                 <div class="row">
                                     <div class="col-lg-10 col-xl-7 mrg">
-                                        <h6 class="display-6">Debit Note</h6>
+                                        <h6 class="display-6">Opinion Report</h6>
 
                                         <iframe [src]="viewData" width="315%" height="500px"></iframe>
                                         <button type="submit" style="margin-left: 250px;" class="submitBTN" (click)="modal.dismiss('Cross click')">OK</button>

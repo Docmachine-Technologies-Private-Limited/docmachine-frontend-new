@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../service/user.service'
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -26,7 +27,8 @@ export class DebitNoteComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -99,5 +101,10 @@ toSave(data, index){
 toEdit(index){
   this.optionsVisibility[index] = true;
   this.toastr.warning('Debit Note Row Is In Edit Mode');
+}
+
+newDebit() {
+  console.log('upload');
+  this.router.navigate(['home/upload', { file: 'export', document: 'debitNote' }]);
 }
 }

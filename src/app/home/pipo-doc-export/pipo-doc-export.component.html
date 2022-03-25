@@ -1,5 +1,5 @@
-<div style="margin-top: 67px; width: 89%; " class="content-wrap" >
-    <main id="content" class="table-padding" role="main" >
+<div style="margin-top: 67px; width: 89%; " class="content-wrap">
+    <main id="content" class="table-padding" role="main">
 
         <div *ngIf="!showInvoice">
             <div style="margin-top: 30px; display: flex; flex-direction: rows; align-items: center; padding: 0.8% 0; border: 0.5px solid #e3e6ee; width: 100%;margin-left: 26px;">
@@ -15,7 +15,7 @@
                                 <a style="width: 100%;">Export</a>
                             </div>
                         </div> -->
-                        <div class="customDropdown" style="width: 80px;border: 1px solid #C6CBD4; font-size: 14px;margin-right: 5px;">
+                        <!-- <div class="customDropdown" style="width: 80px;border: 1px solid #C6CBD4; font-size: 14px;margin-right: 5px;">
                             <span style="color: #4b74ff !important">PI/PO </span>
                             <span class="dropIco"><i id="down" class="fas fa-angle-down"></i>
                                 <i id="up" style="display: none" class="fas fa-angle-up"></i>
@@ -24,7 +24,15 @@
                                 <a style="width: 100%;">PI/PO</a>
                                 <a style="width: 100%;">BOE</a>
                             </div>
-                        </div>
+                        </div> -->
+                        <!-- [(ngModel)]="nameSearch" -->
+                        <select style="border: 1px solid #C6CBD4;
+                        color: black;
+                        padding: 4px;
+                        font-weight: 100 ; margin-right: 5px; font-size: 14px;">
+                            <option >PI/PO</option>
+                            <option >BOE</option>
+                        </select>
                         <!-- <div class="customDropdown" style="width:125px; border: 1px solid #C6CBD4; font-size: 14px;">
                             <span style="color: #323e4a !important">Customer </span>
                             <span class="dropIco"><i id="down" style="margin-left: 12px;" class="fas fa-angle-down"></i>
@@ -53,7 +61,7 @@
                             </span>
                             <div class="dropdown-content" style="min-width: 115px;">
                                 <a style="width: 100%;" *ngFor="let bene of location" (click)="clickloca(bene.loc)">{{ bene.loc }}</a>
-                                
+
                             </div>
                         </div> -->
                         <!-- <div class="customDropdown" style="width: 150px; border: 1px solid #C6CBD4; font-size: 14px;" >
@@ -68,14 +76,14 @@
                         <!-- <select [(ngModel)]="nameSearch" style="border: 1px solid #C6CBD4;
                         color: black;
                         padding: 2px;
-                        font-weight: 100 ; font-size: 14px;"> 
+                        font-weight: 100 ; font-size: 14px;">
                             <option>{{Locaval}}</option>
                             <option *ngFor="let bene of location" >{{ bene.loc }}</option>
                         </select> -->
                         <select [(ngModel)]="nameSearch" style="border: 1px solid #C6CBD4;
                         color: black;
                         padding: 4px;
-                        font-weight: 100 ; margin-right: 5px; font-size: 14px;"> 
+                        font-weight: 100 ; margin-right: 5px; font-size: 14px;">
                             <option >{{Comoval}}</option>
                             <option *ngFor="let buyer of commodity">{{buyer.como}}</option>
                         </select>
@@ -83,18 +91,17 @@
                         <select [(ngModel)]="nameSearch1" style="border: 1px solid #C6CBD4;
                         color: black;
                         padding: 4px;
-                        font-weight: 100 ; font-size: 14px;"> 
+                        font-weight: 100 ; font-size: 14px;">
                             <option >{{Locaval}}</option>
                             <option *ngFor="let bene of location" >{{ bene.loc }}</option>
                         </select>
-                        <input  type="date" placeholder="Start Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;"
-                        [(ngModel)]="startDate" required/>
-                        <input type="date" placeholder="End Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;" [(ngModel)]="endDate"  required/>
-                        
+                        <input type="date" placeholder="Start Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;" [(ngModel)]="startDate" required/>
+                        <input type="date" placeholder="End Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;" [(ngModel)]="endDate" required/>
+
                         <!-- <select [(ngModel)]="nameSearch2" style="border: 1px solid #C6CBD4;
                         color: black;
                         padding: 4px;
-                        font-weight: 100 ; font-size: 14px;"> 
+                        font-weight: 100 ; font-size: 14px;">
                             <option>date</option>
                             <option *ngFor="let data of item1" >{{ data.date }}</option>
                         </select> -->
@@ -102,19 +109,18 @@
                         <div class="customDropdown" style="margin-left: 270px; margin-right: 5px; border: 1px solid #C6CBD4;">
                             <span>Filter </span> <span><i class="fas fa-filter"></i></span>
                         </div>
-                        
-                        
-                        
+
+
+
                         <div class="customDropdown" style="width: 102px; margin-left: 10px; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
-                            <span
-                                style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
+                            <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
                                 <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
                             <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
                                 <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                             </span> -->
                             <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3"
                                 class="fas fa-angle-down"></i>
-                             <i id="up3" style="display: none" class="fas fa-angle-up"></i> 
+                             <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                         </span>
                             <div class="dropdown-content" style="min-width:200px; margin-left: -95px;">
                                 <a style="min-width:200px;" (click)="newCredit()">New Credit Note</a>
@@ -125,28 +131,28 @@
                                 <a style="min-width:200px;" (click)="newLoc()">New Letter of Credit</a>
                             </div>
                         </div>
-                        <button (click)="exportToExcel()"  style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
+                        <button (click)="exportToExcel()" style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
                         background-color: #49A2D7;
                         border: none;
-                        border-radius: 5px;">Export To Excel</button> 
-                       
+                        border-radius: 5px;">Export To Excel</button>
+
                     </div>
                 </div>
             </div>
         </div>
-        
-        
-        <div style="width: 100%" class="analytics-side" *ngIf="!showInvoice" #epltable  >
-            
-            <div style="width: 100%" class="row"  >
-                
-                <div style="width: 100%; margin:5%; left: -70px; top:-60px" class="col-12 mb-lg padding" id="container" >
-                    <section style="width: 280%; margin-left: 70px" class="pb-0 box-shadow"   >
-                        
-                        <div style="margin-left: -79px; height: 638px;"   class="widget-body p-0 support table-wrapper"  >
-                        
-                            <table style="width: 100%; margin-left: 40px;"  class="table table-striped mb-0"   >
-                                
+
+
+        <div style="width: 100%" class="analytics-side" *ngIf="!showInvoice" #epltable>
+
+            <div style="width: 100%" class="row">
+
+                <div style="width: 100%; margin:5%; left: -70px; top:-60px" class="col-12 mb-lg padding" id="container">
+                    <section style="width: 200%; margin-left: 70px" class="pb-0 box-shadow">
+
+                        <div style="margin-left: -79px; height: 638px;" class="widget-body p-0 support table-wrapper">
+
+                            <table style="width: 100%; margin-left: 40px;" class="table table-striped mb-0">
+
                                 <thead style="width: 100% ;height: 54px;">
                                     <tr class="text-muted table-heading" style="opacity: 50%; font-size: 14px; color:black !important; font-weight: 300 !important; padding: 20px; border-bottom: 1px solid rgb(194, 189, 189);">
 
@@ -195,7 +201,7 @@
                                 <tbody class="text-dark">
                                     <tr class="table-row" *ngFor='let data of item1 | filterdate:startDate:endDate | filternew:[{commodity:nameSearch},{location:nameSearch1}]  let i = index' (click)="getInvoices(data, i)">
                                         <td style="padding: 20px 35px;  ">
-                                            <div *ngIf="!optionsVisibility[i]" >
+                                            <div *ngIf="!optionsVisibility[i]">
                                                 {{data.date}}
                                             </div>
                                             <div *ngIf="optionsVisibility[i]">
@@ -204,7 +210,7 @@
                                         </td>
                                         <td class="sb-no" (click)=" hide(data, i)">{{data.pi_poNo}}</td>
                                         <!-- <td> <span *ngIf='data.document == "PI"'> Proforma Invoice</span> <span *ngIf='data.document != "PI"'> Purchase Order</span></td> -->
-                                        <td >
+                                        <td>
                                             {{data.date}}
                                         </td>
                                         <td>
@@ -233,7 +239,7 @@
                                                 <input class="tblInput form-control" name="commodity" type="text" placeholder="Commodity" [(ngModel)]="data.commodity">
                                             </div> -->
                                         </td>
-                                    
+
                                         <td>
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.commodity}}
@@ -243,7 +249,7 @@
                                                 <input class="tblInput form-control" name="commodity" type="text" placeholder="Commodity" [(ngModel)]="data.commodity">
                                             </div>
                                         </td>
-                                    
+
                                         <td>
                                             <div>
                                                 <!-- {{data.portCode}} -->
@@ -566,20 +572,18 @@
                                 </tbody>
                             </table>
                         </div>
-                        
+
                     </section>
                 </div>
             </div>
         </div>
 
-        
-           <div *ngIf="showInvoice && !toggle ">
-              <div class="table_top" style="margin-top: 28px;" >
+
+        <div *ngIf="showInvoice && !toggle ">
+            <div class="table_top" style="margin-top: 28px;">
                 <div style="width: 70%;border-right: 0.5px solid rgba(0, 0, 0, 0.2); margin-left: 40px;">
                     <div>
-                        <img src="../../../assets/back.png" (click)="hide3()"
-                            style="width: 20px; height: 20px; margin-left: 22px;margin-bottom: 10px; margin-top: 6px; "><span style="margin-left: 5px ;margin-bottom: 10px;" (click)=" hide3()"
-                            >Back</span>
+                        <img src="../../../assets/back.png" (click)="hide3()" style="width: 20px; height: 20px; margin-left: 22px;margin-bottom: 10px; margin-top: 6px; "><span style="margin-left: 5px ;margin-bottom: 10px;" (click)=" hide3()">Back</span>
                     </div>
                     <span style="color: RGB(50, 62, 74); font-size: 14px;">PI / PO Documents</span>
                     <!-- <div style="background-color: #49A2D7; float: right;" class="customDropdown">
@@ -598,15 +602,14 @@
                         </div>
                     </div> -->
                     <div class="customDropdown" style="width: 102px; margin-bottom: 5px; float: right; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
-                        <span
-                            style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
+                        <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
                             <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
                         <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
                             <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                         </span> -->
                         <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3"
                             class="fas fa-angle-down"></i>
-                         <i id="up3" style="display: none" class="fas fa-angle-up"></i> 
+                         <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                     </span>
                         <div class="dropdown-content" style="min-width:200px; margin-left: -95px;">
                             <a style="min-width:200px;">New Credit Note</a>
@@ -650,12 +653,12 @@
                         </div>
                     </div>
                 </div>
-            
+
                 <!-- People collaborated -->
 
                 <!-- Invoices -->
                 <div class="invoices_tab">
-                    
+
                     <div class="invoices_inner">
                         <div class="tabbed">
                             <input [attr.data-index]="1" type="radio" id="1" name="css-tabs" checked />
@@ -1368,11 +1371,11 @@
                                                 <tr *ngFor="let course of payTerm; let i = index" style="height: 30px !important;">
                                                     <td style="outline: none; font-size: 12px; border: 1px solid #DEDEDE; width: 15%; border-radius: 5px; padding: 10px; margin-right: 10px; text-align: left;">
                                                         {{course.date}}</td>
-                                                    
+
                                                     <td style="outline: none; font-size: 12px; background:#DEDEDE; width: 25%;  border-radius: 5px; height: 30px;  padding: 10px; text-align: left;">
                                                         {{course.type}}</td>
                                                     <td style="outline: none; font-size: 12px; border: 1px solid #DEDEDE; width: 40%;  border-radius: 5px; padding: 10px; text-align: left;">
-                                                            {{course.description}}</td>
+                                                        {{course.description}}</td>
                                                     <td style="outline: none; font-size: 12px; border: 1px solid #DEDEDE; width: 20%; border-radius: 5px; padding: 10px; text-align: center;">
                                                         {{course.amount}}</td>
                                                 </tr>
@@ -1418,8 +1421,8 @@
 
 
                             </div>
-                    
-                            
+
+
 
                             <!----------------ADD A DOCUMENT ----------------------------------------->
                             <div class="tab-content form-wrapper" [attr.data-index]="2" style="
@@ -1442,7 +1445,7 @@
                                                 <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                                             </span>
                                             <div class="dropdown-content1" style="min-width: 220px; margin-left: 0px;">
-                                                <!-- <p (click)='selectDoc("Shipping Bill")'><a>New Shipping Bill</a></p> 
+                                                <!-- <p (click)='selectDoc("Shipping Bill")'><a>New Shipping Bill</a></p>
                                                 <p (click)='selectDoc("Shipping Bill")'><a>Shipping Bill</a></p>
                                                 <p (click)='selectDoc("blCopy")'><a>New Airway Bill/BL Copy</a></p>
                                                 <p (click)='selectDoc("commercialInvoice")'><a>New Commercial
@@ -1465,37 +1468,36 @@
                                         <div class="customDropdown" style="width: 240px; height: 42px;float: right;margin-left: 172px;
                                      padding-top: 10px; background-color: #49A2D7;border: 1px solid #49A2D7 !important;border-radius: 5px;margin-top: 20px;
                                      margin-bottom: 20px;">
-                                        <span
-                                            style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
+                                            <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
                                             <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Attach a
                                             Document</span>
-                                        <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
+                                            <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
                                             <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                                         </span> -->
-                                        <span class="dropIco" style="margin-left: 10px;margin-top: 10px; color: #ffffff !important;"><i id="down3"
+                                            <span class="dropIco" style="margin-left: 10px;margin-top: 10px; color: #ffffff !important;"><i id="down3"
                                             class="fas fa-angle-down"></i>
-                                         <i id="up3" style="display: none" class="fas fa-angle-up"></i> 
+                                         <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                                     </span>
-                                        <div class="dropdown-content" style="min-width:200px; margin-right: 0px; margin-left: 7px;
+                                            <div class="dropdown-content" style="min-width:200px; margin-right: 0px; margin-left: 7px;
                                         margin-top: 5px;">
-                                            <a style="min-width:100%;" (click)='selectDoc("Shipping Bill")'>New Shipping Bill</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("blCopy")'>New Airway Bill/BL Copy</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("commercialInvoice")'>New Commercial
+                                                <a style="min-width:100%;" (click)='selectDoc("Shipping Bill")'>New Shipping Bill</a>
+                                                <a style="min-width:100%;" (click)='selectDoc("blCopy")'>New Airway Bill/BL Copy</a>
+                                                <a style="min-width:100%;" (click)='selectDoc("commercialInvoice")'>New Commercial
                                                 Invoice</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("creditNote")'>New Credit Note</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("debitNote")'>New Debit Noter</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("agreement")'>Agreement</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("lcCopy")'>Lc Copy</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("deliveryOrder")'>Delivery Order</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("insuranceCopy")'>Insurance Copyt</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("billOfExchange")'>Bill of Exchange</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("tryPartyAgreement")'>Tri Party Agreemente</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("opinionReport")'>Opinion Report</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("caCb")'>15 CA/CB</a>
-                                            <a style="min-width:100%;" (click)='selectDoc("caCertificate")'>CA Certificate</a>
-                                        </div>
+                                                <a style="min-width:100%;" (click)='selectDoc("creditNote")'>New Credit Note</a>
+                                                <a style="min-width:100%;" (click)='selectDoc("debitNote")'>New Debit Noter</a>
+                                                <a style="min-width:100%;" (click)='selectDoc("agreement")'>Agreement</a>
+                                                <a style="min-width:100%;" (click)='selectDoc("lcCopy")'>Lc Copy</a>
+                                                <a style="min-width:100%;" (click)='selectDoc("deliveryOrder")'>Delivery Order</a>
+                                                <a style="min-width:100%;" (click)='selectDoc("insuranceCopy")'>Insurance Copyt</a>
+                                                <a style="min-width:100%;" (click)='selectDoc("billOfExchange")'>Bill of Exchange</a>
+                                                <a style="min-width:100%;" (click)='selectDoc("tryPartyAgreement")'>Tri Party Agreemente</a>
+                                                <a style="min-width:100%;" (click)='selectDoc("opinionReport")'>Opinion Report</a>
+                                                <a style="min-width:100%;" (click)='selectDoc("caCb")'>15 CA/CB</a>
+                                                <a style="min-width:100%;" (click)='selectDoc("caCertificate")'>CA Certificate</a>
+                                            </div>
 
-                                    </div>
+                                        </div>
 
 
                                     </div>
@@ -1567,8 +1569,7 @@
                                         </div>
                                     </div> -->
                                     <div class="customDropdown" style="width:260px;height: 42px;float: right;margin-left: 142px;padding-top: 10px;background-color: #49A2D7;border: 1px solid #49A2D7 !important;border-radius: 5px;margin-top: 20px;margin-bottom: 20px;">
-                                        <span
-                                            style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
+                                        <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
                                             <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Create New
                                             Transaction</span>
                                         <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
@@ -1576,7 +1577,7 @@
                                         </span> -->
                                         <span class="dropIco" style="margin-left: 10px;margin-top: 10px; color: #ffffff !important;"><i id="down3"
                                             class="fas fa-angle-down"></i>
-                                         <i id="up3" style="display: none" class="fas fa-angle-up"></i> 
+                                         <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                                     </span>
                                         <div class="dropdown-content" style="min-width:250px; margin-left: -12px;
                                         margin-top: 5px;">
@@ -1584,7 +1585,7 @@
                                             <a style="min-width:100%;" (click)="openDoc('Direct Import')">Direct Import Payment</a>
                                             <a style="min-width:100%;">Bill Under Collection</a>
                                             <a style="min-width:100%;">Buyers Credit Request</a>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -1622,14 +1623,12 @@
                 </div>
             </div>
         </div>
-        
-    
+
+
         <div *ngIf='toggle' style="margin-left: 24px;">
             <div *ngIf='toggle1'>
                 <div>
-                    <img src="../../../assets/back.png" (click)="hide2()"
-                        style="width: 20px; height: 20px; margin-left: 22px;margin-bottom: 10px; margin-top: 6px; "><span style="margin-left: 5px ;margin-bottom: 10px;" (click)=" hide2()"
-                        >Back</span>
+                    <img src="../../../assets/back.png" (click)="hide2()" style="width: 20px; height: 20px; margin-left: 22px;margin-bottom: 10px; margin-top: 6px; "><span style="margin-left: 5px ;margin-bottom: 10px;" (click)=" hide2()">Back</span>
                 </div>
                 <h3 class="heading1">Upload Proforma invoice</h3>
                 <div class="form5" method="POST">
@@ -1757,9 +1756,7 @@
             </div>
             <div *ngIf='toggle2'>
                 <div>
-                    <img src="../../../assets/back.png" 
-                        style="width: 20px; height: 20px; margin-left: 40px;margin-bottom: 10px; margin-top: 6px;  " (click)=" hide1()"><span style="margin-left: 5px ;margin-bottom: 10px;" (click)=" hide1()"
-                        >Back</span>
+                    <img src="../../../assets/back.png" style="width: 20px; height: 20px; margin-left: 40px;margin-bottom: 10px; margin-top: 6px;  " (click)=" hide1()"><span style="margin-left: 5px ;margin-bottom: 10px;" (click)=" hide1()">Back</span>
                 </div>
                 <h3 class="heading1">Edit Proforma invoice/ Purchase Order</h3>
                 <div style="margin-left: 30px; margin-bottom: 20px;">

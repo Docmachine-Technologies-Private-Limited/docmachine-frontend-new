@@ -263,6 +263,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
 
 
+
+
       this.documentService.getPipoByPipoNo(this.id).subscribe(
         (data) => {
           let index = this.route.snapshot.params['index'];
@@ -305,45 +307,47 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
               this.item1.push(value);
             }
           }
-          this.getMaster();
+          // this.getMaster();
         },
         (err) => console.log(err)
       );
 
-      let arrayMain = []
-          this.documentService.getMaster(1).subscribe(
-            (res: any) => {
-              console.log(res), (this.item4 = res.data);
-              console.log("hello the")
-              for (let value1 of this.item1) {
-                for (let value2 of this.item4) {
-                  for (let a of value2.pipo) {
-                    if (a == value1.pi_poNo) {
-                      const newVal = { ...value1 };
-                      newVal['sbno'] = value2.sbno
-                      newVal['sbdate'] = value2.sbdate
-                      newVal['portCode'] = value2.portCode
-                      newVal['region'] = value2.countryOfFinaldestination
-                      newVal['fobValue'] = value2.fobValue
-
-                      // console.log("Hello Ranjit", a);
-                      // value1.sbno = value2.sbno
-                      // value1.sbdate = value2.sbdate
-                      arrayMain.push(newVal)
-                      // console.log("hello Sj", value2);
-                    }
-                  }
-                }
-              }
-              console.log("Hello There", arrayMain);
-              if(arrayMain.length>0){
-                this.item1 = arrayMain
-              }
 
 
-            },
-            (err) => console.log(err)
-          );
+      // let arrayMain = []
+      //     this.documentService.getMaster(1).subscribe(
+      //       (res: any) => {
+      //         console.log(res), (this.item4 = res.data);
+      //         console.log("hello the")
+      //         for (let value1 of this.item1) {
+      //           for (let value2 of this.item4) {
+      //             for (let a of value2.pipo) {
+      //               if (a == value1.pi_poNo) {
+      //                 const newVal = { ...value1 };
+      //                 newVal['sbno'] = value2.sbno
+      //                 newVal['sbdate'] = value2.sbdate
+      //                 newVal['portCode'] = value2.portCode
+      //                 newVal['region'] = value2.countryOfFinaldestination
+      //                 newVal['fobValue'] = value2.fobValue
+
+      //                 // console.log("Hello Ranjit", a);
+      //                 // value1.sbno = value2.sbno
+      //                 // value1.sbdate = value2.sbdate
+      //                 arrayMain.push(newVal)
+      //                 // console.log("hello Sj", value2);
+      //               }
+      //             }
+      //           }
+      //         }
+      //         console.log("Hello There", arrayMain);
+      //         if(arrayMain.length>0){
+      //           this.item1 = arrayMain
+      //         }
+
+
+      //       },
+      //       (err) => console.log(err)
+      //     );
 
 
 
@@ -365,6 +369,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         this.location = data['data'][0]['location'];
         this.commodity = data['data'][0]['commodity'];
         console.log(this.location);
+        console.log("jsadffhsjshd", this.commodity);
 
         //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
       },
@@ -1017,8 +1022,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet =
-    xlsx.utils.table_to_sheet(this.epltable.nativeElement);
+    const ws: xlsx.WorkSheet = xlsx.utils.table_to_sheet(this.epltable.nativeElement);
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'epltable.xlsx');

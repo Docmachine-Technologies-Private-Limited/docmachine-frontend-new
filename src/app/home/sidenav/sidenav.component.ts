@@ -144,7 +144,7 @@ export class SidenavComponent implements OnInit {
     this.status = !this.status;
     this.router.navigate(["home/pipoDoc"]);
   }
-  
+
   public newTask4(){
     this.status4 = true;
     this.status5  = false;
@@ -230,7 +230,7 @@ export class SidenavComponent implements OnInit {
     this.status16   = false;
     this.status17   = false;
     this.status18   = false;
-    
+
   }
   public newTask9(){
     this.status9 = true;
@@ -487,7 +487,7 @@ export class SidenavComponent implements OnInit {
     this.new14 = false;
   }
   public newSub5() {
-    this.router.navigate(["home/pipoDocExport"]);
+    this.router.navigate(["home/letterOfCredit-LC"]);
     this.new5 = true;
     this.new = false;
     this.new1 = false;
@@ -503,7 +503,7 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
-    
+
   }
   public newSub6() {
     this.router.navigate(["/home/master-services"]);

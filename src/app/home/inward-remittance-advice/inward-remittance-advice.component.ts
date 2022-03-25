@@ -1,7 +1,9 @@
-import { Component, OnInit, resolveForwardRef } from '@angular/core';
+import { Component, ElementRef, OnInit, resolveForwardRef, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { DocumentService } from 'src/app/service/document.service';
-
+import { UserService } from 'src/app/service/user.service';
+import {Router} from '@angular/router';
+import * as xlsx from 'xlsx';
 
 @Component({
   selector: 'app-inward-remittance-advice',
@@ -10,6 +12,7 @@ import { DocumentService } from 'src/app/service/document.service';
 })
 export class InwardRemittanceAdviceComponent implements OnInit {
 
+  @ViewChild('epltable', { static: false }) epltable: ElementRef;
   public optionsVisibility: any = [];
   // public optionsVisibility : boolean = false;
   test;
@@ -20,10 +23,20 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   recievedAmount
   amount;
   commision;
+  Comoval: any = 'Commodity';
+  Locval: any = 'Location';
+  nameSearch : string = 'Commodity';
+  origin: any = [];
+  item5: any;
+  Originval: any = "origin";
+  item3 : any;
+  pipoValue: any = 'Select PI/PO';
 
   constructor(
     private toastr: ToastrService,
+    private userService: UserService,
     private documentService : DocumentService,
+    private router: Router,
 
   ) { }
 
@@ -36,8 +49,9 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         this.item1.forEach((element, i) => {
           let amount = element.amount.replace(/,/g,"");
           let commision = element.commision.replace(/,/g,"");
-          this.item1[i].recievedAmount = (parseInt(amount)) - (parseInt(commision));
-          this.item1[i].convertedAmount = element.recievedAmount * element.exchangeRate;
+          let exchangeRate = element.exchangeRate.replace(/,/g,"");
+          this.item1[i].convertedAmount = (amount * exchangeRate).toFixed(2);
+
 
 });
         console.log("sjsjs", this.item1)
@@ -61,7 +75,52 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     //   },
     //   (err) => console.log(err)
     //   );
+
+    this.userService.getTeam().subscribe(
+      (data) => {
+        console.log('llllllllllllllllllllllllllllllll');
+        console.log(data['data'][0]);
+        this.location = data['data'][0]['location'];
+        this.commodity = data['data'][0]['commodity'];
+        console.log(this.location);
+        console.log("jsadffhsjshd", this.commodity);
+        console.log("team data", data);
+
+        //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
+      },
+      (error) => {
+        console.log('error');
+      }
+    );
+
+    this.documentService.getMaster(1).subscribe((res: any) => {
+      console.log("Master Data File", res);
+      // this.origin = res['data'][0]['countryOfFinaldestination']
+      // console.log("jainshailendra",this.origin);
+      (this.item5 = res.data);
+      this.item5.forEach((element, i) => {
+        this.origin[i] = element.countryOfFinaldestination
+      })
+      console.log("Master Country", this.origin)
+
+      // this.origin.forEach((element, i)=>{
+      //   this.origin[i].ori = element[i]
+      // })
+      // console.log("Master Country2", this.origin)
+  },
+    (err) => console.log(err)
+    );
+
+    this.documentService.getPipo().subscribe(
+      (res: any) => {
+        console.log("HEre Response", res), (this.item3 = res.data);
+
+      },
+      (err) => console.log(err)
+    );
   }
+
+
   toSave(data, index){
     this.optionsVisibility[index] = false;
     console.log('Shailendra',data);
@@ -84,4 +143,17 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Forex Advice Row Is In Edit Mode');
   }
+
+  newIrAdvice() {
+    console.log('upload');
+    this.router.navigate(['home/upload', { file: 'export', document: 'irAdvice' }]);
+  }
+
+  exportToExcel() {
+    const ws: xlsx.WorkSheet =  xlsx.utils.table_to_sheet(this.epltable.nativeElement);
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, 'Forex Advice.xlsx');
+   }
+
 }

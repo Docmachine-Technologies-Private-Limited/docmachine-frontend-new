@@ -180,6 +180,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   origin: any = [];
   item5: any;
 
+
   // ngOnInit() {
   //   this.loginForm = this.formBuilder.group({
   //     name:['',Validators.required]
@@ -374,6 +375,16 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
     }
+    else if(this.docu == 'debitNote' ){
+      this.documentType1 = 'export'
+      this.documentType = 'debitNote'
+      this.documentType1 = 'export'
+      this.pipoOut = this.route.snapshot.paramMap.get('pipo')
+      this.beneOut = this.route.snapshot.paramMap.get('bene')
+      let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
+      this.arrayData.push(x)
+      this.pipoArr.push(this.pipoOut)
+    }
     //console.log(this.route.snapshot.paramMap.get('document'))
     this.config = {
       ...this.config,
@@ -419,23 +430,43 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
     this.documentService.getMaster(1).subscribe((res: any) => {
       console.log("Master Data File", res);
+      // this.origin = res['data'][0]['countryOfFinaldestination']
+      // console.log("jainshailendra",this.origin);
       (this.item5 = res.data);
       this.item5.forEach((element, i) => {
         this.origin[i] = element.countryOfFinaldestination
       })
       console.log("Master Country", this.origin)
+
+      // this.origin.forEach((element, i)=>{
+      //   this.origin[i].ori = element[i]
+      // })
+      // console.log("Master Country2", this.origin)
   },
     (err) => console.log(err)
     );
   }
 
   onSubmitIrAdvice(e){
+    e.form.value.pipo = this.pipoArr;
+    e.form.value.doc = this.pipourl1;
+    // e.form.value.buyerName = this.mainBene;
     console.log("shailendra jain ", e.form.value)
+    console.log("ID Data", this.res._id )
+console.log(this.res)
     // console.log("hshshshshs", this.origin);
     // e.form.value.pipo = this.pipoArr;
     // e.form.value.doc = this.pipourl1;
     // e.form.value.buyerName = this.mainBene;
 
+    // e.form.value.pipo = this.pipoArr
+    if (this.file) {
+      e.form.value.file = this.file
+    }
+    else {
+      e.form.value.file = this.documentType1
+    }
+    // e.form.value.partyName = this.mainBene
     if (this.message == "This file already uploaded") {
       console.log("inside file already exist");
       this.documentService
@@ -446,7 +477,26 @@ export class UploadComponent implements OnInit, AfterViewInit {
             console.log("king123");
             console.log("DATA", data);
             this.message = "";
-            this.router.navigate(["home/inwardRemittanceAdvice"]);
+            this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1)
+              .subscribe(
+                data => {
+                  //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                  console.log("king123")
+                  console.log(data)
+                  this.toastr.success('Firex Document added successfully.');
+                  this.router.navigate(["home/inwardRemittanceAdvice"]);
+
+                  // this.docTog = false
+                  // this.toggle = false
+                  // this.toggle2 = false
+                  // this.toastr.success('Company details updated sucessfully.');
+                  // this.router.navigate(['/home/dashboardNew']);
+                },
+                error => {
+                  // this.toastr.error('Invalid inputs, please check!');
+                  console.log("error")
+                });
+            // this.router.navigate(["home/inwardRemittanceAdvice"]);
             //this.router.navigate(['/login'], { queryParams: { registered: true }});
           },
           (error) => {
@@ -459,8 +509,27 @@ export class UploadComponent implements OnInit, AfterViewInit {
           console.log(e.form.value);
           console.log("king123");
           console.log(data);
-          this.router.navigate(["home/inwardRemittanceAdvice"]);
+          this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+          .subscribe(
+            data => {
+              //this.pipoData[`${this.pipoDoc}`] = args[1].data
+              console.log("king123")
+              console.log(data)
+              this.toastr.success('Firex Document added successfully.');
+              this.router.navigate(["home/inwardRemittanceAdvice"]);
+              // this.docTog = false
+              // this.toggle = false
+              // this.toggle2 = false
+              // this.toastr.success('Company details updated sucessfully.');
+              // this.router.navigate(['/home/dashboardNew']);
+            },
+            error => {
+              // this.toastr.error('Invalid inputs, please check!');
+              console.log("error")
+            });
+          // this.router.navigate(["home/inwardRemittanceAdvice"]);
           //this.router.navigate(['/login'], { queryParams: { registered: true }});
+
         },
         (error) => {
           console.log("error");
@@ -981,7 +1050,10 @@ export class UploadComponent implements OnInit, AfterViewInit {
       console.log("ARGS", args);
       console.log("DATA", args[1].data);
       console.log(args[1].data.boeNumber);
+      console.log("jhsjshsjshjsh",args[1].data.billNo)
+      console.log("Message Message", args[1].message);
       if (args[1].message == "This file already uploaded") {
+        console.log("My Code")
         this.message = args[1].message;
         this.override = true;
         if (args[1].data.sbno) {
@@ -992,10 +1064,10 @@ export class UploadComponent implements OnInit, AfterViewInit {
           this.res = new BoeBill(args[1].data);
           this.boeNumber = true;
           console.log(this.res);
-        }else if (args[1].data.billNo){
+        } else if (args[1].data.billNo){
           this.res = new IRAdvice(args[1].data);
           this.billNo = true;
-          console.log(this.res);
+          console.log("jsjsjsjs",this.res);
         }
       } else if (args[1].data.sbno) {
         console.log("Here data type", args[1].data);
@@ -1004,7 +1076,6 @@ export class UploadComponent implements OnInit, AfterViewInit {
         console.log(this.res);
       } else if (args[1].data.boeNumber) {
         console.log("Here data type", args[1].data);
-
         this.res = new BoeBill(args[1].data);
         this.boeNumber = true;
         console.log(this.res);
@@ -1012,7 +1083,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
         console.log("Here data type", args[1].data);
         this.res = new IRAdvice(args[1].data);
         this.billNo = true;
-        console.log(this.res);
+        console.log("sjsjsjsj",this.res);
       }
       else {
         // this.res = new BoeBill(args[1].data);

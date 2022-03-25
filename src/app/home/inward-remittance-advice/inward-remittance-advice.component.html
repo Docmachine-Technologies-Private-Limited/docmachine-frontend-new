@@ -29,18 +29,22 @@
       </select>
             </div>
             <div style="padding-top: 0.7%">
-                <button class="upload-button" [routerLink]="['/home/upload']">
+                <button style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
+                        background-color: #49A2D7;
+                        border: none;
+                        border-radius: 5px;" (click)="exportToExcel()">Export To Excel</button>
+                <button class="upload-button" (click)="newIrAdvice()">
           Upload New
       </button>
             </div>
         </div>
 
 
-        <div class="analytics">
+        <div class="analytics" #epltable>
             <div style="width: 100%" class="analytics-side">
                 <!-- *ngIf="!showInvoice" -->
                 <div style="width: 100%" class="row">
-                    <div style="width: 100%; margin: 0 -1.5%" class="col-12 mb-lg padding" id="container">
+                    <div style="width: 100%; margin: 0 -1.5%; height: 600px;" class="col-12 mb-lg padding" id="container">
                         <!-- *ngIf="!showInvoice" -->
                         <section style="width: 200%; margin-left: 60px" class="widget pb-0 box-shadow">
                             <div style="margin: 0 -2%" class="widget-body p-0 support table-wrapper">
@@ -53,6 +57,7 @@
                                             </th>
                                             <th scope="col"><span class="pl-3">TT DATE</span></th>
                                             <!-- <th scope="col">PI/PO no.</th> -->
+                                            <th scope="col">PI/PO no.</th>
                                             <th scope="col">Party Name</th>
                                             <th scope="col">TT Amount USD</th>
                                             <th scope="col">From</th>
@@ -87,6 +92,23 @@
                                                 </div>
                                             </th>
 
+                                            <td class="sb-no">
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.pipo}}
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <!-- <input class="tblInput form-control" name="branch" type="text" placeholder="From" [(ngModel)]="data.origin"> -->
+                                                    <select [(ngModel)]="data.pipo" placeholder="Pipo No" class="tblInput form-control" name="pipo" style="border: 1px solid #C6CBD4;
+                                                  color: black;
+                                                  padding: 4px;
+                                                  font-weight: 100 ; margin-right: 5px; font-size: 14px;">
+                                                      <option >{{ pipoValue}}</option>
+                                                      <option *ngFor="let pipo of item3">{{pipo.pi_poNo}}</option>
+                                                  </select>
+                                                </div>
+                                            </td>
+
                                             <td>
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.partyName}}
@@ -111,7 +133,14 @@
                                                 </div>
 
                                                 <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="branch" type="text" placeholder="From" [(ngModel)]="data.origin">
+                                                    <!-- <input class="tblInput form-control" name="branch" type="text" placeholder="From" [(ngModel)]="data.origin"> -->
+                                                    <select [(ngModel)]="data.origin" placeholder="Origin" class="tblInput form-control" name="origin" style="border: 1px solid #C6CBD4;
+                                                    color: black;
+                                                    padding: 4px;
+                                                    font-weight: 100 ; margin-right: 5px; font-size: 14px;">
+                                                        <option >{{Originval}}</option>
+                                                        <option *ngFor="let ori of origin">{{ori}}</option>
+                                                    </select>
                                                 </div>
                                             </td>
                                             <td>
@@ -120,7 +149,14 @@
                                                 </div>
 
                                                 <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="description" type="text" placeholder="Branch" [(ngModel)]="data.location">
+                                                    <!-- <input class="tblInput form-control" name="description" type="text" placeholder="Branch" [(ngModel)]="data.location"> -->
+                                                    <select [(ngModel)]="data.location" placeholder="Location" class="tblInput form-control" name="location" style="border: 1px solid #C6CBD4;
+                                                    color: black;
+                                                    padding: 4px;
+                                                    font-weight: 100 ; margin-right: 5px; font-size: 14px;">
+                                                        <option >{{Locval}}</option>
+                                                        <option *ngFor="let name of location">{{name.loc}}</option>
+                                                    </select>
                                                 </div>
                                             </td>
                                             <td>
@@ -129,8 +165,14 @@
                                                 </div>
 
                                                 <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="recievedDate" type="text" placeholder="Description" [(ngModel)]="data.commodity">
-                                                    
+                                                    <!-- <input class="tblInput form-control" name="recievedDate" type="text" placeholder="Description" [(ngModel)]="data.commodity"> -->
+                                                    <select [(ngModel)]="data.commodity" placeholder="Commodity" class="tblInput form-control" name="commodity" style="border: 1px solid #C6CBD4;
+                                                    color: black;
+                                                    padding: 4px;
+                                                    font-weight: 100 ; margin-right: 5px; font-size: 14px;">
+                                                        <option >{{Comoval}}</option>
+                                                        <option *ngFor="let buyer of commodity">{{buyer.como}}</option>
+                                                    </select>
                                                 </div>
                                             </td>
                                             <td>
@@ -153,7 +195,7 @@
                                             </td>
                                             <td>
                                                 <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.recievedAmount}}
+                                                    {{data.convertedAmount - data.commision}}
                                                 </div>
 
                                                 <div *ngIf="optionsVisibility[i]">

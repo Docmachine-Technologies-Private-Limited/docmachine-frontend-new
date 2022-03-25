@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { DocumentService } from 'src/app/service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from './../../service/user.service'
+import { UserService } from './../../service/user.service';
+import * as xlsx from 'xlsx';
 
 @Component({
   selector: 'app-letter-of-credit-export-lc',
@@ -12,6 +13,7 @@ import { UserService } from './../../service/user.service'
 })
 export class LetterOfCreditExportLCComponent implements OnInit {
 
+  @ViewChild('epltable', { static: false }) epltable: ElementRef;
   public item : any;
   public item1 = [];
   public viewData : any;
@@ -99,4 +101,11 @@ toEdit(index){
   this.optionsVisibility[index] = true;
   this.toastr.warning('LetterLC Row Is In Edit Mode');
 }
+
+exportToExcel() {
+  const ws: xlsx.WorkSheet =  xlsx.utils.table_to_sheet(this.epltable.nativeElement);
+  const wb: xlsx.WorkBook = xlsx.utils.book_new();
+  xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+  xlsx.writeFile(wb, 'LetterOfCredit.xlsx');
+ }
 }
