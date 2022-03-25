@@ -1,23 +1,60 @@
 * {
   font-family: "Poppins", sans-serif;
 }
-.button1 {
-  font-family: 'Nunito Sans', sans-serif !important;
-  min-width: 160px;
-  padding: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  background-color: RGB(81, 174, 229);
+.arrayData {
+  margin-bottom: 2px;
+  width: 32%;
+  padding-left: 10px;
+  background-color: RGB(73, 162, 215);
   border-radius: 20px;
-  margin-left: 5px;
+  color: white;
+  font-size: 14px;
+}
+.filter{
+ 
+    margin-right: 5px;
+    color: #ffffff !important;
+    font-weight: 100;
+    font-family: Poppins, sans-serif;
+    
+    font-size: 12px;
+    background-color: #49A2D7;
+    border: none;
+    border-radius: 5px;
+} 
+.filter1{
+  margin-left: 29.1rem;
+  color: #ffffff !important;
+  font-weight: 100;
+  font-family: Poppins, sans-serif;
+  
+  font-size: 12px;
+  background-color: #49A2D7;
   border: none;
-  outline: none;
-  height: 40px;
-  color: RGB(255, 255, 255);
+  border-radius: 5px;
+} 
+
+.topright {
+  position: absolute;
+  right: 0;
+  
+}
+.button2 {
+  font-family: "Nunito Sans", sans-serif !important;
+    font-size: 12px;
+    width: 3rem;
+    height: 2rem;
+    font-weight: 200;
+    margin-right: 1rem;
+    background-color: RGB(81, 174, 229);
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    
+    color: RGB(255, 255, 255);
 }
 .table-row {
-  background-color: #ffffff !important;
-  color: #707683;
+ font-size: 12px; color:black !important; font-weight: 400 !important; 
 }
 
 input[_ngcontent-wpv-c252] {
@@ -32,7 +69,7 @@ table {
   border-left: 5px solid #49a2d7;
 }
 .modal-body {
-  width: 160% !important;
+  width: 135% !important;
   background-color: white;
 }
 .customDropdown  {

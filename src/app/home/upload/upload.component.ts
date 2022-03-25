@@ -149,7 +149,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   });
 
   pipourl1: any;
-  thirdParty: boolean = false;
+  tryPartyAgreement: boolean = false;
   creditNote: boolean = false;
   debitNote: boolean = false;
   insuranceCopy: boolean = false;
@@ -163,6 +163,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   buyerValue: any = 'Select Buyer';
   pipoValue: any = 'Select PI/PO';
   payment: any = 'select Type';
+ 
   document: any;
   file: any;
   arrayData: any = [];
@@ -179,6 +180,11 @@ export class UploadComponent implements OnInit, AfterViewInit {
   isDisabled: boolean;
   origin: any = [];
   item5: any;
+
+  //*****************
+  redirectid: any;
+  redirectindex: any;
+  redirectpage: any;
 
   // ngOnInit() {
   //   this.loginForm = this.formBuilder.group({
@@ -338,6 +344,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
         });
     console.log(this.route.snapshot.paramMap.get('document'))
     this.file = this.route.snapshot.paramMap.get('file')
+    this.redirectid = this.route.snapshot.paramMap.get('pipo')
+    this.redirectindex = this.route.snapshot.paramMap.get('index')
+    this.redirectpage = this.route.snapshot.paramMap.get('page')
     console.log("checking",this.file)
     this.docu = this.route.snapshot.paramMap.get('document')
     if (this.docu == 'pipo') {
@@ -364,6 +373,36 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.pipoArr.push(this.pipoOut)
 
     }
+    else if (this.docu == 'debitNote') {
+      this.documentType1 = 'export'
+      this.documentType = 'debitNote'
+      this.documentType1 = 'export'
+      this.pipoOut = this.route.snapshot.paramMap.get('pipo')
+      this.beneOut = this.route.snapshot.paramMap.get('bene')
+      let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
+      this.arrayData.push(x)
+      this.pipoArr.push(this.pipoOut)
+    }
+    else if (this.docu == 'creditNote') {
+      this.documentType1 = 'export'
+      this.documentType = 'creditNote'
+      this.documentType1 = 'export'
+      this.pipoOut = this.route.snapshot.paramMap.get('pipo')
+      this.beneOut = this.route.snapshot.paramMap.get('bene')
+      let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
+      this.arrayData.push(x)
+      this.pipoArr.push(this.pipoOut)
+    }
+    else if (this.docu == 'insuranceCopy') {
+      this.documentType1 = 'export'
+      this.documentType = 'insuranceCopy'
+      this.documentType1 = 'export'
+      this.pipoOut = this.route.snapshot.paramMap.get('pipo')
+      this.beneOut = this.route.snapshot.paramMap.get('bene')
+      let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
+      this.arrayData.push(x)
+      this.pipoArr.push(this.pipoOut)
+    }
     else if (this.docu == 'irAdvice'){
       this.documentType1 = 'export'
       this.documentType = 'irAdvice'
@@ -373,6 +412,51 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+    }
+    else if(this.docu == 'lcCopy'){
+      this.documentType1 = 'export'
+      this.documentType = 'lcCopy'
+      this.documentType1 = 'export'
+      this.pipoOut = this.route.snapshot.paramMap.get('pipo')
+      this.beneOut = this.route.snapshot.paramMap.get('bene')
+      let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
+      this.arrayData.push(x)
+      this.pipoArr.push(this.pipoOut)
+
+    }
+    else if(this.docu == 'tryPartyAgreement'){
+      this.documentType1 = 'export'
+      this.documentType = 'tryPartyAgreement'
+      this.documentType1 = 'export'
+      this.pipoOut = this.route.snapshot.paramMap.get('pipo')
+      this.beneOut = this.route.snapshot.paramMap.get('bene')
+      let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
+      this.arrayData.push(x)
+      this.pipoArr.push(this.pipoOut)
+
+    }
+
+    else if(this.docu == 'agreement'){
+      this.documentType1 = 'export'
+      this.documentType = 'agreement'
+      this.documentType1 = 'export'
+      this.pipoOut = this.route.snapshot.paramMap.get('pipo')
+      this.beneOut = this.route.snapshot.paramMap.get('bene')
+      let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
+      this.arrayData.push(x)
+      this.pipoArr.push(this.pipoOut)
+
+    }
+    else if(this.docu == 'opinionReport'){
+      this.documentType1 = 'export'
+      this.documentType = 'opinionReport'
+      this.documentType1 = 'export'
+      this.pipoOut = this.route.snapshot.paramMap.get('pipo')
+      this.beneOut = this.route.snapshot.paramMap.get('bene')
+      let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
+      this.arrayData.push(x)
+      this.pipoArr.push(this.pipoOut)
+
     }
     //console.log(this.route.snapshot.paramMap.get('document'))
     this.config = {
@@ -446,7 +530,14 @@ export class UploadComponent implements OnInit, AfterViewInit {
             console.log("king123");
             console.log("DATA", data);
             this.message = "";
-            this.router.navigate(["home/inwardRemittanceAdvice"]);
+            this.router.navigate([
+              'home/pipoDocExport',
+                  {
+                    id: this.redirectid,
+                    page: this.redirectpage,
+                    index: this.redirectindex,
+                  },
+               ]);
             //this.router.navigate(['/login'], { queryParams: { registered: true }});
           },
           (error) => {
@@ -493,6 +584,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(invoices);
     e.form.value.invoices = invoices;
     e.form.value.buyerName = this.mainBene;
+    e.form.value.doc = this.pipourl1;
     e.form.value.pipo = this.pipoArr
 
 
@@ -753,14 +845,21 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.toastr.success(`Third Party Document Added Successfully`);
         console.log("Third Party Document Added Successfully");
         // this.router.navigateByUrl("/home/dashboardNew");
-        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1)
             .subscribe(
               data => {
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
 
-                this.router.navigateByUrl("/home/try-Party");
+                this.router.navigate([
+                  'home/pipoDocExport',
+                      {
+                        id: this.redirectid,
+                        page: this.redirectpage,
+                        index: this.redirectindex,
+                      },
+                   ]);
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -782,14 +881,22 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.toastr.success(`Credit Note Document Added Successfully`);
         console.log("Credit Note Document Added Successfully");
 
-        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1)
             .subscribe(
               data => {
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
 
-                this.router.navigateByUrl("/home/creditNote");
+                // this.router.navigateByUrl("/home/creditNote");
+                this.router.navigate([
+                 'home/pipoDocExport',
+                     {
+                       id: this.redirectid,
+                       page: this.redirectpage,
+                       index: this.redirectindex,
+                     },
+                  ]);
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -815,14 +922,21 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.toastr.success(`Debit Note Document Added Successfully`);
         console.log("Debit Note Document Added Successfully");
 
-        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+        this.userService.updateManyPipo(this.pipoArr, this.documentType,this.pipourl1)
             .subscribe(
               data => {
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
 
-                this.router.navigateByUrl("/home/debitNote");
+                this.router.navigate([
+                  'home/pipoDocExport',
+                      {
+                        id: this.redirectid,
+                        page: this.redirectpage,
+                        index: this.redirectindex,
+                      },
+                   ]);
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -848,14 +962,21 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.toastr.success(`Insurance Document Added Successfully`);
         console.log("Insurance Document Added Successfully");
 
-        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1)
             .subscribe(
               data => {
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
 
-                this.router.navigateByUrl("/home/insuranceDocument");
+                this.router.navigate([
+                  'home/pipoDocExport',
+                      {
+                        id: this.redirectid,
+                        page: this.redirectpage,
+                        index: this.redirectindex,
+                      },
+                   ]);
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -882,14 +1003,21 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.toastr.success(`Letter Of Credit Document Added Successfully`);
         console.log("Letter of Credit Document Added Successfully");
 
-        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1)
             .subscribe(
               data => {
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
 
-                this.router.navigateByUrl("/home/letterOfCredit-LC");
+                this.router.navigate([
+                  'home/pipoDocExport',
+                      {
+                        id: this.redirectid,
+                        page: this.redirectpage,
+                        index: this.redirectindex,
+                      },
+                   ]);
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -915,14 +1043,21 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.toastr.success(`Master Service Document Added Successfully`);
         console.log("Master Service Document Added Successfully");
 
-        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1)
             .subscribe(
               data => {
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
 
-                this.router.navigateByUrl("/home/master-services");
+                this.router.navigate([
+                  'home/pipoDocExport',
+                      {
+                        id: this.redirectid,
+                        page: this.redirectpage,
+                        index: this.redirectindex,
+                      },
+                   ]);
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -948,14 +1083,21 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.toastr.success(`Opinion Report Document Added Successfully`);
         console.log("Opinion Report Document Added Successfully");
 
-        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl)
+        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1)
             .subscribe(
               data => {
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
 
-                this.router.navigateByUrl("/home/opinion-report");
+                this.router.navigate([
+                  'home/pipoDocExport',
+                      {
+                        id: this.redirectid,
+                        page: this.redirectpage,
+                        index: this.redirectindex,
+                      },
+                   ]);
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -1019,8 +1161,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
         if (this.documentType === 'PI' || this.documentType === 'PO') {
           this.pIpO = true;
         }
-        else if (this.documentType === 'thirdParty') {
-          this.thirdParty = true;
+        else if (this.documentType === 'tryPartyAgreement') {
+          this.tryPartyAgreement = true;
         }
         else if (this.documentType === 'creditNote'){
           this.creditNote = true;

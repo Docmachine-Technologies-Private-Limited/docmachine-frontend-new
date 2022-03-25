@@ -25,86 +25,23 @@
                                 <a style="width: 100%;">BOE</a>
                             </div>
                         </div>
-                        <!-- <div class="customDropdown" style="width:125px; border: 1px solid #C6CBD4; font-size: 14px;">
-                            <span style="color: #323e4a !important">Customer </span>
-                            <span class="dropIco"><i id="down" style="margin-left: 12px;" class="fas fa-angle-down"></i>
-                                <i id="up" style="display: none" class="fas fa-angle-up"></i>
-                            </span>
-                            <div class="dropdown-content" style="min-width: 125px;">
-                                <a style="width: 100%;">India</a>
-                                <a style="width: 100%;">California</a>
-                                <a style="width: 100%;">United States</a>
-                            </div>
-                        </div> -->
-                        <!-- <div class="customDropdown" style="width: 123px; border: 1px solid #C6CBD4; font-size: 14px;">
-                            <span style="color: #323e4a !important">View All</span>
-                            <span class="dropIco"><i id="down1" style="margin-left: 27px;" class="fas fa-angle-down"></i>
-                                <i id="up1" style="display: none" class="fas fa-angle-up"></i>
-                            </span>
-                            <div class="dropdown-content" style="min-width: 123px;">
-                                <a style="width: 100%;">Shipping Bills</a>
-                                <a style="width: 100%;">PI/PO</a>
-                            </div>
-                        </div> -->
-                        <!-- <div class="customDropdown" style="width: 126px; border: 1px solid #C6CBD4; font-size: 14px;">
-                            <span style="color: #323e4a !important">{{Locaval}}</span>
-                            <span class="dropIco"><i id="down2" style="margin-left: 27px;" class="fas fa-angle-down"></i>
-                                <i id="up2" style="display: none" class="fas fa-angle-up"></i>
-                            </span>
-                            <div class="dropdown-content" style="min-width: 115px;">
-                                <a style="width: 100%;" *ngFor="let bene of location" (click)="clickloca(bene.loc)">{{ bene.loc }}</a>
-                                
-                            </div>
-                        </div> -->
-                        <!-- <div class="customDropdown" style="width: 150px; border: 1px solid #C6CBD4; font-size: 14px;" >
-                            <span style="color: #323e4a !important">{{Comoval}}</span>
-                            <span class="dropIco"><i id="down3" style="margin-left: 17px;" class="fas fa-angle-down"></i>
-                                <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                            </span>
-                            <div class="dropdown-content" style="min-width:150px;">
-                                <a style="min-width:100%;"   *ngFor="let buyer of commodity" (click)='clickBuyer(buyer.como)'>{{buyer.como}}</a>
-                            </div>
-                        </div> -->
-                        <!-- <select [(ngModel)]="nameSearch" style="border: 1px solid #C6CBD4;
-                        color: black;
-                        padding: 2px;
-                        font-weight: 100 ; font-size: 14px;"> 
-                            <option>{{Locaval}}</option>
-                            <option *ngFor="let bene of location" >{{ bene.loc }}</option>
-                        </select> -->
-                        <select [(ngModel)]="nameSearch" style="border: 1px solid #C6CBD4;
-                        color: black;
-                        padding: 4px;
-                        font-weight: 100 ; margin-right: 5px; font-size: 14px;"> 
-                            <option >{{Comoval}}</option>
-                            <option *ngFor="let buyer of commodity">{{buyer.como}}</option>
+                        <select [(ngModel)]="nameSearch" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100 ; margin-right: 5px; font-size: 14px;"> 
+                            <option  value=""  > commodities</option>
+                            <option *ngFor="let buyer of commodity" >{{buyer.como}}</option>
                         </select>
-
-                        <select [(ngModel)]="nameSearch1" style="border: 1px solid #C6CBD4;
-                        color: black;
-                        padding: 4px;
-                        font-weight: 100 ; font-size: 14px;"> 
-                            <option >{{Locaval}}</option>
-                            <option *ngFor="let bene of location" >{{ bene.loc }}</option>
+                        
+                        <select [(ngModel)]="nameSearch1" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100 ; font-size: 14px;"> 
+                            <option  value="" >locations</option>
+                            <option *ngFor="let bene of location" >{{ bene.loc }} </option>
                         </select>
+                        
                         <input  type="date" placeholder="Start Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;"
                         [(ngModel)]="startDate" required/>
+                        
                         <input type="date" placeholder="End Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;" [(ngModel)]="endDate"  required/>
-                        
-                        <!-- <select [(ngModel)]="nameSearch2" style="border: 1px solid #C6CBD4;
-                        color: black;
-                        padding: 4px;
-                        font-weight: 100 ; font-size: 14px;"> 
-                            <option>date</option>
-                            <option *ngFor="let data of item1" >{{ data.date }}</option>
-                        </select> -->
-
-                        <div class="customDropdown" style="margin-left: 270px; margin-right: 5px; border: 1px solid #C6CBD4;">
-                            <span>Filter </span> <span><i class="fas fa-filter"></i></span>
-                        </div>
-                        
-                        
-                        
+                       
+                        <button class="filter"   (click)="startDate = '' ; endDate = '' ;nameSearch = '';nameSearch1 = '' "  
+                        >Reset</button> 
                         <div class="customDropdown" style="width: 102px; margin-left: 10px; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
                             <span
                                 style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
@@ -136,12 +73,12 @@
         </div>
         
         
-        <div style="width: 100%" class="analytics-side" *ngIf="!showInvoice" #epltable  >
+        <div style="width: 100%" class="analytics-side" *ngIf="!showInvoice" #piposummery>
             
             <div style="width: 100%" class="row"  >
                 
                 <div style="width: 100%; margin:5%; left: -70px; top:-60px" class="col-12 mb-lg padding" id="container" >
-                    <section style="width: 280%; margin-left: 70px" class="pb-0 box-shadow"   >
+                    <section style="width: 200%; margin-left: 70px" class="pb-0 box-shadow">
                         
                         <div style="margin-left: -79px; height: 638px;"   class="widget-body p-0 support table-wrapper"  >
                         
@@ -575,13 +512,10 @@
         
            <div *ngIf="showInvoice && !toggle ">
               <div class="table_top" style="margin-top: 28px;" >
-                <div style="width: 70%;border-right: 0.5px solid rgba(0, 0, 0, 0.2); margin-left: 40px;">
-                    <div>
-                        <img src="../../../assets/back.png" (click)="hide3()"
-                            style="width: 20px; height: 20px; margin-left: 22px;margin-bottom: 10px; margin-top: 6px; "><span style="margin-left: 5px ;margin-bottom: 10px;" (click)=" hide3()"
-                            >Back</span>
-                    </div>
-                    <span style="color: RGB(50, 62, 74); font-size: 14px;">PI / PO Documents</span>
+                <div style="width: 72%;border-right: 0.5px solid rgba(0, 0, 0, 0.2); margin-left: 40px;margin-top: -6px;
+                padding-top: 6px;">
+                   
+                    <span style="color: RGB(50, 62, 74); font-size: 14px; margin-left: 24px;">PI / PO Documents</span>
                     <!-- <div style="background-color: #49A2D7; float: right;" class="customDropdown">
                         <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
                             <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
@@ -620,9 +554,12 @@
                 <!----style="height: 35px; font-weight: 400"-->
 
                 <div style="width: 74%; font-weight: 300; padding-left: 1%; color: #323e4a">
-                    <span style="font-size: 16px; color: RGB(50, 62, 74);">{{pipoNo}}</span>
+                    <span style="font-size: 16px; color: RGB(50, 62, 74);" >{{pipoNo}}</span>
                 </div>
                 <div style="width: 100%; margin-right: 10%">
+                    <img src="../../../assets/cross.png" (click)="hide3()"
+                    style="width: 20px; height: 20px; margin-right: -60px;
+                    margin-left: 5px; float: right; padding-top: 3px; ">
                     <i style="font-size: 18px; color: rgb(227, 227, 227); margin-left: 10px; float: right; padding-top: 3px;" class="fas fa-plus-circle"></i>
                     <span *ngFor="let data of item1 | slice: 0:3; let i = index" style="float: right; margin-left: 10px;"><img class="image"
                             src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="25px"
@@ -697,11 +634,10 @@
                                                 Inward Remittance Disposal against the Export.
                                                 Create a transaction to submit swift copy to bank to process the
                                                 amount</a> <br>
-
-
                                         </div>
-
                                     </div>
+                                   
+
                                     <div style="margin: 13px 0px 10px 30px; display: flex;">
                                         <div *ngFor="let pay of payTerm;">
                                             <div *ngIf='pay.type == "Advance Payment"'>
@@ -716,6 +652,18 @@
 
                                         </div>
 
+                                    </div>
+                                    <div class="listDocument">
+                                        <ul>
+                                            <!-- <li (click)="uploadShippingbill()">Shipping Bill</li> -->
+                                            <li (click)="uploadDebitnote()">Debit Note</li>
+                                            <li (click)="uploadCreditnote()">Credit Note</li>
+                                            <li (click)="uploadInsurance()">Insurance Documents</li>
+                                            <li (click)="uploadLccopy()">LC Copy</li>
+                                            <li (click)="uploadThirdparty()">Thirdparty</li>
+                                            <li (click)="uploadMaster()">Master service</li>
+                                            <li (click)="uploadOpinion()" class="lastList">Opinion Reports</li>
+                                        </ul>
                                     </div>
                                     <div *ngIf='buttonToggle1' style="margin: 13px 0px 10px 30px;">
 
@@ -793,8 +741,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Uploaded Purchase Order</p>
-                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                Submitted on 13th Oct 2021</p>
+                                                <div class="date_" *ngFor='let data of item1 let i = index'>
+                                            <p *ngIf="data.pi_poNo == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                Submitted on {{data.date}}</p>
+                                            </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -805,6 +755,7 @@
                                     <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
+                                    
                                     <div *ngIf='documentType == "PO"' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left:52px;">
                                             <i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;"></i>
@@ -828,8 +779,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: 0px;">
                                                 Uploaded Proforma Invoice</p>
-                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted on 13th Oct 2021</p>
+                                                <div class="date_" *ngFor='let data of item1 let i = index'>
+                                                    <p *ngIf="data.pi_poNo == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                        Submitted on {{data.date}}</p>
+                                                </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -852,6 +805,26 @@
                                         </div>
                                         <div style="align-items: center; width: 14%;">
                                             <button class="button1" (click)='viewClick("blCopy"); open(content)'>View</button>
+                                        </div>
+                                    </div>
+                                    <div *ngIf='pipoData.tryPartyAgreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                        &nbsp;
+                                    </div>
+                                    <div *ngIf='pipoData.tryPartyAgreement' style="display: flex;">
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
+                                        </div>
+                                        <div style="align-items: center; width: 68%;">
+                                            <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                ThirdParty Uploaded </p>
+                                                <div class="date_" *ngFor='let data of item17 let i = index'>
+                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                        Submitted on {{data.date}}</p>
+                                                </div>
+
+                                        </div>
+                                        <div style="align-items: center; width: 14%;">
+                                            <button class="button1" (click)='viewClick("tryPartyAgreement"); open(content)'>View</button>
                                         </div>
                                     </div>
                                     <div *ngIf='pipoData.lcIssuance' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
@@ -901,9 +874,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Agreement Uploaded</p>
-                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px">
-                                                Submitted on 13th Oct 2021</p>
-
+                                                <div class="date_" *ngFor='let data of item13 let i = index'>
+                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                        Submitted on {{data.date}}</p>
+                                                </div>
                                         </div>
                                         <div style="align-items: center; width: 14%;">
                                             <button class="button1" (click)='viewClick("agreement"); open(content)'>View</button>
@@ -920,8 +894,11 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Debit Note Uploaded</p>
-                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted on 13th Oct 2021</p>
+                                                <div class="date_" *ngFor="let data of item7; let i = index" >
+                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;"  >
+                                                        Submitted on {{ data.date }}
+                                                    </p>
+                                                </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -936,11 +913,16 @@
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
-                                        <div style="align-items: center; width: 68%;">
+                                        <div style="align-items: center; width: 68%;" >
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                                Credit Note Uploaded</p>
-                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted on 13th Oct 2021</p>
+                                                Credit Note Uploaded </p>
+                                                <div class="date_" *ngFor="let data of item5; let i = index" >
+                                                   
+                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;"  >
+                                                        Submitted on {{ data.date }}</p>
+
+                                                </div>
+                                            
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -976,9 +958,11 @@
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                                LC Copy Uploaded</p>
-                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted on 13th Oct 2021</p>
+                                                LC Copy Uploaded </p>
+                                                <div class="date_" *ngFor='let data of item11 let i = index'>
+                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                        Submitted on {{data.date}}</p>
+                                                </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -1192,8 +1176,11 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Insurance Copy Uploaded</p>
-                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted on 13th Oct 2021</p>
+                                                <div class="date_" *ngFor="let data of item9; let i = index">
+                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;"  >
+                                                        Submitted on {{ data.date }}
+                                                    </p>
+                                                </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -1229,8 +1216,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Opinion report Uploaded</p>
-                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted on 13th Oct 2021</p>
+                                                <div class="date_" *ngFor='let data of item15 let i = index'>
+                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                        Submitted on {{data.date}}</p>
+                                                </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">

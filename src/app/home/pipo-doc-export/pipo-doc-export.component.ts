@@ -34,6 +34,8 @@ import * as xlsx from 'xlsx';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { data } from 'jquery';
+import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
+
 @Component({
   selector: 'app-pipo-doc-export',
   templateUrl: './pipo-doc-export.component.html',
@@ -46,13 +48,26 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   bsModalRef: BsModalRef;
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
-  @ViewChild('epltable', { static: false }) epltable: ElementRef;
+  @ViewChild('piposummery', { static: false }) piposummery: ElementRef;
   @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
   public type: string = 'directive';
   public item1 = [];
+  public item5 = [];
+  public item3 : any;
   public item;
   public item2;
+  public item7 = [];
+  public item8 : any;
+  public item9 = [];
+  public item10 : any;
+  public item11 = [];
+  public item12 : any;
+  public item13 = [];
+  public item14 : any;
+  public item15 = [];
+  public item16 : any;
+  public item17 = [];
   public user;
   public selectedRow;
   public showInvoice = false;
@@ -68,6 +83,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   public optionsVisibility: any = [];
   public damagesUSD: any;
   public shippingBillArray: any = [];
+  public selectedrow;
+  public currentindex;
+
 
   Ax1: boolean;
   Ax2: boolean;
@@ -86,6 +104,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   Comoval: any = 'Commodity';
   nameSearch1 : string ='';
   Locaval: any = 'Location';
+  creditdata:any = 'date';
   nameSearch2 : string = '';
   startDate :any = '';
   endDate : any = '';
@@ -150,7 +169,10 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   item4: any;
   viewData1: any;
   obj: any;
-
+  item6: any;
+  
+  
+  
   constructor(
     @Inject(PLATFORM_ID) public platformId,
     private formBuilder: FormBuilder,
@@ -163,7 +185,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     private modalService: NgbModal,
     public appconfig: AppConfig,
     private changeDetectorRef: ChangeDetectorRef,
-    private modalService1: BsModalService
+    private modalService1: BsModalService,
+    private sharedData : SharedDataService
   ) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base);
@@ -207,6 +230,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   // }
   openModalWithComponent(a) {
     this.invoiceArr = this.pipoData[a];
+    console.log("pipoDataaaaaaa",this.pipoData[a]);
+    
     const initialState = {
       list: this.invoiceArr,
     };
@@ -239,10 +264,126 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+   
     this.id = this.route.snapshot.params['id'];
+ //third party API
+    this.documentService.getThird().subscribe(
+      (res: any) => {
+        console.log('HEre Response', res);
+        this.item16 = res.data;
+        for (let value of this.item16) {
+          for(let value1 of value.pipo){
+            const newVal = { ...value };
+                newVal['pipo1'] = value1
+                this.item17.push(newVal)
+              }
+        }
+      },
+      (err) => console.log(err)
+      );
+
+    //opion Api
+    this.documentService.getOpinionReport().subscribe(
+      (res: any) => {
+        console.log('HEre ResponseopionReport', res);
+        this.item14 = res.data;
+        for (let value of this.item14) {
+          for(let value1 of value.pipo){
+            const newVal = { ...value };
+                newVal['pipo1'] = value1
+                this.item15.push(newVal)
+              }
+        }
+      },
+      (err) => console.log(err)
+      );
+    //Agreement Api
+    this.documentService.getMasterService().subscribe(
+      (res: any) => {
+        console.log('HEre Response', res);
+        this.item12 = res.data;
+        for (let value of this.item12) {
+          for(let value1 of value.pipo){
+            const newVal = { ...value };
+                newVal['pipo1'] = value1
+                this.item13.push(newVal)
+              }
+        }
+      },
+      (err) => console.log(err)
+      );
+
+    //lc copy
+    this.documentService.getLetterLC().subscribe(
+      (res: any) => {
+        console.log('HEre Response23434355', res);
+        this.item10 = res.data;
+        for (let value of this.item10) {
+          for(let value1 of value.pipo){
+            const newVal = { ...value };
+                newVal['pipo1'] = value1
+                this.item11.push(newVal)
+              }
+        }
+      },
+      (err) => console.log(err)
+      );
+      // credit note Api
+      this.documentService.getCredit().subscribe(
+        (res: any) => {
+          console.log('HEre Responsesssssssss', res);
+          this.item3 = res.data;
+          this.item6 =this.item3.data;
+          console.log("credit data",this.item3);
+          
+          for (let value of this.item3) {
+            for(let value1 of value.pipo){
+              const newVal = { ...value };
+                  newVal['pipo1'] = value1
+                  this.item5.push(newVal)
+                }
+            
+          }
+        },
+        (err) => console.log(err)
+        );
+        //debit note Api
+ this.documentService.getDebit().subscribe(
+  (res: any) => {
+    console.log('HEre Response Debit Note', res);
+    this.item2 = res.data;
+    console.log("creditNotApi",this.item2);
+    
+    for (let value of this.item2) {
+      for(let value1 of value.pipo){
+        const newVal = { ...value };
+            newVal['pipo1'] = value1
+            this.item7.push(newVal)
+          }
+    }
+  },
+  (err) => console.log(err)
+  );
+   //Insurance Api
+   this.documentService.getInsurance().subscribe(
+    (res: any) => {
+      console.log('HEre Response', res);
+      this.item8 = res.data;
+      for (let value of this.item8) {
+        for(let value1 of value.pipo){
+          const newVal = { ...value };
+              newVal['pipo1'] = value1
+              this.item9.push(newVal)
+            }
+      }
+    },
+    (err) => console.log(err)
+    );
     console.log('sjsj');
     console.log(this.id);
     if (this.id) {
+      console.log("amaniiiiiiiiiiiiiiiii");
+      
       console.log(4845131351315131351351);
       this.documentService.getPipo().subscribe(
         (res: any) => {
@@ -250,6 +391,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
           this.item = res.data;
 
           for (let value of this.item) {
+            
             if (value['file'] == 'export') {
               console.log('avvvvvvvvvv');
               this.item1.push(value);
@@ -257,24 +399,41 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
             }
           }
           this.getMaster();
+          this.documentService.getPipoByPipoNo(this.id).subscribe(
+            (data) => {
+              let index = this.route.snapshot.params['index'];
+              console.log('king123');
+              console.log(data);
+              console.log(data['data'][0]);
+              this.getInvoices(data['data'][0], index);
+            },
+            (error) => {
+              console.log('error');
+            }
+          );
         },
         (err) => console.log(err,"**********")
       );
+  
 
+ 
 
-
-      this.documentService.getPipoByPipoNo(this.id).subscribe(
-        (data) => {
-          let index = this.route.snapshot.params['index'];
-          console.log('king123');
-          console.log(data);
-          console.log(data['data'][0]);
-          this.getInvoices(data['data'][0], index);
-        },
-        (error) => {
-          console.log('error');
-        }
-      );
+ 
+  // lccopy api
+  
+  
+    // this.documentService.getPipoByPipoNo(this.id).subscribe(
+    //     (data) => {
+    //       let index = this.route.snapshot.params['index'];
+    //       console.log('king123');
+    //       console.log(data);
+    //       console.log(data['data'][0]);
+    //       this.getInvoices(data['data'][0], index);
+    //     },
+    //     (error) => {
+    //       console.log('error');
+    //     }
+    //   );
       // this.documentService.getMaster1().subscribe(
       //   (data) => {
       //     console.log("Fresh Data" ,data);
@@ -282,6 +441,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       //   (error) => {}
       // );
     } else {
+      console.log("docmachinnnnnnnnnnnn");
+      
       console.log(88888888888888);
       // this.route.params.subscribe(params => {
       //   this.file = this.route.snapshot.params['id'];
@@ -372,6 +533,23 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         console.log('error');
       }
     );
+   
+
+   //redirect code trail
+  //  let rows = {
+  //     "pi_poNo":''
+  //   }
+   
+    // let index = this.route.snapshot.params['index'];
+    // if(this.id){
+    // console.log("this is id ",this.id,this.pipoNo);
+    
+    //   this.showInvoice = true;
+    //   this.getInvoices(selectedRowValues, this.i);
+    // }
+    // rows.pi_poNo = this.id
+   //rediect code trail demo above 
+
   }
   clickBuyer(value) {
     let commoArray = []
@@ -473,6 +651,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.toggle2 = true;
     console.log(a);
     this.beneValue = this.pipoData.buyerName;
+    console.log("chechingggggggggg",this.pipoData);
+    
     this.commoArray = this.pipoData.commodity;
     console.log(this.commoArray);
     this.loc = this.pipoData.location;
@@ -493,7 +673,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       if (this.pipoData.doc1) {
         this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
           this.pipoData.doc1
-        );
+         
+          
+        ); console.log(this.pipoData.doc1,"hey***************#######");
       } else {
         this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
           this.pipourl11
@@ -542,7 +724,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
   getInvoices(selectedRowValues, i) {
     console.log(selectedRowValues.pi_poNo);
-    // this.showInvoice = true
+    this.showInvoice = true
     this.router.navigate([
       'home/pipoDocExport',
       {
@@ -567,8 +749,10 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     console.log('88888888888888888888888', this.shippingBillArray);
     console.log('SELECTED', selectedRowValues);
     console.log('INDEX', i);
-    console.log(selectedRowValues.doc);
+    console.log(selectedRowValues.doc,"hiiiiii");
     this.pipoData = selectedRowValues;
+    console.log(this.pipoData ,"helooooooooo");
+    
     this.payTerm = this.pipoData.paymentTerm;
     console.log(this.pipoData);
     console.log(this.pipoData.paymentTerm);
@@ -616,13 +800,18 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   }
   newPipo() {
     console.log('upload');
+    // let exportbtn = document.getElementById('export')
+    // exportbtn.classList.add('nothing');
+  
+    // console.log(exportbtn,"export");
+   
     this.router.navigate(['home/upload', { file: 'export', document: 'pipo' }]);
   }
   newShipping() {
     this.router.navigate([
       'home/upload',
       {
-        // file: 'export',
+        file: 'export',
         document: 'sb',
         // pipo: this.pipoData.pi_poNo,
         // bene: this.pipoData.buyerName,
@@ -686,14 +875,18 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     else if (a == 'Collection Bill') {
       this.router.navigate(['home/billLodgement']);
     }
-    // else if (a == 'Letter of Credit') {
-    //   if (this.pipoData.lcIssuance && this.pipoData.lcIssuance1) {
-    //     this.buttonToggle1 = !this.buttonToggle1
-    //     console.log('dhhh')
-    //     // this.router.navigate(['home/bill-under-collection', {
-    //     //   file: "nonlcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
-    //     // }]);
-    //   }
+    else if (a == 'Letter of Credit') {
+      // if (this.pipoData.lcIssuance && this.pipoData.lcIssuance1) {
+      //   this.buttonToggle1 = !this.buttonToggle1
+      //   console.log('dhhh')
+        this.router.navigate(['/home/upload',{
+          file:'export',
+          document:'lcCopy',
+          pipo: this.pipoData.pi_poNo,
+        }]);
+        // , {file: "nonlcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+        // }]);
+      }
     //   else if (this.pipoData.lcIssuance) {
     //     this.buttonToggle1 = !this.buttonToggle1
     //     console.log('2232')
@@ -708,11 +901,80 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     //   }
 
     // }
-  }
+  // }
+}
 
   changeCheckbox() {
     this.buyer = !this.buyer;
   }
+  //single page upload all documents
+  uploadShippingbill(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'sb',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName
+    }]);
+  }
+  uploadDebitnote(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'debitNote',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName
+    }]);
+  }
+  uploadCreditnote(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'creditNote',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName,
+      // id: this.selectedrow.pi_poNo,
+      page: 'details',
+      index: this.currentindex,
+    }]);
+   }
+   uploadInsurance(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'insuranceCopy',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName
+    }]);
+   }
+   uploadLccopy(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'lcCopy',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName
+    }]);
+   }
+   uploadThirdparty(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'tryPartyAgreement',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName
+    }]);
+   }
+   uploadMaster(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'agreement',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName
+    }]);
+   }
+   uploadOpinion(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'opinionReport',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName
+    }]);
+   }
 
   openSubDoc(a) {
     console.log(a);
@@ -907,6 +1169,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.toggle1=false;}
   hide(data, i) {
     this.showInvoice = true;
+    this.selectedrow = data;
+    this.currentindex = i;
     this.getInvoices(data, i);
   }
 
@@ -1018,7 +1282,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
   exportToExcel() {
     const ws: xlsx.WorkSheet =
-    xlsx.utils.table_to_sheet(this.epltable.nativeElement);
+    xlsx.utils.table_to_sheet(this.piposummery.nativeElement);
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'epltable.xlsx');
@@ -1299,3 +1563,7 @@ export class ModalContentComponent1 implements OnInit {
     XLSX.writeFile(wb, 'SheetJS.xlsx');
   }
 }
+function selectedRowValues(selectedRowValues: any, i: any) {
+  throw new Error('Function not implemented.');
+}
+

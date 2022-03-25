@@ -126,6 +126,16 @@ export class ViewDocumentComponent implements OnInit {
     this.sb = true;
     this.showInvoice = false;
   }
+  newShipping(){
+    this.router.navigate([
+      'home/upload',
+      {
+        file: 'export',
+        document: 'sb',
+        
+      },
+    ]);
+  }
 
   getTransactions(selectedRowValues) {
     this.documentService.getTask({ pi_poNo: selectedRowValues, file: "advance" }).subscribe(

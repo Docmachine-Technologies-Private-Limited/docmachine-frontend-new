@@ -1,9 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+
 import { DocumentService } from 'src/app/service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from './../../service/user.service'
+import { UserService } from './../../service/user.service';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
+import { ActivatedRoute, Data, NavigationStart, Router } from '@angular/router';
+import * as xlsx from 'xlsx';
 
 @Component({
   selector: 'app-credit-note',
@@ -11,7 +24,7 @@ import { UserService } from './../../service/user.service'
   styleUrls: ['./credit-note.component.scss']
 })
 export class CreditNoteComponent implements OnInit {
-
+  @ViewChild('creditnotes', { static: false }) creditnotes: ElementRef;
   public item : any;
   public item1 = [];
   public viewData : any;
@@ -25,13 +38,14 @@ export class CreditNoteComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private modalService: NgbModal,
     private toastr: ToastrService,
+    private router: Router,
     private userService: UserService
   ) { }
 
   ngOnInit(): void {
     this.documentService.getCredit().subscribe(
       (res: any) => {
-        console.log('HEre Response', res);
+        console.log('HEre Responsesssssssss', res);
         this.item = res.data;
         for (let value of this.item) {
           for(let value1 of value.pipo){
@@ -93,6 +107,16 @@ toSave(data, index){
 
 
 }
+newDebit(){
+  this.router.navigate(['home/upload', { file: 'export', document: 'debitNote' }]);
+}
+exportToExcel() {
+  const ws: xlsx.WorkSheet =
+  xlsx.utils.table_to_sheet(this.creditnotes.nativeElement);
+  const wb: xlsx.WorkBook = xlsx.utils.book_new();
+  xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+  xlsx.writeFile(wb, 'creditnotes.xlsx');
+ }
 
 toEdit(index){
   this.optionsVisibility[index] = true;

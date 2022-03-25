@@ -1,7 +1,20 @@
 * {
     font-family: "Poppins", sans-serif;
 }
-
+.listDocument ul{
+        padding: 0px;
+}
+.listDocument li{
+        display: inline-block;
+        width: auto;
+        font-size: 14px;
+        list-style: outside none none;
+        border-right: 1px solid #525151;
+        padding: 0px 7px;
+}
+.lastList {
+    border-right: none !important;
+}
 
 input[type="date"]::before {
 	color: #999999;
@@ -1688,4 +1701,30 @@ input[type=number]::-webkit-outer-spin-button {
     font-size: 22px;
     margin-bottom: 12px;
     margin-top: 20px
+}
+.side_document_list{
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 0.3px solid rgba(0, 0, 0, 0.2);
+    padding-left: 8%;
+    margin-left: -5px !important;
+}
+.filter{
+    margin-left: 20.7rem; 
+    margin-right: 5px;
+    color: #ffffff !important; 
+    font-weight: 100 ; 
+    font-family: Poppins ,sans-serif;
+    padding: 5px 8px;
+    font-size: 14px;
+    background-color: #49A2D7;
+    border: none;
+    border-radius: 5px;
+}
+@media screen and (max-width:1300px){
+    .filter{
+        margin-left: 4.5rem;
+    }
 }

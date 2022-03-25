@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { DocumentService } from "../../service/document.service";
 import { UserService } from "../../service/user.service";
 import { ToastrService } from "ngx-toastr";
+import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 @Component({
   selector: "app-sidenav",
   templateUrl: "./sidenav.component.html",
@@ -71,17 +72,32 @@ export class SidenavComponent implements OnInit {
   new12: boolean = false;
   new13: boolean = false;
   new14: boolean;
+  new15: boolean;
+  new16: boolean;
+  new17: boolean;
+  new19: boolean;
+  new18: boolean;
 
   constructor(
+
     public router: Router,
     public authservice: AuthenticateService,
     public authGuard: AuthGuard,
     private documentService: DocumentService,
     public userService: UserService,
-    private toastr: ToastrService
-  ) { }
+    private toastr: ToastrService,
+    private sharedData : SharedDataService
+  ) {
+   
+    // this.sharedData.currentDashBoard.subscribe(message => this.status5 = message)
+    // this.sharedData.currentExport.subscribe(message => this.status7 = message)
+
+
+     this.newHight()
+    }
 
   async ngOnInit() {
+    
     console.log("side nav")
     this.id = await this.userService.getUserDetail();
     console.log(this.id)
@@ -127,11 +143,6 @@ export class SidenavComponent implements OnInit {
     this.view = !this.view;
 
   }
-
-  public exportTask() {
-    this.mt2 = !this.mt2;
-  }
-
   public idpmsTask() {
     this.mt3 = !this.mt3;
   }
@@ -139,12 +150,124 @@ export class SidenavComponent implements OnInit {
   public edpmsTask() {
     this.mt4 = !this.mt4;
   }
-  //export dropdown highlight
-  public newTask() {
-    this.status = !this.status;
-    this.router.navigate(["home/pipoDoc"]);
+  newHight(){
+    if(this.router.url == '/home/dashboardTask'){
+      this.status5 = true;
+    }
+    else if(this.router.url == '/home/pipoDocExport'){
+      this.new = true;
+      this.status7 = true;
+       
+    }
+    else if(this.router.url == '/home/viewDocument/sb'){
+      this.new1 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/creditNote'){
+      this.new2 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/debitNote'){
+      this.new3 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/insuranceDocument'){
+      this.new4 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/letterOfCredit-LC'){
+      this.new5 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/master-services'){
+      this.new6 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/try-Party'){
+      this.new7 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/opinion-report'){
+      this.new8 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/exportHome'){
+      this.new9 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/billLodgement'){
+      this.new10 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/billLodgement'){
+      this.new11 = true;
+      this.status7 = true; 
+    }
+    
+    else if(this.router.url == '/home/packingCreditRequest'){
+      this.new12 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/packingCreditRequest'){
+      this.new13 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/inwardRemittanceAdvice'){
+      this.new14 = true;
+      this.status7 = true; 
+    }
+    else if(this.router.url == '/home/upload'){
+      this.status6 = true;
+    }
+    // else if(this.router.url == '/home/upload' , { file: 'export', document: 'pipo' }){
+    //   this.status6 = true;
+    //   this.new = false;
+    //   this.status7 = false;
+    // }
+    else if(this.router.url == '/home/manageUser'){
+      this.status8 = true;
+    }
+    else if(this.router.url == '/home/manageCustomer/import'){
+      this.status10 = true;
+      this.new15 = true;
+    }
+    else if(this.router.url == '/home/manageCustomer/export'){
+      this.status10 = true;
+      this.new16 = true;
+    }
+    else if(this.router.url == '/home/viewDocument/sb'){
+      this.status11 = true;
+      this.new17 = true;
+    }
+    else if(this.router.url == '/home/viewDocument/boe'){
+      this.status11 = true;
+      this.new18 = true;
+    }
+    else if(this.router.url == '/home/viewDocument/pipo'){
+      this.status11 = true;
+      this.new19 = true;
+    }
+    else if(this.router.url == '/home/help'){
+      this.status12 = true;
+    }
+    else if(this.router.url == '/home/t&c'){
+      this.status17 = true;
+    }
+    else if(this.router.url == '/home/account'){
+      this.status14 = true;
+    }
+    else if(this.router.url == '/home/pipoDoc'){
+      this.status = true;
+      this.status4 = true;
+    }
+   
   }
   
+  public newTask() {
+    this.status = true;
+    this.router.navigate(["home/pipoDoc"]);
+  }
+  //export dropdown highlight
   public newTask4(){
     this.status4 = true;
     this.status5  = false;
@@ -164,7 +287,7 @@ export class SidenavComponent implements OnInit {
 
   }
   public newTask5(){
-    this.status5 = true;
+  this.status5 = true;
   this.status4  = false;
   this.status6    = false;
   this.status7    = false;
@@ -179,6 +302,7 @@ export class SidenavComponent implements OnInit {
   this.status16   = false;
   this.status17   = false;
   this.status18   = false;
+  // this.sharedData.changeDashboard(true)
   }
   public newTask6(){
     this.status6 = true;
@@ -198,6 +322,7 @@ export class SidenavComponent implements OnInit {
   this.status18   = false;
   }
   public newTask7(){
+    this.router.navigate(["home/pipoDocExport"]);
     this.status7 = true;
     this.status4  = false;
     this.status5    = false;
@@ -213,8 +338,10 @@ export class SidenavComponent implements OnInit {
     this.status16   = false;
     this.status17   = false;
     this.status18   = false;
+    // this.sharedData.changeExport(true)
   }
   public newTask8(){
+    this.router.navigate(["/home/manageUser"])
     this.status8 = true;
     this.status4  = false;
     this.status5    = false;
@@ -369,7 +496,22 @@ export class SidenavComponent implements OnInit {
     this.status18   = false;
   }
   public newTask17(){
-    this.status16 = !this.status16;
+    this.status17 = true;
+    this.status4  = false;
+    this.status5    = false;
+    this.status6    = false;
+    this.status7    = false;
+    this.status8    = false;
+    this.status9   = false;
+    this.status11   = false;
+    this.status10   = false;
+    this.status12   = false;
+    this.status13   = false;
+    this.status14   = false;
+    this.status15   = false;
+    this.status16   = false;
+    this.status18   = false;
+    
   }
   public newTask18(){
     this.status18 = true;
@@ -411,9 +553,11 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
   }
   public newSub1() {
-    this.router.navigate(["/home/viewDocument/sb'"]);
+    this.router.navigate(["/home/viewDocument/sb"]);
     this.new1 = true;
     this.new = false;
     this.new2 = false;
@@ -429,6 +573,8 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
 
   }
   public newSub2() {
@@ -448,6 +594,8 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
   }
   public newSub3() {
     this.router.navigate(["/home/debitNote"]);
@@ -466,6 +614,8 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
 
   }
   public newSub4() {
@@ -485,9 +635,11 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
   }
   public newSub5() {
-    this.router.navigate(["home/pipoDocExport"]);
+    this.router.navigate(["/home/letterOfCredit-LC"]);
     this.new5 = true;
     this.new = false;
     this.new1 = false;
@@ -503,6 +655,8 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
     
   }
   public newSub6() {
@@ -522,6 +676,8 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
 
   }
   public newSub7() {
@@ -541,6 +697,8 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
   }
   public newSub8() {
     this.router.navigate(["/home/opinion-report"]);
@@ -558,6 +716,8 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
   }
   public newSub9() {
     this.router.navigate(["/home/exportHome"]);
@@ -575,6 +735,8 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
   }
   public newSub10() {
     this.router.navigate(["/home/billLodgement"]);
@@ -592,6 +754,8 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
   }
   public newSub11() {
     this.router.navigate(["/home/billLodgement"]);
@@ -609,6 +773,8 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
   }
   public newSub12() {
     this.router.navigate(["/home/packingCreditRequest"]);
@@ -626,6 +792,8 @@ export class SidenavComponent implements OnInit {
     this.new8 = false;
     this.new13 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
   }
   public newSub13() {
     this.router.navigate(["/home/packingCreditRequest"]);
@@ -643,10 +811,115 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new8 = false;
     this.new14 = false;
+    this.new16 = false;
+    this.new15 = false;
   }
   public newSub14() {
     this.router.navigate(["/home/inwardRemittanceAdvice"]);
     this.new14 = true;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13= false;
+    this.new16 = false;
+    this.new15 = false;
+  }
+  public newSub15() {
+    this.router.navigate(["/home/manageCustomer/import"]);
+    this.new15 = true;
+    this.new14 = false;
+    this.new16 = false;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13= false;
+  }
+  public newSub16() {
+    this.router.navigate(["/home/manageCustomer/export"]);
+    this.new16 = true;
+    this.new15 = false;
+    this.new14 = false;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13= false;
+  }
+  public newSub17() {
+    this.router.navigate(["/home/viewDocument/sb"]);
+    this.new17 = true;
+    this.new18 = false;
+    this.new19 = false;
+    this.new15 = false;
+    this.new14 = false;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13= false;
+  }
+  public newSub18() {
+    this.router.navigate(["/home/viewDocument/boe"]);
+    this.new18 = true;
+    this.new17 = false;
+    this.new19 = false;
+    this.new15 = false;
+    this.new14 = false;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13= false;
+  }
+  public newSub19() {
+    this.router.navigate(["/home/viewDocument/pipo"]);
+    this.new19 = true;
+    this.new18 = false;
+    this.new17 = false;
+    this.new15 = false;
+    this.new14 = false;
     this.new = false;
     this.new1 = false;
     this.new2 = false;
