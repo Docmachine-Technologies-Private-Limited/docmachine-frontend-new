@@ -52,9 +52,11 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   public Question10 = '';
   public buyerDetail: any = [];
   buyerValue: any = 'Select Buyer';
+  
   nameSearch : string ='';
   nameSearch1 : string ='';
   nameSearch2 : string = '';
+  nameSearch3 : string = '';
   startDate : any = '';
   endDate: any = '';
   pipo = false;
@@ -319,20 +321,30 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   hide(){
     this.isGenerate = !this.isGenerate
   }
+  removeshipping(i) {
+    this.itemArray1.splice(i, 1)
+  }
+  removepipo(i) {
+    this.itemArray.splice(i, 1)
+  }
 
-  addTofilter(event ,i){
+  addTofilter(event ,id){
     let removeArray =[];
      this.pipo=true;
      this.ship=false;
      this.itemArray1 = []
     if(event.target.checked){
+      for(let element of this.item ){
+        if(element._id == id){
+          this.itemArray.push(element)
+        }
+      }
       
-       this.itemArray.push(this.item[i])
     }
     else{
     if(this.itemArray.length){
       this.itemArray.forEach(element => {
-        if(element._id != this.item[i]._id){
+        if(element._id != id){
           removeArray.push(element);
         }
       });
@@ -342,19 +354,25 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   console.log("test",this.itemArray);
   }
 
-  addTofilter1(event ,i){
+  addTofilter1(event ,id){
     let removeArray  = []
       this.ship = true;
       this.pipo = false;
       this.itemArray=[];
     if(event.target.checked){
+
+      for(let element of this.item2 ){
+        if(element._id == id){
+          this.itemArray1.push(element)
+        }
+      }
       
-       this.itemArray1.push(this.item2[i])
+       
     }
     else{
       if(this.itemArray1.length){
         this.itemArray1.forEach(element => {
-          if(element._id != this.item2[i]._id){
+          if(element._id != id){
             removeArray.push(element);
           }
         });

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit,ChangeDetectorRef,Component,ElementRef,Inject,Input,OnInit,PLATFORM_ID,ViewChild,} from '@angular/core';
+import * as xlsx from 'xlsx';
 import { DocumentService } from 'src/app/service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -11,7 +12,7 @@ import { UserService } from './../../service/user.service'
   styleUrls: ['./insurance-document.component.scss']
 })
 export class InsuranceDocumentComponent implements OnInit {
-
+  @ViewChild('insurance', { static: false }) insurance: ElementRef;
   public item : any;
   public item1 = [];
   public viewData : any;
@@ -98,5 +99,12 @@ private getDismissReason(reason: any): string {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Insurance Document Row Is In Edit Mode');
   }
+  exportToExcel() {
+    const ws: xlsx.WorkSheet =
+    xlsx.utils.table_to_sheet(this.insurance.nativeElement);
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, 'insurance.xlsx');
+   }
 
 }

@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+
 import { DocumentService } from 'src/app/service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../service/user.service'
+import {AfterViewInit,ChangeDetectorRef,Component,ElementRef,Inject,Input,OnInit,PLATFORM_ID,ViewChild,} from '@angular/core';
+import * as xlsx from 'xlsx';
 import { Router } from '@angular/router';
 
 
@@ -13,7 +15,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./debit-note.component.scss']
 })
 export class DebitNoteComponent implements OnInit {
-
+  @ViewChild('debitnotes', { static: false }) debitnotes: ElementRef;
   public item : any;
   public item1 = [];
   public viewData : any;
@@ -107,4 +109,11 @@ newDebit() {
   console.log('upload');
   this.router.navigate(['home/upload', { file: 'export', document: 'debitNote' }]);
 }
+exportToExcel() {
+  const ws: xlsx.WorkSheet =
+  xlsx.utils.table_to_sheet(this.debitnotes.nativeElement);
+  const wb: xlsx.WorkBook = xlsx.utils.book_new();
+  xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+  xlsx.writeFile(wb, 'debitnotes.xlsx');
+ }
 }

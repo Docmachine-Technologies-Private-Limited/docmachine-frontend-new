@@ -83,7 +83,8 @@ import { FilternewPipe } from './filterpipo/filternew.pipe';
 import { FilterdatePipe } from './datefilter/filterdate.pipe';
 import { FilteraPipe } from './Export/filtera/filtera.pipe';
 import { FilterbPipe } from './Export/filterb/filterb.pipe';
-
+import { FiterbuyerPipe } from './Export/fiterbuyer.pipe';
+import { SharedDataService } from './shared-Data-Servies/shared-data.service'
 
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -170,6 +171,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     
     FilteraPipe,
     FilterbPipe,
+    FiterbuyerPipe,
   ],
   imports: [
     CommonModule,
@@ -493,7 +495,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ModalModule.forRoot(),
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal],
+  providers: [ConfirmDialogService, NgbModal,SharedDataService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //   exports: [SharedProjectsModule]
   exports: [MatProgressBarModule, MatTabsModule, ConfirmDialogComponent],

@@ -15,17 +15,24 @@
      </div> -->
 
 
-        <h3 class="heading" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
-        <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
-        <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
-        <h3 class="heading" *ngIf='docu == "debitNote"'>Upload Debit Note File</h3>
-        <h3 class="heading" *ngIf='docu == "irAdvice"'>Upload Forex Advice Documnet</h3>
-        <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" && docu != "irAdvice" && docu != "debitNote" '>Upload Document</h3>
-        <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb"' style="margin-bottom: 20px;">
-            <p style="color: rgb(0, 0, 0);margin-left: 40px">
-                Choose the type of document
-            </p>
-            <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
+      <h3 class="heading" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
+      <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
+      <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
+      <h3 class="heading" *ngIf='docu == "debitNote"'>Upload debitNote</h3>
+      <h3 class="heading" *ngIf='docu == "irAdvice"'>Upload Forex Advice Documnet</h3>
+      <h3 class="heading" *ngIf='docu == "creditNote"'>Upload creditNote</h3>
+      <h3 class="heading" *ngIf='docu == "insuranceCopy"'>Upload Insurance Copy</h3>
+      <h3 class="heading" *ngIf='docu == "lcCopy"'>Upload LC Copy</h3>
+      <h3 class="heading" *ngIf='docu == "agreement"'>Upload Master service agreement</h3>
+      <h3 class="heading" *ngIf='docu == "tryPartyAgreement"'>Upload Tri Party Document</h3>
+      <h3 class="heading" *ngIf='docu == "opinionReport"'>Upload Opinion Report</h3>
+
+      <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" && docu != "irAdvice" && docu != "debitNote" && docu !="lcCopy" && docu !="insuranceCopy" && docu !="creditNote" && docu !="agreement" && docu !="opinionReport" && docu !="tryPartyAgreement"'>Upload Document</h3>
+      <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' style="margin-bottom: 20px;">
+          <p style="color: rgb(0, 0, 0);margin-left: 40px">
+              Choose the type of document
+          </p>
+          <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
       <option value="">Document Type</option>
       <option value="import">Import</option>
       <option value="export">Export</option>
@@ -43,7 +50,7 @@
       <option value="boe">BOE</option>
       <option value="PO">PO</option>
       <option value="PI">PI</option>
-      <option value="thirdParty">Tri Party Document</option>
+      <option value="tryPartyAgreement">Tri Party Document</option>
       <option value="debitNote">Debit Note</option>
       <option value="creditNote">Credit Note</option>
       <option value="blCopy">BL Copy</option>
@@ -71,7 +78,7 @@
       <option value="sb">Shipping Bill</option>
       <option value="PO">PO</option>
       <option value="PI">PI</option>
-      <option value="thirdParty">Tri Party Document</option>
+      <option value="tryPartyAgreement">Tri Party Document</option>
       <option value="debitNote">Debit Note</option>
       <option value="creditNote">Credit Note</option>
       <option value="blCopy">BL Copy</option>
@@ -248,22 +255,24 @@
             </div>
 
         </div>
-        <div *ngIf='docu == "sb"' style="margin-bottom: 20px;">
+
+
+        <div *ngIf='docu == "sb" && file == "export"' style="margin-bottom: 20px;">
             <div style="display: flex; align-items: center; margin-left: 30px;">
                 <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
-                <div class="customDropdown" style="flex-direction:row; ">
-                    <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
+                <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;" >
+                    <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
           <i id="up3" style="display: none" class="fas fa-angle-up"></i>
         </span>
-                    <div class="dropdown-content" style="margin-top: -2px;">
-                        <p *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.buyerName )'>
-                            <a *ngIf='bene.file == "export"'> PI-{{bene.pi_poNo}}-{{bene.buyerName}}</a>
-                        </p>
+                    <div class="dropdown-content"  style="margin-top: -2px;min-width:200px;">
+                        <div *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.buyerName )'>
+                            <a style="min-width: 100%;" *ngIf='bene.file == "export"'> PI-{{bene.pi_poNo}}-{{bene.buyerName}}</a>
+                        </div>
                         <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
                     </div>
                 </div>
-            </div> <br>
+        </div> <br>
 
             <!-- <div *ngIf="documentType1 == 'export' && documentType === 'debitNote'">
               <input class="pinput" name="ttDate" type="text" placeholder="Debit Note">
@@ -406,7 +415,7 @@
         </div>
 
 
-        <div *ngIf="documentType === 'PI' || documentType === 'PO' || documentType === 'thirdParty' || documentType === 'debitNote' || documentType === 'creditNote' || documentType === 'blCopy' || documentType === 'agreement' || documentType === 'opinionReport' || documentType === 'lcCopy' || documentType === 'insuranceCopy' || documentType === 'deliveryOrder' || documentType === 'thirdParty' "
+        <div *ngIf="documentType === 'PI' || documentType === 'PO' || documentType === 'tryPartyAgreement' || documentType === 'debitNote' || documentType === 'creditNote' || documentType === 'blCopy' || documentType === 'agreement' || documentType === 'opinionReport' || documentType === 'lcCopy' || documentType === 'insuranceCopy' || documentType === 'deliveryOrder' || documentType === 'tryPartyAgreement' "
             class="form" method="POST">
             <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config1" class="dropzone dropzone-container" id="dropzone" />
             <i class="fas fa-file-upload"></i>
@@ -967,7 +976,7 @@
 
         <!-- Third Party Input File -->
 
-        <form *ngIf="thirdParty && !override" class="" #values="ngForm" (ngSubmit)="onSubmitThird(values)">
+        <form *ngIf="tryPartyAgreement && !override" class="" #values="ngForm" (ngSubmit)="onSubmitThird(values)">
 
             <div style="
               width: 82%;
