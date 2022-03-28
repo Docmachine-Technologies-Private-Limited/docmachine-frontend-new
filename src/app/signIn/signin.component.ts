@@ -1,8 +1,8 @@
-import { UserService } from './../service/user.service';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { ToastrService } from 'ngx-toastr';
+import {UserService} from './../service/user.service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms'
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-detail',
@@ -16,15 +16,14 @@ export class SigninComponent implements OnInit {
   isDisabled: boolean = false;
   isVisible: boolean = false;
   submitted: boolean = false;
-  qr: boolean;
-  tfa: any;
-  authcode: any;
   otp: boolean;
   value: any;
   data1: any;
   data: any;
+
   constructor(private formBuilder: FormBuilder, private userService: UserService,
-    private router: Router, private toastr: ToastrService) { }
+              private router: Router, private toastr: ToastrService) {
+  }
 
   ngOnInit(): void {
     this.password = 'password';
@@ -35,10 +34,11 @@ export class SigninComponent implements OnInit {
     });
 
   }
-  
 
 
-  get f() { return this.loginForm.controls; }
+  get f() {
+    return this.loginForm.controls;
+  }
 
   onClick() {
     if (this.password === 'password') {
@@ -48,6 +48,11 @@ export class SigninComponent implements OnInit {
       this.password = 'password';
       this.show = false;
     }
+  }
+
+  loginError() {
+    this.toastr.error('Login unsuccessful!, Please check the details');
+    this.isDisabled = false;
   }
 
   onSubmit() {
@@ -62,122 +67,66 @@ export class SigninComponent implements OnInit {
       this.userService.login(this.loginForm.value)
         .subscribe(
           data => {
-            this.data = data
+            this.userService.addLoginData(data);
+            this.data = data;
             if (data['result']) {
               this.userService.addToken(data['result'].token);
-              this.userService.getUser().subscribe(
-                data1 => {
-                  this.data1 = data1
-                  if (data['result']['dataURL']) {
-                    this.submitted = false
-                    this.isDisabled = false;
-                    this.qr = true
-                    this.tfa = data['result']
-                  }
-                  else {
-                    this.otp = true
-                    console.log("king123")
-                    // console.log(data['result'])
-                    // if (data['result']) {
-                    //
-                    //   if (data['result']['role'] == 'ca') {
-                    //     this.userService.role = data['result']['role']
-                    //     this.router.navigate(['/home/caDocuments/all'])
-                    //   }
-                    //   else {
-                    //     this.userService.role = data['result']['role']
-                    //     if (data1['data'][0].companyId) {
-                    //       this.router.navigate(['/home/dashboardNew'])
-                    //     }
-                    //     else {
-                    //       this.router.navigate(['createTeam'])
-                    //     }
-                    //   }
-                    // }
-                    // else {
-                    //   console.log()
-                    //   this.toastr.error('Login unsuccessful!, Please check the details');
-                    //   this.isDisabled = false;
-                    // }
-                  }
-
-
-                },
-                error1 => {
-                  this.toastr.error('Login unsuccessful!, Please check the details');
-                  this.isDisabled = false;
-                  console.log(error1)
-                  console.log("error")
-                });
+              if (data['result']['dataURL']) {
+                this.router.navigate(['/2FA']);
+              } else {
+                this.otp = true;
+                // if (data['result']) {
+                //   this.userService.addToken(data['result'].token);
+                this.userService.getUser().subscribe(
+                  data1 => {
+                    this.data1 = data1
+                  },
+                  error1 => {
+                    this.loginError();
+                  });
+              }
+            } else {
+              this.loginError();
             }
-            else {
-              console.log(data)
-              console.log("error")
-              this.toastr.error('Login unsuccessful!, Please check the details');
-              this.isDisabled = false;
-            }
-
           },
           error => {
-            this.toastr.error('Login unsuccessful!, Please check the details');
-            this.isDisabled = false;
-            console.log(error)
-            console.log("error")
+            this.loginError();
           });
-    }
-    else {
-      console.log(this.value)
-      console.log(this.data)
-      console.log(this.data1['data'][0]['emailIdVerified'])
+    } else {
       this.userService.verify(this.value)
         .subscribe(
           data => {
-            console.log("king123")
-            console.log(data)
             if (this.data1['data'][0].emailId == 'docmachinetec@gmail.com' || this.data1['data'][0].emailId == 'tramsdocmachine@gmail.com' || this.data1['data'][0].emailId == 'fintech.innovations2021@gmail.com') {
               this.router.navigate(['/home/powerAdmin/pending'])
-            }
-            else {
+            } else {
               if (this.data1['data'][0]['emailIdVerified']) {
                 if (this.data1['data'][0]['verified'] == 'yes') {
                   if (data['status'] == 200) {
                     this.toastr.success(data['message']);
                     if (this.data['result']['role'] == 'ca') {
-                      console.log('a')
-                      this.userService.role = this.data['result']['role']
+                      this.userService.role = this.data['result']['role'];
                       this.router.navigate(['/home/caDocuments/all'])
-                    }
-                    else {
-                      console.log('b')
-                      this.userService.role = this.data['result']['role']
+                    } else {
+                      this.userService.role = this.data['result']['role'];
                       if (this.data1['data'][0].companyId) {
-                        console.log('d')
                         this.router.navigate(['/home/dashboardTask'])
-                      }
-                      else {
-                        console.log('d')
-                        this.router.navigate(['createTeam'])
+                      } else {
+                        this.router.navigate(['createTeam']);
                       }
                     }
-                  }
-                  else {
+                  } else {
                     this.toastr.error(data['message']);
                   }
-                }
-                else {
+                } else {
                   this.router.navigate(['newUser'])
                 }
-              }
-              else {
+              } else {
                 this.router.navigate(['notVerified'])
               }
             }
-
-
           },
           error => {
-            this.toastr.error('something wrong, please check the details!');
-            console.log("error")
+            this.loginError();
           });
     }
 
@@ -194,28 +143,4 @@ export class SigninComponent implements OnInit {
     this.router.navigate(['/signup'])
 
   }
-  
-
-  confirm() {
-    console.log(this.authcode)
-    this.userService.verify(this.authcode)
-      .subscribe(
-        data => {
-          console.log("king123")
-          console.log(data)
-
-          if (data['status'] == 200) {
-            this.toastr.success(data['message']);
-            this.qr = false
-          }
-          else {
-            this.toastr.error(data['message']);
-          }
-        },
-        error => {
-          this.toastr.error('something wrong, please check the details!');
-          console.log("error")
-        });
-  }
-
 }

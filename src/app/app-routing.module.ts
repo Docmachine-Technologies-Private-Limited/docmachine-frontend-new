@@ -19,6 +19,7 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { NotVerifiedComponent } from "./not-verified/not-verified.component";
 import { MembersigninComponent } from "./membersignin/membersignin.component";
 import { PdfComponent } from "./pdf/pdf.component";
+import {TwoFactorAuthComponent} from './shared/components/two-factor-auth';
 
 const routes: Routes = [
   {
@@ -30,6 +31,11 @@ const routes: Routes = [
   {
     path: "forgotpassword",
     component: ForgotPasswordComponent,
+    pathMatch: "full",
+  },
+  {
+    path: "2FA",
+    component: TwoFactorAuthComponent,
     pathMatch: "full",
   },
   {
