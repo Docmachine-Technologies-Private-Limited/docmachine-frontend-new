@@ -5,9 +5,10 @@ import { SigninRoutingModule } from './signin-routing.module';
 
 import { SigninComponent } from './signin.component';
 import { SharedModule } from '../shared/shared.module';
+import {TwoFactorAuthComponent} from "../shared/components/two-factor-auth";
 
 @NgModule({
-  declarations: [SigninComponent],
+  declarations: [SigninComponent, TwoFactorAuthComponent],
   imports: [CommonModule, SharedModule, SigninRoutingModule, ReactiveFormsModule]
 })
 export class SigninModule {}
