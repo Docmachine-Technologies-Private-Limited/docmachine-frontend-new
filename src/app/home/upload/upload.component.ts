@@ -671,7 +671,7 @@ console.log(this.res)
             console.log("king123");
             console.log("DATA", data);
             this.message = "";
-            this.router.navigate(["home/view"]);
+            this.router.navigate(["home/viewDocument/sb"]);
             //this.router.navigate(['/login'], { queryParams: { registered: true }});
           },
           (error) => {
@@ -683,7 +683,7 @@ console.log(this.res)
         (data) => {
           console.log("king123");
           console.log(data);
-          this.router.navigate(["home/dashboardNew"]);
+          this.router.navigate(["home/viewDocument/sb"]);
           //this.router.navigate(['/login'], { queryParams: { registered: true }});
         },
         (error) => {
