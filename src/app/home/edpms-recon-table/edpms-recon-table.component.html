@@ -1,0 +1,257 @@
+<div>
+    <div class="banner">
+        <button type="button" class="drawer-toggle drawer-hamburger">
+      <span class="sr-only">toggle navigation</span>
+      <span class="drawer-hamburger-icon"></span>
+    </button>
+        <nav class="drawer-nav" role="navigation">
+            <ul class="drawer-menu">
+                <li><a class="drawer-brand" href="#">Brand</a></li>
+                <li><a class="drawer-menu-item" href="#">Nav1</a></li>
+                <li><a class="drawer-menu-item" href="#">Nav2</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div style="margin-left: 210px" class="content-wrap">
+    <main id="content" class="content table-padding" role="main">
+
+        <div style="
+      display: flex;
+      flex-direction: rows;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0.8%;
+      padding-left: 3%;
+      padding-bottom: 0.8%;
+      border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
+      margin-left: 40px;
+      width: 94%;
+  ">
+            <!-- *ngIf="!showInvoice" -->
+            <div style="display: flex; align-items: center">
+                <h3 class="heading">EDPMS Recon</h3>
+                <!-- {{doc}} -->
+            </div>
+
+            <!-- <div class="dropdown">
+                Date:
+                <select name="subject" id="subject">
+              <option value="" selected="selected">Today</option>
+          </select> Type:
+                <select name="topic" id="topic">
+              <option value="" selected="selected">All</option>
+          </select>
+            </div> -->
+
+        </div>
+        <div style="
+        display: flex;
+        flex-direction: rows;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 0.8%;
+        padding-left: 3%;
+        padding-bottom: 0.8%;
+        margin-left: 40px;
+        width: 94%;
+    ">
+            <div style="display: flex; align-items: center">
+                <div class="customDropdown" style="width: 200px; margin-bottom: 10px; flex-direction:row; ">
+                    <span style="color: Black !important;">Select Bank</span>
+                    <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+    </span>
+                    <div class="dropdown-content" style="min-width:200px; margin-right:-26px; height: auto;">
+                        <a style="min-width:100%;">SBI Bank</a>
+                        <a style="min-width:100%;">HDFC Bank</a>
+                        <a style="min-width:100%;">AXIS Bank</a>
+                        <a style="min-width:100%;">ICICI Bank</a>
+                        <a style="min-width:100%;">CANARA Bank</a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding-top: 0.7%">
+                <button style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
+          background-color: #49A2D7;
+          border: none;
+          border-radius: 5px;">Export To Excel</button>
+                <!-- (click)="exportToExcel()" -->
+                <button class="upload-button">
+    <!-- (click)="newDebit()" -->
+  Upload New
+</button>
+            </div>
+        </div>
+        <div style="
+        display: flex;
+        flex-direction: rows;
+        align-items: center;
+        padding-left: 3%;
+        padding-top: -3%;
+        margin-top: -1%;
+        margin-left: 40px;
+        width: 94%;
+        border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
+    ">
+            <p style="font-size: 12px; border-right: 0.5px solid rgba(0, 0, 0, 0.2); padding-right: 10px;">Amount in via Export in DocMachine <span class="sb-no">5,31,000</span> INR</p>
+            <p style="font-size: 12px; padding-left: 10px;">Un Categorised Transactions <span class="sb-no">13</span> </p>
+        </div>
+
+        <div class="analytics">
+            <div style="width: 100%" class="analytics-side" #debitnotes>
+                <!-- *ngIf="!showInvoice" -->
+                <div style="width: 100%" class="row">
+                    <div style="width: 100%; margin: 0 -1.5%; height:523px" class="col-12 mb-lg padding" id="container">
+                        <!-- *ngIf="!showInvoice" -->
+                        <section style="width: 120%; margin-left: 10px" class="widget pb-0 box-shadow">
+                            <div style="margin: 0 -2%" class="widget-body p-0 support table-wrapper">
+                                <table style="width: 100%" class="table table-striped mb-0">
+                                    <!-- *ngIf='pipo' -->
+                                    <thead style="width: 100%">
+                                        <tr class="text-muted table-heading">
+                                            <th class="rect">
+                                                <img src="./assets/Rectangle-13.png" />
+                                            </th>
+                                            <th scope="col"><span class="pl-3">Shipping No.</span></th>
+                                            <th scope="col">Form No</th>
+                                            <th scope="col">Shipping Bill Date</th>
+                                            <th scope="col">Leo Date</th>
+                                            <th scope="col">Export Agency</th>
+                                            <th scope="col">Type of Export</th>
+                                            <th scope="col">AD Code</th>
+                                            <th scope="col">IE Code</th>
+                                            <th scope="col">IE Name</th>
+                                            <th scope="col">Port Code</th>
+                                            <th scope="col">STATUS</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-dark">
+                                        <tr class="table-row">
+                                            <!-- *ngFor="let data of item1; let i = index" -->
+
+                                            <!-- (click)="
+                                          getInvoices(data, i) && getTransactions(data.pi_poNo) -->
+                                            <th class="rect">
+                                                <img src="./assets/Rectangle-13.png" />
+                                            </th>
+                                            <th class="pl-4 fw-normal"></th>
+                                            <!-- {{ data.date }} -->
+
+                                            <td class="sb-no"> </td>
+                                            <!-- {{ data.pipo1 }} -->
+
+                                            <td>
+                                                <div>
+                                                    <!-- *ngIf="!optionsVisibility[i]" -->
+                                                    <!-- {{data.debitNoteNumber}} -->
+                                                </div>
+
+                                                <div>
+                                                    <!-- *ngIf="optionsVisibility[i]" -->
+                                                    <!-- <input class="tblInput form-control" name="debitNoteNumber" type="text" placeholder="Debit Note Number"> -->
+                                                    <!-- [(ngModel)]="data.debitNoteNumber" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <!-- *ngIf="!optionsVisibility[i]"
+                                                  {{data.totalDebitAmount}} -->
+                                                </div>
+
+                                                <div>
+                                                    <!-- *ngIf="optionsVisibility[i]" -->
+                                                    <!-- <input class="tblInput form-control" name="totalDebitAmount" type="text" placeholder="Total Debit Amount"> -->
+                                                    <!-- [(ngModel)]="data.totalDebitAmount" -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <!-- *ngIf="!optionsVisibility[i]"
+                                                  {{data.currency}}-->
+                                                </div>
+
+                                                <div>
+                                                    <!-- *ngIf="optionsVisibility[i]" -->
+                                                    <!-- <input class="tblInput form-control" name="currency" type="text" placeholder="Currency"> -->
+                                                    <!-- [(ngModel)]="data.currency" -->
+                                                </div>
+                                            </td>
+
+                                            <td></td>
+                                            <!-- {{data.buyerName}} -->
+                                            <td>
+                                                <!-- (click)=" openDebitNote(content); viewDN(data)" -->
+                                                <!-- view -->
+                                            </td>
+                                            <td>
+                                                <!-- (click)=" openDebitNote(content); viewDN(data)" -->
+                                                <!-- view -->
+                                            </td>
+                                            <td>
+                                                <!-- (click)=" openDebitNote(content); viewDN(data)" -->
+                                                <!-- view -->
+                                            </td>
+                                            <td>
+                                                <!-- (click)=" openDebitNote(content); viewDN(data)" -->
+                                                <!-- view -->
+                                            </td>
+                                            <td>
+                                                <!-- (click)=" openDebitNote(content); viewDN(data)" -->
+                                                <!-- view -->
+                                                <p style="color: orange;">Un-Catergorised</p>
+                                            </td>
+                                            <td>
+
+                                                <!-- <button class="savBtn">Save</button> -->
+                                                <!-- *ngIf="optionsVisibility[i]" (click)="toSave(data, i)" -->
+                                                <!-- <button class="savBtn">Edit</button> -->
+                                                <!-- *ngIf="!optionsVisibility[i]" (click)="toEdit(i)" -->
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #content let-modal>
+
+            <div class="modal-body">
+                <div class="row no-gutter">
+                    <!-- The image half -->
+                    <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
+
+
+                    <!-- The content half -->
+                    <div class="col-md-7" style="margin: 10px;">
+                        <div class="login d-flex py-5" style="padding: 0px !important;">
+
+                            <!-- Demo content-->
+                            <div class="container popup">
+                                <div class="row">
+                                    <div class="col-lg-10 col-xl-7 mrg">
+                                        <h6 class="display-6">Debit Note</h6>
+
+                                        <iframe width="315%" height="500px"></iframe>
+                                        <!-- [src]="viewData" -->
+                                        <button type="submit" style="margin-left: 250px;" class="submitBTN" (click)="modal.dismiss('Cross click')">OK</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End -->
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </ng-template>

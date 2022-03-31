@@ -49,6 +49,7 @@ export class SidenavComponent implements OnInit {
   status17: boolean = false;
   status18: boolean = false;
   status19: boolean = false;
+  status20: boolean = false;
   mt1: any;
   mt2: any;
   nt1: boolean;
@@ -77,6 +78,8 @@ export class SidenavComponent implements OnInit {
   new17: boolean;
   new19: boolean;
   new18: boolean;
+  new20: boolean;
+  new21: boolean;
 
   constructor(
 
@@ -246,6 +249,14 @@ export class SidenavComponent implements OnInit {
     else if(this.router.url == '/home/viewDocument/pipo'){
       this.status11 = true;
       this.new19 = true;
+    }
+    else if(this.router.url == '/home/viewDocument/edpms-recon'){
+      this.status11 = true;
+      this.new20 = true;
+    }
+    else if(this.router.url == '/home/viewDocument/edpms-recon-table'){
+      this.status11 = true;
+      this.new21 = true;
     }
     else if(this.router.url == '/home/help'){
       this.status12 = true;
@@ -534,6 +545,10 @@ export class SidenavComponent implements OnInit {
     this.status2 = !this.status2;
   }
  //export dropdown highlite
+
+ public newTask20(){
+
+ }
 
   public newTask1() {
     this.nt1 = !this.nt1;
@@ -916,6 +931,51 @@ export class SidenavComponent implements OnInit {
   public newSub19() {
     this.router.navigate(["/home/viewDocument/pipo"]);
     this.new19 = true;
+    this.new18 = false;
+    this.new17 = false;
+    this.new15 = false;
+    this.new14 = false;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13= false;
+  }
+  public newSub20(){
+    this.router.navigate(["/home/edpms-recon"]);
+    this.new20 = true;
+    this.new19 = false;
+    this.new18 = false;
+    this.new17 = false;
+    this.new15 = false;
+    this.new14 = false;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13= false;
+  }
+  public newSub21(){
+    this.router.navigate(["/home/edpms-recon-table"]);
+    this.new21 = true;
+    this.new20 = false;
+    this.new19 = false;
     this.new18 = false;
     this.new17 = false;
     this.new15 = false;

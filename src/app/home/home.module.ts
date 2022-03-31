@@ -84,7 +84,9 @@ import { FilterdatePipe } from './datefilter/filterdate.pipe';
 import { FilteraPipe } from './Export/filtera/filtera.pipe';
 import { FilterbPipe } from './Export/filterb/filterb.pipe';
 import { FiterbuyerPipe } from './Export/fiterbuyer.pipe';
-import { SharedDataService } from './shared-Data-Servies/shared-data.service'
+import { SharedDataService } from './shared-Data-Servies/shared-data.service';
+import { EdpmsReconComponent } from './edpms-recon/edpms-recon.component';
+import { EdpmsReconTableComponent } from './edpms-recon-table/edpms-recon-table.component'
 
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -168,10 +170,12 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     InwardRemittanceAdviceComponent,
     FilternewPipe,
     FilterdatePipe,
-    
+
     FilteraPipe,
     FilterbPipe,
     FiterbuyerPipe,
+    EdpmsReconComponent,
+    EdpmsReconTableComponent,
   ],
   imports: [
     CommonModule,
@@ -487,6 +491,16 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
           {
             path: "inwardRemittanceAdvice",
             component: InwardRemittanceAdviceComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "edpms-recon",
+            component: EdpmsReconComponent,
+            pathMatch: "full"
+          },
+          {
+            path: "edpms-recon-table",
+            component: EdpmsReconTableComponent,
             pathMatch: "full"
           },
         ],

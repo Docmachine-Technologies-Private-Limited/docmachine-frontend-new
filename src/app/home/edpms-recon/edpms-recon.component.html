@@ -1,0 +1,42 @@
+<div class="content-wrap">
+    <main id="content" class="content table-padding" role="main">
+
+        <h3 class="heading">New EDPMS Data</h3>
+
+        <label style="flex-direction:row; font-size: 20px; margin-top: 10px ;margin-left: -5px;color: #303030;  ">Select Bank*</label>
+        <div style="display: flex; align-items: center;">
+
+            <div class="customDropdown" style="width: 200px; margin-bottom: 10px; flex-direction:row; ">
+                <span style="color: Black !important;">Select Bank</span>
+                <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+    </span>
+                <div class="dropdown-content" style="min-width:200px; margin-right:-26px; height: auto;">
+                    <a style="min-width:100%;">SBI Bank</a>
+                    <a style="min-width:100%;">HDFC Bank</a>
+                    <a style="min-width:100%;">AXIS Bank</a>
+                    <a style="min-width:100%;">ICICI Bank</a>
+                    <a style="min-width:100%;">CANARA Bank</a>
+                </div>
+            </div>
+
+
+        </div>
+
+        <h3 class="heading2">Upload EDPMS Info</h3>
+
+        <div class="form" method="POST">
+            <input type="file" (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="config3" class="dropzone dropzone-container" id="dropzone" />
+            <i class="fas fa-file-upload"></i>
+            <h5>Drag and Drop files here to upload</h5>
+            <p>Files Supported: PDF, XLSX, Image, Scanner</p>
+            <button type="submit">Choose File</button>
+            <p>Maximum Size: 5MB</p>
+        </div>
+        <div class="progressbar" *ngIf="uploading">
+            <p class="processheading">IDPMS</p>
+            <div class="meter">
+                <span [style.width]="width + '%'"></span>
+            </div>
+        </div>
+    </main>
+</div>

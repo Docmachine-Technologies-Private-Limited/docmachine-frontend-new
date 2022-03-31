@@ -91,7 +91,7 @@
 
             </ul>
             <ul *ngIf="role != 'ca' && role != 'admin'" class="sidebar-nav">
-                <li class="" (click)="newTask5()"  [ngClass]="status5 ? 'b-color1' : 'nothing'">
+                <li class="" (click)="newTask5()" [ngClass]="status5 ? 'b-color1' : 'nothing'">
                     <!-- an example of nested submenu. basic bootstrap collapse component -->
                     <a (click)="hideIncoice()" [routerLink]="['/home/dashboardTask']" class="sidebar-content">
                         <span class="icon side-icon">
@@ -99,6 +99,7 @@
             </span> Dashboard
                     </a>
                 </li>
+
                 <li style="cursor: pointer" (click)="newTask4()" [ngClass]="status4 ? 'b-color1' : 'nothing'">
                     <a class="sidebar-content" style="cursor: pointer;">
                         <span class="icon side-icon">
@@ -193,12 +194,12 @@
                     <div class="main11" style=" color: #fff; margin-left: 5px;"></div>
                 </li> -->
 
-                <li style="cursor: pointer" class=""  (click)="newTask7()" [ngClass]="status7 ? 'b-color1' : 'nothing'" id="export">
+                <li style="cursor: pointer" class="" (click)="newTask7()" [ngClass]="status7 ? 'b-color1' : 'nothing'" id="export">
                     <a class="sidebar-content" style="cursor: pointer;">
                         <span class="icon side-icon">
                             <img src="./assets/content-paper-edit.png" />
                         </span> Export
-                        <span style="margin-left: 55%;position: absolute;transform: translate(0, 3px);" >
+                        <span style="margin-left: 55%;position: absolute;transform: translate(0, 3px);">
                             <i style="font-size: 18px" *ngIf="!status7" class="fas fa-angle-right"></i>
                             <i style="font-size: 18px" *ngIf="status7" class="fas fa-angle-down"></i>
                         </span>
@@ -210,7 +211,7 @@
                             <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
                         </div>
                         <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;"  [ngClass]="new ? 'b-color' : 'nothing'" (click)="newTask1()">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" [ngClass]="new ? 'b-color' : 'nothing'" (click)="newTask1()">
                             <span style="margin-left: 50px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO
             <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
             </i>
@@ -279,6 +280,17 @@
                                 <span style="margin-left: 50px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packingCreditRequest']">Direct Dispatch</span>
                             </div>
 
+                        </div>
+
+                        <div style="height: 30px; padding-top: 5px; font-size: 10px;">
+                            <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">EDPMS </span>
+                        </div>
+                        <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
+                        <div class="main11" style=" color: #fff;">
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub20()" [ngClass]="new20 ? 'b-color' : 'nothing'">
+                                <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">EDPMS Recon</span></div>
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub21()" [ngClass]="new21 ? 'b-color' : 'nothing'">
+                                <span style="margin-left: 50px; line-height: 30px; font-size: 12px;">EDPMS Recon Table</span></div>
                         </div>
                     </div>
                 </li>
@@ -484,7 +496,7 @@
                         <span class="icon side-icon">
                         <img src="./assets/briefcase.png" />
                         </span> Manage Customer
-                        <span style="margin-left: 19%;position: absolute;transform: translate(0, 3px);" >
+                        <span style="margin-left: 19%;position: absolute;transform: translate(0, 3px);">
                             <i style="font-size: 18px" *ngIf="!status10" class="fas fa-angle-right"></i>
                             <i style="font-size: 18px" *ngIf="status10" class="fas fa-angle-down"></i>
                         </span>

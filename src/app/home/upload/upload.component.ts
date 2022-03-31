@@ -653,7 +653,7 @@ console.log(this.res)
     console.log(invoices);
     e.form.value.invoices = invoices;
     e.form.value.buyerName = this.mainBene;
-    e.form.value.doc = this.pipourl1;
+    // e.form.value.doc = this.pipourl1;
     e.form.value.pipo = this.pipoArr
 
 
@@ -671,11 +671,11 @@ console.log(this.res)
             console.log("king123");
             console.log("DATA", data);
             this.message = "";
-            this.router.navigate(["home/dashboardNew"]);
+            this.router.navigate(["home/view"]);
             //this.router.navigate(['/login'], { queryParams: { registered: true }});
           },
           (error) => {
-            console.log("error");
+            console.log(error);
           }
         );
     } else {

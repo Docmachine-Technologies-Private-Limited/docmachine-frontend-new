@@ -1,17 +1,15 @@
 <div style="margin-left: 210px" class="content-wrap">
     <main id="content" class="content table-padding" role="main">
-        
+
         <div *ngIf="showInvoice" class="table_top">
             <div style="
           width: 100%;
           border-right: 0.5px solid rgba(0, 0, 0, 0.2);
           height: 100%;
           padding-top: 2.3%;">
-          <div style="margin-left: 50px;">
-            <img src="../../../assets/back.png" (click)="hide()"
-                style="width: 20px; height: 20px; margin-left: 30px;margin-bottom: 10px; margin-top: 6px; "><span style="margin-left: 5px ;margin-bottom: 10px;" (click)="hide()"
-                >Back</span>
-        </div>
+                <div style="margin-left: 50px;">
+                    <img src="../../../assets/back.png" (click)="hide()" style="width: 20px; height: 20px; margin-left: 30px;margin-bottom: 10px; margin-top: 6px; "><span style="margin-left: 5px ;margin-bottom: 10px;" (click)="hide()">Back</span>
+                </div>
                 <p class="bcw" style="
             font-size: '14px';
             float: left;
@@ -52,15 +50,14 @@
                 Date:
                 <select name="subject" id="subject">
                     <option value="" selected="selected">Today</option>
-                </select>
-                Type:
+                </select> Type:
                 <select name="topic" id="topic">
                     <option value="" selected="selected">All</option>
                 </select>
             </div>
-            
+
             <div style="padding-top: 0.7%">
-                <button (click)="exportToExcel()"  style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
+                <button (click)="exportToExcel()" style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
                         background-color: #49A2D7;
                         border: none;
                         border-radius: 5px;">Export To Excel</button>
@@ -105,13 +102,8 @@
                                             </td>
                                             <td>Random Company</td>
                                             <td>
-                                                <img class="image"
-                                                    src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                    height="30px" width="30px" /><img class="image image2"
-                                                    src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                    height="30px" width="30px" />
-
-                                                Lindsey Stroud
+                                                <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
+                                                    height="30px" width="30px" /> Lindsey Stroud
                                             </td>
                                             <td>{{data.benneName}}</td>
                                         </tr>
@@ -146,13 +138,8 @@
                                             </td>
                                             <td>Random Company</td>
                                             <td>
-                                                <img class="image"
-                                                    src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                    height="30px" width="30px" /><img class="image image2"
-                                                    src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                    height="30px" width="30px" />
-
-                                                Lindsey Stroud
+                                                <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
+                                                    height="30px" width="30px" /> Lindsey Stroud
                                             </td>
                                             <td>{{data.beneName}}</td>
                                         </tr>
@@ -169,7 +156,7 @@
                                             <th scope="col">SB NUMBER</th>
                                             <th scope="col">AD CODE</th>
                                             <th scope="col">BUYER NAME</th>
-                                            <th scope="col">UPLOADED BY</th>
+                                            <th scope="col">COMPANY NAME</th>
                                             <th scope="col">CURRENCY</th>
                                             <th scope="col">SB AMOUNT</th>
                                         </tr>
@@ -188,13 +175,7 @@
                                             </td>
                                             <td>{{data.buyerName}}</td>
                                             <td>
-                                                <img class="image"
-                                                    src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                    height="30px" width="30px" /><img class="image image2"
-                                                    src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                    height="30px" width="30px" />
-
-                                                Lindsey Stroud
+                                                {{data.consigneeName}}
                                             </td>
                                             <td>{{data.fobCurrency}}</td>
                                             <td>{{data.fobValue}}</td>
@@ -210,16 +191,12 @@
             <div *ngIf="showInvoice" class="p-8 bc" style="padding-left: 0.8%">
                 <div class="side_document_list">
                     <!---class="col-12 mb-lg ph-38"-->
-                    <div id="profile" class="profile_class" *ngFor="let data of item1; let i = index"
-                        [ngClass]="lastIndex == i ? 'activeBtn' : ''"
-                        (click)="getInvoices(data, i) && getTransactions(data.pi_poNo)">
+                    <div id="profile" class="profile_class" *ngFor="let data of item1; let i = index" [ngClass]="lastIndex == i ? 'activeBtn' : ''" (click)="getInvoices(data, i) && getTransactions(data.pi_poNo)">
                         <!----------class="row p-2 bb hhu"-->
                         <div class="" style="display: flex">
                             <!-----------class="ph-10 fl"-->
-                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                height="30px" width="30px" /><img class="image image2"
-                                src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
-                                width="30px" />
+                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"
+                            />
                         </div>
                         <div class="" style="width: 100%; padding: 3%" *ngIf="sb">
                             <!-----class="fr pt-2"-->
@@ -235,8 +212,7 @@
                         </div>
                         <div class="" style="width: 100%; padding: 3%" *ngIf="boe">
                             <!-----class="fr pt-2"-->
-                            <span class="fl fs16">{{ data.boeNumber }}</span><span class="fr fs12"
-                                style="float: 'right'">
+                            <span class="fl fs16">{{ data.boeNumber }}</span><span class="fr fs12" style="float: 'right'">
                                 {{ data.boeDate }}</span>
                             <p class="fs14">Continental carriers pvt ltd</p>
                         </div>
@@ -584,131 +560,87 @@
                                                 <section class="widget pb-0 box-shadow">
                                                     <tr class="form-wrapper1">
                                                         <td class="full-input border1">
-                                                            <label for="dischargePort">DISCHARGE PORT</label><input
-                                                                [(ngModel)]="selectedRow.dischargePort"
-                                                                class="smalll-input" type="text" name="dischargePort" />
+                                                            <label for="dischargePort">DISCHARGE PORT</label><input [(ngModel)]="selectedRow.dischargePort" class="smalll-input" type="text" name="dischargePort" />
                                                         </td>
                                                         <td class="full-input border2">
-                                                            <label for="iecCode">IEC CODE</label><input
-                                                                [(ngModel)]="selectedRow.iecCode" class="smalll-input"
-                                                                type="text" name="iecCode" />
+                                                            <label for="iecCode">IEC CODE</label><input [(ngModel)]="selectedRow.iecCode" class="smalll-input" type="text" name="iecCode" />
                                                         </td>
                                                         <td class="full-input border3">
-                                                            <label for="iecName">IEC NAME</label><input
-                                                                [(ngModel)]="selectedRow.iecName" class="smalll-input"
-                                                                type="text" name="iecName" />
+                                                            <label for="iecName">IEC NAME</label><input [(ngModel)]="selectedRow.iecName" class="smalll-input" type="text" name="iecName" />
                                                         </td>
                                                         <br />
                                                         <td class="full-input border1">
-                                                            <label for="adCode">AD CODE</label><input
-                                                                [(ngModel)]="selectedRow.adCode" class="smalll-input"
-                                                                type="text" name="adCode" />
+                                                            <label for="adCode">AD CODE</label><input [(ngModel)]="selectedRow.adCode" class="smalll-input" type="text" name="adCode" />
                                                         </td>
 
                                                         <p class="sh1">INVOICE DETAILS</p>
                                                         <td class="full-input border1">
-                                                            <label for="invoiceNumber">INVOICE NO</label><input
-                                                                [(ngModel)]="selectedRow.invoiceNumber"
-                                                                class="smalll-input" type="text" name="invoiceNumber" />
+                                                            <label for="invoiceNumber">INVOICE NO</label><input [(ngModel)]="selectedRow.invoiceNumber" class="smalll-input" type="text" name="invoiceNumber" />
                                                         </td>
                                                         <td class="full-input border2">
-                                                            <label for="invoiceAmount">INVOICE AMOUNT</label><input
-                                                                [(ngModel)]="selectedRow.invoiceAmount"
-                                                                class="smalll-input" type="text" name="invoiceAmount" />
+                                                            <label for="invoiceAmount">INVOICE AMOUNT</label><input [(ngModel)]="selectedRow.invoiceAmount" class="smalll-input" type="text" name="invoiceAmount" />
                                                         </td>
                                                         <td class="full-input border3">
-                                                            <label for="currency">CURRENCY</label><input
-                                                                [(ngModel)]="selectedRow.currency" class="smalll-input"
-                                                                type="text" name="currency" />
+                                                            <label for="currency">CURRENCY</label><input [(ngModel)]="selectedRow.currency" class="smalll-input" type="text" name="currency" />
                                                         </td>
                                                         <br />
                                                         <td class="full-input border1">
-                                                            <label for="settledAmount">SETTELED AMOIUNT</label><input
-                                                                [(ngModel)]="selectedRow.settledAmount"
-                                                                class="smalll-input" type="text" name="settledAmount" />
+                                                            <label for="settledAmount">SETTELED AMOIUNT</label><input [(ngModel)]="selectedRow.settledAmount" class="smalll-input" type="text" name="settledAmount" />
                                                         </td>
                                                         <td class="full-input border2">
-                                                            <label for="status">STATUS</label><input
-                                                                [(ngModel)]="selectedRow.status" class="smalll-input"
-                                                                type="text" name="status" />
+                                                            <label for="status">STATUS</label><input [(ngModel)]="selectedRow.status" class="smalll-input" type="text" name="status" />
                                                         </td>
                                                         <br />
 
                                                         <p class="sh1">FOB and FREIGHT</p>
                                                         <td class="full-input border2">
-                                                            <label for="freightAmount">FREIGHT AMOUNT</label><input
-                                                                [(ngModel)]="selectedRow.freightAmount"
-                                                                class="smalll-input" type="text" name="freightAmount" />
+                                                            <label for="freightAmount">FREIGHT AMOUNT</label><input [(ngModel)]="selectedRow.freightAmount" class="smalll-input" type="text" name="freightAmount" />
                                                         </td>
                                                         <td class="full-input border3">
-                                                            <label for="freightCurrency">FREIGHT CURRENCY</label><input
-                                                                [(ngModel)]="selectedRow.freightCurrency"
-                                                                class="smalll-input" type="text"
-                                                                name="freightCurrency" />
+                                                            <label for="freightCurrency">FREIGHT CURRENCY</label><input [(ngModel)]="selectedRow.freightCurrency" class="smalll-input" type="text" name="freightCurrency" />
                                                         </td>
                                                         <br />
 
                                                         <p class="sh1">INSURANCE</p>
                                                         <td class="full-input border2">
-                                                            <label for="insuranceAmount">INSURANCE AMOUNT</label><input
-                                                                [(ngModel)]="selectedRow.insuranceAmount"
-                                                                class="smalll-input" type="text"
-                                                                name="insuranceAmount" />
+                                                            <label for="insuranceAmount">INSURANCE AMOUNT</label><input [(ngModel)]="selectedRow.insuranceAmount" class="smalll-input" type="text" name="insuranceAmount" />
                                                         </td>
                                                         <td class="full-input border3">
                                                             <label for="insuranceCurrency">INSURANCE
-                                                                CURRENCY</label><input
-                                                                [(ngModel)]="selectedRow.insuranceCurrency"
-                                                                class="smalll-input" type="text"
-                                                                name="insuranceCurrency" />
+                                                                CURRENCY</label><input [(ngModel)]="selectedRow.insuranceCurrency" class="smalll-input" type="text" name="insuranceCurrency" />
                                                         </td>
 
                                                         <p class="sh1">DISCOUNT</p>
                                                         <td class="full-input border2">
-                                                            <label for="discountAmount">DISCOUNT AMOUNT</label><input
-                                                                [(ngModel)]="selectedRow.discountAmount"
-                                                                class="smalll-input" type="text"
-                                                                name="discountAmount" />
+                                                            <label for="discountAmount">DISCOUNT AMOUNT</label><input [(ngModel)]="selectedRow.discountAmount" class="smalll-input" type="text" name="discountAmount" />
                                                         </td>
                                                         <td class="full-input border3">
                                                             <label for="discountCurrency">DISCOUNT
-                                                                CURRENCY</label><input
-                                                                [(ngModel)]="selectedRow.discountCurrency"
-                                                                class="smalll-input" type="text"
-                                                                name="discountCurrency" />
+                                                                CURRENCY</label><input [(ngModel)]="selectedRow.discountCurrency" class="smalll-input" type="text" name="discountCurrency" />
                                                         </td>
                                                         <br />
 
                                                         <p class="sh1">MISCELLANEOUS</p>
                                                         <td class="full-input border2">
                                                             <label for="miscellaneousAmount">MISCELLANEOUS
-                                                                AMOUNT</label><input
-                                                                [(ngModel)]="selectedRow.miscellaneousAmount"
-                                                                class="smalll-input" type="text"
-                                                                name="miscellaneousAmount" />
+                                                                AMOUNT</label><input [(ngModel)]="selectedRow.miscellaneousAmount" class="smalll-input" type="text" name="miscellaneousAmount"
+                                                            />
                                                         </td>
                                                         <td class="full-input border3">
                                                             <label for="miscellaneousCurrency">MISCELLANEOUS
-                                                                CURRENCY</label><input
-                                                                [(ngModel)]="selectedRow.miscellaneousCurrency"
-                                                                class="smalll-input" type="text"
-                                                                name="miscellaneousCurrency" />
+                                                                CURRENCY</label><input [(ngModel)]="selectedRow.miscellaneousCurrency" class="smalll-input" type="text" name="miscellaneousCurrency"
+                                                            />
                                                         </td>
 
                                                         <p class="sh1">COMMISSION</p>
                                                         <td class="full-input border2">
                                                             <label for="commissionAmount">COMMISSION
-                                                                AMOUNT</label><input
-                                                                [(ngModel)]="selectedRow.commissionAmount"
-                                                                class="smalll-input" type="text"
-                                                                name="commissionAmount" />
+                                                                AMOUNT</label><input [(ngModel)]="selectedRow.commissionAmount" class="smalll-input" type="text" name="commissionAmount" />
                                                         </td>
                                                         <td class="full-input border3">
                                                             <label for="commissionCurrency">COMMISSION
-                                                                CURRENCY</label><input
-                                                                [(ngModel)]="selectedRow.commissionCurrency"
-                                                                class="smalll-input" type="text"
-                                                                name="commissionCurrency" />
+                                                                CURRENCY</label><input [(ngModel)]="selectedRow.commissionCurrency" class="smalll-input" type="text" name="commissionCurrency"
+                                                            />
                                                         </td>
                                                     </tr>
                                                     <iframe [src]="docu" style="height: 600px; width: 400px;"></iframe>
@@ -739,39 +671,27 @@
                                                     <tr style="width: 100%" class="form-wrapper1">
                                                         <div>
                                                             <td class="full-input border1">
-                                                                <label for="portCode">PORT CODE</label><input
-                                                                    [(ngModel)]="selectedRow.portCode"
-                                                                    class="smalll-input" type="text" name="portCode" />
+                                                                <label for="portCode">PORT CODE</label><input [(ngModel)]="selectedRow.portCode" class="smalll-input" type="text" name="portCode" />
                                                             </td>
                                                             <td class="full-input border2">
-                                                                <label for="ieccode">IEC CODE</label><input
-                                                                    [(ngModel)]="selectedRow.ieccode"
-                                                                    class="smalll-input" type="text" name="ieccode" />
+                                                                <label for="ieccode">IEC CODE</label><input [(ngModel)]="selectedRow.ieccode" class="smalll-input" type="text" name="ieccode" />
                                                             </td>
                                                             <td class="full-input border3">
-                                                                <label for="iecName">IEC NAME</label><input
-                                                                    [(ngModel)]="selectedRow.iecName"
-                                                                    class="smalll-input" type="text" name="iecName" />
+                                                                <label for="iecName">IEC NAME</label><input [(ngModel)]="selectedRow.iecName" class="smalll-input" type="text" name="iecName" />
                                                             </td>
                                                         </div>
                                                         <br />
                                                         <div>
                                                             <td class="full-input border1">
-                                                                <label for="adCode">AD CODE</label><input
-                                                                    [(ngModel)]="selectedRow.adCode"
-                                                                    class="smalll-input" type="text" name="adCode" />
+                                                                <label for="adCode">AD CODE</label><input [(ngModel)]="selectedRow.adCode" class="smalll-input" type="text" name="adCode" />
                                                             </td>
                                                             <td class="full-input border2">
-                                                                <label for="leodate">LEO DATE</label><input
-                                                                    [(ngModel)]="selectedRow.leodate"
-                                                                    class="smalll-input" type="text" name="leodate" />
+                                                                <label for="leodate">LEO DATE</label><input [(ngModel)]="selectedRow.leodate" class="smalll-input" type="text" name="leodate" />
                                                             </td>
                                                             <td class="full-input border3">
                                                                 <label for="processingStaus">PROCESSING
-                                                                    STATUS</label><input
-                                                                    [(ngModel)]="selectedRow.processingStaus"
-                                                                    class="smalll-input" type="text"
-                                                                    name="processingStaus" />
+                                                                    STATUS</label><input [(ngModel)]="selectedRow.processingStaus" class="smalll-input" type="text" name="processingStaus"
+                                                                />
                                                             </td>
                                                         </div>
 
@@ -779,46 +699,33 @@
                                                         <div>
                                                             <p class="sh1">FOB and FREIGHT</p>
                                                             <td class="full-input border1">
-                                                                <label for="fobCurrency">FOB CURRENCY</label><input
-                                                                    [(ngModel)]="selectedRow.fobCurrency"
-                                                                    class="smalll-input" type="text"
-                                                                    name="fobCurrency" />
+                                                                <label for="fobCurrency">FOB CURRENCY</label><input [(ngModel)]="selectedRow.fobCurrency" class="smalll-input" type="text" name="fobCurrency" />
                                                             </td>
                                                             <td class="full-input border2">
-                                                                <label for="fobValue">FOB VALUE</label><input
-                                                                    [(ngModel)]="selectedRow.fobValue"
-                                                                    class="smalll-input" type="text" name="fobValue" />
+                                                                <label for="fobValue">FOB VALUE</label><input [(ngModel)]="selectedRow.fobValue" class="smalll-input" type="text" name="fobValue" />
                                                             </td>
                                                             <td class="full-input border3">
                                                                 <label for="realizedFobValue">REALIZED FOB
-                                                                    VALUE</label><input
-                                                                    [(ngModel)]="selectedRow.realizedFobValue"
-                                                                    class="smalll-input" type="text"
-                                                                    name="realizedFobValue" />
+                                                                    VALUE</label><input [(ngModel)]="selectedRow.realizedFobValue" class="smalll-input" type="text" name="realizedFobValue"
+                                                                />
                                                             </td>
                                                         </div>
                                                         <br />
                                                         <div>
                                                             <td class="full-input border1">
                                                                 <label for="equivalentFobValue">EQUIVALENT FOB
-                                                                    VALUE</label><input
-                                                                    [(ngModel)]="selectedRow.equivalentFobValue"
-                                                                    class="smalll-input" type="text"
-                                                                    name="equivalentFobValue" />
+                                                                    VALUE</label><input [(ngModel)]="selectedRow.equivalentFobValue" class="smalll-input" type="text" name="equivalentFobValue"
+                                                                />
                                                             </td>
                                                             <td class="full-input border2">
                                                                 <label for="freightCurrency">FREIGHT
-                                                                    CURRENCY</label><input
-                                                                    [(ngModel)]="selectedRow.freightCurrency"
-                                                                    class="smalll-input" type="text"
-                                                                    name="freightCurrency" />
+                                                                    CURRENCY</label><input [(ngModel)]="selectedRow.freightCurrency" class="smalll-input" type="text" name="freightCurrency"
+                                                                />
                                                             </td>
                                                             <td class="full-input border3">
                                                                 <label for="realizedFreightValue">FREIGHT
-                                                                    VALUE</label><input
-                                                                    [(ngModel)]="selectedRow.realizedFreightValue"
-                                                                    class="smalll-input" type="text"
-                                                                    name="realizedFreightValue" />
+                                                                    VALUE</label><input [(ngModel)]="selectedRow.realizedFreightValue" class="smalll-input" type="text" name="realizedFreightValue"
+                                                                />
                                                             </td>
                                                         </div>
                                                         <br />
@@ -826,24 +733,18 @@
                                                             <p class="sh1">INSURANCE</p>
                                                             <td class="full-input border2">
                                                                 <label for="insuranceCurrency">INSURANCE
-                                                                    CURRENCY</label><input
-                                                                    [(ngModel)]="selectedRow.insuranceCurrency"
-                                                                    class="smalll-input" type="text"
-                                                                    name="insuranceCurrency" />
+                                                                    CURRENCY</label><input [(ngModel)]="selectedRow.insuranceCurrency" class="smalll-input" type="text" name="insuranceCurrency"
+                                                                />
                                                             </td>
                                                             <td class="full-input border3">
                                                                 <label for="insuranceValue">INSURANCE
-                                                                    VALUE</label><input
-                                                                    [(ngModel)]="selectedRow.insuranceValue"
-                                                                    class="smalll-input" type="text"
-                                                                    name="insuranceValue" />
+                                                                    VALUE</label><input [(ngModel)]="selectedRow.insuranceValue" class="smalll-input" type="text" name="insuranceValue" />
                                                             </td>
                                                             <td class="full-input border1">
                                                                 <label for="realizedInsuranceValue">REALIZED INSURANCE
                                                                     VALUE</label><input [(ngModel)]="
                                                                         selectedRow.realizedInsuranceValue
-                                                                      " class="smalll-input" type="text"
-                                                                    name="realizedInsuranceValue" />
+                                                                      " class="smalll-input" type="text" name="realizedInsuranceValue" />
                                                             </td>
                                                         </div>
                                                         <br />
@@ -851,32 +752,23 @@
                                                             <p class="sh1">Additional</p>
                                                             <td class="full-input border2">
                                                                 <label for="bankingCharges">BANKING
-                                                                    CHARGES</label><input
-                                                                    [(ngModel)]="selectedRow.bankingCharges"
-                                                                    class="smalll-input" type="text"
-                                                                    name="bankingCharges" />
+                                                                    CHARGES</label><input [(ngModel)]="selectedRow.bankingCharges" class="smalll-input" type="text" name="bankingCharges" />
                                                             </td>
                                                             <td class="full-input border3">
                                                                 <label for="expectedPaymentlastdate">PAYMENT LAST
                                                                     DATE</label><input [(ngModel)]="
                                                                         selectedRow.expectedPaymentlastdate
-                                                                      " class="smalll-input" type="text"
-                                                                    name="expectedPaymentlastdate" />
+                                                                      " class="smalll-input" type="text" name="expectedPaymentlastdate" />
                                                             </td>
                                                             <td class="full-input border1">
-                                                                <label for="AddedDate">ADDED DATE</label><input
-                                                                    [(ngModel)]="selectedRow.AddedDate"
-                                                                    class="smalll-input" type="text" name="AddedDate" />
+                                                                <label for="AddedDate">ADDED DATE</label><input [(ngModel)]="selectedRow.AddedDate" class="smalll-input" type="text" name="AddedDate" />
                                                             </td>
                                                         </div>
 
                                                         <br />
                                                         <div>
                                                             <td class="full-input border2">
-                                                                <label for="modifiedDate">MODIFIED DATE</label><input
-                                                                    [(ngModel)]="selectedRow.modifiedDate"
-                                                                    class="smalll-input" type="text"
-                                                                    name="modifiedDate" />
+                                                                <label for="modifiedDate">MODIFIED DATE</label><input [(ngModel)]="selectedRow.modifiedDate" class="smalll-input" type="text" name="modifiedDate" />
                                                             </td>
                                                         </div>
                                                     </tr>

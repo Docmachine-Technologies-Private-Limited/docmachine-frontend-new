@@ -503,6 +503,7 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
     this.submitted = true
     this.submitted1 = true
     this.isDisabled = true;
+    this.editable = false;
     if (this.loginForm.invalid) {
       this.toastr.error('Invalid inputs, please check!');
       console.log("2")
@@ -527,7 +528,7 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
           console.log("king123")
           console.log(data['data'])
           this.toastr.success('Company details updated successfully.');
-          this.router.navigate(['/home/dashboardNew']);
+          // this.router.navigate(['/home/dashboardNew']);
         },
         error => {
           this.toastr.error('Invalid inputs, please check!');
