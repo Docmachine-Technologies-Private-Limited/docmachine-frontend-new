@@ -267,9 +267,10 @@ export class SidenavComponent implements OnInit {
     this.status = true;
     this.router.navigate(["home/pipoDoc"]);
   }
-  //export dropdown highlight
+  //import dropdown highlight
   public newTask4(){
-    this.status4 = true;
+    this.router.navigate(["home/pipoDoc"]);
+    this.status4 = !this.status4;
     this.status5  = false;
     this.status6    = false;
     this.status7    = false;
@@ -323,7 +324,7 @@ export class SidenavComponent implements OnInit {
   }
   public newTask7(){
     this.router.navigate(["home/pipoDocExport"]);
-    this.status7 = true;
+    this.status7 = !this.status7;
     this.status4  = false;
     this.status5    = false;
     this.status6    = false;
@@ -394,7 +395,7 @@ export class SidenavComponent implements OnInit {
     this.status18   = false;
   }
   public newTask11(){
-    this.status11 = true;
+    this.status11 = !this.status11;
     this.status4  = false;
     this.status5    = false;
     this.status6    = false;

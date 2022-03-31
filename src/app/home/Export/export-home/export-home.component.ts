@@ -34,6 +34,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   public Question3 = '';
   public Question4 = '';
   public Question5 = '';
+  redirectid: any;
+  redirectindex: any;
+  redirectpage: any;
   public allTransactions: any = [];
   public generateIndex;
   lodgement1: any;
@@ -150,12 +153,17 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     //window.location.reload();
+    this.redirectid = this.route.snapshot.paramMap.get('pipo')
+    this.redirectindex = this.route.snapshot.paramMap.get('index')
+    this.redirectpage = this.route.snapshot.paramMap.get('page')
+    console.log("pipoId",this.redirectid);
+    
     console.log(data['default'])
     this.jsondata = data['default'];
     console.log(this.jsondata[0].purpose)
     this.dataJson = this.jsondata
     this.purposeFun()
-
+    
     this.route.params.subscribe(params => {
       this.file = this.route.snapshot.params['file'];
       this.showInvoice = false;
@@ -588,7 +596,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
         if (item.pi_poNo === pipo) {
           buyerValue = item.buyerName
           generateDoc1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
-            item.doc1
+            item.doc // item.doc is Profoma Invoice document and item.doc1 is purchase order document
           ))
         }
       }
@@ -1876,7 +1884,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               data => {
                 console.log("king123")
                 console.log(data)
-                this.toastr.success('Task saved as completed successfully!');
+                this.toastr.success('Task saved as completed successfully!!!!!!!!!!!!');
                 this.router.navigate(["/home/dashboardTask"]);
                 //this.router.navigate(["/home/advance-outward-remittance"]);
               },
@@ -1905,6 +1913,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
                 console.log("king123")
                 console.log(data)
                 this.toastr.success('Task saved as completed successfully!');
+                this.router.navigate([
+                  'home/pipoDocExport',
+                      {
+                        id: this.redirectid,
+                        page: this.redirectpage,
+                        index: this.redirectindex,
+                      },
+                   ]);
                 //this.router.navigate(["/home/dashboardTask"]);
                 //this.router.navigate(["/home/advance-outward-remittance"]);
               },

@@ -84,7 +84,7 @@ import { FilterdatePipe } from './datefilter/filterdate.pipe';
 import { FilteraPipe } from './Export/filtera/filtera.pipe';
 import { FilterbPipe } from './Export/filterb/filterb.pipe';
 import { FiterbuyerPipe } from './Export/fiterbuyer.pipe';
-import { SharedDataService } from './shared-Data-Servies/shared-data.service'
+import { SharedDataService } from './shared-Data-Servies/shared-data.service';
 
 // import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -172,7 +172,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     FilteraPipe,
     FilterbPipe,
     FiterbuyerPipe,
-  ],
+    ],
   imports: [
     CommonModule,
     FormsModule,

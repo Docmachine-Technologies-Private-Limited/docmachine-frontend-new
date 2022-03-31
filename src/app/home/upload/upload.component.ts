@@ -151,6 +151,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   pipourl1: any;
   tryPartyAgreement: boolean = false;
   creditNote: boolean = false;
+  swiftCopy : boolean = false;
   debitNote: boolean = false;
   insuranceCopy: boolean = false;
   lcCopy: boolean = false;
@@ -468,6 +469,16 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
     }
+    else if(this.docu == 'swiftCopy' ){
+      this.documentType1 = 'export'
+      this.documentType = 'swiftCopy'
+      this.documentType1 = 'export'
+      this.pipoOut = this.route.snapshot.paramMap.get('pipo')
+      this.beneOut = this.route.snapshot.paramMap.get('bene')
+      let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
+      this.arrayData.push(x)
+      this.pipoArr.push(this.pipoOut)
+    }
     //console.log(this.route.snapshot.paramMap.get('document'))
     this.config = {
       ...this.config,
@@ -624,7 +635,7 @@ console.log(this.res)
         },
         (error) => {
           console.log("error");
-        }
+          }
       );
     }
 
@@ -653,7 +664,7 @@ console.log(this.res)
     console.log(invoices);
     e.form.value.invoices = invoices;
     e.form.value.buyerName = this.mainBene;
-    e.form.value.doc = this.pipourl1;
+    // e.form.value.doc = this.pipourl1;
     e.form.value.pipo = this.pipoArr
 
 
@@ -670,9 +681,32 @@ console.log(this.res)
             console.log(".kjsakjsdkdsjYYYYY");
             console.log("king123");
             console.log("DATA", data);
-            this.message = "";
-            this.router.navigate(["home/dashboardNew"]);
-            //this.router.navigate(['/login'], { queryParams: { registered: true }});
+            // this.message = "";
+            console.log(this.pipoArr);
+            console.log(this.documentType);
+            console.log("this is pipourl2222222",this.pipourl1);
+            this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc)
+              .subscribe(
+                data => {
+                  //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                  console.log("king123")
+                  console.log(data)
+                 
+                  this.toastr.success('shipping Bill added successfully.');
+                  this.router.navigate(["home/viewDocument/sb"]);
+
+                  // this.docTog = false
+                  // this.toggle = false
+                  // this.toggle2 = false
+                  // this.toastr.success('Company details updated sucessfully.');
+                  // this.router.navigate(['/home/dashboardNew']);
+                },
+                error => {
+                  // this.toastr.error('Invalid inputs, please check!');
+                  console.log("error")
+                });
+            
+          //this.router.navigate(['/login'], { queryParams: { registered: true }});
           },
           (error) => {
             console.log("error");
@@ -683,7 +717,29 @@ console.log(this.res)
         (data) => {
           console.log("king123");
           console.log(data);
-          this.router.navigate(["home/dashboardNew"]);
+          console.log(this.pipoArr);
+          console.log(this.documentType);
+          console.log("this messess",this.pipourl1);
+          
+          this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc)
+          .subscribe(
+            data => {
+              //this.pipoData[`${this.pipoDoc}`] = args[1].data
+              console.log("king123")
+              console.log(data)
+              this.toastr.success('shipping Bill added successfully.');
+              this.router.navigate(["home/viewDocument/sb"]);
+
+              // this.docTog = false
+              // this.toggle = false
+              // this.toggle2 = false
+              // this.toastr.success('Company details updated sucessfully.');
+              // this.router.navigate(['/home/dashboardNew']);
+            },
+            error => {
+              // this.toastr.error('Invalid inputs, please check!');
+              console.log("error")
+            });
           //this.router.navigate(['/login'], { queryParams: { registered: true }});
         },
         (error) => {
@@ -954,6 +1010,7 @@ console.log(this.res)
             .subscribe(
               data => {
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                console.log(" credit Note document",this.pipourl1)
                 console.log("king123")
                 console.log(data)
 
@@ -1006,6 +1063,10 @@ console.log(this.res)
                         index: this.redirectindex,
                       },
                    ]);
+                   console.log("redirectindex",this.redirectindex);
+                   console.log("redirectinpage",this.redirectpage);
+                   console.log("redirectid",this.redirectid);
+                   
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -1017,7 +1078,49 @@ console.log(this.res)
     );
 
   }
+//swiftCopy Submit button
+onSubmitSwift(e){
+  console.log(e.form.value);
+  e.form.value.pipo = this.pipoArr;
+  e.form.value.doc = this.pipourl1;
+  e.form.value.buyerName = this.mainBene;
+  // e.form.value.currency = this.currency;
+  console.log(e.form.value);
+  this.documentService.addSwift(e.form.value).subscribe(
+    (res) => {
+      this.toastr.success(`swift copy Document Added Successfully`);
+      console.log("swift copy Document Added Successfully");
 
+      this.userService.updateManyPipo(this.pipoArr, this.documentType,this.pipourl1)
+          .subscribe(
+            data => {
+              //this.pipoData[`${this.pipoDoc}`] = args[1].data
+              console.log("king123")
+              console.log(data)
+
+              this.router.navigate([
+                'home/pipoDocExport',
+                    {
+                      id: this.redirectid,
+                      page: this.redirectpage,
+                      index: this.redirectindex,
+                    },
+                 ]);
+                 console.log("redirectindex",this.redirectindex);
+                 console.log("redirectinpage",this.redirectpage);
+                 console.log("redirectid",this.redirectid);
+                 
+            },
+            error => {
+              // this.toastr.error('Invalid inputs, please check!');
+              console.log("error")
+            });
+      // this.router.navigateByUrl("/home/dashboardNew");
+    },
+    (err) => console.log("Error adding pipo")
+  );
+
+}
   onSubmitInsurance(e){
     console.log(e.form.value);
     console.log(e.form.value);
@@ -1237,6 +1340,9 @@ console.log(this.res)
         }
         else if (this.documentType === 'creditNote'){
           this.creditNote = true;
+        }
+        else if (this.documentType === 'swiftCopy'){
+          this.swiftCopy = true;
         }
         else if (this.documentType === 'debitNote'){
           this.debitNote = true;
