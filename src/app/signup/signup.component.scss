@@ -57,7 +57,6 @@
     position: absolute;
     width: 299px;
     height: 92px;
-    margin-top: -16.7% !important;
 }
 
 // .image3 {
@@ -71,7 +70,7 @@
     color: #606670;
     font-size: 32px;
     margin-bottom: 15px;
-    margin-top: 60px
+    margin-top: 0px;
 }
 
 .display-6 {
@@ -122,7 +121,6 @@ a {
 .bg-dark {
     background-color: rgb(255, 255, 255) !important;
     display: flex;
-    margin-top: -100px;
     // justify-content: center;
 }
 
@@ -146,7 +144,6 @@ input.password {
 
 .image2 {
     position: absolute;
-    margin-top: -2.5%;
     width: 299px;
     height: 92px;
 }
@@ -193,13 +190,13 @@ label {
 }
 
 .btn1 {
-    min-width: 100px;
-    height: 40px;
-    background-color: white;
-    font-size: 18px;
-    font-weight: 600(semibold);
-    color: #606670;
-    outline: none;
+  min-width: 100px;
+  height: 40px;
+  background-color: white;
+  font-size: 18px;
+  font-weight: 600 semibold;
+  color: #606670;
+  outline: none;
 }
 
 .btn2 {
@@ -212,14 +209,11 @@ label {
 }
 
 .leftl {
-    border: none;
-    // font-size: 16px;
-    // font-weight: 600;
-    margin-top: 25px;
-    margin-bottom: 50px;
-    cursor: pointer;
-    margin-top: 60px;
-}
+   border: none;
+   margin-top: 10px;
+   margin-bottom: 50px;
+   cursor: pointer;
+ }
 
 .disable {
     background-color: #6cc9ff;
@@ -236,18 +230,6 @@ label {
 // popup styling
 .popup {
   width: 260px;
-}
-
-.submitBTN {
-  margin-top: 10px;
-  width: 160px;
-  height: 40px;
-  border: 2px white solid;
-  border-radius: 20px;
-  background-color: #51AEE5;
-  font-size: 12px;
-  color: #ffffff;
-  // justify-content: center;
 }
 
 span.cls_002 {
@@ -320,6 +302,13 @@ div.cls_004 {
   font-weight: bold;
   font-style: normal;
   text-decoration: none
+}
+.mainClass {
+  float: left;
+  width: 58%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 @media (min-width: 768px) and (max-width: 1024px) {
     .bg-dark {
@@ -530,10 +519,11 @@ div.cls_004 {
     }
   .checkbox {
     margin-right: 10px;
+    cursor: pointer;
   }
   form {
     margin-top: -20px;
-  width: 300px;
+    width: 300px;
     height: 30px;
   }
     .btn {

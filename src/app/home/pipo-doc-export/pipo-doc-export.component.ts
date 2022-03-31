@@ -55,6 +55,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   public item1 = [];
   public item5 = [];
   public item3 : any;
+  public item18 : any;
+  public item19 : any;
   public item;
   public item2;
   public item7 = [];
@@ -98,6 +100,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   boe: boolean;
   sb: boolean;
   docu: any;
+  docu1:any;
   pipoNo: any;
   toggle: boolean = false;
   nameSearch : string ='';
@@ -170,6 +173,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   viewData1: any;
   obj: any;
   item6: any;
+  toggle4: boolean;
 
 
 
@@ -266,6 +270,15 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
 
     this.id = this.route.snapshot.params['id'];
+    this.currentindex = this.route.snapshot.params['index'];
+    //shipping bill
+    this.documentService.getMaster(1).subscribe (
+      (res: any) => {
+        console.log(res,"SHIPPING DATA"), (this.item1 = res.data);
+      },
+      (err) => console.log(err)
+    );
+  
  //third party API
     this.documentService.getThird().subscribe(
       (res: any) => {
@@ -328,6 +341,14 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       },
       (err) => console.log(err)
       );
+     //swift Api
+      this.documentService.getSwift().subscribe(
+        (res: any) =>{
+          console.log('swift copy responce',res);
+          this.item18 = res.data;
+          console.log("swift copy response2",this.item18);
+      }
+      )
       // credit note Api
       this.documentService.getCredit().subscribe(
         (res: any) => {
@@ -402,7 +423,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
           this.documentService.getPipoByPipoNo(this.id).subscribe(
             (data) => {
               let index = this.route.snapshot.params['index'];
-              console.log('king123');
+              console.log('king123',index);
               console.log(data);
               console.log(data['data'][0]);
               this.getInvoices(data['data'][0], index);
@@ -466,7 +487,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
               this.item1.push(value);
             }
           }
-          // this.getMaster();
+          this.getMaster();
         },
         (err) => console.log(err)
       );
@@ -524,7 +545,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.userService.getTeam().subscribe(
       (data) => {
         console.log('llllllllllllllllllllllllllllllll');
-        console.log(data['data'][0]);
+        console.log(" checking for buyer name",data['data'][0]);
         this.location = data['data'][0]['location'];
         this.commodity = data['data'][0]['commodity'];
         console.log(this.location);
@@ -648,10 +669,43 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         (err) => console.log(err)
       );
   }
+  toggleClick4(a){
+    this.toggle4 = true;
+    this.toggle = true;
+    this.toggle2 = false;
+    this.toggle3 = false;
+    if (a == 'advanceOutward') {
+      if (this.pipoData.doc) {
+        this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.pipoData.doc
+
+
+        ); console.log(this.pipoData.doc1,"hey***************#######");
+      } else {
+        this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.pipourl11
+        );
+      }
+    }
+    if (a == 'advanceOutward') {
+      if (this.pipoData[a]) {
+        this.docu1 = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.pipoData[a]
+
+
+        ); console.log(this.pipoData.doc1,"hey***************#######");
+      } else {
+        this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.pipourl11
+        );
+      }
+    }
+  }
 
   toggleClick(a) {
     this.toggle = true;
     this.toggle2 = true;
+    this.toggle4 = false;
     console.log(a);
     this.beneValue = this.pipoData.buyerName;
     console.log("chechingggggggggg",this.pipoData);
@@ -685,6 +739,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         );
       }
     }
+    
   }
 
   toggleClick2(a) {
@@ -692,6 +747,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.toggle = true;
     this.toggle1 = true;
     this.toggle3 = false;
+    this.toggle4 = false;
   }
 
   initCourse() {
@@ -867,7 +923,12 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   openDoc(a) {
     console.log(a);
     if (a == 'Advance Payment') {
-      this.router.navigate(['home/exportHome']);
+      this.router.navigate(['home/exportHome',{
+        pipo: this.pipoData.pi_poNo,
+     
+        index: this.currentindex
+      }
+    ]);
     }
     // else if (a == 'Direct Import') {
     //   console.log('hello')
@@ -877,6 +938,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     // }
     else if (a == 'Collection Bill') {
       this.router.navigate(['home/billLodgement']);
+    }
+    else if (a == 'packing Credit Request') {
+      this.router.navigate(['home/packingCreditRequest']);
     }
     else if (a == 'Letter of Credit') {
       // if (this.pipoData.lcIssuance && this.pipoData.lcIssuance1) {
@@ -916,7 +980,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       file:'export',
       document:'sb',
       pipo: this.pipoData.pi_poNo,
-      bene: this.pipoData.buyerName
+      bene: this.pipoData.buyerName,
+      index: this.currentindex
     }]);
   }
   uploadDebitnote(){
@@ -924,7 +989,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       file:'export',
       document:'debitNote',
       pipo: this.pipoData.pi_poNo,
-      bene: this.pipoData.buyerName
+      bene: this.pipoData.buyerName,
+      index: this.currentindex
     }]);
   }
   uploadCreditnote(){
@@ -933,8 +999,6 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       document:'creditNote',
       pipo: this.pipoData.pi_poNo,
       bene: this.pipoData.buyerName,
-      // id: this.selectedrow.pi_poNo,
-      page: 'details',
       index: this.currentindex,
     }]);
    }
@@ -943,7 +1007,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       file:'export',
       document:'insuranceCopy',
       pipo: this.pipoData.pi_poNo,
-      bene: this.pipoData.buyerName
+      bene: this.pipoData.buyerName,
+      index: this.currentindex,
     }]);
    }
    uploadLccopy(){
@@ -951,7 +1016,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       file:'export',
       document:'lcCopy',
       pipo: this.pipoData.pi_poNo,
-      bene: this.pipoData.buyerName
+      bene: this.pipoData.buyerName,
+      index: this.currentindex,
     }]);
    }
    uploadThirdparty(){
@@ -959,7 +1025,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       file:'export',
       document:'tryPartyAgreement',
       pipo: this.pipoData.pi_poNo,
-      bene: this.pipoData.buyerName
+      bene: this.pipoData.buyerName,
+      index: this.currentindex,
     }]);
    }
    uploadMaster(){
@@ -967,7 +1034,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       file:'export',
       document:'agreement',
       pipo: this.pipoData.pi_poNo,
-      bene: this.pipoData.buyerName
+      bene: this.pipoData.buyerName,
+      index: this.currentindex,
     }]);
    }
    uploadOpinion(){
@@ -975,7 +1043,37 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       file:'export',
       document:'opinionReport',
       pipo: this.pipoData.pi_poNo,
-      bene: this.pipoData.buyerName
+      bene: this.pipoData.buyerName,
+      index: this.currentindex,
+    }]);
+   }
+   uploadSwift(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'swiftCopy',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName,
+      index: this.currentindex,
+    }]);
+   }
+   uploadshipping(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'sb',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName,
+      index: this.currentindex,
+      
+    }]);
+   }
+   uploadIradvice(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'irAdvice',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName,
+      index: this.currentindex,
+      
     }]);
    }
 
@@ -1158,7 +1256,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   // }
 
   hide3(){
-    this.showInvoice = !this.showInvoice
+    this.showInvoice = false;
+    this.router.navigate(['/home/pipoDocExport']);
+    
   }
   hide1(){
 
@@ -1379,7 +1479,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
             }
           );
       }
-    }
+    } 
   }
 
   opensb(content3) {

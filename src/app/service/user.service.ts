@@ -1,15 +1,22 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AppConfig } from '../../app/app.config';
+import { BehaviorSubject } from 'rxjs';
+
 @Injectable({ providedIn: "root" })
 export class UserService {
   public role;
   public authToken;
   public name;
   api_base: string;
+  public loginData = new BehaviorSubject({});
   constructor(private http: HttpClient, public appconfig: AppConfig) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base)
+  }
+
+  public addLoginData(data) {
+    this.loginData.next(data);
   }
 
   public addToken(token) {

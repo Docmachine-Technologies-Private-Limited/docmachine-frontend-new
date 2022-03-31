@@ -442,7 +442,60 @@ export class DocumentService {
       httpOptions
     );
   }
+  // get Swift Api
+  addSwift(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
 
+    return this.http.post(
+      `${this.api_base}/swift/post`,
+      { swift: pipo },
+      httpOptions
+    );
+  }
+  getSwift() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/swift/get`, httpOptions);
+  }
+  getSwiftBySwiftValue(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/swift/getSingleSwift`,
+      {
+        id: id,
+      },
+      httpOptions
+    );
+  }
+  updateSwift(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/swift/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
 
   // Get Debit Api
 
