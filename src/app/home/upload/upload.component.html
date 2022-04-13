@@ -27,8 +27,10 @@
       <h3 class="heading" *ngIf='docu == "tryPartyAgreement"'>Upload Tri Party Document</h3>
       <h3 class="heading" *ngIf='docu == "opinionReport"'>Upload Opinion Report</h3>
       <h3 class="heading" *ngIf='docu == "swiftCopy"'>Upload Swift Copy Document</h3>
+      <h3 class="heading" *ngIf='docu == "EBRC"'>Upload Export Realisation certificate</h3>
+      <h3 class="heading" *ngIf='docu == "blCopyref"'>Bill lodgement reference number and advice copy</h3>
 
-      <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" && docu != "irAdvice" && docu != "debitNote" && docu !="lcCopy" && docu !="insuranceCopy" && docu !="creditNote" && docu !="agreement" && docu !="opinionReport" && docu !="tryPartyAgreement" && docu !="swiftCopy" '>Upload Document</h3>
+      <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" && docu != "irAdvice" &&  docu != "debitNote" && docu !="lcCopy" && docu !="insuranceCopy" && docu !="creditNote" && docu !="agreement" && docu !="opinionReport" && docu !="tryPartyAgreement" && docu !="swiftCopy" && docu !="EBRC" && docu !="blCopyref"'>Upload Document</h3>
       <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' style="margin-bottom: 20px;">
           <p style="color: rgb(0, 0, 0);margin-left: 40px">
               Choose the type of document
@@ -90,6 +92,8 @@
       <option value="deliveryOrder">Delivery Order</option>
       <option value="irAdvice">Inward Remittance Advice</option>
       <option value="swiftCopy">SwiftCopy</option>
+      <option value="EBRC">EBRC</option>
+      <option value="blCopyref">Bill lodgement refno & advice copy</option>
      </select>
             <div *ngIf='documentType == "PI" && documentType1 == "import" || documentType == "PO" && documentType1 == "import"'>
                 <div style="display: flex; align-items: center; margin-left: 23px !important; ">
@@ -109,7 +113,7 @@
 
             </div>
 
-            <label *ngIf='documentType == "PI" && documentType1 == "export" || documentType == "PO" && documentType1 == "export"' style="flex-direction:row; font-size: 20px; color: #303030;margin-left: 22px !important; margin-top: -22px;  ">Buyer’s
+            <label *ngIf='documentType == "PI" && documentType1 == "export" || documentType == "PO" && documentType1 == "export"' style="flex-direction:row; font-size: 16px; color: #303030;margin-left: 35px !important; margin-top: -22px;  ">Buyer’s
             Name*</label>
             <div *ngIf='documentType == "PI" && documentType1 == "export" || documentType == "PO" && documentType1 == "export"'>
                 <div style="display: flex; align-items: center; margin-left: 23px;">
@@ -121,7 +125,7 @@
                 </span>
                         <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
                             <a style="min-width:100%;" *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'>{{buyer.buyerName}}</a>
-                            <a style="min-width:100%;" (click)="open1(content1)">Add New Buyer</a>
+                            <a style="min-width:100%;border-top: 0.5px solid #C6CBD4;" (click)="open1(content1)">Add New Buyer</a>
                         </div>
                     </div>
 
@@ -137,7 +141,7 @@
 
                 <br>
                 <div style="display: flex; align-items: center; margin-left: 23px;">
-                    <label style="flex-direction:row; font-size: 20px;  color: #303030;margin-right: 50px !important; ">Choose
+                    <label style="flex-direction:row; font-size: 16px; margin-left: 13px; color: #303030;margin-right: 14px !important; ">Choose
                   Commodity</label>
                     <div class="customDropdown" style="width: 300px; flex-direction:row;">
                         <span style="color: Black !important; min-width: 150px;">Choose Commodity</span>
@@ -171,7 +175,7 @@
                 <div *ngIf='documentType != "PI" && documentType != "PO"' style="display: flex; align-items: center; margin-left: 30px;">
 
                     <div *ngIf='documentType == "boe"'>
-                        <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PIPO*</label>
+                        <label style="flex-direction:row; font-size: 16px; color: #303030;margin-left: -19px; margin-right: 14px;">Select PI/PO*</label>
                         <div class="customDropdown" style="width: 300px; flex-direction:row; ">
                             <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                             <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
@@ -189,7 +193,7 @@
 
                     <div *ngIf='documentType == "sb"'>
                         <div style="display: flex; align-items: center; margin-left: 23px;">
-                            <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PIPO*</label>
+                            <label style="flex-direction:row; font-size: 16px; color: #303030; margin-left: -19px; margin-right: 14px;">Select PI/PO*</label>
                             <div class="customDropdown" style="width: 300px; flex-direction:row; ">
                                 <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                                 <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
@@ -206,8 +210,8 @@
                     </div>
 
                     <div *ngIf='documentType != "sb" && documentType != "boe" && documentType != "PO" && documentType != "PI" '>
-                        <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PIPO*</label>
-                        <div class="customDropdown" style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                        <label style="flex-direction:row; font-size: 16px; color: #303030; margin-left: 5px;">Select PI/PO*</label>
+                        <div class="customDropdown" style="width: 300px; margin-bottom: 10px; margin-left: 10px; flex-direction:row; ">
                             <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                             <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                     <i id="up3" style="display: none" class="fas fa-angle-up"></i>
@@ -238,7 +242,7 @@
         </div>
         <div *ngIf='docu == "boe"'>
             <div style="display: flex; align-items: center; margin-left: 23px;">
-                <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PIPO*</label>
+                <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Select PI/PO*</label>
                 <div class="customDropdown" style="width: 300px; flex-direction:row;">
                     <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
@@ -260,7 +264,7 @@
 
         <div *ngIf='docu == "sb" && file == "export"' style="margin-bottom: 20px;">
             <div style="display: flex; align-items: center; margin-left: 30px;">
-                <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
+                <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PI/PO*</label>
                 <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;" >
                     <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
@@ -321,16 +325,16 @@
         </div>
         <div *ngIf='docu == "pipo" && file =="export"'>
             <div style="display: flex; align-items: center; margin-left: 30px;">
-                <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px; margin-left: -9.2px;">Buyer’s
+                <label style="flex-direction:row; font-size: 20px; color: #303030; margin-left: -11.4px;">Buyer’s
         Name*</label>
-                <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px;">
+                <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px;z-index: auto !important;">
                     <span style="color: black !important; min-width: 150px; z-index: 1;">{{buyerValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
           <i id="up3" style="display: none" class="fas fa-angle-up"></i>
         </span>
                     <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
                         <div *ngFor="let buyer of buyerDetail" (click)='clickBuyer(buyer.buyerName)'><a style="min-width:100%;">{{buyer.buyerName}}</a></div>
-                        <div style=" min-width:100%;" (click)="open1(content1)"><a style="min-width:100%;">Add New Buyer</a></div>
+                        <div style=" min-width:100%;" (click)="open1(content1)"><a style="min-width:100%; border-top: 0.5px solid #C6CBD4;">Add New Buyer</a></div>
                     </div>
                 </div>
                 <!-- <select style="border: 1px solid #C6CBD4;
@@ -344,9 +348,9 @@
             </div>
             <br>
             <div style="display: flex; align-items: center; margin-left: 30px;">
-                <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px; margin-left: -9.2px;">Choose
+                <label style="flex-direction:row; font-size: 20px; color: #303030;  margin-left: -11.4px;">Choose
         Commodity</label>
-                <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px; flex-direction:row; ">
+                <div class="customDropdown" style="width: 200px; margin-left: 18px; margin-bottom: 10px; flex-direction:row; z-index: auto !important;">
                     <span style="min-width:100%;" style="color: black !important; min-width: 150px;">Choose Commodity</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
           <i id="up3" style="display: none" class="fas fa-angle-up"></i>
@@ -416,7 +420,7 @@
         </div>
 
 
-        <div *ngIf="documentType === 'PI' || documentType === 'PO' || documentType === 'tryPartyAgreement' || documentType === 'debitNote' || documentType === 'creditNote' || documentType === 'blCopy' || documentType === 'agreement' || documentType === 'opinionReport' ||documentType === 'swiftCopy' || documentType === 'lcCopy' || documentType === 'insuranceCopy' || documentType === 'deliveryOrder' || documentType === 'tryPartyAgreement' "
+        <div *ngIf="documentType === 'PI' || documentType === 'PO' || documentType === 'tryPartyAgreement' || documentType === 'debitNote' || documentType === 'creditNote' || documentType === 'blCopy' || documentType === 'agreement' || documentType === 'opinionReport' ||documentType === 'swiftCopy' || documentType === 'lcCopy' || documentType === 'insuranceCopy' || documentType === 'deliveryOrder' || documentType === 'tryPartyAgreement'|| documentType === 'EBRC' || documentType === 'blCopyref'"
             class="form" method="POST">
             <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config1" class="dropzone dropzone-container" id="dropzone" />
             <i class="fas fa-file-upload"></i>
@@ -459,12 +463,12 @@
        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div> -->
         <form class="" *ngIf="sbNo && !override" #values="ngForm" (ngSubmit)="onSubmit(values)">
-            <div class="field">
+            <div class="field" style="width:84%;margin-left:31px">
                 <table class="field-table">
                     <tr class="field-heading">
                         <td>AD BILL NUMBER</td>
-                        <td>SB Number*</td>
-                        <td>SB Date</td>
+                        <td>SB NUMBER*</td>
+                        <td>SB DATE</td>
                     </tr>
                     <tr>
                         <td>
@@ -742,11 +746,11 @@
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="partyName" [(ngModel)]="res.partyName" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="partyName" [(ngModel)]="res.partyName" />
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="amount" [(ngModel)]="res.amount" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="amount" [(ngModel)]="res.amount" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -832,7 +836,7 @@
                         </td>
 
                         <td>
-                            <input class="form-control input2" type="date" formControlName="date" style="width: 7100%0%" />
+                            <input class="form-control input2" type="date" formControlName="date" style="width: 7100% 0%" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -844,8 +848,8 @@
                     <tr style="width: 100%" class="form-wrapper">
                         <div style="margin-left: 18px; margin-bottom: 10px;">
 
-                            <span style="font-size: 20px; color: #606670; margin-bottom: 5px;">Invoice Amount</span> <br>
-                            <input class="inputAmount" type="text" formControlName="amount" />
+                            <span style="font-size: 16px; color: #606670;margin-left: -8px; margin-bottom: 5px;">Invoice Amount</span> <br>
+                            <input class="inputAmount" type="text" formControlName="amount" style="padding-left: 10px; margin-left: -5px;" />
                         </div>
 
 
@@ -864,21 +868,21 @@
 
 
 
-                        <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
+                        <td style="width: 206px; height: 76px; margin-bottom: 4%; margin-right: 20px; margin-left: 8px;" class="full-input border1">
                             <label for="invoiceNumber">Incoterm</label><input class="form-control smalll-input" type="text" formControlName="incoterm" />
                         </td>
-                        <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border2">
+                        <td style="width: 206px; height: 76px; margin-bottom: 4%; margin-right: 20px; margin-left: 8px;" class="full-input border2">
                             <label for="invoiceAmount">Last Day Of Shipment</label><input class="form-control smalll-input" type="date" formControlName="lastDayShipment" placeholder="dd/mm/yyyy" />
                         </td>
 
-                        <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
+                        <td style="width: 206px; height: 76px; margin-bottom: 4%; margin-right: 20px; margin-left: 8px;" class="full-input border1">
                             <label for="settledAmount">PC Ref No</label><input class="form-control smalll-input" type="text" formControlName="pcRefNo" />
                         </td>
-                        <td style="width: 206px; height: 86px; margin-bottom: 4%; margin-right: 20px;" class="full-input border1">
+                        <td style="width: 206px; height: 76px; margin-bottom: 4%; margin-right: 20px; margin-left: 8px;" class="full-input border1">
                             <label for="settledAmount">Due Date</label><input class="form-control smalll-input" type="date" formControlName="dueDate" placeholder="dd/mm/yyyy" />
                         </td> <br>
-                        <td class="full-input border2" style="width: 206px;">
-                            <label for="location">Location</label><select formControlName="location" ngModel>
+                        <td class="full-input border2" style="width: 206px; height: 76px; margin-bottom: 4%; margin-right: 20px; margin-left: 8px;">
+                            <label for="location">Location</label><select formControlName="location" class="form-control smalll-input" ngModel>
               <option value="">Select Location</option>
               <option *ngFor="let bene of location" [value]="bene.loc">
                 {{ bene.loc }}
@@ -928,7 +932,8 @@
                 </div> -->
                                 <div *ngIf='documentType1 =="export"' style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                                     <span style="color: #707683; font-size: 14px;">Type</span> <br>
-                                    <select name="" formControlName="type" style="outline: none; border: none; background: #f9f8f8;margin-left: -16px; width: 200px; border-radius: 5px; height: 40px; ">
+                                    <select name="" formControlName="type" style="outline: none; border: 1px solid #DEDEDE; width: 160px;height: 40px; border-radius: 5px; font-size: 12px;
+                                    color:black;padding-left: 5px;">
                   <option id="aaa" value="" style="border: none;">Select</option>
                     <option value="Advance Payment" >Advance Payment</option>
                     <option value="Letter of Credit">Letter of Credit</option>
@@ -951,8 +956,8 @@
                                 </div>
                                 <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                                     <span style="color: #707683; font-size: 14px; text-align: center;">Amount</span> <br>
-                                    <input formControlName="amount" style="outline: none; border-style: none;  height: 40px; width: 80px; border-radius: 5px; font-size: 12px;
-                    color: #A5AAB3; ">
+                                    <input formControlName="amount" style="outline: none; border: 1px solid #DEDEDE; width: 120px;height: 40px; border-radius: 5px; font-size: 12px;
+                                    color: #A5AAB3;padding-left: 5px; ">
 
                                 </div>
 
@@ -999,11 +1004,11 @@
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="triPartyAgreementAmount" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="triPartyAgreementAmount" />
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -1052,10 +1057,10 @@
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="creditNoteAmount" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="creditNoteAmount" />
                         </td>
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -1082,6 +1087,65 @@
                 <table style="width: 82%" class="field-table">
                     <tr class="field-heading">
                         <td>Swift Copy Number*</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input ngModel class="form-control input2" type="text" name="swiftcopyNumber" />
+                        </td>
+                        <td><button type="submit" class="button">Submit</button></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="sub-table2">
+                <div class="sb3">
+                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+                </div>
+            </div>
+
+        </form>
+        <!-- blcopyref Input file -->
+        <form *ngIf="blCopyref && !override" class="" #values="ngForm" (ngSubmit)="onSubmitblcopyref(values)" >
+
+            <div style="
+            width: 82%;
+            display: flex;
+            justify-content: center;
+            margin-left: 3%;
+          " class="field">
+                <table style="width: 82%" class="field-table">
+                    <tr class="field-heading">
+                        <td>BlCopyRef Number*</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input ngModel class="form-control input2" type="text" name="blcopyrefNumber" />
+                        </td>
+                        <td><button type="submit" class="button">Submit</button></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="sub-table2">
+                <div class="sb3">
+                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+                </div>
+            </div>
+
+        </form>
+
+        <!-- EBRC Input file -->
+        <form *ngIf="EBRC && !override" class="" #values="ngForm" (ngSubmit)="onSubmitEbrc(values)" >
+
+            <div style="
+            width: 82%;
+            display: flex;
+            justify-content: center;
+            margin-left: 3%;
+          " class="field">
+                <table style="width: 82%" class="field-table">
+                    <tr class="field-heading">
+                        <td>EBRC Number*</td>
                     </tr>
                     <tr>
                         <td>
@@ -1126,10 +1190,10 @@
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="totalDebitAmount" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="totalDebitAmount" />
                         </td>
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -1169,11 +1233,11 @@ margin-left: 3%;
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="insuranceAmount" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="insuranceAmount" />
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -1213,11 +1277,11 @@ margin-left: 3%;
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="letterOfCreditAmount" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="letterOfCreditAmount" />
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -1257,11 +1321,11 @@ margin-left: 3%;
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="masterServiceAmount" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="masterServiceAmount" />
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -1301,11 +1365,11 @@ margin-left: 3%;
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="opinionReportAmount" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="opinionReportAmount" />
                         </td>
 
                         <td>
-                            <input ngModel class="form-control input2" style="width: 7100%0%" name="currency" />
+                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>

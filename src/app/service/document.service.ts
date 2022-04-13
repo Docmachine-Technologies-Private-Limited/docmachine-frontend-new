@@ -442,6 +442,61 @@ export class DocumentService {
       httpOptions
     );
   }
+  //get blcopy refno and advice copy api
+  addBlcopyref(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.post(
+      `${this.api_base}/blcopy/post`,
+      { blcopy: pipo },
+      httpOptions
+    );
+  }
+  getBlcopyref() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/blcopy/get`, httpOptions);
+  }
+  getBlcopyrefByblValue(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/blcopy/getSingleSwift`,
+      {
+        id: id,
+      },
+      httpOptions
+    );
+  }
+  updateBlcopyref(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/blcopy/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
+
   // get Swift Api
   addSwift(pipo) {
     this.loadFromLocalStorage();
@@ -489,6 +544,61 @@ export class DocumentService {
     };
     return this.http.post(
       `${this.api_base}/swift/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
+
+  //Get EBRC Api
+  addEbrc(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.post(
+      `${this.api_base}/ebrc/post`,
+      { ebrc: pipo },
+      httpOptions
+    );
+  }
+  getEbrc() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/ebrc/get`, httpOptions);
+  }
+  getEbrcByEbrcValue(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/ebrc/getSingleSwift`,
+      {
+        id: id,
+      },
+      httpOptions
+    );
+  }
+  updateEbrc(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/ebrc/update`,
       {
         pipo: pipo,
         id: id
