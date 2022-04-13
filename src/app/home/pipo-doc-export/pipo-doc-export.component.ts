@@ -36,6 +36,9 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { data } from 'jquery';
 import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 
+
+
+
 @Component({
   selector: 'app-pipo-doc-export',
   templateUrl: './pipo-doc-export.component.html',
@@ -45,6 +48,44 @@ import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
   ],
 })
 export class PipoDocExportComponent implements OnInit, AfterViewInit {
+  // treeOptions: Options<Report> = {
+  //   capitalisedHeader: true,
+  //   customColumnOrder: [
+  //     'owner', 'name', 'backup', 'protected'
+  //   ]
+  // };
+  // arrayOfNodesTree: Node<Task>[] = [
+  //   {
+  //     value: {
+  //       name: 'Tasks for Sprint 2',
+  //       completed: false,
+  //       owner: 'Erika',
+  //     },
+  //     children: [
+  //       {
+  //         value: {
+  //           name: 'Fix bug #567',
+  //           completed: false,
+  //           owner: 'Marco'
+  //         },
+  //         children: []
+  //       },
+  //       {
+  //         value: {
+  //           name: 'Speak with clients',
+  //           completed: true,
+  //           owner: 'James'
+  //         },
+  //         children: []
+  //       }
+  //     ]
+  //   }
+
+  // ]
+
+  // logNode(node: Node<Report>) {
+  //   console.log(node);
+  // }
   bsModalRef: BsModalRef;
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
@@ -56,13 +97,17 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   public item5 = [];
   public item3 : any;
   public item18 : any;
+  public ebrcdata:any;
+  public blcopyRef:any;
   public item19 : any;
+  public item20 : any;
   public item;
   public item2;
   public item7 = [];
   public item8 : any;
   public item9 = [];
   public item10 : any;
+  public iradvicedata : any;
   public item11 = [];
   public item12 : any;
   public item13 = [];
@@ -175,6 +220,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   obj: any;
   item6: any;
   toggle4: boolean;
+  toggle5: boolean;
+  toggle6: boolean;
+  toggle7: boolean;
 
 
 
@@ -276,6 +324,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.documentService.getMaster(1).subscribe (
       (res: any) => {
         console.log(res,"SHIPPING DATA"), (this.item20 = res.data);
+        console.log("shipping bill for detail",this.item20);
+
       },
       (err) => console.log(err)
     );
@@ -311,6 +361,13 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       },
       (err) => console.log(err)
       );
+      //iradvice
+      this.documentService.getIrAdvice('').subscribe(
+        (res: any) => {
+          console.log('HEre Response iradvice', res);
+         this.iradvicedata = res.data
+         console.log('HEre Response iradvicedata', res);
+        });
     //Agreement Api
     this.documentService.getMasterService().subscribe(
       (res: any) => {
@@ -342,6 +399,24 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       },
       (err) => console.log(err)
       );
+      //blcopyref api
+      this.documentService.getBlcopyref().subscribe(
+        (res: any) =>{
+          console.log('getBlcopyref copy responce',res);
+          this.blcopyRef = res.data;
+          console.log("blcopyref copy response2",this.blcopyRef);
+      }
+      )
+
+      // EBRC api
+      this.documentService.getEbrc().subscribe(
+        (res: any) =>{
+          console.log('EBRC copy responce',res);
+          this.ebrcdata = res.data;
+          console.log("EBRC copy response2",this.ebrcdata);
+      }
+      )
+
      //swift Api
       this.documentService.getSwift().subscribe(
         (res: any) =>{
@@ -407,9 +482,10 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       console.log("amaniiiiiiiiiiiiiiiii");
 
       console.log(4845131351315131351351);
+
       this.documentService.getPipo().subscribe(
         (res: any) => {
-          console.log('HEre Response', res);
+          console.log('HEre ResponseAmani####', res);
           this.item = res.data;
 
           for (let value of this.item) {
@@ -418,6 +494,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
               console.log('avvvvvvvvvv');
               this.item1.push(value);
               console.log("pipoamani",this.item1)
+              console.log("pipoamanihfhjfjh",this.item1)
+
             }
           }
           this.getMaster();
@@ -480,7 +558,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       // });
       this.documentService.getPipo().subscribe(
         (res: any) => {
-          console.log('HEre Response', res);
+          console.log('HEre Response pipo data ########', res);
           this.item = res.data;
           for (let value of this.item) {
             if (value['file'] == 'export') {
@@ -592,28 +670,79 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.documentService.getMaster(1).subscribe(
       (res: any) => {
         console.log(res), (this.item4 = res.data);
-        console.log("hello the")
-        for (let value1 of this.item1) {
-          for (let value2 of this.item4) {
-            for (let a of value2.pipo) {
-              if (a == value1.pi_poNo) {
+        console.log("hello the********************",this.item4)
+        // for (let value1 of this.item1) {
+        //   for (let value2 of this.item4) {
+        //     for (let a of value2.pipo) {
+        //       if (a == value1.pi_poNo) {
 
-                const newVal = { ...value1 };
-                newVal['sbno'] = value2.sbno
-                newVal['sbdate'] = value2.sbdate
-                newVal['portCode'] = value2.portCode
-                newVal['region'] = value2.countryOfFinaldestination
-                newVal['fobValue'] = value2.fobValue
+        //         const newVal = { ...value1 };
+        //         newVal['sbno'] = value2.sbno
+        //         newVal['sbdate'] = value2.sbdate
+        //         newVal['portCode'] = value2.portCode
+        //         newVal['region'] = value2.countryOfFinaldestination
+        //         newVal['fobValue'] = value2.fobValue
 
-                // console.log("Hello Ranjit", a);
-                // value1.sbno = value2.sbno
-                // value1.sbdate = value2.sbdate
-                arrayMain.push(newVal)
-                // console.log("hello Sj", value2);
-              }
-            }
-          }
-        }
+        //         // console.log("Hello Ranjit", a);
+        //         // value1.sbno = value2.sbno
+        //         // value1.sbdate = value2.sbdate
+        //         arrayMain.push(newVal)
+        //         // console.log("hello Sj", value2);
+        //       }
+        //     }
+        //   }
+        // }
+
+
+        //****************start shipping bill and pipo marging code**********/
+        // let pipoindex = 0 ;
+        // let filtershippingdata = [];
+        // let completedpipo = [];
+
+
+        // for (let pipo of this.item1){
+        //   let currentpipo = this.item1[pipoindex]
+
+        //   this.item1[pipoindex].shippingdata = []
+        //   for(let shippingdata of this.item4){
+
+
+        //     if(pipo.pi_poNo == shippingdata.pipo[0]){
+
+
+        //       const newVal = { ...pipo };
+        //         newVal['sbno'] = shippingdata.sbno
+        //         newVal['sbdate'] = shippingdata.sbdate
+        //         newVal['portCode'] = shippingdata.portCode
+        //         newVal['region'] = shippingdata.countryOfFinaldestination
+        //         newVal['fobValue'] = shippingdata.fobValue
+
+
+
+        //       filtershippingdata.push(newVal);
+
+        //       if(completedpipo.indexOf(pipoindex)== -1){
+        //         completedpipo.push(pipoindex)
+        //       }
+        //       console.log("cheching shipping data",currentpipo);
+
+        //     }
+        //   }
+        //   pipoindex = pipoindex + 1;
+
+        // }
+        // console.log("filtershiping data",filtershippingdata);
+        // console.log("completed pipo data",completedpipo);
+
+
+        // for(let i = completedpipo.length-1; i>=0; i--){
+        //   this.item1.splice(completedpipo[i],1)
+        // }
+        // for( let pipo of filtershippingdata){
+        //   this.item1.push(pipo)
+        // }
+        // console.log("*******************************************************final",this.item1);
+        //****************end shipping bill and pipo marging code*******************/
         console.log("Hello There", arrayMain);
         if (arrayMain.length > 0) {
           // this.item1 = arrayMain
@@ -670,11 +799,124 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         (err) => console.log(err)
       );
   }
+  public selectedshippingdata
+  toggleClick5(a ,shippingData){
+    this.selectedshippingdata = shippingData
+    this.toggle = true;
+    this.toggle4 = false;
+    this.toggle5 = true;
+    this.toggle2 = false;
+    this.toggle3 = false;
+    this.toggle6 = false;
+    console.log("*****************",this.item20);
+    console.log("thihfdfsdfgdsfkjgsf",this.pipoData);
+
+    let currentpipo = this.route.snapshot.params['id'];
+    // for(let item of this.item20){
+    //   if(item.sbno == this.pipoData.sbno){
+    //     this.selectedshippingdata = item
+    // }
+
+    // }
+    console.log(this.selectedshippingdata,"this is conslo")
+
+
+    if (a == 'sb') {
+      if (this.pipoData[a]) {
+        this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.pipoData[a]
+
+
+        ); console.log(this.pipoData.doc1,"hey***************#######");
+      } else {
+        this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.pipourl11
+        );
+      }
+    }
+
+  }
+  public irdata
+  toggleClick6(a ,irAdvicecopy){
+    this.irdata = irAdvicecopy
+    this.toggle = true;
+    this.toggle4 = false;
+    this.toggle6 = true;
+    this.toggle2 = false;
+    this.toggle5 = false;
+    this.toggle3 = false;
+    this.toggle7 = false;
+
+    console.log("*****************",this.iradvicedata);
+    console.log("thihfdfsdfgdsfkjgsf",this.pipoData);
+
+    let currentpipo = this.route.snapshot.params['id'];
+    // for(let item of this.iradvicedata){
+    //   if(item.pipo == this.pipoData.pi_poNo){
+    //     this.irdata= item
+    // }
+
+    // }
+    console.log(this.irdata,"this is conslo")
+
+
+    if (a == 'irAdvice') {
+      if (this.pipoData[a]) {
+        this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.pipoData[a]
+
+
+        ); console.log(this.pipoData.doc1,"hey***************#######");
+      } else {
+        this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.pipourl11
+        );
+      }
+    }
+
+  }
+  toggleClick7(a){
+    this.toggle7 = true;
+    this.toggle = true;
+    this.toggle4 = false;
+    this.toggle6 = false;
+    this.toggle2 = false;
+    this.toggle5 = false;
+    this.toggle3 = false;
+    if (a == 'billUnder') {
+      if (this.pipoData[a]) {
+        this.docu1 = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.pipoData[a]
+
+
+        ); console.log(this.pipoData.doc1,"hey***************#######");
+      } else {
+        this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.pipourl11
+        );
+      }
+    }
+    if (a == 'sb') {
+      if (this.pipoData[a]) {
+        this.docu1 = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.pipoData[a].sb
+
+
+        ); console.log(this.pipoData.doc1,"hey***************#######");
+      } else {
+        this.docu1 = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.pipourl11
+        );
+      }
+    }
+  }
   toggleClick4(a){
     this.toggle4 = true;
     this.toggle = true;
     this.toggle2 = false;
     this.toggle3 = false;
+    this.toggle5 = false;
+    this.toggle7 = false;
     if (a == 'advanceOutward') {
       if (this.pipoData.doc) {
         this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -882,10 +1124,24 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.router.navigate(['home/upload', { file: 'export', document: 'debitNote' }]);
   }
   newInsurance(){
-    this.router.navigate(['home/upload', { file: 'export', document: 'pipo' }]);
+    this.router.navigate(['home/upload', { file: 'export', document:'insuranceCopy' }]);
   }
   newLoc(){
-    this.router.navigate(['home/upload', { file: 'export', document: 'pipo' }]);
+    this.router.navigate(['home/upload', {  file:'export',
+    document:'lcCopy',
+  }]);
+  }
+  newtriparty(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'tryPartyAgreement',
+    }]);
+  }
+  newopinoin(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'opinionReport',
+    }]);
   }
 
   selectDoc(a) {
@@ -938,7 +1194,11 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     //   }]);
     // }
     else if (a == 'Collection Bill') {
-      this.router.navigate(['home/billLodgement']);
+      this.router.navigate(['home/billLodgement',{
+        pipo: this.pipoData.pi_poNo,
+
+        index: this.currentindex
+      }]);
     }
     else if (a == 'packing Credit Request') {
       this.router.navigate(['home/packingCreditRequest']);
@@ -1077,6 +1337,42 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
     }]);
    }
+   uploadEbrc(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'EBRC',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName,
+      index: this.currentindex,
+
+    }]);
+   }
+   uploadblcopyref(){
+    this.router.navigate(['/home/upload',{
+      file:'export',
+      document:'blCopyref',
+      pipo: this.pipoData.pi_poNo,
+      bene: this.pipoData.buyerName,
+      index: this.currentindex,
+
+    }]);
+   }
+   uploadInward(){
+    this.router.navigate(['home/exportHome',{
+      pipo: this.pipoData.pi_poNo,
+
+      index: this.currentindex
+    }
+  ]);
+}
+   uploadCollectionBill(){
+    this.router.navigate(['home/billLodgement',{
+      pipo: this.pipoData.pi_poNo,
+
+      index: this.currentindex
+    }
+  ]);
+}
 
   openSubDoc(a) {
     console.log(a);
@@ -1333,22 +1629,66 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     );
   }
 
-  viewClick(a) {
+  viewClick(a,currentData?:any) {
+    // console.log("this is new swift",swiftCopy.doc);
+
     if (a == 'lcIssuance') {
       console.log(this.pipoData[a].doc);
       console.log(this.pipoData[a]);
       this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
         this.pipoData[a].doc
       );
-      console.log(this.viewData);
-    } else if (a == 'invoiceReduction') {
+     console.log(this.viewData);
+    }
+     else if (a == 'invoiceReduction') {
       console.log(this.pipoData[a]);
       this.invoiceArr = this.pipoData[a];
-    } else {
+    } else if (a == 'swiftCopy'){
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+        currentData.doc
+
+      );
+    } else if (a == 'EBRC'){
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+        currentData.doc
+
+      );
+    } else if (a == 'blcopyref'){
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+        currentData.doc
+
+      );
+    } else if (a == 'tryPartyAgreement'){
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+        currentData.doc
+      );
+    } else if (a == 'debitNote'){
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+        currentData.doc
+      );
+    } else if (a == 'creditNote'){
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+        currentData.doc
+      );
+    } else if (a == 'lcCopy'){
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+        currentData.doc
+      );
+    } else if (a == 'opinionReport'){
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+        currentData.doc
+      );
+
+      console.log("viewdata",this.viewData);
+
+
+    }
+
+    else {
       this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
         this.pipoData[a]
       );
-      console.log(this.viewData);
+
     }
   }
 
@@ -1500,7 +1840,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   open(content) {
     this.changeDetectorRef.detectChanges();
 
-    console.log(this.table);
+    console.log("this is table",this.table);
     this.modalService
       .open(content, { ariaLabelledBy: 'modal-basic-title' })
       .result.then(
@@ -1544,7 +1884,17 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     // }
   }
 }
-
+// export interface Report {
+//   name: string;
+//   owner: string;
+//   protected: boolean;
+//   backup: boolean;
+// }
+// export interface Task {
+//   name: string;
+//   completed: boolean;
+//   owner: string;
+// }
 @Component({
   selector: 'modal-content',
   template: `

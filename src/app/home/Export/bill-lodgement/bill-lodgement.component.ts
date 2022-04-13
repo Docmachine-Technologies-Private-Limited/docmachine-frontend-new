@@ -25,7 +25,6 @@ import {
 
 export class BillLodgementComponent implements OnInit, OnDestroy {
   @ViewChild('table1') table: ElementRef;
-  closeResult: string;
   public item1;
   public itemArray;
   public item2;
@@ -100,6 +99,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   data7: any = [];
   done: boolean;
   doc: any = [];
+  redirectid: any;
+  redirectindex: any;
+  redirectpage: any;
   generate: boolean;
   generatePurpose: any = [];
   sbPurpose: any = [];
@@ -190,6 +192,11 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     //window.location.reload();
+    this.redirectid = this.route.snapshot.paramMap.get('pipo')
+    this.redirectindex = this.route.snapshot.paramMap.get('index')
+    this.redirectpage = this.route.snapshot.paramMap.get('page')
+    console.log("pipoId",this.redirectid);
+
     console.log(data['default'])
     this.jsondata = data['default'];
     console.log(this.jsondata[0].purpose)
@@ -1753,7 +1760,14 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
                         console.log("king123")
                         console.log(data1);
                         this.toastr.success('Task saved as completed successfully!');
-                        this.router.navigate(["/home/dashboardTask"]);
+                        this.router.navigate([
+                          'home/pipoDocExport',
+                              {
+                                id: this.redirectid,
+                                page: this.redirectpage,
+                                index: this.redirectindex,
+                              },
+                           ]);
                         //this.router.navigate(["/home/advance-outward-remittance"]);
                       },
                       error => {
@@ -1800,7 +1814,14 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
                         console.log("king123")
                         console.log(data1);
                         this.toastr.success('Task saved as completed successfully!');
-                        this.router.navigate(["/home/dashboardTask"]);
+                        this.router.navigate([
+                          'home/pipoDocExport',
+                              {
+                                id: this.redirectid,
+                                page: this.redirectpage,
+                                index: this.redirectindex,
+                              },
+                           ]);
                         //this.router.navigate(["/home/advance-outward-remittance"]);
                       },
                       error => {

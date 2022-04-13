@@ -9,6 +9,7 @@ import { UserService } from "../../../service/user.service";
 import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { formatDate } from '@angular/common';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-export-home',
@@ -16,6 +17,7 @@ import { formatDate } from '@angular/common';
   styleUrls: ['./export-home.component.scss']
 })
 export class ExportHomeComponent implements OnInit, OnDestroy {
+  closeResult: string;
   public item1;
   public item2;
   public user;
@@ -44,6 +46,15 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   Ax1: boolean;
   Ax2: boolean;
   step1: any;
+  public buyerDetail: any = [];
+  commoditydata: any;
+  locationdata: any;
+  nameSearch : string ='';
+  nameSearch1 : string ='';
+  nameSearch2 : string = '';
+  nameSearch3 : string = '';
+  startDate : any = '';
+  endDate: any = '';
   myRadio: any;
   myRadio1: any;
   myRadio2: any;
@@ -136,6 +147,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   filterToggle: boolean;
   e: boolean;
   d: boolean;
+  model   = {option: 'Bank options'};
+ 
   
   constructor(
     public documentService: DocumentService,
@@ -144,6 +157,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private userService: UserService,
+    private modalService: NgbModal,
     private confirmDialogService: ConfirmDialogService
   ) {
     console.log("hello")
@@ -169,6 +183,15 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       this.showInvoice = false;
       console.log("hello")
     });
+    //buyer details
+    this.userService.getBuyer(1).subscribe(
+      (res: any) => {
+        (this.buyerDetail = res.data),
+          console.log("Benne Detail4", this.buyerDetail);
+      },
+      (err) => console.log("Error", err)
+    );
+    //pipo details
     this.documentService.getPipo().subscribe(
       (res: any) => {
         console.log("HEre Response", res), (this.item3 = res.data);
@@ -208,7 +231,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           console.log("king123")
           console.log(data['data'][0])
           this.item5 = data['data'][0]
-          console.log(this.item5)
+          console.log("checking for location commodity",this.item5)
+          this.commoditydata = this.item5.commodity;
+          console.log("checking for commodity",this.commoditydata)
+          this.locationdata = this.item5.location;
+          console.log("checking for location",this.locationdata)
           this.arr = this.item5.gst.split('');
           this.bankArray = this.item5.bankDetails
           for (let value of this.bankArray) {
@@ -442,6 +469,25 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
     else {
       this.Question5 = '';
+    }
+  }
+
+  open(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    console.log('ddhdhdhh')
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
     }
   }
 
@@ -1885,7 +1931,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
                 console.log("king123")
                 console.log(data)
                 this.toastr.success('Task saved as completed successfully!!!!!!!!!!!!');
-                this.router.navigate(["/home/dashboardTask"]);
+                this.router.navigate([
+                  'home/pipoDocExport',
+                      {
+                        id: this.redirectid,
+                        page: this.redirectpage,
+                        index: this.redirectindex,
+                      },
+                   ]);
                 //this.router.navigate(["/home/advance-outward-remittance"]);
               },
               error => {
@@ -2367,6 +2420,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       if (value.bank == a) {
         this.newBankArray.push(value)
       }
+      
 
     });
 

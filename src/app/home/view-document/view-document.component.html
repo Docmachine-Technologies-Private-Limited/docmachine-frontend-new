@@ -850,17 +850,14 @@
                                                         </div>
                                                     </tr>
                                                     <p class="sh1">Invoices</p>
-                                                    <table id="customers">
+                                                    <table id="customers" style="margin-bottom: 5px;">
                                                         <tr>
-                                                            <th colspan="2" style="
-                                                                      text-align: right !important;
-                                                                      padding-right: 20px;
-                                                                    ">
+                                                            <th >
                                                                 Serial Number
                                                             </th>
                                                             <th>Invoice Number</th>
                                                             <th>Invoice Amount</th>
-                                                            <th colspan="2" style="text-align: left !important">
+                                                            <th  style="text-align: left !important">
                                                                 Currency
                                                             </th>
                                                         </tr>
@@ -868,12 +865,12 @@
                                                                     let obj of selectedRow.invoices;
                                                                     let i = index
                                                                   ">
-                                                            <td><img src="./assets/Rectangle-13.png" /></td>
+                                                            <!-- <td><img src="./assets/Rectangle-13.png" /></td> -->
                                                             <td>{{ i + 1 }}</td>
                                                             <td>{{ obj.invoiceno }}</td>
                                                             <td>{{ obj.amount }}</td>
                                                             <td>{{ obj.currency }}</td>
-                                                            <td><img src="./assets/Rectangle-13.png" /></td>
+                                                            <!-- <td><img src="./assets/Rectangle-13.png" /></td> -->
                                                         </tr>
                                                     </table>
 
