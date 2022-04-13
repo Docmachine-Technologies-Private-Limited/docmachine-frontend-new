@@ -98,6 +98,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   toggle2: boolean;
   z: any;
 
+
   public config: DropzoneConfigInterface;
   public config1: DropzoneConfigInterface;
   public config2: DropzoneConfigInterface;
@@ -638,7 +639,6 @@ console.log(this.res)
           }
       );
     }
-
   }
 
   public onSubmit(e) {
@@ -664,82 +664,39 @@ console.log(this.res)
     console.log(invoices);
     e.form.value.invoices = invoices;
     e.form.value.buyerName = this.mainBene;
-    // e.form.value.doc = this.pipourl1;
     e.form.value.pipo = this.pipoArr
-
-
-    // e.form.value._id = this.res._id
+    e.form.value._id = this.res._id
     console.log(e.form.value);
     // this.formData = new ShippingBill(e.form.value)
     // console.log(this.formData
     if (this.message == "This file already uploaded") {
       console.log("inside file already exist");
+
       this.documentService
-        .updateMasterBySb(e.form.value, e.form.value.sbno)
+        .updateMasterBySb(e.form.value, e.form.value.sbno, e.form.value._id)
         .subscribe(
           (data) => {
-            console.log(".kjsakjsdkdsjYYYYY");
-            console.log("king123");
-            console.log("DATA", data);
-            // this.message = "";
-            console.log(this.pipoArr);
-            console.log(this.documentType);
-            console.log("this is pipourl2222222",this.pipourl1);
-            this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc)
-              .subscribe(
-                data => {
-                  //this.pipoData[`${this.pipoDoc}`] = args[1].data
-                  console.log("king123")
-                  console.log(data)
-
-                  this.toastr.success('shipping Bill added successfully.');
-                  this.router.navigate(["home/viewDocument/sb"]);
-
-                  // this.docTog = false
-                  // this.toggle = false
-                  // this.toggle2 = false
-                  // this.toastr.success('Company details updated sucessfully.');
-                  // this.router.navigate(['/home/dashboardNew']);
-                },
-                error => {
-                  // this.toastr.error('Invalid inputs, please check!');
-                  console.log("error")
-                });
-
-          //this.router.navigate(['/login'], { queryParams: { registered: true }});
+            // console.log(".kjsakjsdkdsjYYYYY");
+            // console.log("",e.form.value._id)
+            // console.log("king123");
+            // console.log("DATA", data);
+            console.log("Shailendra Data", data )
+            this.message = "";
+            this.router.navigate(["home/viewDocument/sb"]);
+            //this.router.navigate(['/login'], { queryParams: { registered: true }});
           },
           (error) => {
-            console.log(error);
+            console.log("error");
           }
         );
+
+
     } else {
       this.documentService.updateMaster(e.form.value, this.res._id).subscribe(
         (data) => {
           console.log("king123");
           console.log(data);
-          console.log(this.pipoArr);
-          console.log(this.documentType);
-          console.log("this messess",this.pipourl1);
-
-          this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc)
-          .subscribe(
-            data => {
-              //this.pipoData[`${this.pipoDoc}`] = args[1].data
-              console.log("king123")
-              console.log(data)
-              this.toastr.success('shipping Bill added successfully.');
-              this.router.navigate(["home/viewDocument/sb"]);
-
-              // this.docTog = false
-              // this.toggle = false
-              // this.toggle2 = false
-              // this.toastr.success('Company details updated sucessfully.');
-              // this.router.navigate(['/home/dashboardNew']);
-            },
-            error => {
-              // this.toastr.error('Invalid inputs, please check!');
-              console.log("error")
-            });
+          this.router.navigate(["home/viewDocument/sb"]);
           //this.router.navigate(['/login'], { queryParams: { registered: true }});
         },
         (error) => {
@@ -748,6 +705,10 @@ console.log(this.res)
       );
     }
   }
+
+
+
+
 
   public submitType() {
     console.log("This is the document type", this.documentType);

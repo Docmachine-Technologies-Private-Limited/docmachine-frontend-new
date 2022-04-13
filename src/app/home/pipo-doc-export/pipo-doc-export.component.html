@@ -6,56 +6,54 @@
                 <div style="display: flex; align-items: center; margin-left: 22px">
                     <div style="display: flex; margin-left: 16px; align-items: center">
                         <!-- <div class="customDropdown" style="width: 90px; border: 1px solid #C6CBD4; font-size: 14px;">
-                            <span style="color: #4b74ff !important; ">Import </span>
-                            <span class="dropIco"><i id="down" class="fas fa-angle-down"></i>
-                                <i id="up" style="display: none" class="fas fa-angle-up"></i>
-                            </span>
-                            <div class="dropdown-content" style="min-width: 90px;">
-                                <a style="width: 100%;">Import</a>
-                                <a style="width: 100%;">Export</a>
-                            </div>
-                        </div> -->
+                          <span style="color: #4b74ff !important; ">Import </span>
+                          <span class="dropIco"><i id="down" class="fas fa-angle-down"></i>
+                              <i id="up" style="display: none" class="fas fa-angle-up"></i>
+                          </span>
+                          <div class="dropdown-content" style="min-width: 90px;">
+                              <a style="width: 100%;">Import</a>
+                              <a style="width: 100%;">Export</a>
+                          </div>
+                      </div> -->
                         <div class="customDropdown" style="width: 80px;border: 1px solid #C6CBD4; font-size: 14px;margin-right: 5px;">
                             <span style="color: #4b74ff !important">PI/PO </span>
                             <span class="dropIco"><i id="down" class="fas fa-angle-down"></i>
-                                <i id="up" style="display: none" class="fas fa-angle-up"></i>
-                            </span>
+                              <i id="up" style="display: none" class="fas fa-angle-up"></i>
+                          </span>
                             <div class="dropdown-content" style="min-width: 80px;">
                                 <a style="width: 100%;">PI/PO</a>
                                 <a style="width: 100%;">BOE</a>
                             </div>
                         </div>
                         <select [(ngModel)]="nameSearch" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100 ; margin-right: 5px; font-size: 14px;">
-                            <option  value=""  > commodities</option>
-                            <option *ngFor="let buyer of commodity" >{{buyer.como}}</option>
-                        </select>
+                          <option  value=""  > commodities</option>
+                          <option *ngFor="let buyer of commodity" >{{buyer.como}}</option>
+                      </select>
 
                         <select [(ngModel)]="nameSearch1" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100 ; font-size: 14px;margin-right: 5px;">
-                            <option  value="" >locations</option>
-                            <option *ngFor="let bene of location" >{{ bene.loc }} </option>
-                        </select>
+                          <option  value="" >locations</option>
+                          <option *ngFor="let bene of location" >{{ bene.loc }} </option>
+                      </select>
                         <select [(ngModel)]="nameSearch2" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100 ; font-size: 14px;">
-                            <option  value="" >Buyers</option>
-                            <option *ngFor="let bene of benneDetail" >{{ bene.buyerName }} </option>
-                        </select>
+                          <option  value="" >Buyers</option>
+                          <option *ngFor="let bene of benneDetail" >{{ bene.buyerName }} </option>
+                      </select>
 
-                        <input  type="date" placeholder="Start Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;"
-                        [(ngModel)]="startDate" required/>
+                        <input type="date" placeholder="Start Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;" [(ngModel)]="startDate" required/>
 
-                        <input type="date" placeholder="End Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;margin-right: 5px;" [(ngModel)]="endDate"  required/>
+                        <input type="date" placeholder="End Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;margin-right: 5px;" [(ngModel)]="endDate" required/>
 
-                        <button class="filter"   (click)="startDate = '' ; endDate = '' ;nameSearch = '';nameSearch1 = '' ;nameSearch2 = '' "
-                        >Reset</button>
+                        <button class="filter" (click)="startDate = '' ; endDate = '' ;nameSearch = '';nameSearch1 = '' ;nameSearch2 = '' ">Reset</button>
                         <div class="customDropdown" style="width: 102px; margin-right: 5px !important; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
                             <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
-                                <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
+                              <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
                             <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
-                                <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                            </span> -->
+                              <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                          </span> -->
                             <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3"
-                                class="fas fa-angle-down"></i>
-                             <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                        </span>
+                              class="fas fa-angle-down"></i>
+                           <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                      </span>
                             <div class="dropdown-content" style="min-width:200px; margin-left: -95px;">
                                 <a style="min-width:200px;" (click)="newCredit()">New Credit Note</a>
                                 <a style="min-width:200px;" (click)='newPipo()'>New PI/PO</a>
@@ -66,9 +64,9 @@
                             </div>
                         </div>
                         <button (click)="exportToExcel()" style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
-                        background-color: #49A2D7;
-                        border: none;
-                        border-radius: 5px;">Export To Excel</button>
+                      background-color: #49A2D7;
+                      border: none;
+                      border-radius: 5px;">Export To Excel</button>
 
                     </div>
                 </div>
@@ -78,14 +76,14 @@
 
         <div style="width: 100%" class="analytics-side" *ngIf="!showInvoice" #piposummery>
 
-            <div style="width: 100%" class="row"  >
+            <div style="width: 100%" class="row">
 
-                <div style="width: 100%; margin:5%; left: -70px; top:-60px" class="col-12 mb-lg padding" id="container" >
+                <div style="width: 100%; margin:5%; left: -70px; top:-60px" class="col-12 mb-lg padding" id="container">
                     <section style="width: 200%; margin-left: 70px" class="pb-0 box-shadow">
 
-                        <div style="margin-left: -79px; height: 638px;"   class="widget-body p-0 support table-wrapper"  >
+                        <div style="margin-left: -79px; height: 638px;" class="widget-body p-0 support table-wrapper">
 
-                            <table style="width: 100%; margin-left: 40px;"  class="table table-striped mb-0"   >
+                            <table style="width: 100%; margin-left: 40px;" class="table table-striped mb-0">
 
                                 <thead style="width: 100% ;height: 54px;">
                                     <tr class="text-muted table-heading" style="opacity: 50%; font-size: 14px; color:black !important; font-weight: 300 !important; padding: 20px; border-bottom: 1px solid rgb(194, 189, 189);">
@@ -133,7 +131,8 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-dark">
-                                    <tr class="table-row" *ngFor='let data of item1 | filterdate:startDate:endDate | filternew:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index' (click)="getInvoices(data, i)">
+                                    <tr class="table-row" *ngFor='let data of item1 | filterdate:startDate:endDate | filternew:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index'>
+
                                         <td style="padding: 20px 35px;  ">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.date}}
@@ -142,7 +141,7 @@
                                                 <input class="tblInput form-control" name="date" type="text" placeholder="Date" [(ngModel)]="data.date">
                                             </div>
                                         </td>
-                                        <td class="sb-no" (click)=" hide(data, i)">{{data.pi_poNo}}</td>
+                                        <td class="sb-no" (click)=" hide(data, i)" (click)="getInvoices(data, i)">{{data.pi_poNo}}</td>
                                         <!-- <td> <span *ngIf='data.document == "PI"'> Proforma Invoice</span> <span *ngIf='data.document != "PI"'> Purchase Order</span></td> -->
                                         <td>
                                             {{data.date}}
@@ -151,12 +150,12 @@
                                             {{data.buyerName}}
                                         </td>
                                         <!-- <td>
-                                            <img class="image"
-                                                src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                height="30px" width="30px" /><img class="image image2"
-                                                src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                height="30px" width="30px" /> Lindsey Stroud
-                                        </td> -->
+                                          <img class="image"
+                                              src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
+                                              height="30px" width="30px" /><img class="image image2"
+                                              src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
+                                              height="30px" width="30px" /> Lindsey Stroud
+                                      </td> -->
                                         <!-- <td>{{data.amount}}</td> -->
 
                                         <!-- <td style="color:#F5A623;">Pending Action</td> -->
@@ -170,8 +169,8 @@
                                                 {{data.location}}
                                             </div>
                                             <!-- <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="commodity" type="text" placeholder="Commodity" [(ngModel)]="data.commodity">
-                                            </div> -->
+                                              <input class="tblInput form-control" name="commodity" type="text" placeholder="Commodity" [(ngModel)]="data.commodity">
+                                          </div> -->
                                         </td>
 
                                         <td>
@@ -373,8 +372,8 @@
                                             </div>
 
                                             <!-- <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="xyz" type="text" placeholder="X+Y+Z" [(ngModel)]="data.xyz">
-                                            </div> -->
+                                              <input class="tblInput form-control" name="xyz" type="text" placeholder="X+Y+Z" [(ngModel)]="data.xyz">
+                                          </div> -->
                                         </td>
 
                                         <td>
@@ -384,8 +383,8 @@
                                             </div>
 
                                             <!-- <div *ngIf="optionsVisibility[i]">
-                                                <input class="tblInput form-control" name="waa" type="text" placeholder="W-AA" [(ngModel)]="data.waa">
-                                            </div> -->
+                                              <input class="tblInput form-control" name="waa" type="text" placeholder="W-AA" [(ngModel)]="data.waa">
+                                          </div> -->
                                         </td>
 
                                         <td>
@@ -513,37 +512,37 @@
         </div>
 
 
-           <div *ngIf="showInvoice && !toggle ">
-              <div class="table_top" style="margin-top: 28px;" >
+        <div *ngIf="showInvoice && !toggle ">
+            <div class="table_top" style="margin-top: 28px;">
                 <div style="width: 72%;border-right: 0.5px solid rgba(0, 0, 0, 0.2); margin-left: 40px;margin-top: -6px;
-                padding-top: 6px;">
+              padding-top: 6px;">
 
                     <span style="color: RGB(50, 62, 74); font-size: 14px; margin-left: 24px;">PI / PO Documents</span>
                     <!-- <div style="background-color: #49A2D7; float: right;" class="customDropdown">
-                        <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
-                            <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
-                        <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
-                                class="fas fa-angle-down"></i>
-                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                        </span>
-                        <div class="dropdown-content1" style="min-width: 200px; margin-left: -92px; font-family: Poppins,sans-serif; font-size: 15px;">
-                            <p><a>New Credit Note</a></p>
-                            <p (click)='pipoClick()'><a>New PI/PO</a></p>
-                            <p><a>New Debit Note</a></p>
-                            <p><a>New Issuance Document</a></p>
-                            <p><a>New Letter of Credit</a></p>
-                        </div>
-                    </div> -->
+                      <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
+                          <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
+                      <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
+                              class="fas fa-angle-down"></i>
+                          <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                      </span>
+                      <div class="dropdown-content1" style="min-width: 200px; margin-left: -92px; font-family: Poppins,sans-serif; font-size: 15px;">
+                          <p><a>New Credit Note</a></p>
+                          <p (click)='pipoClick()'><a>New PI/PO</a></p>
+                          <p><a>New Debit Note</a></p>
+                          <p><a>New Issuance Document</a></p>
+                          <p><a>New Letter of Credit</a></p>
+                      </div>
+                  </div> -->
                     <div class="customDropdown" style="width: 102px; margin-bottom: 5px; float: right; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
                         <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
-                            <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
+                          <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
                         <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
-                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                        </span> -->
+                          <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                      </span> -->
                         <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3"
-                            class="fas fa-angle-down"></i>
-                         <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                    </span>
+                          class="fas fa-angle-down"></i>
+                       <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                  </span>
                         <div class="dropdown-content" style="min-width:200px; margin-left: -95px;">
                             <a style="min-width:200px;">New Credit Note</a>
                             <a (click)='newPipo()' style="min-width:200px;">New PI/PO</a>
@@ -556,21 +555,21 @@
                 <!----style="height: 35px; font-weight: 400"-->
 
                 <div style="width: 75.5%; font-weight: 300; padding-left: 1%; color: #323e4a">
-                    <span style="font-size: 16px; color: RGB(50, 62, 74);" >{{pipoNo}}</span>
+                    <span style="font-size: 16px; color: RGB(50, 62, 74);">{{pipoNo}}</span>
                 </div>
                 <div style="width: 70%; margin-right: 10%">
-                   
+
                     <i style="font-size: 18px; color: rgb(227, 227, 227); margin-left: 10px; float: right; padding-top: 3px; cursor: pointer;" class="fas fa-plus-circle"></i>
                     <span *ngFor="let data of item1 | slice: 0:3; let i = index" style="float: right; margin-left: 10px; cursor: pointer;"><img class="image"
-                            src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="25px"
-                            width="25px" /></span>
+                          src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="25px"
+                          width="25px" /></span>
                     <!-------style="padding-left: 1%" class="pc1"-->
                 </div>
-                <div style="margin-right: 8%"> 
+                <div style="margin-right: 8%">
                     <img src="../../../assets/cross.png" (click)="hide3()" style="width: 20px; height: 20px;
-                     margin-left: 10px;cursor: pointer;">
+                   margin-left: 10px;cursor: pointer;">
                 </div>
-                
+
             </div>
 
             <div class="p-8 bc">
@@ -586,8 +585,8 @@
                         <div class="" style="width: 100%; padding: 3%">
                             <!-----class="fr pt-2"-->
                             <span class="fl fs16" style="color: RGB(50, 62, 74); font-size: 16px;">{{ data.pi_poNo
-                                }}</span><span class="fr fs12" style="float: right; color: RGB(141, 151, 165); font-size: 12px;">
-                                {{ data.date }}</span>
+                              }}</span><span class="fr fs12" style="float: right; color: RGB(141, 151, 165); font-size: 12px;">
+                              {{ data.date }}</span>
                             <p style="color: RGB(81, 96, 109); font-size: 14px;">{{data.buyerName}}</p>
                         </div>
                     </div>
@@ -615,19 +614,19 @@
                                         </li>
                                         <li class="tab" [attr.data-index]="3">
                                             <label for="3">
-                                                Transactions & Tasks</label>
+                                              Transactions & Tasks</label>
                                         </li>
                                         <!-- <li (click)="toggleStep1()" class="tab" [attr.data-index]="3">
-                                                                <label for="3">Transaction and Task</label>
-                                                            </li> -->
+                                                              <label for="3">Transaction and Task</label>
+                                                          </li> -->
                                     </ul>
                                 </div>
                             </ul>
 
                             <!---------------------DETAILS------------------->
-                            
+
                             <ul class="listDocument">
-                                
+
                                 <button class="button3" (click)="uploadDebitnote()">Debit Note</button>
                                 <button class="button3" (click)="uploadCreditnote()">Credit Note</button>
                                 <button class="button3" (click)="uploadInsurance()">Insurance Documents</button>
@@ -635,14 +634,14 @@
                                 <button class="button3" (click)='uploadshipping()'>Shipping Bill</button>
                                 <button class="button3" (click)="uploadThirdparty()">Thirdparty</button>
                                 <button class="button3" (click)="uploadMaster()">Master service</button>
-                                <button class="button3" (click)="uploadOpinion()" >Opinion Reports</button>
-                                <button class="button3" (click)="uploadSwift()" >Swift Copy</button>
-                                <button class="button3" (click)="uploadIradvice()" >IR Advice</button>
+                                <button class="button3" (click)="uploadOpinion()">Opinion Reports</button>
+                                <button class="button3" (click)="uploadSwift()">Swift Copy</button>
+                                <!-- <button class="button3" (click)="uploadIradvice()">IR Advice</button> -->
                             </ul>
                             <div class="tab-content form-wrapper" [attr.data-index]="1" style="background-color: white;
-                            width: 103%; margin-left: 5px; height: 150vh">
-                                
-                        
+                          width: 103%; margin-left: 5px; height: 150vh">
+
+
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12);">
                                     <div style="display: flex;">
 
@@ -651,9 +650,9 @@
                                         </div>
                                         <div style="align-items: center; font-size: 13px; color: black; font-weight: 400;">
                                             <a style="margin-bottom: 5px; margin-top: 15px;"> As per payment terms you need create a
-                                                Inward Remittance Disposal against the Export.
-                                                Create a transaction to submit swift copy to bank to process the
-                                                amount</a> <br>
+                                              Inward Remittance Disposal against the Export.
+                                              Create a transaction to submit swift copy to bank to process the
+                                              amount</a> <br>
                                         </div>
                                     </div>
 
@@ -673,15 +672,15 @@
                                         </div>
 
                                     </div>
-                                    
+
                                     <div *ngIf='buttonToggle1' style="margin: 13px 0px 10px 30px;">
 
                                         <div style="margin-left:10px" class="form-check">
                                             <label class="form-check-label">
-                                                <input class="form-check-input" type="checkbox"
-                                                    (change)=changeCheckbox()>
-                                                With Buyer's Credit
-                                            </label>
+                                              <input class="form-check-input" type="checkbox"
+                                                  (change)=changeCheckbox()>
+                                              With Buyer's Credit
+                                          </label>
                                         </div>
                                         <button class="button2" style="height: 39px !important; padding: 0px 38px; margin-right: 5px;" (click)='openSubDoc1("usance")'>Usance</button>
                                         <button class="button2" style="height: 39px !important; padding: 0px 38px; margin-right: 5px;" (click)='openSubDoc1("sight")'>Sight</button>
@@ -750,9 +749,9 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Uploaded Purchase Order</p>
-                                                <div class="date_" *ngFor='let data of item1 let i = index'>
-                                            <p *ngIf="data.pi_poNo == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                Submitted on {{data.date}}</p>
+                                            <div class="date_" *ngFor='let data of item1 let i = index'>
+                                                <p *ngIf="data.pi_poNo == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                    Submitted on {{data.date}}</p>
                                             </div>
 
                                         </div>
@@ -788,10 +787,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: 0px;">
                                                 Uploaded Proforma Invoice</p>
-                                                <div class="date_" *ngFor='let data of item1 let i = index'>
-                                                    <p *ngIf="data.pi_poNo == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                        Submitted on {{data.date}}</p>
-                                                </div>
+                                            <div class="date_" *ngFor='let data of item1 let i = index'>
+                                                <p *ngIf="data.pi_poNo == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                    Submitted on {{data.date}}</p>
+                                            </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -826,10 +825,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 ThirdParty Uploaded </p>
-                                                <div class="date_" *ngFor='let data of item17 let i = index'>
-                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                        Submitted on {{data.date}}</p>
-                                                </div>
+                                            <div class="date_" *ngFor='let data of item17 let i = index'>
+                                                <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                    Submitted on {{data.date}}</p>
+                                            </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -883,10 +882,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Agreement Uploaded</p>
-                                                <div class="date_" *ngFor='let data of item13 let i = index'>
-                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                        Submitted on {{data.date}}</p>
-                                                </div>
+                                            <div class="date_" *ngFor='let data of item13 let i = index'>
+                                                <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                    Submitted on {{data.date}}</p>
+                                            </div>
                                         </div>
                                         <div style="align-items: center; width: 14%;">
                                             <button class="button1" (click)='viewClick("agreement"); open(content)'>View</button>
@@ -903,11 +902,11 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Debit Note Uploaded</p>
-                                                <div class="date_" *ngFor="let data of item7; let i = index" >
-                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;"  >
-                                                        Submitted on {{ data.date }}
-                                                    </p>
-                                                </div>
+                                            <div class="date_" *ngFor="let data of item7; let i = index">
+                                                <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                    Submitted on {{ data.date }}
+                                                </p>
+                                            </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -922,15 +921,15 @@
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
-                                        <div style="align-items: center; width: 68%;" >
+                                        <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Credit Note Uploaded </p>
-                                                <div class="date_" *ngFor="let data of item5; let i = index" >
+                                            <div class="date_" *ngFor="let data of item5; let i = index">
 
-                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;"  >
-                                                        Submitted on {{ data.date }}</p>
+                                                <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                    Submitted on {{ data.date }}</p>
 
-                                                </div>
+                                            </div>
 
 
                                         </div>
@@ -945,11 +944,11 @@
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
-                                        <div style="align-items: center; width: 68%;" >
+                                        <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 shipping Bill Uploaded </p>
-                                            <p  style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;"  >
-                                                        Submitted on 09/03/2022</p>
+                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                Submitted on 09/03/2022</p>
                                         </div>
                                         <div style="align-items: center; width: 14%;">
                                             <button class="button1" (click)='viewClick("sb"); open(content)'>View</button>
@@ -985,10 +984,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 LC Copy Uploaded </p>
-                                                <div class="date_" *ngFor='let data of item11 let i = index'>
-                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                        Submitted on {{data.date}}</p>
-                                                </div>
+                                            <div class="date_" *ngFor='let data of item11 let i = index'>
+                                                <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                    Submitted on {{data.date}}</p>
+                                            </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -1151,28 +1150,28 @@
                                         </div>
                                     </div>
                                     <!-- <div *ngIf='pipoData.deliveryOrder'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
-                                        &nbsp;
-                                    </div>
-                                    <div *ngIf='pipoData.deliveryOrder' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
-                                        </div>
-                                        <div style="align-items: center; width: 68%;">
-                                            <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
-                                                Delivery Order Uploaded</p>
-                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
+                                      style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
+                                      &nbsp;
+                                  </div>
+                                  <div *ngIf='pipoData.deliveryOrder' style="display: flex;">
+                                      <div style="align-items: center; width: 4%; margin-left: 20px;">
+                                          <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
+                                      </div>
+                                      <div style="align-items: center; width: 68%;">
+                                          <p
+                                              style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
+                                              Delivery Order Uploaded</p>
+                                          <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                              Submitted
+                                              on 13th
+                                              Oct 2021</p>
 
-                                        </div>
-                                        <div style="align-items: center; width: 14%;">
-                                            <button class="button1"
-                                                (click)='viewClick("commercialInvoice")'>View</button>
-                                        </div>
-                                    </div> -->
+                                      </div>
+                                      <div style="align-items: center; width: 14%;">
+                                          <button class="button1"
+                                              (click)='viewClick("commercialInvoice")'>View</button>
+                                      </div>
+                                  </div> -->
 
                                     <div *ngIf='pipoData.deliveryOrder' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
@@ -1202,11 +1201,11 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Insurance Copy Uploaded</p>
-                                                <div class="date_" *ngFor="let data of item9; let i = index">
-                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;"  >
-                                                        Submitted on {{ data.date }}
-                                                    </p>
-                                                </div>
+                                            <div class="date_" *ngFor="let data of item9; let i = index">
+                                                <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                    Submitted on {{ data.date }}
+                                                </p>
+                                            </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -1241,10 +1240,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 SwiftCopy Uploaded</p>
-                                                <div class="date_" *ngFor='let data of item18 let i = index'>
-                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                        Submitted on {{data.date}}</p>
-                                                </div>
+                                            <div class="date_" *ngFor='let data of item18 let i = index'>
+                                                <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                    Submitted on {{data.date}}</p>
+                                            </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -1262,10 +1261,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Opinion report Uploaded</p>
-                                                <div class="date_" *ngFor='let data of item15 let i = index'>
-                                                    <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                        Submitted on {{data.date}}</p>
-                                                </div>
+                                            <div class="date_" *ngFor='let data of item15 let i = index'>
+                                                <p *ngIf="data.pipo[0] == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                    Submitted on {{data.date}}</p>
+                                            </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -1302,7 +1301,7 @@
                                         <div>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;" ></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px;  margin-left: 5px;">
-                                                Create Inward Remittance disposal</span>
+                                              Create Inward Remittance disposal</span>
                                         </div>
                                         <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
@@ -1310,7 +1309,7 @@
                                         <div>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px;  margin-left: 5px;">
-                                                Upload swift copy</span>
+                                              Upload swift copy</span>
                                         </div>
                                         <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
@@ -1318,16 +1317,7 @@
                                         <div>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px;  margin-left: 5px;">
-                                                Upload Bank credit Advice Copy and provide reference number</span>
-                                        </div>
-                                        <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
-                                            &nbsp;
-                                        </div>
-
-                                        <div>
-                                            <span><i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;"></i></span>
-                                            <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px;  margin-left: 5px;">
-                                                Create Bill Lodgement</span>
+                                              Upload Bank credit Advice Copy and provide reference number</span>
                                         </div>
                                         <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
@@ -1336,7 +1326,7 @@
                                         <div>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px;  margin-left: 5px;">
-                                                Bill lodgement reference number and advice copy</span>
+                                              Create Bill Lodgement</span>
                                         </div>
                                         <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
@@ -1345,7 +1335,16 @@
                                         <div>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px;  margin-left: 5px;">
-                                                EBRC- Export Realisation certificate.</span>
+                                              Bill lodgement reference number and advice copy</span>
+                                        </div>
+                                        <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                            &nbsp;
+                                        </div>
+
+                                        <div>
+                                            <span><i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;"></i></span>
+                                            <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px;  margin-left: 5px;">
+                                              EBRC- Export Realisation certificate.</span>
                                         </div>
                                         <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
@@ -1354,7 +1353,7 @@
                                         <div>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: #dfd9df;margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px;  margin-left: 5px; margin-top: -1px;">
-                                                All done</span>
+                                              All done</span>
                                         </div>
                                     </div>
 
@@ -1413,36 +1412,36 @@
                                                 </tr>
                                             </table>
                                             <!-- <div *ngFor="let course of payTerm; let i = index"
-                                                style="display: flex; margin-bottom: 10px;">
-                                                <div style="flex-direction:row; margin-right: 20px; width: 100px;">
-                                                    <span style="color: #707683; font-size: 14px;">Date</span> <br>
-                                                    <a class="h11">
-                                                        {{course.date}}</a>
-                                                </div>
-                                                <div
-                                                    style="flex-direction:row;border-radius: 5px; margin-right: 20px; width: 200px;">
-                                                    <span style="color: #707683; font-size: 14px;">Description</span>
-                                                    <br>
-                                                    <a
-                                                        style="outline: none; border: 1px solid #DEDEDE; width: 180px; border-radius: 5px; padding: 5px;">
-                                                        {{course.description}}</a>
-                                                </div>
-                                                <div
-                                                    style="flex-direction:row; margin-right: 20px; border-radius: 5px; width: 200px;">
-                                                    <span style="color: #707683; font-size: 14px;">Type</span> <br>
+                                              style="display: flex; margin-bottom: 10px;">
+                                              <div style="flex-direction:row; margin-right: 20px; width: 100px;">
+                                                  <span style="color: #707683; font-size: 14px;">Date</span> <br>
+                                                  <a class="h11">
+                                                      {{course.date}}</a>
+                                              </div>
+                                              <div
+                                                  style="flex-direction:row;border-radius: 5px; margin-right: 20px; width: 200px;">
+                                                  <span style="color: #707683; font-size: 14px;">Description</span>
+                                                  <br>
+                                                  <a
+                                                      style="outline: none; border: 1px solid #DEDEDE; width: 180px; border-radius: 5px; padding: 5px;">
+                                                      {{course.description}}</a>
+                                              </div>
+                                              <div
+                                                  style="flex-direction:row; margin-right: 20px; border-radius: 5px; width: 200px;">
+                                                  <span style="color: #707683; font-size: 14px;">Type</span> <br>
 
-                                                    <a
-                                                        style="outline: none; border: 1px solid #DEDEDE; width: 150px; border-radius: 5px; height: 30px; background-color: #E9E9E9; padding: 5px;">{{course.type}}</a>
-                                                </div>
-                                                <div
-                                                    style="flex-direction:row; margin-right: 20px; border-radius: 5px; width: 100px;">
-                                                    <span style="color: #707683; font-size: 14px;">Amount</span> <br>
-                                                    <a
-                                                        style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px; padding: 5px;">{{course.amount}}</a>
-                                                </div>
+                                                  <a
+                                                      style="outline: none; border: 1px solid #DEDEDE; width: 150px; border-radius: 5px; height: 30px; background-color: #E9E9E9; padding: 5px;">{{course.type}}</a>
+                                              </div>
+                                              <div
+                                                  style="flex-direction:row; margin-right: 20px; border-radius: 5px; width: 100px;">
+                                                  <span style="color: #707683; font-size: 14px;">Amount</span> <br>
+                                                  <a
+                                                      style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px; padding: 5px;">{{course.amount}}</a>
+                                              </div>
 
 
-                                            </div> -->
+                                          </div> -->
                                         </div>
 
                                     </div>
@@ -1458,64 +1457,64 @@
 
                             <!----------------ADD A DOCUMENT ----------------------------------------->
                             <div class="tab-content form-wrapper" [attr.data-index]="2" style="
-                                                            background-color: white;
-                                                            width: 103%;
-                                                            margin-left: 5px;
-                                                            height: 150vh;
-                                                            ">
+                                                          background-color: white;
+                                                          width: 103%;
+                                                          margin-left: 5px;
+                                                          height: 150vh;
+                                                          ">
                                 <div *ngIf='!docTog'>
                                     <div style="display: flex;">
                                         <div style="width: 54%; font-size: 17px; padding-left: 30px; margin-left:20px; margin-top:25px; margin-bottom:20px; color: RGB(73, 162, 215);">
                                             Document
                                         </div>
                                         <!-- <div style="background-color: #49A2D7;" class="customDropdown">
-                                            <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
-                                                <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Attach a
-                                                Document</span>
-                                            <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
-                                                    class="fas fa-angle-down"></i>
-                                                <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                                            </span>
-                                            <div class="dropdown-content1" style="min-width: 220px; margin-left: 0px;">
-                                                <!-- <p (click)='selectDoc("Shipping Bill")'><a>New Shipping Bill</a></p>
-                                                <p (click)='selectDoc("Shipping Bill")'><a>Shipping Bill</a></p>
-                                                <p (click)='selectDoc("blCopy")'><a>New Airway Bill/BL Copy</a></p>
-                                                <p (click)='selectDoc("commercialInvoice")'><a>New Commercial
-                                                        Invoice</a></p>
-                                                <p (click)='selectDoc("creditNote")'><a>New Credit Note</a></p>
-                                                <p (click)='selectDoc("debitNote")'><a>New Debit Note</a></p>
-                                                <p (click)='selectDoc("agreement")'><a>Agreement</a></p>
-                                                <p (click)='selectDoc("lcCopy")'><a>Lc Copy</a></p>
-                                                <p (click)='selectDoc("deliveryOrder")'><a>Delivery Order</a></p>
-                                                <p (click)='selectDoc("insuranceCopy")'><a>Insurance Copy</a></p>
-                                                <p (click)='selectDoc("billOfExchange")'><a>Bill of Exchange</a></p>
-                                                <p (click)='selectDoc("tryPartyAgreement")'><a>Tri Party Agreement</a>
-                                                </p>
-                                                <p (click)='selectDoc("opinionReport")'><a>Opinion Report</a></p>
-                                                <p (click)='selectDoc("caCb")'><a>15 CA/CB</a></p>
-                                                <p (click)='selectDoc("caCertificate")'><a>CA Certificate</a></p>
-                                            </div>
-                                        </div> -->
+                                          <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
+                                              <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Attach a
+                                              Document</span>
+                                          <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
+                                                  class="fas fa-angle-down"></i>
+                                              <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                                          </span>
+                                          <div class="dropdown-content1" style="min-width: 220px; margin-left: 0px;">
+                                              <!-- <p (click)='selectDoc("Shipping Bill")'><a>New Shipping Bill</a></p>
+                                              <p (click)='selectDoc("Shipping Bill")'><a>Shipping Bill</a></p>
+                                              <p (click)='selectDoc("blCopy")'><a>New Airway Bill/BL Copy</a></p>
+                                              <p (click)='selectDoc("commercialInvoice")'><a>New Commercial
+                                                      Invoice</a></p>
+                                              <p (click)='selectDoc("creditNote")'><a>New Credit Note</a></p>
+                                              <p (click)='selectDoc("debitNote")'><a>New Debit Note</a></p>
+                                              <p (click)='selectDoc("agreement")'><a>Agreement</a></p>
+                                              <p (click)='selectDoc("lcCopy")'><a>Lc Copy</a></p>
+                                              <p (click)='selectDoc("deliveryOrder")'><a>Delivery Order</a></p>
+                                              <p (click)='selectDoc("insuranceCopy")'><a>Insurance Copy</a></p>
+                                              <p (click)='selectDoc("billOfExchange")'><a>Bill of Exchange</a></p>
+                                              <p (click)='selectDoc("tryPartyAgreement")'><a>Tri Party Agreement</a>
+                                              </p>
+                                              <p (click)='selectDoc("opinionReport")'><a>Opinion Report</a></p>
+                                              <p (click)='selectDoc("caCb")'><a>15 CA/CB</a></p>
+                                              <p (click)='selectDoc("caCertificate")'><a>CA Certificate</a></p>
+                                          </div>
+                                      </div> -->
 
                                         <div class="customDropdown" style="width: 240px; height: 42px;float: right;margin-left: 172px;
-                                     padding-top: 10px; background-color: #49A2D7;border: 1px solid #49A2D7 !important;border-radius: 5px;margin-top: 20px;
-                                     margin-bottom: 20px;">
+                                   padding-top: 10px; background-color: #49A2D7;border: 1px solid #49A2D7 !important;border-radius: 5px;margin-top: 20px;
+                                   margin-bottom: 20px;">
                                             <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
-                                            <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Attach a
-                                            Document</span>
+                                          <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Attach a
+                                          Document</span>
                                             <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
-                                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                                        </span> -->
+                                          <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                                      </span> -->
                                             <span class="dropIco" style="margin-left: 10px;margin-top: 10px; color: #ffffff !important;"><i id="down3"
-                                            class="fas fa-angle-down"></i>
-                                         <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                                    </span>
+                                          class="fas fa-angle-down"></i>
+                                       <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                                  </span>
                                             <div class="dropdown-content" style="min-width:200px; margin-right: 0px; margin-left: 7px;
-                                        margin-top: 5px;">
+                                      margin-top: 5px;">
                                                 <a style="min-width:100%;" (click)='selectDoc("Shipping Bill")'>New Shipping Bill</a>
                                                 <a style="min-width:100%;" (click)='selectDoc("blCopy")'>New Airway Bill/BL Copy</a>
                                                 <a style="min-width:100%;" (click)='selectDoc("commercialInvoice")'>New Commercial
-                                                Invoice</a>
+                                              Invoice</a>
                                                 <a style="min-width:100%;" (click)='selectDoc("creditNote")'>New Credit Note</a>
                                                 <a style="min-width:100%;" (click)='selectDoc("debitNote")'>New Debit Noter</a>
                                                 <a style="min-width:100%;" (click)='selectDoc("agreement")'>Agreement</a>
@@ -1575,44 +1574,44 @@
 
                             </div>
                             <div class="tab-content form-wrapper" [attr.data-index]="3" style="
-                                                            background-color: white;
-                                                            width: 103%;
-                                                            margin-left: 5px;
-                                                            height: 150vh;
-                                                            ">
+                                                          background-color: white;
+                                                          width: 103%;
+                                                          margin-left: 5px;
+                                                          height: 150vh;
+                                                          ">
                                 <div style="display: flex;">
                                     <div style="width: 54%; font-size: 17px; padding-left: 30px; margin-left:20px; margin-top:25px; margin-bottom:20px; color: RGB(73, 162, 215);">
                                         All Transaction
                                     </div>
                                     <!-- <div style="background-color: #49A2D7;" class="customDropdown">
-                                        <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
-                                            <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Create New
-                                            Transaction</span>
-                                        <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i
-                                                id="down3" class="fas fa-angle-down"></i>
-                                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                                        </span>
-                                        <div class="dropdown-content1" style="min-width: 220px; margin-left: 0px;">
-                                            <p (click)="openDoc('Advance Payment')"><a>Advance Outward Remittance</a>
-                                            </p>
-                                            <p (click)="openDoc('Direct Import')"><a>Direct Import Payment</a></p>
-                                            <p><a>Bill Under Collection</a></p>
-                                            <p><a>Buyers Credit Request</a></p>
-                                        </div>
-                                    </div> -->
+                                      <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
+                                          <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Create New
+                                          Transaction</span>
+                                      <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i
+                                              id="down3" class="fas fa-angle-down"></i>
+                                          <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                                      </span>
+                                      <div class="dropdown-content1" style="min-width: 220px; margin-left: 0px;">
+                                          <p (click)="openDoc('Advance Payment')"><a>Advance Outward Remittance</a>
+                                          </p>
+                                          <p (click)="openDoc('Direct Import')"><a>Direct Import Payment</a></p>
+                                          <p><a>Bill Under Collection</a></p>
+                                          <p><a>Buyers Credit Request</a></p>
+                                      </div>
+                                  </div> -->
                                     <div class="customDropdown" style="width:260px;height: 42px;float: right;margin-left: 142px;padding-top: 10px;background-color: #49A2D7;border: 1px solid #49A2D7 !important;border-radius: 5px;margin-top: 20px;margin-bottom: 20px;">
                                         <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
-                                            <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Create New
-                                            Transaction</span>
+                                          <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Create New
+                                          Transaction</span>
                                         <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
-                                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                                        </span> -->
+                                          <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                                      </span> -->
                                         <span class="dropIco" style="margin-left: 10px;margin-top: 10px; color: #ffffff !important;"><i id="down3"
-                                            class="fas fa-angle-down"></i>
-                                         <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                                    </span>
+                                          class="fas fa-angle-down"></i>
+                                       <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                                  </span>
                                         <div class="dropdown-content" style="min-width:250px; margin-left: -12px;
-                                        margin-top: 5px;">
+                                      margin-top: 5px;">
                                             <a style="min-width:100%;" (click)="openDoc('Advance Payment')">Inward Remittance Disposal</a>
                                             <a style="min-width:100%;" (click)="openDoc('Collection Bill')">Bill Under LC</a>
                                             <a style="min-width:100%;" (click)="openDoc('Collection Bill')">Bill Under Collection</a>
@@ -1676,11 +1675,11 @@
                 <form *ngIf='toggle3' class="" [formGroup]="piPoForm" (ngSubmit)="onSubmitPipo1()">
                     <!----------      "-->
                     <div style="
-                                      width: 88%;
-                                      display: flex;
-                                      justify-content: center;
-                                      margin-left: 30px;
-                                    " class="field">
+                                    width: 88%;
+                                    display: flex;
+                                    justify-content: center;
+                                    margin-left: 30px;
+                                  " class="field">
                         <table style="width: 70%" class="field-table">
                             <tr class="field-heading">
                                 <td style="height: 30px !important;">PI/PO Number*</td>
@@ -1693,7 +1692,7 @@
                                 </td>
 
                                 <td>
-                                    <input class="form-control input2" type="date" formControlName="date" [(ngModel)]="pipoData.date" style="width: 7100%0%" />
+                                    <input class="form-control input2" type="date" formControlName="date" [(ngModel)]="pipoData.date" style="width: 7100%" />
                                 </td>
                                 <!-- <td><button type="submit" class="button">Submit</button></td> -->
                             </tr>
@@ -1706,7 +1705,7 @@
                                 <div style="margin-bottom: 10px;">
 
                                     <span style="font-size: 20px; color: #606670; margin-bottom: 5px;">Invoice
-                                        Amount</span>
+                                      Amount</span>
                                     <br>
                                     <input class="inputAmount" type="text" formControlName="amount" [(ngModel)]="pipoData.amount" />
                                 </div>
@@ -1744,37 +1743,37 @@
                                         <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                                             <span style="color: #707683; font-size: 14px;">Type</span> <br>
                                             <select name="" id="" formControlName="type" style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
-                                                <option value="" [selected]="!payTerm[i].type">Select</option>
-                                                <option value="Advance Payment"
-                                                    [selected]="payTerm[i].type === 'Advance Payment'">
-                                                    Advance Payment
-                                                </option>
-                                                <option value="Letter of Credit"
-                                                    [selected]="payTerm[i].type === 'Letter of Credit'">
-                                                    Letter of Credit
-                                                </option>
-                                                <option value="Collection Bill"
-                                                    [selected]="payTerm[i].type === 'Collection Bill'">
-                                                    Collection Bill
-                                                </option>
-                                                <option value="Direct Import"
-                                                    [selected]="payTerm[i].type === 'Direct Import'">Direct
-                                                    Import</option>
-                                            </select>
+                                              <option value="" [selected]="!payTerm[i].type">Select</option>
+                                              <option value="Advance Payment"
+                                                  [selected]="payTerm[i].type === 'Advance Payment'">
+                                                  Advance Payment
+                                              </option>
+                                              <option value="Letter of Credit"
+                                                  [selected]="payTerm[i].type === 'Letter of Credit'">
+                                                  Letter of Credit
+                                              </option>
+                                              <option value="Collection Bill"
+                                                  [selected]="payTerm[i].type === 'Collection Bill'">
+                                                  Collection Bill
+                                              </option>
+                                              <option value="Direct Import"
+                                                  [selected]="payTerm[i].type === 'Direct Import'">Direct
+                                                  Import</option>
+                                          </select>
                                         </div>
                                         <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                                             <span style="color: #707683; font-size: 14px;">Amount</span> <br>
                                             <input formControlName="amount" [(ngModel)]="payTerm[i].amount" style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px;">
                                         </div>
                                         <a *ngIf='z>1' (click)='removeAddress(i)'><i style="margin-top: 30px; "
-                                                class="fas fa-times"></i></a>
+                                              class="fas fa-times"></i></a>
 
                                     </div>
                                 </div>
                                 <div class="row col-md-12" style="margin-top: 10px; margin-bottom: 10px;">
                                     <span (click)="onAddCourse(piPoForm)" style="font-size: 12px; color: #303030;"><i
-                                            style="font-size: 14px;" class="fas fa-plus-circle"></i> Add New
-                                        Row </span>
+                                          style="font-size: 14px;" class="fas fa-plus-circle"></i> Add New
+                                      Row </span>
                                 </div>
                             </tr>
                         </div>
@@ -1790,7 +1789,7 @@
                 <div>
                     <img src="../../../assets/back.png" style="width: 20px; height: 20px; margin-left: 40px;margin-bottom: 10px; margin-top: 6px;  " (click)=" hide1()"><span style="margin-left: 5px ;margin-bottom: 10px;" (click)=" hide1()">Back</span>
                 </div>
-                
+
                 <div style="margin-left: 30px; margin-bottom: 20px;">
                     <p style="color: #303030; font-size: 20px;">Uploaded Document</p>
                     <p style="color: #303030; font-size: 20px;">Proforma Invoice Document</p>
@@ -1811,12 +1810,12 @@
                 </div>
                 <div style="display: flex; align-items: center; margin-left: 30px;">
                     <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Buyer
-                        Name*</label>
+                      Name*</label>
                     <div class="customDropdown2" style="flex-direction:row; ">
                         <span style="color: #323e4a !important; min-width: 150px;">{{beneValue}}</span>
                         <span class="dropIco2" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
-                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                        </span>
+                          <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                      </span>
                         <div class="dropdown-content2" style="margin-top: -2px;">
                             <p *ngFor="let bene of benneDetail" (click)='clickBene(bene.buyerName)'>
                                 <a>{{bene.buyerName}}</a>
@@ -1827,12 +1826,12 @@
                 </div> <br>
                 <div style="display: flex; align-items: center; margin-left: 30px;">
                     <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Choose
-                        Commodity*</label>
+                      Commodity*</label>
                     <div class="customDropdown2" style="flex-direction:row; ">
                         <span style="color: #323e4a !important; min-width: 150px;">Add Commodity</span>
                         <span class="dropIco2" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
-                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                        </span>
+                          <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                      </span>
                         <div class="dropdown-content2" style="margin-top: -2px;">
                             <p *ngFor="let bene of commodity" (click)='clickComo(bene.como)'>
                                 <a>{{bene.como}}</a>
@@ -1862,11 +1861,11 @@
                 <form class="" [formGroup]="piPoForm" (ngSubmit)="onSubmitPipo()">
                     <!----------      "-->
                     <div style="
-                                                  width: 88%;
-                                                  display: flex;
-                                                  justify-content: center;
-                                                  margin-left: 30px;
-                                                " class="field">
+                                                width: 88%;
+                                                display: flex;
+                                                justify-content: center;
+                                                margin-left: 30px;
+                                              " class="field">
                         <table style="width: 70%" class="field-table">
                             <tr class="field-heading">
                                 <td style="height: 30px !important;">PI/PO Number*</td>
@@ -1879,7 +1878,7 @@
                                 </td>
 
                                 <td>
-                                    <input class="form-control input2" type="date" formControlName="date" [(ngModel)]="pipoData.date" style="width: 7100%0%" />
+                                    <input class="form-control input2" type="date" formControlName="date" [(ngModel)]="pipoData.date" style="width: 7100%" />
                                 </td>
                                 <!-- <td><button type="submit" class="button">Submit</button></td> -->
                             </tr>
@@ -1892,7 +1891,7 @@
                                 <div style="margin-bottom: 10px;">
 
                                     <span style="font-size: 20px; color: #606670; margin-bottom: 5px;">Invoice
-                                        Amount</span>
+                                      Amount</span>
                                     <br>
                                     <input class="inputAmount" type="text" formControlName="amount" [(ngModel)]="pipoData.amount" />
                                 </div>
@@ -1919,11 +1918,11 @@
                                     <label for="settledAmount">Location</label>
                                     <select name="" id="" formControlName="location" style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
 
-                                        <option *ngFor="let bene of location" [value]="bene.loc"
-                                            [selected]="loc === 'Mumbai'">
-                                            {{bene.loc}}
-                                        </option>
-                                    </select>
+                                      <option *ngFor="let bene of location" [value]="bene.loc"
+                                          [selected]="loc === 'Mumbai'">
+                                          {{bene.loc}}
+                                      </option>
+                                  </select>
                                 </td>
                                 <br>
                                 <span style="color: hsl(0, 0%, 19%); font-size: 20px;">Payment Terms*</span>
@@ -1940,38 +1939,38 @@
                                         <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                                             <span style="color: #707683; font-size: 14px;">Type</span> <br>
                                             <select name="" id="" formControlName="type" style="outline: none; border: 1px solid #DEDEDE; width: 100px; border-radius: 5px; height: 30px; background-color: #E9E9E9;">
-                                                <option value="" [selected]="!payTerm[i].type">Select</option>
-                                                <option value="Advance Payment"
-                                                    [selected]="payTerm[i].type === 'Advance Payment'">
-                                                    Advance Payment
-                                                </option>
-                                                <option value="Letter of Credit"
-                                                    [selected]="payTerm[i].type === 'Letter of Credit'">
-                                                    Letter of Credit
-                                                </option>
-                                                <option value="Collection Bill"
-                                                    [selected]="payTerm[i].type === 'Collection Bill'">
-                                                    Collection Bill
-                                                </option>
-                                                <option value="Direct Import"
-                                                    [selected]="payTerm[i].type === 'Direct Import'">
-                                                    Direct
-                                                    Import</option>
-                                            </select>
+                                              <option value="" [selected]="!payTerm[i].type">Select</option>
+                                              <option value="Advance Payment"
+                                                  [selected]="payTerm[i].type === 'Advance Payment'">
+                                                  Advance Payment
+                                              </option>
+                                              <option value="Letter of Credit"
+                                                  [selected]="payTerm[i].type === 'Letter of Credit'">
+                                                  Letter of Credit
+                                              </option>
+                                              <option value="Collection Bill"
+                                                  [selected]="payTerm[i].type === 'Collection Bill'">
+                                                  Collection Bill
+                                              </option>
+                                              <option value="Direct Import"
+                                                  [selected]="payTerm[i].type === 'Direct Import'">
+                                                  Direct
+                                                  Import</option>
+                                          </select>
                                         </div>
                                         <div style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                                             <span style="color: #707683; font-size: 14px;">Amount</span> <br>
                                             <input formControlName="amount" [(ngModel)]="payTerm[i].amount" style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px;">
                                         </div>
                                         <a *ngIf='z>1' (click)='removeAddress(i)'><i style="margin-top: 30px; "
-                                                class="fas fa-times"></i></a>
+                                              class="fas fa-times"></i></a>
 
                                     </div>
                                 </div>
                                 <div class="row col-md-12" style="margin-top: 10px; margin-bottom: 10px;">
                                     <span (click)="onAddCourse(piPoForm)" style="font-size: 12px; color: #303030;"><i
-                                            style="font-size: 14px;" class="fas fa-plus-circle"></i> Add New
-                                        Row </span>
+                                          style="font-size: 14px;" class="fas fa-plus-circle"></i> Add New
+                                      Row </span>
                                 </div>
                             </tr>
                         </div>
@@ -1995,8 +1994,8 @@
                         <div class="col-md-7 bg-dark">
                             <div class="login d-flex py-5" style="padding: 0px !important;">
                                 <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                          <span aria-hidden="true">&times;</span>
-                        </button> -->
+                        <span aria-hidden="true">&times;</span>
+                      </button> -->
                                 <!-- Demo content-->
                                 <div class="container">
                                     <div class="row">
@@ -2094,7 +2093,7 @@
                             </table>
 
                             <button class="button1" (click)="fireEvent()">Download Invoice
-                                Reduction</button>
+                              Reduction</button>
                         </div>
                     </div>
                 </div>

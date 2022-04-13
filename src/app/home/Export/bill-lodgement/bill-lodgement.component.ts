@@ -22,12 +22,12 @@ import {
   templateUrl: './bill-lodgement.component.html',
   styleUrls: ['./bill-lodgement.component.scss']
 })
+
 export class BillLodgementComponent implements OnInit, OnDestroy {
   @ViewChild('table1') table: ElementRef;
   closeResult: string;
   public item1;
-  public itemArray = [];
-  public itemArray1 = [];
+  public itemArray;
   public item2;
   public user;
   public selectedRow;
@@ -50,19 +50,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   public Question8 = '';
   public Question9 = '';
   public Question10 = '';
-  public buyerDetail: any = [];
-  buyerValue: any = 'Select Buyer';
-  
-  nameSearch : string ='';
-  nameSearch1 : string ='';
-  nameSearch2 : string = '';
-  nameSearch3 : string = '';
-  startDate : any = '';
-  endDate: any = '';
-  pipo = false;
-  ship = false;
   public allTransactions: any = [];
   public generateIndex;
+  public itemArray1 = [];
   lodgement1: any;
   lodgement2: any;
   Ax1: boolean;
@@ -163,15 +153,26 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   dateArray: any = [];
   buyerAds: any;
   amArr: any = [];
+  pipo = false;
+  ship = false;
+  nameSearch : string ='';
+  nameSearch1 : string ='';
+  nameSearch2 : string = '';
+  nameSearch3 : string = '';
+  item6: any;
+  item7: any;
+  item: any;
+  public buyerDetail: any = [];
+  startDate : any = '';
+  endDate: any = '';
+
+
   advanceForm = new FormGroup({
     advance: new FormArray([this.initCourse()], Validators.required)
   });
   sbDataArray: any = [];
   invoiceArr: any[];
   filterToggle = false;
-  item6: any;
-  item7: any;
-  item: any;
   constructor(
     public documentService: DocumentService,
     private router: Router,
@@ -179,9 +180,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private userService: UserService,
-    private modalService: NgbModal,
     private confirmDialogService: ConfirmDialogService,
     private formBuilder: FormBuilder,
+    private modalService: NgbModal,
   ) {
     console.log("hello")
     // this.onAddCourse("e")
@@ -191,17 +192,17 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     //window.location.reload();
     console.log(data['default'])
     this.jsondata = data['default'];
-    console.log("testing buyer1",this.jsondata[0].purpose)
+    console.log(this.jsondata[0].purpose)
     this.dataJson = this.jsondata
 
-  //Shipping bill API
-    this.documentService.getMaster(1).subscribe(
-      (res: any) => {
-        console.log(res,"SHIPPING DATA"), (this.item2 = res.data);
-        console.log("shipping bill",this.item2)
-      },
-      (err) => console.log(err)
-    );
+    //Shipping bill API
+    // this.documentService.getMaster(1).subscribe(
+    //   (res: any) => {
+    //     console.log(res,"SHIPPING DATA"), (this.item2 = res.data);
+    //     console.log("shipping bill",this.item2)
+    //   },
+    //   (err) => console.log(err)
+    // );
     //PI/PO API
     this.documentService.getPipo().subscribe(
       (res: any) => {
@@ -211,8 +212,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         },
       (err) => console.log(err)
     );
-  
-    
+
+
     this.userService.getBuyer(1).subscribe(
       (res: any) => {
         (this.buyerDetail = res.data),
@@ -220,7 +221,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       },
       (err) => console.log("Error", err)
     );
-   
+
+
+
 
     this.route.params.subscribe(params => {
       this.file = this.route.snapshot.params['file'];
@@ -229,9 +232,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     });
     this.documentService.getMaster(1).subscribe(
       (res: any) => {
-        
-        console.log("getbuyer",res), (this.item1 = res.data);
-        // console.log("hiiiiiiiiiii",this.itemArray)
+        console.log(res), (this.item1 = res.data);
       },
       (err) => console.log(err)
     );
@@ -247,22 +248,16 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       .subscribe(
         data => {
           console.log("king123")
-          console.log( data['data'][0])
+          console.log(data['data'][0])
           this.item5 = data['data'][0]
-          console.log( this.item5)
-          this.item6 = this.item5.commodity;
-          console.log("comodity data",this.item6)
-          this.item7 = this.item5.location;
-          console.log ("loc",this.item7)
-         
-          
+          console.log(this.item5)
           this.arr = this.item5.gst.split('');
-          console.log( "testing buyer", this.arr)
+          console.log(this.arr)
           this.bankArray = this.item5.bankDetails
           for (let value of this.bankArray) {
             this.allBank.push(value.bank)
           }
-          console.log("aaa", this.allBank)
+          console.log(this.allBank)
           this.bank = this.allBank.filter(function (item, index, inputArray) {
             return inputArray.indexOf(item) == index;
           });
@@ -318,93 +313,23 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
   }
 
-  hide(){
-    this.isGenerate = !this.isGenerate
-  }
-  removeshipping(i) {
-    this.itemArray1.splice(i, 1)
-  }
-  removepipo(i) {
-    this.itemArray.splice(i, 1)
-  }
-
-  addTofilter(event ,id){
-    let removeArray =[];
-     this.pipo=true;
-     this.ship=false;
-     this.itemArray1 = []
-    if(event.target.checked){
-      for(let element of this.item ){
-        if(element._id == id){
-          this.itemArray.push(element)
-        }
-      }
-      
-    }
-    else{
-    if(this.itemArray.length){
-      this.itemArray.forEach(element => {
-        if(element._id != id){
-          removeArray.push(element);
-        }
-      });
-      this.itemArray=removeArray;
-    }
-    }
-  console.log("test",this.itemArray);
-  }
-
-  addTofilter1(event ,id){
-    let removeArray  = []
-      this.ship = true;
-      this.pipo = false;
-      this.itemArray=[];
-    if(event.target.checked){
-
-      for(let element of this.item2 ){
-        if(element._id == id){
-          this.itemArray1.push(element)
-        }
-      }
-      
-       
-    }
-    else{
-      if(this.itemArray1.length){
-        this.itemArray1.forEach(element => {
-          if(element._id != id){
-            removeArray.push(element);
-          }
-        });
-        this.itemArray1=removeArray;
-      }
-      }
-  console.log("test",this.itemArray1);
-  }
-
-
   searchData1(a) {
-    console.log(a)
+    console.log("hello",a)
     console.log(a.length)
-    console.log("hiiiiiiiiii",this.item1)
     if (a.length > 0) {
       let arr = []
-      for (let value of this.buyerDetail) {
-        if (value.buyerName.toLowerCase().includes(a)) {
-          console.log("buyer",value.buyerName)
+      for (let value of this.item1) {
+        console.log("value of buyername****", value);
+        console.log("value of buyername", value.buyerName);
+        if (value.buyerName.includes(a) || value.sbno.includes(a)) {
+          console.log("shaile***************",value.buyerName)
           arr.push(value)
         }
 
       }
-      for (let value of this.item6){
-        if(value.como.toLowerCase().includes(a)){
-          console.log("como",value.como)
-          arr.push(value)
-        }
-      }
       this.itemArray = arr
-      this.itemArray1 = arr
       this.filterToggle = true
+      console.log("shaile***************", this.itemArray)
     }
     else {
       this.filterToggle = false
@@ -562,7 +487,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           pipoValue = item
           value = item.pipo
           buyerValue = item.buyerName
-          console.log("heyyy",item.buyerName)
           this.dateArray.push(item.sbdate)
           this.sbDataArray.push(item)
           console.log('value', value)
@@ -701,7 +625,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       b = b.split('-').reverse().join('');
       return a > b ? 1 : a < b ? -1 : 0;
 
-      // return a.localeCompare(b);         // <-- alternative 
+      // return a.localeCompare(b);         // <-- alternative
 
     });
     console.log('Datesss', this.myArr);
@@ -1813,17 +1737,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       this.documentService.updateExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' }, this.documentService.task._id).subscribe(
         (data) => {
           console.log("king123");
-          // this.userService.updateManyPipo(this.pipoValue, 'billUnderCollection', this.newTask.url1)
-          //   .subscribe(
-          //     data => {
-          //       console.log("king123")
-          //       console.log(data)
-          //       this.router.navigate(["/home/advance-outward-remittance"]);
-          //     },
-          //     error => {
-          //       // this.toastr.error('Invalid inputs, please check!');
-          //       console.log("error")
-          //     });
           console.log(data);
           this.documentService.draft = false
           this.documentService.task.id = ''
@@ -1913,7 +1826,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           console.log("Error saving the transaction")
         }
       );
-
     }
 
 
@@ -2100,30 +2012,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       (err) => console.log("ERROR")
     );
   }
-  open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  open1(content1) {
-    this.modalService.open(content1, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any): string {
-    console.log('ddhdhdhh')
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
 
   change(e) {
     console.log(e.target.value);
@@ -2219,6 +2107,34 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     console.log(this.charge)
   }
 
+  private getDismissReason(reason: any): string {
+    console.log('ddhdhdhh')
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+
+  open(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  open1(content1) {
+    this.modalService.open(content1, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+
   showPreview() {
     this.bgColor = true
     this.newDone = true
@@ -2228,4 +2144,139 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     this.newDone = false
   }
 
+  removepipo(i) {
+    this.itemArray.splice(i, 1)
+  }
+
+  removeshipping(i) {
+    this.itemArray1.splice(i, 1)
+  }
+
+  addTofilter(event ,id){
+    let removeArray =[];
+     this.pipo=true;
+     this.ship=false;
+     this.itemArray1 = []
+    if(event.target.checked){
+      for(let element of this.item ){
+        if(element._id == id){
+          this.itemArray.push(element)
+        }
+      }
+
+    }
+    else{
+    if(this.itemArray.length){
+      this.itemArray.forEach(element => {
+        if(element._id != id){
+          removeArray.push(element);
+        }
+      });
+      this.itemArray=removeArray;
+    }
+    }
+  console.log("test",this.itemArray);
+  }
+
+  addTofilter1(event ,id){
+    let removeArray  = []
+      this.ship = true;
+      this.pipo = false;
+      this.itemArray=[];
+    if(event.target.checked){
+      for(let element of this.item1 ){
+        if(element._id == id){
+          this.itemArray.push(element)
+        }
+      }
+
+
+    }
+    else{
+      if(this.itemArray1.length){
+        this.itemArray1.forEach(element => {
+          if(element._id != id){
+            removeArray.push(element);
+          }
+        });
+        this.itemArray1=removeArray;
+      }
+      }
+  console.log("test2",this.itemArray);
+  }
+
+  goBack(){
+    this.isGenerate = false;
+    window.location.reload();
+  }
+
+  // getMaster() {
+  //   let arrayMain = []
+  //   this.documentService.getMaster(1).subscribe(
+  //     (res: any) => {
+  //       console.log(res), (this.item4 = res.data);
+  //       console.log("hello the********",this.item4)
+
+  //       // *****start shipping bill and pipo marging code***/
+  //       let pipoindex = 0 ;
+  //       let filtershippingdata = [];
+  //       let completedpipo = [];
+
+
+  //       for (let pipo of this.item1){
+  //         let currentpipo = this.item1[pipoindex]
+
+  //         this.item1[pipoindex].shippingdata = []
+  //         for(let shippingdata of this.item4){
+
+
+  //           if(pipo.pi_poNo == shippingdata.pipo[0]){
+
+
+  //             const newVal = { ...pipo };
+  //               newVal['sbno'] = shippingdata.sbno
+  //               newVal['sbdate'] = shippingdata.sbdate
+  //               newVal['portCode'] = shippingdata.portCode
+  //               newVal['region'] = shippingdata.countryOfFinaldestination
+  //               newVal['fobValue'] = shippingdata.fobValue
+
+
+
+  //             filtershippingdata.push(newVal);
+
+  //             if(completedpipo.indexOf(pipoindex)== -1){
+  //               completedpipo.push(pipoindex)
+  //             }
+  //             console.log("cheching shipping data",currentpipo);
+
+  //           }
+  //         }
+  //         pipoindex = pipoindex + 1;
+
+  //       }
+  //       console.log("filtershiping data",filtershippingdata);
+  //       console.log("completed pipo data",completedpipo);
+
+
+  //       for(let i = completedpipo.length-1; i>=0; i--){
+  //         this.item1.splice(completedpipo[i],1)
+  //       }
+  //       for( let pipo of filtershippingdata){
+  //         this.item1.push(pipo)
+  //       }
+  //       console.log("*******************final",this.item1);
+
+  //       // *****end shipping bill and pipo marging code******/
+
+  //       console.log("Hello There", arrayMain);
+  //       if (arrayMain.length > 0) {
+
+  //       }
+
+  //     },
+  //     (err) => console.log(err)
+  //   );
+  // }
+
 }
+

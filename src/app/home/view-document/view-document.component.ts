@@ -7,14 +7,16 @@ import * as xlsx from 'xlsx';
 import {
   AfterViewInit,
   ChangeDetectorRef,
-  
+
   ElementRef,
   Inject,
   Input,
-  
+
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import {ShippingBill} from './../../../model/shippingBill.model';
 
 @Component({
   selector: 'app-view-document',
@@ -38,9 +40,11 @@ export class ViewDocumentComponent implements OnInit {
   public greaterAmount = 0;
   public selectedDoc = "";
   public allTransactions: any = [];
+  public optionsVisibility: any = [];
   Ax1: boolean;
   Ax2: boolean;
   step1: any;
+  res;
 
   piPoForm = new FormGroup({
     pi_poNo: new FormControl(""),
@@ -64,6 +68,7 @@ export class ViewDocumentComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
+    private toastr: ToastrService,
   ) { }
 
   ngOnInit(): void {
@@ -115,7 +120,7 @@ export class ViewDocumentComponent implements OnInit {
 
   }
   exportToExcel() {
-    const ws: xlsx.WorkSheet =   
+    const ws: xlsx.WorkSheet =
     xlsx.utils.table_to_sheet(this.epltable.nativeElement);
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
@@ -132,7 +137,7 @@ export class ViewDocumentComponent implements OnInit {
       {
         file: 'export',
         document: 'sb',
-        
+
       },
     ]);
   }
@@ -226,5 +231,30 @@ export class ViewDocumentComponent implements OnInit {
       this.router.navigateByUrl(`/home/fbg-wavier/${piPo}`);
 
     }
+  }
+
+  toSave(data, index){
+    this.optionsVisibility[index] = false;
+    console.log(data);
+    // this.res = new ShippingBill(data[1].data);
+    this.documentService.updateMaster(data, data._id).subscribe(
+      (data) => {
+        console.log("king123");
+        console.log(data);
+        this.toastr.success('Shipping Bill row is updated')
+        // this.router.navigate(["home/viewDocument/sb"]);
+        //this.router.navigate(['/login'], { queryParams: { registered: true }});
+      },
+      (error) => {
+        console.log("error");
+      }
+    );
+
+
+  }
+
+  toEdit(index){
+    this.optionsVisibility[index] = true;
+    this.toastr.warning('Shipping Bill Row Is In Edit Mode');
   }
 }

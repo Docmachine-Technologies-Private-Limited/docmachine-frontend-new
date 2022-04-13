@@ -15,25 +15,25 @@
      </div> -->
 
 
-      <h3 class="heading" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
-      <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
-      <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
-      <h3 class="heading" *ngIf='docu == "debitNote"'>Upload debitNote</h3>
-      <h3 class="heading" *ngIf='docu == "irAdvice"'>Upload Forex Advice Documnet</h3>
-      <h3 class="heading" *ngIf='docu == "creditNote"'>Upload creditNote</h3>
-      <h3 class="heading" *ngIf='docu == "insuranceCopy"'>Upload Insurance Copy</h3>
-      <h3 class="heading" *ngIf='docu == "lcCopy"'>Upload LC Copy</h3>
-      <h3 class="heading" *ngIf='docu == "agreement"'>Upload Master service agreement</h3>
-      <h3 class="heading" *ngIf='docu == "tryPartyAgreement"'>Upload Tri Party Document</h3>
-      <h3 class="heading" *ngIf='docu == "opinionReport"'>Upload Opinion Report</h3>
-      <h3 class="heading" *ngIf='docu == "swiftCopy"'>Upload Swift Copy Document</h3>
+        <h3 class="heading" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
+        <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
+        <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
+        <h3 class="heading" *ngIf='docu == "debitNote"'>Upload debitNote</h3>
+        <h3 class="heading" *ngIf='docu == "irAdvice"'>Upload Forex Advice Documnet</h3>
+        <h3 class="heading" *ngIf='docu == "creditNote"'>Upload creditNote</h3>
+        <h3 class="heading" *ngIf='docu == "insuranceCopy"'>Upload Insurance Copy</h3>
+        <h3 class="heading" *ngIf='docu == "lcCopy"'>Upload LC Copy</h3>
+        <h3 class="heading" *ngIf='docu == "agreement"'>Upload Master service agreement</h3>
+        <h3 class="heading" *ngIf='docu == "tryPartyAgreement"'>Upload Tri Party Document</h3>
+        <h3 class="heading" *ngIf='docu == "opinionReport"'>Upload Opinion Report</h3>
+        <h3 class="heading" *ngIf='docu == "swiftCopy"'>Upload Swift Copy Document</h3>
 
-      <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" && docu != "irAdvice" && docu != "debitNote" && docu !="lcCopy" && docu !="insuranceCopy" && docu !="creditNote" && docu !="agreement" && docu !="opinionReport" && docu !="tryPartyAgreement" && docu !="swiftCopy" '>Upload Document</h3>
-      <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' style="margin-bottom: 20px;">
-          <p style="color: rgb(0, 0, 0);margin-left: 40px">
-              Choose the type of document
-          </p>
-          <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
+        <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" && docu != "irAdvice" && docu != "debitNote" && docu !="lcCopy" && docu !="insuranceCopy" && docu !="creditNote" && docu !="agreement" && docu !="opinionReport" && docu !="tryPartyAgreement" && docu !="swiftCopy" '>Upload Document</h3>
+        <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' style="margin-bottom: 20px;">
+            <p style="color: rgb(0, 0, 0);margin-left: 40px">
+                Choose the type of document
+            </p>
+            <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
       <option value="">Document Type</option>
       <option value="import">Import</option>
       <option value="export">Export</option>
@@ -261,19 +261,19 @@
         <div *ngIf='docu == "sb" && file == "export"' style="margin-bottom: 20px;">
             <div style="display: flex; align-items: center; margin-left: 30px;">
                 <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PIPO*</label>
-                <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;" >
+                <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;">
                     <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
           <i id="up3" style="display: none" class="fas fa-angle-up"></i>
         </span>
-                    <div class="dropdown-content"  style="margin-top: -2px;min-width:200px;">
+                    <div class="dropdown-content" style="margin-top: -2px;min-width:200px;">
                         <div *ngFor="let bene of item3" (click)='clickPipo("PI",bene.pi_poNo,bene.buyerName )'>
                             <a style="min-width: 100%;" *ngIf='bene.file == "export"'> PI-{{bene.pi_poNo}}-{{bene.buyerName}}</a>
                         </div>
                         <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
                     </div>
                 </div>
-        </div> <br>
+            </div> <br>
 
             <!-- <div *ngIf="documentType1 == 'export' && documentType === 'debitNote'">
               <input class="pinput" name="ttDate" type="text" placeholder="Debit Note">
@@ -436,7 +436,7 @@
                 This SB Number is already exist, Do you want to override the changes?
             </h1>
             <button (click)="onOverride()" style="margin-right: 5px">Yes</button>
-            <button [routerLink]="['/home/dashboard']">No</button>
+            <button [routerLink]="['/home/viewDocument/sb']">No</button>
         </div>
         <div style="margin-left: 30px; margin-top: 30px" *ngIf="override && boeNumber">
             <h1 style="font-size: 20px">
@@ -579,7 +579,7 @@
                     </tr>
                 </div>
                 <div class="sb2">
-                    <iframe [src]="publicUrl" width="100%" height="700px"> </iframe>
+                    <iframe [src]="publicUrl" width="100%" height="700px" style="margin-left: -150px;"> </iframe>
                 </div>
             </div>
 
@@ -719,7 +719,7 @@
                     </tr>
                 </div>
                 <div class="sb2">
-                    <iframe [src]="publicUrl" width="100%" height="700px"> </iframe>
+                    <iframe [src]="publicUrl" width="100%" height="700px" style="margin-left: -150px;"> </iframe>
                 </div>
             </div>
         </form>
@@ -770,7 +770,7 @@
                         </td>
                         <br />
                         <td class="full-input border1">
-                            <label for="fobValue">Conversion Rate</label><input [(ngModel)]="res.conversionDate" class="smalll-input" type="text" name="conversionDate" />
+                            <label for="fobValue">Conversion Date</label><input [(ngModel)]="res.conversionDate" class="smalll-input" type="text" name="conversionDate" />
                         </td>
                         <td class="full-input border2">
                             <label for="processingStaus">Exchange Rate</label><input [(ngModel)]="res.exchangeRate" class="smalll-input" type="text" name="exchangeRate" />
@@ -970,7 +970,7 @@
                 </div>
 
                 <div class="sb2">
-                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+                    <iframe [src]="piPoUrl" width="100%" height="700px" style="margin-left: -150px;"> </iframe>
                 </div>
             </div>
         </form>
@@ -1071,7 +1071,7 @@
         </form>
 
         <!-- swift-copy Input file -->
-        <form *ngIf="swiftCopy && !override" class="" #values="ngForm" (ngSubmit)="onSubmitSwift(values)" >
+        <form *ngIf="swiftCopy && !override" class="" #values="ngForm" (ngSubmit)="onSubmitSwift(values)">
 
             <div style="
             width: 82%;

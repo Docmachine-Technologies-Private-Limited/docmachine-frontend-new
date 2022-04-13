@@ -174,7 +174,23 @@ export class DocumentService {
     );
   }
 
-  updateMasterBySb(user, _id) {
+  // updateMasterBySb(user, sbno) {
+  //   this.loadFromLocalStorage();
+  //   console.log(this.authToken);
+  //   const httpOptions = {
+  //     headers: new HttpHeaders({ Authorization: this.authToken }),
+  //   };
+  //   return this.http.post(
+  //     `${this.api_base}/master/updateBySb`,
+  //     {
+  //       sbno: sbno,
+  //       master: user,
+  //     },
+  //     httpOptions
+  //   );
+  // }
+
+  updateMasterBySb(user, sbno, _id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -183,12 +199,15 @@ export class DocumentService {
     return this.http.post(
       `${this.api_base}/master/updateBySb`,
       {
-        _id: _id,
         master: user,
+        sbno: sbno,
+        _id: _id,
+
       },
       httpOptions
     );
   }
+
 
   updateBoe(user, _id) {
     this.loadFromLocalStorage();

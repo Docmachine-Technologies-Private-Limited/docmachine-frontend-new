@@ -71,8 +71,8 @@
         <div class="analytics" #epltable>
             <div *ngIf="!showInvoice" style="width: 100%" class="analytics-side">
                 <div style="width: 100%" class="row">
-                    <div style="width: 100%; margin: 0 -1.5%" *ngIf="!showInvoice" class="col-12 mb-lg padding">
-                        <section style="width: 97%; margin-left: 0" class="widget pb-0 box-shadow">
+                    <div style="width: 100%; margin: 0 -1.5%; height:600px" *ngIf="!showInvoice" class="col-12 mb-lg padding" id="container">
+                        <section style="width: 110%; margin-left: 0" class="widget pb-0 box-shadow">
                             <div style="margin: 0 -2%" class="widget-body p-0 support table-wrapper">
                                 <table *ngIf='pipo' style="width: 100%" class="table table-striped mb-0">
                                     <thead style="width: 100%">
@@ -155,30 +155,107 @@
                                             <th scope="col"><span class="pl-3">SB DATE</span></th>
                                             <th scope="col">SB NUMBER</th>
                                             <th scope="col">AD CODE</th>
+                                            <th scope="col">AD BILL NO</th>
                                             <th scope="col">BUYER NAME</th>
                                             <th scope="col">COMPANY NAME</th>
+                                            <th scope="col">ORIGIN</th>
+                                            <th scope="col">DESTINATION</th>
                                             <th scope="col">CURRENCY</th>
                                             <th scope="col">SB AMOUNT</th>
+                                            <th scope="col"> </th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of item1; let i = index" (click)="
-                                                                                        getInvoices(data, i) && getTransactions(data.pi_poNo)
-                                                                                      ">
+                                        <tr class="table-row" *ngFor="let data of item1; let i = index">
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
-                                            <th class="pl-4 fw-normal">{{ data.sbdate }}</th>
-                                            <td class="sb-no">{{ data.sbno }}</td>
-                                            <td>
-                                                {{ data.adCode }}
+                                            <th class="pl-4 fw-normal">
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{ data.sbdate }}
+                                                </div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="sbdate" type="text" placeholder="Sb Date" [(ngModel)]="data.sbdate">
+                                                </div>
+                                            </th>
+                                            <td class="sb-no">
+                                                <div *ngIf="!optionsVisibility[i]" (click)="
+                                                getInvoices(data, i) && getTransactions(data.pi_poNo)
+                                              ">
+                                                    {{ data.sbno }}
+                                                </div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="sbno" type="text" placeholder="Sb No" [(ngModel)]="data.sbno">
+                                                </div>
                                             </td>
-                                            <td>{{data.buyerName}}</td>
                                             <td>
-                                                {{data.consigneeName}}
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{ data.adCode }}
+                                                </div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="adCode" type="text" placeholder="adCode" [(ngModel)]="data.adCode">
+                                                </div>
                                             </td>
-                                            <td>{{data.fobCurrency}}</td>
-                                            <td>{{data.fobValue}}</td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{ data.adBillNo }}
+                                                </div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="adBillNo" type="text" placeholder="ad Bill No" [(ngModel)]="data.adBillNo">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.buyerName}}
+                                                </div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="buyerName" type="text" placeholder="Buyer Name" [(ngModel)]="data.buyerName">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.consigneeName}}
+                                                </div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="consigneeName" type="text" placeholder="Consignee Name" [(ngModel)]="data.consigneeName">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.exporterLocationCode}}
+                                                </div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="exporterLocationCode" type="text" placeholder="ORIGIN" [(ngModel)]="data.exporterLocationCode">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.countryOfFinaldestination}}
+                                                </div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="countryOfFinaldestination" type="text" placeholder="DESTINATION" [(ngModel)]="data.countryOfFinaldestination">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.fobCurrency}}
+                                                </div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="fobCurrency" type="text" placeholder="Fob Currency" [(ngModel)]="data.fobCurrency">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.fobValue}}
+                                                </div>
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="fobValue" type="text" placeholder="Fob Value" [(ngModel)]="data.fobValue">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button class="savBtn" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)">Save</button>
+                                                <button class="savBtn" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">Edit</button>
+                                            </td>
                                         </tr>
 
                                     </tbody>

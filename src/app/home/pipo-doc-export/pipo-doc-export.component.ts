@@ -70,6 +70,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   public item15 = [];
   public item16 : any;
   public item17 = [];
+  public item20
   public user;
   public selectedRow;
   public showInvoice = false;
@@ -274,11 +275,11 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     //shipping bill
     this.documentService.getMaster(1).subscribe (
       (res: any) => {
-        console.log(res,"SHIPPING DATA"), (this.item1 = res.data);
+        console.log(res,"SHIPPING DATA"), (this.item20 = res.data);
       },
       (err) => console.log(err)
     );
-  
+
  //third party API
     this.documentService.getThird().subscribe(
       (res: any) => {
@@ -615,8 +616,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         }
         console.log("Hello There", arrayMain);
         if (arrayMain.length > 0) {
-          this.item1 = arrayMain
-          this.item1.sort((a:any,b:any)=>a.pi_poNo-b.pi_poNo);
+          // this.item1 = arrayMain
+          // this.item1.sort((a:any,b:any)=>a.pi_poNo-b.pi_poNo);
         }
 
       },
@@ -739,7 +740,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         );
       }
     }
-    
+
   }
 
   toggleClick2(a) {
@@ -925,7 +926,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     if (a == 'Advance Payment') {
       this.router.navigate(['home/exportHome',{
         pipo: this.pipoData.pi_poNo,
-     
+
         index: this.currentindex
       }
     ]);
@@ -1063,7 +1064,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       pipo: this.pipoData.pi_poNo,
       bene: this.pipoData.buyerName,
       index: this.currentindex,
-      
+
     }]);
    }
    uploadIradvice(){
@@ -1073,7 +1074,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       pipo: this.pipoData.pi_poNo,
       bene: this.pipoData.buyerName,
       index: this.currentindex,
-      
+
     }]);
    }
 
@@ -1258,7 +1259,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   hide3(){
     this.showInvoice = false;
     this.router.navigate(['/home/pipoDocExport']);
-    
+
   }
   hide1(){
 
@@ -1270,7 +1271,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.showInvoice=true;
     this.toggle=false;
     this.toggle1=false;}
-  hide(data, i) {
+
+    hide(data, i) {
     this.showInvoice = true;
     this.selectedrow = data;
     this.currentindex = i;
@@ -1479,7 +1481,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
             }
           );
       }
-    } 
+    }
   }
 
   opensb(content3) {
