@@ -700,13 +700,19 @@
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)=uploadCollectionBill()>Bill Collection</button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && !pipoData.EBRC'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && !pipoData.blcopyref'>
+
+
+                                                <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="uploadblcopyref()">BL copy Refno</button>
+                                                
+                                            </div>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && pipoData.blcopyref && !pipoData.EBRC'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="uploadEbrc()">EBRC</button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" >All Done</button>
@@ -750,13 +756,19 @@
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="uploadCollectionBill()">Collection Bill</button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && !pipoData.EBRC'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && !pipoData.blcopyref'>
+
+
+                                                <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="uploadblcopyref()">BL copy Refno</button>
+                                                
+                                            </div>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && pipoData.blcopyref && !pipoData.EBRC'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="uploadEbrc()">EBRC</button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" >All Done</button>
@@ -1503,20 +1515,40 @@
                                             <button class="button1" (click)='viewClick("caCb"); open(content)'>View</button>
                                         </div>
                                     </div>
-
-
+                                    <div *ngIf='pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                        &nbsp;
+                                    </div>
+                                    <div style="display: flex;" *ngIf='pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref'>
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
+                                        </div>
+                                        <div style="align-items: center; width: 68%;">
+                                            <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                All Done</p>
+                                        </div>
+                                    </div>
 
                                 </div>
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12);">
                                     <div style="margin-left: 20px;">
+                                        <div>
                                         <p style="color: RGB(50, 62, 74);font-weight: 400; font-size: 16px; margin-bottom: 15px; margin-left: 33px ; margin-top: 15px;">
                                             Below are the steps still to complete</p>
+                                        </div>
                                         <div *ngIf='!pipoData.advanceOutward'>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;" ></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; font-weight: 400;  margin-left: 5px;">
                                                 Create Inward Remittance disposal</span>
                                         </div>
                                         <div *ngIf='!pipoData.advanceOutward' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                            &nbsp;
+                                        </div>
+                                        <div *ngIf='!pipoData.swiftCopy'>
+                                            <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;" ></i></span>
+                                            <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; font-weight: 400;  margin-left: 5px;">
+                                                Upload SwiftCopy</span>
+                                        </div>
+                                        <div *ngIf='!pipoData.swiftCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
                                         <div *ngIf='!pipoData.sb'>
@@ -1527,14 +1559,7 @@
                                         <div *ngIf='!pipoData.sb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
-                                        <div *ngIf ='!pipoData.swiftCopy'>
-                                            <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
-                                            <span  style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
-                                                Upload swift copy</span>
-                                        </div>
-                                        <div *ngIf ='!pipoData.swiftCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
-                                            &nbsp;
-                                        </div>
+                                        
                                         <div *ngIf='!pipoData.irAdvice'>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
@@ -1553,12 +1578,12 @@
                                             &nbsp;
                                         </div>
 
-                                        <div>
+                                        <div *ngIf='!pipoData.blcopyref '>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                                 Bill lodgement reference number and advice copy</span>
                                         </div>
-                                        <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData.blcopyref' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
@@ -1571,15 +1596,19 @@
                                             &nbsp;
                                         </div>
 
-                                        <div>
+                                        <!-- <div *ngIf='!pipoData.advanceOutward && !pipoData.sb && !pipoData.swiftCopy && !pipoData.irAdvice && !pipoData.EBRC && !pipoData.billUnder && !pipoData.blcopyref'>
+                                            
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
-                                            <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px; margin-top: -1px;">
+                                            <span  style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px; margin-top: -1px;">
+                                                All done</span>
+                                        </div> -->
+                                        
+                                        <div *ngIf='!pipoData.advanceOutward || !pipoData.sb || !pipoData.swiftCopy || !pipoData.irAdvice || !pipoData.EBRC || !pipoData.billUnder || !pipoData.blcopyref'>
+                                            <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
+                                            <span  style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px; margin-top: -1px;">
                                                 All done</span>
                                         </div>
                                     </div>
-
-
-
                                 </div>
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12); margin-bottom: 20px;">
                                     <div style="margin-left: 51px;">
