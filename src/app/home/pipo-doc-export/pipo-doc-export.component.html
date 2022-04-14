@@ -61,7 +61,7 @@
                                 <a style="min-width:200px;" (click)="newDebit()">New Debit Note</a>
                                 <a style="min-width:200px;" (click)="newInsurance()">New Insurance Document</a>
                                 <a style="min-width:200px;" (click)="newLoc()">New Letter of Credit</a>
-                                <a style="min-width:200px;" >New Master service agreement</a>
+                                <a style="min-width:200px;">New Master service agreement</a>
                                 <a style="min-width:200px;" (click)="newtriparty()">New Tri party agreement</a>
                                 <a style="min-width:200px;" (click)="newopinoin()">New Opinion Report</a>
                             </div>
@@ -136,8 +136,8 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-dark">
-                                    <tr   class="table-row" *ngFor='let data of item1 | filterdate:startDate:endDate | filternew:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index' >
-                                        <td style="padding: 20px 35px;  " >
+                                    <tr class="table-row" *ngFor='let data of item1 | filterdate:startDate:endDate | filternew:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index'>
+                                        <td style="padding: 20px 35px;  ">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.date}}
                                             </div>
@@ -145,12 +145,12 @@
                                                 <input class="tblInput form-control" name="date" type="text" placeholder="Date" [(ngModel)]="data.date">
                                             </div>
                                         </td>
-                                        <td class="sb-no" (click)="getInvoices(data, i)" (click)=" hide(data, i)"  >{{data.pi_poNo}}</td>
+                                        <td class="sb-no" (click)="getInvoices(data, i)" (click)=" hide(data, i)">{{data.pi_poNo}}</td>
                                         <!-- <td> <span *ngIf='data.document == "PI"'> Proforma Invoice</span> <span *ngIf='data.document != "PI"'> Purchase Order</span></td> -->
-                                        <td >
+                                        <td>
                                             {{data.date}}
                                         </td>
-                                        <td >
+                                        <td>
                                             {{data.buyerName}}
                                         </td>
                                         <!-- <td>
@@ -475,28 +475,28 @@
                                         </td>
 
                                         <td>
-                                            <div *ngIf = "data.sbno" >
-                                            <!-- invoice Value -->
-                                            {{data.sbno}}
-                                        </div>
+                                            <div *ngIf="data.sbno">
+                                                <!-- invoice Value -->
+                                                {{data.sbno}}
+                                            </div>
                                         </td>
                                         <td>
-                                            <div *ngIf = "data.sbdate">
-                                            {{data.sbdate}}
-                                        </div>
+                                            <div *ngIf="data.sbdate">
+                                                {{data.sbdate}}
+                                            </div>
                                         </td>
                                         <td>
-                                            <div *ngIf = "data.region">
+                                            <div *ngIf="data.region">
                                                 {{data.region}}
                                             </div>
                                         </td>
                                         <td>
-                                            <div *ngIf = "data.fobValue" >
-                                            {{data.fobValue}}
+                                            <div *ngIf="data.fobValue">
+                                                {{data.fobValue}}
                                             </div>
                                         </td>
                                         <td>
-                                            <div *ngIf = "data.portCode">
+                                            <div *ngIf="data.portCode">
                                                 <!-- {{data.portCode}} -->
                                                 {{data.portCode}}
                                             </div>
@@ -520,8 +520,8 @@
         </div>
 
 
-           <div *ngIf="showInvoice && !toggle ">
-              <div class="table_top" style="margin-top: 28px;" >
+        <div *ngIf="showInvoice && !toggle ">
+            <div class="table_top" style="margin-top: 28px;">
                 <div class="table_left" style="">
 
                     <span style="color: RGB(50, 62, 74); font-size: 14px; margin-left: 24px;">PI / PO Documents</span>
@@ -704,7 +704,7 @@
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="uploadblcopyref()">BL copy Refno</button>
-                                                
+
                                             </div>
                                             <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && pipoData.blcopyref && !pipoData.EBRC'>
 
@@ -715,7 +715,7 @@
                                             <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref'>
 
 
-                                                <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" >All Done</button>
+                                                <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px">All Done</button>
 
                                             </div>
                                             <!-- Letter of credit -->
@@ -728,7 +728,7 @@
                                             <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && !pipoData.advanceOutward'>
 
 
-                                                <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px"  (click)="uploadInward()">Inward Remittance Disposal</button>
+                                                <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="uploadInward()">Inward Remittance Disposal</button>
 
                                             </div>
 
@@ -760,7 +760,7 @@
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="uploadblcopyref()">BL copy Refno</button>
-                                                
+
                                             </div>
                                             <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && pipoData.blcopyref && !pipoData.EBRC'>
 
@@ -771,7 +771,7 @@
                                             <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref'>
 
 
-                                                <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" >All Done</button>
+                                                <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px">All Done</button>
 
                                             </div>
                                             <div *ngIf='pay.type == "Collection Bill"'>
@@ -861,9 +861,9 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Uploaded Purchase Order</p>
-                                                <div class="date_" *ngFor='let data of item1 let i = index'>
-                                            <p *ngIf="data.pi_poNo == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                Submitted on {{data.purchasedate}}</p>
+                                            <div class="date_" *ngFor='let data of item1 let i = index'>
+                                                <p *ngIf="data.pi_poNo == pipoData.pi_poNo" style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                    Submitted on {{data.purchasedate}}</p>
                                             </div>
 
                                         </div>
@@ -930,167 +930,167 @@
 
                                     <div class="date_" *ngFor="let data of item20; let i = index">
                                         <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
-                                    <div *ngIf='pipoData.sb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
+                                            <div *ngIf='pipoData.sb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
+                                                &nbsp;
+                                            </div>
+                                            <div *ngIf='pipoData.sb' style="display: flex;">
+                                                <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                                    <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
+                                                </div>
+                                                <div style="align-items: center; width: 68%;">
+                                                    <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                        shipping Bill Uploaded</p>
+                                                    <div>
+
+                                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                            Submitted on {{ data.uploaddate }}</p>
+
+                                                    </div>
+                                                </div>
+                                                <div style="align-items: center; width: 14%;">
+                                                    <button class="button1" (click)='toggleClick5("sb",data)'>View</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="date_" *ngFor='let data of item18 let i = index'>
+                                        <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
+                                            <div *ngIf='pipoData.swiftCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                                &nbsp;
+                                            </div>
+                                            <div *ngIf='pipoData.swiftCopy' style="display: flex;">
+                                                <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                                    <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
+                                                </div>
+                                                <div style="align-items: center; width: 68%;">
+                                                    <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                        SwiftCopy Uploaded</p>
+                                                    <div>
+                                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                            Submitted on {{data.date}}</p>
+                                                    </div>
+
+                                                </div>
+                                                <div style="align-items: center; width: 14%;">
+                                                    <button class="button1" (click)='viewClick("swiftCopy",data); open(content)'>View</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="date_" *ngFor="let data of iradvicedata; let i = index">
+                                        <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
+                                            <div *ngIf='pipoData.irAdvice' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
+                                                &nbsp;
+                                            </div>
+
+                                            <div *ngIf='pipoData.irAdvice' style="display: flex;">
+                                                <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                                    <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
+                                                </div>
+                                                <div style="align-items: center; width: 68%;">
+                                                    <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                        Bank credit Advice Copy and provide reference number Uploaded</p>
+                                                    <div>
+
+                                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                            Submitted on {{ data.irdate }}</p>
+
+                                                    </div>
+                                                </div>
+                                                <div style="align-items: center; width: 14%;">
+                                                    <button class="button1" (click)='toggleClick6("irAdvice",data)'>View</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf='pipoData.billUnder' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
-                                    <div *ngIf='pipoData.sb' style="display: flex;">
+                                    <div *ngIf='pipoData.billUnder' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
-                                        <div style="align-items: center; width: 68%;" >
+                                        <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                                shipping Bill Uploaded</p>
-                                                <div>
+                                                Bill Under Collection Transaction</p>
+                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                Submitted on 13th Oct 2021</p>
 
-                                                    <p  style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;"  >
-                                                        Submitted on {{ data.uploaddate }}</p>
-
-                                                </div>
                                         </div>
                                         <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='toggleClick5("sb",data)'>View</button>
+                                            <button class="button1" (click)='toggleClick7("billUnder")'>View</button>
                                         </div>
                                     </div>
+
+
+                                    <div *ngIf='pipoData.invoiceReduction' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                        &nbsp;
                                     </div>
-                                </div>
-                                <div class="date_" *ngFor='let data of item18 let i = index'>
-                                    <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
-                                    <div *ngIf='pipoData.swiftCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
-                                    &nbsp;
-                                </div>
-                                <div *ngIf='pipoData.swiftCopy' style="display: flex;">
-                                    <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                        <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
+                                    <div *ngIf='pipoData.invoiceReduction' style="display: flex;">
+                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
+                                        </div>
+                                        <div style="align-items: center; width: 68%;">
+                                            <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                Invoice invoiceReduction</p>
+                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                Submitted on 13th Oct 2021</p>
+
+                                        </div>
+                                        <div style="align-items: center; width: 14%;">
+                                            <button class="button1" (click)='openModalWithComponent("invoiceReduction");'>View</button>
+                                        </div>
                                     </div>
-                                    <div  style="align-items: center; width: 68%;">
-                                        <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                            SwiftCopy Uploaded</p>
-                                            <div>
-                                                <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                    Submitted on {{data.date}}</p>
+                                    <div class="date_" *ngFor='let data of blcopyRef let i = index'>
+                                        <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
+                                            <div *ngIf='pipoData.blcopyref' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                                &nbsp;
                                             </div>
+                                            <div *ngIf='pipoData.blcopyref' style="display: flex;">
+                                                <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                                    <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
+                                                </div>
+                                                <div style="align-items: center; width: 68%;">
+                                                    <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
 
-                                    </div>
-                                    <div style="align-items: center; width: 14%;">
-                                        <button class="button1" (click)='viewClick("swiftCopy",data); open(content)'>View</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="date_" *ngFor="let data of iradvicedata; let i = index">
-                            <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
-                            <div *ngIf='pipoData.irAdvice' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
-                                &nbsp;
-                            </div>
+                                                        Bill lodgement reference number and advice copy</p>
+                                                    <div>
+                                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                            Submitted on {{data.blcopyrefdate}}</p>
+                                                    </div>
 
-                            <div *ngIf='pipoData.irAdvice' style="display: flex;">
-                                <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                    <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
-                                </div>
-                                <div style="align-items: center; width: 68%;" >
-                                    <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                        Bank credit Advice Copy and provide reference number Uploaded</p>
-                                        <div  >
-
-                                            <p  style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;"  >
-                                                Submitted on {{ data.irdate }}</p>
-
+                                                </div>
+                                                <div style="align-items: center; width: 14%;">
+                                                    <button class="button1" (click)='viewClick("blcopyref",data); open(content)'>View</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                </div>
-                                <div  style="align-items: center; width: 14%;">
-                                    <button class="button1" (click)='toggleClick6("irAdvice",data)'>View</button>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        <div *ngIf='pipoData.billUnder' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
-                            &nbsp;
-                        </div>
-                        <div *ngIf='pipoData.billUnder' style="display: flex;">
-                            <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
-                            </div>
-                            <div style="align-items: center; width: 68%;">
-                                <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                    Bill Under Collection Transaction</p>
-                                <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                    Submitted on 13th Oct 2021</p>
-
-                            </div>
-                            <div style="align-items: center; width: 14%;">
-                                <button class="button1" (click)='toggleClick7("billUnder")'>View</button>
-                            </div>
-                        </div>
-
-
-                        <div *ngIf='pipoData.invoiceReduction' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
-                            &nbsp;
-                        </div>
-                        <div *ngIf='pipoData.invoiceReduction' style="display: flex;">
-                            <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
-                            </div>
-                            <div style="align-items: center; width: 68%;">
-                                <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                   Invoice invoiceReduction</p>
-                                <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                    Submitted on 13th Oct 2021</p>
-
-                            </div>
-                            <div style="align-items: center; width: 14%;">
-                                <button class="button1" (click)='openModalWithComponent("invoiceReduction");'>View</button>
-                            </div>
-                        </div>
-                        <div class="date_" *ngFor='let data of blcopyRef let i = index'>
-                            <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
-                            <div *ngIf='pipoData.blcopyref' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
-                            &nbsp;
-                        </div>
-                        <div *ngIf='pipoData.blcopyref' style="display: flex;">
-                            <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
-                            </div>
-                            <div  style="align-items: center; width: 68%;">
-                                <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-
-                                    Bill lodgement reference number and advice copy</p>
-                                    <div>
-                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                            Submitted on {{data.blcopyrefdate}}</p>
                                     </div>
+                                    <div class="date_" *ngFor='let data of ebrcdata let i = index'>
+                                        <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
+                                            <div *ngIf='pipoData.EBRC' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                                &nbsp;
+                                            </div>
+                                            <div *ngIf='pipoData.EBRC' style="display: flex;">
+                                                <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                                    <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
+                                                </div>
+                                                <div style="align-items: center; width: 68%;">
+                                                    <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
 
-                            </div>
-                            <div style="align-items: center; width: 14%;">
-                                <button class="button1" (click)='viewClick("blcopyref",data); open(content)'>View</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                        <div class="date_" *ngFor='let data of ebrcdata let i = index'>
-                            <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
-                            <div *ngIf='pipoData.EBRC' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
-                            &nbsp;
-                        </div>
-                        <div *ngIf='pipoData.EBRC' style="display: flex;">
-                            <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
-                            </div>
-                            <div  style="align-items: center; width: 68%;">
-                                <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                        EBRC- Export Realisation certificate Uploaded</p>
+                                                    <div>
+                                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                            Submitted on {{data.ebrcdate}}</p>
+                                                    </div>
 
-                                    EBRC- Export Realisation certificate Uploaded</p>
-                                    <div>
-                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                            Submitted on {{data.ebrcdate}}</p>
+                                                </div>
+                                                <div style="align-items: center; width: 14%;">
+                                                    <button class="button1" (click)='viewClick("EBRC",data); open(content)'>View</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-
-                            </div>
-                            <div style="align-items: center; width: 14%;">
-                                <button class="button1" (click)='viewClick("EBRC",data); open(content)'>View</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                                     <div *ngIf='pipoData.blCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
@@ -1113,28 +1113,28 @@
                                         <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
 
 
-                                    <div *ngIf='pipoData.tryPartyAgreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
-                                        &nbsp;
-                                    </div>
-                                    <div *ngIf='pipoData.tryPartyAgreement' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
-                                        </div>
-                                        <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                                ThirdParty Uploaded </p>
-                                                <div>
-                                                    <p  style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                        Submitted on {{data.date}}</p>
+                                            <div *ngIf='pipoData.tryPartyAgreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                                &nbsp;
+                                            </div>
+                                            <div *ngIf='pipoData.tryPartyAgreement' style="display: flex;">
+                                                <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                                    <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
+                                                <div style="align-items: center; width: 68%;">
+                                                    <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                        ThirdParty Uploaded </p>
+                                                    <div>
+                                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                            Submitted on {{data.date}}</p>
+                                                    </div>
 
-                                        </div>
-                                        <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("tryPartyAgreement",data); open(content)'>View</button>
+                                                </div>
+                                                <div style="align-items: center; width: 14%;">
+                                                    <button class="button1" (click)='viewClick("tryPartyAgreement",data); open(content)'>View</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
                                     <div *ngIf='pipoData.lcIssuance' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
@@ -1182,10 +1182,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Agreement Uploaded</p>
-                                                <div >
-                                                    <p  style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                        Submitted on 13th Oct 2021</p>
-                                                </div>
+                                            <div>
+                                                <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                    Submitted on 13th Oct 2021</p>
+                                            </div>
                                         </div>
                                         <div style="align-items: center; width: 14%;">
                                             <button class="button1" (click)='viewClick("agreement"); open(content)'>View</button>
@@ -1193,54 +1193,54 @@
                                     </div>
                                     <div class="date_" *ngFor="let data of item7; let i = index">
                                         <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
-                                             <div *ngIf='pipoData.debitNote' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
-                                               &nbsp;
-                                             </div>
-                                    <div *ngIf='pipoData.debitNote' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
-                                        </div>
-                                        <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                                Debit Note Uploaded</p>
-                                                <div>
-                                                    <p  style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;"  >
-                                                        Submitted on {{ data.date }}
-                                                    </p>
+                                            <div *ngIf='pipoData.debitNote' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                                &nbsp;
+                                            </div>
+                                            <div *ngIf='pipoData.debitNote' style="display: flex;">
+                                                <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                                    <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
+                                                </div>
+                                                <div style="align-items: center; width: 68%;">
+                                                    <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                        Debit Note Uploaded</p>
+                                                    <div>
+                                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                            Submitted on {{ data.date }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div style="align-items: center; width: 14%;">
+                                                    <button class="button1" (click)='viewClick("debitNote",data); open(content)'>View</button>
                                                 </div>
                                             </div>
-                                        <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("debitNote",data); open(content)'>View</button>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="date_" *ngFor="let data of item5; let i = index">
-                                <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
+                                    <div class="date_" *ngFor="let data of item5; let i = index">
+                                        <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
 
-                            <div *ngIf='pipoData.creditNote' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
-                                        &nbsp;
-                                    </div>
-                                    <div *ngIf='pipoData.creditNote' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
-                                        </div>
-                                        <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                                Credit Note Uploaded </p>
-                                                <div>
+                                            <div *ngIf='pipoData.creditNote' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
+                                                &nbsp;
+                                            </div>
+                                            <div *ngIf='pipoData.creditNote' style="display: flex;">
+                                                <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                                    <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
+                                                </div>
+                                                <div style="align-items: center; width: 68%;">
+                                                    <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                        Credit Note Uploaded </p>
+                                                    <div>
 
-                                                    <p  style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;"  >
-                                                        Submitted on {{ data.date }}</p>
+                                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                            Submitted on {{ data.date }}</p>
 
+                                                    </div>
+                                                </div>
+                                                <div style="align-items: center; width: 14%;">
+                                                    <button class="button1" (click)='viewClick("creditNote",data); open(content)'>View</button>
                                                 </div>
                                             </div>
-                                        <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("creditNote",data); open(content)'>View</button>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
 
 
@@ -1264,29 +1264,29 @@
                                         </div>
                                     </div>
                                     <div class="date_" *ngFor='let data of item11 let i = index'>
-                                     <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
-                                         <div *ngIf='pipoData.lcCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
-                                        &nbsp;
-                                    </div>
-                                    <div *ngIf='pipoData.lcCopy' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
-                                        </div>
-                                        <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                                LC Copy Uploaded </p>
-                                                <div >
-                                                    <p  style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                        Submitted on {{data.date}}</p>
+                                        <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
+                                            <div *ngIf='pipoData.lcCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                                &nbsp;
+                                            </div>
+                                            <div *ngIf='pipoData.lcCopy' style="display: flex;">
+                                                <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                                    <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
+                                                <div style="align-items: center; width: 68%;">
+                                                    <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                        LC Copy Uploaded </p>
+                                                    <div>
+                                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                            Submitted on {{data.date}}</p>
+                                                    </div>
 
-                                        </div>
-                                        <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("lcCopy",data); open(content)'>View</button>
+                                                </div>
+                                                <div style="align-items: center; width: 14%;">
+                                                    <button class="button1" (click)='viewClick("lcCopy",data); open(content)'>View</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
                                     <div *ngIf='pipoData.directImport' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
                                         &nbsp;
@@ -1428,29 +1428,29 @@
                                     <div class="date_" *ngFor="let data of item9; let i = index">
                                         <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
 
-                                    <div *ngIf='pipoData.insuranceCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
-                                        &nbsp;
-                                    </div>
-                                    <div *ngIf='pipoData.insuranceCopy' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
-                                        </div>
-                                        <div style="align-items: center; width: 68%;">
-                                            <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                                Insurance Copy Uploaded</p>
-                                                <div>
-                                                    <p  style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;"  >
-                                                        Submitted on {{ data.date }}
-                                                    </p>
+                                            <div *ngIf='pipoData.insuranceCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                                &nbsp;
+                                            </div>
+                                            <div *ngIf='pipoData.insuranceCopy' style="display: flex;">
+                                                <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                                    <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                                 </div>
+                                                <div style="align-items: center; width: 68%;">
+                                                    <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                        Insurance Copy Uploaded</p>
+                                                    <div>
+                                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                            Submitted on {{ data.date }}
+                                                        </p>
+                                                    </div>
 
-                                        </div>
-                                        <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("insuranceCopy"); open(content)'>View</button>
+                                                </div>
+                                                <div style="align-items: center; width: 14%;">
+                                                    <button class="button1" (click)='viewClick("insuranceCopy"); open(content)'>View</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
                                     <div *ngIf='pipoData.billOfExchange' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
@@ -1471,31 +1471,31 @@
                                     </div>
 
 
-                                   <div class="date_" *ngFor='let data of item15 let i = index'>
-                                       <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
+                                    <div class="date_" *ngFor='let data of item15 let i = index'>
+                                        <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
 
-                                    <div *ngIf='pipoData.opinionReport' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
-                                        &nbsp;
-                                    </div>
-                                    <div *ngIf='pipoData.opinionReport' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
-                                        </div>
-                                        <div style="align-items: center; width: 68%;">
-                                            <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                                Opinion report Uploaded</p>
-                                                <div >
-                                                    <p  style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                        Submitted on {{data.date}}</p>
+                                            <div *ngIf='pipoData.opinionReport' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                                &nbsp;
+                                            </div>
+                                            <div *ngIf='pipoData.opinionReport' style="display: flex;">
+                                                <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                                    <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                                 </div>
+                                                <div style="align-items: center; width: 68%;">
+                                                    <p style="color:RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                        Opinion report Uploaded</p>
+                                                    <div>
+                                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                            Submitted on {{data.date}}</p>
+                                                    </div>
 
-                                        </div>
-                                        <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("opinionReport",data); open(content)'>View</button>
+                                                </div>
+                                                <div style="align-items: center; width: 14%;">
+                                                    <button class="button1" (click)='viewClick("opinionReport",data); open(content)'>View</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
                                     <div *ngIf='pipoData.caCb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
@@ -1531,9 +1531,9 @@
                                 </div>
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12);">
                                     <div style="margin-left: 20px;">
-                                        <div>
-                                        <p style="color: RGB(50, 62, 74);font-weight: 400; font-size: 16px; margin-bottom: 15px; margin-left: 33px ; margin-top: 15px;">
-                                            Below are the steps still to complete</p>
+                                        <div *ngIf='!pipoData.advanceOutward || !pipoData.sb || !pipoData.swiftCopy || !pipoData.irAdvice || !pipoData.EBRC || !pipoData.billUnder || !pipoData.blcopyref'>
+                                            <p style="color: RGB(50, 62, 74);font-weight: 400; font-size: 16px; margin-bottom: 15px; margin-left: 33px ; margin-top: 15px;">
+                                                Below are the steps still to complete</p>
                                         </div>
                                         <div *ngIf='!pipoData.advanceOutward'>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;" ></i></span>
@@ -1553,13 +1553,13 @@
                                         </div>
                                         <div *ngIf='!pipoData.sb'>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
-                                            <span  style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
+                                            <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                                 Upload shipping Bill</span>
                                         </div>
                                         <div *ngIf='!pipoData.sb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
-                                        
+
                                         <div *ngIf='!pipoData.irAdvice'>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
@@ -1597,15 +1597,15 @@
                                         </div>
 
                                         <!-- <div *ngIf='!pipoData.advanceOutward && !pipoData.sb && !pipoData.swiftCopy && !pipoData.irAdvice && !pipoData.EBRC && !pipoData.billUnder && !pipoData.blcopyref'>
-                                            
+
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span  style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px; margin-top: -1px;">
                                                 All done</span>
                                         </div> -->
-                                        
+
                                         <div *ngIf='!pipoData.advanceOutward || !pipoData.sb || !pipoData.swiftCopy || !pipoData.irAdvice || !pipoData.EBRC || !pipoData.billUnder || !pipoData.blcopyref'>
                                             <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
-                                            <span  style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px; margin-top: -1px;">
+                                            <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px; margin-top: -1px;">
                                                 All done</span>
                                         </div>
                                     </div>
@@ -2234,13 +2234,13 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input  [(ngModel)]="selectedshippingdata.adBillNo" value="selectedshippingdata.adBillNo" class="input" type="text" name="adBillNo"/>
+                                        <input [(ngModel)]="selectedshippingdata.adBillNo" value="selectedshippingdata.adBillNo" class="input" type="text" name="adBillNo" />
                                     </td>
                                     <td>
-                                        <input [(ngModel)]="selectedshippingdata.sbno" class="input" type="text" name="sbno"/>
+                                        <input [(ngModel)]="selectedshippingdata.sbno" class="input" type="text" name="sbno" />
                                     </td>
                                     <td>
-                                        <input [(ngModel)]="selectedshippingdata.sbdate" class="input" type="text" name="sbdate"/>
+                                        <input [(ngModel)]="selectedshippingdata.sbdate" class="input" type="text" name="sbdate" />
                                     </td>
                                 </tr>
                             </table>
@@ -2253,7 +2253,7 @@
                                         <label for="portCode">PORT CODE</label><input [(ngModel)]="selectedshippingdata.portCode" class="smalll-input" type="text" name="portCode" />
                                     </td>
                                     <td class="full-input border2">
-                                        <label for="ieccode">IEC CODE</label><input [(ngModel)]="selectedshippingdata.ieccode"  class="smalll-input" type="text" name="ieccode" />
+                                        <label for="ieccode">IEC CODE</label><input [(ngModel)]="selectedshippingdata.ieccode" class="smalll-input" type="text" name="ieccode" />
                                     </td>
                                     <td class="full-input border3">
                                         <label for="iecName">IEC NAME</label><input [(ngModel)]="selectedshippingdata.iecName" class="smalll-input" type="text" name="iecName" />
@@ -2304,7 +2304,7 @@
                                     <br />
                                     <p class="sh1">Additional</p>
                                     <td class="full-input border2">
-                                        <label for="bankingCharges">BANKING CHARGES</label><input [(ngModel)]="selectedshippingdata.bankingCharges"  class="smalll-input" type="text" name="bankingCharges" />
+                                        <label for="bankingCharges">BANKING CHARGES</label><input [(ngModel)]="selectedshippingdata.bankingCharges" class="smalll-input" type="text" name="bankingCharges" />
                                     </td>
                                     <td class="full-input border3">
                                         <label for="expectedPaymentlastdate">PAYMENT LAST DATE</label><input [(ngModel)]="selectedshippingdata.expectedPaymentlastdate" class="smalll-input" type="text" name="expectedPaymentlastdate" />
@@ -2350,7 +2350,7 @@
 
                                     <div class="tab-content form-wrapper" *ngFor="let obj of selectedshippingdata.invoices; let i = index" [attr.data-index]="i">
                                         <td class="full-input border1">
-                                            <label for="mawbno">INVOICE NO</label><input [(ngModel)]="obj.invoiceno"  class="smalll-input" type="text" name="invoiceno{{ i + 1 }}" />
+                                            <label for="mawbno">INVOICE NO</label><input [(ngModel)]="obj.invoiceno" class="smalll-input" type="text" name="invoiceno{{ i + 1 }}" />
                                         </td>
                                         <td class="full-input border2">
                                             <label for="mawbno">AMOUNT</label><input [(ngModel)]="obj.amount" class="smalll-input" type="text" name="amount{{ i + 1 }}" />
@@ -2404,63 +2404,63 @@
                     <p style="color: #303030; font-size: 20px;">Inward Remittance Advice</p>
                     <iframe [src]='docu' width="600px" height="700px"> </iframe>
                     <form>
-                    <div class="field">
-                        <table class="field-table" style="width: 10% !important">
-                            <tr class="field-heading">
-                                <td>FOREX ADVICE DETAILS</td>
-                                <td>PARTY NAME</td>
-                                <td>TT AMOUNT</td>
-                            </tr>
-                            <tr style="margin-left: -10%;">
-                                <td>
-                                    <input ngModel class="form-control input2" type="text" name="billNo" [(ngModel)]="irdata.billNo" />
-                                </td>
+                        <div class="field">
+                            <table class="field-table" style="width: 10% !important">
+                                <tr class="field-heading">
+                                    <td>FOREX ADVICE DETAILS</td>
+                                    <td>PARTY NAME</td>
+                                    <td>TT AMOUNT</td>
+                                </tr>
+                                <tr style="margin-left: -10%;">
+                                    <td>
+                                        <input ngModel class="form-control input2" type="text" name="billNo" [(ngModel)]="irdata.billNo" />
+                                    </td>
 
-                                <td>
-                                    <input ngModel class="form-control input2" style="width: 7100% 0%" name="partyName" [(ngModel)]="irdata.partyName" />
-                                </td>
+                                    <td>
+                                        <input ngModel class="form-control input2" style="width: 7100% 0%" name="partyName" [(ngModel)]="irdata.partyName" />
+                                    </td>
 
-                                <td>
-                                    <input ngModel class="form-control input2" style="width: 7100% 0%" name="amount" [(ngModel)]="irdata.amount" />
-                                </td>
+                                    <td>
+                                        <input ngModel class="form-control input2" style="width: 7100% 0%" name="amount" [(ngModel)]="irdata.amount" />
+                                    </td>
 
-                            </tr>
+                                </tr>
 
-                            <div class="sub-table">
-                                <div class="sb1" style="width:162%">
-                                    <tr class="form-wrapper">
-                                        <p class="sh1">FOREX ADVICE DETAILS</p>
+                                <div class="sub-table">
+                                    <div class="sb1" style="width:162%">
+                                        <tr class="form-wrapper">
+                                            <p class="sh1">FOREX ADVICE DETAILS</p>
 
-                                        <td class="full-input border1">
-                                            <label for="iecName">TT Date</label><input [(ngModel)]="irdata.date" class="smalll-input" type="text" name="date" />
-                                        </td>
+                                            <td class="full-input border1">
+                                                <label for="iecName">TT Date</label><input [(ngModel)]="irdata.date" class="smalll-input" type="text" name="date" />
+                                            </td>
 
-                                        <td class="full-input border2">
-                                            <label for="leodate">Recieved Date</label><input [(ngModel)]="irdata.recievedDate" class="smalll-input" type="text" name="recievedDate" />
-                                        </td>
-                                        <td class="full-input border3">
-                                            <label for="processingStaus">Commission</label><input [(ngModel)]="irdata.commision" class="smalll-input" type="text" name="commision" />
-                                        </td>
-                                        <br />
-                                        <td class="full-input border1">
-                                            <label for="fobValue">Conversion Rate</label><input [(ngModel)]="irdata.conversionDate" class="smalll-input" type="text" name="conversionDate" />
-                                        </td>
-                                        <td class="full-input border2">
-                                            <label for="processingStaus">Exchange Rate</label><input [(ngModel)]="irdata.exchangeRate" class="smalll-input" type="text" name="exchangeRate" />
-                                        </td>
-                                        <br />
-                                        <td class="full-input border2">
-                                            <label for="processingStaus">Location</label><input [(ngModel)]="irdata.location" class="smalll-input" type="text" name="location" />
-                                        </td>
-                                        <td class="full-input border2">
-                                            <label for="processingStaus">Commodity</label><input [(ngModel)]="irdata.commodity" class="smalll-input" type="text" name="commodity" />
-                                        </td>
-                                        <td class="full-input border2">
-                                            <label for="processingStaus">Origin</label><input [(ngModel)]="irdata.origin" class="smalll-input" type="text" name="origin" />
-                                        </td>
+                                            <td class="full-input border2">
+                                                <label for="leodate">Recieved Date</label><input [(ngModel)]="irdata.recievedDate" class="smalll-input" type="text" name="recievedDate" />
+                                            </td>
+                                            <td class="full-input border3">
+                                                <label for="processingStaus">Commission</label><input [(ngModel)]="irdata.commision" class="smalll-input" type="text" name="commision" />
+                                            </td>
+                                            <br />
+                                            <td class="full-input border1">
+                                                <label for="fobValue">Conversion Rate</label><input [(ngModel)]="irdata.conversionDate" class="smalll-input" type="text" name="conversionDate" />
+                                            </td>
+                                            <td class="full-input border2">
+                                                <label for="processingStaus">Exchange Rate</label><input [(ngModel)]="irdata.exchangeRate" class="smalll-input" type="text" name="exchangeRate" />
+                                            </td>
+                                            <br />
+                                            <td class="full-input border2">
+                                                <label for="processingStaus">Location</label><input [(ngModel)]="irdata.location" class="smalll-input" type="text" name="location" />
+                                            </td>
+                                            <td class="full-input border2">
+                                                <label for="processingStaus">Commodity</label><input [(ngModel)]="irdata.commodity" class="smalll-input" type="text" name="commodity" />
+                                            </td>
+                                            <td class="full-input border2">
+                                                <label for="processingStaus">Origin</label><input [(ngModel)]="irdata.origin" class="smalll-input" type="text" name="origin" />
+                                            </td>
 
 
-                                        <!-- <td class="full-input border1" style="width: 206px;">
+                                            <!-- <td class="full-input border1" style="width: 206px;">
                                             <label for="location">Location</label>
                                             <select name="location" ngModel placeholder="Location">
                                                     <option value="">Select Location</option>
@@ -2469,7 +2469,7 @@
                                                     </option>
                                                   </select>
                                         </td> -->
-                                        <!-- <td class="full-input border2" style="width: 206px;">
+                                            <!-- <td class="full-input border2" style="width: 206px;">
                                             <label for="location">Commodity</label>
                                             <select name="commodity" ngModel>
                                                     <option value="">Select commodity</option>
@@ -2479,7 +2479,7 @@
                                                   </select>
                                         </td> -->
 
-                                        <!-- <td class="full-input border2" style="width: 206px;">
+                                            <!-- <td class="full-input border2" style="width: 206px;">
                                             <label for="location">Origin</label>
                                             <select name="origin" ngModel>
                                                     <option value="">Select Origin</option>
@@ -2489,11 +2489,11 @@
                                                   </select>
                                         </td> -->
 
-                                    </tr>
+                                        </tr>
+                                    </div>
                                 </div>
-                            </div>
-                        </table>
-                    </div>
+                            </table>
+                        </div>
                     </form>
                 </div>
             </div>

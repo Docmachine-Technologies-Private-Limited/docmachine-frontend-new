@@ -25,6 +25,7 @@ import {
 
 export class BillLodgementComponent implements OnInit, OnDestroy {
   @ViewChild('table1') table: ElementRef;
+  closeResult: string;
   public item1;
   public itemArray;
   public item2;

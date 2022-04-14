@@ -115,7 +115,6 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   public item15 = [];
   public item16 : any;
   public item17 = [];
-  public item20
   public user;
   public selectedRow;
   public showInvoice = false;
