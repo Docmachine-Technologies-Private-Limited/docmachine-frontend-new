@@ -326,6 +326,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    console.log("zxysomthing");
+    
     this.jsondata1 = data1['default'];
     this.dataJson1 = data1['default']
     this.jsondata2 = data1['default'];
@@ -352,10 +354,14 @@ export class UploadComponent implements OnInit, AfterViewInit {
     this.redirectpage = this.route.snapshot.paramMap.get('page')
     console.log("checking",this.file)
     this.docu = this.route.snapshot.paramMap.get('document')
+    console.log("this is doc" ,this.docu);
+    
     if (this.docu == 'pipo') {
       this.documentType1 = this.route.snapshot.paramMap.get('file')
     }
     if (this.docu == 'sb') {
+      console.log("this is test for pipo");
+      
       this.documentType1 = 'export'
       this.documentType = 'sb'
       this.documentType1 = 'export'
@@ -364,6 +370,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut                                                   
+      console.log("this is test 2******",this.arrayData);
+      
     }
     else if (this.docu == 'boe') {
       this.documentType1 = 'import'
@@ -1225,7 +1234,7 @@ onSubmitSwift(e){
       this.toastr.success(`swift copy Document Added Successfully`);
       console.log("swift copy Document Added Successfully");
 
-      this.userService.updateManyPipo(this.pipoArr, this.documentType,this.pipourl1)
+      this.userService.updateManyPipo(this.pipoArr, 'swiftCopy',this.pipourl1)
           .subscribe(
             data => {
               //this.pipoData[`${this.pipoDoc}`] = args[1].data
