@@ -189,6 +189,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   redirectid: any;
   redirectindex: any;
   redirectpage: any;
+  buyerDetail34: any;
 
   // ngOnInit() {
   //   this.loginForm = this.formBuilder.group({
@@ -384,6 +385,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
 
     }
     else if (this.docu == 'debitNote') {
@@ -395,6 +397,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
     }
     else if (this.docu == 'creditNote') {
       this.documentType1 = 'export'
@@ -405,6 +408,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
     }
     else if (this.docu == 'insuranceCopy') {
       this.documentType1 = 'export'
@@ -415,6 +419,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
     }
     else if (this.docu == 'irAdvice'){
       this.documentType1 = 'export'
@@ -425,6 +430,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
     }
     else if(this.docu == 'lcCopy'){
       this.documentType1 = 'export'
@@ -435,6 +441,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
 
     }
     else if(this.docu == 'tryPartyAgreement'){
@@ -446,6 +453,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
 
     }
 
@@ -458,6 +466,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
 
     }
     else if(this.docu == 'opinionReport'){
@@ -469,6 +478,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
 
     }
     else if(this.docu == 'debitNote' ){
@@ -480,6 +490,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
     }
     else if(this.docu == 'swiftCopy' ){
       this.documentType1 = 'export'
@@ -490,6 +501,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
     }
     else if(this.docu == 'EBRC' ){
       this.documentType1 = 'export'
@@ -500,6 +512,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
     }
     else if(this.docu == 'blCopyref' ){
       this.documentType1 = 'export'
@@ -510,6 +523,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
+      this.mainBene = this.beneOut
     }
     //console.log(this.route.snapshot.paramMap.get('document'))
     this.config = {
@@ -535,6 +549,13 @@ export class UploadComponent implements OnInit, AfterViewInit {
       (res: any) => {
         (this.buyerDetail = res.data),
           console.log("Benne Detail4", this.buyerDetail);
+      },
+      (err) => console.log("Error", err)
+    );
+    this.documentService.getPipoTask(1).subscribe(
+      (res: any) => {
+        (this.buyerDetail34 = res.data),
+          console.log("Benne Detail4354545345435", this.buyerDetail34);
       },
       (err) => console.log("Error", err)
     );

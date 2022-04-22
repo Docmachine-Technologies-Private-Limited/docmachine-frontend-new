@@ -161,7 +161,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     private confirmDialogService: ConfirmDialogService
   ) {
     console.log("hello")
-    this.jstoday = formatDate(this.today, 'dd.MM.yyyy', 'en-US', '+0530');
+    this.jstoday = formatDate(this.today, 'yyyy-MM-dd', 'en-US', '+0530');
     console.log(this.jstoday)
   }
 
@@ -194,7 +194,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     //pipo details
     this.documentService.getPipo().subscribe(
       (res: any) => {
-        console.log("HEre Response", res), (this.item3 = res.data);
+        console.log("HEre Response cheching for", res), (this.item3 = res.data);
         let value1 = []
         for (let value of this.item3) {
           if (value.file == 'export') {

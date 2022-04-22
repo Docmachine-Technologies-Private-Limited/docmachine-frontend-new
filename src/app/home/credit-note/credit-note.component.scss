@@ -1,3 +1,21 @@
+
+#container{
+    overflow: scroll;
+    overflow-x: auto;
+
+
+   }
+#container::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+}
+// #container::-webkit-scrollbar-track {
+//     background-color: #f0f5f5;
+// }
+// #container::-webkit-scrollbar-thumb {
+//     background:#ccc;
+//     }
+
 .table-padding {
     background: white !important;
     width: 104%;
@@ -20,6 +38,7 @@
     font-family: "Poppins", sans-serif;
     font-size: 20px;
     font-weight: 700;
+    margin-left: 23px;
     color: #323e4a;
 }
 

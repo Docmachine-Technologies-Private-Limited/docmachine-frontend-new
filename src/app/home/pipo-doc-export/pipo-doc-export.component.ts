@@ -35,7 +35,7 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { data } from 'jquery';
 import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
-
+import { formatDate } from '@angular/common';
 
 
 
@@ -222,6 +222,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   toggle5: boolean;
   toggle6: boolean;
   toggle7: boolean;
+  jstoday: any;
+  today = new Date();
 
 
 
@@ -247,6 +249,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.headers = {
       Authorization: this.authToken,
     };
+    this.jstoday = formatDate(this.today, 'yyyy-MM-dd', 'en-US', '+0530');
+    console.log(this.jstoday)
 
     if (isPlatformBrowser(this.platformId)) {
       console.log('asdkhsajvdsug');
@@ -694,53 +698,53 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
 
         //****************start shipping bill and pipo marging code**********/
-        // let pipoindex = 0 ;
-        // let filtershippingdata = [];
-        // let completedpipo = [];
+        let pipoindex = 0 ;
+        let filtershippingdata = [];
+        let completedpipo = [];
 
 
-        // for (let pipo of this.item1){
-        //   let currentpipo = this.item1[pipoindex]
+        for (let pipo of this.item1){
+          let currentpipo = this.item1[pipoindex]
 
-        //   this.item1[pipoindex].shippingdata = []
-        //   for(let shippingdata of this.item4){
-
-
-        //     if(pipo.pi_poNo == shippingdata.pipo[0]){
+          this.item1[pipoindex].shippingdata = []
+          for(let shippingdata of this.item4){
 
 
-        //       const newVal = { ...pipo };
-        //         newVal['sbno'] = shippingdata.sbno
-        //         newVal['sbdate'] = shippingdata.sbdate
-        //         newVal['portCode'] = shippingdata.portCode
-        //         newVal['region'] = shippingdata.countryOfFinaldestination
-        //         newVal['fobValue'] = shippingdata.fobValue
+            if(pipo.pi_poNo == shippingdata.pipo[0]){
+
+
+              const newVal = { ...pipo };
+                newVal['sbno'] = shippingdata.sbno
+                newVal['sbdate'] = shippingdata.sbdate
+                newVal['portCode'] = shippingdata.portCode
+                newVal['region'] = shippingdata.countryOfFinaldestination
+                newVal['fobValue'] = shippingdata.fobValue
 
 
 
-        //       filtershippingdata.push(newVal);
+              filtershippingdata.push(newVal);
 
-        //       if(completedpipo.indexOf(pipoindex)== -1){
-        //         completedpipo.push(pipoindex)
-        //       }
-        //       console.log("cheching shipping data",currentpipo);
+              if(completedpipo.indexOf(pipoindex)== -1){
+                completedpipo.push(pipoindex)
+              }
+              console.log("cheching shipping data",currentpipo);
 
-        //     }
-        //   }
-        //   pipoindex = pipoindex + 1;
+            }
+          }
+          pipoindex = pipoindex + 1;
 
-        // }
-        // console.log("filtershiping data",filtershippingdata);
-        // console.log("completed pipo data",completedpipo);
+        }
+        console.log("filtershiping data",filtershippingdata);
+        console.log("completed pipo data",completedpipo);
 
 
-        // for(let i = completedpipo.length-1; i>=0; i--){
-        //   this.item1.splice(completedpipo[i],1)
-        // }
-        // for( let pipo of filtershippingdata){
-        //   this.item1.push(pipo)
-        // }
-        // console.log("*******************************************************final",this.item1);
+        for(let i = completedpipo.length-1; i>=0; i--){
+          this.item1.splice(completedpipo[i],1)
+        }
+        for( let pipo of filtershippingdata){
+          this.item1.push(pipo)
+        }
+        console.log("*******************************************************final",this.item1);
         //****************end shipping bill and pipo marging code*******************/
         console.log("Hello There", arrayMain);
         if (arrayMain.length > 0) {

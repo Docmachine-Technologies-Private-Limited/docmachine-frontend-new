@@ -164,8 +164,8 @@
 
 
                 <div style="margin-left: 250px;">
-                    <p *ngFor='let data of comoData; let i = index' class="arrayData" style="width: 23% !important;">
-                        {{data}} <i style="float: right; margin: 4px 10px;" (click)='removeComo(i)' class="fas fa-times"></i>
+                    <p *ngFor='let data of comoData; let i = index' class="arrayData">
+                        {{data}} <i style="float: right; margin-top: 5px; margin-bottom: 5px; margin-left: 10px;" (click)='removeComo(i)' class="fas fa-times"></i>
                     </p>
                 </div>
 
@@ -231,9 +231,9 @@
 
                 <div style="margin-left: 35px;" *ngIf='documentType != "PI" && documentType != "PO"'>
 
-                    <p *ngFor='let data of arrayData; let i = index' class="arrayData">
-                        {{data}} <i style="float: right; margin: 4px 10px;" (click)='removePipo(i)' class="fas fa-times"></i>
-                    </p>
+                    <button *ngFor='let data of arrayData; let i = index' class="arrayData">
+                        {{data}} <i style="float: right; margin-top: 5px; margin-bottom: 5px; margin-left: 10px;;" (click)='removePipo(i)' class="fas fa-times"></i>
+                    </button>
 
                 </div>
             </div>
@@ -262,7 +262,7 @@
         </div>
 
 
-        <div *ngIf='docu == "sb" && file == "export"' style="margin-bottom: 20px;">
+        <div *ngIf='docu == "sb" && file == "export"' style="margin-bottom: -15px;">
             <div style="display: flex; align-items: center; margin-left: 30px;">
                 <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PI/PO*</label>
                 <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;" >
@@ -288,7 +288,7 @@
         <div *ngIf='docu == "sb" || docu == "boe"' style="margin-left: 185px;">
 
             <p *ngFor='let data of arrayData; let i = index' class="arrayData">
-                {{data}} <i style="float: right; margin: 4px 10px;" (click)='removePipo(i)' class="fas fa-times"></i>
+                {{data}} <i style="float: right; margin-top: 5px; margin-bottom: 5px; margin-left: 10px;" (click)='removePipo(i)' class="fas fa-times"></i>
             </p>
 
         </div>
@@ -369,8 +369,8 @@
             </div>
 
             <div style="margin-left: 250px;">
-                <p *ngFor='let data of comoData; let i = index' class="arrayData" style="width: 23% !important;">
-                    {{data}} <i style="float: right; margin: 4px 10px;" (click)='removeComo(i)' class="fas fa-times"></i>
+                <p *ngFor='let data of comoData; let i = index' class="arrayData" >
+                    {{data}} <i style="float: right; margin-top: 5px; margin-bottom: 5px; margin-left: 10px;" (click)='removeComo(i)' class="fas fa-times"></i>
                 </p>
             </div>
 
@@ -826,9 +826,9 @@
       " class="field">
                 <table style="width: 70%" class="field-table">
                     <tr class="field-heading">
-                        <td>PI/PO Number*</td>
+                        <td>PI/PO NUMBER*</td>
 
-                        <td>Date</td>
+                        <td>DATE</td>
                     </tr>
                     <tr>
                         <td>
