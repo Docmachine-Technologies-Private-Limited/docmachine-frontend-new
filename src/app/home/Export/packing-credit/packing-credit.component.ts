@@ -442,6 +442,9 @@ export class PackingCreditComponent implements OnInit, OnDestroy {
 
   }
 
-
+  goBack(){
+    this.isGenerate = false;
+    this.generate = false;
+  }
 
 }
