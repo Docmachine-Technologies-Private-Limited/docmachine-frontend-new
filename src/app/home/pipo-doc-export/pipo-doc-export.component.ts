@@ -35,7 +35,7 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { data } from 'jquery';
 import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
-
+import { formatDate } from '@angular/common';
 
 
 
@@ -223,6 +223,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   toggle5: boolean;
   toggle6: boolean;
   toggle7: boolean;
+  jstoday: any;
+  today = new Date();
 
 
 
@@ -248,6 +250,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.headers = {
       Authorization: this.authToken,
     };
+    this.jstoday = formatDate(this.today, 'yyyy-MM-dd', 'en-US', '+0530');
+    console.log(this.jstoday)
 
     if (isPlatformBrowser(this.platformId)) {
       console.log('asdkhsajvdsug');

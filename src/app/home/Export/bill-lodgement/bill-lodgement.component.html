@@ -1122,7 +1122,7 @@
                               </div>
 
                           </div> -->
-                            <table #table1>
+                            <table #table1 style="width: 77% !important;">
                                 <tr style="border: 0.5px solid black;">
                                     <td style="border: 0.5px solid black;">
                                         SL NO
@@ -1294,16 +1294,16 @@
                                             <div class="d-flex justify-content-between mb-1">
                                                 <select [(ngModel)]="nameSearch" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
                                                   <option value="">commodity</option>
-                                                  <option *ngFor="let item of item6; let i = index;" style="color: black;"> {{item.como}}</option>
+                                                  <option *ngFor="let item of item6; let i = index;" style="color: black;">{{item.como}}</option>
                                               </select>
 
                                                 <select [(ngModel)]="nameSearch1" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
                                                   <option value="">location</option>
-                                                  <option *ngFor="let item of item7; let i = index;" style="color: black;"> {{item.loc}}</option>
+                                                  <option *ngFor="let item of item7; let i = index;" style="color: black;">{{item.loc}}</option>
                                               </select>
                                                 <select [(ngModel)]="nameSearch2" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
                                                   <option value="">BuyerName</option>
-                                                  <option *ngFor="let item of buyerDetail ; let i = index;" style="color: black;" > {{item.buyerName}}</option>
+                                                  <option *ngFor="let item of buyerDetail ; let i = index;" style="color: black;">{{item.buyerName}}</option>
                                               </select>
 
                                                 <input type="date" placeholder="Start Date" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;" [(ngModel)]="startDate" required/>

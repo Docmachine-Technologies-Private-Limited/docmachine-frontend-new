@@ -19,12 +19,12 @@
                 <!-- {{doc}} -->
             </div>
 
-            <div class="dropdown">
+            <div>
                 Date:
-                <select name="subject" id="subject">
+                <select name="subject" id="subject" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100;margin-right: 5px;font-size: 14px;">
               <option value="" selected="selected">Today</option>
           </select> Type:
-                <select name="topic" id="topic">
+                <select name="topic" id="topic" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100;margin-right: 5px;font-size: 14px;">
               <option value="" selected="selected">All</option>
           </select>
             </div>
@@ -44,24 +44,25 @@
             <div style="width: 100%" class="analytics-side" #insurance>
                 <!-- *ngIf="!showInvoice" -->
                 <div style="width: 100%" class="row">
-                    <div style="width: 100%; margin: 0 -1.5%" class="col-12 mb-lg padding">
+                    <div style="width: 100%; margin:5%; left: -70px; top:-60px" class="col-12 mb-lg padding" id="container">
                         <!-- *ngIf="!showInvoice" -->
-                        <section style="width: 100%; margin-left: 0" class="widget pb-0 box-shadow">
-                            <div style="margin: 0 -2%" class="widget-body p-0 support table-wrapper">
-                                <table style="width: 100%" class="table table-striped mb-0">
+                        <section style="width: 200%; margin-left: 70px; margin-top: -12px;" class="pb-0 box-shadow">
+                            <div style="margin-left: -79px; height: 638px;" class="widget-body p-0 support table-wrapper">
+                                <table style="margin-left: 50px;width: 47% !important;margin-top: -1px;" class="table table-striped mb-0">
                                     <!-- *ngIf='pipo' -->
-                                    <thead style="width: 100%">
-                                        <tr class="text-muted table-heading">
-                                            <th class="rect">
+                                    <thead style="width: 100%;height: 54px;background: white;position: sticky;top: 0;">
+                                        <tr class="text-muted table-heading" style="opacity: 45%; font-size: 14px; color:black !important; font-weight: 300 !important; padding: 5px; border-bottom: 1px solid rgb(194, 189, 189);">
+                                            <!-- <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
-                                            </th>
-                                            <th scope="col"><span class="pl-3">DATE</span></th>
+                                            </th> -->
+                                            <th scope="col"><span class="pl-3" style="margin-left: 9px;">DATE</span></th>
                                             <th scope="col">PI/PO no.</th>
                                             <th scope="col">Insurance No.</th>
                                             <th scope="col">Insurance Amount</th>
                                             <th scope="col">Currency</th>
                                             <th scope="col">Buyer Name</th>
                                             <th scope="col">Insurance Doc</th>
+                                            <th scope="col"></th>
 
                                         </tr>
                                     </thead>
@@ -70,10 +71,10 @@
 
                                             <!-- (click)="
                                           getInvoices(data, i) && getTransactions(data.pi_poNo) -->
-                                            <th class="rect">
+                                            <!-- <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
-                                            </th>
-                                            <th class="pl-4 fw-normal">{{ data.date }}</th>
+                                            </th> -->
+                                            <td style="padding: 20px 35px;">{{ data.date }}</td>
 
                                             <td class="sb-no"> {{ data.pipo1 }} </td>
                                             <td>

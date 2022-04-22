@@ -569,8 +569,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         console.log(amountArr)
         this.amArr = amountArr
         console.log('111111111111111111111111111111111111111111111111111111111111111')
-        console.log(invoicearray)
+        console.log("t",invoicearray)
         this.invoiceArr = invoicearray
+      
         this.Question5 = 'yes'
       }, 8000);
 
@@ -804,7 +805,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       x: 18,
       y: 665,
       width: 295,
-      height: 14,
+      height: 30,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
     })

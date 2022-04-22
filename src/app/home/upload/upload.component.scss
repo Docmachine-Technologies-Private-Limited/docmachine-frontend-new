@@ -777,11 +777,13 @@ label {
 }
 
 .arrayData {
-    margin-bottom: 2px;
-    width: 32%;
-    padding-left: 10px;
-    background-color: RGB(73, 162, 215);
-    border-radius: 20px;
+    text-decoration: none;
     color: white;
-    font-size: 14px;
+    display: inline-block;
+    background-color: #51AEE5;
+    position: relative;
+    padding: 5px 5px;
+    border: 1px solid;
+    border-radius: 6px;
+
 }

@@ -1,175 +1,25 @@
 * {
   font-family: "Poppins", sans-serif;
 }
-.arrayData {
-  text-decoration: none;
-    color: white;
-    display: inline-block;
-    background-color: #51AEE5;
-    position: relative;
-    padding: 5px 5px;
-    border: 1px solid;
-    border-radius: 6px;
-}
-.filter{
- 
-    margin-right: 5px;
-    color: #ffffff !important;
-    font-weight: 100;
-    font-family: Poppins, sans-serif;
-    
-    font-size: 12px;
-    background-color: #49A2D7;
-    border: none;
-    border-radius: 5px;
-} 
-.filter1{
-  margin-left: 29.1rem;
-  color: #ffffff !important;
-  font-weight: 100;
-  font-family: Poppins, sans-serif;
-  
-  font-size: 12px;
-  background-color: #49A2D7;
-  border: none;
-  border-radius: 5px;
-} 
-
-.topright {
-  position: absolute;
-  right: 0;
-  
-}
-.button2 {
-  font-family: "Nunito Sans", sans-serif !important;
-    font-size: 12px;
-    width: 3rem;
-    height: 2rem;
-    font-weight: 200;
-    margin-right: 1rem;
-    background-color: RGB(81, 174, 229);
-    border-radius: 20px;
-    border: none;
-    outline: none;
-    
-    color: RGB(255, 255, 255);
-}
-.table-row {
- font-size: 12px; color:black !important; font-weight: 400 !important; 
-}
-
-input[_ngcontent-wpv-c252] {
-  box-shadow: none !important;
-  border: 1px solid #DEDEDE;
-}
-table {
-  width: 250% !important;
-}
-.table-row:hover {
-  background: #f6f9ff !important;
-  border-left: 5px solid #49a2d7;
-}
-.modal-body {
-  width: 145% !important;
-  background-color: white;
-}
-.customDropdown  {
-  position: relative;
-  display: inline-block;
-  font-size: 14px;
-  padding-left: 12px;
-  padding-right: 10px;
-  padding-top: 5px;
-  height: 32px;
-  border-radius: 2px;
-  margin-right: 12px;
-  cursor: pointer;
-  z-index: 1;
-}
-
-.customDropdown:hover {
-  border: 1px solid #4b74ff !important;
-  color: #4b74ff !important;
-
-}
-
-
-.dropdown-content {
-  display: none;
-  position: relative;
- 
-  // min-width: 70px;
-  background: white;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  z-index: 1;
-  border-radius: 6px;
-  transform: translate(-14px, 4px);
-  // height: 150px;
-}
-
-.dropdown-content  a {
-  display: inline-block;
-  cursor: pointer;
-  padding: 4px 6px;
-  min-width: 70px;
-  color: black;
-  transition: 0.4s ease;
-}
-
-.dropdown-content  a:hover {
-  background-color: #49a2d7;
-  color: white;
-}
-
-
-.customDropdown .dropIco {
-  margin-left: 7px;
-}
-
-.dropdown-content p a {
-  text-decoration: none;
-  color: black;
-  padding: 6px 10px;
-}
-
-.customDropdown:hover .dropdown-content {
-  display: block;
-}
-
-.customDropdown:hover .dropdown-content {
-  display: block;
-}
-
-.display-5 {
-  width: 400px;
-  font-weight: 400;
-  color: #606670;
-  font-size: 24px;
-  border-bottom: 4px solid #49A2D7;
-  padding-bottom: 10px;
-  margin-bottom: 40px;
-}
 
 .heading {
   font-family: "Poppins", sans-serif;
   font-size: 20px;
   font-weight: 700;
+  margin-left: 23px;
   color: #323e4a;
-}
-
-.dropdown {
-  font-size: 14px;
-  font-weight: 400;
 }
 
 .table-heading {
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   color: #747474;
-  //opacity: 50%;
 }
 
-
+table {
+  margin-left: 29px;
+  width: 98% !important;
+}
 
 .box-shadow {
   box-shadow: none !important;
@@ -182,18 +32,16 @@ table {
 }
 
 .upload-button {
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
+  color: #ffffff !important;
+  font-weight: 100;
+  font-family: Poppins, sans-serif;
+  padding: 5px 8px;
+  font-size: 14px;
+  background-color: #49A2D7;
   border: none;
-  float: right;
-  margin-top: -12px;
-  margin-right: 30px;
-  height: 42px;
-  width: 160px;
-  background-color: #49a2d7;
-  border-radius: 4px;
-  color: #ffffff;
-  box-shadow: 0px 4px 10px 0px #49a2d7;
+  border-radius: 5px;
+  margin-left: 2px;
+  margin-right: 2rem;
 }
 
 button {
@@ -207,18 +55,7 @@ button {
 
 .table-row:hover {
   background: #f6f9ff !important;
-  //border-left: 5px solid #49a2d7;
-}
-.columH:hover {
-  background: #f6f9ff !important;
-  //border-left: 5px solid #49a2d7;
-}
-
-.columH {
-  border-left: 0.1px solid #d3d3d3;
-  border-right: 0.1px solid #d3d3d3;
-  padding: 5px;
-  height: 35px;
+  border-left: 5px solid #49a2d7;
 }
 
 select {
@@ -243,7 +80,7 @@ select:focus {
 
 th,
 td {
-  //min-height: 50px;
+  height: 68px;
   vertical-align: middle !important;
 }
 
@@ -259,7 +96,401 @@ td {
   margin-left: -13px;
 }
 
+.fl {
+  float: "left";
+}
 
+.fr {
+  float: "right";
+}
+
+span.fs20 {
+  font-size: 20px;
+}
+
+span.fs16 {
+  font-size: 16px;
+}
+
+p.fs14 {
+  font-size: 14px;
+}
+
+.fs12 {
+  font-size: 12px;
+}
+
+.p-4 {
+  padding: 4px;
+}
+
+.p-8 {
+  z-index: 5000;
+  transform: scale(1, 1);
+  display: grid;
+  grid-template-columns: 29% 70%;
+}
+
+.p-20 {
+  padding: 20px !important;
+}
+
+.p-12 {
+  padding: 12px !important;
+}
+
+.p-16 {
+  padding: 16px !important;
+}
+
+.pr-4 {
+  padding-right: 4px;
+}
+
+.pr-8 {
+  padding-right: 8px !important;
+}
+
+.pr-16 {
+  padding-right: 16px;
+}
+
+.pt-30 {
+  padding-top: 30px !important;
+}
+
+.pt-28 {
+  padding-top: 28px !important;
+}
+
+.pt-25 {
+  padding-top: 25px !important;
+}
+
+.pt-24 {
+  padding-top: 24px !important;
+}
+
+.pt-22 {
+  padding-top: 22px !important;
+}
+
+.pt-20 {
+  padding-top: 20px !important;
+}
+
+.pt-19 {
+  padding-top: 19px !important;
+}
+
+.pt-16 {
+  padding-top: 16px !important;
+}
+
+.pt-14 {
+  padding-top: 14px !important;
+}
+
+.pt-10 {
+  padding-top: 10px !important;
+}
+
+.pt-8 {
+  padding-top: 8px !important;
+}
+
+.pt-4 {
+  padding-top: 4px;
+}
+
+.pt-2 {
+  padding-top: 2px;
+}
+
+.pt-0 {
+  padding-top: 0px !important;
+}
+
+.pb-28 {
+  padding-bottom: 28px !important;
+}
+
+.pb-16 {
+  padding-bottom: 16px !important;
+}
+
+.pv-4 {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.pv-8 {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.pv-10 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.pv-20 {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.pv-14 {
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
+}
+
+.pv-16 {
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+}
+
+.ph-5 {
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+}
+
+.ph-16 {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.ph-8 {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+.ph-10 {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+.ph-4 {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.ph-32 {
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+.ph-38 {
+  padding-left: 38px;
+  padding-right: 38px;
+}
+
+.ph-44 {
+  padding-left: 44px;
+  padding-right: 44px;
+}
+
+.bb {
+  border-bottom: 0.1px solid #d3d3d3;
+  border-right: 0.1px solid #d3d3d3;
+}
+
+.bc {
+  background-color: #f8fafd;
+}
+
+.bcw {
+  background-color: white;
+  color: #323e4a !important;
+}
+
+/* -----------------padding---------------- */
+/* -----------------margin----------------- */
+.m-4 {
+  margin: 4px !important;
+}
+
+.m-8 {
+  margin: 8px !important;
+}
+
+.m-16 {
+  margin: 16px !important;
+}
+
+.mr-20 {
+  margin-right: 20px !important;
+}
+
+.mr-8 {
+  margin-right: 8px !important;
+}
+
+.ml-20 {
+  margin-left: 20px !important;
+}
+
+.ml-24 {
+  margin-left: 24px !important;
+}
+
+.mt-4 {
+  margin-top: 4px !important;
+}
+
+.mt-8 {
+  margin-top: 8px !important;
+}
+
+.mt-16 {
+  margin-top: 16px !important;
+}
+
+.mt-24 {
+  margin-top: 24px !important;
+}
+
+.mt-38 {
+  margin-top: 38px !important;
+}
+
+.mh-8 {
+  margin-left: 8px !important;
+  margin-right: 8px !important;
+}
+
+.mh-16 {
+  margin-left: 16px !important;
+  margin-right: 16px !important;
+}
+
+.mv-4 {
+  margin-top: 4px !important;
+  margin-bottom: 4px !important;
+}
+
+.mv-16 {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.mv-24 {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.mh--16 {
+  margin-left: -16px !important;
+  margin-right: -16px !important;
+}
+
+.mh-8 {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.w70 {
+  width: 70%;
+}
+
+.w50 {
+  width: 50%;
+}
+
+.w30 {
+  width: 30%;
+}
+
+.pc1 {
+  width: 44.5%;
+  height: 35px;
+  float: right;
+  border-left: 1px solid #686767;
+}
+
+.tabbed {
+  overflow-x: hidden;
+  /* so we could easily hide the radio inputs */
+  background-color: #f8fafd;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 28px;
+  padding-left: 32px;
+}
+
+.tabbed [type=radio] {
+  /* hiding the inputs */
+  display: none;
+}
+
+.tabs {
+  display: flex;
+  align-items: stretch;
+  list-style: none;
+  background-color: white;
+  height: 100%;
+  padding: 1% 0;
+  padding-left: 30px;
+  margin-left: -30px;
+  width: 113%;
+}
+
+.tabs label {
+  font-size: 16px;
+}
+
+.tab > label {
+  display: block;
+  margin-bottom: 10px;
+  padding-right: 12px;
+  color: #606670;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-right: 10px;
+  border-right: 1px solid black;
+}
+
+.tab:hover label {
+  border-top-color: #333;
+  color: #333;
+}
+
+.tab-content {
+  display: none;
+  color: #777;
+  background: #f8fafd;
+  margin: 10px !important;
+}
+
+/* As we cannot replace the numbers with variables or calls to element properties, the number of this selector parts is our tab count limit */
+.tabbed [type=radio]:nth-of-type(1):checked ~ .tabs .tab:nth-of-type(1) label,
+.tabbed [type=radio]:nth-of-type(2):checked ~ .tabs .tab:nth-of-type(2) label,
+.tabbed [type=radio]:nth-of-type(3):checked ~ .tabs .tab:nth-of-type(3) label,
+.tabbed [type=radio]:nth-of-type(4):checked ~ .tabs .tab:nth-of-type(4) label,
+.tabbed [type=radio]:nth-of-type(5):checked ~ .tabs .tab:nth-of-type(5) label {
+  color: #49a2d7;
+  margin-right: 10px;
+}
+
+.tabbed [type=radio]:nth-of-type(1):checked ~ .tab-content:nth-of-type(1),
+.tabbed [type=radio]:nth-of-type(2):checked ~ .tab-content:nth-of-type(2),
+.tabbed [type=radio]:nth-of-type(3):checked ~ .tab-content:nth-of-type(3),
+.tabbed [type=radio]:nth-of-type(4):checked ~ .tab-content:nth-of-type(4) {
+  display: block;
+}
+
+.hhu:active,
+.hhu:focus {
+  border: 2px solid red;
+}
 
 .form {
   margin-left: 38px !important;
@@ -270,15 +501,14 @@ td {
   background-color: white;
   border: 1px dashed rgba(0, 0, 0, 0.4);
 }
+
 .form p {
   font-family: "Poppins", sans-serif !important;
-  // margin-top: 20px;
-  // width: 100%;
-  // height: 23px !important;
   text-align: center;
   line-height: 30px;
   color: #303030;
 }
+
 .form input {
   font-family: "EuropaNuova-Regular", sans-serif !important;
   position: absolute;
@@ -290,8 +520,8 @@ td {
   cursor: pointer;
   opacity: 0;
 }
+
 .form .form_inner button {
-  // margin-left: 36%;
   font-family: "Poppins", sans-serif !important;
   font-weight: 600;
   border: none;
@@ -305,13 +535,16 @@ td {
   box-shadow: 0px 4px 10px 0px #49a2d7;
   outline: none;
 }
+
 .form button:hover {
   background: #149174;
   color: #0c5645;
 }
+
 .form button:active {
   border: 0;
 }
+
 input:focus,
 textarea:focus,
 select:focus {
@@ -357,7 +590,9 @@ select:focus {
   outline: none;
 }
 
-
+.border1 {
+  border-left: 3px solid #174d72;
+}
 
 .border2 {
   border-left: 3px solid #5fe6e7;
@@ -368,7 +603,6 @@ select:focus {
 }
 
 .form-wrapper1 {
-  display: flex;
   flex-direction: column;
   width: 100%;
 }
@@ -382,6 +616,7 @@ select:focus {
   width: 100%;
   width: 7%;
 }
+
 .full-input {
   margin-left: 18px;
   margin-bottom: 10px;
@@ -403,6 +638,7 @@ select:focus {
   border: 1px solid #d5dbe8;
   height: 35px;
 }
+
 label {
   display: block;
   padding: 5px 0px 5px 5px;
@@ -448,7 +684,7 @@ label {
   height: 52px !important;
 }
 
-.tab1 [type="radio"] {
+.tab1 [type=radio] {
   /* hiding the inputs */
   display: inline-block;
   height: 17px;
@@ -457,13 +693,13 @@ label {
   margin-bottom: 10px;
 }
 
-.tab1 input[type="radio"]:checked + input {
+.tab1 input[type=radio]:checked + input {
   background-color: #bfb;
   border-color: #4c4;
 }
 
 .label1 {
-  
+  display: inline-block;
   margin-bottom: 10px;
   padding-right: 12px;
   color: #606670;
@@ -471,7 +707,7 @@ label {
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.3s;
-  margin-left: 15px;
+  margin-left: 30px;
 }
 
 .tab1 {
@@ -495,17 +731,17 @@ label {
   font-weight: 500;
 }
 
-.radio1 [type="radio"] {
+.radio1 [type=radio] {
   /* hiding the inputs */
   display: inline-block;
   height: 17px;
   width: 17px;
   color: #49a2d7;
-  
+  margin-bottom: 10px;
   border: 2px solid #49a2d7;
 }
 
-.radio1 input[type="radio"]:checked + input {
+.radio1 input[type=radio]:checked + input {
   background-color: #bfb;
   border-color: #4c4;
 }
@@ -519,7 +755,7 @@ label {
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.3s;
-  margin-left: 15px;
+  margin-left: 30px;
 }
 
 .radio1 {
@@ -573,12 +809,9 @@ label {
 }
 
 /*  Dashboard Main Page Styling (Front Page) */
-
 table tbody {
   cursor: pointer;
 }
-
-//SIDE PEOPLE LIST
 
 .side_document_list {
   background-color: white;
@@ -590,7 +823,6 @@ table tbody {
   margin-left: 27px;
 }
 
-//PROFILE CLASSSSS/
 .profile_class {
   display: flex;
   width: 100%;
@@ -600,14 +832,9 @@ table tbody {
   cursor: pointer;
 }
 
-// .profile_class:hover {
-//   background-color: #f8fafd;
-//   border-left: 8px solid rgb(61, 116, 197);
-// }
-
 .activeBtn {
   background-color: #f8fafd;
-  border-left: 8px solid rgb(61, 116, 197);
+  border-left: 8px solid #3d74c5;
 }
 
 .table_top {
@@ -669,170 +896,38 @@ table tbody {
 
 .opt {
   background-color: #49a2d7;
-  padding: 0 1%;
-  height: 25px;
-  min-width: 100px;
+  padding: 0 3%;
+  height: 42px;
   box-shadow: 4px 0px 7px #109cf1;
   border: none;
   color: white;
-  border-radius: 20px;
 }
 
-input ::placeholder {
-  color: rgb(212, 29, 29);
+#container {
+  overflow: scroll;
+  overflow-x: auto;
 }
 
-.button {
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  min-width: 60px;
-  border: none;
-  padding: 5px;
-  background-color: transparent;
-  border-radius: 4px;
-  color: #0e8cd4;
+#container::-webkit-scrollbar {
+  width: 0px;
+  height: 20px;
 }
 
-.button1 {
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  min-width: 60px;
-  border: none;
-  padding: 5px;
-  background-color: #0e8cd4;
-  border-radius: 4px;
+#container::-webkit-scrollbar-track {
+  background-color: #f0f5f5;
+}
+
+#container::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+
+.savBtn {
+  background-color: #49A2D7;
   color: white;
-}
-
-.class1 {
-  background-color: #97cceb;
-}
-
-.flex-container {
-  display: flex;
-  flex-wrap: nowrap;
-}
-
-.flex-container > div {
-  background-color: #f1f1f1;
-  width: 130px;
-  margin: 10px;
-  text-align: center;
-  font-size: 24px;
-}
-
-.my_class {
-    background-color: #0e8cd4 !important;
-}
-
-
-
-.heading {
-    
-    height: 25px;
-}
-
-tr.border1 {
-    border: 1px solid #070707;
-}
-
-td.border1 {
-    border-right: 1px solid #070707;
-}
-
-.wtd {
-    width: 441px;
-}
-
-.wtd1 {
-    width: 600px;
-}
-
-.wtd1 input {
-   // width: 400px;
-    border: none;
-}
-
-.wtd2 {
-    width: 900px;
-}
-
-
-
-
-span input {
-    border: none;
-    border-bottom: 1px solid black;
-}
-
-.spli {
-    border-bottom: 1px solid black !important;
-}
-
-.ins {
-    border: none;
-    border-bottom: 1px solid black;
-    width: 400px;
-}
-
-.wtd7 input{
-    width: 100px !important;
-    border: none;
-}
-
-
-.wtd8 {
-    width: 160px !important;
-}
-
-.ind {
-    border: none;
-    border-bottom: 1px solid black;
-}
-
-.sl {
-    width: 30px;
-}
-.sl3 input{
- border: none;
- width: 100px;
-}
-
-.sl3 {
-    width: 120px;
-}
-
-.w1 {
-    width: 500px;
-}
-
-.w1 input {
-   width: 216px;
-    border: none;
-}
-
-.pdf_heading {
-    display: flex;
-}
-
-.button1 {
-    font-family: "Poppins", sans-serif;
-    font-weight: 400;
-    width: 170px;
-    border: none;
-    padding: 5px;
-    background-color: #49a2d7;
-    border-radius: 4px;
-    color: #ffffff;
-    box-shadow: 0px 4px 10px 0px #49a2d7; 
-}
-
-.sizes {
-  width: 601px;
-  height: 600px
-}
-
-.sizem {
-  width: 700px;
-  height: 900px
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 2px;
+  width: 60px;
+  margin-left: -2%;
 }
