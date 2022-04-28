@@ -19,6 +19,7 @@ import { FormArray, NgForm } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from 'ngx-toastr';
 import * as data1 from '../../currency.json';
+import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 // import {ToastrService} from 'ngx-toastr';
 import {
   DropzoneDirective,
@@ -190,6 +191,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   redirectindex: any;
   redirectpage: any;
   buyerDetail34: any;
+  retururl;
 
   // ngOnInit() {
   //   this.loginForm = this.formBuilder.group({
@@ -209,8 +211,10 @@ export class UploadComponent implements OnInit, AfterViewInit {
     private toastr: ToastrService,
     private modalService: NgbModal,
     private route: ActivatedRoute,
-    public appconfig: AppConfig
+    public appconfig: AppConfig,
+    private sharedData : SharedDataService
   ) {
+    this.sharedData.currentReturnUrl.subscribe(message => this.retururl = message)
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base)
     this.loadFromLocalStorage();
@@ -218,6 +222,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
     this.headers = {
       Authorization: this.authToken,
     };
+
+    
 
     if (isPlatformBrowser(this.platformId)) {
       console.log("asdkhsajvdsug");
@@ -367,6 +373,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.documentType1 = 'export'
       this.documentType = 'sb'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
@@ -374,86 +381,96 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.pipoArr.push(this.pipoOut)
       this.mainBene = this.beneOut                                                   
       console.log("this is test 2******",this.arrayData);
+      }
       
     }
     else if (this.docu == 'boe') {
       this.documentType1 = 'import'
       this.documentType = 'boe'
       this.documentType1 = 'import'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
-      this.mainBene = this.beneOut
+      this.mainBene = this.beneOut}
 
     }
     else if (this.docu == 'debitNote') {
       this.documentType1 = 'export'
       this.documentType = 'debitNote'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
-      this.mainBene = this.beneOut
+      this.mainBene = this.beneOut}
     }
     else if (this.docu == 'creditNote') {
       this.documentType1 = 'export'
       this.documentType = 'creditNote'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
-      this.mainBene = this.beneOut
+      this.mainBene = this.beneOut}
     }
     else if (this.docu == 'insuranceCopy') {
       this.documentType1 = 'export'
       this.documentType = 'insuranceCopy'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
       this.mainBene = this.beneOut
+      }
     }
+   
     else if (this.docu == 'irAdvice'){
       this.documentType1 = 'export'
       this.documentType = 'irAdvice'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
-      this.mainBene = this.beneOut
+      this.mainBene = this.beneOut}
     }
     else if(this.docu == 'lcCopy'){
       this.documentType1 = 'export'
       this.documentType = 'lcCopy'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
-      this.mainBene = this.beneOut
+      this.mainBene = this.beneOut}
 
     }
     else if(this.docu == 'tryPartyAgreement'){
       this.documentType1 = 'export'
       this.documentType = 'tryPartyAgreement'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
-      this.mainBene = this.beneOut
+      this.mainBene = this.beneOut}
 
     }
 
@@ -461,69 +478,75 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.documentType1 = 'export'
       this.documentType = 'agreement'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
-      this.mainBene = this.beneOut
+      this.mainBene = this.beneOut}
 
     }
     else if(this.docu == 'opinionReport'){
       this.documentType1 = 'export'
       this.documentType = 'opinionReport'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
-      this.mainBene = this.beneOut
+      this.mainBene = this.beneOut}
 
     }
     else if(this.docu == 'debitNote' ){
       this.documentType1 = 'export'
       this.documentType = 'debitNote'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
-      this.mainBene = this.beneOut
+      this.mainBene = this.beneOut}
     }
     else if(this.docu == 'swiftCopy' ){
       this.documentType1 = 'export'
       this.documentType = 'swiftCopy'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
-      this.mainBene = this.beneOut
+      this.mainBene = this.beneOut}
     }
     else if(this.docu == 'EBRC' ){
       this.documentType1 = 'export'
       this.documentType = 'EBRC'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
-      this.mainBene = this.beneOut
+      this.mainBene = this.beneOut}
     }
     else if(this.docu == 'blCopyref' ){
       this.documentType1 = 'export'
       this.documentType = 'blCopyref'
       this.documentType1 = 'export'
+      if(this.route.snapshot.paramMap.get('pipo')){
       this.pipoOut = this.route.snapshot.paramMap.get('pipo')
       this.beneOut = this.route.snapshot.paramMap.get('bene')
       let x = "PI" + "-" + this.pipoOut + "-" + this.beneOut
       this.arrayData.push(x)
       this.pipoArr.push(this.pipoOut)
-      this.mainBene = this.beneOut
+      this.mainBene = this.beneOut}
     }
     //console.log(this.route.snapshot.paramMap.get('document'))
     this.config = {
@@ -624,6 +647,13 @@ console.log(this.res)
             console.log("king123");
             console.log("DATA", data);
             this.message = "";
+            if(this.retururl){
+              let url = this.retururl
+              this.sharedData.changeretunurl('')
+              this.router.navigate([
+                url
+              ])
+            }else{
             this.router.navigate([
               'home/pipoDocExport',
                   {
@@ -631,7 +661,7 @@ console.log(this.res)
                     page: this.redirectpage,
                     index: this.redirectindex,
                   },
-               ]);
+               ]);}
             this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1)
               .subscribe(
                 data => {
@@ -671,6 +701,13 @@ console.log(this.res)
               console.log("king123")
               console.log(data)
               this.toastr.success('Firex Document added successfully.');
+              if(this.retururl){
+                let url = this.retururl
+                this.sharedData.changeretunurl('')
+                this.router.navigate([
+                  url
+                ])
+              }else{
               this.router.navigate([
                 'home/pipoDocExport',
                     {
@@ -679,6 +716,7 @@ console.log(this.res)
                       index: this.redirectindex,
                     },
                  ]);
+                }
               // this.docTog = false
               // this.toggle = false
               // this.toggle2 = false
@@ -752,6 +790,13 @@ console.log(this.res)
                   console.log(data)
 
                   this.toastr.success('shipping Bill added successfully.');
+                  if(this.retururl){
+                    let url = this.retururl
+                    this.sharedData.changeretunurl('')
+                    this.router.navigate([
+                      url
+                    ])
+                  }else{
                   this.router.navigate([
                     'home/pipoDocExport',
                         {
@@ -760,6 +805,7 @@ console.log(this.res)
                           index: this.redirectindex,
                         },
                      ]);
+                    }
 
                   // this.docTog = false
                   // this.toggle = false
@@ -796,6 +842,13 @@ console.log(this.res)
               console.log("king123")
               console.log(data)
               this.toastr.success('shipping Bill added successfully.');
+              if(this.retururl){
+                let url = this.retururl
+                this.sharedData.changeretunurl('')
+                this.router.navigate([
+                  url
+                ])
+              }else{
               this.router.navigate([
                 'home/pipoDocExport',
                     {
@@ -803,7 +856,7 @@ console.log(this.res)
                       page: this.redirectpage,
                       index: this.redirectindex,
                     },
-                 ]);
+                 ]);}
 
               // this.docTog = false
               // this.toggle = false
@@ -1055,7 +1108,13 @@ console.log(this.res)
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
-
+                if(this.retururl){
+                  let url = this.retururl
+                  this.sharedData.changeretunurl('')
+                  this.router.navigate([
+                    url
+                  ])
+                }else{
                 this.router.navigate([
                   'home/pipoDocExport',
                       {
@@ -1064,6 +1123,7 @@ console.log(this.res)
                         index: this.redirectindex,
                       },
                    ]);
+                  }
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -1092,16 +1152,23 @@ console.log(this.res)
                 console.log(" credit Note document",this.pipourl1)
                 console.log("king123")
                 console.log(data)
-
-                // this.router.navigateByUrl("/home/creditNote");
+                if(this.retururl){
+                  let url = this.retururl
+                  this.sharedData.changeretunurl('')
+                  this.router.navigate([
+                    url
+                  ])
+                }else{
                 this.router.navigate([
                  'home/pipoDocExport',
                      {
                        id: this.redirectid,
                        page: this.redirectpage,
                        index: this.redirectindex,
+
                      },
                   ]);
+                }
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -1133,15 +1200,38 @@ console.log(this.res)
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
+                if(this.retururl){
+                  let url = this.retururl
+                  this.sharedData.changeretunurl('')
+                  this.router.navigate([
+                    url
+                  ])
+                }else{
+                  this.router.navigate([
+                    'home/pipoDocExport',
+                        {
+                          id: this.redirectid,
+                          page: this.redirectpage,
+                          index: this.redirectindex,
+                        },
+                     ]);
+  
+                }
+                
 
-                this.router.navigate([
-                  'home/pipoDocExport',
-                      {
-                        id: this.redirectid,
-                        page: this.redirectpage,
-                        index: this.redirectindex,
-                      },
-                   ]);
+                // if(this.redirectid && this.route.snapshot.paramMap.get('document') == "debitNote" ){
+                //   this.router.navigate([
+                //     'home/pipoDocExport',
+                //         {
+                //           id: this.redirectid,
+                //           page: this.redirectpage,
+                //           index: this.redirectindex,
+                //         },
+                //      ]);}else{
+                //        this.router.navigate([
+                //          'home/debitNote'
+                //        ])
+                //      }
                    console.log("redirectindex",this.redirectindex);
                    console.log("redirectinpage",this.redirectpage);
                    console.log("redirectid",this.redirectid);
@@ -1310,7 +1400,13 @@ onSubmitSwift(e){
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
-
+                if(this.retururl){
+                  let url = this.retururl
+                  this.sharedData.changeretunurl('')
+                  this.router.navigate([
+                    url
+                  ])
+                }else{
                 this.router.navigate([
                   'home/pipoDocExport',
                       {
@@ -1319,6 +1415,7 @@ onSubmitSwift(e){
                         index: this.redirectindex,
                       },
                    ]);
+                  }
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -1351,7 +1448,13 @@ onSubmitSwift(e){
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
-
+                if(this.retururl){
+                  let url = this.retururl
+                  this.sharedData.changeretunurl('')
+                  this.router.navigate([
+                    url
+                  ])
+                }else{
                 this.router.navigate([
                   'home/pipoDocExport',
                       {
@@ -1360,6 +1463,7 @@ onSubmitSwift(e){
                         index: this.redirectindex,
                       },
                    ]);
+                  }
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -1391,7 +1495,13 @@ onSubmitSwift(e){
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
-
+                if(this.retururl){
+                  let url = this.retururl
+                  this.sharedData.changeretunurl('')
+                  this.router.navigate([
+                    url
+                  ])
+                }else{
                 this.router.navigate([
                   'home/pipoDocExport',
                       {
@@ -1400,6 +1510,7 @@ onSubmitSwift(e){
                         index: this.redirectindex,
                       },
                    ]);
+                  }
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -1431,7 +1542,13 @@ onSubmitSwift(e){
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
-
+                if(this.retururl){
+                  let url = this.retururl
+                  this.sharedData.changeretunurl('')
+                  this.router.navigate([
+                    url
+                  ])
+                }else{
                 this.router.navigate([
                   'home/pipoDocExport',
                       {
@@ -1439,7 +1556,7 @@ onSubmitSwift(e){
                         page: this.redirectpage,
                         index: this.redirectindex,
                       },
-                   ]);
+                   ]);}
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');

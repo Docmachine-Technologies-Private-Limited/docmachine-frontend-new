@@ -3,6 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DocumentService } from 'src/app/service/document.service';
 import { UserService } from 'src/app/service/user.service';
 import {Router} from '@angular/router';
+import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
 
 @Component({
@@ -37,6 +38,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     private userService: UserService,
     private documentService : DocumentService,
     private router: Router,
+    private sharedData : SharedDataService
 
   ) { }
 
@@ -146,6 +148,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
 
   newIrAdvice() {
     console.log('upload');
+    this.sharedData.changeretunurl('home/inwardRemittanceAdvice')
     this.router.navigate(['home/upload', { file: 'export', document: 'irAdvice' }]);
   }
 

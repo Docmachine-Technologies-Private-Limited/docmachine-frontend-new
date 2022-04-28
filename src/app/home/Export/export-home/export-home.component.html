@@ -2152,7 +2152,7 @@
                                                                 <div *ngFor='let value of newBankArray'
                                                                         style="display: flex; align-items: center; margin-left: 40px;">
                                                                         <input style="flex-direction:row;" type="radio"
-                                                                                id="options1" class="circular_input"
+                                                                                id="options1" (click)="model1.option = value" [checked]="value === model1.option" class="circular_input"
                                                                                 (ngModel)="myRadio" value="value.bank"
                                                                                 (click)="creditTo(value)">
                                                                         <label style="flex-direction:row;"
@@ -2163,7 +2163,7 @@
                                                                 <div *ngFor='let value of newBankArray'
                                                                         style="display: flex; align-items: center; margin-left: 40px;">
                                                                         <input style="flex-direction:row;" type="radio"
-                                                                                id="options1" class="circular_input"
+                                                                                id="options1" (click)="model2.option = value" [checked]="value === model2.option" class="circular_input"
                                                                                 (ngModel)="myRadio" value="value.bank"
                                                                                 (click)="chargesTo(value)">
                                                                         <label style="flex-direction:row;"

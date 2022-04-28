@@ -5,6 +5,8 @@ import { ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../service/user.service';
 import * as xlsx from 'xlsx';
+import { Router } from '@angular/router';
+import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 
 @Component({
   selector: 'app-master-service',
@@ -27,7 +29,9 @@ export class MasterServiceComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private router:Router,
+    private sharedData : SharedDataService
   ) { }
 
   ngOnInit(): void {
@@ -95,6 +99,10 @@ toSave(data, index){
   );
 
 
+}
+masterSer(){
+  this.sharedData.changeretunurl('home/master-services')
+  this.router.navigate(['home/upload', { file: 'export', document: 'agreement' }]);
 }
 
 toEdit(index){

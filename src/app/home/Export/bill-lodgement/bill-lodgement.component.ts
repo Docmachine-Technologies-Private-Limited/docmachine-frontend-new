@@ -51,6 +51,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   public Question9 = '';
   public Question10 = '';
   public allTransactions: any = [];
+  public optionsVisibility: any = [];
   public generateIndex;
   public itemArray1 = [];
   lodgement1: any;
@@ -168,6 +169,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   public buyerDetail: any = [];
   startDate : any = '';
   endDate: any = '';
+  model   = {option: 'Bank options'};
+  model1   = {option: 'Bank options'};
 
 
   advanceForm = new FormGroup({
@@ -258,7 +261,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           console.log("king123")
           console.log(data['data'][0])
           this.item5 = data['data'][0]
-          console.log(this.item5)
+          console.log("this is exporter addres",this.item5)
           this.arr = this.item5.gst.split('');
           console.log(this.arr)
           this.bankArray = this.item5.bankDetails
@@ -660,6 +663,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     }
   }
 
+  
+
   getProper(a) {
     const myArray = a.split('-');
     myArray.forEach((value, index) => {
@@ -709,14 +714,31 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     if (x) {
       this.amArr[i] = this.amArr[i] - a;
       this.invoiceArr[i].pipoValue['damage'] = a
+      
       this.invoiceArr[i].pipoValue['realized'] = this.amArr[i]
     }
-    console.log(this.invoiceArr)
+    console.log("this is invice array",this.invoiceArr)
 
 
 
     console.log(a)
     console.log(this.amArr)
+  }
+
+  toEdit(index) {
+    
+    console.log("this is damage value" ,this.invoiceArr[index].pipoValue['damage']);
+    this.optionsVisibility[index] = true;
+    this.toastr.warning('table Is In Edit Mode');
+  }
+  toSave(index) {
+    this.optionsVisibility[index] = false;
+    this.toastr.success('table updated successfully.');
+  }
+  updaterisevalue(i){
+  this.invoiceArr[i].pipoValue.realized = this.invoiceArr[i].pipoValue.amount - this.invoiceArr[i].pipoValue.damage;
+ console.log("this is rised",this.invoiceArr[i].pipoValue.realized)
+
   }
 
   async fillForm(a) {
@@ -805,7 +827,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       x: 18,
       y: 665,
       width: 295,
-      height: 30,
+      height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
     })

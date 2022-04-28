@@ -5,6 +5,8 @@ import { ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../service/user.service'
 import * as xlsx from 'xlsx';
+import { Router } from '@angular/router';
+import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 
 @Component({
   selector: 'app-try-party-agreements',
@@ -27,7 +29,9 @@ export class TryPartyAgreementsComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router,
+    private sharedData : SharedDataService
   ) { }
 
   ngOnInit(): void {
@@ -96,7 +100,11 @@ toSave(data, index){
 
 
 }
+triParty(){
+  this.sharedData.changeretunurl('home/try-Party')
+  this.router.navigate(['home/upload', { file: 'export', document: 'tryPartyAgreement' }]);
 
+}
 toEdit(index){
   this.optionsVisibility[index] = true;
   this.toastr.warning('Tri-Party Agreement Row Is In Edit Mode');

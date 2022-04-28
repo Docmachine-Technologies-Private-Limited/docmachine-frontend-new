@@ -148,6 +148,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   e: boolean;
   d: boolean;
   model   = {option: 'Bank options'};
+  model1   = {option: 'Bank options'};
+  model2   = {option: 'Bank options'};
  
   
   constructor(
@@ -161,7 +163,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     private confirmDialogService: ConfirmDialogService
   ) {
     console.log("hello")
-    this.jstoday = formatDate(this.today, 'yyyy-MM-dd', 'en-US', '+0530');
+    this.jstoday = formatDate(this.today, 'dd-MM-yyyy', 'en-US', '+0530');
     console.log(this.jstoday)
   }
 
