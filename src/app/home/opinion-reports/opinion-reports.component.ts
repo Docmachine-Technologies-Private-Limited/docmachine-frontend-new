@@ -5,6 +5,8 @@ import { ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../service/user.service'
 import * as xlsx from 'xlsx';
+import { Router } from '@angular/router';
+import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 
 @Component({
   selector: 'app-opinion-reports',
@@ -27,7 +29,9 @@ export class OpinionReportsComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router,
+    private sharedData : SharedDataService
   ) { }
 
   ngOnInit(): void {
@@ -77,6 +81,11 @@ console.log(666666666666666, a)
 this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
   a['doc']
 );
+}
+newOpinion() {
+  console.log('upload');
+  this.sharedData.changeretunurl('home/opinion-report')
+  this.router.navigate(['home/upload', { file: 'export', document: 'opinionReport' }]); 
 }
 
 toSave(data, index){

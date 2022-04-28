@@ -4,7 +4,9 @@ import { DocumentService } from 'src/app/service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from './../../service/user.service'
+import { UserService } from './../../service/user.service';
+import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-insurance-document',
@@ -26,7 +28,9 @@ export class InsuranceDocumentComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private router :Router,
+    private sharedData : SharedDataService
   ) { }
 
   ngOnInit(): void {
@@ -93,6 +97,11 @@ private getDismissReason(reason: any): string {
     );
 
 
+  }
+  newInsurance() {
+    console.log('upload');
+    this.sharedData.changeretunurl('home/insuranceDocument')
+    this.router.navigate(['home/upload', { file: 'export', document: 'insuranceCopy' }]);
   }
 
   toEdit(index){

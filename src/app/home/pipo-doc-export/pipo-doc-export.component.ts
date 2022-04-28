@@ -226,6 +226,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   toggle7: boolean;
   jstoday: any;
   today = new Date();
+  agreement: any;
 
 
 
@@ -326,6 +327,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
     this.id = this.route.snapshot.params['id'];
     this.currentindex = this.route.snapshot.params['index'];
+    console.log("index of detail page",this.currentindex)
     //shipping bill
     this.documentService.getMaster(1).subscribe (
       (res: any) => {
@@ -335,7 +337,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       },
       (err) => console.log(err)
     );
-
+    
  //third party API
     this.documentService.getThird().subscribe(
       (res: any) => {
@@ -377,8 +379,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     //Agreement Api
     this.documentService.getMasterService().subscribe(
       (res: any) => {
-        console.log('HEre Response', res);
+        console.log('HEre Response of master service agreement', res);
         this.item12 = res.data;
+        console.log("second log agreement",this.item12)
         for (let value of this.item12) {
           for(let value1 of value.pipo){
             const newVal = { ...value };

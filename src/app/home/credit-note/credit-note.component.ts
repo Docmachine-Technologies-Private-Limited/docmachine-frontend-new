@@ -17,6 +17,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Data, NavigationStart, Router } from '@angular/router';
 import * as xlsx from 'xlsx';
+import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 
 @Component({
   selector: 'app-credit-note',
@@ -39,7 +40,8 @@ export class CreditNoteComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private sharedData : SharedDataService
   ) { }
 
   ngOnInit(): void {
@@ -107,8 +109,9 @@ toSave(data, index){
 
 
 }
-newDebit(){
-  this.router.navigate(['home/upload', { file: 'export', document: 'debitNote' }]);
+newCredit(){
+  this.sharedData.changeretunurl('home/creditNote')
+  this.router.navigate(['home/upload', { file: 'export', document: 'creditNote' }]);
 }
 exportToExcel() {
   const ws: xlsx.WorkSheet =

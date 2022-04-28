@@ -1220,24 +1220,41 @@
                             <br>
 
 
-                            <span style="margin-left: 30px;">Select a bank*</span>
-                            <div *ngFor='let value of bank' style="display: flex; align-items: center; margin-left: 40px;">
-                                <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" (ngModel)="myRadio" (click)="model.option = value" [checked]="value === model.option" value="value.bank" (click)="setradio(value)" s>
-                                <label style="flex-direction:row;" class="label1" for="male">{{value}}</label>
-                            </div>
-                            <br>
-                            <div *ngIf='bankToggle'>
-                                <span style="margin-left: 30px;"> Credit to {{bankValue}}*</span>
-                                <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; margin-left: 40px;">
-                                    <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" (ngModel)="myRadio" value="value.bank" (click)="creditTo(value)">
-                                    <label style="flex-direction:row;" class="label1" for="male">{{value.bank}}-{{value.accType}}</label>
-                                </div> <br>
-                                <span style="margin-left: 30px;"> to {{bankValue}}*</span>
-                                <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; margin-left: 40px;">
-                                    <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" (ngModel)="myRadio" value="value.bank" (click)="chargesTo(value)">
-                                    <label style="flex-direction:row;" class="label1" for="male">{{value.bank}}-{{value.accType}}</label>
-                                </div> <br>
-                            </div>
+                                                       <span style="margin-left: 30px;">Select a bank*</span>
+                                                        <div *ngFor='let value of bank'
+                                                                style="display: flex; align-items: center; margin-left: 40px;">
+                                                                <input style="flex-direction:row;" type="radio"
+                                                                        id="options1" class="circular_input"
+                                                                        (ngModel)="myRadio" (click)="model.option = value" [checked]="value === model.option" value="value.bank"
+                                                                        (click)="setradio(value)" s>
+                                                                <label style="flex-direction:row;" class="label1"
+                                                                        for="male">{{value}}</label>
+                                                        </div>
+                                                        <br>
+                                                        <div *ngIf='bankToggle'>
+                                                               <span style="margin-left: 30px;"> Credit to {{bankValue}}*</span>
+                                                                <div *ngFor='let value of newBankArray'
+                                                                        style="display: flex; align-items: center; margin-left: 40px;">
+                                                                        <input style="flex-direction:row;" type="radio"
+                                                                                id="options1" (click)="model1.option = value" [checked]="value === model1.option" class="circular_input"
+                                                                                (ngModel)="myRadio" value="value.bank"
+                                                                                (click)="creditTo(value)">
+                                                                        <label style="flex-direction:row;"
+                                                                                class="label1"
+                                                                                for="male">{{value.bank}}-{{value.accType}}</label>
+                                                                </div> <br>
+                                                                <span style="margin-left: 30px;"> to {{bankValue}}*</span>
+                                                                <div *ngFor='let value of newBankArray'
+                                                                        style="display: flex; align-items: center; margin-left: 40px;">
+                                                                        <input style="flex-direction:row;" type="radio"
+                                                                                id="options1" (click)="model2.option = value" [checked]="value === model2.option" class="circular_input"
+                                                                                (ngModel)="myRadio" value="value.bank"
+                                                                                (click)="chargesTo(value)">
+                                                                        <label style="flex-direction:row;"
+                                                                                class="label1"
+                                                                                for="male">{{value.bank}}-{{value.accType}}</label>
+                                                                </div> <br>
+                                                        </div>
 
 
                             <button class="opt" style="margin-right: 1%" (click)='generateDoc(code,j)'>

@@ -216,7 +216,7 @@
                             <div *ngIf='Question2 === "no" || Question2 === "yes" && Question5=="yes" || Question5=="no" ||  Question5=="yes"' style="margin-left: 10px;">
                                 Select a bank*
                                 <div *ngFor='let value of bank' style="display: flex; align-items: center;">
-                                    <input style="flex-direction:row;" type="radio" class="circular_input" [value]="value" (ngModel)="myRadio" (click)="setradio(value)">
+                                    <input style="flex-direction:row;" type="radio" class="circular_input" [value]="value" (click)="model.option = value" [checked]="value === model.option" (ngModel)="myRadio" (click)="setradio(value)">
                                     <label style="flex-direction:row;" class="label1" for="male">{{value}}</label>
                                 </div>
                                 <br>
@@ -224,7 +224,7 @@
 
                                     Charges to {{bankValue}}*
                                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center;">
-                                        <input style="flex-direction:row;" [value]="value" type="radio" id="options1" class="circular_input" (click)="chargesTo(value)">
+                                        <input style="flex-direction:row;" [value]="value" (click)="model1.option = value" [checked]="value === model1.option"  type="radio" id="options1" class="circular_input" (click)="chargesTo(value)">
                                         <label style="flex-direction:row;" class="label1" for="male">{{value.bank}}-{{value.accType}}</label>
                                     </div> <br>
                                 </div> <br>
@@ -1154,6 +1154,9 @@
                                     <td style="border: 0.5px solid black;">
                                         Forex Advice No
                                     </td>
+                                    <td style="border: 0.5px solid black;">
+                                      Add Damage
+                                    </td>
                                 </tr>
                                 <tr *ngFor='let value of invoiceArr; let i = index;' style="border: 0.5px solid black;">
                                     <td style="border: 0.5px solid black;">
@@ -1177,18 +1180,36 @@
                                     <td style="border: 0.5px solid black;">
                                         {{value.pipoValue.amount}}
                                     </td>
-                                    <td style="border: 0.5px solid black;">
-                                        <span contenteditable="true" (input)="searchData($any($event.target).innerHTML, i)" style="width: 100px; border: none;  outline: none;"></span>
+                                    <td style="border: 0.5px solid black;" >
+                                        <div *ngIf="!optionsVisibility[i]">
+                                            
+                                                {{value.pipoValue.damage}}
+                                            
+
+                                        </div>
+                                        <div *ngIf="optionsVisibility[i]">
+                                        <!-- <span contenteditable="true" (input)="searchData($any($event.target).innerHTML, i)" style="width: 100px; border: none;  outline: none;"></span> -->
+                                        <input class="tblInput form-control input5" name="Add Damage Dection" type="number" placeholder="Add Damage Dection" [(ngModel)]="value.pipoValue.damage" (change)="updaterisevalue(i)">
                                         <!-- <input type="text" style="width: 100px; border: none;"
                                           (input)="searchData($any($event.target), i)"> -->
+                                        </div>
                                     </td>
                                     <td style="border: 0.5px solid black;">
-                                        <span style="width: 100px; border: none;  outline: none;" contenteditable="true">{{amArr[i]}}</span>
+                                        <!-- <span style="width: 100px; border: none;  outline: none;" contenteditable="true">{{amArr[i]}}</span> -->
+                                        
+                                            <!-- *ngIf="!optionsVisibility[i]" -->
+                                            
+                                            {{value.pipoValue.realized}}
+                                    
                                         <!-- <input type="text" style="width: 100px; border: none; outline: none;" [(ngModel)]="amArr[i]"> -->
                                     </td>
                                     <td style="border: 0.5px solid black;">
                                         {{value.advance}}
                                     </td>
+                                    <td>
+                                    <button class="savBtn" *ngIf="optionsVisibility[i]" (click)="toSave(i)">Save</button>
+                                    <button class="savBtn" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">Edit</button>
+                                </td>
                                 </tr>
                                 <!-- <tr style="border: 0.5px solid black;">
                                   <td style="border: 0.5px solid black;">

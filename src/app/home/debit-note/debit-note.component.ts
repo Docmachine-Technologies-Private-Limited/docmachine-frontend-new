@@ -7,6 +7,7 @@ import { UserService } from './../../service/user.service'
 import {AfterViewInit,ChangeDetectorRef,Component,ElementRef,Inject,Input,OnInit,PLATFORM_ID,ViewChild,} from '@angular/core';
 import * as xlsx from 'xlsx';
 import { Router } from '@angular/router';
+import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 
 
 @Component({
@@ -23,6 +24,7 @@ export class DebitNoteComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
+  
 
   constructor(
     private documentService : DocumentService,
@@ -30,7 +32,8 @@ export class DebitNoteComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private sharedData : SharedDataService
   ) { }
 
   ngOnInit(): void {
@@ -107,6 +110,7 @@ toEdit(index){
 
 newDebit() {
   console.log('upload');
+  this.sharedData.changeretunurl('home/debitNote')
   this.router.navigate(['home/upload', { file: 'export', document: 'debitNote' }]);
 }
 exportToExcel() {

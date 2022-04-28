@@ -5,7 +5,10 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class SharedDataService {
+  private returnUrl = new BehaviorSubject('');
+  currentReturnUrl = this.returnUrl.asObservable();
   private dashBoard = new BehaviorSubject(true);
+
  currentDashBoard = this.dashBoard.asObservable();
 
  private export  = new BehaviorSubject(false);
@@ -23,6 +26,11 @@ export class SharedDataService {
   changeExport(status: boolean) {
     this.dashBoard.next(false)
     this.export.next(status)
+    
+  }
+  changeretunurl(url: string) {
+    
+    this.returnUrl.next(url)
     
   }
 

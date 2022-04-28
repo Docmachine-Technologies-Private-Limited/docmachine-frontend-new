@@ -638,7 +638,7 @@
                                 <button class="button3" (click)="uploadInsurance()">Insurance Documents</button>
                                 <button class="button3" (click)="uploadLccopy()">LC Copy</button>
                                 <button class="button3" (click)='uploadshipping()'>Shipping Bill</button>
-                                <button class="button3" (click)="uploadThirdparty()">Thirdparty</button>
+                                <button class="button3" (click)="uploadThirdparty()">Tripartite agreement</button>
                                 <button class="button3" (click)="uploadMaster()">Master service</button>
                                 <button class="button3" (click)="uploadOpinion()">Opinion Reports</button>
                                 <button class="button3" (click)="uploadSwift()">Swift Copy</button>
@@ -1039,11 +1039,11 @@
                                         </div>
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                                Invoice invoiceReduction Uploaded</p>
-                                            <div>
-                                                <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                    Submitted on {{pipoData.billUnderDate}}</p>
-                                            </div>
+                                                InvoiceReduction Uploaded</p>
+                                                <div>
+                                                    <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                        Submitted on {{pipoData.billUnderDate}}</p>
+                                                </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -1131,7 +1131,7 @@
                                                 </div>
                                                 <div style="align-items: center; width: 68%;">
                                                     <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                                        ThirdParty Uploaded </p>
+                                                        Tripartite agreement Uploaded </p>
                                                     <div>
                                                         <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
                                                             Submitted on {{data.date}}</p>
@@ -1180,7 +1180,8 @@
                                             <button class="button1" (click)='viewClick("commercialInvoice"); open(content)'>View</button>
                                         </div>
                                     </div>
-
+                                    <div class="date_" *ngFor='let data of item12 let i = index'>
+                                        <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
                                     <div *ngIf='pipoData.agreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
@@ -1193,12 +1194,14 @@
                                                 Agreement Uploaded</p>
                                             <div>
                                                 <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                    Submitted on 13th Oct 2021</p>
+                                                    Submitted on {{ data.date }}</p>
                                             </div>
                                         </div>
                                         <div style="align-items: center; width: 14%;">
                                             <button class="button1" (click)='viewClick("agreement"); open(content)'>View</button>
                                         </div>
+                                    </div>
+                                    </div>
                                     </div>
                                     <div class="date_" *ngFor="let data of item7; let i = index">
                                         <div *ngIf="data.pipo[0] == pipoData.pi_poNo">

@@ -16,6 +16,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 import {ShippingBill} from './../../../model/shippingBill.model';
 
 @Component({
@@ -69,6 +70,7 @@ export class ViewDocumentComponent implements OnInit {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private toastr: ToastrService,
+    private sharedData : SharedDataService
   ) { }
 
   ngOnInit(): void {
@@ -132,6 +134,7 @@ export class ViewDocumentComponent implements OnInit {
     this.showInvoice = false;
   }
   newShipping(){
+    this.sharedData.changeretunurl('home/viewDocument/sb')
     this.router.navigate([
       'home/upload',
       {
