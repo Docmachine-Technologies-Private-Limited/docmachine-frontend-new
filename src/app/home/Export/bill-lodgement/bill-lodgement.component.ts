@@ -155,6 +155,42 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   str: string;
   dateArray: any = [];
   buyerAds: any;
+  buyerAddress2: any;
+  buyerAddress3: any;
+  buyerAddress4: any;
+  teamName1 : any = "";
+  teamName2: any = [];
+  teamName3: any = [];
+  teamName4: any = [];
+  completewords: any = "";
+  devideContent: any = "";
+  address1: any = "";
+  address2: any = "";
+  address3: any = "";
+  team1: any = "";
+  team2: any = "";
+  team3: any = "";
+  completewords2: any = "";
+  devideContent2: any = "";
+  addressLine1: any = "";
+  addressLine2: any = [];
+  addressLine3: any = [];
+  addressLine4: any = [];
+  completewords3: any = "";
+  devideContent3: any = "";
+  buyer1: any = "";
+  buyer2: any = [];
+  buyer3: any = [];
+  buyName1: any = " ";
+  buyName2: any = " ";
+  completewords4: any = "";
+  devideContent4: any = "";
+  buyerAdd2: any = [];
+  buyerAdd3: any = [];
+  buyerAdd4: any = [];
+  buyerAds1: any = " ";
+  buyerAds2: any = " ";
+  buyerAds3: any = " ";
   amArr: any = [];
   pipo = false;
   ship = false;
@@ -261,6 +297,54 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           console.log(this.item5)
           this.arr = this.item5.gst.split('');
           console.log(this.arr)
+          // console.log("*************************Shailendra", this.item5.teamName)
+
+          this.teamName1 = this.item5.teamName
+          this.addressLine1 = this.item5.adress
+
+
+          this.completewords=this.teamName1.split(" ")
+          this.devideContent = this.completewords.length;
+
+          for(let i=0;i<this.completewords.length;i++){
+            if(i<6){
+                this.teamName2.push(this.completewords[i])
+            }else if(i>5 && i<=11){
+                this.teamName3.push(this.completewords[i])
+            }
+            // else if(i>9){
+            //     this.teamName4.push(this.completewords[i])
+            // }
+        }
+
+        this.team1=this.teamName2.join(" ")
+        this.team2=this.teamName3.join(" ")
+        // this.team3=this.teamName4.join(" ")
+
+        console.log("*************************Shailendra", this.team1)
+        console.log("*************************ShailendraAddress", this.team2)
+
+        this.completewords2=this.addressLine1.split(" ")
+        this.devideContent2 = this.completewords2.length;
+
+        for(let i=0;i<this.completewords2.length;i++){
+          if(i<6){
+              this.addressLine2.push(this.completewords2[i])
+          }else if(i>5 && i<=11){
+              this.addressLine3.push(this.completewords2[i])
+          }else if(i>11){
+              this.addressLine4.push(this.completewords2[i])
+          }
+      }
+
+      this.address1 = this.addressLine2.join(" ")
+      this.address2 = this.addressLine3.join(" ")
+      this.address3 = this.addressLine4.join(" ")
+      // console.log("Shailendra Address1 ***********************",this.address1)
+      // console.log("Shailendra Address2 ***********************",this.address2)
+      // console.log("Shailendra Address3 ***********************",this.address3)
+
+
           this.bankArray = this.item5.bankDetails
           for (let value of this.bankArray) {
             this.allBank.push(value.bank)
@@ -337,12 +421,14 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       }
       this.itemArray = arr
       this.filterToggle = true
-      console.log("shaile***************", this.itemArray)
+      // console.log("shaile***************", this.itemArray)
     }
     else {
       this.filterToggle = false
       console.log("else")
     }
+
+    // console.log("shailendra buyerName", a.buyerName)
 
   }
 
@@ -571,7 +657,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         console.log('111111111111111111111111111111111111111111111111111111111111111')
         console.log("t",invoicearray)
         this.invoiceArr = invoicearray
-      
+
         this.Question5 = 'yes'
       }, 8000);
 
@@ -604,6 +690,28 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     );
     console.log('shshhss', data.data)
     this.buyerAds = data.data.buyerAdrs
+
+    this.completewords4 = this.buyerAds.split(" ")
+    this.devideContent4 = this.completewords4.length;
+
+    for(let i=0;i<this.completewords4.length;i++){
+      if(i<6){
+          this.buyerAdd2.push(this.completewords4[i])
+      }else if(i>5 && i<=11){
+          this.buyerAdd3.push(this.completewords4[i])
+      }else if(i>11){
+        this.buyerAdd4.push(this.completewords4[i])
+    }
+
+  }
+
+  this.buyerAds1=this.buyerAdd2.join(" ")
+  this.buyerAds2=this.buyerAdd3.join(" ")
+  this.buyerAds3=this.buyerAdd4.join(" ")
+
+
+  console.log("Shailendra Buyer Address*************",this.buyerAds1)
+  console.log("Shailendra Buyer Address*************",this.buyerAds2)
 
     console.log('89999999999999999999999999999', this.buyerAds)
     this.mainDoc3 = generateDoc3
@@ -720,6 +828,28 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   }
 
   async fillForm(a) {
+
+    console.log("Shailendra *************", a.buyerName)
+
+    this.buyer1 = a.buyerName
+    this.completewords3=this.buyer1.split(" ")
+    this.devideContent3 = this.completewords3.length;
+
+    for(let i=0;i<this.completewords3.length;i++){
+      if(i<6){
+          this.buyer2.push(this.completewords3[i])
+      }else if(i>5 && i<=11){
+          this.buyer3.push(this.completewords3[i])
+      }
+
+  }
+
+  this.buyName1=this.buyer2.join(" ")
+  this.buyName2=this.buyer3.join(" ")
+
+  console.log("Shailendra *************",this.buyName1)
+  console.log("Shailendra *************",this.buyName2)
+
     const formUrl = './../../assets/billUnder.pdf'
 
     const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
@@ -789,7 +919,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     //exporter
 
     const text6 = form.createTextField('favorite5')
-    text6.setText(this.item5.teamName)
+    text6.setText(this.team1)
     text6.addToPage(firstpage, {
       x: 18,
       y: 684,
@@ -800,18 +930,34 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text7 = form.createTextField('favorite6')
-    text7.setText(this.item5.adress)
+    // if(this.team2.length > 0){
+    text7.setText(this.team2)
     text7.addToPage(firstpage, {
+
       x: 18,
       y: 665,
       width: 295,
-      height: 30,
+      height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
     })
+  // }
+  // else{
+  //   text7.setText(this.item5.adress)
+  //   text7.addToPage(firstpage, {
+
+  //     x: 18,
+  //     y: 665,
+  //     width: 295,
+  //     height: 14,
+  //     borderWidth: 0,
+  //     // backgroundColor: rgb(255, 255, 255)
+  //   })
+  // }
 
     const text8 = form.createTextField('favorite7')
-    text8.setText("")
+    // if(this.team2.length > 0 && this.team3.length == 0){
+    text8.setText(this.address1)
     text8.addToPage(firstpage, {
       x: 18,
       y: 646,
@@ -820,9 +966,23 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
     })
+  // }
+  // else{
+  //   text8.setText(this.team3)
+  //   text8.addToPage(firstpage, {
+  //     x: 18,
+  //     y: 646,
+  //     width: 295,
+  //     height: 14,
+  //     borderWidth: 0,
+  //     // backgroundColor: rgb(255, 255, 255)
+
+  //   })
+  // }
 
     const text9 = form.createTextField('favorite8')
-    text9.setText("")
+  //  if(this.team2.length > 0 && this.team3.length > 0){
+    text9.setText(this.address2)
     text9.addToPage(firstpage, {
       x: 18,
       y: 628,
@@ -831,9 +991,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
     })
+  // }
 
     const text10 = form.createTextField('favorite9')
-    text10.setText("")
+    text10.setText(this.address3)
     text10.addToPage(firstpage, {
       x: 18,
       y: 612,
@@ -857,7 +1018,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     //buyer
 
     const text12 = form.createTextField('favorite11')
-    text12.setText(a.buyerName)
+    text12.setText(this.buyName1)
     text12.addToPage(firstpage, {
       x: 320,
       y: 684,
@@ -868,7 +1029,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text13 = form.createTextField('favorite12')
-    text13.setText(this.buyerAds)
+    text13.setText(this.buyName2)
     text13.addToPage(firstpage, {
       x: 320,
       y: 665,
@@ -879,7 +1040,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text14 = form.createTextField('favorite13')
-    text14.setText("")
+    text14.setText(this.buyerAds1)
     text14.addToPage(firstpage, {
       x: 320,
       y: 646,
@@ -890,7 +1051,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text15 = form.createTextField('favorite14')
-    text15.setText("")
+    text15.setText(this.buyerAds2)
     text15.addToPage(firstpage, {
       x: 320,
       y: 628,
@@ -901,7 +1062,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     })
 
     const text16 = form.createTextField('favorite15')
-    text16.setText("")
+    text16.setText(this.buyerAds3)
     text16.addToPage(firstpage, {
       x: 320,
       y: 612,

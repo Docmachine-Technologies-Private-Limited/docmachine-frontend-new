@@ -97,6 +97,11 @@
                                         <th scope="col">CONSIGNEE NAME</th>
                                         <th scope="col">BRANCH</th>
                                         <th scope="col">COMMODITY</th>
+                                        <th scope="col">SB NO</th>
+                                        <th scope="col">SB DATE</th>
+                                        <th scope="col">REGION</th>
+                                        <th scope="col">FOB VALUE - INR</th>
+                                        <th scope="col">PORT CODE</th>
                                         <th scope="col">TT DATE</th>
                                         <th scope="col">TT USD</th>
                                         <th scope="col">Received Date </th>
@@ -126,13 +131,7 @@
                                         <th scope="col">STATUS OF BANK RECO.</th>
                                         <th scope="col">FIRX NUMBER SETTLED AGAINST</th>
                                         <th scope="col" style="padding: 20px 35px;  ">BALANCE IF ANY</th>
-                                        <th scope="col">SB NO</th>
-                                        <th scope="col">SB DATE</th>
-                                        <th scope="col">REGION</th>
-                                        <th scope="col">FOB VALUE - INR</th>
-                                        <th scope="col">PORT CODE</th>
                                         <th scope="col">Edit/Save</th>
-
                                     </tr>
                                 </thead>
                                 <tbody class="text-dark">
@@ -180,6 +179,34 @@
 
                                             <div *ngIf="optionsVisibility[i]">
                                                 <input class="tblInput form-control" name="commodity" type="text" placeholder="Commodity" [(ngModel)]="data.commodity">
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div *ngIf="data.sbno">
+                                                <!-- invoice Value -->
+                                                {{data.sbno}}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="data.sbdate">
+                                                {{data.sbdate}}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="data.region">
+                                                {{data.region}}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="data.fobValue">
+                                                {{data.fobValue}}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="data.portCode">
+                                                <!-- {{data.portCode}} -->
+                                                {{data.portCode}}
                                             </div>
                                         </td>
 
@@ -473,34 +500,6 @@
                                                 <input class="tblInput form-control" name="balanceIfAny" type="text" placeholder="BALANCE IF ANY" [(ngModel)]="data.balanceIfAny">
                                             </div>
                                         </td>
-
-                                        <td>
-                                            <div *ngIf="data.sbno">
-                                                <!-- invoice Value -->
-                                                {{data.sbno}}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div *ngIf="data.sbdate">
-                                                {{data.sbdate}}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div *ngIf="data.region">
-                                                {{data.region}}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div *ngIf="data.fobValue">
-                                                {{data.fobValue}}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div *ngIf="data.portCode">
-                                                <!-- {{data.portCode}} -->
-                                                {{data.portCode}}
-                                            </div>
-                                        </td>
                                         <td>
                                             <button class="savBtn" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)">Save</button>
                                             <button class="savBtn" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">Edit</button>
@@ -582,7 +581,7 @@
             <div class="p-8 bc">
                 <div class="side_document_list">
                     <!---class="col-12 mb-lg ph-38"-->
-                    <div id="profile" class="profile_class" *ngFor="let data of item21; let i = index" [ngClass]="lastIndex == i ? 'activeBtn' : ''" (click)="getInvoices(data, i)">
+                    <div id="profile" class="profile_class" *ngFor="let data of item; let i = index" [ngClass]="lastIndex == i ? 'activeBtn' : ''" (click)="getInvoices(data, i)">
                         <!----------class="row p-2 bb hhu"-->
                         <div class="" style="display: flex; padding-top: 10px;">
                             <!-----------class="ph-10 fl"-->
@@ -901,8 +900,8 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: 0px;">
                                                 Uploaded Proforma Invoice</p>
-                                            <div class="date_" >
-                                                <p  style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                            <div class="date_">
+                                                <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
                                                     Submitted on {{pipoData.date}}</p>
                                             </div>
 
@@ -912,10 +911,10 @@
                                         </div>
                                     </div>
 
-                                        <div *ngIf='pipoData.advanceOutward' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px">
+                                    <div *ngIf='pipoData.advanceOutward' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px">
                                         &nbsp;
-                                            </div>
-                                            <div *ngIf='pipoData.advanceOutward' style="display: flex;">
+                                    </div>
+                                    <div *ngIf='pipoData.advanceOutward' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
@@ -923,8 +922,8 @@
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Inward Remittance Disposal Transaction uploaded</p>
                                             <div>
-                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted on {{pipoData.advanceOutwardDate}}</p>
+                                                <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                    Submitted on {{pipoData.advanceOutwardDate}}</p>
                                             </div>
 
                                         </div>
@@ -1020,11 +1019,11 @@
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Bill Under Collection Transaction uploaded</p>
 
-                                                <div>
-                                                    <p  style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                        Submitted on {{pipoData.billUnderDate}}</p>
-                                                </div>
+                                            <div>
+                                                <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                    Submitted on {{pipoData.billUnderDate}}</p>
                                             </div>
+                                        </div>
                                         <div style="align-items: center; width: 14%;">
                                             <button class="button1" (click)='toggleClick7("billUnder")'>View</button>
                                         </div>
@@ -1041,10 +1040,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 Invoice invoiceReduction Uploaded</p>
-                                                <div>
-                                                    <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                        Submitted on {{pipoData.billUnderDate}}</p>
-                                                </div>
+                                            <div>
+                                                <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                    Submitted on {{pipoData.billUnderDate}}</p>
+                                            </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">

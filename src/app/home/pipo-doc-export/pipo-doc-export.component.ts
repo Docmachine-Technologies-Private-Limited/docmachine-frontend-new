@@ -116,6 +116,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   public item16 : any;
   public item17 = [];
   public item21 = [];
+  public item22 = [];
   public user;
   public selectedRow;
   public showInvoice = false;
@@ -225,6 +226,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   toggle7: boolean;
   jstoday: any;
   today = new Date();
+
 
 
 
@@ -498,12 +500,13 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
               console.log('avvvvvvvvvv');
 
               this.item1.push(value);
-
-              console.log("pipoamani",this.item1)
-              console.log("pipoamanihfhjfjh",this.item1)
-              this.item21.push(value);
+              console.log("pipoamani", this.item1)
+              console.log("pipoamanihfhjfjh", this.item1)
             }
           }
+
+
+           console.log('shailendra Jain #####################', this.item22)
           this.getMaster();
           this.documentService.getPipoByPipoNo(this.id).subscribe(
             (data) => {
@@ -1584,11 +1587,14 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
   toSave(data, index) {
     this.optionsVisibility[index] = false;
-    // console.log('555555555555550', data);
+    console.log('555555555555550', data);
     // console.log('6666666666666', this.pipoData);
     // console.log('777777777', this.pipoData.damagesUSD);
+    // console.log('6666666666667', this.id)
+    // console.log('6666666666668', data._id)
+    // console.log('6666666666669', data.data)
 
-    this.userService.updatePipo(this.pipoData, this.id).subscribe(
+    this.userService.updatePipo(data, data._id).subscribe(
       (data) => {
         console.log('king123');
         this.toastr.success('PI/PO updated successfully.'); // this.docTog = false
@@ -1991,6 +1997,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     </div>
   `,
 })
+
 export class ModalContentComponent1 implements OnInit {
   title: string;
   closeBtnName: string;
