@@ -18,7 +18,7 @@
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
                                             <th scope="col"><span class="pl-3">DATE</span></th>
-                                            <th scope="col">PI/PO no.</th>
+                                            <th scope="col">PI/PO No.</th>
                                             <th scope="col">Purpose Code</th>
                                             <th scope="col">Bank Name</th>
                                             <th scope="col" *ngIf="pending || completed">Upload</th>
@@ -26,13 +26,12 @@
                                     </thead>
                                     <tbody *ngFor="let data of item1; let i = index" class="text-dark">
 
-                                        <tr *ngIf="pending && !data.completed" class="table-row"
-                                            (click)="viewTask(data)">
+                                        <tr *ngIf="pending && !data.completed" class="table-row" (click)="viewTask(data)">
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
-                                            <th class="pl-4 fw-normal">{{
-                                                data.transactionDate}}</th>
+                                            <th class="pl-4 fw-normal">{{ data.transactionDate}}
+                                            </th>
                                             <td class="sb-no">{{ data.pi_poNo }}</td>
                                             <td (click)="viewTask(data)">
                                                 {{ data.file }}
@@ -43,8 +42,7 @@
                                             </td>
                                         </tr>
 
-                                        <tr *ngIf="completed && data.completed" class="table-row"
-                                            (click)="viewTask(data)">
+                                        <tr *ngIf="completed && data.completed" class="table-row" (click)="viewTask(data)">
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
@@ -74,8 +72,7 @@
                                     </thead>
                                     <tbody *ngFor="let data of item2; let i = index" class="text-dark">
 
-                                        <tr class="table-row" *ngIf='data.completed == "yes" && completed'
-                                            (click)='viewExportTask(data)'>
+                                        <tr class="table-row" *ngIf='data.completed == "yes" && completed' (click)='viewExportTask(data)'>
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
@@ -89,8 +86,7 @@
                                                 {{data.completed}}
                                             </td>
                                         </tr>
-                                        <tr class="table-row" *ngIf='data.completed == "no" && pending'
-                                            (click)='viewExportPendingTask(data)'>
+                                        <tr class="table-row" *ngIf='data.completed == "no" && pending' (click)='viewExportPendingTask(data)'>
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>

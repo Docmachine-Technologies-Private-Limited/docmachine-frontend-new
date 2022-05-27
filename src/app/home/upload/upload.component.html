@@ -15,27 +15,27 @@
      </div> -->
 
 
-      <h3 class="heading" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
-      <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
-      <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
-      <h3 class="heading" *ngIf='docu == "debitNote"'>Upload debitNote</h3>
-      <h3 class="heading" *ngIf='docu == "irAdvice"'>Upload Forex Advice Documnet</h3>
-      <h3 class="heading" *ngIf='docu == "creditNote"'>Upload creditNote</h3>
-      <h3 class="heading" *ngIf='docu == "insuranceCopy"'>Upload Insurance Copy</h3>
-      <h3 class="heading" *ngIf='docu == "lcCopy"'>Upload LC Copy</h3>
-      <h3 class="heading" *ngIf='docu == "agreement"'>Upload Master service agreement</h3>
-      <h3 class="heading" *ngIf='docu == "tryPartyAgreement"'>Upload Tri Party Document</h3>
-      <h3 class="heading" *ngIf='docu == "opinionReport"'>Upload Opinion Report</h3>
-      <h3 class="heading" *ngIf='docu == "swiftCopy"'>Upload Swift Copy Document</h3>
-      <h3 class="heading" *ngIf='docu == "EBRC"'>Upload Export Realisation certificate</h3>
-      <h3 class="heading" *ngIf='docu == "blCopyref"'>Bill lodgement reference number and advice copy</h3>
+        <h3 class="heading" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
+        <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
+        <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
+        <h3 class="heading" *ngIf='docu == "debitNote"'>Upload debitNote</h3>
+        <h3 class="heading" *ngIf='docu == "irAdvice"'>Upload Forex Advice Documnet</h3>
+        <h3 class="heading" *ngIf='docu == "creditNote"'>Upload creditNote</h3>
+        <h3 class="heading" *ngIf='docu == "insuranceCopy"'>Upload Insurance Copy</h3>
+        <h3 class="heading" *ngIf='docu == "lcCopy"'>Upload LC Copy</h3>
+        <h3 class="heading" *ngIf='docu == "agreement"'>Upload Master service agreement</h3>
+        <h3 class="heading" *ngIf='docu == "tryPartyAgreement"'>Upload Tri Party Document</h3>
+        <h3 class="heading" *ngIf='docu == "opinionReport"'>Upload Opinion Report</h3>
+        <h3 class="heading" *ngIf='docu == "swiftCopy"'>Upload Swift Copy Document</h3>
+        <h3 class="heading" *ngIf='docu == "EBRC"'>Upload Export Realisation certificate</h3>
+        <h3 class="heading" *ngIf='docu == "blCopyref"'>Bill lodgement reference number and advice copy</h3>
 
-      <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" && docu != "irAdvice" &&  docu != "debitNote" && docu !="lcCopy" && docu !="insuranceCopy" && docu !="creditNote" && docu !="agreement" && docu !="opinionReport" && docu !="tryPartyAgreement" && docu !="swiftCopy" && docu !="EBRC" && docu !="blCopyref"'>Upload Document</h3>
-      <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' style="margin-bottom: 20px;">
-          <p style="color: rgb(0, 0, 0);margin-left: 40px">
-              Choose the type of document
-          </p>
-          <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
+        <h3 class="heading" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" && docu != "irAdvice" &&  docu != "debitNote" && docu !="lcCopy" && docu !="insuranceCopy" && docu !="creditNote" && docu !="agreement" && docu !="opinionReport" && docu !="tryPartyAgreement" && docu !="swiftCopy" && docu !="EBRC" && docu !="blCopyref"'>Upload Document</h3>
+        <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' style="margin-bottom: 20px;">
+            <p style="color: rgb(0, 0, 0);margin-left: 40px">
+                Choose the type of document
+            </p>
+            <select [(ngModel)]="documentType1" style=" margin-bottom: 3%; margin-left: 40px" name="" id="">
       <option value="">Document Type</option>
       <option value="import">Import</option>
       <option value="export">Export</option>
@@ -265,7 +265,7 @@
         <div *ngIf='docu == "sb" && file == "export"' style="margin-bottom: -15px;">
             <div style="display: flex; align-items: center; margin-left: 30px;">
                 <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 30px;">Select PI/PO*</label>
-                <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;" >
+                <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;">
                     <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
           <i id="up3" style="display: none" class="fas fa-angle-up"></i>
@@ -369,7 +369,7 @@
             </div>
 
             <div style="margin-left: 250px;">
-                <p *ngFor='let data of comoData; let i = index' class="arrayData" >
+                <p *ngFor='let data of comoData; let i = index' class="arrayData">
                     {{data}} <i style="float: right; margin-top: 5px; margin-bottom: 5px; margin-left: 10px;" (click)='removeComo(i)' class="fas fa-times"></i>
                 </p>
             </div>
@@ -836,7 +836,7 @@
                         </td>
 
                         <td>
-                            <input class="form-control input2" type="date" type="date" data-date="" data-date-format="DD MMMM YYYY" value= "" formControlName="date" style="width: 7100% 0%" />
+                            <input class="form-control input2" type="date" type="date" data-date="" data-date-format="DD MMMM YYYY" value="" formControlName="date" style="width: 7100% 0%" />
                         </td>
                         <td><button type="submit" class="button">Submit</button></td>
                     </tr>
@@ -1105,7 +1105,7 @@
 
         </form>
         <!-- blcopyref Input file -->
-        <form *ngIf="blCopyref && !override" class="" #values="ngForm" (ngSubmit)="onSubmitblcopyref(values)" >
+        <form *ngIf="blCopyref && !override" class="" #values="ngForm" (ngSubmit)="onSubmitblcopyref(values)">
 
             <div style="
             width: 82%;
@@ -1135,7 +1135,7 @@
         </form>
 
         <!-- EBRC Input file -->
-        <form *ngIf="EBRC && !override" class="" #values="ngForm" (ngSubmit)="onSubmitEbrc(values)" >
+        <form *ngIf="EBRC && !override" class="" #values="ngForm" (ngSubmit)="onSubmitEbrc(values)">
 
             <div style="
             width: 82%;

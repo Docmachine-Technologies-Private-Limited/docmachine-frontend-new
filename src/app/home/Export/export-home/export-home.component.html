@@ -41,7 +41,7 @@
                                         style="width: 20px; height: 20px;"><span style="margin-left: 10px;"
                                         [routerLink]="['/home/dashboardTask']">Back</span>
                         </div> -->
-            <div *ngIf="!selectPurpose" style="margin: 20px 50px;">
+            <div *ngIf="!selectPurpose" style="margin: 20px 80px;">
                 <p class="stp3">Select a Purpose code*</p>
 
                 <div *ngIf="!purposeSelect">
@@ -50,14 +50,15 @@
                         Matching Result <br> Number of Purpose Group = {{ pgNumber }} <br> Number of Purpose Code or Description = {{ pcNumber }}
                     </div>
 
-                    <div *ngIf="selectedPurpose.length>0" style="margin-bottom: 20px;">
+                    <!-- margin-bottom: 20px; margin-left:3px; -->
+                    <div *ngIf="selectedPurpose.length>0" style="margin: -5px 0px 20px 3px">
                         Selected Purpose Code
                         <br>
 
-                        <tr *ngFor="let code of selectedPurpose; let i = index">{{code}} <b (click)="removeClick(i)" style="color: red;">Remove</b>
+                        <tr style="margin-top: 15px;" *ngFor="let code of selectedPurpose; let i = index">{{code}} <b (click)="removeClick(i)" style="color: red;">Remove</b>
                             <br>
                         </tr>
-                        <button class="button1" (click)="proceedClick()">Proceed</button>
+                        <button style="margin-top: 10px;" class="button1" (click)="proceedClick()">Proceed</button>
                     </div>
                     <table class="table table-striped mb-0" style="margin-left: 0px;border-bottom: 0.5px solid rgb(228, 227, 227);">
                         <thead style="width: 100%; font-size: 10px; font-weight: 300;">
@@ -137,7 +138,7 @@
                                         <label class="form-check-label">
                                                                                         <input class="form-check-input"
                                                                                                 type="checkbox"
-                                                                                                (change)=changeCheckbox2(item.thirdNumber)>
+                                                                                                (change)=changeCheckbox2(item.triPartyAgreementNumber)>
                                                                                         {{item.triPartyAgreementNumber}}
                                                                                         {{item.buyerName}}
                                                                                 </label>
@@ -1203,8 +1204,8 @@
                             <br>
                             <br>
                             <input style="width: 50%; margin-top: 10px; margin-left: 30px; margin-bottom: 10px;" placeholder="Search for Buyer name or PI/PO Number to select PI/PO" class="form-control" type="text" (input)="searchData2($any($event.target).value)">
-                            <span *ngIf='filterToggle'>Select PI/PO numbers*</span>
-                            <div *ngIf='filterToggle'>
+                            <span *ngIf='filterToggle' style="margin-left: 30px;">Select PI/PO numbers*</span>
+                            <div *ngIf='filterToggle' style="margin-left: 30px;">
                                 <div class="form-check" *ngFor="let item of itemArray; let i = index;">
                                     <label class="form-check-label">
                                                                                 <input class="form-check-input"
@@ -1220,41 +1221,24 @@
                             <br>
 
 
-                                                       <span style="margin-left: 30px;">Select a bank*</span>
-                                                        <div *ngFor='let value of bank'
-                                                                style="display: flex; align-items: center; margin-left: 40px;">
-                                                                <input style="flex-direction:row;" type="radio"
-                                                                        id="options1" class="circular_input"
-                                                                        (ngModel)="myRadio" (click)="model.option = value" [checked]="value === model.option" value="value.bank"
-                                                                        (click)="setradio(value)" s>
-                                                                <label style="flex-direction:row;" class="label1"
-                                                                        for="male">{{value}}</label>
-                                                        </div>
-                                                        <br>
-                                                        <div *ngIf='bankToggle'>
-                                                               <span style="margin-left: 30px;"> Credit to {{bankValue}}*</span>
-                                                                <div *ngFor='let value of newBankArray'
-                                                                        style="display: flex; align-items: center; margin-left: 40px;">
-                                                                        <input style="flex-direction:row;" type="radio"
-                                                                                id="options1" (click)="model1.option = value" [checked]="value === model1.option" class="circular_input"
-                                                                                (ngModel)="myRadio" value="value.bank"
-                                                                                (click)="creditTo(value)">
-                                                                        <label style="flex-direction:row;"
-                                                                                class="label1"
-                                                                                for="male">{{value.bank}}-{{value.accType}}</label>
-                                                                </div> <br>
-                                                                <span style="margin-left: 30px;"> to {{bankValue}}*</span>
-                                                                <div *ngFor='let value of newBankArray'
-                                                                        style="display: flex; align-items: center; margin-left: 40px;">
-                                                                        <input style="flex-direction:row;" type="radio"
-                                                                                id="options1" (click)="model2.option = value" [checked]="value === model2.option" class="circular_input"
-                                                                                (ngModel)="myRadio" value="value.bank"
-                                                                                (click)="chargesTo(value)">
-                                                                        <label style="flex-direction:row;"
-                                                                                class="label1"
-                                                                                for="male">{{value.bank}}-{{value.accType}}</label>
-                                                                </div> <br>
-                                                        </div>
+                            <span style="margin-left: 30px;">Select a bank*</span>
+                            <div *ngFor='let value of bank' style="display: flex; align-items: center; margin-left: 40px;">
+                                <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" (ngModel)="myRadio" (click)="model.option = value" [checked]="value === model.option" value="value.bank" (click)="setradio(value)" s>
+                                <label style="flex-direction:row;" class="label1" for="male">{{value}}</label>
+                            </div>
+                            <br>
+                            <div *ngIf='bankToggle'>
+                                <span style="margin-left: 30px;"> Credit to {{bankValue}}*</span>
+                                <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; margin-left: 40px;">
+                                    <input style="flex-direction:row;" type="radio" id="options1" (click)="model1.option = value" [checked]="value === model1.option" class="circular_input" (ngModel)="myRadio" value="value.bank" (click)="creditTo(value)">
+                                    <label style="flex-direction:row;" class="label1" for="male">{{value.bank}}-{{value.accType}}</label>
+                                </div> <br>
+                                <span style="margin-left: 30px;"> To {{bankValue}}*</span>
+                                <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; margin-left: 40px;">
+                                    <input style="flex-direction:row;" type="radio" id="options1" (click)="model2.option = value" [checked]="value === model2.option" class="circular_input" (ngModel)="myRadio" value="value.bank" (click)="chargesTo(value)">
+                                    <label style="flex-direction:row;" class="label1" for="male">{{value.bank}}-{{value.accType}}</label>
+                                </div> <br>
+                            </div>
 
 
                             <button class="opt" style="margin-right: 1%" (click)='generateDoc(code,j)'>
@@ -1266,10 +1250,10 @@
                         <div *ngIf='code === c && generatePurpose[j] == code'>
 
                             <div id="mainId" class="bc" *ngIf="donePurpose[j] != code">
-                                <iframe [src]="value" frameborder="0" [ngClass]="bgColor ? 'sizes' : 'sizem'"></iframe>
+                                <iframe style="margin-left: 30px;" [src]="value" frameborder="0" [ngClass]="bgColor ? 'sizes' : 'sizem'"></iframe>
 
                             </div> <br>
-                            <div *ngIf='newDone'>
+                            <div style="margin-left: 30px;" *ngIf='newDone'>
                                 PI/PO Documents <br>
                                 <div style="display: flex; align-items: center;">
                                     <iframe style="flex-direction:row;" *ngFor="let pipo of mainDoc[j]" [src]="pipo" height="600px" width="500px"></iframe>

@@ -124,6 +124,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   isDone: boolean;
   arr: any;
   item5: any;
+  item6: any;
   isDoneAll: any;
   draftPipo: any = [];
   ir: string = 'no';
@@ -150,8 +151,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   model   = {option: 'Bank options'};
   model1   = {option: 'Bank options'};
   model2   = {option: 'Bank options'};
- 
-  
+
+
   constructor(
     public documentService: DocumentService,
     private router: Router,
@@ -173,13 +174,13 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.redirectindex = this.route.snapshot.paramMap.get('index')
     this.redirectpage = this.route.snapshot.paramMap.get('page')
     console.log("pipoId",this.redirectid);
-    
+
     console.log(data['default'])
     this.jsondata = data['default'];
     console.log(this.jsondata[0].purpose)
     this.dataJson = this.jsondata
     this.purposeFun()
-    
+
     this.route.params.subscribe(params => {
       this.file = this.route.snapshot.params['file'];
       this.showInvoice = false;
@@ -1564,7 +1565,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
 
 
-    // *WE AUTHORISE YOU TO CONVERT THE UNUTILISED PORTION OF CAPTIONED INWARD REMITTANCE CREDITED 
+    // *WE AUTHORISE YOU TO CONVERT THE UNUTILISED PORTION OF CAPTIONED INWARD REMITTANCE CREDITED
 
     const textc2Field = form.createTextField('best.textc2')
     textc2Field.setText('')
@@ -2303,7 +2304,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     code === this.c;
     this.sbPurpose[j] != code
     this.importPurpose[j] !=code
-    this.noImportPurpose[j] !=code 
+    this.noImportPurpose[j] !=code
     this.mailArray[j] !=code
     code !== this.c
    this.importPurpose[j] != code
@@ -2422,7 +2423,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       if (value.bank == a) {
         this.newBankArray.push(value)
       }
-      
+
 
     });
 

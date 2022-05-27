@@ -15,12 +15,12 @@
                               <a style="width: 100%;">Export</a>
                           </div>
                       </div> -->
-                        <div class="customDropdown" style="width: 80px;border: 1px solid #C6CBD4; font-size: 14px;margin-right: 5px;">
+                        <div class="customDropdown" style="width: 85px;border: 1px solid #C6CBD4; font-size: 14px;margin-right: 5px;">
                             <span style="color: #4b74ff !important">PI/PO </span>
                             <span class="dropIco"><i id="down" class="fas fa-angle-down"></i>
                               <i id="up" style="display: none" class="fas fa-angle-up"></i>
                           </span>
-                            <div class="dropdown-content" style="min-width: 80px;">
+                            <div class="dropdown-content" style="min-width: 85px;">
                                 <a style="width: 100%;">PI/PO</a>
                                 <a style="width: 100%;">BOE</a>
                             </div>
@@ -39,9 +39,9 @@
                           <option *ngFor="let bene of benneDetail" >{{ bene.buyerName }} </option>
                       </select>
 
-                        <input type="date" placeholder="Start Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;" [(ngModel)]="startDate" required/>
+                        <input type="date" placeholder="Start Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px; height:29px;" [(ngModel)]="startDate" required/>
 
-                        <input type="date" placeholder="End Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px;margin-right: 5px;" [(ngModel)]="endDate" required/>
+                        <input type="date" placeholder="End Date" style="padding: 4px;width: 147px;margin-left: 5px;font-size: 13px; height:29px; margin-right: 5px;" [(ngModel)]="endDate" required/>
 
                         <button class="filter" (click)="startDate = '' ; endDate = '' ;nameSearch = '';nameSearch1 = '' ;nameSearch2 = '' ">Reset</button>
                         <div class="customDropdown" style="width: 102px; margin-right: 5px !important; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
@@ -523,7 +523,7 @@
             <div class="table_top" style="margin-top: 28px;">
                 <div class="table_left" style="">
 
-                    <span style="color: RGB(50, 62, 74); font-size: 14px; margin-left: 24px;">PI / PO Documents</span>
+                    <span style="color: RGB(50, 62, 74); font-size: 14px; margin-left: 24px;">PI/PO Documents</span>
                     <!-- <div style="background-color: #49A2D7; float: right;" class="customDropdown">
                       <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
                           <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
@@ -1040,10 +1040,10 @@
                                         <div style="align-items: center; width: 68%;">
                                             <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                 InvoiceReduction Uploaded</p>
-                                                <div>
-                                                    <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                        Submitted on {{pipoData.billUnderDate}}</p>
-                                                </div>
+                                            <div>
+                                                <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
+                                                    Submitted on {{pipoData.billUnderDate}}</p>
+                                            </div>
 
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -1182,26 +1182,26 @@
                                     </div>
                                     <div class="date_" *ngFor='let data of item12 let i = index'>
                                         <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
-                                    <div *ngIf='pipoData.agreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
-                                        &nbsp;
-                                    </div>
-                                    <div *ngIf='pipoData.agreement' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 52px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7 ; font-size: 24px;"></i>
-                                        </div>
-                                        <div style="align-items: center; width: 68%;">
-                                            <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
-                                                Agreement Uploaded</p>
-                                            <div>
-                                                <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                    Submitted on {{ data.date }}</p>
+                                            <div *ngIf='pipoData.agreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                                &nbsp;
+                                            </div>
+                                            <div *ngIf='pipoData.agreement' style="display: flex;">
+                                                <div style="align-items: center; width: 4%; margin-left: 52px;">
+                                                    <i class="fas fa-check-circle" style="color: #49A2D7 ; font-size: 24px;"></i>
+                                                </div>
+                                                <div style="align-items: center; width: 68%;">
+                                                    <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
+                                                        Agreement Uploaded</p>
+                                                    <div>
+                                                        <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
+                                                            Submitted on {{ data.date }}</p>
+                                                    </div>
+                                                </div>
+                                                <div style="align-items: center; width: 14%;">
+                                                    <button class="button1" (click)='viewClick("agreement"); open(content)'>View</button>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div style="align-items: center; width: 14%;">
-                                            <button class="button1" (click)='viewClick("agreement"); open(content)'>View</button>
-                                        </div>
-                                    </div>
-                                    </div>
                                     </div>
                                     <div class="date_" *ngFor="let data of item7; let i = index">
                                         <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
@@ -1651,8 +1651,8 @@
                                             Commodity</p>
                                         <p *ngFor='let value of  pipoData.commodity' class="arrayData"> {{value}}</p>
 
-                                        <p style="color: RGB(48, 48, 48); font-size: 20px; margin-left: 4px;">
-                                            PaymentTerm*</p>
+                                        <p style="margin-top: 10px;color: #303030; font-size: 20px; font-family: EuropaNuova-Regular, sans-serif !important;  margin-left: 4px;">
+                                            Payment Term*</p>
                                         <div>
                                             <table style="border-collapse: separate; border-spacing: 15px; margin-left: -10px; width: 100% !important;">
                                                 <tr style="height: 30px !important;">
@@ -1989,7 +1989,7 @@
                                     <label for="settledAmount">Due Date</label><input class="form-control smalll-input" type="text" formControlName="dueDate" placeholder="dd/mm/yy" [(ngModel)]="pipoData.dueDate" />
                                 </td>
 
-                                <span style="color: hsl(0, 0%, 19%); font-size: 20px;">Payment Terms*</span>
+                                <span style="color: #303030; font-size: 20px; font-family: EuropaNuova-Regular, sans-serif !important; ">Payment Terms*</span>
                                 <div formArrayName="paymentTerm">
                                     <div *ngFor="let course of getCourses(piPoForm); let i = index" [formGroupName]="i" style="display: flex;">
                                         <div style="flex-direction:row; margin-right: 20px;">
@@ -2172,7 +2172,7 @@
                                   </select>
                                 </td>
                                 <br>
-                                <span style="color: hsl(0, 0%, 19%); font-size: 20px;">Payment Terms*</span>
+                                <span style="color: #303030; font-size: 20px; font-family: EuropaNuova-Regular, sans-serif !important;">Payment Terms*</span>
                                 <div formArrayName="paymentTerm">
                                     <div *ngFor="let course of getCourses(piPoForm); let i = index" [formGroupName]="i" style="display: flex;">
                                         <div style="flex-direction:row; margin-right: 20px;">

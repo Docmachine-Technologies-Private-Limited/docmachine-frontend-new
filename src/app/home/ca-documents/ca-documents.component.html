@@ -14,7 +14,7 @@
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
                                             <th scope="col"><span class="pl-3">DATE</span></th>
-                                            <th scope="col">PI/PO no.</th>
+                                            <th scope="col">PI/PO No.</th>
                                             <th scope="col">Purpose Code</th>
                                             <th scope="col">Bank Name</th>
                                             <th scope="col" *ngIf="pending || completed">Upload</th>
@@ -37,8 +37,8 @@
                                             <th class="rect" (click)="viewTask(data)">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
-                                            <th class="pl-4 fw-normal" (click)="viewTask(data)">{{
-                                                data.transactionDate}}</th>
+                                            <th class="pl-4 fw-normal" (click)="viewTask(data)">{{ data.transactionDate}}
+                                            </th>
                                             <td class="sb-no" (click)="viewTask(data)">{{ data.pi_poNo }}</td>
                                             <td (click)="viewTask(data)">
                                                 {{ data.file }}
@@ -47,10 +47,7 @@
                                             <td>
                                                 <form method="POST">
                                                     <div>
-                                                        <input class="customfile1" (error)="onUploadError($event)"
-                                                            placeholder="Choose File" (init)="onUploadInit($event)"
-                                                            (success)="onUploadSuccess($event)" (click)="clicked(data)"
-                                                            *ngIf="type === 'directive'" [dropzone]="config">
+                                                        <input class="customfile1" (error)="onUploadError($event)" placeholder="Choose File" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (click)="clicked(data)" *ngIf="type === 'directive'" [dropzone]="config">
                                                         <!--<p class="choose">Choose File</p> -->
 
                                                     </div>

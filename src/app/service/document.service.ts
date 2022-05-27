@@ -1168,4 +1168,13 @@ export class DocumentService {
       httpOptions
     );
   }
+
+  downloadDocuments(data:any) {
+    console.log("downloadDocuments",data)
+    const httpOptions:any  = {
+      headers: data['headers'],
+      responseType: 'blob'
+    };
+    return this.http.get(data['url'], httpOptions);
+  }
 }

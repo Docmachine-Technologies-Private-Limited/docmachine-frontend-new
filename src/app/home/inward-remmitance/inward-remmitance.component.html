@@ -23,8 +23,7 @@
                 Date:
                 <select name="subject" id="subject">
                     <option value="" selected="selected">Today</option>
-                </select>
-                Type:
+                </select> Type:
                 <select name="topic" id="topic">
                     <option value="" selected="selected">All</option>
                 </select>
@@ -41,16 +40,11 @@
                 <p class="stp3">Select a Purpose code*</p>
 
                 <div *ngIf="!purposeSelect">
-                    <input style="width: 50%; margin-top: 20px; margin-bottom: 20px;"
-                        placeholder="Search purpose code,group name or description" class="form-control" type="text"
-                        (input)="searchData($any($event.target).value)">
+                    <input style="width: 50%; margin-top: 20px; margin-bottom: 20px;" placeholder="Search purpose code,group name or description" class="form-control" type="text" (input)="searchData($any($event.target).value)">
                     <div *ngIf="pgNumber != 0">
-                        Matching Result <br>
-                        Number of Purpose Group = {{ pgNumber }} <br>
-                        Number of Purpose Code or Description = {{ pcNumber }}
+                        Matching Result <br> Number of Purpose Group = {{ pgNumber }} <br> Number of Purpose Code or Description = {{ pcNumber }}
                     </div>
-                    <table class="table table-striped mb-0"
-                        style="margin-left: 0px;border-bottom: 0.5px solid rgb(228, 227, 227);">
+                    <table class="table table-striped mb-0" style="margin-left: 0px;border-bottom: 0.5px solid rgb(228, 227, 227);">
                         <thead style="width: 100%; font-size: 10px; font-weight: 300;">
                             <tr class="text-muted table-heading">
                                 <th scope="col" style="width: 17%; border: 0.1px solid #d3d3d3;">
@@ -63,11 +57,8 @@
                             </tr>
                         </thead>
                         <tbody class="text-dark">
-                            <tr class="table-row" style="font-size: 12px;"
-                                *ngFor="let purposeRow of purposeRows; let i = index">
-                                <td class="columH" *ngFor="let column of purposeRow;  let j = index"
-                                    [attr.rowSpan]="column.rowSpan" style="vertical-align: top !important;"
-                                    (click)='purposeClick(purposeRow[j]["text"], purposeRow[j+1]["text"])'>
+                            <tr class="table-row" style="font-size: 12px;" *ngFor="let purposeRow of purposeRows; let i = index">
+                                <td class="columH" *ngFor="let column of purposeRow;  let j = index" [attr.rowSpan]="column.rowSpan" style="vertical-align: top !important;" (click)='purposeClick(purposeRow[j]["text"], purposeRow[j+1]["text"])'>
                                     {{column.text}}
                                 </td>
 
@@ -83,8 +74,7 @@
                         <section style="width: 100%; margin-left: 0" class="widget pb-0 box-shadow">
                             <div style="margin: 0 -2%" class="widget-body p-0 support table-wrapper">
                                 <h4 style="margin-left: 80px">Select a Shipping Bill</h4>
-                                <table style="margin-left: 70px; width: 90% !important;"
-                                    class="table table-striped mb-0">
+                                <table style="margin-left: 70px; width: 90% !important;" class="table table-striped mb-0">
                                     <thead style="width: 100%">
                                         <tr class="text-muted table-heading">
                                             <th class="rect">
@@ -112,13 +102,8 @@
                                             </td>
                                             <td>Random Company</td>
                                             <td>
-                                                <img class="image"
-                                                    src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                    height="30px" width="30px" /><img class="image image2"
-                                                    src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                    height="30px" width="30px" />
-
-                                                Lindsey Stroud
+                                                <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
+                                                    height="30px" width="30px" /> Lindsey Stroud
                                             </td>
                                             <td>{{data.beneName}}</td>
                                         </tr>
@@ -133,16 +118,12 @@
             <div *ngIf="showInvoice && selectedSb" class="p-8 bc" style="padding-left: 0.8%">
                 <div class="side_document_list">
                     <!---class="col-12 mb-lg ph-38"-->
-                    <div id="profile" class="profile_class" *ngFor="let data of item1; let i = index"
-                        [ngClass]="lastIndex == i ? 'activeBtn' : ''"
-                        (click)="getInvoices(data, i) && getTransactions(data.sbno)">
+                    <div id="profile" class="profile_class" *ngFor="let data of item1; let i = index" [ngClass]="lastIndex == i ? 'activeBtn' : ''" (click)="getInvoices(data, i) && getTransactions(data.sbno)">
                         <!----------class="row p-2 bb hhu"-->
                         <div class="" style="display: flex">
                             <!-----------class="ph-10 fl"-->
-                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                height="30px" width="30px" /><img class="image image2"
-                                src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
-                                width="30px" />
+                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"
+                            />
                         </div>
                         <div class="" style="width: 100%; padding: 3%">
                             <!-----class="fr pt-2"-->
@@ -211,39 +192,27 @@
                                                     <tr style="width: 100%" class="form-wrapper1">
                                                         <div>
                                                             <td class="full-input border1">
-                                                                <label for="portCode">PORT CODE</label><input
-                                                                    [(ngModel)]="selectedRow.portCode"
-                                                                    class="smalll-input" type="text" name="portCode" />
+                                                                <label for="portCode">PORT CODE</label><input [(ngModel)]="selectedRow.portCode" class="smalll-input" type="text" name="portCode" />
                                                             </td>
                                                             <td class="full-input border2">
-                                                                <label for="ieccode">IEC CODE</label><input
-                                                                    [(ngModel)]="selectedRow.ieccode"
-                                                                    class="smalll-input" type="text" name="ieccode" />
+                                                                <label for="ieccode">IEC CODE</label><input [(ngModel)]="selectedRow.ieccode" class="smalll-input" type="text" name="ieccode" />
                                                             </td>
                                                             <td class="full-input border3">
-                                                                <label for="iecName">IEC NAME</label><input
-                                                                    [(ngModel)]="selectedRow.iecName"
-                                                                    class="smalll-input" type="text" name="iecName" />
+                                                                <label for="iecName">IEC NAME</label><input [(ngModel)]="selectedRow.iecName" class="smalll-input" type="text" name="iecName" />
                                                             </td>
                                                         </div>
                                                         <br />
                                                         <div>
                                                             <td class="full-input border1">
-                                                                <label for="adCode">AD CODE</label><input
-                                                                    [(ngModel)]="selectedRow.adCode"
-                                                                    class="smalll-input" type="text" name="adCode" />
+                                                                <label for="adCode">AD CODE</label><input [(ngModel)]="selectedRow.adCode" class="smalll-input" type="text" name="adCode" />
                                                             </td>
                                                             <td class="full-input border2">
-                                                                <label for="leodate">LEO DATE</label><input
-                                                                    [(ngModel)]="selectedRow.leodate"
-                                                                    class="smalll-input" type="text" name="leodate" />
+                                                                <label for="leodate">LEO DATE</label><input [(ngModel)]="selectedRow.leodate" class="smalll-input" type="text" name="leodate" />
                                                             </td>
                                                             <td class="full-input border3">
                                                                 <label for="processingStaus">PROCESSING
-                                                                    STATUS</label><input
-                                                                    [(ngModel)]="selectedRow.processingStaus"
-                                                                    class="smalll-input" type="text"
-                                                                    name="processingStaus" />
+                                                                    STATUS</label><input [(ngModel)]="selectedRow.processingStaus" class="smalll-input" type="text" name="processingStaus"
+                                                                />
                                                             </td>
                                                         </div>
 
@@ -251,46 +220,33 @@
                                                         <div>
                                                             <p class="sh1">FOB and FREIGHT</p>
                                                             <td class="full-input border1">
-                                                                <label for="fobCurrency">FOB CURRENCY</label><input
-                                                                    [(ngModel)]="selectedRow.fobCurrency"
-                                                                    class="smalll-input" type="text"
-                                                                    name="fobCurrency" />
+                                                                <label for="fobCurrency">FOB CURRENCY</label><input [(ngModel)]="selectedRow.fobCurrency" class="smalll-input" type="text" name="fobCurrency" />
                                                             </td>
                                                             <td class="full-input border2">
-                                                                <label for="fobValue">FOB VALUE</label><input
-                                                                    [(ngModel)]="selectedRow.fobValue"
-                                                                    class="smalll-input" type="text" name="fobValue" />
+                                                                <label for="fobValue">FOB VALUE</label><input [(ngModel)]="selectedRow.fobValue" class="smalll-input" type="text" name="fobValue" />
                                                             </td>
                                                             <td class="full-input border3">
                                                                 <label for="realizedFobValue">REALIZED FOB
-                                                                    VALUE</label><input
-                                                                    [(ngModel)]="selectedRow.realizedFobValue"
-                                                                    class="smalll-input" type="text"
-                                                                    name="realizedFobValue" />
+                                                                    VALUE</label><input [(ngModel)]="selectedRow.realizedFobValue" class="smalll-input" type="text" name="realizedFobValue"
+                                                                />
                                                             </td>
                                                         </div>
                                                         <br />
                                                         <div>
                                                             <td class="full-input border1">
                                                                 <label for="equivalentFobValue">EQUIVALENT FOB
-                                                                    VALUE</label><input
-                                                                    [(ngModel)]="selectedRow.equivalentFobValue"
-                                                                    class="smalll-input" type="text"
-                                                                    name="equivalentFobValue" />
+                                                                    VALUE</label><input [(ngModel)]="selectedRow.equivalentFobValue" class="smalll-input" type="text" name="equivalentFobValue"
+                                                                />
                                                             </td>
                                                             <td class="full-input border2">
                                                                 <label for="freightCurrency">FREIGHT
-                                                                    CURRENCY</label><input
-                                                                    [(ngModel)]="selectedRow.freightCurrency"
-                                                                    class="smalll-input" type="text"
-                                                                    name="freightCurrency" />
+                                                                    CURRENCY</label><input [(ngModel)]="selectedRow.freightCurrency" class="smalll-input" type="text" name="freightCurrency"
+                                                                />
                                                             </td>
                                                             <td class="full-input border3">
                                                                 <label for="realizedFreightValue">FREIGHT
-                                                                    VALUE</label><input
-                                                                    [(ngModel)]="selectedRow.realizedFreightValue"
-                                                                    class="smalll-input" type="text"
-                                                                    name="realizedFreightValue" />
+                                                                    VALUE</label><input [(ngModel)]="selectedRow.realizedFreightValue" class="smalll-input" type="text" name="realizedFreightValue"
+                                                                />
                                                             </td>
                                                         </div>
                                                         <br />
@@ -298,25 +254,18 @@
                                                             <p class="sh1">INSURANCE</p>
                                                             <td class="full-input border2">
                                                                 <label for="insuranceCurrency">INSURANCE
-                                                                    CURRENCY</label><input
-                                                                    [(ngModel)]="selectedRow.insuranceCurrency"
-                                                                    class="smalll-input" type="text"
-                                                                    name="insuranceCurrency" />
+                                                                    CURRENCY</label><input [(ngModel)]="selectedRow.insuranceCurrency" class="smalll-input" type="text" name="insuranceCurrency"
+                                                                />
                                                             </td>
                                                             <td class="full-input border3">
                                                                 <label for="insuranceValue">INSURANCE
-                                                                    VALUE</label><input
-                                                                    [(ngModel)]="selectedRow.insuranceValue"
-                                                                    class="smalll-input" type="text"
-                                                                    name="insuranceValue" />
+                                                                    VALUE</label><input [(ngModel)]="selectedRow.insuranceValue" class="smalll-input" type="text" name="insuranceValue" />
                                                             </td>
                                                             <td class="full-input border1">
                                                                 <label for="realizedInsuranceValue">REALIZED INSURANCE
                                                                     VALUE</label><input [(ngModel)]="
                                                                                                                 selectedRow.realizedInsuranceValue
-                                                                                                              "
-                                                                    class="smalll-input" type="text"
-                                                                    name="realizedInsuranceValue" />
+                                                                                                              " class="smalll-input" type="text" name="realizedInsuranceValue" />
                                                             </td>
                                                         </div>
                                                         <br />
@@ -324,33 +273,23 @@
                                                             <p class="sh1">Additional</p>
                                                             <td class="full-input border2">
                                                                 <label for="bankingCharges">BANKING
-                                                                    CHARGES</label><input
-                                                                    [(ngModel)]="selectedRow.bankingCharges"
-                                                                    class="smalll-input" type="text"
-                                                                    name="bankingCharges" />
+                                                                    CHARGES</label><input [(ngModel)]="selectedRow.bankingCharges" class="smalll-input" type="text" name="bankingCharges" />
                                                             </td>
                                                             <td class="full-input border3">
                                                                 <label for="expectedPaymentlastdate">PAYMENT LAST
                                                                     DATE</label><input [(ngModel)]="
                                                                                                                 selectedRow.expectedPaymentlastdate
-                                                                                                              "
-                                                                    class="smalll-input" type="text"
-                                                                    name="expectedPaymentlastdate" />
+                                                                                                              " class="smalll-input" type="text" name="expectedPaymentlastdate" />
                                                             </td>
                                                             <td class="full-input border1">
-                                                                <label for="AddedDate">ADDED DATE</label><input
-                                                                    [(ngModel)]="selectedRow.AddedDate"
-                                                                    class="smalll-input" type="text" name="AddedDate" />
+                                                                <label for="AddedDate">ADDED DATE</label><input [(ngModel)]="selectedRow.AddedDate" class="smalll-input" type="text" name="AddedDate" />
                                                             </td>
                                                         </div>
 
                                                         <br />
                                                         <div>
                                                             <td class="full-input border2">
-                                                                <label for="modifiedDate">MODIFIED DATE</label><input
-                                                                    [(ngModel)]="selectedRow.modifiedDate"
-                                                                    class="smalll-input" type="text"
-                                                                    name="modifiedDate" />
+                                                                <label for="modifiedDate">MODIFIED DATE</label><input [(ngModel)]="selectedRow.modifiedDate" class="smalll-input" type="text" name="modifiedDate" />
                                                             </td>
                                                         </div>
                                                     </tr>
@@ -451,8 +390,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody class="text-dark">
-                                                            <tr *ngFor="let task of allTransactions" class="table-row"
-                                                                (click)="viewTask(task)">
+                                                            <tr *ngFor="let task of allTransactions" class="table-row" (click)="viewTask(task)">
                                                                 <th class="pl-4 fw-normal">
                                                                     {{ task.transactionDate }}
                                                                 </th>
@@ -481,25 +419,18 @@
                                                     <p class="stp2">Create Transaction:</p>
                                                     <p class="stp3">Select a bank*</p>
                                                     <div style="display: flex; align-items: center;">
-                                                        <input style="flex-direction:row;" type="radio" id="options1"
-                                                            class="circular_input" [(ngModel)]="myRadio"
-                                                            value="yesBank">
+                                                        <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [(ngModel)]="myRadio" value="yesBank">
                                                         <label style="flex-direction:row;" class="label1" for="male">Yes
                                                             Bank</label>
                                                     </div>
                                                     <div style="display: flex; align-items: center;">
-                                                        <input type="radio" style="flex-direction:row;" id="options2"
-                                                            class="circular_input" [(ngModel)]="myRadio"
-                                                            value="axisBank">
-                                                        <label class="label1" style="flex-direction:row;"
-                                                            for="female">Axis Bank</label>
+                                                        <input type="radio" style="flex-direction:row;" id="options2" class="circular_input" [(ngModel)]="myRadio" value="axisBank">
+                                                        <label class="label1" style="flex-direction:row;" for="female">Axis Bank</label>
                                                     </div>
 
                                                     <div style="display: flex; align-items: center;">
-                                                        <input type="radio" style="flex-direction:row;" name="bank"
-                                                            value="Any Bank" class="circular_input" />
-                                                        <label class="label1" style="flex-direction:row;"
-                                                            for="female">Any Bank</label><br />
+                                                        <input type="radio" style="flex-direction:row;" name="bank" value="Any Bank" class="circular_input" />
+                                                        <label class="label1" style="flex-direction:row;" for="female">Any Bank</label><br />
                                                     </div>
                                                     <br>
 
@@ -511,8 +442,7 @@
                                       margin-top: 5%;
                                       justify-content: left;
                                     ">
-                                                        <button (click)="showThisPdf(selectedRow.sbno)" class="opt"
-                                                            style="margin-right: 1%">
+                                                        <button (click)="showThisPdf(selectedRow.sbno)" class="opt" style="margin-right: 1%">
                                                             Generate Document
                                                         </button>
                                                         <button class="opt">Assign Task</button>
@@ -533,15 +463,14 @@
                         <section style="width: 100%; margin-left: 0" class="widget pb-0 box-shadow">
                             <div style="margin: 0 -2%" class="widget-body p-0 support table-wrapper">
                                 <h4 style="margin-left: 80px">Select a PI/PO</h4>
-                                <table style="margin-left: 70px; width: 90% !important;"
-                                    class="table table-striped mb-0">
+                                <table style="margin-left: 70px; width: 90% !important;" class="table table-striped mb-0">
                                     <thead style="width: 100%">
                                         <tr class="text-muted table-heading">
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
                                             <th scope="col"><span class="pl-3">DATE</span></th>
-                                            <th scope="col">PI/PO no.</th>
+                                            <th scope="col">PI/PO No.</th>
                                             <th scope="col">INVOICE NUMBER</th>
                                             <th scope="col">COMPANY NAME</th>
                                             <th scope="col">UPLOADED BY</th>
@@ -564,13 +493,8 @@
                                             </td>
                                             <td>Random Company</td>
                                             <td>
-                                                <img class="image"
-                                                    src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                    height="30px" width="30px" /><img class="image image2"
-                                                    src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                    height="30px" width="30px" />
-
-                                                Lindsey Stroud
+                                                <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
+                                                    height="30px" width="30px" /> Lindsey Stroud
                                             </td>
                                             <td>{{data.amount}}</td>
                                         </tr>
@@ -585,16 +509,12 @@
             <div *ngIf="showInvoice && selectedPipo" class="p-8 bc" style="padding-left: 0.8%">
                 <div class="side_document_list">
                     <!---class="col-12 mb-lg ph-38"-->
-                    <div id="profile" class="profile_class" *ngFor="let data of item3; let i = index"
-                        [ngClass]="lastIndex == i ? 'activeBtn' : ''"
-                        (click)="getInvoices(data, i) && getTransactions(data.pi_poNo)">
+                    <div id="profile" class="profile_class" *ngFor="let data of item3; let i = index" [ngClass]="lastIndex == i ? 'activeBtn' : ''" (click)="getInvoices(data, i) && getTransactions(data.pi_poNo)">
                         <!----------class="row p-2 bb hhu"-->
                         <div class="" style="display: flex">
                             <!-----------class="ph-10 fl"-->
-                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                height="30px" width="30px" /><img class="image image2"
-                                src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
-                                width="30px" />
+                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"
+                            />
                         </div>
                         <div class="" style="width: 100%; padding: 3%">
                             <!-----class="fr pt-2"-->
@@ -606,16 +526,13 @@
                     <div id="profile" class="" *ngFor="let data of item2; let i = index" (click)="getInvoices(data,i)">
                         <!------class="row p-2 bb hhu"-->
                         <div class="ph-10 fl">
-                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                height="30px" width="30px" /><img class="image image2"
-                                src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
-                                width="30px" />
+                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"
+                            />
                         </div>
 
                         <div class="">
                             <!-------class="fr pt-2"-->
-                            <span class="fl fs16">{{ data.pi_poNo }} </span><span class="fr fs12"
-                                style="float: 'right'">
+                            <span class="fl fs16">{{ data.pi_poNo }} </span><span class="fr fs12" style="float: 'right'">
                                 {{ data.boeDate }}</span>
                             <p class="fs14">Continental carriers pvt ltd</p>
                         </div>
@@ -623,16 +540,13 @@
                     <div id="profile" class="" *ngFor="let data of item2; let i = index" (click)="getInvoices(data,i)">
                         <!------class="row p-2 bb hhu"-->
                         <div class="ph-10 fl">
-                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                height="30px" width="30px" /><img class="image image2"
-                                src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
-                                width="30px" />
+                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"
+                            />
                         </div>
 
                         <div class="">
                             <!-------class="fr pt-2"-->
-                            <span class="fl fs16">{{ data.boeNumber }} </span><span class="fr fs12"
-                                style="float: 'right'">
+                            <span class="fl fs16">{{ data.boeNumber }} </span><span class="fr fs12" style="float: 'right'">
                                 {{ data.boeDate }}</span>
                             <p class="fs14">Continental carriers pvt ltd</p>
                         </div>
@@ -1041,8 +955,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody class="text-dark">
-                                                            <tr *ngFor="let task of allTransactions" class="table-row"
-                                                                (click)="viewTask(task)">
+                                                            <tr *ngFor="let task of allTransactions" class="table-row" (click)="viewTask(task)">
                                                                 <th class="pl-4 fw-normal">
                                                                     {{ task.transactionDate }}
                                                                 </th>
@@ -1071,26 +984,19 @@
                                                     <p class="stp2">Create Transaction:</p>
                                                     <p class="stp3">Select a bank*</p>
                                                     <div style="display: flex; align-items: center;">
-                                                        <input style="flex-direction:row;" type="radio" id="options1"
-                                                            class="circular_input" [(ngModel)]="myRadio"
-                                                            value="yesBank">
+                                                        <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [(ngModel)]="myRadio" value="yesBank">
                                                         <label style="flex-direction:row;" class="label1" for="male">Yes
                                                             Bank</label>
                                                     </div>
                                                     <div style="display: flex; align-items: center;">
-                                                        <input type="radio" style="flex-direction:row;" id="options2"
-                                                            class="circular_input" [(ngModel)]="myRadio"
-                                                            value="axisBank">
-                                                        <label class="label1" style="flex-direction:row;"
-                                                            for="female">Axis
+                                                        <input type="radio" style="flex-direction:row;" id="options2" class="circular_input" [(ngModel)]="myRadio" value="axisBank">
+                                                        <label class="label1" style="flex-direction:row;" for="female">Axis
                                                             Bank</label>
                                                     </div>
 
                                                     <div style="display: flex; align-items: center;">
-                                                        <input type="radio" style="flex-direction:row;" name="bank"
-                                                            value="Any Bank" class="circular_input" />
-                                                        <label class="label1" style="flex-direction:row;"
-                                                            for="female">Any
+                                                        <input type="radio" style="flex-direction:row;" name="bank" value="Any Bank" class="circular_input" />
+                                                        <label class="label1" style="flex-direction:row;" for="female">Any
                                                             Bank</label><br />
                                                     </div>
                                                     <br>
@@ -1101,8 +1007,7 @@
                                                   margin-top: 5%;
                                                   justify-content: left;
                                                 ">
-                                                        <button (click)="showThisPdf(selectedRow.pi_poNo)" class="opt"
-                                                            style="margin-right: 1%">
+                                                        <button (click)="showThisPdf(selectedRow.pi_poNo)" class="opt" style="margin-right: 1%">
                                                             Generate Document
                                                         </button>
                                                         <button class="opt">Assign Task</button>

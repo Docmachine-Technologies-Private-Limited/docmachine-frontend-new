@@ -1,28 +1,36 @@
-import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { DocumentService } from "../../../service/document.service";
-import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
+import { DocumentService } from '../../../service/document.service';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import * as data from '../../../inward.json';
 import { ToastrService } from 'ngx-toastr';
-import { DomSanitizer } from "@angular/platform-browser";
-import { UserService } from "../../../service/user.service";
-import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
+import { DomSanitizer } from '@angular/platform-browser';
+import { UserService } from '../../../service/user.service';
+import { ConfirmDialogService } from '../../../confirm-dialog/confirm-dialog.service';
 import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import * as XLSX from 'xlsx';
+import { saveAs as importedSaveAs } from 'file-saver';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   FormBuilder,
   FormGroup,
   Validators,
   FormControl,
-  FormArray
-} from "@angular/forms";
+  FormArray,
+} from '@angular/forms';
+import { ShippingBill } from 'src/model/shippingBill.model';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-bill-lodgement',
   templateUrl: './bill-lodgement.component.html',
-  styleUrls: ['./bill-lodgement.component.scss']
+  styleUrls: ['./bill-lodgement.component.scss'],
 })
-
 export class BillLodgementComponent implements OnInit, OnDestroy {
   @ViewChild('table1') table: ElementRef;
   closeResult: string;
@@ -39,7 +47,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   public lastIndex;
   public showPdf = false;
   public greaterAmount = 0;
-  public selectedDoc = "";
+  public selectedDoc = '';
   public Question1 = '';
   public Question2 = '';
   public Question3 = '';
@@ -67,7 +75,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   myRadio5: any;
   myRadio6: any;
   purposeSelect = false;
-  selectPurpose = false
+  selectPurpose = false;
   public selectedPurpose: any = [];
   url: any;
   file: any;
@@ -87,6 +95,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   pipoArray: any = [];
   sbArray: any = [];
   tryArray: any = [];
+  lcArray: any = [];
   bankReference: any;
   generate0: boolean = false;
   generate3: boolean = false;
@@ -101,6 +110,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   data7: any = [];
   done: boolean;
   doc: any = [];
+  randomArray: any = [];
   redirectid: any;
   redirectindex: any;
   redirectpage: any;
@@ -117,10 +127,13 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   mainDoc1: any;
   mainDoc2: any;
   mainDoc3: any;
+  mainDoc4: any;
+  mainDoc5: any;
   doc1: boolean;
   data8: any;
   data9: any = [];
   dataImport: any;
+  dataImport2: any;
   sbPurposeDone1: any = [];
   item4: any;
   bankRef: any;
@@ -159,58 +172,69 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   buyerAddress2: any;
   buyerAddress3: any;
   buyerAddress4: any;
-  teamName1 : any = "";
+  teamName1: any = '';
   teamName2: any = [];
   teamName3: any = [];
   teamName4: any = [];
-  completewords: any = "";
-  devideContent: any = "";
-  address1: any = "";
-  address2: any = "";
-  address3: any = "";
-  team1: any = "";
-  team2: any = "";
-  team3: any = "";
-  completewords2: any = "";
-  devideContent2: any = "";
-  addressLine1: any = "";
+  completewords: any = '';
+  devideContent: any = '';
+  address1: any = '';
+  address2: any = '';
+  address3: any = '';
+  team1: any = '';
+  team2: any = '';
+  team3: any = '';
+  completewords2: any = '';
+  devideContent2: any = '';
+  addressLine1: any = '';
   addressLine2: any = [];
   addressLine3: any = [];
   addressLine4: any = [];
-  completewords3: any = "";
-  devideContent3: any = "";
-  buyer1: any = "";
+  completewords3: any = '';
+  devideContent3: any = '';
+  buyer1: any = '';
   buyer2: any = [];
   buyer3: any = [];
-  buyName1: any = " ";
-  buyName2: any = " ";
-  completewords4: any = "";
-  devideContent4: any = "";
+  buyName1: any = ' ';
+  buyName2: any = ' ';
+  completewords4: any = '';
+  devideContent4: any = '';
   buyerAdd2: any = [];
   buyerAdd3: any = [];
   buyerAdd4: any = [];
-  buyerAds1: any = " ";
-  buyerAds2: any = " ";
-  buyerAds3: any = " ";
+  buyerAds1: any = ' ';
+  buyerAds2: any = ' ';
+  buyerAds3: any = ' ';
   amArr: any = [];
   pipo = false;
   ship = false;
-  nameSearch : string ='';
-  nameSearch1 : string ='';
-  nameSearch2 : string = '';
-  nameSearch3 : string = '';
+  nameSearch: string = '';
+  nameSearch1: string = '';
+  nameSearch2: string = '';
+  nameSearch3: string = '';
   item6: any;
   item7: any;
   item: any;
+  item8: any;
+  item9: any;
   public buyerDetail: any = [];
-  startDate : any = '';
+  startDate: any = '';
   endDate: any = '';
-  model   = {option: 'Bank options'};
-  model1   = {option: 'Bank options'};
-
+  model = { option: 'Bank options' };
+  model1 = { option: 'Bank options' };
+  creditNote: any;
+  debitNote: any ;
+  advanceOutward: any;
+  ebrc: any ;
+  blcopyref: any ;
+  irAdvice: any ;
+  lcCopy: any ;
+  swiftCopy: any;
+  tryPartyAgreement:any;
+  selectedPdfs = [];
 
   advanceForm = new FormGroup({
-    advance: new FormArray([this.initCourse()], Validators.required)
+    advance: new FormArray([this.initCourse()], Validators.required),
   });
   sbDataArray: any = [];
   invoiceArr: any[];
@@ -224,23 +248,23 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private confirmDialogService: ConfirmDialogService,
     private formBuilder: FormBuilder,
-    private modalService: NgbModal,
+    private modalService: NgbModal
   ) {
-    console.log("hello")
+    console.log('hello');
     // this.onAddCourse("e")
   }
 
   ngOnInit(): void {
     //window.location.reload();
-    this.redirectid = this.route.snapshot.paramMap.get('pipo')
-    this.redirectindex = this.route.snapshot.paramMap.get('index')
-    this.redirectpage = this.route.snapshot.paramMap.get('page')
-    console.log("pipoId",this.redirectid);
+    this.redirectid = this.route.snapshot.paramMap.get('pipo');
+    this.redirectindex = this.route.snapshot.paramMap.get('index');
+    this.redirectpage = this.route.snapshot.paramMap.get('page');
+    console.log('pipoId', this.redirectid);
 
-    console.log(data['default'])
+    console.log(data['default']);
     this.jsondata = data['default'];
-    console.log(this.jsondata[0].purpose)
-    this.dataJson = this.jsondata
+    console.log(this.jsondata[0].purpose);
+    this.dataJson = this.jsondata;
 
     //Shipping bill API
     // this.documentService.getMaster(1).subscribe(
@@ -254,208 +278,237 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     this.documentService.getPipo().subscribe(
       (res: any) => {
         console.log('HEre Response', res);
-        (this.item = res.data),
-        console.log("pipo",this.item)
-        },
+        (this.item = res.data), console.log('pipo', this.item);
+      },
       (err) => console.log(err)
     );
-
 
     this.userService.getBuyer(1).subscribe(
       (res: any) => {
         (this.buyerDetail = res.data),
-          console.log("Benne Detail4", this.buyerDetail);
+          console.log('Benne Detail4', this.buyerDetail);
       },
-      (err) => console.log("Error", err)
+      (err) => console.log('Error', err)
     );
 
+    this.documentService.getIrAdvice(1).subscribe(
+      (res: any) => {
+        console.log(res), (this.item9 = res.data);
+      },
+      (err) => console.log(err)
+    );
 
+    this.documentService.getLetterLC().subscribe(
+      (res: any) => {
+        console.log(res), (this.item8 = res.data);
+        console.log('LC Data', this.item8);
+      },
+      (err) => console.log(err)
+    );
 
-
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.file = this.route.snapshot.params['file'];
       this.showInvoice = false;
-      console.log("hello")
+      console.log('hello');
     });
     this.documentService.getMaster(1).subscribe(
       (res: any) => {
         console.log(res), (this.item1 = res.data);
+        console.log('Master Data ***********************', this.item1);
       },
       (err) => console.log(err)
     );
 
     this.documentService.getThird().subscribe(
       (res: any) => {
-        console.log("HEre Response Third", res), (this.item4 = res.data);
+        console.log('HEre Response Third', res), (this.item4 = res.data);
       },
       (err) => console.log(err)
     );
 
-    this.userService.getTeam()
-      .subscribe(
-        data => {
-          console.log("king123")
-          console.log(data['data'][0])
-          this.item5 = data['data'][0]
-          console.log("this is exporter addres",this.item5)
-          this.arr = this.item5.gst.split('');
-          console.log(this.arr)
-          // console.log("*************************Shailendra", this.item5.teamName)
+    this.userService.getTeam().subscribe(
+      (data) => {
+        console.log('king123');
+        console.log(data['data'][0]);
+        this.item5 = data['data'][0];
+        console.log('this is exporter addres', this.item5);
+        this.arr = this.item5.gst.split('');
+        console.log(this.arr);
+        // console.log("*************************Shailendra", this.item5.teamName)
 
-          this.teamName1 = this.item5.teamName
-          this.addressLine1 = this.item5.adress
+        this.teamName1 = this.item5.teamName;
+        this.addressLine1 = this.item5.adress;
 
+        this.completewords = this.teamName1.split(' ');
+        this.devideContent = this.completewords.length;
 
-          this.completewords=this.teamName1.split(" ")
-          this.devideContent = this.completewords.length;
-
-          for(let i=0;i<this.completewords.length;i++){
-            if(i<6){
-                this.teamName2.push(this.completewords[i])
-            }else if(i>5 && i<=11){
-                this.teamName3.push(this.completewords[i])
-            }
-            // else if(i>9){
-            //     this.teamName4.push(this.completewords[i])
-            // }
+        for (let i = 0; i < this.completewords.length; i++) {
+          if (i < 6) {
+            this.teamName2.push(this.completewords[i]);
+          } else if (i > 5 && i <= 11) {
+            this.teamName3.push(this.completewords[i]);
+          }
+          // else if(i>9){
+          //     this.teamName4.push(this.completewords[i])
+          // }
         }
 
-        this.team1=this.teamName2.join(" ")
-        this.team2=this.teamName3.join(" ")
+        this.team1 = this.teamName2.join(' ');
+        this.team2 = this.teamName3.join(' ');
         // this.team3=this.teamName4.join(" ")
 
-        console.log("*************************Shailendra", this.team1)
-        console.log("*************************ShailendraAddress", this.team2)
+        console.log('*************************Shailendra', this.team1);
+        console.log('*************************ShailendraAddress', this.team2);
 
-        this.completewords2=this.addressLine1.split(" ")
+        this.completewords2 = this.addressLine1.split(' ');
         this.devideContent2 = this.completewords2.length;
 
-        for(let i=0;i<this.completewords2.length;i++){
-          if(i<6){
-              this.addressLine2.push(this.completewords2[i])
-          }else if(i>5 && i<=11){
-              this.addressLine3.push(this.completewords2[i])
-          }else if(i>11){
-              this.addressLine4.push(this.completewords2[i])
+        for (let i = 0; i < this.completewords2.length; i++) {
+          if (i < 6) {
+            this.addressLine2.push(this.completewords2[i]);
+          } else if (i > 5 && i <= 11) {
+            this.addressLine3.push(this.completewords2[i]);
+          } else if (i > 11) {
+            this.addressLine4.push(this.completewords2[i]);
           }
-      }
+        }
 
-      this.address1 = this.addressLine2.join(" ")
-      this.address2 = this.addressLine3.join(" ")
-      this.address3 = this.addressLine4.join(" ")
-      // console.log("Shailendra Address1 ***********************",this.address1)
-      // console.log("Shailendra Address2 ***********************",this.address2)
-      // console.log("Shailendra Address3 ***********************",this.address3)
+        this.address1 = this.addressLine2.join(' ');
+        this.address2 = this.addressLine3.join(' ');
+        this.address3 = this.addressLine4.join(' ');
+        // console.log("Shailendra Address1 ***********************",this.address1)
+        // console.log("Shailendra Address2 ***********************",this.address2)
+        // console.log("Shailendra Address3 ***********************",this.address3)
 
-
-          this.bankArray = this.item5.bankDetails
-          for (let value of this.bankArray) {
-            this.allBank.push(value.bank)
-          }
-          console.log(this.allBank)
-          this.bank = this.allBank.filter(function (item, index, inputArray) {
-            return inputArray.indexOf(item) == index;
-          });
-          console.log(this.bank)
-          //this.letterHead = data['data'][0].file[0]["Letter Head"]
-          //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
-
-        },
-        error => {
-          console.log("error")
+        this.bankArray = this.item5.bankDetails;
+        for (let value of this.bankArray) {
+          this.allBank.push(value.bank);
+        }
+        console.log(this.allBank);
+        this.bank = this.allBank.filter(function (item, index, inputArray) {
+          return inputArray.indexOf(item) == index;
         });
+        console.log(this.bank);
+        //this.letterHead = data['data'][0].file[0]["Letter Head"]
+        //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
+      },
+      (error) => {
+        console.log('error');
+      }
+    );
 
     if (this.documentService.draft) {
-      this.generate = true
+      this.generate = true;
       this.isGenerate = true;
-      console.log(this.documentService.task)
-      console.log(this.documentService.task.task[0])
+      console.log(this.documentService.task);
+      console.log(this.documentService.task.task[0]);
       if (this.documentService.task.task[0].ir == 'yes') {
-        console.log('hhghgghhg')
-        this.Question5 == this.documentService.task.task[0].ir
-      }
-      else if (this.documentService.task.task[0].ir == 'no') {
-        this.Question5 == this.documentService.task.task[0].ir
+        console.log('hhghgghhg');
+        this.Question5 == this.documentService.task.task[0].ir;
+      } else if (this.documentService.task.task[0].ir == 'no') {
+        this.Question5 == this.documentService.task.task[0].ir;
       }
       if (this.documentService.task.task[0].sbUrls) {
         let k = 0;
-        let gene = []
+        let gene = [];
 
         for (let value of this.documentService.task.task[0].sbUrls) {
-          let r = value.changingThisBreaksApplicationSecurity
-          gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(r))
-          k++
+          let r = value.changingThisBreaksApplicationSecurity;
+          gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(r));
+          k++;
         }
-        this.mainDoc1 = gene
-        this.sbArray = this.documentService.task.task[0].sbNumbers
+        this.mainDoc1 = gene;
+        this.sbArray = this.documentService.task.task[0].sbNumbers;
       }
       if (this.documentService.task.task[0].tryUrls) {
         let h = 0;
-        let gene = []
+        let gene = [];
         for (let value of this.documentService.task.task[0].tryUrls) {
-          gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
-            value.changingThisBreaksApplicationSecurity
-          ))
-          h++
+          gene.push(
+            this.sanitizer.bypassSecurityTrustResourceUrl(
+              value.changingThisBreaksApplicationSecurity
+            )
+          );
+          h++;
         }
-        this.mainDoc3 = gene
-        this.tryArray = this.documentService.task.task[0].tryNumbers
+        this.mainDoc3 = gene;
+        this.tryArray =
+          this.documentService.task.task[0].triPartyAgreementNumber;
       }
-    }
-    else {
+      if (this.documentService.task.task[0].lcUrls) {
+        let h = 0;
+        let gene = [];
+        for (let value of this.documentService.task.task[0].lcUrls) {
+          gene.push(
+            this.sanitizer.bypassSecurityTrustResourceUrl(
+              value.changingThisBreaksApplicationSecurity
+            )
+          );
+          h++;
+        }
+        this.mainDoc4 = gene;
+        this.lcArray = this.documentService.task.task[0].letterOfCreditNumber;
+      }
+    } else {
       this.Question5 = '';
     }
-
   }
 
   searchData1(a) {
-    console.log("hello",a)
-    console.log(a.length)
+    console.log('hello', a);
+    console.log(a.length);
     if (a.length > 0) {
-      let arr = []
+      let arr = [];
       for (let value of this.item1) {
-        console.log("value of buyername****", value);
-        console.log("value of buyername", value.buyerName);
+        console.log('value of buyername****', value);
+        console.log('value of buyername', value.buyerName);
         if (value.buyerName.includes(a) || value.sbno.includes(a)) {
-          console.log("shaile***************",value.buyerName)
-          arr.push(value)
+          console.log('shaile***************', value.buyerName);
+          arr.push(value);
         }
-
       }
-      this.itemArray = arr
-      this.filterToggle = true
+      this.itemArray = arr;
+      this.filterToggle = true;
       // console.log("shaile***************", this.itemArray)
-    }
-    else {
-      this.filterToggle = false
-      console.log("else")
+    } else {
+      this.filterToggle = false;
+      console.log('else');
     }
 
     // console.log("shailendra buyerName", a.buyerName)
-
   }
 
   fireEvent() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
+      this.table.nativeElement
+    );
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    console.log(wb)
+    console.log(wb);
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    console.log(wb)
+    console.log(wb);
     /* save to file */
     XLSX.writeFile(wb, 'SheetJS.xlsx');
-
   }
 
-  changeCheckbox1(value) {
-    let j = this.sbArray.indexOf(value)
+  changeCheckbox1(a) {
+    // let value = a + " - " +
+    let j = this.sbArray.indexOf(a);
     if (j == -1) {
-      this.sbArray.push(value)
-    }
-    else {
-      this.sbArray.splice(j, 1)
+      this.sbArray.push(a);
+    } else {
+      this.sbArray.splice(j, 1);
     }
 
-    console.log(this.sbArray)
+    console.log('Shailendra//////////--', this.sbArray);
+    // randomArray = []
+    // for(value of this.pipoArray){
+    //   for(value1 of ){
+    //     if(value.pi_poNo == value1){
+    //       randomArray.push(value)
+    //     }
+    //   }
+    // }
+    // console.log("ALL Data",)
   }
 
   hello() {
@@ -464,54 +517,56 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     // }
     for (var i = 1; i < this.sbArray.length; i++) {
       //binary += String.fromCharCode(bytes[i]);
-      this.onAddCourse(i)
+      this.onAddCourse(i);
     }
-    console.log()
-    console.log("ssjskskssk")
+    console.log();
+    console.log('ssjskskssk');
   }
 
   changeCheckbox2(value) {
-    let j = this.tryArray.indexOf(value)
+    let j = this.tryArray.indexOf(value);
     if (j == -1) {
-      this.tryArray.push(value)
-    }
-    else {
-      this.tryArray.splice(j, 1)
+      this.tryArray.push(value);
+    } else {
+      this.tryArray.splice(j, 1);
     }
 
-    console.log(this.tryArray)
+    console.log(this.tryArray);
   }
 
+  changeCheckbox3(value) {
+    let j = this.lcArray.indexOf(value);
+    if (j == -1) {
+      this.lcArray.push(value);
+    } else {
+      this.lcArray.splice(j, 1);
+    }
 
+    console.log(this.lcArray);
+  }
 
   initCourse() {
     return this.formBuilder.group({
-      value: new FormArray([this.initCourse1()], Validators.required)
+      value: new FormArray([this.initCourse1()], Validators.required),
     });
   }
 
   initCourse1() {
     return this.formBuilder.group({
       valueInternal: ['', Validators.required],
-      sb: ['', Validators.required]
+      sb: ['', Validators.required],
     });
   }
 
-
-
   getCourses(form) {
-
     return form.get('advance').controls;
   }
-
-
 
   // getProducts(form) {
   //   return form.get('products').controls;
   // }
 
   onAddCourse(e) {
-
     // if (e.controls.bankDetails.invalid) {
     //   //this.submitted1 = true
     //   this.toastr.error('You can add another bank after filling first one!');
@@ -519,7 +574,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     //   //this.isDisabled = false;
     //   return;
     // }
-    console.log("fffff")
+    console.log('fffff');
     // this.currencyName.push('')
     // this.bankName.push('')
     const control = this.advanceForm.controls.advance as FormArray;
@@ -528,7 +583,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   }
 
   onAddCourse1(e) {
-
     // if (e.controls.bankDetails.invalid) {
     //   //this.submitted1 = true
     //   this.toastr.error('You can add another bank after filling first one!');
@@ -536,14 +590,17 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     //   //this.isDisabled = false;
     //   return;
     // }
-    console.log("fffff")
-    console.log(e)
+    console.log('fffff');
+    console.log(e);
     // this.currencyName.push('')
     // this.bankName.push('') .controls.contacts
-    console.log(this.advanceForm.controls.advance['controls'][e].controls.value)
+    console.log(
+      this.advanceForm.controls.advance['controls'][e].controls.value
+    );
     // console.log(this.advanceForm.controls.advance[e].controls.value)
     // console.log(this.advanceForm.controls.advance[e])
-    const control = this.advanceForm.controls.advance['controls'][e].controls.value as FormArray;
+    const control = this.advanceForm.controls.advance['controls'][e].controls
+      .value as FormArray;
     control.push(this.initCourse1());
     //this.isDisabled = false;
   }
@@ -570,168 +627,226 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
   async generateDoc1() {
     //console.log(code, j)
-    this.generate = true
+    this.generate = true;
     this.isGenerate = true;
 
     let generateDoc2: any = [];
-    let pipoValue
-    let value
-    let buyerValue
+    let pipoValue;
+    let value;
+    let buyerValue;
     for (let item of this.itemArray) {
-
       for (let sb of this.sbArray) {
         if (item.sbno === sb) {
-          pipoValue = item
-          value = item.pipo
-          buyerValue = item.buyerName
-          this.dateArray.push(item.sbdate)
-          this.sbDataArray.push(item)
-          console.log('value', value)
-          generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(
-            item.doc
-          ))
+          pipoValue = item;
+          value = item.pipo;
+          buyerValue = item.buyerName;
+          this.dateArray.push(item.sbdate);
+          this.sbDataArray.push(item);
+          console.log('value', value);
+          generateDoc2.push(
+            this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+          );
         }
       }
     }
-    let mainArr = []
 
-    let invoicearray = []
-    this.Question5 = 'no'
+    console.log(pipoValue, 'pipovalue*****************************');
+    for (value of this.item) {
+      for (let value1 of pipoValue.pipo) {
+        if (value.pi_poNo == value1) {
+          this.randomArray.push(value);
+        }
+      }
+    }
+
+    this.creditNote = this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.randomArray[0]['creditNote']
+    );
+    console.log('////*********************Credit Note', this.creditNote);
+
+    this.debitNote = this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.randomArray[0]['debitNote']
+    );
+    console.log('////*********************debit Note', this.debitNote);
+
+    this.advanceOutward = this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.randomArray[0]['advanceOutward']
+    );
+    console.log('////*********************advanceOutward', this.advanceOutward);
+
+    this.ebrc = this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.randomArray[0]['EBRC']
+    );
+    console.log('////*********************Ebrc', this.ebrc);
+
+    this.blcopyref = this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.randomArray[0]['blcopyref']
+    );
+
+    this.irAdvice = this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.randomArray[0]['irAdvice']
+    );
+
+    this.lcCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.randomArray[0]['lcCopy']
+    );
+
+    this.swiftCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.randomArray[0]['swiftCopy']
+    );
+
+    this.tryPartyAgreement = this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.randomArray[0]['tryPartyAgreement']
+    );
+
+    console.log('Random Array', this.randomArray);
+
+    console.log('ALL Data');
+
+    let mainArr = [];
+
+    let invoicearray = [];
+    this.Question5 = 'no';
     this.sbDataArray.forEach((value, index) => {
       for (let a of value.pipo) {
-        this.arrayPipo.push(a)
+        this.arrayPipo.push(a);
       }
     });
     if (this.Question6 == 'yes') {
-      let adArr = []
+      let adArr = [];
       for (let x of this.advanceForm.value.advance) {
         for (let z of x.value) {
-          adArr.push(z)
+          adArr.push(z);
         }
       }
-      console.log(adArr)
+      console.log(adArr);
 
       this.sbDataArray.forEach((value, index) => {
-        this.userService.getManyPipo(value.pipo)
-          .subscribe(
-            data => {
-              console.log("king123")
-              console.log(data)
-              for (let item of data['data']) {
-                console.log(item)
-                const newVal = { ...value };
-                newVal['pipoValue'] = item
-                mainArr.push(newVal)
-                console.log('fggfgfgf', mainArr)
-              }
-              //this.getBeneDetaile()
-              //this.router.navigate(['/login'], { queryParams: { registered: true }});
-            },
-            error => {
-              console.log("error")
-            });
-
+        this.userService.getManyPipo(value.pipo).subscribe(
+          (data) => {
+            console.log('king123');
+            console.log(data);
+            for (let item of data['data']) {
+              console.log(item);
+              const newVal = { ...value };
+              newVal['pipoValue'] = item;
+              mainArr.push(newVal);
+              console.log('fggfgfgf', mainArr);
+            }
+            //this.getBeneDetaile()
+            //this.router.navigate(['/login'], { queryParams: { registered: true }});
+          },
+          (error) => {
+            console.log('error');
+          }
+        );
       });
       setTimeout(() => {
-        console.log('sjjssjjsjsjsjsjsjsjsjsjsjssjsjjsjsjsjsjsjs')
-        console.log(mainArr)
+        console.log('sjjssjjsjsjsjsjsjsjsjsjsjssjsjjsjsjsjsjsjs');
+        console.log(mainArr);
         console.log(this.advanceForm.value);
 
-
         mainArr.forEach((value1, index) => {
-          console.log('shshsh')
-          console.log(this.advanceForm.value.advance)
+          console.log('shshsh');
+          console.log(this.advanceForm.value.advance);
           for (let a of adArr) {
             if (a.sb == value1.sbno) {
               const newVal = { ...value1 };
-              newVal['advance'] = a.valueInternal
-              invoicearray.push(newVal)
+              newVal['advance'] = a.valueInternal;
+              invoicearray.push(newVal);
             }
-
           }
-          console.log('aajsjss')
+          console.log('aajsjss');
         });
-        let amountArr = []
+        let amountArr = [];
         for (let item of invoicearray) {
-          amountArr.push(item.pipoValue.amount)
+          amountArr.push(item.pipoValue.amount);
         }
-        console.log(amountArr)
-        this.amArr = amountArr
-        console.log('111111111111111111111111111111111111111111111111111111111111111')
-        console.log("t",invoicearray)
-        this.invoiceArr = invoicearray
+        console.log(amountArr);
+        this.amArr = amountArr;
+        console.log(
+          '111111111111111111111111111111111111111111111111111111111111111'
+        );
+        console.log('t', invoicearray);
+        this.invoiceArr = invoicearray;
 
-        this.Question5 = 'yes'
+        this.Question5 = 'yes';
       }, 8000);
-
     }
 
-
-    console.log('Rajuuuuu', pipoValue)
+    console.log('Rajuuuuu', pipoValue);
     //this.arrayPipo = value
-    this.mainDoc1 = generateDoc2
-    console.log(this.mainDoc1)
-    console.log(generateDoc2)
+    this.mainDoc1 = generateDoc2;
+    console.log(this.mainDoc1);
+    console.log(generateDoc2);
     let generateDoc3: any = [];
     if (this.Question2 == 'yes') {
       for (let item of this.item4) {
         for (let sb of this.tryArray) {
-          if (item.thirdNumber === sb) {
-
-            generateDoc3.push(this.sanitizer.bypassSecurityTrustResourceUrl(
-              item.doc
-            ))
+          if (item.triPartyAgreementNumber === sb) {
+            generateDoc3.push(
+              this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+            );
           }
         }
       }
-
-
     }
-    console.log(buyerValue)
-    const data: any = await this.userService.getBuyerByName(
-      buyerValue
-    );
-    console.log('shshhss', data.data)
-    this.buyerAds = data.data.buyerAdrs
 
-    this.completewords4 = this.buyerAds.split(" ")
+    let generateDoc4: any = [];
+    if (this.Question7 == 'yes') {
+      for (let item of this.item8) {
+        for (let sb of this.lcArray) {
+          if (item.letterOfCreditNumber === sb) {
+            generateDoc4.push(
+              this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+            );
+          }
+        }
+      }
+    }
+    console.log(buyerValue);
+    const data: any = await this.userService.getBuyerByName(buyerValue);
+    console.log('shshhss', data.data);
+    this.buyerAds = data.data.buyerAdrs;
+
+    this.completewords4 = this.buyerAds.split(' ');
     this.devideContent4 = this.completewords4.length;
 
-    for(let i=0;i<this.completewords4.length;i++){
-      if(i<6){
-          this.buyerAdd2.push(this.completewords4[i])
-      }else if(i>5 && i<=11){
-          this.buyerAdd3.push(this.completewords4[i])
-      }else if(i>11){
-        this.buyerAdd4.push(this.completewords4[i])
+    for (let i = 0; i < this.completewords4.length; i++) {
+      if (i < 6) {
+        this.buyerAdd2.push(this.completewords4[i]);
+      } else if (i > 5 && i <= 11) {
+        this.buyerAdd3.push(this.completewords4[i]);
+      } else if (i > 11) {
+        this.buyerAdd4.push(this.completewords4[i]);
+      }
     }
 
-  }
+    this.buyerAds1 = this.buyerAdd2.join(' ');
+    this.buyerAds2 = this.buyerAdd3.join(' ');
+    this.buyerAds3 = this.buyerAdd4.join(' ');
 
-  this.buyerAds1=this.buyerAdd2.join(" ")
-  this.buyerAds2=this.buyerAdd3.join(" ")
-  this.buyerAds3=this.buyerAdd4.join(" ")
+    console.log('Shailendra Buyer Address*************', this.buyerAds1);
+    console.log('Shailendra Buyer Address*************', this.buyerAds2);
 
-
-  console.log("Shailendra Buyer Address*************",this.buyerAds1)
-  console.log("Shailendra Buyer Address*************",this.buyerAds2)
-
-    console.log('89999999999999999999999999999', this.buyerAds)
-    this.mainDoc3 = generateDoc3
+    console.log('89999999999999999999999999999', this.buyerAds);
+    this.mainDoc3 = generateDoc3;
+    this.mainDoc4 = generateDoc4;
     this.newTask[0] = {
       sbNumbers: this.sbArray,
       sbUrls: this.mainDoc1,
-      tryNumbers: this.tryArray,
+      triPartyAgreementNumber: this.tryArray,
       tryUrls: this.mainDoc3,
       purposeCode: '',
       isLc: this.lc,
-      LcNumber: this.LcNumber,
+      letterOfCreditNumber: this.lcArray,
+      lcUrls: this.mainDoc4,
       withScrutiny: this.scrutiny,
       withDiscount: this.withDiscount,
       bankRef: '',
       advanceRef: this.advanceRef,
-      ir: this.Question5
-    }
+      ir: this.Question5,
+    };
 
     //let date = ['31-JAN-21', '29-AUG-21', '01-FEB-20'];
     // const myArray = date[0].split('-');
@@ -746,32 +861,30 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       return a > b ? 1 : a < b ? -1 : 0;
 
       // return a.localeCompare(b);         // <-- alternative
-
     });
     console.log('Datesss', this.myArr);
-    console.log(this.myArr[0])
-    console.log(this.myArr[this.myArr.length - 1])
+    console.log(this.myArr[0]);
+    console.log(this.myArr[this.myArr.length - 1]);
 
-    console.log(this.generate1)
-    console.log(this.c)
-    this.fillForm(pipoValue)
+    console.log(this.generate1);
+    console.log(this.c);
+    this.fillForm(pipoValue);
     this.newTask[0] = {
       sbNumbers: this.sbArray,
       sbUrls: this.mainDoc1,
-      tryNumbers: this.tryArray,
+      triPartyAgreementNumber: this.tryArray,
       tryUrls: this.mainDoc3,
       purposeCode: '',
       isLc: this.lc,
-      LcNumber: this.LcNumber,
+      letterOfCreditNumber: this.lcArray,
+      lcUrls: this.mainDoc4,
       withScrutiny: this.scrutiny,
       withDiscount: this.withDiscount,
       bankRef: '',
       advanceRef: this.advanceRef,
-      ir: this.Question5
-    }
+      ir: this.Question5,
+    };
   }
-
-  
 
   getProper(a) {
     const myArray = a.split('-');
@@ -814,28 +927,28 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   }
 
   searchData(a, i) {
-    console.log(i)
-    console.log(a)
+    console.log(i);
+    console.log(a);
     var reg = /^\d+$/;
-    let x = reg.test(a)
-    console.log(x)
+    let x = reg.test(a);
+    console.log(x);
     if (x) {
       this.amArr[i] = this.amArr[i] - a;
-      this.invoiceArr[i].pipoValue['damage'] = a
-      
-      this.invoiceArr[i].pipoValue['realized'] = this.amArr[i]
+      this.invoiceArr[i].pipoValue['damage'] = a;
+
+      this.invoiceArr[i].pipoValue['realized'] = this.amArr[i];
     }
-    console.log("this is invice array",this.invoiceArr)
+    console.log('this is invice array', this.invoiceArr);
 
-
-
-    console.log(a)
-    console.log(this.amArr)
+    console.log(a);
+    console.log(this.amArr);
   }
 
   toEdit(index) {
-    
-    console.log("this is damage value" ,this.invoiceArr[index].pipoValue['damage']);
+    console.log(
+      'this is damage value',
+      this.invoiceArr[index].pipoValue['damage']
+    );
     this.optionsVisibility[index] = true;
     this.toastr.warning('table Is In Edit Mode');
   }
@@ -843,47 +956,45 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     this.optionsVisibility[index] = false;
     this.toastr.success('table updated successfully.');
   }
-  updaterisevalue(i){
-  this.invoiceArr[i].pipoValue.realized = this.invoiceArr[i].pipoValue.amount - this.invoiceArr[i].pipoValue.damage;
- console.log("this is rised",this.invoiceArr[i].pipoValue.realized)
-
+  updaterisevalue(i) {
+    this.invoiceArr[i].pipoValue.realized =
+      this.invoiceArr[i].pipoValue.amount - this.invoiceArr[i].pipoValue.damage;
+    console.log('this is rised', this.invoiceArr[i].pipoValue.realized);
   }
 
   async fillForm(a) {
+    console.log('Shailendra *************', a.buyerName);
 
-    console.log("Shailendra *************", a.buyerName)
-
-    this.buyer1 = a.buyerName
-    this.completewords3=this.buyer1.split(" ")
+    this.buyer1 = a.buyerName;
+    this.completewords3 = this.buyer1.split(' ');
     this.devideContent3 = this.completewords3.length;
 
-    for(let i=0;i<this.completewords3.length;i++){
-      if(i<6){
-          this.buyer2.push(this.completewords3[i])
-      }else if(i>5 && i<=11){
-          this.buyer3.push(this.completewords3[i])
+    for (let i = 0; i < this.completewords3.length; i++) {
+      if (i < 6) {
+        this.buyer2.push(this.completewords3[i]);
+      } else if (i > 5 && i <= 11) {
+        this.buyer3.push(this.completewords3[i]);
       }
+    }
 
-  }
+    this.buyName1 = this.buyer2.join(' ');
+    this.buyName2 = this.buyer3.join(' ');
 
-  this.buyName1=this.buyer2.join(" ")
-  this.buyName2=this.buyer3.join(" ")
+    console.log('Shailendra *************', this.buyName1);
+    console.log('Shailendra *************', this.buyName2);
 
-  console.log("Shailendra *************",this.buyName1)
-  console.log("Shailendra *************",this.buyName2)
+    const formUrl = './../../assets/billUnder.pdf';
 
-    const formUrl = './../../assets/billUnder.pdf'
+    const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
 
-    const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
+    const pdfDoc = await PDFDocument.load(formPdfBytes);
 
-    const pdfDoc = await PDFDocument.load(formPdfBytes)
+    const form = pdfDoc.getForm();
+    const pages = pdfDoc.getPages();
+    const firstpage = pages[0];
 
-    const form = pdfDoc.getForm()
-    const pages = pdfDoc.getPages()
-    const firstpage = pages[0]
-
-    const text1 = form.createTextField('favorite0')
-    text1.setText('')
+    const text1 = form.createTextField('favorite0');
+    text1.setText('');
     text1.addToPage(firstpage, {
       x: 156,
       y: 752,
@@ -891,11 +1002,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 12,
       borderWidth: 0,
       //backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-
-    const text2 = form.createTextField('favorite1')
-    text2.setText("")
+    const text2 = form.createTextField('favorite1');
+    text2.setText('');
     text2.addToPage(firstpage, {
       x: 482,
       y: 752,
@@ -903,10 +1013,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 13,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const textf3 = form.createTextField('favorite2')
-    textf3.setText("")
+    const textf3 = form.createTextField('favorite2');
+    textf3.setText('');
     textf3.addToPage(firstpage, {
       x: 510,
       y: 752,
@@ -914,10 +1024,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 13,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text4 = form.createTextField('favorite3')
-    text4.setText("")
+    const text4 = form.createTextField('favorite3');
+    text4.setText('');
     text4.addToPage(firstpage, {
       x: 539,
       y: 752,
@@ -925,10 +1035,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 13,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text5 = form.createTextField('favorite4')
-    text5.setText("")
+    const text5 = form.createTextField('favorite4');
+    text5.setText('');
     text5.addToPage(firstpage, {
       x: 570,
       y: 752,
@@ -936,12 +1046,12 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 13,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
     //exporter
 
-    const text6 = form.createTextField('favorite5')
-    text6.setText(this.team1)
+    const text6 = form.createTextField('favorite5');
+    text6.setText(this.team1);
     text6.addToPage(firstpage, {
       x: 18,
       y: 684,
@@ -949,37 +1059,36 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text7 = form.createTextField('favorite6')
+    const text7 = form.createTextField('favorite6');
     // if(this.team2.length > 0){
-    text7.setText(this.team2)
+    text7.setText(this.team2);
     text7.addToPage(firstpage, {
-
       x: 18,
       y: 665,
       width: 295,
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
-  // }
-  // else{
-  //   text7.setText(this.item5.adress)
-  //   text7.addToPage(firstpage, {
+    });
+    // }
+    // else{
+    //   text7.setText(this.item5.adress)
+    //   text7.addToPage(firstpage, {
 
-  //     x: 18,
-  //     y: 665,
-  //     width: 295,
-  //     height: 14,
-  //     borderWidth: 0,
-  //     // backgroundColor: rgb(255, 255, 255)
-  //   })
-  // }
+    //     x: 18,
+    //     y: 665,
+    //     width: 295,
+    //     height: 14,
+    //     borderWidth: 0,
+    //     // backgroundColor: rgb(255, 255, 255)
+    //   })
+    // }
 
-    const text8 = form.createTextField('favorite7')
+    const text8 = form.createTextField('favorite7');
     // if(this.team2.length > 0 && this.team3.length == 0){
-    text8.setText(this.address1)
+    text8.setText(this.address1);
     text8.addToPage(firstpage, {
       x: 18,
       y: 646,
@@ -987,24 +1096,24 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
-  // }
-  // else{
-  //   text8.setText(this.team3)
-  //   text8.addToPage(firstpage, {
-  //     x: 18,
-  //     y: 646,
-  //     width: 295,
-  //     height: 14,
-  //     borderWidth: 0,
-  //     // backgroundColor: rgb(255, 255, 255)
+    });
+    // }
+    // else{
+    //   text8.setText(this.team3)
+    //   text8.addToPage(firstpage, {
+    //     x: 18,
+    //     y: 646,
+    //     width: 295,
+    //     height: 14,
+    //     borderWidth: 0,
+    //     // backgroundColor: rgb(255, 255, 255)
 
-  //   })
-  // }
+    //   })
+    // }
 
-    const text9 = form.createTextField('favorite8')
-  //  if(this.team2.length > 0 && this.team3.length > 0){
-    text9.setText(this.address2)
+    const text9 = form.createTextField('favorite8');
+    //  if(this.team2.length > 0 && this.team3.length > 0){
+    text9.setText(this.address2);
     text9.addToPage(firstpage, {
       x: 18,
       y: 628,
@@ -1012,11 +1121,11 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
-  // }
+    });
+    // }
 
-    const text10 = form.createTextField('favorite9')
-    text10.setText(this.address3)
+    const text10 = form.createTextField('favorite9');
+    text10.setText(this.address3);
     text10.addToPage(firstpage, {
       x: 18,
       y: 612,
@@ -1024,10 +1133,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text11 = form.createTextField('favorite10')
-    text11.setText("")
+    const text11 = form.createTextField('favorite10');
+    text11.setText('');
     text11.addToPage(firstpage, {
       x: 18,
       y: 594,
@@ -1035,12 +1144,12 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
     //buyer
 
-    const text12 = form.createTextField('favorite11')
-    text12.setText(this.buyName1)
+    const text12 = form.createTextField('favorite11');
+    text12.setText(this.buyName1);
     text12.addToPage(firstpage, {
       x: 320,
       y: 684,
@@ -1048,10 +1157,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text13 = form.createTextField('favorite12')
-    text13.setText(this.buyName2)
+    const text13 = form.createTextField('favorite12');
+    text13.setText(this.buyName2);
     text13.addToPage(firstpage, {
       x: 320,
       y: 665,
@@ -1059,10 +1168,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text14 = form.createTextField('favorite13')
-    text14.setText(this.buyerAds1)
+    const text14 = form.createTextField('favorite13');
+    text14.setText(this.buyerAds1);
     text14.addToPage(firstpage, {
       x: 320,
       y: 646,
@@ -1070,10 +1179,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text15 = form.createTextField('favorite14')
-    text15.setText(this.buyerAds2)
+    const text15 = form.createTextField('favorite14');
+    text15.setText(this.buyerAds2);
     text15.addToPage(firstpage, {
       x: 320,
       y: 628,
@@ -1081,10 +1190,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text16 = form.createTextField('favorite15')
-    text16.setText(this.buyerAds3)
+    const text16 = form.createTextField('favorite15');
+    text16.setText(this.buyerAds3);
     text16.addToPage(firstpage, {
       x: 320,
       y: 612,
@@ -1092,10 +1201,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text17 = form.createTextField('favorite16')
-    text17.setText("")
+    const text17 = form.createTextField('favorite16');
+    text17.setText('');
     text17.addToPage(firstpage, {
       x: 320,
       y: 594,
@@ -1103,11 +1212,11 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
     //checkbox
 
-    const checkbox1 = form.createCheckBox('check1')
+    const checkbox1 = form.createCheckBox('check1');
     checkbox1.addToPage(firstpage, {
       x: 150,
       y: 575,
@@ -1115,9 +1224,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 8,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const checkbox2 = form.createCheckBox('check2')
+    const checkbox2 = form.createCheckBox('check2');
     checkbox2.addToPage(firstpage, {
       x: 369,
       y: 575,
@@ -1125,9 +1234,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 8,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const checkbox3 = form.createCheckBox('check3')
+    const checkbox3 = form.createCheckBox('check3');
     checkbox3.addToPage(firstpage, {
       x: 570,
       y: 575,
@@ -1135,14 +1244,12 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 8,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
-
-
+    });
 
     //draw bank details
 
-    const text18 = form.createTextField('favorite17')
-    text18.setText("")
+    const text18 = form.createTextField('favorite17');
+    text18.setText('');
     text18.addToPage(firstpage, {
       x: 219,
       y: 553,
@@ -1150,10 +1257,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text19 = form.createTextField('favorite18')
-    text19.setText("")
+    const text19 = form.createTextField('favorite18');
+    text19.setText('');
     text19.addToPage(firstpage, {
       x: 219,
       y: 538,
@@ -1161,10 +1268,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text20 = form.createTextField('favorite19')
-    text20.setText("")
+    const text20 = form.createTextField('favorite19');
+    text20.setText('');
     text20.addToPage(firstpage, {
       x: 219,
       y: 521,
@@ -1172,10 +1279,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text21 = form.createTextField('favorite20')
-    text21.setText("")
+    const text21 = form.createTextField('favorite20');
+    text21.setText('');
     text21.addToPage(firstpage, {
       x: 219,
       y: 506,
@@ -1183,10 +1290,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text22 = form.createTextField('favorite21')
-    text22.setText("")
+    const text22 = form.createTextField('favorite21');
+    text22.setText('');
     text22.addToPage(firstpage, {
       x: 219,
       y: 491,
@@ -1194,10 +1301,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text23 = form.createTextField('favorite22')
-    text23.setText("")
+    const text23 = form.createTextField('favorite22');
+    text23.setText('');
     text23.addToPage(firstpage, {
       x: 219,
       y: 478,
@@ -1205,11 +1312,11 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 10,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
     //checkbox
 
-    const checkbox4 = form.createCheckBox('check4')
+    const checkbox4 = form.createCheckBox('check4');
     checkbox4.addToPage(firstpage, {
       x: 245,
       y: 456,
@@ -1217,9 +1324,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 5,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const checkbox5 = form.createCheckBox('check5')
+    const checkbox5 = form.createCheckBox('check5');
     checkbox5.addToPage(firstpage, {
       x: 453,
       y: 463,
@@ -1227,12 +1334,12 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 5,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
     //text
 
-    const text24 = form.createTextField('favorite23')
-    text24.setText("")
+    const text24 = form.createTextField('favorite23');
+    text24.setText('');
     text24.addToPage(firstpage, {
       x: 219,
       y: 412,
@@ -1240,10 +1347,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text25 = form.createTextField('favorite24')
-    text25.setText("")
+    const text25 = form.createTextField('favorite24');
+    text25.setText('');
     text25.addToPage(firstpage, {
       x: 219,
       y: 390,
@@ -1251,11 +1358,11 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 16,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
     //checkbox
 
-    const checkbox6 = form.createCheckBox('check6')
+    const checkbox6 = form.createCheckBox('check6');
     checkbox6.addToPage(firstpage, {
       x: 389,
       y: 375,
@@ -1263,9 +1370,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 8,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const checkbox7 = form.createCheckBox('check7')
+    const checkbox7 = form.createCheckBox('check7');
     checkbox7.addToPage(firstpage, {
       x: 550,
       y: 375,
@@ -1273,12 +1380,12 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 8,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
     // firx
 
-    const text26 = form.createTextField('favorite25')
-    text26.setText("")
+    const text26 = form.createTextField('favorite25');
+    text26.setText('');
     text26.addToPage(firstpage, {
       x: 128,
       y: 348,
@@ -1286,10 +1393,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 20,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text27 = form.createTextField('favorite26')
-    text27.setText("")
+    const text27 = form.createTextField('favorite26');
+    text27.setText('');
     text27.addToPage(firstpage, {
       x: 128,
       y: 324,
@@ -1297,10 +1404,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text28 = form.createTextField('favorite27')
-    text28.setText("")
+    const text28 = form.createTextField('favorite27');
+    text28.setText('');
     text28.addToPage(firstpage, {
       x: 421,
       y: 348,
@@ -1308,10 +1415,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 20,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text29 = form.createTextField('favorite28')
-    text29.setText("")
+    const text29 = form.createTextField('favorite28');
+    text29.setText('');
     text29.addToPage(firstpage, {
       x: 421,
       y: 324,
@@ -1319,12 +1426,12 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
     //bill details
 
-    const text30 = form.createTextField('favorite29')
-    text30.setText("")
+    const text30 = form.createTextField('favorite29');
+    text30.setText('');
     text30.addToPage(firstpage, {
       x: 128,
       y: 287,
@@ -1332,10 +1439,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text31 = form.createTextField('favorite30')
-    text31.setText("")
+    const text31 = form.createTextField('favorite30');
+    text31.setText('');
     text31.addToPage(firstpage, {
       x: 128,
       y: 266,
@@ -1343,11 +1450,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-
-    const text32 = form.createTextField('favorite31')
-    text32.setText("")
+    const text32 = form.createTextField('favorite31');
+    text32.setText('');
     text32.addToPage(firstpage, {
       x: 388,
       y: 287,
@@ -1355,11 +1461,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-
-    const text33 = form.createTextField('favorite32')
-    text33.setText("")
+    const text33 = form.createTextField('favorite32');
+    text33.setText('');
     text33.addToPage(firstpage, {
       x: 388,
       y: 266,
@@ -1367,11 +1472,11 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
     //checkbox
 
-    const checkbox8 = form.createCheckBox('check8')
+    const checkbox8 = form.createCheckBox('check8');
     checkbox8.addToPage(firstpage, {
       x: 141,
       y: 251,
@@ -1379,9 +1484,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 5,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const checkbox9 = form.createCheckBox('check9')
+    const checkbox9 = form.createCheckBox('check9');
     checkbox9.addToPage(firstpage, {
       x: 288,
       y: 251,
@@ -1389,10 +1494,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 5,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text01 = form.createTextField('favorite01')
-    text01.setText("")
+    const text01 = form.createTextField('favorite01');
+    text01.setText('');
     text01.addToPage(firstpage, {
       x: 393,
       y: 253,
@@ -1400,10 +1505,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 10,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text02 = form.createTextField('favorite02')
-    text02.setText("")
+    const text02 = form.createTextField('favorite02');
+    text02.setText('');
     text02.addToPage(firstpage, {
       x: 453,
       y: 242,
@@ -1411,12 +1516,12 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 10,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
     // description of goods
 
-    const text34 = form.createTextField('favorite33')
-    text34.setText("")
+    const text34 = form.createTextField('favorite33');
+    text34.setText('');
     text34.addToPage(firstpage, {
       x: 128,
       y: 211,
@@ -1424,10 +1529,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 20,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text35 = form.createTextField('favorite34')
-    text35.setText("")
+    const text35 = form.createTextField('favorite34');
+    text35.setText('');
     text35.addToPage(firstpage, {
       x: 128,
       y: 190,
@@ -1435,10 +1540,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text36 = form.createTextField('favorite35')
-    text36.setText("")
+    const text36 = form.createTextField('favorite35');
+    text36.setText('');
     text36.addToPage(firstpage, {
       x: 448,
       y: 211,
@@ -1446,10 +1551,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text37 = form.createTextField('favorite36')
-    text37.setText("")
+    const text37 = form.createTextField('favorite36');
+    text37.setText('');
     text37.addToPage(firstpage, {
       x: 388,
       y: 190,
@@ -1457,10 +1562,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text38 = form.createTextField('favorite37')
-    text38.setText("")
+    const text38 = form.createTextField('favorite37');
+    text38.setText('');
     text38.addToPage(firstpage, {
       x: 275,
       y: 170,
@@ -1468,10 +1573,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text39 = form.createTextField('favorite38')
-    text39.setText("")
+    const text39 = form.createTextField('favorite38');
+    text39.setText('');
     text39.addToPage(firstpage, {
       x: 275,
       y: 146,
@@ -1479,10 +1584,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text40 = form.createTextField('favorite39')
-    text40.setText("")
+    const text40 = form.createTextField('favorite39');
+    text40.setText('');
     text40.addToPage(firstpage, {
       x: 128,
       y: 126,
@@ -1490,10 +1595,12 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text41 = form.createTextField('favorite40')
-    text41.setText(`${this.myArr[0]}  to  ${this.myArr[this.myArr.length - 1]}`)
+    const text41 = form.createTextField('favorite40');
+    text41.setText(
+      `${this.myArr[0]}  to  ${this.myArr[this.myArr.length - 1]}`
+    );
     // console.log(this.myArr[0])
     // console.log(this.myArr[this.myArr.length - 1])
     text41.addToPage(firstpage, {
@@ -1503,8 +1610,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 18,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
-
+    });
 
     // const texta41 = form.createTextField('favorite404')
     // texta41.setText(`${this.myArr.length}`)
@@ -1520,8 +1626,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     // })
 
     //table1
-    const text421 = form.createTextField('favorite411')
-    text421.setText(`${this.myArr.length}`)
+    const text421 = form.createTextField('favorite411');
+    text421.setText(`${this.myArr.length}`);
     text421.addToPage(firstpage, {
       x: 228,
       y: 108,
@@ -1529,10 +1635,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 16,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text42 = form.createTextField('favorite41')
-    text42.setText("")
+    const text42 = form.createTextField('favorite41');
+    text42.setText('');
     text42.addToPage(firstpage, {
       x: 97,
       y: 62,
@@ -1540,10 +1646,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text43 = form.createTextField('favorite42')
-    text43.setText("")
+    const text43 = form.createTextField('favorite42');
+    text43.setText('');
     text43.addToPage(firstpage, {
       x: 148,
       y: 62,
@@ -1551,10 +1657,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text44 = form.createTextField('favorite43')
-    text44.setText("")
+    const text44 = form.createTextField('favorite43');
+    text44.setText('');
     text44.addToPage(firstpage, {
       x: 206,
       y: 62,
@@ -1562,10 +1668,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text45 = form.createTextField('favorite44')
-    text45.setText("")
+    const text45 = form.createTextField('favorite44');
+    text45.setText('');
     text45.addToPage(firstpage, {
       x: 276,
       y: 62,
@@ -1573,10 +1679,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text46 = form.createTextField('favorite45')
-    text46.setText("")
+    const text46 = form.createTextField('favorite45');
+    text46.setText('');
     text46.addToPage(firstpage, {
       x: 320,
       y: 62,
@@ -1584,10 +1690,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text47 = form.createTextField('favorite46')
-    text47.setText("")
+    const text47 = form.createTextField('favorite46');
+    text47.setText('');
     text47.addToPage(firstpage, {
       x: 370,
       y: 62,
@@ -1595,10 +1701,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text48 = form.createTextField('favorite47')
-    text48.setText("")
+    const text48 = form.createTextField('favorite47');
+    text48.setText('');
     text48.addToPage(firstpage, {
       x: 408,
       y: 62,
@@ -1606,10 +1712,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text49 = form.createTextField('favorite48')
-    text49.setText("")
+    const text49 = form.createTextField('favorite48');
+    text49.setText('');
     text49.addToPage(firstpage, {
       x: 492,
       y: 62,
@@ -1617,10 +1723,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text50 = form.createTextField('favorite49')
-    text50.setText("")
+    const text50 = form.createTextField('favorite49');
+    text50.setText('');
     text50.addToPage(firstpage, {
       x: 547,
       y: 62,
@@ -1628,10 +1734,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 14,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text51 = form.createTextField('favorite50')
-    text51.setText("")
+    const text51 = form.createTextField('favorite50');
+    text51.setText('');
     text51.addToPage(firstpage, {
       x: 97,
       y: 51,
@@ -1639,10 +1745,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 9,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text52 = form.createTextField('favorite51')
-    text52.setText("")
+    const text52 = form.createTextField('favorite51');
+    text52.setText('');
     text52.addToPage(firstpage, {
       x: 148,
       y: 51,
@@ -1650,10 +1756,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 9,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text53 = form.createTextField('favorite52')
-    text53.setText("")
+    const text53 = form.createTextField('favorite52');
+    text53.setText('');
     text53.addToPage(firstpage, {
       x: 206,
       y: 51,
@@ -1661,10 +1767,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 9,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text54 = form.createTextField('favorite53')
-    text54.setText("")
+    const text54 = form.createTextField('favorite53');
+    text54.setText('');
     text54.addToPage(firstpage, {
       x: 276,
       y: 51,
@@ -1672,10 +1778,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 9,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text55 = form.createTextField('favorite54')
-    text55.setText("")
+    const text55 = form.createTextField('favorite54');
+    text55.setText('');
     text55.addToPage(firstpage, {
       x: 320,
       y: 51,
@@ -1683,10 +1789,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 9,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text56 = form.createTextField('favorite55')
-    text56.setText("")
+    const text56 = form.createTextField('favorite55');
+    text56.setText('');
     text56.addToPage(firstpage, {
       x: 370,
       y: 51,
@@ -1694,10 +1800,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 9,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text57 = form.createTextField('favorite56')
-    text57.setText("")
+    const text57 = form.createTextField('favorite56');
+    text57.setText('');
     text57.addToPage(firstpage, {
       x: 408,
       y: 51,
@@ -1705,10 +1811,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 9,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text58 = form.createTextField('favorite57')
-    text58.setText("")
+    const text58 = form.createTextField('favorite57');
+    text58.setText('');
     text58.addToPage(firstpage, {
       x: 492,
       y: 51,
@@ -1716,10 +1822,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 9,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text59 = form.createTextField('favorite58')
-    text59.setText("")
+    const text59 = form.createTextField('favorite58');
+    text59.setText('');
     text59.addToPage(firstpage, {
       x: 547,
       y: 51,
@@ -1727,13 +1833,12 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 9,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
     //table2
 
-
-    const text60 = form.createTextField('favorite59')
-    text60.setText(this.charge[0])
+    const text60 = form.createTextField('favorite59');
+    text60.setText(this.charge[0]);
     text60.addToPage(firstpage, {
       x: 135,
       y: 10,
@@ -1741,10 +1846,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text61 = form.createTextField('favorite60')
-    text61.setText(this.charge[1])
+    const text61 = form.createTextField('favorite60');
+    text61.setText(this.charge[1]);
     text61.addToPage(firstpage, {
       x: 167,
       y: 10,
@@ -1752,10 +1857,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text62 = form.createTextField('favorite61')
-    text62.setText(this.charge[2])
+    const text62 = form.createTextField('favorite61');
+    text62.setText(this.charge[2]);
     text62.addToPage(firstpage, {
       x: 201,
       y: 10,
@@ -1763,10 +1868,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text63 = form.createTextField('favorite62')
-    text63.setText(this.charge[3])
+    const text63 = form.createTextField('favorite62');
+    text63.setText(this.charge[3]);
     text63.addToPage(firstpage, {
       x: 235,
       y: 10,
@@ -1774,10 +1879,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text64 = form.createTextField('favorite63')
-    text64.setText(this.charge[4])
+    const text64 = form.createTextField('favorite63');
+    text64.setText(this.charge[4]);
     text64.addToPage(firstpage, {
       x: 266,
       y: 10,
@@ -1785,10 +1890,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text65 = form.createTextField('favorite64')
-    text65.setText(this.charge[5])
+    const text65 = form.createTextField('favorite64');
+    text65.setText(this.charge[5]);
     text65.addToPage(firstpage, {
       x: 300,
       y: 10,
@@ -1796,10 +1901,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text66 = form.createTextField('favorite65')
-    text66.setText(this.charge[6])
+    const text66 = form.createTextField('favorite65');
+    text66.setText(this.charge[6]);
     text66.addToPage(firstpage, {
       x: 331,
       y: 10,
@@ -1807,10 +1912,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text67 = form.createTextField('favorite66')
-    text67.setText(this.charge[7])
+    const text67 = form.createTextField('favorite66');
+    text67.setText(this.charge[7]);
     text67.addToPage(firstpage, {
       x: 363,
       y: 10,
@@ -1818,10 +1923,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text68 = form.createTextField('favorite67')
-    text68.setText(this.charge[8])
+    const text68 = form.createTextField('favorite67');
+    text68.setText(this.charge[8]);
     text68.addToPage(firstpage, {
       x: 397,
       y: 10,
@@ -1829,10 +1934,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text69 = form.createTextField('favorite68')
-    text69.setText(this.charge[9])
+    const text69 = form.createTextField('favorite68');
+    text69.setText(this.charge[9]);
     text69.addToPage(firstpage, {
       x: 434,
       y: 10,
@@ -1840,10 +1945,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text70 = form.createTextField('favorite69')
-    text70.setText(this.charge[10])
+    const text70 = form.createTextField('favorite69');
+    text70.setText(this.charge[10]);
     text70.addToPage(firstpage, {
       x: 469,
       y: 10,
@@ -1851,10 +1956,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text71 = form.createTextField('favorite70')
-    text71.setText(this.charge[11])
+    const text71 = form.createTextField('favorite70');
+    text71.setText(this.charge[11]);
     text71.addToPage(firstpage, {
       x: 501,
       y: 10,
@@ -1862,10 +1967,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text72 = form.createTextField('favorite71')
-    text72.setText(this.charge[12])
+    const text72 = form.createTextField('favorite71');
+    text72.setText(this.charge[12]);
     text72.addToPage(firstpage, {
       x: 534,
       y: 10,
@@ -1873,10 +1978,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const text73 = form.createTextField('favorite72')
-    text73.setText(this.charge[13])
+    const text73 = form.createTextField('favorite72');
+    text73.setText(this.charge[13]);
     text73.addToPage(firstpage, {
       x: 565,
       y: 10,
@@ -1884,18 +1989,18 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       height: 25,
       borderWidth: 0,
       // backgroundColor: rgb(255, 255, 255)
-    })
+    });
 
-    const pdfBytes = await pdfDoc.save()
-    console.log(pdfBytes, "pdf")
-    console.log(pdfBytes, "pdf")
-    var base64String = this._arrayBufferToBase64(pdfBytes)
+    const pdfBytes = await pdfDoc.save();
+    console.log(pdfBytes, 'pdf');
+    console.log(pdfBytes, 'pdf');
+    var base64String = this._arrayBufferToBase64(pdfBytes);
 
     console.log(base64String);
     const x = 'data:application/pdf;base64,' + base64String;
     console.log(x);
     this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
-    this.newTask[0].generateDoc1 = x
+    this.newTask[0].generateDoc1 = x;
     // const link: any = document.createElement("a");
     // link.id = "dwnldLnk";
     // link.style = "display:none;";
@@ -1917,145 +2022,176 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   }
   onBack() {
     this.isGenerate = false;
-    this.sbArray = []
-    this.tryArray = []
+    this.sbArray = [];
+    this.tryArray = [];
+    this.lcArray = [];
   }
 
-
   doneDox() {
-    console.log(this.newTask)
-    console.log(this.invoiceArr)
+    console.log(this.newTask);
+    console.log(this.invoiceArr);
     if (this.documentService.draft) {
-      this.documentService.updateExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' }, this.documentService.task._id).subscribe(
-        (data) => {
-          console.log("king123");
-          console.log(data);
-          this.documentService.draft = false
-          this.documentService.task.id = ''
-          this.isDoneAll = true
-          this.userService.updateManyPipo(this.arrayPipo, 'billUnder', this.newTask[0].generateDoc1)
-            .subscribe(
-              data => {
-                console.log("king123")
-                console.log(data);
-                if (this.Question5 == 'yes') {
-                  this.userService.updateManyPipo(this.arrayPipo, 'invoiceReduction', this.invoiceArr)
-                    .subscribe(
-                      data1 => {
-                        console.log("king123")
-                        console.log(data1);
-                        this.toastr.success('Task saved as completed successfully!');
-                        this.router.navigate([
-                          'home/pipoDocExport',
-                              {
-                                id: this.redirectid,
-                                page: this.redirectpage,
-                                index: this.redirectindex,
-                              },
-                           ]);
-                        //this.router.navigate(["/home/advance-outward-remittance"]);
-                      },
-                      error => {
-                        // this.toastr.error('Invalid inputs, please check!');
-                        console.log("error")
-                      });
-                }
-                else {
-                  this.toastr.success('Task saved as completed successfully!');
-                  this.router.navigate(["/home/dashboardTask"]);
-                }
+      this.documentService
+        .updateExportTask(
+          { task: this.newTask, completed: 'yes', fileType: 'BL' },
+          this.documentService.task._id
+        )
+        .subscribe(
+          (data) => {
+            console.log('king123');
+            console.log(data);
+            this.documentService.draft = false;
+            this.documentService.task.id = '';
+            this.isDoneAll = true;
+            this.userService
+              .updateManyPipo(
+                this.arrayPipo,
+                'billUnder',
+                this.newTask[0].generateDoc1
+              )
+              .subscribe(
+                (data) => {
+                  console.log('king123');
+                  console.log(data);
+                  if (this.Question5 == 'yes') {
+                    this.userService
+                      .updateManyPipo(
+                        this.arrayPipo,
+                        'invoiceReduction',
+                        this.invoiceArr
+                      )
+                      .subscribe(
+                        (data1) => {
+                          console.log('king123');
+                          console.log(data1);
+                          this.toastr.success(
+                            'Task saved as completed successfully!'
+                          );
+                          this.router.navigate([
+                            'home/pipoDocExport',
+                            {
+                              id: this.redirectid,
+                              page: this.redirectpage,
+                              index: this.redirectindex,
+                            },
+                          ]);
+                          //this.router.navigate(["/home/advance-outward-remittance"]);
+                        },
+                        (error) => {
+                          // this.toastr.error('Invalid inputs, please check!');
+                          console.log('error');
+                        }
+                      );
+                  } else {
+                    this.toastr.success(
+                      'Task saved as completed successfully!'
+                    );
+                    this.router.navigate(['/home/dashboardTask']);
+                  }
 
-                // this.toastr.success('Task saved as completed successfully!');
-                // this.router.navigate(["/home/dashboardTask"]);
-                //this.router.navigate(["/home/advance-outward-remittance"]);
-              },
-              error => {
-                // this.toastr.error('Invalid inputs, please check!');
-                console.log("error")
-              });
-          //this.router.navigate(["/home/dashboardTask"]);
-          //this.router.navigate(['/login'], { queryParams: { registered: true }});
-        },
-        (error) => {
-          console.log("error");
-        }
-      );
+                  // this.toastr.success('Task saved as completed successfully!');
+                  // this.router.navigate(["/home/dashboardTask"]);
+                  //this.router.navigate(["/home/advance-outward-remittance"]);
+                },
+                (error) => {
+                  // this.toastr.error('Invalid inputs, please check!');
+                  console.log('error');
+                }
+              );
+            //this.router.navigate(["/home/dashboardTask"]);
+            //this.router.navigate(['/login'], { queryParams: { registered: true }});
+          },
+          (error) => {
+            console.log('error');
+          }
+        );
+    } else {
+      this.documentService
+        .addExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' })
+        .subscribe(
+          (res) => {
+            this.isDoneAll = true;
+            //this.toastr.success('Task saved successfully!');
+            console.log('Transaction Saved');
+            this.userService
+              .updateManyPipo(
+                this.arrayPipo,
+                'billUnder',
+                this.newTask[0].generateDoc1
+              )
+              .subscribe(
+                (data) => {
+                  console.log('king123');
+                  console.log(data);
+                  if (this.Question5 == 'yes') {
+                    this.userService
+                      .updateManyPipo(
+                        this.arrayPipo,
+                        'invoiceReduction',
+                        this.invoiceArr
+                      )
+                      .subscribe(
+                        (data1) => {
+                          console.log('king123');
+                          console.log(data1);
+                          this.toastr.success(
+                            'Task saved as completed successfully!'
+                          );
+                          this.router.navigate([
+                            'home/pipoDocExport',
+                            {
+                              id: this.redirectid,
+                              page: this.redirectpage,
+                              index: this.redirectindex,
+                            },
+                          ]);
+                          //this.router.navigate(["/home/advance-outward-remittance"]);
+                        },
+                        (error) => {
+                          // this.toastr.error('Invalid inputs, please check!');
+                          console.log('error');
+                        }
+                      );
+                  } else {
+                    this.toastr.success(
+                      'Task saved as completed successfully!'
+                    );
+                    this.router.navigate(['/home/dashboardTask']);
+                  }
+                  //this.router.navigate(["/home/advance-outward-remittance"]);
+                },
+                (error) => {
+                  // this.toastr.error('Invalid inputs, please check!');
+                  console.log('error');
+                }
+              );
+            //this.router.navigate(["/home/dashboardTask"]);
+          },
+          (err) => {
+            this.toastr.error('Error!');
+            console.log('Error saving the transaction');
+          }
+        );
     }
-    else {
-      this.documentService.addExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' }).subscribe(
-        (res) => {
-          this.isDoneAll = true
-          //this.toastr.success('Task saved successfully!');
-          console.log("Transaction Saved");
-          this.userService.updateManyPipo(this.arrayPipo, 'billUnder', this.newTask[0].generateDoc1)
-            .subscribe(
-              data => {
-                console.log("king123")
-                console.log(data)
-                if (this.Question5 == 'yes') {
-                  this.userService.updateManyPipo(this.arrayPipo, 'invoiceReduction', this.invoiceArr)
-                    .subscribe(
-                      data1 => {
-                        console.log("king123")
-                        console.log(data1);
-                        this.toastr.success('Task saved as completed successfully!');
-                        this.router.navigate([
-                          'home/pipoDocExport',
-                              {
-                                id: this.redirectid,
-                                page: this.redirectpage,
-                                index: this.redirectindex,
-                              },
-                           ]);
-                        //this.router.navigate(["/home/advance-outward-remittance"]);
-                      },
-                      error => {
-                        // this.toastr.error('Invalid inputs, please check!');
-                        console.log("error")
-                      });
-                }
-                else {
-                  this.toastr.success('Task saved as completed successfully!');
-                  this.router.navigate(["/home/dashboardTask"]);
-                }
-                //this.router.navigate(["/home/advance-outward-remittance"]);
-              },
-              error => {
-                // this.toastr.error('Invalid inputs, please check!');
-                console.log("error")
-              });
-          //this.router.navigate(["/home/dashboardTask"]);
-
-        },
-        (err) => {
-          this.toastr.error('Error!');
-          console.log("Error saving the transaction")
-        }
-      );
-    }
-
-
   }
 
   exportAsPDF1() {
     if (this.Question7 == 'yes') {
-      this.lc = 'lc'
-    }
-    else if (this.Question7 == 'no') {
-      this.lc = 'nonLc'
+      this.lc = 'lc';
+    } else if (this.Question7 == 'no') {
+      this.lc = 'nonLc';
     }
 
     this.scrutiny = this.Question8;
-    this.withDiscount = this.Question9
-
+    this.withDiscount = this.Question9;
 
     const height =
-      Math.round($("#mainId").outerHeight() * 0.0104166667 * 10) / 10;
-    console.log($("#mainId").html());
+      Math.round($('#mainId').outerHeight() * 0.0104166667 * 10) / 10;
+    console.log($('#mainId').html());
     this.documentService
       .getPDF({
-        data: $("#mainId").html(),
-        filename: "Final Report",
+        data: $('#mainId').html(),
+        filename: 'Final Report',
         format: {
           paperWidth: 7,
           paperHeight: height + 5,
@@ -2065,28 +2201,31 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           marginRight: 0,
         },
         template:
-          "./app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs",
+          './app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs',
       })
       .subscribe((data) => {
         if (data && data.success) {
           console.log(data);
-          this.data4 = data
-          this.data5 = data.file.replace('application/octet-stream', 'application/pdf')
-          console.log(this.data5)
+          this.data4 = data;
+          this.data5 = data.file.replace(
+            'application/octet-stream',
+            'application/pdf'
+          );
+          console.log(this.data5);
           this.data6 = this.sanitizer.bypassSecurityTrustResourceUrl(
             this.data5
           );
-          console.log(this.data6)
-          this.data8 = this.data6
+          console.log(this.data6);
+          this.data8 = this.data6;
           //this.newTask.url1 = this.data5;
           this.done = true;
           const height =
-            Math.round($("#mainId").outerHeight() * 0.0104166667 * 10) / 10;
-          console.log($("#mainId").html());
+            Math.round($('#mainId').outerHeight() * 0.0104166667 * 10) / 10;
+          console.log($('#mainId').html());
           this.documentService
             .getPDF({
-              data: $("#mainId2").html(),
-              filename: "Final Report",
+              data: $('#mainId2').html(),
+              filename: 'Final Report',
               format: {
                 paperWidth: 7,
                 paperHeight: 15,
@@ -2096,27 +2235,32 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
                 marginRight: 0,
               },
               template:
-                "./app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs",
+                './app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs',
             })
             .subscribe((data) => {
               if (data && data.success) {
                 console.log(data);
-                this.data4 = data
-                this.data5 = data.file.replace('application/octet-stream', 'application/pdf')
-                console.log(this.data5)
+                this.data4 = data;
+                this.data5 = data.file.replace(
+                  'application/octet-stream',
+                  'application/pdf'
+                );
+                console.log(this.data5);
                 this.data6 = this.sanitizer.bypassSecurityTrustResourceUrl(
                   this.data5
                 );
-                this.billOfCredit = this.data6
+                this.billOfCredit = this.data6;
 
                 if (this.Question5 == 'yes') {
                   const height1 =
-                    Math.round($("#mainId1").outerHeight() * 0.0104166667 * 10) / 10;
-                  console.log($("#mainId1").html());
+                    Math.round(
+                      $('#mainId1').outerHeight() * 0.0104166667 * 10
+                    ) / 10;
+                  console.log($('#mainId1').html());
                   this.documentService
                     .getPDF({
-                      data: $("#mainId1").html(),
-                      filename: "Final Report",
+                      data: $('#mainId1').html(),
+                      filename: 'Final Report',
                       format: {
                         paperWidth: 7,
                         paperHeight: height1 + 5,
@@ -2126,30 +2270,36 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
                         marginRight: 0,
                       },
                       template:
-                        "./app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs",
+                        './app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs',
                     })
                     .subscribe((data) => {
                       if (data && data.success) {
                         console.log(data);
-                        this.data4 = data
-                        this.data5 = data.file.replace('application/octet-stream', 'application/pdf')
-                        console.log(this.data5)
-                        this.data6 = this.sanitizer.bypassSecurityTrustResourceUrl(
-                          this.data5
+                        this.data4 = data;
+                        this.data5 = data.file.replace(
+                          'application/octet-stream',
+                          'application/pdf'
                         );
+                        console.log(this.data5);
+                        this.data6 =
+                          this.sanitizer.bypassSecurityTrustResourceUrl(
+                            this.data5
+                          );
 
-                        console.log(this.data6)
-                        this.dataImport = this.data6
+                        console.log(this.data6);
+                        this.dataImport = this.data6;
+                        this.dataImport2 = this.data6;
                         //this.newTask.url1 = this.data5;
                         this.done = true;
                         this.newTask[0] = {
                           sbNumbers: this.sbArray,
                           sbUrls: this.mainDoc1,
-                          tryNumbers: this.tryArray,
+                          triPartyAgreementNumber: this.tryArray,
                           tryUrls: this.mainDoc3,
                           purposeCode: '',
                           isLc: this.lc,
-                          LcNumber: this.LcNumber,
+                          letterOfCreditNumber: this.lcArray,
+                          lcUrls: this.mainDoc4,
                           withScrutiny: this.scrutiny,
                           withDiscount: this.withDiscount,
                           bankRef: '',
@@ -2157,33 +2307,33 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
                           generateDoc1: this.data8,
                           generateDoc2: this.billOfCredit,
                           generateDoc3: this.dataImport,
-                          ir: this.Question5
-                        }
+                          generateDoc4: this.dataImport2,
+                          ir: this.Question5,
+                        };
                         //this.downloadPDF(data);
                       }
                     });
 
-
-                  this.isProceed = true
-                }
-                else {
-                  this.isProceed = true
+                  this.isProceed = true;
+                } else {
+                  this.isProceed = true;
                   this.newTask[0] = {
                     sbNumbers: this.sbArray,
                     sbUrls: this.mainDoc1,
-                    tryNumbers: this.tryArray,
+                    triPartyAgreementNumber: this.tryArray,
                     tryUrls: this.mainDoc3,
                     purposeCode: '',
                     isLc: this.lc,
-                    LcNumber: this.LcNumber,
+                    letterOfCreditNumber: this.lcArray,
+                    lcUrls: this.mainDoc4,
                     withScrutiny: this.scrutiny,
                     withDiscount: this.withDiscount,
                     advanceRef: this.advanceRef,
                     generateDoc1: this.data8,
                     generateDoc2: this.billOfCredit,
                     bankRef: '',
-                    ir: this.Question5
-                  }
+                    ir: this.Question5,
+                  };
                 }
               }
             });
@@ -2203,36 +2353,32 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       });
   }
 
-
   sendMail() {
     let val = {
-      file: this.bankRef
-    }
+      file: this.bankRef,
+    };
     this.documentService.exportEmail({ task: val }).subscribe(
       (res2) => {
         this.toastr.success('Message sent successfully!');
-        console.log("Email Sent");
+        console.log('Email Sent');
 
         //this.router.navigate(["/home/advance-outward-remittance"]);
       },
-      (err) => console.log("ERROR")
+      (err) => console.log('ERROR')
     );
   }
 
   change(e) {
     console.log(e.target.value);
-    this.advanceRef = e.target.value
-
+    this.advanceRef = e.target.value;
   }
 
   change1(e) {
     console.log(e.target.value);
-    this.LcNumber = e.target.value
+    this.LcNumber = e.target.value;
   }
 
-  edit() {
-
-  }
+  edit() {}
 
   // showDialog(): any {
   //   console.log('hhhhhh')
@@ -2242,12 +2388,88 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   //     alert('No clicked');
   //   });
   // }
-  downloadPDF() {
+  public currentDownloadPdf;
+  openToPdf(content3, pipo) {
+    this.currentDownloadPdf = pipo;
+    this.selectedPdfs.push(this.currentDownloadPdf.changingThisBreaksApplicationSecurity, this.creditNote.changingThisBreaksApplicationSecurity, this.debitNote.changingThisBreaksApplicationSecurity, this.ebrc.changingThisBreaksApplicationSecurity, this.blcopyref.changingThisBreaksApplicationSecurity, this.irAdvice.changingThisBreaksApplicationSecurity, this.swiftCopy.changingThisBreaksApplicationSecurity, this.tryPartyAgreement.changingThisBreaksApplicationSecurity)
+    this.modalService
+      .open(content3, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+  }
 
+  downloadPDF() {
+    console.log(JSON.stringify(this.creditNote));
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+    let data = {
+      headers: headers,
+      url: this.creditNote['changingThisBreaksApplicationSecurity'],
+    };
+
+    this.documentService.downloadDocuments(data).subscribe((d) => {
+      console.log('sub', d);
+      importedSaveAs(new Blob([d], { type: 'application/pdf' }), 'CreditNote');
+    });
+
+    // console.log(this.mainDoc1.changingThisBreaksApplicationSecurity)
+    // console.log("hello",this.creditNote.changingThisBreaksApplicationSecurity)
+    // window.location.href = this.creditNote
+    // let pdfName= this.creditNote.changingThisBreaksApplicationSecurity.substring(this.creditNote.changingThisBreaksApplicationSecurity.lastIndexOf('/')+1);
+    // console.log(pdfName)
+    // const link = document.createElement('a');
+    // // link.id = "dwnldLnk";
+    // document.body.appendChild(link);
+    // // const dlnk: any = document.getElementById("dwnldLnk");
+    // // dlnk.href =
+    // // dlnk.download = this.creditNote.changingThisBreaksApplicationSecurity;
+    // // dlnk.click();
+    // link.setAttribute('target', '_blank');
+    // link.setAttribute('href', this.creditNote.changingThisBreaksApplicationSecurity);
+    // link.setAttribute('download', pdfName);
+    // link.download = pdfName;
+
+    // link.click();
+    // link.remove();
+
+    // this.durl = this.data3.replace('application/pdf', 'application/octet-stream')
+    //   console.log("DATA")
+    //   const link: any = document.createElement("a");
+    //   link.id = "dwnldLnk";
+    //   link.style = "display:none;";
+    //   document.body.appendChild(link);
+    //   const dlnk: any = document.getElementById("dwnldLnk");
+    //   dlnk.href = this.durl;
+    //   console.log(dlnk)
+    //   console.log(dlnk.href)
+    //   dlnk.download = "finalReport.pdf";
+    //   dlnk.click();
+
+    //     let link = document.createElement('a');
+    // link.setAttribute('type', 'hidden');
+    // link.href = 'abc.net/files/test.ino';
+    // link.download = 'https://storage.googleapis.com/doc-machine-bucket1/BOE-2.pdf';
+    // document.body.appendChild(link);
+    // link.click();
+    // link.remove();
+
+    // const link = document.createElement('a');
+    //     link.setAttribute('target', '_blank');
+    //     link.setAttribute('href', 'https://storage.googleapis.com/doc-machine-bucket1/BOE-2.pdf');
+    //     link.setAttribute('download', `products.pdf`);
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     link.remove();
   }
 
   ngOnDestroy() {
-    console.log("Inside draft");
+    console.log('Inside draft');
     // if (!this.isDoneAll && this.generate) {
     //   this.confirmDialogService.confirmThis('Do you want to save this task?', () => {
     //     if (this.isProceed) {
@@ -2283,38 +2505,36 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     //     console.log("no");
     //   });
     // }
-
   }
 
   setradio(a) {
-    console.log(a)
-    this.bankToggle = true
-    this.bankValue = a
+    console.log(a);
+    this.bankToggle = true;
+    this.bankValue = a;
 
-    this.newBankArray = []
+    this.newBankArray = [];
     this.bankArray.forEach((value, index) => {
-      console.log('shshsh')
+      console.log('shshsh');
       if (value.bank == a) {
-        this.newBankArray.push(value)
+        this.newBankArray.push(value);
       }
-
     });
   }
 
   creditTo(a) {
-    var n = a.accNumber
-    this.credit = n.split("");
-    console.log(this.credit)
+    var n = a.accNumber;
+    this.credit = n.split('');
+    console.log(this.credit);
   }
 
   chargesTo(a) {
-    var n = a.accNumber
-    this.charge = n.split("");
-    console.log(this.charge)
+    var n = a.accNumber;
+    this.charge = n.split('');
+    console.log(this.charge);
   }
 
   private getDismissReason(reason: any): string {
-    console.log('ddhdhdhh')
+    console.log('ddhdhdhh');
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -2324,94 +2544,109 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     }
   }
 
-
   open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this.modalService
+      .open(content, { ariaLabelledBy: 'modal-basic-title' })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
   }
   open1(content1) {
-    this.modalService.open(content1, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this.modalService
+      .open(content1, { ariaLabelledBy: 'modal-basic-title' })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
   }
 
-
+  open2(content2){
+    this.modalService
+    .open(content2, { ariaLabelledBy: 'modal-basic-title' })
+    .result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+  }
   showPreview() {
-    this.bgColor = true
-    this.newDone = true
+    this.bgColor = true;
+    this.newDone = true;
   }
   hidePreview() {
-    this.bgColor = false
-    this.newDone = false
+    this.bgColor = false;
+    this.newDone = false;
   }
 
   removepipo(i) {
-    this.itemArray.splice(i, 1)
+    this.itemArray.splice(i, 1);
   }
 
   removeshipping(i) {
-    this.itemArray1.splice(i, 1)
+    this.itemArray1.splice(i, 1);
   }
 
-  addTofilter(event ,id){
-    let removeArray =[];
-     this.pipo=true;
-     this.ship=false;
-     this.itemArray1 = []
-    if(event.target.checked){
-      for(let element of this.item ){
-        if(element._id == id){
-          this.itemArray.push(element)
+  addTofilter(event, id) {
+    let removeArray = [];
+    this.pipo = true;
+    this.ship = false;
+    this.itemArray1 = [];
+    if (event.target.checked) {
+      for (let element of this.item) {
+        if (element._id == id) {
+          this.itemArray.push(element);
         }
       }
-
-    }
-    else{
-    if(this.itemArray.length){
-      this.itemArray.forEach(element => {
-        if(element._id != id){
-          removeArray.push(element);
-        }
-      });
-      this.itemArray=removeArray;
-    }
-    }
-  console.log("test",this.itemArray);
-  }
-
-  addTofilter1(event ,id){
-    let removeArray  = []
-      this.ship = true;
-      this.pipo = false;
-      this.itemArray=[];
-    if(event.target.checked){
-      for(let element of this.item1 ){
-        if(element._id == id){
-          this.itemArray.push(element)
-        }
-      }
-
-
-    }
-    else{
-      if(this.itemArray1.length){
-        this.itemArray1.forEach(element => {
-          if(element._id != id){
+    } else {
+      if (this.itemArray.length) {
+        this.itemArray.forEach((element) => {
+          if (element._id != id) {
             removeArray.push(element);
           }
         });
-        this.itemArray1=removeArray;
+        this.itemArray = removeArray;
       }
-      }
-  console.log("test2",this.itemArray);
+    }
+    console.log('test', this.itemArray);
   }
 
-  goBack(){
+  addTofilter1(event, id) {
+    let removeArray = [];
+    this.ship = true;
+    this.pipo = false;
+    this.itemArray = [];
+    if (event.target.checked) {
+      for (let element of this.item1) {
+        if (element._id == id) {
+          this.itemArray.push(element);
+        }
+      }
+    } else {
+      if (this.itemArray1.length) {
+        this.itemArray1.forEach((element) => {
+          if (element._id != id) {
+            removeArray.push(element);
+          }
+        });
+        this.itemArray1 = removeArray;
+      }
+    }
+    console.log('test2', this.itemArray);
+  }
+
+  goBack() {
     this.isGenerate = false;
     window.location.reload();
   }
@@ -2428,16 +2663,13 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   //       let filtershippingdata = [];
   //       let completedpipo = [];
 
-
   //       for (let pipo of this.item1){
   //         let currentpipo = this.item1[pipoindex]
 
   //         this.item1[pipoindex].shippingdata = []
   //         for(let shippingdata of this.item4){
 
-
   //           if(pipo.pi_poNo == shippingdata.pipo[0]){
-
 
   //             const newVal = { ...pipo };
   //               newVal['sbno'] = shippingdata.sbno
@@ -2445,8 +2677,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   //               newVal['portCode'] = shippingdata.portCode
   //               newVal['region'] = shippingdata.countryOfFinaldestination
   //               newVal['fobValue'] = shippingdata.fobValue
-
-
 
   //             filtershippingdata.push(newVal);
 
@@ -2462,7 +2692,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   //       }
   //       console.log("filtershiping data",filtershippingdata);
   //       console.log("completed pipo data",completedpipo);
-
 
   //       for(let i = completedpipo.length-1; i>=0; i--){
   //         this.item1.splice(completedpipo[i],1)
@@ -2484,5 +2713,78 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   //   );
   // }
 
-}
+  addPdfToSelectedPdf(value, e){
+    console.log("hi deva",value.changingThisBreaksApplicationSecurity)
+    console.log(e.target.checked);
+    if(e.target.checked){
+      if(this.selectedPdfs.includes(value.changingThisBreaksApplicationSecurity) === false){
+        this.selectedPdfs.push(value.changingThisBreaksApplicationSecurity)
+      }
 
+    }
+    else if(!e.target.checked){
+      this.selectedPdfs = this.selectedPdfs.filter(item => item !== value.changingThisBreaksApplicationSecurity)
+    }
+
+    console.log(this.selectedPdfs)
+  }
+
+  // public myArray = [
+  //   'https://storage.googleapis.com/doc-machine-bucket1/BOE-2.pdf',
+  //   'https://storage.googleapis.com/doc-machine-bucket1/Document_Set_-_5_(1)_(1).pdf',
+  //   'https://storage.googleapis.com/doc-machine-bucket1/proforma-invoice-template.pdf',
+
+  //   'https://storage.googleapis.com/doc-machine-bucket1/Document_Set_-_4-1-5-1-2_(1).pdf'
+
+  // ];
+  async mergeAllPDFs() {
+    let urls = this.selectedPdfs;
+
+    const pdfDoc = await PDFDocument.create();
+    const numDocs = urls.length;
+
+    for (var i = 0; i < numDocs; i++) {
+      const donorPdfBytes = await fetch(urls[i]).then((res) =>
+        res.arrayBuffer()
+      );
+      const donorPdfDoc = await PDFDocument.load(donorPdfBytes);
+      const docLength = donorPdfDoc.getPageCount();
+      for (var k = 0; k < docLength; k++) {
+        const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [k]);
+        //console.log("Doc " + i+ ", page " + k);
+        pdfDoc.addPage(donorPage);
+      }
+    }
+
+    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+    console.log(pdfDataUri);
+
+    // strip off the first part to the first comma "data:image/png;base64,iVBORw0K..."
+    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
+
+    console.log(data_pdf);
+    // this.downloadFile2(new Blob([data_pdf]), "myfile.pdf");
+    const byteCharacters = atob(data_pdf);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    importedSaveAs(new Blob([byteArray], { type: 'application/pdf' }), 'BankAttachment');
+  }
+
+  downloadFile2 = (blob, fileName) => {
+    const link = document.createElement('a');
+    // create a blobURI pointing to our Blob
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    // some browser needs the anchor to be in the doc
+    document.body.append(link);
+    link.click();
+    link.remove();
+    // in case the Blob uses a lot of memory
+    setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+  };
+
+  // downloadFile(new Blob(['random data']), "myfile.txt");
+}

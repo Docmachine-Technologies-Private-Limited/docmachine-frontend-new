@@ -69,7 +69,7 @@
     padding-bottom: 10px !important;
     margin-bottom: 5px !important;
     margin-top: -20px;
-    padding-left:  38px;
+    padding-left: 38px;
     border-bottom: 1px solid #eaedf3;
 }
 
@@ -504,7 +504,6 @@ label {
 // select {
 //     filter: progid: DXImageTransform.Microsoft.dropshadow(OffX=-1, OffY=-1, color=#FF0000) progid: DXImageTransform.Microsoft.dropshadow(OffX=1, OffY=1, color=#FF0000);
 // }
-
 //sailendra changes for drop down
 // .customDropdown {
 //     // position: relative;
@@ -521,12 +520,10 @@ label {
 //     cursor: pointer;
 //     z-index: 1;
 // }
-
 // .customDropdown:hover {
 //     // border: 1px solid #4b74ff !important;
 //     color: #4b74ff !important;
 // }
-
 // .dropdown-content {
 //     display: none;
 //     // position: relative;
@@ -543,7 +540,6 @@ label {
 //     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 //     transition: 0.3s;
 // }
-
 // .dropdown-content a {
 //     display: inline-block;
 //     cursor: pointer;
@@ -553,39 +549,31 @@ label {
 //     // transition: 0.4s ease;
 //     height: 24px;
 // }
-
 // .dropdown-content a:hover {
 //     background-color: #49a2d7;
 //     color: white;
 // }
-
 // .customDropdown .dropIco {
 //     margin-left: 7px;
 // }
-
 // .dropdown-content p a {
 //     text-decoration: none;
 //     color: #000000;
 //     // padding: 6px 10px;
 // }
-
 // .customDropdown:hover .dropdown-content {
 //     display: block;
 // }
-
 // .customDropdown:hover .dropdown-content {
 //     display: block;
 // }
-
-
-
-.customDropdown  {
+.customDropdown {
     position: relative;
     display: inline-block;
     font-size: 14px;
     padding-left: 12px;
     padding-right: 10px;
-    padding-top: 5px;
+    padding-top: 2px;
     height: 29px;
     border: 1px solid #C6CBD4;
     border-radius: 2px;
@@ -597,14 +585,11 @@ label {
 .customDropdown:hover {
     border: 1px solid #4b74ff !important;
     color: #4b74ff !important;
-
 }
-
 
 .dropdown-content {
     display: none;
     position: relative;
-
     // min-width: 70px;
     background: white;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -614,7 +599,7 @@ label {
     // height: 150px;
 }
 
-.dropdown-content  a {
+.dropdown-content a {
     display: inline-block;
     cursor: pointer;
     padding: 4px 6px;
@@ -623,11 +608,10 @@ label {
     transition: 0.4s ease;
 }
 
-.dropdown-content  a:hover {
+.dropdown-content a:hover {
     background-color: #49a2d7;
     color: white;
 }
-
 
 .customDropdown .dropIco {
     margin-left: 7px;
@@ -646,6 +630,7 @@ label {
 .customDropdown:hover .dropdown-content {
     display: block;
 }
+
 .fas {
     font-family: "Font Awesome 5 Free" !important;
 }
@@ -785,5 +770,4 @@ label {
     padding: 5px 5px;
     border: 1px solid;
     border-radius: 6px;
-
 }

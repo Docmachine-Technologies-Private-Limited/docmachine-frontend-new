@@ -48,24 +48,24 @@
                 <div *ngIf='!isGenerate'>
 
                     <div>
-                        <div style="display: flex; align-items: center; margin-left: 23px !important; ">
-                            <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px !important; ">Select PI/PO or Shipping Bill</label>
+                        <!-- <div style="display: flex; align-items: center; margin-left: 23px !important; ">
+                            <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px !important; ">Select Shipping Bill</label>
                             <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
                                 <span style="color: #323e4a !important; min-width: 250px;">select</span>
                                 <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                           <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                         </span>
-                                <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
-<!--                                    <a style="min-width: 100%;" (click)="open(content)">PI/PO</a>-->
-                                    <a style="min-width:100%;" (click)="open1(content1);">Shipping Bill</a>
+                                <div class="dropdown-content" style="min-width:200px; margin-right:-26px;"> -->
+                        <!--                                    <a style="min-width: 100%;" (click)="open(content)">PI/PO</a>-->
+                        <!-- <a style="min-width:100%;" (click)="open1(content1);">Shipping Bill</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
 
 
                         <div>
-                            <!-- <input style="width: 50%; margin-top: 20px; margin-bottom: 20px;" placeholder="Search for Buyer name or Shipping Bill Number to select Shipping Bill" class="form-control" type="text" (input)="searchData1($any($event.target).value)">
+                            <input style="width: 50%; margin-top: 20px; margin-bottom: 20px;" placeholder="Search for Buyer name or Shipping Bill Number to select Shipping Bill" class="form-control" type="text" (input)="searchData1($any($event.target).value)">
                             <div *ngIf='filterToggle'>
                                 <label style="margin-left:10px"> Select Shipping Bill number*</label>
                                 <div style="margin-left:10px" s class="form-check" *ngFor="let item of itemArray; let i = index;">
@@ -76,9 +76,9 @@
                               </label>
                                 </div>
                                 <br>
-                            </div> -->
+                            </div>
 
-                            <div *ngIf='itemArray1?.length >0'>
+                            <!-- <div *ngIf='itemArray1?.length >0'>
                                 <div *ngIf="pipo">
                                     <label style="margin-left:10px">PI/PO NUMBER SELECTED</label>
                                     <div style="margin-left:10px" class="form-check" *ngFor="let item of itemArray1; let i = index;">
@@ -92,22 +92,22 @@
                                     </div>
                                 </div>
                                 <br>
-                            </div>
+                            </div> -->
 
-                            <div *ngIf='itemArray?.length >0'>
+                            <!-- <div *ngIf='itemArray?.length >0'>
                                 <div *ngIf="ship">
                                     <label style="margin-left:10px">SHIPPING BILL NUMBER SELECTED</label>
                                     <div style="margin-left:10px" class="form-check" *ngFor="let item of itemArray; let i = index;">
                                         <label class="form-check-label">
                                 <p class="arrayData">
-                                    {{item.sbno}}--{{item.buyerName}}<i style="float: right; margin: 4px 10px;" (click)='removeshipping(i)' class="fas fa-times"></i>
+                                    {{item}}<i style="float: right; margin: 4px 10px;" (click)='removeshipping(i)' class="fas fa-times"></i>
                                 </p>
 
                             </label>
                                     </div>
                                 </div>
                                 <br>
-                            </div>
+                            </div> -->
 
 
 
@@ -130,8 +130,9 @@
                                             <div formArrayName='value'>
                                                 <div *ngFor="let subgroup of course.controls.value.controls; let idx = index;" [formGroupName]="idx" style="flex-direction:row; margin-right: 15px;">
                                                     <span style="color: #707683; font-size: 14px;">{{idx+1}}</span>
-                                                    <input formControlName="valueInternal" style="outline: none; border: 1px solid #DEDEDE; width: 150px; border-radius: 5px; margin-left: 15px;">
-                                                    <input style="display: none;" type="text" formControlName="sb" [(ngModel)]="sbArray[i]">
+                                                    <!-- <input formControlName="valueInternal" style="outline: none; border: 1px solid #DEDEDE; width: 150px; border-radius: 5px; margin-left: 15px;">
+                                                    <input style="display: none;" type="text" formControlName="sb" [(ngModel)]="sbArray[i]"> -->
+                                                    <button (click)="open2(content2);">Enter Forex Advice</button>
 
                                                 </div>
                                                 <span (click)="onAddCourse1(i)" style="font-size: 12px; color: #303030;"><i
@@ -150,6 +151,8 @@
                                 <!-- //If Yes -->
 
                                 <!-- <input type="text" (keyup)="change($event)"> -->
+
+                                <!-- <button class="button1">Select Forex Advice</button> -->
                             </div>
 
                             <div class="form-group">
@@ -159,10 +162,17 @@
                                     <input type="radio" name="Question7" [(ngModel)]="Question7" value="no"> <span style="margin-left: 10px;">No</span>
                                 </div>
                             </div>
-                            <div style="margin: 10px 12px;" *ngIf='Question7 === "yes"'>
-                                <!-- //If Yes -->
-                                Enter LC Number <br>
-                                <input type="text" (keyup)="change1($event)">
+
+                            <div style="margin-left: 20px; margin-bottom: 10px;" *ngIf='Question7 === "yes"'>
+                                Select Letter Of Credit (LC)
+                                <div style="margin-left:10px" s class="form-check" *ngFor="let item of item8; let i = index;">
+                                    <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox"
+                                (change)=changeCheckbox3(item.letterOfCreditNumber)>
+                                {{item.letterOfCreditNumber}} {{item.buyerName}}
+                            </label>
+                                </div>
+                                <a [routerLink]="['/home/upload']">Upload Letter Of Credit (LC)</a>
                             </div>
 
                             <div class="form-group">
@@ -191,12 +201,12 @@
 
 
 
-                            <div *ngIf='Question2 === "yes"'>
+                            <div style="margin-left: 20px; margin-bottom: 10px;" *ngIf='Question2 === "yes"'>
                                 Select Tri party agreement
                                 <div style="margin-left:10px" s class="form-check" *ngFor="let item of item4; let i = index;">
                                     <label class="form-check-label">
                                   <input class="form-check-input" type="checkbox"
-                                      (change)=changeCheckbox2(item.thirdNumber)>
+                                  (change)=changeCheckbox2(item.triPartyAgreementNumber)>
                                   {{item.triPartyAgreementNumber}} {{item.buyerName}}
                               </label>
                                 </div>
@@ -224,7 +234,7 @@
 
                                     Charges to {{bankValue}}*
                                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center;">
-                                        <input style="flex-direction:row;" [value]="value" (click)="model1.option = value" [checked]="value === model1.option"  type="radio" id="options1" class="circular_input" (click)="chargesTo(value)">
+                                        <input style="flex-direction:row;" [value]="value" (click)="model1.option = value" [checked]="value === model1.option" type="radio" id="options1" class="circular_input" (click)="chargesTo(value)">
                                         <label style="flex-direction:row;" class="label1" for="male">{{value.bank}}-{{value.accType}}</label>
                                     </div> <br>
                                 </div> <br>
@@ -781,13 +791,101 @@
                               </div>
 
                           </div> -->
-                            <iframe [src]="value" frameborder="0" [ngClass]="bgColor ? 'sizes' : 'sizem'"></iframe>
+                            <iframe id="fileRequest" [src]="value" frameborder="0" [ngClass]="bgColor ? 'sizes' : 'sizem'"></iframe>
                             <br>
                             <div *ngIf='newDone'>
-                                SB Documents
-                                <div style="display: flex; align-items: center;">
-                                    <iframe style="flex-direction:row;" *ngFor="let pipo of mainDoc1" [src]="pipo" height="500px" width="400px"></iframe>
-                                </div> <br>
+                                <!-- <div *ngFor="let pipo of mainDoc1" style="width: 100%; display: flex; border: 1px solid inset; overflow-y:auto;">
+                                    <div>
+                                        SB Documents
+                                        <div style="display: flex; align-items: center; margin-right: 5px">
+                                            <iframe style="flex-direction:row;" [src]="pipo" height="500px" width="400px"></iframe>
+                                        </div> <br>
+                                    </div>
+
+
+                                </div> -->
+                                <div *ngFor="let pipo of mainDoc1;  let i = index">
+                                    <div style="display: flex; margin-top: 40px;">
+                                        <div style="height:670px; width:570px; border:1px solid #ccc; overflow: auto;">
+                                            <div style="margin-top: 10px;">
+                                                SB Documents
+                                                <div style="display: flex; align-items: center; margin-right: 5px">
+                                                    <iframe style="flex-direction:row;" [src]="pipo" height="650px" width="550px"></iframe>
+                                                </div> <br>
+                                            </div>
+                                            <div style="margin-top: 10px;">
+                                                Credit Note
+                                                <div style="display: flex; align-items: center; margin-right: 5px">
+                                                    <iframe style="flex-direction:row;" [src]="creditNote" height="650px" width="550px"></iframe>
+                                                </div> <br>
+                                            </div>
+
+                                            <div style="margin-top: 10px;">
+                                                Debit Note
+                                                <div style="display: flex; align-items: center; margin-right: 5px">
+                                                    <iframe style="flex-direction:row;" [src]="debitNote" height="650px" width="550px"></iframe>
+                                                </div> <br>
+                                            </div>
+
+                                            <div style="margin-top: 10px;">
+                                                EBRC
+                                                <div style="display: flex; align-items: center; margin-right: 5px">
+                                                    <iframe style="flex-direction:row;" [src]="ebrc" height="650px" width="550px"></iframe>
+                                                </div> <br>
+                                            </div>
+
+                                            <div style="margin-top: 10px;">
+                                                BL Copyref
+                                                <div style="display: flex; align-items: center; margin-right: 5px">
+                                                    <iframe style="flex-direction:row;" [src]="blcopyref" height="650px" width="550px"></iframe>
+                                                </div> <br>
+                                            </div>
+
+                                            <div style="margin-top: 10px;">
+                                                IRAdvice
+                                                <div style="display: flex; align-items: center; margin-right: 5px">
+                                                    <iframe style="flex-direction:row;" [src]="irAdvice" height="650px" width="550px"></iframe>
+                                                </div> <br>
+                                            </div>
+
+                                            <div style="margin-top: 10px;">
+                                                Swift Copy
+                                                <div style="display: flex; align-items: center; margin-right: 5px">
+                                                    <iframe style="flex-direction:row;" [src]="swiftCopy" height="650px" width="550px"></iframe>
+                                                </div> <br>
+                                            </div>
+
+                                            <div style="margin-top: 10px;">
+                                                Tri Party Agreement
+                                                <div style="display: flex; align-items: center; margin-right: 5px">
+                                                    <iframe style="flex-direction:row;" [src]="tryPartyAgreement" height="650px" width="550px"></iframe>
+                                                </div> <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="button1" style="margin-left: 200px; margin-top: 20px;" (click)="openToPdf(content3, pipo)">Open To Download</button>
+                                </div>
+
+
+
+
+                                <div style="width: 100%; display: flex;">
+                                    <div *ngIf='Question7 === "yes"'>
+                                        <div *ngFor="let pipo of mainDoc4">
+                                            Letter Of Credit (LC)
+                                            <div style="display: flex; align-items: center; margin-right: 20px">
+                                                <iframe style="flex-direction:row;" [src]="pipo" height="500px" width="400px"></iframe>
+                                            </div> <br>
+                                        </div>
+                                    </div>
+                                    <div *ngIf='Question2 === "yes"'>
+                                        <div *ngFor="let try of mainDoc3">
+                                            Try Party Agreement
+                                            <div style="display: flex; align-items: center;">
+                                                <iframe style="flex-direction:row;" [src]="try" height="500px" width="400px"></iframe>
+                                            </div> <br></div>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
@@ -1155,7 +1253,7 @@
                                         Forex Advice No
                                     </td>
                                     <td style="border: 0.5px solid black;">
-                                      Add Damage
+                                        Add Damage
                                     </td>
                                 </tr>
                                 <tr *ngFor='let value of invoiceArr; let i = index;' style="border: 0.5px solid black;">
@@ -1180,36 +1278,36 @@
                                     <td style="border: 0.5px solid black;">
                                         {{value.pipoValue.amount}}
                                     </td>
-                                    <td style="border: 0.5px solid black;" >
+                                    <td style="border: 0.5px solid black;">
                                         <div *ngIf="!optionsVisibility[i]">
-                                            
-                                                {{value.pipoValue.damage}}
-                                            
+
+                                            {{value.pipoValue.damage}}
+
 
                                         </div>
                                         <div *ngIf="optionsVisibility[i]">
-                                        <!-- <span contenteditable="true" (input)="searchData($any($event.target).innerHTML, i)" style="width: 100px; border: none;  outline: none;"></span> -->
-                                        <input class="tblInput form-control input5" name="Add Damage Dection" type="number" placeholder="Add Damage Dection" [(ngModel)]="value.pipoValue.damage" (change)="updaterisevalue(i)">
-                                        <!-- <input type="text" style="width: 100px; border: none;"
+                                            <!-- <span contenteditable="true" (input)="searchData($any($event.target).innerHTML, i)" style="width: 100px; border: none;  outline: none;"></span> -->
+                                            <input class="tblInput form-control input5" name="Add Damage Dection" type="number" placeholder="Add Damage Dection" [(ngModel)]="value.pipoValue.damage" (change)="updaterisevalue(i)">
+                                            <!-- <input type="text" style="width: 100px; border: none;"
                                           (input)="searchData($any($event.target), i)"> -->
                                         </div>
                                     </td>
                                     <td style="border: 0.5px solid black;">
                                         <!-- <span style="width: 100px; border: none;  outline: none;" contenteditable="true">{{amArr[i]}}</span> -->
-                                        
-                                            <!-- *ngIf="!optionsVisibility[i]" -->
-                                            
-                                            {{value.pipoValue.realized}}
-                                    
+
+                                        <!-- *ngIf="!optionsVisibility[i]" -->
+
+                                        {{value.pipoValue.realized}}
+
                                         <!-- <input type="text" style="width: 100px; border: none; outline: none;" [(ngModel)]="amArr[i]"> -->
                                     </td>
                                     <td style="border: 0.5px solid black;">
                                         {{value.advance}}
                                     </td>
                                     <td>
-                                    <button class="savBtn" *ngIf="optionsVisibility[i]" (click)="toSave(i)">Save</button>
-                                    <button class="savBtn" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">Edit</button>
-                                </td>
+                                        <button class="savBtn" *ngIf="optionsVisibility[i]" (click)="toSave(i)">Save</button>
+                                        <button class="savBtn" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">Edit</button>
+                                    </td>
                                 </tr>
                                 <!-- <tr style="border: 0.5px solid black;">
                                   <td style="border: 0.5px solid black;">
@@ -1265,7 +1363,7 @@
                         </div>
                         <div *ngIf="isProceed == true">
                             <p>Setup: 3 Preview</p>
-                            <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button>
+                            <!-- <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button> -->
                             <button class="button1" style="margin-bottom: 40px;">Send it via Email</button><br> Generated Document
                             <div>
                                 <iframe [src]="data8" height="500px" width="400px"></iframe>
@@ -1283,6 +1381,7 @@
 
                             <button class="button1" style="margin-right: 10px;" (click)="edit()">Edit</button>
                             <button class="button1" style="margin-right: 10px;" (click)="doneDox()">Done</button>
+                            <!-- <button class="button1" style="margin-right: 10px;" (click)="doneDox()">Download</button> -->
 
                         </div>
                     </div>
@@ -1292,6 +1391,7 @@
 
 
         </div>
+
 
         <ng-template #content let-modal>
 
@@ -1349,7 +1449,7 @@
                                                     </thead>
                                                     <tbody class="text-dark">
                                                         <tr class="table-row" *ngFor='let data of item | filterb:startDate:endDate | filtera:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index' (click)="changeCheckbox1(item.sbno)">
-                                                            <td><input type="checkbox" (change)="changeCheckbox1(item.sbno)" (change)="addTofilter($event ,data._id)" /></td>
+                                                            <td><input type="checkbox" (change)="changeCheckbox1(item.sbno)" /></td>
                                                             <td>
                                                                 {{data.date}}
                                                             </td>
@@ -1454,6 +1554,163 @@
                         </div>
 
                     </div>
+                </div>
+            </div>
+
+        </ng-template>
+
+        <ng-template #content2 let-modal>
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row no-gutter">
+                        <button type="button" class="button2 topright" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                        <span aria-hidden="true">OK</span>
+                      </button>
+                        <!-- The content half -->
+                        <div class="col-md-7 ">
+                            <div class="login d-flex py-5" style="padding: 0px !important;">
+                                <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button> -->
+                                <!-- Demo content-->
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-10 col-xl-7 mrg">
+                                            <h6 class="display-5">Select Shipping Bill</h6>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <select [(ngModel)]="nameSearch3" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
+                                                <option value="">Party Name</option>
+                                                <option *ngFor="let item of item9 ; let i = index;" style="color: black;" >{{item.partyName}}</option>
+                                            </select>
+                                                <button class="filter1" (click)="nameSearch3 = ''">Reset</button>
+                                            </div>
+                                            <section style="width: 150%; " class="box-shadow">
+                                                <table style=" margin-left: -2.7rem;" class="table table-striped mb-0">
+
+                                                    <thead style="width: 100% ;height: 54px;">
+                                                        <tr class="text-muted table-heading" style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid rgb(194, 189, 189);">
+                                                            <th scope="col"></th>
+                                                            <th scope="col">FIRX Number/ID</th>
+                                                            <th scope="col">Party Name</th>
+                                                            <th scope="col">Recieved Amount USD</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="text-dark">
+                                                        <tr class="table-row" *ngFor='let data of item9 | fiterbuyer:[{partyName:nameSearch3}]  let i = index'>
+                                                            <td><input type="checkbox" /></td>
+                                                            <!-- (change)=" -->
+                                                            <td>
+                                                                {{data.billNo}}
+                                                            </td>
+                                                            <td>
+                                                                {{data.partyName}}
+                                                            </td>
+                                                            <td>
+                                                                {{data.amount}}
+                                                            </td>
+
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </ng-template>
+
+        <ng-template #content3 let-modal>
+
+            <div class="modal-body2">
+                <div class="row no-gutter">
+                    <!-- The image half -->
+                    <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
+
+
+                    <!-- The content half -->
+                    <div class="col-md-7" style="margin: 10px;">
+                        <div class="login d-flex py-5" style="padding: 0px !important;">
+
+                            <!-- Demo content-->
+                            <div class="container popup">
+                                <!--  -->
+                                <div class="row">
+
+                                    <div class="col-lg-10 col-xl-7 mrg">
+                                        <p class="display-5" style="text-align: center; margin-left: 180px;">Select Document To Download</p>
+
+                                        <div class="docStyle">
+                                            <p class="display-4" style="margin-top: 10px;width: 6 0px;
+                                            border-bottom: 4px solid #49A2D7;">SB Data</p>
+                                            <input type="checkBox" checked (change)="addPdfToSelectedPdf(currentDownloadPdf, $event)">
+                                            <iframe [src]="currentDownloadPdf" height="500px" width="600px"></iframe>
+                                        </div>
+
+                                        <div class="docStyle">
+                                            <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                        border-bottom: 4px solid #49A2D7;"> Credit Note</h6>
+                                            <input type="checkBox" checked (change)="addPdfToSelectedPdf(creditNote , $event)">
+                                            <iframe style="flex-direction:row;" [src]="creditNote" height="500px" width="600px"></iframe>
+                                        </div>
+
+                                        <div class="docStyle">
+                                            <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                        border-bottom: 4px solid #49A2D7;"> Debit Note </h6>
+                                            <input type="checkBox" checked (change)="addPdfToSelectedPdf(debitNote , $event)">
+                                            <iframe style="flex-direction:row;" [src]="debitNote" height="500px" width="600px"></iframe>
+                                        </div>
+
+                                        <div class="docStyle">
+                                            <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                        border-bottom: 4px solid #49A2D7;">EBRC</h6>
+                                            <input type="checkBox" checked (change)="addPdfToSelectedPdf(ebrc , $event)">
+                                            <iframe style="flex-direction:row;" [src]="ebrc" height="500px" width="600px"></iframe>
+                                        </div>
+
+                                        <div class="docStyle">
+                                            <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                        border-bottom: 4px solid #49A2D7;">BL Copyref</h6>
+                                            <input type="checkBox" checked (change)="addPdfToSelectedPdf(blcopyref , $event)">
+                                            <iframe style="flex-direction:row;" [src]="blcopyref" height="500px" width="600px"></iframe>
+                                        </div>
+                                        <div class="docStyle">
+                                            <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                        border-bottom: 4px solid #49A2D7;">IRAdvice</h6>
+                                            <input type="checkBox" checked (change)="addPdfToSelectedPdf(irAdvice , $event)">
+                                            <iframe style="flex-direction:row;" [src]="irAdvice" height="500px" width="600px"></iframe>
+                                        </div>
+                                        <div class="docStyle">
+                                            <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                        border-bottom: 4px solid #49A2D7;">Swift Copy</h6>
+                                            <input type="checkBox" checked (change)="addPdfToSelectedPdf(swiftCopy , $event)">
+                                            <iframe style="flex-direction:row;" [src]="swiftCopy" height="500px" width="600px"></iframe>
+                                        </div>
+                                        <div class="docStyle">
+                                            <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                        border-bottom: 4px solid #49A2D7;">Tri Party Agreement</h6>
+                                            <input type="checkBox" checked (change)="addPdfToSelectedPdf(tryPartyAgreement , $event)">
+                                            <iframe style="flex-direction:row;" [src]="tryPartyAgreement" height="500px" width="600px"></iframe>
+                                        </div>
+
+                                        <button type="submit" class="submitBTN" style="margin-left: 280px;" (click)="mergeAllPDFs()" (click)="modal.dismiss('Cross click')">downloadPDF</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End -->
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
