@@ -22,25 +22,5 @@ export class AppConfig {
 
     public getConstants() {
                 this.apiUrl = `http://betabharathexim-env.eba-vkbawzpw.ap-south-1.elasticbeanstalk.com/v1`;
-
-//         if (window.location.hostname === 'localhost') {
-//             this.apiUrl = `http://localhost:3000/v1`;
-//         } else if (window.location.hostname.indexOf('beta') === 0) {
-//             this.apiUrl = window.location.protocol + '//betaapi.' + 'bharathexim.com' + '/v1';
-//         }
-//         else if (window.location.hostname.indexOf('dev') === 0) {
-//             this.apiUrl = window.location.protocol + '//devapi.' + 'bharathexim.com' + '/v1';
-//         }
-//         else if (window.location.hostname.indexOf('docmachine') === 0) {
-//             this.apiUrl = window.location.protocol + '//api.' + 'bharathexim.com' + '/v1';
-//         }
-
-        // else if (window.location.hostname.indexOf('qa') > -1) {
-        //     this.apiUrl = window.location.protocol + '//' + window.location.hostname + ':9000/api';
-        // } else if (window.location.hostname.indexOf('beta') > -1) {
-        //     this.apiUrl = window.location.protocol + '//beta.api.wrked.com/v1';
-        // } else if (window.location.hostname.indexOf('prod') > -1) {
-        //     this.apiUrl = window.location.protocol + '//' + window.location.hostname + ':9000/api';
-        // }
     }
 }
