@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { UserService } from '../service/user.service';
-import jwt_decode from 'jwt-decode';
+import * as jwt_decode from 'jwt-decode';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -20,7 +20,7 @@ export class VerifyEmailComponent implements OnInit {
     private router: Router, private route: ActivatedRoute, private toastr: ToastrService) { }
   ngOnInit(): void {
     this.token = this.route.snapshot.params['id'];
-    let val = jwt_decode(this.token);
+    let val = jwt_decode.default(this.token);
     console.log(val)
     this.email = val['_id'];
 
@@ -39,7 +39,7 @@ export class VerifyEmailComponent implements OnInit {
               this.toastr.success('Email Verification done');
             }
             //this.message = data['message']
-            // 
+            //
           },
           error => {
             console.log("error")

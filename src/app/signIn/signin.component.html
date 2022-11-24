@@ -63,7 +63,7 @@
 
                                 <p class="text-muted mb-4 bottom-text ml-2">
                                     By continuing, you agree to DocMachine
-                                    <a href="">Term of service</a> we will manage information as described in our <a href="">privacy policy agrement</a>
+                                    <a (click)="open(content)">Term of service</a> we will manage information as described in our <a>privacy policy agrement</a>
                                 </p>
                                 <div>
                                     <button type="submit" class="btn btn-block mb-2 rounded-pill shadow-sm reg-sm" style="float: left; margin-top: 20px;" [class.disable]="isDisabled" [disabled]="isDisabled">
@@ -93,3 +93,41 @@
         </div>
     </div>
 </div>
+
+
+<ng-template #content let-modal>
+
+    <div class="modal-body">
+        <div class="row no-gutter">
+            <!-- The image half -->
+            <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
+
+
+            <!-- The content half -->
+            <!-- DB_URL=mongodb://localhost:27017/docMachine -->
+            <div class="col-md-7 bg-dark1" style="margin: 10px;">
+                <div class="d-flex py-5" style="padding: 0px !important;">
+
+                    <!-- Demo content-->
+                    <div class="container popup">
+                        <div class="row">
+                            <div class="col-lg-10 col-xl-7 mrg">
+                                <h6 class="display-6">SOFTWARE LICENSE AGREEMENT</h6>
+
+                                <iframe src="./../../assets/T&C.html" width="580%" height="500px" style="border: none"></iframe>
+                                <button type="submit" style="margin-left: 250px;" class="btn" (click)="modal.dismiss('Cross click')">
+                OK
+              </button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</ng-template>

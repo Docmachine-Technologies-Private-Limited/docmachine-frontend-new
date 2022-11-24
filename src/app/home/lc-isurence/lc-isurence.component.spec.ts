@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LcIsurenceComponent } from './lc-isurence.component';
+import { LcIsuranceComponent } from './lc-isurance.component';
 
-describe('LcIsurenceComponent', () => {
-  let component: LcIsurenceComponent;
-  let fixture: ComponentFixture<LcIsurenceComponent>;
+describe('LcIsuranceComponent', () => {
+  let component: LcIsuranceComponent;
+  let fixture: ComponentFixture<LcIsuranceComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LcIsurenceComponent ]
+      declarations: [ LcIsuranceComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LcIsurenceComponent);
+    fixture = TestBed.createComponent(LcIsuranceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

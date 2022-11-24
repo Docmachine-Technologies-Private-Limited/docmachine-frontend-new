@@ -236,7 +236,7 @@ export class UserService {
     );
   }
 
-  updateManyPipo(pipo, file, doc) {
+  updateManyPipo(pipo, file, doc, updatedData = {}) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     console.log(file)
@@ -245,13 +245,16 @@ export class UserService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
+    let data = {
+      pipo: pipo,
+      file: file,
+      ...updatedData,
+      doc: doc
+    };
+
     return this.http.post(
       `${this.api_base}/pipo/updateMany`,
-      {
-        pipo: pipo,
-        file: file,
-        doc: doc
-      },
+      data,
       httpOptions
     );
   }

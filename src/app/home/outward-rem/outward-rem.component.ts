@@ -217,13 +217,13 @@ export class OutwardRemComponent implements OnInit {
       }
       else if (data.bank == 'yesBank') {
         console.log("h1");
-        this.router.navigate(['home/a2cumApplicationYesbank', { pipo: data.pi_poNo, file: data.file }]);
+        this.router.navigate(['home/a2cum-application-yesbank', { pipo: data.pi_poNo, file: data.file }]);
       }
 
 
 
     } else {
-      this.router.navigateByUrl(`/home/completedTask/${data._id}`);
+      this.router.navigateByUrl(`/home/completed-task/${data._id}`);
     }
 
   }
@@ -236,7 +236,7 @@ export class OutwardRemComponent implements OnInit {
       this.router.navigate(['home/a2cumApplication', { pipo: piPo, file: this.purposeCode, detail: this.detail }]);
     }
     else if (this.myRadio == 'yesBank') {
-      this.router.navigate(['home/a2cumApplicationYesbank', { pipo: piPo, file: this.purposeCode, detail: this.detail }]);
+      this.router.navigate(['home/a2cum-application-yesbank', { pipo: piPo, file: this.purposeCode, detail: this.detail }]);
     }
 
 

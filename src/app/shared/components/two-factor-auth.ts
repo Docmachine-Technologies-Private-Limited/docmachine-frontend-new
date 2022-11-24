@@ -254,7 +254,7 @@ import {ToastrService} from 'ngx-toastr';
       width: 100%;
       padding-left: 10px;
       margin-top: -10px;
-      
+      margin-left: 50px;
     }
     .image1 {
       width: 100%;

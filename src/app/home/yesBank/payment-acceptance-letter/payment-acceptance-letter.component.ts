@@ -22,21 +22,22 @@ export class PaymentAcceptanceLetterComponent implements OnInit, OnDestroy {
   public applicant: any = [];
   public benneDetail: any = [];
   public submitted = false;
-  data5: any;
-  data6: any;
-  data4: any;
-  id: any;
-  data8: any;
-  data7: any;
-  data9: any;
-  done: boolean = false;
-  doc: any;
-  item3: any;
-  letterHead: any;
-  file: string;
-  amount: any;
-  words: any;
-  pipoValue: any = [];
+  public data5: any;
+  public data6: any;
+  public data4: any;
+  public id: any;
+  public pipo_id: any;
+  public data8: any;
+  public data7: any;
+  public data9: any;
+  public done = false;
+  public doc: any;
+  public item3: any;
+  public letterHead: any;
+  public file: string;
+  public amount: any;
+  public words: any;
+  public pipoValue: any = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -50,6 +51,7 @@ export class PaymentAcceptanceLetterComponent implements OnInit, OnDestroy {
         // Perform actions
         console.log("Pressed Back");
       }
+      this.done = false;
     });
   }
 
@@ -70,6 +72,7 @@ export class PaymentAcceptanceLetterComponent implements OnInit, OnDestroy {
     //this.id = this.route.snapshot.paramMap.get('pipo');
     this.file = this.route.snapshot.paramMap.get('file');
     this.id = this.route.snapshot.params['boeNumber'];
+    this.pipo_id = this.route.snapshot.params['pipo_id'];
     this.amount = this.route.snapshot.params['amount']
     console.log(this.route.snapshot.params['pipo'])
     this.words = this.route.snapshot.params['pipo']
@@ -91,7 +94,9 @@ export class PaymentAcceptanceLetterComponent implements OnInit, OnDestroy {
           console.log(data['data'][0])
           this.item3 = data['data'][0]
           console.log(this.item3)
-          this.letterHead = data['data'][0].file[0]["Letter Head"]
+          if (data['data'] && data['data'][0] && data['data'][0].file && data['data'][0].file[0]) {
+            this.letterHead = data['data'][0].file[0]["Letter Head"]
+          }
           //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
 
         },
@@ -107,7 +112,7 @@ export class PaymentAcceptanceLetterComponent implements OnInit, OnDestroy {
   }
 
   getPipoDetaile() {
-    this.documentService.getPipoByPipoNo(this.id)
+    this.documentService.getPipoByPipoNo(this.pipo_id)
       .subscribe(
         data => {
           console.log("king123")

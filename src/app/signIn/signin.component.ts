@@ -3,6 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms'
 import {ToastrService} from 'ngx-toastr';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-detail',
@@ -20,9 +21,10 @@ export class SigninComponent implements OnInit {
   value: any;
   data1: any;
   data: any;
+  closeResult: string;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService,
-              private router: Router, private toastr: ToastrService) {
+              private router: Router, private toastr: ToastrService, private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -142,5 +144,24 @@ export class SigninComponent implements OnInit {
     this.isVisible = true;
     this.router.navigate(['/signup'])
 
+  }
+
+  open(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  getDismissReason(reason: any): string {
+    console.log('ddhdhdhh')
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 }

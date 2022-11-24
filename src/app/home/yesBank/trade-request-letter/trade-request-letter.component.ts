@@ -90,7 +90,9 @@ export class TradeRequestLetterComponent implements OnInit, OnDestroy {
           console.log(data['data'][0])
           this.item3 = data['data'][0]
           console.log(this.item3)
-          this.letterHead = data['data'][0].file[0]["Letter Head"]
+          if (data['data'] && data['data'][0] && data['data'][0].file && data['data'][0].file[0]) {
+            this.letterHead = data['data'][0].file[0]["Letter Head"]
+          }
           this.arr = this.item3.gst.split('');
           console.log(this.arr)
           //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
@@ -219,7 +221,7 @@ export class TradeRequestLetterComponent implements OnInit, OnDestroy {
           console.log("Transaction Saved");
           this.submitted = true;
 
-          this.router.navigate(["/home/buyerCredit"]);
+          this.router.navigate(["/home/buyer-credit"]);
         },
         (err) => console.log("Error saving the transaction")
       );
@@ -228,7 +230,7 @@ export class TradeRequestLetterComponent implements OnInit, OnDestroy {
       this.documentService.completeTask({ _id: this.documentService.task._id, task: this.newTask }).subscribe(
         (res) => {
           console.log("COMPLETED");
-          this.router.navigate(["/home/buyerCredit"]);
+          this.router.navigate(["/home/buyer-credit"]);
         },
         (err) => console.log("ERROR")
       );

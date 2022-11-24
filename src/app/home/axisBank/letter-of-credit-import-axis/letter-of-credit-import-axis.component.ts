@@ -92,7 +92,9 @@ export class LetterOfCreditImportAxisComponent implements OnInit, OnDestroy {
           console.log(data['data'][0])
           this.item3 = data['data'][0]
           console.log(this.item3)
-          this.letterHead = data['data'][0].file[0]["Letter Head"]
+          if (data['data'] && data['data'][0] && data['data'][0].file && data['data'][0].file[0]) {
+            this.letterHead = data['data'][0].file[0]["Letter Head"]
+          }
 
           //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
 
@@ -222,7 +224,7 @@ export class LetterOfCreditImportAxisComponent implements OnInit, OnDestroy {
               data => {
                 console.log("king123")
                 console.log(data)
-                this.router.navigate(["/home/lc-isurence"]);
+                this.router.navigate(["/home/lc-isurance"]);
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -243,13 +245,13 @@ export class LetterOfCreditImportAxisComponent implements OnInit, OnDestroy {
               data => {
                 console.log("king123")
                 console.log(data)
-                this.router.navigate(["/home/lc-isurence"]);
+                this.router.navigate(["/home/lc-isurance"]);
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
                 console.log("error")
               });
-          //this.router.navigate(["/home/lc-isurence", this.file]);
+          //this.router.navigate(["/home/lc-isurance", this.file]);
         },
         (err) => console.log("ERROR")
       );

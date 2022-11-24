@@ -16,8 +16,7 @@ import { UserService } from './../../service/user.service';
 export class DestructionComponent implements OnInit {
 
   @ViewChild('destruction', { static: false }) destruction: ElementRef;
-  public item : any;
-  public item1 = [];
+  public item = [];
   public viewData : any;
   public closeResult: string;
   public optionsVisibility: any = [];
@@ -38,13 +37,11 @@ export class DestructionComponent implements OnInit {
     this.documentService.getDestruction().subscribe(
       (res: any) => {
         console.log('HEre Responsesssssssss', res);
-        this.item = res.data;
-        for (let value of this.item) {
-          for(let value1 of value.pipo){
-            const newVal = { ...value };
-                newVal['pipo1'] = value1
-                this.item1.push(newVal)
-              }
+        for (let value of res.data) {
+          if (value['file'] == 'export') {
+
+            this.item.push(value);
+          }
         }
       },
       (err) => console.log(err)
@@ -65,7 +62,7 @@ export class DestructionComponent implements OnInit {
 }
 
 private getDismissReason(reason: any): string {
-console.log('ddhdhdhh');
+
 if (reason === ModalDismissReasons.ESC) {
   return 'by pressing ESC';
 } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -74,9 +71,11 @@ if (reason === ModalDismissReasons.ESC) {
   return `with: ${reason}`;
 }
 }
-
+  getPipoNumbers(data) {
+    return data.pipo.map((x) => {return x.pi_poNo;});
+  }
 viewCN(a){
-console.log(666666666666666, a)
+
 this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
   a['doc']
 );

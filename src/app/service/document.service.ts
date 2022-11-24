@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpContext, HttpHeaders, HttpParams} from '@angular/common/http';
 import { observable, Observable, of } from 'rxjs';
 import { AppConfig } from '../../app/app.config';
 
@@ -149,6 +149,15 @@ export class DocumentService {
     return this.http.get(url, httpOptions);
   }
 
+  getMasterWithPipo(user){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/master/mergePISb`;
+    return this.http.get(url, httpOptions);
+  }
   // getMaster1(): Observable<any[]> {
   //   let arrayMain = [];
   //   this.getMaster(1).subscribe(
@@ -324,7 +333,6 @@ export class DocumentService {
       httpOptions
     );
   }
-  
 
   getMasterBySb(sbno) {
     this.loadFromLocalStorage();
@@ -341,14 +349,8 @@ export class DocumentService {
     );
   }
 
-  public getPDF(data): Observable<any> {
-    console.log('inside service');
-    const httpOptions = {
-      headers: new HttpHeaders({ Authorization: this.authToken }),
-    };
-    return this.http.post(`${this.api_base}/pdf/generate`, data, httpOptions);
-  }
 
+  
   addPipo(pipo) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -464,7 +466,17 @@ export class DocumentService {
       httpOptions
     );
   }
-  
+
+  public getPDF(data): Observable<any> {
+    console.log('inside service');
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/pdf/generate`, data, httpOptions);
+  }
+
+ 
+
 
   addThird(pipo) {
     this.loadFromLocalStorage();
@@ -1355,7 +1367,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post('${this.api_base}/task/getPipo', data, httpOptions);
+    return this.http.post(`${this.api_base}/task/getPipo`, data, httpOptions);
   }
 
   getBoeTask(data) {
@@ -1366,7 +1378,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      '${this.api_base}/task/getBoeTask',
+      `${this.api_base}/task/getBoeTask`,
       data,
       httpOptions
     );
@@ -1379,7 +1391,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post('${this.api_base}/task/getSbTask', data, httpOptions);
+    return this.http.post(`${this.api_base}/task/getSbTask`, data, httpOptions);
   }
 
   getPipoInwardTask(data) {
@@ -1390,7 +1402,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      '${this.api_base}/task/getPipoInwardTask',
+      `${this.api_base}/task/getPipoInwardTask`,
       data,
       httpOptions
     );
@@ -1403,7 +1415,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post('${this.api_base}/task/getLcTask', data, httpOptions);
+    return this.http.post(`${this.api_base}/task/getLcTask`, data, httpOptions);
   }
 
   getAllTask(data) {
@@ -1414,7 +1426,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      '${this.api_base}/task/getAllTask',
+      `${this.api_base}/task/getAllTask`,
       data,
       httpOptions
     );
@@ -1427,7 +1439,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post('${this.api_base}/task/getTask', data, httpOptions);
+    return this.http.post(`${this.api_base}/task/getTask`, data, httpOptions);
   }
 
   getPipoCaTask(data) {
@@ -1438,7 +1450,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      '${this.api_base}/task/getPipoCaTask',
+      `${this.api_base}/task/getPipoCaTask`,
       data,
       httpOptions
     );
@@ -1451,7 +1463,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post('${this.api_base}/task/getBcTask', data, httpOptions);
+    return this.http.post(`${this.api_base}/task/getBcTask`, data, httpOptions);
   }
 
   getCaTask(data) {
@@ -1462,7 +1474,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      '${this.api_base}/task/getCaTask',
+      `${this.api_base}/task/getCaTask`,
       'data',
       httpOptions
     );
@@ -1475,7 +1487,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post('${this.api_base}/task/getOne', data, httpOptions);
+    return this.http.post(`${this.api_base}/task/getOne`, data, httpOptions);
   }
 
   completeTask(data) {
@@ -1485,7 +1497,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
 
-    return this.http.post('${this.api_base}/task/complete', data, httpOptions);
+    return this.http.post(`${this.api_base}/task/complete`, data, httpOptions);
   }
 
   taskEmail(data) {
@@ -1495,7 +1507,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
 
-    return this.http.post('${this.api_base}/task/taskEmail', data, httpOptions);
+    return this.http.post(`${this.api_base}/task/taskEmail`, data, httpOptions);
   }
 
   addExportTask(data) {
@@ -1532,7 +1544,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      '${this.api_base}/exportTask/getOne',
+      `${this.api_base}/exportTask/getOne`,
       data,
       httpOptions
     );
@@ -1546,7 +1558,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      '${this.api_base}/exportTask/getFromType',
+      `${this.api_base}/exportTask/getFromType`,
       data,
       httpOptions
     );
@@ -1575,7 +1587,7 @@ export class DocumentService {
     };
 
     return this.http.post(
-      '${this.api_base}/task/exportEmail',
+      `${this.api_base}/task/exportEmail`,
       data,
       httpOptions
     );

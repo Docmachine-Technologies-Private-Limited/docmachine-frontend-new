@@ -156,14 +156,14 @@ export class CompletedTaskComponent implements OnInit {
         this.router.navigate(['home/bill-under-collection', this.item.file]);
       }
       else if (this.item.file == "inland" || this.item.file == "import") {
-        this.router.navigate(['home/lc-isurence', this.item.file]);
+        this.router.navigate(['home/lc-isurance', this.item.file]);
       }
 
       else if (this.item.file == "buyerCredit") {
-        this.router.navigate(['home/buyerCredit']);
+        this.router.navigate(['home/buyer-credit']);
       }
       else if (this.item.file == "fbgBuyer") {
-        this.router.navigate(['home/fbgWaiver']);
+        this.router.navigate(['home/fbg-waiver']);
       }
       else if (this.item.file.startsWith("S0") || this.item.file.startsWith("S1")) {
         this.router.navigate(['home/outwardRemitance']);

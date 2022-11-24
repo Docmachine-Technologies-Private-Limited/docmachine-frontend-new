@@ -276,9 +276,12 @@ export class DashboardTaskComponent implements OnInit {
           return { ...data, awaitSubmit: conut }
         })
 
+        console.log("calleddddddd",)
+        console.log("this.EDPMSData.pendingData, this.EDPMSData.uploadData",this.EDPMSData.pendingData, this.EDPMSData.uploadData)
 
-        this.edpmsChart.series = [this.EDPMSData.pendingData, this.EDPMSData.uploadData]
-        this.edpmsChart.labels = ["Pending", "Upload"]
+
+        // this.edpmsChart.series = [this.EDPMSData.pendingData, this.EDPMSData.uploadData]
+        // this.edpmsChart.labels = ["Pending", "Upload"]
 
         // ---------------------------------
 
@@ -698,14 +701,14 @@ export class DashboardTaskComponent implements OnInit {
     };
 
     this.edpmsChart = {
-      series: [],
+      series: [503,60],
       // series: [44, 55, 13, 43, 22],
       chart: {
         width: 300,
         type: "donut"
       },
       // labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
-      labels: [],
+      labels:  ["Pending", "Upload"],
 
       colors: ["#DDF9EB", "4CC78A", "#E07C97", "#DCA1DC"],
 
@@ -745,9 +748,10 @@ export class DashboardTaskComponent implements OnInit {
 
     this.orderShipmentChart = new ApexCharts(document.querySelector('#orderShipmentChart'), this.orderPendingForShipmentChartOptions);
     this.orderShipmentChart.render();
+    
 
-    this.edpmsChart.series = [this.EDPMSData.pendingData, this.EDPMSData.uploadData]
-    this.edpmsChart.labels = ['Pending', "Upload"]
+    // this.edpmsChart.series = [this.EDPMSData.pendingData, this.EDPMSData.uploadData]
+    // this.edpmsChart.labels = ['Pending', "Upload"]
 
   }
 
@@ -828,6 +832,13 @@ export class DashboardTaskComponent implements OnInit {
       labels: this.SBbuyerExportData?.map(data => data._id),
       chartData: this.SBbuyerExportData
     });
+
+    this.inwardChart.updateOptions({
+      series: this.inwardBuyerExportData?.map(data => data.totalItems),
+      labels: this.inwardBuyerExportData?.map(data => data._id),
+      chartData: this.inwardBuyerExportData
+    });
+    
 
     this.inwardChart.updateOptions({
       series: this.inwardBuyerExportData?.map(data => data.totalItems),

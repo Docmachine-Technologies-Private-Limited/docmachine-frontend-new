@@ -1,17 +1,13 @@
-#container {
+#container{
     overflow: scroll;
     overflow-x: auto;
 }
-
 #container::-webkit-scrollbar {
     width: 0px;
     height: 0px;
 }
-
 .table-padding {
     background: white !important;
-    width: 104%;
-    margin-top: 68px;
 }
 
 .table_top {

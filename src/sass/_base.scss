@@ -13,7 +13,8 @@
     top: 0;
     bottom: 0;
     width: $sidebar-width;
-    border-right: 1px solid #d7d7d7;
+    border-right: 1px solid #f2f4f8;
+    box-shadow: 1px 1px 1px 0px #f2f4f8;
     background-color: $sidebar-bg-color;
     color: #8d8d8d;
     .slimScrollBar {
@@ -140,7 +141,7 @@
 .content {
     position: relative;
     min-height: 100%;
-    padding: $content-padding-top $content-padding-horizontal $content-padding-vertical;
+    padding: 10px 0px 25px 30px;
     background-color: $body-bg;
     @include media-breakpoint-down(sm) {
         padding-left: 20px;

@@ -23,7 +23,6 @@ import {
   FormControl,
   FormArray,
 } from '@angular/forms';
-import { ShippingBill } from 'src/model/shippingBill.model';
 import { HttpHeaders } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import * as xlsx from 'xlsx';
@@ -139,8 +138,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   dataImport: any;
   dataImport2: any;
   sbPurposeDone1: any = [];
-  item4= [];
+  item4 = [];
   item12: any;
+  item13 = [];
   bankRef: any;
   newTask: any = [];
   Task: any = [];
@@ -230,6 +230,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   endDate: any = '';
   model = { option: 'Bank options' };
   model1 = { option: 'Bank options' };
+  sb: any;
   creditNote: any;
   debitNote: any;
   advanceOutward: any;
@@ -251,6 +252,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   currentSbForAdvance: any;
   buyerName = [];
   id: any;
+  private genDoc: any;
 
   advanceForm = new FormGroup({
     advance: new FormArray([this.initCourse()], Validators.required),
@@ -302,7 +304,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     //PI/PO API
     this.documentService.getPipo().subscribe(
       (res: any) => {
-        console.log('HEre Response', res);
+        console.log('Data fetched successfully', res);
         (this.item = res.data), console.log('pipo', this.item);
       },
       (err) => console.log(err)
@@ -328,6 +330,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       (res: any) => {
         console.log(res), (this.item9 = res.data);
         console.log('line no. 324 data', this.item9);
+        this.mergeIr();
+        this.mergeIr2();
         this.item9.forEach((element, i) => {
           this.irBuyerName[i] = element.partyName;
         });
@@ -356,6 +360,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       (res: any) => {
         console.log(res), (this.item1 = res.data);
         console.log('Master Data ***********************', this.item1);
+        this.mergeIr();
+        this.mergeIr2();
         this.item1.forEach((element, i) => {
           this.buyerName[i] = element.buyerName;
         });
@@ -363,7 +369,14 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           (value, index) => this.buyerName.indexOf(value) === index
         );
         // console.log(this.buyerName);
-        console.log('jsadffhsjshd line no. 358', this.buyerName);
+        console.log('line no. 367', this.buyerName);
+      },
+      (err) => console.log(err)
+    );
+
+    this.documentService.getMasterWithPipo(1).subscribe(
+      (res: any) => {
+        console.log('Merged sb with pipo', res);
       },
       (err) => console.log(err)
     );
@@ -372,10 +385,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       (res: any) => {
         console.log('HEre Response Third', res);
         this.item12 = res.data;
-        console.log("Try Party", this.item12)
+        console.log('Try Party', this.item12);
         for (let value of this.item12) {
           if (value['file'] == 'export') {
-            console.log('avvvvvvvvvv');
+
             this.item4.push(value);
             console.log('awwww', this.item4);
           }
@@ -394,7 +407,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
         for (let value of this.item10) {
           if (value['file'] == 'export') {
-            console.log('avvvvvvvvvv');
+
             this.item11.push(value);
             console.log('awwww', this.item11);
           }
@@ -570,16 +583,28 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     XLSX.writeFile(wb, 'SheetJS.xlsx');
   }
 
-  changeCheckbox1(a) {
+  changeCheckbox1(a, data) {
     // let value = a + " - " +
-    let j = this.sbArray.indexOf(a);
-    if (j == -1) {
-      this.sbArray.push(a);
-    } else {
-      this.sbArray.splice(j, 1);
-    }
+    if (data.blCopyDoc) {
+      if (data.commercialDoc) {
+        if (data.packingDoc) {
+          let j = this.sbArray.indexOf(a);
+          if (j == -1) {
+            this.sbArray.push(a);
+          } else {
+            this.sbArray.splice(j, 1);
+          }
 
-    console.log('Shailendra//////////--', this.sbArray);
+          console.log('Shailendra//////////--', this.sbArray);
+        } else {
+          console.log("You Don't have packingDoc Document");
+        }
+      } else {
+        console.log("You Don't have Commercial Document");
+      }
+    } else {
+      console.log("You Don't have BLCopy Document");
+    }
     // randomArray = []
     // for(value of this.pipoArray){
     //   for(value1 of ){
@@ -645,10 +670,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   getForexInfo(sbno: number) {
     return this.shippingMap.get(sbno);
   }
-
-  // getProducts(form) {
-  //   return form.get('products').controls;
-  // }
 
   onAddCourse(e) {
     // if (e.controls.bankDetails.invalid) {
@@ -718,7 +739,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     let pipoValue;
     let value;
     let buyerValue;
-    let newVal = {}
+    let newVal = {};
     for (let item of this.itemArray) {
       for (let sb of this.sbArray) {
         if (item.sbno === sb) {
@@ -742,13 +763,17 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     console.log(pipoValue, 'pipovalue*****************************');
     for (value of this.item) {
       for (let value1 of pipoValue.pipo) {
-        if (value.pi_poNo == value1) {
+        if (value.pi_poNo == value1.pi_poNo) {
           this.randomArray.push(value);
         }
       }
     }
     console.log('random Array', this.randomArray);
     console.log('random Array', this.randomArray[0].creditNote);
+
+    this.sb = this.sanitizer.bypassSecurityTrustResourceUrl(
+      this.randomArray[0]['sb']
+    );
 
     this.creditNote = this.sanitizer.bypassSecurityTrustResourceUrl(
       this.randomArray[0]['creditNote']
@@ -853,7 +878,11 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
       forkJoin(
         this.sbDataArray.map((value) => {
-          return this.userService.getManyPipo(value.pipo);
+          let piponumbers = [];
+          for(let i in value.pipo) {
+            piponumbers.push(value.pipo[i].pi_poNo);
+          }
+          return this.userService.getManyPipo(piponumbers);
         })
       ).subscribe((resp: any[]) => {
         console.log('Fork join resp', resp);
@@ -879,6 +908,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
             if (a.sb == value1.sbno) {
               const newVal = { ...value1 };
               newVal['advance'] = a.valueInternal;
+              newVal['irAdviceId'] = a.irDataItem._id;
               invoicearray.push(newVal);
             }
           }
@@ -962,7 +992,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     //this.arrayPipo = value
     this.mainDoc1 = generateDoc2;
     console.log(this.mainDoc1);
-    console.log("950",generateDoc2);
+    console.log('950', generateDoc2);
     let generateDoc3: any = [];
     if (this.Question2 == 'yes') {
       for (let item of this.item4) {
@@ -2215,7 +2245,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     this.lcArray = [];
   }
 
-  doneDox() {
+  doneDox(genDoc) {
+    this.doneToDox();
+    console.log('genDoc', genDoc);
     console.log(this.newTask);
     console.log(this.invoiceArr);
     if (this.documentService.draft) {
@@ -2236,11 +2268,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
             this.documentService.task.id = '';
             this.isDoneAll = true;
             this.userService
-              .updateManyPipo(
-                this.arrayPipo,
-                'billUnder',
-                this.newTask[0].generateDoc1
-              )
+              .updateManyPipo(this.arrayPipo, 'billUnder', genDoc)
               .subscribe(
                 (data) => {
                   console.log('king123');
@@ -2261,7 +2289,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
                           );
                           if (this.redirectid) {
                             // this.router.navigate([
-                            //   'home/pipoDocExport',
+                            //   'home/pipo-export',
                             //   {
                             //     id: this.redirectid,
                             //     page: this.redirectpage,
@@ -2303,18 +2331,18 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         );
     } else {
       this.documentService
-        .addExportTask({ task: this.newTask, completed: 'yes', fileType: 'BL' })
+        .addExportTask({
+          task: this.newTask,
+          completed: 'yes',
+          fileType: 'BL',
+        })
         .subscribe(
           (res) => {
             this.isDoneAll = true;
             //this.toastr.success('Task saved successfully!');
             console.log('Transaction Saved');
             this.userService
-              .updateManyPipo(
-                this.arrayPipo,
-                'billUnder',
-                this.newTask[0].generateDoc1
-              )
+              .updateManyPipo(this.arrayPipo, 'billUnder', genDoc)
               .subscribe(
                 (data) => {
                   console.log('king123');
@@ -2335,7 +2363,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
                           );
                           if (this.redirectid) {
                             // this.router.navigate([
-                            //   'home/pipoDocExport',
+                            //   'home/pipo-export',
                             //   {
                             //     id: this.redirectid,
                             //     page: this.redirectpage,
@@ -2704,7 +2732,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   }
 
   private getDismissReason(reason: any): string {
-    console.log('ddhdhdhh');
+
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -2758,57 +2786,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   }
 
   showPreview() {
-
-    let iradvice = {};
-    function checkIfSbExist(list, checker) {
-      for (let i in list) {
-        if (list[i] == checker) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    for (let i in this.invoiceArr) {
-      console.log('2758', this.invoiceArr[i].advance);
-      if (iradvice[this.invoiceArr[i].advance] == undefined) {
-        iradvice[this.invoiceArr[i].advance] = {
-          sbNo: [this.invoiceArr[i].sbno],
-          billNo: this.invoiceArr[i].advance,
-        };
-      } else {
-        if (
-          !checkIfSbExist(
-            iradvice[this.invoiceArr[i].advance].sbno,
-            this.invoiceArr[i].sbno
-          )
-        ) {
-          iradvice[this.invoiceArr[i].advance].sbNo.push(
-            this.invoiceArr[i].sbno
-          );
-        }
-      }
-    }
-
-    if(this.Question6 == "yes"){
-
-    for(let ir in iradvice){
-      this.documentService
-        .updateByIr(iradvice[ir], iradvice[ir].billNo)
-        .subscribe((data) => {
-
-          console.log('2759', iradvice);
-          console.log('line no. 2760', data);
-        });
-
-    }
-
-    }
-
-    console.log('line no.2770', iradvice);
-
-    // console.log("sb details", this.mainDoc1)
-
     console.log('All Details', this.invoiceArr);
     // {_id:ObjectId('626a527df13ff52fd4871243')}
     this.bgColor = true;
@@ -2853,42 +2830,61 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     console.log('test', this.itemArray);
   }
 
-  addTofilter1(event, id) {
+  addTofilter1(event, id, data) {
     // this.itemArray = [];
-    let removeArray = [];
-    this.ship = true;
-    this.pipo = false;
-    if (event.target.checked) {
-      for (let element of this.item1) {
-        if (element._id == id) {
-          this.itemArray.push(element);
+    if (data.blCopyDoc) {
+      if (data.commercialDoc) {
+        if (data.packingDoc) {
+          let removeArray = [];
+          this.ship = true;
+          this.pipo = false;
+          if (event.target.checked) {
+            for (let element of this.item1) {
+              if (element._id == id) {
+                this.itemArray.push(element);
+              }
+            }
+          } else {
+            if (this.itemArray.length) {
+              this.itemArray.forEach((element) => {
+                if (element._id != id) {
+                  removeArray.push(element);
+                }
+              });
+              this.itemArray = removeArray;
+            }
+          }
+          console.log('test2', this.itemArray);
+        } else {
+          this.toastr.error(
+            "You Don't Have Any Packing List Documnet Linkend with this Shipping Bill"
+          );
         }
+      } else {
+        this.toastr.error(
+          "You Don't Have Any Commercial Documnet Linkend with this Shipping Bill"
+        );
       }
     } else {
-      if (this.itemArray.length) {
-        this.itemArray.forEach((element) => {
-          if (element._id != id) {
-            removeArray.push(element);
-          }
-        });
-        this.itemArray = removeArray;
-      }
+      this.toastr.error(
+        "You Don't Have Any AirWay / BLCopy Documnet Linkend with this Shipping Bill"
+      );
     }
-    console.log('test2', this.itemArray);
   }
 
   shippingMap: Map<number, any[]> = new Map<number, any[]>();
 
-  addToSbArray(billNo, e) {
+  addToSbArray(irDataItem: any, e) {
     if (e.target.checked) {
       console.log('Checked');
       let advance = this.advanceArray.some(
-        (item) => item.valueInternal === billNo
+        (item) => item.valueInternal === irDataItem.billNo
       );
       if (!advance) {
         console.log('Adding');
         let details = {
-          valueInternal: billNo,
+          valueInternal: irDataItem.billNo,
+          irDataItem: irDataItem,
           sb: this.currentSbForAdvance,
         };
         this.advanceArray.push(details);
@@ -2896,7 +2892,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     } else {
       console.log('removing, uncheked');
       this.advanceArray = this.advanceArray.filter(
-        (item) => item.valueInternal !== billNo
+        (item) => item.valueInternal !== irDataItem.billNo
       );
     }
     this.shippingMap.set(
@@ -2929,99 +2925,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       xlsx.writeFile(wb, 'Shipping Details.xlsx');
     }
   }
-  // getMaster() {
-  //   let arrayMain = []
-  //   this.documentService.getMaster(1).subscribe(
-  //     (res: any) => {
-  //       console.log(res), (this.item4 = res.data);
-  //       console.log("hello the********",this.item4)
-
-  //       // *****start shipping bill and pipo marging code***/
-  //       let pipoindex = 0 ;
-  //       let filtershippingdata = [];
-  //       let completedpipo = [];
-
-  //       for (let pipo of this.item1){
-  //         let currentpipo = this.item1[pipoindex]
-
-  //         this.item1[pipoindex].shippingdata = []
-  //         for(let shippingdata of this.item4){
-
-  //           if(pipo.pi_poNo == shippingdata.pipo[0]){
-
-  //             const newVal = { ...pipo };
-  //               newVal['sbno'] = shippingdata.sbno
-  //               newVal['sbdate'] = shippingdata.sbdate
-  //               newVal['portCode'] = shippingdata.portCode
-  //               newVal['region'] = shippingdata.countryOfFinaldestination
-  //               newVal['fobValue'] = shippingdata.fobValue
-
-  //             filtershippingdata.push(newVal);
-
-  //             if(completedpipo.indexOf(pipoindex)== -1){
-  //               completedpipo.push(pipoindex)
-  //             }
-  //             console.log("cheching shipping data",currentpipo);
-
-  //           }
-  //         }
-  //         pipoindex = pipoindex + 1;
-
-  //       }
-  //       console.log("filtershiping data",filtershippingdata);
-  //       console.log("completed pipo data",completedpipo);
-
-  //       for(let i = completedpipo.length-1; i>=0; i--){
-  //         this.item1.splice(completedpipo[i],1)
-  //       }
-  //       for( let pipo of filtershippingdata){
-  //         this.item1.push(pipo)
-  //       }
-  //       console.log("*******************final",this.item1);
-
-  //       // *****end shipping bill and pipo marging code******/
-
-  //       console.log("Hello There", arrayMain);
-  //       if (arrayMain.length > 0) {
-
-  //       }
-
-  //     },
-  //     (err) => console.log(err)
-  //   );
-  // }
-  // sendMail = async (pdfDoc: any) => {
-  //   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-  //   console.log('5417****************', pdfDataUri);
-  //   var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-  //   console.log("line no 2920", data_pdf)
-  //   const byteCharacters = atob(data_pdf);
-  //   const byteNumbers = new Array(byteCharacters.length);
-  //   for (let i = 0; i < byteCharacters.length; i++) {
-  //     byteNumbers[i] = byteCharacters.charCodeAt(i);
-  //     // console.log("bytenumbers", byteNumbers[i])
-  //   }
-  //   const byteArray = new Uint8Array(byteNumbers);
-  //   // this.BytePdfDoc = byteArray.toString();
-
-  //   // console.log("******BytePdfDoc",this.BytePdfDoc)
-  //   console.log('******user id', this.id);
-
-  //   this.userService.documentSend(this.id, data_pdf).subscribe(
-  //     (data) => {
-  //       console.log('king123');
-  //       console.log(data);
-  //       // this.message = data['message']
-  //       // this.no = false;
-  //       //
-  //     },
-  //     (error) => {
-  //       // this.no = true;
-  //       // this.message = null;
-  //       console.log('error');
-  //     }
-  //   );
-  // };
 
   public currentDownloadPdf;
   openToPdf(content3, pipo) {
@@ -3140,102 +3043,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     }
   }
 
-  // public myArray = [
-  //   'https://storage.googleapis.com/doc-machine-bucket1/BOE-2.pdf',
-  //   'https://storage.googleapis.com/doc-machine-bucket1/Document_Set_-_5_(1)_(1).pdf',
-  //   'https://storage.googleapis.com/doc-machine-bucket1/proforma-invoice-template.pdf',
-
-  //   'https://storage.googleapis.com/doc-machine-bucket1/Document_Set_-_4-1-5-1-2_(1).pdf'
-
-  // ];
-  // async mergeAllPDFs() {
-  //   let urls = this.selectedPdfs;
-
-  //   const pdfDoc = await PDFDocument.create();
-
-  //   const numDocs = urls.length;
-
-  //   const myHeaders : HeadersInit = {
-  //     "Access-Control-Allow-Origin": "*"
-  //   }
-
-  //   let params: RequestInit = {
-  //     headers: myHeaders,
-  //     method: "POST",
-  //     mode: "no-cors"
-  //   }
-
-  //   for (var i = 0; i < numDocs; i++) {
-  //     let filename = urls[i].substring(urls[i].lastIndexOf('/')+1)
-  //     // const donorPdfBytes = await fetch (`http://localhost:3000/v1/pipo/mergePdf`, {body: JSON.stringify({filename:filename})}).then((res) =>
-  //     // res.arrayBuffer()
-  //     // );
-
-  //     // (urls[i], params).then((res) =>
-  //     // res.arrayBuffer()
-  //     // );
-
-  //     const donorPdfBytes = await fetch (`http://localhost:3000/v1/pipo/mergePdf`, {
-  //     method: 'POST',
-  //     body: JSON.stringify({filename:filename})}).then((res) =>
-  //     res.arrayBuffer()
-  //     );
-
-  //     // this.userService.mergePdf(filename).subscribe( (res : any) => {
-  //     //   console.log(res)
-  //     //   // res.arrayBuffer()
-  //     // })
-
-  //     console.log("Doner", donorPdfBytes);
-
-  //     const donorPdfDoc = await PDFDocument.load(donorPdfBytes);
-  //     const docLength = donorPdfDoc.getPageCount();
-
-  //     console.log("Donor PdfDoc", donorPdfDoc);
-  //     console.log("docLength", docLength);
-
-  //     for (var k = 0; k < docLength; k++) {
-  //       const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [k]);
-  //       //console.log("Doc " + i+ ", page " + k);
-  //       pdfDoc.addPage(donorPage);
-  //     }
-  //   }
-
-  //   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-  //   console.log(pdfDataUri);
-
-  //   // strip off the first part to the first comma "data:image/png;base64,iVBORw0K..."
-  //   var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-
-  //   console.log(data_pdf);
-  //   // this.downloadFile2(new Blob([data_pdf]), "myfile.pdf");
-  //   const byteCharacters = atob(data_pdf);
-  //   const byteNumbers = new Array(byteCharacters.length);
-  //   for (let i = 0; i < byteCharacters.length; i++) {
-  //     byteNumbers[i] = byteCharacters.charCodeAt(i);
-  //   }
-  //   const byteArray = new Uint8Array(byteNumbers);
-  //   importedSaveAs(new Blob([byteArray], { type: 'application/pdf' }), 'BankAttachment');
-  // }
-  // downloadAsSingleFile = async (pdfDoc: any) => {
-  //   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-  //   console.log("line no 3138", pdfDoc)
-  //   var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-  //   console.log("line no 3140", data_pdf)
-  //   const byteCharacters = atob(data_pdf);
-  //   // console.log("base64PDf**********", byteCharacters)
-  //   const byteNumbers = new Array(byteCharacters.length);
-  //   for (let i = 0; i < byteCharacters.length; i++) {
-  //     byteNumbers[i] = byteCharacters.charCodeAt(i);
-  //     // console.log("bytenumbers", byteNumbers[i])
-  //   }
-  //   const byteArray = new Uint8Array(byteNumbers);
-  //   importedSaveAs(
-  //     new Blob([byteArray], { type: 'application/pdf' }),
-  //     'BankAttachment'
-  //   );
-  // };
-
   downloadAsSingleFile = async (pdfDoc: any) => {
     const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
     var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
@@ -3259,12 +3066,16 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       copiedPagesB.forEach((page) => mergedPdf.addPage(page));
       const mergedPdfFile = await mergedPdf.save();
       var base64String = this._arrayBufferToBase64(mergedPdfFile);
+      console.log('merge doc', base64String);
+      var genDoc = 'data:application/pdf;base64,' + base64String;
       const byteCharacters = atob(base64String);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
         // console.log("bytenumbers", byteNumbers[i])
       }
+
+      this.doneDox(genDoc);
       const byteArray = new Uint8Array(byteNumbers);
       importedSaveAs(
         new Blob([byteArray], { type: 'application/pdf' }),
@@ -3277,6 +3088,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         byteNumbers1[i] = byteCharacters1.charCodeAt(i);
         // console.log("bytenumbers", byteNumbers[i])
       }
+
+      this.doneDox(genDoc);
       const byteArray1 = new Uint8Array(byteNumbers1);
       importedSaveAs(
         new Blob([byteArray1], { type: 'application/pdf' }),
@@ -3301,6 +3114,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     // console.log("**BytePdfDoc",this.BytePdfDoc)
     console.log('**user id', this.id);
     console.log('99999999999999999999999', data_pdf);
+
     if (this.generateChecked == true) {
       var merge = 'data:application/pdf;base64,' + data_pdf; //this.value
 
@@ -3323,6 +3137,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       copiedPagesB.forEach((page) => mergedPdf.addPage(page));
       const mergedPdfFile = await mergedPdf.save();
       var base64String = this._arrayBufferToBase64(mergedPdfFile);
+      var genDoc = 'data:application/pdf;base64,' + base64String;
+      // console.log("line no. 3328", this.genDoc)
+
+      this.doneDox(genDoc);
 
       this.userService.documentSend(this.id, base64String).subscribe(
         (data) => {
@@ -3619,17 +3437,191 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     copiedPagesB.forEach((page) => mergedPdf.addPage(page));
     const mergedPdfFile = await mergedPdf.save();
     var base64String = this._arrayBufferToBase64(mergedPdfFile);
+    console.log('mergeDoc', base64String);
+    var genDoc = 'data:application/pdf;base64,' + base64String;
     const byteCharacters = atob(base64String);
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
       // console.log("bytenumbers", byteNumbers[i])
     }
-    let filenameforDoc = (sbno && sbno.length) ? sbno: 'BankAttachment';
+    this.doneDox(genDoc);
+    let filenameforDoc = sbno && sbno.length ? sbno : 'BankAttachment';
     const byteArray = new Uint8Array(byteNumbers);
     importedSaveAs(
       new Blob([byteArray], { type: 'application/pdf' }),
       filenameforDoc
     );
+  };
+
+  public mergeIr() {
+    let filterSBdata = [];
+    let completedsb = [];
+    let sbindex = 0;
+    for (let sbNum of this.item1) {
+      let totalForex = 0;
+      // item1 have pipo details
+      let currentpipo = this.item1[sbindex];
+      console.log('Line no. 3658', currentpipo);
+      console.log('Line no. 3659', sbNum);
+      for (let irData of this.item9) {
+        console.log('line 3661', irData);
+        for (let i = 0; i <= irData.sbNo.length; i++) {
+          console.log('a');
+          if (sbNum.sbno == irData.sbNo[i]) {
+            let irAmount = parseFloat(irData.amount);
+            totalForex = totalForex + irAmount;
+            console.log('145', totalForex);
+          } else {
+            filterSBdata.push(this.item1);
+          }
+        }
+      }
+
+      const newVal = { ...sbNum };
+      let sbAmount = newVal.fobValue;
+
+      newVal['balanceAvai'] = (sbAmount - totalForex).toFixed(2);
+      console.log('hello sj', newVal);
+
+      filterSBdata.push(newVal);
+
+      if (completedsb.indexOf(sbindex) == -1) {
+        completedsb.push(sbindex);
+      }
+      sbindex = sbindex + 1;
+    }
+    for (let i = completedsb.length - 1; i >= 0; i--) {
+      this.item1.splice(completedsb[i], 1);
+    }
+    for (let sb of filterSBdata) {
+      console.log('data of pipo', sb);
+      if (sb.balanceAvai > 0) {
+        this.item1.push(sb);
+      }
+    }
+  }
+
+  public mergeIr2() {
+    let filterIrdata = [];
+    if (this.item1 && this.item1.length) {
+      for (let irData of this.item9) {
+        // item9 have forex details
+        console.log('Line no. 3700', irData);
+        // if(irData.sbNo.length){
+        for (let sbNum of this.item1) {
+          console.log('line 3701', sbNum);
+          for (let i = 0; i <= irData.sbNo.length; i++) {
+            console.log('a');
+            if (sbNum.sbno == irData.sbNo[i]) {
+              const newVal = { ...irData }
+              console.log('Line no. 3706', newVal);
+                let sbBalance =sbNum.fobValue;
+                let irAmount = parseFloat(irData.amount);
+                let availableBalance = irAmount - sbBalance;
+
+                if (availableBalance <= 0) {
+                  newVal['BalanceAvail'] = 0;
+                } else {
+                  newVal['BalanceAvail'] = availableBalance.toFixed(2);
+                }
+
+                if(newVal.BalanceAvail > 0){
+                  console.log("BalanceAvailable", newVal.BalanceAvail)
+                filterIrdata.push(newVal);
+              }
+                console.log('Line no. 3723', filterIrdata);
+              }
+              // else {
+              //   for (let sb of filterIrdata) {
+              //     if (sb.sbno !== sbNum.sbno) {
+              //       console.log('itemAvailable');
+              //       // itemavailable = true;
+              //       const newVal = { ...irData };
+              //       let availableBal = parseFloat(
+              //         irData.amount
+              //       );
+              //       newVal['BalanceAvail'] = availableBal.toFixed(2);
+              //       filterIrdata.push(newVal);
+              //       console.log('My Data', newVal);
+              //     }
+              //   }
+              // }
+          }
+        }
+    }
+    for (let irData of this.item9) {
+      if(irData.sbNo.length == 0){
+        const newVal = { ...irData };
+          let availableBal = irData.amount;
+          // .replace(/,/g, ''));
+          newVal['BalanceAvail'] = availableBal.toFixed(2);
+          filterIrdata.push(newVal);
+          console.log('235', filterIrdata);
+      }
+    }
+    } else {
+      for(let ir of this.item9){
+        const newVal = { ...ir };
+        let availableBal = ir.amount;
+        // parseFloat(
+
+          // .replace(/,/g, ''));
+          newVal['BalanceAvail'] = availableBal.toFixed(2);
+          filterIrdata.push(newVal);
+      }
+    }
+    console.log("filterForex", filterIrdata)
+    this.item13 = filterIrdata
+  }
+
+  doneToDox() {
+    console.log('All Details', this.invoiceArr);
+
+    let iradvice = {};
+    function checkIfSbExist(list, checker) {
+      for (let i in list) {
+        if (list[i] == checker) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    for (let i in this.invoiceArr) {
+      console.log('2758', this.invoiceArr[i].advance);
+      if (iradvice[this.invoiceArr[i].advance] == undefined) {
+        iradvice[this.invoiceArr[i].advance] = {
+          sbNo: [this.invoiceArr[i]._id],
+          billNo: this.invoiceArr[i].irAdviceId,
+        };
+      } else {
+        if (
+          !checkIfSbExist(
+            iradvice[this.invoiceArr[i].advance].sbNo,
+            this.invoiceArr[i]._id
+          )
+        ) {
+          iradvice[this.invoiceArr[i].advance].sbNo.push(
+            this.invoiceArr[i]._id
+          );
+        }
+      }
+    }
+
+    console.log('My details', iradvice);
+
+    if (this.Question6 == 'yes') {
+      for (let ir in iradvice) {
+        this.documentService
+          .updateByIr(iradvice[ir], iradvice[ir].billNo)
+          .subscribe((data) => {
+            console.log('my ir', ir);
+            console.log('IrAdvice and sb connected successfully');
+            console.log('2759', iradvice);
+            console.log('line no. 2760', data);
+          });
+      }
+    }
   }
 }

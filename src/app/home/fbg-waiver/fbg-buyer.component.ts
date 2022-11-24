@@ -120,7 +120,7 @@ export class FbgBuyerComponent implements OnInit {
       this.router.navigateByUrl(`/home/fbg-wavier-file/${data.pi_poNo}`);
       }
       else {
-      this.router.navigateByUrl(`/home/completedTask/${data._id}`);
+      this.router.navigateByUrl(`/home/completed-task/${data._id}`);
     }
 
   }

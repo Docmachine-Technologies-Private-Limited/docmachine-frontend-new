@@ -166,7 +166,7 @@ export class PackingCreditComponent implements OnInit, OnDestroy {
         this.item5 = res.data;
         for (let value of this.item5) {
           if (value['file'] == 'export') {
-            console.log('avvvvvvvvvv');
+
             this.item4.push(value);
             console.log('awwww', this.item4);
           }

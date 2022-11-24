@@ -260,7 +260,7 @@ export class BuyersCreditRequestComponent implements OnInit {
 
 
     } else {
-      this.router.navigateByUrl(`/home/completedTask/${data._id}`);
+      this.router.navigateByUrl(`/home/completed-task/${data._id}`);
     }
 
   }

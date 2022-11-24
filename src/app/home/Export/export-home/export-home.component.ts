@@ -230,7 +230,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
         this.item7 = res.data;
         for (let value of this.item7) {
           if (value['file'] == 'export') {
-            console.log('avvvvvvvvvv');
+
             this.item4.push(value);
             console.log('awwww', this.item4);
           }
@@ -603,21 +603,17 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     if (a.length > 0) {
       let arr = []
       for (let value of this.item3) {
-        if (value.buyerName.toLowerCase().includes(a) || value.pi_poNo.includes(a)) {
+        if (value.buyerName.includes(a) || value.pi_poNo.includes(a) || value.buyerName.toLowerCase().includes(a) || value.pi_poNo.toLowerCase().includes(a) || value.buyerName.toUpperCase().includes(a) || value.pi_poNo.toUpperCase().includes(a)) {
           console.log(value.buyerName)
           arr.push(value)
         }
-
       }
-
       this.itemArray = arr
       this.filterToggle = true
-    }
-    else {
+    }else {
       this.filterToggle = false
       console.log("else")
     }
-
   }
 
 
@@ -693,7 +689,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log('shshhss', data.data)
     this.buyerAds = data.data.buyerAdrs
     console.log(pipo)
-    console.log(pipoValue)
+    console.log("this is pipo",pipoValue)
     this.mainDoc[j] = generateDoc1
     console.log("line no 664",this.mainDoc[j])
     // for(pipo of this.mainDoc[j]){
@@ -715,7 +711,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       pipoUrls: this.mainDoc[j],
       purposeCode: code,
     }
-    console.log(this.newTask)
+    console.log("hello there",this.newTask)
     // this.newTask[i] = {
     //   pipoNumbers: this.pipoArray,
     //   pipoUrls: this.mainDoc[i],
@@ -896,7 +892,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     })
 
     const text20Field = form.createTextField('best.text20')
-    text20Field.setText(a['amount'])
+    let amount = a['amount'].toString()
+    text20Field.setText(amount)
     text20Field.addToPage(firstpage, {
       x: 150, y: 565, width: 80,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
@@ -1977,7 +1974,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
                 this.toastr.success('Task saved as completed successfully!!!!!!!!!!!!');
                 if(this.redirectid){
                   this.router.navigate([
-                    'home/pipoDocExport',
+                    'home/pipo-export',
                         {
                           id: this.redirectid,
                           page: this.redirectpage,
@@ -2015,7 +2012,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
                 this.toastr.success('Task saved as completed successfully!');
                 if(this.redirectid){
                   this.router.navigate([
-                    'home/pipoDocExport',
+                    'home/pipo-export',
                         {
                           id: this.redirectid,
                           page: this.redirectpage,

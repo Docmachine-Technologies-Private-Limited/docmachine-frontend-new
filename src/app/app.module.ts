@@ -44,7 +44,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: "https://httpbin.org/post",
   acceptedFiles: "image/*",
   maxFilesize: 3,
-createImageThumbnails: true,
+  createImageThumbnails: true,
 };
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -94,4 +94,3 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   bootstrap: [AppComponent],
 })
 export class AppModule { }
-// npm i --save webpack-sources

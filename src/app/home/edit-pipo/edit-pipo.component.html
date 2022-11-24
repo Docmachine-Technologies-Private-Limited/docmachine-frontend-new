@@ -107,7 +107,7 @@
                                                 <div class="mb-3">
                                                     <label for="pi_poNo" class="form-label">PI/PO number
                                                         *</label>
-                                                    <input type="text" class="form-control" id="pi_poNo" aria-describedby="emailHelp" formControlName="pi_poNo" placeholder="PIPO NO">
+                                                    <input type="text" class="form-control" id="pi_poNo" aria-describedby="emailHelp" formControlName="pi_poNo" placeholder="PIPO NO" autocomplete="off">
                                                     <div *ngIf="submitted && form.pi_poNo.errors" class='errorText'>
                                                         <div *ngIf="form.pi_poNo.errors.required"> PIPO NO is required</div>
                                                     </div>
@@ -119,7 +119,7 @@
                                                     <!-- <input class="form-select form-control" type="date" id="date"
                                                       formControlName="date" /> -->
 
-                                                    <input class="form-control" matInput [matDatepicker]="pickerDate" placeholder="Choose a date" formControlName="date">
+                                                    <input class="form-control" matInput [matDatepicker]="pickerDate" placeholder="Choose a date" formControlName="date" autocomplete="off">
                                                     <mat-datepicker-toggle matSuffix [for]="pickerDate"></mat-datepicker-toggle>
                                                     <mat-datepicker aria-setsize="14px" #pickerDate></mat-datepicker>
 
@@ -138,7 +138,7 @@
                                             <div class="col-md-6 col-sm-6 col-xs-12 col-12">
                                                 <div class="mb-3">
                                                     <label for="exampleInputEmail1" class="form-label">Invoice  amount</label>
-                                                    <input type="number" class="form-control" id="amount" class="form-control" name="amount" formControlName="amount" placeholder="Invoice Amount">
+                                                    <input type="number" class="form-control" id="amount" class="form-control" name="amount" formControlName="amount" placeholder="Invoice Amount" autocomplete="off">
                                                     <div *ngIf="submitted && form.amount.errors" class='errorText'>
                                                         <div *ngIf="form.amount.errors.required">Invoice Amount is required</div>
 
@@ -148,7 +148,15 @@
                                             <div class="col-md-6 col-sm-6 col-xs-12 col-12">
                                                 <div class="mb-3">
                                                     <label for="exampleInputPassword1" class="form-label">Currency</label>
-                                                    <input type="text" class="form-control" id="currency" formControlName="currency" placeholder="Currency">
+                                                    <!-- <input type="text" class="form-control" id="currency" formControlName="currency" placeholder="Currency" autocomplete="off"> -->
+                                                    <select class="form-select" aria-label="Default select example"
+                                                            formControlName="currency" name="currency" autocomplete="off">
+                                                            <option value="">Select Currency</option>
+
+                                                            <option *ngFor="let currency of CurrencyData
+                                                        ">{{ currency }}
+                                                            </option>
+                                                        </select>
                                                     <div *ngIf="submitted && form.currency.errors" class='errorText'>
                                                         <div *ngIf="form.currency.errors.required"> Currency is required</div>
                                                     </div>
@@ -166,7 +174,7 @@
                                             <div class="col-md-6 col-sm-12 col-xs-12 col-12">
                                                 <div class="mb-3">
                                                     <label for="exampleInputPassword1" class="form-label">Incoterm</label>
-                                                    <input type="text" class="form-control" id="Incoterm" formControlName="incoterm" placeholder="Incoterm">
+                                                    <input type="text" class="form-control" id="Incoterm" formControlName="incoterm" placeholder="Incoterm" autocomplete="off">
                                                     <div *ngIf="submitted && form.incoterm.errors" class='errorText'>
                                                         <div *ngIf="form.incoterm.errors.required">Incoterm is required</div>
                                                     </div>
@@ -177,7 +185,7 @@
                                                     <label for="exampleInputEmail1" class="form-label">Branch</label>
                                                     <!-- <input type="text" class="form-control" id="Branch"
                                                         aria-describedby="emailHelp" formControlName="branch"> -->
-                                                    <ng-select [items]="LocationData" bindLabel="loc" bindValue="loc" placeholder="Select Branch" formControlName="location" name="location">
+                                                    <ng-select [items]="LocationData" bindLabel="loc" bindValue="loc" placeholder="Select Branch" formControlName="location" name="location" autocomplete="off">
                                                     </ng-select>
                                                     <div *ngIf="submitted && form.location.errors" class='errorText'>
                                                         <div *ngIf="form.location.errors.required">Branch is required</div>
@@ -195,7 +203,7 @@
                                                     <!-- <input class="form-select form-control" type="date"
                                                         placeholder="Start Date"
                                                         formControlName="lastDayShipment" /> -->
-                                                    <input class="form-control" matInput [matDatepicker]="pickerLastDay" placeholder="Choose a date" formControlName="lastDayShipment">
+                                                    <input class="form-control" matInput [matDatepicker]="pickerLastDay" placeholder="Choose a date" formControlName="lastDayShipment" autocomplete="off">
                                                     <mat-datepicker-toggle matSuffix [for]="pickerLastDay"></mat-datepicker-toggle>
                                                     <mat-datepicker #pickerLastDay></mat-datepicker>
                                                     <div *ngIf="submitted && form.lastDayShipment.errors" class='errorText'>
@@ -207,7 +215,7 @@
                                                 <div class="mb-3">
                                                     <label for="exampleInputPassword1" class="form-label">PC
                                                         reference number</label>
-                                                    <input type="number" id="pcRefNo" class="form-control" name="pcRefNo" formControlName="pcRefNo" placeholder="PC Reference No">
+                                                    <input type="number" id="pcRefNo" class="form-control" name="pcRefNo" formControlName="pcRefNo" placeholder="PC Reference No" autocomplete="off">
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-sm-6 col-xs-12 col-12">
@@ -216,7 +224,7 @@
                                                         date</label>
                                                     <!-- <input class="form-select form-control" type="date"
                                                         placeholder="Start Date" formControlName="dueDate" /> -->
-                                                    <input class="form-control" matInput [matDatepicker]="pickerDueDate" placeholder="Choose a date" formControlName="dueDate">
+                                                    <input class="form-control" matInput [matDatepicker]="pickerDueDate" placeholder="Choose a date" formControlName="dueDate" autocomplete="off">
                                                     <mat-datepicker-toggle matSuffix [for]="pickerDueDate"></mat-datepicker-toggle>
                                                     <mat-datepicker #pickerDueDate></mat-datepicker>
                                                 </div>
@@ -232,7 +240,7 @@
                                                             date of shipment</label>
                                                             <!-- <input class="form-select form-control" type="date"
                                                             formControlName="date" /> -->
-                                                            <span>   <input class="form-control" matInput [matDatepicker]="pickerShipmentDate" placeholder="Choose a date"  formControlName="date"> 
+                                                            <span>   <input class="form-control" matInput [matDatepicker]="pickerShipmentDate" placeholder="Choose a date"  formControlName="date" autocomplete="off"> 
                                                                <mat-datepicker-toggle matSuffix [for]="pickerShipmentDate"></mat-datepicker-toggle>
                                                             <mat-datepicker #pickerShipmentDate></mat-datepicker>  
                                                             </span>
@@ -243,7 +251,7 @@
                                                         <div class="mb-3">
                                                             <label for="exampleInputPassword1" class="form-label">Type</label>
 
-                                                            <select class="form-select" aria-label="Default select example" formControlName="type">
+                                                            <select class="form-select" aria-label="Default select example" formControlName="type" autocomplete="off">
                                                             <option value="">Select type</option>
                                                             <option value="Advance Payment">Advance Payment</option>
                                                             <option value="Letter of Credit">Letter of Credit
@@ -259,13 +267,21 @@
                                                     <div class="col-md-4 col-sm-4 col-xs-12 col-12">
                                                         <div class="mb-4">
                                                             <label for="exampleInputPassword1" class="form-label">Amount</label>
-                                                            <input class="form-select form-control" formControlName="amount" placeholder="Amount" />
+                                                            <input class="form-select form-control" formControlName="amount" placeholder="Amount" autocomplete="off" />
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 col-sm-4 col-xs-12 col-12">
                                                         <div class="mb-4">
                                                             <label for="exampleInputPassword1" class="form-label">Currency </label>
-                                                            <input class="form-select form-control" formControlName="description" placeholder="Currency" />
+                                                            <!-- <input class="form-select form-control" formControlName="description" placeholder="Currency" autocomplete="off" /> -->
+                                                            <select class="form-select" aria-label="Default select example"
+                                                            formControlName="description" name="currency" autocomplete="off">
+                                                            <option value="">Select Currency</option>
+
+                                                            <option *ngFor="let currency of CurrencyData
+                                                        ">{{ currency }}
+                                                            </option>
+                                                        </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 col-sm-4 col-xs-12 col-12">

@@ -28,7 +28,7 @@ import {
 
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AppConfig } from 'src/app/app.config';
+import { AppConfig } from '../../app.config';
 import * as XLSX from 'xlsx';
 import * as xlsx from 'xlsx';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -38,195 +38,8 @@ import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
 import { formatDate } from '@angular/common';
 import _ from 'lodash';
 import { filter } from 'rxjs-compat/operator/filter';
-import {BehaviorSubject, Observable} from "rxjs";
-
-class PipoDisplayListViewItem {
-  public pi_poNo: string;
-  public date: string;
-  public buyerName: string;
-  public location: string;
-  public commodity: string;
-  public sbno: string;
-  public sbdate: string;
-  public region: string;
-  public fobValue: number;
-  public portCode: string;
-  public ttDate: string;
-  public ttUSD: string;
-  public recDate: string;
-  public recUSD: string;
-  public commission: string;
-  public conversionDate: string;
-  public conversionRate: string;
-  public convertedAmount: string;
-  public firxNumber: string;
-  public invoiceValueUSD: string;
-  public exchRate: string;
-  public amount: string;
-  public discountAllowed: number;
-  public damagesUSD: number;
-  public goodsShortageUSD: number;
-  public creditNoteStatus: string;
-  public egmNO: string;
-  public egmDate: string;
-  public statusOfRodtep: string;
-  public rodtepAmount: string;
-  public escriptNote: string;
-  public docSubmissionInBank: string;
-  public statusOfBankReco: string;
-  public firxNumberSettledAgainst: string;
-  public balanceIfAny: string;
-  public totaldecutions: number;
-  public finalAmounts: number;
-
-  constructor(data: any) {
-    this.pi_poNo = data.pi_poNo ? data.pi_poNo : "";
-    this.date = data.date ? data.date : "";
-    this.buyerName = data.buyerName ? data.buyerName : "";
-    this.location = data.location ? data.location : "";
-    this.commodity = data.commodity ? data.commodity : "";
-    this.sbno = data.sbno ? data.sbno : "";
-    this.sbdate = data.sbdate ? data.sbdate : "";
-    this.region = data.region ? data.region : "";
-    this.fobValue = data.fobValue ? data.fobValue : "";
-    this.portCode = data.portCode ? data.portCode : "";
-    this.ttDate = data.ttDate ? data.ttDate : "";
-    this.ttUSD = data.ttUSD ? data.ttUSD : "";
-    this.recDate = data.recDate ? data.recDate : "";
-    this.recUSD = data.recUSD ? data.recUSD : "";
-    this.commission = data.commission ? data.commission : "";
-    this.conversionDate = data.conversionDate ? data.conversionDate : "";
-    this.conversionRate = data.conversionRate ? data.conversionRate : "";
-    this.convertedAmount = data.convertedAmount ? data.convertedAmount : "";
-    this.firxNumber = data.firxNumber ? data.firxNumber : "";
-    this.invoiceValueUSD = data.invoiceValueUSD ? data.invoiceValueUSD : "";
-    this.exchRate = data.exchRate ? data.exchRate : "";
-    this.amount = data.amount ? data.amount : "";
-    this.discountAllowed = data.discountAllowed ? data.discountAllowed : "";
-    this.damagesUSD = data.damagesUSD ? data.damagesUSD : "";
-    this.goodsShortageUSD = data.goodsShortageUSD ? data.goodsShortageUSD : "";
-    this.creditNoteStatus = data.creditNoteStatus ? data.creditNoteStatus : "";
-    this.egmNO = data.egmNO ? data.egmNO : "";
-    this.egmDate = data.egmDate ? data.egmDate : "";
-    this.statusOfRodtep = data.statusOfRodtep ? data.statusOfRodtep : "";
-    this.rodtepAmount = data.rodtepAmount ? data.rodtepAmount : "";
-    this.escriptNote = data.escriptNote ? data.escriptNote : "";
-    this.docSubmissionInBank = data.docSubmissionInBank ? data.docSubmissionInBank : "";
-    this.statusOfBankReco = data.statusOfBankReco ? data.statusOfBankReco : "";
-    this.firxNumberSettledAgainst = data.firxNumberSettledAgainst ? data.firxNumberSettledAgainst : "";
-    this.balanceIfAny = data.balanceIfAny ? data.balanceIfAny : "";
-    this.totaldecutions = this.discountAllowed + this.damagesUSD + this.goodsShortageUSD;
-    this.finalAmounts = this.fobValue - this.discountAllowed - this.damagesUSD - this.goodsShortageUSD;
-    console.log("this page called")
-  }
-}
-
-class PipoDisplayListView {
-  public pipolist: Array<PipoDisplayListViewItem> = [];
-  public pipolistSubsciber = new BehaviorSubject([]);
-
-  // getInvoices
-  constructor(data) {
-    for (let value of data) {
-      if (value['file'] == 'export') {
-      this.pipolist.push(new PipoDisplayListViewItem(value));
-      }
-    }
-    this.pipolistSubsciber.next(this.pipolist);
-
-    // this.getInvoices(this,0)
-  }
-
-  computeForexSBPipoMerge(irdata, sbdata, pipolist) {
-    let sbfinallist = [];
-    let finallist = [];
-    function find(list, key, check) {
-      for (let k = 0; k < list.length; k++) {
-        if(list[k][key] == check) {
-          return list[k];
-        }
-      }
-      return null;
-    }
-    function copyValues(source, dest, keys) {
-      for (let i in keys) {
-        source[keys[i]] = dest[keys[i]];
-      }
-      return source;
-    }
-    function forEachSbGetPipo() {
-      // adding fradvice data for each record.
-      for (let i = 0; i < irdata.length; i++) {
-        for (let j=0;j<irdata[i].sbNo.length; j++) {
-          let sb = {..._.cloneDeep(find(sbdata,'sbno', irdata[i].sbNo[j]))};
-          sb['firxNumber'] = irdata[i].billNo; // these are the field which needed in pipo summary page.
-          sb['ttDate'] = irdata[i].date;
-          sb['ttUSD'] = irdata[i].amount;
-          sb['recDate'] = irdata[i].recievedDate;
-          sb['conversionRate'] = irdata[i].exchangeRate;
-          sb['commision'] = irdata[i].commision;
-          sb['conversionDate'] = irdata[i].conversionDate;
-          sb['commission'] = irdata[i].commision;
-          let amount = irdata[i].amount.replace(/,/g, '');
-          let commision = irdata[i].commision.replace(/,/g, '');
-          sb['recUSD'] = amount - commision;
-          let exchangeRate = irdata[i].exchangeRate.replace(/,/g, '');
-          sb['convertedAmount'] = (sb['recUSD'] * exchangeRate).toFixed(2);
-          sbfinallist.push(sb);
-        }
-      }
-      // if any sb is missing in final list
-      for (let i = 0; i < sbdata.length; i++) {
-        if (!find(sbfinallist,'sbno', sbdata[i].sbno)) {
-          let sb = {..._.cloneDeep(sbdata[i])};
-          sbfinallist.push(sb);
-        }
-      }
-      // adding pipo duplicate for each sb no;
-      for (let i = 0; i < sbfinallist.length; i++) {
-        if (sbfinallist[i] && sbfinallist[i].pipo && sbfinallist[i].pipo.length){
-        for (let j=0;j<sbfinallist[i].pipo.length; j++) {
-          let pi = {..._.cloneDeep(find(pipolist,'pi_poNo', sbfinallist[i].pipo[j]))};
-          pi['sbno'] = sbfinallist[i].sbno;
-          pi['sbdate'] = sbfinallist[i].sbdate;
-          pi['portCode'] = sbfinallist[i].portCode;
-          pi['region'] = sbfinallist[i].countryOfFinaldestination;
-          pi['fobValue'] = sbfinallist[i].fobValue;
-          pi = copyValues(pi, sbfinallist[i], ['firxNumber', 'ttDate', 'ttUSD', 'recDate', 'conversionRate', 'commision', 'conversionDate', 'commission', 'recUSD', 'convertedAmount',]);
-          finallist.push(pi);
-        }
-      }
-
-      // if any PI is missing in final list
-      for (let i = 0; i < pipolist.length; i++) {
-        if (!find(finallist,'pi_poNo', pipolist[i].pi_poNo)) {
-          let pi = {..._.cloneDeep(pipolist[i])};
-          finallist.push(pi);
-        }
-      }
-      }
-
-       // if any PI is missing in final list
-      for (let i = 0; i < pipolist.length; i++) {
-          if (!find(finallist,'pi_poNo', pipolist[i].pi_poNo)) {
-          let pi = {..._.cloneDeep(pipolist[i])};
-          	finallist.push(pi);
-          }
-      }
-    }
-    forEachSbGetPipo();
-    this.pipolist = [];
-    for (let i in finallist) {
-      this.pipolist.push(new PipoDisplayListViewItem(finallist[i]));
-    }
-    this.pipolistSubsciber.next(this.pipolist);
-  }
-
-  get pipo$(): Observable<Array<PipoDisplayListViewItem>>
-  {
-    return this.pipolistSubsciber.asObservable();
-  }
-}
+import { BehaviorSubject, Observable } from 'rxjs';
+import { PipoDisplayListViewItem, PipoDisplayListView } from '../../../model/pipo.model';
 @Component({
   selector: 'app-pipo-doc-export',
   templateUrl: './pipo-doc-export.component.html',
@@ -236,83 +49,46 @@ class PipoDisplayListView {
   ],
 })
 export class PipoDocExportComponent implements OnInit, AfterViewInit {
-  // treeOptions: Options<Report> = {
-  //   capitalisedHeader: true,
-  //   customColumnOrder: [
-  //     'owner', 'name', 'backup', 'protected'
-  //   ]
-  // };
-  // arrayOfNodesTree: Node<Task>[] = [
-  //   {
-  //     value: {
-  //       name: 'Tasks for Sprint 2',
-  //       completed: false,
-  //       owner: 'Erika',
-  //     },
-  //     children: [
-  //       {
-  //         value: {
-  //           name: 'Fix bug #567',
-  //           completed: false,
-  //           owner: 'Marco'
-  //         },
-  //         children: []
-  //       },
-  //       {
-  //         value: {
-  //           name: 'Speak with clients',
-  //           completed: true,
-  //           owner: 'James'
-  //         },
-  //         children: []
-  //       }
-  //     ]
-  //   }
 
-  // ]
-
-  // logNode(node: Node<Report>) {
-  //   console.log(node);
-  // }
-  bsModalRef: BsModalRef;
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
+  bsModalRef: BsModalRef;
   @ViewChild('piposummery', { static: false }) piposummery: ElementRef;
   @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
-  public type: string = 'directive';
-  public item1: Array<PipoDisplayListViewItem> = [];
+  public pipoArrayList: Array<PipoDisplayListViewItem> = [];
   public pipoDisplayListData: PipoDisplayListView;
-  public item5 = [];
-  public item3: any;
-  public item18: any;
-  public ebrcdata: any;
-  public airwayData: any;
-  public billOfExchangeData: any;
-  public blcopyRef: any;
-  public commercialData: any;
-  public destructionData: any;
+  public pipoData: PipoDisplayListViewItem;
+  public config: DropzoneConfigInterface;
+  public config1: DropzoneConfigInterface;
+  piPoForm = new FormGroup({
+    pi_poNo: new FormControl('', [
+      Validators.required,
+      Validators.minLength(4),
+    ]),
+    buyerName: new FormControl('', Validators.required),
+    currency: new FormControl('', Validators.required),
+    amount: new FormControl('', Validators.required),
+    incoterm: new FormControl('', Validators.required),
+    lastDayShipment: new FormControl('', Validators.required),
+    paymentTerm: new FormArray([this.initCourse()], Validators.required),
+    pcRefNo: new FormControl('', Validators.required),
+    date: new FormControl('', Validators.required),
+    dueDate: new FormControl('', Validators.required),
+    location: new FormControl('', Validators.required),
+  });
+
+
+  public type: string = 'directive';
   public otherDocData: any;
-  public packingListData: any;
   public item19: any;
-  public item20: any;
   public item23: any;
   public item;
   public item2;
-  public item7 = [];
-  public item8: any;
-  public item9 = [];
   public item10: any;
-  public iradvicedata: any;
-  public item11 = [];
   public item12: any;
   public item13 = [];
-  public item14: any;
-  public item15 = [];
-  public item16: any;
-  public item17 = [];
   public item21 = [];
-  public item22 = [];
   public user;
   public selectedRow;
   public showInvoice = false;
@@ -327,7 +103,6 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   public allTransactions: any = [];
   public optionsVisibility: any = [];
   public damagesUSD: any;
-  public shippingBillArray: any = [];
   public selectedrow;
   public currentindex;
 
@@ -359,31 +134,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   nameSearch2: string = '';
   startDate: any = '';
   endDate: any = '';
-
-  public config: DropzoneConfigInterface;
-  public config1: DropzoneConfigInterface;
-
   authToken: string;
   headers: any;
-
-  piPoForm = new FormGroup({
-    pi_poNo: new FormControl('', [
-      Validators.required,
-      Validators.minLength(4),
-    ]),
-    buyerName: new FormControl('', Validators.required),
-    currency: new FormControl('', Validators.required),
-    amount: new FormControl('', Validators.required),
-    incoterm: new FormControl('', Validators.required),
-    lastDayShipment: new FormControl('', Validators.required),
-    paymentTerm: new FormArray([this.initCourse()], Validators.required),
-    pcRefNo: new FormControl('', Validators.required),
-    date: new FormControl('', Validators.required),
-    dueDate: new FormControl('', Validators.required),
-    location: new FormControl('', Validators.required),
-  });
-  pipoData: any;
-  payTerm: any;
+  payTerm = [];
   benneDetail: any;
   documentType: any;
   beneValue: any;
@@ -442,10 +195,11 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     public appconfig: AppConfig,
     private changeDetectorRef: ChangeDetectorRef,
     private modalService1: BsModalService,
-    private sharedData: SharedDataService
+
+    private sharedData: SharedDataService,
+    private pipoDataService: PipoDataService,
   ) {
     this.api_base = appconfig.apiUrl;
-    console.log(this.api_base);
     this.loadFromLocalStorage();
     console.log(this.authToken);
     this.headers = {
@@ -455,8 +209,6 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     console.log(this.jstoday);
 
     if (isPlatformBrowser(this.platformId)) {
-      console.log('asdkhsajvdsug');
-
       this.config1 = {
         url: `${this.api_base}/member/uploadImage`,
         method: `POST`,
@@ -474,18 +226,6 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       };
     }
   }
-
-  // pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-  // public date1: Date = new Date("2000-01-01");
-  // public date2: Date = new Date();
-  // changeFirstInput(e){
-  //   this.date1 = e.target.value;
-  //   console.log(this.obj.filter(data => new Date(data.date.replace(this.pattern,'$3-$2-$1')) >= new Date(this.date1) && new Date(data.date.replace(this.pattern,'$3-$2-$1')) <= new Date(this.date2)  ));;
-  // }
-  // changeSecondInput(e){
-  //  this.date2 = e.target.value;
-  //  console.log(this.obj.filter(data => new Date(data.date.replace(this.pattern,'$3-$2-$1')) >= new Date(this.date1) && new Date(data.date.replace(this.pattern,'$3-$2-$1')) <= new Date(this.date2) ));;
-  // }
   openModalWithComponent(a) {
     this.invoiceArr = this.pipoData[a];
     console.log('pipoDataaaaaaa', this.pipoData[a]);
@@ -519,75 +259,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
-
-    // this code by nandha - manualy called start
-    if(this.id)
-    {
-       this.documentService.getPipoByPipoNo(this.id).subscribe(
-            (data) => {
-              let index = this.route.snapshot.params['index'];
-              console.log('king123', index);
-              console.log(data);
-              console.log("data['data'][0]",data['data'][0]);
-              this.pipoData = data['data'][0]
-              this.getInvoices(data['data'][0], index);
-            },
-            (error) => {
-              console.log('error');
-            }
-          );
-    }
-    // this code by nandha - manualy called end
     this.currentindex = this.route.snapshot.params['index'];
+    var pipo_id = this.route.snapshot.params['pipo_id'];
     console.log('index of detail page', this.currentindex);
-    //shipping bill
-    this.documentService.getMaster(1).subscribe(
-      (res: any) => {
-        console.log(res, 'SHIPPING DATA'), (this.item20 = res.data);
-        console.log('shipping bill for detail', this.item20);
-      },
-      (err) => console.log(err)
-    );
-
-    //third party API
-    this.documentService.getThird().subscribe(
-      (res: any) => {
-        console.log('HEre Response', res);
-        this.item16 = res.data;
-        for (let value of this.item16) {
-            if (value['file'] == 'export') {
-              console.log('avvvvvvvvvv');
-              this.item17.push(value);
-              console.log('Tri Party', this.item17);
-          }
-        }
-      },
-      (err) => console.log(err)
-    );
-
-    //opion Api
-    this.documentService.getOpinionReport().subscribe(
-      (res: any) => {
-        console.log('HEre ResponseopionReport', res);
-        this.item14 = res.data;
-        for (let value of this.item14) {
-          for (let value1 of value.pipo) {
-            const newVal = { ...value };
-            newVal['pipo1'] = value1;
-            this.item15.push(newVal);
-          }
-        }
-      },
-      (err) => console.log(err)
-    );
-
-    //iradvice
-    this.documentService.getIrAdvice('').subscribe((res: any) => {
-      console.log('HEre Response iradvice', res);
-      this.iradvicedata = res.data;
-      console.log('HEre Response iradvicedata', res);
-    });
-
     //Agreement Api
     this.documentService.getMasterService().subscribe(
       (res: any) => {
@@ -595,310 +269,48 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         this.item12 = res.data;
         console.log('second log agreement', this.item12);
         for (let value of this.item12) {
-          for (let value1 of value.pipo) {
-            const newVal = { ...value };
-            newVal['pipo1'] = value1;
-            this.item13.push(newVal);
+          if (value['file'] == 'export') {
+
+            this.item13.push(value);
+            // console.log('awwww', this.item11);
           }
         }
       },
       (err) => console.log(err)
     );
-
-    //lc copy
-    this.documentService.getLetterLC().subscribe(
-      (res: any) => {
-        console.log('HEre Response23434355', res);
-        this.item10 = res.data;
-        for (let value of this.item10) {
-          if (value['file'] == 'export') {
-          console.log('avvvvvvvvvv');
-          this.item11.push(value);
-          console.log("awwww", this.item11)
-          // for(let value1 of this.item2){
-          //   const newVal = { ...this.item2 };
-          //   newVal['pipo1'] = value1
-          //   this.item1.push(newVal)
-
-        }
-
-}
-        // for (let value of this.item10) {
-        //   for (let value1 of value.pipo) {
-        //     const newVal = { ...value };
-        //     newVal['pipo1'] = value1;
-        //     this.item11.push(newVal);
-        //   }
-        // }
-      },
-      (err) => console.log(err)
-    );
-    //blcopyref api
-    this.documentService.getBlcopyref().subscribe((res: any) => {
-      console.log('getBlcopyref copy responce', res);
-      this.blcopyRef = res.data;
-      console.log('blcopyref copy response2', this.blcopyRef);
-    });
-
-    // EBRC api
-    this.documentService.getEbrc().subscribe((res: any) => {
-      console.log('EBRC copy responce', res);
-      this.ebrcdata = res.data;
-      console.log('EBRC copy response2', this.ebrcdata);
-    });
-
-    // Airway/blcopy api
-    this.documentService.getAirwayBlcopy().subscribe((res: any) => {
-      console.log('Airway/Blcopy', res);
-      this.airwayData = res.data;
-      console.log('Airway/Blcopy response', this.airwayData);
-    });
-
-    // bill Of Exchange api
-    this.documentService.getBillExchange().subscribe((res: any) => {
-      console.log('billOfExchange', res);
-      this.billOfExchangeData = res.data;
-      console.log('billOfExchange response', this.billOfExchangeData);
-    });
-
-    //swift Api
-    this.documentService.getSwift().subscribe((res: any) => {
-      console.log('swift copy responce', res);
-      this.item18 = res.data;
-      console.log('swift copy response2', this.item18);
-    });
-
-    // commercial Invoice Api
-    this.documentService.getCommercial().subscribe((res: any) => {
-      console.log('Commercial responce', res);
-      this.commercialData = res.data;
-      console.log('Commercial response2', this.commercialData);
-    });
-
-    // destruction Invoice Api
-    this.documentService.getDestruction().subscribe((res: any) => {
-      console.log('Destruction responce', res);
-      this.destructionData = res.data;
-      console.log('Destruction response2', this.destructionData);
-    });
-
-    // other Documnet Api
-    this.documentService.getPackingList().subscribe((res: any) => {
-      console.log('OtherDoc responce', res);
-      this.packingListData = res.data;
-      console.log('PackingList', this.packingListData);
-    });
-
-    this.userService
-      .getManyPipo(1)
-      .subscribe((res: any) => [
-        console.log('Many Pipo Data ************', res.data),
-      ]);
-
-    // credit note Api
-    this.documentService.getCredit().subscribe(
-      (res: any) => {
-        console.log('HEre Responsesssssssss', res);
-        this.item3 = res.data;
-        this.item6 = this.item3.data;
-        console.log('credit data', this.item3);
-
-        for (let value of this.item3) {
-          if (value['file'] == 'export') {
-            console.log('avvvvvvvvvv');
-            this.item5.push(value);
-            console.log('awwww', this.item5);
-          }
-        }
-      },
-      (err) => console.log(err)
-    );
-    //debit note Api
-    this.documentService.getDebit().subscribe(
-      (res: any) => {
-        console.log('HEre Response Debit Note', res);
-        this.item2 = res.data;
-        console.log('creditNotApi', this.item2);
-
-        for (let value of this.item2) {
-          for (let value1 of value.pipo) {
-            const newVal = { ...value };
-            newVal['pipo1'] = value1;
-            this.item7.push(newVal);
-          }
-        }
-      },
-      (err) => console.log(err)
-    );
-    //Insurance Api
-    this.documentService.getInsurance().subscribe(
-      (res: any) => {
-        console.log('HEre Response', res);
-        this.item8 = res.data;
-        for (let value of this.item8) {
-          if (value['file'] == 'export') {
-          console.log('avvvvvvvvvv');
-          this.item9.push(value);
-          console.log("awwww", this.item9)
-          // for(let value1 of this.item2){
-          //   const newVal = { ...this.item2 };
-          //   newVal['pipo1'] = value1
-          //   this.item1.push(newVal)
-
-        }
-
-}
-        // for (let value of this.item8) {
-        //   for (let value1 of value.pipo) {
-        //     const newVal = { ...value };
-        //     newVal['pipo1'] = value1;
-        //     this.item9.push(newVal);
-        //   }
-        // }
-      },
-      (err) => console.log(err)
-    );
-    console.log('sjsj');
-    console.log(this.id);
     if (this.id) {
-
       this.documentService.getPipo().subscribe(
         (res: any) => {
           console.log('HEre ResponseAmani####', res);
           this.item = res.data;
-          this.pipoDisplayListData = new PipoDisplayListView(res.data);
-          this.pipoDisplayListData.pipo$.subscribe((data) => {
-              this.item1 = data;
-            });
-          for (let value of res.data) {
-            if (value['file'] == 'export') {
-              this.item22.push(value);
+          this.pipoDisplayListData = this.pipoDataService.setPipoData(res.data, 'export');
+          this.pipoDataService.pipo$.subscribe((data) => {
+            // this.pipoArrayList = data;
+            for (let value of data) {
+              // if (value['file'] == 'export') {
+                this.pipoArrayList.push(value);
+              // }
             }
-          }
-          console.log('shailendra Jain #####################', this.item22);
-          // this.getMaster();
-          this.pipoDisplayListData.computeForexSBPipoMerge(this.iradvicedata, this.item20, this.item1);
-          // this.getFirexValue();
-          this.documentService.getPipoByPipoNo(this.id).subscribe(
-            (data) => {
-              let index = this.route.snapshot.params['index'];
-              console.log('king123', index);
-              console.log(data);
-              console.log(data['data'][0]);
-              this.getInvoices(data['data'][0], index);
-            },
-            (error) => {
-              console.log('error');
-            }
-          );
+            // console.log('shailendra Jain #####################', this.item22);
+          });
+          this.getSinglePipo(pipo_id, 0);
         },
         (err) => console.log(err, '**********')
       );
-
-      // this.documentService.getPipo().subscribe(
-      //   (res: any) => {
-      //     console.log('HEre ResponseAmani####', res);
-      //     this.item = res.data;
-
-      //     for (let value of this.item) {
-
-      //       if (value['file'] == 'export') {
-      //         console.log('avvvvvvvvvv');
-      //         this.item22.push(value);
-      //     }
-      //   }
-      // }
-      // );
-      // lccopy api
-
-      // this.documentService.getPipoByPipoNo(this.id).subscribe(
-      //     (data) => {
-      //       let index = this.route.snapshot.params['index'];
-      //       console.log('king123');
-      //       console.log(data);
-      //       console.log(data['data'][0]);
-      //       this.getInvoices(data['data'][0], index);
-      //     },
-      //     (error) => {
-      //       console.log('error');
-      //     }
-      //   );
-      // this.documentService.getMaster1().subscribe(
-      //   (data) => {
-      //     console.log("Fresh Data" ,data);
-      //   },
-      //   (error) => {}
-      // );
     } else {
-      console.log('docmachinnnnnnnnnnnn');
-
-      console.log(88888888888888);
-      // this.route.params.subscribe(params => {
-      //   this.file = this.route.snapshot.params['id'];
-      //   this.documentService.getPipo().subscribe(
-      //     (res: any) => {
-      //       console.log("HEre Response", res), (this.item1 = res.data);
-      //     },
-      //     (err) => console.log(err)
-      //   );
-
-      //   this.showInvoice = false;
-      //   console.log("hello")
-      // });
       this.documentService.getPipo().subscribe(
         (res: any) => {
           console.log('HEre Response pipo data ########', res);
           this.item = res.data;
-          this.pipoDisplayListData = new PipoDisplayListView(res.data);
-          this.pipoDisplayListData.pipo$.subscribe((data) => { 
-            this.item1 = data;
-          });
-          for (let value of res.data) {
-            if (value['file'] == 'export') {
-              this.item22.push(value);
+          this.pipoDisplayListData = this.pipoDataService.setPipoData(res.data, 'export');
+          this.pipoDataService.pipo$.subscribe((data) => {
+            for (let value of data) {
+                this.pipoArrayList.push(value);
             }
-          }
-          console.log('line no.660', this.item1);
-          console.log('line no. 661', this.item22);
-          this.pipoDisplayListData.computeForexSBPipoMerge(this.iradvicedata, this.item20, this.item1);
-          // this.getFirexValue();
+          });
         },
         (err) => console.log(err)
       );
-
-      // let arrayMain = []
-      //     this.documentService.getMaster(1).subscribe(
-      //       (res: any) => {
-      //         console.log(res), (this.item4 = res.data);
-      //         console.log("hello the")
-      //         for (let value1 of this.item1) {
-      //           for (let value2 of this.item4) {
-      //             for (let a of value2.pipo) {
-      //               if (a == value1.pi_poNo) {
-      //                 const newVal = { ...value1 };
-      //                 newVal['sbno'] = value2.sbno
-      //                 newVal['sbdate'] = value2.sbdate
-      //                 newVal['portCode'] = value2.portCode
-      //                 newVal['region'] = value2.countryOfFinaldestination
-      //                 newVal['fobValue'] = value2.fobValue
-
-      //                 // console.log("Hello Ranjit", a);
-      //                 // value1.sbno = value2.sbno
-      //                 // value1.sbdate = value2.sbdate
-      //                 arrayMain.push(newVal)
-      //                 // console.log("hello Sj", value2);
-      //               }
-      //             }
-      //           }
-      //         }
-      //         console.log("Hello There", arrayMain);
-      //         if(arrayMain.length>0){
-      //           this.item1 = arrayMain
-      //         }
-
-      //       },
-      //       (err) => console.log(err)
-      //     );
     }
     this.userService.getBuyer(1).subscribe(
       (res: any) => {
@@ -923,22 +335,27 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         console.log('error');
       }
     );
-
-    //redirect code trail
-    //  let rows = {
-    //     "pi_poNo":''
-    //   }
-
-    // let index = this.route.snapshot.params['index'];
-    // if(this.id){
-    // console.log("this is id ",this.id,this.pipoNo);
-
-    //   this.showInvoice = true;
-    //   this.getInvoices(selectedRowValues, this.i);
-    // }
-    // rows.pi_poNo = this.id
-    //rediect code trail demo above
   }
+
+  getSinglePipo(id, i) {
+    this.showInvoice = true;
+    this.selectedrow = data;
+    this.currentindex = i;
+    this.documentService.getPipoByPipoNo(id).subscribe(
+      (data) => {
+        this.pipoDataService.setSinglePipoData(data['data'][0]);
+        this.pipoDataService.pipoSingle$.subscribe((selectedPipo) => {
+          this.pipoData = selectedPipo;
+          console.log('calling get invoices', this.pipoData);
+          this.getInvoices(selectedPipo, i);
+        });
+      },
+      (error) => {
+        console.log('error');
+      }
+    );
+  }
+
   clickBuyer(value) {
     let commoArray = [];
     console.log('hhddh');
@@ -946,261 +363,6 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   }
   clickloca(value) {
     this.Locaval = value;
-  }
-
-  getMaster() {
-    let arrayMain = [];
-    // this.documentService.getMaster(1).subscribe(
-    //   (res: any) => {
-    //     console.log(res), (this.item4 = res.data);
-    //     console.log("hello the********************",this.item4)
-    //     // for (let value1 of this.item1) {
-    //     //   for (let value2 of this.item4) {
-    //     //     for (let a of value2.pipo) {
-    //     //       if (a == value1.pi_poNo) {
-
-    //     //         const newVal = { ...value1 };
-    //     //         newVal['sbno'] = value2.sbno
-    //     //         newVal['sbdate'] = value2.sbdate
-    //     //         newVal['portCode'] = value2.portCode
-    //     //         newVal['region'] = value2.countryOfFinaldestination
-    //     //         newVal['fobValue'] = value2.fobValue
-
-    //     //         // console.log("Hello Ranjit", a);
-    //     //         // value1.sbno = value2.sbno
-    //     //         // value1.sbdate = value2.sbdate
-    //     //         arrayMain.push(newVal)
-    //     //         // console.log("hello Sj", value2);
-    //     //       }
-    //     //     }
-    //     //   }
-    //     // }
-
-    //     //****************start shipping bill and pipo marging code**********/
-    //   let pipoindex = 0;
-    //   let filtershippingdata = [];
-    //   let completedpipo = [];
-    //   // let pipoindex = 0;
-    //   let filterForexData = [];
-    //   // let completedpipo1 = [];
-
-    //   for (let pipo of this.item1) { // item1 have pipo details
-    //     let currentpipo = this.item1[pipoindex];
-    //     console.log('Line no. 802', currentpipo);
-    //     this.item1[pipoindex].shippingdata = [];
-    //     for (let shippingdata of this.item20) {
-    //       // item20 have shipping bill details
-    //       if (pipo.pi_poNo == shippingdata.pipo[0]) {
-    //         const newVal = { ...pipo };
-    //         console.log('Line no. 807', newVal);
-    //         newVal['sbno'] = shippingdata.sbno; // these are the field which needed in pipo summary page.
-    //         newVal['sbdate'] = shippingdata.sbdate;
-    //         newVal['portCode'] = shippingdata.portCode;
-    //         newVal['region'] = shippingdata.countryOfFinaldestination;
-    //         newVal['fobValue'] = shippingdata.fobValue;
-    //         console.log('Line no 814', newVal);
-    //         filtershippingdata.push(newVal);
-    //         console.log('Line no. 816', filtershippingdata);
-    //         console.log('Line no. 816', this.item1[pipoindex]);
-    //         if (completedpipo.indexOf(pipoindex) == -1) {
-    //           completedpipo.push(pipoindex);
-    //         }
-    //         console.log('line no. 773 completedpipo',completedpipo)
-    //         console.log('cheching shipping data', currentpipo);
-    //       }
-    //     }
-    //     pipoindex = pipoindex + 1;
-    //   }
-    //   console.log('filtershiping data', filtershippingdata);
-    //   console.log('completed pipo data', completedpipo);
-
-    //   for (let i = completedpipo.length - 1; i >= 0; i--) {
-    //     this.item1.splice(completedpipo[i], 1);
-    //   }
-    //   for (let pipo of filtershippingdata) {
-    //     console.log('data of pipo', pipo);
-    //     this.item1.push(pipo);
-    //   }
-    //   console.log(
-    //     '****************** line no. 850 with sb details ',
-    //     this.item1
-    //   );
-    //   //****************end shipping bill and pipo marging code*******************/
-    //   console.log('Hello There', arrayMain);
-    //   if (arrayMain.length > 0) {
-    //     // this.item1 = arrayMain
-    //     // this.item1.sort((a:any,b:any)=>a.pi_poNo-b.pi_poNo);
-    //   }
-
-    //   //     },
-    //   //     (err) => console.log(err)
-    //   //   );
-
-    //   // *************** Start of Forex advice ****************
-    //   for (let pipo of this.item1) {
-    //     let currentpipo = this.item1[pipoindex];
-    //     // this.item1[pipoindex].firxNumber = []
-    //     for (let firxNumber of this.iradvicedata) { // iradvicedata have forex data
-
-    //       if (pipo.pi_poNo == firxNumber.pipo[0]) {
-    //         const newVal = { ...pipo };
-    //         newVal['firxNumber'] = firxNumber.billNo; // these are the field which needed in pipo summary page.
-    //         newVal['ttDate'] = firxNumber.date;
-    //         newVal['ttUSD'] = firxNumber.amount;
-    //         newVal['recDate'] = firxNumber.recievedDate;
-    //         newVal['conversionRate'] = firxNumber.exchangeRate;
-    //         newVal['commision'] = firxNumber.commision;
-    //         newVal['conversionDate'] = firxNumber.conversionDate;
-    //         newVal['commission'] = firxNumber.commision;
-    //         let amount = firxNumber.amount.replace(/,/g, '');
-    //         let commision = firxNumber.commision.replace(/,/g, '');
-    //         let recUsd: number = amount - commision;
-    //         newVal['recUSD'] = recUsd;
-    //         let exchangeRate = firxNumber.exchangeRate.replace(/,/g, '');
-    //         newVal['convertedAmount'] = (recUsd * exchangeRate).toFixed(2);
-
-    //         filterForexData.push(newVal);
-
-    //         console.log('filterForexData', filterForexData);
-    //         if (completedpipo.indexOf(pipoindex) == -1) {
-    //           completedpipo.push(pipoindex);
-    //         }
-    //         console.log('cheching ForexAdvice data', currentpipo);
-    //       }
-    //     }
-    //     pipoindex = pipoindex + 1;
-    //   }
-    //   console.log('filter Firx adivce data', filterForexData);
-    //   console.log('completed pipo data', completedpipo);
-
-    //   for (let i = completedpipo.length - 1; i >= 0; i--) {
-    //     this.item1.splice(completedpipo[i], 1);
-    //   }
-
-    //   for (let pipo of filterForexData) {
-    //     this.item1.push(pipo);
-    //   }
-    //   console.log(
-    //     '****************** line no. 850 with firx details',
-    //     this.item1
-    //   );
-  }
-
-  getFirexValue() {
-    let pipoindex = 0;
-    let filtershippingdata = [];
-    let completedpipo = [];
-    // let pipoindex = 0;
-    let filterForexData = [];
-    // let completedpipo1 = [];
-    for (let shippingdata of this.item20) {
-      // iradvicedata have pipo details
-      let currentpipo = this.item20[pipoindex];
-      console.log('Line no. 866', currentpipo);
-      console.log('line no. 867', shippingdata.sbno);
-      // this.item1[pipoindex].shippingdata = [];
-      for (let ir of this.iradvicedata) {
-        console.log('line no. 870', ir.sbNo[0]);
-        // item20 have shipping bill details
-        if (ir.sbNo[0] == shippingdata.sbno) {
-          const newVal = { ...shippingdata };
-          console.log('Line no. 872', newVal);
-
-          newVal['firxNumber'] = ir.billNo; // these are the field which needed in pipo summary page.
-          newVal['ttDate'] = ir.date;
-          newVal['ttUSD'] = ir.amount;
-          newVal['recDate'] = ir.recievedDate;
-          newVal['conversionRate'] = ir.exchangeRate;
-          newVal['commision'] = ir.commision;
-          newVal['conversionDate'] = ir.conversionDate;
-          newVal['commission'] = ir.commision;
-          let amount = ir.amount.replace(/,/g, '');
-          let commision = ir.commision.replace(/,/g, '');
-          let recUsd: number = amount - commision;
-          newVal['recUSD'] = recUsd;
-          let exchangeRate = ir.exchangeRate.replace(/,/g, '');
-          newVal['convertedAmount'] = (recUsd * exchangeRate).toFixed(2);
-          console.log('Line no 878', newVal);
-          filtershippingdata.push(newVal);
-          console.log('Line no. 880', filtershippingdata);
-          console.log('Line no. 881', this.item20[pipoindex]);
-          if (completedpipo.indexOf(pipoindex) == -1) {
-            completedpipo.push(pipoindex);
-          }
-          console.log('line no. 885 completedpipo', completedpipo);
-          console.log('checking shipping data', currentpipo);
-        }
-      }
-      pipoindex = pipoindex + 1;
-    }
-    console.log('filtershiping data', filtershippingdata);
-    console.log('completed pipo data', completedpipo);
-
-    for (let i = completedpipo.length - 1; i >= 0; i--) {
-      this.item20.splice(completedpipo[i], 1);
-    }
-    for (let sb of filtershippingdata) {
-      console.log('data of pipo', sb);
-      this.item20.push(sb);
-    }
-    console.log(
-      '****************** line no. 902 with sb details ',
-      this.item20
-    );
-
-    for (let pipo of this.item1) {
-      let currentpipo = this.item1[pipoindex];
-      // this.item1[pipoindex].firxNumber = []
-      for (let sb of this.item20) { // iradvicedata have forex data
-
-        if (pipo.pi_poNo == sb.pipo[0]) {
-          const newVal = { ...pipo };
-          console.log("line no923", newVal)
-          newVal['firxNumber'] = sb.firxNumber; // these are the field which needed in pipo summary page.
-          newVal['ttDate'] = sb.ttDate;
-          newVal['ttUSD'] = sb.ttUSD;
-          newVal['recDate'] = sb.recDate;
-          newVal['conversionRate'] = sb.conversionRate;
-          newVal['commision'] = sb.commision;
-          newVal['conversionDate'] = sb.conversionDate;
-          newVal['commission'] = sb.commision;
-          newVal['sbno'] = sb.sbno; // these are the field which needed in pipo summary page.
-          newVal['sbdate'] = sb.sbdate;
-          newVal['portCode'] = sb.portCode;
-          newVal['region'] = sb.countryOfFinaldestination;
-          newVal['fobValue'] = sb.fobValue;
-    //       let amount = firxNumber.amount.replace(/,/g, '');
-    //       let commision = firxNumber.commision.replace(/,/g, '');
-    //       let recUsd: number = amount - commision;
-          newVal['recUSD'] = sb.recUSD;
-    //       let exchangeRate = firxNumber.exchangeRate.replace(/,/g, '');
-          newVal['convertedAmount'] = sb.convertedAmount;
-            console.log("line no 943", newVal)
-          filterForexData.push(newVal);
-
-          console.log('filterForexData', filterForexData);
-          if (completedpipo.indexOf(pipoindex) == -1) {
-            completedpipo.push(pipoindex);
-          }
-          console.log('cheching ForexAdvice data', currentpipo);
-        }
-      }
-      pipoindex = pipoindex + 1;
-    }
-    console.log('filter Firx adivce data', filterForexData);
-    console.log('completed pipo data', completedpipo);
-
-    for (let i = completedpipo.length - 1; i >= 0; i--) {
-      this.item1.splice(completedpipo[i], 1);
-    }
-
-    for (let pipo of filterForexData) {
-      this.item1.push(pipo);
-    }
-    console.log(
-      '****************** line no. 850 with firx details',
-      this.item1
-    );
   }
 
   fireEvent() {
@@ -1248,6 +410,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         (err) => console.log(err)
       );
   }
+
   public selectedshippingdata;
   toggleClick5(a, shippingData) {
     this.selectedshippingdata = shippingData;
@@ -1257,7 +420,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.toggle2 = false;
     this.toggle3 = false;
     this.toggle6 = false;
-    console.log('*****************', this.item20);
+    // console.log('*****************', this.item20);
     console.log('thihfdfsdfgdsfkjgsf', this.pipoData);
 
     let currentpipo = this.route.snapshot.params['id'];
@@ -1293,7 +456,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.toggle3 = false;
     this.toggle7 = false;
 
-    console.log('*****************', this.iradvicedata);
+    // console.log('*****************', this.iradvicedata);
     console.log('thihfdfsdfgdsfkjgsf', this.pipoData);
 
     let currentpipo = this.route.snapshot.params['id'];
@@ -1461,44 +624,23 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getInvoices(selectedRowValues, i) {
-    console.log(selectedRowValues.pi_poNo);
+  getInvoices(selectedPipo, i) {
+    console.log(selectedPipo.pi_poNo);
     this.showInvoice = true;
     this.router.navigate([
-      'home/pipoDocExport',
+      'home/pipo-export',
       {
-        id: selectedRowValues.pi_poNo,
+        id: selectedPipo.pi_poNo,
         page: 'details',
         index: i,
+        pipo_id: selectedPipo._id,
       },
     ]);
-    let arrayMain = [];
-    for (let value2 of this.item20) {
-      for (let a of value2.pipo) {
-        if (a == selectedRowValues.pi_poNo) {
-          // console.log("Hello Ranjit", a);
-          // value1.sbno = value2.sbno
-          // value1.sbdate = value2.sbdate
-          arrayMain.push(value2);
-          // console.log("hello Sj", value2);
-        }
-      }
-    }
-    this.shippingBillArray = arrayMain;
-    console.log('88888888888888888888888', this.shippingBillArray);
-    console.log('SELECTED', selectedRowValues);
-    console.log('INDEX', i);
-    console.log(selectedRowValues.doc, 'hiiiiii');
-    this.pipoData = selectedRowValues;
-    console.log(this.pipoData, 'helooooooooo');
-
     this.payTerm = this.pipoData.paymentTerm;
-    console.log(this.pipoData);
-    console.log(this.pipoData.paymentTerm);
     this.documentType = this.pipoData.document;
     this.lastIndex = i;
-    this.pipoNo = selectedRowValues.pi_poNo;
-    this.beneValue = this.pipoData.benneName;
+    this.pipoNo = selectedPipo.pi_poNo;
+    this.beneValue = this.pipoData.buyerName;
     this.docTog = false;
     this.buttonToggle = false;
     this.buttonToggle1 = false;
@@ -1506,19 +648,19 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.letterToggle = false;
     this.uploadIsurance = false;
     if (this.pipoData.document == 'PO') {
-      this.pipourl1 = selectedRowValues.doc1;
+      this.pipourl1 = selectedPipo.doc1;
     } else if (this.pipoData.document == 'PI') {
-      this.pipourl1 = selectedRowValues.doc;
+      this.pipourl1 = selectedPipo.doc;
     }
 
-    this.file1 = selectedRowValues.file;
-    this.id = selectedRowValues._id;
+    this.file1 = selectedPipo.file;
+    this.id = selectedPipo._id;
 
-    //this.docu = selectedRowValues.doc;
+    //this.docu = selectedPipo.doc;
     this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
-      selectedRowValues.doc
+      selectedPipo.doc
     );
-
+    console.log('payterm', this.payTerm);
     this.z = this.payTerm.length;
     console.log(this.z);
     if (this.payTerm.length > 1) {
@@ -1529,11 +671,12 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       }
     }
     return (
-      (this.selectedRow = selectedRowValues),
+      (this.selectedRow = selectedPipo),
       (this.tableWidth = '30%'),
       (this.greaterAmount = parseInt(this.selectedRow.amount))
     );
   }
+
   newCredit() {
     this.router.navigate([
       'home/upload',
@@ -1619,7 +762,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
           file: 'import',
           document: 'boe',
           pipo: this.pipoData.pi_poNo,
-          bene: this.pipoData.benneName,
+          bene: this.pipoData.buyerName,
         },
       ]);
     }
@@ -1634,7 +777,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     console.log(a);
     if (a == 'Advance Payment') {
       this.router.navigate([
-        'home/exportHome',
+        'home/export-home',
         {
           pipo: this.pipoData.pi_poNo,
 
@@ -1645,12 +788,12 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     // else if (a == 'Direct Import') {
     //   console.log('hello')
     //   this.router.navigate(['home/direct-import-payment', {
-    //     file: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+    //     file: this.pipoData.pi_poNo, bene: this.pipoData.buyerName, amount: this.pipoData.amount
     //   }]);
     // }
     else if (a == 'Collection Bill') {
       this.router.navigate([
-        'home/billLodgement',
+        'home/bill-lodgement',
         {
           pipo: this.pipoData.pi_poNo,
 
@@ -1658,7 +801,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         },
       ]);
     } else if (a == 'packing Credit Request') {
-      this.router.navigate(['home/packingCreditRequest']);
+      this.router.navigate(['home/packing-credit-request']);
     } else if (a == 'Letter of Credit') {
       // if (this.pipoData.lcIssuance && this.pipoData.lcIssuance1) {
       //   this.buttonToggle1 = !this.buttonToggle1
@@ -1671,7 +814,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
           pipo: this.pipoData.pi_poNo,
         },
       ]);
-      // , {file: "nonlcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+      // , {file: "nonlcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.buyerName, amount: this.pipoData.amount
       // }]);
     }
     //   else if (this.pipoData.lcIssuance) {
@@ -1694,239 +837,39 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   changeCheckbox() {
     this.buyer = !this.buyer;
   }
+  navigate(file, document, pi_poNo, buyerName, pipo_id) {
+    this.router.navigate([
+      '/home/upload',
+      {
+        file: file,
+        document: document,
+        pipo: pi_poNo,
+        pipo_id: pipo_id,
+        bene: buyerName,
+        index: this.currentindex
+      },
+    ])
+  }
   //single page upload all documents
-  uploadShippingbill() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'sb',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadDebitnote() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'debitNote',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadCreditnote() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'creditNote',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadInsurance() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'insuranceCopy',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadLccopy() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'lcCopy',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadThirdparty() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'tryPartyAgreement',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadMaster() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'agreement',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadOpinion() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'opinionReport',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadSwift() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'swiftCopy',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadshipping() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'sb',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadIradvice() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'irAdvice',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadEbrc() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'EBRC',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadAirwayBlcopy() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'blCopy',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadBillExchange() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'billOfExchange',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadCommercial() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'commercial',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadDestruction() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'destruction',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadPackingList() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'packingList',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
-  }
-  uploadblcopyref() {
-    this.router.navigate([
-      '/home/upload',
-      {
-        file: 'export',
-        document: 'blCopyref',
-        pipo: this.pipoData.pi_poNo,
-        bene: this.pipoData.buyerName,
-        index: this.currentindex,
-      },
-    ]);
+  openUploadWithType(type) {
+    this.navigate('export', type, this.pipoData.pi_poNo, this.pipoData.buyerName, this.pipoData._id);
   }
   uploadInward() {
     this.router.navigate([
-      'home/exportHome',
+      'home/export-home',
       {
         pipo: this.pipoData.pi_poNo,
-
+        pipo_id: this.pipoData._id,
         index: this.currentindex,
       },
     ]);
   }
   uploadCollectionBill() {
     this.router.navigate([
-      'home/billLodgement',
+      'home/bill-lodgement',
       {
         pipo: this.pipoData.pi_poNo,
-
+        pipo_id: this.pipoData._id,
         index: this.currentindex,
       },
     ]);
@@ -1941,7 +884,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         {
           file: 'nonlcUsance',
           pipo: this.pipoData.pi_poNo,
-          bene: this.pipoData.benneName,
+          bene: this.pipoData.buyerName,
           amount: this.pipoData.amount,
         },
       ]);
@@ -1952,7 +895,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         {
           file: 'nonlcSight',
           pipo: this.pipoData.pi_poNo,
-          bene: this.pipoData.benneName,
+          bene: this.pipoData.buyerName,
           amount: this.pipoData.amount,
         },
       ]);
@@ -1968,7 +911,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         {
           file: 'lcUsance',
           pipo: this.pipoData.pi_poNo,
-          bene: this.pipoData.benneName,
+          bene: this.pipoData.buyerName,
           amount: this.pipoData.amount,
           buyer: false,
         },
@@ -1980,7 +923,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         {
           file: 'lcSight',
           pipo: this.pipoData.pi_poNo,
-          bene: this.pipoData.benneName,
+          bene: this.pipoData.buyerName,
           amount: this.pipoData.amount,
           buyer: false,
         },
@@ -1991,7 +934,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         {
           file: 'lcUsance',
           pipo: this.pipoData.pi_poNo,
-          bene: this.pipoData.benneName,
+          bene: this.pipoData.buyerName,
           amount: this.pipoData.amount,
           buyer: true,
         },
@@ -2002,7 +945,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         {
           file: 'lcSight',
           pipo: this.pipoData.pi_poNo,
-          bene: this.pipoData.benneName,
+          bene: this.pipoData.buyerName,
           amount: this.pipoData.amount,
           buyer: true,
         },
@@ -2014,31 +957,26 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     if (a == 'yes') {
       console.log(a);
       // this.router.navigate(['home/bill-under-collection', {
-      //   file: "nonlcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+      //   file: "nonlcUsance", pipo: this.pipoData.pi_poNo, bene: this.pipoData.buyerName, amount: this.pipoData.amount
       // }]);
       this.uploadIsurance = !this.uploadIsurance;
       this.letterToggle = !this.letterToggle;
     } else if (a == 'no') {
       console.log(a);
       // this.router.navigate(['home/bill-under-collection', {
-      //   file: "nonlcSight", pipo: this.pipoData.pi_poNo, bene: this.pipoData.benneName, amount: this.pipoData.amount
+      //   file: "nonlcSight", pipo: this.pipoData.pi_poNo, bene: this.pipoData.buyerName, amount: this.pipoData.amount
       // }]);
       this.router.navigate([
-        'home/lc-isurence',
+        'home/lc-isurance',
         {
           file: 'import',
           pipo: this.pipoData.pi_poNo,
-          bene: this.pipoData.benneName,
+          bene: this.pipoData.buyerName,
           amount: this.pipoData.amount,
         },
       ]);
     }
   }
-
-  // getTrasactions() {
-  //   const data: any = this.documentService.getTask();
-  //   this.allTransactions = data.task;
-  // }
 
   onAddCourse(a) {
     console.log(a);
@@ -2088,31 +1026,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     // console.log(control1.length)
   }
 
-  // viewTask(data) {
-  //   console.log(data)
-  //   if (!data.completed) {
-  //     this.documentService.task = data
-  //     this.documentService.draft = true;
-  //     //data.pipoDetail["_id"] = data._id;
-  //     this.documentService.pdfData = data.pipoDetail;
-  //     if (parseInt(this.selectedRow.amount) < 200000) {
-  //       this.documentService.pdfData = this.selectedRow;
-  //       this.router.navigateByUrl(`/home/inwardRemittance/${data.pi_poNo}`);
-  //     } else {
-  //       console.log(this.selectedDoc);
-  //       this.router.navigateByUrl(`/home/fbg-wavier/${data.pi_poNo}`);
-
-  //     }
-
-  //   } else {
-  //     this.router.navigateByUrl(`/home/completedTask/${data._id}`);
-  //   }
-
-  // }
-
   hide3() {
     this.showInvoice = false;
-    this.router.navigate(['/home/pipoDocExport']);
+    this.router.navigate(['/home/pipo-export']);
   }
   hide1() {
     this.showInvoice = true;
@@ -2125,31 +1041,13 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.toggle1 = false;
   }
 
-  hide(data, i) {
-    this.showInvoice = true;
-    this.selectedrow = data;
-    this.currentindex = i;
-    this.getInvoices(data, i);
-  }
-
   toSave(data, index) {
     this.optionsVisibility[index] = false;
     console.log('555555555555550', data);
-    // console.log('6666666666666', this.pipoData);
-    // console.log('777777777', this.pipoData.damagesUSD);
-    // console.log('6666666666667', this.id)
-    // console.log('6666666666668', data._id)
-    // console.log('6666666666669', data.data)
-
     this.userService.updatePipo(data, data._id).subscribe(
       (data) => {
         console.log('king123');
         this.toastr.success('PI/PO updated successfully.'); // this.docTog = false
-        // this.toggle = false
-        // this.toggle2 = false
-        // this.uploadIsurance = false
-        // this.toastr.success('Company details updated successfully.');
-        // this.router.navigate(['/home/dashboardNew']);
       },
       (error) => {
         // this.toastr.error('Invalid inputs, please check!');
@@ -2166,10 +1064,13 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   onSubmitPipo() {
     console.log(this.id);
     console.log(this.piPoForm.value);
-    this.piPoForm.value.doc = this.pipourl1;
-    this.piPoForm.value.file = this.file1;
-    this.piPoForm.value.document = this.documentType;
-    this.piPoForm.value.buyerName = this.beneValue;
+    var temp: any = {
+      ...this.piPoForm.value
+    }
+    temp.doc = this.pipourl1;
+    temp.file = this.file1;
+    temp.document = this.documentType;
+    temp.buyerName = this.beneValue;
     console.log(this.piPoForm.value);
     this.userService.updatePipo(this.piPoForm.value, this.id).subscribe(
       (data) => {
@@ -2178,12 +1079,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         this.toastr.success('PI/PO updated successfully.');
         this.toggle = false;
         this.toggle2 = false;
-        // this.toastr.success('Company details updated successfully.');
-        // this.router.navigate(['/home/dashboardNew']);
       },
       (error) => {
         // this.toastr.error('Invalid inputs, please check!');
-        // console.log("error")
       }
     );
   }
@@ -2244,7 +1142,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       );
     } else if (a == 'commercial') {
       this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-        currentData.doc
+        currentData.commercialDoc
       );
     } else if (a == 'destruction') {
       this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -2256,7 +1154,12 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
       );
     } else if (a == 'packingList') {
       this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-        currentData.doc
+        currentData.packingDoc
+      );
+    }
+    else if(a == 'airwayBlcopy'){
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+        currentData.blCopyDoc
       );
     } else {
       this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -2268,13 +1171,16 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   onSubmitPipo1() {
     console.log(this.id);
     console.log(this.piPoForm.value);
-    this.piPoForm.value.doc1 = this.pipourl1;
-    this.piPoForm.value.doc = this.pipourl11;
-    this.piPoForm.value.file = this.file1;
-    this.piPoForm.value.document = 'PI';
-    this.piPoForm.value.benneName = this.beneValue;
-    console.log(this.piPoForm.value);
-    this.userService.updatePipo(this.piPoForm.value, this.id).subscribe(
+    var temp:any = {
+      ...this.piPoForm.value,
+    }
+    temp.doc1 = this.pipourl1;
+    temp.doc = this.pipourl11;
+    temp.file = this.file1;
+    temp.document = 'PI';
+    temp.buyerName = this.beneValue;
+    console.log(temp);
+    this.userService.updatePipo(temp, this.id).subscribe(
       (data) => {
         console.log('king123');
         console.log(data['data']);
@@ -2440,7 +1346,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   }
 
   private getDismissReason(reason: any): string {
-    console.log('ddhdhdhh');
+
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -2457,17 +1363,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     // }
   }
 }
-// export interface Report {
-//   name: string;
-//   owner: string;
-//   protected: boolean;
-//   backup: boolean;
-// }
-// export interface Task {
-//   name: string;
-//   completed: boolean;
-//   owner: string;
-// }
+
+import {PipoDataService} from "../../service/homeservices/pipo.service";
+
 @Component({
   selector: 'modal-content',
   template: `
@@ -2591,3 +1489,4 @@ export class ModalContentComponent1 implements OnInit {
 function selectedRowValues(selectedRowValues: any, i: any) {
   throw new Error('Function not implemented.');
 }
+

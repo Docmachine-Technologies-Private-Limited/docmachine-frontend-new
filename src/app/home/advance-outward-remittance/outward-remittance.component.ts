@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from "@angular/router";
   templateUrl: "./outward-remittance.component.html",
   styleUrls: ["./outward-remittance.component.scss"],
 })
-export class OutwardRemittanceComponent implements OnInit {
+export class AdvanceOutwardRemittanceComponent implements OnInit {
   public item = [];
   public item1 = [];
   public item2;
@@ -231,7 +231,7 @@ export class OutwardRemittanceComponent implements OnInit {
 
 
     } else {
-      this.router.navigateByUrl(`/home/completedTask/${data._id}`);
+      this.router.navigateByUrl(`/home/completed-task/${data._id}`);
     }
 
   }

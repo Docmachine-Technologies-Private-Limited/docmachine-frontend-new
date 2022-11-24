@@ -1067,9 +1067,9 @@ table tbody {
 }
 
 .button1 {
-
-
-  padding:0px 31px;
+  font-family: "Nunito Sans", sans-serif !important;
+  min-width: 160px;
+  padding: 6px;
   font-size: 12px;
   font-weight: 700;
   background-color: RGB(81, 174, 229);
@@ -1081,9 +1081,9 @@ table tbody {
 }
 
 .button2 {
-
-
-  padding:0px 31px;
+  font-family: "Nunito Sans", sans-serif !important;
+  min-width: 100px;
+  padding: 6px;
   font-size: 12px;
   font-weight: 400;
   background-color: #86ceff;
@@ -1095,7 +1095,7 @@ table tbody {
 }
 
 .heading1 {
-  
+  font-family: "EuropaNuova-Regular", sans-serif !important;
   font-size: 20px;
   font-weight: 400;
   color: #323E4A;

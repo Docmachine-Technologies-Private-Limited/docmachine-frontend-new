@@ -94,7 +94,7 @@ export class BOEComponent implements OnInit {
         console.log("king123");
         console.log(data);
         this.toastr.success('Bill Of Entry row is updated')
-        // this.router.navigate(["home/viewDocument/sb"]);
+        // this.router.navigate(["home/view-document/sb"]);
         //this.router.navigate(['/login'], { queryParams: { registered: true }});
       },
       (error) => {

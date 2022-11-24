@@ -240,7 +240,7 @@ export class EdpmsReconComponent implements OnInit {
     } else if (status === 'PENDING_PAYMENT') {
       return 'Lodgement done'
     } else {
-      'EDPMS Status is not clear'
+      return 'EDPMS Status is not clear'
     }
   }
 

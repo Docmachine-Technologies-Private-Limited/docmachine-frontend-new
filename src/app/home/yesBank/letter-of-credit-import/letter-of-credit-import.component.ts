@@ -97,7 +97,9 @@ export class LetterOfCreditImportComponent implements OnInit, OnDestroy {
           console.log(data['data'][0])
           this.item3 = data['data'][0]
           console.log(this.item3)
-          this.letterHead = data['data'][0].file[0]["Letter Head"]
+          if (data['data'] && data['data'][0] && data['data'][0].file && data['data'][0].file[0]) {
+            this.letterHead = data['data'][0].file[0]["Letter Head"]
+          }
           console.log(this.item3.gst)
           this.arr = this.item3.gst.split('');
           console.log(this.arr)
@@ -230,7 +232,7 @@ export class LetterOfCreditImportComponent implements OnInit, OnDestroy {
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
-                this.router.navigate(["/home/lc-isurence"]);
+                this.router.navigate(["/home/lc-isurance"]);
                 //this.toastr.success('PI/PO updated successfully.');
                 // this.docTog = false
                 // this.toggle = false
@@ -257,7 +259,7 @@ export class LetterOfCreditImportComponent implements OnInit, OnDestroy {
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
-                this.router.navigate(["/home/lc-isurence"]);
+                this.router.navigate(["/home/lc-isurance"]);
                 //this.toastr.success('PI/PO updated successfully.');
                 // this.docTog = false
                 // this.toggle = false

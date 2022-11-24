@@ -5,10 +5,8 @@ import { AppModule } from './app/app.module';
 import { AppConfig } from './environments/environment';
 
 if (AppConfig.production) {
-    enableProdMode();
+  enableProdMode();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    platformBrowserDynamic().bootstrapModule(AppModule)
-        .catch(err => console.error(err));
-});
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err => console.error(err));

@@ -35,13 +35,13 @@ export class ImportInsuranceComponent implements OnInit {
   ngOnInit(): void {
     this.documentService.getInsurance().subscribe(
       (res: any) => {
-        console.log('HEre Response', res);
+        console.log('Data fetched successfully', res);
         this.item = res.data;
         for (let value of this.item) {
           if (value['file'] == 'import') {
-            console.log('avvvvvvvvvv');
+
             this.item1.push(value);
-            console.log('awwww', this.item1);
+
           }
         }
       },
@@ -64,7 +64,7 @@ export class ImportInsuranceComponent implements OnInit {
   }
 
   private getDismissReason(reason: any): string {
-    console.log('ddhdhdhh');
+
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -87,8 +87,14 @@ export class ImportInsuranceComponent implements OnInit {
       );
   }
 
+  getPipoNumbers(data) {
+    return data.pipo.map((x) => {
+      return x.pi_poNo;
+    });
+  }
+
   viewID(a) {
-    console.log(666666666666666, a);
+    ;
     this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
   }
 

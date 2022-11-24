@@ -39,6 +39,7 @@ export class EditPipoComponent implements OnInit {
   buyer: string;
   uploading: boolean = false;
   authToken: string;
+  CurrencyData:any = ['INR','USD', 'EUR', 'GBP', 'CHF','AUD','CAD','AED','SGD','SAR','JPY']
 
   public type: string = "directive";
   public res;

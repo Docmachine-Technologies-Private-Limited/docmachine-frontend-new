@@ -1,7 +1,7 @@
-<div style="margin-top: 36px; width: 89%; overflow-y: overlay;" class="content-wrap">
+<div style="width: 89%; overflow-y: overlay;" class="content-wrap">
     <main id="content" class="table-padding" role="main" style="overflow-y: auto;">
         <div *ngIf="!showInvoice">
-            <div style="margin-top: 30px; display: flex; flex-direction: rows; align-items: center; padding: 0.8% 0; border: 0.5px solid #e3e6ee; width: 100%;margin-left: 26px;">
+            <div style="display: flex; flex-direction: rows; align-items: center; padding: 0.8% 0; border: 0.5px solid #e3e6ee; width: 100%;margin-left: 26px;">
                 <div style="display: flex; align-items: center; margin-left: 22px">
                     <div style="display: flex; margin-left: 16px; align-items: center">
                         <!-- <div class="customDropdown" style="width: 90px; border: 1px solid #C6CBD4; font-size: 14px;">
@@ -15,10 +15,10 @@
                                 <a style="min-width: 90px;">Export</a>
                             </div>
                         </div> -->
-                        <div class="customDropdown" style="width: 80px; border: 1px solid #C6CBD4; font-size: 14px;">
-                            <span>PI/PO </span>
-                            <!-- <span class="arrow arrow-top" ></span> -->
-                            <span class="dropIco"><i id="down" style="display: none" class="fas fa-angle-up"></i>
+                        <!-- <div class="customDropdown" style="width: 80px; border: 1px solid #C6CBD4; font-size: 14px;">
+                            <span>PI/PO </span> -->
+                        <!-- <span class="arrow arrow-top" ></span> -->
+                        <!-- <span class="dropIco"><i id="down" style="display: none" class="fas fa-angle-up"></i>
                                 <i id="up"  class="fas fa-angle-down"></i>
                             </span>
                             <div class="dropdown-content" style="min-width: 80px;">
@@ -27,9 +27,9 @@
                             </div>
                         </div>
                         <div class="customDropdown" style="width:125px; font-size: 14px;border: 1px solid #C6CBD4;">
-                            <span>Customer </span>
-                            <!-- <span class="arrow arrow-top" style="margin-left: 20px !important;" ></span> -->
-                            <span class="dropIco"><i id="down" style="margin-left: 12px;"class="fas fa-angle-down"></i>
+                            <span>Customer </span> -->
+                        <!-- <span class="arrow arrow-top" style="margin-left: 20px !important;" ></span> -->
+                        <!-- <span class="dropIco"><i id="down" style="margin-left: 12px;"class="fas fa-angle-down"></i>
                             </span>
                             <div class="dropdown-content" style="min-width: 125px;">
                                 <a style="min-width: 125px;">India</a>
@@ -38,9 +38,9 @@
                             </div>
                         </div>
                         <div class="customDropdown" style="width: 123px; border: 1px solid #C6CBD4;">
-                            <span>View All</span>
-                            <!-- <span class="arrow arrow-top" style="margin-left: 40px !important;" ></span> -->
-                            <span class="dropIco"><i id="down1" style="margin-left: 27px;" class="fas fa-angle-down"></i>
+                            <span>View All</span> -->
+                        <!-- <span class="arrow arrow-top" style="margin-left: 40px !important;" ></span> -->
+                        <!-- <span class="dropIco"><i id="down1" style="margin-left: 27px;" class="fas fa-angle-down"></i>
                                 <i id="up1" style="display: none" class="fas fa-angle-up"></i>
                             </span>
                             <div class="dropdown-content" style="min-width: 123px;">
@@ -49,9 +49,9 @@
                             </div>
                         </div>
                         <div class="customDropdown" style="width: 115px; border: 1px solid #C6CBD4;">
-                            <span>Status</span>
-                            <!-- <span class="arrow arrow-top" ></span> -->
-                            <span class="dropIco"><i id="down2" style="margin-left: 27px;"class="fas fa-angle-down"></i>
+                            <span>Status</span> -->
+                        <!-- <span class="arrow arrow-top" ></span> -->
+                        <!-- <span class="dropIco"><i id="down2" style="margin-left: 27px;"class="fas fa-angle-down"></i>
                                 <i id="up2" style="display: none" class="fas fa-angle-up"></i>
                             </span>
                             <div class="dropdown-content" style="min-width: 115px;">
@@ -60,19 +60,19 @@
                             </div>
                         </div>
                         <div class="customDropdown" style="width: 150px; border: 1px solid #C6CBD4;">
-                            <span>Last Updated</span>
-                            <!-- <span class="arrow arrow-top" ></span> -->
-                            <span class="dropIco"><i id="down3" style="margin-left: 17px;" class="fas fa-angle-down"></i>
+                            <span>Last Updated</span> -->
+                        <!-- <span class="arrow arrow-top" ></span> -->
+                        <!-- <span class="dropIco"><i id="down3" style="margin-left: 17px;" class="fas fa-angle-down"></i>
                                 <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                             </span>
                             <div class="dropdown-content" style="min-width:150px;">
                                 <a style="min-width:150px;">Completed</a>
                                 <a style="min-width:150px;">Pending</a>
                             </div>
-                        </div>
-                        <div class="customDropdown" style="margin-left: 282px; margin-right: 5px; border: 1px solid #C6CBD4;">
+                        </div> -->
+                        <!-- <div class="customDropdown" style="margin-left: 882px; margin-right: 5px; border: 1px solid #C6CBD4;">
                             <span>Filter </span> <span><i class="fas fa-filter"></i></span>
-                        </div>
+                        </div> -->
 
 
                         <!-- <div style="background-color: #49A2D7; margin-left: 19px;" class="customDropdown2" >
@@ -91,6 +91,12 @@
                                 <p><a>New Letter of Credit</a></p>
                             </div>
                         </div> -->
+                        <div style="margin-left: 940px;">
+                            <button (click)="exportToExcel()" style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
+                          background-color: #49A2D7;
+                          border: none;
+                          border-radius: 5px;">Export To Excel</button>
+                        </div>
                         <div class="customDropdown" style="width: 102px; margin-left: 10px; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
                             <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
                                 <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
@@ -102,10 +108,11 @@
                              <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                         </span>
                             <div class="dropdown-content" style="min-width:200px; margin-left: -95px;">
-                                <a style="min-width:200px;">New Credit Note</a>
+                                <a (click)='pipoClickCredit()' style="min-width:200px;">New Credit Note</a>
                                 <a (click)='pipoClick()' style="min-width:200px;">New PI/PO</a>
-                                <a style="min-width:200px;">New Debit Note</a>
-                                <a style="min-width:200px;">New Insurance Document</a>
+                                <a (click)='pipoClickDebit()' style="min-width:200px;">New Debit Note</a>
+                                <a (click)='pipoClickTri()' style="min-width:200px;">Tri-Party Agreement</a>
+                                <a (click)='pipoClickInsurance()' style="min-width:200px;">New Insurance Document</a>
                                 <a style="min-width:200px;">New Letter of Credit</a>
                             </div>
                         </div>
@@ -113,40 +120,204 @@
                 </div>
             </div>
         </div>
-        <div style="width: 100%" class="analytics-side" *ngIf="!showInvoice">
-            <div style="width: 100% ; margin-left: 22px;" class="row">
-                <div style="width: 100%; margin:5%; left: -70px; top:-60px" class="col-12 mb-lg padding">
-                    <section style="width: 100%;" class="pb-0 box-shadow">
-                        <div style="margin-left:-7px;margin-right:30px;" class="widget-body p-0 support table-wrapper">
-                            <table style="width: 100%; margin-left: 29px; font-weight: 100 !important;" class="table table-striped mb-0">
-                                <thead style="width: 100%;font-weight: 100 !important;">
-                                    <tr class="text-muted table-heading" style="font-size: 15px; font-weight: 100 !important; ">
+        <div style="width: 100%" class="analytics-side" *ngIf="!showInvoice" #piposummery>
+
+            <div style="width: 100%" class="row">
+
+                <div style="width: 100%; left: -60px;" class="col-12 mb-lg padding" id="container">
+                    <section style="width: 220%;" class="pb-0 box-shadow">
+
+                        <div style="height: 563px; margin-left: 95px;" class="widget-body p-0 support table-wrapper">
+
+                            <table style="width: 100%;" class="table table-striped mb-0">
+
+                                <thead style="width: 100% ;height: 54px; background: white;position: sticky;top: 0; ">
+                                    <tr class="text-muted table-heading" style="opacity: 50%; font-size: 14px; color:black !important; border-bottom: 1px solid #f2f4f8;">
 
                                         <th scope="col">DATE</th>
-                                        <th scope="col">ID</th>
                                         <th scope="col">INVOICE NUMBER</th>
-                                        <th scope="col">CUSTOMER NAMES</th>
-                                        <th scope="col">UPLOADED BY</th>
-                                        <th scope="col">AMOUNT</th>
-                                        <th scope="col">STATUS</th>
+                                        <th scope="col">INVOICE DATE</th>
+                                        <th scope="col">SELLER NAMES</th>
+                                        <th scope="col">INVOICE CURRENCY</th>
+                                        <th scope="col">INVOICE VALUE - USD</th>
+                                        <th scope="col">BRANCH</th>
+                                        <th scope="col">COMMODITY</th>
+                                        <th scope="col">BOE NO</th>
+                                        <th scope="col">BOE DATE</th>
+                                        <th scope="col">REGION</th>
+                                        <th scope="col">FOB VALUE</th>
+                                        <th scope="col">PORT CODE</th>
+                                        <th scope="col">BOE Balance Amount</th>
+                                        <th scope="col">Freight Charges</th>
+                                        <th scope="col">TT DATE</th>
+                                        <th scope="col">TT USD</th>
+                                        <th scope="col">Payment Date</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Currency</th>
+                                        <th scope="col">CCY Rate</th>
+                                        <th scope="col">INR Amount</th>
+                                        <th scope="col">ORM REF NUMBER/ID</th>
+                                        <th scope="col">TOTAL DEDUCTIONS/DAMGES/USD</th>
+                                        <th scope="col">FINAL AMOUNT - USD</th>
+                                        <th scope="col">DEBIT NOTE STATUS</th>
+                                        <th scope="col">STATUS OF BOE SUBMISSION IN BANK</th>
+                                        <th scope="col">BALANCE IF ANY</th>
+                                        <th scope="col">Edit/Save</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-dark">
-                                    <tr class="table-row" *ngFor="let data of item1; let i = index" (click)="getInvoices(data, i)">
+                                    <tr class="table-row" *ngFor="let data of item3; let i = index">
                                         <td>
                                             {{data.date}}
                                         </td>
-                                        <td class="sb-no">{{data.pi_poNo}}</td>
-                                        <td> <span *ngIf='data.document == "PI"'> Proforma Invoice</span> <span *ngIf='data.document != "PI"'> Purchase Order</span></td>
+                                        <td class="sb-no" (click)="getInvoices(data, i)">{{data.pi_poNo}}</td>
+                                        <!-- <td> <span *ngIf='data.document == "PI"'> Proforma Invoice</span> <span *ngIf='data.document != "PI"'> Purchase Order</span></td> -->
+                                        <td>{{data.purchasedate}}</td>
                                         <td>
                                             {{data.benneName}}
                                         </td>
                                         <td>
-                                            <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                                                height="30px" width="30px" /> Lindsey Stroud
+                                            {{data.currency}}
                                         </td>
                                         <td>{{data.amount}}</td>
-                                        <td style="color:#F5A623;">Pending Action</td>
+                                        <td>{{data.location}}</td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.commodity}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="commodity" type="text" placeholder="Commodity" [(ngModel)]="data.commodity">
+                                            </div>
+                                        </td>
+                                        <td>{{data.boeNumber}}</td>
+                                        <td>{{data.boeDate}}</td>
+                                        <td>{{data.region}}</td>
+                                        <td>{{data.invoiceAmount}}</td>
+                                        <td>{{data.dischargePort}}</td>
+                                        <td>{{data.invoiceAmount}}</td>
+                                        <td>{{data.freightAmount}}</td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.ttDate}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="ttDate" type="text" placeholder="TT DATE" [(ngModel)]="data.ttDate">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.ttUSD}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="ttUSD" type="text" placeholder="TT USD" [(ngModel)]="data.ttUSD">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.paymentDate}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="paymentDate" type="text" placeholder="PAYMENT DATE" [(ngModel)]="data.paymentDate">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.ttAmount}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="ttAmount" type="text" placeholder="TT AMOUNT" [(ngModel)]="data.ttAmount">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.ttCurrency}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="ttCurrency" type="text" placeholder="TT CURRENCY" [(ngModel)]="data.ttCurrency">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.ccyRate}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="ccyRate" type="text" placeholder="CCY Rate" [(ngModel)]="data.ccyRate">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.ttAmountINR}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="ttAmountINR" type="text" placeholder="Amount INR" [(ngModel)]="data.ttAmountINR">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.ormNumber}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="ormNumber" type="text" placeholder="ORM Number" [(ngModel)]="data.ormNumber">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.totalDedu}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="totalDedu" type="text" placeholder="TOTAL DEDUCTION" [(ngModel)]="data.totalDedu">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.finalAmo}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="finalAmo" type="text" placeholder="Final Amount" [(ngModel)]="data.finalAmo">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.debitNoteStatus}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="debitNoteStatus" type="text" placeholder="Debit Note Status" [(ngModel)]="data.debitNoteStatus">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.boeSubmit}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="boeSubmit" type="text" placeholder="BOE Submit To Bank" [(ngModel)]="data.boeSubmit">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div *ngIf="!optionsVisibility[i]">
+                                                {{data.balanceIfAny}}
+                                            </div>
+
+                                            <div *ngIf="optionsVisibility[i]">
+                                                <input class="tblInput form-control" name="balanceIfAny" type="text" placeholder="BALANCE IF ANY" [(ngModel)]="data.balanceIfAny">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="savBtn" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)">Save</button>
+                                            <button class="savBtn" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">Edit</button>
+                                        </td>
                                     </tr>
 
                                 </tbody>
@@ -159,7 +330,7 @@
 
 
         <div *ngIf="showInvoice && !toggle">
-            <div class="table_top" style="margin-top: 28px">
+            <div class="table_top">
                 <div style="width: 70%;border-right: 0.5px solid rgba(0, 0, 0, 0.2); margin-left: 40px;">
                     <span style="color: RGB(50, 62, 74); font-size: 14px;">PI / PO Documents</span>
 
@@ -214,6 +385,10 @@
                             src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="24px"
                             width="24px" /></span>
                     <!-------style="padding-left: 1%" class="pc1"-->
+                </div>
+                <div style="margin-right: 8%">
+                    <img src="../../../assets/cross.png" (click)="hide3()" style="width: 20px; height: 20px;
+               margin-left: 10px;cursor: pointer;">
                 </div>
             </div>
 

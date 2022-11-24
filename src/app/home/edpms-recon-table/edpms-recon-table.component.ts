@@ -28,6 +28,7 @@ export class EdpmsReconTableComponent implements OnInit {
 
     this.documentService.getEDPMS().subscribe( (res: any) => {
       this.edpmsData = res?.data;
+      console.log("Edpms Data", this.edpmsData)
     }, err => {
       console.log(err)
     });
@@ -43,7 +44,7 @@ export class EdpmsReconTableComponent implements OnInit {
     if(act === 'Upload Documents') {
       this.router.navigateByUrl('/home/upload;file=export;document=pipo');
     } else if (act === 'Create Documents') {
-      this.router.navigate(['/home/billLodgement', {sbNo: sbNo}]);
+      this.router.navigate(['/home/bill-lodgement', {sbNo: sbNo}]);
     }
   }
 

@@ -12,7 +12,6 @@ import { UserService } from "../../service/user.service";
   styleUrls: ['./all-task.component.scss']
 })
 export class AllTaskComponent implements OnInit {
-
   public item1: any;
   public item2;
   public user;
@@ -129,7 +128,7 @@ export class AllTaskComponent implements OnInit {
       }
       else if (data.bank == 'yesBank') {
         if (data.file == "inland") {
-          this.router.navigate(['home/letterOfCredit', { pipo: data.pi_poNo, file: this.file }]);
+          this.router.navigate(['home/letter-of-credit', { pipo: data.pi_poNo, file: this.file }]);
         }
         else if (data.file == "import") {
           this.router.navigate(['home/letterOfCreditImport', { pipo: data.pi_poNo, file: this.file }]);
@@ -148,13 +147,13 @@ export class AllTaskComponent implements OnInit {
           }
         }
         else if (data.file.startsWith('s')) {
-          this.router.navigate(['home/a2cumApplicationYesbank', { pipo: data.pi_poNo, file: data.file }]);
+          this.router.navigate(['home/a2cum-application-yesbank', { pipo: data.pi_poNo, file: data.file }]);
         }
       }
 
 
     } else {
-      this.router.navigateByUrl(`/home/completedTask/${data._id}`);
+      this.router.navigateByUrl(`/home/completed-task/${data._id}`);
     }
 
   }
@@ -200,13 +199,13 @@ export class AllTaskComponent implements OnInit {
     this.documentService.draft = true
     this.documentService.task = data
     if (data.fileType == 'BL') {
-      this.router.navigateByUrl(`/home/billLodgement`);
+      this.router.navigateByUrl(`/home/bill-lodgement`);
     }
     else if (data.fileType == 'PCR') {
-      this.router.navigateByUrl(`/home/packingCreditRequest`);
+      this.router.navigateByUrl(`/home/packing-credit-request`);
     }
     else if (data.fileType == 'IRD') {
-      this.router.navigateByUrl(`/home/exportHome`);
+      this.router.navigateByUrl(`/home/export-home`);
     }
 
   }

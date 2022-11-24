@@ -4,11 +4,11 @@ import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 
 @Component({
-  selector: 'app-lc-isurence',
+  selector: 'app-lc-isurance',
   templateUrl: './lc-isurence.component.html',
   styleUrls: ['./lc-isurence.component.scss']
 })
-export class LcIsurenceComponent implements OnInit {
+export class LcIsuranceComponent implements OnInit {
   public item = [];
   public item1 = [];
   public item2;
@@ -229,7 +229,7 @@ export class LcIsurenceComponent implements OnInit {
           this.router.navigate(['home/letterOfCreditInlandAxis', { pipo: data.pi_poNo, file: this.file }]);
         }
         else if (data.bank == 'yesBank') {
-          this.router.navigate(['home/letterOfCredit', { pipo: data.pi_poNo, file: this.file }]);
+          this.router.navigate(['home/letter-of-credit', { pipo: data.pi_poNo, file: this.file }]);
         }
       }
       else if (this.file == "import") {
@@ -247,7 +247,7 @@ export class LcIsurenceComponent implements OnInit {
       }
 
     } else {
-      this.router.navigateByUrl(`/home/completedTask/${data._id}`);
+      this.router.navigateByUrl(`/home/completed-task/${data._id}`);
     }
 
   }
@@ -269,7 +269,7 @@ export class LcIsurenceComponent implements OnInit {
         }]);
       }
       else if (this.myRadio == 'yesBank') {
-        this.router.navigate(['home/letterOfCredit', {
+        this.router.navigate(['home/letter-of-credit', {
           pipo: this.pipoArr,
           amount: this.selectedRow.amount,
           file: this.file
@@ -307,7 +307,7 @@ export class LcIsurenceComponent implements OnInit {
     //     this.router.navigate(['home/letterOfCreditInlandAxis', { pipo: piPo, file: this.file }]);
     //   }
     //   else if (this.myRadio == 'yesBank') {
-    //     this.router.navigate(['home/letterOfCredit', { pipo: piPo, file: this.file }]);
+    //     this.router.navigate(['home/letter-of-credit', { pipo: piPo, file: this.file }]);
     //   }
     // }
     // else if (this.file == "import") {

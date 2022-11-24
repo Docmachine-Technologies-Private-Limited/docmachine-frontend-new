@@ -34,13 +34,13 @@ export class ImportTriPartyComponent implements OnInit {
   ngOnInit(): void {
     this.documentService.getThird().subscribe(
       (res: any) => {
-        console.log('HEre Response', res);
+        console.log('Data fetched successfully', res);
         this.item = res.data;
         for (let value of this.item) {
           if (value['file'] == 'import') {
-            console.log('avvvvvvvvvv');
+
             this.item1.push(value);
-            console.log('awwww', this.item1);
+
           }
         }
       },
@@ -56,7 +56,7 @@ export class ImportTriPartyComponent implements OnInit {
   }
 
   triParty(){
-    this.sharedData.changeretunurl('home/try-Party')
+    this.sharedData.changeretunurl('home/try-party')
   this.router.navigate(['home/upload', { file: 'import', document: 'tryPartyAgreement' }]);
   }
 
@@ -81,8 +81,14 @@ export class ImportTriPartyComponent implements OnInit {
   this.toastr.warning('Tri-Party Agreement Row Is In Edit Mode');
   }
 
+  getPipoNumbers(data) {
+    return data.pipo.map((x) => {
+      return x.pi_poNo;
+    });
+  }
+
   viewLC(a){
-    console.log(666666666666666, a)
+
     this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
       a['doc']
     );
@@ -102,7 +108,7 @@ export class ImportTriPartyComponent implements OnInit {
   }
 
     private getDismissReason(reason: any): string {
-      console.log('ddhdhdhh');
+
       if (reason === ModalDismissReasons.ESC) {
         return 'by pressing ESC';
       } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {

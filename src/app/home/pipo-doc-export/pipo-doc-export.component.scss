@@ -27,16 +27,8 @@
     color: #606670;
 }
 
-.content_top_common .content-wrap {
-    left: 0px !important;
-    width: 100%;
-    padding-left: 245px;
-    flex: 1 0 auto;
-    padding-right: 0px;
-}
-
 .form-wrapper {
-    margin: 00px;
+    margin: 10px;
 }
 
 .border1 {
@@ -61,10 +53,6 @@
     background-color: white;
     border-radius: 5px;
     box-shadow: 4px 4px 8px 4px #eeeefa;
-}
-
-.content_top_common .content-wrap {
-    margin-left: 0px;
 }
 
 .field {
@@ -605,8 +593,10 @@ p.fs14 {
     //margin-bottom: 0px !important;
     background-color: white;
     height: 100%;
-    min-width: 100%;
+    min-width: 110%;
     padding: 1% 0;
+    padding-left: 24px;
+    margin-left: -24px;
 }
 
 .tab>label {
@@ -662,10 +652,11 @@ p.fs14 {
 }
 
 .form {
+    margin-left: 38px !important;
     margin-right: 5%;
     top: 50%;
     left: 50%;
-    width: 100%;
+    width: 1070px;
     height: 316px;
     background-color: white;
     border: 1px dashed rgba(0, 0, 0, 0.4);
@@ -677,14 +668,8 @@ p.fs14 {
     // width: 100%;
     // height: 23px !important;
     text-align: center;
-    margin: 0px;
     line-height: 30px;
     color: #303030;
-}
-
-.form img {
-    max-width: 40px;
-    margin-bottom: 20px;
 }
 
 .form input {
@@ -1003,7 +988,7 @@ table tbody {
     align-items: center;
     //height: 170vh;
     border-right: 0.3px solid rgba(0, 0, 0, 0.2);
-    padding-left: 0
+    padding-left: 8%;
 }
 
 
@@ -1077,6 +1062,7 @@ table tbody {
 .invoices_tab {
     width: 100%;
     display: flex;
+    height: 100vh;
     background-color: #f8fafd;
 }
 
@@ -1319,6 +1305,7 @@ table tbody {
     padding-top: 15px !important;
     padding-bottom: 15px !important;
     margin-bottom: 25px !important;
+    padding-left: 30px;
     border-bottom: 1px solid #eaedf3;
 }
 
@@ -1563,24 +1550,20 @@ table tbody {
     border: none;
 }
 
-.form5 img {
-    max-width: 40px;
-    margin-bottom: 20px;
-}
-
 .form5 {
+    margin-left: 3%;
+    margin-right: 5%;
     top: 50%;
     left: 50%;
-    width: 100%;
+    width: 88%;
+    height: 300px;
     background-color: white;
-    border: 2px dashed RGB(81, 174, 229);
+    border: 2px dashed rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     flex-direction: column;
     align-items: center;
-    border-radius: 10px;
-    cursor: pointer;
-    padding: 26px 0;
+    padding-top: 2%;
 }
 
 .form5 h5 {
@@ -1597,7 +1580,7 @@ table tbody {
     color: rgba(0, 0, 0, 0.3);
     font-size: 15px;
     font-weight: 400;
-    margin-bottom: 0;
+    margin-bottom: 2%;
 }
 
 .form5 i {
@@ -1807,8 +1790,9 @@ input[type=number]::-webkit-outer-spin-button {
 .table_left {
     width: 72%;
     border-right: 0.5px solid rgba(0, 0, 0, 0.2);
-    margin-left:0px;
-
+    margin-left: 40px;
+    margin-top: -6px;
+    padding-top: 6px;
 }
 
 .box {

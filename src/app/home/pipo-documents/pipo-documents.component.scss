@@ -42,15 +42,60 @@
     font-weight: 400;
 }
 
+#container {
+    overflow: scroll;
+    overflow-x: auto;
+    height: 596px;
+}
+
+#container::-webkit-scrollbar {
+    width: 0px;
+}
+
+#container::-webkit-scrollbar-track {
+    background-color: #f0f5f5;
+}
+
+#container::-webkit-scrollbar-thumb {
+    background: #ccc;
+}
+
+.sub-table {
+    margin-top: 50px;
+    margin-left: 20px;
+}
+
+.sub-table2 {
+    margin-top: 50px;
+    margin-left: -20px;
+}
+
 .table-heading {
     font-family: "Poppins", sans-serif;
-    font-weight: 400;
+    font-weight: 500;
     color: #747474;
     //opacity: 50%;
 }
 
 table {
-    width: 96% !important;
+    width: 180% !important;
+}
+
+.savBtn {
+    background-color: #49A2D7;
+    color: white;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    width: 60px;
+}
+
+.tblInput {
+    border: 1px solid #e3e6ee;
+    border-radius: 3px;
+    width: 180px;
+    margin-left: 20px;
 }
 
 .box-shadow {
@@ -940,7 +985,6 @@ table tbody {
     // display: flex;
     align-items: center;
     padding-top: 0.5%;
-    margin-top: -130px;
     height: auto;
 }
 

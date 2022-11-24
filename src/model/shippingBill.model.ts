@@ -1,3 +1,19 @@
+import {PipoDisplayListViewItem, PipoModel} from "./pipo.model";
+import _ from 'lodash';
+class Invoice {
+  public sno: string;
+  public invoiceno: string;
+  public amount: number;
+  public currency: string;
+
+  constructor(data: any) {
+    this.sno = data.sno ? data.sno : '';
+    this.invoiceno = data.invoiceno ? data.invoiceno : '';
+    this.amount = data.amount ? data.amount : '';
+    this.currency = data.currency ? data.currency : '';
+  }
+}
+
 export class ShippingBill {
     public userId: string;
     public sbno: string;
@@ -31,6 +47,9 @@ export class ShippingBill {
     public consigneeName: string;
     public exchangeRate: string
     public _id: any;
+    public irRef: any;
+    public balanceAvai: any;
+    public doc: any;
 
 
     constructor(data: any) {
@@ -49,7 +68,7 @@ export class ShippingBill {
         this.realizedFobCurrency = data.realizedFobCurrency ? data.realizedFobCurrency : '';
         this.realizedFobValue = data.realizedFobValue ? data.realizedFobValue : '';
         this.equivalentFobValue = data.equivalentFobValue ? data.equivalentFobValue : '';
-        this.invoices = createInvoice(data.invoices) ? data.invoices : [];
+        this.invoices = this.createInvoice(data.invoices) ? data.invoices : [];
         this.freightCurrency = data.freightCurrency ? data.freightCurrency : '';
         this.freightValue = data.freightValue ? data.freightValue : '';
         this.realizedfreightCurrency = data.realizedfreightCurrency ? data.realizedfreightCurrency : '';
@@ -66,29 +85,89 @@ export class ShippingBill {
         this.consigneeName = data.consigneeName ? data.consigneeName : '';
         this.exchangeRate = data.exchangeRate ? data.exchangeRate : '';
         this._id = data._id;
+        this.irRef = data.irRef ? data.irRef: [];
+        this.doc = data.doc ? data.doc: '';
     }
-}
 
-class Invoice {
-    public sno: string;
-    public invoiceno: string;
-    public amount: string;
-    public currency: string;
-
-    constructor(data: any) {
-        this.sno = data.sno ? data.sno : '';
-        this.invoiceno = data.invoiceno ? data.invoiceno : '';
-        this.amount = data.amount ? data.amount : '';
-        this.currency = data.currency ? data.currency : '';
-    }
-}
-
-function createInvoice(data) {
-    let invoice = [];
-    for (let i in data) {
+    createInvoice(data) {
+      let invoice = [];
+      for (let i in data) {
         invoice.push(new Invoice(i))
+      }
+      return invoice;
     }
-    return invoice;
 
+  computeIRMerge() {
+    let finallist = [];
+    let totalForex = 0;
+    if (this.irRef && this.irRef.length) {
+      for (let i in this.irRef) {
+        let sbInfo:any = {
+          ..._.cloneDeep(this)
+        };
+        let amount, commision, exchangeRate;
+        if (this.irRef[i] && this.irRef[i].amount) {
+          amount = parseFloat(this.irRef[i].amount);
+        }
+        if (this.irRef[i] && this.irRef[i].commision) {
+          commision = this.irRef[i].commision.replace(/,/g, '');
+        }
+        if (this.irRef[i] && this.irRef[i].exchangeRate) {
+          exchangeRate = parseFloat(this.irRef[i].exchangeRate);
+        }
+        this.irRef[i].recUSD = (amount - commision).toFixed(2);
+        this.irRef[i].convertedAmount = (
+          this.irRef[i].recUSD * exchangeRate
+        ).toFixed(2);
+
+        sbInfo['firxNumber'] = this.irRef[i].billNo;
+        sbInfo['firxAmount'] = parseFloat(this.irRef[i].amount);
+        sbInfo['firxCurrency'] = this.irRef[i].currency;
+        sbInfo['firxCommision'] = this.irRef[i].commision;
+        sbInfo['firxRecAmo'] = this.irRef[i].recUSD;
+        sbInfo['firxDate'] = this.irRef[i].date;
+        let irAmount = parseFloat(this.irRef[i].amount);
+        totalForex = totalForex + irAmount;
+        finallist.push(sbInfo);
+      }
+    } else {
+      finallist.push(this);
+    }
+    this.balanceAvai = (parseFloat(this.fobValue) - totalForex).toFixed(2);
+    finallist.forEach((i1, index) => {
+      i1.balanceAvai = this.balanceAvai;
+    });
+    return finallist;
+  }
 }
+
+// export class ShippingBillDisplayItem extends ShippingBill {
+//   constructor(props) {
+//
+//   }
+// }
+
+export class ShippingBillDisplayListViewItem {
+  public shippingBillList: Array<ShippingBill> = [];
+  // public shippingBillDiplayList: Array<ShippingBillDisplayItem> = [];
+  constructor(data) {
+    for (let value of data) {
+      this.shippingBillList.push(new ShippingBill(value));
+    }
+    this.computeIRMerge();
+  }
+
+  computeIRMerge() {
+    let finaldata = [];
+    for (let i in this.shippingBillList) {
+      let data = this.shippingBillList[i].computeIRMerge();
+      for (let j in data) {
+        finaldata.push(data[j]);
+      }
+    }
+    this.shippingBillList = finaldata;
+    return finaldata;
+  }
+}
+
 

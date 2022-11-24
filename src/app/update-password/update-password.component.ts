@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { UserService } from '../service/user.service';
-import jwt_decode from 'jwt-decode';
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-update-password',
@@ -23,7 +23,7 @@ export class UpdatePasswordComponent implements OnInit {
     private router: Router, private route: ActivatedRoute) { }
   ngOnInit(): void {
     this.token = this.route.snapshot.params['id'];
-    let val = jwt_decode(this.token);
+    let val = jwt_decode.default(this.token);
     console.log(val)
     this.email = val['_id'];
     this.resetForm = this.formBuilder.group({
@@ -44,7 +44,7 @@ export class UpdatePasswordComponent implements OnInit {
               this.toggle = true;
             }
             //this.message = data['message']
-            // 
+            //
           },
           error => {
             console.log("error")

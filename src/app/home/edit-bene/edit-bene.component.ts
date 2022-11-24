@@ -48,7 +48,7 @@ export class EditBeneComponent implements OnInit {
         this.item1 = data["data"];
         this.item = this.item1[0];
         this.is = true;
-        this.router.navigate(["/home/manageCustomer/import"], {
+        this.router.navigate(["/home/manage-customer/import"], {
           queryParams: { registered: true },
         });
       },

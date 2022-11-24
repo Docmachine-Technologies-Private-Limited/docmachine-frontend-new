@@ -1,104 +1,39 @@
-import { InwardRemittanceComponent } from "./yesBank/inwardRemittance/inwardRemittance.component";
-import { MatProgressBarModule } from "@angular/material/progress-bar";
-import { DashboardComponent } from "./dashboard/dashboard.component";
 import { SidenavComponent } from "./sidenav/sidenav.component";
-import { MatTabsModule } from "@angular/material/tabs";
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { CommonModule } from "@angular/common";
-import { UploadComponent } from "./upload/upload.component";
-import {
-  DropzoneModule,
-  DropzoneConfigInterface,
-  DROPZONE_CONFIG,
-} from "ngx-dropzone-wrapper";
-import { NgSelectModule } from '@ng-select/ng-select';
-
-import { DragDropModule } from "@angular/cdk/drag-drop";
+import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ModalContentComponent1 } from './pipo-doc-export/pipo-doc-export.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { SharedDataService } from './shared-Data-Servies/shared-data.service';
+import {SharedHomeModule} from "./shared-home.module";
+// import {FbgWavierModule} from "./yesBank/advance-fbg-wavier/fbg-wavier.module";
 import { AgainstAdvanceComponent } from "./yesBank/against-advance/against-advance.component";
 import { RequestLetterComponent } from "./yesBank/request-letter/request-letter.component";
-import { LetterOfCreditComponent } from "./yesBank/letter-of-credit/letter-of-credit.component";
 import { LetterOfCreditImportComponent } from "./yesBank/letter-of-credit-import/letter-of-credit-import.component";
 import { A2cumAplicationComponent } from "./axisBank/a2cum-aplication/a2cum-aplication.component";
+import { NgSelectModule } from '@ng-select/ng-select';
+
 import { AdvanceRemitanceComponent } from "./axisBank/advance-remitance/advance-remitance.component";
 import { CreateBeneComponent } from "./create-bene/create-bene.component";
-import { ManageCustomerComponent } from "./manage-customer/manage-customer.component";
 import { EditBeneComponent } from "./edit-bene/edit-bene.component";
 import { ManageUserComponent } from "./manage-user/manage-user.component";
-import { DashboardTaskComponent } from "./dashboard-task/dashboard-task.component";
+// import { DashboardTaskComponent } from "./dashboard-task/dashboard-task.component";
 import { RequestComponent } from "./request/request.component";
-import { EditCompanyComponent } from "./edit-company/edit-company.component";
-import { OutwardRemittanceComponent } from "./advance-outward-remittance/outward-remittance.component";
-import { NumberToWordsPipe } from "./pipe/number-to-words.pipe";
-import { FbgWavierComponent } from "./yesBank/advance-fbg-wavier/fbg-wavier.component";
-import { DirectImportPaymentComponent } from './direct-import-payment/direct-import-payment.component';
-import { CompletedTaskComponent } from './completed-task/completed-task.component';
-import { InwardRemittanceBoeComponent } from './yesBank/inward-remittance-boe/inward-remittance-boe.component';
-import { PaymentAcceptanceLetterComponent } from './yesBank/payment-acceptance-letter/payment-acceptance-letter.component';
-import { BillUnderCollectionComponent } from './bill-under-collection/bill-under-collection.component';
-import { LcIsurenceComponent } from './lc-isurence/lc-isurence.component';
-import { TradeRequestLetterComponent } from './yesBank/trade-request-letter/trade-request-letter.component';
-import { BuyersCreditRequestComponent } from './buyers-credit-request/buyers-credit-request.component';
-import { FbgBuyerComponent } from './fbg-waiver/fbg-buyer.component';
-import { FbgBuyerFileComponent } from './yesBank/fbg-waiver-file/fbg-buyer-file.component';
-import { ViewDocumentComponent } from './view-document/view-document.component';
-import { AdvanceRemitanceFbgComponent } from './axisBank/advance-remitance-fbg/advance-remitance-fbg.component';
-import { DirectImportAxisComponent } from './axisBank/direct-import-axis/direct-import-axis.component';
-import { BuyersCreditAxisComponent } from './axisBank/buyers-credit-axis/buyers-credit-axis.component';
-import { DashboardNewComponent } from './dashboard-new/dashboard-new.component';
-import { LetterOfCreditImportAxisComponent } from './axisBank/letter-of-credit-import-axis/letter-of-credit-import-axis.component';
 import { OutwardRemComponent } from './outward-rem/outward-rem.component';
-import { A2cumApplicationYesBankComponent } from './yesBank/a2cum-application-yes-bank/a2cum-application-yes-bank.component';
 import { CaDocumentsComponent } from './ca-documents/ca-documents.component';
 import { AllTaskComponent } from './all-task/all-task.component';
 import { InwardRemmitanceComponent } from './inward-remmitance/inward-remmitance.component';
 import { InwardRemmitancep0103Component } from './yesBank/inward-remmitancep0103/inward-remmitancep0103.component';
-import { ExportHomeComponent } from './Export/export-home/export-home.component';
-import { BillLodgementComponent } from './Export/bill-lodgement/bill-lodgement.component';
 import { CompletedExportComponent } from './Export/completed-export/completed-export.component';
-import { PackingCreditComponent } from './Export/packing-credit/packing-credit.component';
-import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
-
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { PipoDocumentsComponent } from './pipo-documents/pipo-documents.component';
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+// import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { BuyersLodgeComponent } from './yesBank/buyers-lodge/buyers-lodge.component';
 import { PowerAdminComponent } from './power-admin/power-admin.component';
-import { PipoDocExportComponent } from './pipo-doc-export/pipo-doc-export.component';
-import { ModalContentComponent1 } from './pipo-doc-export/pipo-doc-export.component';
 import { EditBuyerComponent } from './edit-buyer/edit-buyer.component';
 import { TestComponent } from './test/test/test.component';
 import { HelpComponent } from './help/help.component';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { TermsAndConditionComponent } from './terms-and-condition/terms-and-condition.component';
-import { CreditNoteComponent } from './credit-note/credit-note.component';
-import { DebitNoteComponent } from './debit-note/debit-note.component';
-import { InsuranceDocumentComponent } from './insurance-document/insurance-document.component';
-import {LetterOfCreditExportLCComponent} from './letter-of-credit-export-lc/letter-of-credit-export-lc.component';
-import { MasterServiceComponent } from './master-service/master-service.component';
-import { TryPartyAgreementsComponent } from './try-party-agreements/try-party-agreements.component';
-import { OpinionReportsComponent } from './opinion-reports/opinion-reports.component';
-import { InwardRemittanceAdviceComponent } from './inward-remittance-advice/inward-remittance-advice.component';
-import { FilternewPipe } from './filterpipo/filternew.pipe';
-
-import { FilterdatePipe } from './datefilter/filterdate.pipe';
-import { FilteraPipe } from './Export/filtera/filtera.pipe';
-import { FilterbPipe } from './Export/filterb/filterb.pipe';
-import { FiterbuyerPipe } from './Export/fiterbuyer.pipe';
-import { SharedDataService } from './shared-Data-Servies/shared-data.service';
-import { EdpmsReconComponent } from './edpms-recon/edpms-recon.component';
-import { EdpmsReconTableComponent } from './edpms-recon-table/edpms-recon-table.component';
-import { AirwayBLCopyComponent } from './airway-blcopy/airway-blcopy.component';
-import { BillOfExchangeComponent } from './bill-of-exchange/bill-of-exchange.component';
-import { CommercialComponent } from './commercial/commercial.component';
-import { DestructionComponent } from './destruction/destruction.component';
-import { OtherDocumentsComponent } from './other-documents/other-documents.component';
-import { ImportsCreditNoteComponent } from './imports-credit-note/imports-credit-note.component';
-import { ImportDebitNoteComponent } from './import-debit-note/import-debit-note.component';
-import { BOEComponent } from './boe/boe.component';
-import { ImportInsuranceComponent } from './import-insurance/import-insurance.component';
-import { ImportTriPartyComponent } from './import-tri-party/import-tri-party.component'
+import {InwardRemittanceComponent} from "./yesBank/inwardRemittance/inwardRemittance.component";
 import { NgApexchartsModule } from "ng-apexcharts";
 import {ProgressBarModule} from "angular-progress-bar"
 import { PipoNewComponent } from './pipo-new/pipo-new.component';
@@ -106,9 +41,31 @@ import { EditPipoComponent } from './edit-pipo/edit-pipo.component';
 import { ViewPipoComponent } from './view-pipo/view-pipo.component';
 import { AddPipoComponent } from './add-pipo/add-pipo.component';
 import { FooterComponent } from './footer/footer.component'
-import { MatTableModule } from '@angular/material/table'  
-import { MatPaginatorModule } from '@angular/material/paginator'  
-import { MatDatepickerModule } from '@angular/material/datepicker'  
+import { MatTableModule } from '@angular/material/table'
+import { MatPaginatorModule } from '@angular/material/paginator'
+
+
+import {CommonModule} from "@angular/common";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {DropzoneModule} from "ngx-dropzone-wrapper";
+import {DragDropModule} from "@angular/cdk/drag-drop";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatTabsModule} from "@angular/material/tabs";
+
+import { CompletedTaskComponent } from './completed-task/completed-task.component';
+import { InwardRemittanceBoeComponent } from './yesBank/inward-remittance-boe/inward-remittance-boe.component';
+import { PaymentAcceptanceLetterComponent } from './yesBank/payment-acceptance-letter/payment-acceptance-letter.component';
+import { TradeRequestLetterComponent } from './yesBank/trade-request-letter/trade-request-letter.component';
+import { FbgBuyerComponent } from './fbg-waiver/fbg-buyer.component';
+import { FbgBuyerFileComponent } from './yesBank/fbg-waiver-file/fbg-buyer-file.component';
+import { AdvanceRemitanceFbgComponent } from './axisBank/advance-remitance-fbg/advance-remitance-fbg.component';
+import { DirectImportAxisComponent } from './axisBank/direct-import-axis/direct-import-axis.component';
+import { BuyersCreditAxisComponent } from './axisBank/buyers-credit-axis/buyers-credit-axis.component';
+import { LetterOfCreditImportAxisComponent } from './axisBank/letter-of-credit-import-axis/letter-of-credit-import-axis.component';
+
+// --------------------------------?
+
+import { MatDatepickerModule } from '@angular/material/datepicker'
 
 import {  MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -117,160 +74,87 @@ import { MatInputModule} from '@angular/material/input';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { ConfirmDialogBoxComponent } from './confirm-dialog-box/confirm-dialog-box.component';
 
-// import { TradeRequestTradeComponent } from './yesBank/trade-request-trade/trade-request-trade.component';
-const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
-  // Change this to your upload POST address:
-  url: "https://httpbin.org/post",
-  acceptedFiles: "image/*",
-  maxFilesize: 3,
-  createImageThumbnails: true,
-};
 
-// import {LocalStorageService} from '../../shared/services/localstorage.service';
-// import {SharedProjectsModule} from '../../shared/shared.projects.module';
-// import {ProposalsService} from '../../shared/services/proposals.service';
-// import {CommentsService} from '../../shared/services/comments.service';
-// import {SharedProfileModule} from '../freelancerprofile/shared.profile.module';
 @NgModule({
   declarations: [
     SidenavComponent,
-    DashboardComponent,
-    UploadComponent,
-    InwardRemittanceComponent,
-    AgainstAdvanceComponent,
-    RequestLetterComponent,
-    LetterOfCreditComponent,
-    LetterOfCreditImportComponent,
-    A2cumAplicationComponent,
-    AdvanceRemitanceComponent,
-    CreateBeneComponent,
-    ManageCustomerComponent,
-    EditBeneComponent,
     ManageUserComponent,
-    DashboardTaskComponent,
-    RequestComponent,
-    EditCompanyComponent,
-    OutwardRemittanceComponent,
-    NumberToWordsPipe,
-    FbgWavierComponent,
-    DirectImportPaymentComponent,
-    CompletedTaskComponent,
-    InwardRemittanceBoeComponent,
-    PaymentAcceptanceLetterComponent,
-    BillUnderCollectionComponent,
-    LcIsurenceComponent,
-    TradeRequestLetterComponent,
-    BuyersCreditRequestComponent,
-    FbgBuyerComponent,
     FbgBuyerFileComponent,
-    ViewDocumentComponent,
-    AdvanceRemitanceFbgComponent,
-    DirectImportAxisComponent,
-    BuyersCreditAxisComponent,
-    DashboardNewComponent,
-    LetterOfCreditImportAxisComponent,
     OutwardRemComponent,
-    A2cumApplicationYesBankComponent,
     CaDocumentsComponent,
-    AllTaskComponent,
     InwardRemmitanceComponent,
     InwardRemmitancep0103Component,
-    ExportHomeComponent,
-    BillLodgementComponent,
     CompletedExportComponent,
-    PackingCreditComponent,
-    ConfirmDialogComponent,
-    PipoDocumentsComponent,
-    BuyersLodgeComponent,
     PowerAdminComponent,
-    PipoDocExportComponent,
     ModalContentComponent1,
-    EditBuyerComponent,
-    TestComponent,
     HelpComponent,
     TermsAndConditionComponent,
-    CreditNoteComponent,
-    DebitNoteComponent,
-    InsuranceDocumentComponent,
-    LetterOfCreditExportLCComponent,
-    MasterServiceComponent,
-    TryPartyAgreementsComponent,
-    OpinionReportsComponent,
-    InwardRemittanceAdviceComponent,
-    FilternewPipe,
-    FilterdatePipe,
-
-    FilteraPipe,
-    FilterbPipe,
-    FiterbuyerPipe,
-    EdpmsReconComponent,
-    EdpmsReconTableComponent,
-    AirwayBLCopyComponent,
-    BillOfExchangeComponent,
-    CommercialComponent,
-    DestructionComponent,
-    OtherDocumentsComponent,
-    ImportsCreditNoteComponent,
-    ImportDebitNoteComponent,
-    BOEComponent,
-    ImportInsuranceComponent,
-    ImportTriPartyComponent,
     PipoNewComponent,
     EditPipoComponent,
     ViewPipoComponent,
     AddPipoComponent,
     FooterComponent,
-    ConfirmDialogBoxComponent,
+    ConfirmDialogBoxComponent
   ],
   imports: [
-    CommonModule,
-    FormsModule,
-    DropzoneModule,
-    DragDropModule,
+    SharedHomeModule,
     MatProgressBarModule,
+    MatNativeDateModule,MatButtonModule,MatDialogModule, MatInputModule, MatFormFieldModule ,
     MatTabsModule,
-    MatTableModule,
-    MatPaginatorModule,
-    // BrowserModule,
-    MatNativeDateModule,
-    MatFormFieldModule ,MatInputModule,
-    MatDialogModule,MatButtonModule,
     MatDatepickerModule,
+    MatTableModule,
+    NgSelectModule,
+    MatPaginatorModule,
     NgApexchartsModule,
     ProgressBarModule,
-    NgSelectModule,
-    // SharedProjectsModule,
-    // SharedProfileModule,
     ReactiveFormsModule,
-
     RouterModule.forChild([
       {
         path: "",
         component: SidenavComponent,
         children: [
+          { path: "dashboardTask", loadChildren: () => import('./dashboard-task/dashboard-task.module').then(mod => mod.DashboardTaskModule) },
+          { path: "upload", loadChildren: () => import('./upload/upload.module').then(mod => mod.UploadModule) },
+          { path: "manage-customer", loadChildren: () => import('./manage-customer/manage-customer.module').then(mod => mod.ManageCustomerModule) },
+          { path: "createBene", loadChildren: () => import('./create-bene/create-bene.module').then(mod => mod.CreateBeneModule) },
+          { path: "pipo-doc", loadChildren: () => import('./pipo-documents/pipo-documents.module').then(mod => mod.PipoDocumentsModule) },
+          { path: "boe", loadChildren: () => import('./boe/boe.module').then(mod => mod.BoeModule) },
+          { path: "importCredit", loadChildren: () => import('./imports-credit-note/imports-credit-note.module').then(mod => mod.ImportsCreditNoteModule) },
+          { path: "importDebit", loadChildren: () => import('./import-debit-note/import-debit-note.module').then(mod => mod.ImportDebitNoteModule) },
+          { path: "importInsurance", loadChildren: () => import('./import-insurance/imports-insurance.module').then(mod => mod.ImportsInsuranceModule) },
+          { path: "importTriParty", loadChildren: () => import('./import-tri-party/imports-tri-party.module').then(mod => mod.ImportsTriPartyModule) },
+          { path: "advance-outward-remittance", loadChildren: () => import('./advance-outward-remittance/advance-outward.remittance.module').then(mod => mod.AdvanceOutwardRemittanceModule) },
+          { path: "direct-import-payment", loadChildren: () => import('./direct-import-payment/direct-import-payment.module').then(mod => mod.DirectImportPaymentModule) },
+          { path: "a2cum-application-yesbank", loadChildren: () => import('./yesBank/a2cum-application-yes-bank/a2cum-application-yes-bank.module').then(mod => mod.A2cumApplicationYesBankModule) },
+          { path: "fbg-waiver", loadChildren: () => import('./yesBank/advance-fbg-wavier/fbg-wavier.module').then(mod => mod.FbgWavierModule) },
+          { path: "lc-isurance", loadChildren: () => import('./lc-isurence/lc-isurance.module').then(mod => mod.LcIsuranceModule) },
+          { path: "buyer-credit", loadChildren: () => import('./buyers-credit-request/buyers-credit-request-module').then(mod => mod.BuyersCreditRequestModule) },
+          { path: "bill-under-collection", loadChildren: () => import('./bill-under-collection/bill-under-collection.module').then(mod => mod.BillUnderCollectionModule) },
+          { path: "pipo-export", loadChildren: () => import('./pipo-doc-export/pipo-doc-export.module').then(mod => mod.PipoDocExportModule) },
+          { path: "packing-list", loadChildren: () => import('./other-documents/other-documents.module').then(mod => mod.OtherDocumentsModule) },
+          { path: "commercial", loadChildren: () => import('./commercial/commercial.module').then(mod => mod.CommercialModule) },
+          { path: "destruction", loadChildren: () => import('./destruction/destruction.module').then(mod => mod.DestructionModule) },
+          { path: "bill-of-exchange", loadChildren: () => import('./bill-of-exchange/bill-of-exchange.module').then(mod => mod.BillOfExchangeModule) },
+          { path: "airway-bl-copy", loadChildren: () => import('./airway-blcopy/airway-blcopy.module').then(mod => mod.AirwayBlcopyModule) },
+          { path: "inward-remittance-advice", loadChildren: () => import('./inward-remittance-advice/inward-remittance-advice.module').then(mod => mod.InwardRemittanceAdviceModule) },
+          { path: "opinion-report", loadChildren: () => import('./opinion-reports/opinion-reports.module').then(mod => mod.OpinionReportsModule) },
+          { path: "try-party", loadChildren: () => import('./try-party-agreements/try-party-agreements.module').then(mod => mod.TryPartyAgreementsModule) },
+          { path: "master-services", loadChildren: () => import('./master-service/master-service.module').then(mod => mod.MasterServiceModule) },
+          { path: "letterofcredit-lc", loadChildren: () => import('./letter-of-credit-export-lc/letter-of-credit-export-lc.module').then(mod => mod.LetterOfCreditExportLcModule) },
+          { path: "insurance-document", loadChildren: () => import('./insurance-document/insurance-document.module').then(mod => mod.InsuranceDocumentModule) },
+          { path: "debit-note", loadChildren: () => import('./debit-note/debit-note.module').then(mod => mod.DebitNoteModule) },
+          { path: "credit-note", loadChildren: () => import('./credit-note/credit-note.module').then(mod => mod.CreditNoteModule) },
+          { path: "view-document", loadChildren: () => import('./view-document/view-document.module').then(mod => mod.ViewDocumentModule) },
+          { path: "edpms-recon-table", loadChildren: () => import('./edpms-recon-table/edpms-recon-table.module').then(mod => mod.EdpmsReconTableModule) },
+          { path: "edpms-recon", loadChildren: () => import('./edpms-recon/edpms-recon.module').then(mod => mod.EdpmsReconModule) },
+          { path: "bill-lodgement", loadChildren: () => import('./Export/bill-lodgement/bill-lodgement.module').then(mod => mod.BillLodgementModule) },
+          { path: "packing-credit-request", loadChildren: () => import('./Export/packing-credit/packing-credit.module').then(mod => mod.PackingCreditModule) },
+          { path: "export-home", loadChildren: () => import('./Export/export-home/export-home.module').then(mod => mod.ExportHomeModule) },
+          { path: "account", loadChildren: () => import('./edit-company/edit-company.module').then(mod => mod.EditCompanyModule) },
+          { path: "completed-task", loadChildren: () => import('./completed-task/completed-task.module').then(mod => mod.CompletedTaskModule) },
+          { path: "tasks", loadChildren: () => import('./all-task/all-task.module').then(mod => mod.AllTaskModule) },
+          { path: "letter-of-credit", loadChildren: () => import('./yesBank/letter-of-credit/letter-of-credit.module').then(mod => mod.LetterOfCreditModule) },
           {
-            path: "dashboard",
-            component: DashboardComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "dashboardTask",
-            component: DashboardTaskComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "dashboardNew",
-            component: DashboardNewComponent,
-            pathMatch: "full",
-          },
-          { path: "upload", component: UploadComponent, pathMatch: "full" },
-          {
-            path: "manageCustomer/:id",
-            component: ManageCustomerComponent,
-            pathMatch: "full",
-          },
-          {
-            
             path: "createBene",
             component: CreateBeneComponent,
             pathMatch: "full",
@@ -311,11 +195,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
-            path: "letterOfCredit",
-            component: LetterOfCreditComponent,
-            pathMatch: "full",
-          },
-          {
             path: "letterOfCreditImport",
             component: LetterOfCreditImportComponent,
             pathMatch: "full",
@@ -328,11 +207,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
           {
             path: "a2cumApplication",
             component: A2cumAplicationComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "a2cumApplicationYesbank",
-            component: A2cumApplicationYesBankComponent,
             pathMatch: "full",
           },
           {
@@ -355,7 +229,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             component: TestComponent,
             pathMatch: "full",
           },
-
           {
             path: "manageUser",
             component: ManageUserComponent,
@@ -366,21 +239,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             component: RequestComponent,
             pathMatch: "full",
           },
-          {
-            path: "account",
-            component: EditCompanyComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "advance-outward-remittance",
-            component: OutwardRemittanceComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "fbg-wavier",
-            component: FbgWavierComponent,
-            pathMatch: "full",
-          },
+
+          // { path: "fbg-wavier", loadChildren: () => import('./yesBank/advance-fbg-wavier/fbg-wavier.module').then(mod => mod.FbgWavierModule) },
           {
             path: "advance-remittance-fbg",
             component: AdvanceRemitanceFbgComponent,
@@ -391,64 +251,36 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             component: DirectImportAxisComponent,
             pathMatch: "full",
           },
-          {
-            path: "direct-import-payment",
-            component: DirectImportPaymentComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "completedTask/:id",
-            component: CompletedTaskComponent,
-            pathMatch: "full",
-          },
+          // {
+          //   path: "completedTask/:id",
+          //   component: CompletedTaskComponent,
+          //   pathMatch: "full",
+          // },
           {
             path: "inwardRemittanceBoe",
             component: InwardRemittanceBoeComponent,
             pathMatch: "full",
           },
-          {
-            path: "paymentAcceptance",
-            component: PaymentAcceptanceLetterComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "bill-under-collection",
-            component: BillUnderCollectionComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "lc-isurence",
-            component: LcIsurenceComponent,
-            pathMatch: "full",
-          },
+          // {
+          //   path: "paymentAcceptance",
+          //   component: PaymentAcceptanceLetterComponent,
+          //   pathMatch: "full",
+          // },
           {
             path: "tradeRequestLetter",
             component: TradeRequestLetterComponent,
             pathMatch: "full",
           },
+          { path: "payment-acceptance", loadChildren: () => import('./yesBank/payment-acceptance-letter/payment-acceptance.module').then(mod => mod.PaymentAcceptanceModule) },
           {
             path: "buyersCreditAxis",
             component: BuyersCreditAxisComponent,
             pathMatch: "full",
           },
-          {
-            path: "buyerCredit",
-            component: BuyersCreditRequestComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "fbgWaiver",
-            component: FbgBuyerComponent,
-            pathMatch: "full",
-          },
+
           {
             path: "fbg-wavier-file/:id",
             component: FbgBuyerFileComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "viewDocument/:file",
-            component: ViewDocumentComponent,
             pathMatch: "full",
           },
           {
@@ -466,24 +298,14 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             component: CaDocumentsComponent,
             pathMatch: "full",
           },
-          {
-            path: "tasks/:file",
-            component: AllTaskComponent,
-            pathMatch: "full",
-          },
+          // {
+          //   path: "tasks/:file",
+          //   component: AllTaskComponent,
+          //   pathMatch: "full",
+          // },
           {
             path: "inwardRemmitancep0103",
             component: InwardRemmitancep0103Component,
-            pathMatch: "full",
-          },
-          {
-            path: "exportHome",
-            component: ExportHomeComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "billLodgement",
-            component: BillLodgementComponent,
             pathMatch: "full",
           },
           {
@@ -492,23 +314,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             pathMatch: "full",
           },
           {
-            path: "packingCreditRequest",
-            component: PackingCreditComponent,
-            pathMatch: "full",
-          },
-          {
             path: "BuyersLodge",
             component: BuyersLodgeComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "pipoDoc",
-            component: PipoDocumentsComponent,
-            pathMatch: "full",
-          },
-          {
-            path: "pipoDocExport",
-            component: PipoDocExportComponent,
             pathMatch: "full",
           },
           {
@@ -525,106 +332,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             path: "t&c",
             component:TermsAndConditionComponent,
             pathMatch: "full",
-          },
-          {
-            path: "creditNote",
-            component: CreditNoteComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "debitNote",
-            component: DebitNoteComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "insuranceDocument",
-            component: InsuranceDocumentComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "letterOfCredit-LC",
-            component: LetterOfCreditExportLCComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "master-services",
-            component: MasterServiceComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "try-Party",
-            component: TryPartyAgreementsComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "opinion-report",
-            component: OpinionReportsComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "inwardRemittanceAdvice",
-            component: InwardRemittanceAdviceComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "edpms-recon",
-            component: EdpmsReconComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "edpms-recon-table",
-            component: EdpmsReconTableComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "airwayBlcopy",
-            component: AirwayBLCopyComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "billOfExchange",
-            component: BillOfExchangeComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "destruction",
-            component: DestructionComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "commercial",
-            component: CommercialComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "packingList",
-            component: OtherDocumentsComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "importCredit",
-            component: ImportsCreditNoteComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "importDebit",
-            component: ImportDebitNoteComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "boe",
-            component: BOEComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "importInsurance",
-            component: ImportInsuranceComponent,
-            pathMatch: "full"
-          },
-          {
-            path: "importTriParty",
-            component: ImportTriPartyComponent,
-            pathMatch: "full"
           }
 
         ],
@@ -636,6 +343,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   providers: [ConfirmDialogService, NgbModal,SharedDataService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //   exports: [SharedProjectsModule]
-  exports: [MatProgressBarModule, MatTabsModule, ConfirmDialogComponent],
+  exports: [MatProgressBarModule, MatTabsModule],
 })
 export class HomeModule { }

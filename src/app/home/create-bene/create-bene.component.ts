@@ -34,7 +34,7 @@ export class CreateBeneComponent implements OnInit {
         data => {
           console.log("king123")
           console.log(data)
-          this.router.navigate(['/home/manageCustomer']);
+          this.router.navigate(['/home/manage-customer']);
 
         },
         error => {

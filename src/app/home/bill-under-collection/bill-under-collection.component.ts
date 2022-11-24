@@ -41,6 +41,7 @@ export class BillUnderCollectionComponent implements OnInit {
   doc: string;
   popo: string;
   pipo: string;
+  pipo_id: string;
   myRadio: any;
   file1: any;
   constructor(
@@ -81,6 +82,7 @@ export class BillUnderCollectionComponent implements OnInit {
     this.bene = this.route.snapshot.paramMap.get('bene')
     this.amount = parseInt(this.route.snapshot.paramMap.get('amount'))
     this.pipo = this.route.snapshot.paramMap.get('pipo')
+    this.pipo_id = this.route.snapshot.paramMap.get('pipo_id')
     if (this.file == 'nonlcUsance') {
       this.file1 = 'Non LC Usance'
     }
@@ -248,9 +250,9 @@ export class BillUnderCollectionComponent implements OnInit {
       this.documentService.draft = true;
       //data.pipoDetail["_id"] = data._id;
       this.documentService.pdfData = data.pipoDetail;
-      this.router.navigate(['home/paymentAcceptance', { pipo: data.pi_poNo, file: this.file }]);
+      this.router.navigate(['home/payment-acceptance', { pipo: data.pi_poNo,pipo_id: this.pipo_id, file: this.file }]);
     } else {
-      this.router.navigateByUrl(`/home/completedTask/${data._id}`);
+      this.router.navigateByUrl(`/home/completed-task/${data._id}`);
     }
 
   }
@@ -260,9 +262,10 @@ export class BillUnderCollectionComponent implements OnInit {
     a.push(piPo)
     this.pipoArr = a;
     this.documentService.draft = false;
-    this.router.navigate(['home/paymentAcceptance', {
+    this.router.navigate(['home/payment-acceptance', {
       pipo: this.pipoArr,
       amount: this.selectedRow.amount,
+      pipo_id: this.pipo_id,
       file: this.file
     }]);
 
@@ -274,16 +277,18 @@ export class BillUnderCollectionComponent implements OnInit {
 
     if (this.myRadio == 'axisBank') {
       console.log("h");
-      this.router.navigate(['home/paymentAcceptance', {
+      this.router.navigate(['home/payment-acceptance', {
         pipo: this.pipoArr,
         amount: this.amount,
+        pipo_id: this.pipo_id,
         file: this.file
       }]);
     }
     else {
-      this.router.navigate(['home/paymentAcceptance', {
+      this.router.navigate(['home/payment-acceptance', {
         pipo: this.pipoArr,
         amount: this.amount,
+        pipo_id: this.pipo_id,
         file: this.file
       }]);
 

@@ -39,6 +39,13 @@ export class AddPipoComponent implements OnInit {
   uploading: boolean = false;
   authToken: string;
 
+
+  CurrencyData:any = ['INR','USD', 'EUR', 'GBP', 'CHF','AUD','CAD','AED','SGD','SAR','JPY']
+
+
+
+
+
   public type: string = "directive";
   public res;
   public size;
@@ -521,3 +528,6 @@ export class AddPipoComponent implements OnInit {
   }
 
 }
+
+// PROFORMA INVOICE
+
