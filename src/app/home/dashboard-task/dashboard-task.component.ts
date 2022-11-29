@@ -88,11 +88,11 @@ export class DashboardTaskComponent implements OnInit {
 
   public inwardChartOptions;
   public shippingBillChartOptions;
-  public PendingrealisationChart;
+  public PendingrealisationChartOptions;
   public orderPendingForShipmentChartOptions;
-  public packingCreditAvailedChart;
-  public totalBillLodgedChart;
-  public edpmsChart;
+  public packingCreditAvailedChartOptions;
+  public totalBillLodgedChartOptions;
+  public edpmsChartOptions;
   
 
   sbChartNoData: Boolean = true;
@@ -102,6 +102,10 @@ export class DashboardTaskComponent implements OnInit {
   pipoChart;
   inwardChart;
   orderShipmentChart;
+  PendingrealisationChart;
+  EDPMSChart;
+  packingCreditAvailedChart;
+  totalBillLodgedChart;
 
   @ViewChild("chart") chart: ChartComponent;
 
@@ -278,6 +282,8 @@ export class DashboardTaskComponent implements OnInit {
 
         console.log("calleddddddd",)
         console.log("this.EDPMSData.pendingData, this.EDPMSData.uploadData",this.EDPMSData.pendingData, this.EDPMSData.uploadData)
+
+
 
 
         // this.edpmsChart.series = [this.EDPMSData.pendingData, this.EDPMSData.uploadData]
@@ -460,7 +466,7 @@ export class DashboardTaskComponent implements OnInit {
     }
 
 
-    this.PendingrealisationChart = {
+    this.PendingrealisationChartOptions = {
       series: [
         {
           name: "distibuted",
@@ -468,7 +474,7 @@ export class DashboardTaskComponent implements OnInit {
         }
       ],
       chart: {
-        height: 200,
+        height: 180,
         type: "bar",
         events: {
           click: function (chart, w, e) {
@@ -535,7 +541,7 @@ export class DashboardTaskComponent implements OnInit {
    
         chart: {
         type: 'bar',
-        height: 150,
+        height: 220,
         toolbar: {
           show: false
         }
@@ -560,7 +566,7 @@ export class DashboardTaskComponent implements OnInit {
       }
     };
 
-    this.packingCreditAvailedChart = {
+    this.packingCreditAvailedChartOptions = {
       series: [
         {
           name: "distibuted",
@@ -630,7 +636,7 @@ export class DashboardTaskComponent implements OnInit {
       }
     };
 
-    this.totalBillLodgedChart = {
+    this.totalBillLodgedChartOptions = {
       series: [
         {
           name: "distibuted",
@@ -700,17 +706,17 @@ export class DashboardTaskComponent implements OnInit {
       }
     };
 
-    this.edpmsChart = {
-      series: [503,60],
+    this.edpmsChartOptions = {
+      series: [],
       // series: [44, 55, 13, 43, 22],
       chart: {
-        width: 300,
+        width: 270,
         type: "donut"
       },
       // labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
-      labels:  ["Pending", "Upload"],
+      labels:  [],
 
-      colors: ["#DDF9EB", "4CC78A", "#E07C97", "#DCA1DC"],
+      colors: ["#51AEE5", "#4CC78A", "#E07C97", "#DCA1DC"],
 
       responsive: [
         {
@@ -746,12 +752,24 @@ export class DashboardTaskComponent implements OnInit {
     this.inwardChart = new ApexCharts(document.querySelector('#inwardChart'), this.inwardChartOptions);
     this.inwardChart.render();
 
+    this.EDPMSChart = new ApexCharts(document.querySelector('#EdpmsChart'), this.edpmsChartOptions);
+    this.EDPMSChart.render();
+
     this.orderShipmentChart = new ApexCharts(document.querySelector('#orderShipmentChart'), this.orderPendingForShipmentChartOptions);
     this.orderShipmentChart.render();
+
+    this.PendingrealisationChart = new ApexCharts(document.querySelector('#PendingRealisationChart'), this.PendingrealisationChartOptions);
+    this.PendingrealisationChart.render();
+
+    this.packingCreditAvailedChart = new ApexCharts(document.querySelector('#PackingCreditAvailedChart'), this.packingCreditAvailedChartOptions);
+    this.packingCreditAvailedChart.render();
     
+    this.totalBillLodgedChart = new ApexCharts(document.querySelector('#TotalBillLodgedChart'), this.totalBillLodgedChartOptions);
+    this.totalBillLodgedChart.render();
 
     // this.edpmsChart.series = [this.EDPMSData.pendingData, this.EDPMSData.uploadData]
     // this.edpmsChart.labels = ['Pending', "Upload"]
+
 
   }
 
@@ -780,6 +798,17 @@ export class DashboardTaskComponent implements OnInit {
       labels: this.inwardBuyerImportData?.map(data => data._id),
       chartData: this.inwardBuyerImportData
     });
+
+
+    this.EDPMSChart.updateOptions({
+      series:  [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
+      labels:["Pending", "Upload"],
+      // chartData: this.inwardBuyerImportData
+    });
+
+
+    // this.edpmsChart.series = [this.EDPMSData.pendingData, this.EDPMSData.uploadData]
+    // this.edpmsChart.labels = ["Pending", "Upload"]
 
 
     this.shipmentPending = this.shipmentPendingImport
@@ -844,6 +873,12 @@ export class DashboardTaskComponent implements OnInit {
       series: this.inwardBuyerExportData?.map(data => data.totalItems),
       labels: this.inwardBuyerExportData?.map(data => data._id),
       chartData: this.inwardBuyerExportData
+    });
+
+    this.EDPMSChart.updateOptions({
+      series:  [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
+      labels:["Pending", "Upload"],
+      // chartData: this.inwardBuyerImportData
     });
 
 

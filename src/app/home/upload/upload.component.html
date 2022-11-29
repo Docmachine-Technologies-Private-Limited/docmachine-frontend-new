@@ -450,7 +450,7 @@
         <div *ngIf='docu == "debitNote" && file =="export"'></div>
         <div *ngIf='docu == "irAdvice" && file =="export"'></div>
 
-
+<!--sbbbbbbbbbbbbbbbbbbb --------------------------------- -->
         <div *ngIf="documentType === 'sb'" class="form" method="POST">
             <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config" class="dropzone dropzone-container" id="dropzone" />
             <i class="fas fa-file-upload"></i>

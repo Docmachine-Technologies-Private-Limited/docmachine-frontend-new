@@ -504,8 +504,6 @@ export class AddPipoComponent implements OnInit {
     return this.authToken;
   }
 
-
-
   // ----------------------------- end handle image upload ----------------------------------
 
 

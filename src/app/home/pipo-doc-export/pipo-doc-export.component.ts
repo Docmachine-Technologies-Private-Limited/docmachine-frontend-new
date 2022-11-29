@@ -288,7 +288,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
             // this.pipoArrayList = data;
             for (let value of data) {
               // if (value['file'] == 'export') {
-                this.pipoArrayList.push(value);
+              this.pipoArrayList.push(value);
               // }
             }
             // console.log('shailendra Jain #####################', this.item22);
@@ -305,7 +305,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
           this.pipoDisplayListData = this.pipoDataService.setPipoData(res.data, 'export');
           this.pipoDataService.pipo$.subscribe((data) => {
             for (let value of data) {
-                this.pipoArrayList.push(value);
+              this.pipoArrayList.push(value);
             }
           });
         },
@@ -338,14 +338,20 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   }
 
   getSinglePipo(id, i) {
+    console.log("----------->1")
     this.showInvoice = true;
     this.selectedrow = data;
     this.currentindex = i;
     this.documentService.getPipoByPipoNo(id).subscribe(
       (data) => {
+        console.log("----------->2")
+
         this.pipoDataService.setSinglePipoData(data['data'][0]);
+        console.log("----------->2")
         this.pipoDataService.pipoSingle$.subscribe((selectedPipo) => {
           this.pipoData = selectedPipo;
+          console.log("----------->3")
+
           console.log('calling get invoices', this.pipoData);
           this.getInvoices(selectedPipo, i);
         });
@@ -627,6 +633,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   getInvoices(selectedPipo, i) {
     console.log(selectedPipo.pi_poNo);
     this.showInvoice = true;
+
+    console.log("---------> called")
     this.router.navigate([
       'home/pipo-export',
       {
@@ -1157,7 +1165,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         currentData.packingDoc
       );
     }
-    else if(a == 'airwayBlcopy'){
+    else if (a == 'airwayBlcopy') {
       this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
         currentData.blCopyDoc
       );
@@ -1171,7 +1179,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   onSubmitPipo1() {
     console.log(this.id);
     console.log(this.piPoForm.value);
-    var temp:any = {
+    var temp: any = {
       ...this.piPoForm.value,
     }
     temp.doc1 = this.pipourl1;
@@ -1364,7 +1372,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   }
 }
 
-import {PipoDataService} from "../../service/homeservices/pipo.service";
+import { PipoDataService } from "../../service/homeservices/pipo.service";
 
 @Component({
   selector: 'modal-content',
@@ -1465,7 +1473,7 @@ export class ModalContentComponent1 implements OnInit {
   epltable: any;
   static epltable: any;
 
-  constructor(public bsModalRef: BsModalRef) {}
+  constructor(public bsModalRef: BsModalRef) { }
 
   ngOnInit() {
     console.log(this.table);
