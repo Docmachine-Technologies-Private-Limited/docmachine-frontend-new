@@ -1,0 +1,115 @@
+<div class="content_top_common">
+    <div class="content-wrap">
+        <div class="container-fluid">
+            <div class="import_export_sec">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="Dashbord_sec">
+                            <h2 class="title_dash">Inward remittance settlement or disposal</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="float_right_page">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <!-- <li class="breadcrumb-item"><a routerLink="/home/view-pipo">Documents</a></li> -->
+                                    <li class="breadcrumb-item"><a routerLink="/home/pipo">Transactions</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Inward remittance settlement or disposal</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="content_white_background">
+                <div class="data_table_new">
+                    <h3>Upload bank intimation / MT103</h3>
+                    <div class="row">
+                        <div class="col-md-7 col-sm-12 col-xs-12 col-12">
+                            <div class="pdf_invoce">
+                                <div class="file_addd_to">
+                                    <div class="
+                                    new_form_selct
+                                    " method="POST">
+                                        <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config1" class="dropzone dropzone-container" id="dropzone" />
+                                        <i class="fas fa-file-upload"></i>
+                                        <h5>Drag & drop files here or <span class="change_textcolor">Browse</span></h5>
+                                        <p>Files supported: PDF, XSLS, Image, Scanner</p>
+                                        <p>Max. size: 5 MB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-12 col-xs-12 col-12">
+                            <div class="left_edit_form">
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Select bank name*</label>
+                                        <select class="form-select" aria-label="Default select example">
+                                                <option selected>Select bank name</option>
+                                                <option value="1">Axis bank</option>
+                                                <option value="2">HDFC bank</option>
+                                                <option value="3">State bank of India</option>
+                                                <option value="3">IndusInd bank</option>
+                                              </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Inward reference number</label>
+                                        <input type="text" class="form-control" id="Amount" aria-describedby="emailHelp" formControlName="Remitter" placeholder="1187651 80131" autocomplete="off">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">Amount</label>
+                                                <input type="text" class="form-control" id="Amount" aria-describedby="emailHelp" formControlName="Amount" placeholder="30713.25" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">Currency</label>
+                                                <select class="form-select" aria-label="Default select example">
+                                                    <option selected>Select Currency</option>
+                                                    <option value="1">EUR</option>
+                                                    <option value="2">222</option>
+                                                    <option value="3">RS</option>
+                                                    <option value="3">IndusInd bank</option>
+                                                  </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Remitter name ( as per MT103 )</label>
+                                        <input type="text" class="form-control" id="Amount" aria-describedby="emailHelp" formControlName="Remitter" placeholder="NORMEKS AMBALAJ SANAYI LE TICARET" autocomplete="off">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Bill lodgment number</label>
+                                        <input type="text" class="form-control" id="Amount" aria-describedby="emailHelp" formControlName="Remitter" placeholder="Bill lodgment number" autocomplete="off">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Inward amount for disposal</label>
+                                        <input type="text" class="form-control" id="Amount" aria-describedby="emailHelp" formControlName="Remitter" placeholder="25000.00" autocomplete="off">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Credit account number</label>
+                                        <input type="text" class="form-control" id="Amount" aria-describedby="emailHelp" formControlName="Remitter" placeholder="1234 5678 9012 3456" autocomplete="off">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Charges account number</label>
+                                        <input type="text" class="form-control" id="Amount" aria-describedby="emailHelp" formControlName="Remitter" placeholder="1234 5678 9012 3456" autocomplete="off">
+                                    </div>
+                                    <div class="data_submit_righg">
+                                        <div class="data_submit">
+                                            <button type="button" class="btn btn-secondary" routerLink='/home/pipo'>CANCEL</button>
+                                            <button type="submit" class="btn btn-primary">UPLOAD</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
