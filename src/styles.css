@@ -1,0 +1,13 @@
+/* No CSS */
+
+
+/*# sourceMappingURL=styles.css.map */
+
+@import '~ngx-toastr/toastr.css';
+body {
+    background: #F0F2FC!important
+}
+
+.modal-backdrop{
+    z-index: 1050 !important;
+  }
