@@ -12,6 +12,8 @@ src/**/*.js
 
 # dependencies
 /node_modules
+/.git
+/.angular
 
 # IDEs and editors
 /.idea
