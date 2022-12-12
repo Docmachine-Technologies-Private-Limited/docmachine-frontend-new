@@ -21,17 +21,19 @@ export class AppConfig {
     }
 
     public getConstants() {
-        if (window.location.hostname === 'localhost') {
-            this.apiUrl = `http://localhost:3000/v1`;
-        } else if (window.location.hostname.indexOf('beta') === 0) {
-            this.apiUrl = window.location.protocol + '//betaapi.' + 'bharathexim.com' + '/v1';
-        }
-        else if (window.location.hostname.indexOf('dev') === 0) {
-            this.apiUrl = window.location.protocol + '//devapi.' + 'bharathexim.com' + '/v1';
-        }
-        else if (window.location.hostname.indexOf('docmachine') === 0) {
-            this.apiUrl = window.location.protocol + '//api.' + 'bharathexim.com' + '/v1';
-        }
+        
+        this.apiUrl = 'https://stagingapi.bharathexim.com/v1';
+        // if (window.location.hostname === 'localhost') {
+        //     this.apiUrl = `http://localhost:3000/v1`;
+        // } else if (window.location.hostname.indexOf('beta') === 0) {
+        //     this.apiUrl = window.location.protocol + '//betaapi.' + 'bharathexim.com' + '/v1';
+        // }
+        // else if (window.location.hostname.indexOf('dev') === 0) {
+        //     this.apiUrl = window.location.protocol + '//devapi.' + 'bharathexim.com' + '/v1';
+        // }
+        // else if (window.location.hostname.indexOf('docmachine') === 0) {
+        //     this.apiUrl = window.location.protocol + '//api.' + 'bharathexim.com' + '/v1';
+        // }
 
         // if (window.location.hostname === 'localhost') {
         //     this.apiUrl = `http://localhost:3000/v1`;
