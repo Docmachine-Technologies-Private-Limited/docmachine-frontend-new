@@ -32,7 +32,7 @@ export class DashboardTaskComponent implements OnInit {
   bufferValue = 75;
 
   ospType: any = 'Day';
-  ospData : any = ['Day','Week','Month','Financial Quarter','Year',];
+  ospData: any = ['Day', 'Week', 'Month', 'Financial Quarter', 'Year',];
   item: any;
   item1: any = [];
   playerName: any;
@@ -107,7 +107,7 @@ export class DashboardTaskComponent implements OnInit {
   EDPMSChart;
   packingCreditAvailedChart;
   totalBillLodgedChart;
-  userData:any;
+  userData: any;
 
   @ViewChild("chart") chart: ChartComponent;
 
@@ -120,8 +120,9 @@ export class DashboardTaskComponent implements OnInit {
 
     this.userData = await this.userService.getUserDetail();
     // this.userData = this.userData.result
-    console.log("userData",this.userData)
+    console.log("userData", this.userData,this.documentService.EXPORT_IMPORT)
     this.item1 = []
+
     this.documentService.getTypeExportTask({ fileType: 'BL' }).subscribe(
       (res: any) => {
 
@@ -142,15 +143,8 @@ export class DashboardTaskComponent implements OnInit {
 
 
     this.getDashboardData()
-
     this.ChartMethod()
-
     this.getOrderShipmentData()
-
-
-
-
-
   }
   public manage1Task() {
     this.nt = !this.nt;
@@ -168,96 +162,60 @@ export class DashboardTaskComponent implements OnInit {
   getDashboardData = () => {
     this.dashboardService.getDashboardData().subscribe(
       (res: any) => {
-
-console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
-        //  -------------------------------------
-
+        console.log(res, 'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+        // Import data..
         this.pipoCurrencyImportData = res?.pipo?.import?.currencyWise;
-        this.pipoCurrencyExportData = res?.pipo?.export?.currencyWise;
         this.pipoBuyerImportData = res?.pipo?.import?.buyerWise;
-        this.pipoBuyerExportData = res?.pipo?.export?.buyerWise;
-
-
-        // this.pipoBuyerExportData = this.pipoBuyerExportData.filter(data => {
-        //   if (data._id) {
-        //     return data
-        //   }
-        // })
-
-
-        // this.pipoBuyerImportData = this.pipoBuyerImportData.filter(data => {
-        //   if (data._id) {
-        //     return data
-        //   }
-        // })
-
-        // this.pipoBuyerExportData = this.pipoBuyerExportData.slice(0, 9)
-
-
         this.pipoCurrencyImportData = this.pipoCurrencyImportData.filter(data => {
           if (data._id !== null && data._id !== '') {
             return data
           }
         })
+        this.inwardCurrencyImportData = res?.inward?.import?.currencyWise;
+        this.inwardBuyerImportData = res?.inward?.import?.buyerWise;
+        this.inwardCurrencyImportData = this.inwardCurrencyImportData.filter(data => {
+          if (data._id !== null && data._id !== '') {
+            return data
+          }
+        });
+        this.inwardBuyerImportData = this.inwardBuyerImportData.filter(data => {
+          if (data._id) {
+            return data
+          }
+        });
+        this.SBCurrrenycyImportData = res?.ShippingBill?.currencyWise;
+        this.SBbuyerImportData = res?.ShippingBill?.import?.buyerWise;
+        this.SBbuyerImportData = this.SBbuyerImportData.filter(data => {
+          if (data._id) {
+            return data
+          }
+        });
+        this.inwardRemitanceImportData = res?.inwardRemittances?.import;
+        this.shipmentPendingImport = res?.sbPendingData?.import;
+        this.shipmentSubmitImport = res?.docSubmitedAndNoAwaitedData?.import;
 
+        // Export data
+        this.pipoCurrencyExportData = res?.pipo?.export?.currencyWise;
+        this.pipoBuyerExportData = res?.pipo?.export?.buyerWise;
         this.pipoCurrencyExportData = this.pipoCurrencyExportData.filter(data => {
           if (data._id !== null && data._id !== '') {
             return data
           }
         })
-
-
-        //  -------------------------------------
-
-
-
-        // ---------------------------------------
-
-        this.inwardCurrencyImportData = res?.inward?.import?.currencyWise;
         this.inwardCurrencyExportData = res?.inward?.export?.currencyWise;
-        this.inwardBuyerImportData = res?.inward?.import?.buyerWise;
         this.inwardBuyerExportData = res?.inward?.export?.buyerWise;
-
-
-        this.inwardCurrencyImportData = this.inwardCurrencyImportData.filter(data => {
-          if (data._id !== null && data._id !== '') {
-            return data
-          }
-        })
-
         this.inwardCurrencyExportData = this.inwardCurrencyExportData.filter(data => {
           if (data._id !== null && data._id !== '') {
             return data
           }
         })
-        this.inwardBuyerImportData = this.inwardBuyerImportData.filter(data => {
-          if (data._id) {
-            return data
-          }
-        })
-
-
         this.inwardBuyerExportData = this.inwardBuyerExportData.filter(data => {
           if (data._id) {
             return data
           }
         })
-
-        // -----------------------------------------
-
-
-
-        this.SBCurrrenycyImportData = res?.ShippingBill?.currencyWise;
         this.SBCurrencyExportData = res?.ShippingBill?.currencyWise;
-        this.SBbuyerImportData = res?.ShippingBill?.import?.buyerWise;
         this.SBbuyerExportData = res?.ShippingBill?.export?.buyerWise;
-
-
-        this.SBbuyerImportData = this.SBbuyerImportData.filter(data => {
-          if (data._id) {
-            return data
-          }
-        })
 
         this.SBbuyerExportData = this.SBbuyerExportData.filter(data => {
           if (data._id) {
@@ -265,80 +223,45 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
           }
         })
 
-
-        // ----------------------------------
-
-
-
-        this.inwardRemitanceImportData = res?.inwardRemittances?.import;
         this.inwardRemitanceExportData = res?.inwardRemittances?.export;
         this.EDPMSData = res?.EDPMSData;
-
-
-        this.shipmentPendingImport = res?.sbPendingData?.import;
         this.shipmentPendingExport = res?.sbPendingData?.export;
-
-        this.shipmentSubmitImport = res?.docSubmitedAndNoAwaitedData?.import;
         this.shipmentSubmitExport = res?.docSubmitedAndNoAwaitedData?.export;
-
         this.shipmentSubmitExport = this.shipmentSubmitExport.map(data => {
           let conut = data?.blcopyrefNumber?.filter(x => !x)?.length
           return { ...data, awaitSubmit: conut }
         })
-
-        console.log("calleddddddd",)
-        console.log("this.EDPMSData.pendingData, this.EDPMSData.uploadData",this.EDPMSData.pendingData, this.EDPMSData.uploadData)
-
-
-
-
-        // this.edpmsChart.series = [this.EDPMSData.pendingData, this.EDPMSData.uploadData]
-        // this.edpmsChart.labels = ["Pending", "Upload"]
-
-        // ---------------------------------
-
-
-        // this.SBCurrrenycyImportData = this.SBCurrrenycyImportData.filter(data => {
-        //   if (data._id !== null && data._id !== '') {
-        //     return data
-        //   }
-        // })
-
-        // this.SBCurrencyExportData = this.SBCurrencyExportData.filter(data => {
-        //   if (data._id !== null && data._id !== '') {
-        //     return data
-        //   }
-        // })
-
-
-        this.handleExportData()
-
+        if (this.documentService.EXPORT_IMPORT['import']==true) {
+          this.handleImportData();
+        }else{
+          this.handleExportData()
+        }
+        this.documentService.EXPORT_IMPORT['callback']=()=>{
+          if (this.documentService.EXPORT_IMPORT['import']==true) {
+            this.handleImportData();
+        }else{
+          this.handleExportData()
+        }
+        }
+        console.log("this.documentService.EXPORT_IMPORT",this.documentService.EXPORT_IMPORT)
       },
       (err) => console.log(err)
     );
   }
 
-  getOrderShipmentData  = () =>
-  {
-    this.dashboardService.getOrderShipment(this.ospType).subscribe((res:any)=>
-    {
-      console.log("res",res)
+  getOrderShipmentData = () => {
+    this.dashboardService.getOrderShipment(this.ospType).subscribe((res: any) => {
+      console.log("res", res)
       this.orderPendingShipment = res
       this.orderPendingShipmentImport = res?.import
       this.orderPendingShipmentExport = res?.export
       this.handleOrderShipmentExport()
-    },(err)=>{
+    }, (err) => {
 
     })
   }
 
-
-
-
   ChartMethod = () => {
-
-
-
     // pipi chart
     this.pipoChartOptions = {
       chart: {
@@ -367,16 +290,11 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
       series: [],
       tooltip: {
         custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-
           let tooltipData = w?.config?.chartData[seriesIndex]
           let toolTipText = ''
           for (let i = 0; i < tooltipData?.convertData?.length; i++) {
-            // toolTipText += `${tooltipData?.convertData[i].currency} :${tooltipData?.convertData[i].amount}  <br>`
-
-            toolTipText += `${tooltipData?.convertData[i].currency} :${ w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
-
+            toolTipText += `${tooltipData?.convertData[i].currency} :${w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
           }
-          // return "<div></div>";
           return "<div>" + toolTipText + "</div>";
         }
       },
@@ -418,7 +336,7 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
           let toolTipText = ''
           for (let i = 0; i < tooltipData?.convertData?.length; i++) {
             // toolTipText += `${tooltipData?.convertData[i].currency} :${tooltipData?.convertData[i].amount} <br> `
-            toolTipText += `${tooltipData?.convertData[i].currency} :${ w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
+            toolTipText += `${tooltipData?.convertData[i].currency} :${w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
 
           }
           return "<div>" + toolTipText + "</div>";
@@ -460,7 +378,7 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
           let toolTipText = ''
           for (let i = 0; i < tooltipData?.convertData?.length; i++) {
             // toolTipText += `${tooltipData?.convertData[i].currency} :${tooltipData?.convertData[i].amount}  <br>`
-            toolTipText += `${tooltipData?.convertData[i].currency} :${ w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
+            toolTipText += `${tooltipData?.convertData[i].currency} :${w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
 
           }
           return "<div>" + toolTipText + "</div>";
@@ -545,7 +463,7 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
     this.orderPendingForShipmentChartOptions = {
       series: [],
 
-        chart: {
+      chart: {
         type: 'bar',
         height: 220,
         toolbar: {
@@ -561,14 +479,14 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
       dataLabels: {
         enabled: false
       },
-        tooltip: {
-      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-      let data =  series[0]
-      return data[dataPointIndex]
-      }
-    },
+      tooltip: {
+        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+          let data = series[0]
+          return data[dataPointIndex]
+        }
+      },
       xaxis: {
-        categories: ['Partial', 'Full' ],
+        categories: ['Partial', 'Full'],
       }
     };
 
@@ -720,7 +638,7 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
         type: "donut"
       },
       // labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
-      labels:  [],
+      labels: [],
 
       colors: ["#51AEE5", "#4CC78A", "#E07C97", "#DCA1DC"],
 
@@ -757,7 +675,7 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
 
     this.inwardChart = new ApexCharts(document.querySelector('#inwardChart'), this.inwardChartOptions);
     this.inwardChart.render();
-    console.log(this.edpmsChartOptions,'this.edpmsChartOptions')
+    console.log(this.edpmsChartOptions, 'this.edpmsChartOptions')
     this.EDPMSChart = new ApexCharts(document.querySelector('#EdpmsChart'), this.edpmsChartOptions);
     this.EDPMSChart.render();
 
@@ -782,22 +700,17 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
 
 
   handleImportData = () => {
-
-
     this.pipoChart.updateOptions({
       series: this.pipoBuyerImportData?.map(data => data.totalItems),
       labels: this.pipoBuyerImportData?.map(data => data._id),
       chartData: this.pipoBuyerImportData
     });
 
-
-
     this.sbChart.updateOptions({
       series: this.SBbuyerImportData?.map(data => data.totalItems),
       labels: this.SBbuyerImportData?.map(data => data._id),
       chartData: this.SBbuyerImportData
     });
-
 
     this.inwardChart.updateOptions({
       series: this.inwardBuyerImportData?.map(data => data.totalItems),
@@ -807,15 +720,11 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
 
 
     this.EDPMSChart.updateOptions({
-      series:  [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
-      labels:["Pending", "Upload"],
+      series: [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
+      labels: ["Pending", "Upload"],
       // chartData: this.inwardBuyerImportData
     });
-    console.log(this.EDPMSData.pendingData, this.EDPMSData.uploadData,'asdsadsadsadadasdasdsadsadsadsad')
-
-    // this.edpmsChart.series = [this.EDPMSData.pendingData, this.EDPMSData.uploadData]
-    // this.edpmsChart.labels = ["Pending", "Upload"]
-
+    console.log(this.EDPMSData.pendingData, this.EDPMSData.uploadData, 'asdsadsadsadadasdasdsadsadsadsad')
 
     this.shipmentPending = this.shipmentPendingImport
     this.shipmentSubmit = this.shipmentSubmitImport
@@ -841,18 +750,8 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
       this.inwardRemitanceAmount = 0
       this.inwardRemitanceTotalCount = 0
       this.inwardRemitancePendingCount = 0
-
     }
-
-
-
-
-
-
-
   }
-
-
 
   handleExportData = () => {
 
@@ -882,11 +781,11 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
     });
 
     this.EDPMSChart.updateOptions({
-      series:  [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
-      labels:["Pending", "Upload"],
+      series: [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
+      labels: ["Pending", "Upload"],
       // chartData: this.inwardBuyerImportData
     });
-    console.log(this.EDPMSData.pendingData, this.EDPMSData.uploadData,'asdsadsadsadadasdasdsadsadsadsad')
+    console.log(this.EDPMSData.pendingData, this.EDPMSData.uploadData, 'asdsadsadsadadasdasdsadsadsadsad')
 
 
     this.shipmentPending = this.shipmentPendingExport
@@ -913,25 +812,22 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
       this.inwardRemitancePendingCount = 0
     }
 
+  }
+
+
+  handleOrderShipmentImport() {
 
   }
 
 
-  handleOrderShipmentImport ()
-  {
-
-  }
-
-
-  handleOrderShipmentExport ()
-  {
+  handleOrderShipmentExport() {
     // series:
-    let chartData = [this.orderPendingShipmentExport.pendingCount ,this.orderPendingShipmentExport.fullCount ]
-    console.log("chartData",chartData)
+    let chartData = [this.orderPendingShipmentExport.pendingCount, this.orderPendingShipmentExport.fullCount]
+    console.log("chartData", chartData)
     this.orderShipmentChart.updateOptions({
       series: [{
-        data:chartData ,
-       }],
+        data: chartData,
+      }],
 
     });
   }
@@ -955,46 +851,10 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
       }
     );
   }
-
-  // typeChange(type) {
-  //   console.log("typeChange", type)
-  //   this.type = type
-  //   if (type === 'import') {
-  //     this.handleImportData()
-  //   } else {
-  //     this.handleExportData()
-  //   }
-  // }
-  typeChange(type) {
-    // this.dashboardService.DASH_BOARD_TYPES=type;
-    let sendData = { sideMenu: type }
-    this.documentService.updateUserById(this.userData.result._id,sendData).subscribe(
-      (data) => {
-        this.userData.result = { ...this.userData.result ,sideMenu: type  }
-        this.userService.addLoginData(this.userData)
-      },
-      (error) => {
-        console.log("error");
-      }
-    );
-
-    //
-    // console.log("typeChange", type)
-    // this.type = type
-    // if (type === 'import') {
-    //   this.handleImportData()
-    // } else {
-    //   this.handleExportData()
-    // }
-  }
-
-
   calculatePercentage(partialValue, totalValue) {
     let value = (100 * partialValue) / totalValue;
     return Math.round(value)
   }
-
-
 
   currencyFormate(number, currencyType) {
 
@@ -1007,26 +867,8 @@ console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
     }
   }
 
-
-  ospTypeChange(data)
-  {
-    console.log("change",this.ospType)
+  ospTypeChange(data) {
+    console.log("change", this.ospType)
     this.getOrderShipmentData()
-
   }
-
-
-
 }
-// options :{
-//   plugins :{
-//     tooltip : {
-//       callbacks :{
-//         label:(context) =>
-//         {
-//           console.log(context)
-//         }
-//       }
-//     }
-//   }
-// }

@@ -77,7 +77,7 @@
                     </a>
                 </li>
 
-                <li class="manage-li" *ngIf="sideMenu === 'import'">
+                <li class="manage-li" *ngIf="this.documentService.EXPORT_IMPORT['import']==true">
                     <div class="main11">
                         <!-- <div style="height: 30px; padding-top: 5px; font-size: 10px;">
                             <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
@@ -175,18 +175,13 @@
             </li> -->
 
 
-                <li class="manage-li" *ngIf="sideMenu === 'export'">
+                <li class="manage-li" *ngIf="this.documentService.EXPORT_IMPORT['export']==true">
                     <div class="main11">
                         <!-- <div style="height: 30px; padding-top: 5px; font-size: 10px;">
                             <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
                         </div> -->
                         <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" [ngClass]="new ? 'b-color' : 'nothing'" (click)="newTask1()">
-                            <span style="margin-left: 35px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO
-        <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
-        </i>
-      </span>
-                        </div>
+
                         <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"   (click)="handlePipoSummary()">
                             <span style="margin-left: 35px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO Summary
         <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
@@ -244,9 +239,7 @@
                         <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub26()" [ngClass]="new26 ? 'b-color' : 'nothing'">
                         <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packing-list']">Packing List Documents</span>
                         </div>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub27()" [ngClass]="new27 ? 'b-color' : 'nothing'">
-                            <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/Excel-Downloader']">Excel Download</span>
-                            </div>
+
                             <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub28()" [ngClass]="new28 ? 'b-color' : 'nothing'">
                               <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/Sub-bill-Lodgement']">Sub-bill-Lodgement</span>
                               </div>
@@ -277,7 +270,12 @@
                             <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub13()" [ngClass]="new13 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packing-credit-request']">Direct Dispatch</span>
                             </div>
-
+                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" [ngClass]="new ? 'b-color' : 'nothing'" (click)="newTask1()">
+                              <span style="margin-left: 35px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO Master
+          <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
+          </i>
+        </span>
+                          </div>
                         </div>
 
                         <div style="height: 30px; padding-top: 5px; font-size: 10px;">
@@ -289,6 +287,9 @@
                                 <span style="margin-left: 35px; line-height: 30px; font-size: 12px; ">EDPMS Recon</span></div>
                             <div class="hoverClass " style="cursor: pointer; height: 30px; margin-top:-2px; " (click)="newSub21() " [ngClass]="new21 ? 'b-color' : 'nothing' ">
                                 <span style="margin-left: 35px; line-height: 30px; font-size: 12px; ">EDPMS Recon Table</span></div>
+                                <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub27()" [ngClass]="new27 ? 'b-color' : 'nothing'">
+                                  <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/Excel-Downloader']">Report</span>
+                                  </div>
                         </div>
                     </div>
                 </li>
@@ -561,22 +562,33 @@
     <div class="top_spavce"></div>
     <div class="main_nave_haeders">
         <nav class="navbar-dashboard">
-            <div class="container-fluid">
+            <div class="container-fluid height">
                 <!-- .navbar-header contains links seen on xs & sm screens -->
                 <div class="row ">
-                    <div class="col-md-8 col-sm-8 col-xs-7 ">
+                    <div class="col-md-9 col-sm-8 col-xs-7">
                         <div class=" ">
                             <!-- search form! link it to your search server -->
                             <form class="search_box_new_sec" role="search ">
                                 <div class="form-group ">
                                     <div class="input-group input-group-no-border ">
                                         <input id="main-search " type="text " placeholder="Type to search. . . " />
+                                        <div class="col-md-4 col-sm-6 col-xs-12 btn-panel">
+                                          <div class="import_export_button">
+                                              <button type="button" (click)="typeChange('import','export')"
+                                                  [ngClass]="userData?.result?.sideMenu == 'import' ? 'type_active' : 'type_inactive'">
+                                                  <span class="icon_top"></span>Import </button>
+                                              <button type="button" (click)="typeChange('export','import')"
+                                                  [ngClass]="userData?.result?.sideMenu == 'export' ? 'type_active' : 'type_inactive'">
+                                                  <span class="icon_top "></span>Export
+                                              </button>
+                                          </div>
+                                      </div>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-4 col-xs-5 ">
+                    <div class="col-md-3 col-sm-4 col-xs-5">
                         <div class="language_options_right ">
                             <div class="language_options ">
                                 <select style="cursor: pointer " class="dropdown " name="cars " id="cars ">

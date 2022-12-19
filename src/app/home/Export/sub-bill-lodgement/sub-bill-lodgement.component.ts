@@ -39,11 +39,13 @@ export class SubBillLodgementComponent implements OnInit {
   filtervisible: boolean = false
   startDate: any = '';
   endDate: any = '';
-  ALL_DATA_FORMAT:any={
+  ALL_DATA_FORMAT:any=[]
+  TEMP:any={
     SB_NO:[],
     Lodgement_No:[],
     Party_Name:[]
-  }
+  };
+
   constructor(public documentService: DocumentService,
     private userService: UserService, public shippingBillService: ShippingbillDataService,
     public dialog: MatDialog) {
@@ -51,15 +53,14 @@ export class SubBillLodgementComponent implements OnInit {
     this.Controller_of_width(280,'#pagecontent')
   }
   ngOnInit() {
-
-    this.getPipoData()
     this.shippingBillService.getShippingBillList().then((res: any) => {
       this.shippingBillService.shippingbills$.subscribe((data: any) => {
        console.log(data,'ressdsdsdsdv sdfsfsdfsdfd')
        for (let index = 0; index < data.length; index++) {
-        this.ALL_DATA_FORMAT['SB_NO'][index]=data[index]['sbno'];
+        this.TEMP['SB_NO'][index]=data[index]['sbno'];
        }
-       console.log(this.ALL_DATA_FORMAT,'ALL')
+       console.log(this.TEMP,'ALL');
+       this.getPipoData()
       });
     });
   }
@@ -69,17 +70,30 @@ export class SubBillLodgementComponent implements OnInit {
 
   getPipoData() {
     console.log("-->", this.page, this.limit)
-    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer).subscribe((res: any) => {
+    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer).subscribe(async (res: any) => {
       this.dataSource = res.docs
       console.log("res", this.dataSource)
+      var counter=0;
       for (let index = 0; index < this.dataSource.length; index++) {
         if (this.dataSource[index]['buyerName']!='' &&
             this.dataSource[index]['buyerName']!=undefined
             && this.dataSource[index]['buyerName']!=null) {
-          this.ALL_DATA_FORMAT['Party_Name'][index]=this.dataSource[index]['buyerName'];
+          this.TEMP['Party_Name'][index]=this.dataSource[index]['buyerName'];
+        }
+        if ((index+1)==this.dataSource.length) {
+          for (let index = 0; index < this.TEMP['Party_Name'].length; index++) {
+            if (this.TEMP['SB_NO'][index]!='' && this.TEMP['SB_NO'][index]!=undefined) {
+              this.ALL_DATA_FORMAT[counter]={
+                SB_NO:this.TEMP['SB_NO'][counter],
+                Lodgement_No:counter,
+                Party_Name:this.TEMP['Party_Name'][counter]
+              }
+              counter++;
+            }
+          }
         }
        }
-       console.log(this.ALL_DATA_FORMAT,'ALL')
+       console.log(this.TEMP,this.ALL_DATA_FORMAT,'ALL_DATA_FORMAT')
       this.paginator.length = res.totalDocs
     })
   }
@@ -101,8 +115,6 @@ export class SubBillLodgementComponent implements OnInit {
   getDropDownItems() {
     this.userService.getTeam().subscribe(
       (data) => {
-
-
         this.locationArray = data['data'][0]['location'];
         this.commodityArray = data['data'][0]['commodity'];
         console.log("--------->locationArray", this.locationArray)

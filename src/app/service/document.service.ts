@@ -8,6 +8,13 @@ export class DocumentService {
   authToken: string;
   public headers;
   api_base: string;
+  EXPORT_IMPORT:any={
+    export:false,
+    import:false,
+    callback:()=>{}
+  };
+  PDF_DOCUMENTS_DATA:any=[];
+
   constructor(public http: HttpClient, public appconfig: AppConfig) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base);
@@ -26,6 +33,12 @@ export class DocumentService {
 
   // Inward inwardRemittance Advice
 
+  setSessionData(key:any,data:any){
+    sessionStorage.setItem(key,JSON.stringify(data));
+  }
+  getSessionData(key:string){
+    return JSON.parse(sessionStorage.getItem(key));
+  }
   getIrAdvice(user){
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -350,7 +363,7 @@ export class DocumentService {
   }
 
 
-  
+
   addPipo(pipo) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -427,7 +440,7 @@ export class DocumentService {
   }
 
 
-  
+
   deletePipoByid(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -440,7 +453,7 @@ export class DocumentService {
     );
   }
 
-  
+
   getSBDetailsByPIPO(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -453,7 +466,7 @@ export class DocumentService {
     );
   }
 
-   
+
   getInwardDetailsByPIPO(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -474,7 +487,7 @@ export class DocumentService {
     return this.http.post(`${this.api_base}/pdf/generate`, data, httpOptions);
   }
 
- 
+
 
 
   addThird(pipo) {
