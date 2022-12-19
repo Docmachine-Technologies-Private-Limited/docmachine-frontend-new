@@ -78,7 +78,7 @@
                             </div>
                         </div>
 
-                        <div class="file_addd_to">
+                        <div class="file_addd_to" *ngIf="piPoUrl==null || piPoUrl==''">
                             <div class="form" method="POST">
                                 <input (error)="onUploadError($event)" (init)="onUploadInit($event)"
                                     (success)="onUploadSuccess($event)" (sending)="submit($event)"

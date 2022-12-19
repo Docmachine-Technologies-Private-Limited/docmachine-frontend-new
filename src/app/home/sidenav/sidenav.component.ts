@@ -11,8 +11,10 @@ import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
   templateUrl: "./sidenav.component.html",
   styleUrls: ["../../../sass/application.scss", "./sidenav.component.scss"],
 })
+
 export class SidenavComponent implements OnInit {
   // mt: boolean;
+  sideMenu: string = 'export';
   exp: boolean;
   inw: boolean;
   imp: any;
@@ -65,7 +67,7 @@ export class SidenavComponent implements OnInit {
   mt4: any;
   val: Object;
   customer: any;
-  new:  boolean = false;
+  new: boolean = false;
   new1: boolean = false;
   new2: boolean = false;
   new3: boolean = false;
@@ -92,6 +94,8 @@ export class SidenavComponent implements OnInit {
   new24: boolean;
   new25: boolean;
   new26: boolean;
+  new27: boolean;
+  new28: boolean;
 
   constructor(
 
@@ -101,22 +105,41 @@ export class SidenavComponent implements OnInit {
     private documentService: DocumentService,
     public userService: UserService,
     private toastr: ToastrService,
-    private sharedData : SharedDataService
+    private sharedData: SharedDataService
   ) {
 
     // this.sharedData.currentDashBoard.subscribe(message => this.status5 = message)
     // this.sharedData.currentExport.subscribe(message => this.status7 = message)
 
 
-     this.newHight()
-    }
+    this.newHight()
+  }
+
+  userDataListener;
 
   async ngOnInit() {
 
-    console.log("side nav")
+    console.log("new one called")
+
+    this.userDataListener = this.userService.userDataListener$
+
+    this.userDataListener.subscribe((data)=>
+    {
+      console.log("-----------> page calleddd")
+      console.log(data)
+      if (data != '' && data != null && data != undefined) {
+        this.id = data
+        // this.sideMenu = this.id.result.sideMenu
+      }
+    }
+
+    );
+
     this.id = await this.userService.getUserDetail();
-    console.log(this.id)
+    console.log("this.id", this.id)
+
     this.name = this.id.result.fullName
+    this.sideMenu = this.id.result.sideMenu
     if (this.id.result.emailId == 'tramsdocmachine@gmail.com' || this.id.result.emailId == 'docmachinetec@gmail.com' || this.id.result.emailId == 'fintech.innovations2021@gmail.com') {
       this.role = 'admin'
     }
@@ -165,73 +188,73 @@ export class SidenavComponent implements OnInit {
   public edpmsTask() {
     this.mt4 = !this.mt4;
   }
-  newHight(){
-    if(this.router.url == '/home/dashboardTask'){
+  newHight() {
+    if (this.router.url == '/home/dashboardTask') {
       this.status5 = true;
     }
-    else if(this.router.url == '/home/pipo-export'){
+    else if (this.router.url == '/home/pipo-export') {
       this.new = true;
       this.status7 = true;
 
     }
-    else if(this.router.url == '/home/view-document/sb'){
+    else if (this.router.url == '/home/view-document/sb') {
       this.new1 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/credit-note'){
+    else if (this.router.url == '/home/credit-note') {
       this.new2 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/debit-note'){
+    else if (this.router.url == '/home/debit-note') {
       this.new3 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/insurance-document'){
+    else if (this.router.url == '/home/insurance-document') {
       this.new4 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/letterofcredit-lc'){
+    else if (this.router.url == '/home/letterofcredit-lc') {
       this.new5 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/master-services'){
+    else if (this.router.url == '/home/master-services') {
       this.new6 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/try-party'){
+    else if (this.router.url == '/home/try-party') {
       this.new7 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/opinion-report'){
+    else if (this.router.url == '/home/opinion-report') {
       this.new8 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/export-home'){
+    else if (this.router.url == '/home/export-home') {
       this.new9 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/bill-lodgement'){
+    else if (this.router.url == '/home/bill-lodgement') {
       this.new10 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/bill-lodgement'){
+    else if (this.router.url == '/home/bill-lodgement') {
       this.new11 = true;
       this.status7 = true;
     }
 
-    else if(this.router.url == '/home/packing-credit-request'){
+    else if (this.router.url == '/home/packing-credit-request') {
       this.new12 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/packing-credit-request'){
+    else if (this.router.url == '/home/packing-credit-request') {
       this.new13 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/inward-remittance-advice'){
+    else if (this.router.url == '/home/inward-remittance-advice') {
       this.new14 = true;
       this.status7 = true;
     }
-    else if(this.router.url == '/home/upload'){
+    else if (this.router.url == '/home/upload') {
       this.status6 = true;
     }
     // else if(this.router.url == '/home/upload' , { file: 'export', document: 'pipo' }){
@@ -239,54 +262,54 @@ export class SidenavComponent implements OnInit {
     //   this.new = false;
     //   this.status7 = false;
     // }
-    else if(this.router.url == '/home/manageUser'){
+    else if (this.router.url == '/home/manageUser') {
       this.status8 = true;
     }
-    else if(this.router.url == '/home/manage-customer/import'){
+    else if (this.router.url == '/home/manage-customer/import') {
       this.status10 = true;
       this.new15 = true;
     }
-    else if(this.router.url == '/home/manage-customer/export'){
+    else if (this.router.url == '/home/manage-customer/export') {
       this.status10 = true;
       this.new16 = true;
     }
-    else if(this.router.url == '/home/view-document/sb'){
+    else if (this.router.url == '/home/view-document/sb') {
       this.status11 = true;
       this.new17 = true;
     }
-    else if(this.router.url == '/home/view-document/boe'){
+    else if (this.router.url == '/home/view-document/boe') {
       this.status11 = true;
       this.new18 = true;
     }
-    else if(this.router.url == '/home/view-document/pipo'){
+    else if (this.router.url == '/home/view-document/pipo') {
       this.status11 = true;
       this.new19 = true;
     }
-    else if(this.router.url == '/home/view-document/edpms-recon'){
+    else if (this.router.url == '/home/view-document/edpms-recon') {
       this.status11 = true;
       this.new20 = true;
     }
-    else if(this.router.url == '/home/view-document/edpms-recon-table'){
+    else if (this.router.url == '/home/view-document/edpms-recon-table') {
       this.status11 = true;
       this.new21 = true;
     }
-    else if(this.router.url == '/home/help'){
+    else if (this.router.url == '/home/help') {
       this.status12 = true;
     }
-    else if(this.router.url == '/home/t&c'){
+    else if (this.router.url == '/home/t&c') {
       this.status17 = true;
     }
-    else if(this.router.url == '/home/account'){
+    else if (this.router.url == '/home/account') {
       this.status14 = true;
     }
-    else if(this.router.url == '/home/pipo-doc'){
+    else if (this.router.url == '/home/pipo-doc') {
       this.status = true;
       this.status4 = true;
       this.status2 = false;
-    this.status3 = false;
-    this.statusS9 = false;
-    this.statusS4 = false;
-    this.statusS7 = false;
+      this.status3 = false;
+      this.statusS9 = false;
+      this.statusS4 = false;
+      this.statusS7 = false;
     }
 
   }
@@ -313,7 +336,7 @@ export class SidenavComponent implements OnInit {
     this.statusS7 = false;
   }
 
-  public newTask3(){
+  public newTask3() {
     this.router.navigate(["home/importDebit"]);
     // this.status4 = true;
     this.status3 = true;
@@ -324,7 +347,7 @@ export class SidenavComponent implements OnInit {
     this.statusS7 = false;
   }
 
-  public newTask21(){
+  public newTask21() {
     this.router.navigate(["home/boe"]);
     this.statusS9 = true;
     this.status3 = false;
@@ -334,7 +357,7 @@ export class SidenavComponent implements OnInit {
     this.statusS7 = false;
   }
 
-  newTask22(){
+  newTask22() {
     this.router.navigate(["home/importInsurance"])
     this.statusS4 = true;
     this.statusS9 = false;
@@ -344,7 +367,7 @@ export class SidenavComponent implements OnInit {
     this.statusS7 = false;
   }
 
-  newTask23(){
+  newTask23() {
     this.router.navigate(["home/importTriParty"])
     this.statusS7 = true;
     this.statusS4 = false;
@@ -357,283 +380,282 @@ export class SidenavComponent implements OnInit {
 
 
   //import dropdown highlight
-  public newTask4(){
+  public newTask4() {
     this.router.navigate(["home/pipo-doc"]);
     this.status4 = !this.status4;
-    this.status5  = false;
-    this.status6    = false;
-    this.status7    = false;
-    this.status8    = false;
-    this.status9    = false;
-    this.status10   = false;
-    this.status11   = false;
-    this.status12   = false;
-    this.status13   = false;
-    this.status14   = false;
-    this.status15   = false;
-    this.status16   = false;
-    this.status17   = false;
-    this.status18   = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status10 = false;
+    this.status11 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status16 = false;
+    this.status17 = false;
+    this.status18 = false;
 
   }
-  public newTask5(){
-  this.status5 = true;
-  this.status4  = false;
-  this.status6    = false;
-  this.status7    = false;
-  this.status8    = false;
-  this.status9    = false;
-  this.status10   = false;
-  this.status11   = false;
-  this.status12   = false;
-  this.status13   = false;
-  this.status14   = false;
-  this.status15   = false;
-  this.status16   = false;
-  this.status17   = false;
-  this.status18   = false;
-  // this.sharedData.changeDashboard(true)
+  public newTask5() {
+    this.status5 = true;
+    this.status4 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status10 = false;
+    this.status11 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status16 = false;
+    this.status17 = false;
+    this.status18 = false;
+    // this.sharedData.changeDashboard(true)
   }
-  public newTask6(){
+  public newTask6() {
     this.status6 = true;
-    this.status4  = false;
-  this.status5    = false;
-  this.status7    = false;
-  this.status8    = false;
-  this.status9    = false;
-  this.status10   = false;
-  this.status11   = false;
-  this.status12   = false;
-  this.status13   = false;
-  this.status14   = false;
-  this.status15   = false;
-  this.status16   = false;
-  this.status17   = false;
-  this.status18   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status10 = false;
+    this.status11 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status16 = false;
+    this.status17 = false;
+    this.status18 = false;
   }
-  public newTask7(){
+  public newTask7() {
     this.router.navigate(["home/pipo-export"]);
     this.status7 = !this.status7;
-    this.status4  = false;
-    this.status5    = false;
-    this.status6    = false;
-    this.status8    = false;
-    this.status9    = false;
-    this.status10   = false;
-    this.status11   = false;
-    this.status12   = false;
-    this.status13   = false;
-    this.status14   = false;
-    this.status15   = false;
-    this.status16   = false;
-    this.status17   = false;
-    this.status18   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status10 = false;
+    this.status11 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status16 = false;
+    this.status17 = false;
+    this.status18 = false;
     // this.sharedData.changeExport(true)
   }
-  public newTask8(){
+  public newTask8() {
     this.router.navigate(["/home/manageUser"])
     this.status8 = true;
-    this.status4  = false;
-    this.status5    = false;
-    this.status6    = false;
-    this.status7    = false;
-    this.status9    = false;
-    this.status10   = false;
-    this.status11   = false;
-    this.status12   = false;
-    this.status13   = false;
-    this.status14   = false;
-    this.status15   = false;
-    this.status16   = false;
-    this.status17   = false;
-    this.status18   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status9 = false;
+    this.status10 = false;
+    this.status11 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status16 = false;
+    this.status17 = false;
+    this.status18 = false;
 
   }
-  public newTask9(){
+  public newTask9() {
     this.status9 = true;
-    this.status4  = false;
-    this.status5    = false;
-    this.status6    = false;
-    this.status7    = false;
-    this.status8    = false;
-    this.status10   = false;
-    this.status11   = false;
-    this.status12   = false;
-    this.status13   = false;
-    this.status14   = false;
-    this.status15   = false;
-    this.status16   = false;
-    this.status17   = false;
-    this.status18   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status10 = false;
+    this.status11 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status16 = false;
+    this.status17 = false;
+    this.status18 = false;
   }
-  public newTask10(){
+  public newTask10() {
     this.status10 = !this.status10;
-    this.status4  = false;
-    this.status5    = false;
-    this.status6    = false;
-    this.status7    = false;
-    this.status8    = false;
-    this.status9   = false;
-    this.status11   = false;
-    this.status12   = false;
-    this.status13   = false;
-    this.status14   = false;
-    this.status15   = false;
-    this.status16   = false;
-    this.status17   = false;
-    this.status18   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status11 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status16 = false;
+    this.status17 = false;
+    this.status18 = false;
   }
-  public newTask11(){
+  public newTask11() {
     this.status11 = !this.status11;
-    this.status4  = false;
-    this.status5    = false;
-    this.status6    = false;
-    this.status7    = false;
-    this.status8    = false;
-    this.status9   = false;
-    this.status10   = false;
-    this.status12   = false;
-    this.status13   = false;
-    this.status14   = false;
-    this.status15   = false;
-    this.status16   = false;
-    this.status17   = false;
-    this.status18   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status10 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status16 = false;
+    this.status17 = false;
+    this.status18 = false;
   }
-  public newTask12(){
+  public newTask12() {
     this.status12 = true;
-    this.status4  = false;
-    this.status5    = false;
-    this.status6    = false;
-    this.status7    = false;
-    this.status8    = false;
-    this.status9   = false;
-    this.status11   = false;
-    this.status10   = false;
-    this.status13   = false;
-    this.status14   = false;
-    this.status15   = false;
-    this.status16   = false;
-    this.status17   = false;
-    this.status18   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status11 = false;
+    this.status10 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status16 = false;
+    this.status17 = false;
+    this.status18 = false;
   }
-  public newTask13(){
+  public newTask13() {
     this.status13 = true;
-    this.status4  = false;
-    this.status5    = false;
-    this.status6    = false;
-    this.status7    = false;
-    this.status8    = false;
-    this.status9   = false;
-    this.status11   = false;
-    this.status10   = false;
-    this.status12   = false;
-    this.status14   = false;
-    this.status15   = false;
-    this.status16   = false;
-    this.status17   = false;
-    this.status18   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status11 = false;
+    this.status10 = false;
+    this.status12 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status16 = false;
+    this.status17 = false;
+    this.status18 = false;
   }
-  public newTask14(){
+  public newTask14() {
     this.status14 = true;
-    this.status4  = false;
-    this.status5    = false;
-    this.status6    = false;
-    this.status7    = false;
-    this.status8    = false;
-    this.status9   = false;
-    this.status11   = false;
-    this.status10   = false;
-    this.status12   = false;
-    this.status13   = false;
-    this.status15   = false;
-    this.status16   = false;
-    this.status17   = false;
-    this.status18   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status11 = false;
+    this.status10 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status15 = false;
+    this.status16 = false;
+    this.status17 = false;
+    this.status18 = false;
   }
-  public newTask15(){
+  public newTask15() {
     this.status15 = true;
-    this.status4  = false;
-    this.status5    = false;
-    this.status6    = false;
-    this.status7    = false;
-    this.status8    = false;
-    this.status9   = false;
-    this.status11   = false;
-    this.status10   = false;
-    this.status12   = false;
-    this.status13   = false;
-    this.status14   = false;
-    this.status16   = false;
-    this.status17   = false;
-    this.status18   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status11 = false;
+    this.status10 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status16 = false;
+    this.status17 = false;
+    this.status18 = false;
   }
-  public newTask16(){
+  public newTask16() {
     this.status16 = true;
-    this.status4  = false;
-    this.status5    = false;
-    this.status6    = false;
-    this.status7    = false;
-    this.status8    = false;
-    this.status9   = false;
-    this.status11   = false;
-    this.status10   = false;
-    this.status12   = false;
-    this.status13   = false;
-    this.status14   = false;
-    this.status15   = false;
-    this.status17   = false;
-    this.status18   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status11 = false;
+    this.status10 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status17 = false;
+    this.status18 = false;
   }
-  public newTask17(){
+  public newTask17() {
     this.status17 = true;
-    this.status4  = false;
-    this.status5    = false;
-    this.status6    = false;
-    this.status7    = false;
-    this.status8    = false;
-    this.status9   = false;
-    this.status11   = false;
-    this.status10   = false;
-    this.status12   = false;
-    this.status13   = false;
-    this.status14   = false;
-    this.status15   = false;
-    this.status16   = false;
-    this.status18   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status11 = false;
+    this.status10 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status16 = false;
+    this.status18 = false;
 
   }
-  public newTask18(){
+  public newTask18() {
     this.status18 = true;
-    this.status4  = false;
-    this.status5    = false;
-    this.status6    = false;
-    this.status7    = false;
-    this.status8    = false;
-    this.status9   =  false;
-    this.status11   = false;
-    this.status10   = false;
-    this.status12   = false;
-    this.status13   = false;
-    this.status14   = false;
-    this.status15   = false;
-    this.status17   = false;
-    this.status16   = false;
+    this.status4 = false;
+    this.status5 = false;
+    this.status6 = false;
+    this.status7 = false;
+    this.status8 = false;
+    this.status9 = false;
+    this.status11 = false;
+    this.status10 = false;
+    this.status12 = false;
+    this.status13 = false;
+    this.status14 = false;
+    this.status15 = false;
+    this.status17 = false;
+    this.status16 = false;
   }
-  public newTask19(){
+  public newTask19() {
     this.status2 = !this.status2;
   }
- //export dropdown highlite
+  //export dropdown highlite
 
- public newTask20(){
+  public newTask20() {
 
- }
+  }
 
- 
- handlePipoSummary ()
- {
-  this.router.navigate(["home/pipo"]);
- }
+
+  handlePipoSummary() {
+    this.router.navigate(["home/pipo"]);
+  }
 
   public newTask1() {
     this.nt1 = !this.nt1;
@@ -1003,7 +1025,7 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
     this.new16 = false;
     this.new15 = false;
     this.new22 = false;
@@ -1030,7 +1052,7 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
     this.new22 = false;
     this.new23 = false;
     this.new25 = false;
@@ -1055,7 +1077,7 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
     this.new22 = false;
     this.new23 = false;
     this.new25 = false;
@@ -1082,7 +1104,7 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
     this.new22 = false;
     this.new23 = false;
     this.new25 = false;
@@ -1109,7 +1131,7 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
     this.new22 = false;
     this.new23 = false;
     this.new25 = false;
@@ -1136,14 +1158,14 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
     this.new21 = false;
     this.new22 = false;
     this.new23 = false;
     this.new25 = false;
     this.new26 = false;
   }
-  public newSub20(){
+  public newSub20() {
     this.router.navigate(["/home/edpms-recon"]);
     this.new20 = true;
     this.new24 = false;
@@ -1165,14 +1187,14 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
     this.new21 = false;
     this.new22 = false;
     this.new23 = false;
     this.new25 = false;
     this.new26 = false;
   }
-  public newSub21(){
+  public newSub21() {
     this.router.navigate(["/home/edpms-recon-table"]);
     this.new21 = true;
     this.new24 = false;
@@ -1195,14 +1217,14 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
     this.new22 = false;
     this.new23 = false;
     this.new25 = false;
     this.new26 = false;
   }
 
-  public newSub22(){
+  public newSub22() {
     this.router.navigate(["/home/airway-bl-copy"]);
     this.new22 = true;
     this.new24 = false;
@@ -1226,12 +1248,12 @@ export class SidenavComponent implements OnInit {
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
     this.new23 = false;
     this.new25 = false;
     this.new26 = false;
   }
-public newSub23(){
+  public newSub23() {
     this.router.navigate(["/home/bill-of-exchange"]);
     this.new23 = true;
     this.new25 = false;
@@ -1258,9 +1280,9 @@ public newSub23(){
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
   }
-  public newSub24(){
+  public newSub24() {
     this.router.navigate(["/home/destruction"]);
     this.new24 = true;
     this.new25 = false;
@@ -1287,9 +1309,9 @@ public newSub23(){
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
   }
-  public newSub25(){
+  public newSub25() {
     this.router.navigate(["/home/commercial"]);
     this.new25 = true;
     this.new26 = false;
@@ -1316,9 +1338,9 @@ public newSub23(){
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
   }
-  public newSub26(){
+  public newSub26() {
     this.router.navigate(["/home/packing-list"]);
     this.new26 = true;
     this.new25 = false;
@@ -1345,10 +1367,70 @@ public newSub23(){
     this.new11 = false;
     this.new12 = false;
     this.new8 = false;
-    this.new13= false;
+    this.new13 = false;
+  }
+  public newSub27() {
+    this.router.navigate(["/home/Excel-Downloader"]);
+    this.new27 = true;
+    this.new26 = false;
+    this.new25 = false;
+    this.new23 = false;
+    this.new24 = false;
+    this.new22 = false;
+    this.new21 = false;
+    this.new20 = false;
+    this.new19 = false;
+    this.new18 = false;
+    this.new17 = false;
+    this.new15 = false;
+    this.new14 = false;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new6 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13 = false;
   }
 
-
+  public newSub28() {
+    this.router.navigate(["/home/Sub-bill-Lodgement"]);
+    this.new28 = true;
+    this.new27 = false;
+    this.new26 = false;
+    this.new25 = false;
+    this.new23 = false;
+    this.new24 = false;
+    this.new22 = false;
+    this.new21 = false;
+    this.new20 = false;
+    this.new19 = false;
+    this.new18 = false;
+    this.new17 = false;
+    this.new15 = false;
+    this.new14 = false;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new6 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13 = false;
+  }
   public export() {
     this.exp = !this.exp;
   }

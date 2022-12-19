@@ -211,6 +211,7 @@ export class UploadDocComponent implements OnInit {
     Creditaccountnumber:'',
     Chargesaccountnumber:''
   }
+  bank:any=[];
   // ngOnInit() {
   //   this.loginForm = this.formBuilder.group({
   //     name:['',Validators.required]
@@ -727,6 +728,24 @@ export class UploadDocComponent implements OnInit {
       },
       (err) => console.log(err)
     );
+    this.userService.getTeam()
+    .subscribe(
+      data => {
+        var temp:any = data['data'][0]
+        var bankArray:any = temp.bankDetails;
+        var allBank:any=[];
+        for (let value of bankArray) {
+          allBank.push(value.bank)
+        }
+        this.bank = allBank.filter(function (item, index, inputArray) {
+          return inputArray.indexOf(item) == index;
+        });
+        console.log(this.bank,'sallBankallBankallBankallBankallBank')
+
+      },
+      error => {
+        console.log("error")
+      });
   }
 
   onSubmitIrAdvice(e) {
@@ -2077,7 +2096,6 @@ export class UploadDocComponent implements OnInit {
     if (data=='' || data=='Select bank name') {
       $(event).prop("disabled", true); //
       this.uploading = false;
-      alert('Please select bank name!')
       return;
     }
     $(event).prop("disabled", false); //
@@ -2122,7 +2140,7 @@ dataPdf:any=[];
   }
   submit(e) {
     // if (this.documentType !== '') {
-     
+
     // } else {
     //   console.log('Document type not given');
     //   document.getElementById('uploadError').style.display = 'block';

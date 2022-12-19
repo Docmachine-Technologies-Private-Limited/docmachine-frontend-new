@@ -29,7 +29,7 @@ import { DocumentService } from "../../service/document.service";
   selector: 'app-add-pipo',
   templateUrl: './add-pipo.component.html',
   styleUrls: ['./add-pipo.component.scss'],
-  
+
 })
 export class AddPipoComponent implements OnInit {
   buyerDetail: any = []
@@ -58,7 +58,7 @@ export class AddPipoComponent implements OnInit {
   public message = "";
   public documentType: string = '';
   public documentType1 = "";
-  public piPoUrl;
+  public piPoUrl:any='';
   public selectedDocumentType;
   width: any = 0;
   public benneDetail: any = [];
@@ -108,7 +108,7 @@ export class AddPipoComponent implements OnInit {
   public config2: DropzoneConfigInterface;
   public config3: DropzoneConfigInterface;
 
-  pipoForm: FormGroup;
+  pipoForm:any= FormGroup;
   submitted = false;
 
 
@@ -157,7 +157,7 @@ export class AddPipoComponent implements OnInit {
     };
 
 
-    // buyerName commodity doc 
+    // buyerName commodity doc
 
     this.pipoForm = this.formBuilder.group(
       {
@@ -215,7 +215,7 @@ export class AddPipoComponent implements OnInit {
   }
 
   PipoSubmit(): void {
-  
+
     this.submitted = true;
 
     console.log("this.pipoForm.invalid",this.pipoForm.invalid)
@@ -257,7 +257,7 @@ export class AddPipoComponent implements OnInit {
 
 
     this.pipoForm.value.document = this.documentType
-    
+
     this.documentService.addPipo(this.pipoForm.value).subscribe(
       (res) => {
         this.router.navigateByUrl("/home/pipo");
