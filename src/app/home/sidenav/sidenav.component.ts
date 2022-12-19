@@ -96,9 +96,9 @@ export class SidenavComponent implements OnInit {
   new26: boolean;
   new27: boolean;
   new28: boolean;
+  userData:any=[];
 
   constructor(
-
     public router: Router,
     public authservice: AuthenticateService,
     public authGuard: AuthGuard,
@@ -119,17 +119,18 @@ export class SidenavComponent implements OnInit {
 
   async ngOnInit() {
 
-    console.log("new one called")
+    this.userData = await this.userService.getUserDetail();
+    // this.userData = this.userData.result
+    console.log("userData",this.userData)
 
     this.userDataListener = this.userService.userDataListener$
 
-    this.userDataListener.subscribe((data)=>
+    this.userDataListener.subscribe((data:any)=>
     {
       console.log("-----------> page calleddd")
       console.log(data)
       if (data != '' && data != null && data != undefined) {
         this.id = data
-        // this.sideMenu = this.id.result.sideMenu
       }
     }
 
@@ -137,6 +138,8 @@ export class SidenavComponent implements OnInit {
 
     this.id = await this.userService.getUserDetail();
     console.log("this.id", this.id)
+    this.documentService.EXPORT_IMPORT[this.id['result']['sideMenu']]=true;
+    console.log(this.documentService.EXPORT_IMPORT,'sdfhsdgfdjshdgf')
 
     this.name = this.id.result.fullName
     this.sideMenu = this.id.result.sideMenu
@@ -1546,4 +1549,32 @@ export class SidenavComponent implements OnInit {
           console.log("error")
         });
   }
+  typeChange(type1,type2) {
+    // this.dashboardService.DASH_BOARD_TYPES=type;
+    let sendData = { sideMenu: type1 }
+   this.documentService.EXPORT_IMPORT[type1]=true;
+   this.documentService.EXPORT_IMPORT[type2]=false;
+   if (this.documentService.EXPORT_IMPORT['callback']!=null && this.documentService.EXPORT_IMPORT['callback']!=undefined) {
+      this.documentService.EXPORT_IMPORT['callback']();
+   }
+    this.documentService.updateUserById(this.userData.result._id,sendData).subscribe(
+      (data) => {
+        this.userData.result = { ...this.userData.result ,sideMenu: type1  }
+        this.userService.addLoginData(this.userData)
+      },
+      (error) => {
+        console.log("error");
+      }
+    );
+
+    //
+    // console.log("typeChange", type)
+    // this.type = type
+    // if (type === 'import') {
+    //   this.handleImportData()
+    // } else {
+    //   this.handleExportData()
+    // }
+  }
+
 }

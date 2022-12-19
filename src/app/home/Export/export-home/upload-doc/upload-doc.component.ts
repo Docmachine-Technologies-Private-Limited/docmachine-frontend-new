@@ -2110,7 +2110,8 @@ dataPdf:any=[];
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
         args[1].publicUrl
       );
-    console.log('-------------------->Selected Document type', this.publicUrl);
+      this.documentService.setSessionData('InwardSheet',this.dataPdf[0]);
+     console.log('-------------------->Selected Document type', this.publicUrl);
   }
   onUpload(data:any,event:any){
     console.log(data,'onUpload')

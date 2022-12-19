@@ -9,24 +9,6 @@
                                 <h2>DASHBOARD</h2>
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="import_export_button">
-                                <button type="button" (click)="typeChange('import')"
-                                    [ngClass]="userData?.result?.sideMenu == 'import' ? 'type_active' : 'type_inactive'">
-                                    <span class="icon_top"></span>Import </button>
-                                <button type="button" (click)="typeChange('export')"
-                                    [ngClass]="userData?.result?.sideMenu == 'export' ? 'type_active' : 'type_inactive'">
-
-                                    <span class="icon_top "></span>Export
-                                </button>
-                                <!-- <button type="button" class="type_inactive">
-                                    <span class="icon_top"></span>Import </button>
-                                <button type="button" class="type_active">
-
-                                    <span class="icon_top "></span>Export
-                                </button> -->
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="import_export_sec padding0">

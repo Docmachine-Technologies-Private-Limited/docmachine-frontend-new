@@ -890,28 +890,16 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     // }
 
   }
+  replaceText(text:any,repl_text:any){
+    return (text.replace(repl_text,'')).trim()
+  }
   async fillForm(a) {
+    console.log(a,'dshdsfdsfdgjsdhfgdsjf')
+    var data_temp:any=this.documentService.getSessionData('InwardSheet');
+    console.log(data_temp,'PDF_DOCUMENTS_DATA')
     const formUrl = './../../assets/DXB.pdf'
-
     const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
-
-    // const marioUrl = 'https://pdf-lib.js.org/assets/small_mario.png'
-    // const marioImageBytes = await fetch(marioUrl).then(res => res.arrayBuffer())
-
-    // const emblemUrl = 'https://pdf-lib.js.org/assets/mario_emblem.png'
-    // const emblemImageBytes = await fetch(emblemUrl).then(res => res.arrayBuffer())
-
     const pdfDoc = await PDFDocument.load(formPdfBytes)
-    // const page = pdfDoc.context()
-
-
-
-
-
-
-    // const marioImage = await pdfDoc.embedPng(marioImageBytes)
-    // const emblemImage = await pdfDoc.embedPng(emblemImageBytes)
-
     const form = pdfDoc.getForm()
     const pages = pdfDoc.getPages()
     const firstpage = pages[0]
@@ -929,116 +917,118 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     rocket1Field.addToPage(firstpage, { x: 540, y: 705, width: 20, height: 20, borderWidth: 0 })
 
     const text1Field = form.createTextField('best.text1')
-    text1Field.setText(this.item5.teamName)
+    text1Field.setText(this.replaceText(data_temp['Beneficiary Customer Name'],' 59A '))
     text1Field.addToPage(firstpage, {
       x: 150, y: 680, width: 400,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
+    var ACCOUNT_NUMBER_SPLIT=(this.replaceText(data_temp['Beneficiary Customer'],'59A /')).split('');
+    console.log(ACCOUNT_NUMBER_SPLIT,'ACCOUNT_NUMBER_SPLIT')
     const text2Field = form.createTextField('best.text2')
-    text2Field.setText(this.charge[0])
+    text2Field.setText(ACCOUNT_NUMBER_SPLIT[0])
     text2Field.addToPage(firstpage, {
       x: 155, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text3Field = form.createTextField('best.text3')
-    text3Field.setText(this.charge[1])
+    text3Field.setText(ACCOUNT_NUMBER_SPLIT[1])
     text3Field.addToPage(firstpage, {
       x: 190, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text4Field = form.createTextField('best.text4')
-    text4Field.setText(this.charge[2])
+    text4Field.setText(ACCOUNT_NUMBER_SPLIT[2])
     text4Field.addToPage(firstpage, {
       x: 220, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text5Field = form.createTextField('best.text5')
-    text5Field.setText(this.charge[3])
+    text5Field.setText(ACCOUNT_NUMBER_SPLIT[3])
     text5Field.addToPage(firstpage, {
       x: 250, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text6Field = form.createTextField('best.text6')
-    text6Field.setText(this.charge[4])
+    text6Field.setText(ACCOUNT_NUMBER_SPLIT[4])
     text6Field.addToPage(firstpage, {
       x: 270, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text7Field = form.createTextField('best.text7')
-    text7Field.setText(this.charge[5])
+    text7Field.setText(ACCOUNT_NUMBER_SPLIT[5])
     text7Field.addToPage(firstpage, {
       x: 300, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text8Field = form.createTextField('best.text8')
-    text8Field.setText(this.charge[6])
+    text8Field.setText(ACCOUNT_NUMBER_SPLIT[6])
     text8Field.addToPage(firstpage, {
       x: 330, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text9Field = form.createTextField('best.text9')
-    text9Field.setText(this.charge[7])
+    text9Field.setText(ACCOUNT_NUMBER_SPLIT[7])
     text9Field.addToPage(firstpage, {
       x: 360, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text10Field = form.createTextField('best.text10')
-    text10Field.setText(this.charge[8])
+    text10Field.setText(ACCOUNT_NUMBER_SPLIT[8])
     text10Field.addToPage(firstpage, {
       x: 390, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text11Field = form.createTextField('best.text11')
-    text11Field.setText(this.charge[9])
+    text11Field.setText(ACCOUNT_NUMBER_SPLIT[9])
     text11Field.addToPage(firstpage, {
       x: 420, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text12Field = form.createTextField('best.text12')
-    text12Field.setText(this.charge[10])
+    text12Field.setText(ACCOUNT_NUMBER_SPLIT[10])
     text12Field.addToPage(firstpage, {
       x: 450, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text13Field = form.createTextField('best.text13')
-    text13Field.setText(this.charge[11])
+    text13Field.setText(ACCOUNT_NUMBER_SPLIT[11])
     text13Field.addToPage(firstpage, {
       x: 480, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text14Field = form.createTextField('best.text14')
-    text14Field.setText(this.charge[12])
+    text14Field.setText(ACCOUNT_NUMBER_SPLIT[12])
     text14Field.addToPage(firstpage, {
       x: 510, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text15Field = form.createTextField('best.text15')
-    text15Field.setText(this.charge[13])
+    text15Field.setText(ACCOUNT_NUMBER_SPLIT[13])
     text15Field.addToPage(firstpage, {
       x: 540, y: 657, width: 15,
       height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
-    // const text16Field = form.createTextField('best.text16')
-    // text16Field.setText('15')
-    // text16Field.addToPage(firstpage, {
-    //   x: 540, y: 657, width: 15,
-    //   height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    // })
+    const text16Field = form.createTextField('best.text16')
+    text16Field.setText(ACCOUNT_NUMBER_SPLIT[14])
+    text16Field.addToPage(firstpage, {
+      x: 580, y: 657, width: 15,
+      height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
 
     const text17Field = form.createTextField('best.text17')
     text17Field.setText('Export')
@@ -1055,7 +1045,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     })
 
     const text19Field = form.createTextField('best.text19')
-    text19Field.setText(a['currency'])
+    text19Field.setText(this.replaceText(data_temp['Currency Code'],'32A '))
     text19Field.addToPage(firstpage, {
       x: 150, y: 590, width: 80,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
@@ -1063,28 +1053,28 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
     const text20Field = form.createTextField('best.text20')
     let amount = a['amount'].toString()
-    text20Field.setText(amount)
+    text20Field.setText(this.replaceText(data_temp['Amount'],'32A '))
     text20Field.addToPage(firstpage, {
       x: 150, y: 565, width: 80,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text21Field = form.createTextField('best.text21')
-    text21Field.setText('')
+    text21Field.setText(this.Number_to_word(this.replaceText(data_temp['Amount'],'32A ')))
     text21Field.addToPage(firstpage, {
       x: 340, y: 580, width: 220,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text22Field = form.createTextField('best.text22')
-    text22Field.setText(a['buyerName'])
+    text22Field.setText('')
     text22Field.addToPage(firstpage, {
       x: 150, y: 540, width: 90,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text23Field = form.createTextField('best.text23')
-    text23Field.setText(this.buyerAds)
+    text23Field.setText(this.replaceText(data_temp['Remitter Customer Details'],'50A/50K '))
     text23Field.addToPage(firstpage, {
       x: 150, y: 500, width: 400,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
@@ -3023,6 +3013,25 @@ Changebutton(mainkey,Showkey,hidekey,value){
   this.Lodgement[this.selection][mainkey][Showkey]=value
   this.Lodgement[this.selection][mainkey][hidekey]='';
   // console.log(this.Lodgement[this.selection],'Lodgement')
+}
+Number_to_word(numberInput:any){
+  let oneToTwenty = ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ',
+  'eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '];
+  let tenth = ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'];
+    //let num = ('0000000000'+ numberInput).slice(-10).match(/^(\d{1})(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+    let num:any = ('0000000'+ numberInput).slice(-7).match(/^(\d{1})(\d{1})(\d{2})(\d{1})(\d{2})$/);
+    console.log(num);
+  if(numberInput.toString().length > 7 || !num){
+    return '';
+  }else{
+    console.log(numberInput);
+    let outputText = num[1] != 0 ? (oneToTwenty[Number(num[1])] || `${tenth[num[1][0]]} ${oneToTwenty[num[1][1]]}` )+' million ' : '';
+    outputText +=num[2] != 0 ? (oneToTwenty[Number(num[2])] || `${tenth[num[2][0]]} ${oneToTwenty[num[2][1]]}` )+'hundred ' : '';
+    outputText +=num[3] != 0 ? (oneToTwenty[Number(num[3])] || `${tenth[num[3][0]]} ${oneToTwenty[num[3][1]]}`)+' thousand ' : '';
+    outputText +=num[4] != 0 ? (oneToTwenty[Number(num[4])] || `${tenth[num[4][0]]} ${oneToTwenty[num[4][1]]}`) +'hundred ': '';
+    outputText +=num[5] != 0 ? (oneToTwenty[Number(num[5])] || `${tenth[num[5][0]]} ${oneToTwenty[num[5][1]]} `) : '';
+    return outputText;
+  }
 }
 }
 

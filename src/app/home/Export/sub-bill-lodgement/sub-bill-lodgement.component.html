@@ -85,24 +85,26 @@
                   </div>
                   <div class="data_table_new" #piposummery>
                       <div class="record-container">
-                          <table mat-table [dataSource]="dataSource">
-                              <ng-container matColumnDef="SB no">
-                                  <th mat-header-cell *matHeaderCellDef>SB no</th>
-                                  <td mat-cell *matCellDef="let element"> {{element.pi_poNo}} </td>
-                              </ng-container>
-
-                              <ng-container matColumnDef="Lodgement no">
-                                  <th mat-header-cell *matHeaderCellDef>Lodgement no</th>
-                                  <td mat-cell *matCellDef="let element"> {{element?.date | date: 'dd/MM/yyyy'}} </td>
-                              </ng-container>
-
-                              <ng-container matColumnDef="Party Name">
-                                  <th mat-header-cell *matHeaderCellDef>Party Name</th>
-                                  <td mat-cell *matCellDef="let element"> {{element?.buyerName}} </td>
-                              </ng-container>
-                              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        <div class="table-responsive">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">SB no</th>
+                                <th scope="col">Lodgement no</th>
+                                <th scope="col">Party Name</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of this.ALL_DATA_FORMAT; let i=index">
+                                <td scope="row">{{(i+1)}}</td>
+                                <td>{{item.SB_NO}}</td>
+                                <td>{{item.Lodgement_No}}</td>
+                                <td>{{item.Party_Name}}</td>
+                              </tr>
+                            </tbody>
                           </table>
+                        </div>
                           <mat-paginator (page)="handlePage($event)"></mat-paginator>
                       </div>
                       <br><br>

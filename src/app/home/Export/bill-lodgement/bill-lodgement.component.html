@@ -194,9 +194,9 @@
                                     </div>
 
                                     <div class="col-md-12 col-sm-12 col-12" *ngIf='this.Lodgement["InvoiceReduction"]["Show"]==="yes"
-                                        || this.Lodgement["InvoiceReduction"]["Show"]==="no" ||
+                                        || this.Lodgement["InvoiceReduction"]["Hide"]==="no" ||
                                         this.Lodgement["BuyerRemitterDifferent"]["Show"]==="yes"
-                                        || this.Lodgement["BuyerRemitterDifferent"]["Show"]==="no"'>
+                                        || this.Lodgement["BuyerRemitterDifferent"]["Hide"]==="no"'>
                                         <label for="email" class="form-label">Select a bank</label>
                                         <div class="select_rol withborder">
                                             <select class="form-select" aria-label="Default select example" [(ngModel)]="bankToggle" (change)="setradio(bankToggle)">
@@ -217,9 +217,9 @@
                                     </div>
                                     <br>
                                     <div style="width:100%;" *ngIf='this.Lodgement["InvoiceReduction"]["Show"]==="yes"
-                                    || this.Lodgement["InvoiceReduction"]["Show"]==="no" ||
+                                    || this.Lodgement["InvoiceReduction"]["Hide"]==="no" ||
                                     this.Lodgement["BuyerRemitterDifferent"]["Show"]==="yes"
-                                    || this.Lodgement["BuyerRemitterDifferent"]["Show"]==="no"'>
+                                    || this.Lodgement["BuyerRemitterDifferent"]["Hide"]==="no"'>
                                         <button style="float:right;padding: 0 16px;" class="opt" (click)='generateDoc1()'>
                                         Generate Document
                                     </button>

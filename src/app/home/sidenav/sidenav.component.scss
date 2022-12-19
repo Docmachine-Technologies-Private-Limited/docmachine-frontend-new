@@ -830,3 +830,62 @@ body {
     width: 100%;
     padding-left: 260px;
 }
+
+.input-group{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: initial;
+  width: 100%;
+}
+.import_export_button {
+  display: inline-block;
+  float: right;
+  border: 1px solid #51AEE5;
+  border-radius: 50px;
+  opacity: 1;
+  padding: 5px 5px;
+  margin: 0 0 15px 0;
+}
+
+.import_export_button button {
+  height: 34px;
+  display: inline-block;
+  background: none;
+  border: none;
+  color: #51AEE5;
+  font-size: 15px;
+  margin: 0;
+  padding: 4px 23px;
+}
+
+
+.import_export_button button:hover {
+  background: #51AEE5;
+  color: #fff;
+  border-radius: 50px;
+}
+
+.btn-panel{
+  margin-top: 16px;
+}
+.type_active {
+  background: #51AEE5 !important;
+  padding: 3px 30px;
+  border-radius: 50px !important;
+  border: none !important;
+  color: #fff !important;
+  height: 34px !important;
+}
+
+.type_inactive {
+  background: none !important;
+  border: none !important;
+  color: #51AEE5 !important;
+  font-size: 18px !important;
+  margin: 0 !important;
+  padding: 4px 23px !important;
+}
+.height{
+  height: 70px;
+}
