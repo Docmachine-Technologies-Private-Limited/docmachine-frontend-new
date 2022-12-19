@@ -162,7 +162,6 @@ export class DashboardTaskComponent implements OnInit {
   getDashboardData = () => {
     this.dashboardService.getDashboardData().subscribe(
       (res: any) => {
-        console.log(res, 'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
         // Import data..
         this.pipoCurrencyImportData = res?.pipo?.import?.currencyWise;
         this.pipoBuyerImportData = res?.pipo?.import?.buyerWise;
@@ -171,6 +170,13 @@ export class DashboardTaskComponent implements OnInit {
             return data
           }
         })
+
+        this.pipoBuyerImportData = this.pipoBuyerImportData.filter(data => {
+          if (data._id !== null && data._id !== '') {
+            return data
+          }
+        })
+
         this.inwardCurrencyImportData = res?.inward?.import?.currencyWise;
         this.inwardBuyerImportData = res?.inward?.import?.buyerWise;
         this.inwardCurrencyImportData = this.inwardCurrencyImportData.filter(data => {
@@ -202,6 +208,12 @@ export class DashboardTaskComponent implements OnInit {
             return data
           }
         })
+          this.pipoBuyerExportData = this.pipoBuyerExportData.filter(data => {
+          if (data._id !== null && data._id !== '') {
+            return data
+          }
+        })
+
         this.inwardCurrencyExportData = res?.inward?.export?.currencyWise;
         this.inwardBuyerExportData = res?.inward?.export?.buyerWise;
         this.inwardCurrencyExportData = this.inwardCurrencyExportData.filter(data => {
@@ -306,8 +318,16 @@ export class DashboardTaskComponent implements OnInit {
 
     this.inwardChartOptions = {
       chart: {
-        width: 300,
+       width: '100%',
         type: "donut"
+      },
+      yaxis: {
+        labels: {
+          style: {
+            fontSize: '8px',
+            fontWeight: 500,
+          },
+        }
       },
       noData: {
         text: "No Data",
