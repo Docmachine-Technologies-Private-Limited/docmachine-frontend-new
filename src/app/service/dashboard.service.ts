@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 export class DashBoardService {
   api_base: string;
   authToken: string;
+  DASH_BOARD_TYPES:string='';
 
   public loginData = new BehaviorSubject({});
   constructor(private http: HttpClient, public appconfig: AppConfig) {
@@ -29,7 +30,14 @@ export class DashBoardService {
     let url = `${this.api_base}/dashboard-Data`;
     return this.http.get(url, httpOptions);
   }
-
+  getDashboardDataAll(){
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({Authorization : this.authToken}),
+    };
+    let url = `${this.api_base}/dashboard-Data/getExceldata`;
+    return this.http.get(url, httpOptions);
+  }
   getOrderShipment(filterData){
     this.loadFromLocalStorage();
     const httpOptions = {

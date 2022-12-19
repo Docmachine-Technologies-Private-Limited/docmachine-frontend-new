@@ -81,7 +81,6 @@ button {
 //     background: none;
 //     color: #49a2d7;
 // }
-
 select:focus {
     outline: none;
 }
@@ -948,8 +947,6 @@ span input {
     font-size: 15px;
 }
 
-
-
 .select_bg_new {
     display: inline-block;
     width: 100%;
@@ -1039,18 +1036,21 @@ span input {
     border-radius: 6px;
     cursor: pointer;
 }
-.Purpose_auto_serah ul li:hover{color:#218bc3;}
 
-.d-flex{
+.Purpose_auto_serah ul li:hover {
+    color: #218bc3;
+}
+
+.d-flex {
     display: flex;
     gap: 10px;
 }
 
-.custom-modal{
+.custom-modal {
     display: block;
 }
 
-.bg-black-opacity{
+.bg-black-opacity {
     width: 100vw;
     height: 100vh;
     position: absolute;
@@ -1066,16 +1066,15 @@ span input {
     z-index: 1050;
     overflow: hidden;
     outline: 0;
-    margin: 100px auto auto 239px;
     max-height: 600px;
 }
 
-.modal .modal-dialog{
+.modal .modal-dialog {
     max-width: 100%;
     width: 960px;
 }
 
-.appending-search-text{
+.appending-search-text {
     display: flex;
     gap: 10px;
     padding: 20px;
@@ -1088,22 +1087,23 @@ span input {
     margin-left: 40px;
 }
 
-.class-append-text{
-    flex-basis: 30%;
+.class-append-text {
     text-align: center;
     border: 1px solid #51AEE5;
     border-radius: 50px;
-    padding: 15px;
+    padding: 9px 32px;
     color: #51AEE5;
+    margin: 8px 0;
+    display: inline-block;
     cursor: pointer;
 }
 
-.modal-body input{
+.modal-body input {
     border-radius: 50px;
     height: 50px;
 }
 
-.btn-tripartite-agreement{
+.btn-tripartite-agreement {
     background-color: transparent;
     outline: none;
     border: none;
@@ -1112,13 +1112,13 @@ span input {
     width: 80px;
 }
 
-.Tripartite-agreement{
+.Tripartite-agreement {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.btn-Shipping-Bill-number{
+.btn-Shipping-Bill-number {
     background-color: transparent;
     outline: none;
     border: none;
@@ -1127,9 +1127,10 @@ span input {
     width: 80px;
 }
 
-.new-value{
+.new-value {
     color: #0c354d;
 }
+
 .class-append-text-1 {
     flex-basis: 89%;
     text-align: center;
@@ -1141,14 +1142,14 @@ span input {
     margin-top: 0;
 }
 
-.appending-search-text-1{
-flex-basis: 90%;
-max-height: 380px;
-min-height: auto;
-height: auto;
+.appending-search-text-1 {
+    flex-basis: 90%;
+    max-height: 380px;
+    min-height: auto;
+    height: auto;
 }
 
-.form-select{
+.form-select {
     text-decoration: none;
     border: none;
     background: none;
@@ -1159,35 +1160,154 @@ height: auto;
     border-radius: 5px;
 }
 
-.form-select-1{
+.form-select-1 {
     width: 100%;
     padding: 15px;
     border-radius: 50px;
     padding-left: 30px;
 }
 
-.toggle-button{
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    border: 2px solid #02b3e9;
-    width: 250px;
-    padding: 10px;
-    border-radius: 50px;
-    justify-content: center;
-    align-items: center;
-}
-.toggle-button button{
-    background-color: transparent!important;
-    color: black;
-    outline: none;
-    border: none;
+.toggle-button .active {
+    background: #51AEE5!important;
+    color: #fff;
     box-shadow: none !important;
-    width: 100%;
-     border-radius: 50px;
+    outline: none;
 }
-.toggle-button .active{
-    background-color: #02b3e9 !important;
+
+.toggle-button .active1 {
+    background: #FC5E5E;
     color: white;
-    border-radius: 50px;
+}
+
+.toggle-button .removebg {
+    background: white;
+    color: black;
+}
+
+.no-button {
+    float: left;
+    padding: 0 10px;
+    margin: 0;
+    height: 32px;
+    border-radius: 0;
+    background: #FC5E5E;
+    border: 1px solid #FC5E5E;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.yes-button {
+    float: left;
+    padding: 0 10px;
+    margin: 0;
+    border-radius: 0;
+    height: 32px;
+    background: #fff;
+    border: 1px solid #D9D9D9;
+    color: #777;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.remove-no-button {
+    float: left;
+    padding: 0 10px;
+    margin: 0;
+    border-radius: 0;
+    height: 32px;
+    background: #fff;
+    border: 1px solid #D9D9D9;
+    color: #777;
+    border-bottom-left-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
+.middle_data_new_se {
+    display: inline-block;
+    width: 500px;
+}
+
+.border_bottt {
+    display: inline-block;
+    width: 100%;
+    border-bottom: 1px solid #E1E1E1;
+    margin: 7px 0 21px 0;
+}
+
+.new_upbuttons {
+    background: #fff;
+    border: 1px solid #ced4da;
+    display: inline-block;
+    width: 100%;
+    height: 36px;
+    border-radius: 4px;
+}
+
+.middle_data_new_se h3 {
+    font-size: 15px;
+    color: #999999;
+}
+
+#new_popups_added {
+    display: inline-block;
+    width: 100%;
+    padding-top: 20px;
+}
+
+.modal-header h5 {
+    color: #999;
+}
+
+.toggle-button {
+    float: right;
+}
+
+.Select_Shipping table thead tr th {
+    font-size: 14px;
+    font-weight: 500;
+    color: #222;
+    padding: 0px;
+}
+
+.Select_Shipping table tbody tr td {
+    font-size: 14px;
+    font-weight: 500;
+    color: #222;
+    padding: 0px;
+}
+
+.space_div {
+    display: inline-block;
+    width: 100%;
+}
+
+#mainId p {
+    display: inline-block;
+    width: 100%;
+    line-height: 31px;
+    font-size: 14px;
+    padding: 2px 0;
+    color: #999;
+}
+
+#padding_common td {
+    padding: 5px 10px;
+    font-size: 14px;
+    color: #999;
+}
+
+.span_space span {
+    padding: 4px;
+}
+
+.uplod_doc .btn-danger{
+  width: 100%;
+  background: #fff;
+  border: 1px solid #D9D9D9;
+  border-radius: 0 5px 5px 0;
+  height: 35px;
+}
+.collepse-btn-input{
+  margin: auto;
+    margin-left: -22px;
 }

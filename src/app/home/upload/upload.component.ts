@@ -199,6 +199,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
   buyerDetail34: any;
   retururl;
 
+  userData:any
+
   // ngOnInit() {
   //   this.loginForm = this.formBuilder.group({
   //     name:['',Validators.required]
@@ -223,6 +225,13 @@ export class UploadComponent implements OnInit, AfterViewInit {
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
   ) {
+
+    this.userData = this.userService.userData?.result
+    if(this.userData)
+    {
+      this.documentType1 = this.userData?.sideMenu
+    }
+
     this.sharedData.currentReturnUrl.subscribe(
       (message) => (this.retururl = message)
     );

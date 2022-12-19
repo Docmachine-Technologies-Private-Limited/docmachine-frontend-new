@@ -24,6 +24,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
         component: ExportHomeComponent,
         pathMatch: "full"
       },
+      
     ]),
     ModalModule.forRoot(),
   ],

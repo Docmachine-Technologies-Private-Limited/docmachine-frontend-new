@@ -9,7 +9,9 @@ export class UserService {
   public authToken;
   public name;
   api_base: string;
+  userData;
   public loginData = new BehaviorSubject({});
+  public userDataListener$ = this.loginData.asObservable();
   constructor(private http: HttpClient, public appconfig: AppConfig) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base)
@@ -17,6 +19,7 @@ export class UserService {
 
   public addLoginData(data) {
     this.loginData.next(data);
+    this.userData = data
   }
 
   public addToken(token) {

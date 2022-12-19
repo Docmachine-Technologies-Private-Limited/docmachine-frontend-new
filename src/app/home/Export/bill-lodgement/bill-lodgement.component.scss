@@ -3,15 +3,10 @@
 }
 
 .arrayData {
-    text-decoration: none;
-    color: white;
-    display: inline-block;
-    background-color: #51AEE5;
-    position: relative;
-    padding: 5px;
-    border: 1px solid;
-    border-radius: 4px;
-    margin-top: -25px;
+    border: 1px solid #51aee5;
+    padding: 5px 11px;
+    border-radius: 30px;
+    cursor: pointer;
 }
 
 .filter {
@@ -53,6 +48,7 @@
     border: none;
     outline: none;
     color: RGB(255, 255, 255);
+    z-index: 999999;
 }
 
 .table-row {
@@ -985,8 +981,8 @@ span input {
 
 .shippingbilldrp {
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 5px;
+    left: 3px;
     width: 100%;
     margin: 28px 0 0 11px;
 }
@@ -998,27 +994,6 @@ span input {
 
 .check_box_button {
     float: right;
-}
-
-.check_box_button .btn.btn-primary {
-    float: left;
-    padding: 0px 10px;
-    margin: 0px;
-    border-radius: 6px 0 0px 6px;
-    height: 32px;
-    background: #FC5E5E;
-    border: 1px solid #FC5E5E;
-}
-
-.check_box_button .btn-secondary {
-    float: left;
-    padding: 0px 10px;
-    margin: 0px;
-    border-radius: 0px 6px 6px 0px;
-    height: 32px;
-    background: #fff;
-    border: 1px solid #D9D9D9;
-    color: #777;
 }
 
 .bill_lod_section .form-label {
@@ -1064,18 +1039,6 @@ span input {
     color: #777;
 }
 
-.check_box_button .btn.btn-secondary.active {
-    background: #51AEE5;
-    border: 1px solid #51AEE5;
-    color: #fff;
-}
-
-.check_box_button .btn.btn-primary.inactive {
-    background: #fff;
-    border: 1px solid #D9D9D9;
-    color: #777;
-}
-
 .bill_lod_section .select_rol .form-select {
     border: 1px solid #D9D9D9;
     width: 100%;
@@ -1083,4 +1046,113 @@ span input {
     color: #777;
     border-right: 1px solid #fff;
     border-radius: 5px 0px 0 5px;
+}
+
+.content1 {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-shadow: 0 0 2px 2px #d3d3d3;
+    border-radius: 10px;
+    width: 100vw;
+    margin-left: 0;
+    margin-top: 0;
+    height: 100vh;
+    background-color: #2a28283b;
+    z-index: 999999999;
+    align-items: baseline;
+    justify-content: center;
+    padding: 10px;
+}
+
+.shipping-bill-select {
+    border: 1px solid #D9D9D9;
+    width: 100%;
+    height: 35px;
+    color: #777;
+    border-right: 1px solid #fff;
+    border-radius: 5px 0 0 5px;
+}
+
+.check_box_button .active {
+    background: #51AEE5!important;
+    color: #fff;
+    box-shadow: none !important;
+    outline: none;
+}
+
+.check_box_button .active1 {
+    background: #FC5E5E;
+    color: white;
+}
+
+.check_box_button .removebg {
+    background: white;
+    color: black;
+}
+
+.no-button {
+    float: left;
+    padding: 0 10px;
+    margin: 0;
+    height: 32px;
+    border-radius: 0;
+    background: #FC5E5E;
+    border: 1px solid #FC5E5E;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    color: white;
+}
+
+.yes-button {
+    float: left;
+    padding: 0 10px;
+    margin: 0;
+    border-radius: 0;
+    height: 32px;
+    background: #fff;
+    border: 1px solid #D9D9D9;
+    color: #777;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.remove-no-button {
+    float: left;
+    padding: 0 10px;
+    margin: 0;
+    border-radius: 0;
+    height: 32px;
+    background: #fff;
+    border: 1px solid #D9D9D9;
+    color: #777;
+    border-bottom-left-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
+.modal-body {
+    width: 500px !important;
+    max-width: 800px;
+    background-color: #fff;
+    margin-top: 80px;
+    margin-left: 190px;
+    border-radius: 10px;
+}
+
+.main-drop-down-class {
+    padding: 0px;
+    line-height: inherit;
+}
+
+.shpt_bill_sec {
+    display: inline-block;
+    width: 100%;
+}
+
+.shpt_bill_sec label {
+    display: inline-block;
+    width: 100%;
+    color: #999;
+    margin: 10px 0;
 }

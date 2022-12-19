@@ -8,15 +8,19 @@ import { SharedDataService } from '../../shared-Data-Servies/shared-data.service
 import {SharedHomeModule} from "../../shared-home.module";
 import {BillLodgementComponent} from "./bill-lodgement.component";
 import {FiterbuyerPipe} from "../fiterbuyer.pipe";
+import { NgSelectModule } from '@ng-select/ng-select';
+import { CustomDropdownComponent } from '../../../customdropdown/custom-dropdown/custom-dropdown.component';
 
 
 @NgModule({
   declarations: [
     BillLodgementComponent,
     FiterbuyerPipe,
+    CustomDropdownComponent
   ],
   imports: [
     SharedHomeModule,
+    NgSelectModule,
     RouterModule.forChild([
       {
         path: "",

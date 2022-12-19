@@ -159,7 +159,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   LcNumber: any = '';
   isDoneAll: boolean;
   bankArray: any = [];
-  bankToggle: boolean;
+  bankToggle:string='';
   bankValue: any;
   bank: any = [];
   allBank: any = [];
@@ -265,6 +265,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   selectedPdfs2: any[];
   generateChecked: boolean = true;
   forexSbDetail: any;
+  SHIPPING_BILL:any='';
+  SHIPPING_BILL_LIST:any=['Shipping bill'];
+  ThirdPartydata: any = [];
+  changevalue:any=''
 
   constructor(
     public documentService: DocumentService,
@@ -282,7 +286,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    //window.location.reload();
     this.redirectid = this.route.snapshot.paramMap.get('pipo');
     this.redirectindex = this.route.snapshot.paramMap.get('index');
     this.redirectpage = this.route.snapshot.paramMap.get('page');
@@ -293,14 +296,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     console.log(this.jsondata[0].purpose);
     this.dataJson = this.jsondata;
 
-    //Shipping bill API
-    // this.documentService.getMaster(1).subscribe(
-    //   (res: any) => {
-    //     console.log(res,"SHIPPING DATA"), (this.item2 = res.data);
-    //     console.log("shipping bill",this.item2)
-    //   },
-    //   (err) => console.log(err)
-    // );
     //PI/PO API
     this.documentService.getPipo().subscribe(
       (res: any) => {
@@ -388,7 +383,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         console.log('Try Party', this.item12);
         for (let value of this.item12) {
           if (value['file'] == 'export') {
-
+            this.ThirdPartydata.push(value);
             this.item4.push(value);
             console.log('awwww', this.item4);
           }
@@ -478,7 +473,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         this.bank = this.allBank.filter(function (item, index, inputArray) {
           return inputArray.indexOf(item) == index;
         });
-        console.log(this.bank);
+        console.log(this.bank,'bank.....................');
         //this.letterHead = data['data'][0].file[0]["Letter Head"]
         //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
       },
@@ -2706,8 +2701,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   }
 
   setradio(a) {
-    console.log(a);
-    this.bankToggle = true;
+    console.log(a,'setradio');
+    this.bankToggle = a;
     this.bankValue = a;
 
     this.newBankArray = [];
@@ -3623,5 +3618,54 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           });
       }
     }
+  }
+  ShowPopup(callback:any){
+  
+  }
+  Lodgement:any={
+    'AgainstAdvanceReceipt':{
+      Show:'',
+      Hide:''
+    },
+    'UnderLC':{
+      Show:'',
+      Hide:''
+    },
+    'BuyerRemitterDifferent':{
+      Show:'',
+      Hide:''
+    },
+    'InvoiceReduction':{
+      Show:'',
+      Hide:''
+    },
+    'WithDiscount':{
+      Show:'',
+      Hide:''
+    },
+    'WithScrutiny':{
+      Show:'',
+      Hide:''
+    }
+  }
+  ClassRetrun(mainkey,key,class1,class2,condition){
+    if (this.Lodgement[mainkey][key]===condition) {
+      return class1;
+    }
+    else{
+      return class2;
+    }
+  }
+  Changebutton(mainkey,Showkey,hidekey,value){
+    this.Lodgement[mainkey][Showkey]=value
+    this.Lodgement[mainkey][hidekey]='';
+    console.log(this.Lodgement,'Lodgement')
+  }
+  DUMP_FUNCTION(condition1,condition2,popupshow){
+     if (condition1===condition2) {
+      popupshow.style.display='flex'
+     } else {
+      popupshow.style.display='none'
+     }
   }
 }

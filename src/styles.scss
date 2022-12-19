@@ -32,3 +32,142 @@
   body{
     overflow-x: hidden !important;
   }
+
+  // custom drop down
+
+  .dropdownbtn {
+    display: flex!important;
+    background-color: #fff;
+    color: #464a4c;
+    padding: 6px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 100%;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .dropdown i.icon {
+    color: #51AEE5;
+    float: right;
+    margin-right: 8px;
+    font-size: 1.5em;
+    position: absolute;
+    right: 3%;
+  }
+  
+  .dropdownbtn #displayText {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .dropdown {
+    position: relative;
+    display: block;
+  }
+  
+  .dropdown #dropdown-btn {
+    display: block;
+    width: 100% !important;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 100%;
+    width: 100%;
+    box-shadow: 0 8px 16px #a9a3a3;
+    z-index: 1000;
+    border-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  
+  .dropdown-content a {
+    z-index: 1000;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: #ddd;
+  }
+  
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+  .show {
+    display: block;
+  }
+  
+  .main-drop-down-class{
+    display: block;
+    padding: 0 0.875rem;
+    height: auto !important;
+    line-height: 2.5rem;
+    color: #333;
+    background-color: #fff;
+    white-space: nowrap;
+    overflow: unset !important;
+    text-overflow: ellipsis;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+  }
+
+  .dropdown{
+    height: 100%;
+    max-height: 100%;
+  }
+  .margin-left{
+    margin: auto;
+    margin-left: 10px;
+  }
+  .margin-right{
+    margin: auto;
+    margin-right: 10px;
+  }
+
+  .dropdown-input{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #51AEE5;
+    color: #51AEE5;
+    background: transparent;
+    margin: auto;
+    padding-left: 15px;
+    margin-left: 0;
+    font-size: 20px;
+  }
+
+  .dropdown-input:foucs{
+    border: 2px solid #51AEE5;
+  }
+  .dropdown-content a:hover{
+    background-color: #6c6464;
+    color: white !important;
+  }
+  .dropdown-content a:hover:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: white !important;
+}
+.dropdown-content a:hover:first-child {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: white !important;
+}

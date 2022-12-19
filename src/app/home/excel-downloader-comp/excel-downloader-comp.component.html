@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="page-content page-container" id="page-content" #pagecontent>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>SI No.</th>
+                        <th>Table Name</th>
+                        <th>Count</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="this.TABLE_LIST_PIPO.length!=0">
+                    <tr *ngFor="let item of this.TABLE_LIST_PIPO; let i=index">
+                        <td>{{(i+1)}}</td>
+                        <td>{{item}}</td>
+                        <td>{{(this.COUNT[item])}}</td>
+                        <td><button type="button" class="btn -btn-primary" (click)="excelgenrator(item);"
+                             title="download (.xls)"><img src="assets/export.png" alt=""></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

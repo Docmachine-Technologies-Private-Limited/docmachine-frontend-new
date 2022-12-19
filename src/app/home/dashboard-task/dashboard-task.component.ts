@@ -14,6 +14,7 @@ import { DashBoardService } from '../../service/dashboard.service';
 
 import { ThemePalette } from '@angular/material/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
+import { UserService } from "../../service/user.service";
 
 
 @Component({
@@ -78,7 +79,7 @@ export class DashboardTaskComponent implements OnInit {
   EDPMSData: any = [];
 
 
-  
+
   orderPendingShipment: any
   orderPendingShipmentImport: any = [];
   orderPendingShipmentExport: any = [];
@@ -93,7 +94,7 @@ export class DashboardTaskComponent implements OnInit {
   public packingCreditAvailedChartOptions;
   public totalBillLodgedChartOptions;
   public edpmsChartOptions;
-  
+
 
   sbChartNoData: Boolean = true;
   inwardChartNoData: Boolean = true;
@@ -106,15 +107,20 @@ export class DashboardTaskComponent implements OnInit {
   EDPMSChart;
   packingCreditAvailedChart;
   totalBillLodgedChart;
+  userData:any;
 
   @ViewChild("chart") chart: ChartComponent;
 
-  constructor(public documentService: DocumentService, public dashboardService: DashBoardService) {
+  constructor(public documentService: DocumentService, public dashboardService: DashBoardService, public userService: UserService) {
     // this.ChartMethod()
 
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+
+    this.userData = await this.userService.getUserDetail();
+    // this.userData = this.userData.result
+    console.log("userData",this.userData)
     this.item1 = []
     this.documentService.getTypeExportTask({ fileType: 'BL' }).subscribe(
       (res: any) => {
@@ -163,7 +169,7 @@ export class DashboardTaskComponent implements OnInit {
     this.dashboardService.getDashboardData().subscribe(
       (res: any) => {
 
-
+console.log(res,'responseeeeeeeeeeeeeeeeeeeeeeeeeeeee')
         //  -------------------------------------
 
         this.pipoCurrencyImportData = res?.pipo?.import?.currencyWise;
@@ -367,7 +373,7 @@ export class DashboardTaskComponent implements OnInit {
           for (let i = 0; i < tooltipData?.convertData?.length; i++) {
             // toolTipText += `${tooltipData?.convertData[i].currency} :${tooltipData?.convertData[i].amount}  <br>`
 
-            toolTipText += `${tooltipData?.convertData[i].currency} :${ w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`  
+            toolTipText += `${tooltipData?.convertData[i].currency} :${ w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
 
           }
           // return "<div></div>";
@@ -412,7 +418,7 @@ export class DashboardTaskComponent implements OnInit {
           let toolTipText = ''
           for (let i = 0; i < tooltipData?.convertData?.length; i++) {
             // toolTipText += `${tooltipData?.convertData[i].currency} :${tooltipData?.convertData[i].amount} <br> `
-            toolTipText += `${tooltipData?.convertData[i].currency} :${ w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>` 
+            toolTipText += `${tooltipData?.convertData[i].currency} :${ w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
 
           }
           return "<div>" + toolTipText + "</div>";
@@ -454,7 +460,7 @@ export class DashboardTaskComponent implements OnInit {
           let toolTipText = ''
           for (let i = 0; i < tooltipData?.convertData?.length; i++) {
             // toolTipText += `${tooltipData?.convertData[i].currency} :${tooltipData?.convertData[i].amount}  <br>`
-            toolTipText += `${tooltipData?.convertData[i].currency} :${ w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>` 
+            toolTipText += `${tooltipData?.convertData[i].currency} :${ w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
 
           }
           return "<div>" + toolTipText + "</div>";
@@ -538,7 +544,7 @@ export class DashboardTaskComponent implements OnInit {
 
     this.orderPendingForShipmentChartOptions = {
       series: [],
-   
+
         chart: {
         type: 'bar',
         height: 220,
@@ -751,7 +757,7 @@ export class DashboardTaskComponent implements OnInit {
 
     this.inwardChart = new ApexCharts(document.querySelector('#inwardChart'), this.inwardChartOptions);
     this.inwardChart.render();
-
+    console.log(this.edpmsChartOptions,'this.edpmsChartOptions')
     this.EDPMSChart = new ApexCharts(document.querySelector('#EdpmsChart'), this.edpmsChartOptions);
     this.EDPMSChart.render();
 
@@ -763,7 +769,7 @@ export class DashboardTaskComponent implements OnInit {
 
     this.packingCreditAvailedChart = new ApexCharts(document.querySelector('#PackingCreditAvailedChart'), this.packingCreditAvailedChartOptions);
     this.packingCreditAvailedChart.render();
-    
+
     this.totalBillLodgedChart = new ApexCharts(document.querySelector('#TotalBillLodgedChart'), this.totalBillLodgedChartOptions);
     this.totalBillLodgedChart.render();
 
@@ -805,7 +811,7 @@ export class DashboardTaskComponent implements OnInit {
       labels:["Pending", "Upload"],
       // chartData: this.inwardBuyerImportData
     });
-
+    console.log(this.EDPMSData.pendingData, this.EDPMSData.uploadData,'asdsadsadsadadasdasdsadsadsadsad')
 
     // this.edpmsChart.series = [this.EDPMSData.pendingData, this.EDPMSData.uploadData]
     // this.edpmsChart.labels = ["Pending", "Upload"]
@@ -867,7 +873,7 @@ export class DashboardTaskComponent implements OnInit {
       labels: this.inwardBuyerExportData?.map(data => data._id),
       chartData: this.inwardBuyerExportData
     });
-    
+
 
     this.inwardChart.updateOptions({
       series: this.inwardBuyerExportData?.map(data => data.totalItems),
@@ -880,6 +886,7 @@ export class DashboardTaskComponent implements OnInit {
       labels:["Pending", "Upload"],
       // chartData: this.inwardBuyerImportData
     });
+    console.log(this.EDPMSData.pendingData, this.EDPMSData.uploadData,'asdsadsadsadadasdasdsadsadsadsad')
 
 
     this.shipmentPending = this.shipmentPendingExport
@@ -915,17 +922,17 @@ export class DashboardTaskComponent implements OnInit {
 
   }
 
-  
+
   handleOrderShipmentExport ()
   {
-    // series: 
-    let chartData = [this.orderPendingShipmentExport.pendingCount ,this.orderPendingShipmentExport.fullCount ] 
+    // series:
+    let chartData = [this.orderPendingShipmentExport.pendingCount ,this.orderPendingShipmentExport.fullCount ]
     console.log("chartData",chartData)
     this.orderShipmentChart.updateOptions({
       series: [{
         data:chartData ,
        }],
-   
+
     });
   }
 
@@ -958,6 +965,28 @@ export class DashboardTaskComponent implements OnInit {
   //     this.handleExportData()
   //   }
   // }
+  typeChange(type) {
+    // this.dashboardService.DASH_BOARD_TYPES=type;
+    let sendData = { sideMenu: type }
+    this.documentService.updateUserById(this.userData.result._id,sendData).subscribe(
+      (data) => {
+        this.userData.result = { ...this.userData.result ,sideMenu: type  }
+        this.userService.addLoginData(this.userData)
+      },
+      (error) => {
+        console.log("error");
+      }
+    );
+
+    //
+    // console.log("typeChange", type)
+    // this.type = type
+    // if (type === 'import') {
+    //   this.handleImportData()
+    // } else {
+    //   this.handleExportData()
+    // }
+  }
 
 
   calculatePercentage(partialValue, totalValue) {
@@ -979,11 +1008,11 @@ export class DashboardTaskComponent implements OnInit {
   }
 
 
-  ospTypeChange(data)  
+  ospTypeChange(data)
   {
     console.log("change",this.ospType)
     this.getOrderShipmentData()
-    
+
   }
 
 

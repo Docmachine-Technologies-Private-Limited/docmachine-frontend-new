@@ -1609,4 +1609,14 @@ export class DocumentService {
     };
     return this.http.get(data['url'], httpOptions);
   }
+
+  updateUserById(id,data)
+  {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.patch(`${this.api_base}/user/updateUserById/${id}`, data,httpOptions ); }
 }

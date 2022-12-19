@@ -22,9 +22,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   @ViewChildren('ngSelect') ngSelect:ElementRef;
 
   closeResult: string;
-  public SBOriginalData:any=[];
-  SbArrayData:any=[];
-
+  public item1;
   public item2;
   public user;
   public selectedRow;
@@ -180,6 +178,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   Inward_Remittancefilter: any = [];
   SELECT_ThirdPartydata:any='';
   SELECT_bankreferencenumber:any='';
+  Lodgement:any=[];
+  selection:any=[];
+  Select_A_bank:any=[];
 
   constructor(
     public documentService: DocumentService,
@@ -194,6 +195,31 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log("hello")
     this.jstoday = formatDate(this.today, 'dd-MM-yyyy', 'en-US', '+0530');
     console.log(this.jstoday)
+    for (let index = 0; index <this.Inward_Remittance.length; index++) {
+      this.Lodgement[this.Inward_Remittance[index]]={
+        'Lodgement':{
+          Show:'',
+          Hide:''
+        },
+        'BuyerRemitter':{
+          Show:'',
+          Hide:''
+        },
+        'Invoicereduction':{
+          Show:'',
+          Hide:''
+        },
+        'BuyerRemitterDifferent':{
+          Show:'',
+          Hide:''
+        },
+        'InvoiceReduction2':{
+          Show:'',
+          Hide:''
+        }
+      }
+    }
+    console.log(this.Lodgement,'dcsdsdsadsadsdasdasdsadsad')
   }
   ThirdPartydataoldata: any = [];
   Blcopyrefoldata: any = [];
@@ -301,25 +327,22 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     );
     this.documentService.getMaster(1).subscribe(
       (res: any) => {
-        console.log(res), (this.SBOriginalData = res.data);
+        this.item1 = res.data;
         this.ShippingbillNumberfilter = res.data;
-
-        this.SBOriginalData.forEach((element, i) => {
+        this.item1.forEach((element, i) => {
           if (element.buyerName!=null && element.buyerName!=undefined) {
             this.buyerName[i] = element.buyerName;
           }
         });
-
-        this.SbArrayData =  this.SBOriginalData
         this.buyerName = this.buyerName.filter(
           (value, index) => this.buyerName.indexOf(value) === index
         );
-        
+
       },
       (err) => console.log(err)
     );
 
-    
+
 
     this.documentService.getThird().subscribe(
       (res: any) => {
@@ -369,7 +392,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           this.bank = this.allBank.filter(function (item, index, inputArray) {
             return inputArray.indexOf(item) == index;
           });
-          console.log(this.bank)
+          console.log(this.bank,'sallBankallBankallBankallBankallBank')
 
 
 
@@ -620,15 +643,15 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   }
 
   changeCheckbox(value) {
-    let j = this.pipoArray.indexOf(value)
+    let j = this.selectPIPO.indexOf(value)
     if (j == -1) {
-      this.pipoArray.push(value)
+      this.selectPIPO.push(value)
     }
     else {
-      this.pipoArray.splice(j, 1)
+      this.selectPIPO.splice(j, 1)
     }
 
-    console.log(this.pipoArray)
+    console.log(this.selectPIPO)
   }
 
   changeCheckbox1(value) {
@@ -717,7 +740,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.jsondata = [];
     if (multipleselectedvalue.length != 0) {
       for (let index = 0; index < multipleselectedvalue.length; index++) {
-       
+
       for (let data of this.dataJson) {
         if (data.groupname.toLowerCase().indexOf(multipleselectedvalue[index].toLowerCase()) != -1) {
           this.jsondata.push(data)
@@ -799,7 +822,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.generate = true
     this.generatePurpose[j] = code;
     console.log(this.item3)
-    console.log(this.item3[0])
+    this.itemArray=this.item3;
+    console.log(this.itemArray)
     let generateDoc1: any = [];
     let pipo = false;
     let pipoValue = this.itemArray[0]
@@ -807,7 +831,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(pipoValue)
     console.log("645 line", this.itemArray)
     for (let item of this.itemArray) {
-      for (let pipo of this.pipoArray) {
+      for (let pipo of this.selectPIPO) {
         console.log("item.doc")
 
         if (item.pi_poNo === pipo) {
@@ -844,7 +868,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     // console.log("line no. 671", this.mainDoc4)
 
     this.newTask[j] = {
-      pipoNumbers: this.pipoArray,
+      pipoNumbers: this.selectPIPO,
       pipoUrls: this.mainDoc[j],
       purposeCode: code
     }
@@ -853,13 +877,13 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(this.c)
     this.fillForm(pipoValue)
     this.newTask[j] = {
-      pipoNumbers: this.pipoArray,
+      pipoNumbers: this.selectPIPO,
       pipoUrls: this.mainDoc[j],
       purposeCode: code,
     }
     console.log("hello there", this.newTask)
     // this.newTask[i] = {
-    //   pipoNumbers: this.pipoArray,
+    //   pipoNumbers: this.selectPIPO,
     //   pipoUrls: this.mainDoc[i],
     //   purposeCode: code,
     //   generateDoc1: this.data7[i]
@@ -1947,7 +1971,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       this.sbPurpose1[j] = code;
     }
     let generateDoc2: any = [];
-    for (let item of this.SBOriginalData) {
+    for (let item of this.item1) {
       for (let sb of this.sbArray) {
         if (item.sbno === sb) {
           generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -2000,19 +2024,16 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(this.c)
   }
 
-  generateDoc2(code, j) {
+  generateDoc2(SHOW_HIDE_CODE,code, j) {
     console.log(code, j)
     this.generate = true;
-    this.ir = this.Question4
-    if (this.Question4 == 'yes') {
+    this.ir = SHOW_HIDE_CODE
+    if (SHOW_HIDE_CODE == 'yes') {
       this.importPurpose[j] = code;
     }
-    else if (this.Question4 == 'no') {
+    else if (SHOW_HIDE_CODE == 'no') {
       this.noImportPurpose[j] = code;
     }
-
-
-
     let generateDoc2: any = [];
     for (let item of this.item4) {
       for (let sb of this.tryArray) {
@@ -2042,7 +2063,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   exportAsPDF(code, i) {
     if (this.documentService.draft == true) {
       if (this.documentService.task.task[i].pipoUrls) {
-        this.pipoArray = this.documentService.task.task[i].pipoNumbers
+        this.selectPIPO = this.documentService.task.task[i].pipoNumbers
       }
     }
     this.donePurpose[i] = code;
@@ -2080,7 +2101,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           //this.downloadPDF(data);
           this.zToggle[i] = true;
           this.newTask[i] = {
-            pipoNumbers: this.pipoArray,
+            pipoNumbers: this.selectPIPO,
             pipoUrls: this.mainDoc[i],
             purposeCode: code,
             generateDoc1: this.data7[i]
@@ -2464,6 +2485,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           // this.searchData(e)
           this.selectedPurpose.push(e)
           this.toastr.info(`Purpose code added`);
+          this.selection=this.selectedPurpose[0];
         }
       }
       else {
@@ -2535,10 +2557,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.Question3 = '';
     this.Question4 = '';
     this.Question5 = '';
-    this.pipoArray = [];
+    this.selectPIPO = [];
     this.sbArray = [];
     this.tryArray = [];
     let allTrue = true;
+    this.selection=a;
+    console.log(this.Select_A_bank,'Select_A_bank')
     for (let value of this.zToggle) {
       allTrue = allTrue && value;
     }
@@ -2901,11 +2925,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       this.dataSource= this.OLD_dataSource;
     }
   }
-  // (change)="BuyerFilter(SBBuyerName)"
-
-  BuyerFilterForSB(searchvalue) {
-    if (searchvalue!=null && searchvalue!=undefined && searchvalue!='') {
-      this.SbArrayData= this.SBOriginalData.filter((e) => {
+  ShippingBillnumberFil(searchvalue) {
+    if (searchvalue!=null && searchvalue!=undefined && searchvalue!='BuyerName') {
+      this.ShippingbillNumberfilter= this.item1.filter((e) => {
         var temp=(e['buyerName']);
         if (temp!=null && temp!=undefined) {
           if ((temp.toLowerCase()).indexOf(searchvalue.toLowerCase()) != -1) {
@@ -2915,16 +2937,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       });
     }
     else{
-      this.SbArrayData  = this.SBOriginalData;
+      this.ShippingbillNumberfilter= this.item1;
     }
+    console.log(this.ShippingbillNumberfilter,this.item1,'ShippingbillNumberfilter');
+
   }
-  
-  resetSbFilter ()
-  {
-    this.SBBuyerName = '',
-    this.BuyerFilterForSB(null)
-  }
- 
 
   ClickbankNumber(name: any,inputsetvalue:any,hiddenprops) {
     this.SELECT_bankreferencenumber=name;
@@ -2974,7 +2991,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   ShippingbillNumberfilter: any = [];
   PARTY_NAME:any=[];
    loadPopupPIPONumbers(inputid, hidden_props) {
-    
+
   }
   filterBlcopyref(data, searchvalue) {
     return data.filter((e) => ((e.buyerName).toLowerCase()).indexOf(searchvalue.toLowerCase()) != -1);
@@ -2987,29 +3004,25 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     return data.filter((e) => (e.sbno.toLowerCase()).indexOf(searchvalue.toLowerCase()) != -1);
   }
 StringConverter(item){
+  // console.log(item,'itemmmmmmmmm')
   if (item.length==0) {
     return ''
   }else{
     return item.toString();
   }
 }
-
-Lodgement:any={
-  Show:'',
-  Hide:''
-}
-ClassRetrun(key,class1,class2,condition){
-  if (this.Lodgement[key]===condition) {
+ClassRetrun(mainkey,key,class1,class2,condition){
+  if (this.Lodgement[this.selection][mainkey][key]===condition) {
     return class1;
   }
   else{
     return class2;
   }
 }
-Changebutton(Showkey,hidekey,value){
-  this.Lodgement[Showkey]=value
-  this.Lodgement[hidekey]='';
-  // console.log(this.Lodgement,'Lodgement')
+Changebutton(mainkey,Showkey,hidekey,value){
+  this.Lodgement[this.selection][mainkey][Showkey]=value
+  this.Lodgement[this.selection][mainkey][hidekey]='';
+  // console.log(this.Lodgement[this.selection],'Lodgement')
 }
 }
 

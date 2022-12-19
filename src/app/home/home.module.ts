@@ -75,9 +75,8 @@ import { MatInputModule} from '@angular/material/input';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { ConfirmDialogBoxComponent } from './confirm-dialog-box/confirm-dialog-box.component';
 import { UploadDocComponent } from "./Export/export-home/upload-doc/upload-doc.component";
-
-
-
+import { ExcelDownloaderCompComponent } from "./excel-downloader-comp/excel-downloader-comp.component";
+import { SubBillLodgementComponent } from "./Export/sub-bill-lodgement/sub-bill-lodgement.component";
 
 @NgModule({
   declarations: [
@@ -100,6 +99,8 @@ import { UploadDocComponent } from "./Export/export-home/upload-doc/upload-doc.c
     AddPipoComponent,
     FooterComponent,
     ConfirmDialogBoxComponent,
+    ExcelDownloaderCompComponent,
+    SubBillLodgementComponent
   ],
   imports: [
     SharedHomeModule,
@@ -161,6 +162,16 @@ import { UploadDocComponent } from "./Export/export-home/upload-doc/upload-doc.c
           { path: "tasks", loadChildren: () => import('./all-task/all-task.module').then(mod => mod.AllTaskModule) },
           { path: "letter-of-credit", loadChildren: () => import('./yesBank/letter-of-credit/letter-of-credit.module').then(mod => mod.LetterOfCreditModule) },
           { path: "Pdf-Upload",component:UploadDocComponent },
+          {
+            path: "Excel-Downloader",
+            component: ExcelDownloaderCompComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "Sub-bill-Lodgement",
+            component: SubBillLodgementComponent,
+            pathMatch: "full",
+          },
           {
             path: "createBene",
             component: CreateBeneComponent,
@@ -236,7 +247,7 @@ import { UploadDocComponent } from "./Export/export-home/upload-doc/upload-doc.c
             component: UploadBankIntimationComponent,
             pathMatch: "full",
           },
-          
+
           {
             path: "test",
             component: TestComponent,

@@ -8,7 +8,7 @@
                         <div style="display: flex; align-items: center">
                             <h3 class="heading">Bill Lodgement</h3>
                         </div>
-                        <!-- 
+                        <!--
                         <div class="dropdown">
                             Date:
                             <select name="subject" id="subject" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100;margin-right: 5px;font-size: 14px;">
@@ -39,7 +39,22 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <label for="email" class="form-label">Select PI/PO or shipping bill</label>
-                                        <input type="text" class="form-control" id="text" placeholder="Select shipping bill" name="text">
+                                        <app-custom-dropdown class="main-drop-down-class" name="example1"
+                                         [data]="this.SHIPPING_BILL_LIST" label-text="Sample Data 1"
+                                         (PopupShow)="DUMP_FUNCTION(changevalue,'Shipping bill',content1)" [(ngModel)]="changevalue"></app-custom-dropdown>
+                                        <div *ngIf='itemArray?.length >0'>
+                                            <div *ngIf="ship" class="shpt_bill_sec">
+                                                <label>SHIPPING BILL NUMBER SELECTED</label>
+                                                <div class="form-check2" *ngFor="let item of itemArray; let i = index;">
+                                                    <label class="form-check-label">
+                                                        <p class="arrayData" style="display: inline-block;">
+                                                            {{item.sbno}} - {{item.buyerName}}
+                                                        </p>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <br>
+                                        </div>
                                     </div>
                                     <div class="space_bottom"></div>
                                     <div class="col-md-8 col-sm-8 col-7">
@@ -47,8 +62,30 @@
                                     </div>
                                     <div class="col-md-4 col-sm-4 col-5">
                                         <div class="check_box_button">
-                                            <button type="button" class="btn btn-primary">No</button>
-                                            <button type="button" class="btn btn-secondary">Yes</button>
+                                            <button type="button" [class]="ClassRetrun('AgainstAdvanceReceipt','Hide','btn no-button active1',
+                                             'btn btn-primary remove-no-button','no')" (click)="Changebutton('AgainstAdvanceReceipt','Hide','Show','no')">No</button>
+                                            <button type="button" [class]="ClassRetrun('AgainstAdvanceReceipt','Show',
+                                            'btn yes-button active','btn yes-button','yes')" (click)="Changebutton('AgainstAdvanceReceipt','Show','Hide','yes')">Yes</button>
+                                        </div>
+                                    </div>
+                                    <div style="margin: 10px 0px;" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes"'>
+                                        <div class="col-md-12">
+                                            <h3 style="font-size:17px;">Advance reference Number</h3>
+                                            <form class="" [formGroup]="advanceForm" (ngSubmit)="onSubmit()">
+                                                <div formArrayName="advance">
+
+                                                    <div *ngFor="let course of getCourses(advanceForm); let i = index" [formGroupName]="i" style="margin-bottom: 10px;">
+                                                        <h3> {{sbArray[i]}} </h3>
+                                                        <div formArrayName='value'>
+                                                            <button class="button1" (click)="open2(content2, sbArray[i]);">Enter Forex
+                                                            Advice</button><br>
+                                                            <label *ngFor="let data of getForexInfo(sbArray[i])" style="display: inline-block;">
+                                                                <span class="selecter1">{{data.valueInternal}}</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                     <div class="space_bottom"></div>
@@ -57,36 +94,44 @@
                                     </div>
                                     <div class="col-md-4 col-sm-4 col-5">
                                         <div class="check_box_button">
-                                            <button type="button" class="btn btn-primary inactive">No</button>
-                                            <button type="button" class="btn btn-secondary active">Yes</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12"> <label for="email" class="form-label">Select letter of credit</label></div>
-                                    <div class="col-md-10 col-sm-10 col-9 pr-0">
-                                        <div class="select_rol">
-                                            <select class="form-select" aria-label="Default select example">
-                                        <option selected="">Open this select menu</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                      </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-2 col-3 pl-0">
-                                        <div class="uplod_doc">
-                                            <button type="button" class="btn btn-danger">
-                                        <img src="../../../assets/Icon-feather-upload.svg" alt="">
-                                      </button>
+                                            <button type="button" [class]="ClassRetrun('UnderLC','Hide','btn no-button active1',
+                                            'btn btn-primary remove-no-button','no')" (click)="Changebutton('UnderLC','Hide','Show','no')">No</button>
+                                            <button type="button" [class]="ClassRetrun('UnderLC','Show',
+                                            'btn yes-button active','btn yes-button','yes')" (click)="Changebutton('UnderLC','Show','Hide','yes')">Yes</button>
                                         </div>
                                     </div>
                                     <div class="space_bottom"></div>
+                                    <div *ngIf='this.Lodgement["UnderLC"]["Show"]==="yes"' style="width:100%;">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label for="email" class="form-label">Select letter of credit</label></div>
+                                                <div class="col-md-10 col-sm-10 col-9 pr-0">
+                                                    <div class="select_rol">
+                                                        <ng-select [items]="this.ThirdPartydata" bindLabel="buyerName" placeholder="Select Tripartite agreement" [(ngModel)]="ThirdPartydataselection" name="commodity" #ngSelect>
+                                                        </ng-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 col-sm-2 col-3 pl-0">
+                                                    <div class="uplod_doc">
+                                                        <button type="button" class="btn btn-danger">
+                                            <img src="../../../assets/Icon-feather-upload.svg" alt="">
+                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="space_bottom"></div>
+                                    </div>
                                     <div class="col-md-8 col-sm-8 col-7">
                                         <label for="email" class="form-label">With Scrutiny?</label>
                                     </div>
                                     <div class="col-md-4 col-sm-4 col-5">
                                         <div class="check_box_button">
-                                            <button type="button" class="btn btn-primary">No</button>
-                                            <button type="button" class="btn btn-secondary">Yes</button>
+                                            <button type="button" [class]="ClassRetrun('WithScrutiny','Hide','btn no-button active1',
+                                            'btn btn-primary remove-no-button','no')" (click)="Changebutton('WithScrutiny','Hide','Show','no')">No</button>
+                                            <button type="button" [class]="ClassRetrun('WithScrutiny','Show',
+                                            'btn yes-button active','btn yes-button','yes')" (click)="Changebutton('WithScrutiny','Show','Hide','yes')">Yes</button>
                                         </div>
                                     </div>
                                     <div class="space_bottom"></div>
@@ -95,8 +140,10 @@
                                     </div>
                                     <div class="col-md-4 col-sm-4 col-5">
                                         <div class="check_box_button">
-                                            <button type="button" class="btn btn-primary">No</button>
-                                            <button type="button" class="btn btn-secondary">Yes</button>
+                                            <button type="button" [class]="ClassRetrun('WithDiscount','Hide','btn no-button active1',
+                                            'btn btn-primary remove-no-button','no')" (click)="Changebutton('WithDiscount','Hide','Show','no')">No</button>
+                                            <button type="button" [class]="ClassRetrun('WithDiscount','Show',
+                                            'btn yes-button active','btn yes-button','yes')" (click)="Changebutton('WithDiscount','Show','Hide','yes')">Yes</button>
                                         </div>
                                     </div>
                                     <div class="space_bottom"></div>
@@ -105,8 +152,32 @@
                                     </div>
                                     <div class="col-md-4 col-sm-4 col-5">
                                         <div class="check_box_button">
-                                            <button type="button" class="btn btn-primary">No</button>
-                                            <button type="button" class="btn btn-secondary">Yes</button>
+                                            <button type="button" [class]="ClassRetrun('BuyerRemitterDifferent','Hide','btn no-button active1',
+                                            'btn btn-primary remove-no-button','no')" (click)="Changebutton('BuyerRemitterDifferent','Hide','Show','no')">No</button>
+                                            <button type="button" [class]="ClassRetrun('BuyerRemitterDifferent','Show',
+                                            'btn yes-button active','btn yes-button','yes')" (click)="Changebutton('BuyerRemitterDifferent','Show','Hide','yes')">Yes</button>
+                                        </div>
+                                    </div>
+                                    <div style=" margin-bottom: 10px;" *ngIf='this.Lodgement["BuyerRemitterDifferent"]["Show"]==="yes"'>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label for="email" class="form-label">Select Tri party agreement</label>
+                                                </div>
+                                                <div class="col-md-10 col-sm-10 col-9 pr-0">
+                                                    <div class="select_rol">
+                                                        <ng-select [items]="this.ThirdPartydata" bindLabel="buyerName" placeholder="Select Tripartite agreement" [(ngModel)]="ThirPartyselection" name="commodity" #ngSelect>
+                                                        </ng-select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 col-sm-2 col-3 pl-0">
+                                                    <div class="uplod_doc">
+                                                        <button type="button" class="btn btn-danger" [routerLink]="['/home/upload']">
+                    <img src="../../../assets/Icon-feather-upload.svg" alt="">
+                </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="space_bottom"></div>
@@ -115,270 +186,47 @@
                                     </div>
                                     <div class="col-md-4 col-sm-4 col-5">
                                         <div class="check_box_button">
-                                            <button type="button" class="btn btn-primary">No</button>
-                                            <button type="button" class="btn btn-secondary">Yes</button>
+                                            <button type="button" [class]="ClassRetrun('InvoiceReduction','Hide','btn no-button active1',
+                                            'btn btn-primary remove-no-button','no')" (click)="Changebutton('InvoiceReduction','Hide','Show','no')">No</button>
+                                            <button type="button" [class]="ClassRetrun('InvoiceReduction','Show',
+                                            'btn yes-button active','btn yes-button','yes')" (click)="Changebutton('InvoiceReduction','Show','Hide','yes')">Yes</button>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12 col-sm-12 col-12">
+                                    <div class="col-md-12 col-sm-12 col-12" *ngIf='this.Lodgement["InvoiceReduction"]["Show"]==="yes"
+                                        || this.Lodgement["InvoiceReduction"]["Show"]==="no" ||
+                                        this.Lodgement["BuyerRemitterDifferent"]["Show"]==="yes"
+                                        || this.Lodgement["BuyerRemitterDifferent"]["Show"]==="no"'>
                                         <label for="email" class="form-label">Select a bank</label>
                                         <div class="select_rol withborder">
-                                            <select class="form-select" aria-label="Default select example">
-                                        <option selected="">Axis bank</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                      </select>
+                                            <select class="form-select" aria-label="Default select example" [(ngModel)]="bankToggle" (change)="setradio(bankToggle)">
+                                                <option [value]="item" *ngFor="let item of this.bank let i=index">{{item}}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="space_bottom"></div>
-                                    <div class="col-md-12"><label for="email" class="form-label">Select letter of credit</label></div>
-
-                                    <div class="col-md-10 col-sm-10 col-9 pr-0">
-                                        <div class="select_rol">
-                                            <select class="form-select" aria-label="Default select example">
-                                        <option selected="">Axis bank ltd - OD - over draft</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                      </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-2 col-3 pl-0">
-                                        <div class="uplod_doc">
-                                            <button type="button" class="btn btn-danger">
-                                                <img src="../../../assets/Icon-feather-upload.svg" alt="">
-                                      </button>
-                                        </div>
-                                    </div>
-                                    <div class="space_bottom"></div>
-                                </div>
-                            </div>
-
-                            <div *ngIf='!isGenerate'>
-
-                                <div>
-                                    <div style="display: flex; align-items: center; margin-top:20px;">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label style="flex-direction:row; font-size:17px; color: #303030;  ">Select PI/PO or Shipping Bill</label>
-                                            </div>
-                                            <div class="col-md-6">
-
-                                                <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
-                                                    <span style="color: #323e4a !important; min-width: 250px;">select</span>
-                                                    <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
-                              <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                            </span>
-                                                    <div class="dropdown-content shippingbilldrp">
-                                                        <!--                                    <a style="min-width: 100%;" (click)="open(content)">PI/PO</a>-->
-                                                        <a style="min-width:100%;" (click)="open1(content1);">Shipping Bill</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <!-- <input style="width: 50%; margin-top: 20px; margin-bottom: 20px;" placeholder="Search for Buyer name or Shipping Bill Number to select Shipping Bill" class="form-control" type="text" (input)="searchData1($any($event.target).value)">
-                            <div *ngIf='filterToggle'>
-                                <label style="margin-left:10px"> Select Shipping Bill number*</label>
-                                <div style="margin-left:10px" s class="form-check" *ngFor="let item of itemArray; let i = index;">
-                                    <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox"
-                                      (change)="changeCheckbox1(item.sbno)">
-                                  {{item.sbno}} - {{item.buyerName}}
-                              </label>
-                                </div>
-                                <br>
-                            </div> -->
-
-                                        <!-- <div *ngIf='itemArray1?.length >0'>
-                                <div *ngIf="pipo">
-                                    <label style="margin-left:10px">PI/PO NUMBER SELECTED</label>
-                                    <div style="margin-left:10px" class="form-check" *ngFor="let item of itemArray1; let i = index;">
-                                        <label class="form-check-label">
-
-                                  <p class="arrayData">
-                                      {{item.sbno}}--{{item.pi_poNo}}--{{item.buyerName}}<i style="float: right; margin: 4px 10px;" (click)='removepipo(i)' class="fas fa-times"></i>
-                                  </p>
-
-                              </label>
-                                    </div>
-                                </div>
-                                <br>
-                            </div> -->
-
-                                        <div *ngIf='itemArray?.length >0'>
-                                            <div *ngIf="ship">
-                                                <label>SHIPPING BILL NUMBER SELECTED</label>
-                                                <div class="form-check" *ngFor="let item of itemArray; let i = index;">
-                                                    <label class="form-check-label">
-                                <p class="arrayData" style="display: inline-block;">
-                                  {{item.sbno}} - {{item.buyerName}}
-                                  <!-- <i style="float: right; margin: 4px; display: inline-block;" (click)='removeshipping(i)' class="fas fa-times"></i> -->
-                                </p>
-
-                            </label>
-                                                </div>
+                                    <div *ngIf='bankToggle!=""' style="width:100%;">
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            Charges to {{bankValue}}*
+                                            <div *ngFor='let value of newBankArray' style="display: flex; align-items: center;">
+                                                <input style="flex-direction:row;" [value]="value" (click)="model1.option = value" [checked]="value === model1.option" type="radio" id="options1" class="circular_input1" (click)="chargesTo(value)">
+                                                <label style="flex-direction:row;" class="label1" for="male">{{value.bank}}-{{value.accType}}</label>
                                             </div>
                                             <br>
                                         </div>
-
-
-
-
-
-                                        <div class="form-group Against_list">
-                                            <div class="form-group">
-                                                <h3>Against Advance Receipt?</h3>
-                                                <label><input type="radio" class="radiobtn" name="Question6" [(ngModel)]="Question6" value="yes" (change)="hello()"> <span >Yes</span> <br></label>
-                                                <label> <input type="radio" class="radiobtn" name="Question6" [(ngModel)]="Question6" value="no"> <span >No</span></label>
-                                            </div>
-                                        </div>
-                                        <div style="margin: 10px 0px;" *ngIf='Question6 === "yes"'>
-                                            <label>Advance reference Number</label>
-                                            <form class="" [formGroup]="advanceForm" (ngSubmit)="onSubmit()">
-                                                <div formArrayName="advance">
-
-                                                    <div *ngFor="let course of getCourses(advanceForm); let i = index" [formGroupName]="i" style="margin-bottom: 10px;">
-                                                        <h3> {{sbArray[i]}} </h3>
-                                                        <div formArrayName='value'>
-
-                                                            <button class="button1" (click)="open2(content2, sbArray[i]);">Enter Forex Advice</button>
-
-                                                            <div *ngFor="let data of getForexInfo(sbArray[i])" style="width: 100%;">
-                                                                <div class="selecter1">{{data.valueInternal}}</div>
-                                                            </div>
-
-                                                        </div>
-                                                        <!-- <div formArrayName='value'>
-                                                <div *ngFor="let subgroup of course.controls.value.controls; let idx = index;" [formGroupName]="idx" style="flex-direction:row; margin-right: 15px;">
-                                                    <span style="color: #707683; font-size: 14px;">{{idx+1}}</span>
-                                                    <input formControlName="valueInternal" style="outline: none; border: 1px solid #DEDEDE; width: 150px; border-radius: 5px; margin-left: 15px;">
-                                                    <input style="display: none;" type="text" formControlName="sb" [(ngModel)]="sbArray[i]">
-
-                                                </div>
-                                                <span (click)="onAddCourse1(i)" style="font-size: 12px; color: #303030;"><i
-                                                      style="font-size: 14px;" class="fas fa-plus-circle"></i> Add
-                                                  New
-                                                  Row </span> -->
-
-                                                        <!-- <a *ngIf='i>0' (click)='removeAddress(i)'><i style="margin-top: 17px;" class="fas fa-times"></i></a> -->
-                                                        <!-- </div> -->
-
-
-                                                        <!-- <a *ngIf='i>0' (click)='removeAddress(i)'><i style="margin-top: 17px;" class="fas fa-times"></i></a> -->
-                                                    </div>
-
-
-                                                </div>
-
-
-                                            </form>
-                                            <!-- //If Yes -->
-
-                                            <!-- <input type="text" (keyup)="change($event)"> -->
-
-                                            <!-- <button class="button1">Select Forex Advice</button> -->
-                                        </div>
-
-                                        <div class="form-group Against_list">
-                                            <div class="form-group">
-                                                <h3>Under Lc?</h3>
-                                                <label><input type="radio" class="radiobtn" name="Question7" [(ngModel)]="Question7" value="yes"> <span>Yes</span> <br></label>
-                                                <label><input type="radio" class="radiobtn" name="Question7" [(ngModel)]="Question7" value="no"> <span>No</span></label>
-                                            </div>
-                                        </div>
-
-                                        <div style="" *ngIf='Question7 === "yes"'>
-                                            Select Letter Of Credit (LC)
-                                            <div s class="form-check" *ngFor="let item of item8; let i = index;">
-                                                <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox"
-                                (change)=changeCheckbox3(item.letterOfCreditNumber)>
-                                {{item.letterOfCreditNumber}} {{item.buyerName}}
-                            </label>
-                                            </div>
-                                            <a [routerLink]="['/home/upload']">Upload Letter Of Credit (LC)</a>
-                                        </div>
-
-                                        <div class="form-group Against_list">
-                                            <div class="form-group">
-                                                <h3>With Scrutiny?</h3>
-                                                <label><input type="radio" class="radiobtn" name="Question8" [(ngModel)]="Question8" value="yes"> <span>Yes</span> <br></label>
-                                                <label> <input type="radio" class="radiobtn" name="Question8" [(ngModel)]="Question8" value="no"> <span>No</span></label>
-
-
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group Against_list">
-                                            <div class="form-group">
-                                                <h3>With Discount?</h3>
-                                                <label><input type="radio" class="radiobtn" name="Question9" [(ngModel)]="Question9" value="yes"> <span>Yes</span> <br></label>
-                                                <label><input type="radio" class="radiobtn" name="Question9" [(ngModel)]="Question9" value="no"> <span>No</span></label>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group Against_list">
-                                            <div class="form-group">
-                                                <h3>Is Buyer remitter different?</h3>
-                                                <label><input type="radio" class="radiobtn" name="Question2" [(ngModel)]="Question2" value="yes"> <span>Yes</span> <br></label>
-                                                <label><input type="radio" class="radiobtn" name="Question2" [(ngModel)]="Question2" value="no"> <span>No</span></label>
-                                            </div>
-                                        </div>
-
-
-
-                                        <div style=" margin-bottom: 10px;" *ngIf='Question2 === "yes"'>
-                                            Select Tri party agreement
-                                            <div class="form-check" *ngFor="let item of item4; let i = index;">
-                                                <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox"
-                                  (change)=changeCheckbox2(item.triPartyAgreementNumber)>
-                                  {{item.triPartyAgreementNumber}} {{item.buyerName}}
-                              </label>
-                                            </div>
-                                            <a [routerLink]="['/home/upload']">Upload Tri party agreement</a>
-                                        </div>
-
-                                        <div class="form-group Against_list">
-                                            <div class="form-group">
-                                                <h3>Is Invoice reduction?</h3>
-                                                <label><input type="radio" name="Question5" [(ngModel)]="Question5" value="yes"> <span >Yes</span> <br></label>
-                                                <label><input type="radio" name="Question5" [(ngModel)]="Question5" value="no"> <span >No</span></label>
-                                            </div>
-
-                                        </div>
-
-
-                                        <div *ngIf='Question2 === "no" || Question2 === "yes" && Question5=="yes" || Question5=="no" ||  Question5=="yes"' style="">
-                                            <h3 style="margin-bottom:20px;font-size: 16px;">Select a bank*</h3>
-                                            <div *ngFor='let value of bank' style="display: flex; align-items: center;">
-                                                <input style="flex-direction:row;" type="radio" class="circular_input1" [value]="value" (click)="model.option = value" [checked]="value === model.option" (ngModel)="myRadio" (click)="setradio(value)">
-                                                <label style="flex-direction:row;" class="label1" for="male">{{value}}</label>
-                                            </div>
-                                            <br>
-                                            <div *ngIf='bankToggle'>
-
-                                                Charges to {{bankValue}}*
-                                                <div *ngFor='let value of newBankArray' style="display: flex; align-items: center;">
-                                                    <input style="flex-direction:row;" [value]="value" (click)="model1.option = value" [checked]="value === model1.option" type="radio" id="options1" class="circular_input1" (click)="chargesTo(value)">
-                                                    <label style="flex-direction:row;" class="label1" for="male">{{value.bank}}-{{value.accType}}</label>
-                                                </div> <br>
-                                            </div> <br>
-                                            <button style="float:right;padding: 0 16px;" class="opt" (click)='generateDoc1()'>
-                              Generate Document
-                          </button>
-
-                                        </div>
+                                    </div>
+                                    <br>
+                                    <div style="width:100%;" *ngIf='this.Lodgement["InvoiceReduction"]["Show"]==="yes"
+                                    || this.Lodgement["InvoiceReduction"]["Show"]==="no" ||
+                                    this.Lodgement["BuyerRemitterDifferent"]["Show"]==="yes"
+                                    || this.Lodgement["BuyerRemitterDifferent"]["Show"]==="no"'>
+                                        <button style="float:right;padding: 0 16px;" class="opt" (click)='generateDoc1()'>
+                                        Generate Document
+                                    </button>
                                     </div>
                                 </div>
-
                             </div>
-
-
+                            <!-- sometyingggggg -->
                             <div *ngIf='isGenerate'>
                                 <div>
                                     <h1 *ngIf="isProceed == false"></h1>
@@ -1044,7 +892,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button class="button3" style="margin-left: 180px; margin-top: 20px;" (click)="openToPdf(content3, pipo)">Open To Download/Send Mail</button>
+                                                <button class="button3" style="margin-left: 180px; margin-top: 20px;" (click)="openToPdf(content3, pipo)">Open To Download/Send
+                                                    Mail</button>
                                             </div>
 
 
@@ -1064,7 +913,8 @@
                                                         Try Party Agreement
                                                         <div style="display: flex; align-items: center;">
                                                             <iframe style="flex-direction:row;" [src]="try" height="500px" width="400px"></iframe>
-                                                        </div> <br></div>
+                                                        </div> <br>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1540,7 +1390,7 @@
                           </button> -->
                                         <button *ngIf='newDone' class="button1" style="margin-right: 10px; margin-bottom: 30px;" (click)="hidePreview()">Edit</button>
                                         <button *ngIf='!newDone' class="button1" style="margin-right: 10px; margin-bottom: 30px;" (click)="showPreview()">Proceed
-                              to Preview</button>
+                                            to Preview</button>
                                         <button class="button1" style="margin-right: 10px; margin-bottom: 30px;" (click)="exportToExcel()">Download To Excel</button>
                                         <button *ngIf='newDone' class="button1" style="margin-right: 10px; margin-bottom: 30px;" (click)="downloadAll('download')">Download All</button>
 
@@ -1548,7 +1398,8 @@
                                     <div *ngIf="isProceed == true">
                                         <p>Setup: 3 Preview</p>
                                         <!-- <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button> -->
-                                        <button class="button1" style="margin-bottom: 40px;">Send it via Email</button><br> Generated Document
+                                        <button class="button1" style="margin-bottom: 40px;">Send it via
+                                            Email</button><br> Generated Document
                                         <div>
                                             <iframe [src]="data8" height="500px" width="400px"></iframe>
                                             <iframe [src]="billOfCredit" height="500px" width="400px"></iframe>
@@ -1585,8 +1436,8 @@
 
                                 <div class="row no-gutter">
                                     <button type="button" class="button2 topright" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                          <span aria-hidden="true">OK</span>
-                        </button>
+                                        <span aria-hidden="true">OK</span>
+                                    </button>
                                     <!-- The content half -->
                                     <div class="col-md-7 ">
                                         <div class="login d-flex py-5" style="padding: 0px !important;">
@@ -1598,22 +1449,26 @@
                                                         <h6 class="display-5">Select PI/PO</h6>
                                                         <div class="d-flex justify-content-between mb-1">
                                                             <select [(ngModel)]="nameSearch" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
-                                                  <option value="">commodity</option>
-                                                  <option *ngFor="let item of item6; let i = index;" style="color: black;">{{item.como}}</option>
-                                              </select>
+                                                                <option value="">commodity</option>
+                                                                <option *ngFor="let item of item6; let i = index;"
+                                                                    style="color: black;">{{item.como}}</option>
+                                                            </select>
 
                                                             <select [(ngModel)]="nameSearch1" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
-                                                  <option value="">location</option>
-                                                  <option *ngFor="let item of item7; let i = index;" style="color: black;">{{item.loc}}</option>
-                                              </select>
+                                                                <option value="">location</option>
+                                                                <option *ngFor="let item of item7; let i = index;"
+                                                                    style="color: black;">{{item.loc}}</option>
+                                                            </select>
                                                             <select [(ngModel)]="nameSearch2" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
-                                                  <option value="">BuyerName</option>
-                                                  <option *ngFor="let item of buyerDetail ; let i = index;" style="color: black;">{{item.buyerName}}</option>
-                                              </select>
+                                                                <option value="">BuyerName</option>
+                                                                <option
+                                                                    *ngFor="let item of buyerDetail ; let i = index;"
+                                                                    style="color: black;">{{item.buyerName}}</option>
+                                                            </select>
 
-                                                            <input type="date" placeholder="Start Date" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;" [(ngModel)]="startDate" required/>
+                                                            <input type="date" placeholder="Start Date" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;" [(ngModel)]="startDate" required />
 
-                                                            <input type="date" placeholder="End Date" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;" [(ngModel)]="endDate" required/>
+                                                            <input type="date" placeholder="End Date" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;" [(ngModel)]="endDate" required />
 
                                                             <button class="filter" (click)="startDate = '' ; endDate = '' ;nameSearch = '';nameSearch1 = '';nameSearch2 = '' ">Reset</button>
                                                         </div>
@@ -1633,7 +1488,8 @@
                                                                 </thead>
                                                                 <tbody class="text-dark">
                                                                     <tr class="table-row" *ngFor='let data of item | filterb:startDate:endDate | filtera:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index' (click)="changeCheckbox1(item.sbno, item)">
-                                                                        <td><input type="checkbox" (change)="changeCheckbox1(item.sbno, item)" /></td>
+                                                                        <td><input type="checkbox" (change)="changeCheckbox1(item.sbno, item)" />
+                                                                        </td>
                                                                         <td>
                                                                             {{data.date}}
                                                                         </td>
@@ -1668,90 +1524,15 @@
                         </div>
 
                     </ng-template>
-                    <ng-template #content1 let-modal>
-
-                        <div class="modal-body">
-                            <div class="container-fluid">
-                                <div class="xdtr">
-                                    <button type="button" class="button2 topright" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                          <span aria-hidden="true">OK</span>
-                        </button>
-                                    <!-- The content half -->
-                                    <div class="col-md-12 ">
-                                        <div class="login d-flex py-5" style="padding: 0px !important;">
-                                            <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                <span aria-hidden="true">&times;</span>
-              </button> -->
-                                            <!-- Demo content-->
-                                            <div class="container_innser">
-                                                <h6 class="display-5" style="font-size:17px;">Select Shipping Bill</h6>
-                                                <div class="d-flex justify-content-between mb-1">
-                                                    <select [(ngModel)]="nameSearch4" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
-                                                  <option value="">BuyerName</option>
-                                                  <option *ngFor="let item of buyerName ; let i = index;" style="color: black;" >{{item}}</option>
-                                              </select>
-                                                    <button class="filter1" style="margin-left:-20px;" (click)="nameSearch4 = ''">Reset</button>
-                                                </div>
-                                                <section class="box-shadow">
-                                                    <table class="table table-striped mb-0">
-
-                                                        <thead style="width: 100% ;height: 54px;">
-                                                            <tr class="text-muted table-heading" style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
-                                                                <th scope="col"></th>
-                                                                <th scope="col">SB DATE</th>
-                                                                <th scope="col">SB NUMBER</th>
-                                                                <th scope="col">BUYER NAME</th>
-                                                                <th scope="col">CURRENCY</th>
-                                                                <th scope="col">SB AMOUNT</th>
-                                                                <th scope="col">AVAILABLE AMOUNT</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody class="text-dark">
-                                                            <tr class="table-row" *ngFor='let data of item1 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
-                                                                <td><input type="checkbox" (change)="changeCheckbox1(data.sbno, data); addTofilter1($event ,data._id, data) " /></td>
-                                                                <!-- (change)=" -->
-                                                                <td>
-                                                                    {{data.sbdate}}
-                                                                </td>
-                                                                <td>
-                                                                    {{data.sbno}}
-                                                                </td>
-                                                                <td>
-                                                                    {{data.buyerName}}
-                                                                </td>
-                                                                <td>
-                                                                    {{data.fobCurrency}}
-                                                                </td>
-                                                                <td>
-                                                                    {{data.fobValue}}
-                                                                </td>
-                                                                <td>
-                                                                    {{data.balanceAvai}}
-                                                                </td>
-
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </section>
-                                            </div>
-                                            <!-- End -->
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </ng-template>
 
                     <ng-template #content2 let-modal>
 
-                        <div class="modal-body">
+                        <div class="modal-body" style="margin-top: 0px; margin-left: 0px;">
                             <div class="container-fluid">
                                 <div class="row no-gutter">
                                     <button type="button" class="button2 topright" aria-label="Close" (click)="modal.dismiss('Cross click'); clearData();">
-                        <span aria-hidden="true">OK</span>
-                      </button>
+                                        <span aria-hidden="true">OK</span>
+                                    </button>
                                     <!-- The content half -->
                                     <div class="col-md-12 ">
                                         <div class="login d-flex py-5" style="padding: 0px !important;">
@@ -1765,9 +1546,11 @@
                                                         <h6 class="display-5" style="font-size:18px;">Select Forex Advice Number</h6>
                                                         <div class="d-flex justify-content-between mb-1">
                                                             <select [(ngModel)]="nameSearch3" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
-                                                <option value="">Party Name</option>
-                                                <option *ngFor="let item of irBuyerName ; let i = index;" style="color: black;" >{{item}}</option>
-                                            </select>
+                                                                <option value="">Party Name</option>
+                                                                <option
+                                                                    *ngFor="let item of irBuyerName ; let i = index;"
+                                                                    style="color: black;">{{item}}</option>
+                                                            </select>
                                                             <button class="filter1" style="margin-left: 0px;" (click)="nameSearch3 = ''">Reset</button>
                                                         </div>
                                                         <section class="box-shadow">
@@ -1785,7 +1568,8 @@
                                                                 </thead>
                                                                 <tbody class="text-dark">
                                                                     <tr class="table-row" *ngFor='let data of item13 | fiterbuyer:[{partyName:nameSearch3}]  let i = index'>
-                                                                        <td><input type="checkbox" (change)="addToSbArray(data, $event)" /></td>
+                                                                        <td><input type="checkbox" (change)="addToSbArray(data, $event)" />
+                                                                        </td>
                                                                         <!-- (change)=" -->
                                                                         <td>
                                                                             {{data.billNo}}
@@ -1958,4 +1742,78 @@
             </div>
         </div>
     </div>
+</div>
+
+<div #content1 class="content1">
+
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="xdtr">
+                <button type="button" class="button2 topright" aria-label="Close" (click)="content1.style.display='none'">
+                    <span aria-hidden="true">OK</span>
+                </button>
+                <!-- The content half -->
+                <div class="middle_bts">
+                    <div class="login py-5" style="padding: 0px !important; width:100%;">
+                        <div class="container_innser">
+                            <h6 class="display-5" style="font-size:17px;">Select Shipping Bill</h6>
+                            <div class="d-flex justify-content-between mb-1">
+                                <select [(ngModel)]="nameSearch4" style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
+                                    <option value="">BuyerName</option>
+                                    <option *ngFor="let item of buyerName ; let i = index;"
+                                        style="color: black;">{{item}}</option>
+                                </select>
+                                <button class="filter1" style="margin-left:-20px;" (click)="nameSearch4 = ''">Reset</button>
+                            </div>
+                            <section class="box-shadow">
+                                <table class="table table-striped mb-0">
+
+                                    <thead style="width: 100% ;height: 54px;">
+                                        <tr class="text-muted table-heading" style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
+                                            <th scope="col"></th>
+                                            <th scope="col">SB DATE</th>
+                                            <th scope="col">SB NUMBER</th>
+                                            <th scope="col">BUYER NAME</th>
+                                            <th scope="col">CURRENCY</th>
+                                            <th scope="col">SB AMOUNT</th>
+                                            <th scope="col">AVAILABLE AMOUNT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-dark">
+                                        <tr class="table-row" *ngFor='let data of item1 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
+                                            <td><input type="checkbox" (change)="changeCheckbox1(data.sbno, data); addTofilter1($event ,data._id, data) " />
+                                            </td>
+                                            <!-- (change)=" -->
+                                            <td>
+                                                {{data.sbdate}}
+                                            </td>
+                                            <td>
+                                                {{data.sbno}}
+                                            </td>
+                                            <td>
+                                                {{data.buyerName}}
+                                            </td>
+                                            <td>
+                                                {{data.fobCurrency}}
+                                            </td>
+                                            <td>
+                                                {{data.fobValue}}
+                                            </td>
+                                            <td>
+                                                {{data.balanceAvai}}
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+                        </div>
+                        <!-- End -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </div>

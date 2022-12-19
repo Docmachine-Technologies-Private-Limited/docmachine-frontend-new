@@ -58,10 +58,7 @@
                                         <label for="exampleInputEmail1" class="form-label">Select bank name*</label>
                                         <select class="form-select" aria-label="Default select example" #selectbankname (change)="onChangeIssues(selectbankname.value,'#dropzone')" (change)="InsertDTO('selectbankname',selectbankname)">
                                                 <option selected value="Select bank name">Select bank name</option>
-                                                <option value="Axis bank">Axis bank</option>
-                                                <option value="HDFC bank">HDFC bank</option>
-                                                <option value="State bank of India">State bank of India</option>
-                                                <option value="IndusInd bank">IndusInd bank</option>
+                                                <option [value]="item" *ngFor="let item of this.bank; let i=index">{{item}}</option>
                                               </select>
                                     </div>
                                     <div *ngIf="this.iframeVisible==true">
