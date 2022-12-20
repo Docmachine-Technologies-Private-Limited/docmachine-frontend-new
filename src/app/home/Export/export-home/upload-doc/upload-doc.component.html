@@ -61,22 +61,25 @@
                                                 <option [value]="item" *ngFor="let item of this.bank; let i=index">{{item}}</option>
                                               </select>
                                     </div>
-                                    <div *ngIf="this.iframeVisible==true">
+                                    <div *ngIf="this.iframeVisible==true && this.ObjectLength(this.dataPdf).length!=0">
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Inward reference number</label>
-                                            <input #Inwardreferencenumber type="text" class="form-control" id="Amount" aria-describedby="emailHelp" placeholder="1187651 80131" autocomplete="off" (keydown)="InsertDTO('Inwardreferencenumber',Inwardreferencenumber)" [value]="this.dataPdf[0]['Unique 16 digit Identifier']">
+                                            <input #Inwardreferencenumber type="text" class="form-control" id="Amount" aria-describedby="emailHelp" placeholder="1187651 80131" autocomplete="off"
+                                            (keydown)="InsertDTO('Inwardreferencenumber',Inwardreferencenumber)"
+                                            [value]="this.removeallSpace2('Unique16digitIdentifier',this.dataPdf)">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
                                                 <div class="mb-3">
                                                     <label for="exampleInputEmail1" class="form-label">Amount</label>
-                                                    <input #Amount type="text" class="form-control" id="Amount" aria-describedby="emailHelp" placeholder="30713.25" autocomplete="off" (keydown)="InsertDTO('Amount',Amount)" [value]="replaceText(this.dataPdf[0]['Amount'],'32A')">
+                                                    <input #Amount type="text" class="form-control" id="Amount" aria-describedby="emailHelp" placeholder="30713.25" autocomplete="off" (keydown)="InsertDTO('Amount',Amount)" [value]="replaceText(this.dataPdf['Amount'],'32A')">
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-sm-12">
                                                 <div class="mb-3">
                                                     <label for="exampleInputEmail1" class="form-label">Currency</label>
-                                                    <select #Currency class="form-select" aria-label="Default select example" [value]="replaceText(this.dataPdf[0]['Currency Code'],'32A')" (change)="InsertDTO('Currency',Currency)">
+                                                    <select #Currency class="form-select" aria-label="Default select example"
+                                                     [value]="replaceText(this.dataPdf['CurrencyCode'],'32A')" (change)="InsertDTO('Currency',Currency)">
                                                     <option selected>Select Currency</option>
                                                     <option value="EUR">EUR</option>
                                                     <option value="222">222</option>
@@ -87,11 +90,12 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Remitter name ( as per MT103 )</label>
-                                            <input #Remittername type="text" class="form-control" id="Amount" aria-describedby="emailHelp" placeholder="NORMEKS AMBALAJ SANAYI LE TICARET" autocomplete="off" (change)="InsertDTO('Remittername',Remittername)" [value]="replaceText(this.dataPdf[0]['Remitter Customer Name'],'50A/50K')">
+                                            <input #Remittername type="text" class="form-control" id="Amount" aria-describedby="emailHelp" placeholder="NORMEKS AMBALAJ SANAYI LE TICARET" autocomplete="off" (change)="InsertDTO('Remittername',Remittername)"
+                                            [value]="replaceText(this.dataPdf['RemitterCustomerName'],'50A/50K')">
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Bill lodgment number</label>
-                                            <input #Billlodgmentnumber type="text" class="form-control" id="Amount" aria-describedby="emailHelp" placeholder="Bill lodgment number" autocomplete="off" [value]="this.dataPdf[0]['Remittance Information 70 ADVANCE IMPORT PYM INV']" (change)="InsertDTO('Billlodgmentnumber',Billlodgmentnumber)">
+                                            <input #Billlodgmentnumber type="text" class="form-control" id="Amount" aria-describedby="emailHelp" placeholder="Bill lodgment number" autocomplete="off" [value]="this.dataPdf['RemittanceInformation70ADVANCEIMPORTPYMINV']" (change)="InsertDTO('Billlodgmentnumber',Billlodgmentnumber)">
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Inward amount for disposal</label>
