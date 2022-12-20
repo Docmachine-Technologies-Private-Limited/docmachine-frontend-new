@@ -37,7 +37,8 @@ export class DocumentService {
     sessionStorage.setItem(key,JSON.stringify(data));
   }
   getSessionData(key:string){
-    return JSON.parse(sessionStorage.getItem(key));
+    var temp:any=sessionStorage.getItem(key);
+    return temp!=undefined && temp!='undefined' && temp!=null? JSON.parse(temp):null;
   }
   getIrAdvice(user){
     this.loadFromLocalStorage();

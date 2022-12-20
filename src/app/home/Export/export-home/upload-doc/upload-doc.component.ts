@@ -2101,16 +2101,19 @@ export class UploadDocComponent implements OnInit {
     $(event).prop("disabled", false); //
   }
 dataPdf:any=[];
-  public onUploadSuccess(args: any): void {
+ async onUploadSuccess(args: any) {
       this.uploading = false;
-      console.log(args,'args.........')
-      this.dataPdf=args[1]['data']
-      console.log(this.dataPdf,'this.dataPdf');
       this.iframeVisible=true;
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
         args[1].publicUrl
       );
+      var data:any=args[1]['data'][0];
+      var temp:any=Object.keys(data)
+      for (let index = 0; index < temp.length; index++) {
+          this.dataPdf[await this.removeallSpace(temp[index])]=data[temp[index]];
+      }
       this.documentService.setSessionData('InwardSheet',this.dataPdf[0]);
+      console.log(this.dataPdf,'this.dataPdf');
      console.log('-------------------->Selected Document type', this.publicUrl);
   }
   onUpload(data:any,event:any){
@@ -2121,6 +2124,12 @@ dataPdf:any=[];
   }
   replaceText(text:any,repl_text:any){
     return (text.replace(repl_text,'')).trim()
+  }
+  removeallSpace(spacetext:any){
+    return spacetext.replace(/\s/g,'');
+  }
+  removeallSpace2(spacetext:any,data:any){
+    return data[spacetext].replace(/\s/g,'');
   }
   validation(data:any,validationData:any){
     var counter=0;
@@ -2442,5 +2451,8 @@ dataPdf:any=[];
   InsertDTO(key,value){
     this.DTO_FORM[key]=value;
     console.log(this.DTO_FORM)
+  }
+  ObjectLength(object:any){
+    return Object.keys(object);
   }
 }

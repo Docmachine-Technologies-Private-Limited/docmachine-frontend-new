@@ -243,7 +243,12 @@
                             <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub28()" [ngClass]="new28 ? 'b-color' : 'nothing'">
                               <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/Sub-bill-Lodgement']">Sub-bill-Lodgement</span>
                               </div>
-
+                              <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" [ngClass]="new ? 'b-color' : 'nothing'" (click)="newTask1()">
+                                <span style="margin-left: 35px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO Master
+            <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
+            </i>
+          </span>
+                            </div>
                         <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
                             <span style="margin-left: 35px; font-size: 10px; line-height: 30px; color: #9ba4b0">Transactions</span>
 
@@ -270,12 +275,7 @@
                             <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub13()" [ngClass]="new13 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packing-credit-request']">Direct Dispatch</span>
                             </div>
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" [ngClass]="new ? 'b-color' : 'nothing'" (click)="newTask1()">
-                              <span style="margin-left: 35px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO Master
-          <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
-          </i>
-        </span>
-                          </div>
+
                         </div>
 
                         <div style="height: 30px; padding-top: 5px; font-size: 10px;">
