@@ -1915,36 +1915,43 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       x: 50, y: 52, width: 100,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
-
-
     const pdfBytes = await pdfDoc.save()
     console.log(pdfDoc, "pdf")
     //console.log(pdfBytes, "pdf")
     var base64String = this._arrayBufferToBase64(pdfBytes)
-    await pdfDoc.saveAsBase64({ dataUri: true });
-    //console.log(base64String);
     const x = 'data:application/pdf;base64,' + base64String;
-    //console.log(x);
     this.formerge = x
     this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
     this.newTask[0].generateDoc1 = x
-    console.log('jhshshjshj', this.newTask[0])
-    console.log("line no. 1735", this.value)
-    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-    this.PREVIWES_URL=pdfDataUri;
-    console.log(form,'this.PREVIWES_URL')
-    // const link: any = document.createElement("a");
-    // link.id = "dwnldLnk";
-    // link.style = "display:none;";
-    // document.body.appendChild(link);
-    // const dlnk: any = document.getElementById("dwnldLnk");
-    // dlnk.href = x;
-    // dlnk.download = 'file.pdf';
-    // dlnk.click();
 
+    var temp:any=this.disabledTextbox(pdfDoc)
+    temp['mergedPdfFile'].getForm()
+    .getFields()
+    .forEach((field) => field.enableReadOnly());
+    console.log("line no. 1735", this.value)
+    this.PREVIWES_URL= this.sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,'+temp['base64String']);
+    console.log(this.PREVIWES_URL,'this.PREVIWES_URL')
     }else{
       this.uploadingData(data_temp,a)
     }
+  }
+
+ async disabledTextbox(pdfDoc:any){
+    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
+    //const byteCharacters = atob(data_pdf);
+      var merge = 'data:application/pdf;base64,' + data_pdf //this.value
+      const mergedPdf = await PDFDocument.create();
+      const pdfA = await PDFDocument.load(this.formerge);
+      const pdfB = await PDFDocument.load(merge);
+      const copiedPagesA = await mergedPdf.copyPages(pdfA, pdfA.getPageIndices());
+      copiedPagesA.forEach((page) => mergedPdf.addPage(page));
+
+      const copiedPagesB = await mergedPdf.copyPages(pdfB, pdfB.getPageIndices());
+      copiedPagesB.forEach((page) => mergedPdf.addPage(page));
+      const mergedPdfFile = await mergedPdf.save();
+      var base64String = this._arrayBufferToBase64(mergedPdfFile);
+      return {mergedPdfFile:mergedPdfFile,base64String:base64String}
   }
  async uploadingData(data_temp:any,a:any){
     console.log(data_temp,'PDF_DOCUMENTS_DATA')
@@ -2981,19 +2988,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.newTask[0].generateDoc1 = x
     console.log('jhshshjshj', this.newTask[0])
     console.log("line no. 1735asdsadsa", this.value)
-    // This uses File Saver to save the files, i used this to temp save whilst i moved around the text
-    var file = new File(
-      [pdfBytes],
-      "test-Certificate.pdf",
-      {
-          type: "application/pdf;charset=utf-8",
-      }
-  );
-  console.log(file);
-    // await pdfDoc.saveAsBase64({ dataUri: true });
-    this.PREVIWES_URL=file;
-    console.log(this.PREVIWES_URL,'this.PREVIWES_URL')
-
     // const link: any = document.createElement("a");
     // link.id = "dwnldLnk";
     // link.style = "display:none;";
