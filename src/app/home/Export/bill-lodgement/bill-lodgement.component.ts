@@ -2768,16 +2768,16 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   open2(content2, sbno) {
     this.currentSbForAdvance = sbno;
     this.refSbNo = sbno;
-    this.modalService
-      .open(content2, { ariaLabelledBy: 'modal-basic-title' })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
+    // this.modalService
+    //   .open(content2, { ariaLabelledBy: 'modal-basic-title' })
+    //   .result.then(
+    //     (result) => {
+    //       this.closeResult = `Closed with: ${result}`;
+    //     },
+    //     (reason) => {
+    //       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    //     }
+    //   );
   }
 
   showPreview() {
@@ -3620,7 +3620,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     }
   }
   ShowPopup(callback:any){
-  
+
   }
   Lodgement:any={
     'AgainstAdvanceReceipt':{

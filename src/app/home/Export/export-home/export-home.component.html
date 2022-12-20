@@ -858,15 +858,15 @@
                                         <button class="opt" style="float:right" (click)='generateDoc(code,j)'> Generate Document </button>
                                     </div>
                                     <div *ngIf='code === c && generatePurpose[j] == code'>
-                                        <div *ngFor="let pipo of mainDoc[j]">
+                                        <div *ngIf="value!='' && value!=undefined">
                                             <div id="mainId" class="bc" *ngIf="donePurpose[j] != code">
                                                 <iframe [src]="value" frameborder="0" [ngClass]="bgColor ? 'sizes' : 'sizem'"></iframe>
                                             </div>
                                             <br>
                                             <div *ngIf='newDone'> PI/PO Documents
                                                 <br>
-                                                <div style="display: flex; align-items: center;">
-                                                    <iframe style="flex-direction:row;" [src]="pipo" height="600px" width="500px"></iframe>
+                                                <div style="display: flex; align-items: center;" *ngIf="value!=''">
+                                                    <iframe style="flex-direction:row;" [src]="this.PREVIWES_URL" height="600px" width="500px"></iframe>
                                                 </div>
                                             </div>
                                             <div *ngIf="donePurpose[j] != code" style="display: block; width: 78%;  margin-top: 40px;">
@@ -1148,7 +1148,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <section style="width: 100%;" class="box-shadow">
+                                        <section style="width: 100%;overflow: auto;
+                                        height: 350px;max-height: 800px;" class="box-shadow">
                                             <table style="" class="table table-striped mb-0">
                                                 <thead style="width: 100% ;height: 54px;">
                                                     <tr class="text-muted table-heading" style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">

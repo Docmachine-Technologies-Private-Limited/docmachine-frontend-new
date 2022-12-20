@@ -1550,6 +1550,7 @@ export class SidenavComponent implements OnInit {
         });
   }
   typeChange(type1,type2) {
+    this.router.navigate(['/home/dashboardTask'])
     // this.dashboardService.DASH_BOARD_TYPES=type;
     let sendData = { sideMenu: type1 }
    this.documentService.EXPORT_IMPORT[type1]=true;

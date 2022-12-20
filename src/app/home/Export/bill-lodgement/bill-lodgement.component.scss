@@ -20,17 +20,6 @@
     border-radius: 5px;
 }
 
-.filter1 {
-    margin-left: 29.1rem;
-    color: #ffffff !important;
-    font-weight: 100;
-    font-family: Poppins, sans-serif;
-    font-size: 12px;
-    background-color: #49A2D7;
-    border: none;
-    border-radius: 5px;
-}
-
 .topright {
     position: absolute;
     right: 0;
@@ -68,7 +57,7 @@ input[_ngcontent-wpv-c252] {
 }
 
 .modal-body {
-    width: 134% !important;
+    width: 100% !important;
     background-color: white;
 }
 
@@ -228,17 +217,6 @@ button {
     border-right: 0.1px solid #d3d3d3;
     padding: 5px;
     height: 35px;
-}
-
-select {
-    text-decoration: none;
-    border: none;
-    background: none;
-    color: #49a2d7;
-}
-
-select:focus {
-    outline: none;
 }
 
 .rect {
@@ -1133,7 +1111,7 @@ span input {
 
 .modal-body {
     width: 500px !important;
-    max-width: 800px;
+    max-width: 800px !important;
     background-color: #fff;
     margin-top: 80px;
     margin-left: 190px;
@@ -1155,4 +1133,41 @@ span input {
     width: 100%;
     color: #999;
     margin: 10px 0;
+}
+
+.custom-modal {
+  display: block;
+}
+
+.bg-black-opacity {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #0000003b;
+  display: none;
+  z-index: 99999;
+}
+
+.modal {
+  position: relative;
+  z-index: 1050;
+  overflow: hidden;
+  outline: 0;
+  max-height: 600px;
+}
+
+.modal .modal-dialog {
+  max-width: 100%;
+  width: 960px;
+}
+
+.modal-body {
+  width: 100% !important;
+  max-width: 100%;
+  background-color: #fff;
+  margin-top: 0;
+  margin-left: 0;
+  border-radius: 10px;
 }
