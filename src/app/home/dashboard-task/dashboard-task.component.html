@@ -15,7 +15,7 @@
                     <div class="row">
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <div class="Total_pipo">
-                                <h5>Total PI/PO</h5>
+                                <h5>{{ isImport ===  false ? 'Total PI/PO' : 'PI/PO'}} </h5>
                                 <!--  <h6>Amount : <b class="PI_green">USD 500000</b>
                                 </h6>
                                  <img src="./assets/new-img/remittnce.png" alt="images" /> -->
@@ -30,7 +30,7 @@
                         </div>
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <div class="Total_pipo">
-                                <h5>Total shipping bill</h5>
+                                <h5> {{ isImport ===  false  ? 'Total shipping bill' : 'Total Bill of Entry'}}</h5>
                                 <!-- <h6>Amount : <b class="PI_red">USD 780000</b>
                                 </h6> -->
                                 <!-- <img src="./assets/new-img/way.png" alt="images" /> -->
@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <div class="Total_pipo">
-                                <h5>Total inward remittances</h5>
+                                <h5> {{ isImport ===  false  ? 'Total inward remittances' : 'Outward remittances'}} </h5>
                                 <!-- <h6>Amount : <b class="PI_org">USD 300000</b>
                                 </h6>
                                 <img src="./assets/new-img/PI.png" alt="images" /> -->
@@ -57,8 +57,9 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_sec">
-                                <h3>shipment pending for submission</h3>
-                                <h5>>21 Days from shipping bill date</h5>
+                                <h3 *ngIf="isImport === true">Advance Payment pending for BOE submission</h3>
+                                <h3 *ngIf="isImport ===  false " >shipment pending for submission</h3>
+                                <h5 *ngIf="isImport ===  false "> >21 Days from shipping bill date</h5>
                                 <div class="submission_sec_table_scroll">
                                     <table class="table">
                                         <thead>
@@ -88,8 +89,9 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_sec">
-                                <h3>shipment submitted to bank</h3>
-                                <h5>Reference number awaited</h5>
+                                <h3 *ngIf="isImport ===  true ">Total BOE submitted to Bank</h3>
+                                <h3 *ngIf="isImport ===  false ">shipment submitted to bank</h3>
+                                <h5 *ngIf="isImport ===  false ">Reference number awaited</h5>
                                 <div class="submission_sec_table_scroll">
                                     <table class="table">
                                         <thead>
@@ -118,7 +120,9 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_sec remittances">
-                                <p>Total inward remittances <br /> pending for document submission </p>
+
+                                <p *ngIf="isImport ===  false ">Total inward remittances <br /> pending for document submission </p>
+                                <p *ngIf="isImport ===  true ">BOE Pending for Bank Submission </p>
                                 <div class="radio_sec">
                                     <div>
                                         <h4>{{inwardRemitancePendingCount}} out of {{inwardRemitanceTotalCount}} pending
@@ -179,7 +183,10 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_sec map_height Pending_realisation">
-                                <b class="bold_titles_common">Pending realisation</b>
+                                <b class="bold_titles_common">
+                                    {{ isImport ===  false  ? 'Pending realisation ' : 'BOE Pending for Payment'}} 
+
+                                </b> 
                                 <ul>
                                     <li class="Full_icon">Full</li>
                                     <li class="Partial_icon">Partial</li>
@@ -201,7 +208,11 @@
                             <div class="submission_secs map_height Pending_realisation">
                                 <div class="row">
                                     <div class="col-md-8 col-8"><strong class="bold_titles_common">
-                                        Order pending for shipment </strong></div>
+                                       
+                                    
+                                        {{ isImport ===  false  ? ' Order pending for shipment ' : 'Order pending for Dispatch'}} 
+                                    
+                                    </strong></div>
                                     <div class="col-md-4 col-4">
                                         <div>
                                             <select class="form-select" [(ngModel)]="ospType" (ngModelChange)="ospTypeChange(ospType)">

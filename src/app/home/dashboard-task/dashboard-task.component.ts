@@ -84,7 +84,7 @@ export class DashboardTaskComponent implements OnInit {
   orderPendingShipmentImport: any = [];
   orderPendingShipmentExport: any = [];
 
-  type = 'import'
+  isImport:boolean = false;
   public pipoChartOptions;
 
   public inwardChartOptions;
@@ -120,7 +120,7 @@ export class DashboardTaskComponent implements OnInit {
 
     this.userData = await this.userService.getUserDetail();
     // this.userData = this.userData.result
-    console.log("userData", this.userData,this.documentService.EXPORT_IMPORT)
+    console.log("userData", this.userData, this.documentService.EXPORT_IMPORT)
     this.item1 = []
 
     this.documentService.getTypeExportTask({ fileType: 'BL' }).subscribe(
@@ -165,6 +165,7 @@ export class DashboardTaskComponent implements OnInit {
         // Import data..
         this.pipoCurrencyImportData = res?.pipo?.import?.currencyWise;
         this.pipoBuyerImportData = res?.pipo?.import?.buyerWise;
+        console.log("pipoBuyerImportData", this.pipoBuyerImportData)
         this.pipoCurrencyImportData = this.pipoCurrencyImportData.filter(data => {
           if (data._id !== null && data._id !== '') {
             return data
@@ -208,7 +209,7 @@ export class DashboardTaskComponent implements OnInit {
             return data
           }
         })
-          this.pipoBuyerExportData = this.pipoBuyerExportData.filter(data => {
+        this.pipoBuyerExportData = this.pipoBuyerExportData.filter(data => {
           if (data._id !== null && data._id !== '') {
             return data
           }
@@ -243,19 +244,19 @@ export class DashboardTaskComponent implements OnInit {
           let conut = data?.blcopyrefNumber?.filter(x => !x)?.length
           return { ...data, awaitSubmit: conut }
         })
-        if (this.documentService.EXPORT_IMPORT['import']==true) {
+        if (this.documentService.EXPORT_IMPORT['import'] == true) {
           this.handleImportData();
-        }else{
+        } else {
           this.handleExportData()
         }
-        this.documentService.EXPORT_IMPORT['callback']=()=>{
-          if (this.documentService.EXPORT_IMPORT['import']==true) {
+        this.documentService.EXPORT_IMPORT['callback'] = () => {
+          if (this.documentService.EXPORT_IMPORT['import'] == true) {
             this.handleImportData();
-        }else{
-          this.handleExportData()
+          } else {
+            this.handleExportData()
+          }
         }
-        }
-        console.log("this.documentService.EXPORT_IMPORT",this.documentService.EXPORT_IMPORT)
+        console.log("this.documentService.EXPORT_IMPORT", this.documentService.EXPORT_IMPORT)
       },
       (err) => console.log(err)
     );
@@ -318,7 +319,7 @@ export class DashboardTaskComponent implements OnInit {
 
     this.inwardChartOptions = {
       chart: {
-       width: '100%',
+        width: 300,
         type: "donut"
       },
       yaxis: {
@@ -720,61 +721,101 @@ export class DashboardTaskComponent implements OnInit {
 
 
   handleImportData = () => {
+    this.isImport = true
+    // this.pipoChart.updateOptions({
+    //   series: this.pipoBuyerImportData?.map(data => data.totalItems),
+    //   labels: this.pipoBuyerImportData?.map(data => data._id),
+    //   chartData: this.pipoBuyerImportData
+    // });
+
     this.pipoChart.updateOptions({
-      series: this.pipoBuyerImportData?.map(data => data.totalItems),
-      labels: this.pipoBuyerImportData?.map(data => data._id),
-      chartData: this.pipoBuyerImportData
+      series: [44, 55, 41, 17],
+      labels: ['Buyer 1', 'Buyer 2', 'Buyer 3', 'Buyer 4'],
+      // chartData: this.pipoBuyerImportData
     });
 
+    // this.sbChart.updateOptions({
+    //   series: this.SBbuyerImportData?.map(data => data.totalItems),
+    //   labels: this.SBbuyerImportData?.map(data => data._id),
+    //   chartData: this.SBbuyerImportData
+    // });
+
     this.sbChart.updateOptions({
-      series: this.SBbuyerImportData?.map(data => data.totalItems),
-      labels: this.SBbuyerImportData?.map(data => data._id),
-      chartData: this.SBbuyerImportData
+      series: [30, 52, 36, 12],
+      labels: ['Buyer 1', 'Buyer 2', 'Buyer 3', 'Buyer 4'],
     });
 
     this.inwardChart.updateOptions({
-      series: this.inwardBuyerImportData?.map(data => data.totalItems),
-      labels: this.inwardBuyerImportData?.map(data => data._id),
-      chartData: this.inwardBuyerImportData
+      series: [60, 15, 25, 51],
+      labels: ['Buyer 1', 'Buyer 2', 'Buyer 3', 'Buyer 4'],
     });
 
+    // this.inwardChart.updateOptions({
+    //   series: this.inwardBuyerImportData?.map(data => data.totalItems),
+    //   labels: this.inwardBuyerImportData?.map(data => data._id),
+    //   chartData: this.inwardBuyerImportData
+    // });
+
+    // this.EDPMSChart.updateOptions({
+    //   series: [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
+    //   labels: ["Pending", "Upload"],
+      
+    // });
 
     this.EDPMSChart.updateOptions({
-      series: [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
+      series: [15, 80],
       labels: ["Pending", "Upload"],
-      // chartData: this.inwardBuyerImportData
     });
-    console.log(this.EDPMSData.pendingData, this.EDPMSData.uploadData, 'asdsadsadsadadasdasdsadsadsadsad')
 
-    this.shipmentPending = this.shipmentPendingImport
-    this.shipmentSubmit = this.shipmentSubmitImport
+    // this.shipmentPending = this.shipmentPendingImport
+
+    let sampleDataforSPI = [
+      { _id: 'BOE for Tata consultancy', toTalcount: 5, toTalAmount: 1000 },
+      { _id: 'Pending from D8amatiks', toTalcount: 9, toTalAmount: 500 },
+      { _id: 'BOE from SLBT', toTalcount: 3, toTalAmount: 6000 }
+    ]
+    this.shipmentPending = sampleDataforSPI
+    let sampleDataforSS = [
+      { _id: 'BOE for Tata consultancy', toTalcount: 5, awaitSubmit: 2 },
+      { _id: 'Pending from D8amatiks', toTalcount: 9, awaitSubmit: 6 },
+      { _id: 'BOE from SLBT', toTalcount: 3, awaitSubmit: 1 }
+    ]
+    // this.shipmentSubmit = this.shipmentSubmitImport  
+    this.shipmentSubmit = sampleDataforSS
 
 
-    if (this.inwardRemitanceImportData?.totalCount > 0) {
-      let proBarValue = this.calculatePercentage(this.inwardRemitanceImportData?.importInwardData[0]?.pendingCount, this.inwardRemitanceImportData?.totalCount)
-      if (proBarValue) {
-        this.progressBarvalue = proBarValue
-        this.inwardRemitanceAmount = this.inwardRemitanceImportData?.importInwardData[0]?.toTalAmount
+    // if (this.inwardRemitanceImportData?.totalCount > 0) {
+    //   let proBarValue = this.calculatePercentage(this.inwardRemitanceImportData?.importInwardData[0]?.pendingCount, this.inwardRemitanceImportData?.totalCount)
+    //   if (proBarValue) {
+    //     this.progressBarvalue = proBarValue
+    //     this.inwardRemitanceAmount = this.inwardRemitanceImportData?.importInwardData[0]?.toTalAmount
 
-        this.inwardRemitanceTotalCount = this.inwardRemitanceImportData?.totalCount
-        this.inwardRemitancePendingCount = this.inwardRemitanceImportData?.importInwardData[0]?.pendingCount
+    //     this.inwardRemitanceTotalCount = this.inwardRemitanceImportData?.totalCount
+    //     this.inwardRemitancePendingCount = this.inwardRemitanceImportData?.importInwardData[0]?.pendingCount
 
-      } else {
-        this.progressBarvalue = 0
-        this.inwardRemitanceAmount = 0
-        this.inwardRemitanceTotalCount = 0
-        this.inwardRemitancePendingCount = 0
-      }
-    } else {
-      this.progressBarvalue = 0
-      this.inwardRemitanceAmount = 0
-      this.inwardRemitanceTotalCount = 0
-      this.inwardRemitancePendingCount = 0
-    }
+    //   } else {
+    //     this.progressBarvalue = 0
+    //     this.inwardRemitanceAmount = 0
+    //     this.inwardRemitanceTotalCount = 0
+    //     this.inwardRemitancePendingCount = 0
+    //   }
+    // } else {
+    //   this.progressBarvalue = 0
+    //   this.inwardRemitanceAmount = 0
+    //   this.inwardRemitanceTotalCount = 0
+    //   this.inwardRemitancePendingCount = 0
+    // }
+
+    this.progressBarvalue = 80
+    this.inwardRemitanceAmount = 15000
+    this.inwardRemitanceTotalCount = 65000
+    this.inwardRemitancePendingCount = 10
   }
 
-  handleExportData = () => {
 
+
+  handleExportData = () => {
+    this.isImport = false
     this.pipoChart.updateOptions({
       series: this.pipoBuyerExportData?.map(data => data.totalItems),
       labels: this.pipoBuyerExportData?.map(data => data._id),
