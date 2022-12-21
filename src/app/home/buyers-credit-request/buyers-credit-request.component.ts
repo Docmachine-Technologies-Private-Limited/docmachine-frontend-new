@@ -3,6 +3,7 @@ import { DocumentService } from "../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import { UserService } from "../../service/user.service";
+import { WindowInformationService } from "src/app/service/window-information.service";
 
 @Component({
   selector: 'app-buyers-credit-request',
@@ -61,13 +62,13 @@ export class BuyersCreditRequestComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private userService: UserService,
+    public wininfo: WindowInformationService
   ) {
     console.log("hello")
   }
 
   ngOnInit(): void {
-    //window.location.reload();
-
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.route.params.subscribe(params => {
       this.file = this.route.snapshot.params['file'];
       this.showInvoice = false;

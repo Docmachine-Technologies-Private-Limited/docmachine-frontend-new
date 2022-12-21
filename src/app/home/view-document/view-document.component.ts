@@ -16,6 +16,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
 import {ShippingbillDataService} from "../../service/homeservices/shippingbill.service";
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-view-document',
@@ -71,10 +72,12 @@ export class ViewDocumentComponent implements OnInit {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private toastr: ToastrService,
-    private sharedData: SharedDataService
+    private sharedData: SharedDataService,
+    public wininfo: WindowInformationService
   ) {}
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.route.params.subscribe((params) => {
       this.file = this.route.snapshot.params['file'];
       if (this.file === 'sb') {
@@ -250,4 +253,5 @@ export class ViewDocumentComponent implements OnInit {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Shipping Bill Row Is In Edit Mode');
   }
+
 }

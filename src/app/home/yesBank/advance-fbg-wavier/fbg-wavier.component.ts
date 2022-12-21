@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import { DocumentService } from "../../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { DomSanitizer } from "@angular/platform-browser";
-
+import { WindowInformationService } from '../../../.././app/service/window-information.service';
 @Component({
   selector: "app-fbg-wavier",
   templateUrl: "./fbg-wavier.component.html",
@@ -42,10 +42,11 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private documentService: DocumentService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    public wininfo: WindowInformationService
   ) {
-    router.events.subscribe((event: NavigationStart) => {
-      if (event.navigationTrigger === "popstate") {
+    router.events.subscribe((event:any) => {
+      if (event.NavigationStart.navigationTrigger === "popstate") {
         // Perform actions
         console.log("Pressed Back");
       }
@@ -65,6 +66,7 @@ export class FbgWavierComponent implements OnInit, OnDestroy {
   };
 
   async ngOnInit(): Promise<void> {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.id = this.route.snapshot.params['boeNumber'];
     this.amount = this.route.snapshot.params['amount']
     console.log(this.route.snapshot.params['pipo'])

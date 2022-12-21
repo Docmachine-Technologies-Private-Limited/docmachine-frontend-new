@@ -5,6 +5,7 @@ import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AppConfig } from 'src/app/app.config';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 @Component({
   selector: 'app-manage-user',
   templateUrl: './manage-user.component.html',
@@ -29,7 +30,10 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   public config: DropzoneConfigInterface;
   api_base: any;
 
-  constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder, private userService: UserService, public appconfig: AppConfig) {
+  constructor(@Inject(PLATFORM_ID) public platformId,
+  private route: ActivatedRoute, private formBuilder: FormBuilder,
+  private userService: UserService, public appconfig: AppConfig,
+  public wininfo: WindowInformationService) {
     this.loadFromLocalStorage()
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base)
@@ -58,6 +62,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.toggle = false;
     this.id = this.route.snapshot.queryParams.id;
     console.log(this.id)

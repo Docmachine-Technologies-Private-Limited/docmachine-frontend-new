@@ -13,6 +13,7 @@ import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
 import * as xlsx from 'xlsx';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-inward-remittance-advice',
@@ -51,10 +52,12 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     private router: Router,
     private sharedData: SharedDataService,
     private modalService: NgbModal,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    public wininfo: WindowInformationService
   ) {}
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.documentService.getIrAdvice(1).subscribe(
       (res: any) => {
         console.log(res), (this.item = res.data);

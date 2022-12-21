@@ -8,6 +8,7 @@ import * as xlsx from 'xlsx';
 import {Router} from '@angular/router';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import {FormsModule} from '@angular/forms';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-master-service',
@@ -33,11 +34,13 @@ export class MasterServiceComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
-    private sharedData: SharedDataService
+    private sharedData: SharedDataService,
+    public wininfo: WindowInformationService
   ) {
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.documentService.getMasterService().subscribe(
       (res: any) => {
         console.log('Data fetched successfully', res);

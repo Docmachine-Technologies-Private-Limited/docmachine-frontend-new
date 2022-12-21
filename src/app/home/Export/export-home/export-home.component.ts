@@ -1915,21 +1915,29 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       x: 50, y: 52, width: 100,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
+
     const pdfBytes = await pdfDoc.save()
     console.log(pdfDoc, "pdf")
-    //console.log(pdfBytes, "pdf")
+    console.log(form, "form")
     var base64String = this._arrayBufferToBase64(pdfBytes)
     const x = 'data:application/pdf;base64,' + base64String;
     this.formerge = x
     this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
     this.newTask[0].generateDoc1 = x
 
-    var temp:any=this.disabledTextbox(pdfDoc)
-    temp['mergedPdfFile'].getForm()
-    .getFields()
-    .forEach((field) => field.enableReadOnly());
+    const mergedPdf = await PDFDocument.create();
+    const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+    copiedPages.forEach((page) => {
+      mergedPdf.addPage(page);
+    });
+    const mergedPdfFile = await mergedPdf.save();
+    const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+    await this.disabledTextbox(pdfDoc)
+    const mergedPdfFileload = await mergedPdfload.save();
+    var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
+    const x1 = 'data:application/pdf;base64,' + base64String1;
     console.log("line no. 1735", this.value)
-    this.PREVIWES_URL= this.sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,'+temp['base64String']);
+    this.PREVIWES_URL= this.sanitizer.bypassSecurityTrustResourceUrl(x1);
     console.log(this.PREVIWES_URL,'this.PREVIWES_URL')
     }else{
       this.uploadingData(data_temp,a)
@@ -1937,21 +1945,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   }
 
  async disabledTextbox(pdfDoc:any){
-    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-    //const byteCharacters = atob(data_pdf);
-      var merge = 'data:application/pdf;base64,' + data_pdf //this.value
-      const mergedPdf = await PDFDocument.create();
-      const pdfA = await PDFDocument.load(this.formerge);
-      const pdfB = await PDFDocument.load(merge);
-      const copiedPagesA = await mergedPdf.copyPages(pdfA, pdfA.getPageIndices());
-      copiedPagesA.forEach((page) => mergedPdf.addPage(page));
-
-      const copiedPagesB = await mergedPdf.copyPages(pdfB, pdfB.getPageIndices());
-      copiedPagesB.forEach((page) => mergedPdf.addPage(page));
-      const mergedPdfFile = await mergedPdf.save();
-      var base64String = this._arrayBufferToBase64(mergedPdfFile);
-      return {mergedPdfFile:mergedPdfFile,base64String:base64String}
+  pdfDoc.getForm()
+  .getFields()
+  .forEach((field) => {
+    field.enableReadOnly();
+    console.log(field,)
+  });
   }
  async uploadingData(data_temp:any,a:any){
     console.log(data_temp,'PDF_DOCUMENTS_DATA')

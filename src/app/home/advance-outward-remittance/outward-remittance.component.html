@@ -1,16 +1,10 @@
-<div style="margin-left: 0px" class="content-wrap">
+<div class="content-wrap pb-2">
     <main id="content" class="content table-padding" role="main">
         <div *ngIf="showInvoice && !outTog" class="table_top">
-            <div style="
-          width: 100%;
-          border-right: 0.5px solid rgba(0, 0, 0, 0.2);
-          height: 100%;
-          padding-top: 2.3%;
-        ">
+            <div class="header-panel">
                 <p class="bcw" style="
             font-size: '14px';
             float: left;
-            margin-left: 50px;
             font-weight: 500;
           ">
                     All Documents
@@ -28,19 +22,7 @@
                 <!-------style="padding-left: 1%" class="pc1"-->
             </div>
         </div>
-        <div style="
-        display: flex;
-        flex-direction: rows;
-        justify-content: space-between;
-        align-items: center;
-        padding-left: 1%;
-        padding-bottom: 0.8%;
-        /*border: 0.5px solid rgba(0, 0, 0, 0.2);*/
-        margin-left: 40px;
-        width: 85%;
-        margin-top: -15px;
-
-      " *ngIf="!showInvoice && !outTog">
+        <div class="header-panel" *ngIf="!showInvoice && !outTog">
             <div style="display: flex; align-items: center">
                 <h3 class="heading" style="padding-top: 39px;">Advance Outward Remittance</h3>
             </div>
@@ -64,10 +46,10 @@
         <div class="analytics">
             <div *ngIf="!showInvoice && !outTog" style="width: 100%" class="analytics-side">
                 <div style="width: 100%" class="row">
-                    <div style="width: 100%; margin: 0 -1.5%;" *ngIf="!showInvoice" class="col-12 mb-lg padding">
-                        <section style="width: 100%; margin-left: 0" class="widget pb-0 box-shadow">
-                            <div style="margin: 0 -2%; " class="widget-body p-0 support table-wrapper">
-                                <table style="width: 100%" class="table table-striped mb-0">
+                    <div *ngIf="!showInvoice" class="col-12 mb-lg padding">
+                        <section class="widget pb-0 box-shadow">
+                            <div class="widget-body p-0 support table-wrapper">
+                                <table class="table table-striped mb-0">
                                     <thead style="width: 100%;">
                                         <tr class="text-muted table-heading">
                                             <th class="rect">

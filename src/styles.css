@@ -11,3 +11,14 @@ body {
 .modal-backdrop{
     z-index: 1050 !important;
   }
+
+  body ::-webkit-scrollbar {
+    display: block !important;
+}
+#sidebar::-webkit-scrollbar-track {
+  display: none !important;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  width: 0;
+}

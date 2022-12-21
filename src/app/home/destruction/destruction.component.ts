@@ -7,6 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from './../../service/user.service';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-destruction',
@@ -30,10 +31,12 @@ export class DestructionComponent implements OnInit {
     private toastr: ToastrService,
     private router: Router,
     private userService: UserService,
-    private sharedData : SharedDataService
+    private sharedData : SharedDataService,
+    public wininfo: WindowInformationService
   ) { }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.documentService.getDestruction().subscribe(
       (res: any) => {
         console.log('HEre Responsesssssssss', res);

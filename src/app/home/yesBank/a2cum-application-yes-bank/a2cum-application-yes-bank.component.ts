@@ -6,6 +6,7 @@ import { FormGroup, FormControl } from "@angular/forms";
 import { DomSanitizer } from "@angular/platform-browser";
 
 import { NgIf } from "@angular/common";
+import { WindowInformationService } from "src/app/service/window-information.service";
 
 
 @Component({
@@ -49,7 +50,8 @@ export class A2cumApplicationYesBankComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private documentService: DocumentService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    public wininfo: WindowInformationService
   ) {
     router.events.subscribe((event: NavigationStart) => {
       if (event.navigationTrigger === "popstate") {
@@ -74,6 +76,7 @@ export class A2cumApplicationYesBankComponent implements OnInit, OnDestroy {
   };
 
   async ngOnInit(): Promise<void> {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     //console.log(this.documentService.task)
     if (this.documentService.task) {
       console.log("hello123")

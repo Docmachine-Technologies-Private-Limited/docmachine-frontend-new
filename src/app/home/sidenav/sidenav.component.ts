@@ -1567,15 +1567,10 @@ export class SidenavComponent implements OnInit {
         console.log("error");
       }
     );
-
-    //
-    // console.log("typeChange", type)
-    // this.type = type
-    // if (type === 'import') {
-    //   this.handleImportData()
-    // } else {
-    //   this.handleExportData()
-    // }
   }
-
+  addActivedLinks(event:any,allclassname:any) {
+    // $(allclassname).removeClass(`activelink`);
+    // console.log(event,'addhasgdasdsagda')
+    // $(event.target).addClass(`activelink`);
+  }
 }

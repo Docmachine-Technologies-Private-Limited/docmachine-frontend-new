@@ -1,139 +1,35 @@
-<div style="width: 89%; overflow-y: overlay;" class="content-wrap">
+<div class="content-wrap pb-2">
     <main id="content" class="table-padding" role="main" style="overflow-y: auto;">
-        <div *ngIf="!showInvoice">
-            <div style="display: flex; flex-direction: rows; align-items: center; padding: 0.8% 0; border: 0.5px solid #e3e6ee; width: 100%;margin-left: 26px;">
-                <div style="display: flex; align-items: center; margin-left: 22px">
-                    <div style="display: flex; margin-left: 16px; align-items: center">
-                        <!-- <div class="customDropdown" style="width: 90px; border: 1px solid #C6CBD4; font-size: 14px;">
-                            <span >Import </span>
-                             <span class="arrow arrow-top" ></span>
-                            <span class="dropIco"><i id="down" class="fas fa-angle-down"></i>
-                                <i id="up" style="display: none" class="fas fa-angle-up"></i>
-                            </span>
-                            <div class="dropdown-content" style="min-width: 90px;" >
-                                <a style="min-width: 90px;">Import</a>
-                                <a style="min-width: 90px;">Export</a>
-                            </div>
-                        </div> -->
-                        <!-- <div class="customDropdown" style="width: 80px; border: 1px solid #C6CBD4; font-size: 14px;">
-                            <span>PI/PO </span> -->
-                        <!-- <span class="arrow arrow-top" ></span> -->
-                        <!-- <span class="dropIco"><i id="down" style="display: none" class="fas fa-angle-up"></i>
-                                <i id="up"  class="fas fa-angle-down"></i>
-                            </span>
-                            <div class="dropdown-content" style="min-width: 80px;">
-                                <a style="min-width: 80px;">PI/PO</a>
-                                <a style="min-width: 80px;">BOE</a>
-                            </div>
-                        </div>
-                        <div class="customDropdown" style="width:125px; font-size: 14px;border: 1px solid #C6CBD4;">
-                            <span>Customer </span> -->
-                        <!-- <span class="arrow arrow-top" style="margin-left: 20px !important;" ></span> -->
-                        <!-- <span class="dropIco"><i id="down" style="margin-left: 12px;"class="fas fa-angle-down"></i>
-                            </span>
-                            <div class="dropdown-content" style="min-width: 125px;">
-                                <a style="min-width: 125px;">India</a>
-                                <a style="min-width: 125px;">California</a>
-                                <a style="min-width: 125px;">United States</a>
-                            </div>
-                        </div>
-                        <div class="customDropdown" style="width: 123px; border: 1px solid #C6CBD4;">
-                            <span>View All</span> -->
-                        <!-- <span class="arrow arrow-top" style="margin-left: 40px !important;" ></span> -->
-                        <!-- <span class="dropIco"><i id="down1" style="margin-left: 27px;" class="fas fa-angle-down"></i>
-                                <i id="up1" style="display: none" class="fas fa-angle-up"></i>
-                            </span>
-                            <div class="dropdown-content" style="min-width: 123px;">
-                                <a style="min-width: 123px;">Shipping Bills</a>
-                                <a style="min-width: 123px;">PI/PO</a>
-                            </div>
-                        </div>
-                        <div class="customDropdown" style="width: 115px; border: 1px solid #C6CBD4;">
-                            <span>Status</span> -->
-                        <!-- <span class="arrow arrow-top" ></span> -->
-                        <!-- <span class="dropIco"><i id="down2" style="margin-left: 27px;"class="fas fa-angle-down"></i>
-                                <i id="up2" style="display: none" class="fas fa-angle-up"></i>
-                            </span>
-                            <div class="dropdown-content" style="min-width: 115px;">
-                                <a style="min-width: 115px;">Completed</a>
-                                <a style="min-width: 115px;">Pending</a>
-                            </div>
-                        </div>
-                        <div class="customDropdown" style="width: 150px; border: 1px solid #C6CBD4;">
-                            <span>Last Updated</span> -->
-                        <!-- <span class="arrow arrow-top" ></span> -->
-                        <!-- <span class="dropIco"><i id="down3" style="margin-left: 17px;" class="fas fa-angle-down"></i>
-                                <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                            </span>
-                            <div class="dropdown-content" style="min-width:150px;">
-                                <a style="min-width:150px;">Completed</a>
-                                <a style="min-width:150px;">Pending</a>
-                            </div>
-                        </div> -->
-                        <!-- <div class="customDropdown" style="margin-left: 882px; margin-right: 5px; border: 1px solid #C6CBD4;">
-                            <span>Filter </span> <span><i class="fas fa-filter"></i></span>
-                        </div> -->
-
-
-                        <!-- <div style="background-color: #49A2D7; margin-left: 19px;" class="customDropdown2" >
-                            <span
-                                style="color: #ffffff !important; padding-right: 5px;  border-right: 1px solid #ffffff;">
-                                <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
-                            <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
-                                    class="fas fa-angle-down"></i>
-                                 <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                            </span>
-                            <div  class="dropdown-content2" style="min-width:10px;">
-                                <p><a>New Credit Note</a></p>
-                               <p> <a (click)='pipoClick()'>New PI/PO</a></p>
-                                <p><a>New Debit Note</a></p>
-                                <p> <a>New Issuance Document</a></p>
-                                <p><a>New Letter of Credit</a></p>
-                            </div>
-                        </div> -->
-                        <div style="margin-left: 940px;">
-                            <button (click)="exportToExcel()" style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
-                          background-color: #49A2D7;
-                          border: none;
-                          border-radius: 5px;">Export To Excel</button>
-                        </div>
-                        <div class="customDropdown" style="width: 102px; margin-left: 10px; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
-                            <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
-                                <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
-                            <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
-                                <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                            </span> -->
-                            <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3"
-                                class="fas fa-angle-down"></i>
-                             <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                        </span>
-                            <div class="dropdown-content" style="min-width:200px; margin-left: -95px;">
-                                <a (click)='pipoClickCredit()' style="min-width:200px;">New Credit Note</a>
-                                <a (click)='pipoClick()' style="min-width:200px;">New PI/PO</a>
-                                <a (click)='pipoClickDebit()' style="min-width:200px;">New Debit Note</a>
-                                <a (click)='pipoClickTri()' style="min-width:200px;">Tri-Party Agreement</a>
-                                <a (click)='pipoClickInsurance()' style="min-width:200px;">New Insurance Document</a>
-                                <a style="min-width:200px;">New Letter of Credit</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="header-panel" *ngIf="!showInvoice">
+            <div class="customDropdown" style="width: 102px; margin-left: 10px; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
+              <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
+                  <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
+              <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3"
+                  class="fas fa-angle-down"></i>
+               <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+          </span>
+              <div class="dropdown-content" style="min-width:200px;">
+                  <a (click)='pipoClickCredit()' style="min-width:200px;">New Credit Note</a>
+                  <a (click)='pipoClick()' style="min-width:200px;">New PI/PO</a>
+                  <a (click)='pipoClickDebit()' style="min-width:200px;">New Debit Note</a>
+                  <a (click)='pipoClickTri()' style="min-width:200px;">Tri-Party Agreement</a>
+                  <a (click)='pipoClickInsurance()' style="min-width:200px;">New Insurance Document</a>
+                  <a style="min-width:200px;">New Letter of Credit</a>
+              </div>
+          </div>
+          <button (click)="exportToExcel()" style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
+          background-color: #49A2D7;
+          border: none;
+          border-radius: 5px;">Export To Excel</button>
         </div>
         <div style="width: 100%" class="analytics-side" *ngIf="!showInvoice" #piposummery>
-
-            <div style="width: 100%" class="row">
-
-                <div style="width: 100%; left: -60px;" class="col-12 mb-lg padding" id="container">
-                    <section style="width: 220%;" class="pb-0 box-shadow">
-
-                        <div style="height: 563px; margin-left: 95px;" class="widget-body p-0 support table-wrapper">
-
+            <div style="width: 100%;margin: auto;" class="row">
+                <div class="col-12 mb-lg padding" id="container">
+                    <section class="pb-0 box-shadow">
+                        <div class="widget-body p-0 support table-wrapper">
                             <table style="width: 100%;" class="table table-striped mb-0">
-
                                 <thead style="width: 100% ;height: 54px; background: white;position: sticky;top: 0; ">
                                     <tr class="text-muted table-heading" style="opacity: 50%; font-size: 14px; color:black !important; border-bottom: 1px solid #f2f4f8;">
-
                                         <th scope="col">DATE</th>
                                         <th scope="col">INVOICE NUMBER</th>
                                         <th scope="col">INVOICE DATE</th>

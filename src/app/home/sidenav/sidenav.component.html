@@ -76,203 +76,195 @@
         </span> Dashboard
                     </a>
                 </li>
-
                 <li class="manage-li" *ngIf="this.documentService.EXPORT_IMPORT['import']==true">
                     <div class="main11">
-                        <!-- <div style="height: 30px; padding-top: 5px; font-size: 10px;">
+                        <div style="height: 30px; padding-top: 5px; font-size: 10px;">
                             <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
-                        </div> -->
+                        </div>
                         <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" (click)="newTask()" [ngClass]="status ? 'b-color' : 'nothing'">
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" (click)="newTask();addActivedLinks($event,'hoverClass')" [ngClass]="status ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO
           </span>
 
                         </div>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" (click)="newTask21()" [ngClass]="statusS9 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top: -2px;" (click)="newTask21()" [ngClass]="statusS9 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">BOE</span>
                         </div>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" (click)="newTask2()" [ngClass]="status2 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top: -2px;" (click)="newTask2()" [ngClass]="status2 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">Credit Notes</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newTask3()" [ngClass]="status3 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newTask3()" [ngClass]="status3 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;;">Debit notes</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newTask22()" [ngClass]="statusS4 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newTask22()" [ngClass]="statusS4 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">Insurance Documents</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newTask23()" [ngClass]="statusS7 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newTask23()" [ngClass]="statusS7 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;;">Tri party agreements</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="statusS5 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="statusS5 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;;">Letter of credit (LC)</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="statusS6 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="statusS6 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">Master service agree</span>
                         </div>
 
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="statusS8 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" [ngClass]="statusS8 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">Opinion Reports</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;">
                             <span style="margin-left: 35px; font-size: 10px; line-height: 30px; color: #9ba4b0">Transactions</span>
 
                         </div>
                         <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-12px;" [routerLink]="['/home/advance-outward-remittance']">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-12px;" [routerLink]="['/home/advance-outward-remittance']">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">Advance Outward Remittance </span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [routerLink]="['/home/direct-import-payment']">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" [routerLink]="['/home/direct-import-payment']">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">Direct Import Payment
           </span>
                         </div>
-                    <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [routerLink]="['/home/a2cum-application-yesbank']">
+                    <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" [routerLink]="['/home/a2cum-application-yesbank']">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">A2cum Application
       </span>
                         </div>
-                    <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [routerLink]="['/home/fbg-waiver']">
+                    <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" [routerLink]="['/home/fbg-waiver']">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">FBG Waiver</span>
                         </div>
-                    <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [routerLink]="['/home/lc-isurance']">
+                    <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" [routerLink]="['/home/lc-isurance']">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">LC-Insurence</span>
                         </div>
-                    <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" [routerLink]="['/home/buyer-credit']">
+                    <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" [routerLink]="['/home/buyer-credit']">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">Buyer Credit</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="buc()">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="buc()">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">Bills Under Collection</span>
                         </div>
                         <li style="list-style: none;">
                             <div *ngIf="billuc" style="margin: -10px 0px 10px 70px;">
-                                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="lcSight()">Sight</a>
-                                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="lcUsance()">Usance</a>
+                                <a class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; font-size: 11px;" (click)="lcSight()">Sight</a>
+                                <a class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; font-size: 11px;" (click)="lcUsance()">Usance</a>
                             </div>
                         </li>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="buc1()">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="buc1()">
                             <span style="margin-left: 35px; font-size: 13px; line-height: 30px;">Bills Under LC</span>
                         </div>
                         <li>
                             <div *ngIf="billuc1" style="margin: -10px 0px 10px 70px;">
-                                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="nonlcSight()">Sight</a>
-                                <a class="hoverClass" style="cursor: pointer; font-size: 11px;" (click)="nonlcUsance()">Usance</a>
+                                <a class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; font-size: 11px;" (click)="nonlcSight()">Sight</a>
+                                <a class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; font-size: 11px;" (click)="nonlcUsance()">Usance</a>
                             </div>
                         </li>
                     </div>
                 </li>
-
-                <!--
-            <li class="manage-li" *ngIf="mt">
-                <div class="main11" style=" color: #fff; margin-left: 5px;"></div>
-            </li> -->
-
-
                 <li class="manage-li" *ngIf="this.documentService.EXPORT_IMPORT['export']==true">
                     <div class="main11">
-                        <!-- <div style="height: 30px; padding-top: 5px; font-size: 10px;">
+                        <div style="height: 30px; padding-top: 5px; font-size: 10px;">
                             <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
-                        </div> -->
+                        </div>
                         <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;"   (click)="handlePipoSummary()">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;"   (click)="handlePipoSummary()">
                             <span style="margin-left: 35px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO Summary
         <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
         </i>
       </span>
                         </div>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" (click)="newSub1()" [ngClass]="new1 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top: -2px;" (click)="newSub1()" [ngClass]="new1 ? 'b-color' : 'nothing'">
                         <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/view-document/sb']">Shipping Bill</span>
                         </div>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" (click)="newSub2()" [ngClass]="new2 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top: -2px;" (click)="newSub2()" [ngClass]="new2 ? 'b-color' : 'nothing'">
                         <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/credit-note']">Credit Notes</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub3()" [ngClass]="new3? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub3()" [ngClass]="new3? 'b-color' : 'nothing'">
                         <span style="margin-left: 35px; line-height: 30px; font-size: 12px;;" [routerLink]="['/home/debit-note']">Debit Notes</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub4()" [ngClass]="new4 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub4()" [ngClass]="new4 ? 'b-color' : 'nothing'">
                         <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/insurance-document']">Insurance Documents</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub5()" [ngClass]="new5 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub5()" [ngClass]="new5 ? 'b-color' : 'nothing'">
                         <span style="margin-left: 35px; line-height: 30px; font-size: 12px;;" [routerLink]="['/home/letterofcredit-lc']">Letter of Credit (LC)</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub6()" [ngClass]="new6 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub6()" [ngClass]="new6 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/master-services']">Master Service Agreement</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub7()" [ngClass]="new7? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub7()" [ngClass]="new7? 'b-color' : 'nothing'">
                         <span style="margin-left: 35px; line-height: 30px; font-size: 12px;;" [routerLink]="['/home/try-party']">
                             Triparty Agreements</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub8()" [ngClass]="new8 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub8()" [ngClass]="new8 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/opinion-report']">Opinion Reports</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub14()" [ngClass]="new14 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub14()" [ngClass]="new14 ? 'b-color' : 'nothing'">
                         <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/inward-remittance-advice']">Inward Remittance Advice</span>
                         </div>
 
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub22()" [ngClass]="new22 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub22()" [ngClass]="new22 ? 'b-color' : 'nothing'">
                         <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/airway-bl-copy']">Airway/BL Copy</span>
                         </div>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub23()" [ngClass]="new23 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub23()" [ngClass]="new23 ? 'b-color' : 'nothing'">
                         <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/bill-of-exchange']">Bill Of Exchange</span>
                         </div>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub24()" [ngClass]="new24 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub24()" [ngClass]="new24 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/destruction']">Destruction Certificate</span>
                         </div>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub25()" [ngClass]="new25 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub25()" [ngClass]="new25 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/commercial']">Commercial Documents</span>
                         </div>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub26()" [ngClass]="new26 ? 'b-color' : 'nothing'">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub26()" [ngClass]="new26 ? 'b-color' : 'nothing'">
                         <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packing-list']">Packing List Documents</span>
                         </div>
 
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub28()" [ngClass]="new28 ? 'b-color' : 'nothing'">
+                            <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub28()" [ngClass]="new28 ? 'b-color' : 'nothing'">
                               <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/Sub-bill-Lodgement']">Sub-bill-Lodgement</span>
                               </div>
-                              <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -2px;" [ngClass]="new ? 'b-color' : 'nothing'" (click)="newTask1()">
+                              <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top: -2px;" [ngClass]="new ? 'b-color' : 'nothing'" (click)="newTask1()">
                                 <span style="margin-left: 35px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO Master
             <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
             </i>
           </span>
                             </div>
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;">
                             <span style="margin-left: 35px; font-size: 10px; line-height: 30px; color: #9ba4b0">Transactions</span>
 
                         </div>
                         <hr style="margin-left:35px; background-color: #9ba4b0; margin-top:-2px;">
 
                         <div class="main11">
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-12px;" (click)="newSub9()" [ngClass]="new9 ? 'b-color' : 'nothing'">
+                            <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-12px;" (click)="newSub9()" [ngClass]="new9 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/Pdf-Upload']">Inward Remittance
           Disposal</span>
                             </div>
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub10()" [ngClass]="new10 ? 'b-color' : 'nothing'">
+                            <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub10()" [ngClass]="new10 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/bill-lodgement']">Bill Under
           Collection</span>
                             </div>
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub11()" [ngClass]="new11 ? 'b-color' : 'nothing'">
+                            <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub11()" [ngClass]="new11 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/bill-lodgement']">Bill Under
           LC</span>
                             </div>
 
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub12()" [ngClass]="new12 ? 'b-color' : 'nothing'">
+                            <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub12()" [ngClass]="new12 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packing-credit-request']">Packing Credit Request</span>
                             </div>
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub13()" [ngClass]="new13 ? 'b-color' : 'nothing'">
+                            <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub13()" [ngClass]="new13 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packing-credit-request']">Direct Dispatch</span>
                             </div>
 
@@ -283,11 +275,11 @@
                         </div>
                         <hr style="margin-left:35px; background-color: #9ba4b0; margin-top:-2px;">
                         <div class="main11">
-                            <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px; " (click)="newSub20() " [ngClass]="new20 ? 'b-color' : 'nothing' ">
+                            <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px; " (click)="newSub20() " [ngClass]="new20 ? 'b-color' : 'nothing' ">
                                 <span style="margin-left: 35px; line-height: 30px; font-size: 12px; ">EDPMS Recon</span></div>
                             <div class="hoverClass " style="cursor: pointer; height: 30px; margin-top:-2px; " (click)="newSub21() " [ngClass]="new21 ? 'b-color' : 'nothing' ">
                                 <span style="margin-left: 35px; line-height: 30px; font-size: 12px; ">EDPMS Recon Table</span></div>
-                                <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub27()" [ngClass]="new27 ? 'b-color' : 'nothing'">
+                                <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub27()" [ngClass]="new27 ? 'b-color' : 'nothing'">
                                   <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/Excel-Downloader']">Report</span>
                                   </div>
                         </div>
@@ -600,11 +592,11 @@
                             </div>
                             <div class="notfication ">
                                 <ul>
-                                    <li><a routerLink="/second-component " routerLinkActive="active " ariaCurrentWhenActive="page "><span class="icon ">
+                                    <li><a routerLinkActive="active " ariaCurrentWhenActive="page "><span class="icon ">
                                     <img src="./assets/new-img/header_not1.svg"/>
                                   </span></a></li>
                                     <li>
-                                        <a routerLink="/second-component " routerLinkActive="active " ariaCurrentWhenActive="page ">
+                                        <a routerLinkActive="active " ariaCurrentWhenActive="page ">
                                             <span class="icon "><img src="./assets/new-img/header-user.svg " />
                                   </span>
                                         </a>
@@ -629,7 +621,7 @@
                                                         <span class="account_icon">Account</span>
                                                     </a>
                                                 </li>
-                                                <li><a routerLink="/second-component " routerLinkActive="active " ariaCurrentWhenActive="page "><span class="setting_icon">Settings</span></a></li>
+                                                <li><a routerLinkActive="active " ariaCurrentWhenActive="page "><span class="setting_icon">Settings</span></a></li>
                                                 <li style="cursor: pointer " class=" " (click)="newTask16() " [ngClass]="status16 ? 'b-color1' : 'nothing' ">
                                                     <!-- an example of nested submenu. basic bootstrap collapse component -->
                                                     <a class="sidebar-content " (click)="logout() ">

@@ -1,11 +1,8 @@
 <div class="content-wrap">
-    <main id="content" class="content table-padding bc" role="main">
-
-
+    <main id="content" class="content table-padding" role="main">
         <div id="mainId" class="bc" *ngIf="!done && checking == 'no'">
             <div>
                 <div style="text-align: center;">
-
                     <span style="border-bottom: 2px solid black;"><b>APPLICATION & FORM A2 FOR NON IMPORT
                             PAYMENT</b></span>
                 </div>
@@ -1536,73 +1533,63 @@
                     </tbody>
                 </table>
             </div>
+            <div class="pt-3 pb-3" *ngIf="!done && checking == 'no'">
+<div class="button1" style="width: 100px;" title="Share As PDF" (click)="exportAsPDF('MyDIv')">Proceed to
+Preview</div>
+</div>
         </div>
-        <br> <br> <br>
+        <div *ngIf="done">
+          <p>Setup: 3 Preview</p>
+          <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button>
+          <button class="button1" style="margin-bottom: 40px;">Send it via Email</button>
+          <div>
+          <div style="float: left; margin-right: 80px;">
+              <h5>Bank Format</h5>
+              <iframe [src]="data6" height="500px" width="400px" style="margin-bottom: 20px;"></iframe>
+          </div>
+          <div style="float: left; margin-right: 80px;">
+              <h5>Pi/PO document</h5>
+              <iframe [src]="doc" height="500px" width="400px" style="margin-bottom: 20px;"></iframe>
+          </div>
 
-        <div *ngIf="!done && checking == 'no'" style="
-                            float: left;
-                            display: block;
-                            width: 78%;
-                            margin-top: 40px;
-                            margin-left: 43px;
-                            ">
-            <div class="button1" style="width: 100px;" title="Share As PDF" (click)="exportAsPDF('MyDIv')">Proceed to
-                Preview</div>
-        </div>
+          </div><br>
+          <div *ngIf="caDone1 == 'yes'">
+          <h5>CA document</h5>
+          <iframe [src]="caUrl" height="500px" width="400px" style="margin-bottom: 20px;"></iframe>
+          </div><br>
+          <button *ngIf="caDone1 == 'no'" class="button1" style="margin-right: 10px;" (click)="edit()">Edit</button>
+          <button class="button1" style="margin-right: 10px;  margin-top: 20px;" (click)="submitTask()"
+          *ngIf="caDone1 == 'no'">Request
+          For CA
+          Certificate</button>
+          <button class="button1" style="margin-right: 10px;" (click)="submitTask()" *ngIf="caDone1 == 'yes'">Request
+          Done</button>
+          </div>
+          <div *ngIf="checking == 'yes'">
+          <!-- <p>Setup: 3 Preview</p>
+                                      <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button>
+                                      <button class="button1" style="margin-bottom: 40px;">Send it via Email</button> -->
+          <div>
+          <div style="float: left; margin-right: 80px;">
+              <h5>Bank Format</h5>
+              <iframe [src]="data6" height="500px" width="400px" style="margin-bottom: 20px;"></iframe>
+          </div>
+          <div style="float: left; margin-right: 80px;">
+              <h5>Pi/PO document</h5>
+              <iframe [src]="doc" height="500px" width="400px" style="margin-bottom: 20px;"></iframe>
+          </div>
 
-        <div *ngIf="done" style="width: 125%;">
-            <p>Setup: 3 Preview</p>
-            <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button>
-            <button class="button1" style="margin-bottom: 40px;">Send it via Email</button>
-            <div>
-                <div style="float: left; margin-right: 80px;">
-                    <h5>Bank Format</h5>
-                    <iframe [src]="data6" height="500px" width="400px" style="margin-bottom: 20px;"></iframe>
-                </div>
-                <div style="float: left; margin-right: 80px;">
-                    <h5>Pi/PO document</h5>
-                    <iframe [src]="doc" height="500px" width="400px" style="margin-bottom: 20px;"></iframe>
-                </div>
+          </div><br>
+          <div *ngIf="caDone1 == 'yes'" style="float: left; width: 100%;">
+          <h5>CA document</h5>
+          <iframe [src]="caUrl" height="500px" width="400px" style="margin-bottom: 20px;"></iframe>
+          </div><br>
 
-            </div><br>
-            <div *ngIf="caDone1 == 'yes'">
-                <h5>CA document</h5>
-                <iframe [src]="caUrl" height="500px" width="400px" style="margin-bottom: 20px;"></iframe>
-            </div><br>
-            <button *ngIf="caDone1 == 'no'" class="button1" style="margin-right: 10px;" (click)="edit()">Edit</button>
-            <button class="button1" style="margin-right: 10px;  margin-top: 20px;" (click)="submitTask()"
-                *ngIf="caDone1 == 'no'">Request
-                For CA
-                Certificate</button>
-            <button class="button1" style="margin-right: 10px;" (click)="submitTask()" *ngIf="caDone1 == 'yes'">Request
-                Done</button>
-        </div>
-        <div *ngIf="checking == 'yes'" style="width: 125%;">
-            <!-- <p>Setup: 3 Preview</p>
-                                            <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button>
-                                            <button class="button1" style="margin-bottom: 40px;">Send it via Email</button> -->
-            <div>
-                <div style="float: left; margin-right: 80px;">
-                    <h5>Bank Format</h5>
-                    <iframe [src]="data6" height="500px" width="400px" style="margin-bottom: 20px;"></iframe>
-                </div>
-                <div style="float: left; margin-right: 80px;">
-                    <h5>Pi/PO document</h5>
-                    <iframe [src]="doc" height="500px" width="400px" style="margin-bottom: 20px;"></iframe>
-                </div>
+          <button class="button1" style="margin-right: 10px; margin-top: 20px;" (click)="submitTask()"
+          *ngIf="caDone1 == 'yes'">Done</button>
+          <button class="button1" style="margin-right: 10px; margin-top: 20px;"
+          [routerLink]="['/home/outwardRemitance']" *ngIf="caDone1 == 'no'">Back</button>
 
-            </div><br>
-            <div *ngIf="caDone1 == 'yes'" style="float: left; width: 100%;">
-                <h5>CA document</h5>
-                <iframe [src]="caUrl" height="500px" width="400px" style="margin-bottom: 20px;"></iframe>
-            </div><br>
-
-            <button class="button1" style="margin-right: 10px; margin-top: 20px;" (click)="submitTask()"
-                *ngIf="caDone1 == 'yes'">Done</button>
-            <button class="button1" style="margin-right: 10px; margin-top: 20px;"
-                [routerLink]="['/home/outwardRemitance']" *ngIf="caDone1 == 'no'">Back</button>
-
-        </div>
-
+          </div>
     </main>
 </div>

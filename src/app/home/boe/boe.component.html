@@ -1,24 +1,14 @@
-<div class="content-wrap">
+<div class="content-wrap pb-2">
     <main id="content" class="content table-padding" role="main">
         <div *ngIf="showInvoice" class="table_top">
-            <div style="
-      width: 100%;
-      border-right: 0.5px solid rgba(0, 0, 0, 0.2);
-      height: 100%;
-      padding-top: 2.3%;">
+            <div class="header-panel">
                 <!-- <div style="margin-left: 50px;">
                 <img src="../../../assets/back.png" (click)="hide()" style="width: 20px; height: 20px; margin-left: 30px;margin-bottom: 10px; margin-top: 6px; "><span style="margin-left: 5px ;margin-bottom: 10px;" (click)="hide()">Back</span>
             </div> -->
-                <p class="bcw" style="
-        font-size: '14px';
-
-        margin-left: 78px;
-        font-weight: 500; ">
+                <p class="bcw" style="font-size: '14px'; margin-left: 30px;font-weight: 500; ">
                     BOE Documents
                 </p>
             </div>
-            <!----style="height: 35px; font-weight: 400"-->
-
             <div style="width: 100%; font-weight: 300;">
                 <span style="font-weight: 400">People collaborated</span>
             </div>
@@ -34,15 +24,7 @@
            margin-left: 10px;cursor: pointer;">
             </div>
         </div>
-        <div style="
-                  display: flex;
-                  flex-direction: rows;
-                  justify-content: space-between;
-                  align-items: center;
-                  padding-top: 0.8%;
-                  padding-bottom: 0.8%;
-                  width: 85%;
-              " *ngIf="!showInvoice">
+        <div  class="header-panel" *ngIf="!showInvoice">
             <div style="display: flex; align-items: center">
                 <h3 class="heading">BOE Documents</h3>
             </div>
@@ -71,11 +53,11 @@
 
         <div class="analytics" #epltable>
             <div *ngIf="!showInvoice" style="width: 100%" class="analytics-side">
-                <div style="width: 100%;margin-left: 20px;" class="row">
-                    <div style="width: 100%; margin: 0 -1.5%; height: 600px;" class="col-12 mb-lg padding" *ngIf="!showInvoice" id="container">
-                        <section style="width: 200%;" class="widget pb-0 box-shadow">
-                            <div style="margin: 0 -2%" class="widget-body p-0 support table-wrapper">
-                                <table style="width: 100%;margin-left: -70px; " class="table table-striped mb-0">
+                <div style="width: 100%;" class="row">
+                    <div class="col-12 mb-lg padding" *ngIf="!showInvoice" id="container">
+                        <section class="widget pb-0 box-shadow">
+                            <div class="widget-body p-0 support table-wrapper">
+                                <table class="table table-striped mb-0">
                                     <thead style="width: 100%;height: 54px;background: white;position: sticky;top: 0;">
                                         <tr class="text-muted table-heading" style="opacity: 45%; font-size: 14px; color:black !important; font-weight: 300 !important; padding: 5px; border-bottom: 1px solid #f2f4f8;">
                                             <th class="rect">

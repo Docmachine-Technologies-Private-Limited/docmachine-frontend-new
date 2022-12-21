@@ -30,6 +30,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from '../../app.config';
 import * as xlsx from 'xlsx';
 import {PipoDataService} from "../../service/homeservices/pipo.service";
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-pipo-documents',
@@ -143,6 +144,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     private modalService: NgbModal,
     public appconfig: AppConfig,
     private pipoDataService: PipoDataService,
+    public wininfo: WindowInformationService
   ) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base);
@@ -174,6 +176,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.id = this.route.snapshot.params['id'];
     this.pipo_id = this.route.snapshot.params['pipo_id'];
     console.log(this.id, this.pipo_id);

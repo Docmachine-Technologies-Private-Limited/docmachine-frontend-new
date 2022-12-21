@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DocumentService } from 'src/app/service/document.service';
 import { UserService } from 'src/app/service/user.service';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-edpms-recon-table',
@@ -14,9 +15,12 @@ export class EdpmsReconTableComponent implements OnInit {
   bankAccounts = [];
   bankSelection = "";
   edpmsData;
-  constructor(private userService: UserService, private documentService: DocumentService, private router: Router) { }
+  constructor(private userService: UserService, private documentService: DocumentService,
+    private router: Router,
+    public wininfo: WindowInformationService) { }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.userService.getTeam()
       .subscribe((res: any) => {
         this.masterTeam = res?.data[0]?.bankDetails;
