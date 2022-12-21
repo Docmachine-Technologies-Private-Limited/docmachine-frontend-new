@@ -184,9 +184,9 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_sec map_height Pending_realisation">
                                 <b class="bold_titles_common">
-                                    {{ isImport ===  false  ? 'Pending realisation ' : 'BOE Pending for Payment'}} 
+                                    {{ isImport ===  false  ? 'Pending realisation ' : 'BOE Pending for Payment'}}
 
-                                </b> 
+                                </b>
                                 <ul>
                                     <li class="Full_icon">Full</li>
                                     <li class="Partial_icon">Partial</li>
@@ -208,10 +208,10 @@
                             <div class="submission_secs map_height Pending_realisation">
                                 <div class="row">
                                     <div class="col-md-8 col-8"><strong class="bold_titles_common">
-                                       
-                                    
-                                        {{ isImport ===  false  ? ' Order pending for shipment ' : 'Order pending for Dispatch'}} 
-                                    
+
+
+                                        {{ isImport ===  false  ? ' Order pending for shipment ' : 'Order pending for Dispatch'}}
+
                                     </strong></div>
                                     <div class="col-md-4 col-4">
                                         <div>
@@ -232,7 +232,7 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_secs map_height Pending_realisation">
-                                <b class="bold_titles_common">Buyer’s credit availed</b>
+                                <b class="bold_titles_common">{{this.documentService.EXPORT_IMPORT['import']==true?'Buyer’s credit availed':'Packing credit availed'}}</b>
                                 <h2>Maturity : 360</h2>
                                 <!-- <img src="./assets/new-img/realised.png" alt="images" /> -->
                                 <!-- <apx-chart [series]="packingCreditAvailedChart.series"
