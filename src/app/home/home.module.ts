@@ -57,7 +57,6 @@ import { CompletedTaskComponent } from './completed-task/completed-task.componen
 import { InwardRemittanceBoeComponent } from './yesBank/inward-remittance-boe/inward-remittance-boe.component';
 import { PaymentAcceptanceLetterComponent } from './yesBank/payment-acceptance-letter/payment-acceptance-letter.component';
 import { TradeRequestLetterComponent } from './yesBank/trade-request-letter/trade-request-letter.component';
-import { FbgBuyerComponent } from './fbg-waiver/fbg-buyer.component';
 import { FbgBuyerFileComponent } from './yesBank/fbg-waiver-file/fbg-buyer-file.component';
 import { AdvanceRemitanceFbgComponent } from './axisBank/advance-remitance-fbg/advance-remitance-fbg.component';
 import { DirectImportAxisComponent } from './axisBank/direct-import-axis/direct-import-axis.component';

@@ -7,6 +7,7 @@ import {UserService} from './../../service/user.service';
 import * as xlsx from 'xlsx';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import {ActivatedRoute, Data, NavigationStart, Router} from '@angular/router';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-imports-credit-note',
@@ -30,11 +31,13 @@ export class ImportsCreditNoteComponent implements OnInit {
     private toastr: ToastrService,
     private router: Router,
     private userService: UserService,
-    private sharedData: SharedDataService
+    private sharedData: SharedDataService,
+    public wininfo: WindowInformationService
   ) {
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.documentService.getCredit().subscribe(
       (res: any) => {
         console.log('HEre Responsesssssssss', res);

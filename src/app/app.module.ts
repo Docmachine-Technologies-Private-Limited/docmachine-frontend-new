@@ -38,6 +38,7 @@ import { PdfComponent } from './pdf/pdf.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgSelectModule } from '@ng-select/ng-select';
+import {WindowInformationService} from './service/window-information.service'
 
 //import { SidenavComponent } from './home/sidenav/sidenav.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -90,8 +91,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
   ],
-  providers: [{ provide: AppConfig }
-
+  providers: [{ provide: AppConfig },
+    WindowInformationService
   ],
   bootstrap: [AppComponent],
 })

@@ -66,13 +66,14 @@
                                             <label for="exampleInputEmail1" class="form-label">Inward reference number</label>
                                             <input #Inwardreferencenumber type="text" class="form-control" id="Amount" aria-describedby="emailHelp" placeholder="1187651 80131" autocomplete="off"
                                             (keydown)="InsertDTO('Inwardreferencenumber',Inwardreferencenumber)"
-                                            [value]="this.removeallSpace2('Unique16digitIdentifier',this.dataPdf)">
+                                            [value]="this.removeallSpace2('Uniquedigitldentifier',this.dataPdf)">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 col-sm-12">
                                                 <div class="mb-3">
                                                     <label for="exampleInputEmail1" class="form-label">Amount</label>
-                                                    <input #Amount type="text" class="form-control" id="Amount" aria-describedby="emailHelp" placeholder="30713.25" autocomplete="off" (keydown)="InsertDTO('Amount',Amount)" [value]="replaceText(this.dataPdf['Amount'],'32A')">
+                                                    <input #Amount type="text" class="form-control" id="Amount" aria-describedby="emailHelp"
+                                                    placeholder="30713.25" autocomplete="off" (keydown)="InsertDTO('Amount',Amount)" [value]="replaceText(this.dataPdf['Amount'],'32A')">
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-sm-12">
@@ -91,11 +92,14 @@
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Remitter name ( as per MT103 )</label>
                                             <input #Remittername type="text" class="form-control" id="Amount" aria-describedby="emailHelp" placeholder="NORMEKS AMBALAJ SANAYI LE TICARET" autocomplete="off" (change)="InsertDTO('Remittername',Remittername)"
-                                            [value]="replaceText(this.dataPdf['RemitterCustomerName'],'50A/50K')">
+                                            [value]="replaceText(this.dataPdf['RemittersCustomerName'],'50A/50K')">
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Bill lodgment number</label>
-                                            <input #Billlodgmentnumber type="text" class="form-control" id="Amount" aria-describedby="emailHelp" placeholder="Bill lodgment number" autocomplete="off" [value]="this.dataPdf['RemittanceInformation70ADVANCEIMPORTPYMINV']" (change)="InsertDTO('Billlodgmentnumber',Billlodgmentnumber)">
+                                            <input #Billlodgmentnumber type="text" class="form-control"
+                                            id="Amount" aria-describedby="emailHelp" placeholder="Bill lodgment number"
+                                             autocomplete="off" [value]="this.dataPdf['RemittanceInformation']"
+                                              (change)="InsertDTO('Billlodgmentnumber',Billlodgmentnumber)">
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Inward amount for disposal</label>

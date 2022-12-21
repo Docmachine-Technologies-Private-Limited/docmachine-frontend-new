@@ -2109,9 +2109,33 @@ dataPdf:any=[];
       );
       var data:any=args[1]['data'][0];
       var temp:any=Object.keys(data)
-      for (let index = 0; index < temp.length; index++) {
-          this.dataPdf[await this.removeallSpace(temp[index])]=data[temp[index]];
-      }
+      console.log(data,'data')
+
+      this.dataPdf={
+        AccountDetails:data['Account Details'],
+        Amount:data['Amount'],
+        BankOperationCode:data['Bank Operation Code'],
+        BeneficiaryCustomer:data['Beneficiary Customer'],
+        BeneficiaryCustomerAddress:data['Beneficiary Customer Address'],
+        BeneficiaryCustomerName:data['Beneficiary Customer Name'],
+        CurrencyInstructedAmount:data['Currency/Instructed Amount'],
+        CurrencyCode:data['Currency Code'],
+        DetailsofCharges:data['Details of Charges'],
+        Orderinglnstitution:data['Ordering lnstitution'],
+        Receiver:data['Receiver'],
+        ReceiversCorrespondent:data["Receiver's Correspondent"],
+        RemittanceInformation:data["Remittance Information 70 ADVANCE IMPORT PYM INV"],
+        RemitterCustomerCode:data["Remitter Customer Code"],
+        RemitterCustomerDetails:data['Remitter Customer Details'],
+        RemittersCustomerName:data['Remitter Customer Name'],
+        SenderCorrespondent:data["Sender's Correspondent"],
+        SendersReference:data["Sender's Reference"],
+        SenderCode:data['Sender Code'],
+        SenderInformation:data['Sender Information'],
+        Uniquedigitldentifier:data["Unique 16 digit ldentifier"],
+        ValueDate32A31:data["Value Date 32A 31"],
+        lntermediary:data['lntermediary']
+        };
       this.documentService.setSessionData('InwardSheet',this.dataPdf[0]);
       console.log(this.dataPdf,'this.dataPdf');
      console.log('-------------------->Selected Document type', this.publicUrl);
@@ -2129,7 +2153,11 @@ dataPdf:any=[];
     return spacetext.replace(/\s/g,'');
   }
   removeallSpace2(spacetext:any,data:any){
+  if (data[spacetext]!=undefined && data[spacetext]!=null) {
     return data[spacetext].replace(/\s/g,'');
+  }else{
+    return '';
+  }
   }
   validation(data:any,validationData:any){
     var counter=0;

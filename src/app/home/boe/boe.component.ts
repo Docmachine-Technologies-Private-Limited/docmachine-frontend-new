@@ -5,6 +5,7 @@ import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ToastrService } from 'ngx-toastr';
 import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-boe',
@@ -29,10 +30,12 @@ export class BOEComponent implements OnInit {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private toastr: ToastrService,
-    private sharedData : SharedDataService
+    private sharedData : SharedDataService,
+    public wininfo: WindowInformationService
   ) { }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.documentService.getBoe(1).subscribe(
       (res: any) => {
         console.log(res), (this.item1 = res.data);

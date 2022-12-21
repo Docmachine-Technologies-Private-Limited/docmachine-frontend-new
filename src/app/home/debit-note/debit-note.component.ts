@@ -17,6 +17,7 @@ import {
 import * as xlsx from 'xlsx';
 import {Router} from '@angular/router';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 
 @Component({
@@ -43,11 +44,13 @@ export class DebitNoteComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
-    private sharedData: SharedDataService
+    private sharedData: SharedDataService,
+    public wininfo: WindowInformationService
   ) {
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.documentService.getDebit().subscribe(
       (res: any) => {
         console.log('Data fetched successfully', res);

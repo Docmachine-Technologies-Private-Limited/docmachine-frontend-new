@@ -5,6 +5,7 @@ import { UserService } from 'src/app/service/user.service';
 import * as xlsx from 'xlsx';
 import $ from 'jquery';
 import { ShippingbillDataService } from 'src/app/service/homeservices/shippingbill.service';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-excel-downloader-comp',
@@ -50,13 +51,14 @@ export class ExcelDownloaderCompComponent implements OnInit {
   constructor(public documentService: DocumentService,
     public dashboardService: DashBoardService,
     public shippingBillService: ShippingbillDataService,
-    public userService: UserService) { 
-      this.Controller_of_width(280,'#page-content');
+    public wininfo: WindowInformationService,
+    public userService: UserService) {
       this.userDataListener = this.userService.userDataListener$;
       this.TYPE_OF_VIEW=this.dashboardService.DASH_BOARD_TYPES!=''?this.capitalizeFirstLetter(this.dashboardService.DASH_BOARD_TYPES):'Export'
     }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'#page-content')
     this.dashboardService.getDashboardDataAll().subscribe((res:any)=>{
       console.log('getDashboardDataAll',res,this.userDataListener);
       this.PARENT_DATA_EXCEL=res[this.TYPE_OF_VIEW];
@@ -103,11 +105,11 @@ export class ExcelDownloaderCompComponent implements OnInit {
         var temp:any=[];
           for (let index = 0; index <data.length; index++) {
             temp.push({
-              "SB DATE":data[index]['sbdate'],	
-              "SB NUMBER":data[index]['sbno'],	
+              "SB DATE":data[index]['sbdate'],
+              "SB NUMBER":data[index]['sbno'],
               "AD CODE":data[index]['adCode'],
               "AD BILL NO":data[index]['adBillNo'],
-              "BUYER NAME":data[index]['buyerName'],	
+              "BUYER NAME":data[index]['buyerName'],
               "COMPANY NAME":data[index]['consigneeName'],
               "ORIGIN":data[index]['exporterLocationCode'],
               "DESTINATION":data[index]['countryOfFinaldestination'],
@@ -166,7 +168,7 @@ export class ExcelDownloaderCompComponent implements OnInit {
     var screenWidth = window.screen.width;
     var percentage = ( screenWidth - pixels );
     $(id_or_className).css('width',percentage+'px');
-    
+
     $(window).resize(function() {
       var winWidth = document.body.clientWidth;
       var percentage = ( winWidth - pixels );
@@ -288,7 +290,7 @@ export class ExcelDownloaderCompComponent implements OnInit {
           "Conversion Rate":filterForexData[index]['exchangeRate'],
           "Converted Amount":filterForexData[index]['convertedAmount'],
           "FIRX Number/ID":filterForexData[index]['billNo'],
-          "Available Balance":filterForexData[index]['BalanceAvail']	
+          "Available Balance":filterForexData[index]['BalanceAvail']
         });
         if ((index+1)==filterForexData.length) {
           this.DATA_CREATE['Inward Remittances']=temp;

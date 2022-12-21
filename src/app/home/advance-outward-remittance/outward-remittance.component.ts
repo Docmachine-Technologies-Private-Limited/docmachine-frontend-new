@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { DocumentService } from "../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { WindowInformationService } from "src/app/service/window-information.service";
 
 @Component({
   selector: "app-outward-remittance",
@@ -44,9 +45,11 @@ export class AdvanceOutwardRemittanceComponent implements OnInit {
     public documentService: DocumentService,
     private router: Router,
     private route: ActivatedRoute,
+    public wininfo: WindowInformationService
   ) { }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.documentService.getPipo().subscribe(
       (res: any) => {
         console.log("HEre Response", res);

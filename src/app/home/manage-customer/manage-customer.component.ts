@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { DocumentService } from "../../service/document.service";
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { WindowInformationService } from "src/app/service/window-information.service";
 @Component({
   selector: "app-manage-customer",
   templateUrl: "./manage-customer.component.html",
@@ -26,9 +27,11 @@ export class ManageCustomerComponent implements OnInit {
     private userService: UserService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
+    public wininfo: WindowInformationService
   ) { }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.route.params.subscribe(params => {
       this.file = this.route.snapshot.params['id'];
       if (this.file === "import") {

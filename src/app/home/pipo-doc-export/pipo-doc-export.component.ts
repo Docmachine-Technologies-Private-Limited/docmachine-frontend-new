@@ -195,7 +195,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     public appconfig: AppConfig,
     private changeDetectorRef: ChangeDetectorRef,
     private modalService1: BsModalService,
-
+    public wininfo: WindowInformationService,
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
   ) {
@@ -258,6 +258,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.id = this.route.snapshot.params['id'];
     this.currentindex = this.route.snapshot.params['index'];
     var pipo_id = this.route.snapshot.params['pipo_id'];
@@ -1373,6 +1374,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
 }
 
 import { PipoDataService } from "../../service/homeservices/pipo.service";
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'modal-content',

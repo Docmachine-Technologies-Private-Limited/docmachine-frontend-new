@@ -20627,11 +20627,6 @@ body {
     overflow-x: hidden;
 }
 
-body ::-webkit-scrollbar {
-    display: none;
-    /* Safari and Chrome */
-}
-
 
 /* Optional: show position indicator in red */
 

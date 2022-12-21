@@ -6,6 +6,7 @@ import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { AppConfig } from 'src/app/app.config';
 import { DocumentService } from 'src/app/service/document.service';
 import { Router } from '@angular/router';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-edpms-recon',
@@ -42,7 +43,8 @@ export class EdpmsReconComponent implements OnInit {
     private userService: UserService,
     public appconfig: AppConfig,
     public documentService: DocumentService,
-    public router: Router
+    public router: Router,
+    public wininfo: WindowInformationService
   ) {
     this.api_base = appconfig.apiUrl;
     this.loadFromLocalStorage();
@@ -78,6 +80,7 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.userService.getTeam()
       .subscribe((res: any) => {
         this.masterTeam = res?.data[0]?.bankDetails;

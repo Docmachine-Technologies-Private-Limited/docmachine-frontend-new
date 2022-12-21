@@ -1,20 +1,6 @@
-<div style="margin-left: 0px" class="content-wrap">
+<div class="content-wrap pb-2">
     <main id="content" class="content table-padding" role="main">
-
-
-
-        <div style="
-                display: flex;
-                flex-direction: rows;
-                justify-content: space-between;
-                align-items: center;
-                padding-top: 0.8%;
-                padding-left: 1%;
-                padding-bottom: 0.8%;
-                /*border: 0.5px solid rgba(0, 0, 0, 0.2);*/
-                margin-left: 40px;
-                width: 85%;
-              " *ngIf="!showInvoice">
+        <div class="header-panel" *ngIf="!showInvoice">
             <div style="display: flex; align-items: center; margin-left: 23px;">
                 <h3 class="heading">Packing Credit Request</h3>
             </div>
@@ -36,20 +22,9 @@
         </div>
 
 
-        <div class="analytics" style="margin-left: 50px;">
-
-
-
+        <div class="analytics pt-4" >
             <div>
-                <!-- P0102 -->
-
-
                 <div *ngIf='!isGenerate'>
-                    <!-- <div style="margin: 10px;">
-                        <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
-                            style="width: 20px; height: 20px; margin-left: 19px;"><span style="margin-left: 10px;"
-                            [routerLink]="['/home/dashboardTask']">Back</span>
-                    </div> -->
                     <div>
                         <div class="form-group">
                             <div class="form-group col-md-12" style="margin-left: 11px;">

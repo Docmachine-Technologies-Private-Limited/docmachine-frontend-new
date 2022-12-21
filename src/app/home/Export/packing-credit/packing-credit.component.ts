@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "../../../service/user.service";
 import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
+import { WindowInformationService } from "src/app/service/window-information.service";
 
 @Component({
   selector: 'app-packing-credit',
@@ -128,12 +129,14 @@ export class PackingCreditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private userService: UserService,
-    private confirmDialogService: ConfirmDialogService
+    private confirmDialogService: ConfirmDialogService,
+    public wininfo: WindowInformationService
   ) {
     console.log("hello")
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     //window.location.reload();
     console.log(data['default'])
     this.jsondata = data['default'];

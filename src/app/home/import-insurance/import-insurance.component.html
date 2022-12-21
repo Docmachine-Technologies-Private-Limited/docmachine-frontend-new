@@ -1,10 +1,6 @@
-<div class="content-wrap">
-<main id="content" class="content" role="main">
-  <div style="
-            display: flex;
-            flex-direction: rows;
-            justify-content: space-between;
-            align-items: center;">
+<div class="content-wrap pb-2">
+<main id="content" class="content table-padding" role="main">
+  <div class="header-panel">
     <!-- *ngIf="!showInvoice" -->
     <div style="display: flex; align-items: center">
       <h3 class="heading">Import Insurance Documents</h3>
@@ -41,10 +37,9 @@
       <div style="width: 100%" class="row">
         <div class="col-12 mb-lg padding" id="container">
           <!-- *ngIf="!showInvoice" -->
-          <section style="width: 150%;" class="pb-0 box-shadow">
-            <div style="height: 638px;" class="widget-body p-0 support table-wrapper">
-              <table
-                class="table table-striped mb-0">
+          <section class="pb-0 box-shadow">
+            <div  class="widget-body p-0 support table-wrapper">
+              <table class="table table-striped mb-0">
                 <!-- *ngIf='pipo' -->
                 <thead style="width: 100%;height: 54px;background: white;position: sticky;top: 0;">
                 <tr class="text-muted table-heading"

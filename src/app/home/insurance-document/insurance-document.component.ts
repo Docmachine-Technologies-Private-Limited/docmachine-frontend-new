@@ -17,6 +17,7 @@ import {ToastrService} from 'ngx-toastr';
 import {UserService} from './../../service/user.service';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import {Router} from '@angular/router';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-insurance-document',
@@ -40,11 +41,13 @@ export class InsuranceDocumentComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
-    private sharedData: SharedDataService
+    private sharedData: SharedDataService,
+    public wininfo: WindowInformationService
   ) {
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.documentService.getInsurance().subscribe(
       (res: any) => {
         console.log('Data fetched successfully', res);
