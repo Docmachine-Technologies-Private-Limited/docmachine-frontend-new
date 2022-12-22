@@ -270,7 +270,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.Inward_Remittancefilter = this.Inward_Remittance;
     this.old_data = this.default_value;
 
-    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer).subscribe((res: any) => {
+    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer,'export').subscribe((res: any) => {
      console.log(res,'resssssssssssssss');
      this.OLD_dataSource=res.docs;
      this.dataSource = res.docs

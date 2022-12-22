@@ -55,7 +55,7 @@ export class PipoNewComponent implements OnInit {
 
   getPipoData() {
     console.log("-->", this.page, this.limit)
-    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer).subscribe((res: any) => {
+    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer , 'export').subscribe((res: any) => {
       this.dataSource = res.docs
       console.log("res", this.dataSource)
 

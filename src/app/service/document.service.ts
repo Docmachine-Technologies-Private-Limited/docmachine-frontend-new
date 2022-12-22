@@ -389,14 +389,14 @@ export class DocumentService {
   }
 
 
-  getPipos(page,limit,commodity,location,buyer) {
+  getPipos(page,limit,commodity,location,buyer,type) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
 
-    return this.http.get(`${this.api_base}/pipo/getPipos?page=${page}&limit=${limit}&commodity=${commodity}&location=${location}&buyer=${buyer}`, httpOptions);
+    return this.http.get(`${this.api_base}/pipo/getPipos?page=${page}&limit=${limit}&commodity=${commodity}&location=${location}&buyer=${buyer}&type=${type}`, httpOptions);
   }
 
   updatePipobyId(id,data) {

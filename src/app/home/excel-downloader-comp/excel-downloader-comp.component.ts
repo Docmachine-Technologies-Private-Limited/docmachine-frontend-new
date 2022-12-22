@@ -79,7 +79,7 @@ export class ExcelDownloaderCompComponent implements OnInit {
     // this.Controller_of_width(280,'#page-content');
   }
   getPipoData() {
-    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer).subscribe((res: any) => {
+    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer,'export').subscribe((res: any) => {
       console.log("res",res.docs)
       var temp:any=[];
       for (let index = 0; index <res.docs.length; index++) {

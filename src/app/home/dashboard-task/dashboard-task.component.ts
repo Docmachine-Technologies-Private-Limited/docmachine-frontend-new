@@ -298,6 +298,7 @@ export class DashboardTaskComponent implements OnInit {
       dataLabels: {
         enabled: false
       },
+      
       chartData: [],
       currencyFormat: this.currencyFormate,
       series: [],
@@ -312,7 +313,8 @@ export class DashboardTaskComponent implements OnInit {
         }
       },
       legend: {
-        show: true
+        show: true,
+        width: 300
       }
     }
 
@@ -364,8 +366,9 @@ export class DashboardTaskComponent implements OnInit {
         }
       },
       legend: {
-        show: true
-      }
+        show: true,
+        width: 300
+       }
     }
 
     this.shippingBillChartOptions = {
@@ -406,7 +409,8 @@ export class DashboardTaskComponent implements OnInit {
         }
       },
       legend: {
-        show: true
+        show: true,
+        width: 300
       }
     }
 

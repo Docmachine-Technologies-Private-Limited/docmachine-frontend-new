@@ -70,7 +70,7 @@ export class SubBillLodgementComponent implements OnInit {
 
   getPipoData() {
     console.log("-->", this.page, this.limit)
-    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer).subscribe(async (res: any) => {
+    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer,'export').subscribe(async (res: any) => {
       this.dataSource = res.docs
       console.log("res", this.dataSource)
       var counter=0;
