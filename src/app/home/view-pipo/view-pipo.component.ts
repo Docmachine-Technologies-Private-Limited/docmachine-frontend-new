@@ -75,9 +75,8 @@ export class ViewPipoComponent implements OnInit {
     this.documentService.getPipoByid(id).subscribe((pipoRes: any) => {
       console.log("-->",pipoRes)
       this.pipoData = pipoRes
-      this.getSBDetails(pipoRes.pi_poNo)
-      this.getInwardData(pipoRes.pi_poNo)
-
+      this.getSBDetails(this.pipoID)
+      this.getInwardData(this.pipoID)
     }
     )
   }
@@ -117,7 +116,8 @@ export class ViewPipoComponent implements OnInit {
 
   viewDetails ()
   {
-    this.router.navigate(['home/pipoDocExport',{ id: this.pipoData?.pi_poNo,page:'details', index:0}]);
+    console.log("pipoData",this.pipoData)
+    this.router.navigate(['home/pipo-export',{ id: this.pipoData?.pi_poNo,page:'details', index:0,pipo_id:this.pipoData._id}]);
     // pipoDocExport;id=PO01;page=details;index=0
     // pipoDocExport;id=PO01;page=details;index=0
     // this.router.navigate([

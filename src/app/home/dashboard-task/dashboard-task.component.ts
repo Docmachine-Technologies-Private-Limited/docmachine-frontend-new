@@ -280,7 +280,7 @@ export class DashboardTaskComponent implements OnInit {
     // pipi chart
     this.pipoChartOptions = {
       chart: {
-        width: 300,
+        width: '100%',
         type: "donut"
       },
       noData: {
@@ -314,21 +314,25 @@ export class DashboardTaskComponent implements OnInit {
         }
       },
       legend: {
-        show: true
+        show: true,
+        position: 'bottom',
+        horizontalAlign: 'center',
+        // width: 30,
+        height: 50,
       }
     }
 
 
     this.inwardChartOptions = {
       chart: {
-        width: 300,
+        width: '100%',
         type: "donut"
       },
       yaxis: {
         labels: {
           style: {
             fontSize: '8px',
-            fontWeight: 500,
+            maxWidth: 30,
           },
         }
       },
@@ -365,14 +369,19 @@ export class DashboardTaskComponent implements OnInit {
           return "<div>" + toolTipText + "</div>";
         }
       },
+
       legend: {
-        show: true
+        show: true,
+        position: 'bottom',
+        horizontalAlign: 'center',
+        // width: 30,
+        height: 50,
       }
     }
 
     this.shippingBillChartOptions = {
       chart: {
-        width: 300,
+        width: '100%',
         type: "donut"
       },
       noData: {
@@ -408,7 +417,11 @@ export class DashboardTaskComponent implements OnInit {
         }
       },
       legend: {
-        show: true
+        show: true,
+        position: 'bottom',
+        horizontalAlign: 'center',
+        // width: 30,
+        height: 50,
       }
     }
 
@@ -743,7 +756,7 @@ export class DashboardTaskComponent implements OnInit {
     // });
 
     this.sbChart.updateOptions({
-      series: [30, 52, 36, 12],
+      series: [44, 55, 41, 17],
       labels: ['Buyer 1', 'Buyer 2', 'Buyer 3', 'Buyer 4'],
     });
 
