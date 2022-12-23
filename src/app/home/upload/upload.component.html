@@ -483,7 +483,7 @@
 
        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div> -->
-                                        <form class="" *ngIf="sbNo && !override" #values="ngForm" (ngSubmit)="onSubmit(values)">
+                                        <form class="iframecontroller" *ngIf="sbNo && !override" #values="ngForm" (ngSubmit)="onSubmit(values)">
                                             <div class="field" style="width:84%;margin-left:31px">
                                                 <table class="field-table">
                                                     <tr class="field-heading">
@@ -635,7 +635,7 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <form *ngIf="boeNumber && !override" class="" #values="ngForm" (ngSubmit)="onSubmitBoe(values)">
+                                        <form class="iframecontroller" *ngIf="boeNumber && !override" #values="ngForm" (ngSubmit)="onSubmitBoe(values)">
                                             <div class="field">
                                                 <table class="field-table">
                                                     <tr class="field-heading">
@@ -760,44 +760,80 @@
                                         <!-- Forex Advice Bill -->
 
 
-                                        <form class="" *ngIf="billNo && !override" #values="ngForm" (ngSubmit)="onSubmitIrAdvice(values)">
+                                        <form class="iframecontroller" *ngIf="billNo && !override" #values="ngForm" (ngSubmit)="onSubmitIrAdvice(values)">
                                             <div class="field">
-                                                <table class="field-table">
-                                                    <tr class="field-heading">
-                                                        <td>FOREX ADVICE DETAILS</td>
-                                                        <td>PARTY NAME</td>
-                                                        <td>TT AMOUNT</td>
-                                                    </tr>
-                                                    <tr style="margin-left: -10%;">
-                                                        <td>
-                                                            <input ngModel class="form-control input2" type="text" name="billNo" [(ngModel)]="res.billNo" />
-                                                        </td>
-
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="partyName" [(ngModel)]="res.partyName" />
-                                                        </td>
-
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="amount" [(ngModel)]="res.amount" />
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
+                                                <div class="form12">
+                                                    <div class="mb-3">
+                                                      <label for="exampleInputEmail1" class="form-label">FOREX ADVICE DETAILS</label>
+                                                      <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="billNo" [(ngModel)]="res.billNo">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                      <label for="exampleInputPassword1" class="form-label">PARTY NAME</label>
+                                                      <input style="border: 2px solid darkgray;" NgModel class="form-control input2" name="partyName" [(ngModel)]="res.partyName" >
+                                                    </div>
+                                                    <div class="mb-3">
+                                                      <label for="exampleInputPassword1" class="form-label">TT AMOUNT</label>
+                                                      <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="partyName" [(ngModel)]="res.amount">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                  </div>
                                             </div>
 
                                             <div class="sub-table">
-                                                <div class="sb1">
+                                              <div class="form12">
+                                                <p class="sh1">FOREX ADVICE DETAILS</p>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">TT Date</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="date" name="date" [(ngModel)]="res.billNo">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Recieved Date</label>
+                                                  <input style="border: 2px solid darkgray;" NgModel class="form-control input2" name="recievedDate" [(ngModel)]="res.partyName" >
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Commission</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="commision" [(ngModel)]="res.commision">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Conversion Date</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="conversionDate" [(ngModel)]="res.conversionDate">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Exchange Rate</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="exchangeRate" [(ngModel)]="res.exchangeRate">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Location</label>
+                                                  <select name="location" ngModel placeholder="Location">
+                                                    <option value="">Select Location</option>
+                                                    <option *ngFor="let bene of location" [value]="bene.loc">
+                                                      {{ bene.loc }}
+                                                    </option>
+                                                  </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Commodity</label>
+                                                  <select name="commodity" ngModel>
+                                                    <option value="">Select commodity</option>
+                                                    <option *ngFor="let como of commodity" [value]="como.como">
+                                                      {{ como.como }}
+                                                    </option>
+                                                  </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Origin</label>
+                                                  <select name="origin" ngModel>
+                                                    <option value="">Select Origin</option>
+                                                    <option *ngFor="let ori of origin" [value]="ori">
+                                                      {{ ori }}
+                                                    </option>
+                                                  </select>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                              </div>
+                                                <!-- <div class="sb1">
                                                     <tr class="form-wrapper">
                                                         <p class="sh1">FOREX ADVICE DETAILS</p>
-                                                        <!-- <td class="full-input border1" style="width: 206px;">
-    <label for="location">Shipping Bill</label>
-    <select name="sbNo" ngModel placeholder="Location">
-          <option value="">Select SB Number</option>
-          <option *ngFor="let sb of item5" [value]="sb.sbno">
-            {{ sb.sbno }}
-          </option>
-        </select>
-</td> -->
                                                         <td class="full-input border1">
                                                             <label for="iecName">TT Date</label><input [(ngModel)]="res.date" class="smalll-input" type="text" name="date" />
                                                         </td>
@@ -846,45 +882,27 @@
                                                         </td>
 
                                                     </tr>
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </form>
 
-
-                                        <!---     --->
-                                        <form *ngIf="pIpO && !override" class="" [formGroup]="piPoForm" (ngSubmit)="onSubmitPipo()">
-                                            <!----------      "-->
-                                            <div style="
-        width: 80%;
-        display: flex;
-        justify-content: center;
-        margin-left: 2%;
-      " class="field">
-                                                <table style="width: 70%" class="field-table">
-                                                    <tr class="field-heading">
-                                                        <td>PI/PO NUMBER*</td>
-
-                                                        <td>DATE</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <input class="form-control input2" type="text" formControlName="pi_poNo" />
-                                                        </td>
-
-                                                        <td>
-                                                            <input class="form-control input2" type="date" type="date" data-date="" data-date-format="DD MMMM YYYY" value="" formControlName="date" style="width: 7100% 0%" />
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-
+                                        <form class="iframecontroller" *ngIf="pIpO && !override" [formGroup]="piPoForm" (ngSubmit)="onSubmitPipo()">
                                             <div class="sub-table">
-                                                <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="eeeeeee">
                                                             <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                                         </div>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <div class="form12">
+                                                    <div class="mb-3">
+                                                      <label for="exampleInputEmail1" class="form-label">PI/PO NUMBER*</label>
+                                                      <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="creditNoteNumber">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                      <label for="exampleInputPassword1" class="form-label">DATE</label>
+                                                      <input type="date" style="border: 2px solid darkgray;" NgModel class="form-control input2" name="date">
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div style="" class="rrrrrr">
@@ -956,24 +974,7 @@
                             <option value="Direct Import">Direct Import</option>
                           </select>
                                                                         </div>
-                                                                        <!-- <div *ngIf='documentType1 == "import"'
-                        style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
-                        <label style="flex-direction:row; font-size: 20px; color: #303030; margin-right: 50px;">Type</label>
-                        <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row; ">
-                          <span style="color: #323e4a !important; min-width: 150px;">{{payment}}</span>
-                          <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
-                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                          </span>
-                          <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
-                            <a style="min-width:100%;" (click)="clickpay'Advance Payment')">Advance Payment</a>
-                            <a style="min-width:100%;">Letter of Credit</a>
-                            <a style="min-width:100%;">Collection Billt</a>
-                            <a style="min-width:100%;">Direct Importt</a>
 
-                            <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p>
-        </div>
-        </div>
-        </div> -->
                                                                         <div *ngIf='documentType1 =="export"' style="flex-direction:row; margin-right: 20px; border-radius: 5px;">
                                                                             <span style="color: #707683; font-size: 14px;">Type</span> <br>
                                                                             <select name="" formControlName="type" style="outline: none; border: 1px solid #DEDEDE; width: 160px;height: 40px; border-radius: 5px; font-size: 12px;
@@ -1018,26 +1019,19 @@
                                                             </tr>
                                                         </div>
                                                     </div>
-                                                </div>
-
-
-
-
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                  </div>
                                             </div>
                                         </form>
 
                                         <!-- Third Party Input File -->
 
-                                        <form *ngIf="tryPartyAgreement && !override" class="" #values="ngForm" (ngSubmit)="onSubmitThird(values)">
-                                            <div class="row">
-                                                <div class="col-md-7">
+                                        <form class="iframecontroller" *ngIf="tryPartyAgreement && !override" #values="ngForm" (ngSubmit)="onSubmitThird(values)">
                                                     <div class="sub-table2">
                                                       <div class="sb3">
                                                             <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-5">
                                                     <div class="field">
                                                       <div class="form12">
                                                         <div class="mb-3">
@@ -1054,629 +1048,372 @@
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">Submit</button>
                                                       </div>
-                                                        <!-- <table style="width:100%" class="field-table">
-                                                            <tr class="field-heading">
-                                                                <td>Tri Party Number*</td>
-
-                                                                <td>Tri Party Amount</td>
-
-                                                                <td>Currency</td>
-                                                            </tr>
-                                                            <tr style="">
-                                                                <td>
-                                                                    <input ngModel class="form-control input2" type="text" name="triPartyAgreementNumber" />
-                                                                </td>
-
-                                                                <td>
-                                                                    <input ngModel class="form-control input2" name="triPartyAgreementAmount" />
-                                                                </td>
-
-                                                                <td>
-                                                                    <input ngModel class="form-control input2" name="currency" />
-                                                                </td>
-                                                                <td><button type="submit" class="button">Submit</button></td>
-                                                            </tr>
-                                                        </table> -->
                                                     </div>
-                                                </div>
-                                            </div>
                                         </form>
 
                                         <!-- Credit Note Input File -->
 
-                                        <form *ngIf="creditNote && !override" class="" #values="ngForm" (ngSubmit)="onSubmitCredit(values)">
-                                            <div class="row">
-                                                <div class="col-md-7">
-                                                    <div class="sub-table2">
-                                                        <div class="sb3">
-                                                            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-5">
-                                                    <div class="field">
-                                                      <div class="form12">
-                                                        <div class="mb-3">
-                                                          <label for="exampleInputEmail1" class="form-label">Credit Note Number*</label>
-                                                          <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="creditNoteNumber">
-                                                        </div>
-                                                        <div class="mb-3">
-                                                          <label for="exampleInputPassword1" class="form-label">Credit Note Amount</label>
-                                                          <input style="border: 2px solid darkgray;" NgModel class="form-control input2" name="creditNoteAmount">
-                                                        </div>
-                                                        <div class="mb-3">
-                                                          <label for="exampleInputPassword1" class="form-label">Currency</label>
-                                                          <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="currency">
-                                                        </div>
-                                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                                      </div>
-                                                        <!-- <table style="width:100%" class="field-table">
-                                                            <tr class="field-heading">
-
-                                                                <td>Credit Note Number*</td>
-
-                                                                <td>Credit Note Amount</td>
-
-                                                                <td>Currency
-                                                                    <td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <input ngModel class="form-control input2" type="text" name="creditNoteNumber" />
-                                                                </td>
-
-                                                                <td>
-                                                                    <input ngModel class="form-control input2" style="width: 7100% 0%" name="creditNoteAmount" />
-                                                                </td>
-                                                                <td>
-                                                                    <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
-                                                                </td>
-                                                                <td><button type="submit" class="button">Submit</button></td>
-                                                            </tr>
-                                                        </table> -->
-                                                    </div>
+                                        <form class="iframecontroller" *ngIf="creditNote && !override" #values="ngForm" (ngSubmit)="onSubmitCredit(values)">
+                                          <div class="col">
+                                            <div class="sub-table2">
+                                                <div class="sb3">
+                                                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="col-10">
+                                            <div class="field">
+                                              <div class="form12">
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">Credit Note Number*</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="creditNoteNumber">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Credit Note Amount</label>
+                                                  <input style="border: 2px solid darkgray;" NgModel class="form-control input2" name="creditNoteAmount">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Currency</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="currency">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                              </div>
+                                            </div>
+                                        </div>
                                         </form>
 
                                         <!-- swift-copy Input file -->
-                                        <form *ngIf="swiftCopy && !override" class="" #values="ngForm" (ngSubmit)="onSubmitSwift(values)">
-                                            <div class="row">
-                                                <div class="col-md-7">
-                                                    <div class="sub-table2">
-                                                        <div class="sb3">
-                                                            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-5">
-                                                    <div style="
-                                                    width:100%;
-                                                    display: flex;
-                                                    justify-content: center;
-
-                                                  " class="field">
-                                                        <table style="width: 100%" class="field-table">
-                                                            <tr class="field-heading">
-                                                                <td>Swift Copy Number*</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <input ngModel class="form-control input2" type="text" name="swiftcopyNumber" />
-                                                                </td>
-                                                                <td><button type="submit" class="button">Submit</button></td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
+                                        <form class="iframecontroller" *ngIf="swiftCopy && !override" #values="ngForm" (ngSubmit)="onSubmitSwift(values)">
+                                            <div class="sub-table2">
+                                                <div class="sb3">
+                                                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                                 </div>
                                             </div>
-
+                                                <div class="field">
+                                                    <div class="form12">
+                                                        <div class="mb-3">
+                                                          <label for="exampleInputEmail1" class="form-label">Swift Copy Number*</label>
+                                                          <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="swiftcopyNumber">
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                      </div>
+                                                </div>
                                         </form>
                                         <!-- blcopyref Input file -->
-                                        <form *ngIf="blCopyref && !override" class="" #values="ngForm" (ngSubmit)="onSubmitblcopyref(values)">
-                                            <div class="row">
-                                                <div class="col-md-7">
-
+                                        <form class="iframecontroller" *ngIf="blCopyref && !override" #values="ngForm" (ngSubmit)="onSubmitblcopyref(values)">
+                                                <div class="col">
                                                     <div class="sub-table2">
                                                         <div class="sb3">
                                                             <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-5">
-                                                    <div style="
-            width:100%;
-            display: flex;
-            justify-content: center;
-
-          " class="field">
-                                                        <table style="width:100%" class="field-table">
-                                                            <tr class="field-heading">
-                                                                <td>BlCopyRef Number*</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <input ngModel class="form-control input2" type="text" name="blcopyrefNumber" />
-                                                                </td>
-                                                                <td><button type="submit" class="button">Submit</button></td>
-                                                            </tr>
-                                                        </table>
+                                                    <div class="field">
+                                                        <div class="form12">
+                                                            <div class="mb-3">
+                                                              <label for="exampleInputEmail1" class="form-label">BlCopyRef Number*</label>
+                                                              <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="blcopyrefNumber">
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                                          </div>
                                                     </div>
-                                                </div>
-                                            </div>
-
-
-
-
                                         </form>
 
                                         <!-- Airway / BL Copy -->
-                                        <form *ngIf="blCopy && !override" class="" #values="ngForm" (ngSubmit)="onSubmitblCopy(values)">
-
-                                            <div style="
-          width: 100%;
-          display: flex;
-          justify-content: center;
-
-        " class="field">
-                                                <table style="width:100%" class="field-table">
-                                                    <tr class="field-heading">
-                                                        <td>Airway / BlCopy Number*</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" type="text" name="airwayBlCopyNumber" />
-                                                        </td>
-                                                        <td style="width: 206px" *ngFor="let pipo of pipolist; let i=index">
-                                                            <!-- <label for="location">Shipping Bill</label> -->
-                                                            <div>
-                                                                <div *ngIf="matchSelectedPipo(pipo,this.pipoArr)">
-                                                                    <select class="form-control input2" name="sbNo" ngModel placeholder="Location">
-                    <option value="">Select SB Number for PI-{{pipo.pi_poNo}}</option>
-                    <option *ngFor="let sb of pipoDataService.getShippingBills(pipo._id); let i=index" [value]="sb._id">
-                      {{ sb.sbno }}
-                    </option>
-                  </select>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-
+                                        <form class="iframecontroller" *ngIf="blCopy && !override" #values="ngForm" (ngSubmit)="onSubmitblCopy(values)">
                                             <div class="sub-table2">
                                                 <div class="sb3">
                                                     <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                                 </div>
                                             </div>
-
+                                            <div class="field">
+                                                <div class="form12">
+                                                    <div class="mb-3">
+                                                      <label for="exampleInputEmail1" class="form-label">Airway / BlCopy Number*</label>
+                                                      <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="airwayBlCopyNumber">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="exampleInputEmail1" class="form-label"></label>
+                                                        <div *ngIf="matchSelectedPipo(pipo,this.pipoArr)">
+                                                            <select class="form-control input2" name="sbNo" ngModel placeholder="Location">
+                                                            <option value="">Select SB Number for PI-{{pipo.pi_poNo}}</option>
+                                                            <option *ngFor="let sb of pipoDataService.getShippingBills(pipo._id); let i=index" [value]="sb._id">
+                                                            {{ sb.sbno }}
+                                                            </option>
+                                                        </select>
+                                                        </div>
+                                                      </div>
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                  </div>
+                                            </div>
                                         </form>
 
                                         <!-- Commercial Invoice -->
-                                        <form *ngIf="commercial && !override" class="" #values="ngForm" (ngSubmit)="onSubmitCommercial(values)">
-                                            <div class="row">
-                                                <div class="col-md-7 col-12">
-                                                    <div style=" width:100%; display: flex;        justify-content: center;  " class="field">
-                                                        <table style="width:100%" class="field-table">
-                                                            <tr class="field-heading">
-                                                                <td>Commercial Invoice Number*</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <input ngModel class="form-control input2" type="text" name="commercialNumber" />
-                                                                </td>
-                                                                <td style="width: 206px" *ngFor="let pipo of pipolist; let i=index">
-                                                                    <!-- <label for="location">Shipping Bill</label> -->
-                                                                    <div>
-                                                                        <div *ngIf="matchSelectedPipo(pipo,this.pipoArr)">
-                                                                            <select class="form-control input2" name="sbNo" ngModel placeholder="Location">
-                        <option value="">Select SB Number for PI-{{pipo.pi_poNo}}</option>
-                        <option *ngFor="let sb of pipoDataService.getShippingBills(pipo._id); let i=index" [value]="sb._id">
-                          {{ sb.sbno }}
-                        </option>
-                      </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td><button type="submit" class="button">Submit</button></td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-5 col-12">
-                                                    <div class="sub-table2">
-                                                        <div class="sb3">
-                                                            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        <form class="iframecontroller" *ngIf="commercial && !override" #values="ngForm" (ngSubmit)="onSubmitCommercial(values)">
+                                          <div class="sub-table2">
+                                            <div class="sb3">
+                                                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                             </div>
-
-
-
-
-
+                                        </div>
+                                            <div class="field">
+                                              <div class="form12">
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">Commercial Invoice Number*</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="commercialNumber">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="exampleInputEmail1" class="form-label"></label>
+                                                    <div *ngIf="matchSelectedPipo(pipo,this.pipoArr)">
+                                                        <select class="form-control input2" name="sbNo" ngModel placeholder="Location">
+                                                        <option value="">Select SB Number for PI-{{pipo.pi_poNo}}</option>
+                                                        <option *ngFor="let sb of pipoDataService.getShippingBills(pipo._id); let i=index" [value]="sb._id">
+                                                        {{ sb.sbno }}
+                                                        </option>
+                                                    </select>
+                                                    </div>
+                                                  </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                              </div>
+                                            </div>
                                         </form>
 
                                         <!-- Bill Of Exchange -->
-                                        <form *ngIf="billOfExchange && !override" class="" #values="ngForm" (ngSubmit)="onSubmitBillExchange(values)">
-
-                                            <div style="
-width: 82%;
-display: flex;
-justify-content: center;
-margin-left: 3%;
-" class="field">
-                                                <table style="width: 82%" class="field-table">
-                                                    <tr class="field-heading">
-                                                        <td>Bill Of Exchange Number*</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" type="text" name="billExchangeNumber" />
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
+                                        <form class="iframecontroller" *ngIf="billOfExchange && !override" #values="ngForm" (ngSubmit)="onSubmitBillExchange(values)">
+                                          <div class="sub-table2">
+                                            <div class="sb3">
+                                                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                             </div>
-
-                                            <div class="sub-table2">
-                                                <div class="sb3">
-                                                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+                                        </div>
+                                            <div class="field">
+                                              <div class="form12">
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">Bill Of Exchange Number*</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="billExchangeNumber">
                                                 </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                              </div>
                                             </div>
-
                                         </form>
 
                                         <!-- destruction certificate -->
-                                        <form *ngIf="destruction && !override" class="" #values="ngForm" (ngSubmit)="onSubmitDestruction(values)">
-
-                                            <div style="
-width: 82%;
-display: flex;
-justify-content: center;
-margin-left: 3%;
-" class="field">
-                                                <table style="width: 82%" class="field-table">
-                                                    <tr class="field-heading">
-                                                        <td>Destruction Certificate Number*</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" type="text" name="destructionNumber" />
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
+                                        <form class="iframecontroller" *ngIf="destruction && !override" #values="ngForm" (ngSubmit)="onSubmitDestruction(values)">
+                                          <div class="sub-table2">
+                                            <div class="sb3">
+                                                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                             </div>
-
-                                            <div class="sub-table2">
-                                                <div class="sb3">
-                                                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+                                        </div>
+                                            <div class="field">
+                                              <div class="form12">
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">Destruction Certificate Number*</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="destructionNumber">
                                                 </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                              </div>
                                             </div>
-
                                         </form>
 
                                         <!-- Other Documents -->
-                                        <form *ngIf="packingList && !override" class="" #values="ngForm" (ngSubmit)="onSubmitPackingList(values)">
-
-                                            <div style="
-width: 82%;
-display: flex;
-justify-content: center;
-margin-left: 3%;
-" class="field">
-                                                <table style="width: 82%" class="field-table">
-                                                    <tr class="field-heading">
-                                                        <td>Packing List Number*</td>
-                                                        <td>Packing List Amount</td>
-                                                        <td>Currency
-                                                            <td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" type="text" name="packingListNumber" />
-                                                        </td>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="packingListAmount" />
-                                                        </td>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
-                                                        </td>
-                                                        <td style="width: 206px" *ngFor="let pipo of pipolist; let i=index">
-                                                            <!-- <label for="location">Shipping Bill</label> -->
-                                                            <div>
-                                                                <div *ngIf="matchSelectedPipo(pipo,this.pipoArr)">
-                                                                    <select class="form-control input2" name="sbNo" ngModel placeholder="Location">
-                    <option value="">Select SB Number for PI-{{pipo.pi_poNo}}</option>
-                    <option *ngFor="let sb of pipoDataService.getShippingBills(pipo._id); let i=index" [value]="sb._id">
-                      {{ sb.sbno }}
-                    </option>
-                  </select>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
+                                        <form class="iframecontroller" *ngIf="packingList && !override" #values="ngForm" (ngSubmit)="onSubmitPackingList(values)">
+                                          <div class="sub-table2">
+                                            <div class="sb3">
+                                                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                             </div>
-
-                                            <div class="sub-table2">
-                                                <div class="sb3">
-                                                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+                                        </div>
+                                          <div class="field">
+                                              <div class="form12">
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">Packing List Number*</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="packingListNumber">
                                                 </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">Packing List Amount</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="packingListAmount">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">Currency</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="currency">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label"></label>
+                                                  <div>
+                                                    <div *ngIf="matchSelectedPipo(pipo,this.pipoArr)">
+                                                        <select class="form-control input2" name="sbNo" ngModel placeholder="Location">
+                                                        <option value="">Select SB Number for PI-{{pipo.pi_poNo}}</option>
+                                                        <option *ngFor="let sb of pipoDataService.getShippingBills(pipo._id); let i=index" [value]="sb._id">
+                                                          {{ sb.sbno }}
+                                                        </option>
+                                                      </select>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                              </div>
                                             </div>
-
                                         </form>
 
                                         <!-- EBRC Input file -->
-                                        <form *ngIf="EBRC && !override" class="" #values="ngForm" (ngSubmit)="onSubmitEbrc(values)">
-
-                                            <div style="
-            width: 82%;
-            display: flex;
-            justify-content: center;
-            margin-left: 3%;
-          " class="field">
-                                                <table style="width: 82%" class="field-table">
-                                                    <tr class="field-heading">
-                                                        <td>EBRC Number*</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" type="text" name="swiftcopyNumber" />
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
+                                        <form class="iframecontroller" *ngIf="EBRC && !override" #values="ngForm" (ngSubmit)="onSubmitEbrc(values)">
+                                          <div class="sub-table2">
+                                            <div class="sb3">
+                                                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                             </div>
-
-                                            <div class="sub-table2">
-                                                <div class="sb3">
-                                                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+                                        </div>
+                                            <div class="field">
+                                              <div class="form12">
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">EBRC Number*</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="swiftcopyNumber">
                                                 </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                              </div>
                                             </div>
-
                                         </form>
 
                                         <!-- Debit Note Input File -->
 
-                                        <form *ngIf="debitNote && !override" class="" #values="ngForm" (ngSubmit)="onSubmitDebit(values)">
-
-                                            <div style="
-  width: 82%;
-  display: flex;
-  justify-content: center;
-  margin-left: 3%;
-" class="field">
-                                                <table style="width: 82%" class="field-table">
-                                                    <tr class="field-heading">
-
-                                                        <td>Debit Note Number*</td>
-
-                                                        <td>Debit Note Amount</td>
-
-                                                        <td>Currency
-                                                            <td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" type="text" name="debitNoteNumber" />
-                                                        </td>
-
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="totalDebitAmount" />
-                                                        </td>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
+                                        <form class="iframecontroller" *ngIf="debitNote && !override" #values="ngForm" (ngSubmit)="onSubmitDebit(values)">
+                                          <div class="sub-table2">
+                                            <div class="sb3">
+                                                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                             </div>
-
-                                            <div class="sub-table2">
-                                                <div class="sb3">
-                                                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
-                                                </div>
+                                        </div>
+                                          <div class="field">
+                                            <div class="form12">
+                                              <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">Debit Note Number*</label>
+                                                <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="debitNoteNumber">
+                                              </div>
+                                              <div class="mb-3">
+                                                <label for="exampleInputPassword1" class="form-label">Debit Note Amount</label>
+                                                <input style="border: 2px solid darkgray;" NgModel class="form-control input2" name="totalDebitAmount">
+                                              </div>
+                                              <div class="mb-3">
+                                                <label for="exampleInputPassword1" class="form-label">Currency</label>
+                                                <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="currency">
+                                              </div>
+                                              <button type="submit" class="btn btn-primary">Submit</button>
                                             </div>
-
+                                          </div>
                                         </form>
 
                                         <!-- Insurance Document Input File -->
 
-                                        <form *ngIf="insuranceCopy && !override" class="" #values="ngForm" (ngSubmit)="onSubmitInsurance(values)">
-
-                                            <div style="
-width: 82%;
-display: flex;
-justify-content: center;
-margin-left: 3%;
-" class="field">
-                                                <table style="width:82%" class="field-table">
-                                                    <tr class="field-heading">
-
-                                                        <td>Insurance Number*</td>
-
-                                                        <td>Insurance Amount</td>
-
-                                                        <td>Currency</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" type="text" name="insuranceNumber" />
-                                                        </td>
-
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="insuranceAmount" />
-                                                        </td>
-
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
+                                        <form class="iframecontroller" *ngIf="insuranceCopy && !override" #values="ngForm" (ngSubmit)="onSubmitInsurance(values)">
+                                          <div class="sub-table2">
+                                            <div class="sb3">
+                                                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                             </div>
-
-                                            <div class="sub-table2">
-                                                <div class="sb3">
-                                                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+                                        </div>
+                                            <div class="field">
+                                              <div class="form12">
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">Insurance Number*</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="insuranceNumber">
                                                 </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Insurance Amount</label>
+                                                  <input style="border: 2px solid darkgray;" NgModel class="form-control input2" name="insuranceAmount">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Currency</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="currency">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                              </div>
                                             </div>
-
                                         </form>
 
                                         <!-- Letter of Credit LC Input File -->
 
-                                        <form *ngIf="lcCopy && !override" class="" #values="ngForm" (ngSubmit)="onSubmitLetterLC(values)">
-
-                                            <div style="
-width: 82%;
-display: flex;
-justify-content: center;
-margin-left: 3%;
-" class="field">
-                                                <table style="width: 82%" class="field-table">
-                                                    <tr class="field-heading">
-
-                                                        <td>Letter Of Credit Number*</td>
-
-                                                        <td>Letter Of Credit Amount</td>
-
-                                                        <td>Currency</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" type="text" name="letterOfCreditNumber" />
-                                                        </td>
-
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="letterOfCreditAmount" />
-                                                        </td>
-
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
+                                        <form class="iframecontroller" *ngIf="lcCopy && !override" #values="ngForm" (ngSubmit)="onSubmitLetterLC(values)">
+                                          <div class="sub-table2">
+                                            <div class="sb3">
+                                                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                             </div>
-
-                                            <div class="sub-table2">
-                                                <div class="sb3">
-                                                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+                                        </div>
+                                            <div class="field">
+                                              <div class="form12">
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">Letter Of Credit Number*</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="letterOfCreditNumber">
                                                 </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Letter Of Credit Amount</label>
+                                                  <input style="border: 2px solid darkgray;" NgModel class="form-control input2" name="letterOfCreditAmount">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Currency</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="currency">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                              </div>
                                             </div>
-
                                         </form>
 
                                         <!-- Master Service Input File -->
 
-                                        <form *ngIf="agreement && !override" class="" #values="ngForm" (ngSubmit)="onSubmitMasterService(values)">
-
-                                            <div style="
-width: 82%;
-display: flex;
-justify-content: center;
-margin-left: 3%;
-" class="field">
-                                                <table style="width: 82%" class="field-table">
-                                                    <tr class="field-heading">
-
-                                                        <td>Master Service Number*</td>
-
-                                                        <td>Master Service Amount</td>
-
-                                                        <td>Currency</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" type="text" name="masterServiceNumber" />
-                                                        </td>
-
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="masterServiceAmount" />
-                                                        </td>
-
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
+                                        <form class="iframecontroller" *ngIf="agreement && !override" #values="ngForm" (ngSubmit)="onSubmitMasterService(values)">
+                                          <div class="sub-table2">
+                                            <div class="sb3">
+                                                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                             </div>
-
-                                            <div class="sub-table2">
-                                                <div class="sb3">
-                                                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+                                        </div>
+                                            <div class="field">
+                                              <div class="form12">
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">Master Service Number*</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="masterServiceNumber">
                                                 </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Master Service Amount</label>
+                                                  <input style="border: 2px solid darkgray;" NgModel class="form-control input2" name="masterServiceAmount">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Currency</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="currency">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                              </div>
                                             </div>
-
                                         </form>
 
                                         <!-- Letter of Opinion Report Input File -->
 
-                                        <form *ngIf="opinionReport && !override" class="" #values="ngForm" (ngSubmit)="onSubmitOpinionReport(values)">
-
-                                            <div style="
-width: 82%;
-display: flex;
-justify-content: center;
-margin-left: 3%;
-" class="field">
-                                                <table style="width: 82%" class="field-table">
-                                                    <tr class="field-heading">
-
-                                                        <td>Opinion Report Number*</td>
-
-                                                        <td>Opinion Report Amount</td>
-
-                                                        <td>Currency</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <input ngModel class="form-control input2" type="text" name="opinionReportNumber" />
-                                                        </td>
-
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="opinionReportAmount" />
-                                                        </td>
-
-                                                        <td>
-                                                            <input ngModel class="form-control input2" style="width: 7100% 0%" name="currency" />
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
+                                        <form class="iframecontroller" *ngIf="opinionReport && !override" #values="ngForm" (ngSubmit)="onSubmitOpinionReport(values)">
+                                          <div class="sub-table2">
+                                            <div class="sb3">
+                                                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                             </div>
-
-                                            <div class="sub-table2">
-                                                <div class="sb3">
-                                                    <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+                                        </div>
+                                          <div class="field">
+                                              <div class="form12">
+                                                <div class="mb-3">
+                                                  <label for="exampleInputEmail1" class="form-label">Opinion Report Number*</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="opinionReportNumber">
                                                 </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Opinion Report Amount</label>
+                                                  <input style="border: 2px solid darkgray;" NgModel class="form-control input2" name="opinionReportAmount">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="exampleInputPassword1" class="form-label">Currency</label>
+                                                  <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="currency">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                              </div>
                                             </div>
-
                                         </form>
 
 
                                         <ng-template #content let-modal>
-
                                             <div class="modal-body">
                                                 <div class="container-fluid">
                                                     <div class="row no-gutter">
-                                                        <!-- The image half -->
-                                                        <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
-
 
                                                         <!-- The content half -->
                                                         <div class="col-md-7 bg-dark">
                                                             <div class="login d-flex py-5" style="padding: 0px !important;">
-                                                                <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                <span aria-hidden="true">&times;</span>
-              </button> -->
                                                                 <!-- Demo content-->
                                                                 <div class="container">
                                                                     <div class="row">
