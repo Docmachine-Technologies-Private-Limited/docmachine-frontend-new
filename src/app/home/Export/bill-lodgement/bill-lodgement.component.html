@@ -2,32 +2,14 @@
     <div class="content-wrap">
         <div class="container-fluid">
             <div class="content_white_background">
-                <main id="content" class="content table-padding" role="main">
+                <main id="content" class="content" role="main">
 
                     <div *ngIf="!showInvoice">
                         <div style="display: flex; align-items: center">
                             <h3 class="heading">Bill Lodgement</h3>
                         </div>
-                        <!--
-                        <div class="dropdown">
-                            Date:
-                            <select name="subject" id="subject" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100;margin-right: 5px;font-size: 14px;">
-                  <option value="" selected="selected">Today</option>
-              </select> Type:
-                            <select name="topic" id="topic" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100;margin-right: 5px;font-size: 14px;">
-                  <option value="" selected="selected">All</option>
-              </select>
-                        </div> -->
-                        <!-- <div style="padding-top: 0.7%">
-                            <button class="upload-button" [routerLink]="['/home/upload']">
-                  Upload New
-              </button>
-                        </div> -->
                     </div>
-
-
                     <div class="analytics">
-
                         <div>
                             <div *ngIf='!newDone' style="margin-top:15px;">
                                 <img src="../../../assets/back.png" (click)="goBack()" style="width: 20px; height: 20px;"><span style="margin-left: 10px;">Back</span>
