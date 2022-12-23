@@ -62,19 +62,10 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       (res: any) => {
         console.log(res), (this.item = res.data);
         console.log('king', this.item);
-        // console.log(res), (this.item1 = res.data);
-        // console.log('shshsh', this.item1[0].amount);
         for (let value of this.item) {
           if (value['file'] == 'export') {
             console.log('avvvvvvvvvv', value);
-            // console.log()
             this.item1.push(value);
-
-            // for(let value1 of this.item2){
-            //   const newVal = { ...this.item2 };
-            //   newVal['pipo1'] = value1
-            // this.merging();
-            //   this.item1.push(newVal)
           }
         }
         this.item1.forEach((element, i) => {
@@ -94,22 +85,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       },
       (err) => console.log(err)
     );
-
-    // this.documentService.getIrAdvice(user).subscribe(
-    //   (res: any) => {
-    //     console.log('Data fetched successfully', res);
-    //     this.item = res.data;
-    //     for (let value of this.item) {
-    //       for(let value1 of value.pipo){
-    //         const newVal = { ...value };
-    //             newVal['pipo1'] = value1
-    //             this.item1.push(newVal)
-    //           }
-    //     }
-    //   },
-    //   (err) => console.log(err)
-    //   );
-
     this.userService.getTeam().subscribe(
       (data) => {
         console.log('llllllllllllllllllllllllllllllll');
@@ -208,7 +183,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   }
 
   merging() {
-
     let filterForexData = [];
     if (this.item5 && this.item5.length) {
       for (let irData of this.item1) {
@@ -262,96 +236,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     this.item6 = filterForexData
     console.log("Full data", this.item6)
   }
-
-  // mergingSb() {
-  //   let pipoindex = 0;
-  //   let completedpipo = [];
-  //   let filterForexData = [];
-  //   if (this.item5 && this.item5.length) {
-  //     //   // let completedpipo1 = [];
-  //     console.log('Forex Data', this.item1);
-  //     for (let irData of this.item1) {
-  //       // item1 have irdata details
-  //       console.log('irData length', irData.sbNo.length);
-  //       let currentpipo = this.item1[pipoindex];
-  //       console.log('Line no. 802', currentpipo);
-  //       // this.item1[pipoindex].shippingdata = [];
-
-  //       for (let shippingdata of this.item5) {
-  //         //       // item20 have shipping bill details
-  //         console.log('shipping bill data', this.item5);
-  //         for (let i = 0; i <= irData.sbNo.length; i++) {
-  //           if (irData.sbNo[i] == shippingdata.sbno) {
-  //             const newVal = { ...irData };
-  //             console.log('Line no. 807', newVal);
-  //             let sbBalance = shippingdata.fobValue;
-  //             let irAmount = parseFloat(irData.amount);
-  //             let availableBalance = irAmount - sbBalance;
-
-  //             if (availableBalance <= 0) {
-  //               newVal['BalanceAvail'] = 0;
-  //             } else {
-  //               newVal['BalanceAvail'] = availableBalance.toFixed(2);
-  //             }
-
-  //             //         console.log('Line no 814', newVal);
-  //             filterForexData.push(newVal);
-  //             console.log('Line no. 816', filterForexData);
-  //             console.log('Line no. 816', this.item1[pipoindex]);
-  //             if (completedpipo.indexOf(pipoindex) == -1) {
-  //               completedpipo.push(pipoindex);
-  //             }
-  //             //         console.log('line no. 773 completedpipo',completedpipo)
-  //             //         console.log('cheching shipping data', currentpipo);
-  //           } else {
-  //             for (let sb of filterForexData) {
-  //               if (sb.sbno !== shippingdata.sbno) {
-  //                 console.log('itemAvailable');
-  //                 // itemavailable = true;
-  //                 const newVal = { ...irData };
-  //                 let availableBal = parseFloat(
-  //                   irData.amount
-  //                 );
-  //                 newVal['BalanceAvail'] = availableBal.toFixed(2);
-  //                 filterForexData.push(newVal);
-  //                 console.log('My Data', newVal);
-  //               }
-  //             }
-  //           }
-  //           pipoindex = pipoindex + 1;
-  //         }
-  //       }
-
-  //       //   console.log('filtershiping data', filtershippingdata);
-  //       //   console.log('completed pipo data', completedpipo);
-
-  //       for (let i = completedpipo.length - 1; i >= 0; i--) {
-  //         console.log('233', completedpipo);
-  //         this.item1.splice(completedpipo[i], 1);
-  //       }
-  //       // for (let pipo of filterForexData) {
-  //       //   console.log('data of pipo', pipo);
-  //       //   this.item6.push(pipo);
-  //       // }
-  //       this.item6 = filterForexData;
-  //       console.log(
-  //         '****************** line no. 241 with sb details ',
-  //         this.item6
-  //       );
-  //     }
-  //   } else {
-  //     for (let ir of this.item1) {
-  //       const newVal = { ...ir };
-  //       let availableBal = parseFloat(ir.amount);
-  //       newVal['BalanceAvail'] = availableBal.toFixed(2);
-  //       filterForexData.push(newVal);
-  //     }
-  //     for (let sb of filterForexData) {
-  //       console.log('data of pipo', sb);
-  //       this.item1.push(sb);
-  //     }
-  //   }
-  // }
 
   openIradvice(content) {
     this.modalService

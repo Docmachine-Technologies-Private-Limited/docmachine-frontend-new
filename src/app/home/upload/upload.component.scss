@@ -1814,3 +1814,10 @@ span input {
 .form label {
   color: black;
 }
+
+.iframecontroller{
+  display: grid;
+    width: 100%;
+    grid-template-columns: 67% 30%;
+    gap: 20px;
+}
