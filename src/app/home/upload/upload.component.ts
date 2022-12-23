@@ -49,6 +49,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from '../../app.config';
 import {PipoDataService} from "../../service/homeservices/pipo.service";
+import { WindowInformationService } from 'src/app/service/window-information.service';
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
@@ -224,6 +225,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     public appconfig: AppConfig,
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
+    public wininfo: WindowInformationService
   ) {
 
     this.userData = this.userService.userData?.result
@@ -358,6 +360,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(230,'.content_top_common')
     console.log('zxysomthing');
 
     this.jsondata1 = data1['default'];

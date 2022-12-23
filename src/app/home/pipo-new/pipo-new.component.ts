@@ -7,6 +7,7 @@ import { UserService } from '../../service/user.service';
 import * as xlsx from 'xlsx';
 import { ConfirmDialogModel, ConfirmDialogBoxComponent } from '../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 /**
  * @title Table with pagination
@@ -40,12 +41,13 @@ export class PipoNewComponent implements OnInit {
   filtervisible: boolean = false
   startDate: any = '';
   endDate: any = '';
-  constructor(public documentService: DocumentService, private userService: UserService, public dialog: MatDialog) {
+  constructor(public documentService: DocumentService, private userService: UserService, public dialog: MatDialog,
+    public wininfo: WindowInformationService) {
     this.getDropDownItems()
 
   }
   ngOnInit() {
-
+    this.wininfo.set_controller_of_width(270,'.content_top_common')
     this.getPipoData()
 
   }

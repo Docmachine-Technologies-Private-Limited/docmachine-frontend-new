@@ -187,3 +187,23 @@
   background-color: #c5e8ff;
   color: #49a2d7;
 }
+.analytics .support{
+  overflow: auto !important;
+}
+body,html{
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+.content-wrap {
+  height: auto !important;
+}
+.scroll-bar-main{
+  position: absolute;
+  width: 84vw;
+  left: 260px;
+  top: 80px;
+  height: calc(100vh - 80px) !important;
+  overflow: auto;
+  padding: 10px;
+}
+

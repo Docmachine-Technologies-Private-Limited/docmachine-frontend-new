@@ -189,13 +189,11 @@ select:focus {
 }
 
 .field {
-    margin-top: 21px !important;
-    background-color: #174d72;
-    height: 116px !important;
-    // width: 944px !important;
+    margin-top: 21px!important;
+    background-color: transparent;
     padding: 21px;
-    // margin-left: 35px !important;
     border-radius: 10px;
+    box-shadow: 0px 0px 2px 2px lightgrey;
 }
 
 .field-heading {
@@ -1632,7 +1630,7 @@ span input {
 .content_top_common .content-wrap {
     left: 0px !important;
     width: 100%;
-    padding-left: 250px;
+    padding-left: 0;
     flex: 1 0 auto;
     padding-right: 0px;
 }
@@ -1808,4 +1806,11 @@ span input {
     font-weight: 400;
     padding: 0 0 5px;
     color: #999;
+}
+
+.scroll-bar-main{
+ left: 230px;
+}
+.form label {
+  color: black;
 }

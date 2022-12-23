@@ -936,7 +936,7 @@ span input {
 .content_top_common .content-wrap {
     left: 0!important;
     width: 100%;
-    padding-left: 250px;
+    padding-left: 0 !important;
     flex: 1 0 auto;
     padding-right: 0px;
 }
@@ -1170,4 +1170,7 @@ span input {
   margin-top: 0;
   margin-left: 0;
   border-radius: 10px;
+}
+.scroll-bar-main{
+  left: 230px;
 }

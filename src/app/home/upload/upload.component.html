@@ -1,24 +1,9 @@
 <script async src="//jsfiddle.net/g7mvaosL/embed/"></script>
-<div class="content_top_common">
+<div class="content_top_common scroll-bar-main">
     <div class="content-wrap">
         <div class="container-fluid">
             <div class="content_white_background">
                 <main id="content" class="table-padding" role="main">
-                    <!-- <div class="container1" id="myDiv">
-  <div class="tip">
-    <p >Edit Proforma invoice/ Purchase Order</p>
-  </div>
-  <div class="tipright">
-    <div class="tip1">
-    <img src="../../../assets/idea.png" style="height: 30px;width: 30px; margin-left: 1150px; margin-top: -5px;">
-    <p style="color:#49A2D7;font-weight: 400;font-size: 13px;font-family: Europa; margin-left: 3px;">Page Tips <span>
-      <img src="../../../assets/Rectangle-7.png" style="height: 20px; width: 1px; color: #EAEDF3;"></span></p>
-    <img src="../../../assets/cross.png" style="height: 20px; width: 20px; margin-left: 5px;" class="close" onclick="document.getElementById('myDiv').style.display='none'" alt="">
-    </div>
-  </div>
- </div> -->
-
-
                     <h3 class="heading" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
                     <h3 class="heading" *ngIf='docu == "boe"'>Upload Bill Of Entry</h3>
                     <h3 class="heading" *ngIf='docu == "sb"'>Upload Shipping Bill</h3>
@@ -1047,29 +1032,29 @@
                                             <div class="row">
                                                 <div class="col-md-7">
                                                     <div class="sub-table2">
-                                                        <!-- <div style="padding: 5% 0" class="sb1">
-                          Select PI/PO number to link
-                          <div class="form-check" *ngFor="let item of item3; let i = index;">
-                              <label class="form-check-label">
-                    <input class="form-check-input" type="checkbox" (change)="changeCheckbox(item.pi_poNo)">
-                    {{item.pi_poNo}}
-                  </label>
-                          </div> <br>
-                      </div> -->
-                                                        <div class="sb3">
+                                                      <div class="sb3">
                                                             <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                                 <div class="col-md-5">
-                                                    <div style="
-
-                                                    display: flex;
-                                                    justify-content: center;
-
-                                                  " class="field">
-                                                        <table style="width:100%" class="field-table">
+                                                    <div class="field">
+                                                      <div class="form12">
+                                                        <div class="mb-3">
+                                                          <label for="exampleInputEmail1" class="form-label">Tri Party Number*</label>
+                                                          <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="creditNoteNumber">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                          <label for="exampleInputPassword1" class="form-label">Tri Party Amount</label>
+                                                          <input style="border: 2px solid darkgray;" NgModel class="form-control input2" name="creditNoteAmount">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                          <label for="exampleInputPassword1" class="form-label">Currency</label>
+                                                          <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="currency">
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                      </div>
+                                                        <!-- <table style="width:100%" class="field-table">
                                                             <tr class="field-heading">
                                                                 <td>Tri Party Number*</td>
 
@@ -1091,14 +1076,10 @@
                                                                 </td>
                                                                 <td><button type="submit" class="button">Submit</button></td>
                                                             </tr>
-                                                        </table>
+                                                        </table> -->
                                                     </div>
                                                 </div>
                                             </div>
-
-
-
-
                                         </form>
 
                                         <!-- Credit Note Input File -->
@@ -1113,13 +1094,23 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-5">
-                                                    <div style="
-            width: 100%;
-            display: flex;
-            justify-content: center;
-
-          " class="field">
-                                                        <table style="width:100%" class="field-table">
+                                                    <div class="field">
+                                                      <div class="form12">
+                                                        <div class="mb-3">
+                                                          <label for="exampleInputEmail1" class="form-label">Credit Note Number*</label>
+                                                          <input style="border: 2px solid darkgray;" ngModel class="form-control input2" type="text" name="creditNoteNumber">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                          <label for="exampleInputPassword1" class="form-label">Credit Note Amount</label>
+                                                          <input style="border: 2px solid darkgray;" NgModel class="form-control input2" name="creditNoteAmount">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                          <label for="exampleInputPassword1" class="form-label">Currency</label>
+                                                          <input style="border: 2px solid darkgray;" ngModel class="form-control input2" name="currency">
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                      </div>
+                                                        <!-- <table style="width:100%" class="field-table">
                                                             <tr class="field-heading">
 
                                                                 <td>Credit Note Number*</td>
@@ -1142,15 +1133,10 @@
                                                                 </td>
                                                                 <td><button type="submit" class="button">Submit</button></td>
                                                             </tr>
-                                                        </table>
+                                                        </table> -->
                                                     </div>
                                                 </div>
                                             </div>
-
-
-
-
-
                                         </form>
 
                                         <!-- swift-copy Input file -->
@@ -1184,10 +1170,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
-
-
 
                                         </form>
                                         <!-- blcopyref Input file -->

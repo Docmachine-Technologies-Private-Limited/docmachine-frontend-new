@@ -9,6 +9,7 @@ import $ from 'jquery';
 import { DocumentService } from '../../../service/document.service';
 import { UserService } from '../../../service/user.service';
 import { ShippingbillDataService } from '../../../service/homeservices/shippingbill.service';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-sub-bill-lodgement',
@@ -48,11 +49,12 @@ export class SubBillLodgementComponent implements OnInit {
 
   constructor(public documentService: DocumentService,
     private userService: UserService, public shippingBillService: ShippingbillDataService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+     public wininfo: WindowInformationService) {
     this.getDropDownItems()
-    this.Controller_of_width(280,'#pagecontent')
   }
   ngOnInit() {
+    this.wininfo.set_controller_of_width(250,'.content_top_common')
     this.shippingBillService.getShippingBillList().then((res: any) => {
       this.shippingBillService.shippingbills$.subscribe((data: any) => {
        console.log(data,'ressdsdsdsdv sdfsfsdfsdfd')
