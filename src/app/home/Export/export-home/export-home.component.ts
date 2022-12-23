@@ -12,6 +12,7 @@ import { formatDate } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { saveAs as importedSaveAs } from 'file-saver';
 import { MatPaginator } from "@angular/material/paginator";
+import { WindowInformationService } from "src/app/service/window-information.service";
 
 @Component({
   selector: 'app-export-home',
@@ -190,7 +191,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private userService: UserService,
     private modalService: NgbModal,
-    private confirmDialogService: ConfirmDialogService
+    private confirmDialogService: ConfirmDialogService,
+    public wininfo: WindowInformationService
   ) {
     console.log("hello")
     this.jstoday = formatDate(this.today, 'dd-MM-yyyy', 'en-US', '+0530');
@@ -234,6 +236,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   OLD_dataSource:any=[];
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(250,'.content_top_common')
     this.redirectid = this.route.snapshot.paramMap.get('pipo')
     this.redirectindex = this.route.snapshot.paramMap.get('index')
     this.redirectpage = this.route.snapshot.paramMap.get('page')

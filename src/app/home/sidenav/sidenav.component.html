@@ -2,11 +2,7 @@
     <nav id="sidebar" class="sidebar" role="navigation" style="overflow: auto; ">
         <!-- need this .js class to initiate slimscroll -->
         <div class="js-sidebar-content">
-            <header class="logo d-none d-md-block">
-                <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">
-                    <img class="mlogo" src="./assets/new-img/LogoFinal.png" />
-                </a>
-            </header>
+
             <!-- seems like lots of recent admin template have this feature of user info in the sidebar.
                  looks good, so adding it and enhancing with notifications -->
 
@@ -78,11 +74,11 @@
                 </li>
                 <li class="manage-li" *ngIf="this.documentService.EXPORT_IMPORT['import']==true">
                     <div class="main11">
-                        <div style="height: 30px; padding-top: 5px; font-size: 10px;">
-                            <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
+                        <div class="border-2px">
+                            <span style="margin-left: 10px;display: inline;  line-height: 30px;">Documents </span>
                         </div>
-                        <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
-                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: -14px;" (click)="newTask();addActivedLinks($event,'hoverClass')" [ngClass]="status ? 'b-color' : 'nothing'">
+                        <!-- <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;"> -->
+                        <div class="hoverClass" style="cursor: pointer; height: 30px; margin-top: 5px;" (click)="newTask();addActivedLinks($event,'hoverClass')" [ngClass]="status ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO
           </span>
 
@@ -119,13 +115,11 @@
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">Opinion Reports</span>
                         </div>
 
-                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;">
-                            <span style="margin-left: 35px; font-size: 10px; line-height: 30px; color: #9ba4b0">Transactions</span>
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" class="border-2px">
+                            <span style="margin-left: 10px; line-height: 30px; color: #9ba4b0">Transactions</span>
 
                         </div>
-                        <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
-
-                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-12px;" [routerLink]="['/home/advance-outward-remittance']">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px;" [routerLink]="['/home/advance-outward-remittance']">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">Advance Outward Remittance </span>
                         </div>
 
@@ -169,16 +163,15 @@
                 </li>
                 <li class="manage-li" *ngIf="this.documentService.EXPORT_IMPORT['export']==true">
                     <div class="main11">
-                        <div style="height: 30px; padding-top: 5px; font-size: 10px;">
-                            <span style="margin-left: 50px; font-size: 10px; color: #9ba4b0">Documents </span>
+                        <div class="border-2px">
+                            <span style="margin-left: 10px;display: inline;  line-height: 30px;">Documents </span>
                         </div>
-                        <hr style="margin-left:50px; background-color: #9ba4b0; margin-top:-2px;">
-
-                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;"   (click)="handlePipoSummary()">
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;display: flex;
+                        align-items: center;"   (click)="handlePipoSummary()">
                             <span style="margin-left: 35px; font-size: 12px; display: inline;  line-height: 30px;">PI/PO Summary
-        <i style="font-size: 12px; margin-left: 48%;" *ngIf="status" class="fas fa-plus-circle">
-        </i>
-      </span>
+                              <i style="font-size: 12px; margin-left:10px;" *ngIf="status" class="fas fa-plus-circle">
+                              </i>
+                            </span>
                         </div>
                         <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top: -2px;" (click)="newSub1()" [ngClass]="new1 ? 'b-color' : 'nothing'">
                         <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/view-document/sb']">Shipping Bill</span>
@@ -241,14 +234,11 @@
             </i>
           </span>
                             </div>
-                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;">
-                            <span style="margin-left: 35px; font-size: 10px; line-height: 30px; color: #9ba4b0">Transactions</span>
-
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" class="border-2px">
+                            <span style="margin-left:10px; line-height: 30px; color: #9ba4b0">Transactions</span>
                         </div>
-                        <hr style="margin-left:35px; background-color: #9ba4b0; margin-top:-2px;">
-
                         <div class="main11">
-                            <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-12px;" (click)="newSub9()" [ngClass]="new9 ? 'b-color' : 'nothing'">
+                            <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px;" (click)="newSub9()" [ngClass]="new9 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/Pdf-Upload']">Inward Remittance
           Disposal</span>
                             </div>
@@ -270,10 +260,9 @@
 
                         </div>
 
-                        <div style="height: 30px; padding-top: 5px; font-size: 10px;">
-                            <span style="margin-left: 35px; font-size: 10px; color: #9ba4b0">EDPMS </span>
+                        <div class="border-2px">
+                            <span style="margin-left: 10px; color: #9ba4b0">EDPMS </span>
                         </div>
-                        <hr style="margin-left:35px; background-color: #9ba4b0; margin-top:-2px;">
                         <div class="main11">
                             <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px; " (click)="newSub20() " [ngClass]="new20 ? 'b-color' : 'nothing' ">
                                 <span style="margin-left: 35px; line-height: 30px; font-size: 12px; ">EDPMS Recon</span></div>
@@ -551,7 +540,12 @@
 </div>
 <!-- This is the white navigation bar seen on the top. A bit enhanced BS navbar. See .page-controls in _base.scss. -->
 <div class="main_nave">
-    <div class="top_spavce"></div>
+  <header class="logo d-none d-md-block">
+    <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">
+        <img class="mlogo" src="./assets/new-img/LogoFinal.png" />
+    </a>
+</header>
+    <!-- <div class="top_spavce"></div> -->
     <div class="main_nave_haeders">
         <nav class="navbar-dashboard">
             <div class="container-fluid height">

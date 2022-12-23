@@ -1,9 +1,12 @@
 #sidebar {
     background: #fff;
     width: 224px !important;
-    overflow-y: hidden;
-    height: 100vh;
+    left: 0;
+    top: 60px !important;
+    bottom: 0;
+    position: fixed;
 }
+
 
 * {
     font-family: "EuropaNuova-Regular", sans-serif;
@@ -879,4 +882,29 @@ body {
 }
 .height{
   height: 70px;
+}
+.logo{
+  position: relative;
+  z-index: 100;
+  margin: 0;
+  top: 0;
+  left: 0;
+  width: 249px;
+  line-height: 60px;
+  vertical-align: middle;
+  font-weight: 400;
+  font-size: 18px;
+  transition: width .3s ease-in-out;
+  background: white;
+  display: block !important;
+}
+
+.border-2px{
+  height: 30px;
+  padding-top: 5px;
+  font-size: 15px;
+  border-bottom: 1px solid #9ba4b0;
+  width: 95%;
+  margin: auto;
+  margin-right: 0;
 }

@@ -49,6 +49,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from '../../../../app.config';
 import {PipoDataService} from "../../../../service/homeservices/pipo.service";
 import $ from 'jquery';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-upload-doc',
@@ -236,6 +237,7 @@ export class UploadDocComponent implements OnInit {
     public appconfig: AppConfig,
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
+    public wininfo: WindowInformationService
   ) {
     this.iframeVisible=false;
     this.sharedData.currentReturnUrl.subscribe(
@@ -319,8 +321,8 @@ export class UploadDocComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content_top_common')
     console.log('zxysomthing');
-
     this.jsondata1 = data1['default'];
     this.dataJson1 = data1['default'];
     this.jsondata2 = data1['default'];

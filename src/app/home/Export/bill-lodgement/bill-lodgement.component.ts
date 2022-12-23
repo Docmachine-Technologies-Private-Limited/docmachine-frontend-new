@@ -26,6 +26,7 @@ import {
 import { HttpHeaders } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import * as xlsx from 'xlsx';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-bill-lodgement',
@@ -279,13 +280,15 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private confirmDialogService: ConfirmDialogService,
     private formBuilder: FormBuilder,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    public wininfo: WindowInformationService
   ) {
     console.log('hello');
     // this.onAddCourse("e")
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(230,'.content_top_common')
     this.redirectid = this.route.snapshot.paramMap.get('pipo');
     this.redirectindex = this.route.snapshot.paramMap.get('index');
     this.redirectpage = this.route.snapshot.paramMap.get('page');

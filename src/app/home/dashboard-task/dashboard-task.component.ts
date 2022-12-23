@@ -15,6 +15,7 @@ import { DashBoardService } from '../../service/dashboard.service';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
 import { UserService } from "../../service/user.service";
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 
 @Component({
@@ -111,13 +112,14 @@ export class DashboardTaskComponent implements OnInit {
 
   @ViewChild("chart") chart: ChartComponent;
 
-  constructor(public documentService: DocumentService, public dashboardService: DashBoardService, public userService: UserService) {
+  constructor(public documentService: DocumentService, public dashboardService: DashBoardService,
+    public userService: UserService, public wininfo: WindowInformationService) {
     // this.ChartMethod()
 
   }
 
   async ngOnInit() {
-
+    this.wininfo.set_controller_of_width(270,'.content_top_common')
     this.userData = await this.userService.getUserDetail();
     // this.userData = this.userData.result
     console.log("userData", this.userData, this.documentService.EXPORT_IMPORT)
@@ -759,7 +761,7 @@ export class DashboardTaskComponent implements OnInit {
     // this.EDPMSChart.updateOptions({
     //   series: [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
     //   labels: ["Pending", "Upload"],
-      
+
     // });
 
     this.EDPMSChart.updateOptions({
@@ -780,7 +782,7 @@ export class DashboardTaskComponent implements OnInit {
       { _id: 'Pending from D8amatiks', toTalcount: 9, awaitSubmit: 6 },
       { _id: 'BOE from SLBT', toTalcount: 3, awaitSubmit: 1 }
     ]
-    // this.shipmentSubmit = this.shipmentSubmitImport  
+    // this.shipmentSubmit = this.shipmentSubmitImport
     this.shipmentSubmit = sampleDataforSS
 
 

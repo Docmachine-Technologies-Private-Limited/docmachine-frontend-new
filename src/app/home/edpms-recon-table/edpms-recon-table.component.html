@@ -14,26 +14,23 @@
     </div>
 </div>
 
-<div class="content-wrap pb-2">
+<div class="content-wrap pb-2 scroll-bar-main">
     <main id="content" class="content table-padding" role="main">
 
         <div class="header-panel">
-            <!-- *ngIf="!showInvoice" -->
-            <div style="display: flex; align-items: center">
+            <div style="display: flex; align-items: center;width: 190px;">
                 <h3 class="heading">EDPMS Recon</h3>
-                <!-- {{doc}} -->
             </div>
-        </div>
-        <div style="
-        display: flex;
-        flex-direction: rows;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 0.8%;
-        padding-left: 3%;
-        padding-bottom: 0.8%;
-        margin-left: 40px;
-        width: 85%;">
+               <div style="
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding-top: 0.8%;
+                    padding-left: 3%;
+                    padding-bottom: 0.8%;
+                    margin-left: 10px;
+                    width:300px">
             <div style="display: flex; align-items: center">
                 <select style="display: flex; align-items: center;" [(ngModel)]="bankSelection" (ngModelChange)="chooseBank()">
                     <option value="" disabled hidden>Select Bank</option>
@@ -52,6 +49,8 @@
                     Upload New
                 </button>
             </div>
+        </div>
+
         </div>
 
         <div class="analytics">
