@@ -619,7 +619,7 @@ body {
 .content_top_common .content-wrap {
     left: 0px !important;
     width: 100%;
-    padding-left: 250px;
+    padding-left: 0;
     flex: 1 0 auto;
     padding-right: 0px;
 }
@@ -1198,9 +1198,9 @@ body {
 .pdf_invoce_scroll {
     display: inline-block;
     overflow-y: auto;
-    max-height: 600px;
+    max-height: 100%;
     width: 100%;
-    min-height: 300px;
+    min-height: 100%;
 }
 
 .new_document_list_tab {
@@ -1580,4 +1580,7 @@ body {
     position: absolute;
     top: 27px;
     right: 0px;
+}
+.pdf_invoce_scroll iframe{
+  height: 750px;
 }

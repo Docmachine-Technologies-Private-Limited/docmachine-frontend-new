@@ -7,7 +7,7 @@
 
 <app-detail></app-detail> -->
 
-<div [class]="loading==true?'loading-overlay visible':'hidden'">
+<div [class]="this.doc.loading==true?'loading-overlay visible':'hidden'">
  <div class="container loading-main">
         <div class="loading-container">
           <span class="loading one"></span>
@@ -18,6 +18,6 @@
       </div>
 </div>
 
-<div *ngIf="loading==false">
+<div>
 <router-outlet></router-outlet>
 </div>

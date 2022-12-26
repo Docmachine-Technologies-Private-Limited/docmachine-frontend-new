@@ -3,7 +3,7 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule, HttpClient } from "@angular/common/http";
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { SharedModule } from "./shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./app-routing.module";
@@ -39,6 +39,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgSelectModule } from '@ng-select/ng-select';
 import {WindowInformationService} from './service/window-information.service'
+import {InterceptorService} from './service/interceptor.service';
+
 
 //import { SidenavComponent } from './home/sidenav/sidenav.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -92,7 +94,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     ToastrModule.forRoot(), // ToastrModule added
   ],
   providers: [{ provide: AppConfig },
-    WindowInformationService
+    WindowInformationService,
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
   ],
   bootstrap: [AppComponent],
 })
