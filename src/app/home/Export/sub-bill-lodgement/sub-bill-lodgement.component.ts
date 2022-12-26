@@ -55,6 +55,7 @@ export class SubBillLodgementComponent implements OnInit {
   }
   ngOnInit() {
     this.wininfo.set_controller_of_width(250,'.content_top_common')
+    this.documentService.getBlcopyrefPromies().then((res: any)=>{console.log(res,'getBlcopyrefPromies')})
     this.shippingBillService.getShippingBillList().then((res: any) => {
       this.shippingBillService.shippingbills$.subscribe((data: any) => {
        console.log(data,'ressdsdsdsdv sdfsfsdfsdfd')
@@ -72,23 +73,24 @@ export class SubBillLodgementComponent implements OnInit {
 
   getPipoData() {
     console.log("-->", this.page, this.limit)
-    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer,'export').subscribe(async (res: any) => {
-      this.dataSource = res.docs
+    this.documentService.getBlcopyrefPromies().then(async (res: any) => {
+      this.dataSource = res
       console.log("res", this.dataSource)
       var counter=0;
       for (let index = 0; index < this.dataSource.length; index++) {
         if (this.dataSource[index]['buyerName']!='' &&
             this.dataSource[index]['buyerName']!=undefined
             && this.dataSource[index]['buyerName']!=null) {
-          this.TEMP['Party_Name'][index]=this.dataSource[index]['buyerName'];
+            this.TEMP['Party_Name'][index]=this.dataSource[index]['buyerName'];
+            this.TEMP['Lodgement_No'][index]=this.dataSource[index]['blcopyrefNumber'];
         }
         if ((index+1)==this.dataSource.length) {
           for (let index = 0; index < this.TEMP['Party_Name'].length; index++) {
             if (this.TEMP['SB_NO'][index]!='' && this.TEMP['SB_NO'][index]!=undefined) {
               this.ALL_DATA_FORMAT[counter]={
                 SB_NO:this.TEMP['SB_NO'][counter],
-                Lodgement_No:counter,
-                Party_Name:this.TEMP['Party_Name'][counter]
+                Party_Name:this.TEMP['Party_Name'][counter],
+                Lodgement_No:this.TEMP['Lodgement_No'][counter]
               }
               counter++;
             }
@@ -186,21 +188,6 @@ export class SubBillLodgementComponent implements OnInit {
         }, (err) => console.log(err))
       }
     });
-
-
   }
 
-
-  Controller_of_width(fixed_width,id_or_className){
-    var pixels = fixed_width;
-    var screenWidth = window.screen.width;
-    var percentage = ( screenWidth - pixels );
-    $(id_or_className).css('width',percentage+'px');
-
-    $(window).resize(function() {
-      var winWidth = document.body.clientWidth;
-      var percentage = ( winWidth - pixels );
-      $(id_or_className).css('width',percentage+'px');
-    });
-  }
 }
