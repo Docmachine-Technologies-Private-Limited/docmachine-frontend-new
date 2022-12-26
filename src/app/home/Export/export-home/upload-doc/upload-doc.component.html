@@ -31,7 +31,9 @@
                                 <div class="pdf_invoce">
                                     <div class="file_addd_to">
                                         <div class="new_form_selct" method="POST">
-                                            <input disabled (error)="onUploadError($event,selectbankname.value)" (init)="onUploadInit($event,selectbankname.value)" (success)="onUploadSuccess($event)" (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config" class="dropzone dropzone-container"
+                                            <input disabled (error)="onUploadError($event,selectbankname.value)"
+                                             (init)="onUploadInit($event,selectbankname.value)" (success)="onUploadSuccess($event)"
+                                              (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config" class="dropzone dropzone-container"
                                                 id="dropzone" />
                                             <img src="assets/new-img/Icon-feather-upload.svg" alt="Drag & drop files here or Browse" />
                                             <h5>Drag & drop files here or <span class="change_textcolor">Browse</span></h5>

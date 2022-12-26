@@ -4,7 +4,8 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms'
 import {ToastrService} from 'ngx-toastr';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { DocumentService } from '../service/document.service';
+import { AuthGuard } from '../service/authguard.service';
 @Component({
   selector: 'app-detail',
   templateUrl: './signin.component.html',
@@ -24,17 +25,24 @@ export class SigninComponent implements OnInit {
   closeResult: string;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService,
-              private router: Router, private toastr: ToastrService, private modalService: NgbModal) {
+    public documentService: DocumentService,
+    private router: Router, public authGuard: AuthGuard,
+    private toastr: ToastrService, private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
-    this.password = 'password';
 
+    let token = this.authGuard.loadFromLocalStorage();
+    if (token) {
+      this.router.navigate(["/home/dashboardTask"]);
+    }
+
+    this.password = 'password';
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
-
+    // this.documentService.loading=false
   }
 
 

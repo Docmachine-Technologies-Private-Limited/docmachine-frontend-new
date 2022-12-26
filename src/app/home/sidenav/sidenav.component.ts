@@ -170,6 +170,7 @@ export class SidenavComponent implements OnInit {
   public logout() {
     this.authservice.logout();
     this.router.navigate(["login"]);
+
   }
 
   // public manageTask() {
