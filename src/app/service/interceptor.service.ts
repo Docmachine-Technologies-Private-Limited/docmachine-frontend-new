@@ -11,6 +11,7 @@ export class InterceptorService implements HttpInterceptor {
   constructor(public documentService: DocumentService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
+    console.log(req,'hgsdjfdhfgjdf')
     this.documentService.loading=true;
     return next.handle(req).pipe(
       finalize(() => this.documentService.loading=false)
