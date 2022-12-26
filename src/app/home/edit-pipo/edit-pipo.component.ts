@@ -24,6 +24,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { AppConfig } from "src/app/app.config";
 import { DocumentService } from "../../service/document.service";
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-edit-pipo',
@@ -122,7 +123,8 @@ export class EditPipoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private documentService: DocumentService,
     public router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public wininfo: WindowInformationService
   ) {
     this.file = this.route.snapshot.paramMap.get('doc_type');
     this.pipoID = this.route.snapshot.paramMap.get('id');
@@ -137,8 +139,7 @@ export class EditPipoComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-
+    this.wininfo.set_controller_of_width(270,'.content_top_common')
     this.headers = {
       Authorization: this.authToken,
       timeout: `${200000}`
@@ -160,7 +161,7 @@ export class EditPipoComponent implements OnInit {
     };
 
 
-    // buyerName commodity doc 
+    // buyerName commodity doc
 
     this.pipoForm = this.formBuilder.group(
       {

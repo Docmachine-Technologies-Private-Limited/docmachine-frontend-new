@@ -1,4 +1,4 @@
-<div class="content_top_common">
+<div class="content_top_common scroll-bar-main">
     <div class="content-wrap">
         <div class="container-fluid">
             <div class="import_export_sec">
@@ -39,10 +39,10 @@
                             </div>
                         </div>
                     </div> -->
-                    <div class="data_table_new">
+                    <div class="data_table_new" *ngIf="piPoUrl!=null && piPoUrl!=''">
                         <div class="row">
                             <div class="col-md-7 col-sm-12 col-xs-12 col-12">
-                                <div class="pdf_invoce">
+                                <div class="pdf_invoce" >
                                     <h2 class="payment_title">Document</h2>
                                     <div class="pdf_invoce_scroll">
                                         <!-- <img src="assets/new-img/pdf_inn.png" alt="" /> -->
@@ -240,9 +240,9 @@
                                                             date of shipment</label>
                                                             <!-- <input class="form-select form-control" type="date"
                                                             formControlName="date" /> -->
-                                                            <span>   <input class="form-control" matInput [matDatepicker]="pickerShipmentDate" placeholder="Choose a date"  formControlName="date" autocomplete="off"> 
+                                                            <span>   <input class="form-control" matInput [matDatepicker]="pickerShipmentDate" placeholder="Choose a date"  formControlName="date" autocomplete="off">
                                                                <mat-datepicker-toggle matSuffix [for]="pickerShipmentDate"></mat-datepicker-toggle>
-                                                            <mat-datepicker #pickerShipmentDate></mat-datepicker>  
+                                                            <mat-datepicker #pickerShipmentDate></mat-datepicker>
                                                             </span>
 
                                                         </div>

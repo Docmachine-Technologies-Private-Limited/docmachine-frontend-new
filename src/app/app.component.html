@@ -7,5 +7,17 @@
 
 <app-detail></app-detail> -->
 
+<div [class]="loading==true?'loading-overlay visible':'hidden'">
+ <div class="container loading-main">
+        <div class="loading-container">
+          <span class="loading one"></span>
+          <span class="loading two"></span>
+          <span class="loading three"></span>
+          <span class="loading four"></span>
+        </div>
+      </div>
+</div>
 
+<div *ngIf="loading==false">
 <router-outlet></router-outlet>
+</div>
