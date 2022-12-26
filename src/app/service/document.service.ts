@@ -8,6 +8,7 @@ export class DocumentService {
   authToken: string;
   public headers;
   api_base: string;
+  loading:boolean = true
   EXPORT_IMPORT:any={
     export:false,
     import:false,

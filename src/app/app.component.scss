@@ -9,3 +9,31 @@
   outline: none;
   width: 0;
 }
+
+
+.loading-overlay{
+  position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    place-items: center;
+    z-index: 999999;
+    margin: auto;
+}
+.visible{
+  display: flex;
+}
+.hidden{
+  display: none;
+}
+
+.loading-main{
+  max-width: 100vw;
+  height: 100vh;
+  align-items: center;
+  display: flex;
+  z-index: 9999999999999999999;
+  justify-content: center;
+}
