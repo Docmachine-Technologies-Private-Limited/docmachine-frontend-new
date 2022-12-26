@@ -11,7 +11,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timer } from 'rxjs';
 import { count, takeWhile } from 'rxjs/operators';
@@ -26,14 +26,6 @@ import {
   DropzoneConfigInterface,
 } from 'ngx-dropzone-wrapper';
 import { Subscription } from 'rxjs';
-// import {DashboardService} from './dashboard-service';
-// import { TabsComponent } from './tabs.component';
-// import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import {
-  CdkDragDrop,
-  moveItemInArray,
-  transferArrayItem,
-} from '@angular/cdk/drag-drop';
 import { ShippingBill } from '../../../../../model/shippingBill.model';
 import {
   FormBuilder,
@@ -251,14 +243,6 @@ export class UploadDocComponent implements OnInit {
       Authorization: this.authToken,
       timeout: `${200000}`,
     };
-    //   $("input").on("change", function() {
-    //     this.setAttribute(
-    //         "data-date",
-    //         moment(this.value, "YYYY-MM-DD")
-    //         .format( this.getAttribute("data-date-format") )
-    //     )
-    // }).trigger("change")
-
     if (isPlatformBrowser(this.platformId)) {
       console.log('asdkhsajvdsug');
       this.config = {
@@ -283,8 +267,9 @@ export class UploadDocComponent implements OnInit {
   width: any = 0;
 
   runProgressBar(value) {
-    console.log(value / 1500);
-    timer(0, value / 2500)
+    console.log(this.config,'directiveRef');
+    console.log(value /1000);
+    timer(0, value / 1000)
       .pipe(takeWhile(() => this.isWidthWithinLimit()))
       .subscribe(() => {
         this.width = this.width + 1;
@@ -925,6 +910,13 @@ export class UploadDocComponent implements OnInit {
                 this.res._id,
               ],
             }
+            if (res.type === HttpEventType.Response) {
+              console.log('Upload complete');
+              }
+              if (res.type === HttpEventType.UploadProgress) {
+                  const percentDone = Math.round(100 * res.loaded / res.total);
+                  console.log('Progress ' + percentDone + '%');
+              }
             this.userService
               .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc, updatedData)
               .subscribe(
@@ -2104,13 +2096,13 @@ export class UploadDocComponent implements OnInit {
   }
 dataPdf:any=[];
  async onUploadSuccess(args: any) {
+  console.log('onUploadSuccess:', args);
       this.uploading = false;
       this.iframeVisible=true;
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
         args[1].publicUrl
       );
       var data:any=args[1]['data'][0];
-      var temp:any=Object.keys(data)
       console.log(data,'data')
 
       this.dataPdf={
@@ -2242,78 +2234,15 @@ dataPdf:any=[];
   // }
 
   onAddCourse(e) {
-    // if (e.controls.bankDetails.invalid) {
-    //   //this.submitted1 = true
-    //   this.toastr.error('You can add another bank after filling first one!');
-    //   console.log("2")
-    //   //this.isDisabled = false;
-    //   return;
-    // }
     console.log('fffff');
-    // this.currencyName.push('')
-    // this.bankName.push('')
     const control = this.piPoForm.controls.paymentTerm as FormArray;
     control.push(this.initCourse());
-    //this.isDisabled = false;
   }
 
   removeAddress(i) {
-    // console.log(i)
-    // //console.log(this.control)
     let control1 = this.piPoForm.controls.paymentTerm as FormArray;
-    // console.log(control1)
-    // console.log(control1.length)
-    // console.log(this.bankName)
-    // console.log(this.currencyName)
     control1.removeAt(i);
-    // this.bankName.splice(i, 1)
-    // this.currencyName.splice(i, 1)
-    // console.log(this.bankName)
-    // console.log(this.currencyName)
-    // console.log(control1.length)
   }
-
-  // public filePreview() {
-  //   console.log("inside");
-  //   const images = this.que.selectedFiles;
-  //   // is images a true array and not empty
-  //   if (Array.isArray(images) && images.length > 0) {
-  //     images.forEach((image) => {
-  //       // cuting out the extension from filename
-  //       let extension: any = image.fileName.split(".");
-  //       extension = extension
-  //         .slice(extension.length - 1, extension.length)
-  //         .join(".");
-  //       const { accepted, size, height, width, type, dataURL, upload } =
-  //         image.file;
-  //       const mockFile = {
-  //         accepted,
-  //         size,
-  //         type,
-  //         dataURL: dataURL || image.location,
-  //         name: upload.filename,
-  //       };
-  //       const dropzoneInstance = this.directiveRef.dropzone();
-  //       console.log(dropzoneInstance);
-  //       dropzoneInstance.emit("addedfile", mockFile);
-  //       dropzoneInstance.options.maxFiles = 5;
-  //       dropzoneInstance.createThumbnailFromUrl(
-  //         mockFile,
-  //         image.file.width || "400",
-  //         image.file.height || "400",
-  //         "contain",
-  //         true,
-  //         function (thumbnail) {
-  //           dropzoneInstance.files.push(thumbnail);
-  //           dropzoneInstance.emit("thumbnail", mockFile, thumbnail);
-  //         },
-  //         "anonymous"
-  //       );
-  //       dropzoneInstance.emit("complete", mockFile);
-  //     });
-  //   }
-  // }
-
   clickBene(value) {
     console.log('hhddh');
     this.beneValue = value;

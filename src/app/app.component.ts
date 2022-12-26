@@ -15,16 +15,7 @@ export class AppComponent {
     private router: Router,public doc:DocumentService) {
     this.translate.setDefaultLang('en');
     console.log('AppConfig', AppConfig);
-    this.router.events.subscribe((e : RouterEvent) => {
-      this.navigationInterceptor(e);
-    })
   }
   ngOnInit(): void {};
 
-  // Shows and hides the loading spinner during RouterEvent changes
-  navigationInterceptor(event: RouterEvent): void {
-    if (event instanceof NavigationStart) {
-      this.doc.loading = true
-    }
-  }
 }
