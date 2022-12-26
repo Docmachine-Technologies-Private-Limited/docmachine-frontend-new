@@ -116,6 +116,7 @@ export class ViewDocumentComponent implements OnInit {
       }
       this.showInvoice = false;
       console.log('hello');
+      // setTimeout(()=>{this.documentService.loading=false;},1000)
     });
   }
 

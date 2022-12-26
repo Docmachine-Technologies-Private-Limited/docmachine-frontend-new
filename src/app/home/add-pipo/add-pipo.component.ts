@@ -24,6 +24,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { AppConfig } from "src/app/app.config";
 import { DocumentService } from "../../service/document.service";
+import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
   selector: 'app-add-pipo',
@@ -126,7 +127,8 @@ export class AddPipoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private documentService: DocumentService,
     public router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public wininfo: WindowInformationService
   ) {
     this.loadFromLocalStorage();
     this.api_base = appconfig.apiUrl;
@@ -135,6 +137,7 @@ export class AddPipoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(270,'.content_top_common')
     this.file= this.route.snapshot.paramMap.get('doc_type');
     this.headers = {
       Authorization: this.authToken,
