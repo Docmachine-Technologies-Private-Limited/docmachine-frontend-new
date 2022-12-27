@@ -37,7 +37,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   @ViewChild('table1') table: ElementRef;
   @ViewChild('billLodge', { static: false }) billLodge: ElementRef;
   closeResult: string;
-  public item1;
+  public item1:any=[];
   public itemArray = [];
   public item2;
   public user;
@@ -141,7 +141,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   sbPurposeDone1: any = [];
   item4 = [];
   item12: any;
-  item13 = [];
+  item13:any = [];
   bankRef: any;
   newTask: any = [];
   Task: any = [];
@@ -219,13 +219,13 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   nameSearch2: string = '';
   nameSearch3: string = '';
   nameSearch4: string = '';
-  item6: any;
-  item7: any;
-  item: any;
-  item8: any;
-  item9: any;
-  item10: any;
-  item11: any;
+  item6: any=[];
+  item7: any=[];
+  item: any=[];
+  item8: any=[];
+  item9: any=[];
+  item10: any=[];
+  item11: any=[];
   public buyerDetail: any = [];
   startDate: any = '';
   endDate: any = '';
@@ -3530,21 +3530,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
               }
                 console.log('Line no. 3723', filterIrdata);
               }
-              // else {
-              //   for (let sb of filterIrdata) {
-              //     if (sb.sbno !== sbNum.sbno) {
-              //       console.log('itemAvailable');
-              //       // itemavailable = true;
-              //       const newVal = { ...irData };
-              //       let availableBal = parseFloat(
-              //         irData.amount
-              //       );
-              //       newVal['BalanceAvail'] = availableBal.toFixed(2);
-              //       filterIrdata.push(newVal);
-              //       console.log('My Data', newVal);
-              //     }
-              //   }
-              // }
           }
         }
     }
@@ -3552,8 +3537,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       if(irData.sbNo.length == 0){
         const newVal = { ...irData };
           let availableBal = irData.amount;
-          // .replace(/,/g, ''));
-          newVal['BalanceAvail'] = availableBal.toFixed(2);
+          newVal['BalanceAvail'] = availableBal;
           filterIrdata.push(newVal);
           console.log('235', filterIrdata);
       }
@@ -3562,15 +3546,13 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       for(let ir of this.item9){
         const newVal = { ...ir };
         let availableBal = ir.amount;
-        // parseFloat(
-
-          // .replace(/,/g, ''));
-          newVal['BalanceAvail'] = availableBal.toFixed(2);
+          newVal['BalanceAvail'] = availableBal;
           filterIrdata.push(newVal);
       }
     }
-    console.log("filterForex", filterIrdata)
     this.item13 = filterIrdata
+    console.log("filterForex", filterIrdata,this.item13)
+
   }
 
   doneToDox() {
