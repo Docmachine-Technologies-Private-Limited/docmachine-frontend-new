@@ -880,7 +880,7 @@
                                                   </tr>
                                               </thead>
                                               <tbody class="text-dark" *ngIf="item13.length!=0">
-                                                  <tr class="table-row" **ngFor='let data of item13 | fiterbuyer:[{partyName:nameSearch3}]  let i = index'>
+                                                  <tr class="table-row" *ngFor='let data of item13 | fiterbuyer:[{partyName:nameSearch3}]  let i = index'>
                                                     <td><input type="checkbox" (change)="addToSbArray(data, $event)" />
                                                     </td>
                                                     <td>
