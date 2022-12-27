@@ -9,8 +9,7 @@ export class AppConfig {
       console.log(platformId,'pllllllllllllllllllllllllll')
         if (isPlatformBrowser(this.platformId)) {
             // Client only code.
-            // this.getConstants();
-            this.getConstantsAtServer();
+            this.getConstants();
         }
         if (isPlatformServer(this.platformId)) {
             // Server only code.
