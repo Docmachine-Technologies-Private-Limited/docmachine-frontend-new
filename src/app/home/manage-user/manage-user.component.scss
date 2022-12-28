@@ -1,162 +1,168 @@
 .main {
-    margin: 40px 20px 0px 30px;
+  margin: 40px 20px 0px 30px;
 }
 
 
 
 .display-5 {
-    width: 472px;
-    font-weight: 500;
-    color: #606670;
-    font-size: 32px;
+  font-weight: 500;
+  color: #606670;
+  font-size: 32px;
+  margin: auto;
 }
 
 .container1 {
-    display: grid;
-    grid-template-columns:300px 300px 300px;
-    grid-gap: 32px;
-    justify-content: center;
-    align-items: center;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 10px;
+  align-items: center;
+}
 
 #login-container {
   border-radius: 5px;
   background: #ffffff;
   position: relative;
   box-shadow: 0 2px 6px #2f5397e6;
-  padding-bottom: 20px;
-
+  height: 350px;
+  flex: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
 }
 
 .heading {
-    font-size: 16px;
-    color: #98A0A6;
-    text-align: center;
-    margin: 35px;
+  font-size: 16px;
+  color: #98A0A6;
+  text-align: center;
+  margin: 35px;
 }
 
 .img1 {
-    padding: 30px 30px;
-    border-radius: 50%;
-    box-shadow: 0px 2px 6px 0px rgba(47,83,151,0.1);
+  padding: 30px 30px;
+  border-radius: 50%;
+  box-shadow: 0px 2px 6px 0px rgba(47, 83, 151, 0.1);
 
-    text-align: center;
+  text-align: center;
 }
 
 .img3 {
-    border-radius: 50%;
-    box-shadow: 0px 2px 6px 0px rgba(47,83,151,0.1);
-
-    text-align: center;
+  border-radius: 50%;
+  box-shadow: 0px 2px 6px 0px rgba(47, 83, 151, 0.1);
+  text-align: center;
 }
 
 .img2 {
-    margin-top: 80px;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    box-shadow: 0px 2px 6px 0px rgba(47,83,151,0.1);
-
-    text-align: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  padding: 10px;
 }
 
 .img4 {
-    margin-top: 80px;
-    padding: 30px 30px;
-    border-radius: 50%;
-    box-shadow: 0px 2px 6px 0px rgba(47,83,151,0.1);
-
-    text-align: center;
+  margin-top: 80px;
+  padding: 30px;
+  border-radius: 50%;
+  text-align: center;
+  background: white;
 }
 
 
 .content1 {
 
-    text-align: center;
+  text-align: center;
 }
 
 input {
 
-    border: none;
-    outline: none;
-    width: 250px;
-    text-align: center;
+  border: none;
+  outline: none;
+  width: 250px;
+  text-align: center;
 
 
 }
 
 ::placeholder {
-    font-size: 16px;
-    text-align: center/* Firefox */
-  }
+  font-size: 16px;
+  text-align: center
+    /* Firefox */
+}
 
 .name {
-    margin-top: 20px;
-    font-size: 18px;
-    color:black;
-    font-weight: 500;
+  margin-top: 20px;
+  font-size: 18px;
+  color: black;
+  font-weight: 500;
 
-    text-align: center;
+  text-align: center;
 }
 
 .email {
-    margin-bottom: 20px;
-    font-size: 16px;
-    color: #98A0A6;
-    text-align: center;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #98A0A6;
+  text-align: center;
 }
 
 button {
-    border: none;
-    outline: none;
-    width: 154px;
-    height: 40px;
-    border-radius: 20px;
-    color: white;
-    font-size: 16px;
-    background-color: #507BFC;
-    box-shadow: 0px 10px 20px 0px rgba(80,123,252,0.5);
+  border: none;
+  outline: none;
+  width: 154px;
+  height: 40px;
+  border-radius: 20px;
+  color: white;
+  font-size: 16px;
+  background-color: #507BFC;
+  box-shadow: 0px 10px 20px 0px rgba(80, 123, 252, 0.5);
 }
 
 .bottom {
-    font-size: 14px;
-    color: #98A0A6;
-    text-align: center;
+  font-size: 14px;
+  color: #98A0A6;
+  text-align: center;
 }
 
 .bottom1 {
-    padding-top: 10px;
-    text-align: right;
-    text-align: center;
-    width: 120px;
-    height: 40px;
+  padding-top: 10px;
+  text-align: right;
+  text-align: center;
+  width: 120px;
+  height: 40px;
 }
 
 .bottom1:hover {
-    background-color: #507BFC;
-    border-radius: 20px;
-    box-shadow: 0px 10px 20px 0px rgba(80,123,252,0.5);
-    color: white;
+  background-color: #507BFC;
+  border-radius: 20px;
+  box-shadow: 0px 10px 20px 0px rgba(80, 123, 252, 0.5);
+  color: white;
 }
 
 .button-wrapper {
-    position: relative;
-    //width: 150px;
-    text-align: center;
-    //margin-left: 40px;
-  }
+  position: relative;
+  //width: 150px;
+  text-align: center;
+  //margin-left: 40px;
+}
 
 
 
-  #dropzone {
-      display: inline-block;
-      position: absolute;
-      z-index: 1;
-      top: -50px;
-      left: 0;
-      opacity: 0;
-      cursor: pointer;
-  }
+#dropzone {
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+}
+
 // new
 
 
@@ -1105,35 +1111,85 @@ table {
 .analytics .support {
   overflow: hidden;
 }
-.header-panel{
+
+.header-panel {
   display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 0.8%;
-    padding-left: 1%;
-    padding-bottom: 0.8%;
-    border-bottom: 1px solid black;
-    width: 99%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.8%;
+  padding-left: 1%;
+  padding-bottom: 0.8%;
+  border-bottom: 1px solid black;
+  width: 99%;
 }
 
-#formmodel{
+#formmodel {
   display: none;
 }
-.panel{
+
+.panel {
   display: flex;
-    flex-direction: row;
-    border-bottom: 2px solid #49A2D7;
+  flex-direction: row;
+  border-bottom: 2px solid #49A2D7;
+  padding-bottom: 10px;
+  padding-right: 10px;
 }
 
-.right-panel{
+.right-panel {
   display: flex;
-    justify-content: end;
-    width: 100%;
+  justify-content: end;
+  width: 100%;
 }
 
-.left-panel{
+.left-panel {
   display: flex;
-    justify-content: start;
-    width: 100%;
+  justify-content: start;
+  align-items: center;
+}
+
+.modal-content {
+  max-height: 720px;
+  overflow: auto
+}
+
+.modal-dialog {
+  max-width: 70vw;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  background: white;
+  border: 1px solid #49a2d7;
+}
+
+.upload-div {
+  position: absolute;
+  top: 2px;
+  width: 90%;
+  left: 42px;
+}
+
+.table-padding {
+  background: white !important;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 0 2px 3px #0000002b;
+  max-height: none;
+}
+
+.top-panel {
+  background: blue;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  width: 100%;
+  height: 200px;
 }

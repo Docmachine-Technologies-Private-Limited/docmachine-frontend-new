@@ -1,6 +1,6 @@
 <div class="content-wrap pb-2 scroll-bar-main">
     <main id="content" class="content table-padding" role="main">
-        <div class="main">
+        <div class="container-fuild">
             <div class="col-13 panel">
               <div class="left-panel">
                 <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
@@ -12,37 +12,11 @@
                     <button type="button" class="btn btn-primary" (click)="formmodel.style.display='block'">Add</button>
                   </div>
             </div>
-            <div class="container1">
-                <div id="login-container">
-                    <p class="heading">Add New Member</p>
-                    <div class="content1">
-                        <div class="button-wrapper">
-                            <form class="form" method="POST">
-                                <span class="label">
-                                    <img *ngIf="!toggle" class="img1" src="./assets/ic_mail-2.png">
-                                    <img *ngIf="toggle" class="img3" src="{{img}}" style="height: 70px; width: 70px;">
-                                </span>
-                                <div *ngIf="!toggle">
-                                    <input name="upload" class="upload-box" placeholder="Upload File"
-                                        (error)="onUploadError($event)" (init)="onUploadInit($event)"
-                                        (success)="onUploadSuccess($event)" *ngIf="type === 'directive'"
-                                        [dropzone]="config" class="dropzone dropzone-container" id="dropzone">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="content1">
-                        <form [formGroup]="memeberForm" (ngSubmit)="onSubmit()">
-                            <input formControlName="name" class="name" type="text" placeholder="Enter Name"> <br>
-                            <input formControlName="email" class="email" type="text" placeholder="Enter EmailId"> <br>
-                            <button type="submit">Add</button>
-                        </form>
-                    </div>
-                </div>
+            <div class="container1 p-3">
                 <div *ngFor="let data of item1" id="login-container">
-                    <div class="content1">
+                    <div class="content1 top-panel">
                         <div *ngIf="data.imageUrl">
-                            <img class="img2" src="{{data.imageUrl}}">
+                            <img class="img2" src="{{data.imageUrl}}" [alt]="data.name+' \nimage not found...'">
                         </div>
                         <div *ngIf="!data.imageUrl">
                             <img class="img4" src="./assets/ic_mail-2.png">
@@ -52,12 +26,14 @@
                         <h6 class="name">{{data.name}}</h6>
                         <h6 class="email">{{data.email}}</h6>
                     </div>
-                    <div class="bottom" style="float: left; margin-left: 30px; margin-top: 10px;">
-                        <img src="./assets/Shape-4.png" alt="" style="margin-right: 5px;"> Invited
-                    </div>
-                    <div class="bottom bottom1" style="float: right; margin-right: 15px;">
-                        <img src="./assets/Eye.png" style="margin-right: 5px;"> View
-                    </div>
+                   <div class="row">
+                    <div class="bottom" style="float: left;margin-top: 10px;">
+                      <img src="./assets/Shape-4.png" alt="" style="margin-right: 5px;"> Invited
+                  </div>
+                  <div class="bottom bottom1" style="float: right; margin-right: 15px;">
+                      <img src="./assets/Eye.png" style="margin-right: 5px;"> View
+                  </div>
+                   </div>
                 </div>
             </div>
             <br>
@@ -82,7 +58,7 @@
                   <img *ngIf="!toggle" class="img1" src="./assets/ic_mail-2.png">
                   <img *ngIf="toggle" class="img3" src="{{img}}" style="height: 70px; width: 70px;">
               </span>
-              <div *ngIf="!toggle">
+              <div *ngIf="!toggle" class="upload-div">
                   <input name="upload" class="upload-box" placeholder="Upload File"
                       (error)="onUploadError($event)" (init)="onUploadInit($event)"
                       (success)="onUploadSuccess($event)" *ngIf="type === 'directive'"
@@ -93,13 +69,48 @@
         <form [formGroup]="memeberForm" (ngSubmit)="onSubmit()">
           <div class="mb-3">
             <label for="recipient-name" class="col-form-label">Name : </label>
-            <input type="text" class="form-control" id="recipient-name" formControlName="name" placeholder="Enter Name">
+            <input type="text" class="form-control p-2" id="recipient-name" formControlName="name" placeholder="Enter Name">
           </div>
           <div class="mb-3">
             <label for="message-text" class="col-form-label">Email id :</label>
-            <input class="form-control" id="message-text" formControlName="email" type="text" placeholder="Enter Email Id">
+            <input class="form-control p-2" id="message-text" formControlName="email" type="text" placeholder="Enter Email Id">
           </div>
-          <button type="button" class="btn btn-primary" (click)="formmodel.style.display='none'">Submit</button>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Under subscription :</label>
+            <select class="form-select" aria-label="Default select example" formControlName="UnderSubscription" >
+              <option selected value="Select Under subscription">Select Under subscription</option>
+              <option value="Imports">Imports</option>
+              <option value="Export">Export</option>
+              <option value="Any one or both">Any one or both</option>
+            </select>
+          </div>
+        <div class="row m-auto">
+          <div class="mb-3 col-3">
+            <div class="form-check">
+              <label class="col-md-1 checkbox-inline checkbox-label" for="checkboxes-0">
+                <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1" formControlName="UnderSubscriptionCheckBox">
+                Maker
+              </label>
+            </div>
+          </div>
+          <div class="mb-3 col-3">
+            <div class="form-check">
+              <label class="col-md-1 checkbox-inline checkbox-label" for="checkboxes-0">
+                <input type="checkbox" name="checkboxes" id="checkboxes-0" value="2" formControlName="UnderSubscriptionCheckBox">
+                Checker
+              </label>
+            </div>
+          </div>
+          <div class="mb-3 col-3">
+            <div class="form-check">
+              <label class="col-md-1 checkbox-inline checkbox-label" for="checkboxes-0">
+                <input type="checkbox" name="checkboxes" id="checkboxes-0" value="3" formControlName="UnderSubscriptionCheckBox">
+                Approver
+              </label>
+            </div>
+          </div>
+        </div>
+          <button type="submit" class="btn btn-primary" (click)="formmodel.style.display='none'">Submit</button>
         </form>
       </div>
       <div class="modal-footer">

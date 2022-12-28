@@ -6,6 +6,7 @@ export class AppConfig {
     public apiUrl = '';
 
     constructor(@Inject(PLATFORM_ID) public platformId: Object) {
+      console.log(platformId,'pllllllllllllllllllllllllll')
         if (isPlatformBrowser(this.platformId)) {
             // Client only code.
             this.getConstants();

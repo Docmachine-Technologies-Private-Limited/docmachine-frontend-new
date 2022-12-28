@@ -6,6 +6,7 @@ import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_I
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AppConfig } from 'src/app/app.config';
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-manage-user',
   templateUrl: './manage-user.component.html',
@@ -31,9 +32,10 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   api_base: any;
 
   constructor(@Inject(PLATFORM_ID) public platformId,
-  private route: ActivatedRoute, private formBuilder: FormBuilder,
-  private userService: UserService, public appconfig: AppConfig,
-  public wininfo: WindowInformationService) {
+  private route?: ActivatedRoute, private formBuilder?: FormBuilder,
+  private userService?: UserService, public appconfig?: AppConfig,
+  private sanitizer?: DomSanitizer,
+  public wininfo?: WindowInformationService) {
     this.loadFromLocalStorage()
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base)
@@ -64,11 +66,13 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.toggle = false;
-    this.id = this.route.snapshot.queryParams.id;
+    this.id = this.route.snapshot.queryParams['id'];
     console.log(this.id)
     this.memeberForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-      email: ['', [Validators.required, Validators.minLength(6)]]
+      email: ['', [Validators.required, Validators.minLength(6)]],
+      UnderSubscription:['Select Under subscription', [Validators.required]],
+      UnderSubscriptionCheckBox:['', [Validators.required]],
     });
 
     this.userService.getMemeber(this.id)
@@ -78,18 +82,15 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
           console.log(data)
           this.item1 = data['data']
           console.log(this.item1['length'])
-          //this.router.navigate(['/addMember'],{ queryParams: { id:data['data']._id } })
-
         },
         error => {
           console.log("error")
         });
-
-
-
-
   }
 
+URL_CREATE(url){
+  return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+}
   public onUploadInit(args: any): void {
     console.log('onUploadInit:', args);
   }
@@ -104,42 +105,11 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     console.log(args[1].data)
     this.img = args[1].data
     this.toggle = true;
-    // console.log(args[1].data.sbno)
-    // console.log(args[1].data.boeNumber)
-    // if(args[1].message == 'This file already uploaded') {
-    //   this.message = args[1].message
-    //   this.override = true;
-    //   if(args[1].data.sbno) {
-    //     this.res = new ShippingBill(args[1].data)
-    //     this.sbNo = true;
-    //     console.log(this.res)
-    //   }
-    //   else if(args[1].data.boeNumber) {
-    //     this.res = new BoeBill(args[1].data)
-    //     this.boeNumber = true;
-    //     console.log(this.res)
-    //   }
-
-    // }
-    // else if(args[1].data.sbno) {
-    //   this.res = new ShippingBill(args[1].data)
-    //   this.sbNo = true;
-    //   console.log(this.res)
-    // }
-    // else if(args[1].data.boeNumber) {
-    //   this.res = new BoeBill(args[1].data)
-    //   this.boeNumber = true;
-    //   console.log(this.res)
-    // }
-    // this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-    // console.log(this.publicUrl)
-    // console.log(this.res)
-
   }
   onSubmit() {
     console.log(this.memeberForm.value)
     this.memeberForm.value.imageUrl = this.img
-    console.log(this.memeberForm.value)
+    console.log(this.memeberForm.value,'this.memeberForm')
     this.userService.addMemeber(this.id, this.memeberForm.value)
       .subscribe(
         data => {
@@ -147,8 +117,6 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
           console.log(data)
           this.item = data
           this.ngOnInit()
-          //this.router.navigate(['/addMember'],{ queryParams: { id:data['data']._id } })
-
         },
         error => {
           console.log("error")
@@ -162,11 +130,6 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
 
 
   ngAfterViewInit() {
-    //   window['sidebarInit']();
-    //   if (isPlatformBrowser(this.platformId)) {
-    //     this.filePreview();
-    //   }
   }
-
 
 }
