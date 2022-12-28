@@ -21,7 +21,7 @@ export class AppConfig {
     }
 
     public getConstants() {
-        this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
+        this.apiUrl = `http://bharatdev-env.eba-yekwuqzq.ap-south-1.elasticbeanstalk.com/v1`;
         // if (window.location.hostname === 'localhost') {
             // this.apiUrl = `http://localhost:8080/v1`;
         // } else if (window.location.hostname.indexOf('beta') === 0) {
