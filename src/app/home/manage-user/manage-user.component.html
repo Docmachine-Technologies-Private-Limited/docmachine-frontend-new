@@ -12,11 +12,11 @@
                     <button type="button" class="btn btn-primary" (click)="formmodel.style.display='block'">Add</button>
                   </div>
             </div>
-            <div class="container1 pt-3">
+            <div class="container1 p-3">
                 <div *ngFor="let data of item1" id="login-container">
                     <div class="content1 top-panel">
                         <div *ngIf="data.imageUrl">
-                            <img class="img2" src="{{data.imageUrl}}" [alt]="data.name">
+                            <img class="img2" src="{{data.imageUrl}}" [alt]="data.name+' \nimage not found...'">
                         </div>
                         <div *ngIf="!data.imageUrl">
                             <img class="img4" src="./assets/ic_mail-2.png">
