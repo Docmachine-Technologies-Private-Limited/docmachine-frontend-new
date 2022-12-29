@@ -76,6 +76,7 @@ import { ConfirmDialogBoxComponent } from './confirm-dialog-box/confirm-dialog-b
 import { UploadDocComponent } from "./Export/export-home/upload-doc/upload-doc.component";
 import { ExcelDownloaderCompComponent } from "./excel-downloader-comp/excel-downloader-comp.component";
 import { SubBillLodgementComponent } from "./Export/sub-bill-lodgement/sub-bill-lodgement.component";
+import {CustomDropdownComponent} from '../custom/custom-dropdown/custom-dropdown.component'
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { SubBillLodgementComponent } from "./Export/sub-bill-lodgement/sub-bill-
     FooterComponent,
     ConfirmDialogBoxComponent,
     ExcelDownloaderCompComponent,
-    SubBillLodgementComponent
+    SubBillLodgementComponent,
+    CustomDropdownComponent
   ],
   imports: [
     SharedHomeModule,

@@ -202,7 +202,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
               if (availableBalance <= 0) {
                 newVal['BalanceAvail'] = 0;
               } else {
-                newVal['BalanceAvail'] = availableBalance.toFixed(2);
+                newVal['BalanceAvail'] = availableBalance;
               }
 
               console.log('Forex data Value', newVal);
@@ -217,7 +217,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
           const newVal = { ...irData };
           let availableBal = irData.amount
             // .replace(/,/g, ''));
-          newVal['BalanceAvail'] = availableBal.toFixed(2);
+          newVal['BalanceAvail'] = availableBal;
           filterForexData.push(newVal);
           console.log('235', filterForexData);
         }
@@ -228,7 +228,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         const newVal = { ...ir };
         let availableBal = ir.amount
           // .replace(/,/g, ''));
-        newVal['BalanceAvail'] = availableBal.toFixed(2);
+        newVal['BalanceAvail'] = availableBal;
         filterForexData.push(newVal);
         console.log('245', filterForexData);
       }

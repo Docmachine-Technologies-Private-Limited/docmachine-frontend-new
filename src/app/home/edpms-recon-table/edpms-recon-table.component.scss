@@ -213,23 +213,6 @@ table {
     font-family: "Font Awesome 5 Free" !important;
 }
 
-#container {
-    overflow: scroll;
-    overflow-x: auto;
-}
-
-#container::-webkit-scrollbar {
-    width: 0px;
-}
-
-#container::-webkit-scrollbar-track {
-    background-color: #f0f5f5;
-}
-
-#container::-webkit-scrollbar-thumb {
-    background: #ccc;
-}
-
 // * {
 //     -webkit-box-sizing: border-box;
 //     -moz-box-sizing: border-box;

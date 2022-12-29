@@ -8,8 +8,8 @@
                 [routerLink]="['/home/dashboardTask']">Back</span>
               </div>
                   <div class="right-panel">
-                    <h6 class="display-5">Invite your team</h6>
-                    <button type="button" class="btn btn-primary" (click)="formmodel.style.display='block'">Add</button>
+                    <h6 class="display-5">Invite your team <span class="text-left" style="font-size: 15px;" *ngIf="item1.length!=0">| Total Member : {{item1.length}}</span></h6>
+                    <button type="button" class="btn btn-primary" (click)="formmodel.style.display='block'"> Add</button>
                   </div>
             </div>
             <div class="container1 p-3">
@@ -25,13 +25,15 @@
                     <div class="content1">
                         <h6 class="name">{{data.name}}</h6>
                         <h6 class="email">{{data.email}}</h6>
+                        <h6 class="email">{{data.UnderSubscription?data.UnderSubscription:'data not found..'}}</h6>
+                        <h6 class="email">{{data.UnderSubscriptionCheckBox?data.UnderSubscriptionCheckBox:'data not found..'}}</h6>
                     </div>
-                   <div class="row">
+                   <div class="row pb-3">
                     <div class="bottom" style="float: left;margin-top: 10px;">
-                      <img src="./assets/Shape-4.png" alt="" style="margin-right: 5px;"> Invited
+                      <img src="./assets/Eye.png" style="margin-right: 5px;">Edit
                   </div>
-                  <div class="bottom bottom1" style="float: right; margin-right: 15px;">
-                      <img src="./assets/Eye.png" style="margin-right: 5px;"> View
+                  <div class="bottom bottom1" style="float: right; margin-right: 15px;" (click)="deleteuser(data)">
+                      <i class="fa fa-trash" aria-hidden="true"></i> Delete
                   </div>
                    </div>
                 </div>
@@ -66,51 +68,77 @@
               </div>
           </form>
       </div>
-        <form [formGroup]="memeberForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="memeberForm" (ngSubmit)="onSubmit(formmodel)">
           <div class="mb-3">
             <label for="recipient-name" class="col-form-label">Name : </label>
-            <input type="text" class="form-control p-2" id="recipient-name" formControlName="name" placeholder="Enter Name">
+            <input type="text" class="form-control p-2" id="recipient-name"
+            formControlName="name" placeholder="Enter Name"  [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['name']==''}"
+            (keyup)="FORM_BUILDER_INSERT_VALUE('name',$event.target.value)"
+            >
+            <div *ngIf="submitted && this.FORM_BUILDER['name']==''" class="invalid-feedback">
+              <div *ngIf="this.FORM_BUILDER['name']==''">name is required</div>
+            </div>
           </div>
           <div class="mb-3">
             <label for="message-text" class="col-form-label">Email id :</label>
-            <input class="form-control p-2" id="message-text" formControlName="email" type="text" placeholder="Enter Email Id">
+            <input class="form-control p-2" id="message-text" formControlName="email"
+            type="text" placeholder="Enter Email Id" [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['email']==''}"
+            (keyup)="FORM_BUILDER_INSERT_VALUE('email',$event.target.value)"
+            >
+            <div *ngIf="submitted && this.FORM_BUILDER['email']==''" class="invalid-feedback">
+              <div *ngIf="this.FORM_BUILDER['email']==''">Email id is required</div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="message-text" class="col-form-label">Under subscription :</label>
-            <select class="form-select" aria-label="Default select example" formControlName="UnderSubscription" >
-              <option selected value="Select Under subscription">Select Under subscription</option>
+          <!-- <div class="mb-3">
+            <label for="message-text" class="col-form-label">Subscription :</label>
+            <select class="form-select" aria-label="Default select example" formControlName="UnderSubscription"
+            [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
+            this.FORM_BUILDER['UnderSubscription']==='Select Subscription' }"
+            (change)="FORM_BUILDER_INSERT_VALUE('UnderSubscription',$event.target.value)">
+              <option selected value="Select Subscription">Select Subscription</option>
               <option value="Imports">Imports</option>
               <option value="Export">Export</option>
-              <option value="Any one or both">Any one or both</option>
+              <option value="both">both</option>
             </select>
-          </div>
-        <div class="row m-auto">
-          <div class="mb-3 col-3">
-            <div class="form-check">
-              <label class="col-md-1 checkbox-inline checkbox-label" for="checkboxes-0">
-                <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1" formControlName="UnderSubscriptionCheckBox">
-                Maker
-              </label>
+            <div *ngIf="submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
+              this.FORM_BUILDER['UnderSubscription']=='Select Subscription'" class="invalid-feedback">
+              <div *ngIf="this.FORM_BUILDER['UnderSubscription']=='' ||
+              this.FORM_BUILDER['UnderSubscription']=='Select Subscription'">UnderSubscription is required</div>
             </div>
           </div>
-          <div class="mb-3 col-3">
-            <div class="form-check">
-              <label class="col-md-1 checkbox-inline checkbox-label" for="checkboxes-0">
-                <input type="checkbox" name="checkboxes" id="checkboxes-0" value="2" formControlName="UnderSubscriptionCheckBox">
-                Checker
-              </label>
+          <div class="column">
+            <label for="message-text" class="col-form-label">Role :</label>
+            <div class="row m-auto">
+              <div class="mb-3 col-3">
+                <div class="form-check">
+                  <label class="col-md-1 checkbox-inline checkbox-label" for="checkboxes-0">
+                    <input type="checkbox" name="checkboxes" id="checkboxes-0" value="Maker"
+                    (change)="FORM_BUILDER_INSERT_VALUE('UnderSubscriptionCheckBox',$event.target.value)">
+                    Maker
+                  </label>
+                </div>
+              </div>
+              <div class="mb-3 col-3">
+                <div class="form-check">
+                  <label class="col-md-1 checkbox-inline checkbox-label" for="checkboxes-0">
+                    <input type="checkbox" name="checkboxes" id="checkboxes-0" value="Checker"
+                    (change)="FORM_BUILDER_INSERT_VALUE('UnderSubscriptionCheckBox',$event.target.value)">
+                    Checker
+                  </label>
+                </div>
+              </div>
+              <div class="mb-3 col-3">
+                <div class="form-check">
+                  <label class="col-md-1 checkbox-inline checkbox-label" for="checkboxes-0">
+                    <input type="checkbox" name="checkboxes" id="checkboxes-0" value="Approver"
+                    (change)="FORM_BUILDER_INSERT_VALUE('UnderSubscriptionCheckBox',$event.target.value)">
+                    Approver
+                  </label>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="mb-3 col-3">
-            <div class="form-check">
-              <label class="col-md-1 checkbox-inline checkbox-label" for="checkboxes-0">
-                <input type="checkbox" name="checkboxes" id="checkboxes-0" value="3" formControlName="UnderSubscriptionCheckBox">
-                Approver
-              </label>
-            </div>
-          </div>
-        </div>
-          <button type="submit" class="btn btn-primary" (click)="formmodel.style.display='none'">Submit</button>
+          </div> -->
+          <button type="submit" class="btn btn-primary">Submit</button>
         </form>
       </div>
       <div class="modal-footer">
