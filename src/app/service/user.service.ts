@@ -132,6 +132,20 @@ export class UserService {
     );
   }
 
+  deleteUser_Role(data){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/member/deleteUserRole`,
+      {
+        data: data,
+      },
+      httpOptions
+    );
+  }
   delete(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

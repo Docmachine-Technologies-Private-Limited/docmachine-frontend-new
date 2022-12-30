@@ -3,7 +3,7 @@
         <div class="header-panel">
             <!-- *ngIf="!showInvoice" -->
             <div style="display: flex; align-items: center">
-                <h3 class="heading">Credit Note Documents</h3>
+                <h3 class="heading_common_tag">Credit Note Documents</h3>
                 <!-- {{doc}} -->
             </div>
             <div>
@@ -15,7 +15,7 @@
                   <option value="" selected="selected">All</option>
               </select>
             </div>
-            <div style="padding-top: 0.7%">
+            <div class="top_exl_ddivs">
                 <button (click)="exportToExcel()" style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
                         background-color: #49A2D7;
                         border: none;
@@ -28,21 +28,21 @@
 
 
         <div class="analytics">
-            <div style="width: 100%" class="analytics-side" #creditnotes>
+            <div style="width: 100%" class="new_analit" #creditnotes>
                 <!-- *ngIf="!showInvoice" -->
                 <div style="width: 100%" class="row">
-                    <div class="col-12 mb-lg padding" id="container">
+                    <div class="" id="container">
                         <!-- *ngIf="!showInvoice" -->
-                        <section class="pb-0 box-shadow">
+                        <section class="middle_datatable">
                             <div class="widget-body p-0 support table-wrapper">
                                 <table class="table table-striped mb-0">
                                     <!-- *ngIf='pipo' -->
-                                    <thead style="width: 100%;height: 54px;background: white;position: sticky;top: 0;">
-                                        <tr class="text-muted table-heading" style="opacity: 45%; font-size: 14px; color:black !important; font-weight: 300 !important; padding: 5px; border-bottom: 1px solid #f2f4f8;">
+                                    <thead style="width: 100%;background: white;position: sticky;top: 0;">
+                                        <tr class="text-muted table-heading" style="font-size: 14px; color:black !important; font-weight: 300 !important; padding: 5px; border-bottom: 1px solid #f2f4f8;">
                                             <!-- <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th> -->
-                                            <th scope="col"><span class="pl-3" style="margin-left: 9px;">DATE</span></th>
+                                            <th scope="col">DATE</th>
                                             <th scope="col">PI/PO No.</th>
                                             <th scope="col">C N No.</th>
                                             <th scope="col">C N Amount</th>
@@ -61,9 +61,9 @@
                                             <!-- <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th> -->
-                                            <td style="padding: 20px 35px;">{{ data.date }}</td>
+                                            <td>{{ data.date }}</td>
 
-                                          <td class="sb-no"> {{ getPipoNumbers(data) }} </td>
+                                            <td class="sb-no"> {{ getPipoNumbers(data) }} </td>
 
                                             <td>
                                                 <div *ngIf="!optionsVisibility[i]">

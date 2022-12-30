@@ -75,7 +75,9 @@ import { MatFormFieldModule} from '@angular/material/form-field';
 import { ConfirmDialogBoxComponent } from './confirm-dialog-box/confirm-dialog-box.component';
 import { UploadDocComponent } from "./Export/export-home/upload-doc/upload-doc.component";
 import { ExcelDownloaderCompComponent } from "./excel-downloader-comp/excel-downloader-comp.component";
+import { DatatableComponent } from "./datatable/datatable.component";
 import { SubBillLodgementComponent } from "./Export/sub-bill-lodgement/sub-bill-lodgement.component";
+import {CustomDropdownComponent} from '../custom/custom-dropdown/custom-dropdown.component'
 
 @NgModule({
   declarations: [
@@ -99,7 +101,8 @@ import { SubBillLodgementComponent } from "./Export/sub-bill-lodgement/sub-bill-
     FooterComponent,
     ConfirmDialogBoxComponent,
     ExcelDownloaderCompComponent,
-    SubBillLodgementComponent
+    SubBillLodgementComponent,
+    CustomDropdownComponent
   ],
   imports: [
     SharedHomeModule,
@@ -164,6 +167,11 @@ import { SubBillLodgementComponent } from "./Export/sub-bill-lodgement/sub-bill-
           {
             path: "Excel-Downloader",
             component: ExcelDownloaderCompComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "data-table",
+            component: DatatableComponent,
             pathMatch: "full",
           },
           {

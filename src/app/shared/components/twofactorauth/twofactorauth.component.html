@@ -1,0 +1,66 @@
+<div style="padding-right: 0 !important; overflow: hidden" class="container-fluid">
+  <div style="display: flex; width: 100%" class="no-gutter">
+    <div class="bg-dark-1 mainClass">
+      <div  *ngIf="!tfa.secret" style="margin-top: 50px;">
+            <div *ngIf="!!tfa.tempSecret" class="two-factor">
+                <p style="text-align: center;">Scan the QR code and enter the secret key Using Google Authenticator
+                    Application</p>
+                <img [src]="tfa.dataURL" alt="" class="img-thumbnail" style="display:block;margin:auto">
+                <p style="text-align: center;" class="pt-2">Auth Type - Time Based - OTP</p>
+
+                <form class="form-group" (ngSubmit)="confirm({OTP:otp.value,Login_Limit:loginrange.value,
+                  Role:this.ArraytoString(mulitplecheckbox.value),Subscription:Subscription.value})" #otpForm="ngForm"
+                      style="text-align: -webkit-center;">
+                      <div class="row flex-label" style="width: 300px;">
+                        <label for="message-text" class="col-form-label">Subscription :</label>
+                        <select class="form-select p-3" aria-label="Default select example" #Subscription>
+                          <option value="Select Subscription">Select Subscription</option>
+                          <option value="Imports">Imports</option>
+                          <option value="Export">Export</option>
+                          <option value="both">both</option>
+                        </select>
+                      </div>
+                         <div class="row pt-3" style="width: 300px;">
+                            <app-checkbox-components
+                            width="300px"
+                            [styles]="{'margin':'auto'}"
+                            labeltext="Role :"
+                            typeofcheckbox="checkbox"
+                            [data]="[{value:'Maker'},{value:'Checker'},{value:'Apporvers'}]"
+                            [multiple]="true"
+                            #mulitplecheckbox></app-checkbox-components>
+                        </div>
+                      <div class="row" style="width: 300px;">
+                        <label for="message-text" class="col-form-label">login limit :</label>
+                      <input name="loginrange"
+                      type="number"
+                      class="form-control rounded-pill border-0 shadow-sm px-4 password1"
+                      placeholder="Enter the login limit..." id="authcode" autocomplete="off" #loginrange required>
+                      </div>
+                      <div class="row" style="width: 300px;">
+                        <label for="message-text" class="col-form-label">Otp :</label>
+                    <input name="authcode"
+                           class="form-control rounded-pill border-0 shadow-sm px-4 password1" maxlength="6"
+                           placeholder="Enter the Auth Code" id="authcode" autocomplete="off"  #otp
+                           required>
+                    <br>
+                  </div>
+                    <button type="Submit" class="btn btn-lg btn-primary btn-block btn-signin">Submit</button>
+
+                </form>
+            </div>
+      </div>
+    </div>
+
+    <!-- End -->
+    <div class="parent" style="
+      width: 42%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    ">
+      <img style="width: 100%" class="image1" src="./assets/Image.png"/>
+      <img class="image2" src="./assets/LogoFinal.png"/>
+    </div>
+  </div>
+</div>
