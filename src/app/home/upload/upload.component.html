@@ -477,144 +477,134 @@
                                             <button (click)="onOverride()" style="margin-right: 5px">Yes</button>
                                             <button [routerLink]="['/home/inward-remittance-advice']">No</button>
                                         </div>
-
-
-                                        <!-- <div style="margin-top: 100px; width: 70%;">
-
-       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      </div> -->
-                                        <form class="iframecontroller" *ngIf="sbNo && !override" #values="ngForm" (ngSubmit)="onSubmit(values)">
-                                            <div class="field" style="width:84%;margin-left:31px">
-                                                <table class="field-table">
-                                                    <tr class="field-heading">
-                                                        <td>AD BILL NUMBER</td>
-                                                        <td>SB NUMBER*</td>
-                                                        <td>SB DATE</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <input [(ngModel)]="res.adBillNo" class="input" type="text" name="adBillNo" />
-                                                        </td>
-                                                        <td>
-                                                            <input [(ngModel)]="res.sbno" class="input" type="text" name="sbno" />
-                                                        </td>
-                                                        <td>
-                                                            <input [(ngModel)]="res.sbdate" class="input" type="date" name="sbdate" />
-                                                        </td>
-                                                        <td><button type="submit" class="button">Submit</button></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
+                                        <form class="iframecontroller" *ngIf="sbNo && !override" #values="ngForm" (ngSubmit)="onSubmit(values)" style="grid-template-columns: 49% 49%;">
                                             <div class="sub-table">
-                                                <div class="sb1">
-                                                    <tr class="form-wrapper">
-                                                        <p class="sh1">SB DETAILS</p>
-                                                        <td class="full-input border1">
-                                                            <label for="portCode">PORT CODE</label><input [(ngModel)]="res.portCode" class="smalll-input" type="text" name="portCode" />
-                                                        </td>
-                                                        <td class="full-input border2">
-                                                            <label for="ieccode">IEC CODE</label><input [(ngModel)]="res.ieccode" class="smalll-input" type="text" name="ieccode" />
-                                                        </td>
-                                                        <td class="full-input border3">
-                                                            <label for="iecName">IEC NAME</label><input [(ngModel)]="res.iecName" class="smalll-input" type="text" name="iecName" />
-                                                        </td>
-                                                        <br />
-                                                        <td class="full-input border1">
-                                                            <label for="adCode">AD CODE</label><input [(ngModel)]="res.adCode" class="smalll-input" type="text" name="adCode" />
-                                                        </td>
-                                                        <td class="full-input border2">
-                                                            <label for="leodate">LEO DATE</label><input [(ngModel)]="res.leodate" class="smalll-input" type="date" name="leodate" />
-                                                        </td>
-                                                        <td class="full-input border3">
-                                                            <label for="processingStaus">PROCESSING STATUS</label><input [(ngModel)]="res.processingStaus" class="smalll-input" type="text" name="processingStaus" />
-                                                        </td>
-                                                        <br />
-
-                                                        <p class="sh1">FOB and FREIGHT</p>
-                                                        <td class="full-input border1">
-                                                            <label for="fobCurrency">FOB CURRENCY</label><input [(ngModel)]="res.fobCurrency" class="smalll-input" type="text" name="fobCurrency" />
-                                                        </td>
-                                                        <td class="full-input border2">
-                                                            <label for="fobValue">FOB VALUE</label><input [(ngModel)]="res.fobValue" class="smalll-input" type="text" name="fobValue" />
-                                                        </td>
-                                                        <td class="full-input border3">
-                                                            <label for="realizedFobValue">REALIZED FOB VALUE</label><input [(ngModel)]="res.realizedFobValue" class="smalll-input" type="text" name="realizedFobValue" />
-                                                        </td>
-                                                        <br />
-                                                        <td class="full-input border1">
-                                                            <label for="equivalentFobValue">EQUIVALENT FOB VALUE</label><input [(ngModel)]="res.equivalentFobValue" class="smalll-input" type="text" name="equivalentFobValue" />
-                                                        </td>
-                                                        <td class="full-input border2">
-                                                            <label for="freightCurrency">FREIGHT CURRENCY</label><input [(ngModel)]="res.freightCurrency" class="smalll-input" type="text" name="freightCurrency" />
-                                                        </td>
-                                                        <td class="full-input border3">
-                                                            <label for="realizedFreightValue">FREIGHT VALUE</label><input [(ngModel)]="res.realizedFreightValue" class="smalll-input" type="text" name="realizedFreightValue" />
-                                                        </td>
-                                                        <br />
-                                                        <p class="sh1">INSURANCE</p>
-                                                        <td class="full-input border2">
-                                                            <label for="insuranceCurrency">INSURANCE CURRENCY</label><input [(ngModel)]="res.insuranceCurrency" class="smalll-input" type="text" name="insuranceCurrency" />
-                                                        </td>
-                                                        <td class="full-input border3">
-                                                            <label for="insuranceValue">INSURANCE VALUE</label><input [(ngModel)]="res.insuranceValue" class="smalll-input" type="text" name="insuranceValue" />
-                                                        </td>
-                                                        <td class="full-input border1">
-                                                            <label for="realizedInsuranceValue">INSURANCE VALUE</label><input [(ngModel)]="res.realizedInsuranceValue" class="smalll-input" type="text" name="realizedInsuranceValue" />
-                                                        </td>
-                                                        <br />
-                                                        <p class="sh1">Additional</p>
-                                                        <td class="full-input border2">
-                                                            <label for="bankingCharges">BANKING CHARGES</label><input [(ngModel)]="res.bankingCharges" class="smalll-input" type="text" name="bankingCharges" />
-                                                        </td>
-                                                        <td class="full-input border3">
-                                                            <label for="expectedPaymentlastdate">PAYMENT LAST DATE</label><input [(ngModel)]="res.expectedPaymentlastdate" class="smalll-input" type="date" name="expectedPaymentlastdate" />
-                                                        </td>
-                                                        <td class="full-input border1">
-                                                            <label for="AddedDate">ADDED DATE</label><input [(ngModel)]="res.AddedDate" class="smalll-input" type="date" name="AddedDate" />
-                                                        </td>
-                                                        <br />
-                                                        <td class="full-input border2">
-                                                            <label for="modifiedDate">MODIFIED DATE</label><input [(ngModel)]="res.modifiedDate" class="smalll-input" type="date" name="modifiedDate" />
-                                                        </td>
-                                                        <td class="full-input border2">
-                                                            <label for="exporterLocationCode">EXPORTER LOCATION CODE</label><input [(ngModel)]="res.exporterLocationCode" class="smalll-input" type="text" name="exporterLocationCode" />
-                                                        </td>
-                                                        <td class="full-input border2">
-                                                            <label for="countryOfFinaldestination">COUNTRY OF FINAL DESTINATION</label><input [(ngModel)]="res.countryOfFinaldestination" class="smalll-input" type="text" name="countryOfFinaldestination"
-                                                            />
-                                                        </td>
-                                                        <td class="full-input border2">
-                                                            <label for="consigneeName">CONSIGNEE NAME</label><input [(ngModel)]="res.consigneeName" class="smalll-input" type="text" name="consigneeName" />
-                                                        </td>
-                                                        <td class="full-input border2">
-                                                            <label for="exchangeRate">EXCHANGE RATE</label><input [(ngModel)]="res.exchangeRate" class="smalll-input" type="text" name="exchangeRate" />
-                                                        </td>
-                                                        <br />
-                                                        <br />
-                                                        <!-- <p class="sh1">Bene Details</p>
-          <td class="full-input border2">
-            <label for="bankingCharges">Bene Name</label><select name="beneName" ngModel>
-              <option value="">Select Bene Name</option>
-              <option *ngFor="let bene of benneDetail" [value]="bene.beneName">
-                {{ bene.beneName }}
-              </option>
-            </select>
-          </td> -->
-
-
-                                                    </tr>
-                                                </div>
-                                                <div class="sb2">
-                                                    <iframe [src]="publicUrl" width="100%" height="700px" style="margin-left: -150px;"> </iframe>
+                                                <div>
+                                                    <iframe [src]="publicUrl" width="500px" height="700px" > </iframe>
                                                 </div>
                                             </div>
+                                            <div class="field" >
+                                              <div class="col-12">
+                                                <tr class="form-wrapper">
+                                                    <p class="sh1">SB DETAILS</p>
+                                                    <td class="full-input border1">
+                                                        <label for="portCode">PORT CODE</label><input [(ngModel)]="res.portCode" class="smalll-input" type="text" name="portCode" />
+                                                    </td>
+                                                    <td class="full-input border2">
+                                                        <label for="ieccode">IEC CODE</label><input [(ngModel)]="res.ieccode" class="smalll-input" type="text" name="ieccode" />
+                                                    </td>
+                                                    <td class="full-input border3">
+                                                        <label for="iecName">IEC NAME</label><input [(ngModel)]="res.iecName" class="smalll-input" type="text" name="iecName" />
+                                                    </td>
+                                                    <br />
+                                                    <td class="full-input border1">
+                                                        <label for="adCode">AD CODE</label><input [(ngModel)]="res.adCode" class="smalll-input" type="text" name="adCode" />
+                                                    </td>
+                                                    <td class="full-input border2">
+                                                        <label for="leodate">LEO DATE</label><input [(ngModel)]="res.leodate" class="smalll-input" type="date" name="leodate" />
+                                                    </td>
+                                                    <td class="full-input border3">
+                                                        <label for="processingStaus">PROCESSING STATUS</label><input [(ngModel)]="res.processingStaus" class="smalll-input" type="text" name="processingStaus" />
+                                                    </td>
+                                                    <br />
 
-                                            <div style="float: left; width: 73%; margin-left: 20px">
+                                                    <p class="sh1">FOB and FREIGHT</p>
+                                                    <td class="full-input border1">
+                                                        <label for="fobCurrency">FOB CURRENCY</label><input [(ngModel)]="res.fobCurrency" class="smalll-input" type="text" name="fobCurrency" />
+                                                    </td>
+                                                    <td class="full-input border2">
+                                                        <label for="fobValue">FOB VALUE</label><input [(ngModel)]="res.fobValue" class="smalll-input" type="text" name="fobValue" />
+                                                    </td>
+                                                    <td class="full-input border3">
+                                                        <label for="realizedFobValue">REALIZED FOB VALUE</label><input [(ngModel)]="res.realizedFobValue" class="smalll-input" type="text" name="realizedFobValue" />
+                                                    </td>
+                                                    <br />
+                                                    <td class="full-input border1">
+                                                        <label for="equivalentFobValue">EQUIVALENT FOB VALUE</label><input [(ngModel)]="res.equivalentFobValue" class="smalll-input" type="text" name="equivalentFobValue" />
+                                                    </td>
+                                                    <td class="full-input border2">
+                                                        <label for="freightCurrency">FREIGHT CURRENCY</label><input [(ngModel)]="res.freightCurrency" class="smalll-input" type="text" name="freightCurrency" />
+                                                    </td>
+                                                    <td class="full-input border3">
+                                                        <label for="realizedFreightValue">FREIGHT VALUE</label><input [(ngModel)]="res.realizedFreightValue" class="smalll-input" type="text" name="realizedFreightValue" />
+                                                    </td>
+                                                    <br />
+                                                    <p class="sh1">INSURANCE</p>
+                                                    <td class="full-input border2">
+                                                        <label for="insuranceCurrency">INSURANCE CURRENCY</label><input [(ngModel)]="res.insuranceCurrency" class="smalll-input" type="text" name="insuranceCurrency" />
+                                                    </td>
+                                                    <td class="full-input border3">
+                                                        <label for="insuranceValue">INSURANCE VALUE</label><input [(ngModel)]="res.insuranceValue" class="smalll-input" type="text" name="insuranceValue" />
+                                                    </td>
+                                                    <td class="full-input border1">
+                                                        <label for="realizedInsuranceValue">INSURANCE VALUE</label><input [(ngModel)]="res.realizedInsuranceValue" class="smalll-input" type="text" name="realizedInsuranceValue" />
+                                                    </td>
+                                                    <br />
+                                                    <p class="sh1">Additional</p>
+                                                    <td class="full-input border2">
+                                                        <label for="bankingCharges">BANKING CHARGES</label><input [(ngModel)]="res.bankingCharges" class="smalll-input" type="text" name="bankingCharges" />
+                                                    </td>
+                                                    <td class="full-input border3">
+                                                        <label for="expectedPaymentlastdate">PAYMENT LAST DATE</label><input [(ngModel)]="res.expectedPaymentlastdate" class="smalll-input" type="date" name="expectedPaymentlastdate" />
+                                                    </td>
+                                                    <td class="full-input border1">
+                                                        <label for="AddedDate">ADDED DATE</label><input [(ngModel)]="res.AddedDate" class="smalll-input" type="date" name="AddedDate" />
+                                                    </td>
+                                                    <br />
+                                                    <td class="full-input border2">
+                                                        <label for="modifiedDate">MODIFIED DATE</label><input [(ngModel)]="res.modifiedDate" class="smalll-input" type="date" name="modifiedDate" />
+                                                    </td>
+                                                    <td class="full-input border2">
+                                                        <label for="exporterLocationCode">EXPORTER LOCATION CODE</label><input [(ngModel)]="res.exporterLocationCode" class="smalll-input" type="text" name="exporterLocationCode" />
+                                                    </td>
+                                                    <td class="full-input border2">
+                                                        <label for="countryOfFinaldestination">COUNTRY OF FINAL DESTINATION</label><input [(ngModel)]="res.countryOfFinaldestination" class="smalll-input" type="text" name="countryOfFinaldestination"
+                                                        />
+                                                    </td>
+                                                    <td class="full-input border2">
+                                                        <label for="consigneeName">CONSIGNEE NAME</label><input [(ngModel)]="res.consigneeName" class="smalll-input" type="text" name="consigneeName" />
+                                                    </td>
+                                                    <td class="full-input border2">
+                                                        <label for="exchangeRate">EXCHANGE RATE</label><input [(ngModel)]="res.exchangeRate" class="smalll-input" type="text" name="exchangeRate" />
+                                                    </td>
+                                                    <br />
+                                                    <br />
+                                                 </tr>
+                                            </div>
+
+                                        <div class="new_shipping_input" style="padding: 16px;">
+                                            <div class="row">
+                                               <div class="col-md-6 col-12">
+                                                <div class="mb-3">
+                                                    <label for="exampleInputEmail1" class="form-label">AD BILL NUMBER</label>
+                                                    <input [(ngModel)]="res.adBillNo" class="input form-control" type="text" name="adBillNo" />
+        
+                                                  </div>
+                                               </div> 
+                                               <div class="col-md-6 col-12">
+                                                <div class="mb-3">
+                                                    <label for="exampleInputEmail1" class="form-label">SB NUMBER*</label>
+                                                    <input [(ngModel)]="res.sbno" class="input form-control" type="text" name="sbno" />
+                                               </div> 
+                                            </div> 
+                                               <div class="col-md-6 col-12">
+                                                <div class="mb-3">
+                                                    <label for="exampleInputEmail1" class="form-label">SB DATE</label>
+                                                    <input [(ngModel)]="res.sbdate" class="input form-control" type="date" name="sbdate" />
+                                               </div> 
+                                               </div> 
+                                               <div class="col-md-6 col-12">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                               </div> 
+    
+                                            </div>
+                                        </div>
+                                              <div>
                                                 <div>
                                                     <div class="tabbed">
                                                         <input *ngFor="let obj of res.invoices; let i = index" [attr.data-index]="i" type="radio" id="{{ i + 1 }}" name="css-tabs" checked />
 
-                                                        <ul class="tabs">
+                                                        <ul class="tabs" style="padding-left:15px">
                                                             <li class="tab" *ngFor="let obj of res.invoices; let i = index" [attr.data-index]="i">
                                                                 <label for="{{ i + 1 }}">Invoice {{ i + 1 }}</label>
                                                             </li>
@@ -634,7 +624,11 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                          </div>
+
                                         </form>
+
+
                                         <form class="iframecontroller" *ngIf="boeNumber && !override" #values="ngForm" (ngSubmit)="onSubmitBoe(values)">
                                             <div class="field">
                                                 <table class="field-table">
