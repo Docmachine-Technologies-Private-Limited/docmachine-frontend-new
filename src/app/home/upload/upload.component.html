@@ -484,7 +484,7 @@
                                                 </div>
                                             </div>
                                             <div class="field" >
-                                              <div class="col-10">
+                                              <div class="col-12">
                                                 <tr class="form-wrapper">
                                                     <p class="sh1">SB DETAILS</p>
                                                     <td class="full-input border1">
@@ -571,31 +571,40 @@
                                                     <br />
                                                  </tr>
                                             </div>
-                                              <table class="field-table">
-                                                  <tr class="field-heading">
-                                                      <td>AD BILL NUMBER</td>
-                                                      <td>SB NUMBER*</td>
-                                                      <td>SB DATE</td>
-                                                  </tr>
-                                                  <tr>
-                                                      <td>
-                                                          <input [(ngModel)]="res.adBillNo" class="input form-control" type="text" name="adBillNo" />
-                                                      </td>
-                                                      <td>
-                                                          <input [(ngModel)]="res.sbno" class="input form-control" type="text" name="sbno" />
-                                                      </td>
-                                                      <td>
-                                                          <input [(ngModel)]="res.sbdate" class="input form-control" type="date" name="sbdate" />
-                                                      </td>
-                                                      <td><button type="submit" class="button">Submit</button></td>
-                                                  </tr>
-                                              </table>
+
+                                        <div class="new_shipping_input" style="padding: 16px;">
+                                            <div class="row">
+                                               <div class="col-md-6 col-12">
+                                                <div class="mb-3">
+                                                    <label for="exampleInputEmail1" class="form-label">AD BILL NUMBER</label>
+                                                    <input [(ngModel)]="res.adBillNo" class="input form-control" type="text" name="adBillNo" />
+        
+                                                  </div>
+                                               </div> 
+                                               <div class="col-md-6 col-12">
+                                                <div class="mb-3">
+                                                    <label for="exampleInputEmail1" class="form-label">SB NUMBER*</label>
+                                                    <input [(ngModel)]="res.sbno" class="input form-control" type="text" name="sbno" />
+                                               </div> 
+                                            </div> 
+                                               <div class="col-md-6 col-12">
+                                                <div class="mb-3">
+                                                    <label for="exampleInputEmail1" class="form-label">SB DATE</label>
+                                                    <input [(ngModel)]="res.sbdate" class="input form-control" type="date" name="sbdate" />
+                                               </div> 
+                                               </div> 
+                                               <div class="col-md-6 col-12">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                               </div> 
+    
+                                            </div>
+                                        </div>
                                               <div>
                                                 <div>
                                                     <div class="tabbed">
                                                         <input *ngFor="let obj of res.invoices; let i = index" [attr.data-index]="i" type="radio" id="{{ i + 1 }}" name="css-tabs" checked />
 
-                                                        <ul class="tabs">
+                                                        <ul class="tabs" style="padding-left:15px">
                                                             <li class="tab" *ngFor="let obj of res.invoices; let i = index" [attr.data-index]="i">
                                                                 <label for="{{ i + 1 }}">Invoice {{ i + 1 }}</label>
                                                             </li>
