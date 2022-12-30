@@ -9,11 +9,11 @@
               </div>
                   <div class="right-panel">
                     <h6 class="display-5">Invite your team <span class="text-left" style="font-size: 15px;" *ngIf="item1.length!=0">| Total Member : {{item1.length}}</span></h6>
-                    <button type="button" class="btn btn-primary" (click)="formmodel.style.display='block'"> Add</button>
+                    <button type="button" class="btn btn-primary" (click)="OpenPopup(formmodel)"> Add</button>
                   </div>
             </div>
             <div class="container1 p-3">
-                <div *ngFor="let data of item1" id="login-container">
+                <div *ngFor="let data of item1 let i=index" id="login-container">
                     <div class="content1 top-panel">
                         <div *ngIf="data.imageUrl">
                             <img class="img2" src="{{data.imageUrl}}" [alt]="data.name+' \nimage not found...'">
@@ -25,17 +25,15 @@
                     <div class="content1">
                         <h6 class="name">{{data.name}}</h6>
                         <h6 class="email">{{data.email}}</h6>
-                        <h6 class="email">{{data.UnderSubscription?data.UnderSubscription:'data not found..'}}</h6>
-                        <h6 class="email">{{data.UnderSubscriptionCheckBox?data.UnderSubscriptionCheckBox:'data not found..'}}</h6>
                     </div>
-                   <div class="row pb-3">
-                    <div class="bottom" style="float: left;margin-top: 10px;">
-                      <img src="./assets/Eye.png" style="margin-right: 5px;">Edit
-                  </div>
-                  <div class="bottom bottom1" style="float: right; margin-right: 15px;" (click)="deleteuser(data)">
-                      <i class="fa fa-trash" aria-hidden="true"></i> Delete
-                  </div>
-                   </div>
+                      <div class="row pb-3 flex-display">
+                        <div class="bottom" (click)="EditData(Editformmodel.style.display='block',{id:data['_id'],index:i})">
+                          <img src="./assets/Eye.png">Edit
+                      </div>
+                      <div class="bottom bottom1" (click)="deleteuser(data)">
+                          <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                      </div>
+                       </div>
                 </div>
             </div>
             <br>
@@ -147,3 +145,60 @@
     </div>
   </div>
 </div>
+
+<div class="modal" id="formmodel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" #Editformmodel>
+  <div class="modal-dialog" *ngIf="this.SELECTED_INDEX!=0">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Member</h5>
+        <button type="button" class="btn-close" (click)="Editformmodel.style.display='none'"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="button-wrapper">
+          <form class="form" method="POST">
+            <p class="heading">Update Member</p>
+              <span class="label">
+                  <img class="img3" [src]="this.SELECTED_EDIT_DATA['imageUrl']" style="height: 70px; width: 70px;">
+              </span>
+              <div *ngIf="!toggle" class="upload-div">
+                  <input name="upload" class="upload-box" placeholder="Upload File"
+                      (error)="onUploadError($event)" (init)="onUploadInit($event)"
+                      (success)="onUploadSuccess($event)" *ngIf="type === 'directive'"
+                      [dropzone]="config" class="dropzone dropzone-container" id="dropzone">
+              </div>
+          </form>
+      </div>
+        <form [formGroup]="memeberForm" (ngSubmit)="onEditSubmit(Editformmodel,{
+          email: editemail.value,
+          name:editname.value
+        })">
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Name : </label>
+            <input type="text" class="form-control p-2" id="recipient-name" [value]="this.SELECTED_EDIT_DATA['name']"
+             #editname placeholder="Enter Name"  [ngClass]="{ 'is-invalid': submitted && this.EDIT_FORM_BUILDER['name']==''}"
+            (keyup)="EDIT_FORM_BUILDER_INSERT_VALUE('name',$event.target.value)">
+            <div *ngIf="submitted && this.EDIT_FORM_BUILDER['name']==''" class="invalid-feedback">
+              <div *ngIf="this.EDIT_FORM_BUILDER['name']==''">name is required</div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Email id :</label>
+            <input class="form-control p-2" id="message-text"
+            [value]="this.SELECTED_EDIT_DATA['email']"
+            type="text" #editemail placeholder="Enter Email Id" [ngClass]="{ 'is-invalid': submitted && this.SELECTED_EDIT_DATA['email']==''}"
+            (keyup)="EDIT_FORM_BUILDER_INSERT_VALUE('email',$event.target.value)"
+            >
+            <div *ngIf="submitted && this.SELECTED_EDIT_DATA['email']==''" class="invalid-feedback">
+              <div *ngIf="this.SELECTED_EDIT_DATA['email']==''">Email id is required</div>
+            </div>
+          </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="Editformmodel.style.display='none'">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
