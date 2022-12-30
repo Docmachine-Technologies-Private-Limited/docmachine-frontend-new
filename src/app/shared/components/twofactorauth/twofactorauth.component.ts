@@ -31,23 +31,27 @@ export class TwofactorauthComponent implements OnInit {
     this.findEmptyObject(value,[undefined,null,'','Select Subscription']).then((condition:any)=>{
       if (condition==true) {
         console.log(condition,value,'sfdfsdfdfdsfd')
+       if (value['Role']==='Maker,Checker,Apporvers') {
         this.userService.verify(value)
-          .subscribe(
-            data => {
-              if (data['status'] == 200) {
-                this.toastr.success(data['message']);
-                this.router.navigate(['/login'], { queryParams: { registered: true } });
-              } else {
-                this.toastr.error(data['message']);
-              }
-            },
-            error => {
-              this.toastr.error('something wrong, please check the details!');
-              console.log("error")
-            });
+        .subscribe(
+          data => {
+            if (data['status'] == 200) {
+              this.toastr.success(data['message']);
+              this.router.navigate(['/login'], { queryParams: { registered: true } });
+            } else {
+              this.toastr.error(data['message']);
+            }
+          },
+          error => {
+            this.toastr.error('something wrong, please check the details!');
+            console.log("error")
+          });
+       } else {
+        this.toastr.error('Please select also Apporvers checkbox...');
+       }
       }else{
-        for (const key in value) {
-          this.toastr.error(value[key]);
+        for (const key in condition) {
+          this.toastr.error(condition[key]);
         }
       }
 

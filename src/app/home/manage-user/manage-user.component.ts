@@ -38,6 +38,11 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     imageUrl: "",
     name:""
   }
+  EDIT_FORM_BUILDER: any=[]
+  SELECTED_EDIT_DATA:any=[];
+  SELECTED_INDEX=0;
+
+  userData:any=[];
 
   constructor(@Inject(PLATFORM_ID) public platformId,
   private route?: ActivatedRoute, private formBuilder?: FormBuilder,
@@ -71,11 +76,14 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnInit(): void {
+ async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.toggle = false;
     this.id = this.route.snapshot.queryParams['id'];
     console.log(this.id)
+    this.userData = await this.userService.getUserDetail();
+    // this.userData = this.userData.result
+    console.log("userData",this.userData)
     this.memeberForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
@@ -113,6 +121,18 @@ URL_CREATE(url){
     console.log(args[1].data)
     this.img = args[1].data
     this.toggle = true;
+  }
+  OpenPopup(formmodel:any){
+    if (this.userData['result']['Login_Limit']>this.item1.length) {
+      formmodel.style.display='block'
+    } else {
+      formmodel.style.display='none';
+      this.toastr.error('Yours add member limit exceeded...');
+    }
+  }
+  EditData(temp:any,data:any){
+    this.SELECTED_INDEX=1;
+    this.SELECTED_EDIT_DATA=this.item1[data['index']];
   }
   onSubmit(formmodel:any) {
     this.submitted = true;
@@ -158,6 +178,9 @@ URL_CREATE(url){
   FORM_BUILDER_INSERT_VALUE(key:any,value: string) {
     this.FORM_BUILDER[key]=value;
   }
+  EDIT_FORM_BUILDER_INSERT_VALUE(key:any,value: string) {
+    this.EDIT_FORM_BUILDER[key]=value;
+  }
   findEmptyObject(object: any,errorlist: any) {
     var temp:any={};
     return new Promise((resolve, reject) => {
@@ -188,5 +211,45 @@ URL_CREATE(url){
       }
       console.log(res,'dfsdfdsfsgdsfhdsgfd');
     })
+  }
+  onEditSubmit(formmodel:any,data:any)
+  {
+    this.EDIT_FORM_BUILDER=data;
+    this.submitted = true;
+    this.EDIT_FORM_BUILDER['imageUrl'] = this.img!=undefined? this.img:this.SELECTED_EDIT_DATA['imageUrl'];
+    console.log(this.EDIT_FORM_BUILDER)
+    this.findEmptyObject(this.EDIT_FORM_BUILDER,[undefined,null,'','Select Subscription']).then((value:any)=>{
+      if (value==true) {
+        console.log(this.EDIT_FORM_BUILDER,'this.memeberForm')
+        this.userService.UpdateMemeber(this.SELECTED_EDIT_DATA['_id'], this.EDIT_FORM_BUILDER)
+          .subscribe(
+            data => {
+              console.log(data,'UpdateMemeber')
+              if (data['data']!=undefined && data['data']!=null) {
+                formmodel.style.display='none'
+                this.toastr.success('Successfully Update data...');
+                this.ngOnInit()
+                this.SELECTED_EDIT_DATA=[];
+                this.SELECTED_INDEX=0;
+              }else{
+                this.toastr.error(data['message']);
+                this.SELECTED_EDIT_DATA=[];
+                this.SELECTED_INDEX=0;
+              }
+            },
+            error => {
+              console.log("error")
+              this.SELECTED_EDIT_DATA=[];
+              this.SELECTED_INDEX=0;
+            });
+      }else{
+        for (const key in value) {
+          this.toastr.error(value[key]);
+        }
+      }
+    });
+  }
+  ObjectLength(data:any){
+    return Object.keys(data).length;
   }
 }
