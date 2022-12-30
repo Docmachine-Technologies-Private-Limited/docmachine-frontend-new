@@ -189,15 +189,14 @@ select:focus {
 }
 
 .field {
-    margin-top: 21px!important;
+   
     background-color: transparent;
-    padding: 21px;
     border-radius: 10px;
     box-shadow: 0px 0px 2px 2px lightgrey;
+    overflow: auto;
 }
 
 .field-heading {
-    color: white !important;
     font-family: "Poppins", sans-serif !important;
     font-size: 16px;
 }
@@ -222,7 +221,6 @@ select:focus {
     margin-right: 20px;
     width: 220px;
     border-radius: 8px;
-    border: none;
     padding: 15px;
     color: #808080;
 }
@@ -319,14 +317,14 @@ a:hover {
     display: none;
     color: #777;
     background: #f8fafd;
-    height: 112px;
     padding: 13px;
-    width: 72%;
+    // width: 72%;
     padding-left: 0px !important;
     margin: 0px !important;
     border: 1px solid #ebeefe;
 }
-
+.new_shipping_input .form-control{height: 38px;}
+.new_shipping_input label{font-size: 12px;}
 
 /* As we cannot replace the numbers with variables or calls to element properties, the number of this selector parts is our tab count limit */
 
@@ -444,9 +442,8 @@ label {
 }
 
 .sb2 {
-    width: 39%;
-    float: right;
-    // margin-left: 10%;
+  margin: auto;
+  margin-left: 30px;
 }
 
 .sb3 {
@@ -1009,7 +1006,7 @@ select:focus {
     display: inline-block;
     padding: 3px;
     height: 74px;
-    width: 177px;
+    width:200px;
     background-color: white;
     border-radius: 5px;
     box-shadow: 4px 4px 8px 4px #eeeefa;
