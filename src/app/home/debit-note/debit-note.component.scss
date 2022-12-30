@@ -53,16 +53,14 @@ button {
     outline: none;
 }
 
-.table-row {
-    background-color: #ffffff !important;
-    color: #707683;
-}
-
-.table-row:hover {
-    background: #f6f9ff !important;
-    border-left: 5px solid #49a2d7;
-}
-
+// .table-row {
+//     background-color: #ffffff !important;
+//     color: #707683;
+// }
+// .table-row:hover {
+//     background: #f6f9ff !important;
+//     border-left: 5px solid #49a2d7;
+// }
 select {
     text-decoration: none;
     border: none;
@@ -85,7 +83,6 @@ select:focus {
 
 th,
 td {
-    height: 68px;
     vertical-align: middle !important;
 }
 

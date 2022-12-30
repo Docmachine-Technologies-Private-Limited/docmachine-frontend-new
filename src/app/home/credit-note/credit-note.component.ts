@@ -24,6 +24,7 @@ import { WindowInformationService } from 'src/app/service/window-information.ser
   templateUrl: './credit-note.component.html',
   styleUrls: ['./credit-note.component.scss']
 })
+
 export class CreditNoteComponent implements OnInit {
   @ViewChild('creditnotes', {static: false}) creditnotes: ElementRef;
   public item: any;
@@ -33,6 +34,7 @@ export class CreditNoteComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
+  filtervisible: boolean = false
 
   constructor(
     private documentService: DocumentService,
@@ -65,6 +67,7 @@ export class CreditNoteComponent implements OnInit {
 
   }
 
+  
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
       return x.pi_poNo;
@@ -123,6 +126,15 @@ export class CreditNoteComponent implements OnInit {
   newCredit() {
     this.sharedData.changeretunurl('home/credit-note')
     this.router.navigate(['home/upload', {file: 'export', document: 'creditNote'}]);
+  }
+
+  filter() {
+    // this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
   }
 
   exportToExcel() {
