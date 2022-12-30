@@ -11,18 +11,22 @@ import {MatTableDataSource} from '@angular/material/table';
 })
 export class DatatableComponent implements OnInit {
 
+ 
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  dataSource:any[]
+
+
   constructor() { }
 
   ngOnInit(): void {
+    this.dataSource=ELEMENT_DATA 
   }
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  // @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    // this.dataSource.paginator = this.paginator;
     
   }
   
