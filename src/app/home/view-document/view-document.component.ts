@@ -47,6 +47,7 @@ export class ViewDocumentComponent implements OnInit {
   Ax2: boolean;
   step1: any;
   res;
+  filtervisible: boolean = false
 
   piPoForm = new FormGroup({
     pi_poNo: new FormControl(''),
@@ -120,6 +121,14 @@ export class ViewDocumentComponent implements OnInit {
     });
   }
 
+  filter() {
+    // this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
+  }
   exportToExcel() {
     const ws: xlsx.WorkSheet = xlsx.utils.table_to_sheet(
       this.epltable.nativeElement

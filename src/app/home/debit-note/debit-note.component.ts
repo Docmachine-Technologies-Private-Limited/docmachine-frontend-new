@@ -35,7 +35,7 @@ export class DebitNoteComponent implements OnInit {
   public pipoData: any;
   public id: any;
   public item2: any;
-
+  filtervisible: boolean = false
 
   constructor(
     private documentService: DocumentService,
@@ -73,6 +73,7 @@ export class DebitNoteComponent implements OnInit {
     );
 
   }
+  
 
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
@@ -109,6 +110,16 @@ export class DebitNoteComponent implements OnInit {
     this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
       a['doc']
     );
+  }
+  
+
+  filter() {
+    // this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
   }
 
   toSave(data, index) {
@@ -148,3 +159,4 @@ export class DebitNoteComponent implements OnInit {
     xlsx.writeFile(wb, 'debitnotes.xlsx');
   }
 }
+
