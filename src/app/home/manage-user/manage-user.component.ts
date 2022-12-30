@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from './../../service/user.service';
 import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
@@ -7,6 +7,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AppConfig } from 'src/app/app.config';
 import { WindowInformationService } from 'src/app/service/window-information.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-manage-user',
   templateUrl: './manage-user.component.html',
@@ -19,7 +20,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   public type: string = 'directive';
   public disabled: boolean = false;
   @ViewChild(DropzoneDirective, { static: true }) directiveRef?: DropzoneDirective;
-  memeberForm: FormGroup;
+  memeberForm?: FormGroup;
   id: any;
   item: Object;
   item1: any;
@@ -27,14 +28,21 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   headers: any;
   img: any;
   toggle = false;
+  submitted = false;
 
   public config: DropzoneConfigInterface;
   api_base: any;
 
+  FORM_BUILDER: any={
+    email: "",
+    imageUrl: "",
+    name:""
+  }
+
   constructor(@Inject(PLATFORM_ID) public platformId,
   private route?: ActivatedRoute, private formBuilder?: FormBuilder,
   private userService?: UserService, public appconfig?: AppConfig,
-  private sanitizer?: DomSanitizer,
+  private sanitizer?: DomSanitizer, private toastr?: ToastrService,
   public wininfo?: WindowInformationService) {
     this.loadFromLocalStorage()
     this.api_base = appconfig.apiUrl;
@@ -69,10 +77,10 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     this.id = this.route.snapshot.queryParams['id'];
     console.log(this.id)
     this.memeberForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-      email: ['', [Validators.required, Validators.minLength(6)]],
-      UnderSubscription:['Select Under subscription', [Validators.required]],
-      UnderSubscriptionCheckBox:['', [Validators.required]],
+      name: ['', [Validators.required]],
+      email: ['', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+      UnderSubscription:['Select Subscription', [Validators.required]],
+      UnderSubscriptionCheckBox:[false, [Validators.requiredTrue]],
     });
 
     this.userService.getMemeber(this.id)
@@ -106,21 +114,35 @@ URL_CREATE(url){
     this.img = args[1].data
     this.toggle = true;
   }
-  onSubmit() {
-    console.log(this.memeberForm.value)
-    this.memeberForm.value.imageUrl = this.img
-    console.log(this.memeberForm.value,'this.memeberForm')
-    this.userService.addMemeber(this.id, this.memeberForm.value)
-      .subscribe(
-        data => {
-          console.log("king123")
-          console.log(data)
-          this.item = data
-          this.ngOnInit()
-        },
-        error => {
-          console.log("error")
-        });
+  onSubmit(formmodel:any) {
+    this.submitted = true;
+    console.log(this.FORM_BUILDER)
+    this.FORM_BUILDER['imageUrl'] = this.img;
+    this.findEmptyObject(this.FORM_BUILDER,[undefined,null,'','Select Subscription']).then((value:any)=>{
+      if (value==true) {
+        console.log(this.FORM_BUILDER,'this.memeberForm')
+        this.userService.addMemeber(this.id, this.FORM_BUILDER)
+          .subscribe(
+            data => {
+              console.log("king123")
+              console.log(data)
+              if (data['data']!=undefined && data['data']!=null) {
+                formmodel.style.display='none'
+                this.toastr.success('Added Successfully data...');
+                this.ngOnInit()
+              }else{
+                this.toastr.error(data['message']);
+              }
+            },
+            error => {
+              console.log("error")
+            });
+      }else{
+        for (const key in value) {
+          this.toastr.error(value[key]);
+        }
+      }
+    });
   }
   public loadFromLocalStorage() {
     const token = localStorage.getItem('token');
@@ -128,8 +150,43 @@ URL_CREATE(url){
     return this.authToken;
   }
 
-
+  get f(): { [key: string]: AbstractControl } {
+    return this.memeberForm.controls;
+  }
   ngAfterViewInit() {
   }
+  FORM_BUILDER_INSERT_VALUE(key:any,value: string) {
+    this.FORM_BUILDER[key]=value;
+  }
+  findEmptyObject(object: any,errorlist: any) {
+    var temp:any={};
+    return new Promise((resolve, reject) => {
+      var objectkeys=Object.keys(object);
+      if (objectkeys.length==0) {
+        resolve([])
+        return;
+      }
+      for (let index = 0; index < objectkeys.length; index++) {
+        if (errorlist.includes(object[objectkeys[index]]) || object[objectkeys[index]]=='') {
+          temp[objectkeys[index]]=objectkeys[index]+' Please check input value is empty!';
+        }
+      if (objectkeys.length==(index+1)) {
+        if (Object.keys(temp).length!=0) {
+          resolve(temp);
+        }else{
+          resolve(true);
+        }
+      }
+    }
+    });
+  }
 
+  deleteuser(data:any){
+    this.userService.deleteUser_Role(data['_id']).subscribe((res: any)=>{
+      if (res['status']==true) {
+        this.ngOnInit()
+      }
+      console.log(res,'dfsdfdsfsgdsfhdsgfd');
+    })
+  }
 }

@@ -1,0 +1,28 @@
+<div class="custom-dropdown" (mouseenter)="state = 0" (mouseleave)="state = 1">
+  <p class="label-text" for="dropdown-btn" *ngIf="this.label">{{ this.label }}</p>
+  <div id="dropdown-btn" class="dropdownbtn" (click)="disabled==false?showMenu = !showMenu:false; $event.stopPropagation();" [style.width]="width" [attr.disabled]="disabled">
+    <input id="displayText" #selected [value]="selectedItem || '' "
+      [disabled]="disabled"
+      [placeholder]="inputplaceholder" [autocomplete]="this.INPUT_AUTOCOMPLETE"
+      (keyup)="filterInput('value',$event.target);showMenu=true"
+      (click)="disabled==false?dropdown_controller('.dropappend',dropdown,$event,selected):''">
+    <span *ngIf="showMenu" class="icon">
+      <i class="fa fa-caret-up"></i>
+    </span>
+    <span *ngIf="!showMenu" class="icon">
+      <i class="fa fa-caret-down"></i>
+    </span>
+  </div>
+  <div class="dropdown-content" [class.show]="showMenu" #dropdown>
+    <p class="text-append header-text-dropdown" *ngIf="HEADER_DROP_DOWN.length!=0">
+      <span class="left-text">{{this.HEADER_DROP_DOWN[0]}}</span>
+    </p>
+    <div class="dropappend" #dropappend>
+      <p class="text-append" *ngFor="let d of this.FILTER_DATA_INUPUT let i=index"
+      #textappend (click)="valueChange(d);selected.value=d.value;selectedIndex=i"
+      [ngClass]="{'active-dropdown': selectedIndex === i}">
+        <span class="left-text">{{ d.value }}</span>
+      </p>
+    </div>
+  </div>
+</div>`
