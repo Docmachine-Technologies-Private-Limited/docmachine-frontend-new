@@ -23,6 +23,7 @@ export class AppConfig {
         // this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
     }
 
+    
     public getConstants() {
         this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
         // this.apiUrl = `https://devapi.bharathexim.com/v1`;
