@@ -2,17 +2,20 @@
   <p class="label-text" for="dropdown-btn" *ngIf="this.label">{{ this.label }}</p>
   <div id="dropdown-btn" class="dropdownbtn" (click)="disabled==false?showMenu = !showMenu:false; $event.stopPropagation();" [style.width]="width" [attr.disabled]="disabled" *ngIf="this.FILTER_DATA_INUPUT.length!=0">
         <div class="dropappend" #dropappend>
-          <p class="text-append" *ngFor="let d of this.FILTER_DATA_INUPUT let i=index"
-          #textappend (click)="valueChange(d.value,d);selectedIndex[d.value]=i;this.value=d.value;reactive(d.value,'checkbox')"
-          [ngClass]="{'active-dropdown': selectedIndex[d.value] === i}">
-            <span class="left-text-radius {{d.value}}" *ngIf="typeofcheckbox=='checkbox'">
-              <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="48px" height="48px"><path fill="red" d="M 20.292969 5.2929688 L 9 16.585938 L 4.7070312 12.292969 L 3.2929688 13.707031 L 9 19.414062 L 21.707031 6.7070312 L 20.292969 5.2929688 z"/></svg>
-            </span>
-            <span class="left-text-radius radiobox {{d.value}}" *ngIf="typeofcheckbox=='radio'">
-              <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="48px" height="48px"><path fill="red" d="M 20.292969 5.2929688 L 9 16.585938 L 4.7070312 12.292969 L 3.2929688 13.707031 L 9 19.414062 L 21.707031 6.7070312 L 20.292969 5.2929688 z"/></svg>
-            </span>
-            <span class="right-text">{{d.value}}</span>
-          </p>
+           <div class="p-append">
+            <p class="text-append" *ngFor="let d of this.FILTER_DATA_INUPUT let i=index"
+            #textappend (click)="valueChange(d.value,d);selectedIndex[d.value]=i;this.value=d.value;reactive(d.value,'checkbox')"
+            [ngClass]="{'active-dropdown': selectedIndex[d.value] === i}">
+              <span class="left-text-radius {{d.value}}" *ngIf="typeofcheckbox=='checkbox'">
+                <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="48px" height="48px"><path fill="red" d="M 20.292969 5.2929688 L 9 16.585938 L 4.7070312 12.292969 L 3.2929688 13.707031 L 9 19.414062 L 21.707031 6.7070312 L 20.292969 5.2929688 z"/></svg>
+              </span>
+              <span class="left-text-radius radiobox {{d.value}}" *ngIf="typeofcheckbox=='radio'">
+                <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="48px" height="48px"><path fill="red" d="M 20.292969 5.2929688 L 9 16.585938 L 4.7070312 12.292969 L 3.2929688 13.707031 L 9 19.414062 L 21.707031 6.7070312 L 20.292969 5.2929688 z"/></svg>
+              </span>
+              <span class="right-text">{{d.value}}</span>
+            </p>
+          </div>
+
         </div>
   </div>
 </div>

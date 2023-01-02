@@ -12,7 +12,12 @@ import { UserService } from 'src/app/service/user.service';
 export class TwofactorauthComponent implements OnInit {
   public authcode: any;
   public tfa: any;
-
+  RoleCheckbox_DATA:any=[];
+  VIEWS_CHECKBOX_DATA:any={
+    '1':false,
+    '2':false,
+    '3':false,
+  };
   constructor(private formBuilder: FormBuilder, private userService: UserService,
               private router: Router, private toastr: ToastrService) {
     this.userService.loginData.subscribe((data) => {
@@ -27,11 +32,13 @@ export class TwofactorauthComponent implements OnInit {
   }
 
   confirm(value:any) {
-    console.log(this.authcode,value,'sfdfsdfdfdsfd')
-    this.findEmptyObject(value,[undefined,null,'','Select Subscription']).then((condition:any)=>{
+    var TEMP_ROLE_CONDITIONS =['Maker,Checker,Apporvers','Checker,Maker,Apporvers',
+    'Apporvers,Maker,Checker','Apporvers,Checker,Maker','Apporvers,Checker','Apporvers,Maker',
+    'Checker,Apporvers','Maker,Apporvers','Apporvers'];
+    value['RoleCheckbox']=this.ArraytoString(this.RoleCheckbox_DATA);
+    this.findEmptyObject(value,[undefined,null,'','Select Subscription','Select Role']).then((condition:any)=>{
       if (condition==true) {
         console.log(condition,value,'sfdfsdfdfdsfd')
-       if (value['Role']==='Maker,Checker,Apporvers') {
         this.userService.verify(value)
         .subscribe(
           data => {
@@ -46,9 +53,6 @@ export class TwofactorauthComponent implements OnInit {
             this.toastr.error('something wrong, please check the details!');
             console.log("error")
           });
-       } else {
-        this.toastr.error('Please select also Apporvers checkbox...');
-       }
       }else{
         for (const key in condition) {
           this.toastr.error(condition[key]);
@@ -93,5 +97,15 @@ export class TwofactorauthComponent implements OnInit {
       temp.push(arr[key]);
     }
     return temp.toString();
+  }
+  changesRoleCheckbox(value:any){
+    console.log(value)
+    this.RoleCheckbox_DATA=value
+  }
+  checkboxView(value:any){
+    for (const iterator in this.VIEWS_CHECKBOX_DATA) {
+      this.VIEWS_CHECKBOX_DATA[iterator]=false;
+    }
+    this.VIEWS_CHECKBOX_DATA[value]=true;
   }
 }
