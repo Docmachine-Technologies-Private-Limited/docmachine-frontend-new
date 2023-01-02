@@ -74,6 +74,9 @@ export class CheckboxComponentsComponent implements OnInit {
   @Input('multiple')
   multiple:boolean=false;
 
+  @Input('checked')
+  checked:boolean=false;
+
   @Input('styles')
   styles:any=[];
   // styles:any={
@@ -141,6 +144,7 @@ async Object_to_Array(data:any){
     this.selectedItem[key] = item.value;
     this.propagateChange(item);
     this.showMenu = false;
+    this.checked=false;
     if (this.multiple) {
       this.value=this.removeNullValue(this.selectedItem);
     }else{

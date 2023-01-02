@@ -9,7 +9,7 @@
                 <p style="text-align: center;" class="pt-2">Auth Type - Time Based - OTP</p>
 
                 <form class="form-group" (ngSubmit)="confirm({OTP:otp.value,Login_Limit:loginrange.value,
-                  Role:this.ArraytoString(mulitplecheckbox.value),Subscription:Subscription.value})" #otpForm="ngForm"
+                  Role:RoleOption.value,Subscription:Subscription.value})" #otpForm="ngForm"
                       style="text-align: -webkit-center;">
                       <div class="row flex-label" style="width: 300px;">
                         <label for="message-text" class="col-form-label">Subscription :</label>
@@ -20,16 +20,48 @@
                           <option value="both">both</option>
                         </select>
                       </div>
-                         <div class="row pt-3" style="width: 300px;">
+                        <div class="row flex-label" style="width: 300px;">
+                          <label for="message-text" class="col-form-label">Role :</label>
+                          <select class="form-select p-3" aria-label="Default select example" #RoleOption (change)="checkboxView(RoleOption.value)">
+                            <option value="">Select Role</option>
+                            <option value="1">Without maker/checker</option>
+                            <option value="2">Maker and Approver</option>
+                            <option value="3">Maker checker and Approver</option>
+                          </select>
+                        </div>
+                         <div class="row pt-3" style="width: 300px;" *ngIf="this.VIEWS_CHECKBOX_DATA['1']==true">
                             <app-checkbox-components
                             width="300px"
                             [styles]="{'margin':'auto'}"
                             labeltext="Role :"
                             typeofcheckbox="checkbox"
-                            [data]="[{value:'Maker'},{value:'Checker'},{value:'Apporvers'}]"
+                            [data]="[{value:'Apporvers'}]"
                             [multiple]="true"
-                            #mulitplecheckbox></app-checkbox-components>
+                            [checked]="true"
+                            #mulitplecheckbox (event)="changesRoleCheckbox(mulitplecheckbox.value)"></app-checkbox-components>
                         </div>
+                        <div class="row pt-3" style="width: 300px;" *ngIf="this.VIEWS_CHECKBOX_DATA['2']==true">
+                          <app-checkbox-components
+                          width="300px"
+                          [styles]="{'margin':'auto'}"
+                          labeltext="Role :"
+                          typeofcheckbox="checkbox"
+                          [data]="[{value:'Maker'},{value:'Apporvers'}]"
+                          [multiple]="true"
+                          [checked]="true"
+                          #mulitplecheckbox (event)="changesRoleCheckbox(mulitplecheckbox.value)"></app-checkbox-components>
+                      </div>
+                      <div class="row pt-3" style="width: 300px;" *ngIf="this.VIEWS_CHECKBOX_DATA['3']==true">
+                        <app-checkbox-components
+                        width="300px"
+                        [styles]="{'margin':'auto'}"
+                        labeltext="Role :"
+                        typeofcheckbox="checkbox"
+                        [data]="[{value:'Maker'},{value:'Checker'},{value:'Apporvers'}]"
+                        [multiple]="true"
+                        [checked]="true"
+                        #mulitplecheckbox (event)="changesRoleCheckbox(mulitplecheckbox.value)"></app-checkbox-components>
+                    </div>
                       <div class="row" style="width: 300px;">
                         <label for="message-text" class="col-form-label">User limit :</label>
                       <input name="loginrange"
