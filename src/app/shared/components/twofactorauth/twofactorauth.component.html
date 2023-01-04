@@ -15,53 +15,20 @@
                         <label for="message-text" class="col-form-label">Subscription :</label>
                         <select class="form-select p-3" aria-label="Default select example" #Subscription>
                           <option value="Select Subscription">Select Subscription</option>
-                          <option value="Imports">Imports</option>
+                          <option value="Import">Import</option>
                           <option value="Export">Export</option>
                           <option value="both">both</option>
                         </select>
                       </div>
                         <div class="row flex-label" style="width: 300px;">
                           <label for="message-text" class="col-form-label">Role :</label>
-                          <select class="form-select p-3" aria-label="Default select example" #RoleOption (change)="checkboxView(RoleOption.value)">
+                          <select class="form-select p-3" aria-label="Default select example" #RoleOption>
                             <option value="">Select Role</option>
                             <option value="1">Without maker/checker</option>
                             <option value="2">Maker and Approver</option>
                             <option value="3">Maker checker and Approver</option>
                           </select>
                         </div>
-                         <div class="row pt-3" style="width: 300px;" *ngIf="this.VIEWS_CHECKBOX_DATA['1']==true">
-                            <app-checkbox-components
-                            width="300px"
-                            [styles]="{'margin':'auto'}"
-                            labeltext="Role :"
-                            typeofcheckbox="checkbox"
-                            [data]="[{value:'Apporvers'}]"
-                            [multiple]="true"
-                            [checked]="true"
-                            #mulitplecheckbox (event)="changesRoleCheckbox(mulitplecheckbox.value)"></app-checkbox-components>
-                        </div>
-                        <div class="row pt-3" style="width: 300px;" *ngIf="this.VIEWS_CHECKBOX_DATA['2']==true">
-                          <app-checkbox-components
-                          width="300px"
-                          [styles]="{'margin':'auto'}"
-                          labeltext="Role :"
-                          typeofcheckbox="checkbox"
-                          [data]="[{value:'Maker'},{value:'Apporvers'}]"
-                          [multiple]="true"
-                          [checked]="true"
-                          #mulitplecheckbox (event)="changesRoleCheckbox(mulitplecheckbox.value)"></app-checkbox-components>
-                      </div>
-                      <div class="row pt-3" style="width: 300px;" *ngIf="this.VIEWS_CHECKBOX_DATA['3']==true">
-                        <app-checkbox-components
-                        width="300px"
-                        [styles]="{'margin':'auto'}"
-                        labeltext="Role :"
-                        typeofcheckbox="checkbox"
-                        [data]="[{value:'Maker'},{value:'Checker'},{value:'Apporvers'}]"
-                        [multiple]="true"
-                        [checked]="true"
-                        #mulitplecheckbox (event)="changesRoleCheckbox(mulitplecheckbox.value)"></app-checkbox-components>
-                    </div>
                       <div class="row" style="width: 300px;">
                         <label for="message-text" class="col-form-label">User limit :</label>
                       <input name="loginrange"

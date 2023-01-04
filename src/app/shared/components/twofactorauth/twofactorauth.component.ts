@@ -32,10 +32,6 @@ export class TwofactorauthComponent implements OnInit {
   }
 
   confirm(value:any) {
-    var TEMP_ROLE_CONDITIONS =['Maker,Checker,Apporvers','Checker,Maker,Apporvers',
-    'Apporvers,Maker,Checker','Apporvers,Checker,Maker','Apporvers,Checker','Apporvers,Maker',
-    'Checker,Apporvers','Maker,Apporvers','Apporvers'];
-    value['RoleCheckbox']=this.ArraytoString(this.RoleCheckbox_DATA);
     this.findEmptyObject(value,[undefined,null,'','Select Subscription','Select Role']).then((condition:any)=>{
       if (condition==true) {
         console.log(condition,value,'sfdfsdfdfdsfd')
