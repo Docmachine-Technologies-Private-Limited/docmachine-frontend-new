@@ -399,7 +399,13 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/pipo/getPipos?page=${page}&limit=${limit}&commodity=${commodity}&location=${location}&buyer=${buyer}&type=${type}`, httpOptions);
   }
-
+  deletflagPiPo(data:any) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/pipo/deleteflag`,data ,httpOptions);
+  }
   updatePipobyId(id,data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
