@@ -77,8 +77,8 @@ import { UploadDocComponent } from "./Export/export-home/upload-doc/upload-doc.c
 import { ExcelDownloaderCompComponent } from "./excel-downloader-comp/excel-downloader-comp.component";
 import { DatatableComponent } from "./datatable/datatable.component";
 import { SubBillLodgementComponent } from "./Export/sub-bill-lodgement/sub-bill-lodgement.component";
-import {CustomDropdownComponent} from '../custom/custom-dropdown/custom-dropdown.component'
-
+import {CustomDropdownComponent} from '../custom/custom-dropdown/custom-dropdown.component';
+import { ApprovalPanelComponent } from "./approval-panel/approval-panel.component";
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -102,7 +102,8 @@ import {CustomDropdownComponent} from '../custom/custom-dropdown/custom-dropdown
     ConfirmDialogBoxComponent,
     ExcelDownloaderCompComponent,
     SubBillLodgementComponent,
-    CustomDropdownComponent
+    CustomDropdownComponent,
+    ApprovalPanelComponent
   ],
   imports: [
     SharedHomeModule,
@@ -362,6 +363,11 @@ import {CustomDropdownComponent} from '../custom/custom-dropdown/custom-dropdown
           {
             path: "t&c",
             component:TermsAndConditionComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "approvalpanel",
+            component:ApprovalPanelComponent,
             pathMatch: "full",
           }
 
