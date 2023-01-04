@@ -157,11 +157,12 @@
                                             <td (click)=" openDebitNote(content); viewDN(data)">
                                                 view
                                             </td>
-                                            <td>
-                                                <button class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-pencil-square-o"
+                                            <td class="view_edit_button">
+                                                <a title="View" [routerLink]="['/home/view-pipo']"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
                                                     aria-hidden="true"></i></button>
-                                                <button class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
-                                                    aria-hidden="true"></i></button>
+                                                <a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
                                     </tbody>

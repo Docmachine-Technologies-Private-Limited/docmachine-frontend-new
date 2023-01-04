@@ -912,8 +912,6 @@ table tbody {
     font-size: 14px;
     cursor: pointer;
     border-radius: 2px;
-    width: 60px;
-    margin-left: -2%;
 }
 
 .content-wrap {
@@ -946,4 +944,16 @@ table {
     align-items: center;
     border-bottom: 1px solid #dfdfdf;
     width: 99%;
+}
+
+.view_edit_button a i {
+    color: #777;
+    padding: 0 4px;
+    font-size: 15px;
+    display: inline-block;
+}
+
+.view_edit_button .savBtn .fa.fa-floppy-o:before {
+    color: green;
+    font-size: 16px;
 }
