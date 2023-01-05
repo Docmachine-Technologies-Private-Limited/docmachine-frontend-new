@@ -89,7 +89,6 @@
                                             <th scope="col">C N Amount</th>
                                             <th scope="col">Currency</th>
                                             <th scope="col">Buyer Name</th>
-                                            <th scope="col">View</th>
                                             <th scope="col">Action</th>
 
                                         </tr>
@@ -134,11 +133,9 @@
                                                 </div>
                                             </td>
                                             <td>{{data.buyerName}}</td>
-                                            <td (click)=" openCreditNote(content); viewCN(data)">
-                                                view
-                                            </td>
+
                                             <td class="view_edit_button">
-                                                <a title="view" [routerLink]="['/home/view-pipo']"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                <a title="view" (click)=" openCreditNote(content); viewCN(data)"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                 <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                                 <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
                                                     aria-hidden="true"></i></button>
