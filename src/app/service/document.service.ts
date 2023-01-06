@@ -406,6 +406,48 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/pipo/deleteflag`,data ,httpOptions);
   }
+  adddeletflag(data:any) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/add`,{data:data},httpOptions);
+  }
+  getPendingStatus() {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/Approval/getPendingStatus`,httpOptions);
+  }
+  getApprovedStatus() {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/Approval/getApprovedStatus`,httpOptions);
+  }
+  getRejectStatus() {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/Approval/getRejectStatus`,httpOptions);
+  }
+  DeleteStatus(data) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/delete`,{data:data},httpOptions);
+  }
+  RejectedStatus(data) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/reject`,{data:data},httpOptions);
+  }
   updatePipobyId(id,data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

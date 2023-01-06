@@ -285,50 +285,51 @@
 
                                 <ng-container matColumnDef="pi_poNo">
                                     <th mat-header-cell *matHeaderCellDef> Invoice No</th>
-                                    <td mat-cell *matCellDef="let element"> {{element.pi_poNo}} </td>
+                                    <td mat-cell *matCellDef="let element" [ngClass]="truefalse(element['deleteflag']=='0')"> {{element.pi_poNo}} </td>
                                 </ng-container>
 
                                 <ng-container matColumnDef="date">
                                     <th mat-header-cell *matHeaderCellDef> Invoice Date </th>
-                                    <td mat-cell *matCellDef="let element"> {{element?.date | date: 'dd/MM/yyyy'}} </td>
+                                    <td mat-cell *matCellDef="let element" [ngClass]="truefalse(element['deleteflag']=='0')"> {{element?.date | date: 'dd/MM/yyyy'}} </td>
                                 </ng-container>
 
                                 <ng-container matColumnDef="buyerName">
                                     <th mat-header-cell *matHeaderCellDef> Consignee Name </th>
-                                    <td mat-cell *matCellDef="let element"> {{element?.buyerName}} </td>
+                                    <td mat-cell *matCellDef="let element" [ngClass]="truefalse(element['deleteflag']=='0')"> {{element?.buyerName}} </td>
                                 </ng-container>
                                 <ng-container matColumnDef="location">
                                     <th mat-header-cell *matHeaderCellDef> BRANCH </th>
-                                    <td mat-cell *matCellDef="let element"> {{element?.location}} </td>
+                                    <td mat-cell *matCellDef="let element" [ngClass]="truefalse(element['deleteflag']=='0')"> {{element?.location}} </td>
                                 </ng-container>
                                 <ng-container matColumnDef="commodity">
                                     <th mat-header-cell *matHeaderCellDef> Commodity </th>
-                                    <td mat-cell *matCellDef="let element"> {{element?.commodity}} </td>
+                                    <td mat-cell *matCellDef="let element" [ngClass]="truefalse(element['deleteflag']=='0')"> {{element?.commodity}} </td>
                                 </ng-container>
                                 <ng-container matColumnDef="amount">
                                     <th mat-header-cell *matHeaderCellDef> Amount </th>
-                                    <td mat-cell *matCellDef="let element"> {{element?.amount}} </td>
+                                    <td mat-cell *matCellDef="let element" [ngClass]="truefalse(element['deleteflag']=='0')"> {{element?.amount}} </td>
                                 </ng-container>
                                 <ng-container matColumnDef="paymentTerm">
                                     <th mat-header-cell *matHeaderCellDef> Payment Term </th>
-                                    <td mat-cell *matCellDef="let element"> {{element?.paymentTerm[0].type}} </td>
+                                    <td mat-cell *matCellDef="let element" [ngClass]="truefalse(element['deleteflag']=='0')"> {{element?.paymentTerm[0].type}} </td>
                                 </ng-container>
                                 <ng-container matColumnDef="actions">
                                     <th mat-header-cell *matHeaderCellDef> Actions </th>
-                                    <td mat-cell *matCellDef="let element">
+                                    <td mat-cell *matCellDef="let element let i=index">
                                         <a [routerLink]="['/home/view-pipo/'+element._id]"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                        <a [routerLink]="['/home/edit-pipo/export/'+element._id]" ><i class="fa fa-pencil-square-o"
+                                        <a [routerLink]="['/home/edit-pipo/export/'+element._id]" [ngClass]="truefalse(element['deleteflag']=='0')"><i class="fa fa-pencil-square-o"
                                                 aria-hidden="true"></i></a>
-                                        <a href="javascript:void(0)" (click)="handleDelete(element._id)" ><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                        <a href="javascript:void(0)"
+                                        (click)="handleDelete(element._id,i)" [ngClass]="truefalse(element['deleteflag']=='0')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                     </td>
                                 </ng-container>
-                                <ng-container matColumnDef="Approval Status">
+                                <!-- <ng-container matColumnDef="Approval Status">
                                   <th mat-header-cell *matHeaderCellDef> Approval Status </th>
-                                  <td mat-cell *matCellDef="let element" class="button-label-td">
-                                      <label>Approved</label>
-                                      <button type="submit" class="btn btn-primary" (click)="ApprovalDetails.style.display='block'">Details</button>
+                                  <td mat-cell *matCellDef="let element; let i=index">
+                                      <label>{{element['StatusApproval']}}</label>
+                                      <button type="submit" class="btn btn-primary" *ngIf="element['StatusApproval']=='Rejected'" (click)="detailsView(i,ApprovalDetails.style.display='block')">Details</button>
                                   </td>
-                              </ng-container>
+                              </ng-container> -->
                                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                             </table>
@@ -347,21 +348,23 @@
         </div>
     </div>
 </div>
+
 <div class="modal" tabindex="-1" #ApprovalDetails style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Approval Details</h5>
-        <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="ApprovalDetails.style.display='none'">close</button>
+        <h5 class="modal-title">Rejected Details</h5>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close" (click)="ApprovalDetails.style.display='none'">close</button>
       </div>
       <div class="modal-body">
-       <div class="column">
-        <p class="done-by"><span class="bold-text">Done By :</span> Abhishek Kumar Singh</p>
-        <p class="date-time"><span class="bold-text">Date & Time :</span> 2023-01-04</p>
-        <p class="status"><span class="bold-text">Status :</span> Approved</p>
-        <p class="comments"><span class="bold-text">Comments :</span> Ok</p>
+       <div class="column" *ngIf="this.detailsViewdata.length!=0">
+        <p class="done-by"><span class="bold-text">Done By :</span> {{this.detailsViewdata['userdetails']['fullName']}}</p>
+        <p class="date-time"><span class="bold-text">Date & Time :</span> {{this.detailsViewdata['updatedAt']}}</p>
+        <p class="status"><span class="bold-text">Status :</span> {{this.detailsViewdata['status']}}</p>
+        <p class="comments"><span class="bold-text">Comments :</span> {{this.detailsViewdata['rejectcomment']}}</p>
        </div>
       </div>
     </div>
   </div>
 </div>
+
