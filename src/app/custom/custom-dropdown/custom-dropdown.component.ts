@@ -13,7 +13,7 @@ import {
   NG_VALUE_ACCESSOR,
   ControlValueAccessor,
 } from '@angular/forms';
-import { Observable,BehaviorSubject } from 'rxjs';
+import { Observable,BehaviorSubject, isEmpty } from 'rxjs';
 declare var $: any;
 import { CustomdropdownservicesService } from './customdropdownservices.service';
 export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
@@ -79,13 +79,25 @@ export class CustomDropdownComponent implements OnInit,ControlValueAccessor {
 
   selectedIndex:any=-1;
   value:any;
+  @Input('id')
+  id:any=[];
+
+  @Input('limit')
+  limit:any=0;
 
   FILTER_DATA_INUPUT:any=[];
   private _data:any = new BehaviorSubject<any>([]);
+  SHOW_LIST_POPUP:any=['form-control drop-down-input','dropdown-content'];
 
   @HostListener('document:click') clickedOutside() {
+    var objects:any = document.getElementsByClassName('dropdown-content');
+    var allElements = objects[0].getElementsByTagName("*");
+    for (const iterator of allElements) {
+      this.SHOW_LIST_POPUP.push(iterator.className);
+    }
+    this.SHOW_LIST_POPUP=this.removeDuplicates(this.SHOW_LIST_POPUP);
     if (this.state == DropdownMouseState.outside) {
-      this.showMenu = false; // hide the dropdown...
+      // this.showMenu = false; // hide the dropdown...
     }
   }
 
@@ -101,11 +113,13 @@ set data(value:any) {
 get data() {
   return this._data.getValue();
 }
+
  async ngOnInit() {
     this.value=this.setvalue;
     this.selectedItem=this.setvalue;
-    console.log(this._data.value,'this._data.value')
     this.FILTER_DATA_INUPUT=this._data.value;
+    $('.drop-down-input').attr('maxLength',this.limit).keyup(this.minmax);
+
  }
 async Object_to_Array(data:any){
   return Object.keys(data)
@@ -149,9 +163,11 @@ async Object_to_Array(data:any){
     this.isDisabled = isDisabled;
   }
  async dropdown_controller(key:string,dropId:any,event:any,inputid:any){
-    this.Clear();
-    inputid.value='';
-    this.FILTER_DATA_INUPUT=await this._data.value
+    if (!inputid.value) {
+      this.Clear();
+      inputid.value='';
+      this.FILTER_DATA_INUPUT=await this._data.value
+    }
     window.addEventListener("resize",()=>{
       this.showMenu=false;
       var BoundingClientRect = $(inputid)[0].getBoundingClientRect();
@@ -169,18 +185,38 @@ async Object_to_Array(data:any){
     }
     $('body,div').scroll((e:any)=> {
       if (e.currentTarget.className!='dropappend') {
-        this.showMenu=false;
+        // this.showMenu=false;
       }
     });
-    $(document).on("focusout",inputid,(e:any)=>{
-      this.showMenu=false;
-  });
+    // $('input').click((e:any)=> {
+    //   if (!this.SHOW_LIST_POPUP.includes(e.currentTarget.className)) {
+    //     this.showMenu=false;
+    //   }
+    // });
   }
   async filterInput(key:string,val:any){
     if(val.value){
-      this.FILTER_DATA_INUPUT=this.FILTER_DATA_INUPUT=await this._data.value.filter((item:any)=>(item[key].toLowerCase()).includes((val.value).toLowerCase()));
+      this.showMenu=true;
+      console.log(this._data.value,'this._data.value')
+      this.FILTER_DATA_INUPUT=await this._data.value.filter((item:any)=>(item[key].toLowerCase()).indexOf((val.value).toLowerCase())!=-1);
     }else {
-      this.FILTER_DATA_INUPUT=this.FILTER_DATA_INUPUT=await this._data.value;
+      this.FILTER_DATA_INUPUT=await this._data.value;
     }
+  }
+  get SELECTED_VALUES(){
+    return this.setvalue!=''?{value:this.setvalue,key:this.setvalue}:this.value!=''?this.value:{value:$('#'+this.id).val(),key:$('#'+this.id).val()}
+  }
+  changeKeyEvent(value:any){
+   this.valueChange({value:value})
+  }
+  removeDuplicates(arr:any) {
+    return arr.filter((item:any,index:any) => arr.indexOf(item) === index && item!='');
+}
+  minmax(e:any) {
+    if (e.keyCode == 8) {
+      return true;
+     }else{
+      return e.target.value.length < $(e.target).attr("maxLength");
+     }
   }
 }

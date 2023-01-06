@@ -8,12 +8,11 @@ import * as xlsx from 'xlsx';
 import { ConfirmDialogModel, ConfirmDialogBoxComponent } from '../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 /**
  * @title Table with pagination
  */
-
-
 
 @Component({
   selector: 'app-pipo-new',
@@ -25,7 +24,7 @@ import { WindowInformationService } from 'src/app/service/window-information.ser
 export class PipoNewComponent implements OnInit {
   @ViewChild('piposummery', { static: false }) piposummery: ElementRef;
 
-  displayedColumns: string[] = ['pi_poNo', 'date', 'buyerName', 'location', 'commodity', 'amount', 'paymentTerm', 'actions','Approval Status'];
+  displayedColumns: string[] = ['pi_poNo', 'date', 'buyerName', 'location', 'commodity', 'amount', 'paymentTerm', 'actions'];
   dataSource: any[];
   benneDetailArray: any;
   locationArray: any;
@@ -42,16 +41,22 @@ export class PipoNewComponent implements OnInit {
   filtervisible: boolean = false
   startDate: any = '';
   endDate: any = '';
+  PENDING_DATA:any=[];
+
   constructor(public documentService: DocumentService, private userService: UserService, public dialog: MatDialog,
-    public wininfo: WindowInformationService) {
+    public wininfo: WindowInformationService,public CustomConfirmDialogModel:CustomConfirmDialogModelComponent) {
     this.getDropDownItems()
 
   }
  async ngOnInit() {
-    this.wininfo.set_controller_of_width(270,'.content_top_common')
+    this.wininfo.set_controller_of_width(250,'.content_top_common')
     this.getPipoData()
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
+    this.documentService.getRejectStatus().subscribe((res: any)=>{
+      this.PENDING_DATA = res;
+      console.log("this.PENDING_DATA", res)
+    })
   }
   onclick() {
     this.filtervisible = !this.filtervisible
@@ -127,45 +132,55 @@ export class PipoNewComponent implements OnInit {
     this.buyer = ''
     this.getPipoData()
     this.filtervisible = !this.filtervisible
-
   }
 
 
-  handleDelete(id) {
-    var approval_data:any={
-      id:id,
-      userdata:this.USER_DATA['result'],
-      approval_status:false,
-      tableName:''
+  handleDelete(id,index:any) {
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.CustomConfirmDialogModel.InputConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
+              var approval_data:any={
+                id:id,
+                comment:res.value.value,
+                tableName:'PI_PO',
+                deleteflag:'-1',
+                userdetails:this.USER_DATA['result'],
+                status:'pending',
+                dummydata:this.dataSource[index]
+              }
+              this.documentService.deletflagPiPo({id:id,deleteflag:-1}).subscribe((res:any)=>{
+                this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
+                  this.ngOnInit();
+                })
+              })
+        });
+        // this.documentService.deletePipoByid(id).subscribe((res) => {
+        //   console.log(res)
+        //   if (res) {
+        //     this.getPipoData()
+        //   }
+        // }, (err) => console.log(err))
+      }
+    });
+  }
+  detailsViewdata:any=[];
+  detailsView(id:any,dump:any){
+    this.detailsViewdata=this.PENDING_DATA[id];
+    console.log(this.detailsViewdata,'detailsViewdata')
+  }
+  truefalse(condition){
+    if (condition){
+      return '';
     }
-    console.log(approval_data,'dfsdfhjfdfjdsfdsfds')
-    this.documentService.deletflagPiPo({id:id,deleteflag:-1}).subscribe((res:any)=>{
-      console.log(res,'responsgsghgsgs')
-    })
-    // const message = `Are you sure you want to delete this?`;
-
-    // const dialogData = new ConfirmDialogModel("Confirm Action", message);
-
-    // const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
-    //   maxWidth: "400px",
-    //   data: dialogData
-    // });
-
-    // dialogRef.afterClosed().subscribe(dialogResult => {
-    //   // this.result = dialogResult;
-    //   console.log("---->", dialogResult)
-    //   if (dialogResult) {
-    //     this.documentService.deletePipoByid(id).subscribe((res) => {
-    //       console.log(res)
-    //       if (res) {
-    //         this.getPipoData()
-    //       }
-    //     }, (err) => console.log(err))
-    //   }
-    // });
-
-
+    return 'none';
   }
-
 
 }
