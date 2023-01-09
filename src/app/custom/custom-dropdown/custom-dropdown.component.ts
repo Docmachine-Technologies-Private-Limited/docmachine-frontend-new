@@ -97,12 +97,13 @@ export class CustomDropdownComponent implements OnInit,ControlValueAccessor {
     }
     this.SHOW_LIST_POPUP=this.removeDuplicates(this.SHOW_LIST_POPUP);
     if (this.state == DropdownMouseState.outside) {
-      // this.showMenu = false; // hide the dropdown...
+      $('#dropdown').hide();
     }
   }
 
   constructor(public customdrop:CustomdropdownservicesService) {
     this.showMenu = false;
+    $('#dropdown').hide();
     this.isDisabled = false;
     this.state = DropdownMouseState.outside;
   }
@@ -166,10 +167,11 @@ async Object_to_Array(data:any){
     if (!inputid.value) {
       this.Clear();
       inputid.value='';
-      this.FILTER_DATA_INUPUT=await this._data.value
+      this.selectedIndex=-1;
     }
+    this.FILTER_DATA_INUPUT=await this._data.value
     window.addEventListener("resize",()=>{
-      this.showMenu=false;
+      $('#dropdown').hide();
       var BoundingClientRect = $(inputid)[0].getBoundingClientRect();
       dropId.style.top=(window.scrollY+BoundingClientRect.top+BoundingClientRect.height+10)+'px';
       dropId.style.width=inputid.style.width+'px';
@@ -185,22 +187,29 @@ async Object_to_Array(data:any){
     }
     $('body,div').scroll((e:any)=> {
       if (e.currentTarget.className!='dropappend') {
-        // this.showMenu=false;
+        $('#dropdown').hide();
       }
     });
-    // $('input').click((e:any)=> {
-    //   if (!this.SHOW_LIST_POPUP.includes(e.currentTarget.className)) {
-    //     this.showMenu=false;
-    //   }
-    // });
+    $('input').click((e:any)=> {
+      if (!this.SHOW_LIST_POPUP.includes(e.currentTarget.className)) {
+        $('#dropdown').hide();
+      }
+    });
   }
   async filterInput(key:string,val:any){
     if(val.value){
-      this.showMenu=true;
-      console.log(this._data.value,'this._data.value')
       this.FILTER_DATA_INUPUT=await this._data.value.filter((item:any)=>(item[key].toLowerCase()).indexOf((val.value).toLowerCase())!=-1);
+      if (this.FILTER_DATA_INUPUT.length==0) {
+          $('#dropdown').hide();
+      }else {
+        this.selectedIndex=-1;
+        this.FILTER_DATA_INUPUT=await this._data.value;
+        $('#dropdown').show();
+      }
     }else {
+      this.selectedIndex=-1;
       this.FILTER_DATA_INUPUT=await this._data.value;
+      $('#dropdown').show();
     }
   }
   get SELECTED_VALUES(){

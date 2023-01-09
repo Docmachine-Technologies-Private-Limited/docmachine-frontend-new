@@ -146,28 +146,7 @@ export class PipoNewComponent implements OnInit {
     dialogRef.afterClosed().subscribe(dialogResult => {
       console.log("---->", dialogResult)
       if (dialogResult) {
-        this.CustomConfirmDialogModel.InputConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
-              var approval_data:any={
-                id:id,
-                comment:res.value.value,
-                tableName:'PI_PO',
-                deleteflag:'-1',
-                userdetails:this.USER_DATA['result'],
-                status:'pending',
-                dummydata:this.dataSource[index]
-              }
-              this.documentService.deletflagPiPo({id:id,deleteflag:-1}).subscribe((res:any)=>{
-                this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
-                  this.ngOnInit();
-                })
-              })
-        });
-        // this.documentService.deletePipoByid(id).subscribe((res) => {
-        //   console.log(res)
-        //   if (res) {
-        //     this.getPipoData()
-        //   }
-        // }, (err) => console.log(err))
+        this.deleteByRoleType(this.USER_DATA['result']['Role_Type'],id,index)
       }
     });
   }
@@ -182,5 +161,49 @@ export class PipoNewComponent implements OnInit {
     }
     return 'none';
   }
+  deleteByRoleType(roleType:string,id:any,index:any){
+    if (roleType=='1'){
+        this.documentService.deletePipoByid(id).subscribe((res) => {
+            console.log(res)
+            if (res) {
+              this.getPipoData()
+            }
+        }, (err) => console.log(err))
+    } else if (roleType=='2'){
+      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
+        var approval_data:any={
+          id:id,
+          comment:res.value.value,
+          tableName:'PI_PO',
+          deleteflag:'-1',
+          userdetails:this.USER_DATA['result'],
+          status:'pending',
+          dummydata:this.dataSource[index]
+        }
+        this.documentService.deletflagPiPo({id:id,deleteflag:-1}).subscribe((res:any)=>{
+          this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
+            this.ngOnInit();
+          })
+        })
+      });
 
+    } else if (roleType=='3'){
+      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
+        var approval_data:any={
+          id:id,
+          comment:res.value.value,
+          tableName:'PI_PO',
+          deleteflag:'-1',
+          userdetails:this.USER_DATA['result'],
+          status:'pending',
+          dummydata:this.dataSource[index]
+        }
+        this.documentService.deletflagPiPo({id:id,deleteflag:-1}).subscribe((res:any)=>{
+          this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
+            this.ngOnInit();
+          })
+        })
+      });
+    }
+  }
 }

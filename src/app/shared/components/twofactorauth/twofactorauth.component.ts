@@ -18,12 +18,18 @@ export class TwofactorauthComponent implements OnInit {
     '2':false,
     '3':false,
   };
+  USER_LOGIN_DATA:any=[];
+
   constructor(private formBuilder: FormBuilder, private userService: UserService,
               private router: Router, private toastr: ToastrService) {
     this.userService.loginData.subscribe((data) => {
       if (data['result']['dataURL']) {
         this.tfa = data['result']
       }
+    })
+    this.userService.getUserDetail().then((data) => {
+      console.log(data,'dsjfhsdfjdsfdfdsf');
+      this.USER_LOGIN_DATA = data['result'];
     })
   }
 
@@ -32,6 +38,10 @@ export class TwofactorauthComponent implements OnInit {
   }
 
   confirm(value:any) {
+    if (this.USER_LOGIN_DATA['role']=='member') {
+      value['RoleCheckbox']=this.USER_LOGIN_DATA['RoleCheckbox'];
+      value['Subscription']=this.USER_LOGIN_DATA['Subscription'];
+    }
     this.findEmptyObject(value,[undefined,null,'','Select Subscription','Select Role']).then((condition:any)=>{
       if (condition==true) {
         console.log(condition,value,'sfdfsdfdfdsfd')

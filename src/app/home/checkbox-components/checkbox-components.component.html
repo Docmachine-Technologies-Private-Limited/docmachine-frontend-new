@@ -1,6 +1,6 @@
 <div class="custom-dropdown" (mouseenter)="state = 0" (mouseleave)="state = 1" [style.width]="width">
   <p class="label-text" for="dropdown-btn" *ngIf="this.label">{{ this.label }}</p>
-  <div id="dropdown-btn" class="dropdownbtn" (click)="disabled==false?showMenu = !showMenu:false; $event.stopPropagation();" [style.width]="width" [attr.disabled]="disabled" *ngIf="this.FILTER_DATA_INUPUT.length!=0">
+  <div id="dropdown-btn" class="dropdownbtn" (click)="disabled==false?showMenu = !showMenu : false; $event.stopPropagation();" [style.width]="width" [attr.disabled]="disabled" *ngIf="this.FILTER_DATA_INUPUT.length!=0">
         <div class="dropappend" #dropappend>
            <div class="p-append">
             <p class="text-append" *ngFor="let d of this.FILTER_DATA_INUPUT let i=index"

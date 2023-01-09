@@ -11,7 +11,7 @@
       <th scope="col">Date</th>
       <th scope="col">Status</th>
       <th scope="col">Comments</th>
-      <th scope="col">Action</th>
+      <th scope="col" *ngIf="this.USER_DETAILS?.RoleCheckbox!='Maker'">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -26,13 +26,14 @@
       <td>
         <label>{{item['comment']}}</label>
       </td>
-      <td><div class="column flex-display">
+      <td>
+        <div class="column flex-display" *ngIf="this.USER_DETAILS?.RoleCheckbox==='Approver' || this.USER_DETAILS?.RoleCheckbox==''">
         <button type="submit" class="btn btn-success" (click)="Approved({
           id: item['_id'],
           Tableid: item['id'],
           tableName:item['tableName'],
           status:'Approved',
-          deleteflag:'1'
+          deleteflag:'2'
         })">Approve</button>
         <button type="submit" class="btn btn-danger" (click)="Reject({
           id: item['_id'],
@@ -41,8 +42,26 @@
           status:'Rejected',
           deleteflag:'0'
         })">Reject</button>
-        <button type="submit" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''?item['dummydata']['doc']:item['dummydata']['doc1'])">View</button>
-      </div></td>
+        <button type="submit" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'])">View</button>
+      </div>
+      <div class="column flex-display" *ngIf="this.USER_DETAILS?.RoleCheckbox==='Checker'">
+        <button type="submit" class="btn btn-success" (click)="Approved({
+          id: item['_id'],
+          Tableid: item['id'],
+          tableName:item['tableName'],
+          status:'Verify',
+          deleteflag:'1'
+        })">Verify</button>
+        <button type="submit" class="btn btn-danger" (click)="Reject({
+          id: item['_id'],
+          Tableid: item['id'],
+          tableName:item['tableName'],
+          status:'Rejected',
+          deleteflag:'0'
+        })">Reject</button>
+        <button type="submit" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'])">View</button>
+      </div>
+    </td>
     </tr>
   </tbody>
 </table>
