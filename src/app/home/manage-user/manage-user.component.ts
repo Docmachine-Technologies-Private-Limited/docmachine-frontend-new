@@ -23,7 +23,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   memeberForm?: FormGroup;
   id: any;
   item: Object;
-  item1: any;
+  item1: any=[];
   authToken: any;
   headers: any;
   img: any;
@@ -43,7 +43,13 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   SELECTED_INDEX=0;
 
   userData:any=[];
+  ROLE_TYPES:any=[];
 
+  ROLE_LIST={
+    '1':'Without maker/checker',
+    '2':'Maker and Approver',
+    '3':'Maker checker and Approver'
+  }
   constructor(@Inject(PLATFORM_ID) public platformId,
   private route?: ActivatedRoute, private formBuilder?: FormBuilder,
   private userService?: UserService, public appconfig?: AppConfig,
@@ -136,8 +142,10 @@ URL_CREATE(url){
   }
   onSubmit(formmodel:any) {
     this.submitted = true;
-    console.log(this.FORM_BUILDER)
     this.FORM_BUILDER['imageUrl'] = this.img;
+    this.FORM_BUILDER['UnderSubscriptionCheckBox']=this.ROLE_TYPES;
+    console.log(this.FORM_BUILDER)
+
     this.findEmptyObject(this.FORM_BUILDER,[undefined,null,'','Select Subscription']).then((value:any)=>{
       if (value==true) {
         console.log(this.FORM_BUILDER,'this.memeberForm')
@@ -251,5 +259,26 @@ URL_CREATE(url){
   }
   ObjectLength(data:any){
     return Object.keys(data).length;
+  }
+  onChange(event,email:string, isChecked: boolean) {
+      $('.form-check-input').prop("checked",false);
+      if (isChecked) {
+        $(event.target).prop("checked", true);
+      }
+    if(isChecked) {
+      this.ROLE_TYPES=email;
+    } else {
+      this.ROLE_TYPES='';
+
+    }
+  }
+  JSON_TO_ARRAY(object:any){
+    var temp:any=[];
+    for (const key in object) {
+      if (object[key]!='' && object[key]!=undefined) {
+          temp.push(object[key]);
+      }
+    }
+    return temp;
   }
 }

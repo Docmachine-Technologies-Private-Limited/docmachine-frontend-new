@@ -8,34 +8,37 @@
                 <img [src]="tfa.dataURL" alt="" class="img-thumbnail" style="display:block;margin:auto">
                 <p style="text-align: center;" class="pt-2">Auth Type - Time Based - OTP</p>
 
-                <form class="form-group" (ngSubmit)="confirm({OTP:otp.value,Login_Limit:loginrange.value,
+                <form class="form-group" (ngSubmit)="confirm(this.USER_LOGIN_DATA['role']=='member'? {OTP:otp.value} : {OTP:otp.value,Login_Limit:loginrange.value,
                   Role:RoleOption.value,Subscription:Subscription.value})" #otpForm="ngForm"
                       style="text-align: -webkit-center;">
-                      <div class="row flex-label" style="width: 300px;">
-                        <label for="message-text" class="col-form-label">Subscription :</label>
-                        <select class="form-select p-3" aria-label="Default select example" #Subscription>
-                          <option value="Select Subscription">Select Subscription</option>
-                          <option value="Import">Import</option>
-                          <option value="Export">Export</option>
-                          <option value="both">both</option>
-                        </select>
-                      </div>
+                      <div class="col" *ngIf="this.USER_LOGIN_DATA['role']!='member'">
                         <div class="row flex-label" style="width: 300px;">
-                          <label for="message-text" class="col-form-label">Role :</label>
-                          <select class="form-select p-3" aria-label="Default select example" #RoleOption>
-                            <option value="">Select Role</option>
-                            <option value="1">Without maker/checker</option>
-                            <option value="2">Maker and Approver</option>
-                            <option value="3">Maker checker and Approver</option>
+                          <label for="message-text" class="col-form-label">Subscription :</label>
+                          <select class="form-select p-3" aria-label="Default select example" #Subscription>
+                            <option value="Select Subscription">Select Subscription</option>
+                            <option value="Import">Import</option>
+                            <option value="Export">Export</option>
+                            <option value="both">both</option>
                           </select>
                         </div>
-                      <div class="row" style="width: 300px;">
-                        <label for="message-text" class="col-form-label">User limit :</label>
-                      <input name="loginrange"
-                      type="number"
-                      class="form-control rounded-pill border-0 shadow-sm px-4 password1"
-                      placeholder="Enter the login limit..." id="authcode" autocomplete="off" #loginrange required>
+                          <div class="row flex-label" style="width: 300px;">
+                            <label for="message-text" class="col-form-label">Role :</label>
+                            <select class="form-select p-3" aria-label="Default select example" #RoleOption>
+                              <option value="">Select Role</option>
+                              <option value="1">Without maker/checker</option>
+                              <option value="2">Maker and Approver</option>
+                              <option value="3">Maker checker and Approver</option>
+                            </select>
+                          </div>
+                        <div class="row" style="width: 300px;">
+                          <label for="message-text" class="col-form-label">User limit :</label>
+                        <input name="loginrange"
+                        type="number"
+                        class="form-control rounded-pill border-0 shadow-sm px-4 password1"
+                        placeholder="Enter the login limit..." id="authcode" autocomplete="off" #loginrange required>
+                        </div>
                       </div>
+
                       <div class="row" style="width: 300px;">
                         <label for="message-text" class="col-form-label">Otp :</label>
                     <input name="authcode"
@@ -45,7 +48,6 @@
                     <br>
                   </div>
                     <button type="Submit" class="btn btn-lg btn-primary btn-block btn-signin">Submit</button>
-
                 </form>
             </div>
       </div>

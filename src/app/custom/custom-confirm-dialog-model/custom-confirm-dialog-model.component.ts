@@ -19,6 +19,7 @@ export class CustomConfirmDialogModelComponent implements OnInit {
   message:'';
   MODEL_TYPE_VIEW:any={
     ConfirmDialog:false,
+    DropDownInputConfirmDialog:false,
     InputConfirmDialog:false,
     IframeModel:false
   };
@@ -33,16 +34,24 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     $('.custommodel').css('display', 'block');
   }
 
+  DropDownConfirmDialogModel(titleheader:any,message:any,callback:Function){
+    this.HIDE_ALL_MODELS('DropDownInputConfirmDialog');
+    $('.input-remove').val('');
+    this.CustomConfirmDialogModel.titleheader=titleheader;
+    this.CustomConfirmDialogModel.message=message;
+    $('.DropDownInputConfirmDialog').css('display', 'block');
+    this.CustomConfirmDialogModel.CALLBACKS=callback;
+  }
   InputConfirmDialogModel(titleheader:any,message:any,callback:Function){
     this.HIDE_ALL_MODELS('InputConfirmDialog');
     $('.input-remove').val('');
     this.CustomConfirmDialogModel.titleheader=titleheader;
     this.CustomConfirmDialogModel.message=message;
-    $('.custommodel').css('display', 'block');
+    $('.InputConfirmDialog').css('display', 'block');
     this.CustomConfirmDialogModel.CALLBACKS=callback;
   }
   IframeConfirmDialogModel(titleheader:any,url:any,callback:Function){
-    this.HIDE_ALL_MODELS('InputConfirmDialog');
+    this.HIDE_ALL_MODELS('IframeModel');
     $('.input-remove').val('');
     this.CustomConfirmDialogModel.titleheader=titleheader;
     this.CustomConfirmDialogModel.url=url;

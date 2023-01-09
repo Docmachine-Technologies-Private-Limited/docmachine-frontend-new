@@ -420,6 +420,13 @@ export class DocumentService {
     };
     return this.http.get(`${this.api_base}/Approval/getPendingStatus`,httpOptions);
   }
+  getVerifyStatus() {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/Approval/getVerifyStatus`,httpOptions);
+  }
   getApprovedStatus() {
     this.loadFromLocalStorage();
     const httpOptions = {

@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 import { DocumentService } from 'src/app/service/document.service';
+import { UserService } from 'src/app/service/user.service';
 import { WindowInformationService } from 'src/app/service/window-information.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../confirm-dialog-box/confirm-dialog-box.component';
 
@@ -13,13 +14,26 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../confirm-dia
 })
 export class PendingPanelComponent implements OnInit {
   DATA_CREATE:any=[];
+  USER_DETAILS:any=[];
   constructor(public wininfo: WindowInformationService,public CustomConfirmDialogModel:CustomConfirmDialogModelComponent,
-    public documentService: DocumentService,public dialog: MatDialog, private sanitizer: DomSanitizer) { }
+    public documentService: DocumentService,public dialog: MatDialog, private sanitizer: DomSanitizer, public userserivce: UserService,) { }
   ngOnInit(): void {
     this.wininfo.set_controller_of_width(270,'.content_top_common')
     this.documentService.getPendingStatus().subscribe((status) => {
       this.DATA_CREATE=status;
+        if (this.USER_DETAILS?.RoleCheckbox==='Approver') {
+          this.documentService.getVerifyStatus().subscribe((status2:any) => {
+            for (let index = 0; index < status2.length; index++) {
+              this.DATA_CREATE.push(status2[index]);
+            }
+          })
+        }
         console.log(status,'statusstatusstatusstatusstatus');
+    })
+
+    this.userserivce.getUserDetail().then((status) => {
+      this.USER_DETAILS=status['result'];
+      console.log(this.USER_DETAILS,'USER_DETAILS');
     })
   }
 
@@ -32,7 +46,6 @@ export class PendingPanelComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
-        data['status'] ='Approved'
         this.documentService.DeleteStatus(data).subscribe((status) => {
             console.log(status,'DeleteStatusDeleteStatusDeleteStatusDeleteStatusDeleteStatus');
             this.ngOnInit();
