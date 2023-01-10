@@ -27,8 +27,8 @@ export class AppConfig {
 
 
     public getConstants() {
-        // this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
-        this.apiUrl = `https://devapi.bharathexim.com/v1`;
+        this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
+        // this.apiUrl = `https://devapi.bharathexim.com/v1`;
         // this.apiUrl = `https://api.bharathexim.com/v1`;
         // this.apiUrl = `https://api.bharathexim.com/v1`;
 
