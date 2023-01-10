@@ -40,9 +40,15 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgSelectModule } from '@ng-select/ng-select';
 import {WindowInformationService} from './service/window-information.service'
 import {InterceptorService} from './service/interceptor.service';
+import { TwofactorauthComponent } from './shared/components/twofactorauth/twofactorauth.component';
+import { HomeModule } from "./home/home.module";
+import { CheckboxComponentsComponent } from "./home/checkbox-components/checkbox-components.component";
+import {CustomConfirmDialogModelComponent} from './custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component'
+import {CustomConfirmDialogModelService} from './custom/custom-confirm-dialog-model/custom-confirm-dialog-model.service'
+import { CustomDropdownComponent } from "./custom/custom-dropdown/custom-dropdown.component";
+import { CustomdropdownservicesService } from "./custom/custom-dropdown/customdropdownservices.service";
+import { AprrovalPendingRejectTransactionsService } from './service/aprroval-pending-reject-transactions.service';
 
-
-//import { SidenavComponent } from './home/sidenav/sidenav.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
   url: "https://httpbin.org/post",
@@ -56,47 +62,54 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ForgotPasswordComponent,
-    CreateTeamComponent,
-    CreateTeam1Component,
-    AddMemberComponent,
-    UpdatePasswordComponent,
-    NewUserComponent,
-    VerifyEmailComponent,
-    NotVerifiedComponent,
-    MembersigninComponent,
-    PdfComponent,
-  ],
-  imports: [
-    BrowserModule,
-    RouterModule,
-    ReactiveFormsModule,
-    FormsModule,
-    HttpClientModule,
-    DropzoneModule,
-    DragDropModule,
-    SharedModule,
-    SignupModule,
-    BsDatepickerModule.forRoot(),
-    SigninModule,
-    AppRoutingModule,
-    NgSelectModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
-    BrowserAnimationsModule, // required animations module
-    ToastrModule.forRoot(), // ToastrModule added
-  ],
-  providers: [{ provide: AppConfig },
-    WindowInformationService,
-    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
-  ],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        ForgotPasswordComponent,
+        CreateTeamComponent,
+        CreateTeam1Component,
+        AddMemberComponent,
+        UpdatePasswordComponent,
+        NewUserComponent,
+        VerifyEmailComponent,
+        NotVerifiedComponent,
+        MembersigninComponent,
+        PdfComponent,
+        TwofactorauthComponent,
+        CheckboxComponentsComponent,
+        CustomConfirmDialogModelComponent,
+        CustomDropdownComponent
+    ],
+    providers: [{ provide: AppConfig },
+        WindowInformationService,
+        CustomConfirmDialogModelService,
+        CustomdropdownservicesService,
+        AprrovalPendingRejectTransactionsService,
+        { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
+    ],
+    bootstrap: [AppComponent],
+    imports: [
+        BrowserModule,
+        RouterModule,
+        ReactiveFormsModule,
+        FormsModule,
+        HttpClientModule,
+        DropzoneModule,
+        DragDropModule,
+        SharedModule,
+        SignupModule,
+        BsDatepickerModule.forRoot(),
+        SigninModule,
+        AppRoutingModule,
+        NgSelectModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient],
+            },
+        }),
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
+    ]
 })
 export class AppModule { }

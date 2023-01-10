@@ -9,7 +9,8 @@ export class AppConfig {
       console.log(platformId,'pllllllllllllllllllllllllll')
         if (isPlatformBrowser(this.platformId)) {
             // Client only code.
-            this.getConstants();
+            // this.getConstants();
+            this.getConstantsAtServer();
         }
         if (isPlatformServer(this.platformId)) {
             // Server only code.
@@ -18,13 +19,21 @@ export class AppConfig {
     }
 
     public getConstantsAtServer() {
-        this.apiUrl = `http://localhost:3000/v1`;
+        this.apiUrl = `http://localhost:8080/v1`;
+        // this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
+        // this.apiUrl = `http://localhost:8080/v1`;
+        // this.apiUrl = `https://api.bharathexim.com/v1`;
     }
+
 
     public getConstants() {
         this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
+        // this.apiUrl = `https://devapi.bharathexim.com/v1`;
+        // this.apiUrl = `https://api.bharathexim.com/v1`;
+        // this.apiUrl = `https://api.bharathexim.com/v1`;
+
         // if (window.location.hostname === 'localhost') {
-            this.apiUrl = `http://localhost:8080/v1`;
+            // this.apiUrl = `http://localhost:8080/v1`;
         // } else if (window.location.hostname.indexOf('beta') === 0) {
         //     this.apiUrl = window.location.protocol + '//betaapi.' + 'bharathexim.com' + '/v1';
         // }

@@ -80,6 +80,9 @@
                                     <!-- *ngIf='pipo' -->
                                     <thead style="width: 100%;background: white;position: sticky;top: 0;">
                                         <tr class="text-muted table-heading" style="font-size: 14px; color:black; border-bottom: 1px solid #f2f4f8;">
+                                            <!-- <th class="rect">
+                                                <img src="./assets/Rectangle-13.png" />
+                                            </th> -->
                                             <th scope="col"><span class="pl-3" style="margin-left: 9px;">DATE</span></th>
                                             <th scope="col">PI/PO No.</th>
                                             <th scope="col">O R No.</th>
@@ -91,6 +94,12 @@
                                     </thead>
                                     <tbody class="text-dark">
                                         <tr class="table-row" *ngFor="let data of item1; let i = index">
+
+                                            <!-- (click)="
+                                        getInvoices(data, i) && getTransactions(data.pi_poNo) -->
+                                            <!-- <th class="rect">
+                                                <img src="./assets/Rectangle-13.png" />
+                                            </th> -->
                                             <td>{{ data.date }}</td>
 
                                             <td class="sb-no"> {{ getPipoNumbers(data) }} </td>

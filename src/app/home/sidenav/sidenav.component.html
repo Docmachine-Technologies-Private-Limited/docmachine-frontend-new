@@ -159,6 +159,15 @@
                                 <a class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; font-size: 11px;" (click)="nonlcUsance()">Usance</a>
                             </div>
                         </li>
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub11()" [ngClass]="new11 ? 'b-color' : 'nothing'">
+                          <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/bill-lodgement']">Pending</span>
+                          </div>
+                          <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub11()" [ngClass]="new11 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/bill-lodgement']">Approver</span>
+                            </div>
+                            <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub11()" [ngClass]="new11 ? 'b-color' : 'nothing'">
+                              <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/bill-lodgement']">Reject</span>
+                              </div>
                     </div>
                 </li>
                 <li class="manage-li" *ngIf="this.documentService.EXPORT_IMPORT['export']==true">
@@ -250,14 +259,21 @@
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/bill-lodgement']">Bill Under
           LC</span>
                             </div>
-
                             <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub12()" [ngClass]="new12 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packing-credit-request']">Packing Credit Request</span>
                             </div>
                             <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSub13()" [ngClass]="new13 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/packing-credit-request']">Direct Dispatch</span>
                             </div>
-
+                            <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                              <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/pendingpanel']">Pending</span>
+                              </div>
+                              <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                                <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/approvalpanel']">Approved</span>
+                                </div>
+                                <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;">
+                                  <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/rejectpanel']">Reject</span>
+                                  </div>
                         </div>
 
                         <div class="border-2px">
@@ -541,7 +557,7 @@
 <!-- This is the white navigation bar seen on the top. A bit enhanced BS navbar. See .page-controls in _base.scss. -->
 <div class="main_nave">
   <header class="logo d-none d-md-block">
-    <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">
+    <a routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">
         <img class="mlogo" src="./assets/new-img/LogoFinal.png" />
     </a>
 </header>
@@ -560,13 +576,24 @@
                                         <input id="main-search " type="text " placeholder="Type to search. . . " />
                                         <div class="col-md-4 col-sm-6 col-xs-12 btn-panel">
                                           <div class="import_export_button">
+                                            <div *ngIf="this.userData?.result?.Subscription=='Export'">
+                                          <button type="button" (click)="typeChange('export','import')" class="type_active">
+                                              <span class="icon_top "></span>Export
+                                          </button>
+                                            </div>
+                                            <div *ngIf="this.userData?.result?.Subscription=='Import'">
+                                              <button type="button" (click)="typeChange('import','export')" class="type_active">
+                                              <span class="icon_top"></span>Import </button>
+                                            </div>
+                                            <div *ngIf="this.userData?.result?.Subscription=='both'">
                                               <button type="button" (click)="typeChange('import','export')"
-                                                  [ngClass]="userData?.result?.sideMenu == 'import' ? 'type_active' : 'type_inactive'">
-                                                  <span class="icon_top"></span>Import </button>
-                                              <button type="button" (click)="typeChange('export','import')"
-                                                  [ngClass]="userData?.result?.sideMenu == 'export' ? 'type_active' : 'type_inactive'">
-                                                  <span class="icon_top "></span>Export
-                                              </button>
+                                              [ngClass]="userData?.result?.sideMenu == 'import' ? 'type_active' : 'type_inactive'">
+                                              <span class="icon_top"></span>Import </button>
+                                          <button type="button" (click)="typeChange('export','import')"
+                                              [ngClass]="userData?.result?.sideMenu == 'export' ? 'type_active' : 'type_inactive'">
+                                              <span class="icon_top "></span>Export
+                                          </button>
+                                            </div>
                                           </div>
                                       </div>
                                     </div>
@@ -575,14 +602,14 @@
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-4 col-xs-5">
-                        <div class="language_options_right ">
+                        <div class="language_options_right">
                             <div class="language_options ">
                                 <select style="cursor: pointer " class="dropdown " name="cars " id="cars ">
-              <option value="volvo ">English</option>
-              <option value="saab ">Hindi</option>
-              <option value="opel ">Kannada</option>
-              <option value="audi ">Tamil</option>
-            </select>
+                                    <option value="volvo ">English</option>
+                                    <option value="saab ">Hindi</option>
+                                    <option value="opel ">Kannada</option>
+                                    <option value="audi ">Tamil</option>
+                                  </select>
                             </div>
                             <div class="notfication ">
                                 <ul>

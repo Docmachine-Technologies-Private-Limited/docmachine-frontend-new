@@ -131,7 +131,36 @@ export class UserService {
       httpOptions
     );
   }
+  loginVerfiy(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/otp/login/verify`,
+      {
+        data: data,
+      },
+      httpOptions
+    );
+  }
 
+
+  deleteUser_Role(data){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/member/deleteUserRole`,
+      {
+        data: data,
+      },
+      httpOptions
+    );
+  }
   delete(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -460,6 +489,21 @@ export class UserService {
     };
     return this.http.post(
       `${this.api_base}/member/post`,
+      {
+        id: id,
+        member: member,
+      },
+      httpOptions
+    );
+  }
+  public UpdateMemeber(id, member) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/member/update`,
       {
         id: id,
         member: member,

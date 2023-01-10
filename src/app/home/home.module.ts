@@ -77,7 +77,9 @@ import { UploadDocComponent } from "./Export/export-home/upload-doc/upload-doc.c
 import { ExcelDownloaderCompComponent } from "./excel-downloader-comp/excel-downloader-comp.component";
 import { DatatableComponent } from "./datatable/datatable.component";
 import { SubBillLodgementComponent } from "./Export/sub-bill-lodgement/sub-bill-lodgement.component";
-
+import { ApprovalPanelComponent } from "./StatusPanel/approval-panel/approval-panel.component";
+import { PendingPanelComponent } from './StatusPanel/pending-panel/pending-panel.component';
+import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.component';
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -100,7 +102,10 @@ import { SubBillLodgementComponent } from "./Export/sub-bill-lodgement/sub-bill-
     FooterComponent,
     ConfirmDialogBoxComponent,
     ExcelDownloaderCompComponent,
-    SubBillLodgementComponent
+    SubBillLodgementComponent,
+    ApprovalPanelComponent,
+    PendingPanelComponent,
+    RejectPanelComponent
   ],
   imports: [
     SharedHomeModule,
@@ -360,6 +365,20 @@ import { SubBillLodgementComponent } from "./Export/sub-bill-lodgement/sub-bill-
           {
             path: "t&c",
             component:TermsAndConditionComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "approvalpanel",
+            component:ApprovalPanelComponent,
+            pathMatch: "full",
+          },
+          {
+            path: "pendingpanel",
+            component:PendingPanelComponent,
+            pathMatch: "full",
+          },{
+            path: "rejectpanel",
+            component:RejectPanelComponent,
             pathMatch: "full",
           }
 
