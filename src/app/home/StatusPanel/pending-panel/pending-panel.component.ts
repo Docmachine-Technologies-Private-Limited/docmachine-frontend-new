@@ -56,7 +56,7 @@ export class PendingPanelComponent implements OnInit {
   Reject(data:any){
     this.CustomConfirmDialogModel.InputConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
         data['status'] ='Rejected'
-        data['comment']=res.value.value
+        data['comment']=res.value
         this.documentService.RejectedStatus(data).subscribe((status) => {
             console.log(status,'Rejeeced');
             this.ngOnInit();
