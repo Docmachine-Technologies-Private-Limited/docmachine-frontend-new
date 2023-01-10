@@ -24,6 +24,7 @@ export class TryPartyAgreementsComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
+  filtervisible: boolean = false;
 
   constructor(
     private documentService: DocumentService,
@@ -53,6 +54,16 @@ export class TryPartyAgreementsComponent implements OnInit {
     );
 
   }
+  
+  filter() {
+    // this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
+  }
+
 
   openLetterOfCredit(content) {
     this.modalService

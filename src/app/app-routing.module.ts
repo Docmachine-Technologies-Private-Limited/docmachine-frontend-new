@@ -21,6 +21,7 @@ import { MembersigninComponent } from "./membersignin/membersignin.component";
 import { PdfComponent } from "./pdf/pdf.component";
 import {TwoFactorAuthComponent} from './shared/components/two-factor-auth';
 import { UploadDocComponent } from "./home/Export/export-home/upload-doc/upload-doc.component";
+import { TwofactorauthComponent } from "./shared/components/twofactorauth/twofactorauth.component";
 
 const routes: Routes = [
   {
@@ -36,7 +37,7 @@ const routes: Routes = [
   },
   {
     path: "2FA",
-    component: TwoFactorAuthComponent,
+    component: TwofactorauthComponent,
     pathMatch: "full",
   },
   {

@@ -24,6 +24,7 @@ export class OpinionReportsComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
+  filtervisible: boolean = false;
 
   constructor(
     private documentService: DocumentService,
@@ -57,6 +58,16 @@ export class OpinionReportsComponent implements OnInit {
     );
 
   }
+    
+  filter() {
+    // this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
+  }
+
 
   getPipoNumbers(data) {
     return data.pipo.map((x) => {

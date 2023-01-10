@@ -70,7 +70,6 @@
 input {
   border: none;
   outline: none;
-  width: 250px;
   text-align: center;
 }
 
@@ -98,7 +97,6 @@ input {
 }
 
 .email {
-  margin-bottom: 20px;
   font-size: 16px;
   color: #98A0A6;
   text-align: center;

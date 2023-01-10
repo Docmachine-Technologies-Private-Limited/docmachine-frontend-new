@@ -1503,3 +1503,17 @@ body {
     font-size: 8pt;
     float: right;
 }
+.button-label-td{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+.bold-text{
+  font-weight: bold;
+}
+.none{
+  pointer-events: none;
+  opacity: .7;
+}

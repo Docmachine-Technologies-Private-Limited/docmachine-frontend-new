@@ -1,0 +1,51 @@
+<div class="content_top_common scroll-bar-main content_white_background">
+  <div class="content-wrap">
+    <div class="container-fluid">
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Id</th>
+      <th scope="col">Summary Page Name</th>
+      <th scope="col">Date</th>
+      <th scope="col">Status</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of this.DATA_CREATE let i=index">
+      <td>{{i+1}}</td>
+      <td>{{item['id']}}</td>
+      <td>{{item['tableName']}}</td>
+      <td>{{item['createdAt']}}</td>
+      <td>
+        <label *ngIf="item['deleteflag']=='2'">Approved</label>
+      </td>
+      <td><div class="column flex-display">
+        <button type="submit" class="btn btn-primary" (click)="detailsView(i,ApprovalDetails.style.display='block')">Details</button>
+      </div></td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" #ApprovalDetails style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Approval Details</h5>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close" (click)="ApprovalDetails.style.display='none'">close</button>
+      </div>
+      <div class="modal-body">
+       <div class="column" *ngIf="this.detailsViewdata.length!=0">
+        <p class="done-by"><span class="bold-text">Done By :</span> {{this.detailsViewdata['userdetails']['fullName']}}</p>
+        <p class="date-time"><span class="bold-text">Date & Time :</span> {{this.detailsViewdata['createdAt']}}</p>
+        <p class="status"><span class="bold-text">Status :</span> {{this.detailsViewdata['deleteflag']=='1'?'Approved':'Not Approved'}}</p>
+        <p class="comments"><span class="bold-text">Comments :</span> {{this.detailsViewdata['comment']}}</p>
+       </div>
+      </div>
+    </div>
+  </div>
+</div>

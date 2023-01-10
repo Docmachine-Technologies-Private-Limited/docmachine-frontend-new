@@ -103,7 +103,7 @@ export class SigninComponent implements OnInit {
             this.loginError();
           });
     } else {
-      this.userService.verify(this.value)
+      this.userService.loginVerfiy(this.value)
         .subscribe(
           data => {
             if (this.data1['data'][0].emailId == 'docmachinetec@gmail.com' || this.data1['data'][0].emailId == 'tramsdocmachine@gmail.com' || this.data1['data'][0].emailId == 'fintech.innovations2021@gmail.com') {

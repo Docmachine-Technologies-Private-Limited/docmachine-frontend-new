@@ -138,7 +138,7 @@ export class SidenavComponent implements OnInit {
 
     this.id = await this.userService.getUserDetail();
     console.log("this.id", this.id)
-    this.documentService.EXPORT_IMPORT[this.id['result']['sideMenu']]=true;
+    this.documentService.EXPORT_IMPORT[(this.id['result']['Subscription'])=='both'?this.id['result']['sideMenu']:(this.id['result']['Subscription']).toLowerCase()]=true;
     console.log(this.documentService.EXPORT_IMPORT,'sdfhsdgfdjshdgf')
 
     this.name = this.id.result.fullName
