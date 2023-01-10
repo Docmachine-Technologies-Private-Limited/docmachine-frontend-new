@@ -9,6 +9,7 @@ import { ConfirmDialogModel, ConfirmDialogBoxComponent } from '../confirm-dialog
 import { MatDialog } from '@angular/material/dialog';
 import { WindowInformationService } from 'src/app/service/window-information.service';
 import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 
 /**
  * @title Table with pagination
@@ -44,7 +45,8 @@ export class PipoNewComponent implements OnInit {
   PENDING_DATA:any=[];
 
   constructor(public documentService: DocumentService, private userService: UserService, public dialog: MatDialog,
-    public wininfo: WindowInformationService,public CustomConfirmDialogModel:CustomConfirmDialogModelComponent) {
+    public wininfo: WindowInformationService,public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public CustomConfirmDialogModel:CustomConfirmDialogModelComponent) {
     this.getDropDownItems()
 
   }
@@ -162,6 +164,7 @@ export class PipoNewComponent implements OnInit {
     return 'none';
   }
   deleteByRoleType(roleType:string,id:any,index:any){
+
     if (roleType=='1'){
         this.documentService.deletePipoByid(id).subscribe((res) => {
             console.log(res)
@@ -170,23 +173,17 @@ export class PipoNewComponent implements OnInit {
             }
         }, (err) => console.log(err))
     } else if (roleType=='2'){
-      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
-        var approval_data:any={
-          id:id,
-          comment:res.value.value,
-          tableName:'PI_PO',
-          deleteflag:'-1',
-          userdetails:this.USER_DATA['result'],
-          status:'pending',
-          dummydata:this.dataSource[index]
-        }
-        this.documentService.deletflagPiPo({id:id,deleteflag:-1}).subscribe((res:any)=>{
-          this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
-            this.ngOnInit();
-          })
-        })
+      var approval_data:any={
+        id:id,
+        tableName:'PI_PO',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.dataSource[index]
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(roleType,id,index,approval_data,()=>{
+        this.ngOnInit();
       });
-
     } else if (roleType=='3'){
       this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
         var approval_data:any={
@@ -198,11 +195,9 @@ export class PipoNewComponent implements OnInit {
           status:'pending',
           dummydata:this.dataSource[index]
         }
-        this.documentService.deletflagPiPo({id:id,deleteflag:-1}).subscribe((res:any)=>{
-          this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
-            this.ngOnInit();
-          })
-        })
+        this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(roleType,id,index,approval_data,()=>{
+          this.ngOnInit();
+        });
       });
     }
   }

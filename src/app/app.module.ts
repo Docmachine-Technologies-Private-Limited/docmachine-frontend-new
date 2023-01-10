@@ -47,8 +47,7 @@ import {CustomConfirmDialogModelComponent} from './custom/custom-confirm-dialog-
 import {CustomConfirmDialogModelService} from './custom/custom-confirm-dialog-model/custom-confirm-dialog-model.service'
 import { CustomDropdownComponent } from "./custom/custom-dropdown/custom-dropdown.component";
 import { CustomdropdownservicesService } from "./custom/custom-dropdown/customdropdownservices.service";
-
-//import { SidenavComponent } from './home/sidenav/sidenav.component';
+import { AprrovalPendingRejectTransactionsService } from './service/aprroval-pending-reject-transactions.service';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -84,6 +83,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         WindowInformationService,
         CustomConfirmDialogModelService,
         CustomdropdownservicesService,
+        AprrovalPendingRejectTransactionsService,
         { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
     ],
     bootstrap: [AppComponent],
