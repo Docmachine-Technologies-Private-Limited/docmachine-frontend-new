@@ -63,11 +63,11 @@
       <div class="modal-body">
         <div class="form-group">
           <label for="exampleInputEmail1">{{this.CustomConfirmDialogModel.message}}</label>
-          <input type="text" class="form-control input-remove" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter {{this.message}}" #input>
+          <input type="text" class="form-control input-remove" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter {{this.message}}" #normal_input>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="this.CALLBACKS_CALL({Inputdata:input.value},InputConfirmDialog.style.display='none')">Save</button>
+        <button type="button" class="btn btn-primary" (click)="this.CALLBACKS_CALL({Inputdata:normal_input.value},InputConfirmDialog.style.display='none')">Save</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="InputConfirmDialog.style.display='none'">Close</button>
       </div>
     </div>
