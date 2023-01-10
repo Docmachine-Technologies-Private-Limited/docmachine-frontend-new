@@ -19,7 +19,11 @@ export class AppConfig {
     }
 
     public getConstantsAtServer() {
+<<<<<<< HEAD
+        // this.apiUrl = `http://localhost:8080/v1`;
+=======
         //this.apiUrl = `http://localhost:8080/v1`;
+>>>>>>> 7dcb53366c83491c1e8ae57e22e3ae8653d0f030
         this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
         // this.apiUrl = `http://localhost:8080/v1`;
         // this.apiUrl = `https://api.bharathexim.com/v1`;
@@ -30,7 +34,11 @@ export class AppConfig {
         this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
         // this.apiUrl = `https://devapi.bharathexim.com/v1`;
         // this.apiUrl = `https://api.bharathexim.com/v1`;
+<<<<<<< HEAD
+        // this.apiUrl = `https://api.bharathexim.com/v1`;
+=======
 //         this.apiUrl = `https://api.bharathexim.com/v1`;
+>>>>>>> 7dcb53366c83491c1e8ae57e22e3ae8653d0f030
 
         // if (window.location.hostname === 'localhost') {
             // this.apiUrl = `http://localhost:8080/v1`;
