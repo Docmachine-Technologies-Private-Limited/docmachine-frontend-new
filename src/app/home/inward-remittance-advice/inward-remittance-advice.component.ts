@@ -44,6 +44,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   public item6 = [];
   public closeResult: string;
   public viewData: any;
+  filtervisible: boolean = false;
 
   constructor(
     private toastr: ToastrService,
@@ -159,6 +160,17 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     );
   }
 
+
+    
+  filter() {
+    // this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
+  }
+
   toEdit(index) {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Forex Advice Row Is In Edit Mode');
@@ -202,7 +214,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
               if (availableBalance <= 0) {
                 newVal['BalanceAvail'] = 0;
               } else {
-                newVal['BalanceAvail'] = availableBalance.toFixed(2);
+                newVal['BalanceAvail'] = availableBalance;
               }
 
               console.log('Forex data Value', newVal);
@@ -217,7 +229,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
           const newVal = { ...irData };
           let availableBal = irData.amount
             // .replace(/,/g, ''));
-          newVal['BalanceAvail'] = availableBal.toFixed(2);
+          newVal['BalanceAvail'] = availableBal;
           filterForexData.push(newVal);
           console.log('235', filterForexData);
         }
@@ -228,7 +240,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         const newVal = { ...ir };
         let availableBal = ir.amount
           // .replace(/,/g, ''));
-        newVal['BalanceAvail'] = availableBal.toFixed(2);
+        newVal['BalanceAvail'] = availableBal;
         filterForexData.push(newVal);
         console.log('245', filterForexData);
       }

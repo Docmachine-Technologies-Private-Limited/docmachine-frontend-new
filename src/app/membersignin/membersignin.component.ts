@@ -21,12 +21,14 @@ export class MembersigninComponent implements OnInit {
   fullName: any;
   companyId: any;
   companyName: any;
+  SNAPSHOT_DATA: any=[];
   constructor(private formBuilder: FormBuilder, private userService: UserService,
     private router: Router, private route: ActivatedRoute, private toastr: ToastrService) { }
   ngOnInit(): void {
     this.token = this.route.snapshot.params['id'];
     let val = jwt_decode.default(this.token);
-    console.log(val)
+    this.SNAPSHOT_DATA=val;
+    console.log(val);
     this.email = val['email'];
     this.fullName = val['name'];
     this.companyId = val['companyId'];
@@ -51,6 +53,8 @@ export class MembersigninComponent implements OnInit {
     this.resetForm.value.companyId = this.companyId
     this.resetForm.value.companyName = this.companyName
     this.resetForm.value.verified = 'yes'
+    this.resetForm.value.Subscription = this.SNAPSHOT_DATA['UnderSubscription']
+    this.resetForm.value.RoleCheckbox = this.SNAPSHOT_DATA['UnderSubscriptionCheckBox']
     console.log(this.resetForm.value)
     this.userService.register(this.resetForm.value)
       .subscribe(

@@ -361,6 +361,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.wininfo.set_controller_of_width(230,'.content_top_common')
+    // this.wininfo.set_width_grid(700,'.iframecontroller')
     console.log('zxysomthing');
 
     this.jsondata1 = data1['default'];
