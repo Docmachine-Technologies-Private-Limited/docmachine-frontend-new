@@ -71,7 +71,6 @@ table {
 .table-row:hover {
     background: #f6f9ff !important;
     border-left: 2px solid #49a2d7;
-    cursor: pointer;
 }
 
 .sb-no {
