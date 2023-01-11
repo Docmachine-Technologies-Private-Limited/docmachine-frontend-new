@@ -43,7 +43,210 @@ color: #333;padding: 13px 0 12px;}
 
 .middle_datatable table tr td {font-size: 13px!important;padding: 3px 10px;color: #777;
 font-family: Poppins, sans-serif;font-weight: 500;}
-.content{min-height:inherit!important;;}
+.content{min-height:inherit!important;}
+.table-striped tbody tr:nth-of-type(odd){background:#fff!important;}
+
+.float_right_page {
+float: right;
+}
+.filter_section_top{display:inline-block; width:99%;}
+
+.import_export_sec .float_right_page ol {
+margin: 0px;
+padding: 0px;
+}
+
+.import_export_sec .title_dash {
+font-size: 21px;
+font-weight: 500;
+margin: 0px;
+}
+
+.new_data_table_summ table thead th {
+vertical-align: middle;
+}
+
+.table_scroll_common {
+display: inline-block;
+width: 100%;
+overflow-x: auto;
+overflow-y: hidden;
+}
+
+.table_scroll_common .form-check-input {
+top: -11px;
+}
+
+.filter_right_new {
+float: right;
+}
+
+.filter_right_new .btn-success {
+background: #51AEE5;
+border-radius: 5px;
+opacity: 1;
+border: 1px solid #51AEE5;
+font-size: 15px;
+font-weight: 500;
+height: 38px;
+}
+
+.filter_right_new .btn-secondary {
+background: #fff;
+border-radius: 5px;
+opacity: 1;
+border: 1px solid #E1E1E1;
+font-size: 14px;
+font-weight: 500;
+height: 38px;
+color: #999999;
+margin: 0 11px;
+}
+
+.filter_right_new .btn-primary {
+background: #fff;
+border-radius: 5px;
+opacity: 1;
+border: 1px solid #E1E1E1;
+font-size: 14px;
+font-weight: 500;
+height: 38px;
+color: #999999;
+}
+
+.ex_icon {
+display: inline-block;
+width: 25px;
+height: 22px;
+background: url('../../../assets/new-img/new-export.svg') 2px 2px no-repeat;
+vertical-align: middle;
+}
+
+.fi_icon {
+display: inline-block;
+width: 25px;
+height: 22px;
+background: url('../../../assets/new-img/Icon-feather-filter.svg') 2px 2px no-repeat;
+vertical-align: middle;
+}
+
+.add_icon {
+display: inline-block;
+width: 25px;
+height: 22px;
+background: url('../../../assets/new-img/Icon-feather-plus.svg') 2px 2px no-repeat;
+vertical-align: middle;
+}
+
+.import_export_sec {
+display: inline-block;
+width: 100%;
+padding-bottom: 14px;
+}
+
+.filter_posit {
+position: relative;
+display: inline-block;
+}
+
+.filter_main_sec {
+position: absolute;
+right: 12px;
+width: 670px;
+z-index: 2;
+background: #FFFFFF 0% 0% no-repeat padding-box;
+box-shadow: 0px 1px 6px #00000029;
+border-radius: 15px;
+opacity: 1;
+padding: 16px;
+}
+
+.select_filter_options label {
+font-size: 14px;
+font-weight: 600;
+color: #222;
+display: inline-block;
+width: 100%;
+margin: 9px 0;
+}
+
+.select_filter_options .form-control {
+font-size: 13px!important;
+font-weight: 500;
+color: #999999;
+padding: 0px 4px;
+height: 36px;
+}
+
+.footer_buttons {
+display: inline-block;
+width: 100%;
+text-align: center;
+margin: 23px 0 0 0;
+}
+
+.footer_buttons .btn-primary {
+background: #51AEE5;
+border-radius: 5px;
+opacity: 1;
+border: 1px solid #51AEE5;
+font-size: 15px;
+font-weight: 500;
+height: 38px;
+color: #fff;
+padding: 0px 23px;
+}
+
+.footer_buttons .btn-light {
+color: #212529;
+background-color: #f8f9fa;
+border-color: #f8f9fa;
+height: 38px;
+font-size: 15px;
+font-weight: 500;
+margin: 0px 12px;
+padding: 0px 23px;
+}
+
+.top_invoice_section {
+display: inline-block;
+width: 100%;
+background: #51AEE5 0% 0% no-repeat padding-box;
+border-radius: 10px;
+opacity: 1;
+min-height: 225px;
+padding: 20px 25px;
+margin-bottom: 15px;
+}
+.bg-white.filter_main_sec .form-select {
+display: block;
+width: 100%;
+padding:0 9px;
+-moz-padding-start: calc(0.75rem - 3px);
+font-size: 1rem;
+font-weight: 400;
+line-height: 1.5;
+color: #212529;
+background-color: #fff;
+background-repeat: no-repeat;
+background-position: right 0.75rem center;
+background-size: 16px 12px;
+border: 1px solid #ced4da;
+border-radius: 0.25rem;
+font-size: 14px !important;
+transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.filter_right_new .btn-primary:hover {color: #a5a5a5;background-color: #ffffff;border: 1px solid #E1E1E1;}
+.filter_right_new .btn-secondary:hover {color: #a5a5a5;background-color: #ffffff;border: 1px solid #E1E1E1;}
+.filter_right_new.padding_new_top{padding-top:15px;    padding-bottom: 17px;}
+.savBtn.bgnone{background: #fff!important;border: 1px solid #fff!important;color: #777!important;}
+.middle_datatable .form-control{height:28px; font-size:12px;}
+
+
+
+
+
+
 
 
 

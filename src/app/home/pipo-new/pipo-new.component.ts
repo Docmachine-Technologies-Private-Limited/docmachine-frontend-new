@@ -8,12 +8,12 @@ import * as xlsx from 'xlsx';
 import { ConfirmDialogModel, ConfirmDialogBoxComponent } from '../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 
 /**
  * @title Table with pagination
  */
-
-
 
 @Component({
   selector: 'app-pipo-new',
@@ -36,20 +36,29 @@ export class PipoNewComponent implements OnInit {
   commodity: string = '';
   page: number = 0
   limit: number = 10
+  USER_DATA:any=[];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   filtervisible: boolean = false
   startDate: any = '';
   endDate: any = '';
+  PENDING_DATA:any=[];
+
   constructor(public documentService: DocumentService, private userService: UserService, public dialog: MatDialog,
-    public wininfo: WindowInformationService) {
+    public wininfo: WindowInformationService,public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public CustomConfirmDialogModel:CustomConfirmDialogModelComponent) {
     this.getDropDownItems()
 
   }
-  ngOnInit() {
-    this.wininfo.set_controller_of_width(270,'.content_top_common')
+ async ngOnInit() {
+    this.wininfo.set_controller_of_width(250,'.content_top_common')
     this.getPipoData()
-
+    this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA)
+    this.documentService.getRejectStatus().subscribe((res: any)=>{
+      this.PENDING_DATA = res;
+      console.log("this.PENDING_DATA", res)
+    })
   }
   onclick() {
     this.filtervisible = !this.filtervisible
@@ -125,37 +134,71 @@ export class PipoNewComponent implements OnInit {
     this.buyer = ''
     this.getPipoData()
     this.filtervisible = !this.filtervisible
-
   }
 
 
-  handleDelete(id) {
-
-
+  handleDelete(id,index:any) {
     const message = `Are you sure you want to delete this?`;
-
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
-
     const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
       maxWidth: "400px",
       data: dialogData
     });
 
     dialogRef.afterClosed().subscribe(dialogResult => {
-      // this.result = dialogResult;
       console.log("---->", dialogResult)
       if (dialogResult) {
-        this.documentService.deletePipoByid(id).subscribe((res) => {
-          console.log(res)
-          if (res) {
-            this.getPipoData()
-          }
-        }, (err) => console.log(err))
+        this.deleteByRoleType(this.USER_DATA['result']['Role_Type'],id,index)
       }
     });
-
-
   }
+  detailsViewdata:any=[];
+  detailsView(id:any,dump:any){
+    this.detailsViewdata=this.PENDING_DATA[id];
+    console.log(this.detailsViewdata,'detailsViewdata')
+  }
+  truefalse(condition){
+    if (condition){
+      return '';
+    }
+    return 'none';
+  }
+  deleteByRoleType(roleType:string,id:any,index:any){
 
-
+    if (roleType=='1'){
+        this.documentService.deletePipoByid(id).subscribe((res) => {
+            console.log(res)
+            if (res) {
+              this.getPipoData()
+            }
+        }, (err) => console.log(err))
+    } else if (roleType=='2'){
+      var approval_data:any={
+        id:id,
+        tableName:'PI_PO',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.dataSource[index]
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(roleType,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    } else if (roleType=='3'){
+      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
+        var approval_data:any={
+          id:id,
+          comment:res.value.value,
+          tableName:'PI_PO',
+          deleteflag:'-1',
+          userdetails:this.USER_DATA['result'],
+          status:'pending',
+          dummydata:this.dataSource[index]
+        }
+        this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(roleType,id,index,approval_data,()=>{
+          this.ngOnInit();
+        });
+      });
+    }
+  }
 }

@@ -44,6 +44,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   public item6 = [];
   public closeResult: string;
   public viewData: any;
+  filtervisible: boolean = false;
 
   constructor(
     private toastr: ToastrService,
@@ -157,6 +158,17 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         console.log('error');
       }
     );
+  }
+
+
+    
+  filter() {
+    // this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
   }
 
   toEdit(index) {

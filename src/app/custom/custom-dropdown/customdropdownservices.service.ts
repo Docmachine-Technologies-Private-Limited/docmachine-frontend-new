@@ -6,6 +6,7 @@ import { Injectable,OnInit } from '@angular/core';
 export class CustomdropdownservicesService implements OnInit {
   CUTSOM_DROP_DOWN_DATA:any=[];
   SET_DROP_DOWN_VALUE:any=[];
+  limitclass:boolean=false;
 
   constructor() {
    }

@@ -33,6 +33,7 @@ export class InsuranceDocumentComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
+  filtervisible: boolean = false
 
   constructor(
     private documentService: DocumentService,
@@ -63,6 +64,14 @@ export class InsuranceDocumentComponent implements OnInit {
       },
       (err) => console.log(err)
     );
+  }
+  filter() {
+    // this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
   }
 
   openInsuranceDoc(content) {

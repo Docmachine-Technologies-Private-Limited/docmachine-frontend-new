@@ -43,7 +43,11 @@ import {InterceptorService} from './service/interceptor.service';
 import { TwofactorauthComponent } from './shared/components/twofactorauth/twofactorauth.component';
 import { HomeModule } from "./home/home.module";
 import { CheckboxComponentsComponent } from "./home/checkbox-components/checkbox-components.component";
-//import { SidenavComponent } from './home/sidenav/sidenav.component';
+import {CustomConfirmDialogModelComponent} from './custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component'
+import {CustomConfirmDialogModelService} from './custom/custom-confirm-dialog-model/custom-confirm-dialog-model.service'
+import { CustomDropdownComponent } from "./custom/custom-dropdown/custom-dropdown.component";
+import { CustomdropdownservicesService } from "./custom/custom-dropdown/customdropdownservices.service";
+import { AprrovalPendingRejectTransactionsService } from './service/aprroval-pending-reject-transactions.service';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -71,10 +75,15 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         MembersigninComponent,
         PdfComponent,
         TwofactorauthComponent,
-        CheckboxComponentsComponent
+        CheckboxComponentsComponent,
+        CustomConfirmDialogModelComponent,
+        CustomDropdownComponent
     ],
     providers: [{ provide: AppConfig },
         WindowInformationService,
+        CustomConfirmDialogModelService,
+        CustomdropdownservicesService,
+        AprrovalPendingRejectTransactionsService,
         { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
     ],
     bootstrap: [AppComponent],
