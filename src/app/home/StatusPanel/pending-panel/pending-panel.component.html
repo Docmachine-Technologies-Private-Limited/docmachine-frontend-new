@@ -41,7 +41,7 @@
           tableName:item['tableName'],
           status:'Rejected',
           deleteflag:'0'
-        },index)">Reject</button>
+        },i)">Reject</button>
         <button type="submit" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'])">View</button>
       </div>
       <div class="column flex-display" *ngIf="this.USER_DETAILS?.RoleCheckbox==='Checker'">
@@ -58,7 +58,7 @@
           tableName:item['tableName'],
           status:'Rejected',
           deleteflag:'0'
-        },index)">Reject</button>
+        },i)">Reject</button>
         <button type="submit" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'])">View</button>
       </div>
     </td>
