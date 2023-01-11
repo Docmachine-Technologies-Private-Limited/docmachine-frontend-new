@@ -4126,7 +4126,7 @@ SendApproval(Status:string,UniqueId:any,url:any){
     deleteflag:'-1',
     userdetails:this.USER_DATA,
     status:'pending',
-    dummydata:url,
+    dummydata:{doc:url},
     Types:'downloadPDF'
   }
   if (Status=='' || Status==null) {
