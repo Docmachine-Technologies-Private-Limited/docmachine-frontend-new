@@ -179,7 +179,8 @@ export class PipoNewComponent implements OnInit {
         deleteflag:'-1',
         userdetails:this.USER_DATA['result'],
         status:'pending',
-        dummydata:this.dataSource[index]
+        dummydata:this.dataSource[index],
+        Types:'deletion'
       }
       this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(roleType,id,index,approval_data,()=>{
         this.ngOnInit();
@@ -193,7 +194,8 @@ export class PipoNewComponent implements OnInit {
           deleteflag:'-1',
           userdetails:this.USER_DATA['result'],
           status:'pending',
-          dummydata:this.dataSource[index]
+          dummydata:this.dataSource[index],
+          Types:'deletion'
         }
         this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(roleType,id,index,approval_data,()=>{
           this.ngOnInit();
