@@ -875,7 +875,8 @@
                                                   <div *ngIf="this.USER_DATA['RoleCheckbox']==''">
                                                     <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px"  (click)="openToPdf(content2,this.PREVIWES_URL)">Send Mail / Download</button>
                                                   </div>
-                                                  <div *ngIf="this.USER_DATA['RoleCheckbox']=='Checker' || this.USER_DATA['RoleCheckbox']=='Maker' " >
+                                                  <div *ngIf="this.USER_DATA['RoleCheckbox']=='Checker' || this.USER_DATA['RoleCheckbox']=='Maker'
+                                                             || this.GetDownloadStatus.length==0 || this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'" >
                                                     <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px" [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
                                                     (click)="SendApproval(this.GetDownloadStatus?.status,code,this.PREVIWES_URL)">Send for Approval</button>
                                                   </div>
