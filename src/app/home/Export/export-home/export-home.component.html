@@ -373,11 +373,11 @@
                                             <button class="button1" style="margin-bottom: 40px;">Send it via Email</button>
                                             <br> Generated Document
                                             <div>
-                                                <iframe [src]="data9[j]" height="500px" width="400px"></iframe>
+                                                <iframe class='iframe-controller' [src]="data9[j]" height="500px" width="400px"></iframe>
                                             </div>
                                             <br> Tri party document
                                             <div style="display: flex; align-items: center;">
-                                                <iframe style="flex-direction:row;" *ngFor="let pipo of mainDoc2[j]" [src]="pipo" height="500px" width="400px"></iframe>
+                                                <iframe class='iframe-controller' style="flex-direction:row;" *ngFor="let pipo of mainDoc2[j]" [src]="pipo" height="500px" width="400px"></iframe>
                                             </div>
                                             <br>
                                             <br>
@@ -780,18 +780,18 @@
                                                 <button class="button1" style="margin-bottom: 40px;">Send it via Email</button>
                                                 <br> Generated Document
                                                 <div>
-                                                    <iframe [src]="data8[j]" height="500px" width="400px"></iframe>
-                                                    <iframe *ngIf="sbPurposeDone1[j] == code" [src]="dataImport[j]" height="500px" width="400px"></iframe>
+                                                    <iframe class='iframe-controller' [src]="data8[j]" height="500px" width="400px"></iframe>
+                                                    <iframe class='iframe-controller' *ngIf="sbPurposeDone1[j] == code" [src]="dataImport[j]" height="500px" width="400px"></iframe>
                                                 </div>
                                                 <br> SB Documents
                                                 <div style="display: flex; align-items: center;">
-                                                    <iframe style="flex-direction:row;" *ngFor="let pipo of mainDoc1[j]" [src]="pipo" height="500px" width="400px"></iframe>
+                                                    <iframe class='iframe-controller' style="flex-direction:row;" *ngFor="let pipo of mainDoc1[j]" [src]="pipo" height="500px" width="400px"></iframe>
                                                 </div>
                                                 <br>
                                                 <br> <span *ngIf='mainDoc3[j]'>Tri Party
                                                     Documents</span>
                                                 <div *ngIf='mainDoc3[j]' style="display: flex; align-items: center;">
-                                                    <iframe style="flex-direction:row;" *ngFor="let pipo of mainDoc3[j]" [src]="pipo" height="500px" width="400px"></iframe>
+                                                    <iframe class='iframe-controller' style="flex-direction:row;" *ngFor="let pipo of mainDoc3[j]" [src]="pipo" height="500px" width="400px"></iframe>
                                                 </div>
                                                 <br>
                                                 <br>
@@ -803,7 +803,7 @@
                                     <div *ngIf='code === c && noImportPurpose[j] == code && mailArray[j] != code'> <span>Tri Party agreement</span>
                                         <br>
                                         <div style="display: flex; align-items: center;">
-                                            <iframe style="flex-direction:row;" *ngFor="let pipo of mainDoc2[j]" [src]="pipo" height="500px" width="400px"></iframe>
+                                            <iframe class='iframe-controller' style="flex-direction:row;" *ngFor="let pipo of mainDoc2[j]" [src]="pipo" height="500px" width="400px"></iframe>
                                         </div>
                                         <br>
                                         <br>
@@ -860,21 +860,30 @@
                                     <div *ngIf='code === c && generatePurpose[j] == code'>
                                         <div *ngIf="value!='' && value!=undefined">
                                             <div id="mainId" class="bc" *ngIf="donePurpose[j] != code">
-                                                <iframe [src]="value" frameborder="0" [ngClass]="bgColor ? 'sizes' : 'sizem'"></iframe>
+                                                <iframe class='iframe-controller' [src]="value" frameborder="0" [ngClass]="bgColor ? 'sizes' : 'sizem'"></iframe>
                                             </div>
                                             <br>
                                             <div *ngIf='newDone'> PI/PO Documents
                                                 <br>
                                                 <div style="display: flex; align-items: center;" *ngIf="value!=''">
-                                                    <iframe style="flex-direction:row;" [src]="this.PREVIWES_URL" height="600px" width="500px"></iframe>
+                                                    <iframe class='iframe-controller' style="flex-direction:row;" [src]="this.PREVIWES_URL" id="frame1" height="600px" width="500px"></iframe>
                                                 </div>
                                             </div>
                                             <div *ngIf="donePurpose[j] != code" style="display: block; width: 78%;  margin-top: 40px;">
                                                 <button *ngIf='newDone' class="button1" style="margin-right: 10px;" title="Share As PDF" (click)="doneDox()">Done </button>
                                                 <button *ngIf='newDone' class="button1" style="margin-right: 10px;" (click)="hidePreview()">Edit</button>
-                                                <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px " (click)="openToPdf(content2, pipo)">Send Mail / Download</button>
+                                                  <div *ngIf="this.USER_DATA['RoleCheckbox']==''">
+                                                    <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px"  (click)="openToPdf(content2,this.PREVIWES_URL)">Send Mail / Download</button>
+                                                  </div>
+                                                  <div *ngIf="this.USER_DATA['RoleCheckbox']=='Checker' || this.USER_DATA['RoleCheckbox']=='Maker' " >
+                                                    <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px" [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
+                                                    (click)="SendApproval(this.GetDownloadStatus?.status,code,this.PREVIWES_URL)">Send for Approval</button>
+                                                  </div>
+                                                  <div *ngIf="this.GetDownloadStatus?.status=='Approved'">
+                                                    <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px" (click)="openToPdf(content2,this.PREVIWES_URL)">Send Mail / Download</button>
+                                                  </div>
                                                 <!-- <button *ngIf='newDone' class="button1" style="margin-right: 10px;" (click)="download()">Download</button> -->
-                                                <button *ngIf='!newDone' class="button1" style="margin-right: 10px; margin-bottom: 30px;" (click)="showPreview()">Proceed to Preview</button>
+                                                <button *ngIf='!newDone' class="button1" style="margin-right: 10px; margin-bottom: 30px;" (click)="showPreview(code)">Proceed to Preview</button>
                                                 <!-- <div *ngIf='!newDone' class="button1"
                                                                         title="Share As PDF" (click)="showPreview()">
                                                                         Proceed
@@ -889,12 +898,12 @@
                                                                         Email</button><br>
                                                                 Generated Document
                                                                 <div>
-                                                                        <iframe [src]="data7[j]" height="500px"
+                                                                        <iframe class='iframe-controller' [src]="data7[j]" height="500px"
                                                                                 width="400px"></iframe>
                                                                 </div><br>
                                                                 PI/PO Documents
                                                                 <div style="display: flex; align-items: center;">
-                                                                        <iframe style="flex-direction:row;"
+                                                                        <iframe class='iframe-controller' style="flex-direction:row;"
                                                                                 *ngFor="let pipo of mainDoc[j]"
                                                                                 [src]="pipo" height="600px"
                                                                                 width="500px"></iframe>
@@ -925,14 +934,14 @@
                                                                         <p class="display-4" style="margin-top: 10px;width: 6 0px;
                                                         border-bottom: 4px solid #49A2D7;">Generated Document</p>
                                                                         <input type="checkBox" checked (change)="addPdfToSelectedPdf2($event)">
-                                                                        <iframe [src]="value" style="margin-left: 10px;" height="600px" width="700px"></iframe>
+                                                                        <iframe class='iframe-controller' [src]="value" style="margin-left: 10px;" height="600px" width="700px"></iframe>
                                                                     </div>
                                                                     <div *ngIf='newDone'>
                                                                         <div class="docStyle" *ngFor="let pipo of mainDoc[j]">
                                                                             <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
                                                     border-bottom: 4px solid #49A2D7;"> PIPO Document</h6>
                                                                             <input type="checkBox" checked (change)="addPdfToSelectedPdf(pipo , $event)">
-                                                                            <iframe style="flex-direction:row;" [src]="pipo" height="600px" width="700px"></iframe>
+                                                                            <iframe class='iframe-controller' style="flex-direction:row;" [src]="pipo" height="600px" width="700px"></iframe>
                                                                         </div>
                                                                     </div>
                                                                     <div style="display: flex; width:100%; margin-left: 240px; margin-top: 20px; margin-bottom:20px; ">

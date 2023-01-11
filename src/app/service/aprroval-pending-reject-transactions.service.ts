@@ -21,7 +21,7 @@ export class AprrovalPendingRejectTransactionsService {
      if (roleType=='2'){
       this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
         var approval_data:any=data;
-        approval_data['comments']=res.value.value;
+        approval_data['comment']=res.value.value;
         this.documentService.deletflagPiPo({id:id,deleteflag:-1}).subscribe((res:any)=>{
           this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
             if (callback!=null && callback!=undefined) {
@@ -33,7 +33,7 @@ export class AprrovalPendingRejectTransactionsService {
     } else if (roleType=='3'){
       this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
         var approval_data:any=data;
-        approval_data['comments']=res.value.value;
+        approval_data['comment']=res.value.value;
         this.documentService.deletflagPiPo({id:id,deleteflag:-1}).subscribe((res:any)=>{
           this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
             callback();
@@ -42,11 +42,11 @@ export class AprrovalPendingRejectTransactionsService {
       });
     }
   }
-  DownloadByRole_Transaction_Type(roleType:string,id:any,index:any,data:any,callback:any){
+  DownloadByRole_Transaction_Type(roleType:string,data:any,callback:any){
     if (roleType=='2'){
      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
-       var approval_data:any=data;
-       approval_data['comments']=res.value.value;
+         var approval_data:any=data;
+         approval_data['comment']=res.value.value;
          this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
            if (callback!=null && callback!=undefined) {
              callback();
@@ -56,7 +56,7 @@ export class AprrovalPendingRejectTransactionsService {
    } else if (roleType=='3'){
      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
        var approval_data:any=data;
-       approval_data['comments']=res.value.value;
+       approval_data['comment']=res.value.value;
          this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
            callback();
          })

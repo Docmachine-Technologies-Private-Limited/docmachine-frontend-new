@@ -58,6 +58,14 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     $('.iframecustommodel').css('display', 'block');
     this.CustomConfirmDialogModel.CALLBACKS=callback;
   }
+  YesNoDialogModel(titleheader:any,message:any,callback:Function){
+    this.HIDE_ALL_MODELS('YesNoDialogModel');
+    $('.input-remove').val('');
+    this.CustomConfirmDialogModel.titleheader=titleheader;
+    this.CustomConfirmDialogModel.message=message;
+    $('.YesNoDialogModel').css('display', 'flex');
+    this.CustomConfirmDialogModel.CALLBACKS=callback;
+  }
   ngOnInit(): void {
   }
 
