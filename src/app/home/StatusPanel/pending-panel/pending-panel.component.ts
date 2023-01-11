@@ -72,7 +72,7 @@ export class PendingPanelComponent implements OnInit {
       var download={
         _id: data['id'],
         status:data['status'],
-        deleteflag:data['deleteflag']
+        deleteflag:'3'
       }
       this.documentService.setDownloadStatus(download).subscribe((res:any) => {
         console.log(res,'dfsdfhsdfdsjhdsfgdsfds')

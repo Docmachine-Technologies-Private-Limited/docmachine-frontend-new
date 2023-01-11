@@ -3473,9 +3473,15 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.bgColor = true
     this.newDone = true
     this.jQuery_Iframe_Style();
-    this.documentService.getDownloadStatus({id:id}).subscribe((res:any)=>{
+    this.documentService.getDownloadStatus({id:id,deleteflag:'-1'}).subscribe((res:any)=>{
       console.log(res,'dsdsdsdsdsdsds');
       this.GetDownloadStatus=res[0];
+      if (res.length==0) {
+        this.documentService.getDownloadStatus({id:id,deleteflag:'2'}).subscribe((res:any)=>{
+          console.log(res,'dsdsdsdsdsdsds');
+          this.GetDownloadStatus=res[0];
+        })
+      }
     })
   }
   hidePreview() {
@@ -4129,8 +4135,20 @@ SendApproval(Status:string,UniqueId:any,url:any){
     dummydata:{doc:url},
     Types:'downloadPDF'
   }
-  if (Status=='' || Status==null) {
-    this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['Role_Type'],approval_data,null);
+  if (Status=='' || Status==null ||  Status=='Rejected') {
+    this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['Role_Type'],approval_data,()=>{
+      this.ngOnInit();
+      this.documentService.getDownloadStatus({id:UniqueId,deleteflag:'-1'}).subscribe((res:any)=>{
+        console.log(res,'dsdsdsdsdsdsds');
+        this.GetDownloadStatus=res[0];
+        if (res.length==0) {
+          this.documentService.getDownloadStatus({id:UniqueId,deleteflag:'2'}).subscribe((res:any)=>{
+            console.log(res,'dsdsdsdsdsdsds');
+            this.GetDownloadStatus=res[0];
+          })
+        }
+      })
+    });
   }else if (Status=='pending') {
     this.CustomConfirmDialogModel.YesNoDialogModel('Are you sure you want to delete this item?','Yes or No',(res:any) => {
 
