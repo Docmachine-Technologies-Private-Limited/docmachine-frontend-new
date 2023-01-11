@@ -875,13 +875,16 @@
                                                   <div *ngIf="this.USER_DATA['RoleCheckbox']==''">
                                                     <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px"  (click)="openToPdf(content2,this.PREVIWES_URL)">Send Mail / Download</button>
                                                   </div>
-                                                  <div *ngIf="this.USER_DATA['RoleCheckbox']=='Checker' || this.USER_DATA['RoleCheckbox']=='Maker'
-                                                             || this.GetDownloadStatus.length==0 || this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'" >
+                                                  <div *ngIf="this.GetDownloadStatus?.status=='Approved'">
+                                                    <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px" (click)="openToPdf(content2,this.PREVIWES_URL)">Send Mail / Download</button>
+                                                  </div>
+                                                  <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                                                    <div *ngIf="this.USER_DATA['RoleCheckbox']=='Checker' || this.USER_DATA['RoleCheckbox']=='Maker'
+                                                    || this.GetDownloadStatus?.length==null || this.GetDownloadStatus?.status=='pending' ||
+                                                    this.GetDownloadStatus?.status=='Verify' || this.GetDownloadStatus?.status=='Rejected'" >
                                                     <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px" [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
                                                     (click)="SendApproval(this.GetDownloadStatus?.status,code,this.PREVIWES_URL)">Send for Approval</button>
                                                   </div>
-                                                  <div *ngIf="this.GetDownloadStatus?.status=='Approved'">
-                                                    <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px" (click)="openToPdf(content2,this.PREVIWES_URL)">Send Mail / Download</button>
                                                   </div>
                                                 <!-- <button *ngIf='newDone' class="button1" style="margin-right: 10px;" (click)="download()">Download</button> -->
                                                 <button *ngIf='!newDone' class="button1" style="margin-right: 10px; margin-bottom: 30px;" (click)="showPreview(code)">Proceed to Preview</button>
