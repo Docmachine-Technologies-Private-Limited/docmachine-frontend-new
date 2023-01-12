@@ -46,6 +46,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   public viewData: any;
   filtervisible: boolean = false;
 
+  
   constructor(
     private toastr: ToastrService,
     private userService: UserService,
