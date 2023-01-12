@@ -29,11 +29,11 @@
 }
 
 .table-padding {
-    background: white !important;
     width: 100%;
+    background: #fff;
     border-radius: 10px;
-    box-shadow: 0px 0px 2px 3px #0000002b;
-    max-height: 100%;
+    margin: 0;
+    box-shadow: 0 2px 10px #3a35411a;
 }
 
 .upload-button {
@@ -45,8 +45,6 @@
     background-color: #49A2D7;
     border: none;
     border-radius: 5px;
-    margin-left: 2px;
-    margin-right: 2rem;
 }
 
 button {
@@ -916,8 +914,6 @@ table tbody {
     font-size: 14px;
     cursor: pointer;
     border-radius: 2px;
-    width: 60px;
-    margin-left: -2%;
 }
 
 .content-wrap {
@@ -953,4 +949,23 @@ table {
     padding-bottom: 0.8%;
     border-bottom: 1px solid black;
     width: 99%;
+}
+
+.view_edit_button {
+    color: #777;
+    padding: 0 4px;
+    font-size: 15px;
+    display: inline-block;
+}
+
+.view_edit_button a i {
+    color: #777;
+    padding: 0 4px;
+    font-size: 15px;
+    display: inline-block;
+}
+
+.view_edit_button .savBtn .fa.fa-floppy-o:before {
+    color: green;
+    font-size: 16px;
 }
