@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms'
 import {ToastrService} from 'ngx-toastr';
 import { UserService } from 'src/app/service/user.service';
+import { AuthGuard } from 'src/app/service/authguard.service';
 
 @Component({
   selector: 'app-twofactorauth',
@@ -19,8 +20,18 @@ export class TwofactorauthComponent implements OnInit {
     '3':false,
   };
   USER_LOGIN_DATA:any=[];
+  INPUT_FORM_VALUE_LIST_MANGER:any={
+    Subscription:'',
+    Role:'',
+    Login_Limit:'',
+    OTP:''
+  };
+  INPUT_FORM_VALUE_LIST_MEMBER:any={
+    OTP:''
+  };
 
   constructor(private formBuilder: FormBuilder, private userService: UserService,
+              public authGuard:AuthGuard,
               private router: Router, private toastr: ToastrService) {
     this.userService.loginData.subscribe((data) => {
       if (data['result']['dataURL']) {
@@ -37,20 +48,21 @@ export class TwofactorauthComponent implements OnInit {
 
   }
 
-  confirm(value:any) {
+  confirm(inputformdata:any) {
     if (this.USER_LOGIN_DATA['role']=='member') {
-      value['RoleCheckbox']=this.USER_LOGIN_DATA['RoleCheckbox'];
-      value['Subscription']=this.USER_LOGIN_DATA['Subscription'];
+      inputformdata['RoleCheckbox']=this.USER_LOGIN_DATA['RoleCheckbox'];
+      inputformdata['Subscription']=this.USER_LOGIN_DATA['Subscription'];
     }
-    this.findEmptyObject(value,[undefined,null,'','Select Subscription','Select Role']).then((condition:any)=>{
+    this.findEmptyObject(inputformdata,[undefined,null,'','Select Subscription','Select Role']).then((condition:any)=>{
       if (condition==true) {
-        console.log(condition,value,'sfdfsdfdfdsfd')
-        this.userService.verify(value)
+        console.log(condition,inputformdata,'sfdfsdfdfdsfd')
+        this.userService.SingUpVerify(inputformdata)
         .subscribe(
           data => {
             if (data['status'] == 200) {
               this.toastr.success(data['message']);
               this.router.navigate(['/login'], { queryParams: { registered: true } });
+              this.authGuard.setLocalStorage('SING_UP_OTP',true)
             } else {
               this.toastr.error(data['message']);
             }

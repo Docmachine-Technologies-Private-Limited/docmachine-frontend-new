@@ -42,7 +42,7 @@
           status:'Rejected',
           deleteflag:'0'
         },i)">Reject</button>
-        <button type="submit" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'])">View</button>
+        <button type="submit" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'],i)">View</button>
       </div>
       <div class="column flex-display" *ngIf="this.USER_DETAILS?.RoleCheckbox==='Checker'">
         <button type="submit" class="btn btn-success" (click)="Approved({
@@ -59,7 +59,7 @@
           status:'Rejected',
           deleteflag:'0'
         },i)">Reject</button>
-        <button type="submit" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'])">View</button>
+        <button type="submit" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'],i)">View</button>
       </div>
     </td>
     </tr>

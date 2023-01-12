@@ -89,9 +89,13 @@ export class PendingPanelComponent implements OnInit {
     });
   }
   }
-  openView(url){
+  openView(url:any,index:any){
     console.log(url,'sdfgsfhsdgfdfsd')
-    var publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    this.CustomConfirmDialogModel.IframeConfirmDialogModel('View',publicUrl,null);
+    if (this.DATA_CREATE[index]['Types']=='downloadPDF') {
+    this.CustomConfirmDialogModel.IframeConfirmDialogModel('View',url,null);
+    } else {
+      var publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.CustomConfirmDialogModel.IframeConfirmDialogModel('View',[publicUrl],null);
+    }
   }
 }
