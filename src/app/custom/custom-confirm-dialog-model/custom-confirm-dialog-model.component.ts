@@ -1,4 +1,5 @@
 import { Component, Injectable, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import $ from 'jquery';
 import { Observable } from 'rxjs';
 import { CustomConfirmDialogModelService } from './custom-confirm-dialog-model.service';
@@ -21,9 +22,11 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     ConfirmDialog:false,
     DropDownInputConfirmDialog:false,
     InputConfirmDialog:false,
-    IframeModel:false
+    IframeModel:false,
+    YesNoDialogModel:false
   };
-  constructor(public CustomConfirmDialogModel:CustomConfirmDialogModelService) {
+  constructor(public CustomConfirmDialogModel:CustomConfirmDialogModelService,
+    private sanitizer: DomSanitizer) {
     this.HIDE_ALL_MODELS('');
   }
 
@@ -32,6 +35,7 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     this.CustomConfirmDialogModel.titleheader=titleheader;
     this.CustomConfirmDialogModel.message=message;
     $('.custommodel').css('display', 'block');
+    window.scroll(0,0)
   }
 
   DropDownConfirmDialogModel(titleheader:any,message:any,callback:Function){
@@ -41,6 +45,7 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     this.CustomConfirmDialogModel.message=message;
     $('.DropDownInputConfirmDialog').css('display', 'block');
     this.CustomConfirmDialogModel.CALLBACKS=callback;
+    window.scroll(0,0)
   }
   InputConfirmDialogModel(titleheader:any,message:any,callback:Function){
     this.HIDE_ALL_MODELS('InputConfirmDialog');
@@ -57,6 +62,8 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     this.CustomConfirmDialogModel.url=url;
     $('.iframecustommodel').css('display', 'block');
     this.CustomConfirmDialogModel.CALLBACKS=callback;
+    window.scroll(0,0)
+
   }
   YesNoDialogModel(titleheader:any,message:any,callback:Function){
     this.HIDE_ALL_MODELS('YesNoDialogModel');
@@ -65,6 +72,8 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     this.CustomConfirmDialogModel.message=message;
     $('.YesNoDialogModel').css('display', 'flex');
     this.CustomConfirmDialogModel.CALLBACKS=callback;
+    window.scroll(0,0)
+
   }
   ngOnInit(): void {
   }
@@ -77,5 +86,8 @@ export class CustomConfirmDialogModelComponent implements OnInit {
   }
   CALLBACKS_CALL(value:any,dump:any){
     this.CustomConfirmDialogModel.CALLBACKS({value:value.Inputdata})
+  }
+  ByPassSecurityTrustResourceUrl(url:any){
+     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }

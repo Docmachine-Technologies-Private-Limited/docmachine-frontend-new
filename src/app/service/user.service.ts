@@ -131,6 +131,17 @@ export class UserService {
       httpOptions
     );
   }
+  SingUpVerify(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/otp/SingUpverify`,data,
+      httpOptions
+    );
+  }
   loginVerfiy(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -182,13 +193,7 @@ export class UserService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      `${this.api_base}/team/get`,
-      {
-        team: "team",
-      },
-      httpOptions
-    );
+    return this.http.post(`${this.api_base}/team/get`,{team: "team"},httpOptions);
   }
 
   updateTeam(team) {

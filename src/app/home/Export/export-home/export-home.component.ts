@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "../../../service/user.service";
 import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
-import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { formatDate } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { saveAs as importedSaveAs } from 'file-saver';
@@ -15,6 +15,7 @@ import { MatPaginator } from "@angular/material/paginator";
 import { WindowInformationService } from "src/app/service/window-information.service";
 import { AprrovalPendingRejectTransactionsService } from "src/app/service/aprroval-pending-reject-transactions.service";
 import { CustomConfirmDialogModelComponent } from "src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-export-home',
@@ -136,8 +137,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   zToggle: any = [];
   isDone: boolean;
   arr: any;
-  item5: any;
-  item6: any;
+  item5: any=[];
+  item6: any=[];
   item7 = [];
   isDoneAll: any;
   draftPipo: any = [];
@@ -3756,23 +3757,18 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
   addPdfToSelectedPdf(value, e) {
     if (e.target.checked) {
-      if (
-        this.selectedPdfs.includes(
-          value.changingThisBreaksApplicationSecurity
-        ) === false
-      ) {
+      if (this.selectedPdfs.includes(value.changingThisBreaksApplicationSecurity) === false) {
         this.selectedPdfs.push(value.changingThisBreaksApplicationSecurity);
       }
     } else if (!e.target.checked) {
-      this.selectedPdfs = this.selectedPdfs.filter(
-        (item) => item !== value.changingThisBreaksApplicationSecurity
-      );
+      this.selectedPdfs = this.selectedPdfs.filter((item) => item !== value.changingThisBreaksApplicationSecurity);
     }
 
     console.log("line no. 2495", this.selectedPdfs);
   }
 
-  addPdfToSelectedPdf2(e) {
+  addPdfToSelectedPdf2(e,urls:any) {
+    console.log(urls,'hsdgdhfgsdjhgfs')
     if (e.target.checked) {
       this.generateChecked = true
     }
@@ -3780,6 +3776,23 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       this.generateChecked = false
     }
   }
+  async MERGE_ALL_PDFS(urls:any) {
+    const pdfDoc = await PDFDocument.create();
+    const numDocs = urls.length;
+    for(var i = 0; i < numDocs; i++) {
+        const donorPdfBytes = await fetch(urls[i]).then(res => res.arrayBuffer());
+        const donorPdfDoc = await PDFDocument.load(donorPdfBytes);
+        const docLength = donorPdfDoc.getPageCount();
+        for(var k = 0; k < docLength; k++) {
+            const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [k]);
+            pdfDoc.addPage(donorPage);
+        }
+    }
+
+    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',')+1);
+    console.log(pdfDataUri,data_pdf,'data_pdf');
+}
 
   mergeAllPDFs = async (type: String) => {
     let urls = this.selectedPdfs;
@@ -3787,8 +3800,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     const numDocs = urls.length;
     const pdfDoc = await PDFDocument.create();
 
-    // download the single file to local.
-    // Append each pdfs to a single file
+    // this.MERGE_ALL_PDFS(this.selectedPdfs);
+    // // download the single file to local.
+    // // Append each pdfs to a single file
     var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
       if (currentpage < docLength) {
         console.log('Inside Page', currentpage, 'total pages', docLength);
@@ -3820,6 +3834,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     // download single file;
     let downloadEachFile = (filename) => {
       return new Promise((resolve, reject) => {
+        console.log(filename,'djgdfgjdfghfdgdfgkdfgdf')
         this.userService.mergePdf(filename).subscribe(
           (res: any) => {
             console.log('res', res);
@@ -3833,6 +3848,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     let downloadAllFiles = () => {
       var promises = [];
       for (var i = 0; i < numDocs; i++) {
+        // saveAs(urls[i], 'temp.pdf');
         let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
         promises.push(downloadEachFile(filename));
       }

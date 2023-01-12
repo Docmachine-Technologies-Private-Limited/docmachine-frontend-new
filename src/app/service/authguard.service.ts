@@ -34,4 +34,10 @@ export class AuthGuard {
     this.authToken = token;
     return this.authToken;
   }
+  public setLocalStorage(key: string, value:any){
+    localStorage.setItem(key,value);
+  }
+  public getLocalStorage(key: string):any{
+    return localStorage.getItem(key);
+  }
 }

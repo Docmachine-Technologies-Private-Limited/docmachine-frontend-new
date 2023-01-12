@@ -33,7 +33,8 @@ export class SigninComponent implements OnInit {
   ngOnInit(): void {
 
     let token = this.authGuard.loadFromLocalStorage();
-    if (token) {
+    console.log(token,'tokenn....');
+    if (token && this.authGuard.getLocalStorage('LOGIN_OTP')==true) {
       this.router.navigate(["/home/dashboardTask"]);
     }
 
@@ -112,6 +113,7 @@ export class SigninComponent implements OnInit {
               if (this.data1['data'][0]['emailIdVerified']) {
                 if (this.data1['data'][0]['verified'] == 'yes') {
                   if (data['status'] == 200) {
+                    this.authGuard.setLocalStorage('LOGIN_OTP',true)
                     this.toastr.success(data['message']);
                     if (this.data['result']['role'] == 'ca') {
                       this.userService.role = this.data['result']['role'];
