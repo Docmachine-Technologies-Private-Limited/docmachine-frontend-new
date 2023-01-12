@@ -69,7 +69,7 @@ export class TwofactorauthComponent implements OnInit {
           },
           error => {
             this.toastr.error('something wrong, please check the details!');
-            console.log("error")
+            console.log("error",error)
           });
       }else{
         for (const key in condition) {
