@@ -13,6 +13,8 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { saveAs as importedSaveAs } from 'file-saver';
 import { MatPaginator } from "@angular/material/paginator";
 import { WindowInformationService } from "src/app/service/window-information.service";
+import { AprrovalPendingRejectTransactionsService } from "src/app/service/aprroval-pending-reject-transactions.service";
+import { CustomConfirmDialogModelComponent } from "src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component";
 
 @Component({
   selector: 'app-export-home',
@@ -182,6 +184,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   Lodgement:any=[];
   selection:any=[];
   Select_A_bank:any=[];
+  GetDownloadStatus:any=[];
 
   constructor(
     public documentService: DocumentService,
@@ -192,7 +195,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private modalService: NgbModal,
     private confirmDialogService: ConfirmDialogService,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public CustomConfirmDialogModel:CustomConfirmDialogModelComponent
   ) {
     console.log("hello")
     this.jstoday = formatDate(this.today, 'dd-MM-yyyy', 'en-US', '+0530');
@@ -234,9 +239,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   filtervisible: boolean = false
   dataSource:any=[];
   OLD_dataSource:any=[];
+  USER_DATA:any=[];
 
-  ngOnInit(): void {
+ async ngOnInit() {
     this.wininfo.set_controller_of_width(250,'.content_top_common')
+    await this.userService.getUserDetail().then((res: any)=>{
+      this.USER_DATA = res['result'];
+    });
+    console.log(this.USER_DATA,'this.USER_DATA')
     this.redirectid = this.route.snapshot.paramMap.get('pipo')
     this.redirectindex = this.route.snapshot.paramMap.get('index')
     this.redirectpage = this.route.snapshot.paramMap.get('page')
@@ -821,7 +831,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
 
   async generateDoc(code, j) {
-
     this.generate = true
     this.generatePurpose[j] = code;
     console.log(this.item3,'item')
@@ -891,7 +900,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     //   purposeCode: code,
     //   generateDoc1: this.data7[i]
     // }
-
+    this.jQuery_Iframe_Style()
   }
   replaceText(text:any,repl_text:any){
     return (text.replace(repl_text,'')).trim()
@@ -3458,11 +3467,22 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.bankRef = e.target.value
   }
 
-  showPreview() {
+  showPreview(id:any) {
     // this.PREVIWES_URL='./../../assets/DXB.pdf'
     console.log("2214 line", this.mainDoc)
     this.bgColor = true
     this.newDone = true
+    this.jQuery_Iframe_Style();
+    this.documentService.getDownloadStatus({id:id,deleteflag:'-1'}).subscribe((res:any)=>{
+      console.log(res,'dsdsdsdsdsdsds');
+      this.GetDownloadStatus=res[0];
+      if (res.length==0) {
+        this.documentService.getDownloadStatus({id:id,deleteflag:'2'}).subscribe((res:any)=>{
+          console.log(res,'dsdsdsdsdsdsds');
+          this.GetDownloadStatus=res[0];
+        })
+      }
+    })
   }
   hidePreview() {
     this.bgColor = false
@@ -3709,7 +3729,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   }
 
   openToPdf(content2, pipo) {
-    console.log("Line 2488", pipo)
+    console.log("Line 2488", pipo,this.selectedPurpose,this.mainDoc)
     this.selectedPdfs = [];
     console.log('line no. 2467', this.selectedPdfs);
 
@@ -4093,6 +4113,48 @@ Number_to_word(numberInput:any){
     outputText +=num[5] != 0 ? (oneToTwenty[Number(num[5])] || `${tenth[num[5][0]]} ${oneToTwenty[num[5][1]]} `) : '';
     return outputText;
   }
+}
+
+iframeStyle(){
+  const cssLink = document.createElement("link");
+  cssLink.href  = "style.css";
+  cssLink.rel   = "stylesheet";
+  cssLink.type  = "text/css";
+  frames['frame1'].contentWindow.document.body.appendChild(cssLink);
+}
+jQuery_Iframe_Style(){
+    console.log($('.iframe-controller').find('#toolbar'),'hhhjhhjhjjhhj')
+}
+SendApproval(Status:string,UniqueId:any,url:any){
+  var approval_data:any={
+    id:UniqueId,
+    tableName:'PI_PO',
+    deleteflag:'-1',
+    userdetails:this.USER_DATA,
+    status:'pending',
+    dummydata:{doc:url},
+    Types:'downloadPDF'
+  }
+  if (Status=='' || Status==null ||  Status=='Rejected') {
+    this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['Role_Type'],approval_data,()=>{
+      this.ngOnInit();
+      this.documentService.getDownloadStatus({id:UniqueId,deleteflag:'-1'}).subscribe((res:any)=>{
+        console.log(res,'dsdsdsdsdsdsds');
+        this.GetDownloadStatus=res[0];
+        if (res.length==0) {
+          this.documentService.getDownloadStatus({id:UniqueId,deleteflag:'2'}).subscribe((res:any)=>{
+            console.log(res,'dsdsdsdsdsdsds');
+            this.GetDownloadStatus=res[0];
+          })
+        }
+      })
+    });
+  }else if (Status=='pending') {
+    this.CustomConfirmDialogModel.YesNoDialogModel('Are you sure you want to delete this item?','Yes or No',(res:any) => {
+
+    });
+  }
+  console.log(UniqueId,approval_data,'uiiiiiiiiiiiiii')
 }
 }
 

@@ -448,6 +448,20 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/Approval/delete`,{data:data},httpOptions);
   }
+  getDownloadStatus(data) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/getDownloadStatus`,data,httpOptions);
+  }
+  setDownloadStatus(data) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/UpdateDownloadStatus`,data,httpOptions);
+  }
   RejectedStatus(data) {
     this.loadFromLocalStorage();
     const httpOptions = {
@@ -455,6 +469,7 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/Approval/reject`,{data:data},httpOptions);
   }
+
   updatePipobyId(id,data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

@@ -146,11 +146,7 @@ export class InwardRemittanceComponent implements OnInit, OnDestroy {
     console.log(dlnk)
     console.log(dlnk.href)
     dlnk.download = this.data4.filename;
-
     dlnk.click();
-    //this.submitTask()
-    // this.downloading = false;
-    // this.backupClicked = false;
     console.log("DLINK", dlnk);
   }
 
