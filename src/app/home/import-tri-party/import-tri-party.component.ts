@@ -23,6 +23,16 @@ export class ImportTriPartyComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
+  filtervisible: boolean = false;
+  
+  filter() {
+  // this.getPipoData()
+  this.filtervisible = !this.filtervisible
+
+}
+onclick() {
+  this.filtervisible = !this.filtervisible
+}
 
   constructor(private documentService : DocumentService,
     private sanitizer: DomSanitizer,
