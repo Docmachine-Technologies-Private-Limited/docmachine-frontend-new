@@ -85,7 +85,6 @@ export class CustomDropdownComponent implements OnInit,ControlValueAccessor {
   @Input('limit')
   limit:any=0;
 
-  FILTER_DATA_INUPUT:any=[];
   private _data:any = new BehaviorSubject<any>([]);
   SHOW_LIST_POPUP:any=['form-control drop-down-input','dropdown-content'];
 
@@ -118,8 +117,9 @@ get data() {
  async ngOnInit() {
     this.value=this.setvalue;
     this.selectedItem=this.setvalue;
-    this.FILTER_DATA_INUPUT=this._data.value;
+    this.customdrop.FILTER_DATA_INUPUT=this._data.value;
     $('.drop-down-input').attr('maxLength',this.limit).keyup(this.minmax);
+    console.log('sdfgsdfgsdfdsf',this.customdrop.FILTER_DATA_INUPUT)
 
  }
 async Object_to_Array(data:any){
@@ -169,7 +169,7 @@ async Object_to_Array(data:any){
       inputid.value='';
       this.selectedIndex=-1;
     }
-    this.FILTER_DATA_INUPUT=await this._data.value
+    this.customdrop.FILTER_DATA_INUPUT=await this._data.value
     window.addEventListener("resize",()=>{
       $('#dropdown').hide();
       var BoundingClientRect = $(inputid)[0].getBoundingClientRect();
@@ -198,17 +198,17 @@ async Object_to_Array(data:any){
   }
   async filterInput(key:string,val:any){
     if(val.value){
-      this.FILTER_DATA_INUPUT=await this._data.value.filter((item:any)=>(item[key].toLowerCase()).indexOf((val.value).toLowerCase())!=-1);
-      if (this.FILTER_DATA_INUPUT.length==0) {
+      this.customdrop.FILTER_DATA_INUPUT=await this._data.value.filter((item:any)=>(item[key].toLowerCase()).indexOf((val.value).toLowerCase())!=-1);
+      if (this.customdrop.FILTER_DATA_INUPUT.length==0) {
           $('#dropdown').hide();
       }else {
         this.selectedIndex=-1;
-        this.FILTER_DATA_INUPUT=await this._data.value;
+        this.customdrop.FILTER_DATA_INUPUT=await this._data.value;
         $('#dropdown').show();
       }
     }else {
       this.selectedIndex=-1;
-      this.FILTER_DATA_INUPUT=await this._data.value;
+      this.customdrop.FILTER_DATA_INUPUT=await this._data.value;
       $('#dropdown').show();
     }
   }

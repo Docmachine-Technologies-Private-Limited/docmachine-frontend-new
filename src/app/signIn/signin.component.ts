@@ -80,6 +80,7 @@ export class SigninComponent implements OnInit {
           data => {
             this.userService.addLoginData(data);
             this.data = data;
+            console.log(this.data,'oppppppppppppppppppppppppppppppp');
             if (data['result']) {
               this.userService.addToken(data['result'].token);
               if (data['result']['dataURL']) {
@@ -104,6 +105,7 @@ export class SigninComponent implements OnInit {
             this.loginError();
           });
     } else {
+      console.log(this.data1,'hjjjjjjjjjjjjjjjjjhhjjhjhhjjh')
       this.userService.loginVerfiy(this.value)
         .subscribe(
           data => {
@@ -123,7 +125,27 @@ export class SigninComponent implements OnInit {
                       if (this.data1['data'][0].companyId) {
                         this.router.navigate(['/home/dashboardTask'])
                       } else {
-                        this.router.navigate(['createTeam']);
+                        if (this.data1['data'][0]?.role!='member') {
+                          this.router.navigate(['createTeam']);
+                        }else{
+                          this.userService.getUserById(this.data1['data'][0].emailId).subscribe((teamuser) => {
+                            console.log(teamuser,'sdfsdhdfjdsfdsfdsfd')
+                            this.userService.getTeamByUser(teamuser['data'][0]['companyId']).subscribe((TeamByUser)=>{
+                              var loginFormTeam=TeamByUser['data'][0];
+                              delete loginFormTeam['_id'];
+                              console.log(TeamByUser,loginFormTeam,'sdfsdhdfjdsfdsfdsfd')
+                              this.userService.creatTeam(loginFormTeam).subscribe(data => {
+                                console.log(data['data']._id)
+                                this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
+                              },
+                              error => {
+                                this.toastr.error('something wrong, please check the details!');
+                                console.log("error")
+                              });
+                            })
+                            // this.router.navigate(['/home/dashboardTask'])
+                          })
+                        }
                       }
                     }
                   } else {

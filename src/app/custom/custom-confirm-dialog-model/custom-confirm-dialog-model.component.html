@@ -109,3 +109,19 @@
     </div>
    </div>
 </div>
+
+<div class="modal DropDownInput" tabindex="-1" role="dialog" #DropDownInput [style]="this.MODEL_TYPE_VIEW['DropDownInput']==true?'display: block;z-index:99999999;' : 'display: none;'" >
+  <div class="modal-dialog" role="document">
+        <div class="form-group">
+           <app-custom-dropdown
+           name="depot_Name"
+           placeholdertext="Please select...."
+           key="depot_Name"
+           [labeltext]="this.CustomConfirmDialogModel.message"
+           limit="15"
+           [data]="this.CustomConfirmDialogModel.message"
+            #input autocomplete_on_off="off"
+           ></app-custom-dropdown>
+        </div>
+      </div>
+</div>
