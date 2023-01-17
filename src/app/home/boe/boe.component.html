@@ -1,14 +1,10 @@
 <div class="content-wrap pb-2 scroll-bar-main">
+    <div class="import_export_sec">
+        <h3 class="heading_common_tag">BOE Documents</h3>
+    </div>
     <main id="content" class="content table-padding" role="main">
         <div *ngIf="showInvoice" class="table_top">
-            <div class="header-panel">
-                <!-- <div style="margin-left: 50px;">
-                <img src="../../../assets/back.png" (click)="hide()" style="width: 20px; height: 20px; margin-left: 30px;margin-bottom: 10px; margin-top: 6px; "><span style="margin-left: 5px ;margin-bottom: 10px;" (click)="hide()">Back</span>
-            </div> -->
-                <p class="bcw" style="font-size: '14px'; margin-left: 30px;font-weight: 500; ">
-                    BOE Documents
-                </p>
-            </div>
+
             <div style="width: 100%; font-weight: 300;">
                 <span style="font-weight: 400">People collaborated</span>
             </div>
@@ -24,42 +20,80 @@
            margin-left: 10px;cursor: pointer;">
             </div>
         </div>
-        <div  class="header-panel" *ngIf="!showInvoice">
-            <div style="display: flex; align-items: center">
-                <h3 class="heading">BOE Documents</h3>
-            </div>
 
-            <div>
-                Date:
-                <select name="subject" id="subject" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100;margin-right: 5px;font-size: 14px;">
-                          <option value="" selected="selected">Today</option>
-                      </select> Type:
-                <select name="topic" id="topic" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100;margin-right: 5px;font-size: 14px;">
-                          <option value="" selected="selected">All</option>
-                      </select>
-            </div>
-
-            <div style="padding-top: 0.7%">
-                <button (click)="exportToExcel()" style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
-                              background-color: #49A2D7;
-                              border: none;
-                              border-radius: 5px;">Export To Excel</button>
-                <button class="upload-button" (click)="uploadNew()">
-                          Upload New
+        <div class="header-panel" *ngIf="!showInvoice">
+            <div class="filter_section_top">
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-12"></div>
+                    <div class="col-md-8 col-sm-8 col-12">
+                        <div class="filter_right_new padding_new_top">
+                            <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
+                              class="ex_icon"></span>Export</button>
+                            <div class="filter_posit">
+                                <button (click)="onclick()" type="button" class="btn btn-secondary"><span
+                                  class="fi_icon"></span>Filter</button>
+                                <div *ngIf="filtervisible" class="bg-white filter_main_sec">
+                                    <form class="select_filter_options">
+                                        <div class="row">
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">Commodity</label>
+                                                <select class="form-select form-control" name="subject" id="subject" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100;margin-right: 5px;font-size: 14px;">
+                                                    <option value="" selected="selected">Today</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">Location</label>
+                                                <select class="form-select form-control" name="topic" id="topic" style="border: 1px solid #C6CBD4;color: black;padding: 4px;font-weight: 100;margin-right: 5px;font-size: 14px;">
+                                                    <option value="" selected="selected">All</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">Buyer</label>
+                                                <select class="form-select form-control" aria-label="Default select example" [(ngModel)]="buyer" name="banee">
+                                              <option value="">Buyers</option>
+                                              <option *ngFor="let bene of benneDetailArray
+                                              ">{{ bene.buyerName }}
+                                              </option>
+    
+                                          </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">Start
+                                              Date</label>
+                                                <input class="form-select form-control" type="date" placeholder="Start Date" [(ngModel)]="startDate" name="startdate" required />
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleFormControlInput1" class="form-label">End
+                                              Date</label>
+                                                <input class="form-select form-control" type="date" placeholder="End Date" [(ngModel)]="endDate" name="enddate" required />
+                                            </div>
+                                        </div>
+                                        <div class="footer_buttons">
+                                            <button type="button" class="btn btn-light" (click)="resetFilter()">RESET</button>
+                                            <button type="submit" class="btn btn-primary" (click)="filter()">APPLY</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <button class="upload-button btn btn-success" (click)="uploadNew()">
+                          <span class="add_icon"></span>  ADD NEW
                       </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
 
         <div class="analytics" #epltable>
-            <div *ngIf="!showInvoice" style="width: 100%" class="analytics-side">
+            <div *ngIf="!showInvoice" style="width: 100%" class="analytics_top">
                 <div style="width: 100%;" class="row">
-                    <div class="col-12 mb-lg padding" *ngIf="!showInvoice" id="container">
-                        <section class="widget pb-0 box-shadow">
+                    <div class="" *ngIf="!showInvoice" id="container">
+                        <section class="middle_datatable">
                             <div class="widget-body p-0 support table-wrapper">
                                 <table class="table table-striped mb-0">
-                                    <thead style="width: 100%;height: 54px;background: white;position: sticky;top: 0;">
-                                        <tr class="text-muted table-heading" style="opacity: 45%; font-size: 14px; color:black !important; font-weight: 300 !important; padding: 5px; border-bottom: 1px solid #f2f4f8;">
+                                    <thead style="width: 100%;background: white;position: sticky;top: 0;">
+                                        <tr class="text-muted table-heading" style="color:black !important; border-bottom: 1px solid #f2f4f8;">
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
@@ -74,7 +108,7 @@
                                             <th scope="col">DISCHARGE PORT</th>
                                             <th scope="col">CURRENCY</th>
                                             <th scope="col">SB AMOUNT</th>
-                                            <th scope="col"> </th>
+                                            <th scope="col">Action </th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-dark">
@@ -178,9 +212,13 @@
                                                     <input class="tblInput form-control" name="invoiceAmount" type="text" placeholder="Invoice Amount" [(ngModel)]="data.invoiceAmount">
                                                 </div>
                                             </td>
-                                            <td>
-                                                <button class="savBtn" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)">Save</button>
-                                                <button class="savBtn" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">Edit</button>
+
+                                            <td class="view_edit_button">
+                                                <a (click)=" openCreditNote(content); viewCN(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
+                          aria-hidden="true"></i></button>
+                                                <a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
 

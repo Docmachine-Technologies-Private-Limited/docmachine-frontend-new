@@ -23,6 +23,16 @@ export class BOEComponent implements OnInit {
   public greaterAmount = 0;
   public allTransactions: any = [];
   public optionsVisibility: any = [];
+  filtervisible: boolean = false;
+  
+  filter() {
+  // this.getPipoData()
+  this.filtervisible = !this.filtervisible
+
+}
+onclick() {
+  this.filtervisible = !this.filtervisible
+}
 
   constructor(
     public documentService: DocumentService,
