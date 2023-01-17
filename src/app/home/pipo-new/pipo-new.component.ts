@@ -148,7 +148,7 @@ export class PipoNewComponent implements OnInit {
     dialogRef.afterClosed().subscribe(dialogResult => {
       console.log("---->", dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['Role_Type'],id,index)
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
       }
     });
   }
@@ -163,16 +163,15 @@ export class PipoNewComponent implements OnInit {
     }
     return 'none';
   }
-  deleteByRoleType(roleType:string,id:any,index:any){
-
-    if (roleType=='1'){
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
         this.documentService.deletePipoByid(id).subscribe((res) => {
             console.log(res)
             if (res) {
               this.getPipoData()
             }
         }, (err) => console.log(err))
-    } else if (roleType=='2'){
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
       var approval_data:any={
         id:id,
         tableName:'PI_PO',
@@ -182,24 +181,8 @@ export class PipoNewComponent implements OnInit {
         dummydata:this.dataSource[index],
         Types:'deletion'
       }
-      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(roleType,id,index,approval_data,()=>{
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
         this.ngOnInit();
-      });
-    } else if (roleType=='3'){
-      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
-        var approval_data:any={
-          id:id,
-          comment:res.value.value,
-          tableName:'PI_PO',
-          deleteflag:'-1',
-          userdetails:this.USER_DATA['result'],
-          status:'pending',
-          dummydata:this.dataSource[index],
-          Types:'deletion'
-        }
-        this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(roleType,id,index,approval_data,()=>{
-          this.ngOnInit();
-        });
       });
     }
   }

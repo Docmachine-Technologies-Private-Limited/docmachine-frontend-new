@@ -9,7 +9,7 @@ import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import {ActivatedRoute, Data, NavigationStart, Router} from '@angular/router';
 import { WindowInformationService } from 'src/app/service/window-information.service';
 
-@Component({
+@Component({ 
   selector: 'app-imports-credit-note',
   templateUrl: './imports-credit-note.component.html',
   styleUrls: ['./imports-credit-note.component.scss']
@@ -23,6 +23,16 @@ export class ImportsCreditNoteComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
+  filtervisible: boolean = false;
+  
+  filter() {
+  // this.getPipoData()
+  this.filtervisible = !this.filtervisible
+
+}
+onclick() {
+  this.filtervisible = !this.filtervisible
+}
 
   constructor(
     private documentService: DocumentService,

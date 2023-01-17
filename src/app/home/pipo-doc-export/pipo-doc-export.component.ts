@@ -61,6 +61,16 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   public pipoData: PipoDisplayListViewItem;
   public config: DropzoneConfigInterface;
   public config1: DropzoneConfigInterface;
+  filtervisible: boolean = false;
+  
+  filter() {
+  // this.getPipoData()
+  this.filtervisible = !this.filtervisible
+
+}
+onclick() {
+  this.filtervisible = !this.filtervisible
+}
   piPoForm = new FormGroup({
     pi_poNo: new FormControl('', [
       Validators.required,

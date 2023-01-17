@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { UserService } from "../../../service/user.service";
 import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.service";
-import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { formatDate } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { saveAs as importedSaveAs } from 'file-saver';
@@ -15,6 +15,7 @@ import { MatPaginator } from "@angular/material/paginator";
 import { WindowInformationService } from "src/app/service/window-information.service";
 import { AprrovalPendingRejectTransactionsService } from "src/app/service/aprroval-pending-reject-transactions.service";
 import { CustomConfirmDialogModelComponent } from "src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-export-home',
@@ -136,8 +137,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   zToggle: any = [];
   isDone: boolean;
   arr: any;
-  item5: any;
-  item6: any;
+  item5: any=[];
+  item6: any=[];
   item7 = [];
   isDoneAll: any;
   draftPipo: any = [];
@@ -1930,9 +1931,16 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
     const pdfBytes = await pdfDoc.save()
     console.log(pdfDoc, "pdf")
+    console.log(pdfBytes, "pdfBytes")
+    this.getPdfFile(pdfBytes);
     console.log(form, "form")
     var base64String = this._arrayBufferToBase64(pdfBytes)
+
     const x = 'data:application/pdf;base64,' + base64String;
+
+    const url = window.URL.createObjectURL(new Blob([pdfBytes], {type: 'application/pdf'}));
+    console.log(url,'dsjkfhsdkjfsdhfksfhsd')
+// this.sendFileDownload()
     this.formerge = x
     this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
     this.newTask[0].generateDoc1 = x
@@ -1955,7 +1963,33 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       this.uploadingData(data_temp,a)
     }
   }
-
+  sendFileDownload(fileName:any){
+    this.userService.mergePdfChecking({listFile:fileName})
+  }
+  async getPdfFile(item:any){
+    let array = new Uint8Array(item);
+    let blob = new Blob([array], { type: 'application/pdf' });
+    var urlCreator = window.URL || window.webkitURL;
+    let url = urlCreator.createObjectURL(blob);
+    let fileName: string = new Date().toLocaleDateString();
+    try {
+      const link = document.createElement('a');
+      if (link.download !== undefined) {
+        link.setAttribute('href', url);
+        link.setAttribute('download', fileName);
+        link.target = '_blank';
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        var evt = document.createEvent('MouseEvents');
+        evt.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
+        link.dispatchEvent(evt);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch (e) {
+      console.error('BlobToSaveAs error', e);
+    }
+  }
  async disabledTextbox(pdfDoc:any){
   pdfDoc.getForm()
   .getFields()
@@ -3007,6 +3041,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     // dlnk.href = x;
     // dlnk.download = 'file.pdf';
     // dlnk.click();
+
   }
 
   _arrayBufferToBase64(buffer) {
@@ -3756,23 +3791,18 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
   addPdfToSelectedPdf(value, e) {
     if (e.target.checked) {
-      if (
-        this.selectedPdfs.includes(
-          value.changingThisBreaksApplicationSecurity
-        ) === false
-      ) {
+      if (this.selectedPdfs.includes(value.changingThisBreaksApplicationSecurity) === false) {
         this.selectedPdfs.push(value.changingThisBreaksApplicationSecurity);
       }
     } else if (!e.target.checked) {
-      this.selectedPdfs = this.selectedPdfs.filter(
-        (item) => item !== value.changingThisBreaksApplicationSecurity
-      );
+      this.selectedPdfs = this.selectedPdfs.filter((item) => item !== value.changingThisBreaksApplicationSecurity);
     }
 
     console.log("line no. 2495", this.selectedPdfs);
   }
 
-  addPdfToSelectedPdf2(e) {
+  addPdfToSelectedPdf2(e,urls:any) {
+    console.log(urls,'hsdgdhfgsdjhgfs')
     if (e.target.checked) {
       this.generateChecked = true
     }
@@ -3780,6 +3810,23 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       this.generateChecked = false
     }
   }
+  async MERGE_ALL_PDFS(urls:any) {
+    const pdfDoc = await PDFDocument.create();
+    const numDocs = urls.length;
+    for(var i = 0; i < numDocs; i++) {
+        const donorPdfBytes = await fetch(urls[i]).then(res => res.arrayBuffer());
+        const donorPdfDoc = await PDFDocument.load(donorPdfBytes);
+        const docLength = donorPdfDoc.getPageCount();
+        for(var k = 0; k < docLength; k++) {
+            const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [k]);
+            pdfDoc.addPage(donorPage);
+        }
+    }
+
+    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',')+1);
+    console.log(pdfDataUri,data_pdf,'data_pdf');
+}
 
   mergeAllPDFs = async (type: String) => {
     let urls = this.selectedPdfs;
@@ -3787,68 +3834,101 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     const numDocs = urls.length;
     const pdfDoc = await PDFDocument.create();
 
-    // download the single file to local.
-    // Append each pdfs to a single file
-    var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
-      if (currentpage < docLength) {
-        console.log('Inside Page', currentpage, 'total pages', docLength);
-        const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [currentpage]);
-        pdfDoc.addPage(donorPage);
-        await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
-      }
-    };
-    var appendEachFile = async (bytes) => {
-      const donorPdfDoc = await PDFDocument.load(bytes);
-      const docLength = donorPdfDoc.getPageCount();
-      console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
-      await appendEachPage(donorPdfDoc, 0, docLength);
-    };
-    var appendAllFiles = async (pdflist, currentfile) => {
-      if (currentfile < numDocs) {
-        await appendEachFile(pdflist[currentfile]);
-        console.log('Inside file', currentfile);
-        await appendAllFiles(pdflist, currentfile + 1);
-      } else {
-        if (type == 'download') {
-          this.downloadAsSingleFile(pdfDoc);
-        } else {
-          this.sendMail2(pdfDoc);
-        }
-      }
-    };
+    var listFile:any=[];
+    for (var i = 0; i < numDocs; i++) {
+      listFile.push(urls[i].split('base64,')[1]);
+    }
+    this.userService.mergePdfChecking({listFile:listFile}).subscribe((res: any) => {
+        console.log('res', res);
+      },(err) => console.log('Failed to fetch the pdf')
+    );
 
-    // download single file;
-    let downloadEachFile = (filename) => {
-      return new Promise((resolve, reject) => {
-        this.userService.mergePdf(filename).subscribe(
-          (res: any) => {
-            console.log('res', res);
-            resolve(res.arrayBuffer());
-          },
-          (err) => reject('Failed to fetch the pdf')
-        );
-      });
-    };
-    // download all the pdfs
-    let downloadAllFiles = () => {
-      var promises = [];
-      for (var i = 0; i < numDocs; i++) {
-        let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
-        promises.push(downloadEachFile(filename));
-      }
-      Promise.all(promises).then(
-        (pdfList) => {
-          appendAllFiles(pdfList, 0);
-          console.log('pdfList2', pdfList);
-        },
-        (error) => {
-          // write code to send error to user
-          // res.send({"error": "failed to fetch the document try again later/ contact administrator"})''
-        }
-      );
-    };
-    downloadAllFiles();
+    // this.MERGE_ALL_PDFS(this.selectedPdfs);
+    // // download the single file to local.
+    // // Append each pdfs to a single file
+    // var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
+    //   if (currentpage < docLength) {
+    //     console.log('Inside Page', currentpage, 'total pages', docLength);
+    //     const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [currentpage]);
+    //     pdfDoc.addPage(donorPage);
+    //     await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
+    //   }
+    // };
+    // var appendEachFile = async (bytes) => {
+    //   const donorPdfDoc = await PDFDocument.load(bytes);
+    //   const docLength = donorPdfDoc.getPageCount();
+    //   console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
+    //   await appendEachPage(donorPdfDoc, 0, docLength);
+    // };
+    // var appendAllFiles = async (pdflist, currentfile) => {
+    //   if (currentfile < numDocs) {
+    //     await appendEachFile(pdflist[currentfile]);
+    //     console.log('Inside file', currentfile);
+    //     await appendAllFiles(pdflist, currentfile + 1);
+    //   } else {
+    //     if (type == 'download') {
+    //       this.downloadAsSingleFile(pdfDoc);
+    //     } else {
+    //       this.sendMail2(pdfDoc);
+    //     }
+    //   }
+    // };
+
+    // // download single file;
+    // let downloadEachFile = (filename) => {
+    //   return new Promise((resolve, reject) => {
+    //     console.log(filename,'djgdfgjdfghfdgdfgkdfgdf')
+    //     this.userService.mergePdfChecking(filename).subscribe(
+    //       (res: any) => {
+    //         console.log('res', res);
+    //         resolve(res.arrayBuffer());
+    //       },
+    //       (err) => reject('Failed to fetch the pdf')
+    //     );
+    //   });
+    // };
+    // // download all the pdfs
+    // let downloadAllFiles = () => {
+    //   var promises = [];
+    //   var listFile:any=[];
+    //   for (var i = 0; i < numDocs; i++) {
+    //     let file = new Blob([urls[i].split('base64,')[1]], { type: 'application/pdf' });
+    //     var fileURL = URL.createObjectURL(file);
+    //     listFile.push(fileURL);
+    //   }
+    //   this.userService.mergePdfChecking({listFile:listFile}).subscribe((res: any) => {
+    //       console.log('res', res);
+    //     },(err) => console.log('Failed to fetch the pdf')
+    //   );
+    //   // for (var i = 0; i < numDocs; i++) {
+    //   //   // saveAs(urls[i], 'temp.pdf');
+    //   //   // this.blobToSaveAs('temptest.pdf',urls[i]);
+    //   //   let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
+    //   //   console.log(urls[i].split('base64,')[1],'finame');
+    //   //   promises.push(downloadEachFile({buffer:urls[i].split('base64,')[1],filename:'temp'+i+'.pdf'}));
+    //   // }
+    //   Promise.all(promises).then(
+    //     (pdfList) => {
+    //       appendAllFiles(pdfList, 0);
+    //       console.log('pdfList2', pdfList);
+    //     },
+    //     (error) => {
+    //       // write code to send error to user
+    //       // res.send({"error": "failed to fetch the document try again later/ contact administrator"})''
+    //     }
+    //   );
+    // };
+    // downloadAllFiles();
   };
+  validURL(str:any) {
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return !!pattern.test(str);
+  }
 
   downloadAsSingleFile = async (pdfDoc: any) => {
     const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
@@ -3897,6 +3977,18 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
     }
   };
+
+  blobToSaveAs(fileName: string, exportText:any) {
+    try {
+        const linkSource = exportText;
+        const downloadLink = document.createElement("a");
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        downloadLink.click();
+    } catch (e) {
+      console.error('BlobToSaveAs error', e);
+    }
+  }
 
   sendMail2 = async (pdfDoc: any) => {
     const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });

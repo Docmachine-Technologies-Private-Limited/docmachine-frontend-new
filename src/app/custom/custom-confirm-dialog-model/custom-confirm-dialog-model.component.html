@@ -19,7 +19,7 @@
 </div>
 
 
-<div class="modal DropDownInputConfirmDialog" tabindex="-1" role="dialog" #DropDownInputConfirmDialog [style]="this.MODEL_TYPE_VIEW['DropDownInputConfirmDialog']==true?'display: block;' : 'display: none;'" >
+<div class="modal DropDownInputConfirmDialog" tabindex="-1" role="dialog" #DropDownInputConfirmDialog [style]="this.MODEL_TYPE_VIEW['DropDownInputConfirmDialog']==true?'display: block;z-index:99999999;' : 'display: none;'" >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -84,8 +84,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
-         <iframe [src]="this.CustomConfirmDialogModel.url" width="450px" height="500px"></iframe>
+        <div class="form-group ifrmae-group">
+         <iframe [src]="this.ByPassSecurityTrustResourceUrl(url)" *ngFor="let url of this.CustomConfirmDialogModel.url" width="450px" height="500px"></iframe>
         </div>
       </div>
       <div class="modal-footer">
@@ -108,4 +108,20 @@
       </div>
     </div>
    </div>
+</div>
+
+<div class="modal DropDownInput" tabindex="-1" role="dialog" #DropDownInput [style]="this.MODEL_TYPE_VIEW['DropDownInput']==true?'display: block;z-index:99999999;' : 'display: none;'" >
+  <div class="modal-dialog" role="document">
+        <div class="form-group">
+           <app-custom-dropdown
+           name="depot_Name"
+           placeholdertext="Please select...."
+           key="depot_Name"
+           [labeltext]="this.CustomConfirmDialogModel.message"
+           limit="15"
+           [data]="this.CustomConfirmDialogModel.message"
+            #input autocomplete_on_off="off"
+           ></app-custom-dropdown>
+        </div>
+      </div>
 </div>

@@ -1,35 +1,52 @@
 <div class="content-wrap pb-2 scroll-bar-main">
-    <main id="content" class="table-padding" role="main" style="overflow-y: auto;">
-        <div class="header-panel" *ngIf="!showInvoice">
+    <div class="import_export_sec">
+        <h3 class="heading_common_tag">Packing List Documents</h3>
+    </div>
+    <main id="content" class="table-padding" role="main">
+        <div class="filter_section_top">
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-12"></div>
+                <div class="col-md-8 col-sm-8 col-12">
+                    <div class="filter_right_new padding_new_top">
+                        <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
+                          class="ex_icon"></span>Export</button>
+                        <button class="upload-button btn btn-success" (click)='pipoClick()'>
+                      <span class="add_icon"></span>  ADD NEW
+                  </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="header-panel" *ngIf="!showInvoice">
             <div class="customDropdown" style="width: 102px; margin-left: 10px; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
-              <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
+                <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
                   <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
-              <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3"
+                <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3"
                   class="fas fa-angle-down"></i>
                <i id="up3" style="display: none" class="fas fa-angle-up"></i>
           </span>
-              <div class="dropdown-content" style="min-width:200px;">
-                  <a (click)='pipoClickCredit()' style="min-width:200px;">New Credit Note</a>
-                  <a (click)='pipoClick()' style="min-width:200px;">New PI/PO</a>
-                  <a (click)='pipoClickDebit()' style="min-width:200px;">New Debit Note</a>
-                  <a (click)='pipoClickTri()' style="min-width:200px;">Tri-Party Agreement</a>
-                  <a (click)='pipoClickInsurance()' style="min-width:200px;">New Insurance Document</a>
-                  <a style="min-width:200px;">New Letter of Credit</a>
-              </div>
-          </div>
-          <button (click)="exportToExcel()" style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
+                <div class="dropdown-content" style="min-width:200px;">
+                    <a (click)='pipoClickCredit()' style="min-width:200px;">New Credit Note</a>
+                    <a (click)='pipoClick()' style="min-width:200px;">New PI/PO</a>
+                    <a (click)='pipoClickDebit()' style="min-width:200px;">New Debit Note</a>
+                    <a (click)='pipoClickTri()' style="min-width:200px;">Tri-Party Agreement</a>
+                    <a (click)='pipoClickInsurance()' style="min-width:200px;">New Insurance Document</a>
+                    <a style="min-width:200px;">New Letter of Credit</a>
+                </div>
+            </div>
+            <button (click)="exportToExcel()" style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
           background-color: #49A2D7;
           border: none;
           border-radius: 5px;">Export To Excel</button>
-        </div>
-        <div style="width: 100%" class="analytics-side" *ngIf="!showInvoice" #piposummery>
+        </div> -->
+        <div style="width: 100%" class="analytics" *ngIf="!showInvoice" #piposummery>
             <div style="width: 100%;margin: auto;" class="row">
-                <div class="col-12 mb-lg padding" id="container">
-                    <section class="pb-0 box-shadow">
+                <div class="" id="container">
+                    <section class="middle_datatable">
                         <div class="widget-body p-0 support table-wrapper">
                             <table style="width: 100%;" class="table table-striped mb-0">
-                                <thead style="width: 100% ;height: 54px; background: white;position: sticky;top: 0; ">
-                                    <tr class="text-muted table-heading" style="opacity: 50%; font-size: 14px; color:black !important; border-bottom: 1px solid #f2f4f8;">
+                                <thead style="width: 100% ;background: white;position: sticky;top: 0; ">
+                                    <tr class="text-muted table-heading" style=" border-bottom: 1px solid #f2f4f8;">
                                         <th scope="col">DATE</th>
                                         <th scope="col">INVOICE NUMBER</th>
                                         <th scope="col">INVOICE DATE</th>
@@ -58,7 +75,7 @@
                                         <th scope="col">DEBIT NOTE STATUS</th>
                                         <th scope="col">STATUS OF BOE SUBMISSION IN BANK</th>
                                         <th scope="col">BALANCE IF ANY</th>
-                                        <th scope="col">Edit/Save</th>
+                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-dark">
@@ -210,9 +227,12 @@
                                                 <input class="tblInput form-control" name="balanceIfAny" type="text" placeholder="BALANCE IF ANY" [(ngModel)]="data.balanceIfAny">
                                             </div>
                                         </td>
-                                        <td>
-                                            <button class="savBtn" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)">Save</button>
-                                            <button class="savBtn" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">Edit</button>
+                                        <td class="view_edit_button">
+                                            <a (click)=" openCreditNote(content); viewCN(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                            <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
+                      aria-hidden="true"></i></button>
+                                            <a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
 

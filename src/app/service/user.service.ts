@@ -131,6 +131,17 @@ export class UserService {
       httpOptions
     );
   }
+  SingUpVerify(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/otp/SingUpverify`,data,
+      httpOptions
+    );
+  }
   loginVerfiy(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -182,13 +193,16 @@ export class UserService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      `${this.api_base}/team/get`,
-      {
-        team: "team",
-      },
-      httpOptions
-    );
+    return this.http.post(`${this.api_base}/team/get`,{team: "team"},httpOptions);
+  }
+
+  public getTeamByUser(id:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/team/getTeamByUser`,{companyId:id},httpOptions);
   }
 
   updateTeam(team) {
@@ -220,10 +234,17 @@ export class UserService {
        filename: filename
       },
       httpOptions,
-
-
     );
   }
+  mergePdfChecking(filename) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken,filename,'hjhhjjhjhhj');
+    const httpOptions: Object = {
+      headers: new HttpHeaders({ Authorization: this.authToken })
+    };
+    return this.http.post(`${this.api_base}/pipo/mergePdf`,filename,httpOptions);
+  }
+
 
 
   updatePipo(pipo, id) {
@@ -317,12 +338,16 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `${this.api_base}/team/getUser`,
-      {
-        team: "team",
-      },
-      httpOptions
-    );
+      `${this.api_base}/team/getUser`,{team: "team",},httpOptions);
+  }
+
+  public getUserById(id:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/team/getUserById`,{email:id},httpOptions);
   }
 
   public creatBene(bene) {
@@ -511,6 +536,14 @@ export class UserService {
       httpOptions
     );
   }
+  public UpdateUserMemeber(id, member) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/member/UPDATE_USER_MEMBER`,{email:id,member: member},httpOptions);
+  }
   public getMemeber(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -578,5 +611,13 @@ export class UserService {
       .toPromise();
   }
 
+  getUserDetailById(id:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/user/getprofilebyId`,{email:id}, httpOptions).toPromise();
+  }
 
 }

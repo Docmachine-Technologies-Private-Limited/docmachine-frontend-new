@@ -5,9 +5,8 @@
 
 
         <!-- The content half -->
-        <div class="bg-dark" style="float: left; width: 50.99%;">
+        <div class="bg-dark" style="float: left; width: 50.99%;height: 100vh;overflow: auto;">
             <div class="login d-flex py-5">
-
                 <!-- Demo content-->
                 <div class="container">
                     <div class="row">
@@ -260,7 +259,7 @@
 
                                             <!-- <label class="bank">Account Type</label>
                                             <!-- <input formControlName="accType" id="password1" type=""
-                                                placeholder="Account Type"> 
+                                                placeholder="Account Type">
                                             <select class="form-control rounded-pill password password1 deco"
                                                 formControlName="accType"
                                                 [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('accType').errors }"
@@ -276,7 +275,7 @@
                                                 <option value="EBRD- Bill discounting account)">EBRD- Bill
                                                     discounting account)</option>
                                             </select> -->
-                                           
+
                                             <label class="bank">Account Type</label>
                                             <div class="customDropdown"    style="display: block;
                                             width: 100%;
@@ -297,7 +296,7 @@
                                                 </span> -->
                                                 <span class="dropIco" >
                                                  <i id="down3" class="fas fa-angle-down"></i>
-                                                 <i id="up3" style="display: none" class="fas fa-angle-up"></i> 
+                                                 <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                                             </span>
                                                 <div class="dropdown-content" style="min-width:100%; margin-right: -20px !important;">
                                                     <!-- <a  style="min-width:100%;"></a> -->
@@ -370,7 +369,7 @@
                                                 (success)="onUploadSuccess($event)"
                                                 (sending)="sending($event,'Letter Head')" *ngIf="type === 'directive'"
                                                 [dropzone]="config" [disabled]="true" > -->
-                                                <input [disabled]="dynamicVariable" placeholder="Choose File" class="customfile1" > 
+                                                <input [disabled]="dynamicVariable" placeholder="Choose File" class="customfile1" >
                                             <!--<p class="choose">Choose File</p> -->
                                             <p class="bottomText">Maximum size: 5MB</p>
                                             <!-- <p class="bottomText" *ngIf="letterHead">Uploading...</p>
@@ -385,7 +384,7 @@
                                     <label>Round Seal</label><br>
                                     <form method="POST">
                                         <!-- uncomment code to enable uload file -->
-                                        <!-- <input  [disabled]="true" class="customfile1" 
+                                        <!-- <input  [disabled]="true" class="customfile1"
                                            (error)="onUploadError($event)"
                                             placeholder="Choose File" (init)="onUploadInit($event)"
                                             (success)="onUploadSuccess($event)" (sending)="sending($event,'Round Seal')"

@@ -23,7 +23,7 @@ export class BillOfExchangeComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
-
+  filtervisible: boolean = false;
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -50,6 +50,15 @@ export class BillOfExchangeComponent implements OnInit {
       },
       (err) => console.log(err)
     );
+  }
+      
+  filter() {
+    // this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
   }
 
   openCreditNote(content) {
