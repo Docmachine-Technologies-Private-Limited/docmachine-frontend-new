@@ -239,9 +239,17 @@
                     </div>
                   </div>
                 </div>
-
-                <div
-                  *ngIf='documentType != "sb" && documentType != "boe" && documentType != "PO" && documentType != "PI" '>
+                <div *ngIf='documentType != "sb" && documentType != "boe" && documentType != "PO" && documentType != "PI"' class="col-5">
+                  <!-- <div class="col-10">
+                  <label class="form-label">Select PI/PO*</label>
+                  <select class="form-control p-3" aria-label="Default select example">
+                    <option selected>Open this select menu</option>
+                    <div class="col" *ngFor="let pipo of pipolist">
+                      <option  *ngIf="pipo.file == 'export'" [value]="pipo.buyerName"  (click)="clickPipo('PI', pipo, pipo.buyerName)">{{ pipo.pi_poNo }}-{{ pipo.buyerName }}</option>
+                      <option *ngIf="pipo.file == 'import'" [value]="pipo.benneName"  (click)="clickPipo('PI', pipo, pipo.benneName)">{{ pipo.pi_poNo }}-{{ pipo.benneName }}</option>
+                    </div>
+                  </select>
+                  </div> -->
                   <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
                   <div class="customDropdown" style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
                     <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
@@ -257,7 +265,6 @@
                           (click)="clickPipo('PI', pipo, pipo.benneName)">
                           {{ pipo.pi_poNo }}-{{ pipo.benneName }}</a>
                       </div>
-                      <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
                     </div>
                   </div>
                 </div>

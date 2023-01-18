@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import * as data from '../../bank.json';
 import * as data1 from '../../currency.json';
 import { AppConfig } from 'src/app/app.config';
+import { WindowInformationService } from 'src/app/service/window-information.service';
 @Component({
   selector: 'app-edit-company',
   templateUrl: './edit-company.component.html',
@@ -25,7 +26,7 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   authToken: any;
   headers: any;
   file: Array<any> = [];
-  loginForm: FormGroup;
+  loginForm:any = FormGroup;
   letterHead = false;
   roundSeal = false;
   forSeal = false;
@@ -75,7 +76,8 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   q: any;
 
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
-    private userService: UserService, private router: Router, private toastr: ToastrService, public appconfig: AppConfig) {
+    private userService: UserService, private router: Router, private toastr: ToastrService, public appconfig: AppConfig,
+    public wininfo: WindowInformationService) {
     this.loadFromLocalStorage()
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base)
@@ -104,6 +106,7 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
+    this.wininfo.set_controller_of_width(250,'.content-wrap')
     this.jsondata = data['default'];
     this.dataJson = data['default']
     this.jsondata1 = data1['default'];

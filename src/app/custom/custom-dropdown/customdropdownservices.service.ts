@@ -7,6 +7,7 @@ export class CustomdropdownservicesService implements OnInit {
   CUTSOM_DROP_DOWN_DATA:any=[];
   SET_DROP_DOWN_VALUE:any=[];
   limitclass:boolean=false;
+  FILTER_DATA_INUPUT:any=[];
 
   constructor() {
    }

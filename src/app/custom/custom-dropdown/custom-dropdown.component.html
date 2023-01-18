@@ -21,7 +21,7 @@
       <span class="right-text">{{this.HEADER_DROP_DOWN[1]}}</span>
     </p>
     <div class="dropappend" #dropappend>
-      <p class="text-append" *ngFor="let d of this.FILTER_DATA_INUPUT let i=index"
+      <p class="text-append" *ngFor="let d of this.customdrop.FILTER_DATA_INUPUT let i=index"
       #textappend (click)="valueChange(d);selected.value=d.value;selectedIndex=i;dropdown.style.display='none'"
       [ngClass]="{'active-dropdown': selectedIndex === i}">
         <span class="left-text">{{ d.value }}</span>

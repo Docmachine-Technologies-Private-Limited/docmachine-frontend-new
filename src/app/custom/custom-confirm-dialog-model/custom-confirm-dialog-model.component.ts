@@ -23,8 +23,11 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     DropDownInputConfirmDialog:false,
     InputConfirmDialog:false,
     IframeModel:false,
-    YesNoDialogModel:false
+    YesNoDialogModel:false,
+    DropDownInput:false
   };
+  DATA_RECIVED:any=[];
+
   constructor(public CustomConfirmDialogModel:CustomConfirmDialogModelService,
     private sanitizer: DomSanitizer) {
     this.HIDE_ALL_MODELS('');
@@ -73,6 +76,15 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     $('.YesNoDialogModel').css('display', 'flex');
     this.CustomConfirmDialogModel.CALLBACKS=callback;
     window.scroll(0,0)
+  }
+  DropDownInput(event:any,data:any,callback:Function){
+    this.HIDE_ALL_MODELS('DropDownInput');
+    $('.input-remove').val('');
+    this.CustomConfirmDialogModel.message=data;
+    $('.DropDownInput').css('display', 'none');
+    callback($('.DropDownInput').html());
+    window.scroll(0,0)
+    console.log($('.DropDownInput').html(),'DropDownInput')
 
   }
   ngOnInit(): void {
