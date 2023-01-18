@@ -3846,6 +3846,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     // this.MERGE_ALL_PDFS(this.selectedPdfs);
     // // download the single file to local.
     // // Append each pdfs to a single file
+
     // var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
     //   if (currentpage < docLength) {
     //     console.log('Inside Page', currentpage, 'total pages', docLength);
@@ -3919,6 +3920,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     //   );
     // };
     // downloadAllFiles();
+
   };
   validURL(str:any) {
     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
