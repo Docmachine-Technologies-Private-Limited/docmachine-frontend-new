@@ -120,7 +120,9 @@ export class SidenavComponent implements OnInit {
 
   async ngOnInit() {
 
-    this.userData = await this.userService.getUserDetail();
+   await this.userService.getUserDetail().then(user => {
+    this.userData = user['result'];
+   });
     // this.userData = this.userData.result
     console.log("userData",this.userData)
 
@@ -1588,9 +1590,9 @@ export class SidenavComponent implements OnInit {
    if (this.documentService.EXPORT_IMPORT['callback']!=null && this.documentService.EXPORT_IMPORT['callback']!=undefined) {
       this.documentService.EXPORT_IMPORT['callback']();
    }
-    this.documentService.updateUserById(this.userData.result._id,sendData).subscribe(
+    this.documentService.updateUserById(this.userData._id,sendData).subscribe(
       (data) => {
-        this.userData.result = { ...this.userData.result ,sideMenu: type1  }
+        this.userData = { ...this.userData ,sideMenu: type1  }
         this.userService.addLoginData(this.userData)
       },
       (error) => {

@@ -199,10 +199,7 @@
               </div>
           </form>
       </div>
-        <form [formGroup]="memeberForm" (ngSubmit)="onEditSubmit(Editformmodel,{
-          email: editemail.value,
-          name:editname.value
-        })">
+        <form [formGroup]="memeberForm" (ngSubmit)="onEditSubmit(Editformmodel)">
           <div class="mb-3">
             <label for="recipient-name" class="col-form-label">Name : </label>
             <input type="text" class="form-control p-2" id="recipient-name" [value]="this.SELECTED_EDIT_DATA['name']"
@@ -215,7 +212,7 @@
           <div class="mb-3">
             <label for="message-text" class="col-form-label">Email id :</label>
             <input class="form-control p-2" id="message-text"
-            [value]="this.SELECTED_EDIT_DATA['email']"
+            [value]="this.SELECTED_EDIT_DATA['email']" disabled
             type="text" #editemail placeholder="Enter Email Id" [ngClass]="{ 'is-invalid': submitted && this.SELECTED_EDIT_DATA['email']==''}"
             (keyup)="EDIT_FORM_BUILDER_INSERT_VALUE('email',$event.target.value)"
             >
@@ -224,7 +221,64 @@
             </div>
           </div>
           <div class="mb-3">
-            <app-checkbox-components [data]="[{value:'Maker'},{value:'Checker'},{value:'Approver'}]"></app-checkbox-components>
+            <label for="message-text" class="col-form-label">Subscription :</label>
+            <select class="form-select" aria-label="Default select example" [disabled]="this.userData?.result['Subscription']!='both'? true : false"
+            [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
+            this.FORM_BUILDER['UnderSubscription']==='Select Subscription' }"
+            (change)="EDIT_FORM_BUILDER_INSERT_VALUE('UnderSubscription',$event.target.value)"
+            [value]="this.MEMBER_DATA['Subscription']" #editSubscription>
+            <option *ngIf="this.userData?.result['Subscription']!='both'" [value]="this.userData?.result['Subscription']">{{this.userData?.result['Subscription']}}</option>
+            <option *ngIf="this.userData?.result['Subscription']=='both'" value="">Select Option</option>
+            <option *ngIf="this.userData?.result['Subscription']=='both'" value="Export">Export</option>
+            <option *ngIf="this.userData?.result['Subscription']=='both'" value="Import">Import</option>
+          </select>
+            <div *ngIf="submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
+              this.FORM_BUILDER['UnderSubscription']=='Select Subscription'" class="invalid-feedback">
+              <div *ngIf="this.FORM_BUILDER['UnderSubscription']=='' ||
+              this.FORM_BUILDER['UnderSubscription']=='Select Subscription'">UnderSubscription is required</div>
+            </div>
+          </div>
+       <div class="mb-3">
+            <label for="message-text" class="col-form-label">Role_Type :</label>
+            <select class="form-select" aria-label="Default select example" disabled
+            [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['Role_Type']=='' ||
+            this.FORM_BUILDER['Role_Type']==='Select Subscription' }"
+            (change)="EDIT_FORM_BUILDER_INSERT_VALUE('Role_Type',$event.target.value)" #editRole_Type>
+              <option [value]="this.userData?.result['Role_Type']">{{this.ROLE_LIST[this.userData?.result['Role_Type']]}}</option>
+            </select>
+            <div *ngIf="submitted && this.FORM_BUILDER['Role_Type']=='' ||
+              this.FORM_BUILDER['Role_Type']=='Select Subscription'" class="invalid-feedback">
+              <div *ngIf="this.FORM_BUILDER['Role_Type']=='' ||
+              this.FORM_BUILDER['Role_Type']=='Select Subscription'">Role_Type is required</div>
+            </div>
+          </div>
+         <div class="mb-3">
+            <div class="column" *ngIf="this.userData?.result['Role_Type']=='2'">
+              <label for="message-text" class="col-form-label">Role : </label>
+              <div class="row flex col-5">
+                  <div class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Approver'}]">
+                    <input class="form-check-input" [checked]="this.MEMBER_DATA['RoleCheckbox']==cat.value ? true : false"
+                    (change)="onChange($event,cat.value, $event.target.checked)" name="{{ cat.value }}"
+                     type="checkbox" id="{{cat.value}}" #editRoleCheckbox>
+                    <label class="form-check-label" for="{{cat.value}}">
+                        {{cat.value}}
+                    </label>
+                </div>
+                </div>
+              </div>
+              <div class="column"  *ngIf="this.userData?.result['Role_Type']=='3'">
+                <label for="message-text" class="col-form-label">Role : </label>
+                <div class="row flex col-5">
+                <div class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Checker'},{value:'Approver'}]">
+                  <input class="form-check-input" [checked]="this.MEMBER_DATA['RoleCheckbox']==cat.value ? true : false"
+                   (change)="onChange($event,cat.value, $event.target.checked)" name="{{ cat.value }}"
+                   type="checkbox" id="{{cat.value}}" #editRoleCheckbox>
+                  <label class="form-check-label" for="{{cat.value}}">
+                      {{cat.value}}
+                  </label>
+              </div>
+              </div>
+              </div>
           </div>
         <button type="submit" class="btn btn-primary">Update</button>
         </form>

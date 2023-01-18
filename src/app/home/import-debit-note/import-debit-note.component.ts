@@ -24,6 +24,16 @@ export class ImportDebitNoteComponent implements OnInit {
   public pipoData: any;
   public id: any;
   public item2: any;
+  filtervisible: boolean = false;
+  
+  filter() {
+  // this.getPipoData()
+  this.filtervisible = !this.filtervisible
+
+}
+onclick() {
+  this.filtervisible = !this.filtervisible
+}
 
   constructor(
     private documentService: DocumentService,

@@ -31,7 +31,7 @@ import { Subscription } from 'rxjs';
 // import {DashboardService} from './dashboard-service';
 // import { TabsComponent } from './tabs.component';
 // import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import * as $ from 'jquery';
+import $ from 'jquery';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -52,6 +52,8 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from '../../app.config';
 import {PipoDataService} from "../../service/homeservices/pipo.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
@@ -114,7 +116,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   authToken: string;
   headers: any;
   closeResult: string;
-
+  APPEND_HTML:any=[];
   piPoForm = new FormGroup({
     pi_poNo: new FormControl('', [
       Validators.required,
@@ -228,7 +230,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
     public appconfig: AppConfig,
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public CustomDropDown:CustomConfirmDialogModelComponent
   ) {
 
     this.userData = this.userService.userData?.result
@@ -810,8 +813,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
         // })
         // console.log("Master Country2", this.origin)
       },
-      (err) => console.log(err)
-    );
+      (err) => console.log(err));
   }
 
   onSubmitIrAdvice(e) {

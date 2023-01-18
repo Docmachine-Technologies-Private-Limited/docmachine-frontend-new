@@ -38,12 +38,20 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     imageUrl: "",
     name:""
   }
-  EDIT_FORM_BUILDER: any=[]
+  EDIT_FORM_BUILDER: any={
+    name:'',
+    UnderSubscriptionCheckBox:'',
+    imageUrl:'',
+    UnderSubscription:'',
+    Role_Type:'',
+    RoleCheckbox:''
+  }
   SELECTED_EDIT_DATA:any=[];
   SELECTED_INDEX=0;
 
   userData:any=[];
-  ROLE_TYPES:any=[];
+  ROLE_TYPES:any='';
+  MEMBER_DATA:any=[];
 
   ROLE_LIST={
     '1':'Without maker/checker',
@@ -54,6 +62,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   private route?: ActivatedRoute, private formBuilder?: FormBuilder,
   private userService?: UserService, public appconfig?: AppConfig,
   private sanitizer?: DomSanitizer, private toastr?: ToastrService,
+  private elRef?:ElementRef,
   public wininfo?: WindowInformationService) {
     this.loadFromLocalStorage()
     this.api_base = appconfig.apiUrl;
@@ -139,13 +148,25 @@ URL_CREATE(url){
   EditData(temp:any,data:any){
     this.SELECTED_INDEX=1;
     this.SELECTED_EDIT_DATA=this.item1[data['index']];
+    console.log(this.SELECTED_EDIT_DATA,'sdhfjsdfsdfsdf');
+    this.userService.getUserDetailById(this.SELECTED_EDIT_DATA['email']).then((data) => {
+      this.MEMBER_DATA=data;
+      this.EDIT_FORM_BUILDER={
+        name:data['fullName'],
+        UnderSubscriptionCheckBox:data['RoleCheckbox'],
+        imageUrl:this.SELECTED_EDIT_DATA['imageUrl'],
+        UnderSubscription:data['Subscription'],
+        Role_Type:data['Role_Type'],
+        RoleCheckbox:data['RoleCheckbox']
+      }
+      console.log(data,'getUserDetailByIdgetUserDetailById');
+    })
   }
   onSubmit(formmodel:any) {
     this.submitted = true;
     this.FORM_BUILDER['imageUrl'] = this.img;
     this.FORM_BUILDER['UnderSubscriptionCheckBox']=this.ROLE_TYPES;
     console.log(this.FORM_BUILDER)
-
     this.findEmptyObject(this.FORM_BUILDER,[undefined,null,'','Select Subscription']).then((value:any)=>{
       if (value==true) {
         console.log(this.FORM_BUILDER,'this.memeberForm')
@@ -220,16 +241,16 @@ URL_CREATE(url){
       console.log(res,'dfsdfdsfsgdsfhdsgfd');
     })
   }
-  onEditSubmit(formmodel:any,data:any)
-  {
-    this.EDIT_FORM_BUILDER=data;
+  onEditSubmit(formmodel:any){
     this.submitted = true;
     this.EDIT_FORM_BUILDER['imageUrl'] = this.img!=undefined? this.img:this.SELECTED_EDIT_DATA['imageUrl'];
+    this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox']=this.ROLE_TYPES!=''?this.ROLE_TYPES:this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox'];
+    this.EDIT_FORM_BUILDER['Role_Type']=this.ROLE_TYPES!=''?this.ROLE_TYPES:this.EDIT_FORM_BUILDER['Role_Type'];
     console.log(this.EDIT_FORM_BUILDER)
     this.findEmptyObject(this.EDIT_FORM_BUILDER,[undefined,null,'','Select Subscription']).then((value:any)=>{
       if (value==true) {
         console.log(this.EDIT_FORM_BUILDER,'this.memeberForm')
-        this.userService.UpdateMemeber(this.SELECTED_EDIT_DATA['_id'], this.EDIT_FORM_BUILDER)
+        this.userService.UpdateUserMemeber(this.SELECTED_EDIT_DATA['email'],this.EDIT_FORM_BUILDER)
           .subscribe(
             data => {
               console.log(data,'UpdateMemeber')
