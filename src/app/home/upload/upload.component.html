@@ -1381,6 +1381,7 @@
                       </option>
                     </select>
                   </div>
+                  {{pipo}} jsfghdfjsd
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
@@ -1446,6 +1447,7 @@
                     <div *ngIf="matchSelectedPipo(pipo,this.pipoArr)">
                       <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
                         <option value="">Select SB Number for PI-{{pipo.pi_poNo}}</option>
+                        {{pipo._id}} hgggghghghg
                         <option *ngFor="let sb of pipoDataService.getShippingBills(pipo._id); let i=index"
                           [value]="sb._id">
                           {{ sb.sbno }}
