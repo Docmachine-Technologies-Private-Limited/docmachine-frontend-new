@@ -664,10 +664,34 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.pipoArr.push(this.pipoOut);
         this.mainBene = this.beneOut;
       }
+    } else if (this.docu == 'import-blCopy') {
+      this.documentType1 = 'import';
+      this.documentType = 'blCopy';
+      this.documentType1 = 'import';
+      if (this.route.snapshot.paramMap.get('pipo_id')) {
+        this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
+        this.beneOut = this.route.snapshot.paramMap.get('bene');
+        let x = 'PI' + '-' + this.pipoOut + '-' + this.beneOut;
+        this.arrayData.push(x);
+        this.pipoArr.push(this.pipoOut);
+        this.mainBene = this.beneOut;
+      }
     } else if (this.docu == 'commercial') {
       this.documentType1 = 'export';
       this.documentType = 'commercial';
       this.documentType1 = 'export';
+      if (this.route.snapshot.paramMap.get('pipo_id')) {
+        this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
+        this.beneOut = this.route.snapshot.paramMap.get('bene');
+        let x = 'PI' + '-' + this.pipoOut + '-' + this.beneOut;
+        this.arrayData.push(x);
+        this.pipoArr.push(this.pipoOut);
+        this.mainBene = this.beneOut;
+      }
+    } else if (this.docu == 'import-commercial') {
+      this.documentType1 = 'import';
+      this.documentType = 'commercial';
+      this.documentType1 = 'import';
       if (this.route.snapshot.paramMap.get('pipo_id')) {
         this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
         this.beneOut = this.route.snapshot.paramMap.get('bene');
@@ -1738,8 +1762,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(e.form.value);
     this.documentService.addCommercial(e.form.value).subscribe(
       (res: any) => {
-        this.toastr.success(`Commercial Document Added Successfully`);
-        console.log('Commercial Document Added Successfully');
+        this.toastr.success(`Commercial Invoice Added Successfully`);
+        console.log('Commercial Invoice Added Successfully');
         let updatedData = {
           "commercialRef" : [
             res.data._id,
