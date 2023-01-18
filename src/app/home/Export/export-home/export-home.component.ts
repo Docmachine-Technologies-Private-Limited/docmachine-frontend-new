@@ -3812,6 +3812,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       }
     };
     var appendEachFile = async (bytes) => {
+      console.log('bytes',bytes);
       const donorPdfDoc = await PDFDocument.load(bytes);
       const docLength = donorPdfDoc.getPageCount();
       console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
@@ -3850,6 +3851,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       for (var i = 0; i < numDocs; i++) {
         // saveAs(urls[i], 'temp.pdf');
         let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
+
         promises.push(downloadEachFile(filename));
       }
       Promise.all(promises).then(

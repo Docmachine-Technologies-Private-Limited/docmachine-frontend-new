@@ -105,7 +105,7 @@ import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.co
     SubBillLodgementComponent,
     ApprovalPanelComponent,
     PendingPanelComponent,
-    RejectPanelComponent
+    RejectPanelComponent,
   ],
   imports: [
     SharedHomeModule,
@@ -149,6 +149,7 @@ import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.co
           { path: "bill-of-exchange", loadChildren: () => import('./bill-of-exchange/bill-of-exchange.module').then(mod => mod.BillOfExchangeModule) },
           { path: "airway-bl-copy", loadChildren: () => import('./airway-blcopy/airway-blcopy.module').then(mod => mod.AirwayBlcopyModule) },
           { path: "inward-remittance-advice", loadChildren: () => import('./inward-remittance-advice/inward-remittance-advice.module').then(mod => mod.InwardRemittanceAdviceModule) },
+          { path: "outward-remittance-advice", loadChildren: () => import('./import-outward-remittance-sheet/outward-remittance-advice.module').then(mod => mod.OutwardRemittanceAdviceModule) },
           { path: "opinion-report", loadChildren: () => import('./opinion-reports/opinion-reports.module').then(mod => mod.OpinionReportsModule) },
           { path: "try-party", loadChildren: () => import('./try-party-agreements/try-party-agreements.module').then(mod => mod.TryPartyAgreementsModule) },
           { path: "master-services", loadChildren: () => import('./master-service/master-service.module').then(mod => mod.MasterServiceModule) },

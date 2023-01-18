@@ -98,6 +98,10 @@
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">Insurance Documents</span>
                         </div>
 
+                        <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSubOut14()" [ngClass]="newSubOut14 ? 'b-color' : 'nothing'">
+                            <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/outward-remittance-advice']">Outward Remittance Advice</span>
+                            </div>
+
                         <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newTask23()" [ngClass]="statusS7 ? 'b-color' : 'nothing'">
                             <span style="margin-left: 35px; line-height: 30px; font-size: 12px;;">Tri party agreements</span>
                         </div>
