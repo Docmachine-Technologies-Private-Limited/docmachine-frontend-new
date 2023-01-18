@@ -91,6 +91,7 @@ export class SigninComponent implements OnInit {
                 //   this.userService.addToken(data['result'].token);
                 this.userService.getUser().subscribe(
                   data1 => {
+                    console.log(data1),'sdfsdhdsgfjdsfhgsdfjsfgdsjfd';
                     this.data1 = data1
                   },
                   error1 => {
@@ -132,18 +133,18 @@ export class SigninComponent implements OnInit {
                             console.log(teamuser,'sdfsdhdfjdsfdsfdsfd')
                             this.userService.getTeamByUser(teamuser['data'][0]['companyId']).subscribe((TeamByUser)=>{
                               var loginFormTeam=TeamByUser['data'][0];
+                              loginFormTeam['userId']=loginFormTeam['_id'];
                               delete loginFormTeam['_id'];
                               console.log(TeamByUser,loginFormTeam,'sdfsdhdfjdsfdsfdsfd')
-                              this.userService.creatTeam(loginFormTeam).subscribe(data => {
+                              this.userService.createTeamUser(loginFormTeam,this.data1['data'][0]['_id']).subscribe(data => {
                                 console.log(data['data']._id)
-                                this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
+                                this.router.navigate(['/home/dashboardTask']);
                               },
                               error => {
                                 this.toastr.error('something wrong, please check the details!');
                                 console.log("error")
                               });
                             })
-                            // this.router.navigate(['/home/dashboardTask'])
                           })
                         }
                       }
