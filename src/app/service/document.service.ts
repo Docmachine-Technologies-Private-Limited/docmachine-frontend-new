@@ -51,6 +51,16 @@ export class DocumentService {
     return this.http.get(url, httpOptions);
   }
 
+  getOrAdvice(user){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({Authorization : this.authToken}),
+    };
+    let url = `${this.api_base}/orAdvice/get`;
+    return this.http.get(url, httpOptions);
+  }
+
   updateIrAdvice(user, _id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -59,6 +69,22 @@ export class DocumentService {
     };
     return this.http.post(
       `${this.api_base}/irAdvice/update`,
+      {
+        _id: _id,
+        master: user,
+      },
+      httpOptions
+    );
+  }
+
+  updateOrAdvice(user, _id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/orAdvice/update`,
       {
         _id: _id,
         master: user,
@@ -83,6 +109,23 @@ export class DocumentService {
     );
   }
 
+  updateByOrAdvice(data, _id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/orAdvice/updateByOrAdvice`,
+      {
+        _id: _id,
+        master: data,
+      },
+      httpOptions
+    );
+  }
+
+
   updateByIr(data, _id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -91,6 +134,22 @@ export class DocumentService {
     };
     return this.http.post(
       `${this.api_base}/irAdvice/updateIrAdvice`,
+      {
+        _id: _id,
+        master: data,
+      },
+      httpOptions
+    );
+  }
+
+  updateByOr(data, _id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/orAdvice/updateOrAdvice`,
       {
         _id: _id,
         master: data,
@@ -114,6 +173,21 @@ export class DocumentService {
     );
   }
 
+  getOrAdviceByOrAdvice(billNo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/orAdvice/getOrAdviceByOrAdvice`,
+      {
+        billNo: billNo,
+      },
+      httpOptions
+    );
+  }
+
   getIrAdviceByBillNo( billNo) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -122,6 +196,21 @@ export class DocumentService {
     };
     return this.http.post(
       `${this.api_base}/irAdvice/getIrAdviceByBillNo`,
+      {
+        billNo: billNo,
+      },
+      httpOptions
+    );
+  }
+
+  getOrAdviceByBillNo( billNo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/orAdvice/getOrAdviceByBillNo`,
       {
         billNo: billNo,
       },
