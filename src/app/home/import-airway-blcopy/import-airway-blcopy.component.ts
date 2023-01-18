@@ -10,28 +10,21 @@ import {UserService} from './../../service/user.service';
 import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
-  selector: 'app-commercial',
-  templateUrl: './commercial.component.html',
-  styleUrls: ['./commercial.component.scss']
+  selector: 'app-import-airway-blcopy',
+  templateUrl: './import-airway-blcopy.component.html',
+  styleUrls: ['./import-airway-blcopy.component.scss']
 })
-export class CommercialComponent implements OnInit {
-  @ViewChild('commercial', {static: false}) commercial: ElementRef;
-  public item: any = [];
+export class ImportAirwayBlcopyComponent implements OnInit {
+
+
+  @ViewChild('importairwayBlCopy', {static: false}) importairwayBlCopy: ElementRef;
+  public item = [];
   public viewData: any;
   public closeResult: string;
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
   filtervisible: boolean = false;
-  
-  filter() {
-  // this.getPipoData()
-  this.filtervisible = !this.filtervisible
-
-}
-onclick() {
-  this.filtervisible = !this.filtervisible
-}
 
   constructor(
     private documentService: DocumentService,
@@ -46,13 +39,11 @@ onclick() {
   }
 
   ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
-    this.documentService.getCommercial().subscribe(
+  this.wininfo.set_controller_of_width(270,'.content-wrap')
+    this.documentService.getAirwayBlcopy().subscribe(
       (res: any) => {
-        console.log('HEre Responsesssssssss', res);
         for (let value of res.data) {
           if (value['file'] == 'import') {
-
             this.item.push(value);
           }
         }
@@ -60,6 +51,15 @@ onclick() {
       (err) => console.log(err)
     );
 
+  }
+      
+  filter() {
+    // this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
   }
 
   openCreditNote(content) {
@@ -95,17 +95,17 @@ onclick() {
   viewCN(a) {
 
     this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-      a['commercialDoc']
+  a['blCopyDoc']
     );
   }
 
   toSave(data, index) {
     this.optionsVisibility[index] = false;
     console.log(data);
-    this.documentService.updateCommercial(data, data._id).subscribe(
+    this.documentService.updateAirwayBlcopy(data, data._id).subscribe(
       (data) => {
         console.log('king123');
-        this.toastr.success('Commercial invoie updated successfully.');
+        this.toastr.success('Airway / BlCopy updated successfully.');
 
       },
       (error) => {
@@ -113,24 +113,26 @@ onclick() {
         console.log('error');
       }
     );
+
+
   }
 
-  newDest() {
-    this.sharedData.changeretunurl('home/commercial')
-    this.router.navigate(['home/upload', {file: 'export', document: 'commercial'}]);
+  newCredit() {
+    this.sharedData.changeretunurl('home/import-airway-bl-copy')
+    this.router.navigate(['home/upload', {file: 'import', document: 'import-blCopy'}]);
   }
 
   exportToExcel() {
     const ws: xlsx.WorkSheet =
-      xlsx.utils.table_to_sheet(this.commercial.nativeElement);
+      xlsx.utils.table_to_sheet(this.importairwayBlCopy.nativeElement);
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
-    xlsx.writeFile(wb, 'Commercial.xlsx');
+    xlsx.writeFile(wb, 'airwayBlCopy.xlsx');
   }
 
   toEdit(index) {
     this.optionsVisibility[index] = true;
-    this.toastr.warning('Commercial Invoice Is In Edit Mode');
+    this.toastr.warning('Airway / Blcopy Is In Edit Mode');
   }
 
 }

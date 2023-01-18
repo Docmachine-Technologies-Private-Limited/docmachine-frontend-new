@@ -11,11 +11,13 @@ import { WindowInformationService } from 'src/app/service/window-information.ser
 
 @Component({
   selector: 'app-commercial',
-  templateUrl: './commercial.component.html',
-  styleUrls: ['./commercial.component.scss']
+  templateUrl: './import-commercial.component.html',
+  styleUrls: ['./import-commercial.component.scss']
 })
-export class CommercialComponent implements OnInit {
-  @ViewChild('commercial', {static: false}) commercial: ElementRef;
+export class ImportCommercialComponent implements OnInit {
+
+
+  @ViewChild('importcommercial', {static: false}) importcommercial: ElementRef;
   public item: any = [];
   public viewData: any;
   public closeResult: string;
@@ -49,7 +51,7 @@ onclick() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.documentService.getCommercial().subscribe(
       (res: any) => {
-        console.log('HEre Responsesssssssss', res);
+        console.log('Res', res);
         for (let value of res.data) {
           if (value['file'] == 'import') {
 
@@ -116,13 +118,13 @@ onclick() {
   }
 
   newDest() {
-    this.sharedData.changeretunurl('home/commercial')
-    this.router.navigate(['home/upload', {file: 'export', document: 'commercial'}]);
+    this.sharedData.changeretunurl('home/import-commercial')
+    this.router.navigate(['home/upload', {file: 'import', document: 'import-commercial'}]);
   }
 
   exportToExcel() {
     const ws: xlsx.WorkSheet =
-      xlsx.utils.table_to_sheet(this.commercial.nativeElement);
+      xlsx.utils.table_to_sheet(this.importcommercial.nativeElement);
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'Commercial.xlsx');

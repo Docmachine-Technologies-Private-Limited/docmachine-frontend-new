@@ -77,7 +77,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         TwofactorauthComponent,
         CheckboxComponentsComponent,
         CustomConfirmDialogModelComponent,
-        CustomDropdownComponent
+        CustomDropdownComponent,
     ],
     providers: [{ provide: AppConfig },
         WindowInformationService,

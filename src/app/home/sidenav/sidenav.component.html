@@ -98,6 +98,24 @@
                 <span style="margin-left: 35px; line-height: 30px; font-size: 12px;">Insurance Documents</span>
               </div>
 
+              <div class="hoverClass"  (click)="addActivedLinks($event,'.hoverClass')" style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSubImp14()" [ngClass]="new29 ? 'b-color' : 'nothing'">
+                <span style="margin-left: 35px; line-height: 30px; font-size: 12px;" [routerLink]="['/home/outward-remittance-advice']">Outward Remittance Advice</span>
+              </div>
+
+              <div class="hoverClass" (click)="addActivedLinks($event,'.hoverClass')"
+              style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSubImp22()"
+              [ngClass]="new31 ? 'b-color' : 'nothing'">
+              <span style="margin-left: 35px; line-height: 30px; font-size: 12px;"
+                [routerLink]="['/home/import-airway-bl-copy']">Airway/BL Copy</span>
+            </div>
+            
+              <div class="hoverClass" (click)="addActivedLinks($event,'.hoverClass')"
+              style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newSubImp25()"
+              [ngClass]="new30 ? 'b-color' : 'nothing'">
+              <span style="margin-left: 35px; line-height: 30px; font-size: 12px;"
+                [routerLink]="['/home/import-commercial']">Commercial Invoices</span>
+            </div>
+
               <div class="hoverClass" (click)="addActivedLinks($event,'.hoverClass')"
                 style="cursor: pointer; height: 30px; margin-top:-2px;" (click)="newTask23()"
                 [ngClass]="statusS7 ? 'b-color' : 'nothing'">
