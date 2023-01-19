@@ -61,6 +61,7 @@ export class PipoDataService {
 
   getShippingBills(pipoid) {
     let pipolist = this.pipolistModelSubsciber.value;
+    console.log('pipolist',pipolist);
     for (let i in pipolist) {
       if (pipolist[i]._id == pipoid) {
         return pipolist[i].sbRef;
