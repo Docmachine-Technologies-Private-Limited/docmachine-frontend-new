@@ -206,7 +206,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   retururl;
 
   userData:any
-
+  commerciallist: any;
   // ngOnInit() {
   //   this.loginForm = this.formBuilder.group({
   //     name:['',Validators.required]
@@ -2629,6 +2629,15 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
     console.log(this.arrayData);
     console.log('Array List', this.pipoArr);
+
+    this.documentService.getCommercialByFiletype(this.documentType1,pipo._id).subscribe(
+      (res: any) => {
+        console.log('getCommercialImport', res);
+            this.commerciallist = res.data;
+      },
+      (err) => console.log(err)
+    );
+
   }
 
   removePipo(i) {
