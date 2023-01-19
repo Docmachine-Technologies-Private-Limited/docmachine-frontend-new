@@ -1819,6 +1819,52 @@ export class UploadComponent implements OnInit, AfterViewInit {
     );
   }
 
+    //commercial Invoice Import Submit buttton
+    onSubmitCommercialImport(e) {
+      console.log('this is console of blcopy', e.form.value);
+      e.form.value.pipo = this.pipoArr;
+      console.log('pipoarrya', this.pipoArr);
+      e.form.value.file = this.documentType1;
+      e.form.value.commercialDoc = this.pipourl1;
+      console.log('pipoDoc', this.pipourl1);
+  
+      e.form.value.buyerName = this.mainBene;
+      // e.form.value.currency = this.currency;
+      console.log(e.form.value);
+      this.documentService.addCommercial(e.form.value).subscribe(
+        (res: any) => {
+          this.toastr.success(`Commercial Invoice Added Successfully`);
+          console.log('Commercial Invoice Added Successfully');
+          let updatedData = {
+            "commercialRef" : [
+              res.data._id,
+            ],
+          }
+          this.userService
+            .updateManyPipo(this.pipoArr, 'commercial', this.pipourl1, updatedData)
+            .subscribe(
+              (data) => {
+                //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                console.log('king123');
+                console.log(data);
+  
+                this.router.navigate(['home/import-commercial']);
+
+                console.log('redirectindex', this.redirectindex);
+                console.log('redirectinpage', this.redirectpage);
+                console.log('redirectid', this.redirectid);
+              },
+              (error) => {
+                // this.toastr.error('Invalid inputs, please check!');
+                console.log('error');
+              }
+            );
+          // this.router.navigateByUrl('/home/dashboardNew');
+        },
+        (err) => console.log('Error adding pipo')
+      );
+    }
+
   // billExchange Submit button
   onSubmitBillExchange(e) {
     console.log('this is console of blcopy', e.form.value);
@@ -2352,6 +2398,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.billNo = true;
         console.log('sjsjsjsj', this.res);
       } else {
+        console.log('this.documentType',this.documentType);
         // this.res = new BoeBill(args[1].data);
         if (this.documentType === 'PI' || this.documentType === 'PO') {
           this.pIpO = true;
@@ -2723,6 +2770,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
     // }
   }
   matchSelectedPipo(pipo, selectedPipoArr) {
+    console.log("pipo",pipo)
+    console.log("pipo",pipo)
     for (let i in selectedPipoArr) {
       if (selectedPipoArr[i] == pipo._id) {
         return true;

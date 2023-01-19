@@ -1332,7 +1332,7 @@
           </form>
 
           <!-- Airway / BL Copy -->
-          <form class="iframecontroller" *ngIf="blCopy && !override" #values="ngForm"
+          <form class="iframecontroller" *ngIf="blCopy && documentType1== 'export' && !override" #values="ngForm"
             (ngSubmit)="onSubmitblCopy(values)">
                 <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
@@ -1359,8 +1359,32 @@
             </div>
           </form>
 
+          <!-- Airway / BL Copy -->
+          <form class="iframecontroller" *ngIf="blCopy && documentType1== 'import' && !override" #values="ngForm"
+          (ngSubmit)="onSubmitblCopy(values)">
+              <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+          <div class="field">
+            <div class="form12 p-3">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label"></label>
+                <div >
+                  <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="commercialNumber" ngModel placeholder="Location">
+                    <option value="">Select Commercial Number</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Airway / BlCopy Number*</label>
+                <input ngModel class="form-control p-3" type="text"
+                  name="airwayBlCopyNumber">
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </form>
+
           <!-- Commercial Invoice -->
-          <form class="iframecontroller" *ngIf="commercial && !override" #values="ngForm"
+          <form class="iframecontroller" *ngIf="commercial && documentType1== 'export' && !override" #values="ngForm"
             (ngSubmit)="onSubmitCommercial(values)">
                 <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
@@ -1386,6 +1410,35 @@
               </div>
             </div>
           </form>
+
+          <!-- Commercial Invoice -->
+          <form class="iframecontroller" *ngIf="commercial && documentType1== 'import' && !override" #values="ngForm"
+          (ngSubmit)="onSubmitCommercialImport(values)">
+              <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+          <div class="field">
+            <div class="form12 p-3">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Commercial Invoice Number*</label>
+                <input ngModel class="form-control p-3" type="text"
+                  name="commercialNumber">
+              </div>
+
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Currency*</label>
+                <input ngModel class="form-control p-3" type="text"
+                  name="currency">
+              </div>
+
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Amount*</label>
+                <input ngModel class="form-control p-3" type="text"
+                  name="amount">
+              </div>
+
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </form>
 
           <!-- Bill Of Exchange -->
           <form class="iframecontroller" *ngIf="billOfExchange && !override" #values="ngForm"
