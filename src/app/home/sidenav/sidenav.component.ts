@@ -1681,4 +1681,22 @@ export class SidenavComponent implements OnInit {
     // console.log(event,'addhasgdasdsagda')
     // $(event.target).addClass(`activelink`);
   }
+  SUB_MENU:any = {};
+
+  navigationByUrl(event:any,url: string): void {
+    $('.nav-link').removeClass(`active`);
+    $(event.target).addClass(`active`);
+    this.router.navigate(['/home/'+url]);
+    this.HIDE_ALL_SUB_MENU();
+  }
+  navigationByUrlParam(event:any,url: string,param:any): void {
+    $('.nav-link').removeClass(`active`);
+    $(event.target).addClass(`active`);
+    this.router.navigate(['home/'+url,param]);
+  }
+  HIDE_ALL_SUB_MENU(){
+    for (const key in this.SUB_MENU) {
+     this.SUB_MENU[key]=false;
+    }
+  }
 }

@@ -53,15 +53,14 @@
 }
 
 .img2 {
-  width: 100%;
-  height: 100%;
+  width: 150px;
+  height: 150px;
   text-align: center;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
   font-size: 15px;
   font-weight: 700;
-  color: white;
-  padding: 10px;
+  color: #fff;
+  margin: auto;
+  border-radius: 50%;
 }
 
 .img4 {
@@ -1200,10 +1199,13 @@ table {
 
 .top-panel {
   background: blue;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  width: 100%;
-  height: 200px;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+width: 100%;
+height: 200px;
+display: flex;
+align-content: center;
+justify-content: center;
 }
 
  select.is-invalid{

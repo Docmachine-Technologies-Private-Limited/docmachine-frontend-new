@@ -166,6 +166,7 @@ URL_CREATE(url){
     this.submitted = true;
     this.FORM_BUILDER['imageUrl'] = this.img;
     this.FORM_BUILDER['UnderSubscriptionCheckBox']=this.ROLE_TYPES;
+    this.FORM_BUILDER['Subscription']=this.FORM_BUILDER['UnderSubscription'];
     console.log(this.FORM_BUILDER)
     this.findEmptyObject(this.FORM_BUILDER,[undefined,null,'','Select Subscription']).then((value:any)=>{
       if (value==true) {

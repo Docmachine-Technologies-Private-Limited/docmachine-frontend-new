@@ -8,7 +8,6 @@ import * as xlsx from 'xlsx';
 import { ConfirmDialogModel, ConfirmDialogBoxComponent } from '../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
 import { WindowInformationService } from 'src/app/service/window-information.service';
-import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 
 /**
@@ -45,8 +44,7 @@ export class PipoNewComponent implements OnInit {
   PENDING_DATA:any=[];
 
   constructor(public documentService: DocumentService, private userService: UserService, public dialog: MatDialog,
-    public wininfo: WindowInformationService,public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
-    public CustomConfirmDialogModel:CustomConfirmDialogModelComponent) {
+    public wininfo: WindowInformationService,public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService) {
     this.getDropDownItems()
 
   }
@@ -55,7 +53,7 @@ export class PipoNewComponent implements OnInit {
     this.getPipoData()
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
-    this.documentService.getRejectStatus().subscribe((res: any)=>{
+    this.documentService.getRejectStatus(this.USER_DATA?.result?.sideMenu).subscribe((res: any)=>{
       this.PENDING_DATA = res;
       console.log("this.PENDING_DATA", res)
     })
@@ -179,7 +177,8 @@ export class PipoNewComponent implements OnInit {
         userdetails:this.USER_DATA['result'],
         status:'pending',
         dummydata:this.dataSource[index],
-        Types:'deletion'
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
       }
       this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
         this.ngOnInit();

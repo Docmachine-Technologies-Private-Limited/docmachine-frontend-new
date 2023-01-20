@@ -95,34 +95,12 @@
                                             <span *ngIf="!editable" name="gst" id="password1" type="" placeholder="GSTIN" required="" class="form-control rounded-pill password password1">
                                                 {{item.gst}}</span>
                                         </div>
-                                        <!-- <div class="form-group mb-3">
-                                            <label>Account Number</label>
-                                            <input *ngIf="editable" [(ngModel)]="item.acNo" formControlName="acNo"
-                                                id="inputEmail" type="email"
-                                                placeholder="Ex: CC/OD/PC/PCFC/EBRD/BP/EEFC-USD/EUR/GBP/CHF/JPY ETC"
-                                                required="" class="form-control rounded-pill email"
-                                                [ngModelOptions]="{standalone: true}"
-                                                [ngClass]="{ 'is-invalid': submitted && f.acNo.errors }">
-                                            <div *ngIf="submitted && f.acNo.errors" class="invalid-feedback">
-                                                <div *ngIf="f.acNo.errors.required" style="margin-left: 15px;">Account
-                                                    number
-                                                    Required</div>
-                                            </div>
-                                            <span *ngIf="!editable" name="acNo" id="inputEmail" type="email"
-                                                placeholder="Ex: CC/OD/PC/PCFC/EBRD/BP/EEFC-USD/EUR/GBP/CHF/JPY ETC"
-                                                required="" class="form-control rounded-pill email"> {{item.acNo}}
-                                            </span>
-                                        </div> -->
                                         <div *ngIf="!editable && item.location" class="form-group mb-3">
                                             <label>Location</label>
                                             <div *ngFor="let course of item.location.slice(0,l); let i = index" style="margin-bottom: 10px;">
-
-
-                                                <span id="password1" type="" placeholder="bank name" class="form-control rounded-pill password password1">
+                                               <span id="password1" type="" placeholder="bank name" class="form-control rounded-pill password password1">
                                                     {{course.loc}}</span>
-
-
-                                            </div>
+                                                  </div>
                                             <div style="text-align: end;">
                                                 <a *ngIf="!showLessLoc && item.location.length >2" (click)=showMoreLoc() style="color: rgb(100, 100, 100);">Show More
                                                     Location>></a>
@@ -133,15 +111,15 @@
                                         <div *ngIf="editable && item.location" class="form-group mb-3" formArrayName="location">
                                             <label>Location</label>
                                             <div *ngFor="let course of getLoc(loginForm); let i = index" [formGroupName]="i">
-
-
-                                                <input [(ngModel)]="location[i].loc" formControlName="loc" id="password1" type="" placeholder="Location" style="margin-bottom: 10px;" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted1 && b.controls[i].get('loc').errors?.required }"
-                                                    autocomplete="off">
+                                              {{i+' '+ this.location}}
+                                                <!-- <input [(ngModel)]="location[i].loc" formControlName="loc" id="password1" type=""
+                                                  placeholder="Location" style="margin-bottom: 10px;" class="form-control rounded-pill password password1"
+                                                  [ngClass]="{ 'is-invalid': submitted1 && b.controls[i].get('loc').errors?.required }" autocomplete="off">
                                                 <i style="margin: -39px -18px; float: right;" *ngIf='p>1' (click)='removeLoc(i)' class="fas fa-times"></i>
                                                 <div *ngIf="submitted1 && b.controls[i].get('loc').errors" class="invalid-feedback">
                                                     <div *ngIf="b.controls[i].get('loc').errors?.required " style="margin-left: 15px;">Location Required
                                                     </div>
-                                                </div>
+                                                </div> -->
 
                                             </div>
                                         </div>
@@ -154,8 +132,6 @@
                                         <div *ngIf="editable && !item.location" class="form-group mb-3" formArrayName="location">
                                             <label>Location</label>
                                             <div *ngFor="let course of getLoc(loginForm); let i = index" [formGroupName]="i">
-
-
                                                 <input formControlName="loc" id="password1" type="" placeholder="Location" style="margin-bottom: 10px;" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted1 && b.controls[i].get('loc').errors?.required }" autocomplete="off">
                                                 <i style="margin: -39px -18px; float: right;" *ngIf='i>0' (click)='removeAddressLoc(i)' class="fas fa-times"></i>
                                                 <div *ngIf="submitted1 && b.controls[i].get('loc').errors" class="invalid-feedback">
@@ -376,14 +352,12 @@
                                         </div>
 
                                         <div class="form-group mb-3">
-
                                             <label>Letter Head</label> <br>
                                             <img *ngIf="lh" src="{{letterHead1}}" height="100px" width="100%">
                                             <br *ngIf="lh"> <br *ngIf="lh">
                                             <form *ngIf="editable" method="POST">
                                                 <div>
                                                     <input class="customfile1" (error)="onUploadError($event)" placeholder="Choose File" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (sending)="sending($event,'Letter Head')" *ngIf="type === 'directive'" [dropzone]="config">
-                                                    <!--<p class="choose">Choose File</p> -->
                                                     <p class="bottomText">Maximum size: 5MB</p>
                                                     <p class="bottomText" *ngIf="letterHead">Uploading...</p>
                                                     <p class="bottomText" *ngIf="letterHeadDone">Uploading Done</p>
@@ -394,13 +368,11 @@
 
                                         </div>
                                         <div class="form-group mb-3">
-
                                             <label>Round Seal</label><br>
                                             <img *ngIf="rs" src="{{roundSeal1}}" height="100px" width="100%">
                                             <br *ngIf="rs"> <br *ngIf="rs">
                                             <form *ngIf="editable" method="POST">
                                                 <input class="customfile1" (error)="onUploadError($event)" placeholder="Choose File" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (sending)="sending($event,'Round Seal')" *ngIf="type === 'directive'" [dropzone]="config">
-                                                <!-- <p class="choose">Choose File</p> -->
                                                 <p class="bottomText">Maximum size: 5MB</p>
                                                 <p class="bottomText" *ngIf="roundSeal">Uploading...</p>
                                                 <p class="bottomText" *ngIf="roundSealDone">Uploading Done</p>
@@ -413,64 +385,21 @@
                                             <br *ngIf="fs"> <br *ngIf="fs">
                                             <form *ngIf="editable" method="POST">
                                                 <input class="customfile1" placeholder="Choose File" (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (sending)="sending($event,'For Seal')" *ngIf="type === 'directive'" [dropzone]="config">
-                                                <!-- <p class="choose">Choose File</p> -->
                                                 <p class="bottomText">Maximum size: 5MB</p>
                                                 <p class="bottomText" *ngIf="forSeal">Uploading...</p>
                                                 <p class="bottomText" *ngIf="forSealDone">Uploading Done</p>
                                             </form>
                                         </div>
-
-                                        <!-- <div class="form-group mb-3">
-                                            <label>Letter Head</label> <br>
-                                            <form method="POST">
-                                                <div>
-                                                    <input class="customfile1" (error)="onUploadError($event)"
-                                                        placeholder="Choose File" (init)="onUploadInit($event)"
-                                                        (success)="onUploadSuccess($event)"
-                                                        (sending)="sending($event,'Letter Head')"
-                                                        *ngIf="type === 'directive'" [dropzone]="config">
-                                                    <p class="bottomText">Maximum size: 5MB</p>
-                                                    <p class="bottomText" *ngIf="letterHead">Uploading...</p>
-                                                    <p class="bottomText" *ngIf="letterHeadDone">Uploading Done</p>
-                                                </div>
-
-
-                                            </form>
-
+                                        <div class="col-12 d-flex row">
+                                          <div *ngIf="!editable;else updatebtn">
+                                            <button type="submit" class="btn" (click)="edit();editable=true" [style]="this.userData?.role!='manager'? ' pointer-events: none;' : ' pointer-events: auto;' ">Edit</button>
+                                          </div>
+                                          <ng-template #updatebtn>
+                                            <button type="submit" class="btn" [style]="this.userData?.role!='manager'? ' pointer-events: none;' : ' pointer-events: auto;'">Update</button>
+                                            </ng-template>
+                                          <button class="btn" [routerLink]="['/home/dashboardTask']">Back</button>
                                         </div>
-                                        <div class="form-group mb-3">
-                                            <label>Round Seal</label><br>
-                                            <form method="POST">
-                                                <input class="customfile1" (error)="onUploadError($event)"
-                                                    placeholder="Choose File" (init)="onUploadInit($event)"
-                                                    (success)="onUploadSuccess($event)"
-                                                    (sending)="sending($event,'Round Seal')"
-                                                    *ngIf="type === 'directive'" [dropzone]="config">
-                                                <p class="bottomText">Maximum size: 5MB</p>
-                                                <p class="bottomText" *ngIf="roundSeal">Uploading...</p>
-                                                <p class="bottomText" *ngIf="roundSealDone">Uploading Done</p>
-                                            </form>
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label>For Seal</label><br>
-                                            <form method="POST">
-                                                <input class="customfile1" placeholder="Choose File"
-                                                    (error)="onUploadError($event)" (init)="onUploadInit($event)"
-                                                    (success)="onUploadSuccess($event)"
-                                                    (sending)="sending($event,'For Seal')" *ngIf="type === 'directive'"
-                                                    [dropzone]="config">
-                                                <p class="bottomText">Maximum size: 5MB</p>
-                                                <p class="bottomText" *ngIf="forSeal">Uploading...</p>
-                                                <p class="bottomText" *ngIf="forSealDone">Uploading Done</p>
-                                            </form>
-                                        </div> -->
-
-
-                                        <button *ngIf="editable" type="submit" class="btn">Update</button>
-                                        <button *ngIf="!editable" class="btn" (click)="edit()">Edit</button>
-                                        <button class="btn" [routerLink]="['/home/dashboardNew']">Back</button>
                                     </form>
-
                                 </div>
                             </div>
                         </div>

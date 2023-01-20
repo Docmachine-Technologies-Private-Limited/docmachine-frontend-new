@@ -26,7 +26,7 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   authToken: any;
   headers: any;
   file: Array<any> = [];
-  loginForm:any = FormGroup;
+  loginForm: FormGroup;
   letterHead = false;
   roundSeal = false;
   forSeal = false;
@@ -68,12 +68,13 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   showLessLoc: boolean;
   m: number = 2;
   showLessCom: boolean;
-  location: any;
-  commodity: any;
+  location: any=[];
+  commodity: any=[];
   x: number;
   y: number;
   p: any;
   q: any;
+  userData:any=[];
 
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private router: Router, private toastr: ToastrService, public appconfig: AppConfig,
@@ -106,7 +107,11 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    this.wininfo.set_controller_of_width(250,'.content-wrap')
+    this.wininfo.set_controller_of_width(250,'.content-wrap');
+     this.userService.getUserDetail().then((user:any) => {
+      this.userData = user?.result
+      console.log("userData",this.userData)
+    });
     this.jsondata = data['default'];
     this.dataJson = data['default']
     this.jsondata1 = data1['default'];
@@ -240,6 +245,7 @@ export class EditCompanyComponent implements OnInit, AfterViewInit {
   }
 
   getLoc(form) {
+    console.log(form.get('location').controls,'form.controls');
     return form.get('location').controls;
   }
 

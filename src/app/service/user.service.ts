@@ -554,13 +554,7 @@ export class UserService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      `${this.api_base}/member/get`,
-      {
-        teamId: id,
-      },
-      httpOptions
-    );
+    return this.http.post(`${this.api_base}/member/get`,{teamId: id},httpOptions);
   }
 
   addpipo(pipo) {

@@ -511,33 +511,33 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/Approval/add`,{data:data},httpOptions);
   }
-  getPendingStatus() {
+  getPendingStatus(id:any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.get(`${this.api_base}/Approval/getPendingStatus`,httpOptions);
+    return this.http.post(`${this.api_base}/Approval/getPendingStatus`,{FileType:id},httpOptions);
   }
-  getVerifyStatus() {
+  getVerifyStatus(id:any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.get(`${this.api_base}/Approval/getVerifyStatus`,httpOptions);
+    return this.http.post(`${this.api_base}/Approval/getVerifyStatus`,{FileType:id},httpOptions);
   }
-  getApprovedStatus() {
+  getApprovedStatus(id:any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.get(`${this.api_base}/Approval/getApprovedStatus`,httpOptions);
+    return this.http.post(`${this.api_base}/Approval/getApprovedStatus`,{FileType:id},httpOptions);
   }
-  getRejectStatus() {
+  getRejectStatus(id:any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.get(`${this.api_base}/Approval/getRejectStatus`,httpOptions);
+    return this.http.post(`${this.api_base}/Approval/getRejectStatus`,{FileType:id},httpOptions);
   }
   DeleteStatus(data) {
     this.loadFromLocalStorage();

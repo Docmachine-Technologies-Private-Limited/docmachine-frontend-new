@@ -15,16 +15,14 @@
             <div class="container1 p-3">
                 <div *ngFor="let data of item1 let i=index" id="login-container">
                     <div class="content1 top-panel">
-                        <div *ngIf="data.imageUrl">
-                            <img class="img2" src="{{data.imageUrl}}" [alt]="data.name+' \nimage not found...'">
-                        </div>
-                        <div *ngIf="!data.imageUrl">
-                            <img class="img4" src="./assets/ic_mail-2.png">
-                        </div>
+                        <img *ngIf="data.imageUrl" class="img2" src="{{data.imageUrl}}" [alt]="data.name+' \nimage not found...'">
+                        <img *ngIf="!data.imageUrl" class="img4" src="./assets/ic_mail-2.png">
                     </div>
                     <div class="content1">
-                        <h6 class="name">{{data.name}}</h6>
-                        <h6 class="email">{{data.email}}</h6>
+                        <h6 class="name">Name : {{data?.name}}</h6>
+                        <h6 class="email">Email Id : {{data?.email}}</h6>
+                        <h6 class="email">Subscription : {{data?.Subscription}}</h6>
+                        <h6 class="email">Role : {{data?.UnderSubscriptionCheckBox}}</h6>
                     </div>
                       <div class="row pb-3 flex-display">
                         <div class="bottom" (click)="EditData(Editformmodel.style.display='block',{id:data['_id'],index:i})">
@@ -110,6 +108,7 @@
             <option value="">Select Option</option>
             <option value="Export">Export</option>
             <option value="Import">Import</option>
+            <option value="both">both</option>
             </select>
             <div *ngIf="submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
               this.FORM_BUILDER['UnderSubscription']=='Select Subscription'" class="invalid-feedback">
@@ -231,6 +230,7 @@
             <option *ngIf="this.userData?.result['Subscription']=='both'" value="">Select Option</option>
             <option *ngIf="this.userData?.result['Subscription']=='both'" value="Export">Export</option>
             <option *ngIf="this.userData?.result['Subscription']=='both'" value="Import">Import</option>
+            <option *ngIf="this.userData?.result['Subscription']=='both'" value="both">both</option>
           </select>
             <div *ngIf="submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
               this.FORM_BUILDER['UnderSubscription']=='Select Subscription'" class="invalid-feedback">
