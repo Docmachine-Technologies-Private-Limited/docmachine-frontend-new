@@ -44,7 +44,7 @@
         },i)">Reject</button>
         <button type="submit" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'],i)">View</button>
       </div>
-      <div class="column flex-display" *ngIf="this.USER_DETAILS?.RoleCheckbox==='Checker'">
+      <div class="column flex-display" *ngIf="this.USER_DETAILS?.RoleCheckbox==='Checker' && item['status']!='Verify'">
         <button type="submit" class="btn btn-success" (click)="Approved({
           id: item['_id'],
           Tableid: item['id'],

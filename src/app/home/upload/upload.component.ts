@@ -1638,8 +1638,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
   CommercialNumber:any=[];
   storeCommercialNumber(id:any,commercialnumber){
     console.log(this.CommercialNumber,'CommercialNumber')
-    if (!this.CommercialNumber.includes(commercialnumber)) {
-      this.CommercialNumber.push(commercialnumber)
+    if (!this.CommercialNumber[id].includes(commercialnumber)) {
+      this.CommercialNumber[id].push(commercialnumber)
     }
   }
   //blCopyref Submit buttton
@@ -2645,7 +2645,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     } else {
       console.log('x');
     }
-    // this.CommercialNumber[pipo._id]=[]
+    this.CommercialNumber[pipo._id]=[]
 
     console.log(this.arrayData);
     console.log('Array List', this.pipoArr);
