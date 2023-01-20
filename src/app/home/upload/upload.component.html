@@ -1367,10 +1367,10 @@
             <div class="form12 p-3">
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label"></label>
-                <div >
+                <div class="col-12 column d-flex" *ngFor="let item of this.pipoArr">
                   <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="commercialNumber" ngModel placeholder="Commercial Number">
                     <option value="">Select Commercial Number</option>
-                    <option *ngFor="let comm of commerciallist"
+                    <option *ngFor="let comm of this.MULITPLE_DROP_DOWN[item]"
                     [value]="comm?.commercialNumber">
                     {{ comm?.commercialNumber }}
                   </option>

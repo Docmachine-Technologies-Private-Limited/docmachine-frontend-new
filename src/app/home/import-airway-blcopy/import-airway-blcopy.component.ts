@@ -56,6 +56,7 @@ export class ImportAirwayBlcopyComponent implements OnInit {
             this.item.push(value);
           }
         }
+        console.log(res,'yuyuyuyuyuyuyuuy')
       },
       (err) => console.log(err)
     );

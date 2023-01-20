@@ -2323,7 +2323,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     this.uploading = false;
     console.log('onUploadError:', args, args[1].message);
   }
-
+  MULITPLE_DROP_DOWN:any =[];
   public onUploadSuccess(args: any): void {
     if (this.documentType !== '') {
       this.uploading = false;
@@ -2379,6 +2379,15 @@ export class UploadComponent implements OnInit, AfterViewInit {
           this.blCopyref = true;
         } else if (this.documentType === 'blCopy') {
           this.blCopy = true;
+          for (let index = 0; index < this.pipoArr.length; index++) {
+            this.documentService.getCommercialByFiletype(this.documentType1,this.pipoArr[index]).subscribe(
+              (res: any) => {
+                console.log('getCommercialImport', res);
+                  this.MULITPLE_DROP_DOWN[this.pipoArr[index]]=res.data;
+              },
+              (err) => console.log(err)
+            );
+          }
         } else if (this.documentType === 'commercial') {
           this.commercial = true;
         } else if (this.documentType === 'destruction') {
