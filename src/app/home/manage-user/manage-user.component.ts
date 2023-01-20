@@ -235,7 +235,7 @@ URL_CREATE(url){
   }
 
   deleteuser(data:any){
-    this.userService.deleteUser_Role(data['_id']).subscribe((res: any)=>{
+    this.userService.deleteUser_Role(data['email']).subscribe((res: any)=>{
       if (res['status']==true) {
         this.ngOnInit()
       }

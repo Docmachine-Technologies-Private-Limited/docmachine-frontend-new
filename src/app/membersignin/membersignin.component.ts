@@ -47,15 +47,18 @@ export class MembersigninComponent implements OnInit {
       this.isDisabled = false;
       return;
     }
+    this.userService.getTeamByUser(this.SNAPSHOT_DATA['teamId']).subscribe((res: any)=>{
+      console.log(res,'getTeamByUser');
+      this.resetForm.value.companyName = res.data[0]?.teamName;
+    })
     this.resetForm.value.role = 'member'
     this.resetForm.value.fullName = this.fullName
     this.resetForm.value.email = this.email
-    this.resetForm.value.companyId = this.companyId
-    this.resetForm.value.companyName = this.companyName
+    this.resetForm.value.companyId = this.SNAPSHOT_DATA['teamId']
     this.resetForm.value.verified = 'yes'
     this.resetForm.value.Subscription = this.SNAPSHOT_DATA['UnderSubscription']
     this.resetForm.value.RoleCheckbox = this.SNAPSHOT_DATA['UnderSubscriptionCheckBox']
-    console.log(this.resetForm.value)
+    console.log(this.resetForm.value,'this.resetForm.value')
     this.userService.register(this.resetForm.value)
       .subscribe(
         data => {
