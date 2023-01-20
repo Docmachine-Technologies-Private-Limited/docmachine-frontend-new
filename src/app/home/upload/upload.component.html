@@ -1400,7 +1400,7 @@
                 <label for="exampleInputEmail1" class="form-label"></label>
                 <div class="col-12 column d-flex Commercial" *ngFor="let item of this.pipoArr;let i=index">
                   <label for="exampleInputEmail1" class="form-label">PI_PO_{{(i+1)}}</label>
-                  <ng-select [items]="this.MULITPLE_DROP_DOWN[item]"
+                  <!-- <ng-select [items]="this.MULITPLE_DROP_DOWN[item]"
                   bindLabel="commercialNumber"
                   [multiple]="true"
                   groupBy="selectedAllGroup"
@@ -1408,8 +1408,8 @@
                   placeholder="Select cities"
                   (change)="storeCommercialNumber(item,$event)"
                    ngModel placeholder="Commercial Number" #CommercialNumber>
-                  </ng-select>
-                  <!-- <select class="form-control p-3" aria-label="Default select example"
+                  </ng-select> -->
+                  <select class="form-control p-3" aria-label="Default select example"
                    class="form-control p-3" [name]="'commercialNumber'" (change)="storeCommercialNumber(item,CommercialNumber.value)"
                    #CommercialNumber>
                     <option value="">Select Commercial Number</option>
@@ -1417,7 +1417,7 @@
                     [value]="comm?.commercialNumber">
                     {{ comm?.commercialNumber }}
                   </option>
-                  </select> -->
+                  </select>
               </div>
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Airway / BlCopy Number*</label>
