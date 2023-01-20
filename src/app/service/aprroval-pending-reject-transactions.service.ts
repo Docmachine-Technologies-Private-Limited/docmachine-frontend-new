@@ -53,4 +53,10 @@ export class AprrovalPendingRejectTransactionsService {
      });
    }
  }
+ truefalse(condition){
+  if (condition){
+    return '';
+  }
+  return 'none';
+}
 }

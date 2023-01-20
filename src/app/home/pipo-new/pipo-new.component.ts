@@ -8,7 +8,6 @@ import * as xlsx from 'xlsx';
 import { ConfirmDialogModel, ConfirmDialogBoxComponent } from '../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
 import { WindowInformationService } from 'src/app/service/window-information.service';
-import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 
 /**
@@ -45,8 +44,7 @@ export class PipoNewComponent implements OnInit {
   PENDING_DATA:any=[];
 
   constructor(public documentService: DocumentService, private userService: UserService, public dialog: MatDialog,
-    public wininfo: WindowInformationService,public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
-    public CustomConfirmDialogModel:CustomConfirmDialogModelComponent) {
+    public wininfo: WindowInformationService,public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService) {
     this.getDropDownItems()
 
   }

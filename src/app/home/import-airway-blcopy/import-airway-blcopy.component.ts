@@ -8,6 +8,9 @@ import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
 import {UserService} from './../../service/user.service';
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
 @Component({
   selector: 'app-import-airway-blcopy',
@@ -25,6 +28,7 @@ export class ImportAirwayBlcopyComponent implements OnInit {
   public pipoData: any;
   public id: any;
   filtervisible: boolean = false;
+  USER_DATA:any=[];
 
   constructor(
     private documentService: DocumentService,
@@ -34,12 +38,17 @@ export class ImportAirwayBlcopyComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private sharedData: SharedDataService,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public dialog: MatDialog,
   ) {
   }
 
-  ngOnInit(): void {
+ async ngOnInit() {
   this.wininfo.set_controller_of_width(270,'.content-wrap')
+  this.USER_DATA = await this.userService.getUserDetail();
+  console.log("this.USER_DATA", this.USER_DATA)
+  this.item=[];
     this.documentService.getAirwayBlcopy().subscribe(
       (res: any) => {
         for (let value of res.data) {
@@ -52,7 +61,7 @@ export class ImportAirwayBlcopyComponent implements OnInit {
     );
 
   }
-      
+
   filter() {
     // this.getPipoData()
     this.filtervisible = !this.filtervisible
@@ -133,6 +142,43 @@ export class ImportAirwayBlcopyComponent implements OnInit {
   toEdit(index) {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Airway / Blcopy Is In Edit Mode');
+  }
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+        this.documentService.deletePipoByid(id).subscribe((res) => {
+            console.log(res)
+            if (res) {
+              this.ngOnInit()
+            }
+        }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'airwayblcopies',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item[index],
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
   }
 
 }

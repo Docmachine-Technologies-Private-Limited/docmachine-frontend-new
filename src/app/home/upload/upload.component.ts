@@ -1627,12 +1627,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log('this is console of blcopy', e.form.value);
     e.form.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
-
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
-
     e.form.value.buyerName = this.mainBene;
-    // e.form.value.currency = this.currency;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
     this.documentService.addBlcopyref(e.form.value).subscribe(
@@ -1648,25 +1645,17 @@ export class UploadComponent implements OnInit, AfterViewInit {
           .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1, updatedData)
           .subscribe(
             (data) => {
-              //this.pipoData[`${this.pipoDoc}`] = args[1].data
               console.log('king123');
               console.log(data);
-
-              this.router.navigate([
-                this.router.navigate([
-                  'home/pipo-export'
-                ])
-              ]);
+              this.router.navigate(['home/']);
               console.log('redirectindex', this.redirectindex);
               console.log('redirectinpage', this.redirectpage);
               console.log('redirectid', this.redirectid);
             },
             (error) => {
-              // this.toastr.error('Invalid inputs, please check!');
               console.log('error');
             }
           );
-        // this.router.navigateByUrl("/home/dashboardNew");
       },
       (err) => console.log('Error adding pipo')
     );
@@ -1805,7 +1794,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       e.form.value.file = this.documentType1;
       e.form.value.commercialDoc = this.pipourl1;
       console.log('pipoDoc', this.pipourl1);
-  
+
       e.form.value.buyerName = this.mainBene;
       // e.form.value.currency = this.currency;
       console.log(e.form.value);
@@ -1825,7 +1814,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log('king123');
                 console.log(data);
-  
+
                 this.router.navigate(['home/import-commercial']);
 
                 console.log('redirectindex', this.redirectindex);
