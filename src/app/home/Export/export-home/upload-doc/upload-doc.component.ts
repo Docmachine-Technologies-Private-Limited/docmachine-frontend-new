@@ -1532,8 +1532,8 @@ export class UploadDocComponent implements OnInit {
     console.log(e.form.value);
     this.documentService.addCommercial(e.form.value).subscribe(
       (res: any) => {
-        this.toastr.success(`Commercial Document Added Successfully`);
-        console.log('Commercial Document Added Successfully');
+        this.toastr.success(`Commercial Invoice Added Successfully`);
+        console.log('Commercial Invoice Added Successfully');
         let updatedData = {
           "commercialRef" : [
             res.data._id,

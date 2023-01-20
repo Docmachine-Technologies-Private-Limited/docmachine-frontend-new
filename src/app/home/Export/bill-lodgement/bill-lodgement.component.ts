@@ -598,7 +598,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           console.log("You Don't have packingDoc Document");
         }
       } else {
-        console.log("You Don't have Commercial Document");
+        console.log("You Don't have Commercial Invoice");
       }
     } else {
       console.log("You Don't have BLCopy Document");
@@ -2860,7 +2860,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         }
       } else {
         this.toastr.error(
-          "You Don't Have Any Commercial Documnet Linkend with this Shipping Bill"
+          "You Don't Have Any Commercial Invoice Linkend with this Shipping Bill"
         );
       }
     } else {

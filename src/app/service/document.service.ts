@@ -912,6 +912,16 @@ export class DocumentService {
     return this.http.get(`${this.api_base}/commercial/get`, httpOptions);
   }
 
+  getCommercialByFiletype(filetype,pipo_id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/commercial/getByFiletype/${filetype}/${pipo_id}`, httpOptions);
+  }
+
   getCommercialByCommercialValue(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -919,7 +929,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `${this.api_base}/commercial/getSingleCommercial`,
+      `${this.api_base}/commercial/getSingleCommercial/`,
       {
         id: id,
       },
