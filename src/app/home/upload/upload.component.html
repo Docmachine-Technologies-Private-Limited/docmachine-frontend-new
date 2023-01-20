@@ -255,7 +255,7 @@
                     <div class="form-group">
                       <label for="exampleInputEmail1">Buyer's name</label>
                       <select class="form-control p-3" aria-label="Default select example" [(ngModel)]="bene" name="" id="" class="form-control p-3"  (change)=changepipo($event.target.value)>
-                        <option value="">Select Beneficiary/option>
+                        <option value="">Select Beneficiary</option>
                         <option value="{{bene?.beneName}}" *ngFor="let bene of benneDetail
                         ">{{ bene?.beneName }}
                         </option>
@@ -1396,18 +1396,28 @@
               <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
           <div class="field">
             <div class="form12 p-3">
-        
               <div class="mb-3">
-                <div class="col-12 column d-flex" *ngFor="let item of pipoArr;changedCommercial(item)">
-                  <label for="exampleInputEmail1" class="form-label">{{item}}</label>
-                  <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="commercialNumber" ngModel placeholder="Commercial Number">
+                <label for="exampleInputEmail1" class="form-label"></label>
+                <div class="col-12 column d-flex Commercial" *ngFor="let item of this.pipoArr;let i=index">
+                  <label for="exampleInputEmail1" class="form-label">PI_PO_{{(i+1)}}</label>
+                  <!-- <ng-select [items]="this.MULITPLE_DROP_DOWN[item]"
+                  bindLabel="commercialNumber"
+                  [multiple]="true"
+                  groupBy="selectedAllGroup"
+                  [selectableGroup]="true"
+                  placeholder="Select cities"
+                  (change)="storeCommercialNumber(item,$event)"
+                   ngModel placeholder="Commercial Number" #CommercialNumber>
+                  </ng-select> -->
+                  <select class="form-control p-3" aria-label="Default select example"
+                   class="form-control p-3" [name]="'commercialNumber'" (change)="storeCommercialNumber(item,CommercialNumber.value)"
+                   #CommercialNumber>
                     <option value="">Select Commercial Number</option>
-                    <option *ngFor="let comm of this.commerciallistselected[item]"
+                    <option *ngFor="let comm of this.MULITPLE_DROP_DOWN[item]"
                     [value]="comm?.commercialNumber">
                     {{ comm?.commercialNumber }}
                   </option>
                   </select>
-                </div>
               </div>
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Airway / BlCopy Number*</label>
@@ -1416,6 +1426,7 @@
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
             </div>
+          </div>
           </div>
         </form>
 

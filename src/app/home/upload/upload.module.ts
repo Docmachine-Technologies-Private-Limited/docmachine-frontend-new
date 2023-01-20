@@ -15,6 +15,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
 import {SharedHomeModule} from "../shared-home.module";
 import {UploadComponent} from "./upload.component";
+import { NgSelectModule } from "@ng-select/ng-select";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import {UploadComponent} from "./upload.component";
   ],
   imports: [
     SharedHomeModule,
+    NgSelectModule,
     RouterModule.forChild([
       {
         path: "",

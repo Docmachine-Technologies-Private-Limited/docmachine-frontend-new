@@ -60,7 +60,7 @@
                                 </form>
                             </div>
                         </div>
-                        <button class="upload-button btn btn-success" (click)="newCredit()">
+                        <button class="upload-button btn btn-success" [disabled]="this.USER_DATA?.result?.Role_Type!='Approver'? false : true" (click)="newCredit()">
                             <span class="add_icon"></span>  ADD NEW
                         </button>
                     </div>
@@ -137,8 +137,7 @@
                                                 (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
                                                     aria-hidden="true"></i></button>
                                                     <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
-                                                     (click)="handleDelete(data._id,i)">
-                                                      <a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                     (click)="handleDelete(data._id,i)"><a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                     </button>
                                             </td>
                                         </tr>
