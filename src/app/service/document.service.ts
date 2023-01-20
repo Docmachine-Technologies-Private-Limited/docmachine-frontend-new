@@ -478,6 +478,15 @@ export class DocumentService {
     return this.http.get(`${this.api_base}/pipo/get`, httpOptions);
   }
 
+  getPipoByCustomer(type,buyer) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/pipo/getPipoByCustomer?filetype=${type}&buyer=${buyer}`, httpOptions);
+  }
 
   getPipos(page,limit,commodity,location,buyer,type) {
     this.loadFromLocalStorage();
