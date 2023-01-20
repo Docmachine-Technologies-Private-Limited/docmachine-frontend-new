@@ -1635,6 +1635,13 @@ export class UploadComponent implements OnInit, AfterViewInit {
       (err) => console.log('Error adding pipo')
     );
   }
+  CommercialNumber:any=[];
+  storeCommercialNumber(id:any,commercialnumber){
+    console.log(this.CommercialNumber,'CommercialNumber')
+    if (!this.CommercialNumber.includes(commercialnumber)) {
+      this.CommercialNumber.push(commercialnumber)
+    }
+  }
   //blCopyref Submit buttton
   onSubmitblcopyref(e) {
     console.log('this is console of blcopy', e.form.value);
@@ -1688,6 +1695,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log('pipodoc', this.pipourl1);
     e.form.value.file = this.documentType1;
     e.form.value.buyerName = this.mainBene;
+    e.form.value.CommercialNumber=this.CommercialNumber
     // e.form.value.currency = this.currency;
     console.log(e.form.value);
     this.documentService.addAirwayBlcopyFile(e.form.value).subscribe(
@@ -2637,6 +2645,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     } else {
       console.log('x');
     }
+    // this.CommercialNumber[pipo._id]=[]
 
     console.log(this.arrayData);
     console.log('Array List', this.pipoArr);
@@ -2645,10 +2654,10 @@ export class UploadComponent implements OnInit, AfterViewInit {
       (res: any) => {
         console.log('getCommercialImport', res);
             this.commerciallist = res.data;
+            this.MULITPLE_DROP_DOWN[pipo._id]=res.data;
       },
       (err) => console.log(err)
     );
-
   }
 
   commerciallistselected:any=[];

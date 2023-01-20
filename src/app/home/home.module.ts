@@ -119,7 +119,6 @@ import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.co
     NgApexchartsModule,
     ProgressBarModule,
     ReactiveFormsModule,
-    NgSelectModule,
     RouterModule.forChild([
       {
         path: "",
