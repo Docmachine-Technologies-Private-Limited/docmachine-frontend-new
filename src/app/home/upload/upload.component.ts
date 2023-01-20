@@ -207,6 +207,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
   userData:any
   commerciallist: any;
+  importpipolist: any;
+
   // ngOnInit() {
   //   this.loginForm = this.formBuilder.group({
   //     name:['',Validators.required]
@@ -1254,6 +1256,17 @@ export class UploadComponent implements OnInit, AfterViewInit {
     }
 
     console.log(this.pipoArray);
+  }
+
+  changepipo(value)
+  {
+    this.pipoDataService.getPipoListByCustomer(this.documentType1,value).then((data) => {
+      console.log(data,'data..................')
+      this.pipoDataService.pipolistModel$.subscribe((data) => {
+        console.log(data,'data2222..................')
+        this.importpipolist = data;
+      });
+    });;
   }
 
   searchCurrency(e, i) {
@@ -2638,6 +2651,16 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
   }
 
+  commerciallistselected:any=[];
+  changedCommercial(pipo:any){
+  this.documentService.getCommercialByFiletype(this.documentType1,pipo).subscribe((res: any) => {
+    this.commerciallistselected[pipo]=res.data;
+     },
+    (err) => {
+      console.log(err)
+    }
+  );
+}
   removePipo(i) {
     this.arrayData.splice(i, 1);
     this.pipoArr.splice(i, 1);
