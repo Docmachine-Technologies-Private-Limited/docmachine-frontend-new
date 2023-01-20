@@ -42,7 +42,7 @@
        <div class="column" *ngIf="this.detailsViewdata.length!=0">
         <p class="done-by"><span class="bold-text">Done By :</span> {{this.detailsViewdata['userdetails']['fullName']}}</p>
         <p class="date-time"><span class="bold-text">Date & Time :</span> {{this.detailsViewdata['createdAt']}}</p>
-        <p class="status"><span class="bold-text">Status :</span> {{this.detailsViewdata['deleteflag']=='1'?'Approved':'Not Approved'}}</p>
+        <p class="status"><span class="bold-text">Status :</span> {{this.detailsViewdata['status']}}</p>
         <p class="comments"><span class="bold-text">Comments :</span> {{this.detailsViewdata['comment']}}</p>
        </div>
       </div>

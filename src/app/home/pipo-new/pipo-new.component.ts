@@ -55,7 +55,7 @@ export class PipoNewComponent implements OnInit {
     this.getPipoData()
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
-    this.documentService.getRejectStatus().subscribe((res: any)=>{
+    this.documentService.getRejectStatus(this.USER_DATA?.result?.sideMenu).subscribe((res: any)=>{
       this.PENDING_DATA = res;
       console.log("this.PENDING_DATA", res)
     })
@@ -179,7 +179,8 @@ export class PipoNewComponent implements OnInit {
         userdetails:this.USER_DATA['result'],
         status:'pending',
         dummydata:this.dataSource[index],
-        Types:'deletion'
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
       }
       this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
         this.ngOnInit();
