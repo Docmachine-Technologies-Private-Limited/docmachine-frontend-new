@@ -1369,10 +1369,10 @@
                 <label for="exampleInputEmail1" class="form-label"></label>
                 <div >
                   <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="commercialNumber" ngModel placeholder="Commercial Number">
-                    <option value="">Select Commercial Numberss</option>
+                    <option value="">Select Commercial Number</option>
                     <option *ngFor="let comm of commerciallist"
-                    [value]="comm.commercialNumber">
-                    {{ comm.commercialNumber }}
+                    [value]="comm?.commercialNumber">
+                    {{ comm?.commercialNumber }}
                   </option>
 
                   </select>
