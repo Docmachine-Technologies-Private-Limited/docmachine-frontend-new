@@ -46,6 +46,23 @@ export class PipoDataService {
     });
   }
 
+  getPipoListByCustomer = (type,customer) => {
+    return new Promise((resolve, reject) => {
+      this.documentService.getPipoByCustomer(type,customer).subscribe(
+        (res: any) => {
+          console.log(res,'resssss.................')
+          let temppipo = new PipoDisplayListView(res.data, type);
+          console.log( temppipo,'temppipo')
+          this.pipolistModelSubsciber.next(temppipo.pipoModelList);
+          this.pipolistSubsciber.next(temppipo.pipolist);
+          resolve(temppipo);
+        },
+        (err) => reject(err)
+      );
+    });
+  }
+
+
   getShippingBillById(shippingBillId) {
     let pipolist = this.pipolistModelSubsciber.value;
     for (let i in pipolist) {
