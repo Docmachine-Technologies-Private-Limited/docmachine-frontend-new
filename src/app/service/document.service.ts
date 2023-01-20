@@ -51,6 +51,16 @@ export class DocumentService {
     return this.http.get(url, httpOptions);
   }
 
+  getOrAdvice(user){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({Authorization : this.authToken}),
+    };
+    let url = `${this.api_base}/orAdvice/get`;
+    return this.http.get(url, httpOptions);
+  }
+
   updateIrAdvice(user, _id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -59,6 +69,22 @@ export class DocumentService {
     };
     return this.http.post(
       `${this.api_base}/irAdvice/update`,
+      {
+        _id: _id,
+        master: user,
+      },
+      httpOptions
+    );
+  }
+
+  updateOrAdvice(user, _id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/orAdvice/update`,
       {
         _id: _id,
         master: user,
@@ -83,6 +109,23 @@ export class DocumentService {
     );
   }
 
+  updateByOrAdvice(data, _id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/orAdvice/updateByOrAdvice`,
+      {
+        _id: _id,
+        master: data,
+      },
+      httpOptions
+    );
+  }
+
+
   updateByIr(data, _id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -91,6 +134,22 @@ export class DocumentService {
     };
     return this.http.post(
       `${this.api_base}/irAdvice/updateIrAdvice`,
+      {
+        _id: _id,
+        master: data,
+      },
+      httpOptions
+    );
+  }
+
+  updateByOr(data, _id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/orAdvice/updateOrAdvice`,
       {
         _id: _id,
         master: data,
@@ -114,6 +173,21 @@ export class DocumentService {
     );
   }
 
+  getOrAdviceByOrAdvice(billNo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/orAdvice/getOrAdviceByOrAdvice`,
+      {
+        billNo: billNo,
+      },
+      httpOptions
+    );
+  }
+
   getIrAdviceByBillNo( billNo) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -122,6 +196,21 @@ export class DocumentService {
     };
     return this.http.post(
       `${this.api_base}/irAdvice/getIrAdviceByBillNo`,
+      {
+        billNo: billNo,
+      },
+      httpOptions
+    );
+  }
+
+  getOrAdviceByBillNo( billNo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/orAdvice/getOrAdviceByBillNo`,
       {
         billNo: billNo,
       },
@@ -389,6 +478,15 @@ export class DocumentService {
     return this.http.get(`${this.api_base}/pipo/get`, httpOptions);
   }
 
+  getPipoByCustomer(type,buyer) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/pipo/getPipoByCustomer?filetype=${type}&buyer=${buyer}`, httpOptions);
+  }
 
   getPipos(page,limit,commodity,location,buyer,type) {
     this.loadFromLocalStorage();
@@ -413,33 +511,33 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/Approval/add`,{data:data},httpOptions);
   }
-  getPendingStatus() {
+  getPendingStatus(id:any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.get(`${this.api_base}/Approval/getPendingStatus`,httpOptions);
+    return this.http.post(`${this.api_base}/Approval/getPendingStatus`,{FileType:id},httpOptions);
   }
-  getVerifyStatus() {
+  getVerifyStatus(id:any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.get(`${this.api_base}/Approval/getVerifyStatus`,httpOptions);
+    return this.http.post(`${this.api_base}/Approval/getVerifyStatus`,{FileType:id},httpOptions);
   }
-  getApprovedStatus() {
+  getApprovedStatus(id:any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.get(`${this.api_base}/Approval/getApprovedStatus`,httpOptions);
+    return this.http.post(`${this.api_base}/Approval/getApprovedStatus`,{FileType:id},httpOptions);
   }
-  getRejectStatus() {
+  getRejectStatus(id:any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.get(`${this.api_base}/Approval/getRejectStatus`,httpOptions);
+    return this.http.post(`${this.api_base}/Approval/getRejectStatus`,{FileType:id},httpOptions);
   }
   DeleteStatus(data) {
     this.loadFromLocalStorage();
@@ -823,6 +921,16 @@ export class DocumentService {
     return this.http.get(`${this.api_base}/commercial/get`, httpOptions);
   }
 
+  getCommercialByFiletype(filetype,pipo_id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/commercial/getByFiletype/${filetype}/${pipo_id}`, httpOptions);
+  }
+
   getCommercialByCommercialValue(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -830,7 +938,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `${this.api_base}/commercial/getSingleCommercial`,
+      `${this.api_base}/commercial/getSingleCommercial/`,
       {
         id: id,
       },

@@ -51,7 +51,7 @@ onclick() {
       (res: any) => {
         console.log('HEre Responsesssssssss', res);
         for (let value of res.data) {
-          if (value['file'] == 'export') {
+          if (value['file'] == 'import') {
 
             this.item.push(value);
           }
@@ -105,7 +105,7 @@ onclick() {
     this.documentService.updateCommercial(data, data._id).subscribe(
       (data) => {
         console.log('king123');
-        this.toastr.success('Commercial Document updated successfully.');
+        this.toastr.success('Commercial invoie updated successfully.');
 
       },
       (error) => {
@@ -130,7 +130,7 @@ onclick() {
 
   toEdit(index) {
     this.optionsVisibility[index] = true;
-    this.toastr.warning('Commercial Document Is In Edit Mode');
+    this.toastr.warning('Commercial Invoice Is In Edit Mode');
   }
 
 }

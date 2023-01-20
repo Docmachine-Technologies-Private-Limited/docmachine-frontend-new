@@ -109,12 +109,16 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `${this.api_base}/team/post`,
-      {
-        team: team,
-      },
-      httpOptions
-    );
+      `${this.api_base}/team/post`,{team: team},httpOptions);
+  }
+
+  public createTeamUser(team,id:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/team/post`,{team: team,userId:id},httpOptions);
   }
 
   verify(data) {
@@ -550,13 +554,7 @@ export class UserService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(
-      `${this.api_base}/member/get`,
-      {
-        teamId: id,
-      },
-      httpOptions
-    );
+    return this.http.post(`${this.api_base}/member/get`,{teamId: id},httpOptions);
   }
 
   addpipo(pipo) {

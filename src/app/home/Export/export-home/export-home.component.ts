@@ -3846,6 +3846,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     // this.MERGE_ALL_PDFS(this.selectedPdfs);
     // // download the single file to local.
     // // Append each pdfs to a single file
+
     // var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
     //   if (currentpage < docLength) {
     //     console.log('Inside Page', currentpage, 'total pages', docLength);
@@ -3919,6 +3920,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     //   );
     // };
     // downloadAllFiles();
+
   };
   validURL(str:any) {
     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
@@ -4225,7 +4227,8 @@ SendApproval(Status:string,UniqueId:any,url:any){
     userdetails:this.USER_DATA,
     status:'pending',
     dummydata:{doc:url},
-    Types:'downloadPDF'
+    Types:'downloadPDF',
+    FileType:this.USER_DATA?.sideMenu
   }
   if (Status=='' || Status==null ||  Status=='Rejected') {
     this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['Role_Type'],approval_data,()=>{

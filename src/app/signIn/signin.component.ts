@@ -91,6 +91,7 @@ export class SigninComponent implements OnInit {
                 //   this.userService.addToken(data['result'].token);
                 this.userService.getUser().subscribe(
                   data1 => {
+                    console.log(data1),'sdfsdhdsgfjdsfhgsdfjsfgdsjfd';
                     this.data1 = data1
                   },
                   error1 => {
@@ -123,28 +124,12 @@ export class SigninComponent implements OnInit {
                     } else {
                       this.userService.role = this.data['result']['role'];
                       if (this.data1['data'][0].companyId) {
-                        this.router.navigate(['/home/dashboardTask'])
+                        this.router.navigate(['/home'])
                       } else {
                         if (this.data1['data'][0]?.role!='member') {
                           this.router.navigate(['createTeam']);
                         }else{
-                          this.userService.getUserById(this.data1['data'][0].emailId).subscribe((teamuser) => {
-                            console.log(teamuser,'sdfsdhdfjdsfdsfdsfd')
-                            this.userService.getTeamByUser(teamuser['data'][0]['companyId']).subscribe((TeamByUser)=>{
-                              var loginFormTeam=TeamByUser['data'][0];
-                              delete loginFormTeam['_id'];
-                              console.log(TeamByUser,loginFormTeam,'sdfsdhdfjdsfdsfdsfd')
-                              this.userService.creatTeam(loginFormTeam).subscribe(data => {
-                                console.log(data['data']._id)
-                                this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
-                              },
-                              error => {
-                                this.toastr.error('something wrong, please check the details!');
-                                console.log("error")
-                              });
-                            })
-                            // this.router.navigate(['/home/dashboardTask'])
-                          })
+                          this.router.navigate(['/home/dashboardTask'])
                         }
                       }
                     }

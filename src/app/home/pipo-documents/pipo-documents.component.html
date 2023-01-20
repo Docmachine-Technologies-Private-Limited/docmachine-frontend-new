@@ -17,28 +17,6 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="header-panel" *ngIf="!showInvoice">
-            <div class="customDropdown" style="width: 102px; margin-left: 10px; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
-                <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
-                  <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
-                <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3"
-                  class="fas fa-angle-down"></i>
-               <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-          </span>
-                <div class="dropdown-content" style="min-width:200px;">
-                    <a (click)='pipoClickCredit()' style="min-width:200px;">New Credit Note</a>
-                    <a (click)='pipoClick()' style="min-width:200px;">New PI/PO</a>
-                    <a (click)='pipoClickDebit()' style="min-width:200px;">New Debit Note</a>
-                    <a (click)='pipoClickTri()' style="min-width:200px;">Tri-Party Agreement</a>
-                    <a (click)='pipoClickInsurance()' style="min-width:200px;">New Insurance Document</a>
-                    <a style="min-width:200px;">New Letter of Credit</a>
-                </div>
-            </div>
-            <button (click)="exportToExcel()" style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
-          background-color: #49A2D7;
-          border: none;
-          border-radius: 5px;">Export To Excel</button>
-        </div> -->
         <div style="width: 100%" class="analytics" *ngIf="!showInvoice" #piposummery>
             <div style="width: 100%;margin: auto;" class="row">
                 <div class="" id="container">
@@ -230,8 +208,8 @@
                                         <td class="view_edit_button">
                                             <a (click)=" openCreditNote(content); viewCN(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                             <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-                                            <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
-                      aria-hidden="true"></i></button>
+                                            <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">
+                                              <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                                             <a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
@@ -249,30 +227,9 @@
             <div class="table_top">
                 <div style="width: 70%;border-right: 0.5px solid rgba(0, 0, 0, 0.2); margin-left: 40px;">
                     <span style="color: RGB(50, 62, 74); font-size: 14px;">PI / PO Documents</span>
-
-                    <!-- <div style="background-color: #49A2D7; float: right;" class="customDropdown">
-                        <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
-                            <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
-                        <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
-                                class="fas fa-angle-down"></i>
-                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                        </span>
-                        <div class="dropdown-content1"
-                            style="min-width: 200px; margin-left: -92px; font-family: Poppins,sans-serif; font-size: 15px;">
-                            <p><a>New Credit Note</a></p>
-                            <p (click)='pipoClick()'><a>New PI/PO</a></p>
-                            <p><a>New Debit Note</a></p>
-                            <p><a>New Issuance Document</a></p>
-                            <p><a>New Letter of Credit</a></p>
-                        </div>
-                    </div> -->
-
-                    <div class="customDropdown" style="width: 102px; margin-bottom: 5px; float: right; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
+                 <div class="customDropdown" style="width: 102px; margin-bottom: 5px; float: right; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
                         <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
                             <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
-                        <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
-                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                        </span> -->
                         <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3"
                             class="fas fa-angle-down"></i>
                          <i id="up3" style="display: none" class="fas fa-angle-up"></i>
@@ -285,10 +242,7 @@
                             <a style="min-width:200px;">New Letter of Credit</a>
                         </div>
                     </div>
-
                 </div>
-                <!----style="height: 35px; font-weight: 400"-->
-
                 <div style="width: 74%; font-weight: 300; padding-left: 1%; color: #323e4a">
                     <span style="font-size: 16px; color: RGB(50, 62, 74);">{{pipoNo}}</span>
                 </div>
