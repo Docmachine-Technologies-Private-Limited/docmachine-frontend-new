@@ -206,7 +206,7 @@ export class UserService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/team/getTeamByUser`,{companyId:id},httpOptions);
+    return this.http.post(`${this.api_base}/authenticate/getUser`,{companyId:id},httpOptions);
   }
 
   updateTeam(team) {
