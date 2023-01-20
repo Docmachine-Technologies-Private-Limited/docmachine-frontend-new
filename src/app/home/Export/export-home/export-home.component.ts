@@ -4227,7 +4227,8 @@ SendApproval(Status:string,UniqueId:any,url:any){
     userdetails:this.USER_DATA,
     status:'pending',
     dummydata:{doc:url},
-    Types:'downloadPDF'
+    Types:'downloadPDF',
+    FileType:this.USER_DATA?.sideMenu
   }
   if (Status=='' || Status==null ||  Status=='Rejected') {
     this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['Role_Type'],approval_data,()=>{

@@ -131,6 +131,8 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   public buttonToggle1: any;
   public buyer: boolean;
   public api_base: any;
+  USER_DATA:any=[];
+  PENDING_DATA:any=[];
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -180,6 +182,11 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     this.id = this.route.snapshot.params['id'];
     this.pipo_id = this.route.snapshot.params['pipo_id'];
     console.log(this.id, this.pipo_id);
+
+    this.userService.getUserDetail().then((user:any) => {
+      this.USER_DATA =user;
+      console.log("this.USER_DATA", this.USER_DATA)
+    });
     this.documentService.getBoe(1).subscribe(
       (res: any) => {
         console.log(res), (this.item4 = res.data);
@@ -980,4 +987,28 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'Import -pipo.xlsx');
   }
+  // deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+  //   if (RoleCheckbox==''){
+  //       this.documentService.deletePipoByid(id).subscribe((res) => {
+  //           console.log(res)
+  //           if (res) {
+  //             // this.getPipoData()
+  //           }
+  //       }, (err) => console.log(err))
+  //   } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+  //     var approval_data:any={
+  //       id:id,
+  //       tableName:'PI_PO',
+  //       deleteflag:'-1',
+  //       userdetails:this.USER_DATA['result'],
+  //       status:'pending',
+  //       dummydata:this.dataSource[index],
+  //       Types:'deletion',
+  //       FileType:this.USER_DATA?.result?.sideMenu
+  //     }
+  //     this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+  //       this.ngOnInit();
+  //     });
+  //   }
+  // }
 }

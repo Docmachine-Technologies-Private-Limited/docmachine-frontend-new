@@ -1,11 +1,11 @@
 <div class="main">
-
     <h6 class="display-5">Invite your team</h6>
-    <p style="color:#606670;font-size:16px;margin-top:-48px">Add people to your team who would help you on documents
-    </p>
+    <p style="color:#606670;font-size:16px;margin-top:-48px">Add people to your team who would help you on documents</p>
+    <div>
+      <button [routerLink]="['/login']">go to login</button>
+  </div>
     <div class="container">
         <div id="login-container">
-
             <p class="heading">Add New Member</p>
             <div class="content">
                 <div class="button-wrapper">
@@ -20,10 +20,7 @@
                                 (success)="onUploadSuccess($event)" *ngIf="type === 'directive'" [dropzone]="config"
                                 class="dropzone dropzone-container" id="dropzone">
                         </div>
-
                     </form>
-
-
                 </div>
             </div>
             <div class="content">
@@ -32,27 +29,20 @@
                     <input formControlName="email" class="email" type="text" placeholder="Enter EmailId"> <br>
                     <button type="submit">Add</button>
                 </form>
-
             </div>
-
-
         </div>
         <div *ngFor="let data of item1" id="login-container">
             <div class="content">
                 <div *ngIf="data.imageUrl">
                     <img class="img2" src="{{data.imageUrl}}">
                 </div>
-
                 <div *ngIf="!data.imageUrl">
                     <img class="img4" src="./assets/ic_mail-2.png">
                 </div>
-
-
             </div>
             <div class="content">
                 <h6 class="name">{{data.name}}</h6>
                 <h6 class="email">{{data.email}}</h6>
-
             </div>
             <div class="bottom" style="float: left; margin-left: 30px; margin-top: 10px;">
                 <img src="./assets/Shape-4.png" alt="" style="margin-right: 5px;"> Invited
@@ -60,17 +50,9 @@
             <div class="bottom bottom1" style="float: right; margin-right: 15px;">
                 <img src="./assets/Eye.png" style="margin-right: 5px;"> View
             </div>
-
         </div>
-
-
-
     </div>
-    <br>
-
     <div>
-        <button [routerLink]="['/home/dashboardNew']">Finish</button>
-    </div>
-
-
+      <button [routerLink]="['/home']">Finish</button>
+  </div>
 </div>

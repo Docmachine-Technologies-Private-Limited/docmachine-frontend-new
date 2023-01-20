@@ -924,3 +924,29 @@ body {
 .manager-col li a span{
   position: inherit !important;
 }
+
+.navbar-nav label{
+  border-bottom: 1px solid #9ba4b0;
+  width: 100%;
+  padding-bottom: 5px;
+  margin-top: 10px;
+}
+.nav-item {
+  cursor: pointer;
+}
+.navbar-nav .nav-item .nav-link {
+  line-height: 20px !important;
+  padding: 0 0 0 10px !important;
+  font-weight: 500 !important;
+  font-size: 12px !important;
+}
+.nav-link.active{
+  background-color: #c5e8ff;
+  color: #49a2d7;
+}
+.navbar-nav .nav-item .nav-link:hover {
+  color: #4daae0!important;
+}
+.sub-menu .nav-link{
+  margin-left: 20px;
+}

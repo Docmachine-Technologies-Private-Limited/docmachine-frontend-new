@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DocumentService } from 'src/app/service/document.service';
+import { UserService } from 'src/app/service/user.service';
 import { WindowInformationService } from 'src/app/service/window-information.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../confirm-dialog-box/confirm-dialog-box.component';
 
@@ -12,13 +13,20 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../confirm-dia
 export class ApprovalPanelComponent implements OnInit {
   DATA_CREATE:any=[];
   APPROVED_DATA:any=[];
-  constructor(public wininfo: WindowInformationService,public documentService: DocumentService,public dialog: MatDialog) { }
+  USER_DETAILS:any=[];
+
+  constructor(public wininfo: WindowInformationService,public documentService: DocumentService,
+    public dialog: MatDialog,public userserivce: UserService) { }
   ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content_top_common')
-    this.documentService.getApprovedStatus().subscribe((status) => {
-      this.DATA_CREATE=status;
-        console.log(status,'statusstatusstatusstatusstatus');
-    })
+    this.wininfo.set_controller_of_width(270,'.content_top_common');
+    this.userserivce.getUserDetail().then((status) => {
+      this.USER_DETAILS=status['result'];
+      console.log(this.USER_DETAILS,this.USER_DETAILS?.sideMenu,'USER_DETAILS');
+      this.documentService.getApprovedStatus(this.USER_DETAILS?.sideMenu).subscribe((status) => {
+        this.DATA_CREATE=status;
+          console.log(status,'statusstatusstatusstatusstatus');
+      })
+    });
   }
 
   Approved(data:any){
