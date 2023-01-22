@@ -10,7 +10,6 @@ import { AuthGuard } from "./authguard.service";
   providedIn: 'root'
 })
 export class InterceptorService implements HttpInterceptor {
-
   constructor(public documentService: DocumentService,private router: Router,
     public authservice: AuthenticateService,
     public authGuard: AuthGuard) { }

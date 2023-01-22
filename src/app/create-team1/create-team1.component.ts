@@ -341,8 +341,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
           console.log(data['data']._id)
           this.item = data
           this.toastr.success('Company details uploaded successfully!');
-          this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
-
+          this.router.navigate(['/home/dashboardTask'])
         },
         error => {
           this.toastr.error('something wrong, please check the details!');
