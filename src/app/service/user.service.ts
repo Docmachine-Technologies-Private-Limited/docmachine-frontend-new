@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AppConfig } from '../../app/app.config';
 import { BehaviorSubject } from 'rxjs';
+import { Router } from "@angular/router";
 
 @Injectable({ providedIn: "root" })
 export class UserService {
@@ -12,7 +13,7 @@ export class UserService {
   userData;
   public loginData = new BehaviorSubject({});
   public userDataListener$ = this.loginData.asObservable();
-  constructor(private http: HttpClient, public appconfig: AppConfig) {
+   constructor(private http: HttpClient, public appconfig: AppConfig,public router:Router) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base)
   }
@@ -608,7 +609,18 @@ export class UserService {
       .get(`${this.api_base}/user/profile`, httpOptions)
       .toPromise();
   }
-
+  getUser_Profile() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return new Promise((resolve, reject)=>{
+      this.http.get(`${this.api_base}/user/profile`, httpOptions).subscribe((res:any)=>{
+        resolve(res?.result)
+      })
+    });
+  }
   getUserDetailById(id:any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -617,5 +629,7 @@ export class UserService {
     };
     return this.http.post(`${this.api_base}/user/getprofilebyId`,{email:id}, httpOptions).toPromise();
   }
-
+ Url_Change_Authorization(name_url:any){
+  this.router.navigate([name_url]);
+ }
 }
