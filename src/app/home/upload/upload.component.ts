@@ -214,6 +214,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
   //     name:['',Validators.required]
   //   });
   // }
+
+  PI_PO_NUMBER_LIST:any=[];
+
   get f() {
     return this.loginForm.controls;
   }
@@ -382,7 +385,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.wininfo.set_controller_of_width(230,'.content_top_common')
     // this.wininfo.set_width_grid(700,'.iframecontroller')
     console.log('zxysomthing');
@@ -791,10 +794,19 @@ export class UploadComponent implements OnInit, AfterViewInit {
       (err) => console.log('Error', err)
     );
     console.log('DOCUMENT TYPE', this.documentType);
-    this.pipoDataService.getPipoList(this.documentType1).then((data) => {
+  await this.pipoDataService.getPipoList(this.documentType1).then((data) => {
       console.log(data,'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
         console.log(data,'data2222..................')
+        for (let index = 0; index < data.length; index++) {
+          if (data[index]?.buyerName!='' || data[index].pi_poNo!='' ) {
+            this.PI_PO_NUMBER_LIST.push({
+              pi_po_buyerName:'PI-'+data[index]?.buyerName+'-'+data[index].pi_poNo,
+              id:[data[index].pi_poNo,data[index]?.buyerName]
+            })
+          }
+        }
+        console.log(this.PI_PO_NUMBER_LIST,'PI_PO_NUMBER_LIST')
         this.pipolist = data;
       });
     });;
@@ -1130,8 +1142,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     e.form.value.buyerName = this.mainBene;
     e.form.value.pipo = this.pipoArr;
     console.log('buyername for BL', e.form.value.buyerName);
-
-    // e.form.value._id = this.res._id
+    e.form.value._id = this.res._id
     console.log(e.form.value);
     // this.formData = new ShippingBill(e.form.value)
     // console.log(this.formData
@@ -2631,35 +2642,38 @@ export class UploadComponent implements OnInit, AfterViewInit {
     }
   }
 
-  clickPipo(pitype, pipo, type) {
+  clickPipo(PI_PO_LIST) {
+    var last_length=PI_PO_LIST.length-1;
+    var LAST_VALUE:any=PI_PO_LIST[last_length]?.value;
+    console.log(PI_PO_LIST[last_length]?.value,'clickPipoclickPipoclickPipo')
     console.log('line 2359', this.pipoSelect);
     this.pipoSelect = true;
     console.log('line 2361', this.pipoSelect);
 
-    this.mainBene = type;
-    let x = pitype + '-' + pipo.pi_poNo + '-' + type;
-    let j = this.arrayData.indexOf(x);
+    this.mainBene = this.FILTER_VALUE(this.pipolist,LAST_VALUE?._id)[0];
+    let x = LAST_VALUE?.pi_po_buyerName;
+    let j = this.arrayData.indexOf(LAST_VALUE?.pi_po_buyerName);
     if (j == -1) {
       this.arrayData.push(x);
-      this.pipoArr.push(pipo._id);
+      this.pipoArr.push(LAST_VALUE?._id);
     } else {
       console.log('x');
     }
-    // this.CommercialNumber[pipo._id]=[]
-
-    console.log(this.arrayData);
+    console.log(this.arrayData,this.mainBene,'mainBenemainBene');
     console.log('Array List', this.pipoArr);
 
-    this.documentService.getCommercialByFiletype(this.documentType1,pipo._id).subscribe(
+    this.documentService.getCommercialByFiletype(this.documentType1,LAST_VALUE?._id).subscribe(
       (res: any) => {
         console.log('getCommercialImport', res);
             this.commerciallist = res.data;
-            this.MULITPLE_DROP_DOWN[pipo._id]=res.data;
+            this.MULITPLE_DROP_DOWN[LAST_VALUE?._id]=res.data;
       },
       (err) => console.log(err)
     );
   }
-
+FILTER_VALUE(array:any,value:any){
+  return array.filter((item:any)=>item?._id==value);
+}
   commerciallistselected:any=[];
   changedCommercial(pipo:any){
   this.documentService.getCommercialByFiletype(this.documentType1,pipo).subscribe((res: any) => {

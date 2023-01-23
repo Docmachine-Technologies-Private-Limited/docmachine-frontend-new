@@ -9,6 +9,8 @@ export class PipoDataService {
   public pipolistSubsciber = new BehaviorSubject([]);
   public pipolistModelSubsciber = new BehaviorSubject([]);
   public pipoSingleSubsciber = new BehaviorSubject(new PipoDisplayListViewItem({}));
+  public PI_PO_NUMBER_LIST:any=[];
+
   constructor(public documentService: DocumentService) {
 
   }
@@ -36,9 +38,21 @@ export class PipoDataService {
         (res: any) => {
           console.log(res,'resssss.................')
           let temppipo = new PipoDisplayListView(res.data, type);
-          console.log( temppipo,'temppipo')
           this.pipolistModelSubsciber.next(temppipo.pipoModelList);
           this.pipolistSubsciber.next(temppipo.pipolist);
+          console.log(temppipo,'temppipo')
+          this.pipolistModelSubsciber.subscribe((pipo_lits:any)=>{
+          var data:any=pipo_lits;
+              for (let index = 0; index < data.length; index++) {
+                if (data[index]?.buyerName!='' || data[index].pi_poNo!='' ) {
+                  this.PI_PO_NUMBER_LIST.push({
+                    pi_po_buyerName:'PI-'+data[index]?.buyerName+'-'+data[index].pi_poNo,
+                    id:[data[index].pi_poNo,data[index]?.buyerName],
+                    _id:data[index]?._id
+                  })
+                }
+              }
+          })
           resolve(temppipo);
         },
         (err) => reject(err)

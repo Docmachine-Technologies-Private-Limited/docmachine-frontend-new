@@ -336,9 +336,18 @@
 
 
           <div *ngIf='docu == "sb" && file == "export"' style="margin-bottom: -15px;">
-            <div style="display: flex; align-items: center;">
+            <div style="display: flex;flex-direction: column;" class="col-7">
               <label style="flex-direction:row; font-size: 16px; color: #303030; ">Select PI/PO*</label>
-              <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;">
+               <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.length!=0" [items]="this.pipoDataService.PI_PO_NUMBER_LIST"
+                  bindLabel="pi_po_buyerName"
+                  [multiple]="true"
+                  groupBy="selectedAllGroup"
+                  [selectableGroup]="true"
+                  placeholder="Select PI/PO"
+                  bindValue="testFunctionID"
+                  ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+              </ng-select>
+              <!-- <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;">
                 <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
                 <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                   <i id="up3" style="display: none" class="fas fa-angle-up"></i>
@@ -348,10 +357,11 @@
                     <a style="min-width: 100%">
                       PI-{{ pipo.pi_poNo }}-{{ pipo.buyerName }}</a>
                   </div>
-                  <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
+                  <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p>
                 </div>
-              </div>
-            </div> <br>
+              </div> -->
+            </div>
+            <br>
 
             <!-- <div *ngIf="documentType1 == 'export' && documentType === 'debitNote'">
               <input class="pinput" name="ttDate" type="text" placeholder="Debit Note">
@@ -359,15 +369,12 @@
           </div> -->
 
           </div>
-          <div *ngIf='docu == "sb" || docu == "boe"' style="margin-left: 185px;">
-
+          <!-- <div *ngIf='docu == "sb" || docu == "boe"' style="margin-left: 185px;">
             <p *ngFor='let data of arrayData; let i = index' class="arrayData">
               {{data}} <i style="float: right; margin-top: 5px; margin-bottom: 5px; margin-left: 10px;"
                 (click)='removePipo(i)' class="fas fa-times"></i>
             </p>
-
-          </div>
-
+          </div> -->
           <div *ngIf='docu == "pipo" && file =="import"'>
             <div style="display: flex; align-items: center; margin-left: 23px;">
               <label

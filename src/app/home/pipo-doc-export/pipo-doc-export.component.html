@@ -653,7 +653,7 @@
                                     <div style="margin: 13px 0px 10px 30px; display: flex;">
                                         <div *ngFor="let pay of payTerm;">
                                             <!-- Advance payment -->
-                                            <div *ngIf='pay.type == "Advance Payment" && !pipoData.advanceOutward'>
+                                            <div *ngIf='pay.type == "Advance Payment" && !pipoData?.advanceOutward'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)=openDoc(pay.type)>Inward Remittance Disposal
@@ -661,49 +661,49 @@
 
                                             </div>
 
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && !pipoData.sb'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && !pipoData?.sb'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)='openUploadWithType("sb")'>shipping Bill
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && !pipoData.swiftCopy'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && pipoData?.sb && !pipoData?.swiftCopy'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('swiftCopy')">SWift Copy
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && !pipoData.irAdvice'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && !pipoData?.irAdvice'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('irAdvice')">IR Advice
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && !pipoData.billUnder'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && !pipoData?.billUnder'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="uploadCollectionBill()">Bill Under Collection
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && !pipoData.blcopyref'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.billUnder && !pipoData?.blcopyref'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('blCopyref')">BL copy Refno
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && pipoData.blcopyref && !pipoData.EBRC'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.billUnder && pipoData?.blcopyref && !pipoData?.EBRC'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('EBRC')">EBRC
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref && !pipoData.airwayBlcopy '>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.EBRC && pipoData?.billUnder && pipoData?.blcopyref && !pipoData?.airwayBlcopy '>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('blCopy')">Airway/Blcopy
@@ -711,7 +711,7 @@
 
                                             </div>
 
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref && pipoData.airwayBlcopy && !pipoData.tryPartyAgreement'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.EBRC && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.airwayBlcopy && !pipoData?.tryPartyAgreement'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)='openUploadWithType("tryPartyAgreement")'>Tri-Party Agreement
@@ -719,21 +719,21 @@
 
                                             </div>
 
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref && pipoData.airwayBlcopy && pipoData.tryPartyAgreement && !pipoData.commercial'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.EBRC && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.airwayBlcopy && pipoData?.tryPartyAgreement && !pipoData?.commercial'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('commercial')">Commercial
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref && pipoData.airwayBlcopy && pipoData.tryPartyAgreement && pipoData.blCopy && pipoData.commercial && !pipoData.destruction'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.EBRC && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.airwayBlcopy && pipoData?.tryPartyAgreement && pipoData?.blCopy && pipoData?.commercial && !pipoData?.destruction'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('destruction')">Destruction
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref && pipoData.airwayBlcopy && pipoData.tryPartyAgreement && pipoData.blCopy && pipoData.commercial && pipoData.destruction && !pipoData.billOfExchange'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.EBRC && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.airwayBlcopy && pipoData?.tryPartyAgreement && pipoData?.blCopy && pipoData?.commercial && pipoData?.destruction && !pipoData?.billOfExchange'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('billOfExchange')">billOfExchange
@@ -741,7 +741,7 @@
 
                                             </div>
 
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref && pipoData.airwayBlcopy && pipoData.tryPartyAgreement && pipoData.blCopy && pipoData.commercial && pipoData.destruction && pipoData.billOfExchange && !pipoData.packingList'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.EBRC && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.airwayBlcopy && pipoData?.tryPartyAgreement && pipoData?.blCopy && pipoData?.commercial && pipoData?.destruction && pipoData?.billOfExchange && !pipoData?.packingList'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('packingList')">Packing List Documents
@@ -749,7 +749,7 @@
 
                                             </div>
 
-                                            <div *ngIf='pay.type == "Advance Payment" && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref && pipoData.airwayBlcopy && pipoData.tryPartyAgreement && pipoData.commercial && pipoData.destruction && pipoData.billOfExchange && pipoData.packingList'>
+                                            <div *ngIf='pay.type == "Advance Payment" && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.EBRC && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.airwayBlcopy && pipoData?.tryPartyAgreement && pipoData?.commercial && pipoData?.destruction && pipoData?.billOfExchange && pipoData?.packingList'>
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px">
                           All Done
@@ -757,14 +757,14 @@
 
                                             </div>
                                             <!-- Letter of credit -->
-                                            <div *ngIf='pay.type == "Letter of Credit" && !pipoData.lcCopy '>
+                                            <div *ngIf='pay.type == "Letter of Credit" && !pipoData?.lcCopy '>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('lcCopy')">Letter of Credit
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && !pipoData.advanceOutward'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && !pipoData?.advanceOutward'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="uploadInward()">Inward Remittance Disposal
@@ -772,51 +772,51 @@
 
                                             </div>
 
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && !pipoData.sb '>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && pipoData?.advanceOutward && !pipoData?.sb '>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)='openUploadWithType("sb")'>Shipping Bill
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && !pipoData.swiftCopy'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && pipoData?.advanceOutward && pipoData?.sb && !pipoData?.swiftCopy'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('swiftCopy')">SWift Copy
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && !pipoData.irAdvice'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && !pipoData?.irAdvice'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('irAdvice')">IR Advice
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && !pipoData.billUnder'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && !pipoData?.billUnder'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="uploadCollectionBill()">Bill Under Collection
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && !pipoData.blcopyref'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.billUnder && !pipoData?.blcopyref'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('blCopyref')">BL copy Refno
                         </button>
 
                                             </div>
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && pipoData.blcopyref && !pipoData.EBRC'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.billUnder && pipoData?.blcopyref && !pipoData?.EBRC'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('EBRC')">EBRC
                         </button>
 
                                             </div>
-                                            <!-- && !pipoData.billExchange -->
+                                            <!-- && !pipoData?.billExchange -->
 
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && pipoData.blcopyref && pipoData.EBRC && !pipoData.airwayBlcopy'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.EBRC && !pipoData?.airwayBlcopy'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('blCopy')">Airway/BlCopy
@@ -824,7 +824,7 @@
 
                                             </div>
 
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && pipoData.blcopyref && pipoData.EBRC && pipoData.airwayBlcopy && !pipoData.tryPartyAgreement'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.EBRC && pipoData?.airwayBlcopy && !pipoData?.tryPartyAgreement'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('tryPartyAgreement')">Tri-Party
@@ -832,7 +832,7 @@
 
                                             </div>
 
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && pipoData.blcopyref && pipoData.EBRC && pipoData.airwayBlcopy && pipoData.tryPartyAgreement && !pipoData.commercial'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.EBRC && pipoData?.airwayBlcopy && pipoData?.tryPartyAgreement && !pipoData?.commercial'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('commercial')">Commercial
@@ -840,7 +840,7 @@
 
                                             </div>
 
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && pipoData.blcopyref && pipoData.EBRC && pipoData.airwayBlcopy && pipoData.tryPartyAgreement && pipoData.commercial && !pipoData.destruction'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.EBRC && pipoData?.airwayBlcopy && pipoData?.tryPartyAgreement && pipoData?.commercial && !pipoData?.destruction'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('destruction')">Destruction
@@ -848,7 +848,7 @@
 
                                             </div>
 
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.billUnder && pipoData.blcopyref && pipoData.EBRC && pipoData.airwayBlcopy && pipoData.tryPartyAgreement && pipoData.commercial && pipoData.destruction && !pipoData.billOfExchange'>
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.EBRC && pipoData?.airwayBlcopy && pipoData?.tryPartyAgreement && pipoData?.commercial && pipoData?.destruction && !pipoData?.billOfExchange'>
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px" (click)="openUploadWithType('billOfExchange')">Bill Of Exchange
@@ -856,8 +856,8 @@
 
                                             </div>
 
-                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData.lcCopy && pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref && pipoData.airwayBlcopy && pipoData.tryPartyAgreement && pipoData.commercial && pipoData.destruction && pipoData.billOfExchange && pipoData.packingList'>
-                                                <!-- && pipoData.billExchange -->
+                                            <div *ngIf='pay.type == "Letter of Credit" && pipoData?.lcCopy && pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.EBRC && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.airwayBlcopy && pipoData?.tryPartyAgreement && pipoData?.commercial && pipoData?.destruction && pipoData?.billOfExchange && pipoData?.packingList'>
+                                                <!-- && pipoData?.billExchange -->
 
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px">
@@ -936,7 +936,7 @@
                                     <p style="color: RGB(50, 62, 74);font-weight: 400; font-size: 16px; margin-left: 51px;margin-bottom: 15px; margin-top: 6px;">
                                         Activity</p>
 
-                                    <div *ngIf='!(pipoData && pipoData.doc1)' style="display: flex;">
+                                    <div *ngIf='!(pipoData && pipoData?.doc1)' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-circle" style="color: #636363;font-size: 24px; color: #dfd9df;"></i>
                                         </div>
@@ -952,7 +952,7 @@
                                         </div>
                                     </div>
 
-                                    <div *ngIf='(pipoData && pipoData.doc1)' style="display: flex;">
+                                    <div *ngIf='(pipoData && pipoData?.doc1)' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left:52px">
                                             <i class="fas fa-check-circle" style="font-size: 24px;  color: #49A2D7;;"></i>
                                         </div>
@@ -961,7 +961,7 @@
                                                 Uploaded Purchase Order</p>
                                             <div>
                                                 <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                    Submitted on {{pipoData.purchasedate}}</p>
+                                                    Submitted on {{pipoData?.purchasedate}}</p>
                                             </div>
 
                                         </div>
@@ -999,7 +999,7 @@
                                                 Uploaded Proforma Invoice</p>
                                             <div class="date_">
                                                 <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px;margin-bottom: 0px;">
-                                                    Submitted on {{pipoData.date}}</p>
+                                                    Submitted on {{pipoData?.date}}</p>
                                             </div>
 
                                         </div>
@@ -1020,7 +1020,7 @@
                                                 Inward Remittance Disposal Transaction uploaded</p>
                                             <div>
                                                 <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                    Submitted on {{pipoData.advanceOutwardDate}}</p>
+                                                    Submitted on {{pipoData?.advanceOutwardDate}}</p>
                                             </div>
 
                                         </div>
@@ -1030,12 +1030,12 @@
                                     </div>
 
 
-                                    <div class="date_" *ngFor="let data of pipoData.sbRef; let i = index">
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
-                                            <div *ngIf='pipoData.sb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
+                                    <div class="date_" *ngFor="let data of pipoData?.sbRef; let i = index">
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                            <div *ngIf='pipoData?.sb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.sb' style="display: flex;">
+                                            <div *ngIf='pipoData?.sb' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
@@ -1054,13 +1054,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="date_" *ngFor="let data of data.irRef; let i = index">
-                                            <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
-                                                <div *ngIf='pipoData.irAdvice' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
+                                        <div class="date_" *ngFor="let data of data?.irRef; let i = index">
+                                            <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                                <div *ngIf='pipoData?.irAdvice' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
                                                     &nbsp;
                                                 </div>
 
-                                                <div *ngIf='pipoData.irAdvice' style="display: flex;">
+                                                <div *ngIf='pipoData?.irAdvice' style="display: flex;">
                                                     <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                         <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                     </div>
@@ -1081,12 +1081,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="date_" *ngFor='let data of pipoData.swiftRef; let i = index'>
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
-                                            <div *ngIf='pipoData.swiftCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div class="date_" *ngFor='let data of pipoData?.swiftRef; let i = index'>
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                            <div *ngIf='pipoData?.swiftCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.swiftCopy' style="display: flex;">
+                                            <div *ngIf='pipoData?.swiftCopy' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                                 </div>
@@ -1106,10 +1106,10 @@
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.billUnder' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div *ngIf='pipoData?.billUnder' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
-                                    <div *ngIf='pipoData.billUnder' style="display: flex;">
+                                    <div *ngIf='pipoData?.billUnder' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
@@ -1119,7 +1119,7 @@
 
                                             <div>
                                                 <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                    Submitted on {{pipoData.billUnderDate}}</p>
+                                                    Submitted on {{pipoData?.billUnderDate}}</p>
                                             </div>
                                         </div>
                                         <div style="align-items: center; width: 14%;">
@@ -1128,10 +1128,10 @@
                                     </div>
 
 
-                                    <div *ngIf='pipoData.invoiceReduction' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div *ngIf='pipoData?.invoiceReduction' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
-                                    <div *ngIf='pipoData.invoiceReduction' style="display: flex;">
+                                    <div *ngIf='pipoData?.invoiceReduction' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
@@ -1140,7 +1140,7 @@
                                                 InvoiceReduction Uploaded</p>
                                             <div>
                                                 <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                    Submitted on {{pipoData.billUnderDate}}</p>
+                                                    Submitted on {{pipoData?.billUnderDate}}</p>
                                             </div>
 
                                         </div>
@@ -1148,12 +1148,12 @@
                                             <button class="button1" (click)='openModalWithComponent("invoiceReduction");'>View</button>
                                         </div>
                                     </div>
-                                    <div class="date_" *ngFor='let data of pipoData.blcopyRefs let i = index'>
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
-                                            <div *ngIf='pipoData.blcopyRefs' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div class="date_" *ngFor='let data of pipoData?.blcopyRefs let i = index'>
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                            <div *ngIf='pipoData?.blcopyRefs' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.blcopyRefs' style="display: flex;">
+                                            <div *ngIf='pipoData?.blcopyRefs' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                                 </div>
@@ -1173,12 +1173,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="date_" *ngFor='let data of pipoData.ebrcRef let i = index'>
-                                        <div *ngIf="data.pipo[0] == pipoData.pi_poNo">
-                                            <div *ngIf='pipoData.EBRC' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div class="date_" *ngFor='let data of pipoData?.ebrcRef let i = index'>
+                                        <div *ngIf="data.pipo[0] == pipoData?.pi_poNo">
+                                            <div *ngIf='pipoData?.EBRC' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.EBRC' style="display: flex;">
+                                            <div *ngIf='pipoData?.EBRC' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                                 </div>
@@ -1199,12 +1199,12 @@
                                         </div>
                                     </div>
 
-                                    <div class="date_" *ngFor='let data of pipoData.airwayBlCopyRef let i = index'>
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
-                                            <div *ngIf='pipoData.airwayBlcopy' style="border-left: 1px solid  RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div class="date_" *ngFor='let data of pipoData?.airwayBlCopyRef let i = index'>
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                            <div *ngIf='pipoData?.airwayBlcopy' style="border-left: 1px solid  RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.airwayBlcopy' style="display: flex;">
+                                            <div *ngIf='pipoData?.airwayBlcopy' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
@@ -1222,12 +1222,12 @@
                                         </div>
                                     </div>
 
-                                    <div class="date_" *ngFor='let data of pipoData.billOfExchangeRef; let i = index'>
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
-                                            <div *ngIf='pipoData.billOfExchange' style="border-left: 1px solid  RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div class="date_" *ngFor='let data of pipoData?.billOfExchangeRef; let i = index'>
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                            <div *ngIf='pipoData?.billOfExchange' style="border-left: 1px solid  RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.billOfExchange' style="display: flex;">
+                                            <div *ngIf='pipoData?.billOfExchange' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
@@ -1247,14 +1247,14 @@
                                     </div>
 
 
-                                    <div class="date_" *ngFor='let data of pipoData.tryPartyAgreementRef; let i = index'>
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
+                                    <div class="date_" *ngFor='let data of pipoData?.tryPartyAgreementRef; let i = index'>
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
 
 
-                                            <div *ngIf='pipoData.tryPartyAgreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                            <div *ngIf='pipoData?.tryPartyAgreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.tryPartyAgreement' style="display: flex;">
+                                            <div *ngIf='pipoData?.tryPartyAgreement' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
@@ -1274,10 +1274,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div *ngIf='pipoData.lcIssuance' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div *ngIf='pipoData?.lcIssuance' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
-                                    <div *ngIf='pipoData.lcIssuance' style="display: flex;">
+                                    <div *ngIf='pipoData?.lcIssuance' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;;"></i>
                                         </div>
@@ -1293,12 +1293,12 @@
                                         </div>
                                     </div>
 
-                                    <div class="date_" *ngFor='let data of pipoData.commercialRef let i = index'>
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
-                                            <div *ngIf='pipoData.commercial' style="border-left: 1px solid  RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div class="date_" *ngFor='let data of pipoData?.commercialRef let i = index'>
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                            <div *ngIf='pipoData?.commercial' style="border-left: 1px solid  RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.commercial' style="display: flex;">
+                                            <div *ngIf='pipoData?.commercial' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
@@ -1316,12 +1316,12 @@
                                         </div>
                                     </div>
 
-                                    <div class="date_" *ngFor='let data of pipoData.destructionRef; let i = index'>
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
-                                            <div *ngIf='pipoData.destruction' style="border-left: 1px solid  RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div class="date_" *ngFor='let data of pipoData?.destructionRef; let i = index'>
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                            <div *ngIf='pipoData?.destruction' style="border-left: 1px solid  RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.destruction' style="display: flex;">
+                                            <div *ngIf='pipoData?.destruction' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
@@ -1340,11 +1340,11 @@
                                     </div>
 
                                     <div class="date_" *ngFor='let data of item13 let i = index'>
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
-                                            <div *ngIf='pipoData.agreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                            <div *ngIf='pipoData?.agreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.agreement' style="display: flex;">
+                                            <div *ngIf='pipoData?.agreement' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7 ; font-size: 24px;"></i>
                                                 </div>
@@ -1362,12 +1362,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="date_" *ngFor="let data of pipoData.debitNoteRef; let i = index">
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
-                                            <div *ngIf='pipoData.debitNote' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div class="date_" *ngFor="let data of pipoData?.debitNoteRef; let i = index">
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                            <div *ngIf='pipoData?.debitNote' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.debitNote' style="display: flex;">
+                                            <div *ngIf='pipoData?.debitNote' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
@@ -1386,13 +1386,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="date_" *ngFor="let data of pipoData.creditNoteRef; let i = index">
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
+                                    <div class="date_" *ngFor="let data of pipoData?.creditNoteRef; let i = index">
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
 
-                                            <div *ngIf='pipoData.creditNote' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
+                                            <div *ngIf='pipoData?.creditNote' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.creditNote' style="display: flex;">
+                                            <div *ngIf='pipoData?.creditNote' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
@@ -1414,10 +1414,10 @@
                                     </div>
 
 
-                                    <div *ngIf='pipoData.hssAgreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div *ngIf='pipoData?.hssAgreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
-                                    <div *ngIf='pipoData.hssAgreement' style="display: flex;">
+                                    <div *ngIf='pipoData?.hssAgreement' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
@@ -1432,12 +1432,12 @@
                                             <button class="button1" (click)='viewClick("hssAgreement"); open(content)'>View</button>
                                         </div>
                                     </div>
-                                    <div class="date_" *ngFor='let data of pipoData.lcRef; let i = index'>
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
-                                            <div *ngIf='pipoData.lcCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div class="date_" *ngFor='let data of pipoData?.lcRef; let i = index'>
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                            <div *ngIf='pipoData?.lcCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.lcCopy' style="display: flex;">
+                                            <div *ngIf='pipoData?.lcCopy' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
@@ -1457,10 +1457,10 @@
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.directImport' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
+                                    <div *ngIf='pipoData?.directImport' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
                                         &nbsp;
                                     </div>
-                                    <div *ngIf='pipoData.directImport' style="display: flex;">
+                                    <div *ngIf='pipoData?.directImport' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
@@ -1477,10 +1477,10 @@
                                     </div>
 
 
-                                    <div *ngIf='pipoData.nonlcUsance' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div *ngIf='pipoData?.nonlcUsance' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
-                                    <div *ngIf='pipoData.nonlcUsance' style="display: flex;">
+                                    <div *ngIf='pipoData?.nonlcUsance' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
@@ -1495,10 +1495,10 @@
                                             <button class="button1" (click)='viewClick("nonlcUsance"); open(content)'>View</button>
                                         </div>
                                     </div>
-                                    <div *ngIf='pipoData.nonlcSight' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div *ngIf='pipoData?.nonlcSight' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
-                                    <div *ngIf='pipoData.nonlcSight' style="display: flex;">
+                                    <div *ngIf='pipoData?.nonlcSight' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
@@ -1514,10 +1514,10 @@
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.lcSight' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div *ngIf='pipoData?.lcSight' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
-                                    <div *ngIf='pipoData.lcSight' style="display: flex;">
+                                    <div *ngIf='pipoData?.lcSight' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
@@ -1533,10 +1533,10 @@
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.lcUsance' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div *ngIf='pipoData?.lcUsance' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
-                                    <div *ngIf='pipoData.lcUsance' style="display: flex;">
+                                    <div *ngIf='pipoData?.lcUsance' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
@@ -1551,11 +1551,11 @@
                                             <button class="button1" (click)='viewClick("lcUsance"); open(content)'>View</button>
                                         </div>
                                     </div>
-                                    <!-- <div *ngIf='pipoData.deliveryOrder'
+                                    <!-- <div *ngIf='pipoData?.deliveryOrder'
                   style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
                   &nbsp;
               </div>
-              <div *ngIf='pipoData.deliveryOrder' style="display: flex;">
+              <div *ngIf='pipoData?.deliveryOrder' style="display: flex;">
                   <div style="align-items: center; width: 4%; margin-left: 20px;">
                       <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
                   </div>
@@ -1575,10 +1575,10 @@
                   </div>
               </div> -->
 
-                                    <div *ngIf='pipoData.deliveryOrder' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div *ngIf='pipoData?.deliveryOrder' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
-                                    <div *ngIf='pipoData.deliveryOrder' style="display: flex;">
+                                    <div *ngIf='pipoData?.deliveryOrder' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                         </div>
@@ -1593,13 +1593,13 @@
                                             <button class="button1" (click)='viewClick("deliveryOrder"); open(content)'>View</button>
                                         </div>
                                     </div>
-                                    <div class="date_" *ngFor="let data of pipoData.insuranceRef; let i = index">
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
+                                    <div class="date_" *ngFor="let data of pipoData?.insuranceRef; let i = index">
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
 
-                                            <div *ngIf='pipoData.insuranceCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                            <div *ngIf='pipoData?.insuranceCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.insuranceCopy' style="display: flex;">
+                                            <div *ngIf='pipoData?.insuranceCopy' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                                 </div>
@@ -1621,13 +1621,13 @@
                                     </div>
 
 
-                                    <div class="date_" *ngFor='let data of pipoData.opinionReportRef let i = index'>
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
+                                    <div class="date_" *ngFor='let data of pipoData?.opinionReportRef let i = index'>
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
 
-                                            <div *ngIf='pipoData.opinionReport' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                            <div *ngIf='pipoData?.opinionReport' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.opinionReport' style="display: flex;">
+                                            <div *ngIf='pipoData?.opinionReport' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                                 </div>
@@ -1647,12 +1647,12 @@
                                         </div>
                                     </div>
 
-                                    <div class="date_" *ngFor='let data of pipoData.packingListRef let i = index'>
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData.pi_poNo">
-                                            <div *ngIf='pipoData.packingList' style="border-left: 1px solid  RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div class="date_" *ngFor='let data of pipoData?.packingListRef let i = index'>
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                            <div *ngIf='pipoData?.packingList' style="border-left: 1px solid  RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData.packingList' style="display: flex;">
+                                            <div *ngIf='pipoData?.packingList' style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
@@ -1670,10 +1670,10 @@
                                         </div>
                                     </div>
 
-                                    <div *ngIf='pipoData.caCb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                    <div *ngIf='pipoData?.caCb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
-                                    <div *ngIf='pipoData.caCb' style="display: flex;">
+                                    <div *ngIf='pipoData?.caCb' style="display: flex;">
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
@@ -1688,11 +1688,11 @@
                                             <button class="button1" (click)='viewClick("caCb"); open(content)'>View</button>
                                         </div>
                                     </div>
-                                    <div *ngIf='pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref && pipoData.airwayBlcopy && pipoData.tryPartyAgreement && pipoData.commercial && pipoData.destruction && pipoData.billOfExchange && pipoData.packingList'
+                                    <div *ngIf='pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.EBRC && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.airwayBlcopy && pipoData?.tryPartyAgreement && pipoData?.commercial && pipoData?.destruction && pipoData?.billOfExchange && pipoData?.packingList'
                                         style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
-                                    <div style="display: flex;" *ngIf='pipoData.advanceOutward && pipoData.sb && pipoData.swiftCopy && pipoData.irAdvice && pipoData.EBRC && pipoData.billUnder && pipoData.blcopyref && pipoData.airwayBlcopy && pipoData.tryPartyAgreement && pipoData.commercial && pipoData.destruction && pipoData.billOfExchange && pipoData.packingList'>
+                                    <div style="display: flex;" *ngIf='pipoData?.advanceOutward && pipoData?.sb && pipoData?.swiftCopy && pipoData?.irAdvice && pipoData?.EBRC && pipoData?.billUnder && pipoData?.blcopyref && pipoData?.airwayBlcopy && pipoData?.tryPartyAgreement && pipoData?.commercial && pipoData?.destruction && pipoData?.billOfExchange && pipoData?.packingList'>
                                         <div style="align-items: center; width: 4%; margin-left: 52px;">
                                             <i class="fas fa-check-circle" style="color: #49A2D7;font-size: 24px;"></i>
                                         </div>
@@ -1705,155 +1705,155 @@
                                 </div>
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12);">
                                     <div style="margin-left: 20px;">
-                                        <div *ngIf='!pipoData.advanceOutward || !pipoData.sb || !pipoData.swiftCopy || !pipoData.irAdvice || !pipoData.EBRC || !pipoData.billUnder || !pipoData.blcopyref || !pipoData.airwayBlcopy || !pipoData.tryPartyAgreement || !pipoData.commercial || !pipoData.destruction || !pipoData.billOfExchange || !pipoData.packingList'>
+                                        <div *ngIf='!pipoData?.advanceOutward || !pipoData?.sb || !pipoData?.swiftCopy || !pipoData?.irAdvice || !pipoData?.EBRC || !pipoData?.billUnder || !pipoData?.blcopyref || !pipoData?.airwayBlcopy || !pipoData?.tryPartyAgreement || !pipoData?.commercial || !pipoData?.destruction || !pipoData?.billOfExchange || !pipoData?.packingList'>
                                             <p style="color: RGB(50, 62, 74);font-weight: 400; font-size: 16px; margin-bottom: 15px; margin-left: 33px ; margin-top: 15px;">
                                                 Below are the steps still to complete</p>
                                         </div>
-                                        <div *ngIf='!pipoData.advanceOutward'>
+                                        <div *ngIf='!pipoData?.advanceOutward'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; font-weight: 400;  margin-left: 5px;">
                                               Create Inward Remittance disposal</span>
                                         </div>
-                                        <div *ngIf='!pipoData.advanceOutward' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.advanceOutward' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
-                                        <div *ngIf='!pipoData.swiftCopy'>
+                                        <div *ngIf='!pipoData?.swiftCopy'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; font-weight: 400;  margin-left: 5px;">
                                               Upload SwiftCopy</span>
                                         </div>
-                                        <div *ngIf='!pipoData.swiftCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.swiftCopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
-                                        <div *ngIf='!pipoData.sb'>
+                                        <div *ngIf='!pipoData?.sb'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                               Upload shipping Bill</span>
                                         </div>
-                                        <div *ngIf='!pipoData.sb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.sb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
-                                        <div *ngIf='!pipoData.irAdvice'>
+                                        <div *ngIf='!pipoData?.irAdvice'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                               Upload Bank credit Advice Copy and provide reference number</span>
                                         </div>
-                                        <div *ngIf='!pipoData.irAdvice' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.irAdvice' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
-                                        <div *ngIf='!pipoData.billUnder'>
+                                        <div *ngIf='!pipoData?.billUnder'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                               Create Bill Lodgement</span>
                                         </div>
-                                        <div *ngIf='!pipoData.billUnder' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.billUnder' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
-                                        <div *ngIf='!pipoData.blcopyref '>
+                                        <div *ngIf='!pipoData?.blcopyref '>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                               Bill lodgement reference number and advice copy</span>
                                         </div>
-                                        <div *ngIf='!pipoData.blcopyref' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.blcopyref' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
-                                        <div *ngIf='!pipoData.EBRC'>
+                                        <div *ngIf='!pipoData?.EBRC'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color:RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                               EBRC- Export Realisation certificate.</span>
                                         </div>
-                                        <div *ngIf='!pipoData.EBRC' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.EBRC' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
-                                        <div *ngIf='!pipoData.airwayBlcopy'>
+                                        <div *ngIf='!pipoData?.airwayBlcopy'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color:RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                             Upload Airway / BLCopy Document</span>
                                         </div>
-                                        <div *ngIf='!pipoData.airwayBlcopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.airwayBlcopy' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
-                                        <div *ngIf='!pipoData.tryPartyAgreement'>
+                                        <div *ngIf='!pipoData?.tryPartyAgreement'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color:RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                       Upload Tri-PartyAgreement Document</span>
                                         </div>
-                                        <div *ngIf='!pipoData.tryPartyAgreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.tryPartyAgreement' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
-                                        <div *ngIf='!pipoData.commercial'>
+                                        <div *ngIf='!pipoData?.commercial'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color:RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                         Upload Commercial Invoice</span>
                                         </div>
-                                        <div *ngIf='!pipoData.commercial' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.commercial' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
-                                        <div *ngIf='!pipoData.destruction'>
+                                        <div *ngIf='!pipoData?.destruction'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color:RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                       Upload Destruction Document</span>
                                         </div>
-                                        <div *ngIf='!pipoData.destruction' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.destruction' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
-                                        <div *ngIf='!pipoData.billOfExchange'>
+                                        <div *ngIf='!pipoData?.billOfExchange'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color:RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                           Upload Bill Of Exchange</span>
                                         </div>
-                                        <div *ngIf='!pipoData.billOfExchange' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.billOfExchange' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
-                                        <!-- <div *ngIf='!pipoData.destruction'>
+                                        <!-- <div *ngIf='!pipoData?.destruction'>
                       <span><i class="fas fa-circle" style="font-size: 24px; color:RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                       <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                   Upload Destruction Certificate</span>
                   </div>
-                  <div *ngIf='!pipoData.destruction' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                  <div *ngIf='!pipoData?.destruction' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                       &nbsp;
                   </div> -->
 
-                                        <div *ngIf='!pipoData.packingList'>
+                                        <div *ngIf='!pipoData?.packingList'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color:RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px;">
                                     Upload Packing List Document</span>
                                         </div>
-                                        <div *ngIf='!pipoData.packingList' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
+                                        <div *ngIf='!pipoData?.packingList' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 44px; height: 30px;">
                                             &nbsp;
                                         </div>
 
-                                        <!-- <div *ngIf='!pipoData.advanceOutward && !pipoData.sb && !pipoData.swiftCopy && !pipoData.irAdvice && !pipoData.EBRC && !pipoData.billUnder && !pipoData.blcopyref'>
+                                        <!-- <div *ngIf='!pipoData?.advanceOutward && !pipoData?.sb && !pipoData?.swiftCopy && !pipoData?.irAdvice && !pipoData?.EBRC && !pipoData?.billUnder && !pipoData?.blcopyref'>
 
                       <span><i class="fas fa-circle" style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                       <span  style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px; margin-top: -1px;">
                           All done</span>
                   </div> -->
 
-                                        <div *ngIf='!pipoData.advanceOutward || !pipoData.sb || !pipoData.swiftCopy || !pipoData.irAdvice || !pipoData.EBRC || !pipoData.billUnder || !pipoData.blcopyref || !pipoData.airwayBlcopy || !pipoData.commercial || !pipoData.destruction || !pipoData.billOfExchange || !pipoData.packingList'>
+                                        <div *ngIf='!pipoData?.advanceOutward || !pipoData?.sb || !pipoData?.swiftCopy || !pipoData?.irAdvice || !pipoData?.EBRC || !pipoData?.billUnder || !pipoData?.blcopyref || !pipoData?.airwayBlcopy || !pipoData?.commercial || !pipoData?.destruction || !pipoData?.billOfExchange || !pipoData?.packingList'>
                                             <span><i class="fas fa-circle"
                                style="font-size: 24px; color: RGBA(0, 0, 0, 0.27);margin-left: 34px;"></i></span>
                                             <span style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px;  margin-left: 5px; margin-top: -1px;">
@@ -1866,31 +1866,31 @@
                                         <p style="color: RGB(50, 62, 74); font-weight: 400;font-size: 16px; margin-bottom: 15px; margin-top: 25px; ">
                                             PI/ PO Master details</p>
                                         <td style="width: 206px; height: 76px; margin-bottom: 4% ;margin-right:15px" class="full-input border1">
-                                            <label for="invoiceNumber" style="text-align: left;">Amount</label><span style="text-align: left;" class="form-control smalll-input" type="text">{{pipoData.amount}}</span>
+                                            <label for="invoiceNumber" style="text-align: left;">Amount</label><span style="text-align: left;" class="form-control smalll-input" type="text">{{pipoData?.amount}}</span>
                                         </td>
                                         <td style="width: 206px; height: 76px; margin-bottom: 4%;margin-right:15px" class="full-input border2">
-                                            <label for="invoiceAmount" style="text-align: left;">Currency</label><span style="text-align: left;" class="form-control smalll-input" type="text">{{pipoData.currency}}</span>
+                                            <label for="invoiceAmount" style="text-align: left;">Currency</label><span style="text-align: left;" class="form-control smalll-input" type="text">{{pipoData?.currency}}</span>
                                         </td>
 
                                         <td style="width: 206px; height: 76px; margin-bottom: 4% ;margin-right:15px" class="full-input border1">
-                                            <label for="settledAmount" style="text-align: left;">Incoterm</label><span style="text-align: left;" class="form-control smalll-input" type="text">{{pipoData.incoterm}}</span>
+                                            <label for="settledAmount" style="text-align: left;">Incoterm</label><span style="text-align: left;" class="form-control smalll-input" type="text">{{pipoData?.incoterm}}</span>
                                         </td>
 
                                         <td style="width: 206px; height: 76px; margin-bottom: 4% ;margin-right:15px" class="full-input border1">
-                                            <label for="invoiceNumber" style="text-align: left;">PC Ref. No</label><span style="text-align: left;" class="form-control smalll-input" type="text">{{pipoData.pcRefNo}}</span>
+                                            <label for="invoiceNumber" style="text-align: left;">PC Ref. No</label><span style="text-align: left;" class="form-control smalll-input" type="text">{{pipoData?.pcRefNo}}</span>
                                         </td>
                                         <td style="width: 206px; height: 76px; margin-bottom: 4% ;margin-right:15px" class="full-input border2">
-                                            <label for="invoiceAmount" style="text-align: left;">Last Day Of Shipment</label><span style="text-align: left;" class="form-control smalll-input" type="text">{{pipoData.lastDayShipment}}</span>
+                                            <label for="invoiceAmount" style="text-align: left;">Last Day Of Shipment</label><span style="text-align: left;" class="form-control smalll-input" type="text">{{pipoData?.lastDayShipment}}</span>
                                         </td>
                                         <br>
                                         <td style="width: 206px; height: 76px; margin-bottom: 4% ;margin-right:15px" class="full-input border2">
-                                            <label for="invoiceAmount" style="text-align: left;">Location</label><span style="text-align: left;" class="form-control smalll-input" type="text">{{pipoData.location}}</span>
+                                            <label for="invoiceAmount" style="text-align: left;">Location</label><span style="text-align: left;" class="form-control smalll-input" type="text">{{pipoData?.location}}</span>
                                         </td>
                                         <br>
 
                                         <p style="color: RGB(48, 48, 48); font-size: 20px; margin-bottom: 0px;">
                                             Commodity</p>
-                                        <p *ngFor='let value of  pipoData.commodity' class="arrayData"> {{value}}</p>
+                                        <p *ngFor='let value of  pipoData?.commodity' class="arrayData"> {{value}}</p>
 
                                         <p style="margin-top: 10px;color: #303030; font-size: 20px; font-family: EuropaNuova-Regular, sans-serif !important;  margin-left: 4px;">
                                             Payment Term*</p>

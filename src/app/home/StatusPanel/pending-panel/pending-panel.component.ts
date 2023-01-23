@@ -25,11 +25,13 @@ export class PendingPanelComponent implements OnInit {
 
       this.documentService.getPendingStatus(this.USER_DETAILS?.sideMenu).subscribe((status) => {
         this.DATA_CREATE=status;
+        if(this.USER_DETAILS?.RoleCheckbox!='Checker'){
           this.documentService.getVerifyStatus(this.USER_DETAILS?.sideMenu).subscribe((status2:any) => {
-              for (let index = 0; index < status2.length; index++) {
-                this.DATA_CREATE.push(status2[index]);
-              }
-          })
+            for (let index = 0; index < status2.length; index++) {
+              this.DATA_CREATE.push(status2[index]);
+            }
+         })
+        }
           console.log(this.DATA_CREATE,'statusstatusstatusstatusstatus');
       })
     })
