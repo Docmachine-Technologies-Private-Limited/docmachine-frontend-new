@@ -9,8 +9,10 @@ export class PipoDataService {
   public pipolistSubsciber = new BehaviorSubject([]);
   public pipolistModelSubsciber = new BehaviorSubject([]);
   public pipoSingleSubsciber = new BehaviorSubject(new PipoDisplayListViewItem({}));
-  public PI_PO_NUMBER_LIST:any=[];
-
+  public PI_PO_NUMBER_LIST:any={
+    PI_PO_BUYER_NAME:[],
+    PI_PO_BENNE_NAME:[]
+  };
   constructor(public documentService: DocumentService) {
 
   }
@@ -34,6 +36,8 @@ export class PipoDataService {
 
   getPipoList = (type) => {
     return new Promise((resolve, reject) => {
+      this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME']=[];
+      this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME']=[];
       this.documentService.getPipo().subscribe(
         (res: any) => {
           console.log(res,'resssss.................')
@@ -43,11 +47,16 @@ export class PipoDataService {
           console.log(temppipo,'temppipo')
           this.pipolistModelSubsciber.subscribe((pipo_lits:any)=>{
           var data:any=pipo_lits;
-              for (let index = 0; index < data.length; index++) {
+          for (let index = 0; index < data.length; index++) {
                 if (data[index]?.buyerName!='' || data[index].pi_poNo!='' ) {
-                  this.PI_PO_NUMBER_LIST.push({
-                    pi_po_buyerName:'PI-'+data[index]?.buyerName+'-'+data[index].pi_poNo,
+                  this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'].push({
+                    pi_po_buyerName:'PI-'+data[index]?.pi_poNo+'-'+data[index].buyerName,
                     id:[data[index].pi_poNo,data[index]?.buyerName],
+                    _id:data[index]?._id
+                  })
+                  this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'].push({
+                    pi_po_buyerName:'PI-'+data[index]?.pi_poNo+'-'+data[index].benneName,
+                    id:[data[index].pi_poNo,data[index]?.benneName],
                     _id:data[index]?._id
                   })
                 }

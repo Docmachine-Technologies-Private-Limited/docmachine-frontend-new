@@ -216,7 +216,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   // }
 
   PI_PO_NUMBER_LIST:any=[];
-
+  USER_DATA:any=[];
   get f() {
     return this.loginForm.controls;
   }
@@ -240,11 +240,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
   ) {
 
     this.userData = this.userService.userData?.result
-    if(this.userData)
-    {
+    if(this.userData){
       this.documentType1 = this.userData?.sideMenu
     }
-
     this.sharedData.currentReturnUrl.subscribe(
       (message) => (this.retururl = message)
     );
@@ -390,6 +388,10 @@ export class UploadComponent implements OnInit, AfterViewInit {
     // this.wininfo.set_width_grid(700,'.iframecontroller')
     console.log('zxysomthing');
 
+    this.userService.getUserDetail().then((data:any) => {
+      this.USER_DATA = data?.result
+      console.log("this.USER_DATA", this.USER_DATA)
+    });
     this.jsondata1 = data1['default'];
     this.dataJson1 = data1['default'];
     this.jsondata2 = data1['default'];
