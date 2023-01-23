@@ -8,6 +8,9 @@ import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
 import {UserService} from './../../service/user.service';
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
 @Component({
   selector: 'app-commercial',
@@ -22,6 +25,7 @@ export class CommercialComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
+  USER_DATA:any=[];
   filtervisible: boolean = false;
   
   filter() {
@@ -41,17 +45,22 @@ onclick() {
     private router: Router,
     private userService: UserService,
     private sharedData: SharedDataService,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public dialog: MatDialog,
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
+    this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA)
+    this.item=[];
     this.documentService.getCommercial().subscribe(
       (res: any) => {
-        console.log('HEre Responsesssssssss', res);
+        console.log('Res', res);
         for (let value of res.data) {
-          if (value['file'] == 'import') {
+          if (value['file'] == 'export') {
 
             this.item.push(value);
           }
@@ -131,6 +140,43 @@ onclick() {
   toEdit(index) {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Commercial Invoice Is In Edit Mode');
+  }
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+        this.documentService.deletePipoByid(id).subscribe((res) => {
+            console.log(res)
+            if (res) {
+              this.ngOnInit()
+            }
+        }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'commercials',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item[index],
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
   }
 
 }

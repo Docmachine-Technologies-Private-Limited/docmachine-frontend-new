@@ -88,7 +88,8 @@
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="text-dark" *ngFor="let data of item1; let i = index">
+                                    <tbody class="text-dark" *ngFor="let data of item1; let i = index" [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                    this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')" >
                                         <tr class="table-row">
 
                                             <td>{{ data.date }}</td>
@@ -126,7 +127,9 @@
                                                 <a (click)=" openInsuranceDoc(content); viewID(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                 <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                                 <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                                                <a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
+                                               (click)="handleDelete(data._id,i)"><a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                </button>
                                             </td>
                                         </tr>
 
