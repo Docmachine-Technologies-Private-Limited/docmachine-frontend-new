@@ -347,6 +347,10 @@
                   </div>
                   <!-- <div *ngIf='documentType != "blCopy" && file !="import" ' class="customDropdown" style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
                    <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
+
+                  <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
+                  <div *ngIf='documentType != "blCopy" || file !="import" ' class="customDropdown" style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                    <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                       <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                     </span>
