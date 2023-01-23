@@ -622,7 +622,14 @@ export class DocumentService {
       httpOptions
     );
   }
-
+  deleteById(data:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/delete_by_id/`,data,httpOptions);
+  }
 
   getSBDetailsByPIPO(id) {
     this.loadFromLocalStorage();

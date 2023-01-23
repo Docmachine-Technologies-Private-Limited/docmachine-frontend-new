@@ -105,15 +105,12 @@
                                             </tr>
                                         </thead>
                                         <tbody class="text-dark">
-                                            <tr class="table-row" *ngFor="let data of item6; let i=index">
 
-
-                                                <!-- (click)="
-                                      getInvoices(data, i) && getTransactions(data.pi_poNo) -->
-                                                <!-- <th class="rect">
-                                                <img src="./assets/Rectangle-13.png" />
-                                            </th> -->
-                                                <td>
+                                            <tr class="table-row" *ngFor="let data of item6; let i=index"
+                                             [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='') ||
+                                            this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
+                                            {{data['deleteflag']}}
+                                            <td>
                                                     <div *ngIf="!optionsVisibility[i]">
                                                         {{ data.date }}
                                                     </div>

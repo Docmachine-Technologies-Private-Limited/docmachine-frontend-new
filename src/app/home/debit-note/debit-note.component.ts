@@ -72,10 +72,10 @@ export class DebitNoteComponent implements OnInit {
         },
         (err) => console.log(err)
       );
-  
+
     }
- 
-  
+
+
 
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
@@ -113,7 +113,7 @@ export class DebitNoteComponent implements OnInit {
       a['doc']
     );
   }
-  
+
 
   filter() {
     // this.getPipoData()
@@ -161,12 +161,12 @@ export class DebitNoteComponent implements OnInit {
 
   deleteByRoleType(RoleCheckbox:string,id:any,index:any){
     if (RoleCheckbox==''){
-        this.documentService.deletePipoByid(id).subscribe((res) => {
-            console.log(res)
-            if (res) {
-              this.ngOnInit()
-            }
-        }, (err) => console.log(err))
+      this.documentService.deleteById({id:id,tableName:'debitnotes'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
     } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
       var approval_data:any={
         id:id,

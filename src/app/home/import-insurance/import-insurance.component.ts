@@ -28,7 +28,7 @@ export class ImportInsuranceComponent implements OnInit {
   public closeResult: string;
   USER_DATA:any=[];
   filtervisible: boolean = false;
-  
+
   filter() {
   // this.getPipoData()
   this.filtervisible = !this.filtervisible
@@ -69,7 +69,7 @@ onclick() {
         },
         (err) => console.log(err)
       );
-  
+
     }
 
 
@@ -157,12 +157,12 @@ onclick() {
 
   deleteByRoleType(RoleCheckbox:string,id:any,index:any){
     if (RoleCheckbox==''){
-        this.documentService.deletePipoByid(id).subscribe((res) => {
-            console.log(res)
-            if (res) {
-              this.ngOnInit()
-            }
-        }, (err) => console.log(err))
+      this.documentService.deleteById({id:id,tableName:'insurances'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
     } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
       var approval_data:any={
         id:id,

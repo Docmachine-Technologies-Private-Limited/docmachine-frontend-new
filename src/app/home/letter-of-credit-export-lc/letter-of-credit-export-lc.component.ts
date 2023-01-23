@@ -29,7 +29,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
   public id: any;
   USER_DATA:any=[];
   filtervisible: boolean = false
-  
+
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -153,12 +153,12 @@ export class LetterOfCreditExportLCComponent implements OnInit {
 
   deleteByRoleType(RoleCheckbox:string,id:any,index:any){
     if (RoleCheckbox==''){
-        this.documentService.deletePipoByid(id).subscribe((res) => {
-            console.log(res)
-            if (res) {
-              this.ngOnInit()
-            }
-        }, (err) => console.log(err))
+      this.documentService.deleteById({id:id,tableName:'letterlcs'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
     } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
       var approval_data:any={
         id:id,
