@@ -34,10 +34,15 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="exampleInputPassword1"> Choose the type of document</label>
-                    <select class="form-control p-3" aria-label="Default select example" [(ngModel)]="documentType1" name="" id="" class="form-control p-3">
+                    <select class="form-control p-3" *ngIf="this.USER_DATA?.Subscription=='both'" aria-label="Default select example" [(ngModel)]="documentType1" name="" id="" class="form-control p-3">
                       <option value="">Document Type</option>
                       <option value="import">Import</option>
                       <option value="export">Export</option>
+                    </select>
+                    <select class="form-control p-3" *ngIf="this.USER_DATA?.Subscription!='both'" aria-label="Default select example" [(ngModel)]="documentType1" name="" id="" class="form-control p-3">
+                      <option value="">Document Type</option>
+                      <option *ngIf="this.USER_DATA?.Subscription=='Import'" value="import">Import</option>
+                      <option *ngIf="this.USER_DATA?.Subscription=='Export'" value="export">Export</option>
                     </select>
                   </div>
                 </div>
@@ -125,7 +130,7 @@
                   <div class="dropdown-content" style="min-width:200px; margin-right:-26px;">
                     <a style="min-width:100%;" *ngFor="let bene of benneDetail"
                       (click)='clickBene(bene.beneName)'>{{bene.beneName}}</a>
-                    <a style="border: 1px solid #EAEDF3;min-width:100%;" (click)="open(content)">Add New Beneficiary</a>
+                    <!-- <a style="border: 1px solid #EAEDF3;min-width:100%;" (click)="open(content)">Add New Beneficiary</a> -->
                   </div>
                 </div>
               </div>
@@ -205,7 +210,16 @@
                 <div *ngIf='documentType == "boe"'>
                   <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
                     PI/PO*</label>
-                  <div class="customDropdown" style="width: 300px; flex-direction:row; ">
+                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.length!=0" [items]="this.pipoDataService.PI_PO_NUMBER_LIST"
+                    bindLabel="pi_po_buyerName"
+                    [multiple]="true"
+                    groupBy="selectedAllGroup"
+                    [selectableGroup]="true"
+                    placeholder="Select PI/PO"
+                    bindValue="testFunctionID"
+                    ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                </ng-select>
+                  <!-- <div class="customDropdown" style="width: 300px; flex-direction:row; ">
                     <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                       <i id="up3" style="display: none" class="fas fa-angle-up"></i>
@@ -215,16 +229,26 @@
                         <a *ngIf="pipo.file == 'import'">{{ pipo.pi_poNo }}-{{ pipo.benneName }}</a>
                       </div>
 
-                      <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
+                       <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
 
                 <div *ngIf='documentType == "sb"'>
                   <div style="display: flex; align-items: center;">
                     <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
                       PI/PO*</label>
-                    <div class="customDropdown" style="width: 300px; flex-direction:row; ">
+                      <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
+                       [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
+                      bindLabel="pi_po_buyerName"
+                      [multiple]="true"
+                      groupBy="selectedAllGroup"
+                      [selectableGroup]="true"
+                      placeholder="Select PI/PO"
+                      bindValue="testFunctionID"
+                      ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                  </ng-select>
+                    <!-- <div class="customDropdown" style="width: 300px; flex-direction:row; ">
                       <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                       <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                         <i id="up3" style="display: none" class="fas fa-angle-up"></i>
@@ -234,22 +258,42 @@
                           <a style="min-width: 100%" *ngIf="bene.file == 'export'">
                             PI-{{ bene.pi_poNo }}-{{ bene.buyerName }}</a>
                         </div>
-                        <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
+                        <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
                 <div *ngIf='documentType != "sb" && documentType != "boe" && documentType != "PO" && documentType != "PI"' class="col-5">
-                  <!-- <div class="col-10">
-                  <label class="form-label">Select PI/PO*</label>
-                  <select class="form-control p-3" aria-label="Default select example">
+                   <div class="col-10">
+                   <!-- <label class="form-label">Select PI/PO*</label> -->
+                  <!-- <select class="form-control p-3" aria-label="Default select example">
                     <option selected>Open this select menu</option>
                     <div class="col" *ngFor="let pipo of pipolist">
                       <option  *ngIf="pipo.file == 'export'" [value]="pipo.buyerName"  (click)="clickPipo('PI', pipo, pipo.buyerName)">{{ pipo.pi_poNo }}-{{ pipo.buyerName }}</option>
                       <option *ngIf="pipo.file == 'import'" [value]="pipo.benneName"  (click)="clickPipo('PI', pipo, pipo.benneName)">{{ pipo.pi_poNo }}-{{ pipo.benneName }}</option>
                     </div>
-                  </select>
-                  </div> -->
+                  </select> -->
+                  <!-- <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.length!=0" [items]="this.pipoDataService.PI_PO_NUMBER_LIST"
+                  bindLabel="pi_po_buyerName"
+                  [multiple]="true"
+                  groupBy="selectedAllGroup"
+                  [selectableGroup]="true"
+                  placeholder="Select PI/PO"
+                  bindValue="testFunctionID"
+                  ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                </ng-select> -->
+                  </div>
+                  <div  *ngIf='documentType== "" && file =="import" ' class="row p-3">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Buyer's name</label>
+                      <select class="form-control p-3" aria-label="Default select example" [(ngModel)]="bene" name="" id="" class="form-control p-3"  (change)=changepipo($event.target.value)>
+                        <option value="">Select Beneficiary</option>
+                        <option value="{{bene?.beneName}}" *ngFor="let bene of benneDetail
+                        ">{{ bene?.beneName }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
 
                   <div  *ngIf='documentType == "blCopy" && file =="import" ' class="row p-3">
                     <div class="form-group">
@@ -262,6 +306,47 @@
                       </select>
                     </div>
                   </div>
+                  <div *ngIf='documentType == "blCopy" && file !="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                    <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
+                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+                     [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                      bindLabel="pi_po_buyerName"
+                      [multiple]="true"
+                      groupBy="selectedAllGroup"
+                      [selectableGroup]="true"
+                      placeholder="Select PI/PO"
+                      bindValue="testFunctionID"
+                      ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                    </ng-select>
+                  </div>
+                  <div *ngIf='documentType != "blCopy" && file !="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                    <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
+                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+                     [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                      bindLabel="pi_po_buyerName"
+                      [multiple]="true"
+                      groupBy="selectedAllGroup"
+                      [selectableGroup]="true"
+                      placeholder="Select PI/PO"
+                      bindValue="testFunctionID"
+                      ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                    </ng-select>
+                  </div>
+                  <div *ngIf='documentType == "blCopy" && file =="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                    <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
+                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+                    [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                      bindLabel="pi_po_buyerName"
+                      [multiple]="true"
+                      groupBy="selectedAllGroup"
+                      [selectableGroup]="true"
+                      placeholder="Select PI/PO"
+                      bindValue="testFunctionID"
+                      ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                    </ng-select>
+                  </div>
+                  <!-- <div *ngIf='documentType != "blCopy" && file !="import" ' class="customDropdown" style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                   <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
 
                   <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
                   <div *ngIf='documentType != "blCopy" || file !="import" ' class="customDropdown" style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
@@ -279,10 +364,11 @@
                           {{ pipo.pi_poNo }}-{{ pipo.benneName }}</a>
                       </div>
                     </div>
-                  </div>
 
-                  <div *ngIf='documentType == "blCopy" && file =="import" ' class="customDropdown" style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
-                    <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
+                  </div> -->
+
+                  <!-- <div *ngIf='documentType == "blCopy" && file =="import" ' class="customDropdown" style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                     <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                     <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                       <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                     </span>
@@ -296,19 +382,26 @@
                           {{ pipo.pi_poNo }}----{{ pipo.benneName }}</a>
                       </div>
                     </div>
-                  </div>
-
+                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.length!=0" [items]="this.pipoDataService.PI_PO_NUMBER_LIST"
+                    bindLabel="pi_po_buyerName"
+                    [multiple]="true"
+                    groupBy="selectedAllGroup"
+                    [selectableGroup]="true"
+                    placeholder="Select PI/PO"
+                    bindValue="testFunctionID"
+                    ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                </ng-select>
+                  </div> -->
                 </div>
               </div>
-
-              <div style="margin-left: 35px;" *ngIf='documentType != "PI" && documentType != "PO"'>
+              <!-- <div style="margin-left: 35px;" *ngIf='documentType != "PI" && documentType != "PO"'>
 
                 <button *ngFor='let data of arrayData; let i = index' class="arrayData">
                   {{data}} <i style="float: right; margin-top: 5px; margin-bottom: 5px; margin-left: 10px;;"
                     (click)='removePipo(i)' class="fas fa-times"></i>
                 </button>
 
-              </div>
+              </div> -->
             </div>
 
 
@@ -317,7 +410,7 @@
             <div style="display: flex; align-items: center; margin-left: 23px;">
               <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 50px;">Select
                 PI/PO*</label>
-              <div class="customDropdown" style="width: 300px; flex-direction:row;">
+              <!-- <div class="customDropdown" style="width: 300px; flex-direction:row;">
                 <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
                 <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                   <i id="up3" style="display: none" class="fas fa-angle-up"></i>
@@ -327,18 +420,37 @@
                     <a *ngIf="pipo.file == 'import'">
                       PI-{{ pipo.pi_poNo }}-{{ pipo.benneName }}</a>
                   </div>
-                  <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
                 </div>
-              </div>
+              </div> -->
+              <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+              [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+              bindLabel="pi_po_buyerName"
+              [multiple]="true"
+              groupBy="selectedAllGroup"
+              [selectableGroup]="true"
+              placeholder="Select PI/PO"
+              bindValue="testFunctionID"
+              ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+          </ng-select>
             </div>
 
           </div>
 
 
-          <div *ngIf='docu == "sb" && file == "export"' style="margin-bottom: -15px;">
-            <div style="display: flex; align-items: center;">
+          <div *ngIf='docu == "sb" && file == "export"'>
+            <div style="display: flex;flex-direction: column;" class="col-7">
               <label style="flex-direction:row; font-size: 16px; color: #303030; ">Select PI/PO*</label>
-              <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;">
+               <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
+                [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
+                  bindLabel="pi_po_buyerName"
+                  [multiple]="true"
+                  groupBy="selectedAllGroup"
+                  [selectableGroup]="true"
+                  placeholder="Select PI/PO"
+                  bindValue="testFunctionID"
+                  ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+              </ng-select>
+              <!-- <div class="customDropdown" style="width: 300px; border: 1px solid #C6CBD4; flex-direction:row;">
                 <span style="color: #323e4a !important; min-width: 150px;">{{pipoValue}}</span>
                 <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
                   <i id="up3" style="display: none" class="fas fa-angle-up"></i>
@@ -348,10 +460,11 @@
                     <a style="min-width: 100%">
                       PI-{{ pipo.pi_poNo }}-{{ pipo.buyerName }}</a>
                   </div>
-                  <!-- <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p> -->
+                  <p style="border: 1px solid #EAEDF3;" (click)="open(content)"><a>Add New Beneficiary</a></p>
                 </div>
-              </div>
-            </div> <br>
+              </div> -->
+            </div>
+            <br>
 
             <!-- <div *ngIf="documentType1 == 'export' && documentType === 'debitNote'">
               <input class="pinput" name="ttDate" type="text" placeholder="Debit Note">
@@ -359,15 +472,12 @@
           </div> -->
 
           </div>
-          <div *ngIf='docu == "sb" || docu == "boe"' style="margin-left: 185px;">
-
+          <!-- <div *ngIf='docu == "sb" || docu == "boe"' style="margin-left: 185px;">
             <p *ngFor='let data of arrayData; let i = index' class="arrayData">
               {{data}} <i style="float: right; margin-top: 5px; margin-bottom: 5px; margin-left: 10px;"
                 (click)='removePipo(i)' class="fas fa-times"></i>
             </p>
-
-          </div>
-
+          </div> -->
           <div *ngIf='docu == "pipo" && file =="import"'>
             <div style="display: flex; align-items: center; margin-left: 23px;">
               <label
@@ -381,13 +491,11 @@
                 <div class="dropdown-content" style="min-width:200px; ">
                   <a style="min-width:100%;" *ngFor="let bene of benneDetail"
                     (click)='clickBene(bene.beneName)'>{{bene.beneName}}</a>
-                  <a style="min-width:100%; border-top: 2px solid #e5e7ec;" (click)="open(content)">Add New
-                    Beneficiary</a>
+                  <!-- <a style="min-width:100%; border-top: 2px solid #e5e7ec;" (click)="open(content)">Add New
+                    Beneficiary</a> -->
                 </div>
               </div>
             </div>
-
-
 
             <div style="margin-top: 40px; ">
               <span style="color: #303030; font-size: 20px; margin-left: -6px;">Choose the type of document *</span>

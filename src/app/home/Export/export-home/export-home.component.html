@@ -936,7 +936,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div style="display: flex; width:100%; margin-left: 240px; margin-top: 20px; margin-bottom:20px; ">
-                                                                      <div *ngIf="this.GetDownloadStatus?.status=='Approved'">
+                                                                      <div *ngIf="this.GetDownloadStatus?.status=='Approved' || this.USER_DATA?.RoleCheckbox=='' || this.USER_DATA?.RoleCheckbox==null">
                                                                         <button type="submit" class="submitBTN" (click)="mergeAllPDFs('download')" (click)="modal.dismiss('Cross click')">Download PDF</button>
                                                                         <button type="submit" class="submitBTN" (click)="mergeAllPDFs('sendMail')" (click)="modal.dismiss('Cross click')">Send Mail</button>                                                                      </div>
                                                                       <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
