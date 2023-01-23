@@ -80,6 +80,9 @@ import { SubBillLodgementComponent } from "./Export/sub-bill-lodgement/sub-bill-
 import { ApprovalPanelComponent } from "./StatusPanel/approval-panel/approval-panel.component";
 import { PendingPanelComponent } from './StatusPanel/pending-panel/pending-panel.component';
 import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.component';
+import { AdminGuard } from "../service/RolePermission/Admin/admin.guard";
+import { SuperGuard } from "../service/RolePermission/SuperAdmin/super.guard";
+import { MemberGuard } from "../service/RolePermission/Member/member.guard";
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -125,155 +128,179 @@ import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.co
         component: SidenavComponent,
         children: [
           { path: "dashboardTask", loadChildren: () => import('./dashboard-task/dashboard-task.module').then(mod => mod.DashboardTaskModule) },
-          { path: "upload", loadChildren: () => import('./upload/upload.module').then(mod => mod.UploadModule) },
-          { path: "manage-customer", loadChildren: () => import('./manage-customer/manage-customer.module').then(mod => mod.ManageCustomerModule) },
-          { path: "createBene", loadChildren: () => import('./create-bene/create-bene.module').then(mod => mod.CreateBeneModule) },
-          { path: "pipo-doc", loadChildren: () => import('./pipo-documents/pipo-documents.module').then(mod => mod.PipoDocumentsModule) },
-          { path: "boe", loadChildren: () => import('./boe/boe.module').then(mod => mod.BoeModule) },
-          { path: "importCredit", loadChildren: () => import('./imports-credit-note/imports-credit-note.module').then(mod => mod.ImportsCreditNoteModule) },
-          { path: "importDebit", loadChildren: () => import('./import-debit-note/import-debit-note.module').then(mod => mod.ImportDebitNoteModule) },
-          { path: "importInsurance", loadChildren: () => import('./import-insurance/imports-insurance.module').then(mod => mod.ImportsInsuranceModule) },
+          { path: "upload", loadChildren: () => import('./upload/upload.module').then(mod => mod.UploadModule), canActivate:[MemberGuard] },
+          { path: "manage-customer",
+           loadChildren: () => import('./manage-customer/manage-customer.module').then(mod => mod.ManageCustomerModule),
+           canActivate:[AdminGuard]
+          },
+          { path: "createBene", loadChildren: () => import('./create-bene/create-bene.module').then(mod => mod.CreateBeneModule) , canActivate:[MemberGuard]},
+          { path: "pipo-doc", loadChildren: () => import('./pipo-documents/pipo-documents.module').then(mod => mod.PipoDocumentsModule), canActivate:[MemberGuard] },
+          { path: "boe", loadChildren: () => import('./boe/boe.module').then(mod => mod.BoeModule), canActivate:[MemberGuard] },
+          { path: "importCredit", loadChildren: () => import('./imports-credit-note/imports-credit-note.module').then(mod => mod.ImportsCreditNoteModule), canActivate:[MemberGuard] },
+          { path: "importDebit", loadChildren: () => import('./import-debit-note/import-debit-note.module').then(mod => mod.ImportDebitNoteModule),canActivate:[MemberGuard] },
+          { path: "importInsurance", loadChildren: () => import('./import-insurance/imports-insurance.module').then(mod => mod.ImportsInsuranceModule),canActivate:[MemberGuard] },
           { path: "importTriParty", loadChildren: () => import('./import-tri-party/imports-tri-party.module').then(mod => mod.ImportsTriPartyModule) },
-          { path: "advance-outward-remittance", loadChildren: () => import('./advance-outward-remittance/advance-outward.remittance.module').then(mod => mod.AdvanceOutwardRemittanceModule) },
-          { path: "direct-import-payment", loadChildren: () => import('./direct-import-payment/direct-import-payment.module').then(mod => mod.DirectImportPaymentModule) },
-          { path: "a2cum-application-yesbank", loadChildren: () => import('./yesBank/a2cum-application-yes-bank/a2cum-application-yes-bank.module').then(mod => mod.A2cumApplicationYesBankModule) },
-          { path: "fbg-waiver", loadChildren: () => import('./yesBank/advance-fbg-wavier/fbg-wavier.module').then(mod => mod.FbgWavierModule) },
-          { path: "lc-isurance", loadChildren: () => import('./lc-isurence/lc-isurance.module').then(mod => mod.LcIsuranceModule) },
-          { path: "buyer-credit", loadChildren: () => import('./buyers-credit-request/buyers-credit-request-module').then(mod => mod.BuyersCreditRequestModule) },
-          { path: "bill-under-collection", loadChildren: () => import('./bill-under-collection/bill-under-collection.module').then(mod => mod.BillUnderCollectionModule) },
-          { path: "pipo-export", loadChildren: () => import('./pipo-doc-export/pipo-doc-export.module').then(mod => mod.PipoDocExportModule) },
-          { path: "packing-list", loadChildren: () => import('./other-documents/other-documents.module').then(mod => mod.OtherDocumentsModule) },
-          { path: "commercial", loadChildren: () => import('./commercial/commercial.module').then(mod => mod.CommercialModule) },
-          { path: "import-commercial", loadChildren: () => import('./import-commercial/import-commercial.module').then(mod => mod.ImportCommercialModule) },
-          { path: "destruction", loadChildren: () => import('./destruction/destruction.module').then(mod => mod.DestructionModule) },
-          { path: "bill-of-exchange", loadChildren: () => import('./bill-of-exchange/bill-of-exchange.module').then(mod => mod.BillOfExchangeModule) },
-          { path: "airway-bl-copy", loadChildren: () => import('./airway-blcopy/airway-blcopy.module').then(mod => mod.AirwayBlcopyModule) },
-          { path: "import-airway-bl-copy", loadChildren: () => import('./import-airway-blcopy/import-airway-blcopy.module').then(mod => mod.ImportAirwayBlcopyModule) },
-          { path: "inward-remittance-advice", loadChildren: () => import('./inward-remittance-advice/inward-remittance-advice.module').then(mod => mod.InwardRemittanceAdviceModule) },
-          { path: "outward-remittance-advice", loadChildren: () => import('./import-outward-remittance-sheet/outward-remittance-advice.module').then(mod => mod.OutwardRemittanceAdviceModule) },
-          { path: "opinion-report", loadChildren: () => import('./opinion-reports/opinion-reports.module').then(mod => mod.OpinionReportsModule) },
-          { path: "try-party", loadChildren: () => import('./try-party-agreements/try-party-agreements.module').then(mod => mod.TryPartyAgreementsModule) },
-          { path: "master-services", loadChildren: () => import('./master-service/master-service.module').then(mod => mod.MasterServiceModule) },
-          { path: "letterofcredit-lc", loadChildren: () => import('./letter-of-credit-export-lc/letter-of-credit-export-lc.module').then(mod => mod.LetterOfCreditExportLcModule) },
-          { path: "insurance-document", loadChildren: () => import('./insurance-document/insurance-document.module').then(mod => mod.InsuranceDocumentModule) },
-          { path: "debit-note", loadChildren: () => import('./debit-note/debit-note.module').then(mod => mod.DebitNoteModule) },
-          { path: "credit-note", loadChildren: () => import('./credit-note/credit-note.module').then(mod => mod.CreditNoteModule) },
-          { path: "view-document", loadChildren: () => import('./view-document/view-document.module').then(mod => mod.ViewDocumentModule) },
-          { path: "edpms-recon-table", loadChildren: () => import('./edpms-recon-table/edpms-recon-table.module').then(mod => mod.EdpmsReconTableModule) },
-          { path: "edpms-recon", loadChildren: () => import('./edpms-recon/edpms-recon.module').then(mod => mod.EdpmsReconModule) },
-          { path: "bill-lodgement", loadChildren: () => import('./Export/bill-lodgement/bill-lodgement.module').then(mod => mod.BillLodgementModule) },
-          { path: "packing-credit-request", loadChildren: () => import('./Export/packing-credit/packing-credit.module').then(mod => mod.PackingCreditModule) },
-          { path: "export-home", loadChildren: () => import('./Export/export-home/export-home.module').then(mod => mod.ExportHomeModule) },
-          { path: "account", loadChildren: () => import('./edit-company/edit-company.module').then(mod => mod.EditCompanyModule) },
-          { path: "completed-task", loadChildren: () => import('./completed-task/completed-task.module').then(mod => mod.CompletedTaskModule) },
-          { path: "tasks", loadChildren: () => import('./all-task/all-task.module').then(mod => mod.AllTaskModule) },
-          { path: "letter-of-credit", loadChildren: () => import('./yesBank/letter-of-credit/letter-of-credit.module').then(mod => mod.LetterOfCreditModule) },
+          { path: "advance-outward-remittance", loadChildren: () => import('./advance-outward-remittance/advance-outward.remittance.module').then(mod => mod.AdvanceOutwardRemittanceModule),canActivate:[MemberGuard] },
+          { path: "direct-import-payment", loadChildren: () => import('./direct-import-payment/direct-import-payment.module').then(mod => mod.DirectImportPaymentModule),canActivate:[MemberGuard] },
+          { path: "a2cum-application-yesbank", loadChildren: () => import('./yesBank/a2cum-application-yes-bank/a2cum-application-yes-bank.module').then(mod => mod.A2cumApplicationYesBankModule),canActivate:[MemberGuard] },
+          { path: "fbg-waiver", loadChildren: () => import('./yesBank/advance-fbg-wavier/fbg-wavier.module').then(mod => mod.FbgWavierModule),canActivate:[MemberGuard] },
+          { path: "lc-isurance", loadChildren: () => import('./lc-isurence/lc-isurance.module').then(mod => mod.LcIsuranceModule),canActivate:[MemberGuard] },
+          { path: "buyer-credit", loadChildren: () => import('./buyers-credit-request/buyers-credit-request-module').then(mod => mod.BuyersCreditRequestModule),canActivate:[MemberGuard] },
+          { path: "bill-under-collection", loadChildren: () => import('./bill-under-collection/bill-under-collection.module').then(mod => mod.BillUnderCollectionModule),canActivate:[MemberGuard] },
+          { path: "pipo-export", loadChildren: () => import('./pipo-doc-export/pipo-doc-export.module').then(mod => mod.PipoDocExportModule),canActivate:[MemberGuard] },
+          { path: "packing-list", loadChildren: () => import('./other-documents/other-documents.module').then(mod => mod.OtherDocumentsModule),canActivate:[MemberGuard] },
+          { path: "commercial", loadChildren: () => import('./commercial/commercial.module').then(mod => mod.CommercialModule),canActivate:[MemberGuard] },
+          { path: "import-commercial", loadChildren: () => import('./import-commercial/import-commercial.module').then(mod => mod.ImportCommercialModule),canActivate:[MemberGuard] },
+          { path: "destruction", loadChildren: () => import('./destruction/destruction.module').then(mod => mod.DestructionModule),canActivate:[MemberGuard] },
+          { path: "bill-of-exchange", loadChildren: () => import('./bill-of-exchange/bill-of-exchange.module').then(mod => mod.BillOfExchangeModule),canActivate:[MemberGuard] },
+          { path: "airway-bl-copy", loadChildren: () => import('./airway-blcopy/airway-blcopy.module').then(mod => mod.AirwayBlcopyModule),canActivate:[MemberGuard] },
+          { path: "import-airway-bl-copy", loadChildren: () => import('./import-airway-blcopy/import-airway-blcopy.module').then(mod => mod.ImportAirwayBlcopyModule),canActivate:[MemberGuard] },
+          { path: "inward-remittance-advice", loadChildren: () => import('./inward-remittance-advice/inward-remittance-advice.module').then(mod => mod.InwardRemittanceAdviceModule),canActivate:[MemberGuard] },
+          { path: "outward-remittance-advice", loadChildren: () => import('./import-outward-remittance-sheet/outward-remittance-advice.module').then(mod => mod.OutwardRemittanceAdviceModule),canActivate:[MemberGuard] },
+          { path: "opinion-report", loadChildren: () => import('./opinion-reports/opinion-reports.module').then(mod => mod.OpinionReportsModule),canActivate:[MemberGuard] },
+          { path: "try-party", loadChildren: () => import('./try-party-agreements/try-party-agreements.module').then(mod => mod.TryPartyAgreementsModule),canActivate:[MemberGuard] },
+          { path: "master-services", loadChildren: () => import('./master-service/master-service.module').then(mod => mod.MasterServiceModule),canActivate:[MemberGuard] },
+          { path: "letterofcredit-lc", loadChildren: () => import('./letter-of-credit-export-lc/letter-of-credit-export-lc.module').then(mod => mod.LetterOfCreditExportLcModule),canActivate:[MemberGuard] },
+          { path: "insurance-document", loadChildren: () => import('./insurance-document/insurance-document.module').then(mod => mod.InsuranceDocumentModule),canActivate:[MemberGuard] },
+          { path: "debit-note", loadChildren: () => import('./debit-note/debit-note.module').then(mod => mod.DebitNoteModule),canActivate:[MemberGuard] },
+          { path: "credit-note", loadChildren: () => import('./credit-note/credit-note.module').then(mod => mod.CreditNoteModule),canActivate:[MemberGuard] },
+          { path: "view-document", loadChildren: () => import('./view-document/view-document.module').then(mod => mod.ViewDocumentModule),canActivate:[MemberGuard] },
+          { path: "edpms-recon-table", loadChildren: () => import('./edpms-recon-table/edpms-recon-table.module').then(mod => mod.EdpmsReconTableModule),canActivate:[MemberGuard] },
+          { path: "edpms-recon", loadChildren: () => import('./edpms-recon/edpms-recon.module').then(mod => mod.EdpmsReconModule),canActivate:[MemberGuard] },
+          { path: "bill-lodgement", loadChildren: () => import('./Export/bill-lodgement/bill-lodgement.module').then(mod => mod.BillLodgementModule),canActivate:[MemberGuard] },
+          { path: "packing-credit-request", loadChildren: () => import('./Export/packing-credit/packing-credit.module').then(mod => mod.PackingCreditModule),canActivate:[MemberGuard] },
+          { path: "export-home", loadChildren: () => import('./Export/export-home/export-home.module').then(mod => mod.ExportHomeModule),canActivate:[MemberGuard] },
+          { path: "account", loadChildren: () => import('./edit-company/edit-company.module').then(mod => mod.EditCompanyModule),canActivate:[MemberGuard] },
+          { path: "completed-task", loadChildren: () => import('./completed-task/completed-task.module').then(mod => mod.CompletedTaskModule),canActivate:[MemberGuard] },
+          { path: "tasks", loadChildren: () => import('./all-task/all-task.module').then(mod => mod.AllTaskModule),canActivate:[MemberGuard] },
+          { path: "letter-of-credit", loadChildren: () => import('./yesBank/letter-of-credit/letter-of-credit.module').then(mod => mod.LetterOfCreditModule),canActivate:[MemberGuard] },
           { path: "Pdf-Upload",component:UploadDocComponent },
           {
             path: "Excel-Downloader",
             component: ExcelDownloaderCompComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "data-table",
             component: DatatableComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "Sub-bill-Lodgement",
             component: SubBillLodgementComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "createBene",
             component: CreateBeneComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "inwardRemittance",
             component: InwardRemittanceComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "pipo",
             component: PipoNewComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "view-pipo/:id",
             component: ViewPipoComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "add-pipo/:doc_type",
             component: AddPipoComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "edit-pipo/:doc_type/:id",
             component: EditPipoComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "againstAdvance",
             component: AgainstAdvanceComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "requestLetter",
             component: RequestLetterComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "letterOfCreditImport",
             component: LetterOfCreditImportComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "letterOfCreditImportAxis",
             component: LetterOfCreditImportAxisComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "a2cumApplication",
             component: A2cumAplicationComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "advance-remittance",
             component: AdvanceRemitanceComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "editBene/:id",
             component: EditBeneComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "editBuyer/:id",
             component: EditBuyerComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "upload-bank-intimation",
             component: UploadBankIntimationComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
 
           {
             path: "test",
             component: TestComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "manageUser",
             component: ManageUserComponent,
             pathMatch: "full",
+            canActivate:[AdminGuard]
           },
           {
             path: "requestLetter1",
             component: RequestComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
 
           // { path: "fbg-wavier", loadChildren: () => import('./yesBank/advance-fbg-wavier/fbg-wavier.module').then(mod => mod.FbgWavierModule) },
@@ -281,11 +308,13 @@ import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.co
             path: "advance-remittance-fbg",
             component: AdvanceRemitanceFbgComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "direct-import-axis",
             component: DirectImportAxisComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           // {
           //   path: "completedTask/:id",
@@ -296,6 +325,7 @@ import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.co
             path: "inwardRemittanceBoe",
             component: InwardRemittanceBoeComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           // {
           //   path: "paymentAcceptance",
@@ -306,33 +336,39 @@ import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.co
             path: "tradeRequestLetter",
             component: TradeRequestLetterComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
-          { path: "payment-acceptance", loadChildren: () => import('./yesBank/payment-acceptance-letter/payment-acceptance.module').then(mod => mod.PaymentAcceptanceModule) },
+          { path: "payment-acceptance", loadChildren: () => import('./yesBank/payment-acceptance-letter/payment-acceptance.module').then(mod => mod.PaymentAcceptanceModule),canActivate:[MemberGuard] },
           {
             path: "buyersCreditAxis",
             component: BuyersCreditAxisComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
 
           {
             path: "fbg-wavier-file/:id",
             component: FbgBuyerFileComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "outwardRemitance",
             component: OutwardRemComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "inwardRemmitance",
             component: InwardRemmitanceComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "caDocuments/:file",
             component: CaDocumentsComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           // {
           //   path: "tasks/:file",
@@ -343,21 +379,25 @@ import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.co
             path: "inwardRemmitancep0103",
             component: InwardRemmitancep0103Component,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "completedExport/:id",
             component: CompletedExportComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "BuyersLodge",
             component: BuyersLodgeComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "powerAdmin/:file",
             component: PowerAdminComponent,
             pathMatch: "full",
+            canActivate:[SuperGuard]
           },
           {
             path: "help",
@@ -373,17 +413,19 @@ import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.co
             path: "approvalpanel",
             component:ApprovalPanelComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },
           {
             path: "pendingpanel",
             component:PendingPanelComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           },{
             path: "rejectpanel",
             component:RejectPanelComponent,
             pathMatch: "full",
+            canActivate:[MemberGuard]
           }
-
         ],
       },
     ]),
