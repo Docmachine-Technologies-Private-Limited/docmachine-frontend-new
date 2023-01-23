@@ -71,10 +71,10 @@ export class CreditNoteComponent implements OnInit {
         },
         (err) => console.log(err)
       );
-  
+
     }
 
-  
+
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
       return x.pi_poNo;
@@ -171,12 +171,12 @@ export class CreditNoteComponent implements OnInit {
 
   deleteByRoleType(RoleCheckbox:string,id:any,index:any){
     if (RoleCheckbox==''){
-        this.documentService.deletePipoByid(id).subscribe((res) => {
-            console.log(res)
-            if (res) {
-              this.ngOnInit()
-            }
-        }, (err) => console.log(err))
+      this.documentService.deleteById({id:id,tableName:'creditnotes'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
     } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
       var approval_data:any={
         id:id,

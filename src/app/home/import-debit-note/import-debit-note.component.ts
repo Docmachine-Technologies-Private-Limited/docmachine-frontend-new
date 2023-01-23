@@ -29,7 +29,7 @@ export class ImportDebitNoteComponent implements OnInit {
   public item2: any;
   filtervisible: boolean = false;
   USER_DATA:any=[];
-  
+
   filter() {
   // this.getPipoData()
   this.filtervisible = !this.filtervisible
@@ -69,7 +69,7 @@ onclick() {
         },
         (err) => console.log(err)
       );
-  
+
     }
 
 
@@ -125,12 +125,12 @@ onclick() {
 
   deleteByRoleType(RoleCheckbox:string,id:any,index:any){
     if (RoleCheckbox==''){
-        this.documentService.deletePipoByid(id).subscribe((res) => {
-            console.log(res)
-            if (res) {
-              this.ngOnInit()
-            }
-        }, (err) => console.log(err))
+      this.documentService.deleteById({id:id,tableName:'debitnotes'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
     } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
       var approval_data:any={
         id:id,

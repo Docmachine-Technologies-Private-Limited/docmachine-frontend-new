@@ -29,7 +29,7 @@ export class MasterServiceComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
-  USER_DATA:any=[]; 
+  USER_DATA:any=[];
   filtervisible: boolean = false;
 
   constructor(
@@ -63,7 +63,7 @@ export class MasterServiceComponent implements OnInit {
         },
         (err) => console.log(err)
       );
-  
+
     }
 
   filter() {
@@ -153,12 +153,12 @@ export class MasterServiceComponent implements OnInit {
 
   deleteByRoleType(RoleCheckbox:string,id:any,index:any){
     if (RoleCheckbox==''){
-        this.documentService.deletePipoByid(id).subscribe((res) => {
-            console.log(res)
-            if (res) {
-              this.ngOnInit()
-            }
-        }, (err) => console.log(err))
+      this.documentService.deleteById({id:id,tableName:'masterservices'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
     } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
       var approval_data:any={
         id:id,
