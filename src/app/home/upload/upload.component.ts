@@ -2464,6 +2464,15 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
         args[1].data
       );
+
+      if(args[1].data.doc)
+      {
+        console.log('DOC URL', args[1].doc);
+
+        this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+          args[1].data.doc
+        );
+      }
       console.log('PIPO URL', this.piPoUrl);
       console.log(this.publicUrl);
       console.log(this.piPoUrl);

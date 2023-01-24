@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PipoNewComponent } from './pipo-new.component';
+import { PipoExportComponent } from './pipo-export.component';
 
-describe('PipoNewComponent', () => {
-  let component: PipoNewComponent;
-  let fixture: ComponentFixture<PipoNewComponent>;
+describe('PipoExportComponent', () => {
+  let component: PipoExportComponent;
+  let fixture: ComponentFixture<PipoExportComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PipoNewComponent ]
+      declarations: [ PipoExportComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PipoNewComponent);
+    fixture = TestBed.createComponent(PipoExportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

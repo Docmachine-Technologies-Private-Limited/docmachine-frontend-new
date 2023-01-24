@@ -15,7 +15,7 @@ export class DocumentService {
     callback:()=>{}
   };
   PDF_DOCUMENTS_DATA:any=[];
-
+  pipolist:any=[];
   constructor(public http: HttpClient, public appconfig: AppConfig) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base);
@@ -476,6 +476,16 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.get(`${this.api_base}/pipo/get`, httpOptions);
+  }
+
+  getPipoByType(type) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/pipo/getPipoByType?filetype=${type}`, httpOptions);
   }
 
   getPipoByCustomer(type,buyer) {
@@ -1813,3 +1823,6 @@ export class DocumentService {
 
     return this.http.patch(`${this.api_base}/user/updateUserById/${id}`, data,httpOptions ); }
 }
+
+
+
