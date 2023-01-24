@@ -94,23 +94,14 @@
                                         </tr>
                                     </thead>
                                     <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of item1; let i = index"  [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                        <tr class="table-row" *ngFor="let data of item; let i = index"  [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-
-                                            <!-- (click)="
-                                          getInvoices(data, i) && getTransactions(data.pi_poNo) -->
-                                            <!-- <th class="rect">
-                                                <img src="./assets/Rectangle-13.png" />
-                                            </th> -->
                                             <td>{{ data.date }}</td>
-
                                             <td class="sb-no"> {{ getPipoNumbers(data) }} </td>
-
                                             <td>
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.letterOfCreditNumber}}
                                                 </div>
-
                                                 <div *ngIf="optionsVisibility[i]">
                                                     <input class="tblInput form-control" name="letterOfCreditNumber" type="text" placeholder="Letter Of Credit Number" [(ngModel)]="data.letterOfCreditNumber">
                                                 </div>

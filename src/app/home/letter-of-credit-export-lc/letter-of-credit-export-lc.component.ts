@@ -54,7 +54,6 @@ export class LetterOfCreditExportLCComponent implements OnInit {
         console.log('Res', res);
         for (let value of res.data) {
           if (value['file'] == 'export') {
-
             this.item.push(value);
           }
         }

@@ -43,8 +43,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label *ngIf='documentType1 == "import" || documentType1 == "export"'>
-                      Now you selected {{documentType1}}, select Type of {{documentType1}} document in the following
-                      dropdown
+                      Now you selected {{documentType1}}, select Type of {{documentType1}} document
 
                     </label>
                     <select class="form-control p-3" aria-label="Default select example" *ngIf='documentType1 == "import"' [(ngModel)]="documentType" class="form-control p-3" name=""
@@ -289,16 +288,16 @@
                     </div>
                   </div>
 
-                  <div  *ngIf='documentType == "blCopy" && file =="import" ' class="row p-3">
-                    <div class="form-group">
+                  <div  *ngIf='documentType == "blCopy" && file =="import" ' class="row p-3" >
+                    <form class="form-group" #values="ngForm">
                       <label for="exampleInputEmail1">Buyer's name</label>
-                      <select class="form-control p-3" aria-label="Default select example" [(ngModel)]="bene" name="" id="" class="form-control p-3"  (change)=changepipo($event.target.value)>
+                      <select class="form-control p-3" aria-label="Default select example" [(ngModel)]="bene" name="buyerName" placeholder="Select Beneficiary" id="" class="form-control p-3"  (change)=changepipo($event.target.value)>
                         <option value="">Select Beneficiary</option>
                         <option value="{{bene?.beneName}}" *ngFor="let bene of benneDetail
                         ">{{ bene?.beneName }}
                         </option>
                       </select>
-                    </div>
+                    </form>
                   </div>
                   <div *ngIf='documentType == "blCopy" && file !="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
                     <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
@@ -328,8 +327,8 @@
                   </div>
                   <div *ngIf='documentType == "blCopy" && file =="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
                     <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
-                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
-                    [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
+                    [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
                       bindLabel="pi_po_buyerName"
                       [multiple]="true"
                       groupBy="selectedAllGroup"
@@ -339,6 +338,33 @@
                       ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
                     </ng-select>
                   </div>
+                  <div *ngIf='documentType == "orAdvice" && file =="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                    <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
+                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+                     [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                      bindLabel="pi_po_buyerName"
+                      [multiple]="true"
+                      groupBy="selectedAllGroup"
+                      [selectableGroup]="true"
+                      placeholder="Select PI/PO"
+                      bindValue="testFunctionID"
+                      ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                    </ng-select>
+                  </div>
+                  <div *ngIf='documentType == "commercial" && file =="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                    <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
+                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+                     [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                      bindLabel="pi_po_buyerName"
+                      [multiple]="true"
+                      groupBy="selectedAllGroup"
+                      [selectableGroup]="true"
+                      placeholder="Select PI/PO"
+                      bindValue="testFunctionID"
+                      ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                    </ng-select>
+                  </div>
+
                   <!-- <div *ngIf='documentType != "blCopy" && file !="import" ' class="customDropdown" style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
                    <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
 
@@ -1003,13 +1029,24 @@
                 <p class="sh1">FOREX ADVICE DETAILS</p>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">TT Date</label>
-                  <input ngModel class="form-control p-3" type="date" name="date"
-                    [(ngModel)]="res.billNo">
+                  <input class="form-control p-3" [(ngModel)]="res.billNo" matInput
+                  [matDatepicker]="date" placeholder="Choose a date"
+                  formControlName="date" autocomplete="off">
+                  <mat-datepicker-toggle matSuffix [for]="date">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker aria-setsize="14px" #date>
+                  </mat-datepicker>
                 </div>
+
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Recieved Date</label>
-                  <input NgModel class="form-control p-3" name="recievedDate"
-                    [(ngModel)]="res.partyName">
+                  <input class="form-control p-3" [(ngModel)]="res.recievedDate" matInput
+                  [matDatepicker]="recievedDate" placeholder="Choose a date"
+                  formControlName="recievedDate" autocomplete="off">
+                  <mat-datepicker-toggle matSuffix [for]="recievedDate">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker aria-setsize="14px" #recievedDate>
+                  </mat-datepicker>
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Commission</label>
@@ -1018,8 +1055,14 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Conversion Date</label>
-                  <input ngModel class="form-control p-3" name="conversionDate"
-                    [(ngModel)]="res.conversionDate">
+                  <input class="form-control p-3" [(ngModel)]="res.conversionDate" matInput
+                  [matDatepicker]="conversionDate" placeholder="Choose a date"
+                  formControlName="conversionDate" autocomplete="off">
+                  <mat-datepicker-toggle matSuffix [for]="conversionDate">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker aria-setsize="14px" #conversionDate>
+                  </mat-datepicker>
+
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Exchange Rate</label>
@@ -1059,57 +1102,74 @@
             </div>
 
           </form>
-
+          <!-- Outward Remittance Start -->
           <form class="iframecontroller" *ngIf="billNo && !override && documentType1 == 'import'" #values="ngForm"
           (ngSubmit)="onSubmitOrAdvice(values)">
-          <div class="field">
-            <div class="form12 p-3">
+          <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+          <div class="field"> <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">FOREX ADVICE DETAILS</label>
+                <label for="exampleInputEmail1" class="form-label">Bill No</label>
                 <input ngModel class="form-control p-3" type="text"
                   name="billNo" [(ngModel)]="res.billNo">
               </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">PARTY NAME</label>
                 <input NgModel class="form-control p-3" name="partyName"
                   [(ngModel)]="res.partyName">
               </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">TT AMOUNT</label>
-                <input ngModel class="form-control p-3" name="partyName"
+                <input ngModel class="form-control p-3" name="amount"
                   [(ngModel)]="res.amount">
               </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
             </div>
 
-          <div class="sub-table">
-            <div class="form12 p-3">
-              <p class="sh1">FOREX ADVICE DETAILS</p>
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">TT Date</label>
-                <input ngModel class="form-control p-3" type="date" name="date"
-                  [(ngModel)]="res.billNo">
+                <label for="exampleInputPassword1" class="form-label">TT Date</label>
+                <input ngModel class="form-control p-3" name="date"
+                  [(ngModel)]="res.date">
               </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Recieved Date</label>
-                <input NgModel class="form-control p-3" name="recievedDate"
-                  [(ngModel)]="res.partyName">
+                <input ngModel class="form-control p-3" name="recievedDate"
+                  [(ngModel)]="res.recievedDate">
               </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Commission</label>
                 <input ngModel class="form-control p-3" name="commision"
                   [(ngModel)]="res.commision">
               </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Conversion Date</label>
                 <input ngModel class="form-control p-3" name="conversionDate"
                   [(ngModel)]="res.conversionDate">
               </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Exchange Rate</label>
                 <input ngModel class="form-control p-3" name="exchangeRate"
                   [(ngModel)]="res.exchangeRate">
               </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Location</label>
                 <select class="form-control p-3" aria-label="Default select example" name="location" ngModel placeholder="Location">
@@ -1119,6 +1179,9 @@
                   </option>
                 </select>
               </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Commodity</label>
                 <select class="form-control p-3" aria-label="Default select example" name="commodity" ngModel>
@@ -1128,6 +1191,9 @@
                   </option>
                 </select>
               </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Origin</label>
                 <select class="form-control p-3" aria-label="Default select example" name="origin" ngModel>
@@ -1137,13 +1203,17 @@
                   </option>
                 </select>
               </div>
+            </div>
+
+            <div class="form12 p-3">
+
               <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-         </div>
-          </div>
+
+          </div> </div>
 
         </form>
-
+          <!-- Outward Remittance End -->
           <form class="iframecontroller" *ngIf="pIpO && !override" [formGroup]="piPoForm" (ngSubmit)="onSubmitPipo()">
             <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field frame-controller">
@@ -1391,16 +1461,23 @@
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Tri Party Number*</label>
                   <input ngModel class="form-control p-3" type="text"
-                    name="creditNoteNumber">
+                    name="triPartyAgreementNumber">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Tri Party Amount</label>
-                  <input NgModel class="form-control p-3"
-                    name="creditNoteAmount">
+                  <input ngModel class="form-control p-3"
+                    name="triPartyAgreementAmount">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <input ngModel class="form-control p-3" name="currency">
+                  <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                  [items]="this.CURRENCY_LIST"
+                  bindLabel="type"
+                  [multiple]="false"
+                  groupBy="selectedAllGroup"
+                  placeholder="Select PI/PO"
+                  name="currency"
+                  ngModel></ng-select>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
@@ -1554,7 +1631,6 @@
                       </option>
                     </select>
                   </div>
-                  {{pipo}} jsfghdfjsd
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
@@ -1575,8 +1651,14 @@
 
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Currency*</label>
-                <input ngModel class="form-control p-3" type="text"
-                  name="currency">
+                  <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                  [items]="this.CURRENCY_LIST"
+                  bindLabel="type"
+                  [multiple]="false"
+                  groupBy="selectedAllGroup"
+                  placeholder="Select PI/PO"
+                  name="currency"
+                  ngModel></ng-select>
               </div>
 
               <div class="mb-3">
@@ -1718,12 +1800,20 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Insurance Amount</label>
-                  <input NgModel class="form-control p-3" name="insuranceAmount">
+                  <input ngModel class="form-control p-3" type="number" name="insuranceAmount">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <input ngModel class="form-control p-3" name="currency">
-                </div>
+                  <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                    [items]="this.CURRENCY_LIST"
+                    bindLabel="type"
+                    [multiple]="false"
+                    groupBy="selectedAllGroup"
+                    placeholder="Select PI/PO"
+                    name="currency"
+                    ngModel>
+                  </ng-select>
+                  </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>
@@ -1743,13 +1833,20 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Letter Of Credit Amount</label>
-                  <input NgModel class="form-control p-3"
-                    name="letterOfCreditAmount">
+                  <input ngModel class="form-control p-3"
+                    name="letterOfCreditAmount" type="number">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <input ngModel class="form-control p-3" name="currency">
-                </div>
+                  <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                  [items]="this.CURRENCY_LIST"
+                  bindLabel="type"
+                  [multiple]="false"
+                  groupBy="selectedAllGroup"
+                  placeholder="Select PI/PO"
+                  name="currency"
+                  ngModel></ng-select>
+                  </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>
@@ -1795,12 +1892,19 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Opinion Report Amount</label>
-                  <input NgModel class="form-control p-3"
+                  <input ngModel class="form-control p-3" type="number"
                     name="opinionReportAmount">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <input ngModel class="form-control p-3" name="currency">
+                  <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                  [items]="this.CURRENCY_LIST"
+                  bindLabel="type"
+                  [multiple]="false"
+                  groupBy="selectedAllGroup"
+                  placeholder="Select PI/PO"
+                  name="currency"
+                  ngModel></ng-select>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>

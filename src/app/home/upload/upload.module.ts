@@ -20,6 +20,13 @@ import { CreateNoteComponent } from './Import/create-note/create-note.component'
 import { DebitNoteComponent } from './Import/debit-note/debit-note.component';
 import { ExportCreditNoteComponent } from './Export/export-credit-note/export-credit-note.component';
 import { ExportDebitNoteComponent } from './Export/export-debit-note/export-debit-note.component';
+import { MatDatepickerModule } from '@angular/material/datepicker'
+
+import {  MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule} from '@angular/material/input';
+import { MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -32,6 +39,10 @@ import { ExportDebitNoteComponent } from './Export/export-debit-note/export-debi
   imports: [
     SharedHomeModule,
     NgSelectModule,
+    MatProgressBarModule,
+    MatNativeDateModule,MatButtonModule,MatDialogModule, MatInputModule, MatFormFieldModule ,
+    MatTabsModule,
+    MatDatepickerModule,
     RouterModule.forChild([
       {
         path: "",

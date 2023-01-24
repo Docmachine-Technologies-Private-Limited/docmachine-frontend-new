@@ -70,6 +70,7 @@ export class PipoDataService {
   }
 
   getPipoListByCustomer = (type,customer) => {
+
     return new Promise((resolve, reject) => {
       this.documentService.getPipoByCustomer(type,customer).subscribe(
         (res: any) => {
@@ -78,6 +79,25 @@ export class PipoDataService {
           console.log( temppipo,'temppipo')
           this.pipolistModelSubsciber.next(temppipo.pipoModelList);
           this.pipolistSubsciber.next(temppipo.pipolist);
+          this.pipolistModelSubsciber.subscribe((pipo_lits:any)=>{
+            var data:any=pipo_lits;
+            this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME']=[];
+            this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME']=[];
+            for (let index = 0; index < data.length; index++) {
+                  if (data[index]?.buyerName!='' || data[index].pi_poNo!='' ) {
+                    this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'].push({
+                      pi_po_buyerName:'PI-'+data[index]?.pi_poNo+'-'+data[index].buyerName,
+                      id:[data[index].pi_poNo,data[index]?.buyerName],
+                      _id:data[index]?._id
+                    })
+                    this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'].push({
+                      pi_po_buyerName:'PI-'+data[index]?.pi_poNo+'-'+data[index].benneName,
+                      id:[data[index].pi_poNo,data[index]?.benneName],
+                      _id:data[index]?._id
+                    })
+                  }
+                }
+            })
           resolve(temppipo);
         },
         (err) => reject(err)

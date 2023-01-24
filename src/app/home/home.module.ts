@@ -36,7 +36,7 @@ import { TermsAndConditionComponent } from './terms-and-condition/terms-and-cond
 import {InwardRemittanceComponent} from "./yesBank/inwardRemittance/inwardRemittance.component";
 import { NgApexchartsModule } from "ng-apexcharts";
 import {ProgressBarModule} from "angular-progress-bar"
-import { PipoNewComponent } from './pipo-new/pipo-new.component';
+import { PipoExportComponent } from './pipo-export/pipo-export.component';
 import { EditPipoComponent } from './edit-pipo/edit-pipo.component';
 import { ViewPipoComponent } from './view-pipo/view-pipo.component';
 import { AddPipoComponent } from './add-pipo/add-pipo.component';
@@ -103,7 +103,7 @@ import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/expo
     ModalContentComponent1,
     HelpComponent,
     TermsAndConditionComponent,
-    PipoNewComponent,
+    PipoExportComponent,
     EditPipoComponent,
     ViewPipoComponent,
     AddPipoComponent,
@@ -212,7 +212,7 @@ import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/expo
           },
           {
             path: "pipo",
-            component: PipoNewComponent,
+            component: PipoExportComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
