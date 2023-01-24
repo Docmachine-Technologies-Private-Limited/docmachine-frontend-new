@@ -27,8 +27,16 @@ export class LetterOfCreditExportLCComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
+  filtervisible: boolean = false;
   USER_DATA:any=[];
-  filtervisible: boolean = false
+  filter() {
+    // this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
+  }
 
   constructor(
     private documentService: DocumentService,
@@ -44,18 +52,19 @@ export class LetterOfCreditExportLCComponent implements OnInit {
   ) {
   }
 
+  
   async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
-    this.item=[];
+    this.item1=[];
     this.documentService.getLetterLC().subscribe(
       (res: any) => {
         console.log('Res', res);
         for (let value of res.data) {
           if (value['file'] == 'export') {
 
-            this.item.push(value);
+            this.item1.push(value);
           }
         }
       },
@@ -63,16 +72,6 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     );
 
   }
-
-  filter() {
-    // this.getPipoData()
-    this.filtervisible = !this.filtervisible
-
-  }
-  onclick() {
-    this.filtervisible = !this.filtervisible
-  }
-
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
       return x.pi_poNo;
@@ -166,7 +165,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
         deleteflag:'-1',
         userdetails:this.USER_DATA['result'],
         status:'pending',
-        dummydata:this.item[index],
+        dummydata:this.item1[index],
         Types:'deletion',
         FileType:this.USER_DATA?.result?.sideMenu
       }
@@ -175,6 +174,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
       });
     }
   }
+
 
   exportToExcel() {
     const ws: xlsx.WorkSheet = xlsx.utils.table_to_sheet(this.epltable.nativeElement);

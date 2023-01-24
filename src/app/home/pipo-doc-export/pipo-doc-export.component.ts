@@ -208,6 +208,7 @@ onclick() {
     public wininfo: WindowInformationService,
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
+    
   ) {
     this.api_base = appconfig.apiUrl;
     this.loadFromLocalStorage();
