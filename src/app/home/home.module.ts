@@ -36,7 +36,7 @@ import { TermsAndConditionComponent } from './terms-and-condition/terms-and-cond
 import {InwardRemittanceComponent} from "./yesBank/inwardRemittance/inwardRemittance.component";
 import { NgApexchartsModule } from "ng-apexcharts";
 import {ProgressBarModule} from "angular-progress-bar"
-import { PipoNewComponent } from './pipo-new/pipo-new.component';
+import { PipoExportComponent } from './pipo-export/pipo-export.component';
 import { EditPipoComponent } from './edit-pipo/edit-pipo.component';
 import { ViewPipoComponent } from './view-pipo/view-pipo.component';
 import { AddPipoComponent } from './add-pipo/add-pipo.component';
@@ -83,6 +83,8 @@ import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.co
 import { AdminGuard } from "../service/RolePermission/Admin/admin.guard";
 import { SuperGuard } from "../service/RolePermission/SuperAdmin/super.guard";
 import { MemberGuard } from "../service/RolePermission/Member/member.guard";
+import { AddOutwardRemittanceComponent } from './add-outward-remittance/add-outward-remittance.component';
+
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -98,7 +100,7 @@ import { MemberGuard } from "../service/RolePermission/Member/member.guard";
     ModalContentComponent1,
     HelpComponent,
     TermsAndConditionComponent,
-    PipoNewComponent,
+    PipoExportComponent,
     EditPipoComponent,
     ViewPipoComponent,
     AddPipoComponent,
@@ -109,6 +111,7 @@ import { MemberGuard } from "../service/RolePermission/Member/member.guard";
     ApprovalPanelComponent,
     PendingPanelComponent,
     RejectPanelComponent,
+    AddOutwardRemittanceComponent,
   ],
   imports: [
     SharedHomeModule,
@@ -207,7 +210,7 @@ import { MemberGuard } from "../service/RolePermission/Member/member.guard";
           },
           {
             path: "pipo",
-            component: PipoNewComponent,
+            component: PipoExportComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
@@ -425,7 +428,13 @@ import { MemberGuard } from "../service/RolePermission/Member/member.guard";
             component:RejectPanelComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
-          }
+          },
+          {
+            path: "add-outward-remittance/:doc_type",
+            component: AddOutwardRemittanceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
         ],
       },
     ]),

@@ -15,13 +15,13 @@ import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprrov
  */
 
 @Component({
-  selector: 'app-pipo-new',
-  templateUrl: './pipo-new.component.html',
-  styleUrls: ['./pipo-new.component.scss'],
+  selector: 'app-pipo-export',
+  templateUrl: './pipo-export.component.html',
+  styleUrls: ['./pipo-export.component.scss'],
 
 })
 
-export class PipoNewComponent implements OnInit {
+export class PipoExportComponent implements OnInit {
   @ViewChild('piposummery', { static: false }) piposummery: ElementRef;
 
   displayedColumns: string[] = ['pi_poNo', 'date', 'buyerName', 'location', 'commodity', 'amount', 'paymentTerm', 'actions'];
