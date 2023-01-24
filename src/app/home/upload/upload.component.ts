@@ -1278,6 +1278,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.pipoDataService.pipolistModel$.subscribe((data) => {
         console.log(data,'data2222..................')
         this.importpipolist = data;
+        console.log('importpipolist',this.importpipolist);
       });
     });;
   }

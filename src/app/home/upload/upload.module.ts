@@ -16,6 +16,13 @@ import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
 import {SharedHomeModule} from "../shared-home.module";
 import {UploadComponent} from "./upload.component";
 import { NgSelectModule } from "@ng-select/ng-select";
+import { MatDatepickerModule } from '@angular/material/datepicker'
+
+import {  MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule} from '@angular/material/input';
+import { MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -24,6 +31,10 @@ import { NgSelectModule } from "@ng-select/ng-select";
   imports: [
     SharedHomeModule,
     NgSelectModule,
+    MatProgressBarModule,
+    MatNativeDateModule,MatButtonModule,MatDialogModule, MatInputModule, MatFormFieldModule ,
+    MatTabsModule,
+    MatDatepickerModule,
     RouterModule.forChild([
       {
         path: "",
