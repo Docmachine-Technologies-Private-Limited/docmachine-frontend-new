@@ -83,6 +83,11 @@ import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.co
 import { AdminGuard } from "../service/RolePermission/Admin/admin.guard";
 import { SuperGuard } from "../service/RolePermission/SuperAdmin/super.guard";
 import { MemberGuard } from "../service/RolePermission/Member/member.guard";
+import { CreateNoteComponent } from "./upload/Import/create-note/create-note.component";
+import { DebitNoteComponent } from "./upload/Import/debit-note/debit-note.component";
+
+import { ExportCreditNoteComponent } from "./upload/Export/export-credit-note/export-credit-note.component";
+import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/export-debit-note.component";
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -425,7 +430,30 @@ import { MemberGuard } from "../service/RolePermission/Member/member.guard";
             component:RejectPanelComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
-          }
+          },{
+            path: "ImportCredit",
+            component:CreateNoteComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "ImportDebit",
+            component:DebitNoteComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "ExportCredit",
+            component:ExportCreditNoteComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "ExportDebit",
+            component:ExportDebitNoteComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
         ],
       },
     ]),
