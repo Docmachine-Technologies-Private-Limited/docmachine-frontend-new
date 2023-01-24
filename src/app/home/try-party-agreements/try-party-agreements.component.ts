@@ -48,7 +48,7 @@ export class TryPartyAgreementsComponent implements OnInit {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
-    this.item=[];
+    this.item1=[];
     this.documentService.getThird().subscribe(
       (res: any) => {
         console.log('Res', res);
@@ -168,7 +168,7 @@ export class TryPartyAgreementsComponent implements OnInit {
         deleteflag:'-1',
         userdetails:this.USER_DATA['result'],
         status:'pending',
-        dummydata:this.item[index],
+        dummydata:this.item1[index],
         Types:'deletion',
         FileType:this.USER_DATA?.result?.sideMenu
       }
@@ -177,6 +177,8 @@ export class TryPartyAgreementsComponent implements OnInit {
       });
     }
   }
+
+
 
   exportToExcel() {
     const ws: xlsx.WorkSheet = xlsx.utils.table_to_sheet(this.epltable.nativeElement);
