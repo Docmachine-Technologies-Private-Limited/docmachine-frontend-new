@@ -54,8 +54,7 @@ export class TryPartyAgreementsComponent implements OnInit {
         console.log('Res', res);
         for (let value of res.data) {
           if (value['file'] == 'export') {
-
-            this.item1.push(value);
+            this.item.push(value);
           }
         }
       },
@@ -63,7 +62,7 @@ export class TryPartyAgreementsComponent implements OnInit {
     );
 
   }
-  
+
   filter() {
     // this.getPipoData()
     this.filtervisible = !this.filtervisible

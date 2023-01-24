@@ -382,11 +382,15 @@ export class UploadComponent implements OnInit, AfterViewInit {
       return true;
     }
   }
+  CURRENCY_LIST: any = [];
 
   async ngOnInit() {
     this.wininfo.set_controller_of_width(230,'.content_top_common')
-    // this.wininfo.set_width_grid(700,'.iframecontroller')
-    console.log('zxysomthing');
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.CURRENCY_LIST.push({
+        type: data1['default'][index]['value']
+      })
+    }
 
     this.userService.getUserDetail().then((data:any) => {
       this.USER_DATA = data?.result
@@ -1482,11 +1486,11 @@ export class UploadComponent implements OnInit, AfterViewInit {
   }
 
   onSubmitThird(e) {
-    console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     e.form.value.file = this.documentType1;
+    e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     this.documentService.addThird(e.form.value).subscribe(
       (res: any) => {
@@ -1698,20 +1702,16 @@ export class UploadComponent implements OnInit, AfterViewInit {
   //blCopy Submit buttton
   onSubmitblCopy(e) {
     let selectedShippingBill = this.pipoDataService.getShippingBillById(e.form.value.sbNo);
-    // e.form.value.currency = this.currency;
-    console.log(e.form.value);
     console.log('this is console of blcopy', e.form.value);
     e.form.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
-
-    // e.form.value.doc = this.pipourl1;
     e.form.value.blCopyDoc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
     e.form.value.file = this.documentType1;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     e.form.value.CommercialNumber=this.CommercialNumber
-    // e.form.value.currency = this.currency;
-    console.log(e.form.value);
+    console.log(e.form.value,'onSubmitblCopy');
+
     this.documentService.addAirwayBlcopyFile(e.form.value).subscribe(
       (res: any) => {
         this.toastr.success(`addAirwayBlcopy Document Added Successfully`);
@@ -1827,10 +1827,10 @@ export class UploadComponent implements OnInit, AfterViewInit {
       e.form.value.pipo = this.pipoArr;
       console.log('pipoarrya', this.pipoArr);
       e.form.value.file = this.documentType1;
+      e.form.value.currency = e.form.value?.currency?.type;
       e.form.value.commercialDoc = this.pipourl1;
       console.log('pipoDoc', this.pipourl1);
-
-      e.form.value.buyerName = this.mainBene;
+      e.form.value.buyerName = this.arrayData;
       // e.form.value.currency = this.currency;
       console.log(e.form.value);
       this.documentService.addCommercial(e.form.value).subscribe(
@@ -2167,14 +2167,13 @@ export class UploadComponent implements OnInit, AfterViewInit {
     );
   }
   onSubmitInsurance(e) {
-    console.log(e.form.value);
-    console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     e.form.value.file = this.documentType1;
+    e.form.value.currency = e.form.value?.currency?.type;
     // e.form.value.currency = this.currency;
-    console.log(e.form.value);
+    console.log(e.form.value,'onSubmitInsurance');
     this.documentService.addInsurance(e.form.value).subscribe(
       (res: any) => {
         this.toastr.success(`Insurance Document Added Successfully`);
@@ -2217,8 +2216,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     e.form.value.file = this.documentType1;
+    e.form.value.currency = e.form.value?.currency?.type;
     // e.form.value.currency = this.currency;
     console.log(e.form.value);
     this.documentService.addLetterLC(e.form.value).subscribe(
@@ -2309,8 +2309,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     e.form.value.file = this.documentType1;
+    e.form.value.currency = e.form.value?.currency?.type;
     // e.form.value.currency = this.currency;
     console.log(e.form.value);
     this.documentService.addOpinionReport(e.form.value).subscribe(
@@ -2658,11 +2659,11 @@ export class UploadComponent implements OnInit, AfterViewInit {
     var last_length=PI_PO_LIST.length-1;
     var LAST_VALUE:any=PI_PO_LIST[last_length]?.value;
     console.log(PI_PO_LIST[last_length]?.value,'clickPipoclickPipoclickPipo')
-    console.log('line 2359', this.pipoSelect);
+    console.log('PI_PO_LISTPI_PO_LISTPI_PO_LIST',PI_PO_LIST);
     this.pipoSelect = true;
     console.log('line 2361', this.pipoSelect);
 
-    this.mainBene = this.FILTER_VALUE(this.pipolist,LAST_VALUE?._id)[0];
+    this.mainBene = this.FILTER_VALUE(this.pipolist, LAST_VALUE?._id)[0]?.buyerName;
     let x = LAST_VALUE?.pi_po_buyerName;
     let j = this.arrayData.indexOf(LAST_VALUE?.pi_po_buyerName);
     if (j == -1) {
@@ -2814,9 +2815,8 @@ FILTER_VALUE(array:any,value:any){
   }
   matchSelectedPipo(pipo, selectedPipoArr) {
     console.log("pipo",pipo)
-    console.log("pipo",pipo)
     for (let i in selectedPipoArr) {
-      if (selectedPipoArr[i] == pipo._id) {
+      if (selectedPipoArr[i] == pipo?._id) {
         return true;
       }
     }

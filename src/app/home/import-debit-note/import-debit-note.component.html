@@ -56,7 +56,7 @@
                                 </form>
                             </div>
                         </div>
-                        <button class="upload-button btn btn-success" (click)="newDebit()">
+                        <button class="upload-button btn btn-success" [routerLink]="['/home/ImportDebit']">
                       <span class="add_icon"></span>  ADD NEW
                   </button>
                     </div>
@@ -140,7 +140,7 @@
                                                 <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
                                                  (click)="handleDelete(data._id,i)"><a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                </button>
-                                                
+
                                             </td>
                                         </tr>
 

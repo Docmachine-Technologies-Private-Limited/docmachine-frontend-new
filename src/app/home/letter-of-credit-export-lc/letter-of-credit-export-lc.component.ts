@@ -52,7 +52,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
   ) {
   }
 
-  
+
   async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
@@ -63,8 +63,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
         console.log('Res', res);
         for (let value of res.data) {
           if (value['file'] == 'export') {
-
-            this.item1.push(value);
+            this.item.push(value);
           }
         }
       },

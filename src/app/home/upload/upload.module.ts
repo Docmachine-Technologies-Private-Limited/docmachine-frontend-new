@@ -16,6 +16,10 @@ import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
 import {SharedHomeModule} from "../shared-home.module";
 import {UploadComponent} from "./upload.component";
 import { NgSelectModule } from "@ng-select/ng-select";
+import { CreateNoteComponent } from './Import/create-note/create-note.component';
+import { DebitNoteComponent } from './Import/debit-note/debit-note.component';
+import { ExportCreditNoteComponent } from './Export/export-credit-note/export-credit-note.component';
+import { ExportDebitNoteComponent } from './Export/export-debit-note/export-debit-note.component';
 import { MatDatepickerModule } from '@angular/material/datepicker'
 
 import {  MatNativeDateModule } from '@angular/material/core';
@@ -26,7 +30,11 @@ import { MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
-    UploadComponent
+    UploadComponent,
+    CreateNoteComponent,
+    DebitNoteComponent,
+    ExportCreditNoteComponent,
+    ExportDebitNoteComponent
   ],
   imports: [
     SharedHomeModule,

@@ -1828,7 +1828,11 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
 
-    return this.http.patch(`${this.api_base}/user/updateUserById/${id}`, data,httpOptions ); }
+    return this.http.patch(`${this.api_base}/user/updateUserById/${id}`, data,httpOptions );
+  }
+  getCurrency(){
+    return this.http.get("../../currency.json")
+  }
 }
 
 

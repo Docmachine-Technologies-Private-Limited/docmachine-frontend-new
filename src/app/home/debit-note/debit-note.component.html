@@ -60,14 +60,14 @@
                                 </form>
                             </div>
                         </div>
-                        <button class="upload-button btn btn-success" (click)="newDebit()">
+                        <button class="upload-button btn btn-success" [routerLink]="['/home/ExportDebit']">
                             <span class="add_icon"></span>  ADD NEW
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- 
+        <!--
         <div class="header-panel">
             <div>
                 Date:
@@ -78,7 +78,7 @@
                 <option value="" selected="selected">All</option>
             </select>
             </div>
-            
+
             <div class="top_exl_ddivs">
                 <button (click)="exportToExcel()" style=" color: #ffffff !important; font-weight: 100 ; font-family: Poppins ,sans-serif; padding: 5px 8px; font-size: 14px;
                         background-color: #49A2D7;
@@ -162,7 +162,7 @@
                                                     aria-hidden="true"></i></button>
                                                     <button title="Delete" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
                                                     (click)="handleDelete(data._id,i)"><a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                  </button>    
+                                                  </button>
                                             </td>
                                         </tr>
                                     </tbody>
