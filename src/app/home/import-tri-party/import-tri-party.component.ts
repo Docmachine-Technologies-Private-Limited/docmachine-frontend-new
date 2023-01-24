@@ -55,14 +55,14 @@ onclick() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
-    this.item=[];
+    this.item1=[];
     this.documentService.getThird().subscribe(
       (res: any) => {
         console.log('Res', res);
         for (let value of res.data) {
           if (value['file'] == 'import') {
 
-            this.item.push(value);
+            this.item1.push(value);
           }
         }
       },
@@ -104,6 +104,7 @@ onclick() {
     this.optionsVisibility[i] = true;
   this.toastr.warning('Tri-Party Agreement Row Is In Edit Mode');
   }
+
   handleDelete(id,index:any) {
     console.log(id,index,'dfsfhsfgsdfgdss');
     const message = `Are you sure you want to delete this?`;
@@ -132,7 +133,7 @@ onclick() {
         deleteflag:'-1',
         userdetails:this.USER_DATA['result'],
         status:'pending',
-        dummydata:this.item[index],
+        dummydata:this.item1[index],
         Types:'deletion',
         FileType:this.USER_DATA?.result?.sideMenu
       }
@@ -141,6 +142,7 @@ onclick() {
       });
     }
   }
+
 
 
   getPipoNumbers(data) {

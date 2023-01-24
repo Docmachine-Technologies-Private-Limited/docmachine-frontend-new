@@ -170,7 +170,7 @@ export class OpinionReportsComponent implements OnInit {
         deleteflag:'-1',
         userdetails:this.USER_DATA['result'],
         status:'pending',
-        dummydata:this.item[index],
+        dummydata:this.item1[index],
         Types:'deletion',
         FileType:this.USER_DATA?.result?.sideMenu
       }
