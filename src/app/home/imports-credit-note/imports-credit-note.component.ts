@@ -8,8 +8,12 @@ import * as xlsx from 'xlsx';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import {ActivatedRoute, Data, NavigationStart, Router} from '@angular/router';
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
-@Component({ 
+
+@Component({
   selector: 'app-imports-credit-note',
   templateUrl: './imports-credit-note.component.html',
   styleUrls: ['./imports-credit-note.component.scss']
@@ -24,7 +28,7 @@ export class ImportsCreditNoteComponent implements OnInit {
   public pipoData: any;
   public id: any;
   filtervisible: boolean = false;
-  
+  USER_DATA:any=[];
   filter() {
   // this.getPipoData()
   this.filtervisible = !this.filtervisible
@@ -42,27 +46,31 @@ onclick() {
     private router: Router,
     private userService: UserService,
     private sharedData: SharedDataService,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public dialog: MatDialog,
   ) {
   }
 
-  ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
-    this.documentService.getCredit().subscribe(
-      (res: any) => {
-        console.log('HEre Responsesssssssss', res);
-        this.item = res.data;
-        for (let value of this.item) {
-          if (value['file'] == 'import') {
 
-            this.item1.push(value);
-            console.log("awwww", this.item1)
+  async ngOnInit() {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
+    this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA)
+    this.item1=[];
+      this.documentService.getCredit().subscribe(
+        (res: any) => {
+          for (let value of res.data) {
+            if (value['file'] == 'import') {
+              this.item1.push(value);
+            }
           }
-        }
-      },
-      (err) => console.log(err)
-    );
-  }
+          console.log(res,'yuyuyuyuyuyuyuuy')
+        },
+        (err) => console.log(err)
+      );
+
+    }
 
   openCreditNote(content) {
     this.modalService
@@ -134,5 +142,42 @@ onclick() {
   toEdit(i) {
     this.optionsVisibility[i] = true;
     this.toastr.warning('PI/PO Is In Edit Mode');
+  }
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+      this.documentService.deleteById({id:id,tableName:'creditnotes'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'creditnotes',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item1[index],
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
   }
 }

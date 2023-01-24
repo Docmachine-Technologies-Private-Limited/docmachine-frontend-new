@@ -163,7 +163,7 @@ export class PipoExportComponent implements OnInit {
   }
   deleteByRoleType(RoleCheckbox:string,id:any,index:any){
     if (RoleCheckbox==''){
-        this.documentService.deletePipoByid(id).subscribe((res) => {
+        this.documentService.deleteById({id:id,tableName:'PI_PO'}).subscribe((res) => {
             console.log(res)
             if (res) {
               this.getPipoData()

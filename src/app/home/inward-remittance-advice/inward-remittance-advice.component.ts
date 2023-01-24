@@ -14,6 +14,9 @@ import * as xlsx from 'xlsx';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-inward-remittance-advice',
@@ -45,8 +48,9 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   public closeResult: string;
   public viewData: any;
   filtervisible: boolean = false;
+  USER_DATA:any=[];
+  PENDING_DATA:any=[];
 
-  
   constructor(
     private toastr: ToastrService,
     private userService: UserService,
@@ -55,11 +59,19 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     private sharedData: SharedDataService,
     private modalService: NgbModal,
     private sanitizer: DomSanitizer,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public dialog: MatDialog,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService
   ) {}
 
-  ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
+ async ngOnInit() {
+    this.wininfo.set_controller_of_width(270,'.content-wrap');
+    this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA)
+    this.documentService.getRejectStatus(this.USER_DATA?.result?.sideMenu).subscribe((res: any)=>{
+      this.PENDING_DATA = res;
+      console.log("this.PENDING_DATA", res)
+    })
     this.documentService.getIrAdvice(1).subscribe(
       (res: any) => {
         console.log(res), (this.item = res.data);
@@ -162,7 +174,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   }
 
 
-    
+
   filter() {
     // this.getPipoData()
     this.filtervisible = !this.filtervisible
@@ -200,8 +212,11 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     if (this.item5 && this.item5.length) {
       for (let irData of this.item1) {
         console.log('irdata', irData);
+        var temp:any=[];
         for (let shippingdata of this.item5) {
           console.log('shipping', shippingdata);
+          temp['deleteflag']=shippingdata['deleteflag']
+          // filterForexData.push(temp);
           for (let i = 0; i <= irData.sbNo.length; i++) {
             console.log('index of shipping Bill', irData.sbNo[i]);
             if (irData.sbNo[i] == shippingdata.sbno) {
@@ -277,5 +292,45 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   viewIr(a) {
     ;
     this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+  }
+  handleDelete(id,index:any) {
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+        this.documentService.deleteById({id:id,tableName:'masterrecord'}).subscribe((res) => {
+            console.log(res)
+            if (res) {
+              this.ngOnInit()
+            }
+        }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'masterrecord',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item1[index],
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
   }
 }

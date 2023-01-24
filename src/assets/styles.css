@@ -241,7 +241,7 @@ transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 .filter_right_new.padding_new_top{padding-top:15px;    padding-bottom: 17px;}
 .savBtn.bgnone{background: #fff!important;border: 1px solid #fff!important;color: #777!important;}
 .middle_datatable .form-control{height:28px; font-size:12px;}
-
+.padding_move_right{padding-right:16px;}
 
 
 
