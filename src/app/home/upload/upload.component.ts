@@ -1278,6 +1278,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.pipoDataService.pipolistModel$.subscribe((data) => {
         console.log(data,'data2222..................')
         this.importpipolist = data;
+        console.log('importpipolist',this.importpipolist);
       });
     });;
   }
@@ -2477,6 +2478,15 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
         args[1].data
       );
+
+      if(args[1].data.doc)
+      {
+        console.log('DOC URL', args[1].doc);
+
+        this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+          args[1].data.doc
+        );
+      }
       console.log('PIPO URL', this.piPoUrl);
       console.log(this.publicUrl);
       console.log(this.piPoUrl);
