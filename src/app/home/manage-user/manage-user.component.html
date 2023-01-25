@@ -1,292 +1,302 @@
-<div class="content-wrap pb-2 scroll-bar-main">
+<div class="content-wrap scroll-bar-main">
+    <div class="import_export_sec">
+        <h3 class="heading_common_tag">Invite your team</h3>
+    </div>
     <main id="content" class="content table-padding" role="main">
-        <div class="container-fuild">
-            <div class="col-13 panel">
-              <div class="left-panel">
-                <img src="../../../assets/back.png" [routerLink]="['/home/dashboardTask']"
-                style="width: 20px; height: 20px;"><span style="margin-left: 10px;"
-                [routerLink]="['/home/dashboardTask']">Back</span>
-              </div>
-                  <div class="right-panel">
-                    <h6 class="display-5">Invite your team <span class="text-left" style="font-size: 15px;" *ngIf="item1.length!=0">| Total Member : {{item1.length}}</span></h6>
-                    <button type="button" class="btn btn-primary" (click)="OpenPopup(formmodel)"> Add</button>
-                  </div>
-            </div>
-            <div class="container1 p-3">
-                <div *ngFor="let data of item1 let i=index" id="login-container">
-                    <div class="content1 top-panel">
-                        <img *ngIf="data.imageUrl" class="img2" src="{{data.imageUrl}}" [alt]="data.name+' \nimage not found...'">
-                        <img *ngIf="!data.imageUrl" class="img4" src="./assets/ic_mail-2.png">
+        <div class="filter_section_top" style="border-bottom: 1px solid #f3f3f3; margin:0 0 32px 0;">
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-12">
+                    <h6 class="display-5">
+                        <span class="text-left change_newfft" *ngIf="item1.length!=0">| Total team members  :<span class="change_fontcolor">{{item1.length}}</span> </span>
+                    </h6>
+                </div>
+                <div class="col-md-8 col-sm-8 col-12">
+                    <div class="filter_right_new padding_new_top">
+                        <button class="upload-button btn btn-success" (click)="OpenPopup(formmodel)">
+                        <span class="add_icon"></span>  ADD NEW
+                    </button>
                     </div>
-                    <div class="content1">
-                        <h6 class="name">Name : {{data?.name}}</h6>
-                        <h6 class="email">Email Id : {{data?.email}}</h6>
-                        <h6 class="email">Subscription : {{data?.Subscription}}</h6>
-                        <h6 class="email">Role : {{data?.UnderSubscriptionCheckBox}}</h6>
-                    </div>
-                      <div class="row pb-3 flex-display">
-                        <div class="bottom" (click)="EditData(Editformmodel.style.display='block',{id:data['_id'],index:i})">
-                          <img src="./assets/Eye.png">Edit
-                      </div>
-                      <div class="bottom bottom1" (click)="deleteuser(data)">
-                          <i class="fa fa-trash" aria-hidden="true"></i> Delete
-                      </div>
-                       </div>
                 </div>
             </div>
-            <br>
-            <div>
-                <button [routerLink]="['/home/dashboard']">Finish</button>
+        </div>
+        <div class="members_list_middle">
+            <div *ngFor="let data of item1 let i=index" id="login-container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 col-12">
+                        <div class="common_list_bottoms">
+                            <div class="row">
+                                <div class="col-md-2 col-sm-2 col-12">
+                                    <div class="dy_images_new">
+                                        <img *ngIf="data.imageUrl" class="img2" src="{{data.imageUrl}}" [alt]="data.name+' \nimage not found...'">
+                                        <img *ngIf="!data.imageUrl" class="img4" src="./assets/ic_mail-2.png">
+                                    </div>
+                                </div>
+                                <div class="col-md-7 col-sm-7 col-12 padding-left0">
+                                    <div class="content1 lefttext_move">
+                                        <h6 class="name">{{data?.name}} <span class="role_based">{{data?.UnderSubscriptionCheckBox}}</span></h6>
+                                        <h6 class="email">{{data?.email}}</h6>
+                                        <label class="email">Subscription : <span class="subcolor">{{data?.Subscription}}</span></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-12">
+                                    <div class="row pb-3 flex-display new_editi_buttons">
+                                        <div class="bottom" (click)="EditData(Editformmodel.style.display='block',{id:data['_id'],index:i})">
+                                            <i aria-hidden="true" class="fa fa-eye"></i>
+                                        </div>
+                                        <div class="bottom bottom1" (click)="deleteuser(data)">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        <!-- <div class="bottom_button_new" style="margin-top:25px;">
+            <button class="new_bot_butn" [routerLink]="['/home/dashboard']">Finish</button>
+        </div> -->
     </main>
 </div>
-<div class="modal" id="formmodel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" #formmodel>
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add New Member</h5>
-        <button type="button" class="btn-close" (click)="formmodel.style.display='none'"><span aria-hidden="true">&times;</span></button>
-      </div>
-      <div class="modal-body">
-        <div class="button-wrapper">
-          <form class="form" method="POST">
-            <p class="heading">Add New Member</p>
-              <span class="label">
-                  <img *ngIf="!toggle" class="img1" src="./assets/ic_mail-2.png">
-                  <img *ngIf="toggle" class="img3" src="{{img}}" style="height: 70px; width: 70px;">
-              </span>
-              <div *ngIf="!toggle" class="upload-div">
-                  <input name="upload" class="upload-box" placeholder="Upload File"
-                      (error)="onUploadError($event)" (init)="onUploadInit($event)"
-                      (success)="onUploadSuccess($event)" *ngIf="type === 'directive'"
-                      [dropzone]="config" class="dropzone dropzone-container" id="dropzone">
-              </div>
-          </form>
-      </div>
-        <form [formGroup]="memeberForm" (ngSubmit)="onSubmit(formmodel)">
-          <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Name : </label>
-            <input type="text" class="form-control p-2" id="recipient-name"
-            formControlName="name" placeholder="Enter Name"  [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['name']==''}"
-            (keyup)="FORM_BUILDER_INSERT_VALUE('name',$event.target.value)"
-            >
-            <div *ngIf="submitted && this.FORM_BUILDER['name']==''" class="invalid-feedback">
-              <div *ngIf="this.FORM_BUILDER['name']==''">name is required</div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="message-text" class="col-form-label">Email id :</label>
-            <input class="form-control p-2" id="message-text" formControlName="email"
-            type="text" placeholder="Enter Email Id" [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['email']==''}"
-            (keyup)="FORM_BUILDER_INSERT_VALUE('email',$event.target.value)"
-            >
-            <div *ngIf="submitted && this.FORM_BUILDER['email']==''" class="invalid-feedback">
-              <div *ngIf="this.FORM_BUILDER['email']==''">Email id is required</div>
-            </div>
-          </div>
-            <div class="mb-3" *ngIf="this.userData?.result['Subscription']!='both'">
-            <label for="message-text" class="col-form-label">Subscription :</label>
-            <select class="form-select" aria-label="Default select example" disabled
-            [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
-            this.FORM_BUILDER['UnderSubscription']==='Select Subscription' }"
-            (change)="FORM_BUILDER_INSERT_VALUE('UnderSubscription',$event.target.value)">
-              <option [value]="this.userData?.result['Subscription']">{{this.userData?.result['Subscription']}}</option>
-            </select>
-            <div *ngIf="submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
-              this.FORM_BUILDER['UnderSubscription']=='Select Subscription'" class="invalid-feedback">
-              <div *ngIf="this.FORM_BUILDER['UnderSubscription']=='' ||
-              this.FORM_BUILDER['UnderSubscription']=='Select Subscription'">UnderSubscription is required</div>
-            </div>
-          </div>
-          <div class="mb-3" *ngIf="this.userData?.result['Subscription']=='both'">
-            <label for="message-text" class="col-form-label">Subscription :</label>
-            <select class="form-select" aria-label="Default select example"
-            [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
-            this.FORM_BUILDER['UnderSubscription']==='Select Subscription' }"
-            (change)="FORM_BUILDER_INSERT_VALUE('UnderSubscription',$event.target.value)">
-            <option value="">Select Option</option>
-            <option value="Export">Export</option>
-            <option value="Import">Import</option>
-            <option value="both">both</option>
-            </select>
-            <div *ngIf="submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
-              this.FORM_BUILDER['UnderSubscription']=='Select Subscription'" class="invalid-feedback">
-              <div *ngIf="this.FORM_BUILDER['UnderSubscription']=='' ||
-              this.FORM_BUILDER['UnderSubscription']=='Select Subscription'">Subscription is required</div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="message-text" class="col-form-label">Role_Type :</label>
-            <select class="form-select" aria-label="Default select example" disabled
-            [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['Role_Type']=='' ||
-            this.FORM_BUILDER['Role_Type']==='Select Subscription' }"
-            (change)="FORM_BUILDER_INSERT_VALUE('Role_Type',$event.target.value)">
-              <option [value]="this.userData?.result['Role_Type']">{{this.ROLE_LIST[this.userData?.result['Role_Type']]}}</option>
-            </select>
-            <div *ngIf="submitted && this.FORM_BUILDER['Role_Type']=='' ||
-              this.FORM_BUILDER['Role_Type']=='Select Subscription'" class="invalid-feedback">
-              <div *ngIf="this.FORM_BUILDER['Role_Type']=='' ||
-              this.FORM_BUILDER['Role_Type']=='Select Subscription'">Role_Type is required</div>
-            </div>
-          </div>
-         <div class="mb-3">
-            <div class="row flex col-5" *ngIf="this.userData?.result['Role_Type']=='1'">
-                <!-- <label for="message-text" class="col-form-label">Role : </label> -->
-                <!-- <div class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Checker'},{value:'Approver'}]">
-                  <input class="form-check-input" (change)="onChange(cat.value, $event.target.checked)"name="{{ cat.value }}"
-                   type="checkbox" id="{{cat.value}}">
-                  <label class="form-check-label" for="{{cat.value}}">
-                      {{cat.value}}
-                  </label>
-              </div> -->
-            </div>
-            <div class="column"  *ngIf="this.userData?.result['Role_Type']=='2'">
-              <label for="message-text" class="col-form-label">Role : </label>
-              <div class="row flex col-5">
-                  <div class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Approver'}]">
-                    <input class="form-check-input" (change)="onChange($event,cat.value, $event.target.checked)"name="{{ cat.value }}"
+<div class="opcaity">
+    <div class="modal" id="formmodel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" #formmodel>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Member</h5>
+                    <button type="button" class="btn-close buton_right_new" (click)="formmodel.style.display='none'"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="add_new_members_lus">
+                        <div class="">
+                            <div class="">
+                                <div class="button-wrapper">
+                                    <form class="form" method="POST">
+                                        <span class="label">
+                        <img *ngIf="!toggle" class="img1" src="./assets/Icon-feather-upload.svg">
+                      <img *ngIf="toggle" class="img3" src="{{img}}" style="height: 70px; width: 70px;">
+                           </span>
+                                        <p class="heading">Add New Member</p>
+                                        <div *ngIf="!toggle" class="upload-div">
+                                            <input name="upload" class="upload-box" placeholder="Upload File" (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" *ngIf="type === 'directive'" [dropzone]="config" class="dropzone dropzone-container" id="dropzone">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form [formGroup]="memeberForm" (ngSubmit)="onSubmit(formmodel)" class="edit_form_new_sec">
+                            <div class="row">
+                                <div class="col-md-6 col-12">
+                                    <label for="recipient-name" class="col-form-label">Name</label>
+                                    <input type="text" class="form-control p-2" id="recipient-name" formControlName="name" placeholder="Enter Name" [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['name']==''}" (keyup)="FORM_BUILDER_INSERT_VALUE('name',$event.target.value)">
+                                    <div *ngIf="submitted && this.FORM_BUILDER['name']==''" class="invalid-feedback">
+                                        <div *ngIf="this.FORM_BUILDER['name']==''">name is required</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <label for="message-text" class="col-form-label">Email id</label>
+                                    <input class="form-control p-2" id="message-text" formControlName="email" type="text" placeholder="Enter Email Id" [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['email']==''}" (keyup)="FORM_BUILDER_INSERT_VALUE('email',$event.target.value)">
+                                    <div *ngIf="submitted && this.FORM_BUILDER['email']==''" class="invalid-feedback">
+                                        <div *ngIf="this.FORM_BUILDER['email']==''">Email id is required</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12" *ngIf="this.userData?.result['Subscription']!='both'">
+                                    <label for="message-text" class="col-form-label">Subscription</label>
+                                    <select class="form-select" aria-label="Default select example" disabled [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
+              this.FORM_BUILDER['UnderSubscription']==='Select Subscription' }" (change)="FORM_BUILDER_INSERT_VALUE('UnderSubscription',$event.target.value)">
+                <option [value]="this.userData?.result['Subscription']">{{this.userData?.result['Subscription']}}</option>
+              </select>
+                                    <div *ngIf="submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
+                this.FORM_BUILDER['UnderSubscription']=='Select Subscription'" class="invalid-feedback">
+                                        <div *ngIf="this.FORM_BUILDER['UnderSubscription']=='' ||
+                this.FORM_BUILDER['UnderSubscription']=='Select Subscription'">UnderSubscription is required</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12" *ngIf="this.userData?.result['Subscription']=='both'">
+                                    <label for="message-text" class="col-form-label">Subscription</label>
+                                    <select class="form-select" aria-label="Default select example" [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
+              this.FORM_BUILDER['UnderSubscription']==='Select Subscription' }" (change)="FORM_BUILDER_INSERT_VALUE('UnderSubscription',$event.target.value)">
+              <option value="">Select Option</option>
+              <option value="Export">Export</option>
+              <option value="Import">Import</option>
+              <option value="both">both</option>
+              </select>
+                                    <div *ngIf="submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
+                this.FORM_BUILDER['UnderSubscription']=='Select Subscription'" class="invalid-feedback">
+                                        <div *ngIf="this.FORM_BUILDER['UnderSubscription']=='' ||
+                this.FORM_BUILDER['UnderSubscription']=='Select Subscription'">Subscription is required</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <label for="message-text" class="col-form-label">Role_Type</label>
+                                    <select class="form-select" aria-label="Default select example" disabled [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['Role_Type']=='' ||
+              this.FORM_BUILDER['Role_Type']==='Select Subscription' }" (change)="FORM_BUILDER_INSERT_VALUE('Role_Type',$event.target.value)">
+                <option [value]="this.userData?.result['Role_Type']">{{this.ROLE_LIST[this.userData?.result['Role_Type']]}}</option>
+              </select>
+                                    <div *ngIf="submitted && this.FORM_BUILDER['Role_Type']=='' ||
+                this.FORM_BUILDER['Role_Type']=='Select Subscription'" class="invalid-feedback">
+                                        <div *ngIf="this.FORM_BUILDER['Role_Type']=='' ||
+                this.FORM_BUILDER['Role_Type']=='Select Subscription'">Role_Type is required</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-12">
+                                    <div class="row flex col-5" *ngIf="this.userData?.result['Role_Type']=='1'">
+                                        <!-- <label for="message-text" class="col-form-label">Role : </label> -->
+                                        <!-- <div class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Checker'},{value:'Approver'}]">
+                    <input class="form-check-input" (change)="onChange(cat.value, $event.target.checked)"name="{{ cat.value }}"
                      type="checkbox" id="{{cat.value}}">
                     <label class="form-check-label" for="{{cat.value}}">
                         {{cat.value}}
                     </label>
-                </div>
-                </div>
-              </div>
-              <div class="column"  *ngIf="this.userData?.result['Role_Type']=='3'">
-                <label for="message-text" class="col-form-label">Role : </label>
-                <div class="row flex col-5">
-                <div class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Checker'},{value:'Approver'}]">
-                  <input class="form-check-input" (change)="onChange($event,cat.value, $event.target.checked)"name="{{ cat.value }}"
-                   type="checkbox" id="{{cat.value}}">
-                  <label class="form-check-label" for="{{cat.value}}">
-                      {{cat.value}}
-                  </label>
-              </div>
-              </div>
-              </div>
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="formmodel.style.display='none'">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+                </div> -->
+                                    </div>
+                                    <div class="column top_paddd_new" *ngIf="this.userData?.result['Role_Type']=='2'">
+                                        <h5 for="message-text" class="col_neww">Role : </h5>
+                                        <ul class="ul_list">
+                                            <li class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Approver'}]">
+                                                <input class="form-check-input" (change)="onChange($event,cat.value, $event.target.checked)" name="{{ cat.value }}" type="checkbox" id="{{cat.value}}">
+                                                <label class="form-check-label" for="{{cat.value}}">
+                                                {{cat.value}}
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="column top_paddd_new" *ngIf="this.userData?.result['Role_Type']=='3'">
+                                        <h5 for="message-text" class="col_neww">Role : </h5>
+                                        <ul class="ul_list">
+                                            <li class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Checker'},{value:'Approver'}]">
+                                                <input class="form-check-input" (change)="onChange($event,cat.value, $event.target.checked)" name="{{ cat.value }}" type="checkbox" id="{{cat.value}}">
+                                                <label class="form-check-label" for="{{cat.value}}">
+                                                 {{cat.value}}
+                                              </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer new_footers_sections">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="formmodel.style.display='none'">Close</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
 
-<div class="modal" id="formmodel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" #Editformmodel>
-  <div class="modal-dialog" *ngIf="this.SELECTED_INDEX!=0">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Member</h5>
-        <button type="button" class="btn-close" (click)="Editformmodel.style.display='none'"><span aria-hidden="true">&times;</span></button>
-      </div>
-      <div class="modal-body">
-        <div class="button-wrapper">
-          <form class="form" method="POST">
-            <p class="heading">Update Member</p>
-              <span class="label">
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="opcaity">
+    <div class="modal" id="formmodel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" #Editformmodel>
+        <div class="modal-dialog" *ngIf="this.SELECTED_INDEX!=0">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Member</h5>
+                    <button type="button" class="btn-close buton_right_new" (click)="Editformmodel.style.display='none'"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="add_new_members_lus">
+                        <div class="">
+                            <div class="">
+                                <div class="button-wrapper">
+                                    <form class="form" method="POST">
+                                        <p class="heading">Update Member</p>
+                                        <span class="label">
                   <img class="img3" [src]="this.SELECTED_EDIT_DATA['imageUrl']" style="height: 70px; width: 70px;">
               </span>
-              <div *ngIf="!toggle" class="upload-div">
-                  <input name="upload" class="upload-box" placeholder="Upload File"
-                      (error)="onUploadError($event)" (init)="onUploadInit($event)"
-                      (success)="onUploadSuccess($event)" *ngIf="type === 'directive'"
-                      [dropzone]="config" class="dropzone dropzone-container" id="dropzone">
-              </div>
-          </form>
-      </div>
-        <form [formGroup]="memeberForm" (ngSubmit)="onEditSubmit(Editformmodel)">
-          <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Name : </label>
-            <input type="text" class="form-control p-2" id="recipient-name" [value]="this.SELECTED_EDIT_DATA['name']"
-             #editname placeholder="Enter Name"  [ngClass]="{ 'is-invalid': submitted && this.EDIT_FORM_BUILDER['name']==''}"
-            (keyup)="EDIT_FORM_BUILDER_INSERT_VALUE('name',$event.target.value)">
-            <div *ngIf="submitted && this.EDIT_FORM_BUILDER['name']==''" class="invalid-feedback">
-              <div *ngIf="this.EDIT_FORM_BUILDER['name']==''">name is required</div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="message-text" class="col-form-label">Email id :</label>
-            <input class="form-control p-2" id="message-text"
-            [value]="this.SELECTED_EDIT_DATA['email']" disabled
-            type="text" #editemail placeholder="Enter Email Id" [ngClass]="{ 'is-invalid': submitted && this.SELECTED_EDIT_DATA['email']==''}"
-            (keyup)="EDIT_FORM_BUILDER_INSERT_VALUE('email',$event.target.value)"
-            >
-            <div *ngIf="submitted && this.SELECTED_EDIT_DATA['email']==''" class="invalid-feedback">
-              <div *ngIf="this.SELECTED_EDIT_DATA['email']==''">Email id is required</div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="message-text" class="col-form-label">Subscription :</label>
-            <select class="form-select" aria-label="Default select example" [disabled]="this.userData?.result['Subscription']!='both'? true : false"
-            [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
-            this.FORM_BUILDER['UnderSubscription']==='Select Subscription' }"
-            (change)="EDIT_FORM_BUILDER_INSERT_VALUE('UnderSubscription',$event.target.value)"
-            [value]="this.MEMBER_DATA['Subscription']" #editSubscription>
-            <option *ngIf="this.userData?.result['Subscription']!='both'" [value]="this.userData?.result['Subscription']">{{this.userData?.result['Subscription']}}</option>
-            <option *ngIf="this.userData?.result['Subscription']=='both'" value="">Select Option</option>
-            <option *ngIf="this.userData?.result['Subscription']=='both'" value="Export">Export</option>
-            <option *ngIf="this.userData?.result['Subscription']=='both'" value="Import">Import</option>
-            <option *ngIf="this.userData?.result['Subscription']=='both'" value="both">both</option>
-          </select>
-            <div *ngIf="submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
-              this.FORM_BUILDER['UnderSubscription']=='Select Subscription'" class="invalid-feedback">
-              <div *ngIf="this.FORM_BUILDER['UnderSubscription']=='' ||
-              this.FORM_BUILDER['UnderSubscription']=='Select Subscription'">UnderSubscription is required</div>
-            </div>
-          </div>
-       <div class="mb-3">
-            <label for="message-text" class="col-form-label">Role_Type :</label>
-            <select class="form-select" aria-label="Default select example" disabled
-            [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['Role_Type']=='' ||
-            this.FORM_BUILDER['Role_Type']==='Select Subscription' }"
-            (change)="EDIT_FORM_BUILDER_INSERT_VALUE('Role_Type',$event.target.value)" #editRole_Type>
-              <option [value]="this.userData?.result['Role_Type']">{{this.ROLE_LIST[this.userData?.result['Role_Type']]}}</option>
-            </select>
-            <div *ngIf="submitted && this.FORM_BUILDER['Role_Type']=='' ||
-              this.FORM_BUILDER['Role_Type']=='Select Subscription'" class="invalid-feedback">
-              <div *ngIf="this.FORM_BUILDER['Role_Type']=='' ||
-              this.FORM_BUILDER['Role_Type']=='Select Subscription'">Role_Type is required</div>
-            </div>
-          </div>
-         <div class="mb-3">
-            <div class="column" *ngIf="this.userData?.result['Role_Type']=='2'">
-              <label for="message-text" class="col-form-label">Role : </label>
-              <div class="row flex col-5">
-                  <div class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Approver'}]">
-                    <input class="form-check-input" [checked]="this.MEMBER_DATA['RoleCheckbox']==cat.value ? true : false"
-                    (change)="onChange($event,cat.value, $event.target.checked)" name="{{ cat.value }}"
-                     type="checkbox" id="{{cat.value}}" #editRoleCheckbox>
-                    <label class="form-check-label" for="{{cat.value}}">
-                        {{cat.value}}
-                    </label>
-                </div>
-                </div>
-              </div>
-              <div class="column"  *ngIf="this.userData?.result['Role_Type']=='3'">
-                <label for="message-text" class="col-form-label">Role : </label>
-                <div class="row flex col-5">
-                <div class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Checker'},{value:'Approver'}]">
-                  <input class="form-check-input" [checked]="this.MEMBER_DATA['RoleCheckbox']==cat.value ? true : false"
-                   (change)="onChange($event,cat.value, $event.target.checked)" name="{{ cat.value }}"
-                   type="checkbox" id="{{cat.value}}" #editRoleCheckbox>
-                  <label class="form-check-label" for="{{cat.value}}">
-                      {{cat.value}}
-                  </label>
-              </div>
-              </div>
-              </div>
-          </div>
-        <button type="submit" class="btn btn-primary">Update</button>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="Editformmodel.style.display='none'">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+                                        <div *ngIf="!toggle" class="upload-div">
+                                            <input name="upload" class="upload-box" placeholder="Upload File" (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" *ngIf="type === 'directive'" [dropzone]="config" class="dropzone dropzone-container" id="dropzone">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
 
+                            <form [formGroup]="memeberForm" (ngSubmit)="onEditSubmit(Editformmodel)" class="edit_form_new_sec">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="recipient-name" class="col-form-label">Name</label>
+                                        <input type="text" class="form-control p-2" id="recipient-name" [value]="this.SELECTED_EDIT_DATA['name']" #editname placeholder="Enter Name" [ngClass]="{ 'is-invalid': submitted && this.EDIT_FORM_BUILDER['name']==''}" (keyup)="EDIT_FORM_BUILDER_INSERT_VALUE('name',$event.target.value)">
+                                        <div *ngIf="submitted && this.EDIT_FORM_BUILDER['name']==''" class="invalid-feedback">
+                                            <div *ngIf="this.EDIT_FORM_BUILDER['name']==''">name is required</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="message-text" class="col-form-label">Email id</label>
+                                        <input class="form-control p-2" id="message-text" [value]="this.SELECTED_EDIT_DATA['email']" disabled type="text" #editemail placeholder="Enter Email Id" [ngClass]="{ 'is-invalid': submitted && this.SELECTED_EDIT_DATA['email']==''}" (keyup)="EDIT_FORM_BUILDER_INSERT_VALUE('email',$event.target.value)">
+                                        <div *ngIf="submitted && this.SELECTED_EDIT_DATA['email']==''" class="invalid-feedback">
+                                            <div *ngIf="this.SELECTED_EDIT_DATA['email']==''">Email id is required</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="message-text" class="col-form-label">Subscription</label>
+                                        <select class="form-select" aria-label="Default select example" [disabled]="this.userData?.result['Subscription']!='both'? true : false" [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
+        this.FORM_BUILDER['UnderSubscription']==='Select Subscription' }" (change)="EDIT_FORM_BUILDER_INSERT_VALUE('UnderSubscription',$event.target.value)" [value]="this.MEMBER_DATA['Subscription']" #editSubscription>
+        <option *ngIf="this.userData?.result['Subscription']!='both'" [value]="this.userData?.result['Subscription']">{{this.userData?.result['Subscription']}}</option>
+        <option *ngIf="this.userData?.result['Subscription']=='both'" value="">Select Option</option>
+        <option *ngIf="this.userData?.result['Subscription']=='both'" value="Export">Export</option>
+        <option *ngIf="this.userData?.result['Subscription']=='both'" value="Import">Import</option>
+        <option *ngIf="this.userData?.result['Subscription']=='both'" value="both">both</option>
+      </select>
+                                        <div *ngIf="submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
+          this.FORM_BUILDER['UnderSubscription']=='Select Subscription'" class="invalid-feedback">
+                                            <div *ngIf="this.FORM_BUILDER['UnderSubscription']=='' ||
+          this.FORM_BUILDER['UnderSubscription']=='Select Subscription'">UnderSubscription is required</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="message-text" class="col-form-label">Role_Type</label>
+                                        <select class="form-select" aria-label="Default select example" disabled [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['Role_Type']=='' ||
+        this.FORM_BUILDER['Role_Type']==='Select Subscription' }" (change)="EDIT_FORM_BUILDER_INSERT_VALUE('Role_Type',$event.target.value)" #editRole_Type>
+          <option [value]="this.userData?.result['Role_Type']">{{this.ROLE_LIST[this.userData?.result['Role_Type']]}}</option>
+        </select>
+                                        <div *ngIf="submitted && this.FORM_BUILDER['Role_Type']=='' ||
+          this.FORM_BUILDER['Role_Type']=='Select Subscription'" class="invalid-feedback">
+                                            <div *ngIf="this.FORM_BUILDER['Role_Type']=='' ||
+          this.FORM_BUILDER['Role_Type']=='Select Subscription'">Role_Type is required</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="column top_paddd_new" *ngIf="this.userData?.result['Role_Type']=='2'">
+                                            <h5 for="message_new" class="col_neww">Role : </h5>
+                                            <ul class="ul_list">
+                                                <li class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Approver'}]">
+                                                    <input class="form-check-input" [checked]="this.MEMBER_DATA['RoleCheckbox']==cat.value ? true : false" (change)="onChange($event,cat.value, $event.target.checked)" name="{{ cat.value }}" type="checkbox" id="{{cat.value}}" #editRoleCheckbox>
+                                                    <label class="form-check-label" for="{{cat.value}}">
+                                                    {{cat.value}}
+                                                   </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="column top_paddd_new" *ngIf="this.userData?.result['Role_Type']=='3'">
+                                            <h5 for="message_new" class="col_neww">Role : </h5>
+                                            <ul class="ul_list">
+                                                <li class="form-check" *ngFor="let cat of [{value:'Maker'},{value:'Checker'},{value:'Approver'}]">
+                                                    <input class="form-check-input" [checked]="this.MEMBER_DATA['RoleCheckbox']==cat.value ? true : false" (change)="onChange($event,cat.value, $event.target.checked)" name="{{ cat.value }}" type="checkbox" id="{{cat.value}}" #editRoleCheckbox>
+                                                    <label class="form-check-label" for="{{cat.value}}">
+                                                 {{cat.value}}
+                                               </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer new_footers_sections">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="Editformmodel.style.display='none'">Close</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="modal-footer">
+
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>

@@ -108,13 +108,7 @@ export class SidenavComponent implements OnInit {
     private documentService: DocumentService,
     public userService: UserService,
     private toastr: ToastrService,
-    private sharedData: SharedDataService
-  ) {
-
-    // this.sharedData.currentDashBoard.subscribe(message => this.status5 = message)
-    // this.sharedData.currentExport.subscribe(message => this.status7 = message)
-
-
+    private sharedData: SharedDataService) {
     this.newHight()
   }
 

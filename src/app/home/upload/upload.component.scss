@@ -3,21 +3,6 @@
     ;
 }
 
-// .container1{
-//     display: flex;
-//     margin-top: -38px;
-//     margin-bottom: 26px;
-//     margin-left: -10px;
-//     width: 95%;
-//     height: 50px;
-//     border-bottom: 1px solid #eaedf3;
-// }
-// .container1 h5{
-//   margin-left: 30px;
-// }
-// .container1 p{
-//   margin-left: 70%;
-// }
 .modal-body {
     width: 133% !important;
     background-color: white;
@@ -32,9 +17,6 @@
 }
 
 .tip p {
-    // width:25%;
-    // line-height: 20px;
-    // float: left;
     font-family: Avenir;
     font-size: 20px;
     line-height: 15px;
@@ -42,13 +24,6 @@
     margin-left: 27px;
     margin-bottom: 23px;
 }
-
-// .tip{
-//   margin-left: 22px;
-// }
-// .tipright{
-//   height: 40px;
-// }
 #aaa {
     background-color: white;
     color: black;
@@ -189,6 +164,7 @@ select:focus {
   box-shadow: 0 0 2px 2px #d3d3d3;
   overflow: auto;
   width: calc(100vw - 300px);
+  height: 80vh;
 }
 
 .field-heading {
@@ -1681,10 +1657,10 @@ span input {
 
 .iframecontroller{
   display: flex;
-  width: 100%;
+  width: 95%;
   gap: 20px;
   justify-content: flex-start;
-  align-items: inherit;
+  align-items: flex-start;
 }
 
 .iframecontroller .flex-basis{
@@ -1708,13 +1684,29 @@ span input {
     cursor: pointer;
     opacity: 0;
 }
-// .iframecontroller iframe{
-//   width: 600px;
-// }
 .form-control{
   height: auto !important;
 }
 .Commercial{
   gap: 10px;
   flex-direction: column;
+}
+.bg-white{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 10px;
+  margin-left: 15px;
+}
+
+.bg-white .heading_doc{
+  display: inline-block;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 600;
+  color: #222;
+  border-bottom: 2px solid #aba8a8;
+  padding-bottom: 5px;
 }

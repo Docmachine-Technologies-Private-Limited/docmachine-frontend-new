@@ -4231,7 +4231,7 @@ SendApproval(Status:string,UniqueId:any,url:any){
     FileType:this.USER_DATA?.sideMenu
   }
   if (Status=='' || Status==null ||  Status=='Rejected') {
-    this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['Role_Type'],approval_data,()=>{
+    this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'],approval_data,()=>{
       this.ngOnInit();
       this.documentService.getDownloadStatus({id:UniqueId,deleteflag:'-1'}).subscribe((res:any)=>{
         console.log(res,'dsdsdsdsdsdsds');

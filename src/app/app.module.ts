@@ -48,6 +48,10 @@ import {CustomConfirmDialogModelService} from './custom/custom-confirm-dialog-mo
 import { CustomDropdownComponent } from "./custom/custom-dropdown/custom-dropdown.component";
 import { CustomdropdownservicesService } from "./custom/custom-dropdown/customdropdownservices.service";
 import { AprrovalPendingRejectTransactionsService } from './service/aprroval-pending-reject-transactions.service';
+import { AuthorizationComponent } from './Authorization/authorization/authorization.component';
+import { AdminGuard } from "./service/RolePermission/Admin/admin.guard";
+import { SuperGuard } from "./service/RolePermission/SuperAdmin/super.guard";
+import { MemberGuard } from "./service/RolePermission/Member/member.guard";
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -78,12 +82,16 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         CheckboxComponentsComponent,
         CustomConfirmDialogModelComponent,
         CustomDropdownComponent,
+        AuthorizationComponent,
     ],
     providers: [{ provide: AppConfig },
         WindowInformationService,
         CustomConfirmDialogModelService,
         CustomdropdownservicesService,
         AprrovalPendingRejectTransactionsService,
+        AdminGuard,
+        SuperGuard,
+        MemberGuard,
         { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
     ],
     bootstrap: [AppComponent],

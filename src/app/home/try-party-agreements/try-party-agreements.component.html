@@ -93,13 +93,8 @@
                                         </tr>
                                     </thead>
                                     <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of item1; let i = index">
-
-                                            <!-- (click)="
-                                        getInvoices(data, i) && getTransactions(data.pi_poNo) -->
-                                            <!-- <th class="rect">
-                                                <img src="./assets/Rectangle-13.png" />
-                                            </th> -->
+                                        <tr class="table-row" *ngFor="let data of item; let i = index"[ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                        this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
                                             <td>{{ data.date }}</td>
 
                                             <td class="sb-no"> {{ getPipoNumbers(data) }} </td>
@@ -137,7 +132,9 @@
                                                 <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                                 <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
                                                     aria-hidden="true"></i></button>
-                                                <a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                    <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
+                                                (click)="handleDelete(data._id,i)"><a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                               </button>
                                             </td>
                                         </tr>
                                     </tbody>

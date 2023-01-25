@@ -8,6 +8,9 @@ import * as xlsx from 'xlsx';
 import {Router} from '@angular/router';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
 @Component({
   selector: 'app-import-debit-note',
@@ -25,7 +28,8 @@ export class ImportDebitNoteComponent implements OnInit {
   public id: any;
   public item2: any;
   filtervisible: boolean = false;
-  
+  USER_DATA:any=[];
+
   filter() {
   // this.getPipoData()
   this.filtervisible = !this.filtervisible
@@ -43,27 +47,31 @@ onclick() {
     private userService: UserService,
     private router: Router,
     private sharedData: SharedDataService,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public dialog: MatDialog,
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
-    this.documentService.getDebit().subscribe(
-      (res: any) => {
-        console.log('Data fetched successfully', res);
-        this.item = res.data;
-        for (let value of this.item) {
-          if (value['file'] == 'import') {
-            this.item1.push(value);
-            console.log("awwww", this.item1)
+    this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA)
+    this.item1=[];
+      this.documentService.getDebit().subscribe(
+        (res: any) => {
+          for (let value of res.data) {
+            if (value['file'] == 'import') {
+              this.item1.push(value);
+            }
           }
-        }
-      },
-      (err) => console.log(err)
-    );
+          console.log(res,'yuyuyuyuyuyuyuuy')
+        },
+        (err) => console.log(err)
+      );
 
-  }
+    }
+
 
   exportToExcel() {
     const ws: xlsx.WorkSheet =
@@ -101,6 +109,43 @@ onclick() {
   toEdit(index) {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Debit Note Row Is In Edit Mode');
+  }
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+      this.documentService.deleteById({id:id,tableName:'debitnotes'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'debitnotes',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item1[index],
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
   }
 
   getPipoNumbers(data) {

@@ -22,6 +22,7 @@ export class MembersigninComponent implements OnInit {
   companyId: any;
   companyName: any;
   SNAPSHOT_DATA: any=[];
+  COMPANY_DETAILS: any=[];
   constructor(private formBuilder: FormBuilder, private userService: UserService,
     private router: Router, private route: ActivatedRoute, private toastr: ToastrService) { }
   ngOnInit(): void {
@@ -37,6 +38,10 @@ export class MembersigninComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
     });
+    this.userService.getTeamByUser(this.SNAPSHOT_DATA['teamId']).subscribe((res: any)=>{
+      console.log(res,'getTeamByUser');
+      this.COMPANY_DETAILS=res.data[0];
+    })
   }
   get f() { return this.resetForm.controls; }
   onSubmit() {
@@ -47,10 +52,7 @@ export class MembersigninComponent implements OnInit {
       this.isDisabled = false;
       return;
     }
-    this.userService.getTeamByUser(this.SNAPSHOT_DATA['teamId']).subscribe((res: any)=>{
-      console.log(res,'getTeamByUser');
-      this.resetForm.value.companyName = res.data[0]?.teamName;
-    })
+
     this.resetForm.value.role = 'member'
     this.resetForm.value.fullName = this.fullName
     this.resetForm.value.email = this.email
@@ -58,6 +60,7 @@ export class MembersigninComponent implements OnInit {
     this.resetForm.value.verified = 'yes'
     this.resetForm.value.Subscription = this.SNAPSHOT_DATA['UnderSubscription']
     this.resetForm.value.RoleCheckbox = this.SNAPSHOT_DATA['UnderSubscriptionCheckBox']
+    this.resetForm.value.companyName = this.COMPANY_DETAILS?.teamName;
     console.log(this.resetForm.value,'this.resetForm.value')
     this.userService.register(this.resetForm.value)
       .subscribe(
