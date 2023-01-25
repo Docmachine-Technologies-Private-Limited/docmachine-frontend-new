@@ -8,6 +8,9 @@ import * as xlsx from 'xlsx';
 import {Router} from '@angular/router';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
 @Component({
   selector: 'app-letter-of-credit-export-lc',
@@ -24,50 +27,8 @@ export class LetterOfCreditExportLCComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
-  filtervisible: boolean = false
-  
-  constructor(
-    private documentService: DocumentService,
-    private sanitizer: DomSanitizer,
-    private modalService: NgbModal,
-    private toastr: ToastrService,
-    private userService: UserService,
-    private router: Router,
-    private sharedData: SharedDataService,
-    public wininfo: WindowInformationService
-  ) {
-  }
-
-  ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
-    this.documentService.getLetterLC().subscribe(
-      (res: any) => {
-        console.log('Data fetched successfully', res);
-        this.item = res.data;
-        for (let value of this.item) {
-          if (value['file'] == 'export') {
-            this.item1.push(value);
-            console.log("awwww", this.item1)
-            // for(let value1 of this.item2){
-            //   const newVal = { ...this.item2 };
-            //   newVal['pipo1'] = value1
-            //   this.item1.push(newVal)
-
-          }
-
-        }
-        // for (let value of this.item) {
-        //   for(let value1 of value.pipo){
-        //     const newVal = { ...value };
-        //         newVal['pipo1'] = value1
-        //         this.item1.push(newVal)
-        //       }
-        // }
-      },
-      (err) => console.log(err)
-    );
-
-  }
+  filtervisible: boolean = false;
+  USER_DATA:any=[];
   filter() {
     // this.getPipoData()
     this.filtervisible = !this.filtervisible
@@ -77,6 +38,39 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     this.filtervisible = !this.filtervisible
   }
 
+  constructor(
+    private documentService: DocumentService,
+    private sanitizer: DomSanitizer,
+    private modalService: NgbModal,
+    private toastr: ToastrService,
+    private userService: UserService,
+    private router: Router,
+    private sharedData: SharedDataService,
+    public wininfo: WindowInformationService,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public dialog: MatDialog
+  ) {
+  }
+
+
+  async ngOnInit() {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
+    this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA)
+    this.item1=[];
+    this.documentService.getLetterLC().subscribe(
+      (res: any) => {
+        console.log('Res', res);
+        for (let value of res.data) {
+          if (value['file'] == 'export') {
+            this.item.push(value);
+          }
+        }
+      },
+      (err) => console.log(err)
+    );
+
+  }
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
       return x.pi_poNo;
@@ -142,6 +136,44 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     this.optionsVisibility[index] = true;
     this.toastr.warning('LetterLC Row Is In Edit Mode');
   }
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+      this.documentService.deleteById({id:id,tableName:'letterlcs'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'letterlcs',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item1[index],
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
+  }
+
 
   exportToExcel() {
     const ws: xlsx.WorkSheet = xlsx.utils.table_to_sheet(this.epltable.nativeElement);

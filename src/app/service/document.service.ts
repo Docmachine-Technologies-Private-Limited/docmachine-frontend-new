@@ -15,7 +15,7 @@ export class DocumentService {
     callback:()=>{}
   };
   PDF_DOCUMENTS_DATA:any=[];
-
+  pipolist:any=[];
   constructor(public http: HttpClient, public appconfig: AppConfig) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base);
@@ -478,6 +478,16 @@ export class DocumentService {
     return this.http.get(`${this.api_base}/pipo/get`, httpOptions);
   }
 
+  getPipoByType(type) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+
+    return this.http.get(`${this.api_base}/pipo/getPipoByType?filetype=${type}`, httpOptions);
+  }
+
   getPipoByCustomer(type,buyer) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -622,7 +632,14 @@ export class DocumentService {
       httpOptions
     );
   }
-
+  deleteById(data:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/delete_by_id/`,data,httpOptions);
+  }
 
   getSBDetailsByPIPO(id) {
     this.loadFromLocalStorage();
@@ -1811,5 +1828,12 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
 
-    return this.http.patch(`${this.api_base}/user/updateUserById/${id}`, data,httpOptions ); }
+    return this.http.patch(`${this.api_base}/user/updateUserById/${id}`, data,httpOptions );
+  }
+  getCurrency(){
+    return this.http.get("../../currency.json")
+  }
 }
+
+
+

@@ -17,6 +17,10 @@ import { ToastrService } from 'ngx-toastr';
 import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
 import {ShippingbillDataService} from "../../service/homeservices/shippingbill.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { UserService } from 'src/app/service/user.service';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-view-document',
@@ -66,6 +70,8 @@ export class ViewDocumentComponent implements OnInit {
   boe: boolean;
   sb: boolean;
   docu: any;
+  USER_DATA:any=[];
+  PENDING_DATA:any=[];
   constructor(
     public documentService: DocumentService,
     public shippingBillService: ShippingbillDataService,
@@ -74,11 +80,20 @@ export class ViewDocumentComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private toastr: ToastrService,
     private sharedData: SharedDataService,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    private userService: UserService,
+    public dialog: MatDialog,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService
   ) {}
 
-  ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
+ async ngOnInit() {
+    this.wininfo.set_controller_of_width(270,'.content-wrap');
+    this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA)
+    this.documentService.getRejectStatus(this.USER_DATA?.result?.sideMenu).subscribe((res: any)=>{
+      this.PENDING_DATA = res;
+      console.log("this.PENDING_DATA", res)
+    })
     this.route.params.subscribe((params) => {
       this.file = this.route.snapshot.params['file'];
       if (this.file === 'sb') {
@@ -263,5 +278,44 @@ export class ViewDocumentComponent implements OnInit {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Shipping Bill Row Is In Edit Mode');
   }
+  handleDelete(id,index:any) {
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
 
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+        this.documentService.deleteById({id:id,tableName:'masterrecord'}).subscribe((res) => {
+            console.log(res)
+            if (res) {
+              this.ngOnInit()
+            }
+        }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'masterrecord',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item1[index],
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
+  }
 }

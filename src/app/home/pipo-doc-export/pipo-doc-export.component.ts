@@ -58,11 +58,11 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
   public pipoArrayList: Array<PipoDisplayListViewItem> = [];
   public pipoDisplayListData: PipoDisplayListView;
-  public pipoData: PipoDisplayListViewItem;
+  public pipoData?: PipoDisplayListViewItem;
   public config: DropzoneConfigInterface;
   public config1: DropzoneConfigInterface;
   filtervisible: boolean = false;
-  
+
   filter() {
   // this.getPipoData()
   this.filtervisible = !this.filtervisible
@@ -208,6 +208,7 @@ onclick() {
     public wininfo: WindowInformationService,
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
+    
   ) {
     this.api_base = appconfig.apiUrl;
     this.loadFromLocalStorage();

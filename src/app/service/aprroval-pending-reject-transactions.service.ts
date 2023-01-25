@@ -33,7 +33,7 @@ export class AprrovalPendingRejectTransactionsService {
     }
   }
   DownloadByRole_Transaction_Type(roleType:string,data:any,callback:any){
-    if (roleType=='2'){
+    if (roleType=='Maker' || roleType=='Checker'){
      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
          var approval_data:any=data;
          approval_data['comment']=res.value.value;
@@ -41,14 +41,6 @@ export class AprrovalPendingRejectTransactionsService {
            if (callback!=null && callback!=undefined) {
              callback();
            }
-         })
-     });
-   } else if (roleType=='3'){
-     this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
-       var approval_data:any=data;
-       approval_data['comment']=res.value.value;
-         this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
-           callback();
          })
      });
    }

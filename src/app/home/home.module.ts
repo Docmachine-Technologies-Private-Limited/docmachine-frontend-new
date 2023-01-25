@@ -36,7 +36,7 @@ import { TermsAndConditionComponent } from './terms-and-condition/terms-and-cond
 import {InwardRemittanceComponent} from "./yesBank/inwardRemittance/inwardRemittance.component";
 import { NgApexchartsModule } from "ng-apexcharts";
 import {ProgressBarModule} from "angular-progress-bar"
-import { PipoNewComponent } from './pipo-new/pipo-new.component';
+import { PipoExportComponent } from './pipo-export/pipo-export.component';
 import { EditPipoComponent } from './edit-pipo/edit-pipo.component';
 import { ViewPipoComponent } from './view-pipo/view-pipo.component';
 import { AddPipoComponent } from './add-pipo/add-pipo.component';
@@ -83,6 +83,11 @@ import { RejectPanelComponent } from './StatusPanel/reject-panel/reject-panel.co
 import { AdminGuard } from "../service/RolePermission/Admin/admin.guard";
 import { SuperGuard } from "../service/RolePermission/SuperAdmin/super.guard";
 import { MemberGuard } from "../service/RolePermission/Member/member.guard";
+import { CreateNoteComponent } from "./upload/Import/create-note/create-note.component";
+import { DebitNoteComponent } from "./upload/Import/debit-note/debit-note.component";
+
+import { ExportCreditNoteComponent } from "./upload/Export/export-credit-note/export-credit-note.component";
+import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/export-debit-note.component";
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -98,7 +103,7 @@ import { MemberGuard } from "../service/RolePermission/Member/member.guard";
     ModalContentComponent1,
     HelpComponent,
     TermsAndConditionComponent,
-    PipoNewComponent,
+    PipoExportComponent,
     EditPipoComponent,
     ViewPipoComponent,
     AddPipoComponent,
@@ -207,7 +212,7 @@ import { MemberGuard } from "../service/RolePermission/Member/member.guard";
           },
           {
             path: "pipo",
-            component: PipoNewComponent,
+            component: PipoExportComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
@@ -425,7 +430,30 @@ import { MemberGuard } from "../service/RolePermission/Member/member.guard";
             component:RejectPanelComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
-          }
+          },{
+            path: "ImportCredit",
+            component:CreateNoteComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "ImportDebit",
+            component:DebitNoteComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "ExportCredit",
+            component:ExportCreditNoteComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "ExportDebit",
+            component:ExportDebitNoteComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
         ],
       },
     ]),

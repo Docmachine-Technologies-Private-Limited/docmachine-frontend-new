@@ -9,6 +9,9 @@ import {Router} from '@angular/router';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import {FormsModule} from '@angular/forms';
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
 @Component({
   selector: 'app-master-service',
@@ -26,6 +29,7 @@ export class MasterServiceComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
+  USER_DATA:any=[];
   filtervisible: boolean = false;
 
   constructor(
@@ -36,28 +40,31 @@ export class MasterServiceComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private sharedData: SharedDataService,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public dialog: MatDialog
   ) {
   }
 
-  ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
-    this.documentService.getMasterService().subscribe(
-      (res: any) => {
-        console.log('Data fetched successfully', res);
-        this.item = res.data;
-        for (let value of this.item) {
-          for (let value1 of value.pipo) {
-            const newVal = {...value};
-            newVal['pipo1'] = value1
-            this.item1.push(newVal)
-          }
-        }
-      },
-      (err) => console.log(err)
-    );
 
-  }
+  async ngOnInit() {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
+    this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA)
+    this.item1=[];
+      this.documentService.getMasterService().subscribe(
+        (res: any) => {
+          for (let value of res.data) {
+            if (value['file'] == 'export') {
+              this.item1.push(value);
+            }
+          }
+          console.log(res,'yuyuyuyuyuyuyuuy')
+        },
+        (err) => console.log(err)
+      );
+
+    }
 
   filter() {
     // this.getPipoData()
@@ -130,6 +137,43 @@ export class MasterServiceComponent implements OnInit {
   toEdit(index) {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Master Service Row Is In Edit Mode');
+  }
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+      this.documentService.deleteById({id:id,tableName:'masterservices'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'masterservices',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item1[index],
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
   }
 
   exportToExcel() {

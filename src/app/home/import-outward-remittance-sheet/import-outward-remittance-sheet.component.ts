@@ -46,7 +46,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
   public closeResult: string;
   public viewData: any;
   filtervisible: boolean = false;
-
+  USER_DATA:any=[];
   
   constructor(
     private toastr: ToastrService,
@@ -59,7 +59,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
     public wininfo: WindowInformationService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.documentService.getOrAdvice(1).subscribe(
       (res: any) => {
@@ -140,6 +140,10 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       },
       (err) => console.log(err)
     );
+
+    this.USER_DATA = await this.userService.getUserDetail();
+
+
   }
 
   getPipoNumbers(data) {
