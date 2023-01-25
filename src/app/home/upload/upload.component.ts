@@ -2368,6 +2368,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       console.log(args[1].data.boeNumber);
       console.log('jhsjshsjshjsh', args[1].data.billNo);
       console.log('Message Message', args[1].message);
+      console.log('Sample PDF other doc',args[1].data.pdfflag);
       if (args[1].message == 'This file already uploaded') {
         console.log('My Code');
         this.message = args[1].message;
@@ -2400,7 +2401,14 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.res = new IRAdvice(args[1].data);
         this.billNo = true;
         console.log('sjsjsjsj', this.res);
-      } else {
+      }
+      else if (args[1].data.pdfflag) {
+        // BoE.pdf Except other document upload code
+        this.res = args[1].data.pdfflag;
+        console.log('Sample Other PDF FLAG CONDITION');
+        this.boeNumber = true;
+        }
+       else {
         console.log('this.documentType',this.documentType);
         // this.res = new BoeBill(args[1].data);
         if (this.documentType === 'PI' || this.documentType === 'PO') {
