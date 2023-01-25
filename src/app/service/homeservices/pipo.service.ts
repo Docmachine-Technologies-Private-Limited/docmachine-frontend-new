@@ -70,7 +70,6 @@ export class PipoDataService {
   }
 
   getPipoListByCustomer = (type,customer) => {
-
     return new Promise((resolve, reject) => {
       this.documentService.getPipoByCustomer(type,customer).subscribe(
         (res: any) => {
