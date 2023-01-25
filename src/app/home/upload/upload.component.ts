@@ -117,7 +117,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   headers: any;
   closeResult: string;
   APPEND_HTML:any=[];
-  piPoForm = new FormGroup({
+  piPoForm :any= new FormGroup({
     pi_poNo: new FormControl('', [
       Validators.required,
       Validators.minLength(4),
@@ -396,6 +396,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.USER_DATA = data?.result
       console.log("this.USER_DATA", this.USER_DATA)
     });
+    
     this.jsondata1 = data1['default'];
     this.dataJson1 = data1['default'];
     this.jsondata2 = data1['default'];
@@ -1423,6 +1424,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
     var temp: any = {
       ...this.piPoForm.value,
     }
+    this.piPoForm.value.currency = this.piPoForm.value?.currency?.type;
+
     if (this.file) {
       if (this.file == 'import') {
         temp.benneName = this.beneValue;
