@@ -34,9 +34,15 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="exampleInputPassword1"> Choose the type of document</label>
-                    <select class="form-control p-3" aria-label="Default select example" [(ngModel)]="documentType1" name="" id="" class="form-control p-3">
+                    <select class="form-control p-3" *ngIf="this.USER_DATA?.Subscription=='both'" aria-label="Default select example" [(ngModel)]="documentType1" name="" id="" class="form-control p-3">
+                      <option value="">Select Import/Export</option>
                       <option *ngIf="this.USER_DATA?.sideMenu=='import'" value="import">Import</option>
                       <option *ngIf="this.USER_DATA?.sideMenu=='export'" value="export">Export</option>
+                    </select>
+                    <select class="form-control p-3" *ngIf="this.USER_DATA?.Subscription!='both'" aria-label="Default select example" [(ngModel)]="documentType1" name="" id="" class="form-control p-3">
+                      <option value="">Select {{this.USER_DATA?.Subscription}}</option>
+                      <option *ngIf="this.USER_DATA?.Subscription=='Import'" value="import">Import</option>
+                      <option *ngIf="this.USER_DATA?.Subscription=='Export'" value="export">Export</option>
                     </select>
                   </div>
                 </div>
@@ -312,10 +318,23 @@
                       ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
                     </ng-select>
                   </div>
-                  <div *ngIf='documentType != "blCopy" && file !="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                  <div *ngIf='documentType == "insuranceCopy" && file =="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
                     <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
                     <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
                      [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                      bindLabel="pi_po_buyerName"
+                      [multiple]="true"
+                      groupBy="selectedAllGroup"
+                      [selectableGroup]="true"
+                      placeholder="Select PI/PO"
+                      bindValue="testFunctionID"
+                      ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                    </ng-select>
+                  </div>
+                  <div *ngIf='documentType != "blCopy" && file !="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                    <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
+                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
+                     [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
                       bindLabel="pi_po_buyerName"
                       [multiple]="true"
                       groupBy="selectedAllGroup"
@@ -1221,13 +1240,11 @@
                 <div class="row p-3">
                   <div class="mb-3 flex-basis-1">
                     <label for="exampleInputEmail1" class="form-label">PI/PO NUMBER*</label>
-                    <input ngModel class="form-control p-3" type="text"
-                      name="creditNoteNumber">
+                    <input ngModel class="form-control p-3" type="text" formControlName="pi_poNo">
                   </div>
                   <div class="mb-3 flex-basis-1">
                     <label for="exampleInputPassword1" class="form-label">DATE</label>
-                    <input type="date" NgModel class="form-control p-3"
-                      name="date">
+                    <input type="date" ngModel class="form-control p-3" formControlName="date">
                   </div>
                 </div>
                 <div class="row p-3">
@@ -1262,10 +1279,10 @@
                   </div>
                 </div>
                 <div class="row p-3">
-                  <div class="mb-3 flex-basis-1">
+                  <!-- <div class="mb-3 flex-basis-1">
                     <label for="settledAmount">PC Ref No</label>
                     <input class="form-control p-3" type="text" formControlName="pcRefNo" />
-                  </div>
+                  </div> -->
                   <div class="mb-3 flex-basis-1">
                     <label for="settledAmount">Due Date</label>
                     <input class="form-control p-3" type="date" formControlName="dueDate"
@@ -1338,10 +1355,13 @@
                     <a *ngIf='i>0' (click)='removeAddress(i)'><i style="margin-top: 30px; "
                         class="fas fa-times"></i></a>
                     </div>
+                    <div class="row p-3">
+                      <button type="submit" class="btn btn-primary mb-3">Submit</button>
+                    </div>
                   </div>
               </div>
               </div>
-              <div class="column col-12">
+              <!-- <div class="column col-12">
                 <div class="row p-3">
                   <div class="mb-3 flex-basis-1">
                     <label for="invoiceAmount">Invoice Amount</label>
@@ -1447,7 +1467,7 @@
                         </div>
                   </div>
                 <button type="submit" class="btn btn-primary mb-3">Submit</button>
-              </div>
+              </div> -->
             </div>
           </form>
 
