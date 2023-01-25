@@ -1275,8 +1275,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(this.pipoArray);
   }
 
-  changepipo(value)
-  {
+  changepipo(value){
     this.pipoDataService.getPipoListByCustomer(this.documentType1,value).then((data) => {
       console.log(data,'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
