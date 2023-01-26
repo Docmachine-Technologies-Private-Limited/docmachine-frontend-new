@@ -12,6 +12,7 @@ import { WindowInformationService } from 'src/app/service/window-information.ser
 import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+import { PipoDataService } from 'src/app/service/homeservices/pipo.service';
 
 @Component({
   selector: 'app-master-service',
@@ -23,7 +24,7 @@ export class MasterServiceComponent implements OnInit {
 
   @ViewChild('epltable', {static: false}) epltable: ElementRef;
   public item: any;
-  public item1 = [];
+  public item1:any = [];
   public viewData: any;
   public closeResult: string;
   public optionsVisibility: any = [];
@@ -31,7 +32,7 @@ export class MasterServiceComponent implements OnInit {
   public id: any;
   USER_DATA:any=[];
   filtervisible: boolean = false;
-
+  TEMP_PI_PO_NUMBER:any=[];
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -41,6 +42,7 @@ export class MasterServiceComponent implements OnInit {
     private router: Router,
     private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
+    private pipoDataService: PipoDataService,
     public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog
   ) {
@@ -63,7 +65,13 @@ export class MasterServiceComponent implements OnInit {
         },
         (err) => console.log(err)
       );
-
+      await this.pipoDataService.getPipoList('export').then((data) => {
+        console.log(data,'getPipoList')
+        this.pipoDataService.pipolistModel$.subscribe((data) => {
+          console.log(data,'pipolistModel');
+          this.TEMP_PI_PO_NUMBER=data;
+        });
+      });;
     }
 
   filter() {
@@ -101,7 +109,7 @@ export class MasterServiceComponent implements OnInit {
   }
 
   getPipoNumbers(data) {
-    return data.pipo1.pi_poNo;
+    return data?.pipo[0]?.pi_poNo;
   }
 
   viewLC(a) {

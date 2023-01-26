@@ -307,8 +307,8 @@
                   </div>
                   <div *ngIf='documentType == "blCopy" && file !="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
                     <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
-                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
-                     [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
+                     [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
                       bindLabel="pi_po_buyerName"
                       [multiple]="true"
                       groupBy="selectedAllGroup"
@@ -320,8 +320,8 @@
                   </div>
                   <div *ngIf='documentType == "insuranceCopy" && file =="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
                     <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
-                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
-                     [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
+                     [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
                       bindLabel="pi_po_buyerName"
                       [multiple]="true"
                       groupBy="selectedAllGroup"
@@ -1023,70 +1023,55 @@
 
           <form class="iframecontroller" *ngIf="billNo && !override && documentType1 == 'export'" #values="ngForm"
             (ngSubmit)="onSubmitIrAdvice(values)">
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">FOREX ADVICE DETAILS</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="billNo" [(ngModel)]="res.billNo">
+                  <input class="form-control p-3" type="text"
+                    name="billNo" [(ngModel)]="PDF_READER_DATA.billNo">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">PARTY NAME</label>
-                  <input NgModel class="form-control p-3" name="partyName"
-                    [(ngModel)]="res.partyName">
+                  <input class="form-control p-3" name="partyName"
+                    [(ngModel)]="PDF_READER_DATA.customer">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">TT AMOUNT</label>
-                  <input ngModel class="form-control p-3" name="partyName"
-                    [(ngModel)]="res.amount">
+                  <input class="form-control p-3" name="amount"
+                    [(ngModel)]="PDF_READER_DATA.amount">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
-
-            <div class="sub-table">
-              <div class="form12 p-3">
-                <p class="sh1">FOREX ADVICE DETAILS</p>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">TT Date</label>
-                  <input class="form-control p-3" [(ngModel)]="res.billNo" matInput
-                  [matDatepicker]="date" placeholder="Choose a date"
-                  formControlName="date" autocomplete="off">
-                  <mat-datepicker-toggle matSuffix [for]="date">
-                  </mat-datepicker-toggle>
-                  <mat-datepicker aria-setsize="14px" #date>
-                  </mat-datepicker>
+                  <input class="form-control p-3"
+                   [(ngModel)]="PDF_READER_DATA.date"
+                   placeholder="Choose a date"
+                  name="date" type="date" autocomplete="off">
                 </div>
 
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Recieved Date</label>
-                  <input class="form-control p-3" [(ngModel)]="res.recievedDate" matInput
-                  [matDatepicker]="recievedDate" placeholder="Choose a date"
-                  formControlName="recievedDate" autocomplete="off">
-                  <mat-datepicker-toggle matSuffix [for]="recievedDate">
-                  </mat-datepicker-toggle>
-                  <mat-datepicker aria-setsize="14px" #recievedDate>
-                  </mat-datepicker>
+                  <input class="form-control p-3"
+                  type="date" placeholder="Choose a date"
+                  [(ngModel)]="PDF_READER_DATA.recievedDate"
+                  name="recievedDate" autocomplete="off">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Commission</label>
-                  <input ngModel class="form-control p-3" name="commision"
-                    [(ngModel)]="res.commision">
+                  <input  class="form-control p-3" name="commision"
+                    [(ngModel)]="this.PDF_READER_DATA.commision">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Conversion Date</label>
-                  <input class="form-control p-3" [(ngModel)]="res.conversionDate" matInput
-                  [matDatepicker]="conversionDate" placeholder="Choose a date"
-                  formControlName="conversionDate" autocomplete="off">
-                  <mat-datepicker-toggle matSuffix [for]="conversionDate">
-                  </mat-datepicker-toggle>
-                  <mat-datepicker aria-setsize="14px" #conversionDate>
-                  </mat-datepicker>
-
+                  <input class="form-control p-3"
+                  type="date" placeholder="Choose a date"
+                  [(ngModel)]="PDF_READER_DATA.conversionDate"
+                  name="conversionDate" autocomplete="off">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Exchange Rate</label>
                   <input ngModel class="form-control p-3" name="exchangeRate"
-                    [(ngModel)]="res.exchangeRate">
+                    [(ngModel)]="PDF_READER_DATA.exchangeRate">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Location</label>
@@ -1117,7 +1102,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
-           </div>
             </div>
 
           </form>
@@ -1125,42 +1109,43 @@
           <form class="iframecontroller" *ngIf="billNo && !override && documentType1 == 'import'" #values="ngForm"
           (ngSubmit)="onSubmitOrAdvice(values)">
           <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
-          <div class="field"> <div class="row">
+          <div class="field p-3">
+            <div class="row">
             <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Bill No</label>
                 <input ngModel class="form-control p-3" type="text"
-                  name="billNo" [(ngModel)]="res.billNo">
+                  name="billNo" [(ngModel)]="this.PDF_READER_DATA.billNo">
               </div>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">PARTY NAME</label>
                 <input NgModel class="form-control p-3" name="partyName"
-                  [(ngModel)]="res.partyName">
+                  [(ngModel)]="this.PDF_READER_DATA.customer">
               </div>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">TT AMOUNT</label>
                 <input ngModel class="form-control p-3" name="amount"
-                  [(ngModel)]="res.amount">
+                  [(ngModel)]="this.PDF_READER_DATA.amount">
               </div>
             </div>
 
             <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">TT Date</label>
-                <input ngModel class="form-control p-3" name="date"
-                  [(ngModel)]="res.date">
+                <input ngModel class="form-control p-3" type="date" name="date"
+                  [(ngModel)]="this.PDF_READER_DATA.date">
               </div>
             </div>
 
             <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Recieved Date</label>
-                <input ngModel class="form-control p-3" name="recievedDate"
-                  [(ngModel)]="res.recievedDate">
+                <label for="exampleInputPassword1" class="form-label">Received Date</label>
+                <input ngModel class="form-control p-3" type="date" name="recievedDate"
+                  [(ngModel)]="this.PDF_READER_DATA.recievedDate">
               </div>
             </div>
 
@@ -1168,15 +1153,15 @@
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Commission</label>
                 <input ngModel class="form-control p-3" name="commision"
-                  [(ngModel)]="res.commision">
+                  [(ngModel)]="this.PDF_READER_DATA.commision">
               </div>
             </div>
 
             <div class="col-md-6 col-sm-6 col-xs-12 col-12">
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Conversion Date</label>
-                <input ngModel class="form-control p-3" name="conversionDate"
-                  [(ngModel)]="res.conversionDate">
+                <input ngModel class="form-control p-3" type="date" name="conversionDate"
+                  [(ngModel)]="this.PDF_READER_DATA.conversionDate">
               </div>
             </div>
 
@@ -1184,7 +1169,7 @@
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Exchange Rate</label>
                 <input ngModel class="form-control p-3" name="exchangeRate"
-                  [(ngModel)]="res.exchangeRate">
+                  [(ngModel)]="this.PDF_READER_DATA.exchangeRate">
               </div>
             </div>
 
@@ -1223,14 +1208,13 @@
                 </select>
               </div>
             </div>
-
-            <div class="form12 p-3">
-
-              <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+              <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
             </div>
-
-          </div> </div>
-
+          </div>
+        </div>
         </form>
           <!-- Outward Remittance End -->
           <form class="iframecontroller" *ngIf="pIpO && !override" [formGroup]="piPoForm" (ngSubmit)="onSubmitPipo()">
@@ -1574,10 +1558,10 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"></label>
-                  <div *ngIf="matchSelectedPipo(pipo,this.pipoArr)">
+                  <div *ngIf="this.pipoArr.length!=0">
                     <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
-                      <option value="">Select SB Number for PI-{{pipo.pi_poNo}}</option>
-                      <option *ngFor="let sb of pipoDataService.getShippingBills(pipo._id); let i=index"
+                      <option value="">Select SB Number</option>
+                      <option *ngFor="let sb of this.SHIPPINGBILL_LIST; let i=index"
                         [value]="sb._id">
                         {{ sb.sbno }}
                       </option>
@@ -1642,10 +1626,10 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"></label>
-                  <div *ngIf="matchSelectedPipo(pipo,this.pipoArr)">
+                  <div>
                     <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
-                      <option value="">Select SB Number for PI-{{pipo.pi_poNo}}</option>
-                      <option *ngFor="let sb of pipoDataService.getShippingBills(pipo._id); let i=index"
+                      <option value="">Select SB Number</option>
+                      <option *ngFor="let sb of this.SHIPPINGBILL_LIST; let i=index"
                         [value]="sb._id">
                         {{ sb.sbno }}
                       </option>
@@ -1748,11 +1732,10 @@
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"></label>
                   <div>
-                    <div *ngIf="matchSelectedPipo(pipo,this.pipoArr)">
+                    <div>
                       <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
-                        <option value="">Select SB Number for PI-{{pipo.pi_poNo}}</option>
-                        {{pipo._id}}
-                        <option *ngFor="let sb of pipoDataService.getShippingBills(pipo._id); let i=index"
+                        <option value="">Select SB Number</option>
+                        <option *ngFor="let sb of this.SHIPPINGBILL_LIST; let i=index"
                           [value]="sb._id">
                           {{ sb.sbno }}
                         </option>
@@ -1886,12 +1869,19 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Master Service Amount</label>
-                  <input NgModel class="form-control p-3"
+                  <input ngModel class="form-control p-3"
                     name="masterServiceAmount">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <input ngModel class="form-control p-3" name="currency">
+                  <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                  [items]="this.CURRENCY_LIST"
+                  bindLabel="type"
+                  [multiple]="false"
+                  groupBy="selectedAllGroup"
+                  placeholder="Select PI/PO"
+                  name="currency"
+                  ngModel></ng-select>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>

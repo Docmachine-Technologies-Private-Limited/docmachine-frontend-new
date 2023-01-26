@@ -208,7 +208,7 @@ onclick() {
     public wininfo: WindowInformationService,
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
-    
+
   ) {
     this.api_base = appconfig.apiUrl;
     this.loadFromLocalStorage();
@@ -282,7 +282,6 @@ onclick() {
         console.log('second log agreement', this.item12);
         for (let value of this.item12) {
           if (value['file'] == 'export') {
-
             this.item13.push(value);
             // console.log('awwww', this.item11);
           }
@@ -438,16 +437,9 @@ onclick() {
     this.toggle2 = false;
     this.toggle3 = false;
     this.toggle6 = false;
-    // console.log('*****************', this.item20);
     console.log('thihfdfsdfgdsfkjgsf', this.pipoData);
 
     let currentpipo = this.route.snapshot.params['id'];
-    // for(let item of this.item20){
-    //   if(item.sbno == this.pipoData.sbno){
-    //     this.selectedshippingdata = item
-    // }
-
-    // }
     console.log(this.selectedshippingdata, 'this is conslo');
 
     if (a == 'sb') {
