@@ -127,4 +127,15 @@ export class PipoDataService {
       }
     }
   }
+  getShippingNo() {
+    let pipolist = this.pipolistModelSubsciber.value;
+    console.log('pipolist',pipolist);
+    var temp:any=[];
+    for (let i in pipolist) {
+      for (let index = 0; index < pipolist[i]?.sbRef.length; index++) {
+        temp.push(pipolist[i]?.sbRef[index]);
+      }
+      }
+      return temp;
+    }
 }
