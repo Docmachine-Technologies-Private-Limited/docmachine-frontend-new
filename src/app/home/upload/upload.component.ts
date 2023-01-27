@@ -2310,21 +2310,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
         console.log('Here data type', args[1].data);
         this.res = new IRAdvice(args[1].data);
         this.billNo = true;
-<<<<<<< HEAD
-        console.log('sjsjsjsj', this.res);
-      }
-      else if (args[1].data.pdfflag) {
-        // BoE.pdf Except other document upload code
-        this.res = args[1].data.pdfflag;
-        console.log('Sample Other PDF FLAG CONDITION');
-        this.boeNumber = true;
-        }
-       else {
-=======
         this.PDF_READER_DATA=args[1].data;
         console.log('PDF_READER_DATA',this.PDF_READER_DATA,this.res);
       } else {
->>>>>>> d72fafd145c9a6130b3e50a65c84a87fde40fe51
         console.log('this.documentType',this.documentType);
         // this.res = new BoeBill(args[1].data);
         if (this.documentType === 'PI' || this.documentType === 'PO') {
