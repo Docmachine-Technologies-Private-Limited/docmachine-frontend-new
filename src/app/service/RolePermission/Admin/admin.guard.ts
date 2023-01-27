@@ -7,7 +7,6 @@ import { UserService } from '../../user.service';
   providedIn: 'root'
 })
 export class AdminGuard implements CanActivate {
-  USER_PROFILE:any=[];
   role:any = '';
   constructor(public user_service:UserService,public router:Router){
   }

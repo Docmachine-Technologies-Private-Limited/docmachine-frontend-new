@@ -16,6 +16,7 @@ export class DocumentService {
   };
   PDF_DOCUMENTS_DATA:any=[];
   pipolist:any=[];
+  OUTWARD_REMITTANCE_ADVICE_SHEET: any=[];
   constructor(public http: HttpClient, public appconfig: AppConfig) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base);
@@ -123,6 +124,15 @@ export class DocumentService {
       },
       httpOptions
     );
+  }
+  getBillNo(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/orAdvice/getByIdBillNo`,{_id:id},httpOptions);
   }
 
 

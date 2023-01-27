@@ -27,6 +27,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import * as xlsx from 'xlsx';
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { ShippingbillDataService } from 'src/app/service/homeservices/shippingbill.service';
 
 @Component({
   selector: 'app-bill-lodgement',
@@ -269,6 +270,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   SHIPPING_BILL:any='';
   SHIPPING_BILL_LIST:any=['Shipping bill'];
   ThirdPartydata: any = [];
+  Letter_Of_Credit: any = [];
   changevalue:any=''
 
   constructor(
@@ -281,7 +283,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     private confirmDialogService: ConfirmDialogService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public shippingBillService: ShippingbillDataService,
   ) {
     console.log('hello');
     // this.onAddCourse("e")
@@ -354,58 +357,61 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       this.showInvoice = false;
       console.log('hello');
     });
-    this.documentService.getMaster(1).subscribe(
-      (res: any) => {
-        console.log(res), (this.item1 = res.data);
-        console.log('Master Data ***********************', this.item1);
-        this.mergeIr();
-        this.mergeIr2();
-        this.item1.forEach((element, i) => {
-          this.buyerName[i] = element.buyerName;
-        });
-        this.buyerName = this.buyerName.filter(
-          (value, index) => this.buyerName.indexOf(value) === index
-        );
-        // console.log(this.buyerName);
-        console.log('line no. 367', this.buyerName);
-      },
-      (err) => console.log(err)
-    );
+    this.shippingBillService.getShippingBillList().then((res: any) => {
+      this.shippingBillService.shippingbills$.subscribe((data: any) => {
+        console.log('getShippingBillList',data)
+        this.documentService.getMaster(1).subscribe((res: any) => {
+          console.log(res);
+          this.item1 = res?.data;
+          console.log('getMaster Data', this.item1);
+          this.item1.forEach((element, i) => {
+            this.buyerName[i] = element.buyerName;
+          });
+          for (let index = 0; index < data.length; index++) {
+            this.item1[index]['balanceAvai'] = data[index]?.balanceAvai!=null && data[index]?.balanceAvai!=undefined ?data[index]?.balanceAvai:'0';
+          }
+          // this.mergeIr();
+          // this.mergeIr2();
+          console.log('buyerName', this.buyerName);
+        },
+        (err) => console.log(err)
+      );
 
-    this.documentService.getMasterWithPipo(1).subscribe(
-      (res: any) => {
-        console.log('Merged sb with pipo', res);
-      },
-      (err) => console.log(err)
-    );
+      });
+    });
 
     this.documentService.getThird().subscribe(
       (res: any) => {
         console.log('HEre Response Third', res);
         this.item12 = res.data;
         console.log('Try Party', this.item12);
+        var temp:any=[];
         for (let value of this.item12) {
           if (value['file'] == 'export') {
-            this.ThirdPartydata.push(value);
+            temp.push(value?.triPartyAgreementNumber);
             this.item4.push(value);
             console.log('awwww', this.item4);
+          }
+        }
+        for (let index = 0; index < temp.length; index++) {
+          if (!this.ThirdPartydata.includes(temp[index])) {
+              this.ThirdPartydata.push({
+                try_part_agreement:temp[index]
+              });
           }
         }
       },
       (err) => console.log(err)
     );
 
-    // credit note Api
+    // // credit note Api
     this.documentService.getCredit().subscribe(
       (res: any) => {
         console.log('HEre Responsesssssssss', res);
         this.item10 = res.data;
-        // this.item6 =this.item3.data;
         console.log('credit data', this.item10);
-
         for (let value of this.item10) {
           if (value['file'] == 'export') {
-
             this.item11.push(value);
             console.log('awwww', this.item11);
           }
@@ -422,7 +428,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         console.log('this is exporter addres', this.item5);
         this.arr = this.item5.gst.split('');
         console.log(this.arr);
-        // console.log("*************************Shailendra", this.item5.teamName)
 
         this.teamName1 = this.item5.teamName;
         this.addressLine1 = this.item5.adress;
@@ -436,14 +441,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           } else if (i > 5 && i <= 11) {
             this.teamName3.push(this.completewords[i]);
           }
-          // else if(i>9){
-          //     this.teamName4.push(this.completewords[i])
-          // }
         }
 
         this.team1 = this.teamName2.join(' ');
         this.team2 = this.teamName3.join(' ');
-        // this.team3=this.teamName4.join(" ")
 
         console.log('*************************Shailendra', this.team1);
         console.log('*************************ShailendraAddress', this.team2);
@@ -464,9 +465,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
         this.address1 = this.addressLine2.join(' ');
         this.address2 = this.addressLine3.join(' ');
         this.address3 = this.addressLine4.join(' ');
-        // console.log("Shailendra Address1 ***********************",this.address1)
-        // console.log("Shailendra Address2 ***********************",this.address2)
-        // console.log("Shailendra Address3 ***********************",this.address3)
 
         this.bankArray = this.item5.bankDetails;
         for (let value of this.bankArray) {
@@ -477,12 +475,22 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           return inputArray.indexOf(item) == index;
         });
         console.log(this.bank,'bank.....................');
-        //this.letterHead = data['data'][0].file[0]["Letter Head"]
-        //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
       },
       (error) => {
         console.log('error');
       }
+    );
+    this.Letter_Of_Credit=[];
+    this.documentService.getLetterLC().subscribe(
+      (res: any) => {
+        console.log('Res', res);
+        for (let value of res.data) {
+          if (value['file'] == 'export') {
+            this.Letter_Of_Credit.push(value);
+          }
+        }
+      },
+      (err) => console.log(err)
     );
     console.log('this is me');
     console.log('main array*********', this.sbArray);
@@ -1180,7 +1188,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     console.log('Shailendra *************', a.buyerName);
 
     this.buyer1 = a.buyerName;
-    this.completewords3 = this.buyer1.split(' ');
+    this.completewords3 = this.buyer1;;
     this.devideContent3 = this.completewords3.length;
 
     for (let i = 0; i < this.completewords3.length; i++) {

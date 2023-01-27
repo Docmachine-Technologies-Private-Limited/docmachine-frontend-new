@@ -50,11 +50,11 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
   public viewData: any;
   filtervisible: boolean = false;
   USER_DATA:any=[];
-  
+
   constructor(
     private toastr: ToastrService,
     private userService: UserService,
-    private documentService: DocumentService,
+    public documentService: DocumentService,
     private router: Router,
     private sharedData: SharedDataService,
     private modalService: NgbModal,
@@ -79,11 +79,8 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         }
         this.item1.forEach((element, i) => {
           let amount = element.amount
-          // .replace(/,/g, '');
           let commision = parseFloat(element.commision)
-          // .replace(/,/g, '');
           let exchangeRate = parseFloat(element.exchangeRate)
-          // .replace(/,/g, '');
           this.item1[i].recUSD = (amount - commision).toFixed(2);
           let cv = (
             parseFloat(this.item1[i].recUSD) * exchangeRate
@@ -103,13 +100,10 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         console.log(this.location);
         console.log('jsadffhsjshd', this.commodity);
         console.log('team data', data);
-        this.location = this.location.filter(
-          (value, index) => this.location.indexOf(value) === index
-        );
+        this.location = this.location.filter((value, index) => this.location.indexOf(value) === index);
         this.commodity = this.commodity.filter(
           (value, index) => this.commodity.indexOf(value) === index
         );
-        //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
       },
       (error) => {
         console.log('error');
@@ -119,23 +113,13 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
     this.documentService.getMaster(1).subscribe(
       (res: any) => {
         console.log('Master Data File', res);
-        // this.origin = res['data'][0]['countryOfFinaldestination']
-        // console.log("jainshailendra",this.origin);
         this.item5 = res.data;
         this.merging();
         this.item5.forEach((element, i) => {
           this.origin[i] = element.countryOfFinaldestination;
         });
-        this.origin = this.origin.filter(
-          (value, index) => this.origin.indexOf(value) === index
-        );
-
+        this.origin = this.origin.filter((value, index) => this.origin.indexOf(value) === index);
         console.log('Master Country', this.origin);
-
-        // this.origin.forEach((element, i)=>{
-        //   this.origin[i].ori = element[i]
-        // })
-        // console.log("Master Country2", this.origin)
       },
       (err) => console.log(err)
     );
@@ -166,16 +150,14 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         this.toastr.success('Forex Advice Row Is Updated Successfully.');
       },
       (error) => {
-        // this.toastr.error('Invalid inputs, please check!');
         console.log('error');
       }
     );
   }
 
 
-    
+
   filter() {
-    // this.getPipoData()
     this.filtervisible = !this.filtervisible
 
   }
@@ -229,15 +211,12 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
               console.log('Line no. 211', newVal);
               let sbBalance = shippingdata.fobValue;
               let irAmount = irData.amount
-              // .replace(/,/g, ''));
               let availableBalance = irAmount - sbBalance;
-
               if (availableBalance <= 0) {
                 newVal['BalanceAvail'] = 0;
               } else {
                 newVal['BalanceAvail'] = availableBalance;
               }
-
               console.log('Forex data Value', newVal);
               filterForexData.push(newVal);
             }
@@ -249,7 +228,6 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         if(irData.sbNo.length == 0){
           const newVal = { ...irData };
           let availableBal = irData.amount
-            // .replace(/,/g, ''));
           newVal['BalanceAvail'] = availableBal;
           filterForexData.push(newVal);
           console.log('235', filterForexData);
@@ -260,14 +238,14 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       for (let ir of this.item1) {
         const newVal = { ...ir };
         let availableBal = ir.amount
-          // .replace(/,/g, ''));
         newVal['BalanceAvail'] = availableBal;
         filterForexData.push(newVal);
         console.log('245', filterForexData);
       }
     }
+    this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET=filterForexData;
     this.item6 = filterForexData
-    console.log("Full data", this.item6)
+    console.log("Full data", this.item6,this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET)
   }
 
   openIradvice(content) {

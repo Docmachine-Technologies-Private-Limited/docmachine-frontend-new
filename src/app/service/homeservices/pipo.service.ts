@@ -70,7 +70,6 @@ export class PipoDataService {
   }
 
   getPipoListByCustomer = (type,customer) => {
-
     return new Promise((resolve, reject) => {
       this.documentService.getPipoByCustomer(type,customer).subscribe(
         (res: any) => {
@@ -128,4 +127,15 @@ export class PipoDataService {
       }
     }
   }
+  getShippingNo() {
+    let pipolist = this.pipolistModelSubsciber.value;
+    console.log('pipolist',pipolist);
+    var temp:any=[];
+    for (let i in pipolist) {
+      for (let index = 0; index < pipolist[i]?.sbRef.length; index++) {
+        temp.push(pipolist[i]?.sbRef[index]);
+      }
+      }
+      return temp;
+    }
 }

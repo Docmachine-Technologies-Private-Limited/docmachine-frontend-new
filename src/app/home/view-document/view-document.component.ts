@@ -103,6 +103,7 @@ export class ViewDocumentComponent implements OnInit {
         this.sb = true;
         this.shippingBillService.getShippingBillList().then((res: any) => {
           this.shippingBillService.shippingbills$.subscribe((data: any) => {
+            console.log('getShippingBillList',data)
             this.item1 = data;
           });
         });
@@ -317,5 +318,8 @@ export class ViewDocumentComponent implements OnInit {
         this.ngOnInit();
       });
     }
+  }
+  transform(input:Array<any>): string {
+    return input.join(',');
   }
 }
