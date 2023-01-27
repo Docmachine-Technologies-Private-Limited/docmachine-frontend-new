@@ -117,7 +117,7 @@ import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-me
     ApprovalPanelComponent,
     PendingPanelComponent,
     RejectPanelComponent,
-   
+    RemittanceFlowComponent,
     EditBuyerComponent,
     EditBeneComponent
   ],
