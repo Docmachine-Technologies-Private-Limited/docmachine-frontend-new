@@ -117,7 +117,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
   headers: any;
   closeResult: string;
   APPEND_HTML:any=[];
-  piPoForm = new FormGroup({
+  piPoForm :any= new FormGroup({
     pi_poNo: new FormControl('', [
       Validators.required,
       Validators.minLength(4),
@@ -398,6 +398,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.USER_DATA = data?.result
       console.log("this.USER_DATA", this.USER_DATA)
     });
+    
     this.jsondata1 = data1['default'];
     this.dataJson1 = data1['default'];
     this.jsondata2 = data1['default'];
@@ -1341,6 +1342,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
     var temp: any = {
       ...this.piPoForm.value,
     }
+    this.piPoForm.value.currency = this.piPoForm.value?.currency?.type;
+
     if (this.file) {
       if (this.file == 'import') {
         temp.benneName = this.beneValue;
@@ -2271,6 +2274,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       console.log(args[1].data.boeNumber);
       console.log('jhsjshsjshjsh', args[1].data.billNo);
       console.log('Message Message', args[1].message);
+      console.log('Sample PDF other doc',args[1].data.pdfflag);
       if (args[1].message == 'This file already uploaded') {
         console.log('My Code');
         this.message = args[1].message;
@@ -2306,9 +2310,21 @@ export class UploadComponent implements OnInit, AfterViewInit {
         console.log('Here data type', args[1].data);
         this.res = new IRAdvice(args[1].data);
         this.billNo = true;
+<<<<<<< HEAD
+        console.log('sjsjsjsj', this.res);
+      }
+      else if (args[1].data.pdfflag) {
+        // BoE.pdf Except other document upload code
+        this.res = args[1].data.pdfflag;
+        console.log('Sample Other PDF FLAG CONDITION');
+        this.boeNumber = true;
+        }
+       else {
+=======
         this.PDF_READER_DATA=args[1].data;
         console.log('PDF_READER_DATA',this.PDF_READER_DATA,this.res);
       } else {
+>>>>>>> d72fafd145c9a6130b3e50a65c84a87fde40fe51
         console.log('this.documentType',this.documentType);
         // this.res = new BoeBill(args[1].data);
         if (this.documentType === 'PI' || this.documentType === 'PO') {

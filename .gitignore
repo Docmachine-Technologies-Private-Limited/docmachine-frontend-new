@@ -48,3 +48,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+Config Files
+src/app/app.config.ts
+
