@@ -249,10 +249,7 @@
                                     <tbody class="text-dark">
                                         <tr class="table-row" *ngFor="let data of item1; let i = index" [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-                                            <!-- <th class="rect">
-                                                <img src="./assets/Rectangle-13.png" />
-                                            </th> -->
-                                            <td style="">
+                                            <td>
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{ data.sbdate }}
                                                 </div>
@@ -288,7 +285,7 @@
                                             </td>
                                             <td>
                                                 <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.buyerName}}
+                                                    {{transform(data.buyerName)}}
                                                 </div>
                                                 <div *ngIf="optionsVisibility[i]">
                                                     <input class="tblInput form-control" name="buyerName" type="text" placeholder="Buyer Name" [(ngModel)]="data.buyerName">

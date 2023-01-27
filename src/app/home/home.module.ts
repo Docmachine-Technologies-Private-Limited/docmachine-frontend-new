@@ -89,6 +89,7 @@ import { DebitNoteComponent } from "./upload/Import/debit-note/debit-note.compon
 import { ExportCreditNoteComponent } from "./upload/Export/export-credit-note/export-credit-note.component";
 import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/export-debit-note.component";
 import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.component';
+import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-member.guard";
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -116,6 +117,8 @@ import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.compo
     PendingPanelComponent,
     RejectPanelComponent,
     RemittanceFlowComponent,
+    EditBuyerComponent,
+    EditBeneComponent
   ],
   imports: [
     SharedHomeModule,
@@ -177,7 +180,7 @@ import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.compo
           { path: "bill-lodgement", loadChildren: () => import('./Export/bill-lodgement/bill-lodgement.module').then(mod => mod.BillLodgementModule),canActivate:[MemberGuard] },
           { path: "packing-credit-request", loadChildren: () => import('./Export/packing-credit/packing-credit.module').then(mod => mod.PackingCreditModule),canActivate:[MemberGuard] },
           { path: "export-home", loadChildren: () => import('./Export/export-home/export-home.module').then(mod => mod.ExportHomeModule),canActivate:[MemberGuard] },
-          { path: "account", loadChildren: () => import('./edit-company/edit-company.module').then(mod => mod.EditCompanyModule),canActivate:[MemberGuard] },
+          { path: "account", loadChildren: () => import('./edit-company/edit-company.module').then(mod => mod.EditCompanyModule),canActivate:[AdminMemberGuard] },
           { path: "completed-task", loadChildren: () => import('./completed-task/completed-task.module').then(mod => mod.CompletedTaskModule),canActivate:[MemberGuard] },
           { path: "tasks", loadChildren: () => import('./all-task/all-task.module').then(mod => mod.AllTaskModule),canActivate:[MemberGuard] },
           { path: "letter-of-credit", loadChildren: () => import('./yesBank/letter-of-credit/letter-of-credit.module').then(mod => mod.LetterOfCreditModule),canActivate:[MemberGuard] },
@@ -288,13 +291,13 @@ import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.compo
             path: "editBene/:id",
             component: EditBeneComponent,
             pathMatch: "full",
-            canActivate:[MemberGuard]
+            canActivate:[AdminGuard]
           },
           {
             path: "editBuyer/:id",
             component: EditBuyerComponent,
             pathMatch: "full",
-            canActivate:[MemberGuard]
+            canActivate:[AdminGuard]
           },
           {
             path: "upload-bank-intimation",

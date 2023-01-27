@@ -50,9 +50,11 @@ export class ShippingBill {
     public irRef: any;
     public balanceAvai: any;
     public doc: any;
+    public buyerName: any;
 
 
     constructor(data: any) {
+      console.log(data,'ShippingBill')
         this.userId = data.userId ? data.userId : '';
         this.sbno = data.sbno ? data.sbno : '';
         this.sbdate = data.sbdate ? data.sbdate : '';
@@ -87,6 +89,7 @@ export class ShippingBill {
         this._id = data._id;
         this.irRef = data.irRef ? data.irRef: [];
         this.doc = data.doc ? data.doc: '';
+        this.buyerName=data.buyerName?data.buyerName:[];
     }
 
     createInvoice(data) {

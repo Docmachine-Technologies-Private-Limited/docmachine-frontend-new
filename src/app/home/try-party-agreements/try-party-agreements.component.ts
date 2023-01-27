@@ -20,7 +20,7 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog
 export class TryPartyAgreementsComponent implements OnInit {
 
   @ViewChild('epltable', {static: false}) epltable: ElementRef;
-  public item: any;
+  public item: any=[];
   public item1 = [];
   public viewData: any;
   public closeResult: string;
@@ -48,7 +48,7 @@ export class TryPartyAgreementsComponent implements OnInit {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
-    this.item1=[];
+    this.item=[];
     this.documentService.getThird().subscribe(
       (res: any) => {
         console.log('Res', res);

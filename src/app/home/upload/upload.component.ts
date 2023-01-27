@@ -217,6 +217,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
 
   PI_PO_NUMBER_LIST:any=[];
   USER_DATA:any=[];
+  PDF_READER_DATA:any=[];
+
   get f() {
     return this.loginForm.controls;
   }
@@ -835,8 +837,6 @@ export class UploadComponent implements OnInit, AfterViewInit {
     this.documentService.getMaster(1).subscribe(
       (res: any) => {
         console.log('Master Data File', res);
-        // this.origin = res['data'][0]['countryOfFinaldestination']
-        // console.log("jainshailendra",this.origin);
         this.item5 = res.data;
         console.log('line 736', this.item5);
         this.item5.forEach((element, i) => {
@@ -852,11 +852,6 @@ export class UploadComponent implements OnInit, AfterViewInit {
           this.pipoSelect = true;
           console.log("pipoSelect", this.pipoSelect)
         }
-
-        // this.origin.forEach((element, i)=>{
-        //   this.origin[i].ori = element[i]
-        // })
-        // console.log("Master Country2", this.origin)
       },
       (err) => console.log(err));
   }
@@ -865,264 +860,187 @@ export class UploadComponent implements OnInit, AfterViewInit {
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1.doc;
     console.log('doc', this.pipourl1.doc);
-    // e.form.value.buyerName = this.mainBene;
-    console.log('shailendra jain ', e.form.value);
     console.log('ID Data', this.res._id);
     console.log(this.res);
-    // console.log("hshshshshs", this.origin);
-    // e.form.value.pipo = this.pipoArr;
-    // e.form.value.doc = this.pipourl1;
-    // e.form.value.buyerName = this.mainBene;
-
-    // e.form.value.pipo = this.pipoArr
-    if (this.file) {
-      e.form.value.file = this.file;
-    } else {
-      e.form.value.file = this.documentType1;
-    }
-    // e.form.value.partyName = this.mainBene
-    if (this.message == 'This file already uploaded') {
-      console.log('inside file already exist');
-      console.log('document value', e.form.value);
-      this.documentService
-        .updateByIrAdvice(e.form.value, e.form.value.billNo)
-        .subscribe(
-          (data: any) => {
-            console.log('.kjsakjsdkdsjYYYYY');
-            console.log('king123');
-            console.log('DATA', data);
-            this.message = '';
-            if (this.retururl) {
-              let url = this.retururl;
-              this.sharedData.changeretunurl('');
-              this.router.navigate([url]);
-            } else {
-              this.router.navigate([
-                'home/pipo-export',
-                {
-                  id: this.redirectid,
-                  page: this.redirectpage,
-                  index: this.redirectindex,
-                },
-              ]);
+    e.form.value.file = 'export';
+    console.log('onSubmitIrAdvice',e.form.value);
+    this.documentService.getBillNo(e.form.value.billNo).subscribe((res:any)=>{
+      console.log(res,'getBillNo')
+      if (res.length!=0) {
+        console.log('inside file already exist');
+        console.log('document value', e.form.value);
+        this.documentService.updateByOrAdvice(e.form.value, e.form.value.billNo).subscribe(
+            (data: any) => {
+              console.log('updateByOrAdvice', data);
+              this.message = '';
+              if (this.retururl) {
+                this.router.navigate(['/home/inward-remittance-advice']);
+              } else {
+                this.router.navigate(['home/pipo-export',{
+                    id: this.redirectid,
+                    page: this.redirectpage,
+                    index: this.redirectindex,
+                  },
+                ]);
+              }
+              let updatedData = {
+                "MasterServiceRef" : [
+                  data.data._id,
+                ],
+              }
+              this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1, updatedData).subscribe(
+                  (data) => {
+                    console.log('king123');
+                    console.log(data);
+                    this.toastr.success('Firex Document added successfully.');
+                    this.router.navigate(['/home/inward-remittance-advice']);
+                  },
+                  (error) => {
+                    console.log('error');
+                  }
+                );
+            },
+            (error) => {
+              console.log('error');
             }
+          );
+      } else {
+        console.log('updateOrAdvice', e.form.value.doc, this.res);
+        this.documentService.updateOrAdvice(e.form.value, this.res._id).subscribe(
+          (res: any) => {
+            this.toastr.success(`Ir document updated successfully`);
+            console.log('Ir document updated successfully');
             let updatedData = {
-              "MasterServiceRef" : [
-                data.data._id,
+              "masterRef" : [
+                res.data._id,
               ],
             }
             this.userService
-              .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1, updatedData)
+              .updateManyPipo(this.pipoArr, this.documentType, this.pubUrl, updatedData)
               .subscribe(
                 (data) => {
-                  //this.pipoData[`${this.pipoDoc}`] = args[1].data
                   console.log('king123');
                   console.log(data);
                   this.toastr.success('Firex Document added successfully.');
-                  this.router.navigate(['home/inward-remittance-advice']);
-
-                  // this.docTog = false
-                  // this.toggle = false
-                  // this.toggle2 = false
-                  // this.toastr.success('Company details updated sucessfully.');
-                  // this.router.navigate(['/home/dashboardNew']);
+                  if (this.retururl) {
+                    let url = this.retururl;
+                    this.sharedData.changeretunurl('');
+                    this.router.navigate([url]);
+                  } else {
+                    this.router.navigate([
+                      'home/pipo-export',
+                      {
+                     file: 'export',
+                        pipo_id: this.pipoArr[0],
+                      },
+                    ]);
+                  }
                 },
                 (error) => {
-                  // this.toastr.error('Invalid inputs, please check!');
                   console.log('error');
                 }
               );
-            // this.router.navigate(["home/inward-remittance-advice"]);
-            //this.router.navigate(['/login'], { queryParams: { registered: true }});
           },
           (error) => {
             console.log('error');
           }
         );
-    } else {
-      console.log('document value', e.form.value.doc);
-
-      this.documentService.updateIrAdvice(e.form.value, this.res._id).subscribe(
-        (res: any) => {
-          this.toastr.success(`Ir document updated successfully`);
-          console.log('Ir document updated successfully');
-          let updatedData = {
-            "masterRef" : [
-              res.data._id,
-            ],
-          }
-          this.userService
-            .updateManyPipo(this.pipoArr, this.documentType, this.pubUrl, updatedData)
-            .subscribe(
-              (data) => {
-                //this.pipoData[`${this.pipoDoc}`] = args[1].data
-                console.log('king123');
-                console.log(data);
-                this.toastr.success('Firex Document added successfully.');
-                if (this.retururl) {
-                  let url = this.retururl;
-                  this.sharedData.changeretunurl('');
-                  this.router.navigate([url]);
-                } else {
-                  this.router.navigate([
-                    'home/pipo-export',
-                    {
-                   file: 'export',
-                      pipo_id: this.pipoArr[0],
-                    },
-                  ]);
-                }
-                // this.docTog = false
-                // this.toggle = false
-                // this.toggle2 = false
-                // this.toastr.success('Company details updated sucessfully.');
-                // this.router.navigate(['/home/dashboardNew']);
-              },
-              (error) => {
-                // this.toastr.error('Invalid inputs, please check!');
-                console.log('error');
-              }
-            );
-          // this.router.navigate(["home/inward-remittance-advice"]);
-          //this.router.navigate(['/login'], { queryParams: { registered: true }});
-        },
-        (error) => {
-          console.log('error');
-        }
-      );
-    }
+      }
+    })
   }
 
   onSubmitOrAdvice(e) {
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1.doc;
     console.log('doc', this.pipourl1.doc);
-    // e.form.value.buyerName = this.mainBene;
-    console.log('shailendra jain ', e.form.value);
     console.log('ID Data', this.res._id);
     console.log(this.res);
-    // console.log("hshshshshs", this.origin);
-    // e.form.value.pipo = this.pipoArr;
-    // e.form.value.doc = this.pipourl1;
-    // e.form.value.buyerName = this.mainBene;
-
-    // e.form.value.pipo = this.pipoArr
-    if (this.file) {
-      e.form.value.file = this.file;
-    } else {
-      e.form.value.file = this.documentType1;
-    }
-    // e.form.value.partyName = this.mainBene
-    if (this.message == 'This file already uploaded') {
-      console.log('inside file already exist');
-      console.log('document value', e.form.value);
-      this.documentService
-        .updateByOrAdvice(e.form.value, e.form.value.billNo)
-        .subscribe(
-          (data: any) => {
-            console.log('.kjsakjsdkdsjYYYYY');
-            console.log('king123');
-            console.log('DATA', data);
-            this.message = '';
-            if (this.retururl) {
-              let url = this.retururl;
-              this.sharedData.changeretunurl('');
-              this.router.navigate([url]);
-            } else {
-              this.router.navigate([
-                'home/pipo-export',
-                {
-                  id: this.redirectid,
-                  page: this.redirectpage,
-                  index: this.redirectindex,
-                },
-              ]);
+    e.form.value.file = 'import';
+    console.log('onSubmitOrAdvice',e.form.value);
+    this.documentService.getBillNo(e.form.value.billNo).subscribe((res:any)=>{
+      console.log(res,'getBillNo')
+      if (res.length!=0) {
+        console.log('inside file already exist');
+        console.log('document value', e.form.value);
+        this.documentService.updateByOrAdvice(e.form.value, e.form.value.billNo).subscribe(
+            (data: any) => {
+              console.log('updateByOrAdvice', data);
+              this.message = '';
+              if (this.retururl) {
+                this.router.navigate(['/home/Onward-remittance-advice']);
+              } else {
+                this.router.navigate(['home/pipo-export',{
+                    id: this.redirectid,
+                    page: this.redirectpage,
+                    index: this.redirectindex,
+                  },
+                ]);
+              }
+              let updatedData = {
+                "MasterServiceRef" : [
+                  data.data._id,
+                ],
+              }
+              this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1, updatedData).subscribe(
+                  (data) => {
+                    console.log('king123');
+                    console.log(data);
+                    this.toastr.success('Firex Document added successfully.');
+                    this.router.navigate(['home/outward-remittance-advice']);
+                  },
+                  (error) => {
+                    console.log('error');
+                  }
+                );
+            },
+            (error) => {
+              console.log('error');
             }
+          );
+      } else {
+        console.log('updateOrAdvice', e.form.value.doc, this.res);
+        this.documentService.updateOrAdvice(e.form.value, this.res._id).subscribe(
+          (res: any) => {
+            this.toastr.success(`Ir document updated successfully`);
+            console.log('Ir document updated successfully');
             let updatedData = {
-              "MasterServiceRef" : [
-                data.data._id,
+              "masterRef" : [
+                res.data._id,
               ],
             }
             this.userService
-              .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1, updatedData)
+              .updateManyPipo(this.pipoArr, this.documentType, this.pubUrl, updatedData)
               .subscribe(
                 (data) => {
-                  //this.pipoData[`${this.pipoDoc}`] = args[1].data
                   console.log('king123');
                   console.log(data);
                   this.toastr.success('Firex Document added successfully.');
-                  this.router.navigate(['home/outward-remittance-advice']);
-
-                  // this.docTog = false
-                  // this.toggle = false
-                  // this.toggle2 = false
-                  // this.toastr.success('Company details updated sucessfully.');
-                  // this.router.navigate(['/home/dashboardNew']);
+                  if (this.retururl) {
+                    let url = this.retururl;
+                    this.sharedData.changeretunurl('');
+                    this.router.navigate([url]);
+                  } else {
+                    this.router.navigate([
+                      'home/pipo-export',
+                      {
+                     file: 'export',
+                        pipo_id: this.pipoArr[0],
+                      },
+                    ]);
+                  }
                 },
                 (error) => {
-                  // this.toastr.error('Invalid inputs, please check!');
                   console.log('error');
                 }
               );
-            // this.router.navigate(["home/inward-remittance-advice"]);
-            //this.router.navigate(['/login'], { queryParams: { registered: true }});
           },
           (error) => {
             console.log('error');
           }
         );
-    } else {
-      console.log('document value', e.form.value.doc);
+      }
+    })
 
-      this.documentService.updateOrAdvice(e.form.value, this.res._id).subscribe(
-        (res: any) => {
-          this.toastr.success(`Ir document updated successfully`);
-          console.log('Ir document updated successfully');
-          let updatedData = {
-            "masterRef" : [
-              res.data._id,
-            ],
-          }
-          this.userService
-            .updateManyPipo(this.pipoArr, this.documentType, this.pubUrl, updatedData)
-            .subscribe(
-              (data) => {
-                //this.pipoData[`${this.pipoDoc}`] = args[1].data
-                console.log('king123');
-                console.log(data);
-                this.toastr.success('Firex Document added successfully.');
-                if (this.retururl) {
-                  let url = this.retururl;
-                  this.sharedData.changeretunurl('');
-                  this.router.navigate([url]);
-                } else {
-                  this.router.navigate([
-                    'home/pipo-export',
-                    {
-                   file: 'export',
-                      pipo_id: this.pipoArr[0],
-                    },
-                  ]);
-                }
-                // this.docTog = false
-                // this.toggle = false
-                // this.toggle2 = false
-                // this.toastr.success('Company details updated sucessfully.');
-                // this.router.navigate(['/home/dashboardNew']);
-              },
-              (error) => {
-                // this.toastr.error('Invalid inputs, please check!');
-                console.log('error');
-              }
-            );
-          // this.router.navigate(["home/inward-remittance-advice"]);
-          //this.router.navigate(['/login'], { queryParams: { registered: true }});
-        },
-        (error) => {
-          console.log('error');
-        }
-      );
-    }
   }
 
   public onSubmit(e) {
@@ -1146,7 +1064,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     }
     console.log(invoices);
     e.form.value.invoices = invoices;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     e.form.value.pipo = this.pipoArr;
     console.log('buyername for BL', e.form.value.buyerName);
     e.form.value._id = this.res._id
@@ -1542,7 +1460,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
     this.documentService.addCredit(e.form.value).subscribe(
@@ -1598,7 +1516,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     e.form.value.file = this.documentType1;
     // e.form.value.currency = this.currency;
     console.log(e.form.value);
@@ -1669,7 +1587,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log('pipoarrya', this.pipoArr);
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
     this.documentService.addBlcopyref(e.form.value).subscribe(
@@ -1727,10 +1645,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
           .updateManyPipo(this.pipoArr, 'airwayBlcopy', this.pipourl1, updatedData)
           .subscribe(
             (data) => {
-              //this.pipoData[`${this.pipoDoc}`] = args[1].data
               console.log('king123');
               console.log(data);
-
               this.documentService
                 .updateMasterBySb(
                   e.form.value,
@@ -1742,17 +1658,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
                     console.log('.kjsakjsdkdsjYYYYY');
                     console.log('king123');
                     console.log('DATA', data);
-                    // this.message = "";
-
-                    this.router.navigate(['home/airway-bl-copy']);
-                    // this.router.navigate([
-                    //   'home/airway-bl-copy'
-                    // {
-                    //   id: this.redirectid,
-                    //   page: this.redirectpage,
-                    //   index: this.redirectindex,
-                    // },
-                    // ]);
+                    this.router.navigate(['/home/airway-bl-copy']);
                   },
                   (error) => {
                     console.log('error');
@@ -1782,9 +1688,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     e.form.value.file = this.documentType1;
     e.form.value.commercialDoc = this.pipourl1;
     console.log('pipoDoc', this.pipourl1);
-
-    e.form.value.buyerName = this.mainBene;
-    // e.form.value.currency = this.currency;
+    e.form.value.buyerName = this.arrayData;
     console.log(e.form.value);
     this.documentService.addCommercial(e.form.value).subscribe(
       (res: any) => {
@@ -1798,7 +1702,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.userService.updateManyPipo(this.pipoArr, 'commercial', this.pipourl1, updatedData).subscribe((data) => {
               console.log('king123');
               console.log('commercial',data);
-              this.documentService.updateMasterBySb(e.form.value,selectedShippingBill.sbno,selectedShippingBill._id).subscribe(
+              this.documentService.updateMasterBySb(e.form.value,selectedShippingBill?.sbno,selectedShippingBill?._id).subscribe(
                   (data) => {
                     console.log('.kjsakjsdkdsjYYYYY');
                     console.log('DATA', data);
@@ -1878,7 +1782,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
 
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     // e.form.value.currency = this.currency;
     console.log(e.form.value);
     this.documentService.addBillExchange(e.form.value).subscribe(
@@ -1930,7 +1834,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
 
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     // e.form.value.currency = this.currency;
     console.log(e.form.value);
     this.documentService.addDestruction(e.form.value).subscribe(
@@ -1984,7 +1888,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     e.form.value.packingDoc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
     e.form.value.file = this.documentType1;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     // e.form.value.currency = this.currency;
     console.log(e.form.value);
     this.documentService.addPackingList(e.form.value).subscribe(
@@ -2054,7 +1958,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
 
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     // e.form.value.currency = this.currency;
     console.log(e.form.value);
     // this.documentService.addOtherDoc(e.form.value).subscribe(
@@ -2097,7 +2001,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     // e.form.value.currency = this.currency;
     console.log(e.form.value);
     e.form.value.file = this.documentType1;
@@ -2141,7 +2045,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     // e.form.value.currency = this.currency;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
@@ -2265,9 +2169,9 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.arrayData;
     e.form.value.file = this.documentType1;
-    // e.form.value.currency = this.currency;
+    e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     this.documentService.addMasterService(e.form.value).subscribe(
       (res: any) => {
@@ -2386,7 +2290,11 @@ export class UploadComponent implements OnInit, AfterViewInit {
         } else if (args[1].data.billNo) {
           this.res = new IRAdvice(args[1].data);
           this.billNo = true;
-          console.log('jsjsjsjs', this.res);
+          this.PDF_READER_DATA=args[1].data;
+          this.PDF_READER_DATA['recievedDate']=this.formatDate(this.PDF_READER_DATA['recievedDate'],'/')
+          this.PDF_READER_DATA['date']=this.formatDate(this.PDF_READER_DATA['date'],'dd/mm/yyy')
+          this.PDF_READER_DATA['conversionDate']=this.formatDate(this.PDF_READER_DATA['conversionDate'],'/')
+          console.log('PDF_READER_DATA',this.PDF_READER_DATA,this.res);
         }
       } else if (args[1].data.sbno) {
         console.log('Here data type', args[1].data);
@@ -2402,6 +2310,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
         console.log('Here data type', args[1].data);
         this.res = new IRAdvice(args[1].data);
         this.billNo = true;
+<<<<<<< HEAD
         console.log('sjsjsjsj', this.res);
       }
       else if (args[1].data.pdfflag) {
@@ -2411,6 +2320,11 @@ export class UploadComponent implements OnInit, AfterViewInit {
         this.boeNumber = true;
         }
        else {
+=======
+        this.PDF_READER_DATA=args[1].data;
+        console.log('PDF_READER_DATA',this.PDF_READER_DATA,this.res);
+      } else {
+>>>>>>> d72fafd145c9a6130b3e50a65c84a87fde40fe51
         console.log('this.documentType',this.documentType);
         // this.res = new BoeBill(args[1].data);
         if (this.documentType === 'PI' || this.documentType === 'PO') {
@@ -2462,23 +2376,15 @@ export class UploadComponent implements OnInit, AfterViewInit {
             .updateManyPipo(this.pipoArr, this.documentType, args[1].data)
             .subscribe(
               (data) => {
-                //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log('king123');
                 console.log(data);
                 this.toastr.success('PI/PO updated successfully.');
-                // this.docTog = false
-                // this.toggle = false
-                // this.toggle2 = false
-                // this.toastr.success('Company details updated successfully.');
-                // this.router.navigate(['/home/dashboardNew']);
               },
               (error) => {
-                // this.toastr.error('Invalid inputs, please check!');
                 console.log('error');
               }
             );
         }
-
         console.log(this.res);
       }
       this.pubUrl = args[1].publicUrl;
@@ -2664,7 +2570,7 @@ export class UploadComponent implements OnInit, AfterViewInit {
       this.comoData.push(a);
     }
   }
-
+  SHIPPINGBILL_LIST:any=[];
   clickPipo(PI_PO_LIST) {
     var last_length=PI_PO_LIST.length-1;
     var LAST_VALUE:any=PI_PO_LIST[last_length]?.value;
@@ -2674,8 +2580,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
     console.log('line 2361', this.pipoSelect);
 
     this.mainBene = this.FILTER_VALUE(this.pipolist, LAST_VALUE?._id)[0]?.buyerName;
-    let x = LAST_VALUE?.pi_po_buyerName;
-    let j = this.arrayData.indexOf(LAST_VALUE?.pi_po_buyerName);
+    let x =LAST_VALUE?.id[1];
+    let j = this.arrayData.indexOf(LAST_VALUE?.id[1]);
     if (j == -1) {
       this.arrayData.push(x);
       this.pipoArr.push(LAST_VALUE?._id);
@@ -2683,8 +2589,8 @@ export class UploadComponent implements OnInit, AfterViewInit {
       console.log('x');
     }
     console.log(this.arrayData,this.mainBene,'mainBenemainBene');
-    console.log('Array List', this.pipoArr);
-
+    this.SHIPPINGBILL_LIST=this.pipoDataService.getShippingNo()
+    console.log('Array List', this.pipoArr,this.SHIPPINGBILL_LIST);
     this.documentService.getCommercialByFiletype(this.documentType1,LAST_VALUE?._id).subscribe(
       (res: any) => {
         console.log('getCommercialImport', res);
@@ -2835,4 +2741,28 @@ FILTER_VALUE(array:any,value:any){
   // getSBwithPiPO(pipo) {
   //   this.pipoDataService.getShippingBills(pipo._id);
   // }
+  DATE_FORMAT_CHANGE:any='';
+  getNewString(dateString:any,type:any):any {
+    console.log(dateString.toString(),type.toString()==("dd/mm/yyyy"),'getNewString')
+    var date = new Date(dateString.toString());
+    if(type.toString()==("dd/mm/yyyy")){
+      return `${date.getDate()<10?'0'+date.getDate():date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
+    }else if(type.toString()==("mm/dd/yyyy")){
+      return `${date.getMonth()+1}/${date.getDate()<10?'0'+date.getDate():date.getDate()}/${date.getFullYear()}`;
+    }else{
+      return `${date.getMonth()+1}/${date.getDate()<10?'0'+date.getDate():date.getDate()}/${date.getFullYear()}`;
+    }
+  }
+  formatDate(date,format) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [day, month, year].join(format);
+}
 }

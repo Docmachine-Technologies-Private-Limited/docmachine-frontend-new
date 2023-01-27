@@ -1031,7 +1031,7 @@
 
 
                                     <div class="date_" *ngFor="let data of pipoData?.sbRef; let i = index">
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
+                                        <div *ngIf="data?.pipo[0] || data?.pipo[1] || data?.pipo[2] || data?.pipo[3] == pipoData?.pi_poNo">
                                             <div *ngIf='pipoData?.sb' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
                                                 &nbsp;
                                             </div>
@@ -1363,11 +1363,11 @@
                                         </div>
                                     </div>
                                     <div class="date_" *ngFor="let data of pipoData?.debitNoteRef; let i = index">
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
-                                            <div *ngIf='pipoData?.debitNote' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?._id">
+                                            <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData?.debitNote' style="display: flex;">
+                                            <div style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
@@ -1387,12 +1387,11 @@
                                         </div>
                                     </div>
                                     <div class="date_" *ngFor="let data of pipoData?.creditNoteRef; let i = index">
-                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?.pi_poNo">
-
-                                            <div *ngIf='pipoData?.creditNote' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
+                                        <div *ngIf="data.pipo[0] || data.pipo[1] || data.pipo[2] || data.pipo[3] == pipoData?._id">
+                                            <div style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;;">
                                                 &nbsp;
                                             </div>
-                                            <div *ngIf='pipoData?.creditNote' style="display: flex;">
+                                            <div style="display: flex;">
                                                 <div style="align-items: center; width: 4%; margin-left: 52px;">
                                                     <i class="fas fa-check-circle" style="color: #49A2D7; font-size: 24px;"></i>
                                                 </div>
@@ -1400,10 +1399,8 @@
                                                     <p style="color: RGBA(0, 0, 0, 0.84);font-weight: 400; font-size: 14px; margin-bottom: -4px;">
                                                         Credit Note Uploaded </p>
                                                     <div>
-
                                                         <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
                                                             Submitted on {{ data.date }}</p>
-
                                                     </div>
                                                 </div>
                                                 <div style="align-items: center; width: 14%;">
