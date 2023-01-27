@@ -951,13 +951,23 @@ table {
     width: 99%;
 }
 
-table,
-.analytics .support {
-    overflow: auto;
+.view_edit_button {
+    color: #777;
+    padding: 0 4px;
+    font-size: 15px;
+    display: inline-block;
 }
 
-.row {
-    margin: auto;
+.view_edit_button a i {
+    color: #777;
+    padding: 0 4px;
+    font-size: 15px;
+    display: inline-block;
+}
+
+.view_edit_button .savBtn .fa.fa-floppy-o:before {
+    color: green;
+    font-size: 16px;
 }
 .none{
     pointer-events: none;

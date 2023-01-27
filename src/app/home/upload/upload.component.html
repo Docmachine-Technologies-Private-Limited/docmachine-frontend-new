@@ -27,7 +27,7 @@
 
           <h3 class="heading_doc"
             *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" && docu != "irAdvice" &&  docu != "orAdvice" &&  docu != "debitNote" && docu !="lcCopy" && docu !="insuranceCopy" && docu !="creditNote" && docu !="agreement" && docu !="opinionReport" && docu !="tryPartyAgreement" && docu !="swiftCopy" && docu !="EBRC" && docu !="blCopyref" && docu != "blCopy" && docu !="commercial" && docu !="billOfExchange" && docu !="destruction" && docu !="packingList"'>
-            Upload Document</h3>
+            Uploads Document</h3>
           <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" ' style="margin-bottom: 20px;">
             <div class="lastets_doc_sec">
               <div class="row p-3">
@@ -312,10 +312,23 @@
                       ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
                     </ng-select>
                   </div>
-                  <div *ngIf='documentType != "blCopy" && file !="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                  <div *ngIf='documentType == "import-billOfExchange"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
                     <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
                     <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
-                     [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                     [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
+                      bindLabel="pi_po_buyerName"
+                      [multiple]="true"
+                      groupBy="selectedAllGroup"
+                      [selectableGroup]="true"
+                      placeholder="Select PI/PO"
+                      bindValue="testFunctionID"
+                      ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                    </ng-select>
+                  </div>
+                  <div *ngIf='documentType != "blCopy" && file !="import"' style="width: 300px; margin-bottom: 10px; flex-direction:row; ">
+                    <label style="flex-direction:row; font-size: 16px; color: #303030;">Select PI/PO*</label>
+                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
+                     [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
                       bindLabel="pi_po_buyerName"
                       [multiple]="true"
                       groupBy="selectedAllGroup"
@@ -426,6 +439,36 @@
 
 
           </div>
+          <div *ngIf='docu == "boe"'>
+            <div style="display: flex; align-items: center; margin-left: 23px;">
+              <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 50px;">Select
+                PI/PO*</label>
+              <!-- <div class="customDropdown" style="width: 300px; flex-direction:row;">
+                <span style="color: black !important; min-width: 150px;">{{pipoValue}}</span>
+                <span class="dropIco" style="float: right;"><i id="down3" class="fas fa-angle-down"></i>
+                  <i id="up3" style="display: none" class="fas fa-angle-up"></i>
+                </span>
+                <div class="dropdown-content" style="min-width: 200px; margin-right: -26px">
+                  <div *ngFor="let pipo of pipolist" (click)="clickPipo('PI', pipo, pipo.benneName)">
+                    <a *ngIf="pipo.file == 'import'">
+                      PI-{{ pipo.pi_poNo }}-{{ pipo.benneName }}</a>
+                  </div>
+                </div>
+              </div> -->
+              <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+              [items]="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+              bindLabel="pi_po_buyerName"
+              [multiple]="true"
+              groupBy="selectedAllGroup"
+              [selectableGroup]="true"
+              placeholder="Select PI/PO"
+              bindValue="testFunctionID"
+              ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+          </ng-select>
+            </div>
+
+          </div>
+          <!---import -->
           <div *ngIf='docu == "boe"'>
             <div style="display: flex; align-items: center; margin-left: 23px;">
               <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 50px;">Select
@@ -652,7 +695,16 @@
           </div>
 
           <div
-            *ngIf="documentType === 'PI' || documentType === 'PO' || documentType === 'tryPartyAgreement' || documentType === 'debitNote' || documentType === 'creditNote' || documentType === 'blCopy' || documentType === 'agreement' || documentType === 'opinionReport' ||documentType === 'swiftCopy' || documentType === 'lcCopy' || documentType === 'insuranceCopy' || documentType === 'deliveryOrder' || documentType === 'tryPartyAgreement'|| documentType === 'EBRC' || documentType === 'blCopyref' || documentType === 'commercial' || documentType === 'billOfExchange' || documentType === 'destruction' || documentType === 'packingList'"
+            *ngIf="documentType === 'PI' || documentType === 'PO' ||
+             documentType === 'tryPartyAgreement' || documentType === 'debitNote' 
+             || documentType === 'creditNote' || documentType === 'blCopy' || 
+             documentType === 'agreement' || documentType === 'opinionReport' 
+             ||documentType === 'swiftCopy' || documentType === 'lcCopy' || 
+             documentType === 'insuranceCopy' || documentType === 'deliveryOrder' || 
+             documentType === 'tryPartyAgreement'|| documentType === 'EBRC' || 
+             documentType === 'blCopyref' || documentType === 'commercial' || 
+             documentType === 'billOfExchange' || documentType === 'destruction' || 
+             documentType === 'packingList' || documentType === 'import-billOfExchange'"
             class="form" method="POST">
             <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
               (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config1"
@@ -1673,7 +1725,7 @@
         </form>
 
           <!-- Bill Of Exchange -->
-          <form class="iframecontroller" *ngIf="billOfExchange && !override" #values="ngForm"
+          <form class="iframecontroller" *ngIf="billOfExchange && documentType1== 'export'&& !override" #values="ngForm"
             (ngSubmit)="onSubmitBillExchange(values)">
                 <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
@@ -1687,6 +1739,21 @@
               </div>
             </div>
           </form>
+           <!-- Bill Of ExchangeExport -->
+           <form class="iframecontroller" *ngIf="billOfExchange && documentType1== 'import' && !override" #values="ngForm"
+           (ngSubmit)="onSubmitBillExchangeImport(values)">
+               <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+           <div class="field">
+             <div class="form12 p-3">
+               <div class="mb-3">
+                 <label for="exampleInputEmail1" class="form-label">Bill Of Exchange Number*</label>
+                 <input ngModel class="form-control p-3" type="text"
+                   name="billExchangeNumber">
+               </div>
+               <button type="submit" class="btn btn-primary">Submit</button>
+             </div>
+           </div>
+         </form>
 
           <!-- destruction certificate -->
           <form class="iframecontroller" *ngIf="destruction && !override" #values="ngForm"
