@@ -88,6 +88,7 @@ import { DebitNoteComponent } from "./upload/Import/debit-note/debit-note.compon
 
 import { ExportCreditNoteComponent } from "./upload/Export/export-credit-note/export-credit-note.component";
 import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/export-debit-note.component";
+import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.component';
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -114,6 +115,7 @@ import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/expo
     ApprovalPanelComponent,
     PendingPanelComponent,
     RejectPanelComponent,
+    RemittanceFlowComponent,
   ],
   imports: [
     SharedHomeModule,
@@ -199,6 +201,12 @@ import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/expo
             canActivate:[MemberGuard]
           },
           {
+            path: "Sub-bill-Lodgement",
+            component: SubBillLodgementComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
             path: "createBene",
             component: CreateBeneComponent,
             pathMatch: "full",
@@ -207,6 +215,12 @@ import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/expo
           {
             path: "inwardRemittance",
             component: InwardRemittanceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "remittance-flow",
+            component: RemittanceFlowComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },

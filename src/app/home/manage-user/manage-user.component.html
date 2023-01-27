@@ -20,9 +20,9 @@
             </div>
         </div>
         <div class="members_list_middle">
-            <div *ngFor="let data of item1 let i=index" id="login-container">
+            <div id="login-container">
                 <div class="row">
-                    <div class="col-md-6 col-sm-12 col-12">
+                    <div class="col-md-6 col-sm-12 col-12" *ngFor="let data of item1 let i=index">
                         <div class="common_list_bottoms">
                             <div class="row">
                                 <div class="col-md-2 col-sm-2 col-12">
