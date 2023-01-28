@@ -24,6 +24,7 @@
     margin-left: 27px;
     margin-bottom: 23px;
 }
+
 #aaa {
     background-color: white;
     color: black;
@@ -36,7 +37,7 @@
 }
 
 .heading {
-    font-family: EuropaNuova-Regular,sans-serif!important;
+    font-family: EuropaNuova-Regular, sans-serif!important;
     font-size: 20px;
     font-weight: 400;
     color: #323e4a;
@@ -159,12 +160,12 @@ select:focus {
 }
 
 .field {
-  background-color: transparent;
-  border-radius: 10px;
-  box-shadow: 0 0 2px 2px #d3d3d3;
-  overflow: auto;
-  width: calc(100vw - 300px);
-  height: 80vh;
+    background-color: transparent;
+    border-radius: 10px;
+    box-shadow: 0 0 2px 2px #d3d3d3;
+    overflow: auto;
+    width: calc(100vw - 300px);
+    height: 80vh;
 }
 
 .field-heading {
@@ -275,8 +276,15 @@ a:hover {
     margin: 0px !important;
     border: 1px solid #ebeefe;
 }
-.new_shipping_input .form-control{height: 38px;}
-.new_shipping_input label{font-size: 12px;}
+
+.new_shipping_input .form-control {
+    height: 38px;
+}
+
+.new_shipping_input label {
+    font-size: 12px;
+}
+
 
 /* As we cannot replace the numbers with variables or calls to element properties, the number of this selector parts is our tab count limit */
 
@@ -394,8 +402,8 @@ label {
 }
 
 .sb2 {
-  margin: auto;
-  margin-left: 30px;
+    margin: auto;
+    margin-left: 30px;
 }
 
 .sb3 {
@@ -900,7 +908,6 @@ td {
     width: 100%;
     width: 7%;
 }
-
 
 label {
     display: block;
@@ -1648,35 +1655,38 @@ span input {
     color: #999;
 }
 
-.scroll-bar-main{
- left: 230px;
+.scroll-bar-main {
+    left: 230px;
 }
+
 .form label {
-  color: black;
+    color: black;
 }
 
-.iframecontroller{
-  display: flex;
-  width: 95%;
-  gap: 20px;
-  justify-content: flex-start;
-  align-items: flex-start;
+.iframecontroller {
+    display: flex;
+    width: 95%;
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
-.iframecontroller .flex-basis{
-  flex-basis:30%;
-  padding: 10px;
-}
-.flex-basis-1{
-  flex: 1 0;
-  max-width: 100%;
+.iframecontroller .flex-basis {
+    flex-basis: 30%;
+    padding: 10px;
 }
 
-.field .column .row{
-  gap: 10px;
+.flex-basis-1 {
+    flex: 1 0;
+    max-width: 100%;
 }
-#dropzone{
-  font-family: EuropaNuova-Regular,sans-serif!important;
+
+.field .column .row {
+    gap: 10px;
+}
+
+#dropzone {
+    font-family: EuropaNuova-Regular, sans-serif!important;
     position: absolute;
     margin: 0;
     padding: 0;
@@ -1684,29 +1694,36 @@ span input {
     cursor: pointer;
     opacity: 0;
 }
-.form-control{
-  height: auto !important;
-}
-.Commercial{
-  gap: 10px;
-  flex-direction: column;
-}
-.bg-white{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 10px;
-  border-radius: 10px;
-  margin-left: 15px;
+
+.Commercial {
+    gap: 10px;
+    flex-direction: column;
 }
 
-.bg-white .heading_doc{
-  display: inline-block;
-  width: 100%;
-  font-size: 20px;
-  font-weight: 600;
-  color: #222;
-  border-bottom: 2px solid #aba8a8;
-  padding-bottom: 5px;
+.bg-white {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 10px;
+    margin-left: 15px;
+}
+
+.bg-white .heading_doc {
+    display: inline-block;
+    width: 100%;
+    font-size: 20px;
+    font-weight: 600;
+    color: #222;
+    border-bottom: 2px solid #aba8a8;
+    padding-bottom: 5px;
+}
+
+.new_ari_select_box_bill .ng-select .ng-select-container {
+    min-height: 46px;
+}
+
+.new_ari_select_box_bill .ng-placeholder {
+    top: 12px;
 }
