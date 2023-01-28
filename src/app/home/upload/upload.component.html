@@ -46,15 +46,16 @@
                     <label for="exampleInputPassword1"> Choose the type of document</label>
                     <select class="form-control p-3"
                     *ngIf="this.USER_DATA?.Subscription=='both'" aria-label="Default select example"
-                     [(ngModel)]="documentType1" name="" id="" class="form-control p-3">
+                     [(ngModel)]="documentType1" name="" id="">
                       <option value="">Select Import/Export</option>
                       <option *ngIf="this.USER_DATA?.sideMenu=='import'" value="import">Import</option>
                       <option *ngIf="this.USER_DATA?.sideMenu=='export'" value="export">Export</option>
                     </select>
-                    <select class="form-control p-3" *ngIf="this.USER_DATA?.Subscription!='both'" aria-label="Default select example" [(ngModel)]="documentType1" name="" id="" class="form-control p-3">
+                    <select class="form-control p-3" *ngIf="this.USER_DATA?.Subscription!='both'"
+                    aria-label="Default select example" [(ngModel)]="documentType1" name="" id="">
                       <option value="">Select {{this.USER_DATA?.Subscription}}</option>
-                      <option *ngIf="this.USER_DATA?.Subscription=='Import'" value="import">Import</option>
-                      <option *ngIf="this.USER_DATA?.Subscription=='Export'" value="export">Export</option>
+                      <option *ngIf="this.USER_DATA?.sideMenu=='import'" value="import">Import</option>
+                      <option *ngIf="this.USER_DATA?.sideMenu=='export'" value="export">Export</option>
                     </select>
                   </div>
                 </div>
@@ -63,7 +64,7 @@
                     <label *ngIf='documentType1 == "import" || documentType1 == "export"'>
                       Now you selected {{documentType1}}, select Type of {{documentType1}} document </label>
                     <select class="form-control p-3" aria-label="Default select example" *ngIf='documentType1 == "import"'
-                     [(ngModel)]="documentType" class="form-control p-3" name=""
+                     [(ngModel)]="documentType" name=""
                       id="" (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
                       <option value="">Document Type</option>
                       <option value="boe">BOE</option>
@@ -86,7 +87,7 @@
                     </select>
                     <select class="form-control p-3" aria-label="Default select example"
                     *ngIf='documentType1 == "export"' [(ngModel)]="documentType"
-                    class="form-control p-3" name="" id="" (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
+                     name="" id="" (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
                       <option value="">Document Type</option>
                       <option value="sb">Shipping Bill</option>
                       <option value="PO">PO</option>
@@ -114,7 +115,8 @@
                 </div>
                 <div class="col-md-6" *ngIf='documentType== "import-blCopy" && documentType1 == "import"'>
                   <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Buyer's name*</label>
-                  <select class="form-control p-3" aria-label="Default select example" ngModel name="buyerName" placeholder="Select Beneficiary" id="" class="form-control p-3"  (change)=changepipo($event.target.value)>
+                  <select class="form-control p-3" aria-label="Default select example" ngModel name="buyerName" placeholder="Select Beneficiary" id=""
+                    (change)=changepipo($event.target.value)>
                     <option value="">Select Beneficiary</option>
                     <option value="{{bene?.beneName}}" *ngFor="let bene of benneDetail
                     ">{{ bene?.beneName }}
@@ -124,7 +126,7 @@
                 <div class="col-md-6" *ngIf='documentType1 == "import"'>
                   <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
                     PI/PO*</label>
-                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+                    <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
                      [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
                     bindLabel="pi_po_buyerName"
                     [multiple]="true"
@@ -145,7 +147,7 @@
                 <div class="col-md-6" *ngIf='documentType1 == "export"'>
                   <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
                     PI/PO*</label>
-                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
+                    <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
                      [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
                     bindLabel="pi_po_buyerName"
                     [multiple]="true"
@@ -183,7 +185,7 @@
         <div *ngIf='docu == "pipo" && file =="import"' class="col-md-10 d-flex flex-column">
           <div style="display: flex;flex-direction: column;" class="col-5">
             <label style="font-size: 20px; color: #303030;">Beneficiary Name*</label>
-              <ng-select *ngIf="this.benneDetail?.length!=0"
+              <ng-select class="custom" *ngIf="this.benneDetail?.length!=0"
                 [items]="this.benneDetail"
                 bindLabel="beneName"
                 [multiple]="false"
@@ -210,7 +212,7 @@
         </div>
         <div *ngIf='docu == "sb"' style="margin-bottom: 20px;" class="col-md-6">
           <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select PI/PO*</label>
-            <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
+            <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
              [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
             bindLabel="pi_po_buyerName"
             [multiple]="true"
@@ -223,7 +225,7 @@
         </div>
         <div *ngIf='docu == "boe"' style="margin-bottom: 20px;" class="col-md-6">
           <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select PI/PO*</label>
-            <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+            <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
              [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
             bindLabel="pi_po_buyerName"
             [multiple]="true"
@@ -288,7 +290,7 @@
             documentType === 'swiftCopy' || documentType === 'lcCopy' || documentType === 'insuranceCopy' ||
             documentType === 'deliveryOrder' || documentType === 'tryPartyAgreement'|| documentType === 'EBRC' ||
             documentType === 'blCopyref' || documentType === 'commercial' ||
-            documentType === 'import-commercial' || documentType === 'billOfExchange' ||
+            documentType === 'import-commercial' || documentType === 'billOfExchange' || documentType === 'import-billOfExchange' ||
             documentType === 'destruction' || documentType === 'packingList'"
             class="form" method="POST">
             <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
@@ -856,7 +858,7 @@
                   </div>
                   <div class="mb-3 flex-basis-1">
                     <label for="exampleInputPassword1" class="form-label">Currency</label>
-                      <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                      <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                       [items]="this.CURRENCY_LIST"
                       bindLabel="type"
                       [multiple]="false"
@@ -930,7 +932,7 @@
                     <div class="row p-3">
                       <div class="mb-3 flex-basis-1">
                         <label for="exampleInputPassword1" class="form-label">Currency</label>
-                          <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                          <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                           [items]="this.CURRENCY_LIST"
                           bindLabel="type"
                           [multiple]="false"
@@ -1083,7 +1085,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                   [items]="this.CURRENCY_LIST"
                   bindLabel="type"
                   [multiple]="false"
@@ -1264,7 +1266,7 @@
 
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Currency*</label>
-                  <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                   [items]="this.CURRENCY_LIST"
                   bindLabel="type"
                   [multiple]="false"
@@ -1416,7 +1418,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                     [items]="this.CURRENCY_LIST"
                     bindLabel="type"
                     [multiple]="false"
@@ -1450,7 +1452,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                   [items]="this.CURRENCY_LIST"
                   bindLabel="type"
                   [multiple]="false"
@@ -1483,7 +1485,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                   [items]="this.CURRENCY_LIST"
                   bindLabel="type"
                   [multiple]="false"
@@ -1516,7 +1518,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                   [items]="this.CURRENCY_LIST"
                   bindLabel="type"
                   [multiple]="false"

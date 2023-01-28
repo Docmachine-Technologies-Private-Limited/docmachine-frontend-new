@@ -379,7 +379,7 @@ export class UploadComponent implements OnInit {
       this.USER_DATA = data?.result
       console.log("this.USER_DATA", this.USER_DATA)
     });
-    
+
     this.jsondata1 = data1['default'];
     this.dataJson1 = data1['default'];
     this.jsondata2 = data1['default'];
@@ -754,7 +754,7 @@ export class UploadComponent implements OnInit {
         this.mainBene = this.beneOut;
       }
     }
-    
+
 
     //console.log(this.route.snapshot.paramMap.get('document'))
     this.config = {
@@ -1498,7 +1498,11 @@ export class UploadComponent implements OnInit {
             (data) => {
               console.log('king123');
               console.log(data);
-              this.router.navigate(['/home/airway-bl-copy']);
+              if (this.documentType1=='import') {
+                this.router.navigate(['/home/import-airway-bl-copy']);
+              } else {
+                this.router.navigate(['/home/airway-bl-copy']);
+              }
               console.log('redirectindex', this.redirectindex);
               console.log('redirectinpage', this.redirectpage);
               console.log('redirectid', this.redirectid);
@@ -1540,18 +1544,19 @@ export class UploadComponent implements OnInit {
             (data) => {
               console.log('king123');
               console.log(data);
-              this.documentService
-                .updateMasterBySb(
+              this.documentService.updateMasterBySb(
                   e.form.value,
-                  selectedShippingBill.sbno,
-                  selectedShippingBill._id
-                )
-                .subscribe(
+                  selectedShippingBill?.sbno,
+                  selectedShippingBill?._id
+                ).subscribe(
                   (data) => {
-                    console.log('.kjsakjsdkdsjYYYYY');
                     console.log('king123');
                     console.log('DATA', data);
-                    this.router.navigate(['/home/airway-bl-copy']);
+                    if (this.documentType1=='import') {
+                      this.router.navigate(['/home/import-airway-bl-copy']);
+                    } else {
+                      this.router.navigate(['/home/airway-bl-copy']);
+                    }
                   },
                   (error) => {
                     console.log('error');
@@ -1691,72 +1696,13 @@ export class UploadComponent implements OnInit {
           .updateManyPipo(this.pipoArr, 'billOfExchange', this.pipourl1, updatedData)
           .subscribe(
             (data) => {
-              //this.pipoData[`${this.pipoDoc}`] = args[1].data
               console.log('king123');
               console.log(data);
-              this.router.navigate(['home/bill-of-exchange']);
-              // this.router.navigate([
-              //   'home/pipo-export',
-              //   {
-              //     id: this.redirectid,
-              //     page: this.redirectpage,
-              //     index: this.redirectindex,
-              //   },
-              // ]);
-              console.log('redirectindex', this.redirectindex);
-              console.log('redirectinpage', this.redirectpage);
-              console.log('redirectid', this.redirectid);
-            },
-            (error) => {
-              // this.toastr.error('Invalid inputs, please check!');
-              console.log('error');
-            }
-          );
-        // this.router.navigateByUrl('/home/dashboardNew');
-      },
-      (err) => console.log('Error adding pipo')
-    );
-  }
-   // importbillExchange Submit button
-   onSubmitBillExchangeImport(e) {
-    console.log('this is console of blcopy', e.form.value);
-    e.form.value.pipo = this.pipoArr;
-    console.log('pipoarrya', this.pipoArr);
-    e.form.value.file = this.documentType1;
-    e.form.value.doc = this.pipourl1;
-    console.log('pipodoc', this.pipourl1);
-
-    e.form.value.buyerName = this.mainBene;
-    // e.form.value.currency = this.currency;
-    console.log(e.form.value);
-    this.documentService.addBillExchange(e.form.value).subscribe(
-      (res: any) => {
-        this.toastr.success(`Bill Of Exchange Document Added Successfully`);
-        console.log('Bill Of Exchange Document Added Successfully');
-        let updatedData = {
-          "billOfExchangeRef" : [
-            res.data._id,
-          ],
-        }
-        this.userService
-          .updateManyPipo(this.pipoArr, 'billOfExchange', this.pipourl1, updatedData)
-          .subscribe(
-            (data) => {
-              //this.pipoData[`${this.pipoDoc}`] = args[1].data
-              console.log('king123');
-              console.log(data);
-              this.router.navigate(['home/import-bill-of-exchange']);
-              // this.router.navigate([
-              //   'home/pipo-export',
-              //   {
-              //     id: this.redirectid,
-              //     page: this.redirectpage,
-              //     index: this.redirectindex,
-              //   },
-              // ]);
-              console.log('redirectindex', this.redirectindex);
-              console.log('redirectinpage', this.redirectpage);
-              console.log('redirectid', this.redirectid);
+              if (this.documentType1=='import') {
+                this.router.navigate(['/home/import-bill-of-exchange']);
+              } else {
+                this.router.navigate(['/home/bill-of-exchange']);
+              }
             },
             (error) => {
               // this.toastr.error('Invalid inputs, please check!');
@@ -2287,6 +2233,8 @@ export class UploadComponent implements OnInit {
         } else if (this.documentType === 'destruction') {
           this.destruction = true;
         } else if (this.documentType === 'billOfExchange') {
+          this.billOfExchange = true;
+        }else if (this.documentType === 'import-billOfExchange') {
           this.billOfExchange = true;
         } else if (this.documentType === 'EBRC') {
           this.EBRC = true;
