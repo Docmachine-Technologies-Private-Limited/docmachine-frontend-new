@@ -31,6 +31,9 @@ import { AppConfig } from '../../app.config';
 import * as xlsx from 'xlsx';
 import {PipoDataService} from "../../service/homeservices/pipo.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 
 @Component({
   selector: 'app-pipo-documents',
@@ -146,7 +149,9 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     private modalService: NgbModal,
     public appconfig: AppConfig,
     private pipoDataService: PipoDataService,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public dialog: MatDialog,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
   ) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base);
@@ -987,28 +992,43 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'Import -pipo.xlsx');
   }
-  // deleteByRoleType(RoleCheckbox:string,id:any,index:any){
-  //   if (RoleCheckbox==''){
-  //       this.documentService.deletePipoByid(id).subscribe((res) => {
-  //           console.log(res)
-  //           if (res) {
-  //             // this.getPipoData()
-  //           }
-  //       }, (err) => console.log(err))
-  //   } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
-  //     var approval_data:any={
-  //       id:id,
-  //       tableName:'PI_PO',
-  //       deleteflag:'-1',
-  //       userdetails:this.USER_DATA['result'],
-  //       status:'pending',
-  //       dummydata:this.dataSource[index],
-  //       Types:'deletion',
-  //       FileType:this.USER_DATA?.result?.sideMenu
-  //     }
-  //     this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
-  //       this.ngOnInit();
-  //     });
-  //   }
-  // }
+
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+      this.documentService.deleteById({id:id,tableName:'pi_po'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'pi_po',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item1[index],
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
+  }
+
 }

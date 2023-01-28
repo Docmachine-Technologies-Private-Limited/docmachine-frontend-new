@@ -11,6 +11,7 @@ export class UserService {
   public name;
   api_base: string;
   userData;
+  USER_RESULT:any=[];
   public loginData = new BehaviorSubject({});
   public userDataListener$ = this.loginData.asObservable();
    constructor(private http: HttpClient, public appconfig: AppConfig,public router:Router) {
@@ -615,11 +616,7 @@ export class UserService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return new Promise((resolve, reject)=>{
-      this.http.get(`${this.api_base}/user/profile`, httpOptions).subscribe((res:any)=>{
-        resolve(res?.result)
-      })
-    });
+   return this.http.get(`${this.api_base}/user/profile`, httpOptions);
   }
   getUserDetailById(id:any) {
     this.loadFromLocalStorage();

@@ -3,6 +3,7 @@ import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Rout
 import { TranslateService } from '@ngx-translate/core';
 import { AppConfig } from '../environments/environment';
 import '../sass/application.scss';
+import { AuthGuard } from './service/authguard.service';
 import { DocumentService } from './service/document.service';
 @Component({
   selector: 'app-root' ,
@@ -12,10 +13,15 @@ import { DocumentService } from './service/document.service';
 export class AppComponent {
   constructor(
     private translate: TranslateService,
-    private router: Router,public doc:DocumentService) {
+    private router: Router,public doc:DocumentService,
+    public authGuard: AuthGuard) {
     this.translate.setDefaultLang('en');
     console.log('AppConfig', AppConfig);
   }
-  ngOnInit(): void {};
+  ngOnInit(): void {
+    if (this.authGuard.getLocalStorage('PERMISSION')==null) {
+      this.router.navigate(['/login']);
+    }
+  };
 
 }

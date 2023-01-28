@@ -88,6 +88,7 @@ import { DebitNoteComponent } from "./upload/Import/debit-note/debit-note.compon
 
 import { ExportCreditNoteComponent } from "./upload/Export/export-credit-note/export-credit-note.component";
 import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/export-debit-note.component";
+import { ImportBillOfExchangeComponent } from "./import-bill-of-exchange/import-bill-of-exchange.component";
 import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.component';
 import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-member.guard";
 
@@ -167,6 +168,7 @@ import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remi
           { path: "import-commercial", loadChildren: () => import('./import-commercial/import-commercial.module').then(mod => mod.ImportCommercialModule),canActivate:[MemberGuard] },
           { path: "destruction", loadChildren: () => import('./destruction/destruction.module').then(mod => mod.DestructionModule),canActivate:[MemberGuard] },
           { path: "bill-of-exchange", loadChildren: () => import('./bill-of-exchange/bill-of-exchange.module').then(mod => mod.BillOfExchangeModule),canActivate:[MemberGuard] },
+          { path: "import-bill-of-exchange", loadChildren: () => import('./import-bill-of-exchange/import-bill-of-exchange.module').then(mod => mod.ImportBillOfExchangeModule),canActivate:[MemberGuard] },
           { path: "airway-bl-copy", loadChildren: () => import('./airway-blcopy/airway-blcopy.module').then(mod => mod.AirwayBlcopyModule),canActivate:[MemberGuard] },
           { path: "import-airway-bl-copy", loadChildren: () => import('./import-airway-blcopy/import-airway-blcopy.module').then(mod => mod.ImportAirwayBlcopyModule),canActivate:[MemberGuard] },
           { path: "inward-remittance-advice", loadChildren: () => import('./inward-remittance-advice/inward-remittance-advice.module').then(mod => mod.InwardRemittanceAdviceModule),canActivate:[MemberGuard] },
@@ -208,12 +210,6 @@ import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remi
             canActivate:[MemberGuard]
           },
           {
-            path: "Sub-bill-Lodgement",
-            component: SubBillLodgementComponent,
-            pathMatch: "full",
-            canActivate:[MemberGuard]
-          },
-          {
             path: "createBene",
             component: CreateBeneComponent,
             pathMatch: "full",
@@ -225,12 +221,7 @@ import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remi
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
-          {
-            path: "remittance-flow",
-            component: RemittanceFlowComponent,
-            pathMatch: "full",
-            canActivate:[MemberGuard]
-          },
+        
           {
             path: "pipo",
             component: PipoExportComponent,
@@ -460,6 +451,12 @@ import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remi
           {
             path: "ImportDebit",
             component:DebitNoteComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "ImportBillOfExchange",
+            component:ImportBillOfExchangeComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },

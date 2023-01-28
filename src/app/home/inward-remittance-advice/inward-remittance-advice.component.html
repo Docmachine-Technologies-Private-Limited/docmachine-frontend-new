@@ -107,9 +107,8 @@
                                         <tbody class="text-dark">
 
                                             <tr class="table-row" *ngFor="let data of item1; let i=index"
-                                             [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='') ||
+                                             [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                             this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-                                            {{data['deleteflag']}}
                                             <td>
                                                     <div *ngIf="!optionsVisibility[i]">
                                                         {{ data.date }}
