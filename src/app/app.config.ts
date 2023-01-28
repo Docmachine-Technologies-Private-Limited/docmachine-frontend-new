@@ -20,13 +20,9 @@ export class AppConfig {
 
     public getConstantsAtServer() {
         this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
-        //this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
-         this.apiUrl = `http://localhost:8080/v1`;
-        // this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
-                // this.apiUrl = `https://devapi.bharathexim.com/v1`;
-
         // this.apiUrl = `http://localhost:8080/v1`;
         // this.apiUrl = `https://devapi.bharathexim.com/v1`;
+
         // this.apiUrl = `https://devapi.bharathexim.com/v1`;
         // this.apiUrl = `https://api.bharathexim.com/v1`;
     }
@@ -34,41 +30,8 @@ export class AppConfig {
 
     public getConstants() {
          this.apiUrl = `http://localhost:8080/v1`;
-      // this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
+       // this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
         // this.apiUrl = `https://devapi.bharathexim.com/v1`;
         // this.apiUrl = `https://api.bharathexim.com/v1`;
-        // this.apiUrl = `https://api.bharathexim.com/v1`;
-
-        // if (window.location.hostname === 'localhost') {
-            // this.apiUrl = `http://localhost:8080/v1`;
-        // } else if (window.location.hostname.indexOf('beta') === 0) {
-        //     this.apiUrl = window.location.protocol + '//betaapi.' + 'bharathexim.com' + '/v1';
-        // }
-        // else if (window.location.hostname.indexOf('dev') === 0) {
-        //     this.apiUrl = window.location.protocol + '//devapi.' + 'bharathexim.com' + '/v1';
-        // }
-        // else if (window.location.hostname.indexOf('docmachine') === 0) {
-        //     this.apiUrl = window.location.protocol + '//api.' + 'bharathexim.com' + '/v1';
-        // }
-
-        // if (window.location.hostname === 'localhost') {
-        //     this.apiUrl = `http://localhost:3000/v1`;
-        // } else if (window.location.hostname.indexOf('beta') === 0) {
-        //     this.apiUrl = window.location.protocol + '//betaapi.' + 'docmachine.in' + '/v1';
-        // }
-        // else if (window.location.hostname.indexOf('dev') === 0) {
-        //     this.apiUrl = window.location.protocol + '//devapi.' + 'docmachine.in' + '/v1';
-        // }
-        // else if (window.location.hostname.indexOf('docmachine') === 0) {
-        //     this.apiUrl = window.location.protocol + '//api.' + 'docmachine.in' + '/v1';
-        // }
-
-        // else if (window.location.hostname.indexOf('qa') > -1) {
-        //     this.apiUrl = window.location.protocol + '//' + window.location.hostname + ':9000/api';
-        // } else if (window.location.hostname.indexOf('beta') > -1) {
-        //     this.apiUrl = window.location.protocol + '//beta.api.wrked.com/v1';
-        // } else if (window.location.hostname.indexOf('prod') > -1) {
-        //     this.apiUrl = window.location.protocol + '//' + window.location.hostname + ':9000/api';
-        // }
     }
 }
