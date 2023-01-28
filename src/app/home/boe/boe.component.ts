@@ -6,6 +6,10 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { ToastrService } from 'ngx-toastr';
 import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import {UserService} from './../../service/user.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
 @Component({
   selector: 'app-boe',
@@ -17,6 +21,7 @@ export class BOEComponent implements OnInit {
   public showInvoice;
   public selectedRow;
   docu: any;
+  public item: any;
   public lastIndex;
   public item1;
   public tableWidth;
@@ -24,6 +29,7 @@ export class BOEComponent implements OnInit {
   public allTransactions: any = [];
   public optionsVisibility: any = [];
   filtervisible: boolean = false;
+  USER_DATA:any=[];
   
   filter() {
   // this.getPipoData()
@@ -41,19 +47,33 @@ onclick() {
     private sanitizer: DomSanitizer,
     private toastr: ToastrService,
     private sharedData : SharedDataService,
-    public wininfo: WindowInformationService
+    private userService: UserService,
+    public wininfo: WindowInformationService,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public dialog: MatDialog,
+
   ) { }
 
-  ngOnInit(): void {
+
+  async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
-    this.documentService.getBoe(1).subscribe(
-      (res: any) => {
-        console.log(res), (this.item1 = res.data);
-        console.log("item1 data", this.item1)
-      },
-      (err) => console.log(err)
-    );
-  }
+    this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA)
+    this.item1=[];
+      this.documentService.getBoe(1).subscribe(
+        (res: any) => {
+          for (let value of res.data) {
+            if (value['file'] == 'import') {
+              this.item1.push(value);
+            }
+          }
+          console.log(res,'yuyuyuyuyuyuyuuy')
+        },
+        (err) => console.log(err)
+      );
+
+    }
+
 
   exportToExcel(){
     const ws: xlsx.WorkSheet =
@@ -119,6 +139,43 @@ onclick() {
   toEdit(index){
     this.optionsVisibility[index] = true;
     this.toastr.warning('Bill Of Entry Row Is In Edit Mode');
+  }
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+      this.documentService.deleteById({id:id,tableName:'boerecords'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'boerecords',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item1[index],
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
   }
 
 }
