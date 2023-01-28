@@ -1430,7 +1430,7 @@ export class UploadComponent implements OnInit {
     e.form.value.doc = this.pipourl1;
     e.form.value.buyerName = this.arrayData;
     e.form.value.file = this.documentType1;
-    // e.form.value.currency = this.currency;
+    e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     this.documentService.addDebit(e.form.value).subscribe(
       (res: any) => {
@@ -1635,7 +1635,7 @@ export class UploadComponent implements OnInit {
       e.form.value.commercialDoc = this.pipourl1;
       console.log('pipoDoc', this.pipourl1);
       e.form.value.buyerName = this.arrayData;
-      // e.form.value.currency = this.currency;
+
       console.log(e.form.value);
       this.documentService.addCommercial(e.form.value).subscribe(
         (res: any) => {
@@ -1681,7 +1681,8 @@ export class UploadComponent implements OnInit {
     console.log('pipodoc', this.pipourl1);
 
     e.form.value.buyerName = this.arrayData;
-    // e.form.value.currency = this.currency;
+    e.form.value.currency = e.form.value?.currency?.type;
+
     console.log(e.form.value);
     this.documentService.addBillExchange(e.form.value).subscribe(
       (res: any) => {
@@ -1725,7 +1726,7 @@ export class UploadComponent implements OnInit {
     console.log('pipodoc', this.pipourl1);
 
     e.form.value.buyerName = this.arrayData;
-    // e.form.value.currency = this.currency;
+    e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     this.documentService.addDestruction(e.form.value).subscribe(
       (res: any) => {
@@ -1744,15 +1745,7 @@ export class UploadComponent implements OnInit {
               console.log('king123');
               console.log(data);
 
-              this.router.navigate(['home/destruction']);
-              // this.router.navigate([
-              //   'home/pipo-export',
-              //   {
-              //     id: this.redirectid,
-              //     page: this.redirectpage,
-              //     index: this.redirectindex,
-              //   },
-              // ]);
+              this.router.navigate(['/home/destruction']);
               console.log('redirectindex', this.redirectindex);
               console.log('redirectinpage', this.redirectpage);
               console.log('redirectid', this.redirectid);
@@ -1779,7 +1772,7 @@ export class UploadComponent implements OnInit {
     console.log('pipodoc', this.pipourl1);
     e.form.value.file = this.documentType1;
     e.form.value.buyerName = this.arrayData;
-    // e.form.value.currency = this.currency;
+    e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     this.documentService.addPackingList(e.form.value).subscribe(
       (res: any) => {
@@ -1801,25 +1794,17 @@ export class UploadComponent implements OnInit {
               this.documentService
                 .updateMasterBySb(
                   e.form.value,
-                  selectedShippingBill.sbno,
-                  selectedShippingBill._id
-                )
-                .subscribe(
+                  selectedShippingBill?.sbno,
+                  selectedShippingBill?._id
+                ).subscribe(
                   (data) => {
-                    console.log('.kjsakjsdkdsjYYYYY');
                     console.log('king123');
                     console.log('DATA', data);
-                    // this.message = "";
-
-                    this.router.navigate(['home/packing-list']);
-                    // this.router.navigate([
-                    //   'home/pipo-export',
-                    //   {
-                    //     id: this.redirectid,
-                    //     page: this.redirectpage,
-                    //     index: this.redirectindex,
-                    //   },
-                    // ]);
+                    if (this.documentType1=='import') {
+                      this.router.navigate(['/home/packing-list']);
+                    } else {
+                      this.router.navigate(['/home/packing-list']);
+                    }
                   },
                   (error) => {
                     console.log('error');
@@ -1849,7 +1834,7 @@ export class UploadComponent implements OnInit {
     console.log('pipodoc', this.pipourl1);
 
     e.form.value.buyerName = this.arrayData;
-    // e.form.value.currency = this.currency;
+    e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     // this.documentService.addOtherDoc(e.form.value).subscribe(
     //   (res) => {
@@ -1892,7 +1877,7 @@ export class UploadComponent implements OnInit {
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
     e.form.value.buyerName = this.arrayData;
-    // e.form.value.currency = this.currency;
+    e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     e.form.value.file = this.documentType1;
     this.documentService.addEbrc(e.form.value).subscribe(
@@ -1936,7 +1921,7 @@ export class UploadComponent implements OnInit {
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
     e.form.value.buyerName = this.arrayData;
-    // e.form.value.currency = this.currency;
+    e.form.value.currency = e.form.value?.currency?.type;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
     this.documentService.addSwift(e.form.value).subscribe(
@@ -1968,7 +1953,6 @@ export class UploadComponent implements OnInit {
     e.form.value.buyerName = this.arrayData;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
-    // e.form.value.currency = this.currency;
     console.log(e.form.value,'onSubmitInsurance');
     this.documentService.addInsurance(e.form.value).subscribe(
       (res: any) => {
@@ -2018,7 +2002,7 @@ export class UploadComponent implements OnInit {
     e.form.value.buyerName = this.arrayData;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
-    // e.form.value.currency = this.currency;
+
     console.log(e.form.value);
     this.documentService.addLetterLC(e.form.value).subscribe(
       (res: any) => {
@@ -2101,7 +2085,7 @@ export class UploadComponent implements OnInit {
     e.form.value.buyerName = this.arrayData;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
-    // e.form.value.currency = this.currency;
+
     console.log(e.form.value);
     this.documentService.addOpinionReport(e.form.value).subscribe(
       (res: any) => {

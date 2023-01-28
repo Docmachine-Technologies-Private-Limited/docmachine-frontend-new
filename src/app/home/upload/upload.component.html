@@ -364,8 +364,18 @@
 
                   <p class="sh1">FOB and FREIGHT</p>
                   <td class="full-input border1">
-                    <label for="fobCurrency">FOB CURRENCY</label><input [(ngModel)]="res.fobCurrency"
-                      class="form-control p-3" type="text" name="fobCurrency" />
+                    <label for="fobCurrency">FOB CURRENCY</label>
+                    <!-- <input [(ngModel)]="res.fobCurrency"
+                      class="form-control p-3" type="text" name="fobCurrency" /> -->
+                      <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                      [items]="this.CURRENCY_LIST"
+                      bindLabel="type"
+                      [multiple]="false"
+                      groupBy="selectedAllGroup"
+                      placeholder="Select PI/PO"
+                      name="fobCurrency"
+                      [(ngModel)]="res.fobCurrency">
+                    </ng-select>
                   </td>
                   <td class="full-input border2">
                     <label for="fobValue">FOB VALUE</label><input [(ngModel)]="res.fobValue" class="form-control p-3"
@@ -381,8 +391,18 @@
                       [(ngModel)]="res.equivalentFobValue" class="form-control p-3" type="text" name="equivalentFobValue" />
                   </td>
                   <td class="full-input border2">
-                    <label for="freightCurrency">FREIGHT CURRENCY</label><input [(ngModel)]="res.freightCurrency"
-                      class="form-control p-3" type="text" name="freightCurrency" />
+                    <label for="freightCurrency">FREIGHT CURRENCY</label>
+                    <!-- <input [(ngModel)]="res.freightCurrency"
+                      class="form-control p-3" type="text" name="freightCurrency" /> -->
+                      <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                      [items]="this.CURRENCY_LIST"
+                      bindLabel="type"
+                      [multiple]="false"
+                      groupBy="selectedAllGroup"
+                      placeholder="Select PI/PO"
+                      name="freightCurrency"
+                      [(ngModel)]="res.freightCurrency">
+                    </ng-select>
                   </td>
                   <td class="full-input border3">
                     <label for="realizedFreightValue">FREIGHT VALUE</label><input [(ngModel)]="res.realizedFreightValue"
@@ -391,8 +411,18 @@
                   <br />
                   <p class="sh1">INSURANCE</p>
                   <td class="full-input border2">
-                    <label for="insuranceCurrency">INSURANCE CURRENCY</label><input [(ngModel)]="res.insuranceCurrency"
-                      class="form-control p-3" type="text" name="insuranceCurrency" />
+                    <label for="insuranceCurrency">INSURANCE CURRENCY</label>
+                    <!-- <input [(ngModel)]="res.insuranceCurrency"
+                      class="form-control p-3" type="text" name="insuranceCurrency" /> -->
+                      <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                      [items]="this.CURRENCY_LIST"
+                      bindLabel="type"
+                      [multiple]="false"
+                      groupBy="selectedAllGroup"
+                      placeholder="Select PI/PO"
+                      name="insuranceCurrency"
+                      [(ngModel)]="res.insuranceCurrency">
+                    </ng-select>
                   </td>
                   <td class="full-input border3">
                     <label for="insuranceValue">INSURANCE VALUE</label><input [(ngModel)]="res.insuranceValue"
@@ -496,8 +526,18 @@
                           type="text" name="amount{{ i + 1 }}" />
                       </td>
                       <td class="full-input border3">
-                        <label for="mawbno">CURRENCY</label><input [(ngModel)]="obj.currency" class="form-control p-3"
-                          type="text" name="currency{{ i + 1 }}" />
+                        <label for="mawbno">CURRENCY</label>
+                        <!-- <input [(ngModel)]="obj.currency" class="form-control p-3"
+                          type="text" name="currency{{ i + 1 }}" /> -->
+                          <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                        [items]="this.CURRENCY_LIST"
+                        bindLabel="type"
+                        [multiple]="false"
+                        groupBy="selectedAllGroup"
+                        placeholder="Select PI/PO"
+                        name="currency"
+                        [(ngModel)]="obj.currency">
+                      </ng-select>
                       </td>
                     </div>
                   </div>
@@ -565,8 +605,18 @@
                     class="form-control p-3" type="text" name="invoiceAmount" />
                 </td>
                 <td class="full-input border3">
-                  <label for="currency">CURRENCY</label><input [(ngModel)]="res.currency" class="form-control p-3"
-                    type="text" name="currency" />
+                  <label for="currency">CURRENCY</label>
+                  <!-- <input [(ngModel)]="res.currency" class="form-control p-3"
+                    type="text" name="currency" /> -->
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                    [items]="this.CURRENCY_LIST"
+                    bindLabel="type"
+                    [multiple]="false"
+                    groupBy="selectedAllGroup"
+                    placeholder="Select PI/PO"
+                    name="currency"
+                    [(ngModel)]="res.currency">
+                  </ng-select>
                 </td>
                 <br />
                 <td class="full-input border1">
@@ -585,8 +635,18 @@
                     class="form-control p-3" type="text" name="freightAmount" />
                 </td>
                 <td class="full-input border3">
-                  <label for="freightCurrency">FREIGHT CURRENCY</label><input [(ngModel)]="res.freightCurrency"
-                    class="form-control p-3" type="text" name="freightCurrency" />
+                  <label for="freightCurrency">FREIGHT CURRENCY</label>
+                  <!-- <input [(ngModel)]="res.freightCurrency"
+                    class="form-control p-3" type="text" name="freightCurrency" /> -->
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                    [items]="this.CURRENCY_LIST"
+                    bindLabel="type"
+                    [multiple]="false"
+                    groupBy="selectedAllGroup"
+                    placeholder="Select PI/PO"
+                    name="freightCurrency"
+                    [(ngModel)]="res.freightCurrency">
+                  </ng-select>
                 </td>
                 <br />
 
@@ -596,8 +656,18 @@
                     class="form-control p-3" type="text" name="insuranceAmount" />
                 </td>
                 <td class="full-input border3">
-                  <label for="insuranceCurrency">INSURANCE CURRENCY</label><input [(ngModel)]="res.insuranceCurrency"
-                    class="form-control p-3" type="text" name="insuranceCurrency" />
+                  <label for="insuranceCurrency">INSURANCE CURRENCY</label>
+                  <!-- <input [(ngModel)]="res.insuranceCurrency"
+                    class="form-control p-3" type="text" name="insuranceCurrency" /> -->
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                    [items]="this.CURRENCY_LIST"
+                    bindLabel="type"
+                    [multiple]="false"
+                    groupBy="selectedAllGroup"
+                    placeholder="Select PI/PO"
+                    name="insuranceCurrency"
+                    [(ngModel)]="res.insuranceCurrency">
+                  </ng-select>
                 </td>
 
                 <p class="sh1">DISCOUNT</p>
@@ -606,8 +676,18 @@
                     class="form-control p-3" type="text" name="discountAmount" />
                 </td>
                 <td class="full-input border3">
-                  <label for="discountCurrency">DISCOUNT CURRENCY</label><input [(ngModel)]="res.discountCurrency"
-                    class="form-control p-3" type="text" name="discountCurrency" />
+                  <label for="discountCurrency">DISCOUNT CURRENCY</label>
+                  <!-- <input [(ngModel)]="res.discountCurrency"
+                    class="form-control p-3" type="text" name="discountCurrency" /> -->
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                    [items]="this.CURRENCY_LIST"
+                    bindLabel="type"
+                    [multiple]="false"
+                    groupBy="selectedAllGroup"
+                    placeholder="Select PI/PO"
+                    name="discountCurrency"
+                    [(ngModel)]="res.discountCurrency">
+                  </ng-select>
                 </td>
                 <br />
 
@@ -618,9 +698,19 @@
                     name="miscellaneousAmount" />
                 </td>
                 <td class="full-input border3">
-                  <label for="miscellaneousCurrency">MISCELLANEOUS CURRENCY</label><input
+                  <label for="miscellaneousCurrency">MISCELLANEOUS CURRENCY</label>
+                  <!-- <input
                     [(ngModel)]="res.miscellaneousCurrency" class="form-control p-3" type="text"
-                    name="miscellaneousCurrency" />
+                    name="miscellaneousCurrency" /> -->
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                    [items]="this.CURRENCY_LIST"
+                    bindLabel="type"
+                    [multiple]="false"
+                    groupBy="selectedAllGroup"
+                    placeholder="Select PI/PO"
+                    name="miscellaneousCurrency"
+                    [(ngModel)]="res.miscellaneousCurrency">
+                  </ng-select>
                 </td>
 
                 <p class="sh1">COMMISSION</p>
@@ -629,8 +719,18 @@
                     class="form-control p-3" type="text" name="commissionAmount" />
                 </td>
                 <td class="full-input border3">
-                  <label for="commissionCurrency">COMMISSION CURRENCY</label><input
-                    [(ngModel)]="res.commissionCurrency" class="form-control p-3" type="text" name="commissionCurrency" />
+                  <label for="commissionCurrency">COMMISSION CURRENCY</label>
+                  <!-- <input
+                    [(ngModel)]="res.commissionCurrency" class="form-control p-3" type="text" name="commissionCurrency" /> -->
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                    [items]="this.CURRENCY_LIST"
+                    bindLabel="type"
+                    [multiple]="false"
+                    groupBy="selectedAllGroup"
+                    placeholder="Select PI/PO"
+                    name="commissionCurrency"
+                    [(ngModel)]="res.commissionCurrency">
+                  </ng-select>
                 </td>
                 <br />
               </tr>
@@ -1337,8 +1437,17 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Currency</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="currency">
+                  <!-- <input ngModel class="form-control p-3" type="text"
+                    name="currency"> -->
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                    [items]="this.CURRENCY_LIST"
+                    bindLabel="type"
+                    [multiple]="false"
+                    groupBy="selectedAllGroup"
+                    placeholder="Select PI/PO"
+                    name="currency"
+                    ngModel>
+                  </ng-select>
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"></label>
@@ -1393,7 +1502,16 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <input ngModel class="form-control p-3" name="currency">
+                  <!-- <input ngModel class="form-control p-3" name="currency"> -->
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                  [items]="this.CURRENCY_LIST"
+                  bindLabel="type"
+                  [multiple]="false"
+                  groupBy="selectedAllGroup"
+                  placeholder="Select PI/PO"
+                  name="currency"
+                  ngModel>
+                </ng-select>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
