@@ -5,9 +5,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { WindowInformationService } from "src/app/service/window-information.service";
 
 @Component({
-  selector: "app-outward-remittance",
-  templateUrl: "./outward-remittance.component.html",
-  styleUrls: ["./outward-remittance.component.scss"],
+  selector: "app-advance-outward-remittance",
+  templateUrl: "./advance-outward-remittance.component.html",
+  styleUrls: ["./advance-outward-remittance.component.scss"],
 })
 export class AdvanceOutwardRemittanceComponent implements OnInit {
   public item = [];

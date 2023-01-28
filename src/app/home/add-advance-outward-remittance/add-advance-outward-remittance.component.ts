@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
 import { UserService } from "../../service/user.service";
-import { BoeBill } from "./../../../model/boe.model";
-import { IRAdvice } from "./../../../model/irAdvice.model";
+import { BoeBill } from "../../../model/boe.model";
+import { IRAdvice } from "../../../model/irAdvice.model";
 import { timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
@@ -27,20 +27,20 @@ import { DocumentService } from "../../service/document.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
-  selector: 'app-add-outward-remittance',
-  templateUrl: './add-outward-remittance.component.html',
-  styleUrls: ['./add-outward-remittance.component.scss'],
+  selector: 'app-add-advance-outward-remittance',
+  templateUrl: './add-advance-outward-remittance.component.html',
+  styleUrls: ['./add-advance-outward-remittance.component.scss'],
 
 })
-export class AddOutwardRemittanceComponent implements OnInit {
-  buyerDetail: any = [];
-  LocationData: any = [];
-  commodity: any = [];
+export class AddAdvanceOutwardRemittanceComponent implements OnInit {
+  buyerDetail: any = []
+  LocationData: any = []
+  commodity: any = []
   buyer: string;
   uploading: boolean = false;
   authToken: string;
-  USER_DATA:any=[];
-  selectedpipo: any = [];
+
+
   CurrencyData:any = ['INR','USD', 'EUR', 'GBP', 'CHF','AUD','CAD','AED','SGD','SAR','JPY']
 
 
@@ -57,7 +57,7 @@ export class AddOutwardRemittanceComponent implements OnInit {
   public pIpO = false;
   public override = false;
   public message = "";
-  public documentType: string = 'import';
+  public documentType: string = '';
   public documentType1 = "";
   public piPoUrl:any='';
   public selectedDocumentType;
@@ -98,13 +98,16 @@ export class AddOutwardRemittanceComponent implements OnInit {
   mainBene: any;
   location: any;
   isDisabled: boolean;
-  originData: any = [];
+  origin: any = [];
   item5: any;
   headers: any;
 
   isUploaded: boolean = false;
 
   public config: DropzoneConfigInterface;
+  public config1: DropzoneConfigInterface;
+  public config2: DropzoneConfigInterface;
+  public config3: DropzoneConfigInterface;
 
   pipoForm:any= FormGroup;
   submitted = false;
@@ -114,7 +117,7 @@ export class AddOutwardRemittanceComponent implements OnInit {
     { id: 'PI', name: 'Perform Invoice' },
     { id: 'PO', name: 'Purchase Order' },
   ];
-  pipolist:any=[];
+
 
   constructor(
     private userService: UserService,
@@ -122,7 +125,7 @@ export class AddOutwardRemittanceComponent implements OnInit {
     private sanitizer: DomSanitizer,
     public appconfig: AppConfig,
     private formBuilder: FormBuilder,
-    public documentService: DocumentService,
+    private documentService: DocumentService,
     public router: Router,
     private route: ActivatedRoute,
     public wininfo: WindowInformationService
@@ -133,16 +136,15 @@ export class AddOutwardRemittanceComponent implements OnInit {
 
   }
 
-  async ngOnInit() {
+  ngOnInit(): void {
     this.wininfo.set_controller_of_width(270,'.content_top_common')
     this.file= this.route.snapshot.paramMap.get('doc_type');
-    console.log('this.file',this.file);
     this.headers = {
       Authorization: this.authToken,
       timeout: `${200000}`
     };
-    this.config = {
-      url: `${this.api_base}/documents/uploadFile4`,
+    this.config1 = {
+      url: `${this.api_base}/member/uploadImage`,
       method: `POST`,
       maxFiles: 5,
       maxFilesize: 5,
@@ -150,14 +152,15 @@ export class AddOutwardRemittanceComponent implements OnInit {
       headers: this.headers,
       timeout: 820000,
       // autoProcessQueue: false,
-      dictDefaultMessage: 'Drag a document here',
+      dictDefaultMessage: "Drag a document here",
       acceptedFiles:
-        'image/*,application/pdf,.psd,.txt,.doc,.docx,.ppt,.pptx, .pps, .ppsx',
+        "image/*,application/pdf,.psd,.txt,.doc,.docx,.ppt,.pptx, .pps, .ppsx",
       previewTemplate:
         '<div  class="dz-preview dz-file-preview" style="text-align: right; margin-right:3px;">\n <div class="dz-image" style="text-align: right; margin-right:3px;"> <img data-dz-thumbnail /></div>\n <div class="dz-details">\n    <div class="dz-size"><span data-dz-size></span></div>\n    <div class="dz-filename"><span data-dz-name></span></div>\n  </div>\n  <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>\n  <div class="dz-error-message"><span data-dz-errormessage></span></div>\n  <div class="dz-success-mark">\n    <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">\n      <title>Check</title>\n      <defs></defs>\n      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">\n        <path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>\n      </g>\n    </svg>\n  </div>\n  <div class="dz-error-mark">\n    <i style="color: red; text-align: center;font-size: 30px;" class="fa fa-exclamation-circle"></i>\n  </div>\n</div>',
     };
 
 
+    // buyerName commodity doc
 
     this.pipoForm = this.formBuilder.group(
       {
@@ -172,12 +175,7 @@ export class AddOutwardRemittanceComponent implements OnInit {
         dueDate: new FormControl("",),
         location: new FormControl(null, Validators.required),
       }
-    )
-   this.documentService.getPipoByType('import').subscribe((res:any)=>{
-    this.pipolist =res?.data;
-    console.log('this.pipolist',this.pipolist);
-  });
-
+    );
   }
 
 
@@ -212,24 +210,6 @@ export class AddOutwardRemittanceComponent implements OnInit {
       },
       (err) => console.log("Error", err)
     );
-
-    this.documentService.getMaster(1).subscribe(
-      (res: any) => {
-        console.log('Master Data File', res);
-        this.item5 = res.data;
-        console.log('line 736', this.item5);
-        this.item5.forEach((element, i) => {
-          this.originData[i] = element.countryOfFinaldestination;
-        });
-        console.log('Master Country', this.originData);
-        this.originData = this.originData.filter(
-          (value, index) => this.originData.indexOf(value) === index
-        );
-
-      },
-      (err) => console.log(err));
-  
-
   }
 
 
@@ -270,12 +250,34 @@ export class AddOutwardRemittanceComponent implements OnInit {
       this.pipoForm.value.doc1 = this.pipourl1
     }
 
+    // if (this.documentType1 == 'import') {
+    //   // this.pipoForm.value.benneName = this.beneValue
+    // }
+    // else if (this.documentType1 == 'export') {
+    //   this.pipoForm.value.buyerName = this.buyer
+    //   this.pipoForm.value.commodity = this.commodityData
+    // }
+
 
     this.pipoForm.value.document = this.documentType
 
     this.documentService.addPipo(this.pipoForm.value).subscribe(
       (res) => {
         this.router.navigateByUrl("/home/pipo");
+        // if (this.documentType1 == 'import' && this.documentType == 'PI'){
+        // this.router.navigateByUrl("/home/pipoDoc");}
+        // else if( this.documentType1 == 'import' && this.documentType == 'PO'){
+        //   this.router.navigateByUrl("/home/pipoDoc");
+        // }
+        // else if (this.documentType1 == 'export' && this.documentType == 'PI') {
+        //   this.router.navigateByUrl("/home/pipoDocExport");
+        // }
+        // else if (this.documentType1 == 'export' && this.documentType == 'PO') {
+        //   this.router.navigateByUrl("/home/pipoDocExport");
+        // }
+        // else{
+        //   this.router.navigateByUrl("/home/dashboardNew");
+        // }
       },
       (err) => console.log("Error adding pipo")
     );
@@ -299,10 +301,7 @@ export class AddOutwardRemittanceComponent implements OnInit {
 
 
   public onUploadSuccess(args: any): void {
-
-    this.isUploaded = true;
     console.log("-----------------------> onUploadSuccess called")
-    console.log("this.documentType",this.documentType)
     if (this.documentType !== "") {
       this.uploading = false;
       console.log("ARGS", args);
@@ -345,7 +344,61 @@ export class AddOutwardRemittanceComponent implements OnInit {
       }
       else {
         // this.res = new BoeBill(args[1].data);
-
+        if (this.documentType === 'PI' || this.documentType === 'PO') {
+          console.log("here comeee")
+          this.pIpO = true;
+          this.isUploaded = true
+        }
+        else if (this.documentType === 'tryPartyAgreement') {
+          this.tryPartyAgreement = true;
+        }
+        else if (this.documentType === 'creditNote') {
+          this.creditNote = true;
+        }
+        else if (this.documentType === 'swiftCopy') {
+          this.swiftCopy = true;
+        }
+        else if (this.documentType === 'blCopyref') {
+          this.blCopyref = true;
+        }
+        else if (this.documentType === 'blCopy') {
+          this.blCopy = true;
+        }
+        else if (this.documentType === 'commercial') {
+          this.commercial = true
+        }
+        else if (this.documentType === 'destruction') {
+          this.destruction = true
+        }
+        else if (this.documentType === 'billOfExchange') {
+          this.billOfExchange = true
+        }
+        else if (this.documentType === 'EBRC') {
+          this.EBRC = true;
+        }
+        else if (this.documentType === 'debitNote') {
+          this.debitNote = true;
+        }
+        else if (this.documentType === 'insuranceCopy') {
+          this.insuranceCopy = true;
+        }
+        else if (this.documentType === 'lcCopy') {
+          this.lcCopy = true;
+        }
+        else if (this.documentType === 'agreement') {
+          this.agreement = true;
+        }
+        else if (this.documentType === 'opinionReport') {
+          this.opinionReport = true;
+        }
+        else if (this.documentType === 'packingList') {
+          this.packingList = true
+        }
+        else if (this.documentType === 'otherDoc') {
+          this.otherDoc = true
+        }
+        else {
+          this.other = true
           this.userService.updateManyPipo(this.pipoArr, this.documentType, args[1].data)
             .subscribe(
               data => {
@@ -363,17 +416,17 @@ export class AddOutwardRemittanceComponent implements OnInit {
                 // this.toastr.error('Invalid inputs, please check!');
                 console.log("error")
               });
-
+        }
 
         console.log(this.res);
       }
-      this.pubUrl = args[1].doc
+      this.pubUrl = args[1].publicUrl
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        args[1].doc
+        args[1].publicUrl
       );
-      this.pipourl1 = args[1].doc;
+      this.pipourl1 = args[1].data;
       this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        args[1].doc
+        args[1].data
       );
       console.log(this.publicUrl);
       console.log("this.piPoUr this.piPoUr this.piPoUr", this.piPoUrl);
@@ -382,7 +435,7 @@ export class AddOutwardRemittanceComponent implements OnInit {
       console.log("Document type not given");
     }
 
-
+    console.log("Selected Document type", this.selectedDocumentType);
   }
 
   submit(e) {
