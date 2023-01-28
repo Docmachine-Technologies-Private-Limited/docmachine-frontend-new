@@ -51,6 +51,7 @@ export class ShippingBill {
     public balanceAvai: any;
     public doc: any;
     public buyerName: any;
+    public deleteflag: any;
 
 
     constructor(data: any) {
@@ -90,6 +91,7 @@ export class ShippingBill {
         this.irRef = data.irRef ? data.irRef: [];
         this.doc = data.doc ? data.doc: '';
         this.buyerName=data.buyerName?data.buyerName:[];
+        this.deleteflag=data.deleteflag?data.deleteflag:'0'
     }
 
     createInvoice(data) {
@@ -144,15 +146,10 @@ export class ShippingBill {
   }
 }
 
-// export class ShippingBillDisplayItem extends ShippingBill {
-//   constructor(props) {
-//
-//   }
-// }
+
 
 export class ShippingBillDisplayListViewItem {
   public shippingBillList: Array<ShippingBill> = [];
-  // public shippingBillDiplayList: Array<ShippingBillDisplayItem> = [];
   constructor(data) {
     for (let value of data) {
       this.shippingBillList.push(new ShippingBill(value));

@@ -61,6 +61,7 @@ export class PipoDataService {
                   })
                 }
               }
+              console.log(this.PI_PO_NUMBER_LIST,type,'PI_PO_NUMBER_LIST')
           })
           resolve(temppipo);
         },
@@ -127,13 +128,15 @@ export class PipoDataService {
       }
     }
   }
-  getShippingNo() {
+  getShippingNo(id:any) {
     let pipolist = this.pipolistModelSubsciber.value;
     console.log('pipolist',pipolist);
     var temp:any=[];
     for (let i in pipolist) {
       for (let index = 0; index < pipolist[i]?.sbRef.length; index++) {
-        temp.push(pipolist[i]?.sbRef[index]);
+        if (id==pipolist[i]._id) {
+          temp.push(pipolist[i]?.sbRef[index]);
+        }
       }
       }
       return temp;

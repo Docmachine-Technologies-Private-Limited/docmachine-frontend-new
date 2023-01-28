@@ -72,6 +72,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       this.PENDING_DATA = res;
       console.log("this.PENDING_DATA", res)
     })
+    this.item1=[];
     this.documentService.getIrAdvice(1).subscribe(
       (res: any) => {
         console.log(res), (this.item = res.data);
@@ -311,7 +312,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
 
   deleteByRoleType(RoleCheckbox:string,id:any,index:any){
     if (RoleCheckbox==''){
-        this.documentService.deleteById({id:id,tableName:'masterrecord'}).subscribe((res) => {
+        this.documentService.deleteById({id:id,tableName:'iradvices'}).subscribe((res) => {
             console.log(res)
             if (res) {
               this.ngOnInit()
@@ -320,7 +321,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
       var approval_data:any={
         id:id,
-        tableName:'masterrecord',
+        tableName:'iradvices',
         deleteflag:'-1',
         userdetails:this.USER_DATA['result'],
         status:'pending',
