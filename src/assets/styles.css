@@ -257,4 +257,7 @@ transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 .removeamouts_new{display:inline-block;    margin-top: 45px;}
 .new_left_sidedoc img{max-width:100%;}
 .right_form_new .paddingleft0{padding-left:0px;}
+.newdatatable tbody tr td{vertical-align:middle; padding:7px 16px;min-width: 213px;}
 
+.newdatatable tbody tr td b{vertical-align:middle; font-size:16px; font-weight:500; color:#333;}
+.newdatatable tbody tr td p{vertical-align:middle; font-size:15px; font-weight:500; color:#999;}
