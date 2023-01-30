@@ -210,6 +210,8 @@ export class UploadDocComponent implements OnInit {
   //     name:['',Validators.required]
   //   });
   // }
+  CURRENCY_LIST: any = [];
+
   iframeVisible:boolean=false;
   get f() {
     return this.loginForm.controls;
@@ -306,12 +308,17 @@ export class UploadDocComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content_top_common')
+    this.wininfo.set_controller_of_width(230,'.content_top_common')
     console.log('zxysomthing');
     this.jsondata1 = data1['default'];
     this.dataJson1 = data1['default'];
     this.jsondata2 = data1['default'];
     this.dataJson2 = data1['default'];
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.CURRENCY_LIST.push({
+        type: data1['default'][index]['value']
+      })
+    }
     this.userService.getTeam().subscribe(
       (data) => {
         console.log('llllllllllllllllllllllllllllllll');
@@ -2113,7 +2120,7 @@ dataPdf:any=[];
         BeneficiaryCustomerAddress:data['Beneficiary Customer Address'],
         BeneficiaryCustomerName:data['Beneficiary Customer Name'],
         CurrencyInstructedAmount:data['Currency/Instructed Amount'],
-        CurrencyCode:data['Currency Code'],
+        CurrencyCode:this.replaceText(data['CurrencyCode'],'32A'),
         DetailsofCharges:data['Details of Charges'],
         Orderinglnstitution:data['Ordering lnstitution'],
         Receiver:data['Receiver'],
@@ -2141,7 +2148,7 @@ dataPdf:any=[];
     }
   }
   replaceText(text:any,repl_text:any){
-    return (text.replace(repl_text,'')).trim()
+    return text!=undefined?(text.replace(repl_text,'')).trim():''
   }
   removeallSpace(spacetext:any){
     return spacetext.replace(/\s/g,'');

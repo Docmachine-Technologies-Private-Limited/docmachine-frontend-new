@@ -284,7 +284,7 @@ export class UploadComponent implements OnInit {
         maxFilesize: 5,
         addRemoveLinks: true,
         headers: this.headers,
-        timeout: 820000,
+        timeout: 500000,
         // autoProcessQueue: false,
         dictDefaultMessage: 'Drag a document here',
         acceptedFiles:
@@ -2238,9 +2238,7 @@ export class UploadComponent implements OnInit {
           this.otherDoc = true;
         } else {
           this.other = true;
-          this.userService
-            .updateManyPipo(this.pipoArr, this.documentType, args[1].data)
-            .subscribe(
+          this.userService.updateManyPipo(this.pipoArr, this.documentType, args[1].data).subscribe(
               (data) => {
                 console.log('king123');
                 console.log(data);
