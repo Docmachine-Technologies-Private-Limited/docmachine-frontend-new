@@ -356,7 +356,7 @@ export class CreateNoteComponent implements OnInit {
       (err) => console.log('Error', err)
     );
     console.log('DOCUMENT TYPE', this.documentType);
-    await this.pipoDataService.getPipoList('export').then((data) => {
+    await this.pipoDataService.getPipoList('import').then((data) => {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
         console.log(data, 'data2222..................')
@@ -398,6 +398,7 @@ export class CreateNoteComponent implements OnInit {
         }
       },
       (err) => console.log(err));
+
   }
 
   onSubmitCredit(e) {

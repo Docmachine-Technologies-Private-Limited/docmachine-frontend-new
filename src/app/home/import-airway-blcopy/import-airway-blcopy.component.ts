@@ -128,8 +128,8 @@ export class ImportAirwayBlcopyComponent implements OnInit {
   }
 
   newCredit() {
-    this.sharedData.changeretunurl('home/import-airway-bl-copy')
-    this.router.navigate(['home/upload', {file: 'import', document: 'import-blCopy'}]);
+    // this.sharedData.changeretunurl('home/import-airway-bl-copy')
+    this.router.navigate(['/home/upload', {file: 'import', document: 'import-blCopy'}]);
   }
 
   exportToExcel() {

@@ -387,6 +387,14 @@ export class DocumentService {
     );
   }
 
+  CHECK_ALL_INVOICES(data:any){
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/invoice/get`,data,httpOptions);
+  }
+
   updateBoeByBoe(user, _id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -402,7 +410,14 @@ export class DocumentService {
       httpOptions
     );
   }
-
+  addBoe(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/boe/post`,{data:data},httpOptions);
+  }
   getBoeByBoe(boeNumber) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

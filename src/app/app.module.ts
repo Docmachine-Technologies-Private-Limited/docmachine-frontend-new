@@ -53,6 +53,7 @@ import { AdminGuard } from "./service/RolePermission/Admin/admin.guard";
 import { SuperGuard } from "./service/RolePermission/SuperAdmin/super.guard";
 import { MemberGuard } from "./service/RolePermission/Member/member.guard";
 import { AdminMemberGuard } from "./service/RolePermission/AdminMember/admin-member.guard";
+import {DateFormatService} from "./DateFormat/date-format.service"
 
 import { JoinPipePipe } from './join-pipe.pipe';
 
@@ -97,6 +98,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         SuperGuard,
         MemberGuard,
         AdminMemberGuard,
+        DateFormatService,
         { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
     ],
     bootstrap: [AppComponent],

@@ -5,8 +5,8 @@
       <div class="from-control">
         <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
           PI/PO*</label>
-          <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
-           [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
+          <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+           [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
           bindLabel="pi_po_buyerName"
           [multiple]="true"
           groupBy="selectedAllGroup"
