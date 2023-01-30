@@ -13,7 +13,7 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a routerLink="/home/pipo">Transactions</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Add new</li>
+                                    <!-- <li class="breadcrumb-item active" aria-current="page">Add new</li> -->
                                 </ol>
                             </nav>
                         </div>
@@ -26,24 +26,102 @@
                         <div class="new_document_list_add_data">
                             <form>
                                 <div class="row">
-                                    <div class="col-md-6 col-12">
-                                        <label for="exampleInputEmail1" class="form-label">Select bank name*</label>
-                                        <select class="form-select" aria-label="Default select example">
-                                                <option selected>Open this select menu</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
-                                              </select>
+                                    <div class="col-md-7 col-sm-12 col-12">
+                                        <div class="new_left_sidedoc">
+                                            <img src="/assets/Group3055.png" alt="Drag & drop files here or Browse" />
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 col-12">
-                                        <label for="exampleInputPassword1" class="form-label">Select beneficiary</label>
-                                        <select class="form-select" aria-label="Default select example">
-                                                <option selected>Open this select menu</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
-                                              </select>
+                                    <div class="col-md-5 col-sm-12 col-12">
+                                        <div class="right_form_new">
+                                            <div class="row">
+                                                <div class="col-md-6 col-12">
+                                                    <label for="exampleInputEmail1" class="form-label">Select bank name*</label>
+                                                    <select class="form-select" aria-label="Default select example">
+                <option selected>Select bank name</option>
+                <option value="1">Axis bank</option>
+                <option value="2">HDFC bank</option>
+                <option value="3">State bank of India</option>
+                <option value="3">IndusInd bank</option>
+              </select>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <label for="exampleInputPassword1" class="form-label">Select beneficiary</label>
+                                                    <select class="form-select" aria-label="Default select example">
+                <option selected>Muniraj</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-5 col-12">
+                                                    <label for="exampleInputEmail1" class="form-label">Select PI</label>
+                                                    <select class="form-select" aria-label="Default select example">
+                <option selected>PI02</option>
+                <option value="1">Axis bank</option>
+                <option value="2">HDFC bank</option>
+                <option value="3">State bank of India</option>
+                <option value="3">IndusInd bank</option>
+              </select>
+                                                </div>
+                                                <div class="col-md-2 col-12 padding0">
+                                                    <label for="Currency" class="form-label">Currency</label>
+                                                    <input type="text" class="form-control" id="Currency" placeholder="EUR">
+                                                </div>
+                                                <div class="col-md-3 col-12">
+                                                    <label for="Amount" class="form-label">Amount</label>
+                                                    <input type="text" class="form-control" id="Amount" placeholder="1,00,000">
+                                                </div>
+                                                <div class="col-md-2 col-12 paddingleft0">
+                                                    <div class="removeamouts_new">
+                                                        <button type="button" class="btn btn-primary">-</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="add_new_buttons">
+                                                        <button type="button" class="btn btn-success">+ Add PI</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6 col-12">
+                                                    <label for="TotalPIamount" class="form-label">Total PI amount</label>
+                                                    <input type="text" class="form-control" id="TotalPIamount" placeholder="2,50,000">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 col-sm-12 col-12">
+                                                    <label for="Opinion" class="form-label">Opinion report available?</label><br>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                                        <label class="form-check-label" for="flexRadioDefault1">
+                                                     YES
+                                                    </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                                        <label class="form-check-label" for="flexRadioDefault2">
+                                                   NO
+                                                    </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <label for="Opinion" class="form-label">Attach opinion report</label>
+                                                    <div cladss="file_addd_new">
+                                                        <input class="form-control" type="file" id="formFileDisabled" disabled />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bottom_submit_section">
+                                                <button type="button" class="btn btn-primary">CANCEL</button>
+                                                <button type="button" class="btn btn-secondary">PROCEED</button>
+                                            </div>
+                                        </div>
                                     </div>
+
                                 </div>
                             </form>
                         </div>
