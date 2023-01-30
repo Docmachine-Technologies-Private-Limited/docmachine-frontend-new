@@ -473,6 +473,12 @@ import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remi
             canActivate:[MemberGuard]
           },
           {
+            path: "remittance-flow",
+            component: RemittanceFlowComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
             path: "add-advance-outward-remittance/:doc_type",
             component: AddAdvanceOutwardRemittanceComponent,
             pathMatch: "full",

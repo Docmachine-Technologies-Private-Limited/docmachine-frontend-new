@@ -27,16 +27,28 @@
                         <div class="new_document_list_add_data">
                             <div class="row">
                                 <div class="col-md-9">
-                                    <form>
+                                    <form [formGroup]="pipoForm">
                                         <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="ADbill" class="form-label">Select bank name</label>
+                                                <select class="form-select" aria-label="Default select example"
+                                                    [(ngModel)]="bank" name="bank">
+                                                    <option value="">Select bank name</option>
+
+                                                    <option *ngFor="let banklist of bankDetail
+                                                    ">{{ banklist.bank }}
+                                                    </option>
+                                                </select>
+                                            </div>
                                             <div class="col-md-6">
                                                 <label for="ADbill" class="form-label">Buyer's name</label>
                                                 <select class="form-select" aria-label="Default select example"
-                                                    [(ngModel)]="buyer" name="buy">
+                                                    [(ngModel)]="beneName" name="beneName"
+                                                    (change)=changepipo($event.target.value)>
                                                     <option value="">Select Buyer</option>
 
-                                                    <option *ngFor="let buyer of buyerDetail
-                                                    ">{{ buyer.buyerName }}
+                                                    <option *ngFor="let bene of benneDetail
+                                                    ">{{ bene.beneName }}
                                                     </option>
                                                 </select>
                                                 <!-- <ng-select [items]="buyerDetail" bindLabel="buyerName"
@@ -44,33 +56,107 @@
                                                     [(ngModel)]="buyer" name="buyer">
                                                 </ng-select> -->
                                             </div>
-                                            <div class="col-md-6">
-                                                <label for="ADbill" class="form-label">Choose commodity</label>
-                                                <!-- <select multiple="multiple" class="form-select" aria-label="Default select example" [(ngModel)]="commodityData" name="commodityy">
-                                                    <option *ngFor="let data of commodity
-                                                    ">{{ data.como }}
-                                                    </option>
-                                                </select> -->
 
-                                                <ng-select [items]="commodity" bindLabel="como" bindValue="como"
-                                                    [multiple]="true" placeholder="Select Commodity"
-                                                    [(ngModel)]="commodityData" name="commodity">
-                                                </ng-select>
-                                            </div>
                                             <div class="col-md-6">
-                                                <!-- <b>Upload documents</b> -->
-                                                <label class="form-label">Select the type of document</label>
-                                                <select class="form-select" aria-label="Default select example"
-                                                    [(ngModel)]="documentType" name='doc_type'>
-                                                    <option value="">Select Document</option>
-                                                    <option value="PI">Perform Invoice</option>
-                                                    <option value="PO">Purchase Order</option>
-                                                </select>
+                                                <table class="table table-bordered" formArrayName="quantityTerm">
 
-                                                <!-- <ng-select [items]="documentTypes" bindLabel="name"
-                                        bindValue="id" placeholder="Select Type"
-                                        [(ngModel)]="documentType" name="doc_type">
-                                    </ng-select> -->
+                                                    <td>
+                                                        <select class="form-select" aria-label="Default select example"
+                                                            formControlName="pi_poNo" name="pi_poNo" autocomplete="off">
+                                                            <option value="">Select PI/PO</option>
+
+                                                            <option *ngFor="let pipolist of pipoData
+                                                    ">{{ pipolist.pi_poNo }}
+                                                            </option>
+                                                        </select>
+                                                        <div *ngIf="submitted && form.pi_poNo.errors" class='errorText'>
+                                                            <div *ngIf="form.pi_poNo.errors.required">PiPo is required</div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-select" aria-label="Default select example"
+                                                            formControlName="currency" name="currency"
+                                                            autocomplete="off">
+                                                            <option value="">Select Currency</option>
+
+                                                            <option *ngFor="let currency of CurrencyData
+                                                    ">{{ currency }}
+                                                            </option>
+                                                        </select>
+
+
+                                                        <div *ngIf="submitted && form.currency.errors"
+                                                            class='errorText'>
+                                                            <div *ngIf="form.currency.errors.required"> Currency is
+                                                                required</div>
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        Amount:
+                                                        <input type="text" formControlName="amount"
+                                                            class="form-control">
+                                                    </td>
+
+
+                                                    <tr *ngFor="let quantity of getQuantities(pipoForm); let i = index"
+                                                        [formGroupName]="i">
+                                                        <td>
+                                                            <select class="form-select"
+                                                                aria-label="Default select example"
+                                                                formControlName="pi_poNo" name="pi_poNo"
+                                                                autocomplete="off">
+                                                                <option value="">Select PI/PO</option>
+
+                                                                <option *ngFor="let pipolist of pipoData
+                                                    ">{{ pipolist.pi_poNo }}
+                                                                </option>
+                                                            </select>
+                                                            <div *ngIf="submitted && form.pi_poNo.errors"
+                                                                class='errorText'>
+                                                                <div *ngIf="form.pi_poNo.errors.required">Branch is
+                                                                    required</div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <select class="form-select"
+                                                                aria-label="Default select example"
+                                                                formControlName="currency" name="currency"
+                                                                autocomplete="off">
+                                                                <option value="">Select Currency</option>
+
+                                                                <option *ngFor="let currency of CurrencyData
+                                                    ">{{ currency }}
+                                                                </option>
+                                                            </select>
+
+
+                                                            <div *ngIf="submitted && form.currency.errors"
+                                                                class='errorText'>
+                                                                <div *ngIf="form.currency.errors.required"> Currency is
+                                                                    required</div>
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            Amount:
+                                                            <input type="text" formControlName="amount"
+                                                                class="form-control">
+                                                        </td>
+                                                        <td>
+                                                            <button (click)='removeQuantity(i)'
+                                                                class="btn btn-danger">Remove</button>
+                                                        </td>
+                                                        <td>
+                                                            <div class="add_payment_methode">
+                                                                <button type="submit" (click)="addQuantity(pipoForm)"
+                                                                    class="btn btn-primary"><i class="fa fa-plus"
+                                                                        aria-hidden="true"></i> Add payment
+                                                                    term</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </div>
                                         </div>
                                     </form>
@@ -118,7 +204,7 @@
                                                             *</label>
                                                         <input type="text" class="form-control" id="pi_poNo"
                                                             aria-describedby="emailHelp" formControlName="pi_poNo"
-                                                            placeholder="PIPO NO"  autocomplete="off">
+                                                            placeholder="PIPO NO" autocomplete="off">
                                                         <div *ngIf="submitted && form.pi_poNo.errors" class='errorText'>
                                                             <div *ngIf="form.pi_poNo.errors.required"> PIPO NO is
                                                                 required</div>
@@ -171,7 +257,8 @@
                                                             formControlName="currency" placeholder="Currency"> -->
 
                                                         <select class="form-select" aria-label="Default select example"
-                                                            formControlName="currency" name="currency" autocomplete="off">
+                                                            formControlName="currency" name="currency"
+                                                            autocomplete="off">
                                                             <option value="">Select Currency</option>
 
                                                             <option *ngFor="let currency of CurrencyData
@@ -200,7 +287,8 @@
                                                         <label for="exampleInputPassword1"
                                                             class="form-label">Incoterm</label>
                                                         <input type="text" class="form-control" id="Incoterm"
-                                                            formControlName="incoterm" placeholder="Incoterm" autocomplete="off">
+                                                            formControlName="incoterm" placeholder="Incoterm"
+                                                            autocomplete="off">
                                                         <div *ngIf="submitted && form.incoterm.errors"
                                                             class='errorText'>
                                                             <div *ngIf="form.incoterm.errors.required">Incoterm is
@@ -220,7 +308,8 @@
                                                         </ng-select> -->
 
                                                         <select class="form-select" aria-label="Default select example"
-                                                            formControlName="location" name="location" autocomplete="off">
+                                                            formControlName="location" name="location"
+                                                            autocomplete="off">
                                                             <option value="">Select Branch</option>
 
                                                             <option *ngFor="let location of LocationData
@@ -331,7 +420,8 @@
                                                                 <label for="exampleInputPassword1"
                                                                     class="form-label">Amount</label>
                                                                 <input class="form-select form-control"
-                                                                    formControlName="amount" placeholder="Amount" autocomplete="off" />
+                                                                    formControlName="amount" placeholder="Amount"
+                                                                    autocomplete="off" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4 col-sm-4 col-xs-12 col-12">
@@ -346,7 +436,8 @@
 
                                                                 <select class="form-select"
                                                                     aria-label="Default select example"
-                                                                    formControlName="description" name="description" autocomplete="off">
+                                                                    formControlName="description" name="description"
+                                                                    autocomplete="off">
                                                                     <option value="">Select Currency</option>
 
                                                                     <option *ngFor="let currency of CurrencyData

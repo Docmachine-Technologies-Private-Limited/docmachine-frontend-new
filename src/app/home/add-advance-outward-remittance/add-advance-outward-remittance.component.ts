@@ -33,10 +33,12 @@ import { WindowInformationService } from 'src/app/service/window-information.ser
 
 })
 export class AddAdvanceOutwardRemittanceComponent implements OnInit {
-  buyerDetail: any = []
   LocationData: any = []
+  bankDetail: any = []
   commodity: any = []
   buyer: string;
+  bank: string;
+  beneName: string;
   uploading: boolean = false;
   authToken: string;
 
@@ -63,6 +65,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   public selectedDocumentType;
   width: any = 0;
   public benneDetail: any = [];
+  public pipoData: any = [];
+
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
   // ----------------------------------
@@ -111,12 +115,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
   pipoForm:any= FormGroup;
   submitted = false;
-
-
-  documentTypes = [
-    { id: 'PI', name: 'Perform Invoice' },
-    { id: 'PO', name: 'Purchase Order' },
-  ];
 
 
   constructor(
@@ -174,6 +172,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         date: new FormControl("", Validators.required),
         dueDate: new FormControl("",),
         location: new FormControl(null, Validators.required),
+        quantityTerm: new FormArray([this.initQuantity()]),
       }
     );
   }
@@ -187,6 +186,14 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       description: ['', Validators.required]
     });
   }
+
+  initQuantity() {
+    return this.formBuilder.group({
+      qty: ['', Validators.required],
+      price: ['', Validators.required]
+    });
+  }
+
   //hiding info box
   filtervisible: boolean = false
   startDate: any = '';
@@ -199,19 +206,33 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         data => {
           this.commodity = data['data'][0]['commodity']
           this.LocationData = data['data'][0]['location']
-
+          this.bankDetail = data['data'][0]['bankDetails']
         },
         error => {
           console.log("error")
         });
-    this.userService.getBuyer(1).subscribe(
+
+    this.userService.getBene(1).subscribe(
       (res: any) => {
-        this.buyerDetail = res.data
+        this.benneDetail = res.data
       },
       (err) => console.log("Error", err)
     );
+
+
   }
 
+  changepipo(value){
+    this.documentService.getPipoByCustomer('import',value).subscribe(
+      (res: any) => {
+        this.pipoData = res.data
+      },
+      (err) => console.log("Error", err)
+    );
+    console.log('pipoData',this.pipoData);
+  }
+
+  
 
   get form() {
     return this.pipoForm.controls;
@@ -250,41 +271,16 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       this.pipoForm.value.doc1 = this.pipourl1
     }
 
-    // if (this.documentType1 == 'import') {
-    //   // this.pipoForm.value.benneName = this.beneValue
-    // }
-    // else if (this.documentType1 == 'export') {
-    //   this.pipoForm.value.buyerName = this.buyer
-    //   this.pipoForm.value.commodity = this.commodityData
-    // }
-
 
     this.pipoForm.value.document = this.documentType
 
     this.documentService.addPipo(this.pipoForm.value).subscribe(
       (res) => {
         this.router.navigateByUrl("/home/pipo");
-        // if (this.documentType1 == 'import' && this.documentType == 'PI'){
-        // this.router.navigateByUrl("/home/pipoDoc");}
-        // else if( this.documentType1 == 'import' && this.documentType == 'PO'){
-        //   this.router.navigateByUrl("/home/pipoDoc");
-        // }
-        // else if (this.documentType1 == 'export' && this.documentType == 'PI') {
-        //   this.router.navigateByUrl("/home/pipoDocExport");
-        // }
-        // else if (this.documentType1 == 'export' && this.documentType == 'PO') {
-        //   this.router.navigateByUrl("/home/pipoDocExport");
-        // }
-        // else{
-        //   this.router.navigateByUrl("/home/dashboardNew");
-        // }
       },
       (err) => console.log("Error adding pipo")
     );
   }
-
-
-
 
   //  ------------------------- handle image upload------------------------------------------
 
@@ -403,14 +399,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
             .subscribe(
               data => {
                 //this.pipoData[`${this.pipoDoc}`] = args[1].data
-                console.log("king123")
                 console.log(data)
                 this.toastr.success('PI/PO updated successfully.');
-                // this.docTog = false
-                // this.toggle = false
-                // this.toggle2 = false
-                // this.toastr.success('Company details updated successfully.');
-                // this.router.navigate(['/home/dashboardNew']);
               },
               error => {
                 // this.toastr.error('Invalid inputs, please check!');
@@ -475,6 +465,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     }
   }
 
+  // quantities() : FormArray {  
+  //   return this.pipoForm.get("quantities") as FormArray  
+  // }  
 
   runProgressBar(value) {
     console.log(value / 1500);
@@ -492,13 +485,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       (err) => console.log("Error", err)
     );
 
-    this.userService.getBuyer(1).subscribe(
-      (res: any) => {
-        (this.buyerDetail = res.data),
-          console.log("Benne Detail111", this.buyerDetail);
-      },
-      (err) => console.log("Error", err)
-    );
   }
 
   public loadFromLocalStorage() {
@@ -510,11 +496,33 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   // ----------------------------- end handle image upload ----------------------------------
 
 
+newQuantity(): FormGroup {  
+  return this.formBuilder.group({  
+    qty: '',  
+    price: '',  
+  })  
+}  
 
   getCourses(form) {
     return form.get('paymentTerm').controls;
   }
 
+  getQuantities(form) {
+    return form.get('quantityTerm').controls;
+  }
+
+
+  addQuantity(e) {
+    const control = this.pipoForm.controls.quantityTerm as FormArray;
+    control.push(this.initQuantity());
+  }
+
+  removeQuantity(i) {
+    let control = this.pipoForm.controls.quantityTerm as FormArray;
+    control.removeAt(i);
+
+  }
+  
   onAddCourse(e) {
     const control = this.pipoForm.controls.paymentTerm as FormArray;
     control.push(this.initCourse());
