@@ -91,6 +91,9 @@ import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/expo
 import { ImportBillOfExchangeComponent } from "./import-bill-of-exchange/import-bill-of-exchange.component";
 import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.component';
 import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-member.guard";
+import { EditRemittanceComponent } from './edit-remittance/edit-remittance.component';
+import { RemittanceSummaryComponent } from './remittance-summary/remittance-summary.component';
+import { AddRemittanceComponent } from './add-remittance/add-remittance.component';
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -119,7 +122,10 @@ import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-me
     RejectPanelComponent,
     RemittanceFlowComponent,
     EditBuyerComponent,
-    EditBeneComponent
+    EditBeneComponent,
+    EditRemittanceComponent,
+    RemittanceSummaryComponent,
+    AddRemittanceComponent
   ],
   imports: [
     SharedHomeModule,
@@ -218,6 +224,24 @@ import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-me
             canActivate:[MemberGuard]
           },
         
+          {
+            path: "edit-remittance",
+            component: EditRemittanceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "add-remittance",
+            component: AddRemittanceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "remittance-summary",
+            component: RemittanceSummaryComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
           {
             path: "pipo",
             component: PipoExportComponent,

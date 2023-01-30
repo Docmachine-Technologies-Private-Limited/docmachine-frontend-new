@@ -242,17 +242,19 @@ transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 .savBtn.bgnone{background: #fff!important;border: 1px solid #fff!important;color: #777!important;}
 .middle_datatable .form-control{height:28px; font-size:12px;}
 .padding_move_right{padding-right:16px;}
-
-
-
-
-
-
-
-
-
-
-
-
-
+.add_new_buttons{display:inline-block; width:100%;    margin: 17px 0 11px -2px;}
+.right_form_new label{font-size:14px;font-weight:500; color:#333;}
+.right_form_new .form-select{border:1px solid #e9e9e9!important;}
+.right_form_new .form-control{border:1px solid #e9e9e9!important;}
+.right_form_new .form-check{display:inline-block; margin:0 15px 0 0;}
+.bottom_submit_section{float:right;margin: 31px 0 0 0;}
+.right_form_new .padding0{padding:0px;}
+.add_new_buttons .btn-success{background:#51AEE5; border:1px solid #51AEE5; font-weight:500; padding:0 21px;    height: 36px;}
+.bottom_submit_section .btn-primary{background:#fff; border:1px solid #51AEE5; font-weight:500; padding:0 21px;  color:#51AEE5;    height: 36px;  font-weight: 500;}
+.bottom_submit_section .btn-secondary{background:#51AEE5; border:1px solid #51AEE5; font-weight:500; padding:0 21px;    font-weight: 500; margin:0 0px 0 15px;    height: 36px;    line-height: 36px;}
+.new_document_list_add_data .right_form_new .form-label{padding: 12px 0;}
+.right_form_new .removeamouts_new .btn.btn-primary{background:#fff; border:1px solid #51AEE5; color:#51AEE5;}
+.removeamouts_new{display:inline-block;    margin-top: 45px;}
+.new_left_sidedoc img{max-width:100%;}
+.right_form_new .paddingleft0{padding-left:0px;}
 
