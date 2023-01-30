@@ -1031,6 +1031,14 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/billOfExchange/get`, httpOptions);
   }
+  getBillExchangefile(type:string) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/billOfExchange/filetype`, {file:type},httpOptions);
+  }
 
   getBillExchangeByBillExchangeValue(id) {
     this.loadFromLocalStorage();
