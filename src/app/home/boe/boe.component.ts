@@ -3,6 +3,7 @@ import { DocumentService } from "../../service/document.service";
 import * as xlsx from 'xlsx';
 import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
@@ -21,9 +22,11 @@ export class BOEComponent implements OnInit {
   public showInvoice;
   public selectedRow;
   docu: any;
+  public viewData: any;
   public item: any;
+  public closeResult: string;
   public lastIndex;
-  public item1;
+  public item1 = [];
   public tableWidth;
   public greaterAmount = 0;
   public allTransactions: any = [];
@@ -46,6 +49,7 @@ onclick() {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private toastr: ToastrService,
+    private modalService: NgbModal,
     private sharedData : SharedDataService,
     private userService: UserService,
     public wininfo: WindowInformationService,
@@ -74,6 +78,29 @@ onclick() {
 
     }
 
+    openBoe(content) {
+      this.modalService
+        .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+        .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+    }
+    
+    private getDismissReason(reason: any): string {
+  
+      if (reason === ModalDismissReasons.ESC) {
+        return 'by pressing ESC';
+      } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+        return 'by clicking on a backdrop';
+      } else {
+        return `with: ${reason}`;
+      }
+    }
 
   exportToExcel(){
     const ws: xlsx.WorkSheet =
@@ -117,6 +144,13 @@ onclick() {
 
   hide(){
     this.showInvoice = false;
+  }
+
+  viewCN(a) {
+
+    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+      a['doc']
+    );
   }
 
   toSave(data, index){

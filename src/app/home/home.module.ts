@@ -95,6 +95,9 @@ import { UserProfilesComponent } from "./user-profiles/user-profiles.component";
 import { EmailValidatorDirective } from './Validator/email/email-validator.directive';
 import { PhoneValidatorDirective } from './Validator/phone/phone-validator.directive';
 
+import { EditRemittanceComponent } from './edit-remittance/edit-remittance.component';
+import { RemittanceSummaryComponent } from './remittance-summary/remittance-summary.component';
+import { AddRemittanceComponent } from './add-remittance/add-remittance.component';
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -126,7 +129,10 @@ import { PhoneValidatorDirective } from './Validator/phone/phone-validator.direc
     EditBeneComponent,
     UserProfilesComponent,
     PhoneValidatorDirective,
-    EmailValidatorDirective
+    EmailValidatorDirective,
+    EditRemittanceComponent,
+    RemittanceSummaryComponent,
+    AddRemittanceComponent
   ],
   imports: [
     SharedHomeModule,
@@ -231,6 +237,24 @@ import { PhoneValidatorDirective } from './Validator/phone/phone-validator.direc
             canActivate:[MemberGuard]
           },
 
+          {
+            path: "edit-remittance",
+            component: EditRemittanceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "add-remittance",
+            component: AddRemittanceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "remittance-summary",
+            component: RemittanceSummaryComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
           {
             path: "pipo",
             component: PipoExportComponent,

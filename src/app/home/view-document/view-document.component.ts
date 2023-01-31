@@ -21,6 +21,7 @@ import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprrov
 import { UserService } from 'src/app/service/user.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-view-document',
@@ -35,6 +36,8 @@ export class ViewDocumentComponent implements OnInit {
   public item2 = [];
   public item3 = [];
   public item4 = [];
+  public viewData: any;
+  public closeResult: string;
   public user;
   public selectedRow;
   public showInvoice;
@@ -78,6 +81,7 @@ export class ViewDocumentComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
+    private modalService: NgbModal,
     private toastr: ToastrService,
     private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
@@ -255,6 +259,38 @@ export class ViewDocumentComponent implements OnInit {
 
       this.router.navigateByUrl(`/home/fbg-wavier/${piPo}`);
     }
+  }
+
+
+  openLetterOfCredit(content) {
+    this.modalService
+      .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+      .result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+  }
+
+  private getDismissReason(reason: any): string {
+
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  viewCN(a) {
+
+    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+      a['doc']
+    );
   }
 
   toSave(data, index) {

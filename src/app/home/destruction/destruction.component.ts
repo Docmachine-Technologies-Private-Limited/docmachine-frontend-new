@@ -73,7 +73,7 @@ onclick() {
 
     }
 
-  openCreditNote(content){
+    openDestruction(content){
     this.modalService
     .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
     .result.then(
