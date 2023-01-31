@@ -1,0 +1,53 @@
+<div class="content-wrap scroll-bar-main" style="position: absolute;left: 245px;margin: auto;margin-top: 0;">
+  <main id="content" class="content p-0" role="main"
+    style="border-radius: 10px;box-shadow: 0px 0px 2px 2px #cdc9c9;background: white;">
+    <div class="container-fluid p-0 m-0">
+      <div class="col-12 p-0 m-0">
+        <div class="col-12 m-0 p-0">
+          <div class="header">
+            <h2 class="col-12 border-2px p-0">User Profile Details</h2>
+          </div>
+          <div class="card">
+            <div class="main-panel front col-12 p-0 m-0">
+              <div class="col-12 p-0 m-0 grid-template">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Name : </label>
+                  <input type="text" [value]="this.userData?.fullName" class="form-control" aria-describedby="emailHelp"
+                    disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Company Name : </label>
+                  <input type="text" class="form-control" [value]="this.userData?.companyName" id="exampleInputPassword1" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Email Id :</label>
+                  <input type="text" class="form-control" [value]="this.userData?.emailId" aria-describedby="emailHelp"
+                    disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Subscription :</label>
+                  <input type="text" class="form-control" [value]="this.userData?.Subscription" id="exampleInputPassword1"
+                    disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Date :</label>
+                  <input type="text" class="form-control" [value]="this.userData?.date" aria-describedby="emailHelp"
+                    disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Role :</label>
+                  <input type="text" class="form-control" [value]="this.userData?.role" id="exampleInputPassword1"
+                    disabled>
+                </div>
+                <!-- <div class="form-group" style="display: flex;align-items: end;">
+                  <button type="submit" class="btn btn-primary" (click)="Edit('.front','.back')">Edit</button>
+                  <button type="submit" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">Back</button>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

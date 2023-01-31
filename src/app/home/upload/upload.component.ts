@@ -1216,6 +1216,7 @@ export class UploadComponent implements OnInit {
     } else {
       e.form.value.file = this.documentType1;
     }
+    e.form.value.doc = this.pubUrl;
     e.form.value.benneName = this.arrayData;
     e.form.value.commissionCurrency = e.form.value?.commissionCurrency?.type;
     e.form.value.discountCurrency = e.form.value?.discountCurrency?.type;
