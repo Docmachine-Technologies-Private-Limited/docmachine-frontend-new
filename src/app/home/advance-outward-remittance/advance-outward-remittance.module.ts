@@ -6,7 +6,7 @@ import { ModalContentComponent1 } from '../pipo-doc-export/pipo-doc-export.compo
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
 import {SharedHomeModule} from "../shared-home.module";
-import {AdvanceOutwardRemittanceComponent} from "./outward-remittance.component";
+import {AdvanceOutwardRemittanceComponent} from "./advance-outward-remittance.component";
 
 @NgModule({
   declarations: [
