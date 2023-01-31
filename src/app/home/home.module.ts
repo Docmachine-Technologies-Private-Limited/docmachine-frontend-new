@@ -91,6 +91,10 @@ import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/expo
 import { ImportBillOfExchangeComponent } from "./import-bill-of-exchange/import-bill-of-exchange.component";
 import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.component';
 import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-member.guard";
+import { UserProfilesComponent } from "./user-profiles/user-profiles.component";
+import { EmailValidatorDirective } from './Validator/email/email-validator.directive';
+import { PhoneValidatorDirective } from './Validator/phone/phone-validator.directive';
+
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -119,7 +123,10 @@ import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-me
     RejectPanelComponent,
     RemittanceFlowComponent,
     EditBuyerComponent,
-    EditBeneComponent
+    EditBeneComponent,
+    UserProfilesComponent,
+    PhoneValidatorDirective,
+    EmailValidatorDirective
   ],
   imports: [
     SharedHomeModule,
@@ -193,6 +200,12 @@ import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-me
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
+           {
+            path: "user-profiles",
+            component: UserProfilesComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
           {
             path: "data-table",
             component: DatatableComponent,
@@ -217,7 +230,7 @@ import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-me
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
-        
+
           {
             path: "pipo",
             component: PipoExportComponent,
