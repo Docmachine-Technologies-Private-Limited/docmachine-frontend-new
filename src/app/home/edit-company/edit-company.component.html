@@ -89,7 +89,7 @@
                     id="exampleInputPassword1" disabled>
                 </div>
                 <div class="form-group" style="display: flex;align-items: end;">
-                  <button type="submit" class="btn btn-primary" (click)="Edit('.front','.back')">Edit</button>
+                  <button type="submit" class="btn btn-primary" (click)="Edit('.front','.back')" [style]="this.userData?.role!='manager'? ' pointer-events: none;' : ' pointer-events: auto;' ">Edit</button>
                   <button type="submit" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">Back</button>
                 </div>
               </div>
@@ -203,9 +203,18 @@
                           [value]="course?.accType" placeholder="Account Type"
                           class="form-control rounded-pill password password1">
                         <label class="bank">Currency Type</label>
-                        <input type="text" (keyup)="add_ArrayForm_value('bankDetails',i,'currency',$event.target.value)"
+                        <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                          [items]="this.CURRENCY_LIST"
+                          bindLabel="type"
+                          [multiple]="false"
+                          groupBy="selectedAllGroup"
+                          placeholder="Select PI/PO"
+                          name="currency"
+                          [value]="course?.currency"
+                          (change)="add_ArrayForm_value('bankDetails',i,'currency',$event.target.value.type)"></ng-select>
+                        <!-- <input type="text" (keyup)="add_ArrayForm_value('bankDetails',i,'currency',$event.target.value)"
                           [value]="course?.currency" placeholder="currency"
-                          class="form-control rounded-pill password password1">
+                          class="form-control rounded-pill password password1"> -->
                       </div>
                     </div>
                   </div>

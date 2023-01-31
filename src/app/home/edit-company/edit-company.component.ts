@@ -91,6 +91,7 @@ export class EditCompanyComponent implements OnInit {
     phone:'',
     teamName:''
   };
+  CURRENCY_LIST: any = [];
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private router: Router, private toastr: ToastrService, public appconfig: AppConfig,
     public wininfo: WindowInformationService) {
@@ -127,6 +128,11 @@ export class EditCompanyComponent implements OnInit {
       this.userData = user?.result
       console.log("userData", this.userData)
     });
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.CURRENCY_LIST.push({
+        type: data1['default'][index]['value']
+      })
+    }
     this.jsondata = data['default'];
     this.dataJson = data['default']
     this.jsondata1 = data1['default'];
