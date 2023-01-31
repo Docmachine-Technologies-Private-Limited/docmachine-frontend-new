@@ -239,18 +239,19 @@ export class DirectImportPaymentComponent implements OnInit {
     let a = [];
     a.push(piPo)
     this.pipoArr = a;
+    console.log('showThisPdf',this.pipoArr,this.selectedRow)
     if (this.myRadio == 'axisBank') {
       console.log("h");
-      this.router.navigate(['home/direct-import-axis', {
+      this.router.navigate(['/home/direct-import-axis', {
         pipo: this.pipoArr,
-        amount: this.selectedRow.amount
+        amount: this.selectedRow.invoiceAmount
       }]);
 
     }
     else if (this.myRadio == 'yesBank') {
-      this.router.navigate(['home/inwardRemittanceBoe', {
+      this.router.navigate(['/home/inwardRemittanceBoe', {
         pipo: this.pipoArr,
-        amount: this.selectedRow.amount
+        amount: this.selectedRow.invoiceAmount
       }])
     }
   }

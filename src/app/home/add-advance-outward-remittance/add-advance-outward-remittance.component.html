@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <div class="Dashbord_sec">
-                            <h2 class="title_dash">PI PO details</h2>
+                            <h2 class="title_dash">Advance outward remittance</h2>
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -13,7 +13,8 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
 
-                                    <li class="breadcrumb-item"><a routerLink="/home/pipo">PI PO</a></li>
+                                    <li class="breadcrumb-item"><a routerLink="/home/remittance-flow">Advance outward
+                                            remittance</a></li>
                                     <!-- <li class="breadcrumb-item active" aria-current="page">Add new</li> -->
                                 </ol>
                             </nav>
@@ -25,61 +26,93 @@
                 <main id="content" class="table-padding" role="main">
                     <div class="new_document_list1">
                         <div class="new_document_list_add_data">
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <form [formGroup]="pipoForm">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label for="ADbill" class="form-label">Select bank name</label>
-                                                <select class="form-select" aria-label="Default select example"
-                                                    [(ngModel)]="bank" name="bank">
-                                                    <option value="">Select bank name</option>
 
-                                                    <option *ngFor="let banklist of bankDetail
-                                                    ">{{ banklist.bank }}
-                                                    </option>
-                                                </select>
+                            <form [formGroup]="pipoForm">
+                                <div class="row">
+                                    <div class="col-md-7 col-sm-12 col-12">
+                                        <!-- <div class="new_left_sidedoc">
+                                            <img src="/assets/Group3055.png" alt="Drag & drop files here or Browse" />
+                                        </div> -->
+                                        <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="selectedItems.length!=0">
+                                            <div *ngFor="let selItems of selectedItems">
+                                                <iframe *ngIf="selItems?.doc!=''" style="border:none;"  [src]="selItems?.doc" width="100%"> </iframe>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label for="ADbill" class="form-label">Buyer's name</label>
-                                                <select class="form-select" aria-label="Default select example"
-                                                    [(ngModel)]="beneName" name="beneName"
-                                                    (change)=changepipo($event.target.value)>
-                                                    <option value="">Select Buyer</option>
+                                            <div *ngIf="isUploaded">
+                                                <iframe *ngIf="uploadUrl!=''" style="border:none;"  [src]="uploadUrl" width="100%"> </iframe>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="col-md-5 col-sm-12 col-12">
+                                        <div class="right_form_new">
+                                            <div class="row">
+                                                <div class="col-md-6 col-12">
+                                                    <label for="exampleInputEmail1" class="form-label">Select
+                                                        bank*</label>
+                                                    <select class="form-select" aria-label="Default select example"
+                                                        [(ngModel)]="bank" name="bank">
+                                                        <option value="">Select bank</option>
 
-                                                    <option *ngFor="let bene of benneDetail
-                                                    ">{{ bene.beneName }}
-                                                    </option>
-                                                </select>
-                                                <!-- <ng-select [items]="buyerDetail" bindLabel="buyerName"
-                                                    bindValue="buyerName" placeholder="Select Buyer"
-                                                    [(ngModel)]="buyer" name="buyer">
-                                                </ng-select> -->
+                                                        <option *ngFor="let banklist of bankDetail
+                                                                ">{{ banklist.bank }}
+                                                        </option>
+                                                    </select>
+                                                    <div *ngIf="submitted && form.bank.errors" class='errorText'>
+                                                        <div *ngIf="form.bank.errors.required">Select bank is
+                                                            required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <label for="exampleInputPassword1" class="form-label">Select
+                                                        beneficiary</label>
+                                                    <select class="form-select" aria-label="Default select example"
+                                                        [(ngModel)]="beneName" name="beneName"
+                                                        (change)=changepipo($event.target.value) #select_ben>
+                                                        <option value="">Select Buyer</option>
+
+                                                        <option value="{{ bene._id }}" *ngFor="let bene of benneDetail
+                                                                ">{{ bene.beneName }}
+                                                        </option>
+                                                    </select>
+                                                    <div *ngIf="submitted && form.beneName.errors" class='errorText'>
+                                                        <div *ngIf="form.beneName.errors.required">Select Buyer
+                                                            is required
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <div class="col-md-6">
-                                                <table class="table table-bordered" formArrayName="quantityTerm">
-
-                                                    <td>
+                                            <div *ngIf="pipoData?.length > 0">
+                                                <div class="row" formArrayName="itemsTerm"
+                                                    *ngFor="let items of getItems(pipoForm); let i = index"
+                                                    [formGroupName]="i">
+                                                    <div class="col-md-5 col-12">
+                                                        <label for="exampleInputEmail1" class="form-label">Select
+                                                            PI</label>
                                                         <select class="form-select" aria-label="Default select example"
-                                                            formControlName="pi_poNo" name="pi_poNo" autocomplete="off">
+                                                            formControlName="pi_poNo" name="pi_poNo" autocomplete="off"
+                                                            (change)="choosenItems($event.target.value,i)" #multiplepipo>
                                                             <option value="">Select PI/PO</option>
 
-                                                            <option *ngFor="let pipolist of pipoData
+                                                            <option value="{{pipolist._id}}" *ngFor="let pipolist of pipoData
                                                     ">{{ pipolist.pi_poNo }}
                                                             </option>
                                                         </select>
                                                         <div *ngIf="submitted && form.pi_poNo.errors" class='errorText'>
-                                                            <div *ngIf="form.pi_poNo.errors.required">PiPo is required</div>
+                                                            <div *ngIf="form.pi_poNo.errors.required">PiPo is
+                                                                required
+                                                            </div>
                                                         </div>
-                                                    </td>
-                                                    <td>
+                                                    </div>
+                                                    <div class="col-md-2 col-12 padding0">
+                                                        <label for="Currency" class="form-label">Currency</label>
                                                         <select class="form-select" aria-label="Default select example"
                                                             formControlName="currency" name="currency"
-                                                            autocomplete="off">
+                                                            autocomplete="off" [value]="this.LIST_PIPO[multiplepipo.value]?.currency">
                                                             <option value="">Select Currency</option>
 
-                                                            <option *ngFor="let currency of CurrencyData
+                                                            <option value="{{currency}}" *ngFor="let currency of CurrencyData
                                                     ">{{ currency }}
                                                             </option>
                                                         </select>
@@ -90,394 +123,93 @@
                                                             <div *ngIf="form.currency.errors.required"> Currency is
                                                                 required</div>
                                                         </div>
-                                                    </td>
-
-                                                    <td>
-                                                        Amount:
-                                                        <input type="text" formControlName="amount"
-                                                            class="form-control">
-                                                    </td>
-
-
-                                                    <tr *ngFor="let quantity of getQuantities(pipoForm); let i = index"
-                                                        [formGroupName]="i">
-                                                        <td>
-                                                            <select class="form-select"
-                                                                aria-label="Default select example"
-                                                                formControlName="pi_poNo" name="pi_poNo"
-                                                                autocomplete="off">
-                                                                <option value="">Select PI/PO</option>
-
-                                                                <option *ngFor="let pipolist of pipoData
-                                                    ">{{ pipolist.pi_poNo }}
-                                                                </option>
-                                                            </select>
-                                                            <div *ngIf="submitted && form.pi_poNo.errors"
-                                                                class='errorText'>
-                                                                <div *ngIf="form.pi_poNo.errors.required">Branch is
-                                                                    required</div>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <select class="form-select"
-                                                                aria-label="Default select example"
-                                                                formControlName="currency" name="currency"
-                                                                autocomplete="off">
-                                                                <option value="">Select Currency</option>
-
-                                                                <option *ngFor="let currency of CurrencyData
-                                                    ">{{ currency }}
-                                                                </option>
-                                                            </select>
-
-
-                                                            <div *ngIf="submitted && form.currency.errors"
-                                                                class='errorText'>
-                                                                <div *ngIf="form.currency.errors.required"> Currency is
-                                                                    required</div>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            Amount:
-                                                            <input type="text" formControlName="amount"
-                                                                class="form-control">
-                                                        </td>
-                                                        <td>
-                                                            <button (click)='removeQuantity(i)'
-                                                                class="btn btn-danger">Remove</button>
-                                                        </td>
-                                                        <td>
-                                                            <div class="add_payment_methode">
-                                                                <button type="submit" (click)="addQuantity(pipoForm)"
-                                                                    class="btn btn-primary"><i class="fa fa-plus"
-                                                                        aria-hidden="true"></i> Add payment
-                                                                    term</button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="file_addd_to" *ngIf="piPoUrl==null || piPoUrl==''">
-                            <div class="form" method="POST">
-                                <input (error)="onUploadError($event)" (init)="onUploadInit($event)"
-                                    (success)="onUploadSuccess($event)" (sending)="submit($event)"
-                                    *ngIf="type === 'directive'" [dropzone]="config1"
-                                    class="dropzone dropzone-container" id="dropzone" />
-                                <img src="assets/new-img/Icon-feather-upload.svg"
-                                    alt="Drag & drop files here or Browse" />
-                                <h5>Drag & drop files here or <span class="change_textcolor">Browse</span></h5>
-                                <p>Files supported: PDF, XSLS, Image, Scanner</p>
-                                <p>Max. size: 5 MB</p>
-                            </div>
-                        </div>
-                        <div class="progressbar" *ngIf="uploading">
-                            <!-- <p class="processheading">Invoice-001</p> -->
-                            <div class="meter">
-                                <span [style.width]="width + '%'"></span>
-                            </div>
-                        </div>
-                        <div *ngIf="isUploaded" class="data_table_new">
-                            <div class="row">
-                                <div class="col-md-7 col-sm-12 col-xs-12 col-12">
-                                    <div class="pdf_invoce">
-                                        <h2 class="payment_title">Document</h2>
-                                        <div class="pdf_invoce_scroll">
-                                            <!-- <img src="assets/new-img/pdf_inn.png" alt="" /> -->
-                                            <iframe style="border:none;" [src]="piPoUrl" width="100%"> </iframe>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5 col-sm-12 col-xs-12 col-12">
-                                    <div class="left_edit_form">
-                                        <form [formGroup]="pipoForm" autocomplete="disabled">
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                                                    <div class="mb-3">
-                                                        <label for="pi_poNo" class="form-label">PI/PO number
-                                                            *</label>
-                                                        <input type="text" class="form-control" id="pi_poNo"
-                                                            aria-describedby="emailHelp" formControlName="pi_poNo"
-                                                            placeholder="PIPO NO" autocomplete="off">
-                                                        <div *ngIf="submitted && form.pi_poNo.errors" class='errorText'>
-                                                            <div *ngIf="form.pi_poNo.errors.required"> PIPO NO is
-                                                                required</div>
-                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-4 col-xs-12 col-12">
-                                                    <div class="mb-3 date_of_shipment">
-                                                        <label for="date" class="form-label">Invoice Date</label>
-                                                        <!-- <input class="form-select form-control" type="date" id="date"
-                                                          formControlName="date" /> -->
-
-                                                        <input class="form-control" matInput
-                                                            [matDatepicker]="pickerDate" placeholder="Choose a date"
-                                                            formControlName="date" autocomplete="off">
-                                                        <mat-datepicker-toggle matSuffix [for]="pickerDate">
-                                                        </mat-datepicker-toggle>
-                                                        <mat-datepicker aria-setsize="14px" #pickerDate>
-                                                        </mat-datepicker>
-
-                                                        <div *ngIf="submitted && form.date.errors" class='errorText'>
-                                                            <div *ngIf="form.date.errors.required">Invoice Date is
-                                                                required</div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                                                    <div class="mb-3">
-                                                        <label for="exampleInputEmail1" class="form-label">Invoice
-                                                            amount</label>
-                                                        <input type="number" class="form-control" id="amount"
-                                                            class="form-control" name="amount" formControlName="amount"
+                                                    <div class="col-md-3 col-12">
+                                                        <label for="Amount" class="form-label">Amount</label>
+                                                        <input type="text" class="form-control" formControlName="amount"
+                                                            id="amount" name="amount"
+                                                            [value]="this.LIST_PIPO[multiplepipo.value]?.amount"
                                                             placeholder="Invoice Amount" autocomplete="off">
                                                         <div *ngIf="submitted && form.amount.errors" class='errorText'>
-                                                            <div *ngIf="form.amount.errors.required">Invoice Amount is
-                                                                required</div>
+                                                            <div *ngIf="form.amount.errors.required">Invoice Amount
+                                                                is required</div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-md-2 col-12 paddingleft0">
+                                                        <div class="removeamouts_new">
+                                                            <button type="button" class="btn btn-primary"
+                                                                (click)="removeItems(i)">-</button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                                                    <div class="mb-3">
-                                                        <label for="exampleInputPassword1"
-                                                            class="form-label">Currency</label>
 
-
-                                                        <!-- <input type="text" class="form-control" id="currency"
-                                                            formControlName="currency" placeholder="Currency"> -->
-
-                                                        <select class="form-select" aria-label="Default select example"
-                                                            formControlName="currency" name="currency"
-                                                            autocomplete="off">
-                                                            <option value="">Select Currency</option>
-
-                                                            <option *ngFor="let currency of CurrencyData
-                                                        ">{{ currency }}
-                                                            </option>
-                                                        </select>
-
-
-                                                        <div *ngIf="submitted && form.currency.errors"
-                                                            class='errorText'>
-                                                            <div *ngIf="form.currency.errors.required"> Currency is
-                                                                required</div>
+                                            </div>
+                                            <div class="row" *ngIf="select_ben.value!=''">
+                                                <div class="col-md-6 col-sm-6 col-12">
+                                                    <div class="col-md-12">
+                                                        <div class="add_new_buttons">
+                                                            <button type="button" class="btn btn-success"
+                                                                (click)="addItems(pipoForm)">+ Add PI</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <!-- <div class="col-md-4 col-sm-4 col-xs-12 col-12">
-                                                    <div class="mb-3">
-                                                        <label for="exampleInputEmail1" class="form-label">Invoice amount</label>
-                                                        <input type="number" class="form-control" id="quantity2" class="form-control" name="quantity2" min="1" max="5" formControlName="amount">
-                                                    </div>
-                                                </div> -->
-                                                <div class="col-md-6 col-sm-12 col-xs-12 col-12">
-                                                    <div class="mb-3">
-                                                        <label for="exampleInputPassword1"
-                                                            class="form-label">Incoterm</label>
-                                                        <input type="text" class="form-control" id="Incoterm"
-                                                            formControlName="incoterm" placeholder="Incoterm"
-                                                            autocomplete="off">
-                                                        <div *ngIf="submitted && form.incoterm.errors"
-                                                            class='errorText'>
-                                                            <div *ngIf="form.incoterm.errors.required">Incoterm is
-                                                                required</div>
-                                                        </div>
-                                                    </div>
+                                                <div class="col-md-6 col-sm-6 col-12">
+                                                    <label for="TotalPIamount" class="form-label">Total PI
+                                                        amount</label>
+                                                    <input type="text" class="form-control" id="TotalPIamount" [value]="sumTotalAmount" name="sumTotalAmount"
+                                                        placeholder="Select PI/PO" readonly>
                                                 </div>
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                                                    <div class="mb-3">
-                                                        <label for="exampleInputEmail1"
-                                                            class="form-label">Branch</label>
-                                                        <!-- <input type="text" class="form-control" id="Branch"
-                                                            aria-describedby="emailHelp" formControlName="branch"> -->
-                                                        <!-- <ng-select [items]="LocationData" bindLabel="loc"
-                                                            bindValue="loc" placeholder="Select Branch"
-                                                            formControlName="location" name="location">
-                                                        </ng-select> -->
-
-                                                        <select class="form-select" aria-label="Default select example"
-                                                            formControlName="location" name="location"
-                                                            autocomplete="off">
-                                                            <option value="">Select Branch</option>
-
-                                                            <option *ngFor="let location of LocationData
-                                                        ">{{ location.loc }}
-                                                            </option>
-                                                        </select>
-                                                        <div *ngIf="submitted && form.location.errors"
-                                                            class='errorText'>
-                                                            <div *ngIf="form.location.errors.required">Branch is
-                                                                required</div>
-                                                        </div>
+                                            </div>
+                                            <div class="row" *ngIf="sumTotalAmount != 0 && sumTotalAmount > 200000">
+                                                <div class="col-md-12 col-sm-12 col-12">
+                                                    <label for="Opinion" class="form-label">Opinion report
+                                                        available?</label><br>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="opinionReport" value="1" id="flexRadioDefault1" (click)="showhideOpinionReport(1)">
+                                                        <label class="form-check-label" for="flexRadioDefault1">
+                                                            YES
+                                                        </label>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                                                    <div class="mb-3 date_of_shipment">
-                                                        <label for="exampleInputPassword1" class="form-label">Last date
-                                                            of shipment</label>
-                                                        <!-- <input class="form-select form-control" type="date"
-                                                            placeholder="Start Date"
-                                                            formControlName="lastDayShipment" /> -->
-                                                        <input class="form-control" matInput
-                                                            [matDatepicker]="pickerLastDay" placeholder="Choose a date"
-                                                            formControlName="lastDayShipment" autocomplete="off">
-                                                        <mat-datepicker-toggle matSuffix [for]="pickerLastDay">
-                                                        </mat-datepicker-toggle>
-                                                        <mat-datepicker #pickerLastDay></mat-datepicker>
-                                                        <div *ngIf="submitted && form.lastDayShipment.errors"
-                                                            class='errorText'>
-                                                            <div *ngIf="form.lastDayShipment.errors.required">Last date
-                                                                of shipment is required</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                                                    <div class="mb-3">
-                                                        <label for="exampleInputPassword1" class="form-label">PC
-                                                            reference number</label>
-                                                        <input type="number" id="pcRefNo" class="form-control"
-                                                            name="pcRefNo" formControlName="pcRefNo"
-                                                            placeholder="PC Reference No">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                                                    <div class="mb-3 date_of_shipment">
-                                                        <label for="exampleInputPassword1" class="form-label">Due
-                                                            date</label>
-                                                        <!-- <input class="form-select form-control" type="date"
-                                                            placeholder="Start Date" formControlName="dueDate" /> -->
-                                                        <input class="form-control" matInput
-                                                            [matDatepicker]="pickerDueDate" placeholder="Choose a date"
-                                                            formControlName="dueDate" autocomplete="off">
-                                                        <mat-datepicker-toggle matSuffix [for]="pickerDueDate">
-                                                        </mat-datepicker-toggle>
-                                                        <mat-datepicker #pickerDueDate></mat-datepicker>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                        name="opinionReport" value="0"  id="flexRadioDefault2" (click)="showhideOpinionReport(0)">
+                                                        <label class="form-check-label" for="flexRadioDefault2">
+                                                            NO
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="add_payment_terms" formArrayName="paymentTerm">
-                                                <h2 class="payment_title">Payment terms</h2>
-                                                <div *ngFor="let course of getCourses(pipoForm); let i = index"
-                                                    [formGroupName]="i">
-                                                    <div class="row">
-                                                        <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                                                            <div class="mb-3  date_of_shipment">
-                                                                <label for="exampleInputPassword1"
-                                                                    class="form-label">Last
-                                                                    date of shipment</label>
-                                                                <!-- <input class="form-select form-control" type="date"
-                                                                formControlName="date" /> -->
-                                                                <span> <input class="form-control" matInput
-                                                                        [matDatepicker]="pickerShipmentDate"
-                                                                        placeholder="Choose a date"
-                                                                        formControlName="date" autocomplete="off">
-                                                                    <mat-datepicker-toggle matSuffix
-                                                                        [for]="pickerShipmentDate">
-                                                                    </mat-datepicker-toggle>
-                                                                    <mat-datepicker #pickerShipmentDate>
-                                                                    </mat-datepicker>
-                                                                </span>
-
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                                                            <div class="mb-3">
-                                                                <label for="exampleInputPassword1"
-                                                                    class="form-label">Type</label>
-
-                                                                <select class="form-select"
-                                                                    aria-label="Default select example"
-                                                                    formControlName="type" autocomplete="off">
-                                                                    <option value="">Select type </option>
-                                                                    <option value="Advance Payment">Advance Payment
-                                                                    </option>
-                                                                    <option value="Letter of Credit">Letter of Credit
-                                                                    </option>
-                                                                    <option value="Collection Bill">Collection Bill
-                                                                    </option>
-                                                                    <option value="Direct Import">Direct Dispatch
-                                                                    </option>
-                                                                </select>
-
-                                                            </div>
-                                                        </div>
+                                            <div class="row" *ngIf="sumTotalAmount != 0 && sumTotalAmount > 200000 && showOpinionReport == 1">
+                                                <div class="col-12">
+                                                    <label for="Opinion" class="form-label">Attach opinion
+                                                        report</label>
+                                                    <div cladss="file_addd_new" *ngIf="uploadUrl==null || uploadUrl==''">
+                                                        <input (error)="onUploadError($event)" (init)="onUploadInit($event)"
+                                                        (success)="onUploadSuccess($event)" (sending)="submit($event)"
+                                                        *ngIf="type === 'directive'" [dropzone]="config"
+                                                        class="dropzone dropzone-container" id="dropzone" />
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-md-4 col-sm-4 col-xs-12 col-12">
-                                                            <div class="mb-4">
-                                                                <label for="exampleInputPassword1"
-                                                                    class="form-label">Amount</label>
-                                                                <input class="form-select form-control"
-                                                                    formControlName="amount" placeholder="Amount"
-                                                                    autocomplete="off" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4 col-sm-4 col-xs-12 col-12">
-                                                            <div class="mb-4">
-                                                                <label for="exampleInputPassword1"
-                                                                    class="form-label">Currency </label>
-
-
-                                                                <!-- <input class="form-select form-control"
-                                                                    formControlName="description"
-                                                                    placeholder="Currency" /> -->
-
-                                                                <select class="form-select"
-                                                                    aria-label="Default select example"
-                                                                    formControlName="description" name="description"
-                                                                    autocomplete="off">
-                                                                    <option value="">Select Currency</option>
-
-                                                                    <option *ngFor="let currency of CurrencyData
-                                                        ">{{ currency }}
-                                                                    </option>
-                                                                </select>
-
-
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4 col-sm-4 col-xs-12 col-12">
-                                                            <div class="right_add_plus mb-4" *ngIf='i>0'>
-                                                                <button (click)='removeAddress(i)'
-                                                                    class="add_payment delet_payment">
-                                                                    <i class="fa fa-trash"
-                                                                        aria-hidden="true"></i></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                                <div class="add_payment_methode">
-                                                    <button type="submit" (click)="onAddCourse(pipoForm)"
-                                                        class="btn btn-primary"><i class="fa fa-plus"
-                                                            aria-hidden="true"></i> Add payment term</button>
                                                 </div>
                                             </div>
-                                        </form>
+                                            <div class="progressbar" *ngIf="uploading">
+                                                <div class="meter">
+                                                    <span [style.width]="width + '%'"></span>
+                                                </div>
+                                            </div>
+                                            <div class="bottom_submit_section">
+                                                <button type="button" class="btn btn-primary">CANCEL</button>
+                                                <button type="button" class="btn btn-secondary">PROCEED</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="data_submit_righg">
-                                    <div class="data_submit">
-                                        <button type="button" class="btn btn-secondary"
-                                            routerLink='/home/pipo'>Cancel</button>
-                                        <button type="submit" class="btn btn-primary"
-                                            (click)="PipoSubmit()">Submit</button>
-                                    </div>
                                 </div>
-                            </div>
+                            </form>
+
                         </div>
                     </div>
                 </main>

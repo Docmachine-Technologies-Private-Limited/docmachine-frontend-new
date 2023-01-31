@@ -6,6 +6,7 @@ import { timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
+import $ from 'jquery'
 
 import {
   DropzoneDirective,
@@ -24,6 +25,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { AppConfig } from "src/app/app.config";
 import { DocumentService } from "../../service/document.service";
+import { PipoDataService } from "../../service/homeservices/pipo.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
 
 @Component({
@@ -41,28 +43,14 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   beneName: string;
   uploading: boolean = false;
   authToken: string;
-
-
+  
   CurrencyData:any = ['INR','USD', 'EUR', 'GBP', 'CHF','AUD','CAD','AED','SGD','SAR','JPY']
-
-
-
-
 
   public type: string = "directive";
   public res;
   public size;
-  public publicUrl;
-  public sbNo = false;
-  public boeNumber = false;
-  public billNo = false;
-  public pIpO = false;
-  public override = false;
+  public uploadUrl:any='';
   public message = "";
-  public documentType: string = '';
-  public documentType1 = "";
-  public piPoUrl:any='';
-  public selectedDocumentType;
   width: any = 0;
   public benneDetail: any = [];
   public pipoData: any = [];
@@ -109,14 +97,13 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   isUploaded: boolean = false;
 
   public config: DropzoneConfigInterface;
-  public config1: DropzoneConfigInterface;
-  public config2: DropzoneConfigInterface;
-  public config3: DropzoneConfigInterface;
 
   pipoForm:any= FormGroup;
   submitted = false;
-
-
+  selectedItems: any = [];
+  LIST_PIPO:any=[];
+  sumTotalAmount = 0;
+  showOpinionReport = 0;
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
@@ -124,6 +111,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     public appconfig: AppConfig,
     private formBuilder: FormBuilder,
     private documentService: DocumentService,
+    public pipoDataService: PipoDataService, 
     public router: Router,
     private route: ActivatedRoute,
     public wininfo: WindowInformationService
@@ -141,7 +129,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       Authorization: this.authToken,
       timeout: `${200000}`
     };
-    this.config1 = {
+    this.config = {
       url: `${this.api_base}/member/uploadImage`,
       method: `POST`,
       maxFiles: 5,
@@ -162,35 +150,21 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
     this.pipoForm = this.formBuilder.group(
       {
+        bank: new FormControl('', Validators.required),
+        beneName: new FormControl('', Validators.required),
         pi_poNo: new FormControl('', Validators.required),
         currency: new FormControl("",),
         amount: new FormControl("", Validators.required),
-        incoterm: new FormControl("", Validators.required),
-        lastDayShipment: new FormControl("", Validators.required),
-        paymentTerm: new FormArray([this.initCourse()]),
-        pcRefNo: new FormControl("",),
-        date: new FormControl("", Validators.required),
-        dueDate: new FormControl("",),
-        location: new FormControl(null, Validators.required),
-        quantityTerm: new FormArray([this.initQuantity()]),
+        itemsTerm: new FormArray([this.initItems()]),
       }
     );
   }
 
-
-  initCourse() {
+  initItems() {
     return this.formBuilder.group({
-      date: ['', Validators.required],
-      type: ['', [Validators.required]],
+      pi_poNo: ['', Validators.required],
+      currency: ['', Validators.required],
       amount: ['', Validators.required],
-      description: ['', Validators.required]
-    });
-  }
-
-  initQuantity() {
-    return this.formBuilder.group({
-      qty: ['', Validators.required],
-      price: ['', Validators.required]
     });
   }
 
@@ -222,17 +196,71 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
   }
 
-  changepipo(value){
-    this.documentService.getPipoByCustomer('import',value).subscribe(
-      (res: any) => {
-        this.pipoData = res.data
-      },
-      (err) => console.log("Error", err)
-    );
-    console.log('pipoData',this.pipoData);
+  changepipo(value) {
+    this.pipoDataService.getPipoListByCustomer('import', value).then((data) => {
+      console.log(data, 'data..................')
+      this.pipoDataService.pipolistModel$.subscribe((data) => {
+        console.log(data, 'data2222..................')
+        this.pipoData = data;
+        for (let index = 0; index < data.length; index++) {
+          this.LIST_PIPO[data[index]['_id']]=data[index];
+        }
+        console.log('importpipolist', this.pipoData, this.LIST_PIPO);
+      });
+    });;
+  }
+  DATA:any=[];
+  slicedData(data : any[],id:any,value:any) {
+    if (value!='') {
+      var indexof=data.map(e => e?._id).indexOf(value);
+      if (indexof==-1) {
+        this.DATA[id]=data
+      } else {
+        delete data[indexof] 
+        var temp:any=data;
+        for (let index = 0; index <temp.length; index++) {
+          this.DATA[id].push(temp[index]);  
+        }
+      }
+    }else{
+      this.DATA[id]=data
+    }
   }
 
+  choosenItems(id,i)
+  {
+    let temp = [];
+    temp = this.pipoData.filter(items => { 
+      console.log('items._id ',items._id);
+      console.log('id ',id);
+      console.log('items._id == id',items._id == id);
+      return items._id == id 
+     });
+
+    temp =temp.map((items) => {
+
+      // items.doc = items.doc ? this.sanitizer.bypassSecurityTrustResourceUrl(items.doc):items.doc;
+
+      return {
+				pipo_id: items._id,
+				pipo_no: items.pi_poNo,
+				doc: items.doc ? this.sanitizer.bypassSecurityTrustResourceUrl(items.doc):items.doc,
+				amount: items.amount,
+				currency: items.currency,
+			};
+    });
   
+    this.selectedItems[i] = temp.pop();
+
+    this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
+   
+    this.showOpinionReport = 0;
+  }
+
+  showhideOpinionReport(value)
+  {
+    this.showOpinionReport = value;
+  }
 
   get form() {
     return this.pipoForm.controls;
@@ -248,41 +276,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     if (this.pipoForm.invalid) {
       return;
     }
-
-    if (this.file) {
-      if (this.file == 'import') {
-        // this.pipoForm.value.benneName = this.beneValue
-      }
-      else if (this.file == 'export') {
-        this.pipoForm.value.buyerName = this.buyer
-        this.pipoForm.value.commodity = this.commodityData
-      }
-      this.pipoForm.value.file = this.file
-
-    }
-    else {
-      this.pipoForm.value.file = this.documentType1
-    }
-
-    if (this.documentType == 'PI') {
-      this.pipoForm.value.doc = this.pipourl1
-    }
-    else if (this.documentType == 'PO') {
-      this.pipoForm.value.doc1 = this.pipourl1
-    }
-
-
-    this.pipoForm.value.document = this.documentType
-
-    this.documentService.addPipo(this.pipoForm.value).subscribe(
-      (res) => {
-        this.router.navigateByUrl("/home/pipo");
-      },
-      (err) => console.log("Error adding pipo")
-    );
-  }
-
-  //  ------------------------- handle image upload------------------------------------------
+  }  //  ------------------------- handle image upload------------------------------------------
 
 
   public onUploadError(args: any): void {
@@ -291,156 +285,29 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   }
 
   public onUploadInit(args: any): void {
-    console.log("11111111111111111111111")
     console.log("onUploadInit:", args);
   }
 
 
   public onUploadSuccess(args: any): void {
-    console.log("-----------------------> onUploadSuccess called")
-    if (this.documentType !== "") {
-      this.uploading = false;
-      console.log("ARGS", args);
-      console.log("DATA", args[1].data);
-      console.log(args[1].data.boeNumber);
-      console.log("jhsjshsjshjsh", args[1].data.billNo)
-      console.log("Message Message", args[1].message);
-      if (args[1].message == "This file already uploaded") {
-        console.log("My Code")
-        this.message = args[1].message;
-        this.override = true;
-        if (args[1].data.sbno) {
-          this.res = new ShippingBill(args[1].data);
-          this.sbNo = true;
-          console.log(this.res);
-        } else if (args[1].data.boeNumber) {
-          this.res = new BoeBill(args[1].data);
-          this.boeNumber = true;
-          console.log(this.res);
-        } else if (args[1].data.billNo) {
-          this.res = new IRAdvice(args[1].data);
-          this.billNo = true;
-          console.log("jsjsjsjs", this.res);
-        }
-      } else if (args[1].data.sbno) {
-        console.log("Here data type", args[1].data);
-        this.res = new ShippingBill(args[1].data);
-        this.sbNo = true;
-        console.log(this.res);
-      } else if (args[1].data.boeNumber) {
-        console.log("Here data type", args[1].data);
-        this.res = new BoeBill(args[1].data);
-        this.boeNumber = true;
-        console.log(this.res);
-      } else if (args[1].data.billNo) {
-        console.log("Here data type", args[1].data);
-        this.res = new IRAdvice(args[1].data);
-        this.billNo = true;
-        console.log("sjsjsjsj", this.res);
-      }
-      else {
-        // this.res = new BoeBill(args[1].data);
-        if (this.documentType === 'PI' || this.documentType === 'PO') {
-          console.log("here comeee")
-          this.pIpO = true;
-          this.isUploaded = true
-        }
-        else if (this.documentType === 'tryPartyAgreement') {
-          this.tryPartyAgreement = true;
-        }
-        else if (this.documentType === 'creditNote') {
-          this.creditNote = true;
-        }
-        else if (this.documentType === 'swiftCopy') {
-          this.swiftCopy = true;
-        }
-        else if (this.documentType === 'blCopyref') {
-          this.blCopyref = true;
-        }
-        else if (this.documentType === 'blCopy') {
-          this.blCopy = true;
-        }
-        else if (this.documentType === 'commercial') {
-          this.commercial = true
-        }
-        else if (this.documentType === 'destruction') {
-          this.destruction = true
-        }
-        else if (this.documentType === 'billOfExchange') {
-          this.billOfExchange = true
-        }
-        else if (this.documentType === 'EBRC') {
-          this.EBRC = true;
-        }
-        else if (this.documentType === 'debitNote') {
-          this.debitNote = true;
-        }
-        else if (this.documentType === 'insuranceCopy') {
-          this.insuranceCopy = true;
-        }
-        else if (this.documentType === 'lcCopy') {
-          this.lcCopy = true;
-        }
-        else if (this.documentType === 'agreement') {
-          this.agreement = true;
-        }
-        else if (this.documentType === 'opinionReport') {
-          this.opinionReport = true;
-        }
-        else if (this.documentType === 'packingList') {
-          this.packingList = true
-        }
-        else if (this.documentType === 'otherDoc') {
-          this.otherDoc = true
-        }
-        else {
-          this.other = true
-          this.userService.updateManyPipo(this.pipoArr, this.documentType, args[1].data)
-            .subscribe(
-              data => {
-                //this.pipoData[`${this.pipoDoc}`] = args[1].data
-                console.log(data)
-                this.toastr.success('PI/PO updated successfully.');
-              },
-              error => {
-                // this.toastr.error('Invalid inputs, please check!');
-                console.log("error")
-              });
-        }
-
-        console.log(this.res);
-      }
-      this.pubUrl = args[1].publicUrl
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        args[1].publicUrl
-      );
-      this.pipourl1 = args[1].data;
-      this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+    console.log("------ onUploadSuccess called")
+    console.log('args',args);
+      this.uploading = true;
+      this.isUploaded = true;
+      this.uploadUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
         args[1].data
       );
-      console.log(this.publicUrl);
-      console.log("this.piPoUr this.piPoUr this.piPoUr", this.piPoUrl);
-      console.log(this.res);
-    } else {
-      console.log("Document type not given");
-    }
 
-    console.log("Selected Document type", this.selectedDocumentType);
+      console.log("this.uploadUrl", this.uploadUrl);
   }
 
   submit(e) {
-    if (this.documentType !== "") {
-      console.log("ajbkab");
       this.uploading = true;
       console.log(e[0].size);
       this.size = this.formatBytes(e[0].size);
       //document.getElementById("uploadError").style.display = "none";
-
       this.runProgressBar(e[0].size);
-    } else {
-      console.log("Document type not given");
-      document.getElementById("uploadError").style.display = "block";
-    }
+
   }
 
 
@@ -465,10 +332,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     }
   }
 
-  // quantities() : FormArray {  
-  //   return this.pipoForm.get("quantities") as FormArray  
-  // }  
-
   runProgressBar(value) {
     console.log(value / 1500);
     timer(0, value / 2500)
@@ -476,14 +339,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       .subscribe(() => {
         this.width = this.width + 1;
       });
-
-    this.userService.getBene(1).subscribe(
-      (res: any) => {
-        (this.benneDetail = res.data),
-          console.log("Benne Detail22222", this.benneDetail);
-      },
-      (err) => console.log("Error", err)
-    );
 
   }
 
@@ -496,45 +351,31 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   // ----------------------------- end handle image upload ----------------------------------
 
 
-newQuantity(): FormGroup {  
-  return this.formBuilder.group({  
-    qty: '',  
-    price: '',  
-  })  
-}  
-
-  getCourses(form) {
-    return form.get('paymentTerm').controls;
-  }
-
-  getQuantities(form) {
-    return form.get('quantityTerm').controls;
+  getItems(form) {
+    return form.get('itemsTerm').controls;
   }
 
 
-  addQuantity(e) {
-    const control = this.pipoForm.controls.quantityTerm as FormArray;
-    control.push(this.initQuantity());
+  addItems(index,id) {
+    const control = this.pipoForm.controls.itemsTerm as FormArray;
+    control.push(this.initItems());
   }
 
-  removeQuantity(i) {
-    let control = this.pipoForm.controls.quantityTerm as FormArray;
+  removeItems(i) {
+    this.selectedItems = this.selectedItems.filter((items,index) => { 
+      return index != i
+    });
+
+    console.log('this.selectedItems',this.selectedItems);
+
+    this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
+
+    let control = this.pipoForm.controls.itemsTerm as FormArray;
     control.removeAt(i);
 
   }
   
-  onAddCourse(e) {
-    const control = this.pipoForm.controls.paymentTerm as FormArray;
-    control.push(this.initCourse());
-  }
 
-  removeAddress(i) {
-
-    let control = this.pipoForm.controls.paymentTerm as FormArray;
-
-    control.removeAt(i);
-
-  }
 
 }
 

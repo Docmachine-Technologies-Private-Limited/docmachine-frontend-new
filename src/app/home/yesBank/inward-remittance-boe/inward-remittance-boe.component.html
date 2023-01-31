@@ -1,6 +1,6 @@
 <div class="content-wrap">
   <main id="content" class="content table-padding bc" role="main">
-    <div id="mainId" class="bc" *ngIf="!done">
+    <div id="mainId" class="bc">
       <div id="first" class="bc">
         <div style="margin-left: 230px; width: 535px">
           <p class="heading">
@@ -92,7 +92,7 @@
               <td class="wtd1">
                 <p style="
                   display: inline-block;
-                  
+
                   outline: none;
                 " contenteditable="true">
                   {{ item2.currency }}
@@ -116,7 +116,7 @@
                 <p style="
                   display: inline-block;
                   outline: none;
-                " contenteditable="true">
+                " contenteditable="true" *ngIf="item2.invoiceAmount">
                   {{ item2.invoiceAmount | numberToWords: item2.invoiceAmount }}
                 </p>
               </td>

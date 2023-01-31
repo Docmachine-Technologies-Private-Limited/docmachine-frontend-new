@@ -93,6 +93,9 @@ import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.compo
 import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-member.guard";
 
 import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remittance/add-advance-outward-remittance.component';
+import { EditRemittanceComponent } from './edit-remittance/edit-remittance.component';
+import { RemittanceSummaryComponent } from './remittance-summary/remittance-summary.component';
+import { AddRemittanceComponent } from './add-remittance/add-remittance.component';
 
 @NgModule({
   declarations: [
@@ -123,6 +126,9 @@ import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remi
     RemittanceFlowComponent,
     EditBuyerComponent,
     EditBeneComponent,
+    EditRemittanceComponent,
+    RemittanceSummaryComponent,
+    AddRemittanceComponent,
     AddAdvanceOutwardRemittanceComponent
   ],
   imports: [
@@ -222,6 +228,24 @@ import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remi
             canActivate:[MemberGuard]
           },
         
+          {
+            path: "edit-remittance",
+            component: EditRemittanceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "add-remittance",
+            component: AddRemittanceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "remittance-summary",
+            component: RemittanceSummaryComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
           {
             path: "pipo",
             component: PipoExportComponent,

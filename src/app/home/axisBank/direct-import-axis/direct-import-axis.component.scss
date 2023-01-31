@@ -1,129 +1,131 @@
 .heading5 {
-    border-bottom: 3px solid black;
-    color: black;
-    height: 25px;
-    width: 52%;
+  border-bottom: 3px solid black;
+  color: black;
+  height: 25px;
+  width: 52%;
 }
 
 tr {
-    border: 1px solid #070707;
+  border: 1px solid #070707;
 }
 
 td {
-    border-right: 1px solid #070707;
+  border-right: 1px solid #070707;
 }
 
 .wtd {
-    width: 441px;
+  width: 441px;
 }
 
 .wtd1 {
-    width: 600px;
-    
+  width: 600px;
+
 }
 
 .wtd11 {
-    width: 450px;
+  width: 450px;
 }
-.wtd12 textarea{
-    width: 290px;
-    border: none;
+
+.wtd12 textarea {
+  width: 290px;
+  border: none;
 }
 
 .wtd12 input {
-     border: none;
- }
+  border: none;
+}
 
 .wtd12 {
-    width: 318px;
-    
+  width: 318px;
+
 }
 
 .wtd10 {
-    line-height: 16px;
-    font-size: 14px;
+  line-height: 16px;
+  font-size: 14px;
 }
 
 .wtd1 input {
-   // width: 400px;
-    border: none;
+  // width: 400px;
+  border: none;
 }
 
 .wtd2 {
-    width: 900px;
+  width: 900px;
 }
 
-.wtd3 input{
+.wtd3 input {
   width: 140px !important;
   border: none;
 }
 
 span input {
-    border: none;
-    border-bottom: 1px solid black;
+  border: none;
+  border-bottom: 1px solid black;
 }
 
 .spli {
-    border-bottom: 1px solid black !important;
+  border-bottom: 1px solid black !important;
 }
 
 .ins {
-    border: none;
-    border-bottom: 1px solid black;
-    width: 400px;
+  border: none;
+  border-bottom: 1px solid black;
+  width: 400px;
 }
 
-.wtd7 input{
-    width: 100px !important;
-    border: none;
+.wtd7 input {
+  width: 100px !important;
+  border: none;
 }
 
 
 .wtd8 {
-    width: 160px !important;
+  width: 160px !important;
 }
 
 .ind {
-    border: none;
-    border-bottom: 1px solid black;
+  border: none;
+  border-bottom: 1px solid black;
 }
 
 .wtd4 input {
-    width: 170px;
-    border: none;
+  width: 170px;
+  border: none;
 }
 
 .ll1 {
-    width: 150px;
+  width: 150px;
 }
 
 .ll2 {
-    width: 200px;
+  width: 200px;
 }
 
 .ll3 {
-    width: 400px;
+  width: 400px;
 }
 
 
 .rm1 input {
-    width: 120px;
-    border: none;
+  width: 120px;
+  border: none;
 }
+
 .rm2 input {
-    width: 80px;
-    border: none;
+  width: 80px;
+  border: none;
 }
 
 .check {
-    margin-top: 10px;
-    margin-left: 40px ;
-    height: 30px;
-    width: 30px;
+  margin-top: 10px;
+  margin-left: 40px;
+  height: 30px;
+  width: 30px;
 }
 
 .button1 {
-  
+
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   width: 170px;
@@ -134,4 +136,15 @@ span input {
   color: #ffffff;
   box-shadow: 0px 4px 10px 0px #49a2d7;
 
+}
+
+.content {
+  height: calc(100vh - 80px);
+  overflow: auto;
+  width: 80vw;
+  margin-left: 32px;
+  margin-top: 20px;
+  border-radius: 5px;
+  padding: 10px;
+  padding-bottom: 20px;
 }

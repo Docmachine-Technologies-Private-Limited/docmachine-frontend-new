@@ -4,6 +4,7 @@ import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import { DocumentService } from "../../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { DomSanitizer } from "@angular/platform-browser";
+import { WindowInformationService } from "src/app/service/window-information.service";
 
 @Component({
   selector: 'app-advance-remitance-fbg',
@@ -42,6 +43,7 @@ export class AdvanceRemitanceFbgComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private documentService: DocumentService,
     private userService: UserService,
+    public wininfo: WindowInformationService,
     private router: Router
   ) {
     router.events.subscribe((event: NavigationStart) => {
@@ -65,6 +67,7 @@ export class AdvanceRemitanceFbgComponent implements OnInit, OnDestroy {
   };
 
   async ngOnInit(): Promise<void> {
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.id = this.route.snapshot.params['boeNumber'];
     this.amount = this.route.snapshot.params['amount']
     console.log(this.route.snapshot.params['pipo'])
