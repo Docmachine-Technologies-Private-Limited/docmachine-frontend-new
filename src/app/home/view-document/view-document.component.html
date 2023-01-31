@@ -353,7 +353,7 @@
                                                 {{data.balanceAvai}}
                                             </td>
                                             <td class="view_edit_button">
-                                                <a title="View" [routerLink]="['/home/view-pipo']"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                <a title="View" (click)=" openLetterOfCredit(content); viewCN(data)"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                 <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                                 <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
                                                     aria-hidden="true"></i></button>
@@ -1013,3 +1013,36 @@
         </div>
     </main>
 </div>
+<ng-template #content let-modal>
+
+    <div class="modal-body">
+        <div class="row no-gutter">
+            <!-- The image half -->
+            <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
+
+
+            <!-- The content half -->
+            <div class="col-md-7" style="margin: 10px;">
+                <div class="login d-flex py-5" style="padding: 0px !important;">
+
+                    <!-- Demo content-->
+                    <div class="container popup">
+                        <div class="row">
+                            <div class="col-lg-10 col-xl-7 mrg">
+                                <h6 class="display-6">Shipping Bill</h6>
+
+                                <iframe [src]="viewData" width="315%" height="500px"></iframe>
+                                <button type="submit" style="margin-left: 250px;" class="submitBTN" (click)="modal.dismiss('Cross click')">OK</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</ng-template>
