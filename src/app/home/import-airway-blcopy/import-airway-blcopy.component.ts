@@ -72,7 +72,7 @@ export class ImportAirwayBlcopyComponent implements OnInit {
     this.filtervisible = !this.filtervisible
   }
 
-  openCreditNote(content) {
+  openLetterOfCredit(content) {
     this.modalService
       .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
       .result.then(
