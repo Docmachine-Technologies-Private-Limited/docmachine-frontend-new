@@ -91,9 +91,19 @@ import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/expo
 import { ImportBillOfExchangeComponent } from "./import-bill-of-exchange/import-bill-of-exchange.component";
 import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.component';
 import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-member.guard";
+<<<<<<< HEAD
+
+import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remittance/add-advance-outward-remittance.component';
+=======
+import { UserProfilesComponent } from "./user-profiles/user-profiles.component";
+import { EmailValidatorDirective } from './Validator/email/email-validator.directive';
+import { PhoneValidatorDirective } from './Validator/phone/phone-validator.directive';
+
+>>>>>>> c272e3d39f64f009bea5426cb12c53861553a1f4
 import { EditRemittanceComponent } from './edit-remittance/edit-remittance.component';
 import { RemittanceSummaryComponent } from './remittance-summary/remittance-summary.component';
 import { AddRemittanceComponent } from './add-remittance/add-remittance.component';
+
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -123,9 +133,13 @@ import { AddRemittanceComponent } from './add-remittance/add-remittance.componen
     RemittanceFlowComponent,
     EditBuyerComponent,
     EditBeneComponent,
+    UserProfilesComponent,
+    PhoneValidatorDirective,
+    EmailValidatorDirective,
     EditRemittanceComponent,
     RemittanceSummaryComponent,
-    AddRemittanceComponent
+    AddRemittanceComponent,
+    AddAdvanceOutwardRemittanceComponent
   ],
   imports: [
     SharedHomeModule,
@@ -157,7 +171,7 @@ import { AddRemittanceComponent } from './add-remittance/add-remittance.componen
           { path: "importDebit", loadChildren: () => import('./import-debit-note/import-debit-note.module').then(mod => mod.ImportDebitNoteModule),canActivate:[MemberGuard] },
           { path: "importInsurance", loadChildren: () => import('./import-insurance/imports-insurance.module').then(mod => mod.ImportsInsuranceModule),canActivate:[MemberGuard] },
           { path: "importTriParty", loadChildren: () => import('./import-tri-party/imports-tri-party.module').then(mod => mod.ImportsTriPartyModule) },
-          { path: "advance-outward-remittance", loadChildren: () => import('./advance-outward-remittance/advance-outward.remittance.module').then(mod => mod.AdvanceOutwardRemittanceModule),canActivate:[MemberGuard] },
+          { path: "advance-outward-remittance", loadChildren: () => import('./advance-outward-remittance/advance-outward-remittance.module').then(mod => mod.AdvanceOutwardRemittanceModule),canActivate:[MemberGuard] },
           { path: "direct-import-payment", loadChildren: () => import('./direct-import-payment/direct-import-payment.module').then(mod => mod.DirectImportPaymentModule),canActivate:[MemberGuard] },
           { path: "a2cum-application-yesbank", loadChildren: () => import('./yesBank/a2cum-application-yes-bank/a2cum-application-yes-bank.module').then(mod => mod.A2cumApplicationYesBankModule),canActivate:[MemberGuard] },
           { path: "fbg-waiver", loadChildren: () => import('./yesBank/advance-fbg-wavier/fbg-wavier.module').then(mod => mod.FbgWavierModule),canActivate:[MemberGuard] },
@@ -199,6 +213,12 @@ import { AddRemittanceComponent } from './add-remittance/add-remittance.componen
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
+           {
+            path: "user-profiles",
+            component: UserProfilesComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
           {
             path: "data-table",
             component: DatatableComponent,
@@ -223,7 +243,7 @@ import { AddRemittanceComponent } from './add-remittance/add-remittance.componen
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
-        
+
           {
             path: "edit-remittance",
             component: EditRemittanceComponent,
@@ -489,6 +509,18 @@ import { AddRemittanceComponent } from './add-remittance/add-remittance.componen
           {
             path: "ExportDebit",
             component:ExportDebitNoteComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "remittance-flow",
+            component: RemittanceFlowComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "add-advance-outward-remittance/:doc_type",
+            component: AddAdvanceOutwardRemittanceComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },

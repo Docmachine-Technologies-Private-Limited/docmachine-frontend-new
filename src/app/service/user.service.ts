@@ -225,7 +225,14 @@ export class UserService {
       httpOptions
     );
   }
-
+  updateTeamById(team,id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken}),
+    };
+    return this.http.post(`${this.api_base}/team/Team_Update`,{team: team,id:id},httpOptions);
+  }
   mergePdf(filename) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

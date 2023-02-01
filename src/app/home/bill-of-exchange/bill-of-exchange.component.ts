@@ -67,7 +67,7 @@ export class BillOfExchangeComponent implements OnInit {
     this.filtervisible = !this.filtervisible
   }
 
-  openCreditNote(content) {
+  openBillofExchange(content) {
     this.modalService
       .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
       .result.then(
