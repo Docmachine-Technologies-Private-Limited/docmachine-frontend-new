@@ -1098,6 +1098,14 @@ export class DocumentService {
 
       return this.http.get(`${this.api_base}/destruction/get`, httpOptions);
     }
+    getDestructionfile(type:string) {
+      this.loadFromLocalStorage();
+      console.log(this.authToken);
+      const httpOptions = {
+        headers: new HttpHeaders({ Authorization: this.authToken }),
+      };
+      return this.http.post(`${this.api_base}/destruction/filetype`, {file:type},httpOptions);
+    }
 
     getDestructionByDestructionValue(id) {
       this.loadFromLocalStorage();

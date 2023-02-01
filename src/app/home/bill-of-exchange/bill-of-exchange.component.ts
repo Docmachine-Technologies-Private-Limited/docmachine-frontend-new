@@ -48,7 +48,7 @@ export class BillOfExchangeComponent implements OnInit {
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA);
     this.item = [];
-    this.documentService.getBillExchangefile("import").subscribe(
+    this.documentService.getBillExchangefile("export").subscribe(
       (res: any) => {
         this.item=res?.data;
         console.log(res,'getBillExchangefile');

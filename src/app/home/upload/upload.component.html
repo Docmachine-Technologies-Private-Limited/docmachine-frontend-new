@@ -291,7 +291,7 @@
             documentType === 'deliveryOrder' || documentType === 'tryPartyAgreement'|| documentType === 'EBRC' ||
             documentType === 'blCopyref' || documentType === 'commercial' ||
             documentType === 'import-commercial' || documentType === 'billOfExchange' || documentType === 'import-billOfExchange' ||
-            documentType === 'destruction' || documentType === 'packingList'"
+            documentType === 'destruction'  || documentType === 'import-destruction'|| documentType === 'packingList'"
             class="form" method="POST">
             <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
               (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config1"

@@ -729,7 +729,19 @@ export class UploadComponent implements OnInit {
         this.pipoArr.push(this.pipoOut);
         this.mainBene = this.beneOut;
       }
-    } else if (this.docu == 'packingList') {
+    } else if (this.docu == 'import-destruction') {
+      this.documentType1 = 'import';
+      this.documentType = 'import-destruction';
+      this.documentType1 = 'import';
+      if (this.route.snapshot.paramMap.get('pipo_id')) {
+        this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
+        this.beneOut = this.route.snapshot.paramMap.get('bene');
+        let x = 'PI' + '-' + this.pipoOut + '-' + this.beneOut;
+        this.arrayData.push(x);
+        this.pipoArr.push(this.pipoOut);
+        this.mainBene = this.beneOut;
+      }
+    }else if (this.docu == 'packingList') {
       this.documentType1 = 'export';
       this.documentType = 'packingList';
       this.documentType1 = 'export';
@@ -1745,8 +1757,11 @@ export class UploadComponent implements OnInit {
               //this.pipoData[`${this.pipoDoc}`] = args[1].data
               console.log('king123');
               console.log(data);
-
-              this.router.navigate(['/home/destruction']);
+              if (this.documentType1 == 'import') {
+                this.router.navigate(['/home/import-destruction']);
+              } else {
+                this.router.navigate(['/home/destruction']);
+              }
               console.log('redirectindex', this.redirectindex);
               console.log('redirectinpage', this.redirectpage);
               console.log('redirectid', this.redirectid);
@@ -2217,6 +2232,8 @@ export class UploadComponent implements OnInit {
           this.commercial = true;
         } else if (this.documentType === 'destruction') {
           this.destruction = true;
+        } else if (this.documentType === 'import-destruction') {
+          this.destruction = true;  
         } else if (this.documentType === 'billOfExchange') {
           this.billOfExchange = true;
         } else if (this.documentType === 'import-billOfExchange') {

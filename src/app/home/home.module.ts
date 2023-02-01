@@ -91,18 +91,16 @@ import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/expo
 import { ImportBillOfExchangeComponent } from "./import-bill-of-exchange/import-bill-of-exchange.component";
 import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.component';
 import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-member.guard";
-<<<<<<< HEAD
 
 import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remittance/add-advance-outward-remittance.component';
-=======
 import { UserProfilesComponent } from "./user-profiles/user-profiles.component";
 import { EmailValidatorDirective } from './Validator/email/email-validator.directive';
 import { PhoneValidatorDirective } from './Validator/phone/phone-validator.directive';
 
->>>>>>> c272e3d39f64f009bea5426cb12c53861553a1f4
 import { EditRemittanceComponent } from './edit-remittance/edit-remittance.component';
 import { RemittanceSummaryComponent } from './remittance-summary/remittance-summary.component';
 import { AddRemittanceComponent } from './add-remittance/add-remittance.component';
+
 
 @NgModule({
   declarations: [
@@ -183,6 +181,7 @@ import { AddRemittanceComponent } from './add-remittance/add-remittance.componen
           { path: "commercial", loadChildren: () => import('./commercial/commercial.module').then(mod => mod.CommercialModule),canActivate:[MemberGuard] },
           { path: "import-commercial", loadChildren: () => import('./import-commercial/import-commercial.module').then(mod => mod.ImportCommercialModule),canActivate:[MemberGuard] },
           { path: "destruction", loadChildren: () => import('./destruction/destruction.module').then(mod => mod.DestructionModule),canActivate:[MemberGuard] },
+          { path: "import-destruction", loadChildren: () => import('./import-destruction/import-destruction.module').then(mod => mod.ImportDestructionModule),canActivate:[MemberGuard] },
           { path: "bill-of-exchange", loadChildren: () => import('./bill-of-exchange/bill-of-exchange.module').then(mod => mod.BillOfExchangeModule),canActivate:[MemberGuard] },
           { path: "import-bill-of-exchange", loadChildren: () => import('./import-bill-of-exchange/import-bill-of-exchange.module').then(mod => mod.ImportBillOfExchangeModule),canActivate:[MemberGuard] },
           { path: "airway-bl-copy", loadChildren: () => import('./airway-blcopy/airway-blcopy.module').then(mod => mod.AirwayBlcopyModule),canActivate:[MemberGuard] },
