@@ -16,6 +16,7 @@
           <h3 class="heading pb-2" *ngIf='docu == "agreement"'>Upload Master service agreement</h3>
           <h3 class="heading pb-2" *ngIf='docu == "tryPartyAgreement"'>Upload Tri Party Document</h3>
           <h3 class="heading pb-2" *ngIf='docu == "opinionReport"'>Upload Opinion Report</h3>
+          <h3 class="heading pb-2" *ngIf='docu == "import-opinionReport"'>Upload Opinion Report</h3>
           <h3 class="heading pb-2" *ngIf='docu == "swiftCopy"'>Upload Swift Copy Document</h3>
           <h3 class="heading pb-2" *ngIf='docu == "EBRC"'>Upload Export Realisation certificate</h3>
           <h3 class="heading pb-2" *ngIf='docu == "blCopyref"'>Bill lodgement reference number and advice copy</h3>
@@ -32,6 +33,7 @@
              docu != "debitNote" && docu !="lcCopy" &&
              docu !="insuranceCopy" && docu !="creditNote" &&
              docu !="agreement" && docu !="opinionReport" &&
+             docu !="import-opinionReport" &&
              docu !="tryPartyAgreement" && docu !="swiftCopy" &&
              docu !="EBRC" && docu !="blCopyref" && docu != "blCopy" &&
              docu !="commercial" && docu !="billOfExchange" &&
@@ -74,7 +76,7 @@
                       <option value="debitNote">Debit Note</option>
                       <option value="creditNote">Credit Note</option>
                       <option value="agreement">Agreement</option>
-                      <option value="opinionReport">Opinion Report</option>
+                      <option value="import-opinionReport">Opinion Report</option>
                       <option value="lcCopy">LC Copy</option>
                       <option value="insuranceCopy">Insurance Copy</option>
                       <option value="deliveryOrder">Delivery Order</option>
@@ -286,7 +288,7 @@
             documentType === 'tryPartyAgreement' || documentType === 'debitNote' ||
             documentType === 'creditNote' ||
             documentType === 'import-blCopy' || documentType === 'blCopy' ||
-            documentType === 'agreement' || documentType === 'opinionReport' ||
+            documentType === 'agreement' || documentType === 'opinionReport' || documentType === 'import-opinionReport' ||
             documentType === 'swiftCopy' || documentType === 'lcCopy' || documentType === 'insuranceCopy' ||
             documentType === 'deliveryOrder' || documentType === 'tryPartyAgreement'|| documentType === 'EBRC' ||
             documentType === 'blCopyref' || documentType === 'commercial' ||
@@ -1650,6 +1652,36 @@
               </div>
             </div>
           </form>
+          <form class="iframecontroller" *ngIf="importopinionReport && !override" #values="ngForm"
+          (ngSubmit)="onSubmitOpinionReport(values)">
+              <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+          <div class="field">
+            <div class="form12 p-2">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Opinion Report Number*</label>
+                <input ngModel class="form-control p-3" type="text"
+                  name="opinionReportNumber">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Opinion Report Amount</label>
+                <input ngModel class="form-control p-3" type="number"
+                  name="opinionReportAmount">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Currency</label>
+                <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                [items]="this.CURRENCY_LIST"
+                bindLabel="type"
+                [multiple]="false"
+                groupBy="selectedAllGroup"
+                placeholder="Select PI/PO"
+                name="currency"
+                ngModel></ng-select>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </form>
 
 
           <ng-template #content let-modal>

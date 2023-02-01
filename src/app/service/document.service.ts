@@ -1572,6 +1572,14 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/opinionReport/get`, httpOptions);
   }
+  getOpinionReportfile(type:string) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/opinionReport/filetype`, {file:type},httpOptions);
+  }
 
   getOpinionByOpinionValue(id) {
     this.loadFromLocalStorage();

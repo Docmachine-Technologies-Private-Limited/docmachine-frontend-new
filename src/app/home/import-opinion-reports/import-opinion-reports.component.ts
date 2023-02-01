@@ -13,12 +13,13 @@ import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprrov
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
 
+
 @Component({
-  selector: 'app-opinion-reports',
-  templateUrl: './opinion-reports.component.html',
-  styleUrls: ['./opinion-reports.component.scss']
+  selector: 'app-import-opinion-reports',
+  templateUrl: './import-opinion-reports.component.html',
+  styleUrls: ['./import-opinion-reports.component.scss']
 })
-export class OpinionReportsComponent implements OnInit {
+export class ImportOpinionReportsComponent implements OnInit {
 
   @ViewChild('epltable', {static: false}) epltable: ElementRef;
   public item: any;
@@ -51,7 +52,7 @@ export class OpinionReportsComponent implements OnInit {
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
     this.item=[];
-    this.documentService.getOpinionReportfile("export").subscribe(
+    this.documentService.getOpinionReportfile("import").subscribe(
       (res: any) => {
         this.item=res?.data;
         console.log(res,'getOpinionReportfile');
@@ -109,8 +110,8 @@ export class OpinionReportsComponent implements OnInit {
 
   newOpinion() {
     console.log('upload');
-    this.sharedData.changeretunurl('home/opinion-report')
-    this.router.navigate(['home/upload', {file: 'export', document: 'opinionReport'}]);
+    this.sharedData.changeretunurl('home/import-opinion-report')
+    this.router.navigate(['home/upload', {file: 'import', document: 'import-opinionReport'}]);
   }
 
   toSave(data, index) {
@@ -181,3 +182,22 @@ export class OpinionReportsComponent implements OnInit {
     xlsx.writeFile(wb, 'OpinionReport.xlsx');
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

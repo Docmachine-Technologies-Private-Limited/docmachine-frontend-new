@@ -169,6 +169,7 @@ export class UploadComponent implements OnInit {
   lcCopy: boolean = false;
   agreement: boolean = false;
   opinionReport: boolean = false;
+  importopinionReport: boolean = false
   pipolist: any;
   item4: any;
   pipoArray: any = [];
@@ -590,6 +591,18 @@ export class UploadComponent implements OnInit {
       this.documentType1 = 'export';
       this.documentType = 'opinionReport';
       this.documentType1 = 'export';
+      if (this.route.snapshot.paramMap.get('pipo_id')) {
+        this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
+        this.beneOut = this.route.snapshot.paramMap.get('bene');
+        let x = 'PI' + '-' + this.pipoOut + '-' + this.beneOut;
+        this.arrayData.push(x);
+        this.pipoArr.push(this.pipoOut);
+        this.mainBene = this.beneOut;
+      }
+    } else if (this.docu == 'import-opinionReport') {
+      this.documentType1 = 'import';
+      this.documentType = 'import-opinionReport';
+      this.documentType1 = 'import';
       if (this.route.snapshot.paramMap.get('pipo_id')) {
         this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
         this.beneOut = this.route.snapshot.paramMap.get('bene');
@@ -2118,13 +2131,19 @@ export class UploadComponent implements OnInit {
             (data) => {
               console.log('king123');
               console.log(data);
-              if (this.retururl) {
-                let url = this.retururl;
-                this.sharedData.changeretunurl('');
-                this.router.navigate(['/home/opinion-report']);
+              // if (this.retururl) {
+              //   let url = this.retururl;
+              //   this.sharedData.changeretunurl('');
+              //   this.router.navigate(['/home/opinion-report']);
+              // } else {
+              //   this.router.navigate(['/home/opinion-report']);
+              // }
+              if (this.documentType1 == 'import') {
+                this.router.navigate(['/home/import-opinion-report']);
               } else {
                 this.router.navigate(['/home/opinion-report']);
               }
+
             },
             (error) => {
               console.log('error');
@@ -2250,6 +2269,8 @@ export class UploadComponent implements OnInit {
           this.agreement = true;
         } else if (this.documentType === 'opinionReport') {
           this.opinionReport = true;
+        } else if (this.documentType === 'import-opinionReport') {
+          this.importopinionReport = true;
         } else if (this.documentType === 'packingList') {
           this.packingList = true;
         } else if (this.documentType === 'otherDoc') {

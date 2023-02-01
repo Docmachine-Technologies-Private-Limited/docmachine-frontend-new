@@ -100,6 +100,7 @@ import { PhoneValidatorDirective } from './Validator/phone/phone-validator.direc
 import { EditRemittanceComponent } from './edit-remittance/edit-remittance.component';
 import { RemittanceSummaryComponent } from './remittance-summary/remittance-summary.component';
 import { AddRemittanceComponent } from './add-remittance/add-remittance.component';
+import { ImportOpinionReportsComponent } from "./import-opinion-reports/import-opinion-reports.component";
 
 
 @NgModule({
@@ -189,6 +190,7 @@ import { AddRemittanceComponent } from './add-remittance/add-remittance.componen
           { path: "inward-remittance-advice", loadChildren: () => import('./inward-remittance-advice/inward-remittance-advice.module').then(mod => mod.InwardRemittanceAdviceModule),canActivate:[MemberGuard] },
           { path: "outward-remittance-advice", loadChildren: () => import('./import-outward-remittance-sheet/outward-remittance-advice.module').then(mod => mod.OutwardRemittanceAdviceModule),canActivate:[MemberGuard] },
           { path: "opinion-report", loadChildren: () => import('./opinion-reports/opinion-reports.module').then(mod => mod.OpinionReportsModule),canActivate:[MemberGuard] },
+          { path: "import-opinion-report", loadChildren: () => import('./import-opinion-reports/import-opinion-reports.module').then(mod => mod.ImportOpinionReportsModule),canActivate:[MemberGuard] },
           { path: "try-party", loadChildren: () => import('./try-party-agreements/try-party-agreements.module').then(mod => mod.TryPartyAgreementsModule),canActivate:[MemberGuard] },
           { path: "master-services", loadChildren: () => import('./master-service/master-service.module').then(mod => mod.MasterServiceModule),canActivate:[MemberGuard] },
           { path: "letterofcredit-lc", loadChildren: () => import('./letter-of-credit-export-lc/letter-of-credit-export-lc.module').then(mod => mod.LetterOfCreditExportLcModule),canActivate:[MemberGuard] },
@@ -496,6 +498,12 @@ import { AddRemittanceComponent } from './add-remittance/add-remittance.componen
           {
             path: "ImportBillOfExchange",
             component:ImportBillOfExchangeComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "ImportOpinionReports",
+            component:ImportOpinionReportsComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
