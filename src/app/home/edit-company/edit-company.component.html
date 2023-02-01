@@ -199,22 +199,23 @@
                           [value]="course?.bicAddress" placeholder="Bic address"
                           class="form-control rounded-pill password password1" style="text-transform: uppercase;">
                         <label class="bank">Account Type</label>
-                        <input type="text" (keyup)="add_ArrayForm_value('bankDetails',i,'accType',$event.target.value)"
-                          [value]="course?.accType" placeholder="Account Type"
-                          class="form-control rounded-pill password password1">
+                        <ng-select *ngIf="this.Account_Type?.length!=0"
+                          [items]="this.Account_Type"
+                          bindLabel="type"
+                          [multiple]="false"
+                          placeholder="Select AccType"
+                          name="accType"
+                          [ngModel]="course?.accType"
+                          (change)="add_ArrayForm_value('bankDetails',i,'accType',$event.type)"></ng-select>
                         <label class="bank">Currency Type</label>
                         <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
                           [items]="this.CURRENCY_LIST"
                           bindLabel="type"
                           [multiple]="false"
-                          groupBy="selectedAllGroup"
-                          placeholder="Select PI/PO"
+                          placeholder="Select Currency"
                           name="currency"
-                          [value]="course?.currency"
-                          (change)="add_ArrayForm_value('bankDetails',i,'currency',$event.target.value.type)"></ng-select>
-                        <!-- <input type="text" (keyup)="add_ArrayForm_value('bankDetails',i,'currency',$event.target.value)"
-                          [value]="course?.currency" placeholder="currency"
-                          class="form-control rounded-pill password password1"> -->
+                          [ngModel]="course?.currency"
+                          (change)="add_ArrayForm_value('bankDetails',i,'currency',$event.type)"></ng-select>
                       </div>
                     </div>
                   </div>

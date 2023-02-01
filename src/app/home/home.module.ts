@@ -100,6 +100,7 @@ import { PhoneValidatorDirective } from './Validator/phone/phone-validator.direc
 import { EditRemittanceComponent } from './edit-remittance/edit-remittance.component';
 import { RemittanceSummaryComponent } from './remittance-summary/remittance-summary.component';
 import { AddRemittanceComponent } from './add-remittance/add-remittance.component';
+import {EditCompanyComponent} from "./edit-company/edit-company.component";
 
 @NgModule({
   declarations: [
@@ -136,7 +137,8 @@ import { AddRemittanceComponent } from './add-remittance/add-remittance.componen
     EditRemittanceComponent,
     RemittanceSummaryComponent,
     AddRemittanceComponent,
-    AddAdvanceOutwardRemittanceComponent
+    AddAdvanceOutwardRemittanceComponent,
+    EditCompanyComponent
   ],
   imports: [
     SharedHomeModule,
@@ -199,7 +201,6 @@ import { AddRemittanceComponent } from './add-remittance/add-remittance.componen
           { path: "bill-lodgement", loadChildren: () => import('./Export/bill-lodgement/bill-lodgement.module').then(mod => mod.BillLodgementModule),canActivate:[MemberGuard] },
           { path: "packing-credit-request", loadChildren: () => import('./Export/packing-credit/packing-credit.module').then(mod => mod.PackingCreditModule),canActivate:[MemberGuard] },
           { path: "export-home", loadChildren: () => import('./Export/export-home/export-home.module').then(mod => mod.ExportHomeModule),canActivate:[MemberGuard] },
-          { path: "account", loadChildren: () => import('./edit-company/edit-company.module').then(mod => mod.EditCompanyModule),canActivate:[AdminMemberGuard] },
           { path: "completed-task", loadChildren: () => import('./completed-task/completed-task.module').then(mod => mod.CompletedTaskModule),canActivate:[MemberGuard] },
           { path: "tasks", loadChildren: () => import('./all-task/all-task.module').then(mod => mod.AllTaskModule),canActivate:[MemberGuard] },
           { path: "letter-of-credit", loadChildren: () => import('./yesBank/letter-of-credit/letter-of-credit.module').then(mod => mod.LetterOfCreditModule),canActivate:[MemberGuard] },
@@ -210,11 +211,12 @@ import { AddRemittanceComponent } from './add-remittance/add-remittance.componen
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
+          { path: "account",component:EditCompanyComponent,canActivate:[AdminMemberGuard] },
            {
             path: "user-profiles",
             component: UserProfilesComponent,
             pathMatch: "full",
-            canActivate:[MemberGuard]
+            canActivate:[AdminMemberGuard]
           },
           {
             path: "data-table",
