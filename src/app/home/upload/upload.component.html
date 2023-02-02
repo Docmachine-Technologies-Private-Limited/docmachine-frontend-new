@@ -13,7 +13,9 @@
           <h3 class="heading pb-2" *ngIf='docu == "creditNote"'>Upload creditNote</h3>
           <h3 class="heading pb-2" *ngIf='docu == "insuranceCopy"'>Upload Insurance Copy</h3>
           <h3 class="heading pb-2" *ngIf='docu == "lcCopy"'>Upload LC Copy</h3>
+          <h3 class="heading pb-2" *ngIf='docu == "import-lcCopy"'>Upload LC Copy</h3>
           <h3 class="heading pb-2" *ngIf='docu == "agreement"'>Upload Master service agreement</h3>
+          <h3 class="heading pb-2" *ngIf='docu == "import-agreement"'>Upload Master service agreement</h3>
           <h3 class="heading pb-2" *ngIf='docu == "tryPartyAgreement"'>Upload Tri Party Document</h3>
           <h3 class="heading pb-2" *ngIf='docu == "opinionReport"'>Upload Opinion Report</h3>
           <h3 class="heading pb-2" *ngIf='docu == "import-opinionReport"'>Upload Opinion Report</h3>
@@ -30,9 +32,10 @@
 
           <h3 class="heading_doc" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" &&
              docu != "irAdvice" &&  docu != "orAdvice" &&
-             docu != "debitNote" && docu !="lcCopy" &&
+             docu != "debitNote" && docu !="lcCopy" && docu !="import-lcCopy" &&
              docu !="insuranceCopy" && docu !="creditNote" &&
              docu !="agreement" && docu !="opinionReport" &&
+             docu !="import-agreement" &&
              docu !="import-opinionReport" &&
              docu !="tryPartyAgreement" && docu !="swiftCopy" &&
              docu !="EBRC" && docu !="blCopyref" && docu != "blCopy" &&
@@ -288,8 +291,9 @@
             documentType === 'tryPartyAgreement' || documentType === 'debitNote' ||
             documentType === 'creditNote' ||
             documentType === 'import-blCopy' || documentType === 'blCopy' ||
+            documentType === 'import-agreement' ||
             documentType === 'agreement' || documentType === 'opinionReport' || documentType === 'import-opinionReport' ||
-            documentType === 'swiftCopy' || documentType === 'lcCopy' || documentType === 'insuranceCopy' ||
+            documentType === 'swiftCopy' || documentType === 'lcCopy'|| documentType === 'import-lcCopy' || documentType === 'insuranceCopy' ||
             documentType === 'deliveryOrder' || documentType === 'tryPartyAgreement'|| documentType === 'EBRC' ||
             documentType === 'blCopyref' || documentType === 'commercial' ||
             documentType === 'import-commercial' || documentType === 'billOfExchange' || documentType === 'import-billOfExchange' ||
@@ -1586,6 +1590,36 @@
               </div>
             </div>
           </form>
+          <form class="iframecontroller" *ngIf="importlcCopy && !override" #values="ngForm"
+            (ngSubmit)="onSubmitLetterLC(values)">
+                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <div class="field">
+              <div class="form12 p-3">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Letter Of Credit Number*</label>
+                  <input ngModel class="form-control p-3" type="text"
+                    name="letterOfCreditNumber">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Letter Of Credit Amount</label>
+                  <input ngModel class="form-control p-3"
+                    name="letterOfCreditAmount" type="number">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Currency</label>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                  [items]="this.CURRENCY_LIST"
+                  bindLabel="type"
+                  [multiple]="false"
+                  groupBy="selectedAllGroup"
+                  placeholder="Select PI/PO"
+                  name="currency"
+                  ngModel></ng-select>
+                  </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
 
           <!-- Master Service Input File -->
 
@@ -1619,6 +1653,38 @@
               </div>
             </div>
           </form>
+           <!-- Master Service Input File-import-->
+
+           <form class="iframecontroller" *ngIf="importagreement && !override" #values="ngForm"
+           (ngSubmit)="onSubmitMasterService(values)">
+               <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+           <div class="field">
+             <div class="form12 p-3">
+               <div class="mb-3">
+                 <label for="exampleInputEmail1" class="form-label">Master Service Number*</label>
+                 <input ngModel class="form-control p-3" type="text"
+                   name="masterServiceNumber">
+               </div>
+               <div class="mb-3">
+                 <label for="exampleInputPassword1" class="form-label">Master Service Amount</label>
+                 <input ngModel class="form-control p-3"
+                   name="masterServiceAmount">
+               </div>
+               <div class="mb-3">
+                 <label for="exampleInputPassword1" class="form-label">Currency</label>
+                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                 [items]="this.CURRENCY_LIST"
+                 bindLabel="type"
+                 [multiple]="false"
+                 groupBy="selectedAllGroup"
+                 placeholder="Select PI/PO"
+                 name="currency"
+                 ngModel></ng-select>
+               </div>
+               <button type="submit" class="btn btn-primary">Submit</button>
+             </div>
+           </div>
+         </form>
 
           <!-- Letter of Opinion Report Input File -->
 

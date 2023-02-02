@@ -104,6 +104,8 @@ import { ImportOpinionReportsComponent } from "./import-opinion-reports/import-o
 
 import {EditCompanyComponent} from "./edit-company/edit-company.component";
 import { LetterOfCreditImportLCComponent } from "./letter-of-credit-import-lc/letter-of-credit-import-lc.component";
+import { MasterServiceComponent } from "./master-service/master-service.component";
+import { ImportMasterServiceComponent } from "./import-master-service/import-master-service.component";
 
 @NgModule({
   declarations: [
@@ -196,6 +198,7 @@ import { LetterOfCreditImportLCComponent } from "./letter-of-credit-import-lc/le
           { path: "import-opinion-report", loadChildren: () => import('./import-opinion-reports/import-opinion-reports.module').then(mod => mod.ImportOpinionReportsModule),canActivate:[MemberGuard] },
           { path: "try-party", loadChildren: () => import('./try-party-agreements/try-party-agreements.module').then(mod => mod.TryPartyAgreementsModule),canActivate:[MemberGuard] },
           { path: "master-services", loadChildren: () => import('./master-service/master-service.module').then(mod => mod.MasterServiceModule),canActivate:[MemberGuard] },
+          { path: "import-master-services", loadChildren: () => import('./import-master-service/import-master-service.module').then(mod => mod.ImportMasterServiceModule),canActivate:[MemberGuard] },
           { path: "letterofcredit-lc", loadChildren: () => import('./letter-of-credit-export-lc/letter-of-credit-export-lc.module').then(mod => mod.LetterOfCreditExportLcModule),canActivate:[MemberGuard] },
           { path: "letterofcredit-import-lc", loadChildren: () => import('./letter-of-credit-import-lc/letter-of-credit-import-lc.module').then(mod => mod.LetterOfCreditImportLCModule),canActivate:[MemberGuard] },
           { path: "insurance-document", loadChildren: () => import('./insurance-document/insurance-document.module').then(mod => mod.InsuranceDocumentModule),canActivate:[MemberGuard] },
@@ -514,6 +517,18 @@ import { LetterOfCreditImportLCComponent } from "./letter-of-credit-import-lc/le
           {
             path: "letterOfCreditLCImport",
             component: LetterOfCreditImportLCComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "MasterService",
+            component: MasterServiceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "ImportMasterService",
+            component: ImportMasterServiceComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
