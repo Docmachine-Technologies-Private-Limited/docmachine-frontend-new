@@ -1,6 +1,6 @@
 <div class="content-wrap pb-2 scroll-bar-main">
     <div class="import_export_sec">
-        <h3 class="heading_common_tag">Master Service Agreement Documents</h3>
+        <h3 class="heading_common_tag">import Letter Of Credit Documents</h3>
     </div>
     <main id="content" class="content table-padding" role="main">
         <div class="filter_section_top">
@@ -60,7 +60,7 @@
                                 </form>
                             </div>
                         </div>
-                        <button class="upload-button btn btn-success" (click)="masterSer()">
+                        <button class="upload-button btn btn-success" (click)="letterOfCredit()">
                             <span class="add_icon"></span>  ADD NEW
                         </button>
                     </div>
@@ -71,22 +71,22 @@
         <div class="analytics" #epltable>
             <div style="width: 100%" class="analytics_top">
                 <!-- *ngIf="!showInvoice" -->
-                <div style="width: 100%" class="row">
+                <div style="width: 100%;" class="row">
                     <div class="" id="container">
                         <!-- *ngIf="!showInvoice" -->
                         <section class="middle_datatable">
                             <div class="widget-body p-0 support table-wrapper">
                                 <table class="table table-striped mb-0">
                                     <!-- *ngIf='pipo' -->
-                                    <thead style="width: 100%;background: white;position: sticky;top: 0;">
+                                    <thead style="width: 100%;position: sticky;top: 0;">
                                         <tr class="text-muted table-heading" style="font-size: 14px; color:black; border-bottom: 1px solid #f2f4f8;">
                                             <!-- <th class="rect">
-                                              <img src="./assets/Rectangle-13.png" />
-                                          </th> -->
-                                            <th scope="col"><span class="pl-3" style="margin-left: 9px;">DATE</span></th>
+                                                    <img src="./assets/Rectangle-13.png" />
+                                                </th> -->
+                                            <th scope="col"><span>DATE</span></th>
                                             <th scope="col">PI/PO No.</th>
-                                            <th scope="col">M S A No.</th>
-                                            <th scope="col">M S A Amount</th>
+                                            <th scope="col">L C No.</th>
+                                            <th scope="col">L C Amount</th>
                                             <th scope="col">Currency</th>
                                             <th scope="col">Buyer Name</th>
                                             <th scope="col">Action</th>
@@ -94,34 +94,25 @@
                                         </tr>
                                     </thead>
                                     <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of item; let i = index" [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
-                                        this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')" >
-
-                                            <!-- (click)="
-                                      getInvoices(data, i) && getTransactions(data.pi_poNo) -->
-                                            <!-- <th class="rect">
-                                              <img src="./assets/Rectangle-13.png" />
-                                          </th> -->
+                                        <tr class="table-row" *ngFor="let data of item; let i = index"  [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                        this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
                                             <td>{{ data.date }}</td>
-
                                             <td class="sb-no"> {{ getPipoNumbers(data) }} </td>
-
                                             <td>
                                                 <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.masterServiceNumber}}
+                                                    {{data.letterOfCreditNumber}}
                                                 </div>
-
                                                 <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="masterServiceNumber" type="text" placeholder="Master Service Number" [(ngModel)]="data.masterServiceNumber">
+                                                    <input class="tblInput form-control" name="letterOfCreditNumber" type="text" placeholder="Letter Of Credit Number" [(ngModel)]="data.letterOfCreditNumber">
                                                 </div>
                                             </td>
                                             <td>
                                                 <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.masterServiceAmount}}
+                                                    {{data.letterOfCreditAmount}}
                                                 </div>
 
                                                 <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="masterServiceAmount" type="text" placeholder="Master Service Amount" [(ngModel)]="data.masterServiceAmount">
+                                                    <input class="tblInput form-control" name="letterOfCreditAmount" type="text" placeholder="Letter Of Credit Amount" [(ngModel)]="data.letterOfCreditAmount">
                                                 </div>
                                             </td>
                                             <td>
@@ -139,11 +130,12 @@
                                                 <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                                 <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
                                                     aria-hidden="true"></i></button>
-                                                    <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
-                                                    (click)="handleDelete(data._id,i)"><a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                   </button>    
-                                            </td>
+                                                <button title="Delete" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
+                                                   (click)="handleDelete(data._id,i)"><a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                </button>
+                                             </td>
                                         </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -154,13 +146,10 @@
         </div>
 
         <ng-template #content let-modal>
-
             <div class="modal-body">
                 <div class="row no-gutter">
                     <!-- The image half -->
                     <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
-
-
                     <!-- The content half -->
                     <div class="col-md-7" style="margin: 10px;">
                         <div class="login d-flex py-5" style="padding: 0px !important;">
@@ -169,7 +158,7 @@
                             <div class="container popup">
                                 <div class="row">
                                     <div class="col-lg-10 col-xl-7 mrg">
-                                        <h6 class="display-6">Master Service</h6>
+                                        <h6 class="display-6">Letter Of Credit</h6>
 
                                         <iframe [src]="viewData" width="315%" height="500px"></iframe>
                                         <button type="submit" style="margin-left: 250px;" class="submitBTN" (click)="modal.dismiss('Cross click')">OK</button>
@@ -178,11 +167,9 @@
                                 </div>
                             </div>
                             <!-- End -->
-
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </ng-template>
+

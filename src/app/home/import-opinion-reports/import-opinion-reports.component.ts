@@ -3,7 +3,7 @@ import {DocumentService} from 'src/app/service/document.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
-import {UserService} from './../../service/user.service';
+import {UserService} from './../../service/user.service'
 import * as xlsx from 'xlsx';
 import {Router} from '@angular/router';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
@@ -12,31 +12,25 @@ import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
+
+
 @Component({
-  selector: 'app-letter-of-credit-export-lc',
-  templateUrl: './letter-of-credit-export-lc.component.html',
-  styleUrls: ['./letter-of-credit-export-lc.component.scss']
+  selector: 'app-import-opinion-reports',
+  templateUrl: './import-opinion-reports.component.html',
+  styleUrls: ['./import-opinion-reports.component.scss']
 })
-export class LetterOfCreditExportLCComponent implements OnInit {
+export class ImportOpinionReportsComponent implements OnInit {
 
   @ViewChild('epltable', {static: false}) epltable: ElementRef;
-  public item: any=[];
+  public item: any;
   public item1 = [];
   public viewData: any;
   public closeResult: string;
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
-  filtervisible: boolean = false;
   USER_DATA:any=[];
-  filter() {
-    // this.getPipoData()
-    this.filtervisible = !this.filtervisible
-
-  }
-  onclick() {
-    this.filtervisible = !this.filtervisible
-  }
+  filtervisible: boolean = false;
 
   constructor(
     private documentService: DocumentService,
@@ -46,9 +40,9 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private sharedData: SharedDataService,
-    public wininfo: WindowInformationService,
-    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
-    public dialog: MatDialog
+     public wininfo: WindowInformationService,
+     public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+     public dialog: MatDialog,
   ) {
   }
 
@@ -58,14 +52,25 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
     this.item=[];
-      this.documentService.getLetterLCfile("export").subscribe(
-        (res: any) => {
-          this.item=res?.data;
-          console.log(res,'getLetterLCfile');
-        },
-        (err) => console.log(err)
-        );
-      }
+    this.documentService.getOpinionReportfile("import").subscribe(
+      (res: any) => {
+        this.item=res?.data;
+        console.log(res,'getOpinionReportfile');
+      },
+      (err) => console.log(err)
+      );
+    }
+
+  filter() {
+    // this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
+  }
+
+
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
       return x.pi_poNo;
@@ -103,19 +108,19 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     );
   }
 
-  letterOfCredit() {
+  newOpinion() {
     console.log('upload');
-    //this.sharedData.changeretunurl('home/letterofcredit-lc')
-    this.router.navigate(['home/upload', {file: 'export', document: 'lcCopy'}]);
+    this.sharedData.changeretunurl('home/import-opinion-report')
+    this.router.navigate(['home/upload', {file: 'import', document: 'import-opinionReport'}]);
   }
 
   toSave(data, index) {
     this.optionsVisibility[index] = false;
     console.log(data);
-    this.documentService.updateLetterLC(data, data._id).subscribe(
+    this.documentService.updateOpinionReport(data, data._id).subscribe(
       (data) => {
         console.log('king123');
-        this.toastr.success('LetterLC Row Is Updated Successfully.');
+        this.toastr.success('Opinion Report Row Is Updated Successfully.');
 
       },
       (error) => {
@@ -129,8 +134,9 @@ export class LetterOfCreditExportLCComponent implements OnInit {
 
   toEdit(index) {
     this.optionsVisibility[index] = true;
-    this.toastr.warning('LetterLC Row Is In Edit Mode');
+    this.toastr.warning('Opinion Report Row Is In Edit Mode');
   }
+
   handleDelete(id,index:any) {
     console.log(id,index,'dfsfhsfgsdfgdss');
     const message = `Are you sure you want to delete this?`;
@@ -146,7 +152,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
 
   deleteByRoleType(RoleCheckbox:string,id:any,index:any){
     if (RoleCheckbox==''){
-      this.documentService.deleteById({id:id,tableName:'letterlcs'}).subscribe((res) => {
+      this.documentService.deleteById({id:id,tableName:'opinionreports'}).subscribe((res) => {
         console.log(res)
         if (res) {
           this.ngOnInit()
@@ -155,7 +161,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
       var approval_data:any={
         id:id,
-        tableName:'letterlcs',
+        tableName:'opinionreports',
         deleteflag:'-1',
         userdetails:this.USER_DATA['result'],
         status:'pending',
@@ -169,11 +175,29 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     }
   }
 
-
   exportToExcel() {
     const ws: xlsx.WorkSheet = xlsx.utils.table_to_sheet(this.epltable.nativeElement);
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
-    xlsx.writeFile(wb, 'LetterOfCredit.xlsx');
+    xlsx.writeFile(wb, 'OpinionReport.xlsx');
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

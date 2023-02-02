@@ -167,8 +167,11 @@ export class UploadComponent implements OnInit {
   otherDoc: boolean = false;
   insuranceCopy: boolean = false;
   lcCopy: boolean = false;
+  importlcCopy: boolean = false;
   agreement: boolean = false;
   opinionReport: boolean = false;
+  importopinionReport: boolean = false;
+  importagreement:boolean = false;
   pipolist: any;
   item4: any;
   pipoArray: any = [];
@@ -550,7 +553,19 @@ export class UploadComponent implements OnInit {
         this.pipoArr.push(this.pipoOut);
         this.mainBene = this.beneOut;
       }
-    } else if (this.docu == 'tryPartyAgreement') {
+    } else if (this.docu == 'import-lcCopy') {
+      this.documentType1 = 'import';
+      this.documentType = 'import-lcCopy';
+      this.documentType1 = 'import';
+      if (this.route.snapshot.paramMap.get('pipo_id')) {
+        this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
+        this.beneOut = this.route.snapshot.paramMap.get('bene');
+        let x = 'PI' + '-' + this.pipoOut + '-' + this.beneOut;
+        this.arrayData.push(x);
+        this.pipoArr.push(this.pipoOut);
+        this.mainBene = this.beneOut;
+      }
+    }else if (this.docu == 'tryPartyAgreement') {
       if (this.file == 'import') {
         this.documentType1 = 'import';
         this.documentType = 'tryPartyAgreement';
@@ -586,10 +601,34 @@ export class UploadComponent implements OnInit {
         this.pipoArr.push(this.pipoOut);
         this.mainBene = this.beneOut;
       }
+    } else if (this.docu == 'import-agreement') {
+      this.documentType1 = 'import';
+      this.documentType = 'import-agreement';
+      this.documentType1 = 'import';
+      if (this.route.snapshot.paramMap.get('pipo_id')) {
+        this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
+        this.beneOut = this.route.snapshot.paramMap.get('bene');
+        let x = 'PI' + '-' + this.pipoOut + '-' + this.beneOut;
+        this.arrayData.push(x);
+        this.pipoArr.push(this.pipoOut);
+        this.mainBene = this.beneOut;
+      }
     } else if (this.docu == 'opinionReport') {
       this.documentType1 = 'export';
       this.documentType = 'opinionReport';
       this.documentType1 = 'export';
+      if (this.route.snapshot.paramMap.get('pipo_id')) {
+        this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
+        this.beneOut = this.route.snapshot.paramMap.get('bene');
+        let x = 'PI' + '-' + this.pipoOut + '-' + this.beneOut;
+        this.arrayData.push(x);
+        this.pipoArr.push(this.pipoOut);
+        this.mainBene = this.beneOut;
+      }
+    } else if (this.docu == 'import-opinionReport') {
+      this.documentType1 = 'import';
+      this.documentType = 'import-opinionReport';
+      this.documentType1 = 'import';
       if (this.route.snapshot.paramMap.get('pipo_id')) {
         this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
         this.beneOut = this.route.snapshot.paramMap.get('bene');
@@ -729,7 +768,19 @@ export class UploadComponent implements OnInit {
         this.pipoArr.push(this.pipoOut);
         this.mainBene = this.beneOut;
       }
-    } else if (this.docu == 'packingList') {
+    } else if (this.docu == 'import-destruction') {
+      this.documentType1 = 'import';
+      this.documentType = 'import-destruction';
+      this.documentType1 = 'import';
+      if (this.route.snapshot.paramMap.get('pipo_id')) {
+        this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
+        this.beneOut = this.route.snapshot.paramMap.get('bene');
+        let x = 'PI' + '-' + this.pipoOut + '-' + this.beneOut;
+        this.arrayData.push(x);
+        this.pipoArr.push(this.pipoOut);
+        this.mainBene = this.beneOut;
+      }
+    }else if (this.docu == 'packingList') {
       this.documentType1 = 'export';
       this.documentType = 'packingList';
       this.documentType1 = 'export';
@@ -1745,8 +1796,11 @@ export class UploadComponent implements OnInit {
               //this.pipoData[`${this.pipoDoc}`] = args[1].data
               console.log('king123');
               console.log(data);
-
-              this.router.navigate(['/home/destruction']);
+              if (this.documentType1 == 'import') {
+                this.router.navigate(['/home/import-destruction']);
+              } else {
+                this.router.navigate(['/home/destruction']);
+              }
               console.log('redirectindex', this.redirectindex);
               console.log('redirectinpage', this.redirectpage);
               console.log('redirectid', this.redirectid);
@@ -2020,10 +2074,8 @@ export class UploadComponent implements OnInit {
             (data) => {
               console.log('king123');
               console.log(data);
-              if (this.retururl) {
-                let url = this.retururl;
-                this.sharedData.changeretunurl('');
-                this.router.navigate(['/home/letterofcredit-lc']);
+              if (this.documentType1 == 'import') {
+                this.router.navigate(['/home/letterofcredit-import-lc']);
               } else {
                 this.router.navigate(['/home/letterofcredit-lc']);
               }
@@ -2061,10 +2113,15 @@ export class UploadComponent implements OnInit {
             (data) => {
               console.log('king123');
               console.log(data);
-              if (this.retururl) {
-                let url = this.retururl;
-                this.sharedData.changeretunurl('');
-                this.router.navigate(['/home/master-services']);
+              // if (this.retururl) {
+              //   let url = this.retururl;
+              //   this.sharedData.changeretunurl('');
+              //   this.router.navigate(['/home/master-services']);
+              // } else {
+              //   this.router.navigate(['/home/master-services']);
+              // }
+              if (this.documentType1 == 'import') {
+                this.router.navigate(['/home/import-master-services']);
               } else {
                 this.router.navigate(['/home/master-services']);
               }
@@ -2103,13 +2160,19 @@ export class UploadComponent implements OnInit {
             (data) => {
               console.log('king123');
               console.log(data);
-              if (this.retururl) {
-                let url = this.retururl;
-                this.sharedData.changeretunurl('');
-                this.router.navigate(['/home/opinion-report']);
+              // if (this.retururl) {
+              //   let url = this.retururl;
+              //   this.sharedData.changeretunurl('');
+              //   this.router.navigate(['/home/opinion-report']);
+              // } else {
+              //   this.router.navigate(['/home/opinion-report']);
+              // }
+              if (this.documentType1 == 'import') {
+                this.router.navigate(['/home/import-opinion-report']);
               } else {
                 this.router.navigate(['/home/opinion-report']);
               }
+
             },
             (error) => {
               console.log('error');
@@ -2217,6 +2280,8 @@ export class UploadComponent implements OnInit {
           this.commercial = true;
         } else if (this.documentType === 'destruction') {
           this.destruction = true;
+        } else if (this.documentType === 'import-destruction') {
+          this.destruction = true;  
         } else if (this.documentType === 'billOfExchange') {
           this.billOfExchange = true;
         } else if (this.documentType === 'import-billOfExchange') {
@@ -2229,10 +2294,16 @@ export class UploadComponent implements OnInit {
           this.insuranceCopy = true;
         } else if (this.documentType === 'lcCopy') {
           this.lcCopy = true;
+        } else if (this.documentType === 'import-lcCopy') {
+          this.importlcCopy = true;
         } else if (this.documentType === 'agreement') {
           this.agreement = true;
+        } else if (this.documentType === 'import-agreement') {
+          this.importagreement = true;
         } else if (this.documentType === 'opinionReport') {
           this.opinionReport = true;
+        } else if (this.documentType === 'import-opinionReport') {
+          this.importopinionReport = true;
         } else if (this.documentType === 'packingList') {
           this.packingList = true;
         } else if (this.documentType === 'otherDoc') {

@@ -100,7 +100,12 @@ import { PhoneValidatorDirective } from './Validator/phone/phone-validator.direc
 import { EditRemittanceComponent } from './edit-remittance/edit-remittance.component';
 import { RemittanceSummaryComponent } from './remittance-summary/remittance-summary.component';
 import { AddRemittanceComponent } from './add-remittance/add-remittance.component';
+import { ImportOpinionReportsComponent } from "./import-opinion-reports/import-opinion-reports.component";
+
 import {EditCompanyComponent} from "./edit-company/edit-company.component";
+import { LetterOfCreditImportLCComponent } from "./letter-of-credit-import-lc/letter-of-credit-import-lc.component";
+import { MasterServiceComponent } from "./master-service/master-service.component";
+import { ImportMasterServiceComponent } from "./import-master-service/import-master-service.component";
 
 @NgModule({
   declarations: [
@@ -182,6 +187,7 @@ import {EditCompanyComponent} from "./edit-company/edit-company.component";
           { path: "commercial", loadChildren: () => import('./commercial/commercial.module').then(mod => mod.CommercialModule),canActivate:[MemberGuard] },
           { path: "import-commercial", loadChildren: () => import('./import-commercial/import-commercial.module').then(mod => mod.ImportCommercialModule),canActivate:[MemberGuard] },
           { path: "destruction", loadChildren: () => import('./destruction/destruction.module').then(mod => mod.DestructionModule),canActivate:[MemberGuard] },
+          { path: "import-destruction", loadChildren: () => import('./import-destruction/import-destruction.module').then(mod => mod.ImportDestructionModule),canActivate:[MemberGuard] },
           { path: "bill-of-exchange", loadChildren: () => import('./bill-of-exchange/bill-of-exchange.module').then(mod => mod.BillOfExchangeModule),canActivate:[MemberGuard] },
           { path: "import-bill-of-exchange", loadChildren: () => import('./import-bill-of-exchange/import-bill-of-exchange.module').then(mod => mod.ImportBillOfExchangeModule),canActivate:[MemberGuard] },
           { path: "airway-bl-copy", loadChildren: () => import('./airway-blcopy/airway-blcopy.module').then(mod => mod.AirwayBlcopyModule),canActivate:[MemberGuard] },
@@ -189,9 +195,12 @@ import {EditCompanyComponent} from "./edit-company/edit-company.component";
           { path: "inward-remittance-advice", loadChildren: () => import('./inward-remittance-advice/inward-remittance-advice.module').then(mod => mod.InwardRemittanceAdviceModule),canActivate:[MemberGuard] },
           { path: "outward-remittance-advice", loadChildren: () => import('./import-outward-remittance-sheet/outward-remittance-advice.module').then(mod => mod.OutwardRemittanceAdviceModule),canActivate:[MemberGuard] },
           { path: "opinion-report", loadChildren: () => import('./opinion-reports/opinion-reports.module').then(mod => mod.OpinionReportsModule),canActivate:[MemberGuard] },
+          { path: "import-opinion-report", loadChildren: () => import('./import-opinion-reports/import-opinion-reports.module').then(mod => mod.ImportOpinionReportsModule),canActivate:[MemberGuard] },
           { path: "try-party", loadChildren: () => import('./try-party-agreements/try-party-agreements.module').then(mod => mod.TryPartyAgreementsModule),canActivate:[MemberGuard] },
           { path: "master-services", loadChildren: () => import('./master-service/master-service.module').then(mod => mod.MasterServiceModule),canActivate:[MemberGuard] },
+          { path: "import-master-services", loadChildren: () => import('./import-master-service/import-master-service.module').then(mod => mod.ImportMasterServiceModule),canActivate:[MemberGuard] },
           { path: "letterofcredit-lc", loadChildren: () => import('./letter-of-credit-export-lc/letter-of-credit-export-lc.module').then(mod => mod.LetterOfCreditExportLcModule),canActivate:[MemberGuard] },
+          { path: "letterofcredit-import-lc", loadChildren: () => import('./letter-of-credit-import-lc/letter-of-credit-import-lc.module').then(mod => mod.LetterOfCreditImportLCModule),canActivate:[MemberGuard] },
           { path: "insurance-document", loadChildren: () => import('./insurance-document/insurance-document.module').then(mod => mod.InsuranceDocumentModule),canActivate:[MemberGuard] },
           { path: "debit-note", loadChildren: () => import('./debit-note/debit-note.module').then(mod => mod.DebitNoteModule),canActivate:[MemberGuard] },
           { path: "credit-note", loadChildren: () => import('./credit-note/credit-note.module').then(mod => mod.CreditNoteModule),canActivate:[MemberGuard] },
@@ -496,6 +505,30 @@ import {EditCompanyComponent} from "./edit-company/edit-company.component";
           {
             path: "ImportBillOfExchange",
             component:ImportBillOfExchangeComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "ImportOpinionReports",
+            component:ImportOpinionReportsComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "letterOfCreditLCImport",
+            component: LetterOfCreditImportLCComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "MasterService",
+            component: MasterServiceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "ImportMasterService",
+            component: ImportMasterServiceComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
