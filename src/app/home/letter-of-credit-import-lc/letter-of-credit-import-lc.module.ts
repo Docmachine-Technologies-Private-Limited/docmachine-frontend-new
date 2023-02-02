@@ -29,4 +29,4 @@ import {LetterOfCreditImportLCComponent} from "./letter-of-credit-import-lc.comp
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [],
 })
-export class LetterOfCreditImportLcModule { }
+export class LetterOfCreditImportLCModule { }

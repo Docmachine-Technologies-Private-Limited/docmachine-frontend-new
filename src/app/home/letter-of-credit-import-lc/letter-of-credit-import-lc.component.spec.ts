@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LetterOfCreditImportLcComponent } from './letter-of-credit-import-lc.component';
+import { LetterOfCreditImportLCComponent } from './letter-of-credit-import-lc.component';
 
-describe('LetterOfCreditImportLcComponent', () => {
-  let component: LetterOfCreditImportLcComponent;
-  let fixture: ComponentFixture<LetterOfCreditImportLcComponent>;
+describe('LetterOfCreditImportLCComponent', () => {
+  let component: LetterOfCreditImportLCComponent;
+  let fixture: ComponentFixture<LetterOfCreditImportLCComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LetterOfCreditImportLcComponent ]
+      declarations: [ LetterOfCreditImportLCComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LetterOfCreditImportLcComponent);
+    fixture = TestBed.createComponent(LetterOfCreditImportLCComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

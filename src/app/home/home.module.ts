@@ -197,7 +197,7 @@ import { LetterOfCreditImportLCComponent } from "./letter-of-credit-import-lc/le
           { path: "try-party", loadChildren: () => import('./try-party-agreements/try-party-agreements.module').then(mod => mod.TryPartyAgreementsModule),canActivate:[MemberGuard] },
           { path: "master-services", loadChildren: () => import('./master-service/master-service.module').then(mod => mod.MasterServiceModule),canActivate:[MemberGuard] },
           { path: "letterofcredit-lc", loadChildren: () => import('./letter-of-credit-export-lc/letter-of-credit-export-lc.module').then(mod => mod.LetterOfCreditExportLcModule),canActivate:[MemberGuard] },
-          { path: "letterofcredit-import-lc", loadChildren: () => import('./letter-of-credit-import-lc/letter-of-credit-import-lc.module').then(mod => mod.LetterOfCreditImportLcModule),canActivate:[MemberGuard] },
+          { path: "letterofcredit-import-lc", loadChildren: () => import('./letter-of-credit-import-lc/letter-of-credit-import-lc.module').then(mod => mod.LetterOfCreditImportLCModule),canActivate:[MemberGuard] },
           { path: "insurance-document", loadChildren: () => import('./insurance-document/insurance-document.module').then(mod => mod.InsuranceDocumentModule),canActivate:[MemberGuard] },
           { path: "debit-note", loadChildren: () => import('./debit-note/debit-note.module').then(mod => mod.DebitNoteModule),canActivate:[MemberGuard] },
           { path: "credit-note", loadChildren: () => import('./credit-note/credit-note.module').then(mod => mod.CreditNoteModule),canActivate:[MemberGuard] },
