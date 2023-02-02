@@ -493,14 +493,26 @@ export class DocumentService {
       httpOptions
     );
   }
-
-  getPipo() {
+  addInward_remittance(Inward_remittance) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
+    return this.http.post(`${this.api_base}/Inward_remittance/post`,{ Inward_remittance:Inward_remittance },httpOptions);
+  }
+
+  getPipo() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {headers: new HttpHeaders({ Authorization: this.authToken })};
     return this.http.get(`${this.api_base}/pipo/get`, httpOptions);
+  }
+  getInward_remittance() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {headers: new HttpHeaders({ Authorization: this.authToken })};
+    return this.http.get(`${this.api_base}/Inward_remittance/get`, httpOptions);
   }
 
   getPipoByType(type) {

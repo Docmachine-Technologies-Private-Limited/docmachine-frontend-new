@@ -241,6 +241,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   dataSource:any=[];
   OLD_dataSource:any=[];
   USER_DATA:any=[];
+  STORE_URL:any=[];
 
  async ngOnInit() {
     this.wininfo.set_controller_of_width(250,'.content_top_common')
@@ -455,7 +456,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
                 value1.changingThisBreaksApplicationSecurity
               ))
             }
-            this.mainDoc[i] = gene
+            this.mainDoc[i] = gene;
             console.log("Line no. 301", this.mainDoc)
             if (value.generateDoc1) {
               console.log('hshshsh')
@@ -846,20 +847,19 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     for (let item of this.itemArray) {
       for (let pipo of this.selectPIPO) {
         console.log("item.doc")
-
         if (item.pi_poNo === pipo) {
           buyerValue = item.buyerName
           if (item.doc) {
             generateDoc1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
-
               item.doc  //item.doc is Profoma Invoice document
             ))
+            this.STORE_URL.push(item.doc)
           }
           else {
             generateDoc1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
-
               item.doc1 //item.doc1 is purchase order document
             ))
+            this.STORE_URL.push(item.doc1)
           }
         }
       }
@@ -875,10 +875,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log("this is pipo", pipoValue)
     this.mainDoc[j] = generateDoc1
     console.log("line no 664", this.mainDoc[j])
-    // for(pipo of this.mainDoc[j]){
-    //   this.mainDoc4.push(pipo)
-    // }
-    // console.log("line no. 671", this.mainDoc4)
 
     this.newTask[j] = {
       pipoNumbers: this.selectPIPO,
@@ -1932,7 +1928,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     const pdfBytes = await pdfDoc.save()
     console.log(pdfDoc, "pdf")
     console.log(pdfBytes, "pdfBytes")
-    this.getPdfFile(pdfBytes);
     console.log(form, "form")
     var base64String = this._arrayBufferToBase64(pdfBytes)
 
@@ -1940,7 +1935,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
     const url = window.URL.createObjectURL(new Blob([pdfBytes], {type: 'application/pdf'}));
     console.log(url,'dsjkfhsdkjfsdhfksfhsd')
-// this.sendFileDownload()
     this.formerge = x
     this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
     this.newTask[0].generateDoc1 = x
@@ -3033,14 +3027,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.newTask[0].generateDoc1 = x
     console.log('jhshshjshj', this.newTask[0])
     console.log("line no. 1735asdsadsa", this.value)
-    // const link: any = document.createElement("a");
-    // link.id = "dwnldLnk";
-    // link.style = "display:none;";
-    // document.body.appendChild(link);
-    // const dlnk: any = document.getElementById("dwnldLnk");
-    // dlnk.href = x;
-    // dlnk.download = 'file.pdf';
-    // dlnk.click();
+    const link: any = document.createElement("a");
+    link.id = "dwnldLnk";
+    link.style = "display:none;";
+    document.body.appendChild(link);
+    const dlnk: any = document.getElementById("dwnldLnk");
+    dlnk.href = x;
+    dlnk.download = 'file.pdf';
+    dlnk.click();
 
   }
 
@@ -3504,7 +3498,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
   showPreview(id:any) {
     // this.PREVIWES_URL='./../../assets/DXB.pdf'
-    console.log("2214 line", this.mainDoc)
+    console.log("2214 line",this.STORE_URL)
     this.bgColor = true
     this.newDone = true
     this.jQuery_Iframe_Style();
@@ -3767,19 +3761,13 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log("Line 2488", pipo,this.selectedPurpose,this.mainDoc)
     this.selectedPdfs = [];
     console.log('line no. 2467', this.selectedPdfs);
-
-    if (pipo.changingThisBreaksApplicationSecurity) {
-      this.selectedPdfs.push(
-        pipo.changingThisBreaksApplicationSecurity
-      );
+    this.selectedPdfs[0]=this.value?.changingThisBreaksApplicationSecurity;
+    for (let index = 0; index < this.STORE_URL.length; index++) {
+      this.selectedPdfs.push(this.STORE_URL[index])
     }
-
     console.log('line no. 2493', this.selectedPdfs);
 
-
-    this.modalService
-      .open(content2, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
-      .result.then(
+    this.modalService.open(content2, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then(
         (result) => {
           this.closeResult = `Closed with: ${result}`;
         },
@@ -3797,36 +3785,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     } else if (!e.target.checked) {
       this.selectedPdfs = this.selectedPdfs.filter((item) => item !== value.changingThisBreaksApplicationSecurity);
     }
-
     console.log("line no. 2495", this.selectedPdfs);
   }
-
-  addPdfToSelectedPdf2(e,urls:any) {
-    console.log(urls,'hsdgdhfgsdjhgfs')
-    if (e.target.checked) {
-      this.generateChecked = true
-    }
-    else {
-      this.generateChecked = false
-    }
-  }
-  async MERGE_ALL_PDFS(urls:any) {
-    const pdfDoc = await PDFDocument.create();
-    const numDocs = urls.length;
-    for(var i = 0; i < numDocs; i++) {
-        const donorPdfBytes = await fetch(urls[i]).then(res => res.arrayBuffer());
-        const donorPdfDoc = await PDFDocument.load(donorPdfBytes);
-        const docLength = donorPdfDoc.getPageCount();
-        for(var k = 0; k < docLength; k++) {
-            const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [k]);
-            pdfDoc.addPage(donorPage);
-        }
-    }
-
-    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',')+1);
-    console.log(pdfDataUri,data_pdf,'data_pdf');
-}
 
   mergeAllPDFs = async (type: String) => {
     let urls = this.selectedPdfs;
@@ -3834,93 +3794,62 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     const numDocs = urls.length;
     const pdfDoc = await PDFDocument.create();
 
-    var listFile:any=[];
-    for (var i = 0; i < numDocs; i++) {
-      listFile.push(urls[i].split('base64,')[1]);
-    }
-    this.userService.mergePdfChecking({listFile:listFile}).subscribe((res: any) => {
-        console.log('res', res);
-      },(err) => console.log('Failed to fetch the pdf')
-    );
+    var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
+      if (currentpage < docLength) {
+        console.log('Inside Page', currentpage, 'total pages', docLength);
+        const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [currentpage]);
+        pdfDoc.addPage(donorPage);
+        await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
+      }
+    };
+    var appendEachFile = async (bytes) => {
+      const donorPdfDoc = await PDFDocument.load(bytes);
+      const docLength = donorPdfDoc.getPageCount();
+      console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
+      await appendEachPage(donorPdfDoc, 0, docLength);
+    };
+    var appendAllFiles = async (pdflist, currentfile) => {
+      if (currentfile < numDocs) {
+        await appendEachFile(pdflist[currentfile]);
+        console.log('Inside file', currentfile);
+        await appendAllFiles(pdflist, currentfile + 1);
+      } else {
+        if (type == 'download') {
+          this.downloadAsSingleFile(pdfDoc);
+        } else {
+          this.sendMail2(pdfDoc);
+        }
+      }
+    };
 
-    // this.MERGE_ALL_PDFS(this.selectedPdfs);
-    // // download the single file to local.
-    // // Append each pdfs to a single file
-
-    // var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
-    //   if (currentpage < docLength) {
-    //     console.log('Inside Page', currentpage, 'total pages', docLength);
-    //     const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [currentpage]);
-    //     pdfDoc.addPage(donorPage);
-    //     await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
-    //   }
-    // };
-    // var appendEachFile = async (bytes) => {
-    //   const donorPdfDoc = await PDFDocument.load(bytes);
-    //   const docLength = donorPdfDoc.getPageCount();
-    //   console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
-    //   await appendEachPage(donorPdfDoc, 0, docLength);
-    // };
-    // var appendAllFiles = async (pdflist, currentfile) => {
-    //   if (currentfile < numDocs) {
-    //     await appendEachFile(pdflist[currentfile]);
-    //     console.log('Inside file', currentfile);
-    //     await appendAllFiles(pdflist, currentfile + 1);
-    //   } else {
-    //     if (type == 'download') {
-    //       this.downloadAsSingleFile(pdfDoc);
-    //     } else {
-    //       this.sendMail2(pdfDoc);
-    //     }
-    //   }
-    // };
-
-    // // download single file;
-    // let downloadEachFile = (filename) => {
-    //   return new Promise((resolve, reject) => {
-    //     console.log(filename,'djgdfgjdfghfdgdfgkdfgdf')
-    //     this.userService.mergePdfChecking(filename).subscribe(
-    //       (res: any) => {
-    //         console.log('res', res);
-    //         resolve(res.arrayBuffer());
-    //       },
-    //       (err) => reject('Failed to fetch the pdf')
-    //     );
-    //   });
-    // };
-    // // download all the pdfs
-    // let downloadAllFiles = () => {
-    //   var promises = [];
-    //   var listFile:any=[];
-    //   for (var i = 0; i < numDocs; i++) {
-    //     let file = new Blob([urls[i].split('base64,')[1]], { type: 'application/pdf' });
-    //     var fileURL = URL.createObjectURL(file);
-    //     listFile.push(fileURL);
-    //   }
-    //   this.userService.mergePdfChecking({listFile:listFile}).subscribe((res: any) => {
-    //       console.log('res', res);
-    //     },(err) => console.log('Failed to fetch the pdf')
-    //   );
-    //   // for (var i = 0; i < numDocs; i++) {
-    //   //   // saveAs(urls[i], 'temp.pdf');
-    //   //   // this.blobToSaveAs('temptest.pdf',urls[i]);
-    //   //   let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
-    //   //   console.log(urls[i].split('base64,')[1],'finame');
-    //   //   promises.push(downloadEachFile({buffer:urls[i].split('base64,')[1],filename:'temp'+i+'.pdf'}));
-    //   // }
-    //   Promise.all(promises).then(
-    //     (pdfList) => {
-    //       appendAllFiles(pdfList, 0);
-    //       console.log('pdfList2', pdfList);
-    //     },
-    //     (error) => {
-    //       // write code to send error to user
-    //       // res.send({"error": "failed to fetch the document try again later/ contact administrator"})''
-    //     }
-    //   );
-    // };
-    // downloadAllFiles();
-
+    // download single file;
+    let downloadEachFile = (filename) => {
+      return new Promise((resolve, reject) => {
+        this.userService.mergePdf(filename).subscribe((res: any) => {
+            console.log('downloadEachFile', res);
+            resolve(res.arrayBuffer());
+          },
+          (err) => reject('Failed to fetch the pdf')
+        );
+      });
+    };
+    // download all the pdfs
+    let downloadAllFiles = () => {
+      var promises = [];
+      for (var i = 0; i < numDocs; i++) {
+        let filename = urls[i];
+        promises.push(downloadEachFile(filename));
+      }
+      Promise.all(promises).then((pdfList) => {
+          appendAllFiles(pdfList, 0);
+          console.log('pdfList2', pdfList);
+        },(error) => {
+          // write code to send error to user
+          // res.send({"error": "failed to fetch the document try again later/ contact administrator"})''
+        }
+      );
+    };
+    downloadAllFiles();
   };
   validURL(str:any) {
     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
