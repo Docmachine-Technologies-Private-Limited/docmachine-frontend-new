@@ -1043,6 +1043,14 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/billOfExchange/get`, httpOptions);
   }
+  getBillExchangefile(type:string) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/billOfExchange/filetype`, {file:type},httpOptions);
+  }
 
   getBillExchangeByBillExchangeValue(id) {
     this.loadFromLocalStorage();
@@ -1101,6 +1109,14 @@ export class DocumentService {
       };
 
       return this.http.get(`${this.api_base}/destruction/get`, httpOptions);
+    }
+    getDestructionfile(type:string) {
+      this.loadFromLocalStorage();
+      console.log(this.authToken);
+      const httpOptions = {
+        headers: new HttpHeaders({ Authorization: this.authToken }),
+      };
+      return this.http.post(`${this.api_base}/destruction/filetype`, {file:type},httpOptions);
     }
 
     getDestructionByDestructionValue(id) {
@@ -1449,7 +1465,14 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/letterLC/get`, httpOptions);
   }
-
+  getLetterLCfile(type:string) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/letterLC/filetype`, {file:type},httpOptions);
+  }
   getLetterLCByLetterLCValue(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -1508,7 +1531,14 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/masterService/get`, httpOptions);
   }
-
+  getMasterServiceFile(type:string) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/masterService/filetype`, {file:type},httpOptions);
+  }
   getMasterSerByMasterSerValue(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -1567,6 +1597,14 @@ export class DocumentService {
     };
 
     return this.http.get(`${this.api_base}/opinionReport/get`, httpOptions);
+  }
+  getOpinionReportfile(type:string) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/opinionReport/filetype`, {file:type},httpOptions);
   }
 
   getOpinionByOpinionValue(id) {

@@ -93,7 +93,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of item1; let i = index" [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                        <tr class="table-row" *ngFor="let data of item; let i = index" [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
 
                                             <!-- (click)="

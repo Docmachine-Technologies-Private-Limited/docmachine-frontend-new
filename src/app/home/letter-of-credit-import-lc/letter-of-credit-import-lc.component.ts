@@ -1,3 +1,4 @@
+
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {DocumentService} from 'src/app/service/document.service';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -13,11 +14,11 @@ import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprrov
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
 @Component({
-  selector: 'app-letter-of-credit-export-lc',
-  templateUrl: './letter-of-credit-export-lc.component.html',
-  styleUrls: ['./letter-of-credit-export-lc.component.scss']
+  selector: 'app-letter-of-credit-import-lc',
+  templateUrl: './letter-of-credit-import-lc.component.html',
+  styleUrls: ['./letter-of-credit-import-lc.component.scss']
 })
-export class LetterOfCreditExportLCComponent implements OnInit {
+export class LetterOfCreditImportLCComponent implements OnInit {
 
   @ViewChild('epltable', {static: false}) epltable: ElementRef;
   public item: any=[];
@@ -52,13 +53,12 @@ export class LetterOfCreditExportLCComponent implements OnInit {
   ) {
   }
 
-
   async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
     this.item=[];
-      this.documentService.getLetterLCfile("export").subscribe(
+      this.documentService.getLetterLCfile("import").subscribe(
         (res: any) => {
           this.item=res?.data;
           console.log(res,'getLetterLCfile');
@@ -66,6 +66,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
         (err) => console.log(err)
         );
       }
+
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
       return x.pi_poNo;
@@ -105,8 +106,8 @@ export class LetterOfCreditExportLCComponent implements OnInit {
 
   letterOfCredit() {
     console.log('upload');
-    //this.sharedData.changeretunurl('home/letterofcredit-lc')
-    this.router.navigate(['home/upload', {file: 'export', document: 'lcCopy'}]);
+   // this.sharedData.changeretunurl('home/letterofcredit-lc')
+    this.router.navigate(['home/upload', {file: 'import', document: 'import-lcCopy'}]);
   }
 
   toSave(data, index) {
@@ -177,3 +178,11 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     xlsx.writeFile(wb, 'LetterOfCredit.xlsx');
   }
 }
+
+
+
+
+
+
+
+

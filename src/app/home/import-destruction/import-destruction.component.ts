@@ -1,3 +1,4 @@
+
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
@@ -14,12 +15,12 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog
 
 
 @Component({
-  selector: 'app-destruction',
-  templateUrl: './destruction.component.html',
-  styleUrls: ['./destruction.component.scss']
+  selector: 'app-import-destruction',
+  templateUrl: './import-destruction.component.html',
+  styleUrls: ['./import-destruction.component.scss']
 })
-export class DestructionComponent implements OnInit {
 
+export class ImportDestructionComponent implements OnInit {
   @ViewChild('destruction', { static: false }) destruction: ElementRef;
   public item = [];
   public item1 = [];
@@ -54,38 +55,20 @@ onclick() {
   ) { }
 
 
-  // async ngOnInit() {
-  //   this.wininfo.set_controller_of_width(270,'.content-wrap')
-  //   this.USER_DATA = await this.userService.getUserDetail();
-  //   console.log("this.USER_DATA", this.USER_DATA)
-  //   this.item=[];
-  //     this.documentService.getDestruction().subscribe(
-  //       (res: any) => {
-  //         for (let value of res.data) {
-  //           if (value['file'] == 'export') {
-  //             this.item.push(value);
-  //           }
-  //         }
-  //         console.log(res,'yuyuyuyuyuyuyuuy')
-  //       },
-  //       (err) => console.log(err)
-  //     );
-
-  //   }
-
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270,'.content-wrap');
+    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA);
-    this.item = [];
-    this.documentService.getDestructionfile("export").subscribe(
-      (res: any) => {
-        this.item=res?.data;
-        console.log(res,'getDestructionfile');
-      },
-      (err) => console.log(err)
-      );
-    }
+    console.log("this.USER_DATA", this.USER_DATA)
+    this.item=[];
+      this.documentService.getDestructionfile("import").subscribe(
+        (res: any) => {
+          this.item=res?.data;
+          console.log(res,'getDestructionfile');
+        },
+        (err) => console.log(err)
+        );
+      }
+
     openDestruction(content){
     this.modalService
     .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
@@ -173,8 +156,8 @@ deleteByRoleType(RoleCheckbox:string,id:any,index:any){
 }
 
 newDest(){
-this.sharedData.changeretunurl('home/destruction')
-this.router.navigate(['home/upload', { file: 'export', document: 'destruction' }]);
+//this.sharedData.changeretunurl('home/destruction')
+this.router.navigate(['home/upload', { file: 'import', document: 'import-destruction' }]);
 }
 
 exportToExcel() {
@@ -192,3 +175,11 @@ this.toastr.warning('Destruction Certificate Is In Edit Mode');
 
 
 }
+
+
+
+
+
+
+
+
