@@ -82,22 +82,13 @@ export class UploadDocComponent implements OnInit {
   redirectpage: any;
   buyerDetail34: any;
   retururl;
-  DTO_FORM={
-    selectbankname:'',
-    Inwardreferencenumber:'',
-    Amountinward:'',
-    Currency:'',
-    Remittername:'',
-    Billlodgmentnumber:'',
-    Inwardamountfordisposal:'',
-    Creditaccountnumber:'',
-    Chargesaccountnumber:''
-  }
   bank:any=[];
   CURRENCY_LIST: any = [];
   uploading:boolean=false;
   iframeVisible:boolean=false;
   publicUrl:any ='';
+  formSubmitted:boolean=false;
+
   constructor(
     @Inject(PLATFORM_ID) public platformId,
 
@@ -220,6 +211,11 @@ export class UploadDocComponent implements OnInit {
   public onChangeIssues(data:any,event:any): void {
     console.log(data,'onChangeIssues')
   }
+  submit(e) {
+    this.uploading = true;
+    console.log(e[0].size,'ajbkab')
+    this.runProgressBar(e[0].size);
+  }
 dataPdf:any=[];
  async onUploadSuccess(args: any) {
   console.log('onUploadSuccess:', args);
@@ -261,14 +257,21 @@ dataPdf:any=[];
      console.log('-------------------->Selected Document type', this.publicUrl);
   }
   onUpload(e){
+    e.value.BankName=e.value?.BankName?.Bank_Name!=undefined?e.value?.BankName?.Bank_Name:e.value?.BankName
+    e.value.Charges_Account_Number=e.value?.Charges_Account_Number?.accNumber!=undefined?e.value?.Charges_Account_Number?.accNumber:e.value?.Charges_Account_Number
+    e.value.currency =e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;
     console.log(e,'onUpload')
-    // if (this.validation(data,['Select bank name','undefined','null','','Select Currency'])) {
-    //   this.documentService.addInward_remittance(data).subscribe((res:any)=>{
-    //     if (res){
-    //       // this.router.navigate(['/home/export-home'])
-    //     }
-    //   })
-    // }
+    this.formSubmitted=true;
+    if (e.status=='INVALID') {
+      return;
+    }
+    e.value.file=this.publicUrl?.changingThisBreaksApplicationSecurity;
+    this.documentService.addInward_remittance(e.value).subscribe((res:any)=>{
+      console.log(res,'addInward_remittance')
+      if (res.data.length!=0){
+        this.router.navigate(['/home/export-home'])
+      }
+    })
   }
   replaceText(text:any,repl_text:any){
     return text!=undefined?(text.replace(repl_text,'')).trim():''
@@ -283,21 +286,12 @@ dataPdf:any=[];
     return '';
   }
   }
-  validation(data:any,validationData:any){
-    var counter=0;
-    for (const key in data) {
-      var inputname=data[key];
-      if (validationData.includes(inputname.value)) {
-        inputname.style.border='1px solid red'
-        counter++;
-      }else{
-        inputname.style.border='1px solid #ced4da'
+  validation(e:any,validationData:any){
+    var temp:any=[];
+    for (const key in e) {
+      if (validationData.includes(e.value)) {
+          temp.push(`Plese`)
       }
-    }
-    if (counter==0) {
-      return true;
-    }else{
-      return false;
     }
   }
   ObjectLength(object:any){

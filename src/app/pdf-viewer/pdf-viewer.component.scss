@@ -1,0 +1,64 @@
+.pdf-viewer-wrap {
+  display: flex;
+  height: 95vh;
+  flex-direction: column;
+  gap: 5px;
+  box-shadow: 0px 0px 2px 2px #cfcfcf;
+  border-radius: 10px;
+}
+
+.pdf-viewer-controls-wrap {
+  width: 100%;
+  text-align: center;
+  background: black;
+  display: flex;
+  align-items: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.pdfv-control {
+  padding: 10px;
+  color: white;
+  font-size: 15px;
+}
+
+.pdfv-control button {
+  background: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pdf-viewer-controls {
+  overflow: auto;
+  display: flex;
+  border-top-right-radius: 10px;
+  align-items: center;
+  gap: 5px;
+}
+
+.pdf-viewer-viewer-window {
+  width: 100%;
+  overflow: auto;
+  height: 100%;
+}
+
+.pdf-viewer-controls-wrap h2 {
+  color: white;
+  margin: auto;
+  margin-left: 10px;
+  font-size: 20px;
+}
+
+.pdfv-control select {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  box-shadow: none;
+}
+
+.pdf-viewer ::ng-deep .ng2-pdf-viewer-container {
+  overflow: unset !important;
+}

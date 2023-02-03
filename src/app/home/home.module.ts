@@ -106,6 +106,7 @@ import {EditCompanyComponent} from "./edit-company/edit-company.component";
 import { LetterOfCreditImportLCComponent } from "./letter-of-credit-import-lc/letter-of-credit-import-lc.component";
 import { MasterServiceComponent } from "./master-service/master-service.component";
 import { ImportMasterServiceComponent } from "./import-master-service/import-master-service.component";
+import { PdfViewerModule } from "ng2-pdf-viewer";
 
 @NgModule({
   declarations: [
@@ -157,6 +158,7 @@ import { ImportMasterServiceComponent } from "./import-master-service/import-mas
     NgApexchartsModule,
     ProgressBarModule,
     ReactiveFormsModule,
+    PdfViewerModule,
     RouterModule.forChild([
       {
         path: "",
