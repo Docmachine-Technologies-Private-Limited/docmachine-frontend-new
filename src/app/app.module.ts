@@ -111,6 +111,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         DragDropModule,
         SharedModule,
         SignupModule,
+        HomeModule,
         BsDatepickerModule.forRoot(),
         SigninModule,
         AppRoutingModule,

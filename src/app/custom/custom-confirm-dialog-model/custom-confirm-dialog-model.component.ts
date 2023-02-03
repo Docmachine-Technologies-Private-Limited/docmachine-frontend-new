@@ -2,6 +2,7 @@ import { Component, Injectable, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import $ from 'jquery';
 import { Observable } from 'rxjs';
+import { DocumentService } from 'src/app/service/document.service';
 import { CustomConfirmDialogModelService } from './custom-confirm-dialog-model.service';
 
 
@@ -27,8 +28,10 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     DropDownInput:false
   };
   DATA_RECIVED:any=[];
+  DownloadStatus:boolean=false;
 
   constructor(public CustomConfirmDialogModel:CustomConfirmDialogModelService,
+    public documentService: DocumentService,
     private sanitizer: DomSanitizer) {
     this.HIDE_ALL_MODELS('');
   }
@@ -58,15 +61,15 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     $('.InputConfirmDialog').css('display', 'block');
     this.CustomConfirmDialogModel.CALLBACKS=callback;
   }
-  IframeConfirmDialogModel(titleheader:any,url:any,callback:Function){
+  IframeConfirmDialogModel(titleheader:any,url:any,downloadShow:boolean,callback:Function){
     this.HIDE_ALL_MODELS('IframeModel');
     $('.input-remove').val('');
     this.CustomConfirmDialogModel.titleheader=titleheader;
     this.CustomConfirmDialogModel.url=url;
     $('.iframecustommodel').css('display', 'block');
     this.CustomConfirmDialogModel.CALLBACKS=callback;
-    window.scroll(0,0)
-
+    this.DownloadStatus=downloadShow
+    window.scroll(0,0);
   }
   YesNoDialogModel(titleheader:any,message:any,callback:Function){
     this.HIDE_ALL_MODELS('YesNoDialogModel');
@@ -98,8 +101,5 @@ export class CustomConfirmDialogModelComponent implements OnInit {
   }
   CALLBACKS_CALL(value:any,dump:any){
     this.CustomConfirmDialogModel.CALLBACKS({value:value.Inputdata})
-  }
-  ByPassSecurityTrustResourceUrl(url:any){
-     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }

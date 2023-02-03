@@ -59,7 +59,9 @@
           status:'Rejected',
           deleteflag:'0'
         },i)">Reject</button>
-        <button type="submit" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'],i)">View</button>
+        <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary"
+         (click)="openView(item?.documents,i)">View</button>
+        <button type="submit" *ngIf="item?.Types!='downloadPDF'" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'],i)">View</button>
       </div>
     </td>
     </tr>

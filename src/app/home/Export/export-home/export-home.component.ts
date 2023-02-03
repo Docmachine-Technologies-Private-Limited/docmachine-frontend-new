@@ -891,14 +891,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       pipoUrls: this.mainDoc[j],
       purposeCode: code,
     }
-    console.log("hello there", this.newTask)
-    // this.newTask[i] = {
-    //   pipoNumbers: this.selectPIPO,
-    //   pipoUrls: this.mainDoc[i],
-    //   purposeCode: code,
-    //   generateDoc1: this.data7[i]
-    // }
-    this.jQuery_Iframe_Style()
+    console.log("hello there", this.newTask);
   }
   replaceText(text: any, repl_text: any) {
     return (text.replace(repl_text, '')).trim()
@@ -4137,28 +4130,24 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       return outputText;
     }
   }
-
-  iframeStyle() {
-    const cssLink = document.createElement("link");
-    cssLink.href = "style.css";
-    cssLink.rel = "stylesheet";
-    cssLink.type = "text/css";
-    frames['frame1'].contentWindow.document.body.appendChild(cssLink);
-  }
-  jQuery_Iframe_Style() {
-    console.log($('.iframe-controller').find('#toolbar'), 'hhhjhhjhjjhhj')
-  }
   SendApproval(Status: string, UniqueId: any, url: any) {
+    var temp_doc:any=[];
+    temp_doc[0]='data:application/pdf;base64,'+this.value;
+    temp_doc[1]=this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?.file;
+    for (let index = 0; index < this.mainDoc[0].length; index++) {
+     temp_doc.push(this.mainDoc[0][index]?.changingThisBreaksApplicationSecurity)
+    }
     var approval_data: any = {
       id: UniqueId,
       tableName: 'PI_PO',
       deleteflag: '-1',
       userdetails: this.USER_DATA,
       status: 'pending',
-      dummydata: { doc: url },
+      documents:temp_doc,
       Types: 'downloadPDF',
       FileType: this.USER_DATA?.sideMenu
     }
+    console.log(approval_data,this.mainDoc,'approval_data')
     if (Status == '' || Status == null || Status == 'Rejected') {
       this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
         this.ngOnInit();
