@@ -75,8 +75,8 @@
                                             <label for="exampleInputEmail1" class="form-label">Inward reference number</label>
                                             <input #Inwardreferencenumber type="text" class="form-control" id="Amount"
                                             aria-describedby="emailHelp" placeholder="1187651 80131" autocomplete="off"
-                                            formControlName="Inward_reference_number" ngModel
-                                            [value]="this.removeallSpace2('Uniquedigitldentifier',this.dataPdf)!='' ? this.removeallSpace2('Uniquedigitldentifier',this.dataPdf) : 0">
+                                            formControlName="Inward_reference_number" [ngModel]="this.removeallSpace2('Uniquedigitldentifier',this.dataPdf)!='' ? this.removeallSpace2('Uniquedigitldentifier',this.dataPdf) : 0"
+                                            >
                                             <span class="invalid-feedback" *ngIf="this.MT103_Form.get('Inward_reference_number').hasError('required') &&
                                             (this.formSubmitted || this.MT103_Form.get('Inward_reference_number').touched)">Inward reference number is required
                                            </span>
@@ -84,8 +84,8 @@
                                         <div class="mb-3">
                                           <label for="exampleInputEmail1" class="form-label">Amount</label>
                                           <input #Amount type="number" class="form-control" id="Amount" aria-describedby="emailHelp"
-                                          placeholder="30713.25" autocomplete="off" formControlName="amount" ngModel
-                                           [value]="replaceText(this.dataPdf['Amount'],'32A')==''?0 : replaceText(this.dataPdf['Amount'],'32A')">
+                                          placeholder="30713.25" autocomplete="off" formControlName="amount"
+                                          [ngModel]="replaceText(this.dataPdf['Amount'],'32A')==''?0 : replaceText(this.dataPdf['Amount'],'32A')">
                                            <span class="invalid-feedback" *ngIf="this.MT103_Form.get('amount').hasError('required') &&
                                            (this.formSubmitted || this.MT103_Form.get('amount').touched)">Amount is required
                                           </span>
@@ -107,8 +107,8 @@
                                             <label for="exampleInputEmail1" class="form-label">Remitter name ( as per MT103 )</label>
                                             <input #Remittername type="text" class="form-control" id="Amount" aria-describedby="emailHelp"
                                             placeholder="NORMEKS AMBALAJ SANAYI LE TICARET"
-                                            autocomplete="off" formControlName="Remitter_Name" ngModel
-                                            [value]="replaceText(this.dataPdf['RemittersCustomerName'],'50A/50K')">
+                                            autocomplete="off" formControlName="Remitter_Name"
+                                             [ngModel]="replaceText(this.dataPdf['RemittersCustomerName'],'50A/50K')">
                                             <span class="invalid-feedback" *ngIf="this.MT103_Form.get('Remitter_Name').hasError('required') &&
                                             (this.formSubmitted || this.MT103_Form.get('Remitter_Name').touched)">Remitter Name is required
                                           </span>
@@ -117,8 +117,7 @@
                                             <label for="exampleInputEmail1" class="form-label">Bill lodgment number</label>
                                             <input #Billlodgmentnumber type="text" class="form-control"
                                             id="Amount" aria-describedby="emailHelp" placeholder="Bill lodgment number"
-                                             autocomplete="off" ngModel
-                                              [value]="this.dataPdf['RemittanceInformation']!=undefined?this.dataPdf['RemittanceInformation'] : 0"
+                                             autocomplete="off" [ngModel]="this.dataPdf['RemittanceInformation']!=undefined?this.dataPdf['RemittanceInformation'] : 0"
                                              formControlName="Bill_lodgment_Number">
                                              <span class="invalid-feedback" *ngIf="this.MT103_Form.get('Bill_lodgment_Number').hasError('required') &&
                                              (this.formSubmitted || this.MT103_Form.get('Bill_lodgment_Number').touched)">Bill lodgment Number Name is required
