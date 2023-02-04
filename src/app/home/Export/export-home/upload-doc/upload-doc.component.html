@@ -134,9 +134,12 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Credit account number</label>
-                                            <input #Creditaccountnumber type="text" class="form-control" id="Amount"
-                                             aria-describedby="emailHelp" placeholder="0000 0000 0000 0000" ngModel
-                                             formControlName="Credit_Account_Number" autocomplete="off">
+                                            <ng-select
+                                            [items]="this.BANK_DETAILS"
+                                            bindLabel="value"
+                                            [multiple]="false"
+                                            placeholder="0000 0000 0000 0000"
+                                            formControlName="Credit_Account_Number" autocomplete="off" ngModel #Credit_account_number></ng-select>
                                              <span class="invalid-feedback" *ngIf="this.MT103_Form.get('Credit_Account_Number').hasError('required') &&
                                              (this.formSubmitted || this.MT103_Form.get('Credit_Account_Number').touched)">Credit Account Number is required
                                            </span>

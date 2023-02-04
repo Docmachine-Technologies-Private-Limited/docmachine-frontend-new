@@ -259,6 +259,7 @@ dataPdf:any=[];
   onUpload(e){
     e.value.BankName=e.value?.BankName?.Bank_Name!=undefined?e.value?.BankName?.Bank_Name:e.value?.BankName
     e.value.Charges_Account_Number=e.value?.Charges_Account_Number?.accNumber!=undefined?e.value?.Charges_Account_Number?.accNumber:e.value?.Charges_Account_Number
+    e.value.Credit_Account_Number=e.value?.Credit_Account_Number?.accNumber!=undefined?e.value?.Credit_Account_Number?.accNumber:e.value?.Credit_Account_Number
     e.value.currency =e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;
     console.log(e,'onUpload')
     this.formSubmitted=true;
