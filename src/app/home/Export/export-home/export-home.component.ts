@@ -4145,6 +4145,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       status: 'pending',
       documents:temp_doc,
       Types: 'downloadPDF',
+      TypeOfPage:'Transaction',
       FileType: this.USER_DATA?.sideMenu
     }
     console.log(approval_data,this.mainDoc,'approval_data')
