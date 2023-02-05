@@ -11,6 +11,7 @@ export class UserService {
   public name;
   api_base: string;
   userData;
+  USER_RESULT:any=[];
   public loginData = new BehaviorSubject({});
   public userDataListener$ = this.loginData.asObservable();
    constructor(private http: HttpClient, public appconfig: AppConfig,public router:Router) {
@@ -224,11 +225,17 @@ export class UserService {
       httpOptions
     );
   }
-
+  updateTeamById(team,id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken}),
+    };
+    return this.http.post(`${this.api_base}/team/Team_Update`,{team: team,id:id},httpOptions);
+  }
   mergePdf(filename) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
-
     const httpOptions: Object = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
       responseType:"blob"
@@ -243,11 +250,10 @@ export class UserService {
   }
   mergePdfChecking(filename) {
     this.loadFromLocalStorage();
-    console.log(this.authToken,filename,'hjhhjjhjhhj');
     const httpOptions: Object = {
       headers: new HttpHeaders({ Authorization: this.authToken })
     };
-    return this.http.post(`${this.api_base}/pipo/mergePdf`,filename,httpOptions);
+    return this.http.post(`${this.api_base}/pipo/mergePdf`,{url:filename},httpOptions);
   }
 
 
@@ -615,11 +621,7 @@ export class UserService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return new Promise((resolve, reject)=>{
-      this.http.get(`${this.api_base}/user/profile`, httpOptions).subscribe((res:any)=>{
-        resolve(res?.result)
-      })
-    });
+   return this.http.get(`${this.api_base}/user/profile`, httpOptions);
   }
   getUserDetailById(id:any) {
     this.loadFromLocalStorage();

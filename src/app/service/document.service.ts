@@ -16,6 +16,7 @@ export class DocumentService {
   };
   PDF_DOCUMENTS_DATA:any=[];
   pipolist:any=[];
+  OUTWARD_REMITTANCE_ADVICE_SHEET: any=[];
   constructor(public http: HttpClient, public appconfig: AppConfig) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base);
@@ -123,6 +124,15 @@ export class DocumentService {
       },
       httpOptions
     );
+  }
+  getBillNo(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/orAdvice/getByIdBillNo`,{_id:id},httpOptions);
   }
 
 
@@ -377,6 +387,14 @@ export class DocumentService {
     );
   }
 
+  CHECK_ALL_INVOICES(data:any){
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/invoice/get`,data,httpOptions);
+  }
+
   updateBoeByBoe(user, _id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -392,7 +410,14 @@ export class DocumentService {
       httpOptions
     );
   }
-
+  addBoe(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/boe/post`,{data:data},httpOptions);
+  }
   getBoeByBoe(boeNumber) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -468,14 +493,26 @@ export class DocumentService {
       httpOptions
     );
   }
-
-  getPipo() {
+  addInward_remittance(Inward_remittance) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
+    return this.http.post(`${this.api_base}/Inward_remittance/post`,{ Inward_remittance:Inward_remittance },httpOptions);
+  }
+
+  getPipo() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {headers: new HttpHeaders({ Authorization: this.authToken })};
     return this.http.get(`${this.api_base}/pipo/get`, httpOptions);
+  }
+  getInward_remittance() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {headers: new HttpHeaders({ Authorization: this.authToken })};
+    return this.http.get(`${this.api_base}/Inward_remittance/get`, httpOptions);
   }
 
   getPipoByType(type) {
@@ -1006,6 +1043,14 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/billOfExchange/get`, httpOptions);
   }
+  getBillExchangefile(type:string) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/billOfExchange/filetype`, {file:type},httpOptions);
+  }
 
   getBillExchangeByBillExchangeValue(id) {
     this.loadFromLocalStorage();
@@ -1064,6 +1109,14 @@ export class DocumentService {
       };
 
       return this.http.get(`${this.api_base}/destruction/get`, httpOptions);
+    }
+    getDestructionfile(type:string) {
+      this.loadFromLocalStorage();
+      console.log(this.authToken);
+      const httpOptions = {
+        headers: new HttpHeaders({ Authorization: this.authToken }),
+      };
+      return this.http.post(`${this.api_base}/destruction/filetype`, {file:type},httpOptions);
     }
 
     getDestructionByDestructionValue(id) {
@@ -1412,7 +1465,14 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/letterLC/get`, httpOptions);
   }
-
+  getLetterLCfile(type:string) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/letterLC/filetype`, {file:type},httpOptions);
+  }
   getLetterLCByLetterLCValue(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -1471,7 +1531,14 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/masterService/get`, httpOptions);
   }
-
+  getMasterServiceFile(type:string) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/masterService/filetype`, {file:type},httpOptions);
+  }
   getMasterSerByMasterSerValue(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -1530,6 +1597,14 @@ export class DocumentService {
     };
 
     return this.http.get(`${this.api_base}/opinionReport/get`, httpOptions);
+  }
+  getOpinionReportfile(type:string) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/opinionReport/filetype`, {file:type},httpOptions);
   }
 
   getOpinionByOpinionValue(id) {

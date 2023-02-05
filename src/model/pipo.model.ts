@@ -280,7 +280,7 @@ export class PipoDisplayListViewItem {
     function createSbIrinfo(pipoInfo, sbdata) {
       console.log(pipoInfo,sbdata,'sbdata')
       let sbirmerged = [];
-      if (sbdata?.irRef.length === 0) {
+      if (sbdata?.irRef?.length === 0) {
         sbirmerged.push(pipoInfo);
       }
       for (let i in sbdata?.irRef) {
@@ -297,7 +297,7 @@ export class PipoDisplayListViewItem {
         piInfo['conversionDate'] = irdata?.conversionDate;
         piInfo['commission'] = irdata?.commision;
         let amount = parseFloat(irdata?.amount);
-        let commision = irdata?.commision.replace(/,/g, '');
+        let commision = irdata?.commision?.replace(/,/g, '');
         piInfo['recUSD'] = amount - commision;
         let exchangeRate = parseFloat(irdata?.exchangeRate);
         piInfo['convertedAmount'] = (piInfo['recUSD'] * exchangeRate).toFixed(2);

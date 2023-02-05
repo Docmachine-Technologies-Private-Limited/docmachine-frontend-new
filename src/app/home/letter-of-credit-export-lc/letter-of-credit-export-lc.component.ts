@@ -20,7 +20,7 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog
 export class LetterOfCreditExportLCComponent implements OnInit {
 
   @ViewChild('epltable', {static: false}) epltable: ElementRef;
-  public item: any;
+  public item: any=[];
   public item1 = [];
   public viewData: any;
   public closeResult: string;
@@ -57,20 +57,15 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
-    this.item1=[];
-    this.documentService.getLetterLC().subscribe(
-      (res: any) => {
-        console.log('Res', res);
-        for (let value of res.data) {
-          if (value['file'] == 'export') {
-            this.item.push(value);
-          }
-        }
-      },
-      (err) => console.log(err)
-    );
-
-  }
+    this.item=[];
+      this.documentService.getLetterLCfile("export").subscribe(
+        (res: any) => {
+          this.item=res?.data;
+          console.log(res,'getLetterLCfile');
+        },
+        (err) => console.log(err)
+        );
+      }
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
       return x.pi_poNo;
@@ -110,7 +105,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
 
   letterOfCredit() {
     console.log('upload');
-    this.sharedData.changeretunurl('home/letterofcredit-lc')
+    //this.sharedData.changeretunurl('home/letterofcredit-lc')
     this.router.navigate(['home/upload', {file: 'export', document: 'lcCopy'}]);
   }
 

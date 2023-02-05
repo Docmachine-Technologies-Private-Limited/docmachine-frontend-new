@@ -116,7 +116,11 @@ export class SigninComponent implements OnInit {
               if (this.data1['data'][0]['emailIdVerified']) {
                 if (this.data1['data'][0]['verified'] == 'yes') {
                   if (data['status'] == 200) {
-                    this.authGuard.setLocalStorage('LOGIN_OTP',true)
+                    this.authGuard.setLocalStorage('LOGIN_OTP',true);
+                    this.authGuard.setLocalStorage('PERMISSION',JSON.stringify({
+                      emailId:this.data1['data'][0].emailId,
+                      role:this.data['result']['role']
+                    }))
                     this.toastr.success(data['message']);
                     if (this.data['result']['role'] == 'ca') {
                       this.userService.role = this.data['result']['role'];
@@ -124,7 +128,7 @@ export class SigninComponent implements OnInit {
                     } else {
                       this.userService.role = this.data['result']['role'];
                       if (this.data1['data'][0].companyId) {
-                        this.router.navigate(['/home'])
+                        this.router.navigate(['/home/dashboardTask'])
                       } else {
                         if (this.data1['data'][0]?.role!='member') {
                           this.router.navigate(['createTeam']);

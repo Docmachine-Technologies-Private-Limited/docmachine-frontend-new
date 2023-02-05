@@ -62,7 +62,8 @@
             </span> Dashboard
           </a>
         </li>
-        <div class="col-12" *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
+        <div class="col-12"
+          *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
           <ul class="navbar-nav ml-auto">
             <label for="" class="label-form">Documents</label>
             <li class="nav-item">
@@ -81,37 +82,50 @@
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/importInsurance')">Insurance Documents</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/outward-remittance-advice')">Outward Remittance Advice</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/letterofcredit-import-lc')">Letter of Credit (LC)</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-airway-bl-copy')">Airway/BL Copy</h6>
-            </li>
-            <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-commercial')">Commercial Invoices</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-master-services')">Master Service Agreement
+              </h6>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/importTriParty')">Tri party agreements</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0">Letter of credit (LC)</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-opinion-report')">Opinion Reports</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0">Master service agree</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/outward-remittance-advice')">Outward Remittance
+                Advice</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0">Opinion Reports</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-airway-bl-copy')">Airway/BL Copy</h6>
             </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-bill-of-exchange')">Bill Of Exchange
+              </h6>
+            </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-destruction')">Destruction Certificate</h6>
+            </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-commercial')">Commercial Invoices</h6>
+            </li>
+
           </ul>
           <ul class="navbar-nav ml-auto">
             <label for="" class="label-form">Transactions</label>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/advance-outward-remittance')">Advance Outward Remittance</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/advance-outward-remittance')">Advance Outward
+                Remittance</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-import-payment')">Direct Import Payment</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-import-payment')">Direct Import Payment
+              </h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/a2cum-application-yesbank')">A2cum Application</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/a2cum-application-yesbank')">A2cum Application
+              </h6>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/fbg-waiver')">FBG Waiver</h6>
@@ -123,17 +137,28 @@
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/buyer-credit')">Buyer Credit</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="subbillunder.style.display='block';this.HIDE_ALL_SUB_MENU();this.SUB_MENU['Bills_Under_Collection']=true">Bills Under Collection</h6>
-              <div class="sub-menu navbar-nav ml-auto" [style]="this.SUB_MENU['Bills_Under_Collection']==true ? 'display:block;' : 'display:none;'" #subbillunder>
-                <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'lcSight'})">Sight</h6>
-                <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'lcUsance'})">Usance</h6>
+              <h6 class="nav-link p-0"
+                (click)="subbillunder.style.display='block';this.HIDE_ALL_SUB_MENU();this.SUB_MENU['Bills_Under_Collection']=true">
+                Bills Under Collection</h6>
+              <div class="sub-menu navbar-nav ml-auto"
+                [style]="this.SUB_MENU['Bills_Under_Collection']==true ? 'display:block;' : 'display:none;'"
+                #subbillunder>
+                <h6 class="nav-link p-0"
+                  (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'lcSight'})">Sight</h6>
+                <h6 class="nav-link p-0"
+                  (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'lcUsance'})">Usance</h6>
               </div>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="subbillunderlc.style.display='block';this.HIDE_ALL_SUB_MENU();this.SUB_MENU['Bills_Under_LC']=true">Bills Under LC</h6>
-              <div class="sub-menu navbar-nav ml-auto" [style]="this.SUB_MENU['Bills_Under_LC']==true ? 'display:block;' : 'display:none;'" #subbillunderlc>
-                <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcSight'})">Sight</h6>
-                <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcUsance'})">Usance</h6>
+              <h6 class="nav-link p-0"
+                (click)="subbillunderlc.style.display='block';this.HIDE_ALL_SUB_MENU();this.SUB_MENU['Bills_Under_LC']=true">
+                Bills Under LC</h6>
+              <div class="sub-menu navbar-nav ml-auto"
+                [style]="this.SUB_MENU['Bills_Under_LC']==true ? 'display:block;' : 'display:none;'" #subbillunderlc>
+                <h6 class="nav-link p-0"
+                  (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcSight'})">Sight</h6>
+                <h6 class="nav-link p-0"
+                  (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcUsance'})">Usance</h6>
               </div>
             </li>
             <li class="nav-item">
@@ -147,12 +172,14 @@
             </li>
           </ul>
         </div>
-        <div class="col-12" *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
+        <div class="col-12"
+          *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
           <ul class="navbar-nav ml-auto">
             <label for="" class="label-form">Documents</label>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/pipo')">PI/PO Summary  <i style="font-size: 12px; margin-left:10px;" class="fas fa-plus-circle">
-              </i></h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/pipo')">PI/PO Summary <i
+                  style="font-size: 12px; margin-left:10px;" class="fas fa-plus-circle">
+                </i></h6>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/view-document/sb')">Shipping Bill</h6>
@@ -170,7 +197,8 @@
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/letterofcredit-lc')">Letter of Credit (LC)</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/master-services')">Master Service Agreement</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/master-services')">Master Service Agreement
+              </h6>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/try-party')">Triparty Agreements</h6>
@@ -179,8 +207,10 @@
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/opinion-report')">Opinion Reports</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/inward-remittance-advice')">Inward Remittance Advice</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/inward-remittance-advice')">Inward Remittance
+                Advice</h6>
             </li>
+
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/airway-bl-copy')">Airway/BL Copy</h6>
             </li>
@@ -203,8 +233,12 @@
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/pipo-export')">PI/PO Master</h6>
             </li>
           </ul>
+
           <ul class="navbar-nav ml-auto">
             <label for="" class="label-form">Transactions</label>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/remittance-flow')">Advance remittance Flow</h6>
+            </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Pdf-Upload')">Inward Remittance Disposal</h6>
             </li>
@@ -215,7 +249,8 @@
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/bill-lodgement')">Bill Under LC</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/packing-credit-request')">Packing Credit Request</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/packing-credit-request')">Packing Credit
+                Request</h6>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/packing-credit-request')">Direct Dispatch</h6>
@@ -229,136 +264,141 @@
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/rejectpanel')">Reject</h6>
             </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-              <label for="" class="label-form">EDPMS</label>
-              <li class="nav-item">
-                <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/edpms-recon')">EDPMS Recon</h6>
-              </li>
-              <li class="nav-item">
-                <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/edpms-recon-table')">EDPMS Recon Table</h6>
-              </li>
-              <li class="nav-item">
-                <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Excel-Downloader')">Report</h6>
-              </li>
-              </ul>
+          </ul>
+
+          <ul class="navbar-nav ml-auto">
+            <label for="" class="label-form">EDPMS</label>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/edpms-recon')">EDPMS Recon</h6>
+            </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/edpms-recon-table')">EDPMS Recon Table</h6>
+            </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Excel-Downloader')">Report</h6>
+            </li>
+          </ul>
         </div>
 
-    <div class="manager-col">
-      <li (click)="newTask6() " [ngClass]="status6 ? 'b-color1' : 'nothing' " *ngIf="this.userData['role']=='member'">
-        <a [routerLink]="[ '/home/upload'] " style="cursor: pointer " class="sidebar-content ">
-          <span class="icon side-icon "><img src="./assets/new-img/upload.svg " /></span> Upload Documents
-        </a>
-      </li>
+        <div class="manager-col">
+          <li (click)="newTask6() " [ngClass]="status6 ? 'b-color1' : 'nothing' "
+            *ngIf="this.userData['role']=='member'">
+            <a [routerLink]="[ '/home/upload'] " style="cursor: pointer " class="sidebar-content ">
+              <span class="icon side-icon "><img src="./assets/new-img/upload.svg " /></span> Upload Documents
+            </a>
+          </li>
 
-      <li style="cursor: pointer " (click)="newTask8() "
-        [ngClass]="status8 ? 'b-color1' : 'nothing' " *ngIf="this.userData['role']=='manager'">
-        <a class="sidebar-content " [routerLink]="[ '/home/manageUser'] ">
-          <span class="icon side-icon ">
-            <img src="./assets/new-img/user.svg " />
-          </span> Manage User
-        </a>
-      </li>
+          <li style="cursor: pointer " (click)="newTask8() " [ngClass]="status8 ? 'b-color1' : 'nothing' "
+            *ngIf="this.userData['role']=='manager'">
+            <a class="sidebar-content " [routerLink]="[ '/home/manageUser'] ">
+              <span class="icon side-icon ">
+                <img src="./assets/new-img/user.svg " />
+              </span> Manage User
+            </a>
+          </li>
 
-      <li style="cursor: pointer " (click)="newTask9() " [ngClass]="status9 ? 'b-color1' : 'nothing' " *ngIf="this.userData['role']=='member'">
-        <a class="sidebar-content ">
-          <span class="icon side-icon ">
-            <img src="./assets/new-img/transport.svg " />
-          </span> Transaction
-        </a>
-      </li>
-      <li style="cursor: pointer " (click)="newTask10() " [ngClass]="status10 ? 'b-color1' : 'nothing' " *ngIf="this.userData['role']=='manager'">
-        <a class="sidebar-content " style="cursor: pointer; ">
-          <span class="icon side-icon ">
-            <img src="./assets/new-img/manager-cus.svg " />
-          </span> Manage Customer
-          <span style="margin-left: 19%;position: absolute;transform: translate(0, 3px); ">
-            <i style="font-size: 18px " *ngIf="!status10 " class="fas fa-angle-right "></i>
-            <i style="font-size: 18px " *ngIf="status10 " class="fas fa-angle-down "></i>
-          </span>
-        </a>
-      </li>
-      <li class="manage-li " *ngIf="status10 ">
-        <div class="main11 ">
-          <div class="hoverClass " style="cursor: pointer; height: 30px; margin-top: 0px; " (click)="newSub15() "
-            [ngClass]="new15 ? 'b-color' : 'nothing' ">
-            <span style="margin-left: 35px; line-height: 30px; font-size: 12px;"
-              [routerLink]="['/home/manage-customer/import']">Import</span>
-          </div>
-          <div class="hoverClass " style="cursor: pointer; height: 30px; margin-top: 0px; " (click)="newSub16() "
-            [ngClass]="new16 ? 'b-color' : 'nothing' ">
-            <span style="margin-left: 35px; line-height: 30px; font-size: 12px;"
-              [routerLink]="['/home/manage-customer/export']">Export</span>
-          </div>
+          <li style="cursor: pointer " (click)="newTask9() " [ngClass]="status9 ? 'b-color1' : 'nothing' "
+            *ngIf="this.userData['role']=='member'">
+            <a class="sidebar-content ">
+              <span class="icon side-icon ">
+                <img src="./assets/new-img/transport.svg " />
+              </span> Transaction
+            </a>
+          </li>
+          <li style="cursor: pointer " (click)="newTask10() " [ngClass]="status10 ? 'b-color1' : 'nothing' "
+            *ngIf="this.userData['role']=='manager'">
+            <a class="sidebar-content " style="cursor: pointer; ">
+              <span class="icon side-icon ">
+                <img src="./assets/new-img/manager-cus.svg " />
+              </span> Manage Customer
+              <span style="margin-left: 19%;position: absolute;transform: translate(0, 3px); ">
+                <i style="font-size: 18px " *ngIf="!status10 " class="fas fa-angle-right "></i>
+                <i style="font-size: 18px " *ngIf="status10 " class="fas fa-angle-down "></i>
+              </span>
+            </a>
+          </li>
+          <li class="manage-li " *ngIf="status10 ">
+            <div class="main11 ">
+              <div class="hoverClass " style="cursor: pointer; height: 30px; margin-top: 0px; " (click)="newSub15() "
+                [ngClass]="new15 ? 'b-color' : 'nothing' ">
+                <span style="margin-left: 35px; line-height: 30px; font-size: 12px;"
+                  [routerLink]="['/home/manage-customer/import']">Import</span>
+              </div>
+              <div class="hoverClass " style="cursor: pointer; height: 30px; margin-top: 0px; " (click)="newSub16() "
+                [ngClass]="new16 ? 'b-color' : 'nothing' ">
+                <span style="margin-left: 35px; line-height: 30px; font-size: 12px;"
+                  [routerLink]="['/home/manage-customer/export']">Export</span>
+              </div>
+            </div>
+          </li>
+
+          <li style="cursor: pointer " (click)="newTask11() " [ngClass]="status11 ? 'b-color1' : 'nothing' "
+            *ngIf="this.userData['role']=='member'">
+            <a class="sidebar-content " style="cursor: pointer; ">
+              <span class="icon side-icon ">
+                <img src="./assets/new-img/Document.svg " />
+              </span> View Document
+              <span style="margin-left: 27%;position: absolute;transform: translate(0, 3px); ">
+                <i style="font-size: 18px " *ngIf="!status11 " class="fas fa-angle-right "></i>
+                <i style="font-size: 18px " *ngIf="status11 " class="fas fa-angle-down "></i>
+              </span>
+            </a>
+          </li>
+          <li class="manage-li " *ngIf="status11 ">
+            <div class="main11 ">
+              <div class="hoverClass " style="cursor: pointer; height: 30px; margin-top: 0px; " (click)="newSub17() "
+                [ngClass]="new17 ? 'b-color' : 'nothing' ">
+                <span style="margin-left: 35px; line-height: 30px; font-size: 12px;"
+                  [routerLink]="['/home/view-document/sb']">Shipping Bill</span>
+              </div>
+              <div class="hoverClass " style="cursor: pointer; height: 30px; margin-top: 0px; " (click)="newSub18() "
+                [ngClass]="new18 ? 'b-color' : 'nothing' ">
+                <span style="margin-left: 35px; line-height: 30px; font-size: 12px;"
+                  [routerLink]="['/home/view-document/boe']">BOE Documents</span>
+              </div>
+              <div class="hoverClass " style="cursor: pointer; height: 30px; margin-top: 0px; " (click)="newSub19() "
+                [ngClass]="new19 ? 'b-color' : 'nothing' ">
+                <span style="margin-left: 35px; line-height: 30px; font-size: 12px;"
+                  [routerLink]="['/home/view-document/pipo']">PI/PO Documents</span>
+              </div>
+            </div>
+          </li>
         </div>
-      </li>
+      </ul>
 
-      <li style="cursor: pointer " (click)="newTask11() " [ngClass]="status11 ? 'b-color1' : 'nothing' " *ngIf="this.userData['role']=='member'">
-        <a class="sidebar-content " style="cursor: pointer; ">
-          <span class="icon side-icon ">
-            <img src="./assets/new-img/Document.svg " />
-          </span> View Document
-          <span style="margin-left: 27%;position: absolute;transform: translate(0, 3px); ">
-            <i style="font-size: 18px " *ngIf="!status11 " class="fas fa-angle-right "></i>
-            <i style="font-size: 18px " *ngIf="status11 " class="fas fa-angle-down "></i>
-          </span>
-        </a>
-      </li>
-      <li class="manage-li " *ngIf="status11 ">
-        <div class="main11 ">
-          <div class="hoverClass " style="cursor: pointer; height: 30px; margin-top: 0px; " (click)="newSub17() "
-            [ngClass]="new17 ? 'b-color' : 'nothing' ">
-            <span style="margin-left: 35px; line-height: 30px; font-size: 12px;"
-              [routerLink]="['/home/view-document/sb']">Shipping Bill</span>
-          </div>
-          <div class="hoverClass " style="cursor: pointer; height: 30px; margin-top: 0px; " (click)="newSub18() "
-            [ngClass]="new18 ? 'b-color' : 'nothing' ">
-            <span style="margin-left: 35px; line-height: 30px; font-size: 12px;"
-              [routerLink]="['/home/view-document/boe']">BOE Documents</span>
-          </div>
-          <div class="hoverClass " style="cursor: pointer; height: 30px; margin-top: 0px; " (click)="newSub19() "
-            [ngClass]="new19 ? 'b-color' : 'nothing' ">
-            <span style="margin-left: 35px; line-height: 30px; font-size: 12px;"
-              [routerLink]="['/home/view-document/pipo']">PI/PO Documents</span>
-          </div>
-        </div>
-      </li>
+      <!-- <h5 class="sidebar-nav-title sidebar-title ">SUPPORT</h5> -->
+      <ul style="cursor: pointer " class="sidebar-nav ">
+        <li (click)="newTask12() " [ngClass]="status12 ? 'b-color1' : 'nothing' ">
+          <a class="sidebar-content " [routerLink]="[ '/home/help'] ">
+            <span class="icon side-icon ">
+              <img src="./assets/new-img/help.svg " />
+            </span> Need Help?
+          </a>
+        </li>
+        <li style="cursor: pointer " (click)="newTask13() " [ngClass]="status13 ? 'b-color1' : 'nothing' ">
+          <a class="sidebar-content ">
+            <span class="icon side-icon ">
+              <img src="./assets/new-img/contact-us.svg " />
+            </span> Contact Us
+          </a>
+        </li>
+        <li style="cursor: pointer " (click)="newTask17() " [ngClass]="status17 ? 'b-color1' : 'nothing' ">
+          <a class="sidebar-content " [routerLink]="[ '/home/t&c'] ">
+            <span class="icon side-icon ">
+              <img src="./assets/new-img/condition.svg " />
+            </span> Terms & Condition
+          </a>
+        </li>
+
+      </ul>
+      <footer>
+        <h5 class="footer-heading ">DocMachine 2020.</h5>
+        <p class="footer-content ">
+          Created with love for the community <br /> of designers and project managers.
+        </p>
+      </footer>
     </div>
-    </ul>
-
-    <!-- <h5 class="sidebar-nav-title sidebar-title ">SUPPORT</h5> -->
-    <ul style="cursor: pointer " class="sidebar-nav ">
-      <li (click)="newTask12() " [ngClass]="status12 ? 'b-color1' : 'nothing' ">
-        <a class="sidebar-content " [routerLink]="[ '/home/help'] ">
-          <span class="icon side-icon ">
-            <img src="./assets/new-img/help.svg " />
-          </span> Need Help?
-        </a>
-      </li>
-      <li style="cursor: pointer " (click)="newTask13() " [ngClass]="status13 ? 'b-color1' : 'nothing' ">
-        <a class="sidebar-content ">
-          <span class="icon side-icon ">
-            <img src="./assets/new-img/contact-us.svg " />
-          </span> Contact Us
-        </a>
-      </li>
-      <li style="cursor: pointer " (click)="newTask17() " [ngClass]="status17 ? 'b-color1' : 'nothing' ">
-        <a class="sidebar-content " [routerLink]="[ '/home/t&c'] ">
-          <span class="icon side-icon ">
-            <img src="./assets/new-img/condition.svg " />
-          </span> Terms & Condition
-        </a>
-      </li>
-
-    </ul>
-    <footer>
-      <h5 class="footer-heading ">DocMachine 2020.</h5>
-      <p class="footer-content ">
-        Created with love for the community <br /> of designers and project managers.
-      </p>
-    </footer>
-</div>
-</nav>
+  </nav>
 </div>
 <!-- This is the white navigation bar seen on the top. A bit enhanced BS navbar. See .page-controls in _base.scss. -->
 <div class="main_nave">
@@ -434,30 +474,32 @@
                         </div>
                         <div class="left_user_info">
                           <h5 class="name">{{name}}</h5>
-                          <h6 class="side-name" *ngIf="this.userData['role'] == 'member'">{{this.userData['RoleCheckbox']!=''?this.userData['RoleCheckbox']:this.userData['role']}}</h6>
+                          <h6 class="side-name" *ngIf="this.userData['role'] == 'member'">
+                            {{this.userData['RoleCheckbox']!=''?this.userData['RoleCheckbox']:this.userData['role']}}
+                          </h6>
                           <h6 class="side-name" *ngIf="role == 'admin'">Admin</h6>
                           <h6 class="side-name" *ngIf="role == 'ca'">CA</h6>
                           <h6 class="side-name" *ngIf="role == 'manager'">Manager</h6>
                         </div>
                       </div>
-                      <ul>
-                        <li *ngIf="role !='ca' " style="cursor: pointer " (click)="newTask14() "
-                          [ngClass]="status14 ? 'b-color1' : 'nothing' ">
-                          <!-- an example of nested submenu. basic bootstrap collapse component -->
-                          <a class="sidebar-content " [routerLink]="[ '/home/account'] ">
-                            <span class="account_icon">Account</span>
-                          </a>
+                      <ul class="navbar-nav ml-auto" style="padding-left: 10px !important;">
+                        <li class="nav-item" style="display: flex;">
+                          <span class="account_icon"></span>
+                          <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/user-profiles')">Profile</h6>
                         </li>
-                        <li><a routerLinkActive="active " ariaCurrentWhenActive="page "><span
-                              class="setting_icon">Settings</span></a></li>
-                        <li style="cursor: pointer " (click)="newTask16() "
-                          [ngClass]="status16 ? 'b-color1' : 'nothing' ">
-                          <!-- an example of nested submenu. basic bootstrap collapse component -->
-                          <a class="sidebar-content " (click)="logout() ">
-                            <span class="logout_icons">
-                            </span> Log Out
-                          </a>
+                        <li class="nav-item" style="display: flex;">
+                          <span class="account_icon"></span>
+                          <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/account')">Account</h6>
                         </li>
+                        <li class="nav-item" style="display: flex;">
+                          <span class="setting_icon"></span>
+                          <h6 class="nav-link p-0">Settings</h6>
+                        </li>
+                        <li class="nav-item" style="display: flex;">
+                          <span class="logout_icons"></span>
+                          <h6 class="nav-link p-0" (click)="logout() ">Log Out</h6>
+                        </li>
+
                       </ul>
                     </div>
                   </li>

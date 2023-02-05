@@ -72,7 +72,7 @@ export class ImportAirwayBlcopyComponent implements OnInit {
     this.filtervisible = !this.filtervisible
   }
 
-  openCreditNote(content) {
+  openLetterOfCredit(content) {
     this.modalService
       .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
       .result.then(
@@ -128,8 +128,8 @@ export class ImportAirwayBlcopyComponent implements OnInit {
   }
 
   newCredit() {
-    this.sharedData.changeretunurl('home/import-airway-bl-copy')
-    this.router.navigate(['home/upload', {file: 'import', document: 'import-blCopy'}]);
+    // this.sharedData.changeretunurl('home/import-airway-bl-copy')
+    this.router.navigate(['/home/upload', {file: 'import', document: 'import-blCopy'}]);
   }
 
   exportToExcel() {

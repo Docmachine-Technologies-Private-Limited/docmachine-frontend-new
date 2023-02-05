@@ -14,6 +14,9 @@ import * as xlsx from 'xlsx';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
 @Component({
   selector: 'app-import-outward-remittance-sheet',
@@ -47,16 +50,19 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
   public viewData: any;
   filtervisible: boolean = false;
   USER_DATA:any=[];
-  
+
   constructor(
     private toastr: ToastrService,
     private userService: UserService,
-    private documentService: DocumentService,
+    public documentService: DocumentService,
     private router: Router,
     private sharedData: SharedDataService,
     private modalService: NgbModal,
     private sanitizer: DomSanitizer,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public dialog: MatDialog,
+
   ) {}
 
   async ngOnInit() {
@@ -73,11 +79,8 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         }
         this.item1.forEach((element, i) => {
           let amount = element.amount
-          // .replace(/,/g, '');
           let commision = parseFloat(element.commision)
-          // .replace(/,/g, '');
           let exchangeRate = parseFloat(element.exchangeRate)
-          // .replace(/,/g, '');
           this.item1[i].recUSD = (amount - commision).toFixed(2);
           let cv = (
             parseFloat(this.item1[i].recUSD) * exchangeRate
@@ -97,13 +100,10 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         console.log(this.location);
         console.log('jsadffhsjshd', this.commodity);
         console.log('team data', data);
-        this.location = this.location.filter(
-          (value, index) => this.location.indexOf(value) === index
-        );
+        this.location = this.location.filter((value, index) => this.location.indexOf(value) === index);
         this.commodity = this.commodity.filter(
           (value, index) => this.commodity.indexOf(value) === index
         );
-        //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
       },
       (error) => {
         console.log('error');
@@ -113,23 +113,13 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
     this.documentService.getMaster(1).subscribe(
       (res: any) => {
         console.log('Master Data File', res);
-        // this.origin = res['data'][0]['countryOfFinaldestination']
-        // console.log("jainshailendra",this.origin);
         this.item5 = res.data;
         this.merging();
         this.item5.forEach((element, i) => {
           this.origin[i] = element.countryOfFinaldestination;
         });
-        this.origin = this.origin.filter(
-          (value, index) => this.origin.indexOf(value) === index
-        );
-
+        this.origin = this.origin.filter((value, index) => this.origin.indexOf(value) === index);
         console.log('Master Country', this.origin);
-
-        // this.origin.forEach((element, i)=>{
-        //   this.origin[i].ori = element[i]
-        // })
-        // console.log("Master Country2", this.origin)
       },
       (err) => console.log(err)
     );
@@ -160,16 +150,14 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         this.toastr.success('Forex Advice Row Is Updated Successfully.');
       },
       (error) => {
-        // this.toastr.error('Invalid inputs, please check!');
         console.log('error');
       }
     );
   }
 
 
-    
+
   filter() {
-    // this.getPipoData()
     this.filtervisible = !this.filtervisible
 
   }
@@ -223,15 +211,12 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
               console.log('Line no. 211', newVal);
               let sbBalance = shippingdata.fobValue;
               let irAmount = irData.amount
-              // .replace(/,/g, ''));
               let availableBalance = irAmount - sbBalance;
-
               if (availableBalance <= 0) {
                 newVal['BalanceAvail'] = 0;
               } else {
                 newVal['BalanceAvail'] = availableBalance;
               }
-
               console.log('Forex data Value', newVal);
               filterForexData.push(newVal);
             }
@@ -243,7 +228,6 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         if(irData.sbNo.length == 0){
           const newVal = { ...irData };
           let availableBal = irData.amount
-            // .replace(/,/g, ''));
           newVal['BalanceAvail'] = availableBal;
           filterForexData.push(newVal);
           console.log('235', filterForexData);
@@ -254,14 +238,14 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       for (let ir of this.item1) {
         const newVal = { ...ir };
         let availableBal = ir.amount
-          // .replace(/,/g, ''));
         newVal['BalanceAvail'] = availableBal;
         filterForexData.push(newVal);
         console.log('245', filterForexData);
       }
     }
+    this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET=filterForexData;
     this.item6 = filterForexData
-    console.log("Full data", this.item6)
+    console.log("Full data", this.item6,this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET)
   }
 
   openIradvice(content) {
@@ -292,4 +276,42 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
     ;
     this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
   }
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+      this.documentService.deleteById({id:id,tableName:'iradvices'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'iradvices',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item6[index],
+        Types:'deletion',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
+  }
+
 }

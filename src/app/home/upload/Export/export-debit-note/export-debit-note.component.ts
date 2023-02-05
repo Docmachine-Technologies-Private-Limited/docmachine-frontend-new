@@ -412,7 +412,7 @@ export class ExportDebitNoteComponent implements OnInit {
     this.documentService.addDebit(e.form.value).subscribe((res: any) => {
       this.toastr.success(`Credit Note Document Added Successfully`);
       let updatedData = {
-        "creditNoteRef": [
+        "debitNoteRef": [
           res.data._id,
         ],
       }

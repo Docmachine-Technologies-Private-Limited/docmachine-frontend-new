@@ -355,7 +355,7 @@ export class DebitNoteComponent implements OnInit {
       (err) => console.log('Error', err)
     );
     console.log('DOCUMENT TYPE', this.documentType);
-    await this.pipoDataService.getPipoList('export').then((data) => {
+    await this.pipoDataService.getPipoList('import').then((data) => {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
         console.log(data, 'data2222..................')
@@ -410,7 +410,7 @@ export class DebitNoteComponent implements OnInit {
     this.documentService.addDebit(e.form.value).subscribe((res: any) => {
       this.toastr.success(`Credit Note Document Added Successfully`);
       let updatedData = {
-        "creditNoteRef": [
+        "debitNoteRef": [
           res.data._id,
         ],
       }

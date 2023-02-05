@@ -1,416 +1,275 @@
 <div class="content-wrap scroll-bar-main" style="position: absolute;left: 245px;margin: auto;margin-top: 0;">
-    <main id="content" class="content" role="main" style="border-radius: 10px;box-shadow: 0px 0px 2px 2px #cdc9c9;">
-        <div class="container-fluid">
-            <div class="row no-gutter">
-                <div class="col-md-7 bg-dark">
-                    <div class="login d-flex py-5" style="padding: 0px !important;">
-                        <!-- Demo content-->
-                        <div class="container">
-                            <div class="row">
-                                <div *ngIf="isItem" class="col-lg-10 col-xl-7 mrg">
-                                    <h6 class="display-5">Company Details</h6>
-                                    <p class="side1">Give us some of your information about your company</p>
-                                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                                        <div class="form-group mb-3">
-                                            <label>Company Name</label>
-                                            <input *ngIf="editable" [(ngModel)]="item.teamName" formControlName="teamName" placeholder="Company name/ Team name" required="" class="form-control rounded-pill" [ngClass]="{ 'is-invalid': submitted && f.teamName.errors }" autocomplete="off">
-                                            <div *ngIf="submitted && f.teamName.errors" class="invalid-feedback">
-                                                <div *ngIf="f.teamName.errors.required" style="margin-left: 15px;">
-                                                    Company Name Required
-                                                </div>
-                                                <div *ngIf="f.teamName.errors.pattern" style="margin-left: 15px;">
-                                                    Company Name should be alphanumerics </div>
-                                            </div>
-                                            <span *ngIf="!editable" name="teamName" placeholder="Company name/ Team name" required="" class="form-control rounded-pill" contenteditable="false">{{item.teamName}}</span>
-                                        </div>
-
-                                        <div class="form-group mb-3">
-                                            <label>*Importer exporter code (IEC)</label>
-                                            <input *ngIf="editable" [(ngModel)]="item.iec" formControlName="iec" placeholder="Ex: 12121ABVEW." required="" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted && f.iec.errors }" autocomplete="off">
-                                            <div *ngIf="submitted && f.iec.errors" class="invalid-feedback">
-                                                <div *ngIf="f.iec.errors.required" style="margin-left: 15px;">IEC Required
-                                                </div>
-                                                <div *ngIf="f.iec.errors.minlength" style="margin-left: 15px;">ICE should contains only 10 numbers</div>
-                                                <div *ngIf="f.iec.errors.maxlength" style="margin-left: 15px;">ICE should contains 10 letters</div>
-                                                <div *ngIf="f.iec.errors.pattern" style="margin-left: 15px;">IEC should be numerics with 10 letters EX: 12121ABVEW</div>
-                                            </div>
-                                            <span *ngIf="!editable" name="iec" placeholder="Ex: 1212121212" required="" class="form-control rounded-pill">{{item.iec}}</span>
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label>Company Address</label>
-                                            <input *ngIf="editable" [(ngModel)]="item.adress" formControlName="adress" placeholder="Ex: street address, City. PIN" required="" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted && f.adress.errors }" autocomplete="off">
-                                            <div *ngIf="submitted && f.adress.errors" class="invalid-feedback">
-                                                <div *ngIf="f.adress.errors.required" style="margin-left: 15px;">Address Required
-                                                </div>
-                                            </div>
-                                            <span *ngIf="!editable" name="adress" placeholder="Ex: street address, City. PIN" required="" class="form-control rounded-pill password password1">{{item.adress}}</span>
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label>Contact Phone number</label>
-                                            <input *ngIf="editable" [(ngModel)]="item.phone" formControlName="phone" id="password1" type="" placeholder="Ex: +91 95023 23352" required="" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }"
-                                                autocomplete="off">
-                                            <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
-                                                <div *ngIf="f.phone.errors.required" style="margin-left: 15px;">Phone number Required
-                                                </div>
-                                                <div *ngIf="f.phone.errors.minlength" style="margin-left: 15px;">Phone Number should contains only 10 numbers</div>
-                                                <div *ngIf="f.phone.errors.maxlength" style="margin-left: 15px;">Phone Number should contains 10 letters</div>
-                                                <div *ngIf="f.phone.errors.pattern" style="margin-left: 15px;">Phone Number should be numerics with 10 letters EX: 9111122222</div>
-                                            </div>
-                                            <span *ngIf="!editable" name="phone" id="password1" type="" placeholder="Ex: +91 95023 23352" required="" class="form-control rounded-pill password password1">{{item.phone}}</span>
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label>CA email id</label>
-                                            <p class="sl">Ex: CA email ID’s for submission of documents for documents like 15B,annual statutory auditor certificate, write off etc.,</p>
-                                            <input *ngIf="editable" [(ngModel)]="item.caEmail" formControlName="caEmail" id="password1" type="" placeholder="Ex: example@gmail.com" required="" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted && f.caEmail.errors }"
-                                                autocomplete="off">
-                                            <div *ngIf="submitted && f.caEmail.errors" class="invalid-feedback">
-                                                <div *ngIf="f.caEmail.errors.required" style="margin-left: 15px;">CA Email is Required
-                                                </div>
-                                                <div *ngIf="f.caEmail.errors.pattern" style="margin-left: 15px;">CA Email should be Email EX: example@email.com</div>
-                                            </div>
-                                            <span *ngIf="!editable" name="caEmail" id="password1" type="" placeholder="Ex: example@gmail.com" required="" class="form-control rounded-pill password password1">{{item.caEmail}}</span>
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label>CHA email id</label>
-                                            <input *ngIf="editable" [(ngModel)]="item.chaEmail" formControlName="chaEmail" id="password1" type="" placeholder="Ex: example@gmail.com" required="" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted && f.chaEmail.errors }"
-                                                autocomplete="off">
-                                            <div *ngIf="submitted && f.chaEmail.errors" class="invalid-feedback">
-                                                <div *ngIf="f.chaEmail.errors.required" style="margin-left: 15px;">CHA Email is Required
-                                                </div>
-                                                <div *ngIf="f.chaEmail.errors.pattern" style="margin-left: 15px;">CHA Email should be Email EX: example@email.com</div>
-                                            </div>
-                                            <span *ngIf="!editable" name="caEmail" id="password1" type="" placeholder="Ex: example@gmail.com" required="" class="form-control rounded-pill password password1">
-                                                {{item.chaEmail}}</span>
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label>*GSTIN</label>
-                                            <input *ngIf="editable" [(ngModel)]="item.gst" formControlName="gst" id="password1" type="" placeholder="GSTIN" required="" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted && f.gst.errors }" autocomplete="off">
-                                            <div *ngIf="submitted && f.gst.errors" class="invalid-feedback">
-                                                <div *ngIf="f.gst.errors.required" style="margin-left: 15px;">GSTIN Required
-                                                </div>
-                                                <div *ngIf="f.gst.errors.minlength" style="margin-left: 15px;">GSTIN should contains 15 letters</div>
-                                                <div *ngIf="f.gst.errors.maxlength" style="margin-left: 15px;">GSTIN should contains 15 letters only</div>
-                                                <div *ngIf="f.gst.errors.pattern" style="margin-left: 15px;">GSTIN should be alphanumerics with 15 letters EX: 22AAAAA0000A1Z5</div>
-                                            </div>
-                                            <span *ngIf="!editable" name="gst" id="password1" type="" placeholder="GSTIN" required="" class="form-control rounded-pill password password1">
-                                                {{item.gst}}</span>
-                                        </div>
-                                        <div *ngIf="!editable && item.location" class="form-group mb-3">
-                                            <label>Location</label>
-                                            <div *ngFor="let course of item.location.slice(0,l); let i = index" style="margin-bottom: 10px;">
-                                               <span id="password1" type="" placeholder="bank name" class="form-control rounded-pill password password1">
-                                                    {{course.loc}}</span>
-                                                  </div>
-                                            <div style="text-align: end;">
-                                                <a *ngIf="!showLessLoc && item.location.length >2" (click)=showMoreLoc() style="color: rgb(100, 100, 100);">Show More
-                                                    Location>></a>
-                                                <a *ngIf="showLessLoc" (click)=lessShowLoc() style="color: rgb(100, 100, 100);">Show Less Location<< </a>
-                                            </div>
-
-                                        </div>
-                                        <div *ngIf="editable && item.location" class="form-group mb-3" formArrayName="location">
-                                            <label>Location</label>
-                                            <div *ngFor="let course of getLoc(loginForm); let i = index" [formGroupName]="i">
-                                              {{i+' '+ this.location}}
-                                                <!-- <input [(ngModel)]="location[i].loc" formControlName="loc" id="password1" type=""
-                                                  placeholder="Location" style="margin-bottom: 10px;" class="form-control rounded-pill password password1"
-                                                  [ngClass]="{ 'is-invalid': submitted1 && b.controls[i].get('loc').errors?.required }" autocomplete="off">
-                                                <i style="margin: -39px -18px; float: right;" *ngIf='p>1' (click)='removeLoc(i)' class="fas fa-times"></i>
-                                                <div *ngIf="submitted1 && b.controls[i].get('loc').errors" class="invalid-feedback">
-                                                    <div *ngIf="b.controls[i].get('loc').errors?.required " style="margin-left: 15px;">Location Required
-                                                    </div>
-                                                </div> -->
-
-                                            </div>
-                                        </div>
-                                        <div *ngIf="editable && item.location" class="row col-md-12" style="margin-bottom: 12px;">
-                                            <button class="rounded-pill add" type="button" (click)="onAddCourseLoc(loginForm)">
-                                                Add Another Location
-                                            </button>
-                                        </div>
-
-                                        <div *ngIf="editable && !item.location" class="form-group mb-3" formArrayName="location">
-                                            <label>Location</label>
-                                            <div *ngFor="let course of getLoc(loginForm); let i = index" [formGroupName]="i">
-                                                <input formControlName="loc" id="password1" type="" placeholder="Location" style="margin-bottom: 10px;" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted1 && b.controls[i].get('loc').errors?.required }" autocomplete="off">
-                                                <i style="margin: -39px -18px; float: right;" *ngIf='i>0' (click)='removeAddressLoc(i)' class="fas fa-times"></i>
-                                                <div *ngIf="submitted1 && b.controls[i].get('loc').errors" class="invalid-feedback">
-                                                    <div *ngIf="b.controls[i].get('loc').errors?.required " style="margin-left: 15px;">Location Required
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div *ngIf="editable && !item.location" class="row col-md-12" style="margin-bottom: 12px;">
-                                            <button class="rounded-pill add" type="button" (click)="onAddCourseLoc1(loginForm)">
-                                                Add Another Location
-                                            </button>
-                                        </div>
-
-                                        <div *ngIf="editable && !item.commodity" class="form-group mb-3" formArrayName="commodity">
-                                            <label>Commodity</label>
-                                            <div *ngFor="let course of getCom(loginForm); let i = index" [formGroupName]="i">
-
-
-                                                <input formControlName="como" id="password1" type="" placeholder="Commodity" style="margin-bottom: 10px;" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted1 && c.controls[i].get('como').errors?.required }" autocomplete="off">
-                                                <i style="margin: -39px -18px; float: right;" *ngIf='i>0' (click)='removeAddressCom(i)' class="fas fa-times"></i>
-                                                <div *ngIf="submitted1 && c.controls[i].get('como').errors" class="invalid-feedback">
-                                                    <div *ngIf="c.controls[i].get('como').errors?.required " style="margin-left: 15px;">Location Required
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div *ngIf="editable && !item.commodity" class="row col-md-12" style="margin-bottom: 12px;">
-                                            <button class="rounded-pill add" type="button" (click)="onAddCourseLCom1(loginForm)">
-                                                Add Another Commodity
-                                            </button>
-                                        </div>
-
-
-                                        <div *ngIf="!editable && item.commodity" class="form-group mb-3">
-                                            <label>Commodity</label>
-                                            <div *ngFor="let course of item.commodity.slice(0,m); let i = index" style="margin-bottom: 10px;">
-
-
-                                                <span id="password1" type="" placeholder="bank name" class="form-control rounded-pill password password1">
-                                                    {{course.como}}</span>
-
-
-                                            </div>
-                                            <div style="text-align: end;">
-                                                <a *ngIf="!showLessCom && item.commodity.length >2" (click)=showMoreCom() style="color: rgb(100, 100, 100);">Show More
-                                                    Commodity>></a>
-                                                <a *ngIf="showLessCom" (click)=lessShowCom() style="color: rgb(100, 100, 100);">Show Less Commodity<< </a>
-                                            </div>
-
-                                        </div>
-                                        <div *ngIf="editable && item.commodity" class="form-group mb-3" formArrayName="commodity">
-                                            <label>Commodity</label>
-                                            <div *ngFor="let course of getCom(loginForm); let i = index" [formGroupName]="i">
-
-
-                                                <input [(ngModel)]="commodity[i].como" formControlName="como" id="password1" type="" placeholder="Commodity" style="margin-bottom: 10px;" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted1 && c.controls[i].get('com').errors?.required }"
-                                                    autocomplete="off">
-                                                <i style="margin: -39px -18px; float: right;" *ngIf='p>1' (click)='removeLoc(i)' class="fas fa-times"></i>
-                                                <div *ngIf="submitted1 && c.controls[i].get('com').errors" class="invalid-feedback">
-                                                    <div *ngIf="c.controls[i].get('com').errors?.required " style="margin-left: 15px;">Commodity Required
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div *ngIf="editable && item.commodity" class="row col-md-12" style="margin-bottom: 12px;">
-                                            <button class="rounded-pill add" type="button" (click)="onAddCourseCom(loginForm)">
-                                                Add Another Commodity
-                                            </button>
-                                        </div>
-
-
-                                        <div *ngIf="!editable" class="form-group mb-3">
-                                            <label>Bank Details</label>
-                                            <div *ngFor="let course of details.slice(0,k); let i = index">
-                                                <div class="bankClass">
-                                                    <label class="bank">*Bank Name</label>
-
-                                                    <span id="password1" type="" placeholder="bank name" class="form-control rounded-pill password password1">
-                                                        {{course.bank}}</span>
-
-
-                                                    <label class="bank">Bic Address</label>
-                                                    <span id="password1" type="" placeholder="Bic address" class="form-control rounded-pill password password1" style="text-transform: uppercase;">
-                                                        {{course.bicAddress}}</span>
-
-
-                                                    <label class="bank">Account Number</label>
-                                                    <span id="password1" type="" placeholder="Account number" class="form-control rounded-pill password password1">
-                                                        {{course.accNumber}}</span>
-
-
-                                                    <label class="bank">Account Type</label>
-                                                    <span id="password1" type="" placeholder="Account Type" class="form-control rounded-pill password password1">
-                                                        {{course.accType}}</span>
-
-
-                                                    <label class="bank">Currency Type</label>
-                                                    <span id="password1" type="" placeholder="currency" class="form-control rounded-pill password password1">
-                                                        {{course.currency}}</span>
-
-                                                </div>
-                                            </div>
-                                            <div style="text-align: end;">
-                                                <a *ngIf="!showLess && details.length >2" (click)=showMore() style="color: rgb(100, 100, 100);">Show More Banks>></a>
-                                                <a *ngIf="showLess" (click)=lessShow() style="color: rgb(100, 100, 100);">Show Less Banks<< </a>
-                                            </div>
-
-                                        </div>
-                                        <div *ngIf="editable" class="form-group mb-3" formArrayName="bankDetails">
-                                            <label>Bank Details</label>
-                                            <div *ngFor="let course of getCourses(loginForm); let i = index" [formGroupName]="i">
-                                                <div class="bankClass">
-                                                    <label class="bank">*Bank Name</label>
-                                                    <a *ngIf='z>1' (click)='removeAddress(i)' style="float: right; color: red;">Remove</a>
-                                                    <input [(ngModel)]="details[i].bank" formControlName="bank" id="password1" type="" placeholder="Type the bank name to search" class="form-control rounded-pill password password1" (input)="searchData($any($event.target).value, i)" [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('bank').errors?.required }"
-                                                        autocomplete="off">
-                                                    <div *ngIf="submitted1 && g.controls[i].get('bank').errors" class="invalid-feedback">
-                                                        <div *ngIf="g.controls[i].get('bank').errors?.required " style="margin-left: 15px;">Bank Name Required
-                                                        </div>
-                                                    </div>
-
-                                                    <div *ngIf='toggle' style="margin-left: 20px;">
-                                                        <table *ngIf='value === i'>
-                                                            <tr *ngFor="let bankName of jsondata" (click)=bankClick(bankName.bank,i)>{{bankName.bank}}
-                                                            </tr>
-                                                        </table>
-                                                    </div>
-
-
-                                                    <label class="bank">Bic Address</label>
-                                                    <input [(ngModel)]="details[i].bicAddress" formControlName="bicAddress" style="text-transform: uppercase;" id="password1" type="" placeholder="Bic address" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('bicAddress').errors?.required }"
-                                                        autocomplete="off">
-                                                    <div *ngIf="submitted1 && g.controls[i].get('bicAddress').errors" class="invalid-feedback">
-                                                        <div *ngIf="g.controls[i].get('bicAddress').errors?.pattern" style="margin-left: 15px;">BIC address should be alphanumerics Ex: ABCABCA12AB
-                                                        </div>
-                                                        <div *ngIf="g.controls[i].get('bicAddress').errors?.required" style="margin-left: 15px;">BIC address Required
-                                                        </div>
-                                                        <div *ngIf="g.controls[i].get('bicAddress').errors?.maxlength" style="margin-left: 15px;">
-                                                            BIC address should contains 11 Letters.
-                                                        </div>
-                                                    </div>
-
-                                                    <label class="bank">Account Number</label>
-                                                    <input [(ngModel)]="details[i].accNumber" formControlName="accNumber" id="password1" type="" placeholder="Account number" class="form-control rounded-pill password password1" [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('accNumber').errors }"
-                                                        autocomplete="off">
-                                                    <div *ngIf="submitted1 && g.controls[i].get('accNumber').errors" class="invalid-feedback">
-                                                        <div *ngIf="g.controls[i].get('accNumber').errors?.required" style="margin-left: 15px;">
-                                                            Account number Required
-                                                        </div>
-                                                        <div *ngIf="g.controls[i].get('accNumber').errors?.pattern" style="margin-left: 15px;">
-                                                            Account number should be number
-                                                        </div>
-                                                    </div>
-
-
-                                                    <label class="bank">Account Type</label>
-                                                    <select [(ngModel)]="details[i].accType" class="form-control rounded-pill password password1" formControlName="accType" (change)="modo($any($event.target).value, i)" [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('accType').errors }">
-                                                        <option value="" [selected]="!details[i].accType">Choose Account
-                                                            Type</option>
-                                                        <option value="OD-over draft"
-                                                            [selected]="details[i].accType === 'OD-over draft'">OD-over
-                                                            draft</option>
-                                                        <option value="CC- cash credit"
-                                                            [selected]="details[i].accType === 'CC- cash credit'">CC-
-                                                            cash
-                                                            credit</option>
-                                                        <option value="CA-Current account"
-                                                            [selected]="details[i].accType === 'CA-Current account'">
-                                                            CA-Current account</option>
-                                                        <option value="EEFC - Exchange earner Foreign currency"
-                                                            [selected]="details[i].accType === 'EEFC -Exchange earner Foreign currency'">
-                                                            EEFC -
-                                                            Exchange earner Foreign currency</option>
-                                                        <option value="PCFC- packing credit Foreign currency"
-                                                            [selected]="details[i].accType === 'PCFC- packing credit Foreign currency'">
-                                                            PCFC- packing
-                                                            credit Foreign currency</option>
-                                                        <option value="EBRD- Bill discounting account)"
-                                                            [selected]="details[i].accType === 'EBRD- Bill discounting account'">
-                                                            EBRD- Bill
-                                                            discounting account</option>
-                                                    </select>
-                                                    <div *ngIf="submitted1 && g.controls[i].get('accType').errors" class="invalid-feedback">
-                                                        <div *ngIf="g.controls[i].get('accType').errors.required" style="margin-left: 15px;">
-                                                            Account type is required
-                                                        </div>
-                                                    </div>
-
-
-                                                    <label class="bank">Currency Type</label>
-
-                                                    <input [(ngModel)]="details[i].currency" formControlName="currency" id="password1" type="" placeholder="Type the currency name to search" class="form-control rounded-pill password password1" (input)="searchCurrency($any($event.target).value,i)" [ngClass]="{ 'is-invalid': submitted1 && g.controls[i].get('currency').errors }"
-                                                        autocomplete="off">
-                                                    <div *ngIf="submitted1 && g.controls[i].get('currency').errors" class="invalid-feedback">
-                                                        <div *ngIf="g.controls[i].get('currency').errors.required" style="margin-left: 15px;">
-                                                            Currency Type is required
-                                                        </div>
-                                                    </div>
-
-                                                    <div *ngIf='toggle1' style="margin-left: 20px;">
-                                                        <table *ngIf='value1 == i'>
-                                                            <tr *ngFor="let currencyName of jsondata1" (click)=currencyClick(currencyName.value,i)>
-                                                                {{currencyName.currency}}</tr>
-                                                        </table>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div *ngIf="editable" class="row col-md-12" style="margin-bottom: 12px;">
-                                            <button class="rounded-pill add" type="button" (click)="onAddCourse(loginForm)">
-                                                Add Another Bank
-                                            </button>
-                                        </div>
-
-                                        <div class="form-group mb-3">
-                                            <label>Letter Head</label> <br>
-                                            <img *ngIf="lh" src="{{letterHead1}}" height="100px" width="100%">
-                                            <br *ngIf="lh"> <br *ngIf="lh">
-                                            <form *ngIf="editable" method="POST">
-                                                <div>
-                                                    <input class="customfile1" (error)="onUploadError($event)" placeholder="Choose File" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (sending)="sending($event,'Letter Head')" *ngIf="type === 'directive'" [dropzone]="config">
-                                                    <p class="bottomText">Maximum size: 5MB</p>
-                                                    <p class="bottomText" *ngIf="letterHead">Uploading...</p>
-                                                    <p class="bottomText" *ngIf="letterHeadDone">Uploading Done</p>
-                                                </div>
-
-
-                                            </form>
-
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label>Round Seal</label><br>
-                                            <img *ngIf="rs" src="{{roundSeal1}}" height="100px" width="100%">
-                                            <br *ngIf="rs"> <br *ngIf="rs">
-                                            <form *ngIf="editable" method="POST">
-                                                <input class="customfile1" (error)="onUploadError($event)" placeholder="Choose File" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (sending)="sending($event,'Round Seal')" *ngIf="type === 'directive'" [dropzone]="config">
-                                                <p class="bottomText">Maximum size: 5MB</p>
-                                                <p class="bottomText" *ngIf="roundSeal">Uploading...</p>
-                                                <p class="bottomText" *ngIf="roundSealDone">Uploading Done</p>
-                                            </form>
-                                        </div>
-
-                                        <div class="form-group mb-3">
-                                            <label>For Seal</label><br>
-                                            <img *ngIf="fs" src="{{forSeal1}}" height="100px" width="100%">
-                                            <br *ngIf="fs"> <br *ngIf="fs">
-                                            <form *ngIf="editable" method="POST">
-                                                <input class="customfile1" placeholder="Choose File" (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (sending)="sending($event,'For Seal')" *ngIf="type === 'directive'" [dropzone]="config">
-                                                <p class="bottomText">Maximum size: 5MB</p>
-                                                <p class="bottomText" *ngIf="forSeal">Uploading...</p>
-                                                <p class="bottomText" *ngIf="forSealDone">Uploading Done</p>
-                                            </form>
-                                        </div>
-                                        <div class="col-12 d-flex row">
-                                          <div *ngIf="!editable;else updatebtn">
-                                            <button type="submit" class="btn" (click)="edit();editable=true" [style]="this.userData?.role!='manager'? ' pointer-events: none;' : ' pointer-events: auto;' ">Edit</button>
-                                          </div>
-                                          <ng-template #updatebtn>
-                                            <button type="submit" class="btn" [style]="this.userData?.role!='manager'? ' pointer-events: none;' : ' pointer-events: auto;'">Update</button>
-                                            </ng-template>
-                                          <button class="btn" [routerLink]="['/home/dashboardTask']">Back</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End -->
-
-                    </div>
+  <main id="content" class="content p-0" role="main"
+    style="border-radius: 10px;box-shadow: 0px 0px 2px 2px #cdc9c9;background: white;">
+    <div class="container-fluid p-0 m-0">
+      <div class="col-12 p-0 m-0">
+        <div class="col-12 m-0 p-0">
+          <div class="header">
+            <h2 class="col-12 border-2px p-0">Company {{TEXT_CHANGED}}</h2>
+            <h6 class="col-12 p-0 h6">Give us some of your information about your company</h6>
+          </div>
+          <div class="card">
+            <div class="main-panel front col-12 p-0 m-0">
+              <div class="col-12 p-0 m-0 grid-template">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Company Name</label>
+                  <input type="text" [value]="this.item?.teamName" class="form-control" aria-describedby="emailHelp"
+                    disabled>
                 </div>
-
+                <div class="form-group">
+                  <label for="exampleInputPassword1">*Importer exporter code (IEC)</label>
+                  <input type="text" class="form-control" [value]="this.item?.iec" id="exampleInputPassword1" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Company Address</label>
+                  <input type="text" class="form-control" [value]="this.item?.adress" aria-describedby="emailHelp"
+                    disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Contact Phone number</label>
+                  <input type="text" class="form-control" [value]="this.item?.phone" id="exampleInputPassword1"
+                    disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">CA email id
+                    <h6 style="font-size: 12px;
+                            color: gray;">Ex: CA email ID’s for submission of documents for documents like 15B,annual
+                      statutory auditor certificate, write off etc.,</h6>
+                  </label>
+                  <input type="text" class="form-control" [value]="this.item?.caEmail" aria-describedby="emailHelp"
+                    disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">CHA email id</label>
+                  <input type="text" class="form-control" [value]="this.item?.chaEmail" id="exampleInputPassword1"
+                    disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">*GSTIN</label>
+                  <input type="text" class="form-control" [value]="this.item?.gst" aria-describedby="emailHelp"
+                    disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Location</label>
+                  <input type="text" *ngFor="let location of this.item?.location" class="form-control mb-2"
+                    [value]="location?.loc" id="exampleInputPassword1" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Commodity</label>
+                  <input type="text" *ngFor="let commodity of this.item?.commodity" class="form-control mb-2"
+                    [value]="commodity?.como" aria-describedby="emailHelp" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Bank Details</label>
+                  <div *ngFor="let course of item?.bankDetails; let i = index" class="mb-2">
+                    <div class="bankClass">
+                      <div class="column">
+                        <label class="bank">*Bank Name | Account Number</label>
+                        <span id="password1" type="" placeholder="bank name"
+                          class="form-control rounded-pill password password1">
+                          {{course.bank}} | {{course.accNumber}}</span>
+                      </div>
+                      <button type="submit" class="btn btn-primary" (click)="bank_details.style.display='flex';view_bank_details(i)">View</button>
+                   </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Letter Head</label>
+                  <input type="text" class="form-control" style="height: 150px;border-radius: 5px;"
+                    aria-describedby="emailHelp" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Round Seal</label>
+                  <input type="text" class="form-control" style="height: 150px;border-radius: 5px;"
+                    id="exampleInputPassword1" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">For Seal</label>
+                  <input type="text" class="form-control" style="height: 150px;border-radius: 5px;"
+                    id="exampleInputPassword1" disabled>
+                </div>
+                <div class="form-group" style="display: flex;align-items: end;">
+                  <button type="submit" class="btn btn-primary" (click)="Edit('.front','.back')" [style]="this.userData?.role!='manager'? ' pointer-events: none;' : ' pointer-events: auto;' ">Edit</button>
+                  <button type="submit" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">Back</button>
+                </div>
+              </div>
             </div>
+            <div class="back col-12 p-0 m-0">
+              <div class="col-12 p-0 m-0 grid-template">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Company Name</label>
+                  <input type="text" (keyup)="add_Form_value('teamName',$event.target.value)"
+                    [value]="this.UPDATED_DETAILS?.teamName" class="form-control" aria-describedby="emailHelp">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">*Importer exporter code (IEC)</label>
+                  <input type="text" pattern="^[a-zA-Z0-9 _]{10}$" (keyup)="add_Form_value('iec',$event.target.value)" class="form-control"
+                    [value]="this.UPDATED_DETAILS?.iec" maxlength="10" #iec>
+                    <span [style]="iec.value.length<10 ? 'display:block' : 'display:none'" class="invalid-feedback">ICE should contains only 10 numbers</span>
+                    <!-- <div *ngIf="iec.value.length<10" [style]="iec.value.length<10 ? 'display:block' : 'display:none'" class="invalid-feedback">ICE should contains only 10 numbers</div>
+                    <div *ngIf="iec.pattern"  [style]="iec.pattern ? 'display:block' : 'display:none'" class="invalid-feedback">IEC should be numerics with 10 letters EX: 12121ABVEW</div> -->
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Company Address</label>
+                  <input type="text" (keyup)="add_Form_value('adress',$event.target.value)" class="form-control"
+                    [value]="this.UPDATED_DETAILS?.adress" aria-describedby="emailHelp">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Contact Phone number</label>
+                  <input type="text" pattern="[1-9]{1}[0-9]{9}" maxlength="10" (keyup)="add_Form_value('phone',$event.target.value)" class="form-control"
+                  appPhoneValidator [value]="this.UPDATED_DETAILS?.phone" placeholder="Ex: +91 95023 23352" id="exampleInputPassword1" #phone>
+                    <span class="invalid-feedback" *ngIf="phone.value.length<10" [style]="phone.value.length<10 ? 'display:block' : 'display:none'">
+                      Phone number must be 10 digits
+                  </span>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">CA email id
+                    <h6 style="font-size: 12px;
+                            color: gray;">Ex: CA email ID’s for submission of documents for documents like 15B,annual
+                      statutory auditor certificate, write off etc.,</h6>
+                  </label>
+                  <input type="text" (keyup)="add_Form_value('caEmail',$event.target.value)" class="form-control"
+                    [value]="this.UPDATED_DETAILS?.caEmail"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                    required aria-describedby="emailHelp">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">CHA email id</label>
+                  <input type="text" (keyup)="add_Form_value('chaEmail',$event.target.value)" class="form-control"
+                    [value]="this.UPDATED_DETAILS?.chaEmail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                    required id="exampleInputPassword1">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">*GSTIN</label>
+                  <input type="text" (keyup)="add_Form_value('gst',$event.target.value)" class="form-control"
+                    [value]="this.UPDATED_DETAILS?.gst" aria-describedby="emailHelp">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Location</label>
+                  <div class="row col-12 grid-template-1 p-0 mb-3"
+                    *ngFor="let location of this.UPDATED_DETAILS?.location;let i=index">
+                    <input type="text" (keyup)="add_ArrayForm_value('location',i,'loc',$event.target.value)"
+                      class="form-control col-12" [value]="location?.loc" id="exampleInputPassword1">
+                    <button type="submit" *ngIf="(i)!=0 && location?.loc==''" class="btn danger-primary remove-btn"
+                      style="background-color: #fd5f00;" (click)="remove_location(i)"><span>&#215;</span></button>
+                    <button type="submit" *ngIf="(i+1)==this.UPDATED_DETAILS?.location.length"
+                      class="btn btn-primary remove-btn" (click)="add_location()"><span>&#43;</span></button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Commodity</label>
+                  <div class="row col-12 grid-template-2 p-0 mb-3"
+                    *ngFor="let comm of this.UPDATED_DETAILS?.commodity;let i=index">
+                    <input type="text" (keyup)="add_ArrayForm_value('commodity',i,'como',$event.target.value)"
+                      class="form-control col-12" [value]="comm?.como" aria-describedby="emailHelp">
+                    <button type="submit" *ngIf="(i)!=0 && comm?.como==''" class="btn danger-primary remove-btn"
+                      style="background-color: #fd5f00;" (click)="remove_commodity(i)"><span>&#215;</span></button>
+                    <button type="submit" *ngIf="(i+1)==this.UPDATED_DETAILS?.commodity.length"
+                      class="btn btn-primary remove-btn" (click)="add_commodity()"><span>&#43;</span></button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Bank Details</label>
+                  <div class="column bankClass1">
+                    <div class="column bank-details"
+                      *ngFor="let course of this.UPDATED_DETAILS?.bankDetails; let i = index">
+                      <div class="row bank-header p-1 m-auto">
+                        <h4>Bank Details_{{i+1}}</h4>
+                        <div class="row mr-2">
+                          <button type="submit" *ngIf="(i)!=0 && course?.bank==''" class="btn danger-primary remove-btn mr-2"
+                            style="background-color: #fd5f00;"
+                            (click)="remove_more_Bank(i)"><span>&#215;</span></button>
+                          <button type="submit" *ngIf="(i+1)==this.UPDATED_DETAILS?.bankDetails.length"
+                            class="btn btn-primary remove-btn mr-2"
+                            (click)="add_more_Bank()"><span>&#43;</span></button>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <label class="bank">*Bank Name</label>
+                        <input type="text" (keyup)="add_ArrayForm_value('bankDetails',i,'bank',$event.target.value)"
+                          placeholder="bank name" [value]="course?.bank"
+                          class="form-control rounded-pill password password1">
+                        <label class="bank">*Account Number</label>
+                        <input type="text"
+                          (keyup)="add_ArrayForm_value('bankDetails',i,'accNumber',$event.target.value)"
+                          placeholder="Amount Number" [value]="course?.accNumber"
+                          class="form-control rounded-pill password password1">
+                        <label class="bank">Bic Address</label>
+                        <input type="text"
+                          (keyup)="add_ArrayForm_value('bankDetails',i,'bicAddress',$event.target.value)"
+                          [value]="course?.bicAddress" placeholder="Bic address"
+                          class="form-control rounded-pill password password1" style="text-transform: uppercase;">
+                        <label class="bank">Account Type</label>
+                        <ng-select *ngIf="this.Account_Type?.length!=0"
+                          [items]="this.Account_Type"
+                          bindLabel="type"
+                          [multiple]="false"
+                          placeholder="Select AccType"
+                          name="accType"
+                          [ngModel]="course?.accType"
+                          (change)="add_ArrayForm_value('bankDetails',i,'accType',$event.type)"></ng-select>
+                        <label class="bank">Currency Type</label>
+                        <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                          [items]="this.CURRENCY_LIST"
+                          bindLabel="type"
+                          [multiple]="false"
+                          placeholder="Select Currency"
+                          name="currency"
+                          [ngModel]="course?.currency"
+                          (change)="add_ArrayForm_value('bankDetails',i,'currency',$event.type)"></ng-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Letter Head</label>
+                  <input type="text" class="form-control" style="height: 150px;border-radius: 5px;"
+                    aria-describedby="emailHelp" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Round Seal</label>
+                  <input type="text" class="form-control" style="height: 150px;border-radius: 5px;" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">For Seal</label>
+                  <input type="text" class="form-control" style="height: 150px;border-radius:5px;" disabled>
+                </div>
+                <div class="form-group" style="display: flex;align-items: end;">
+                  <button type="submit" class="btn btn-primary" (click)="onSubmit(this.item._id)">Update</button>
+                  <button type="submit" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">Back</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-    </main>
-
-
+      </div>
+    </div>
+  </main>
+  <div class="modal" tabindex="-1" #bank_details style="display: none;">
+    <div class="col-5 m-auto d-flex" *ngIf="ID!=-1">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Bank Details | {{item?.bankDetails[ID].bank}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="bank_details.style.display='none'"><span>&#215;</span></button>
+        </div>
+        <div class="modal-body">
+          <label class="bank">Bic Address</label>
+          <span id="password1" type="" placeholder="Bic address" class="form-control rounded-pill password password1"
+            style="text-transform: uppercase;">
+            {{item?.bankDetails[ID].bicAddress}}</span>
+          <label class="bank">Account Number</label>
+          <span id="password1" type="" placeholder="Account number" class="form-control rounded-pill password password1">
+            {{item?.bankDetails[ID].accNumber}}</span>
+          <label class="bank">Account Type</label>
+          <span id="password1" type="" placeholder="Account Type" class="form-control rounded-pill password password1">
+            {{item?.bankDetails[ID].accType}}</span>
+          <label class="bank">Currency Type</label>
+          <span id="password1" type="" placeholder="currency" class="form-control rounded-pill password password1">
+            {{item?.bankDetails[ID].currency}}</span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="bank_details.style.display='none'">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

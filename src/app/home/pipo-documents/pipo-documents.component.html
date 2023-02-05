@@ -1,6 +1,6 @@
 <div class="content-wrap pb-2 scroll-bar-main">
     <div class="import_export_sec">
-        <h3 class="heading_common_tag">Packing List Documents</h3>
+        <h3 class="heading_common_tag">PIPO Documents</h3>
     </div>
     <main id="content" class="table-padding" role="main">
         <div class="filter_section_top">
@@ -57,7 +57,9 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-dark">
-                                    <tr class="table-row" *ngFor="let data of item3; let i = index">
+                                    <tr class="table-row" *ngFor="let data of item3; let i = index"
+                                       [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                       this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
                                         <td>
                                             {{data.date}}
                                         </td>
@@ -206,14 +208,16 @@
                                             </div>
                                         </td>
                                         <td class="view_edit_button">
-                                            <a (click)=" openCreditNote(content); viewCN(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a (click)=" openPipoNote(content); viewCN(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                             <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                             <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">
                                               <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                                            <a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                              <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
+                                              (click)="handleDelete(data._id,i)">
+                                              <a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                            </button>
                                         </td>
                                     </tr>
-
                                 </tbody>
                             </table>
                         </div>
@@ -1458,40 +1462,39 @@
                 </form>
             </div>
         </div>
-        <ng-template #content let-modal>
+       
+    </main>
+</div>
+<ng-template #content let-modal>
 
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row no-gutter">
-                        <!-- The image half -->
-                        <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
+    <div class="modal-body">
+            <div class="row no-gutter">
+                <!-- The image half -->
+                <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
 
 
-                        <!-- The content half -->
-                        <div class="col-md-7 bg-dark">
-                            <div class="login d-flex py-5" style="padding: 0px !important;">
-                                <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                          <span aria-hidden="true">&times;</span>
-                        </button> -->
-                                <!-- Demo content-->
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-lg-10 col-xl-7 mrg">
-                                            <h6 class="display-5">Document</h6>
+                <!-- The content half -->
+                <div class="col-md-7" style="margin: 10px;">
+                    <div class="login d-flex py-5" style="padding: 0px !important;">
+                        <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button> -->
+                        <!-- Demo content-->
+                        <div class="container popup">
+                            <div class="row">
+                                <div class="col-lg-10 col-xl-7 mrg">
+                                    <h6 class="display-6">PIPO Documents</h6>
 
-                                            <iframe [src]='viewData' width="400px" height="500px"> </iframe>
-                                        </div>
-                                    </div>
+                                    <iframe [src]='viewData' width="315%" height="500px"> </iframe>
                                 </div>
-                                <!-- End -->
-
                             </div>
                         </div>
+                        <!-- End -->
 
                     </div>
                 </div>
+
+            </div>
             </div>
 
-        </ng-template>
-    </main>
-</div>
+</ng-template>

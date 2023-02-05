@@ -52,6 +52,9 @@ import { AuthorizationComponent } from './Authorization/authorization/authorizat
 import { AdminGuard } from "./service/RolePermission/Admin/admin.guard";
 import { SuperGuard } from "./service/RolePermission/SuperAdmin/super.guard";
 import { MemberGuard } from "./service/RolePermission/Member/member.guard";
+import { AdminMemberGuard } from "./service/RolePermission/AdminMember/admin-member.guard";
+import {DateFormatService} from "./DateFormat/date-format.service"
+import { JoinPipePipe } from './join-pipe.pipe';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -83,6 +86,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         CustomConfirmDialogModelComponent,
         CustomDropdownComponent,
         AuthorizationComponent,
+        JoinPipePipe,
     ],
     providers: [{ provide: AppConfig },
         WindowInformationService,
@@ -92,6 +96,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         AdminGuard,
         SuperGuard,
         MemberGuard,
+        AdminMemberGuard,
+        DateFormatService,
         { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
     ],
     bootstrap: [AppComponent],
@@ -105,6 +111,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         DragDropModule,
         SharedModule,
         SignupModule,
+        HomeModule,
         BsDatepickerModule.forRoot(),
         SigninModule,
         AppRoutingModule,

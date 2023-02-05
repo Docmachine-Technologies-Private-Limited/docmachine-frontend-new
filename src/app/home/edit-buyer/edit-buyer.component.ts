@@ -13,7 +13,7 @@ export class EditBuyerComponent implements OnInit {
   item: any;
   item1: any;
   id: any;
-  is: any;
+  is:boolean=false;
   shippingForm: FormGroup;
   constructor(
     private route: ActivatedRoute,
