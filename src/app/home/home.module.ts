@@ -91,15 +91,12 @@ import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/expo
 import { ImportBillOfExchangeComponent } from "./import-bill-of-exchange/import-bill-of-exchange.component";
 import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.component';
 import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-member.guard";
-<<<<<<< HEAD
 
 import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remittance/add-advance-outward-remittance.component';
-=======
 import { UserProfilesComponent } from "./user-profiles/user-profiles.component";
 import { EmailValidatorDirective } from './Validator/email/email-validator.directive';
 import { PhoneValidatorDirective } from './Validator/phone/phone-validator.directive';
 
->>>>>>> c272e3d39f64f009bea5426cb12c53861553a1f4
 import { EditRemittanceComponent } from './edit-remittance/edit-remittance.component';
 import { RemittanceSummaryComponent } from './remittance-summary/remittance-summary.component';
 import { AddRemittanceComponent } from './add-remittance/add-remittance.component';

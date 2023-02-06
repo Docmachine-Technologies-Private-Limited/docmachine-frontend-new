@@ -33,6 +33,11 @@
                                         <!-- <div class="new_left_sidedoc">
                                             <img src="/assets/Group3055.png" alt="Drag & drop files here or Browse" />
                                         </div> -->
+
+                                        <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="this.PREVIWES_URL!=''">
+                                            <iframe class='iframe-controller' style="flex-direction:row;" [src]="this.PREVIWES_URL" id="frame1" height="600px" width="500px"></iframe>
+                                        </div>
+
                                         <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="selectedItems.length!=0">
                                             <div *ngFor="let selItems of selectedItems">
                                                 <iframe *ngIf="selItems?.doc!=''" style="border:none;"  [src]="selItems?.doc" width="100%"> </iframe>
@@ -43,17 +48,17 @@
                                         </div>
                                         
                                     </div>
-                                    <div class="col-md-5 col-sm-12 col-12">
+                                    <div class="col-md-5 col-sm-12 col-12" *ngIf="showSummaryPage == 0">
                                         <div class="right_form_new">
                                             <div class="row">
                                                 <div class="col-md-6 col-12">
                                                     <label for="exampleInputEmail1" class="form-label">Select
                                                         bank*</label>
                                                     <select class="form-select" aria-label="Default select example"
-                                                        [(ngModel)]="bank" name="bank">
+                                                        [(ngModel)]="bank" formControlName="bank" (change)="onSelectBank($event.target.value)" autocomplete="off">
                                                         <option value="">Select bank</option>
 
-                                                        <option *ngFor="let banklist of bankDetail
+                                                        <option value="{{ banklist.bank }}" *ngFor="let banklist of bankDetail
                                                                 ">{{ banklist.bank }}
                                                         </option>
                                                     </select>
@@ -67,7 +72,7 @@
                                                     <label for="exampleInputPassword1" class="form-label">Select
                                                         beneficiary</label>
                                                     <select class="form-select" aria-label="Default select example"
-                                                        [(ngModel)]="beneName" name="beneName"
+                                                        [(ngModel)]="beneName" formControlName="beneName"
                                                         (change)=changepipo($event.target.value) #select_ben>
                                                         <option value="">Select Buyer</option>
 
@@ -83,16 +88,16 @@
                                                 </div>
                                             </div>
 
-                                            <div *ngIf="pipoData?.length > 0">
-                                                <div class="row" formArrayName="itemsTerm"
+                                            <div *ngIf="pipoData?.length > 0" formArrayName="pipoTerm">
+                                                <div class="row"
                                                     *ngFor="let items of getItems(pipoForm); let i = index"
                                                     [formGroupName]="i">
                                                     <div class="col-md-5 col-12">
                                                         <label for="exampleInputEmail1" class="form-label">Select
                                                             PI</label>
                                                         <select class="form-select" aria-label="Default select example"
-                                                            formControlName="pi_poNo" name="pi_poNo" autocomplete="off"
-                                                            (change)="choosenItems($event.target.value,i)" #multiplepipo>
+                                                            formControlName="pi_poNo" autocomplete="off"
+                                                            [value]="items?.pi_poNo"  (change)="choosenItems($event.target.value,i)" #multiplepipo>
                                                             <option value="">Select PI/PO</option>
 
                                                             <option value="{{pipolist._id}}" *ngFor="let pipolist of pipoData
@@ -108,8 +113,8 @@
                                                     <div class="col-md-2 col-12 padding0">
                                                         <label for="Currency" class="form-label">Currency</label>
                                                         <select class="form-select" aria-label="Default select example"
-                                                            formControlName="currency" name="currency"
-                                                            autocomplete="off" [value]="this.LIST_PIPO[multiplepipo.value]?.currency">
+                                                            formControlName="currency" 
+                                                            autocomplete="off" [value]="this.LIST_PIPO[multiplepipo.value]?.currency" ngModel>
                                                             <option value="">Select Currency</option>
 
                                                             <option value="{{currency}}" *ngFor="let currency of CurrencyData
@@ -125,13 +130,36 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3 col-12">
-                                                        <label for="Amount" class="form-label">Amount</label>
-                                                        <input type="text" class="form-control" formControlName="amount"
-                                                            id="amount" name="amount"
+                                                        <label for="Amount" class="form-label">Invoice Amount</label>
+                                                        <input type="text" class="form-control" formControlName="invoice_amount"
+                                                            id="invoice_amount" 
                                                             [value]="this.LIST_PIPO[multiplepipo.value]?.amount"
-                                                            placeholder="Invoice Amount" autocomplete="off">
+                                                            placeholder="Invoice Amount" autocomplete="off" ngModel>
                                                         <div *ngIf="submitted && form.amount.errors" class='errorText'>
                                                             <div *ngIf="form.amount.errors.required">Invoice Amount
+                                                                is required</div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-md-3 col-12">
+                                                        <label for="payableAmount" class="form-label">Payable Amount</label>
+                                                        <input type="text" class="form-control" formControlName="payableAmount"
+                                                            id="payableAmount" 
+                                                            [value]="this.LIST_PIPO[multiplepipo.value]?.payableAmount??this.LIST_PIPO[multiplepipo.value]?.amount"
+                                                            placeholder="Payable Amount" autocomplete="off" ngModel>
+                                                        <div *ngIf="submitted && form.payableAmount.errors" class='errorText'>
+                                                            <div *ngIf="form.payableAmount.errors.required">Payable Amount
+                                                                is required</div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-md-3 col-12">
+                                                        <label for="remittanceAmount" class="form-label">Remittance Amount</label>
+                                                        <input type="text" class="form-control" formControlName="remittanceAmount"
+                                                            id="remittanceAmount" 
+                                                             placeholder="Remittance Amount" autocomplete="off" (ngModelChange)="addNums()" >
+                                                        <div *ngIf="submitted && form.remittanceAmount.errors" class='errorText'>
+                                                            <div *ngIf="form.remittanceAmount.errors.required">Remittance Amount
                                                                 is required</div>
                                                         </div>
 
@@ -160,7 +188,13 @@
                                                     <label for="TotalPIamount" class="form-label">Total PI
                                                         amount</label>
                                                     <input type="text" class="form-control" id="TotalPIamount" [value]="sumTotalAmount" name="sumTotalAmount"
-                                                        placeholder="Select PI/PO" readonly>
+                                                        placeholder="Total PI amount" readonly>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-12">
+                                                    <label for="totalremittanceAmount" class="form-label">Remittance
+                                                        amount</label>
+                                                    <input type="text" formControlName="totalremittanceAmount" class="form-control" id="totalremittanceAmount" [value]="sumTotalAmount" name="sumTotalAmount"
+                                                        placeholder="Remittance amount" >
                                                 </div>
                                             </div>
                                             <div class="row" *ngIf="sumTotalAmount != 0 && sumTotalAmount > 200000">
@@ -169,14 +203,15 @@
                                                         available?</label><br>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
-                                                            name="opinionReport" value="1" id="flexRadioDefault1" (click)="showhideOpinionReport(1)">
-                                                        <label class="form-check-label" for="flexRadioDefault1">
+                                                        formControlName="opinionReport"  value="1" id="flexRadioDefault1" (click)="showhideOpinionReport(1)">
+                                                        <label class="form-check-label" for="flexRadioDefault1" [checked]="isCheckedYes">
                                                             YES
                                                         </label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
-                                                        name="opinionReport" value="0"  id="flexRadioDefault2" (click)="showhideOpinionReport(0)">
+                                                        formControlName="opinionReport" 
+                                                         value="0"  id="flexRadioDefault2" (click)="showhideOpinionReport(0)" [checked]="isCheckedNo">
                                                         <label class="form-check-label" for="flexRadioDefault2">
                                                             NO
                                                         </label>
@@ -202,7 +237,68 @@
                                             </div>
                                             <div class="bottom_submit_section">
                                                 <button type="button" class="btn btn-primary">CANCEL</button>
-                                                <button type="button" class="btn btn-secondary">PROCEED</button>
+                                                <button type="button" class="btn btn-secondary" (click)="showhideSummaryPage(1)">PROCEED</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-5 col-sm-12 col-12" *ngIf="showSummaryPage == 1" #summarypage>
+                                        <div class="right_form_new">
+                                            <table class="newdatatable">
+                                                <tbody>
+                                                    <tr>
+                                                        <td><b>Bank name</b></td>
+                                                        <td>
+                                                            <p>{{selectedBankName}}</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Beneficiary name</b></td>
+                                                        <td>
+                                                            <p>{{selectedBenne.beneName}}</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Beneficiary account</b></td>
+                                                        <td>
+                                                            <p>{{selectedBenne.beneAccNo}}</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2"><strong>PI details</strong></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Total no. of PI</b></td>
+                                                        <td>
+                                                            <p>{{selectedItems.length}}</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr *ngFor="let items of selectedItems">
+                                                        <td><b>{{items.pipo_no}} </b></td>
+                                                        <td>
+                                                            <p> ( Amount: {{items.amount}}, Date: {{items.date}}, Buyer name: {{items.buyerName}} ) 
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Total PI amount</b></td>
+                                                        <td>
+                                                            <p>{{sumTotalAmount}}
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Opinion report</b></td>
+                                                        <td>
+                                                            <p style="color:#51AEE5;">Opinion report.pdf</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <div class="bottom_submit_section">
+                                                <button type="button" class="btn btn-primary" (click)="showhideSummaryPage(0)">BACK</button>
+                                                <button type="button" class="btn btn-secondary" (click)="onSubmit(this.pipoForm)">CREATE DOCUMENT</button>
                                             </div>
                                         </div>
                                     </div>

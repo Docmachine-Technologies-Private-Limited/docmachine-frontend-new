@@ -27,6 +27,7 @@ import { AppConfig } from "src/app/app.config";
 import { DocumentService } from "../../service/document.service";
 import { PipoDataService } from "../../service/homeservices/pipo.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 
 @Component({
   selector: 'app-add-advance-outward-remittance',
@@ -41,6 +42,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   buyer: string;
   bank: string;
   beneName: string;
+  selectedBankName: string;
+  selectedBenneId: string;
+  selectedBenneName: string;
   uploading: boolean = false;
   authToken: string;
   
@@ -58,42 +62,13 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
   // ----------------------------------
-  pipourl1: any;
-  tryPartyAgreement: boolean = false;
-  creditNote: boolean = false;
-  swiftCopy: boolean = false;
-  EBRC: boolean = false;
-  blCopyref: boolean = false;
-  blCopy: boolean = false;
-  commercial: boolean = false;
-  billOfExchange: boolean = false;
-  destruction: boolean = false;
-  debitNote: boolean = false;
-  packingList: boolean = false;
-  otherDoc: boolean = false;
-  insuranceCopy: boolean = false;
-  lcCopy: boolean = false;
-  agreement: boolean = false;
-  opinionReport: boolean = false;
-  pipoArray: any = [];
 
+  opinionReport: boolean = false;
   document: any;
   file: any;
-  arrayData: any = [];
-  commodityData: any = [];
-  other: boolean;
-  pipoArr: any = [];
-  pubUrl: any;
-  pipoOut: string;
-  beneOut: string;
   api_base: any;
-  mainBene: any;
-  location: any;
-  isDisabled: boolean;
-  origin: any = [];
-  item5: any;
   headers: any;
-
+  
   isUploaded: boolean = false;
 
   public config: DropzoneConfigInterface;
@@ -101,9 +76,19 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   pipoForm:any= FormGroup;
   submitted = false;
   selectedItems: any = [];
+  selectedBenne: any = [];
   LIST_PIPO:any=[];
   sumTotalAmount = 0;
   showOpinionReport = 0;
+  showSummaryPage = 0;
+  isCheckedYes:boolean = false;
+  isCheckedNo:boolean = false;
+  charge: any;
+  formerge: string | ArrayBuffer | Uint8Array;
+  remittanceUrl: any;
+  newTask: any = [];
+  PREVIWES_URL:any='';
+
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
@@ -155,7 +140,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         pi_poNo: new FormControl('', Validators.required),
         currency: new FormControl("",),
         amount: new FormControl("", Validators.required),
-        itemsTerm: new FormArray([this.initItems()]),
+        pipoTerm: new FormArray([this.initItems()]),
       }
     );
   }
@@ -165,6 +150,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       pi_poNo: ['', Validators.required],
       currency: ['', Validators.required],
       amount: ['', Validators.required],
+      payableAmount: ['', Validators.required],
+      remittanceAmount: ['', Validators.required],
     });
   }
 
@@ -188,6 +175,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
     this.userService.getBene(1).subscribe(
       (res: any) => {
+        console.log('benneDetail',res.data);
         this.benneDetail = res.data
       },
       (err) => console.log("Error", err)
@@ -196,8 +184,38 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
   }
 
-  changepipo(value) {
-    this.pipoDataService.getPipoListByCustomer('import', value).then((data) => {
+  changepipo(id) {
+
+    let temp = [];
+    temp = this.benneDetail.filter(items => { 
+      return items._id == id 
+     });
+
+    // temp =temp.map((items) => {
+
+    //   // items.doc = items.doc ? this.sanitizer.bypassSecurityTrustResourceUrl(items.doc):items.doc;
+
+    // return {
+      // beneAccNo: items.beneAccNo,
+      // beneAdrs: items.beneAdrs,
+      // beneBankAdress: items.beneBankAdress,
+      // beneBankName: items.beneBankName,
+      // beneBankSwiftCode: items.beneBankSwiftCode,
+      // beneName:items.beneName,
+      // iban:items.iban,
+      // interBankName:items.interBankName,
+      // interBankSwiftCode:items.interBankSwiftCode
+      // sortCode:items.sortCode
+    // };
+    // });
+  
+    
+    // this.selectedBenne[0] = temp.pop();
+
+    this.selectedBenne = temp.pop();
+
+    console.log('this.selectedBenneName',this.selectedBenne);
+    this.pipoDataService.getPipoListByCustomer('import', this.selectedBenne.beneName).then((data) => {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
         console.log(data, 'data2222..................')
@@ -247,6 +265,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 				doc: items.doc ? this.sanitizer.bypassSecurityTrustResourceUrl(items.doc):items.doc,
 				amount: items.amount,
 				currency: items.currency,
+        buyerName:items.buyerName,
+        date:items.date,
+        balanceAmount:items?.balanceAmount??"",
 			};
     });
   
@@ -260,21 +281,288 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   showhideOpinionReport(value)
   {
     this.showOpinionReport = value;
+    if(value == 1)
+    {
+      this.isCheckedYes = true;
+      this.isCheckedNo = false;
+    }
+    else
+    {
+      this.isCheckedYes = false;
+      this.isCheckedNo = true;
+    }
+    
+  }
+
+  showhideSummaryPage(value)
+  {
+    console.log('this.pipoForm.controls;',this.pipoForm.controls);
+    this.showSummaryPage = value;
+  }
+
+  onSelectBank(value)
+  {
+    this.selectedBankName = value;
+    this.fillForm();
+  }
+
+  async fillForm() {
+    const formUrl = './../../assets/TAOR.pdf'
+
+    const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
+    const pdfDoc = await PDFDocument.load(formPdfBytes)
+    const form = pdfDoc.getForm()
+    const pages = pdfDoc.getPages()
+    const firstpage = pages[0]
+    const secondpage = pages[1]
+    const textField = form.createTextField('best.text')
+    textField.setText(this.selectedBenne?.beneName + this.selectedBenne?.beneAdrs)
+    textField.addToPage(firstpage, {
+      x: 409, y: 605, width: 132,
+      height: 28, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text1Field = form.createTextField('best.text1')
+    text1Field.setText('')
+    text1Field.addToPage(firstpage, {
+      x: 409, y: 594, width: 132,
+      height: 8, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text2Field = form.createTextField('best.text2')
+    text2Field.setText('')
+    text2Field.addToPage(firstpage, {
+      x: 409, y: 580, width: 132,
+      height: 8, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text3Field = form.createTextField('best.text3')
+    text3Field.setText('')
+    text3Field.addToPage(firstpage, {
+      x: 409, y: 559, width: 132,
+      height: 20, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text4Field = form.createTextField('best.text4')
+    text4Field.setText(this.selectedBenne?.beneName)
+    text4Field.addToPage(firstpage, {
+      x: 409, y: 542, width: 132,
+      height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text5Field = form.createTextField('best.text5')
+    text5Field.setText(this.selectedBenne?.beneBankName + this.selectedBenne?.beneBankAdress + this.selectedBenne?.beneBankSwiftCode)
+    text5Field.addToPage(firstpage, {
+      x: 409, y: 526, width: 132,
+      height: 28, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text6Field = form.createTextField('best.text6')
+    text6Field.setText(this.selectedBenne?.beneAccNo)
+    text6Field.addToPage(firstpage, {
+      x: 409, y: 510, width: 132,
+      height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text7Field = form.createTextField('best.text7')
+    text7Field.setText(this.selectedBenne?.interBankName + this.selectedBenne?.interBankSwiftCode)
+    text7Field.addToPage(firstpage, {
+      x: 409, y: 483, width: 132,
+      height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text8Field = form.createTextField('best.text8')
+    text8Field.setText(this.selectedBenne?.beneBankName)
+    text8Field.addToPage(firstpage, {
+      x: 409, y: 428, width: 132,
+      height: 28, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text9Field = form.createTextField('best.text9')
+    text9Field.setText(this.selectedBenne?.beneBankName)
+    text9Field.addToPage(firstpage, {
+      x: 368, y: 355, width: 33,
+      height: 10, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text10Field = form.createTextField('best.text10')
+    text10Field.setText(this.selectedBenne?.beneBankName)
+    text10Field.addToPage(firstpage, {
+      x: 225, y: 199, width: 70,
+      height: 10, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text11Field = form.createTextField('best.text11')
+    text11Field.setText(this.selectedBenne?.beneBankName)
+    text11Field.addToPage(secondpage, {
+      x: 390, y: 518, width: 92,
+      height: 25, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text12Field = form.createTextField('best.text12')
+    text12Field.setText(this.selectedBenne?.beneBankName)
+    text12Field.addToPage(secondpage, {
+      x: 390, y: 501, width: 92,
+      height: 8, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text13Field = form.createTextField('best.text13')
+    text13Field.setText(this.selectedBenne?.beneBankName)
+    text13Field.addToPage(secondpage, {
+      x: 390, y: 484, width: 92,
+      height: 8, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text14Field = form.createTextField('best.text14')
+    text14Field.setText(this.selectedBenne?.beneBankName)
+    text14Field.addToPage(secondpage, {
+      x: 390, y: 464, width: 92,
+      height: 8, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text15Field = form.createTextField('best.text15')
+    text15Field.setText(this.selectedBenne?.beneBankName)
+    text15Field.addToPage(secondpage, {
+      x: 390, y: 446, width: 92,
+      height: 8, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text16Field = form.createTextField('best.text16')
+    text16Field.setText(this.selectedBenne?.beneBankName)
+    text16Field.addToPage(secondpage, {
+      x: 390, y: 413, width: 92,
+      height: 25, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text17Field = form.createTextField('best.text17')
+    text17Field.setText(this.selectedBenne?.beneBankName)
+    text17Field.addToPage(secondpage, {
+      x: 390, y: 392, width: 92,
+      height: 8, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text18Field = form.createTextField('best.text18')
+    text18Field.setText(this.selectedBenne?.beneBankName)
+    text18Field.addToPage(secondpage, {
+      x: 390, y: 371, width: 92,
+      height: 10, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text19Field = form.createTextField('best.text19')
+    text19Field.setText(this.selectedBenne?.beneBankName)
+    text19Field.addToPage(secondpage, {
+      x: 390, y: 351, width: 92,
+      height: 8, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text20Field = form.createTextField('best.text20')
+    text20Field.setText(this.selectedBenne?.beneBankName)
+    text20Field.addToPage(secondpage, {
+      x: 164, y: 282, width: 57,
+      height: 10, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const text21Field = form.createTextField('best.text21')
+    text21Field.setText(this.selectedBenne?.beneBankName)
+    text21Field.addToPage(secondpage, {
+      x: 321, y: 233, width: 57,
+      height: 10, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+    })
+
+    const pdfBytes = await pdfDoc.save()
+    console.log(pdfDoc, "pdf")
+    console.log(pdfBytes, "pdfBytes")
+    // this.getPdfFile(pdfBytes);
+    console.log(form, "form")
+    var base64String = this._arrayBufferToBase64(pdfBytes)
+
+    const x = 'data:application/pdf;base64,' + base64String;
+
+    const url = window.URL.createObjectURL(new Blob([pdfBytes], {type: 'application/pdf'}));
+    console.log(url,'dsjkfhsdkjfsdhfksfhsd')
+// this.sendFileDownload()
+    this.formerge = x
+    this.remittanceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(x);
+
+    const mergedPdf = await PDFDocument.create();
+    const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+    copiedPages.forEach((page) => {
+      mergedPdf.addPage(page);
+    });
+    const mergedPdfFile = await mergedPdf.save();
+    const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+    await this.disabledTextbox(pdfDoc)
+    const mergedPdfFileload = await mergedPdfload.save();
+    var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
+    const x1 = 'data:application/pdf;base64,' + base64String1;
+    console.log("line no. 1735", this.remittanceUrl)
+    this.PREVIWES_URL= this.sanitizer.bypassSecurityTrustResourceUrl(x1);
+    console.log(this.PREVIWES_URL,'this.PREVIWES_URL')
+
+  }
+
+  async getPdfFile(item:any){
+    let array = new Uint8Array(item);
+    let blob = new Blob([array], { type: 'application/pdf' });
+    var urlCreator = window.URL || window.webkitURL;
+    let url = urlCreator.createObjectURL(blob);
+    let fileName: string = new Date().toLocaleDateString();
+    try {
+      const link = document.createElement('a');
+      if (link.download !== undefined) {
+        link.setAttribute('href', url);
+        link.setAttribute('download', fileName);
+        link.target = '_blank';
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        var evt = document.createEvent('MouseEvents');
+        evt.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
+        link.dispatchEvent(evt);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch (e) {
+      console.error('BlobToSaveAs error', e);
+    }
+  }
+
+  async disabledTextbox(pdfDoc:any){
+    pdfDoc.getForm()
+    .getFields()
+    .forEach((field) => {
+      field.enableReadOnly();
+      console.log(field,)
+    });
+    }
+
+
+  _arrayBufferToBase64(buffer) {
+    var binary = '';
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
   }
 
   get form() {
     return this.pipoForm.controls;
   }
 
-  PipoSubmit(): void {
+  onSubmit(e): void {
 
     this.submitted = true;
 
     console.log("this.pipoForm.invalid",this.pipoForm.invalid)
     console.log("this.pipoForm.invalid",this.pipoForm)
-
+    console.log('this.pipoForm.value',this.pipoForm.value);
     if (this.pipoForm.invalid) {
       return;
+    }
+    else
+    {
+
     }
   }  //  ------------------------- handle image upload------------------------------------------
 
@@ -352,12 +640,12 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
 
   getItems(form) {
-    return form.get('itemsTerm').controls;
+    return form.get('pipoTerm').controls;
   }
 
 
   addItems(index,id) {
-    const control = this.pipoForm.controls.itemsTerm as FormArray;
+    const control = this.pipoForm.controls.pipoTerm as FormArray;
     control.push(this.initItems());
   }
 
@@ -370,7 +658,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
     this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
 
-    let control = this.pipoForm.controls.itemsTerm as FormArray;
+    let control = this.pipoForm.controls.pipoTerm as FormArray;
     control.removeAt(i);
 
   }
