@@ -47,32 +47,44 @@ export class MasterServiceComponent implements OnInit {
     public dialog: MatDialog
   ) {
   }
-
-
   async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
-    this.item1=[];
-      this.documentService.getMasterService().subscribe(
+    this.item=[];
+      this.documentService.getMasterServiceFile("export").subscribe(
         (res: any) => {
-          for (let value of res.data) {
-            if (value['file'] == 'export') {
-              this.item1.push(value);
-            }
-          }
-          console.log(res,'yuyuyuyuyuyuyuuy')
+          this.item=res?.data;
+          console.log(res,'getMasterServiceFile');
         },
         (err) => console.log(err)
-      );
-      await this.pipoDataService.getPipoList('export').then((data) => {
-        console.log(data,'getPipoList')
-        this.pipoDataService.pipolistModel$.subscribe((data) => {
-          console.log(data,'pipolistModel');
-          this.TEMP_PI_PO_NUMBER=data;
-        });
-      });;
+        );
     }
+
+  // async ngOnInit() {
+  //   this.wininfo.set_controller_of_width(270,'.content-wrap')
+  //   this.USER_DATA = await this.userService.getUserDetail();
+  //   console.log("this.USER_DATA", this.USER_DATA)
+  //   this.item1=[];
+  //     this.documentService.getMasterService().subscribe(
+  //       (res: any) => {
+  //         for (let value of res.data) {
+  //           if (value['file'] == 'export') {
+  //             this.item1.push(value);
+  //           }
+  //         }
+  //         console.log(res,'yuyuyuyuyuyuyuuy')
+  //       },
+  //       (err) => console.log(err)
+  //     );
+  //     await this.pipoDataService.getPipoList('export').then((data) => {
+  //       console.log(data,'getPipoList')
+  //       this.pipoDataService.pipolistModel$.subscribe((data) => {
+  //         console.log(data,'pipolistModel');
+  //         this.TEMP_PI_PO_NUMBER=data;
+  //       });
+  //     });;
+  //   }
 
   filter() {
     // this.getPipoData()

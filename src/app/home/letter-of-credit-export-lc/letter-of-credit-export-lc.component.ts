@@ -58,19 +58,14 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
     this.item=[];
-    this.documentService.getLetterLC().subscribe(
-      (res: any) => {
-        console.log('Res', res);
-        for (let value of res.data) {
-          if (value['file'] == 'export') {
-            this.item.push(value);
-          }
-        }
-      },
-      (err) => console.log(err)
-    );
-
-  }
+      this.documentService.getLetterLCfile("export").subscribe(
+        (res: any) => {
+          this.item=res?.data;
+          console.log(res,'getLetterLCfile');
+        },
+        (err) => console.log(err)
+        );
+      }
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
       return x.pi_poNo;
@@ -110,7 +105,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
 
   letterOfCredit() {
     console.log('upload');
-    this.sharedData.changeretunurl('home/letterofcredit-lc')
+    //this.sharedData.changeretunurl('home/letterofcredit-lc')
     this.router.navigate(['home/upload', {file: 'export', document: 'lcCopy'}]);
   }
 

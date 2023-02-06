@@ -54,25 +54,38 @@ onclick() {
   ) { }
 
 
+  // async ngOnInit() {
+  //   this.wininfo.set_controller_of_width(270,'.content-wrap')
+  //   this.USER_DATA = await this.userService.getUserDetail();
+  //   console.log("this.USER_DATA", this.USER_DATA)
+  //   this.item=[];
+  //     this.documentService.getDestruction().subscribe(
+  //       (res: any) => {
+  //         for (let value of res.data) {
+  //           if (value['file'] == 'export') {
+  //             this.item.push(value);
+  //           }
+  //         }
+  //         console.log(res,'yuyuyuyuyuyuyuuy')
+  //       },
+  //       (err) => console.log(err)
+  //     );
+
+  //   }
+
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
+    this.wininfo.set_controller_of_width(270,'.content-wrap');
     this.USER_DATA = await this.userService.getUserDetail();
-    console.log("this.USER_DATA", this.USER_DATA)
-    this.item=[];
-      this.documentService.getDestruction().subscribe(
-        (res: any) => {
-          for (let value of res.data) {
-            if (value['file'] == 'export') {
-              this.item.push(value);
-            }
-          }
-          console.log(res,'yuyuyuyuyuyuyuuy')
-        },
-        (err) => console.log(err)
+    console.log("this.USER_DATA", this.USER_DATA);
+    this.item = [];
+    this.documentService.getDestructionfile("export").subscribe(
+      (res: any) => {
+        this.item=res?.data;
+        console.log(res,'getDestructionfile');
+      },
+      (err) => console.log(err)
       );
-
     }
-
     openDestruction(content){
     this.modalService
     .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })

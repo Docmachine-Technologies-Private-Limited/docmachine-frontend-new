@@ -9,28 +9,37 @@ import {SharedHomeModule} from "../../shared-home.module";
 import {ExportHomeComponent} from "./export-home.component";
 import { UploadDocComponent } from './upload-doc/upload-doc.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { PDFVIEWERComponent } from "src/app/pdf-viewer/pdf-viewer.component";
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { CommonModule } from "@angular/common";
 
 @NgModule({
   declarations: [
     ExportHomeComponent,
     UploadDocComponent,
+    PDFVIEWERComponent
   ],
   imports: [
     SharedHomeModule,
     NgSelectModule,
+    PdfViewerModule,
+    CommonModule,
     RouterModule.forChild([
       {
         path: "",
         component: ExportHomeComponent,
         pathMatch: "full"
       },
-      
+
     ]),
     ModalModule.forRoot(),
   ],
-  entryComponents: [ModalContentComponent1],
+  entryComponents: [ModalContentComponent1,PDFVIEWERComponent],
   providers: [ConfirmDialogService, NgbModal,SharedDataService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  exports: [],
+  exports: [
+    PDFVIEWERComponent,
+    PdfViewerModule
+  ],
 })
 export class ExportHomeModule { }

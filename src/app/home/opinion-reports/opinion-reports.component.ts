@@ -50,21 +50,15 @@ export class OpinionReportsComponent implements OnInit {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
-    this.item1=[];
-    this.documentService.getOpinionReport().subscribe(
+    this.item=[];
+    this.documentService.getOpinionReportfile("export").subscribe(
       (res: any) => {
-        console.log('Res', res);
-        for (let value of res.data) {
-          if (value['file'] == 'export') {
-
-            this.item1.push(value);
-          }
-        }
+        this.item=res?.data;
+        console.log(res,'getOpinionReportfile');
       },
       (err) => console.log(err)
-    );
-
-  }
+      );
+    }
 
   filter() {
     // this.getPipoData()
