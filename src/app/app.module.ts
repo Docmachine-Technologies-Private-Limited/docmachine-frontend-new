@@ -54,7 +54,6 @@ import { SuperGuard } from "./service/RolePermission/SuperAdmin/super.guard";
 import { MemberGuard } from "./service/RolePermission/Member/member.guard";
 import { AdminMemberGuard } from "./service/RolePermission/AdminMember/admin-member.guard";
 import {DateFormatService} from "./DateFormat/date-format.service"
-
 import { JoinPipePipe } from './join-pipe.pipe';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -87,7 +86,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         CustomConfirmDialogModelComponent,
         CustomDropdownComponent,
         AuthorizationComponent,
-        JoinPipePipe
+        JoinPipePipe,
     ],
     providers: [{ provide: AppConfig },
         WindowInformationService,
@@ -112,6 +111,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         DragDropModule,
         SharedModule,
         SignupModule,
+        HomeModule,
         BsDatepickerModule.forRoot(),
         SigninModule,
         AppRoutingModule,

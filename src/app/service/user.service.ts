@@ -236,7 +236,6 @@ export class UserService {
   mergePdf(filename) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
-
     const httpOptions: Object = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
       responseType:"blob"
@@ -251,11 +250,10 @@ export class UserService {
   }
   mergePdfChecking(filename) {
     this.loadFromLocalStorage();
-    console.log(this.authToken,filename,'hjhhjjhjhhj');
     const httpOptions: Object = {
       headers: new HttpHeaders({ Authorization: this.authToken })
     };
-    return this.http.post(`${this.api_base}/pipo/mergePdf`,filename,httpOptions);
+    return this.http.post(`${this.api_base}/pipo/mergePdf`,{url:filename},httpOptions);
   }
 
 

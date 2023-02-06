@@ -106,7 +106,9 @@ import {EditCompanyComponent} from "./edit-company/edit-company.component";
 import { LetterOfCreditImportLCComponent } from "./letter-of-credit-import-lc/letter-of-credit-import-lc.component";
 import { MasterServiceComponent } from "./master-service/master-service.component";
 import { ImportMasterServiceComponent } from "./import-master-service/import-master-service.component";
-import { ImportOtherDocumentsComponent } from "./import-other-documents/import-other-documents.component";
+import { PdfViewerModule } from "ng2-pdf-viewer";
+import { ExportHomeModule } from "./Export/export-home/export-home.module";
+import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";import { ImportOtherDocumentsComponent } from "./import-other-documents/import-other-documents.component";
 
 @NgModule({
   declarations: [
@@ -144,7 +146,7 @@ import { ImportOtherDocumentsComponent } from "./import-other-documents/import-o
     RemittanceSummaryComponent,
     AddRemittanceComponent,
     AddAdvanceOutwardRemittanceComponent,
-    EditCompanyComponent
+    EditCompanyComponent,
   ],
   imports: [
     SharedHomeModule,
@@ -158,6 +160,8 @@ import { ImportOtherDocumentsComponent } from "./import-other-documents/import-o
     NgApexchartsModule,
     ProgressBarModule,
     ReactiveFormsModule,
+    ExportHomeModule,
+    PdfViewerModule,
     RouterModule.forChild([
       {
         path: "",
@@ -569,10 +573,10 @@ import { ImportOtherDocumentsComponent } from "./import-other-documents/import-o
     ]),
     ModalModule.forRoot(),
   ],
-  entryComponents: [ModalContentComponent1],
+  entryComponents: [ModalContentComponent1,PDFVIEWERComponent],
   providers: [ConfirmDialogService, NgbModal,SharedDataService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //   exports: [SharedProjectsModule]
-  exports: [MatProgressBarModule, MatTabsModule],
+  exports: [MatProgressBarModule, MatTabsModule,ExportHomeModule],
 })
 export class HomeModule { }
