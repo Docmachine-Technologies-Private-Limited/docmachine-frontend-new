@@ -69,25 +69,39 @@ onclick() {
   //     (err) => console.log(err)
   //   );
   // }
+  // async ngOnInit() {
+  //   this.wininfo.set_controller_of_width(270,'.content-wrap')
+  //   this.USER_DATA = await this.userService.getUserDetail();
+  //   console.log("this.USER_DATA", this.USER_DATA)
+  //   this.item=[];
+  //   this.documentService.getPackingList().subscribe(
+  //     (res: any) => {
+  //       console.log('Res', res);
+  //       for (let value of res.data) {
+  //         if (value['file'] == 'import') {
+
+  //           this.item.push(value);
+  //         }
+  //       }
+  //     },
+  //     (err) => console.log(err)
+  // //   );
+
+  // }
+  
   async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
     this.item=[];
-    this.documentService.getPackingList().subscribe(
-      (res: any) => {
-        console.log('Res', res);
-        for (let value of res.data) {
-          if (value['file'] == 'export') {
-
-            this.item.push(value);
-          }
-        }
-      },
-      (err) => console.log(err)
-    );
-
-  }
+      this.documentService.getPackingListfile("import").subscribe(
+        (res: any) => {
+          this.item=res?.data;
+          console.log(res,'getPackingListfile');
+        },
+        (err) => console.log(err)
+        );
+      }
 
   openCreditNote(content) {
     this.modalService
@@ -143,8 +157,8 @@ onclick() {
   }
 
   newComme() {
-    this.sharedData.changeretunurl('home/otherDoc')
-    this.router.navigate(['home/upload', {file: 'export', document: 'packingList'}]);
+    //this.sharedData.changeretunurl('home/otherDoc')
+    this.router.navigate(['home/upload', {file: 'import', document: 'import-packingList'}]);
   }
 
   exportToExcel() {
@@ -189,6 +203,7 @@ onclick() {
         status:'pending',
         dummydata:this.item[index],
         Types:'deletion',
+        TypeOfPage:'summary',
         FileType:this.USER_DATA?.result?.sideMenu
       }
       this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
