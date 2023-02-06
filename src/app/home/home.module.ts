@@ -106,6 +106,7 @@ import {EditCompanyComponent} from "./edit-company/edit-company.component";
 import { LetterOfCreditImportLCComponent } from "./letter-of-credit-import-lc/letter-of-credit-import-lc.component";
 import { MasterServiceComponent } from "./master-service/master-service.component";
 import { ImportMasterServiceComponent } from "./import-master-service/import-master-service.component";
+import { ImportOtherDocumentsComponent } from "./import-other-documents/import-other-documents.component";
 
 @NgModule({
   declarations: [
@@ -184,6 +185,7 @@ import { ImportMasterServiceComponent } from "./import-master-service/import-mas
           { path: "bill-under-collection", loadChildren: () => import('./bill-under-collection/bill-under-collection.module').then(mod => mod.BillUnderCollectionModule),canActivate:[MemberGuard] },
           { path: "pipo-export", loadChildren: () => import('./pipo-doc-export/pipo-doc-export.module').then(mod => mod.PipoDocExportModule),canActivate:[MemberGuard] },
           { path: "packing-list", loadChildren: () => import('./other-documents/other-documents.module').then(mod => mod.OtherDocumentsModule),canActivate:[MemberGuard] },
+          { path: "import-packing-list", loadChildren: () => import('./import-other-documents/import-other-documents.module').then(mod => mod.ImportOtherDocumentsModule),canActivate:[MemberGuard] },
           { path: "commercial", loadChildren: () => import('./commercial/commercial.module').then(mod => mod.CommercialModule),canActivate:[MemberGuard] },
           { path: "import-commercial", loadChildren: () => import('./import-commercial/import-commercial.module').then(mod => mod.ImportCommercialModule),canActivate:[MemberGuard] },
           { path: "destruction", loadChildren: () => import('./destruction/destruction.module').then(mod => mod.DestructionModule),canActivate:[MemberGuard] },
@@ -529,6 +531,12 @@ import { ImportMasterServiceComponent } from "./import-master-service/import-mas
           {
             path: "ImportMasterService",
             component: ImportMasterServiceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "ImportOtherDocuments",
+            component: ImportOtherDocumentsComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
