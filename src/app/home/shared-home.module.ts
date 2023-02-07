@@ -17,13 +17,19 @@ import {CommonModule} from "@angular/common";
 import { FilternewPipe } from './filterpipo/filternew.pipe';
 import { FilterdatePipe } from './datefilter/filterdate.pipe';
 import { NumberToWordsPipe } from "./pipe/number-to-words.pipe";
-
+import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";
+import { PdfViewerModule } from "ng2-pdf-viewer";
+import { FiterbuyerPipe } from "./Export/fiterbuyer.pipe";
+import {CustomDropdownComponent} from '.././custom/custom-dropdown/custom-dropdown.component'
 @NgModule({
   declarations: [
     ConfirmDialogComponent,
     FilternewPipe,
     FilterdatePipe,
+    FiterbuyerPipe,
     NumberToWordsPipe,
+    CustomDropdownComponent,
+    PDFVIEWERComponent
   ],
   imports: [
     CommonModule,
@@ -32,6 +38,7 @@ import { NumberToWordsPipe } from "./pipe/number-to-words.pipe";
     DragDropModule,
     MatProgressBarModule,
     MatTabsModule,
+    PdfViewerModule,
     ModalModule.forRoot(),
   ],
   entryComponents: [ModalContentComponent1],
@@ -41,6 +48,7 @@ import { NumberToWordsPipe } from "./pipe/number-to-words.pipe";
   exports: [
     FilternewPipe,
     FilterdatePipe,
+    FiterbuyerPipe,
     NumberToWordsPipe,
     CommonModule,
     FormsModule,
@@ -48,6 +56,10 @@ import { NumberToWordsPipe } from "./pipe/number-to-words.pipe";
     DragDropModule,
     MatProgressBarModule,
     MatTabsModule,
-    ReactiveFormsModule],
+    ReactiveFormsModule,
+    PdfViewerModule,
+    CustomDropdownComponent,
+    PDFVIEWERComponent
+  ],
 })
 export class SharedHomeModule { }

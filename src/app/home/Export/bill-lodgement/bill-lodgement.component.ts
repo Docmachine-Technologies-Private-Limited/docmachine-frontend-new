@@ -268,7 +268,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   generateChecked: boolean = true;
   forexSbDetail: any;
   SHIPPING_BILL:any='';
-  SHIPPING_BILL_LIST:any=['Shipping bill'];
+  SHIPPING_BILL_LIST:any=[{
+    value:'Shipping bill'
+  }];
   ThirdPartydata: any = [];
   Letter_Of_Credit: any = [];
   changevalue:any=''
@@ -2597,16 +2599,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     this.LcNumber = e.target.value;
   }
 
-  edit() {}
-
-  // showDialog(): any {
-  //   console.log('hhhhhh')
-  //   this.confirmDialogService.confirmThis('Are you sure to delete ?', () => {
-  //     alert('Yes clicked');
-  //   }, () => {
-  //     alert('No clicked');
-  //   });
-  // }
 
   downloadPDF() {
     console.log(JSON.stringify(this.creditNote));
@@ -3655,6 +3647,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     console.log(this.Lodgement,'Lodgement')
   }
   DUMP_FUNCTION(condition1,condition2,popupshow){
+    console.log(condition1,'condition1')
      if (condition1===condition2) {
       popupshow.style.display='flex'
      } else {

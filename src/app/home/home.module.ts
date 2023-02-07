@@ -109,6 +109,9 @@ import { ImportMasterServiceComponent } from "./import-master-service/import-mas
 import { PdfViewerModule } from "ng2-pdf-viewer";
 import { ExportHomeModule } from "./Export/export-home/export-home.module";
 import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";
+import { NewBillUnderCollectionComponent } from "./new-bill-under-collection/Bill-Under-Collection.component";
+import { NewDirectDispatchComponent } from "./New-Direct-Dispatch/New-Direct-Dispatch.component";
+import { BillLodgementModule } from "./Export/bill-lodgement/bill-lodgement.module";
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -146,6 +149,8 @@ import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";
     AddRemittanceComponent,
     AddAdvanceOutwardRemittanceComponent,
     EditCompanyComponent,
+    NewBillUnderCollectionComponent,
+    NewDirectDispatchComponent
   ],
   imports: [
     SharedHomeModule,
@@ -159,7 +164,6 @@ import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";
     NgApexchartsModule,
     ProgressBarModule,
     ReactiveFormsModule,
-    ExportHomeModule,
     PdfViewerModule,
     RouterModule.forChild([
       {
@@ -555,8 +559,20 @@ import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";
             canActivate:[MemberGuard]
           },
           {
-            path: "add-advance-outward-remittance/:doc_type",
+            path: "add-advance-outward-remittance",
             component: AddAdvanceOutwardRemittanceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "new-Bill-Under-Collection",
+            component: NewBillUnderCollectionComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "direct-dispatch",
+            component: NewDirectDispatchComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
@@ -565,10 +581,9 @@ import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";
     ]),
     ModalModule.forRoot(),
   ],
-  entryComponents: [ModalContentComponent1,PDFVIEWERComponent],
+  entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal,SharedDataService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  //   exports: [SharedProjectsModule]
-  exports: [MatProgressBarModule, MatTabsModule,ExportHomeModule],
+  exports: [MatProgressBarModule, MatTabsModule,SharedHomeModule],
 })
 export class HomeModule { }
