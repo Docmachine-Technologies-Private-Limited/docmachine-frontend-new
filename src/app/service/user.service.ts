@@ -447,7 +447,7 @@ export class UserService {
     return this.http
       .post(
         `${this.api_base}/bene/getByName`,
-        { beneName: name },
+        { benneName: name },
         httpOptions
       ).toPromise();
 

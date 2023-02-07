@@ -45,7 +45,7 @@ export class NewDirectDispatchComponent implements OnInit {
   commodity: any = []
   buyer: string;
   bank: string;
-  beneName: string;
+  benneName: string;
   uploading: boolean = false;
   authToken: string;
 

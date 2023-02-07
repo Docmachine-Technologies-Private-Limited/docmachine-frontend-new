@@ -36,7 +36,7 @@ export class NewBillUnderCollectionComponent implements OnInit {
   commodity: any = []
   buyer: string;
   bank: string;
-  beneName: string;
+  benneName: string;
   uploading: boolean = false;
   authToken: string;
 
@@ -143,7 +143,7 @@ export class NewBillUnderCollectionComponent implements OnInit {
 
     this.pipoForm = this.formBuilder.group({
         bank: new FormControl('', Validators.required),
-        beneName: new FormControl('', Validators.required),
+        benneName: new FormControl('', Validators.required),
         pi_poNo: new FormControl('', Validators.required),
         currency: new FormControl("",),
         amount: new FormControl("", Validators.required),

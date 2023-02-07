@@ -244,7 +244,7 @@ export class BuyersCreditRequestComponent implements OnInit {
 
   viewTask(data) {
     console.log(data)
-    console.log(data.beneDetail.beneName)
+    console.log(data.beneDetail.benneName)
 
 
     if (!data.completed) {
@@ -253,10 +253,10 @@ export class BuyersCreditRequestComponent implements OnInit {
       //data.pipoDetail["_id"] = data._id;
       this.documentService.pdfData = data.pipoDetail;
       if (data.bank == 'yesBank') {
-        this.router.navigate(['home/tradeRequestLetter', data.beneDetail.beneName]);
+        this.router.navigate(['home/tradeRequestLetter', data.beneDetail.benneName]);
       }
       else if (data.bank == 'axisBank') {
-        this.router.navigate(['home/buyersCreditAxis', data.beneDetail.beneName]);
+        this.router.navigate(['home/buyersCreditAxis', data.beneDetail.benneName]);
       }
 
 

@@ -126,8 +126,8 @@
                   <select class="form-control p-3" aria-label="Default select example" ngModel name="buyerName" placeholder="Select Beneficiary" id=""
                     (change)=changepipo($event.target.value)>
                     <option value="">Select Beneficiary</option>
-                    <option value="{{bene?.beneName}}" *ngFor="let bene of benneDetail
-                    ">{{ bene?.beneName }}
+                    <option value="{{bene?.benneName}}" *ngFor="let bene of benneDetail
+                    ">{{ bene?.benneName }}
                     </option>
                   </select>
                 </div>
@@ -195,13 +195,13 @@
             <label style="font-size: 20px; color: #303030;">Beneficiary Name*</label>
               <ng-select class="custom" *ngIf="this.benneDetail?.length!=0"
                 [items]="this.benneDetail"
-                bindLabel="beneName"
+                bindLabel="benneName"
                 [multiple]="false"
                 groupBy="selectedAllGroup"
                 [selectableGroup]="true"
                 placeholder="Select PI/PO"
                 bindValue="testFunctionID"
-                ngModel (change)="clickBene(bene?.selectedValues[0]?.beneName)" #bene>
+                ngModel (change)="clickBene(bene?.selectedValues[0]?.benneName)" #bene>
               </ng-select>
           </div>
           <div class="col-5 pt-2 d-flex flex-column">
@@ -1818,7 +1818,7 @@
                             <form [formGroup]="loginForm" (ngSubmit)="onSubmitBene()" class="form11">
                               <div class="form-group mb-3">
                                 <label class="plable">Name</label>
-                                <input formControlName="beneName" placeholder="Beneficiary/ Customer name" required=""
+                                <input formControlName="benneName" placeholder="Beneficiary/ Customer name" required=""
                                   class="form-control p-4 rounded-pill">
                               </div>
                               <div class="form-group mb-3">

@@ -57,15 +57,15 @@
                         </div>
                         <div class="col-md-6 col-12">
                           <label for="exampleInputPassword1" class="form-label">Select buyer</label>
-                          <select class="form-select" aria-label="Default select example" [ngModel]="beneName"
-                            name="beneName" (change)=changepipo($event.target.value) #select_ben>
+                          <select class="form-select" aria-label="Default select example" [ngModel]="benneName"
+                            name="benneName" (change)=changepipo($event.target.value) #select_ben>
                             <option value="">Select Buyer</option>
                             <option value="{{ bene._id }}" *ngFor="let bene of benneDetail
-                                                                ">{{ bene.beneName }}
+                                                                ">{{ bene.benneName }}
                             </option>
                           </select>
-                          <div *ngIf="submitted && form.beneName.errors" class='errorText'>
-                            <div *ngIf="form.beneName.errors.required">Select Buyer
+                          <div *ngIf="submitted && form.benneName.errors" class='errorText'>
+                            <div *ngIf="form.benneName.errors.required">Select Buyer
                               is required
                             </div>
                           </div>

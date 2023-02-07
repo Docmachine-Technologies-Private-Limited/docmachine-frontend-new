@@ -126,7 +126,7 @@ export class DebitNoteComponent implements OnInit {
     date: new FormControl('', Validators.required),
     dueDate: new FormControl('', Validators.required),
     location: new FormControl('', Validators.required),
-    beneName: new FormControl('', Validators.required),
+    benneName: new FormControl('', Validators.required),
   });
 
   // payment = this.formBuilder.group({
@@ -134,7 +134,7 @@ export class DebitNoteComponent implements OnInit {
   // });
 
   loginForm = this.formBuilder.group({
-    beneName: ['', Validators.required],
+    benneName: ['', Validators.required],
     beneAdrs: ['', Validators.required],
     beneBankName: ['', Validators.required],
     beneAccNo: ['', Validators.required],

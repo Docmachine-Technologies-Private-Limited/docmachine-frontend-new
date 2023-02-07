@@ -39,7 +39,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   commodity: any = []
   buyer: string;
   bank: string;
-  beneName: string;
+  benneName: string;
   selectedBankName: string;
   selectedBenneId: string;
   selectedBenneName: string;
@@ -139,7 +139,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.pipoForm = this.formBuilder.group(
       {
         bank: new FormControl('', Validators.required),
-        beneName: new FormControl('', Validators.required),
+        benneName: new FormControl('', Validators.required),
         pi_poNo: new FormControl('', Validators.required),
         currency: new FormControl("",),
         amount: new FormControl("", Validators.required),
@@ -196,7 +196,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.selectedBenne = temp.pop();
 
     console.log('this.selectedBenneName', this.selectedBenne);
-    this.pipoDataService.getPipoListByCustomer('import', this.selectedBenne.beneName).then((data) => {
+    this.pipoDataService.getPipoListByCustomer('import', this.selectedBenne.benneName).then((data) => {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
         console.log(data, 'data2222..................')
@@ -302,7 +302,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     }
     console.log(this.selectedBenne, this.ITEM_FILL_PDF, INVOICE_NO, 'fillForm')
     const textField = form.createTextField('best.text')
-    let result = this.selectedBenne?.beneName.concat(" ", this.selectedBenne?.beneAdrs);
+    let result = this.selectedBenne?.benneName.concat(" ", this.selectedBenne?.beneAdrs);
     textField.setText(result)
     textField.addToPage(firstpage, {
       x: 409, y: 570, width: 132,
