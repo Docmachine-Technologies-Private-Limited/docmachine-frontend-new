@@ -1178,7 +1178,14 @@ export class DocumentService {
 
         return this.http.get(`${this.api_base}/packingList/get`, httpOptions);
       }
-
+      getPackingListfile(type:string) {
+        this.loadFromLocalStorage();
+        console.log(this.authToken);
+        const httpOptions = {
+          headers: new HttpHeaders({ Authorization: this.authToken }),
+        };
+        return this.http.post(`${this.api_base}/packingList/filetype`, {file:type},httpOptions);
+      }
       getPackingListByPackingListValue(id) {
         this.loadFromLocalStorage();
         console.log(this.authToken);

@@ -192,6 +192,7 @@ import { BillLodgementModule } from "./Export/bill-lodgement/bill-lodgement.modu
           { path: "bill-under-collection", loadChildren: () => import('./bill-under-collection/bill-under-collection.module').then(mod => mod.BillUnderCollectionModule),canActivate:[MemberGuard] },
           { path: "pipo-export", loadChildren: () => import('./pipo-doc-export/pipo-doc-export.module').then(mod => mod.PipoDocExportModule),canActivate:[MemberGuard] },
           { path: "packing-list", loadChildren: () => import('./other-documents/other-documents.module').then(mod => mod.OtherDocumentsModule),canActivate:[MemberGuard] },
+          { path: "import-packing-list", loadChildren: () => import('./import-other-documents/import-other-documents.module').then(mod => mod.ImportOtherDocumentsModule),canActivate:[MemberGuard] },
           { path: "commercial", loadChildren: () => import('./commercial/commercial.module').then(mod => mod.CommercialModule),canActivate:[MemberGuard] },
           { path: "import-commercial", loadChildren: () => import('./import-commercial/import-commercial.module').then(mod => mod.ImportCommercialModule),canActivate:[MemberGuard] },
           { path: "destruction", loadChildren: () => import('./destruction/destruction.module').then(mod => mod.DestructionModule),canActivate:[MemberGuard] },

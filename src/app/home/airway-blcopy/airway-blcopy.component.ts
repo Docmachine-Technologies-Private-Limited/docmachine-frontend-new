@@ -172,6 +172,7 @@ export class AirwayBLCopyComponent implements OnInit {
         status:'pending',
         dummydata:this.item[index],
         Types:'deletion',
+        TypeOfPage:'summary',
         FileType:this.USER_DATA?.result?.sideMenu
       }
       this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{

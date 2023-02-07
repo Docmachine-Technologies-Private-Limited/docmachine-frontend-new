@@ -74,20 +74,15 @@ onclick() {
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
     this.item=[];
-    this.documentService.getPackingList().subscribe(
-      (res: any) => {
-        console.log('Res', res);
-        for (let value of res.data) {
-          if (value['file'] == 'export') {
+      this.documentService.getPackingListfile("export").subscribe(
+        (res: any) => {
+          this.item=res?.data;
+          console.log(res,'getPackingListfile');
+        },
+        (err) => console.log(err)
+        );
+      }
 
-            this.item.push(value);
-          }
-        }
-      },
-      (err) => console.log(err)
-    );
-
-  }
 
   openCreditNote(content) {
     this.modalService
@@ -143,7 +138,7 @@ onclick() {
   }
 
   newComme() {
-    this.sharedData.changeretunurl('home/otherDoc')
+    //this.sharedData.changeretunurl('home/otherDoc')
     this.router.navigate(['home/upload', {file: 'export', document: 'packingList'}]);
   }
 
@@ -189,6 +184,7 @@ onclick() {
         status:'pending',
         dummydata:this.item[index],
         Types:'deletion',
+        TypeOfPage:'summary',
         FileType:this.USER_DATA?.result?.sideMenu
       }
       this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{

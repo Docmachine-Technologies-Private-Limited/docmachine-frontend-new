@@ -172,6 +172,7 @@ export class UploadComponent implements OnInit {
   opinionReport: boolean = false;
   importopinionReport: boolean = false;
   importagreement:boolean = false;
+  importpackingList: boolean = false;
   pipolist: any;
   item4: any;
   pipoArray: any = [];
@@ -792,7 +793,19 @@ export class UploadComponent implements OnInit {
         this.pipoArr.push(this.pipoOut);
         this.mainBene = this.beneOut;
       }
-    } else if (this.docu == 'otherDoc') {
+    } else if (this.docu == 'import-packingList') {
+      this.documentType1 = 'import';
+      this.documentType = 'import-packingList';
+      this.documentType1 = 'import';
+      if (this.route.snapshot.paramMap.get('pipo_id')) {
+        this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
+        this.beneOut = this.route.snapshot.paramMap.get('bene');
+        let x = 'PI' + '-' + this.pipoOut + '-' + this.beneOut;
+        this.arrayData.push(x);
+        this.pipoArr.push(this.pipoOut);
+        this.mainBene = this.beneOut;
+      }
+    }else if (this.docu == 'otherDoc') {
       this.documentType1 = 'export';
       this.documentType = 'otherDoc';
       this.documentType1 = 'export';
@@ -805,8 +818,7 @@ export class UploadComponent implements OnInit {
         this.mainBene = this.beneOut;
       }
     }
-
-
+    
     //console.log(this.route.snapshot.paramMap.get('document'))
     this.config = {
       ...this.config,
@@ -1855,8 +1867,13 @@ export class UploadComponent implements OnInit {
                   (data) => {
                     console.log('king123');
                     console.log('DATA', data);
+                    // if (this.documentType1 == 'import') {
+                    //   this.router.navigate(['/home/packing-list']);
+                    // } else {
+                    //   this.router.navigate(['/home/packing-list']);
+                    // }
                     if (this.documentType1 == 'import') {
-                      this.router.navigate(['/home/packing-list']);
+                      this.router.navigate(['/home/import-packing-list']);
                     } else {
                       this.router.navigate(['/home/packing-list']);
                     }
@@ -2306,6 +2323,8 @@ export class UploadComponent implements OnInit {
           this.importopinionReport = true;
         } else if (this.documentType === 'packingList') {
           this.packingList = true;
+        } else if (this.documentType === 'import-packingList') {
+          this.importpackingList = true; 
         } else if (this.documentType === 'otherDoc') {
           this.otherDoc = true;
         } else {

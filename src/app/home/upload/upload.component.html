@@ -29,6 +29,8 @@
           <h3 class="heading pb-2" *ngIf='docu == "billOfExchange"'>Upload Bill of Exchange</h3>
           <h3 class="heading pb-2" *ngIf='docu == "destruction"'>Upload Destruction certificate</h3>
           <h3 class="heading pb-2" *ngIf='docu == "packingList"'>Upload Packing List Document</h3>
+          <h3 class="heading pb-2" *ngIf='docu == "import-packingList"'>Upload Packing List Document</h3>
+
 
           <h3 class="heading_doc" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" &&
              docu != "irAdvice" &&  docu != "orAdvice" &&
@@ -36,6 +38,7 @@
              docu !="insuranceCopy" && docu !="creditNote" &&
              docu !="agreement" && docu !="opinionReport" &&
              docu !="import-agreement" &&
+             docu !="import-packingList" &&
              docu !="import-opinionReport" &&
              docu !="tryPartyAgreement" && docu !="swiftCopy" &&
              docu !="EBRC" && docu !="blCopyref" && docu != "blCopy" &&
@@ -296,8 +299,9 @@
             documentType === 'swiftCopy' || documentType === 'lcCopy'|| documentType === 'import-lcCopy' || documentType === 'insuranceCopy' ||
             documentType === 'deliveryOrder' || documentType === 'tryPartyAgreement'|| documentType === 'EBRC' ||
             documentType === 'blCopyref' || documentType === 'commercial' ||
-            documentType === 'import-commercial' || documentType === 'billOfExchange' || documentType === 'import-billOfExchange' ||
-            documentType === 'destruction'  || documentType === 'import-destruction'|| documentType === 'packingList'"
+            documentType === 'import-commercial' || documentType === 'billOfExchange'||documentType === 'import-billOfExchange' || 
+            documentType === 'import-packingList' ||
+            documentType === 'destruction'  || documentType === 'import-destruction' || documentType === 'packingList'"
             class="form" method="POST">
             <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
               (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config1"
@@ -1428,6 +1432,54 @@
 
           <!-- Other Documents -->
           <form class="iframecontroller" *ngIf="packingList && !override" #values="ngForm"
+            (ngSubmit)="onSubmitPackingList(values)">
+                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <div class="field">
+              <div class="form12 p-3">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Packing List Number*</label>
+                  <input ngModel class="form-control p-3" type="text"
+                    name="packingListNumber">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Packing List Amount</label>
+                  <input ngModel class="form-control p-3" type="text"
+                    name="packingListAmount">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Currency</label>
+                  <!-- <input ngModel class="form-control p-3" type="text"
+                    name="currency"> -->
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                    [items]="this.CURRENCY_LIST"
+                    bindLabel="type"
+                    [multiple]="false"
+                    groupBy="selectedAllGroup"
+                    placeholder="Select PI/PO"
+                    name="currency"
+                    ngModel>
+                  </ng-select>
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label"></label>
+                  <div>
+                    <div>
+                      <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
+                        <option value="">Select SB Number</option>
+                        <option *ngFor="let sb of this.pipoDataService?.SHIPPING_BILL_LIST; let i=index"
+                          [value]="sb._id">
+                          {{ sb.sbno }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
+          <!-- Other Documents import -->
+          <form class="iframecontroller" *ngIf="importpackingList && !override" #values="ngForm"
             (ngSubmit)="onSubmitPackingList(values)">
                 <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
