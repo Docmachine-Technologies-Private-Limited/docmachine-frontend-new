@@ -119,8 +119,11 @@
           <ul class="navbar-nav ml-auto">
             <label for="" class="label-form">Transactions</label>
             <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/add-advance-outward-remittance')">Advance remittance Flow</h6>
+            </li>
+            <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/advance-outward-remittance')">Advance Outward
-                Remittance</h6>
+                Remittance(Old)</h6>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-import-payment')">Direct Import Payment
@@ -240,13 +243,13 @@
           <ul class="navbar-nav ml-auto">
             <label for="" class="label-form">Transactions</label>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/remittance-flow')">Advance remittance Flow</h6>
-            </li>
-            <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Pdf-Upload')">Inward Remittance Disposal</h6>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/bill-lodgement')">Bill Under Collection</h6>
+            </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/new-Bill-Under-Collection')">New Bill Under Collection</h6>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/bill-lodgement')">Bill Under LC</h6>
@@ -256,7 +259,7 @@
                 Request</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/packing-credit-request')">Direct Dispatch</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-dispatch')">Export Bill Lodgement</h6>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/pendingpanel')">Pending</h6>

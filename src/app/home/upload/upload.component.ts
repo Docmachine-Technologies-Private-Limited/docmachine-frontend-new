@@ -132,10 +132,10 @@ export class UploadComponent implements OnInit {
     date: new FormControl('', Validators.required),
     dueDate: new FormControl('', Validators.required),
     location: new FormControl('', Validators.required),
-    beneName: new FormControl('', Validators.required),
+    benneName: new FormControl('', Validators.required),
   });
   loginForm = this.formBuilder.group({
-    beneName: ['', Validators.required],
+    benneName: ['', Validators.required],
     beneAdrs: ['', Validators.required],
     beneBankName: ['', Validators.required],
     beneAccNo: ['', Validators.required],
@@ -2650,7 +2650,7 @@ export class UploadComponent implements OnInit {
 
     console.log(this.loginForm.value);
 
-    this.beneValue = this.loginForm.value.beneName;
+    this.beneValue = this.loginForm.value.benneName;
     this.userService.creatBene(this.loginForm.value).subscribe(
       (data) => {
         console.log('king123');

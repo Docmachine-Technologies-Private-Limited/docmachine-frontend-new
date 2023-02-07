@@ -24,6 +24,8 @@
       </td>
       <td><div class="column flex-display">
         <button type="submit" class="btn btn-primary" (click)="detailsView(i,ApprovalDetails.style.display='block')">Details</button>
+        <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary" (click)="mergeAllPDFs('download',item?.documents)">Download Pdf</button>
+        <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary" (click)="mergeAllPDFs('mail',item?.documents)">Send Mail</button>
       </div></td>
     </tr>
   </tbody>

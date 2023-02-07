@@ -44,7 +44,7 @@
                   <tbody class="text-dark">
                     <tr class="table-row" *ngFor="let data of item2">
                       <th class="rect"><input type="radio" /></th>
-                      <th class="pl-4 fw-normal">{{ data.beneName }}</th>
+                      <th class="pl-4 fw-normal">{{ data.benneName }}</th>
                       <td>{{ data.beneBankName }}</td>
                       <td>{{ data.beneAccNo }}</td>
                       <td>{{ data.iban }}</td>
@@ -129,7 +129,7 @@
                     <label>Name</label>
                     <input
                       style="width: 350px"
-                      formControlName="beneName"
+                      formControlName="benneName"
                       placeholder="Beneficiary/ Customer name"
                       required=""
                       class="form-control rounded-pill"

@@ -85,7 +85,7 @@
       </div>
       <div class="modal-body">
         <div class="form-group iframe-group">
-          <app-pdf-viewer [downloadShow]="this.DownloadStatus" *ngFor="let url of this.CustomConfirmDialogModel.url"
+          <app-pdf-viewer [downloadShow]="true" *ngFor="let url of this.CustomConfirmDialogModel.url"
            name="Documents" [src]="url" width="700px" height="500px"></app-pdf-viewer>
         </div>
       </div>

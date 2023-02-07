@@ -108,8 +108,10 @@ import { MasterServiceComponent } from "./master-service/master-service.componen
 import { ImportMasterServiceComponent } from "./import-master-service/import-master-service.component";
 import { PdfViewerModule } from "ng2-pdf-viewer";
 import { ExportHomeModule } from "./Export/export-home/export-home.module";
-import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";import { ImportOtherDocumentsComponent } from "./import-other-documents/import-other-documents.component";
-
+import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";
+import { NewBillUnderCollectionComponent } from "./new-bill-under-collection/Bill-Under-Collection.component";
+import { NewDirectDispatchComponent } from "./New-Direct-Dispatch/New-Direct-Dispatch.component";
+import { BillLodgementModule } from "./Export/bill-lodgement/bill-lodgement.module";
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -147,6 +149,8 @@ import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";import {
     AddRemittanceComponent,
     AddAdvanceOutwardRemittanceComponent,
     EditCompanyComponent,
+    NewBillUnderCollectionComponent,
+    NewDirectDispatchComponent
   ],
   imports: [
     SharedHomeModule,
@@ -160,7 +164,6 @@ import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";import {
     NgApexchartsModule,
     ProgressBarModule,
     ReactiveFormsModule,
-    ExportHomeModule,
     PdfViewerModule,
     RouterModule.forChild([
       {
@@ -539,12 +542,6 @@ import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";import {
             canActivate:[MemberGuard]
           },
           {
-            path: "ImportOtherDocuments",
-            component: ImportOtherDocumentsComponent,
-            pathMatch: "full",
-            canActivate:[MemberGuard]
-          },
-          {
             path: "ExportCredit",
             component:ExportCreditNoteComponent,
             pathMatch: "full",
@@ -563,8 +560,20 @@ import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";import {
             canActivate:[MemberGuard]
           },
           {
-            path: "add-advance-outward-remittance/:doc_type",
+            path: "add-advance-outward-remittance",
             component: AddAdvanceOutwardRemittanceComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "new-Bill-Under-Collection",
+            component: NewBillUnderCollectionComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "direct-dispatch",
+            component: NewDirectDispatchComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
@@ -573,10 +582,9 @@ import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";import {
     ]),
     ModalModule.forRoot(),
   ],
-  entryComponents: [ModalContentComponent1,PDFVIEWERComponent],
+  entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal,SharedDataService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  //   exports: [SharedProjectsModule]
-  exports: [MatProgressBarModule, MatTabsModule,ExportHomeModule],
+  exports: [MatProgressBarModule, MatTabsModule,SharedHomeModule],
 })
 export class HomeModule { }

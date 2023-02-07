@@ -69,11 +69,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-        $(function() {
-            if($('[data-toggle="tooltip"]')) {
-              $('[data-toggle="tooltip"]').tooltip();
-            }
-        });
         $(document).ready(function() {
             $(".collapse.in").prev(".panel-heading").addClass("active");
             $("#accordion, #bs-collapse")
@@ -116,15 +111,7 @@
             });
         };
     </script>
-
-    <app-root>
-
-      loading....
-    </app-root>
-    <!-- common libraries. required for every page-->
-
-    <!-- page specific js -->
-    <!-- <script src="js/index.js"></script> -->
+    <app-root></app-root>
 </body>
 
 </html>

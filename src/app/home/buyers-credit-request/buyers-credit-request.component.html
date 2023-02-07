@@ -60,8 +60,8 @@
                 <select style="border: 0.5px solid black" [(ngModel)]="selectedDoc"
                     (change)="modo($event.target.value)">
                     <option value="">Select Bene Name</option>
-                    <option *ngFor="let bene of beneDetail" [value]="bene.beneName">
-                        {{ bene.beneName }}
+                    <option *ngFor="let bene of beneDetail" [value]="bene.benneName">
+                        {{ bene.benneName }}
                     </option>
                 </select>
 
