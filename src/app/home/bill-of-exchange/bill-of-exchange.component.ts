@@ -6,6 +6,7 @@ import {DocumentService} from 'src/app/service/document.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
+import * as data1 from '../../currency.json';
 import {UserService} from './../../service/user.service';
 import { WindowInformationService } from 'src/app/service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
@@ -29,7 +30,14 @@ export class BillOfExchangeComponent implements OnInit {
   public id: any;
   USER_DATA:any=[];
   filtervisible: boolean = false;
-
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    Bill_Of_Exchange_No: [],
+    Currency: [],
+    DATE: []
+  };
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -38,7 +46,7 @@ export class BillOfExchangeComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private sharedData: SharedDataService,
-    public wininfo: WindowInformationService,  
+    public wininfo: WindowInformationService,
     public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
   ) {
@@ -47,26 +55,42 @@ export class BillOfExchangeComponent implements OnInit {
     this.wininfo.set_controller_of_width(270,'.content-wrap');
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA);
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
     this.item = [];
     this.documentService.getBillExchangefile("export").subscribe(
       (res: any) => {
         this.item=res?.data;
+        this.FILTER_VALUE_LIST= this.item;
+        for (let value of res.data) {
+          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+          }
+          if ( this.ALL_FILTER_DATA['Buyer_Name'].includes(value?.buyerName[0])==false) {
+            this.ALL_FILTER_DATA['Buyer_Name'].push(value?.buyerName[0]);
+          }
+          if ( this.ALL_FILTER_DATA['Bill_Of_Exchange_No'].includes(value?.billExchangeNumber)==false) {
+            this.ALL_FILTER_DATA['Bill_Of_Exchange_No'].push(value?.billExchangeNumber);
+          }
+          if ( this.ALL_FILTER_DATA['DATE'].includes(value?.billOfExchangeDate)==false) {
+            this.ALL_FILTER_DATA['DATE'].push(value?.billOfExchangeDate);
+          }
+      }
         console.log(res,'getBillExchangefile');
       },
       (err) => console.log(err)
       );
     }
- 
-      
-  filter() {
-    // this.getPipoData()
-    this.filtervisible = !this.filtervisible
-
-  }
-  onclick() {
-    this.filtervisible = !this.filtervisible
-  }
-
+    filter(value, key) {
+      this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+      if (this.FILTER_VALUE_LIST.length== 0) {
+        this.FILTER_VALUE_LIST = this.item;
+      }
+    }
+    resetFilter() {
+      this.FILTER_VALUE_LIST = this.item;
+    }
   openBillofExchange(content) {
     this.modalService
       .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
