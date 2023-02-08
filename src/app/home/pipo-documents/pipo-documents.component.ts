@@ -308,6 +308,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     }
 
     this.item3 = filterboedata;
+    console.log('aaa',this.item3);
   }
 
   lcFun(a) {
