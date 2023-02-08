@@ -21,6 +21,7 @@ import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";
 import { PdfViewerModule } from "ng2-pdf-viewer";
 import { FiterbuyerPipe } from "./Export/fiterbuyer.pipe";
 import {CustomDropdownComponent} from '.././custom/custom-dropdown/custom-dropdown.component'
+import { NgSelectModule } from "@ng-select/ng-select";
 @NgModule({
   declarations: [
     ConfirmDialogComponent,
@@ -39,6 +40,7 @@ import {CustomDropdownComponent} from '.././custom/custom-dropdown/custom-dropdo
     MatProgressBarModule,
     MatTabsModule,
     PdfViewerModule,
+    NgSelectModule,
     ModalModule.forRoot(),
   ],
   entryComponents: [ModalContentComponent1],
@@ -58,6 +60,7 @@ import {CustomDropdownComponent} from '.././custom/custom-dropdown/custom-dropdo
     MatTabsModule,
     ReactiveFormsModule,
     PdfViewerModule,
+    NgSelectModule,
     CustomDropdownComponent,
     PDFVIEWERComponent
   ],

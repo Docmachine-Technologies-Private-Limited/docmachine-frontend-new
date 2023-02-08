@@ -10,6 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as xlsx from 'xlsx';
+import * as data1 from '../../currency.json';
 import {DocumentService} from 'src/app/service/document.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -38,8 +39,15 @@ export class InsuranceDocumentComponent implements OnInit {
   public pipoData: any;
   public id: any;
   USER_DATA:any=[];
-  filtervisible: boolean = false
-
+  filtervisible: boolean = false;
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    Insurance_No: [],
+    Currency: [],
+    DATE: []
+  };
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -58,12 +66,28 @@ export class InsuranceDocumentComponent implements OnInit {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
     this.item1=[];
       this.documentService.getInsurance().subscribe(
         (res: any) => {
           for (let value of res.data) {
             if (value['file'] == 'export') {
               this.item1.push(value);
+              this.FILTER_VALUE_LIST.push(value);
+              if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+                this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+              }
+              if ( this.ALL_FILTER_DATA['Buyer_Name'].includes(value?.buyerName[0])==false) {
+                this.ALL_FILTER_DATA['Buyer_Name'].push(value?.buyerName[0]);
+              }
+              if ( this.ALL_FILTER_DATA['Insurance_No'].includes(value?.insuranceNumber)==false) {
+                this.ALL_FILTER_DATA['Insurance_No'].push(value?.insuranceNumber);
+              }
+              if ( this.ALL_FILTER_DATA['DATE'].includes(value?.date)==false) {
+                this.ALL_FILTER_DATA['DATE'].push(value?.date);
+              }
             }
           }
           console.log(res,'yuyuyuyuyuyuyuuy')
@@ -72,11 +96,15 @@ export class InsuranceDocumentComponent implements OnInit {
       );
 
     }
-  filter() {
-    // this.getPipoData()
-    this.filtervisible = !this.filtervisible
-
-  }
+    filter(value, key) {
+      this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
+      if (this.FILTER_VALUE_LIST.length== 0) {
+        this.FILTER_VALUE_LIST = this.item1;
+      }
+    }
+    resetFilter() {
+      this.FILTER_VALUE_LIST = this.item1;
+    }
   onclick() {
     this.filtervisible = !this.filtervisible
   }
