@@ -82,9 +82,11 @@ export class DebitNoteComponent implements OnInit {
               if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
                 this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
               }
-              if ( this.ALL_FILTER_DATA['Buyer_Name'].includes(value?.buyerName[0])==false) {
-                this.ALL_FILTER_DATA['Buyer_Name'].push(value?.buyerName[0]);
-              }
+              value?.buyerName.forEach(element => {
+                if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+                  this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+                }
+              });
               if ( this.ALL_FILTER_DATA['D_N_No'].includes(value?.debitNoteNumber)==false) {
                 this.ALL_FILTER_DATA['D_N_No'].push(value?.debitNoteNumber);
               }

@@ -66,9 +66,11 @@ export class AirwayBLCopyComponent implements OnInit {
               if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
                 this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
               }
-              if ( this.ALL_FILTER_DATA['Buyer_Name'].includes(value?.buyerName[0])==false) {
-                this.ALL_FILTER_DATA['Buyer_Name'].push(value?.buyerName[0]);
-              }
+              value?.buyerName.forEach(element => {
+                if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+                  this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+                }
+              });
               if ( this.ALL_FILTER_DATA['BL_Airway_No'].includes(value?.airwayBlCopyNumber)==false) {
                 this.ALL_FILTER_DATA['BL_Airway_No'].push(value?.airwayBlCopyNumber);
               }

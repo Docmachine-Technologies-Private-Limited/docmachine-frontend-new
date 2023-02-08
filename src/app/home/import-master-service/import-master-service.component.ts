@@ -13,6 +13,7 @@ import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprrov
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 import { PipoDataService } from 'src/app/service/homeservices/pipo.service';
+import * as data1 from '../../currency.json';
 
 @Component({
   selector: 'app-import-master-service',
@@ -32,6 +33,14 @@ export class ImportMasterServiceComponent implements OnInit {
   USER_DATA:any=[];
   filtervisible: boolean = false;
   TEMP_PI_PO_NUMBER:any=[];
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    M_S_A_No: [],
+    Currency: [],
+    DATE: []
+  };
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -46,31 +55,47 @@ export class ImportMasterServiceComponent implements OnInit {
     public dialog: MatDialog
   ) {
   }
-  
+
   async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
     this.item=[];
       this.documentService.getMasterServiceFile("import").subscribe(
         (res: any) => {
           this.item=res?.data;
+          this.FILTER_VALUE_LIST= this.item;
+          for (let value of res.data) {
+            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+            }
+            if ( this.ALL_FILTER_DATA['Buyer_Name'].includes(value?.buyerName[0])==false) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push(value?.buyerName[0]);
+            }
+            if ( this.ALL_FILTER_DATA['M_S_A_No'].includes(value?.masterServiceNumber)==false) {
+              this.ALL_FILTER_DATA['M_S_A_No'].push(value?.masterServiceNumber);
+            }
+            if ( this.ALL_FILTER_DATA['DATE'].includes(value?.date)==false) {
+              this.ALL_FILTER_DATA['DATE'].push(value?.date);
+            }
+          }
           console.log(res,'getMasterServiceFile');
         },
         (err) => console.log(err)
         );
     }
-
-  filter() {
-    // this.getPipoData()
-    this.filtervisible = !this.filtervisible
-
-  }
-  onclick() {
-    this.filtervisible = !this.filtervisible
-  }
-
-
+    filter(value, key) {
+      this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+      if (this.FILTER_VALUE_LIST.length== 0) {
+        this.FILTER_VALUE_LIST = this.item;
+      }
+    }
+    resetFilter() {
+      this.FILTER_VALUE_LIST = this.item;
+    }
   openLetterOfCredit(content) {
     this.modalService
       .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
@@ -126,7 +151,7 @@ export class ImportMasterServiceComponent implements OnInit {
 
   masterSer() {
     // this.sharedData.changeretunurl('home/master-services')
-    this.router.navigate(['home/upload', {file: 'import', document: 'agreement'}]);
+    this.router.navigate(['home/upload', {file: 'import', document: 'import-agreement'}]);
   }
 
   toEdit(index) {

@@ -36,10 +36,10 @@
                                               </select>
                                       </div>
                                       <div class="col-md-6 col-12">
-                                          <label for="exampleFormControlInput1" class="form-label">Insurance No.</label>
+                                          <label for="exampleFormControlInput1" class="form-label">M S A No.</label>
                                           <select class="form-select form-control" aria-label="Default select example"
                                           (change)="filter($event.target.value,'masterServiceNumber');filter_Popup.style.display='none'" name="Origin">
-                                                  <option value="">Insurance No.</option>
+                                                  <option value="">M S A No.</option>
                                                   <option *ngFor="let Origin of this.ALL_FILTER_DATA?.M_S_A_No">{{ Origin }}
                                                   </option>
                                               </select>

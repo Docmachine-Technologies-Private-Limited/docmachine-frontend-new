@@ -11,6 +11,7 @@ import { WindowInformationService } from 'src/app/service/window-information.ser
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+import * as data1 from '../../currency.json';
 
 @Component({
   selector: 'app-commercial',
@@ -29,15 +30,14 @@ export class ImportCommercialComponent implements OnInit {
   public id: any;
   filtervisible: boolean = false;
   USER_DATA:any=[];
-
-  filter() {
-  // this.getPipoData()
-  this.filtervisible = !this.filtervisible
-
-}
-onclick() {
-  this.filtervisible = !this.filtervisible
-}
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    Commercial_Invoice_No: [],
+    Currency: [],
+    DATE: []
+  };
 
   constructor(
     private documentService: DocumentService,
@@ -56,6 +56,9 @@ onclick() {
  async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
     console.log("this.USER_DATA", this.USER_DATA)
     this.item=[];
     this.documentService.getCommercial().subscribe(
@@ -63,16 +66,38 @@ onclick() {
         console.log('Res', res);
         for (let value of res.data) {
           if (value['file'] == 'import') {
-
             this.item.push(value);
+            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+            }
+            value?.buyerName.forEach(element => {
+              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+              }
+            });
+            if ( this.ALL_FILTER_DATA['Commercial_Invoice_No'].includes(value?.commercialNumber)==false) {
+              this.ALL_FILTER_DATA['Commercial_Invoice_No'].push(value?.commercialNumber);
+            }
+            if ( this.ALL_FILTER_DATA['DATE'].includes(value?.commercialDate)==false) {
+              this.ALL_FILTER_DATA['DATE'].push(value?.commercialDate);
+            }
           }
         }
+        this.FILTER_VALUE_LIST= this.item;
       },
       (err) => console.log(err)
     );
 
   }
-
+  filter(value, key) {
+    this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+    if (this.FILTER_VALUE_LIST.length== 0) {
+      this.FILTER_VALUE_LIST = this.item;
+    }
+  }
+  resetFilter() {
+    this.FILTER_VALUE_LIST = this.item;
+  }
   openCreditNote(content) {
     this.modalService
       .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
