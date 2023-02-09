@@ -22,6 +22,7 @@ import { PdfViewerModule } from "ng2-pdf-viewer";
 import { FiterbuyerPipe } from "./Export/fiterbuyer.pipe";
 import {CustomDropdownComponent} from '.././custom/custom-dropdown/custom-dropdown.component'
 import { NgSelectModule } from "@ng-select/ng-select";
+import {FilterToggleDirective} from "../custom/Filter/filter-toggle.directive";
 @NgModule({
   declarations: [
     ConfirmDialogComponent,
@@ -30,7 +31,8 @@ import { NgSelectModule } from "@ng-select/ng-select";
     FiterbuyerPipe,
     NumberToWordsPipe,
     CustomDropdownComponent,
-    PDFVIEWERComponent
+    PDFVIEWERComponent,
+    FilterToggleDirective
   ],
   imports: [
     CommonModule,
@@ -62,7 +64,8 @@ import { NgSelectModule } from "@ng-select/ng-select";
     PdfViewerModule,
     NgSelectModule,
     CustomDropdownComponent,
-    PDFVIEWERComponent
+    PDFVIEWERComponent,
+    FilterToggleDirective
   ],
 })
 export class SharedHomeModule { }
