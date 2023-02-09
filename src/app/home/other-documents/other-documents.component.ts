@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
 import {Router} from '@angular/router';
+import * as data1 from '../../currency.json';
 import {DocumentService} from 'src/app/service/document.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -28,15 +29,14 @@ export class OtherDocumentsComponent implements OnInit {
   public id: any;
   filtervisible: boolean = false;
   USER_DATA:any=[];
-  
-  filter() {
-  // this.getPipoData()
-  this.filtervisible = !this.filtervisible
-
-}
-onclick() {
-  this.filtervisible = !this.filtervisible
-}
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    Packing_List_No: [],
+    Currency: [],
+    DATE: []
+  };
 
   constructor(
     private documentService: DocumentService,
@@ -52,37 +52,48 @@ onclick() {
 
   ) {
   }
-
-  // ngOnInit(): void {
-  //   this.wininfo.set_controller_of_width(270,'.content-wrap')
-  //   this.documentService.getPackingList().subscribe(
-  //     (res: any) => {
-  //       console.log('HEre Responsesssssssss', res);
-  //       for (let value of res.data) {
-  //         if (value['file'] == 'export') {
-
-  //           this.item.push(value);
-  //           console.log("awwww", this.item)
-  //         }
-  //       }
-  //     },
-  //     (err) => console.log(err)
-  //   );
-  // }
   async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
     this.item=[];
       this.documentService.getPackingListfile("export").subscribe(
         (res: any) => {
           this.item=res?.data;
+          this.FILTER_VALUE_LIST= this.item;
+          for (let value of res.data) {
+            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+            }
+            value?.buyerName.forEach(element => {
+              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+              }
+            });
+            if ( this.ALL_FILTER_DATA['Packing_List_No'].includes(value?.packingListNumber)==false) {
+              this.ALL_FILTER_DATA['Packing_List_No'].push(value?.packingListNumber);
+            }
+            if ( this.ALL_FILTER_DATA['DATE'].includes(value?.packingListDate)==false) {
+              this.ALL_FILTER_DATA['DATE'].push(value?.packingListDate);
+            }
+        }
           console.log(res,'getPackingListfile');
         },
         (err) => console.log(err)
         );
       }
-
+      filter(value, key) {
+        this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+        if (this.FILTER_VALUE_LIST.length== 0) {
+          this.FILTER_VALUE_LIST = this.item;
+        }
+      }
+      resetFilter() {
+        this.FILTER_VALUE_LIST = this.item;
+      }
 
   openCreditNote(content) {
     this.modalService

@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
+import * as data1 from '../../currency.json';
+
 import {Router}from '@angular/router';
 import { DocumentService } from 'src/app/service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -30,15 +32,14 @@ export class DestructionComponent implements OnInit {
   public id: any;
   filtervisible: boolean = false;
   USER_DATA:any=[];
-  
-  filter() {
-  // this.getPipoData()
-  this.filtervisible = !this.filtervisible
-
-}
-onclick() {
-  this.filtervisible = !this.filtervisible
-}
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    Destruction_Certificate_No: [],
+    Currency: [],
+    DATE: []
+  };
 
   constructor(
     private documentService : DocumentService,
@@ -52,27 +53,6 @@ onclick() {
     public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
   ) { }
-
-
-  // async ngOnInit() {
-  //   this.wininfo.set_controller_of_width(270,'.content-wrap')
-  //   this.USER_DATA = await this.userService.getUserDetail();
-  //   console.log("this.USER_DATA", this.USER_DATA)
-  //   this.item=[];
-  //     this.documentService.getDestruction().subscribe(
-  //       (res: any) => {
-  //         for (let value of res.data) {
-  //           if (value['file'] == 'export') {
-  //             this.item.push(value);
-  //           }
-  //         }
-  //         console.log(res,'yuyuyuyuyuyuyuuy')
-  //       },
-  //       (err) => console.log(err)
-  //     );
-
-  //   }
-
   async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap');
     this.USER_DATA = await this.userService.getUserDetail();
@@ -81,6 +61,23 @@ onclick() {
     this.documentService.getDestructionfile("export").subscribe(
       (res: any) => {
         this.item=res?.data;
+        this.FILTER_VALUE_LIST= this.item;
+          for (let value of res.data) {
+            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+            }
+            value?.buyerName.forEach(element => {
+              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+              }
+            });
+            if ( this.ALL_FILTER_DATA['Destruction_Certificate_No'].includes(value?.destructionNumber)==false) {
+              this.ALL_FILTER_DATA['Destruction_Certificate_No'].push(value?.destructionNumber);
+            }
+            if ( this.ALL_FILTER_DATA['DATE'].includes(value?.destructionDate)==false) {
+              this.ALL_FILTER_DATA['DATE'].push(value?.destructionDate);
+            }
+        }
         console.log(res,'getDestructionfile');
       },
       (err) => console.log(err)
@@ -97,6 +94,15 @@ onclick() {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       }
     );
+}
+filter(value, key) {
+  this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+  if (this.FILTER_VALUE_LIST.length== 0) {
+    this.FILTER_VALUE_LIST = this.item;
+  }
+}
+resetFilter() {
+  this.FILTER_VALUE_LIST = this.item;
 }
 
 private getDismissReason(reason: any): string {

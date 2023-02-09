@@ -6,6 +6,7 @@ import {DocumentService} from 'src/app/service/document.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
+import * as data1 from '../../currency.json';
 import {UserService} from './../../service/user.service';
 import { WindowInformationService } from 'src/app/service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
@@ -28,7 +29,14 @@ export class AirwayBLCopyComponent implements OnInit {
   public id: any;
   USER_DATA:any=[];
   filtervisible: boolean = false;
-
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    BL_Airway_No: [],
+    Currency: [],
+    DATE: []
+  };
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -46,30 +54,47 @@ export class AirwayBLCopyComponent implements OnInit {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
     this.item=[];
       this.documentService.getAirwayBlcopy().subscribe(
         (res: any) => {
           for (let value of res.data) {
             if (value['file'] == 'export') {
               this.item.push(value);
+              if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+                this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+              }
+              value?.buyerName.forEach(element => {
+                if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+                  this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+                }
+              });
+              if ( this.ALL_FILTER_DATA['BL_Airway_No'].includes(value?.airwayBlCopyNumber)==false) {
+                this.ALL_FILTER_DATA['BL_Airway_No'].push(value?.airwayBlCopyNumber);
+              }
+              if ( this.ALL_FILTER_DATA['DATE'].includes(value?.airwayBlCopydate)==false) {
+                this.ALL_FILTER_DATA['DATE'].push(value?.airwayBlCopydate);
+              }
             }
           }
+          this.FILTER_VALUE_LIST= this.item;
           console.log(res,'yuyuyuyuyuyuyuuy')
         },
         (err) => console.log(err)
       );
 
     }
-
-  filter() {
-    // this.getPipoData()
-    this.filtervisible = !this.filtervisible
-
-  }
-  onclick() {
-    this.filtervisible = !this.filtervisible
-  }
-
+    filter(value, key) {
+      this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+      if (this.FILTER_VALUE_LIST.length== 0) {
+        this.FILTER_VALUE_LIST = this.item;
+      }
+    }
+    resetFilter() {
+      this.FILTER_VALUE_LIST = this.item;
+    }
   openLetterOfCredit(content) {
     this.modalService
       .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
