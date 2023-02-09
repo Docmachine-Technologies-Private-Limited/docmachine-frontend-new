@@ -13,7 +13,7 @@
                     <div class="filter_posit">
                         <button (click)="filter_Popup.style.display='block'" type="button" class="btn btn-secondary"><span
                                 class="fi_icon"></span>Filter</button>
-                                <div style="display: none;" class="bg-white filter_main_sec" #filter_Popup>
+                                <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup appFilterToggle>
                                   <form class="select_filter_options">
                                       <div class="row">
                                           <div class="col-md-6 col-12">
@@ -67,6 +67,7 @@
                                           <button type="button" class="btn btn-light" (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
                                       </div>
                                   </form>
+                                  <i></i>
                               </div>
                     </div>
                         <button class="upload-button btn btn-success" (click)="newInsurance()">
