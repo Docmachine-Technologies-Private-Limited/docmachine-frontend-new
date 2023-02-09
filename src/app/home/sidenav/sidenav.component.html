@@ -252,7 +252,16 @@
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/new-Bill-Under-Collection')">New Bill Under Collection</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/bill-lodgement')">Bill Under LC</h6>
+              <h6 class="nav-link p-0"
+                (click)="subbillunderlc.style.display='block';this.HIDE_ALL_SUB_MENU();this.SUB_MENU['Bills_Under_LC']=true">
+                Bills Under LC</h6>
+              <div class="sub-menu navbar-nav ml-auto"
+                [style]="this.SUB_MENU['Bills_Under_LC']==true ? 'display:block;' : 'display:none;'" #subbillunderlc>
+                <h6 class="nav-link p-0"
+                  (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcSight'})">Sight</h6>
+                <h6 class="nav-link p-0"
+                  (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcUsance'})">Usance</h6>
+              </div>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/packing-credit-request')">Packing Credit

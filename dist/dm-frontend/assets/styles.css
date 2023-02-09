@@ -17,7 +17,7 @@ z-index: 1;background: transparent;height: 60px;box-shadow: 4px 4px 30px 0px rgb
 .sidebar-nav > li > a:hover{background:#c5e8ff!important}
 .table_bottom_section .table-row.active{background:#d9f1ff;}
 
-.new_document_list_add_data .form-label{font-weight:500; color:#333; margin:0px;padding: 7px 0; font-size:14px;}
+.new_document_list_add_data .form-label{font-weight:500; color:#333; margin:0px;padding: 7px 0; font-size:13px; }
 .file_addd_to img{max-width: 32px;margin: 0 0 12px 0;}
 .change_textcolor{color:#51AEE5;}
 .file_addd_to{display:inline-block; width:100%; padding:20px 0px;}
@@ -244,11 +244,17 @@ transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 .padding_move_right{padding-right:16px;}
 .add_new_buttons{display:inline-block; width:100%;    margin: 17px 0 11px -2px;}
 .right_form_new label{font-size:14px;font-weight:500; color:#333;}
-.right_form_new .form-select{border:1px solid #e9e9e9!important;}
-.right_form_new .form-control{border:1px solid #e9e9e9!important;}
+.right_form_new .form-select{border:1px solid #e9e9e9!important;font-weight:500; font-size:13px;}
+.right_form_new .form-control{border:1px solid #e9e9e9!important; font-weight:500;}
 .right_form_new .form-check{display:inline-block; margin:0 15px 0 0;}
 .bottom_submit_section{float:right;margin: 31px 0 0 0;}
 .right_form_new .padding0{padding:0px;}
+.right_form_new .paddingright0{padding-right:0px;}
+
+
+
+
+
 .add_new_buttons .btn-success{background:#51AEE5; border:1px solid #51AEE5; font-weight:500; padding:0 21px;    height: 36px;}
 .bottom_submit_section .btn-primary{background:#fff; border:1px solid #51AEE5; font-weight:500; padding:0 21px;  color:#51AEE5;    height: 36px;  font-weight: 500;}
 .bottom_submit_section .btn-secondary{background:#51AEE5; border:1px solid #51AEE5; font-weight:500; padding:0 21px;    font-weight: 500; margin:0 0px 0 15px;    height: 36px;    line-height: 36px;}

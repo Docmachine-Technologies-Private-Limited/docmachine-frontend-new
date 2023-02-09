@@ -818,7 +818,7 @@ export class UploadComponent implements OnInit {
         this.mainBene = this.beneOut;
       }
     }
-    
+
     //console.log(this.route.snapshot.paramMap.get('document'))
     this.config = {
       ...this.config,
@@ -1093,7 +1093,7 @@ export class UploadComponent implements OnInit {
     }
     console.log(invoices);
     e.form.value.invoices = invoices;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.pipo = this.pipoArr;
     console.log('buyername for BL', e.form.value.buyerName);
     e.form.value._id = this.res._id
@@ -1390,7 +1390,7 @@ export class UploadComponent implements OnInit {
   onSubmitThird(e) {
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
@@ -1446,7 +1446,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
     this.documentService.addCredit(e.form.value).subscribe(
@@ -1492,7 +1492,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
@@ -1544,7 +1544,7 @@ export class UploadComponent implements OnInit {
     console.log('pipoarrya', this.pipoArr);
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
     this.documentService.addBlcopyref(e.form.value).subscribe(
@@ -1589,7 +1589,7 @@ export class UploadComponent implements OnInit {
     e.form.value.blCopyDoc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
     e.form.value.file = this.documentType1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.CommercialNumber = this.CommercialNumber
     console.log(e.form.value, 'onSubmitblCopy');
 
@@ -1650,7 +1650,7 @@ export class UploadComponent implements OnInit {
     e.form.value.file = this.documentType1;
     e.form.value.commercialDoc = this.pipourl1;
     console.log('pipoDoc', this.pipourl1);
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     console.log(e.form.value);
     this.documentService.addCommercial(e.form.value).subscribe(
       (res: any) => {
@@ -1698,7 +1698,7 @@ export class UploadComponent implements OnInit {
     e.form.value.currency = e.form.value?.currency?.type;
     e.form.value.commercialDoc = this.pipourl1;
     console.log('pipoDoc', this.pipourl1);
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
 
     console.log(e.form.value);
     this.documentService.addCommercial(e.form.value).subscribe(
@@ -1744,7 +1744,7 @@ export class UploadComponent implements OnInit {
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
 
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
 
     console.log(e.form.value);
@@ -1789,7 +1789,7 @@ export class UploadComponent implements OnInit {
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
 
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     this.documentService.addDestruction(e.form.value).subscribe(
@@ -1838,7 +1838,7 @@ export class UploadComponent implements OnInit {
     e.form.value.packingDoc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
     e.form.value.file = this.documentType1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     this.documentService.addPackingList(e.form.value).subscribe(
@@ -1905,7 +1905,7 @@ export class UploadComponent implements OnInit {
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
 
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     // this.documentService.addOtherDoc(e.form.value).subscribe(
@@ -1948,7 +1948,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     e.form.value.file = this.documentType1;
@@ -1992,7 +1992,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
@@ -2022,7 +2022,7 @@ export class UploadComponent implements OnInit {
   onSubmitInsurance(e) {
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value, 'onSubmitInsurance');
@@ -2071,7 +2071,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
 
@@ -2111,7 +2111,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
@@ -2157,7 +2157,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
 
@@ -2298,7 +2298,7 @@ export class UploadComponent implements OnInit {
         } else if (this.documentType === 'destruction') {
           this.destruction = true;
         } else if (this.documentType === 'import-destruction') {
-          this.destruction = true;  
+          this.destruction = true;
         } else if (this.documentType === 'billOfExchange') {
           this.billOfExchange = true;
         } else if (this.documentType === 'import-billOfExchange') {
@@ -2324,7 +2324,7 @@ export class UploadComponent implements OnInit {
         } else if (this.documentType === 'packingList') {
           this.packingList = true;
         } else if (this.documentType === 'import-packingList') {
-          this.importpackingList = true; 
+          this.importpackingList = true;
         } else if (this.documentType === 'otherDoc') {
           this.otherDoc = true;
         } else {
@@ -2536,6 +2536,7 @@ export class UploadComponent implements OnInit {
     }
   }
   SHIPPINGBILL_LIST: any = [];
+  BUYER_LIST: any = [];
   clickPipo(PI_PO_LIST) {
     var last_length = PI_PO_LIST.length - 1;
     var LAST_VALUE: any = PI_PO_LIST[last_length]?.value;
@@ -2544,6 +2545,9 @@ export class UploadComponent implements OnInit {
     this.pipoSelect = true;
     console.log('line 2361', this.pipoSelect);
 
+    if (this.BUYER_LIST.includes(LAST_VALUE?.id[1])==false) {
+      this.BUYER_LIST.push(LAST_VALUE?.id[1])
+    }
     this.mainBene = this.FILTER_VALUE(this.pipolist, LAST_VALUE?._id)[0]?.buyerName;
     let x = LAST_VALUE?.id[1];
     let j = this.arrayData.indexOf(LAST_VALUE?.id[1]);

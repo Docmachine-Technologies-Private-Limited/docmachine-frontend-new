@@ -11,6 +11,7 @@ import { WindowInformationService } from 'src/app/service/window-information.ser
 import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+import * as data1 from '../../currency.json';
 
 @Component({
   selector: 'app-import-debit-note',
@@ -29,15 +30,14 @@ export class ImportDebitNoteComponent implements OnInit {
   public item2: any;
   filtervisible: boolean = false;
   USER_DATA:any=[];
-
-  filter() {
-  // this.getPipoData()
-  this.filtervisible = !this.filtervisible
-
-}
-onclick() {
-  this.filtervisible = !this.filtervisible
-}
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    D_N_No: [],
+    Currency: [],
+    DATE: []
+  };
 
   constructor(
     private documentService: DocumentService,
@@ -57,12 +57,28 @@ onclick() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
     this.item1=[];
       this.documentService.getDebit().subscribe(
         (res: any) => {
           for (let value of res.data) {
             if (value['file'] == 'import') {
               this.item1.push(value);
+              this.FILTER_VALUE_LIST.push(value);
+              if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+                this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+              }
+              if ( this.ALL_FILTER_DATA['Buyer_Name'].includes(value?.buyerName[0])==false) {
+                this.ALL_FILTER_DATA['Buyer_Name'].push(value?.buyerName[0]);
+              }
+              if ( this.ALL_FILTER_DATA['D_N_No'].includes(value?.debitNoteNumber)==false) {
+                this.ALL_FILTER_DATA['D_N_No'].push(value?.debitNoteNumber);
+              }
+              if ( this.ALL_FILTER_DATA['DATE'].includes(value?.date)==false) {
+                this.ALL_FILTER_DATA['DATE'].push(value?.date);
+              }
             }
           }
           console.log(res,'yuyuyuyuyuyuyuuy')
@@ -71,7 +87,15 @@ onclick() {
       );
 
     }
-
+    filter(value, key) {
+      this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
+      if (this.FILTER_VALUE_LIST.length== 0) {
+        this.FILTER_VALUE_LIST = this.item1;
+      }
+    }
+    resetFilter() {
+      this.FILTER_VALUE_LIST = this.item1;
+    }
 
   exportToExcel() {
     const ws: xlsx.WorkSheet =

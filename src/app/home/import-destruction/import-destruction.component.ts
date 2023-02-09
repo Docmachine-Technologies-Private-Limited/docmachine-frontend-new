@@ -31,15 +31,14 @@ export class ImportDestructionComponent implements OnInit {
   public id: any;
   filtervisible: boolean = false;
   USER_DATA:any=[];
-  
-  filter() {
-  // this.getPipoData()
-  this.filtervisible = !this.filtervisible
-
-}
-onclick() {
-  this.filtervisible = !this.filtervisible
-}
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    Destruction_Certificate_No: [],
+    Currency: [],
+    DATE: []
+  };
 
   constructor(
     private documentService : DocumentService,
@@ -63,12 +62,37 @@ onclick() {
       this.documentService.getDestructionfile("import").subscribe(
         (res: any) => {
           this.item=res?.data;
+          this.FILTER_VALUE_LIST= this.item;
+          for (let value of res.data) {
+            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+            }
+            value?.buyerName.forEach(element => {
+              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+              }
+            });
+            if ( this.ALL_FILTER_DATA['Destruction_Certificate_No'].includes(value?.destructionNumber)==false) {
+              this.ALL_FILTER_DATA['Destruction_Certificate_No'].push(value?.destructionNumber);
+            }
+            if ( this.ALL_FILTER_DATA['DATE'].includes(value?.destructionDate)==false) {
+              this.ALL_FILTER_DATA['DATE'].push(value?.destructionDate);
+            }
+        }
           console.log(res,'getDestructionfile');
         },
         (err) => console.log(err)
         );
       }
-
+      filter(value, key) {
+        this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+        if (this.FILTER_VALUE_LIST.length== 0) {
+          this.FILTER_VALUE_LIST = this.item;
+        }
+      }
+      resetFilter() {
+        this.FILTER_VALUE_LIST = this.item;
+      }
     openDestruction(content){
     this.modalService
     .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })

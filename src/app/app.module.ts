@@ -54,6 +54,7 @@ import { MemberGuard } from "./service/RolePermission/Member/member.guard";
 import { AdminMemberGuard } from "./service/RolePermission/AdminMember/admin-member.guard";
 import {DateFormatService} from "./DateFormat/date-format.service"
 import { JoinPipePipe } from './join-pipe.pipe';
+import { FilterToggleDirective } from './custom/filter-toggle.directive';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -85,6 +86,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         CustomConfirmDialogModelComponent,
         AuthorizationComponent,
         JoinPipePipe,
+        FilterToggleDirective,
     ],
     providers: [{ provide: AppConfig },
         WindowInformationService,
