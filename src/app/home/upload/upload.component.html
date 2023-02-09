@@ -512,7 +512,7 @@
               </div>
               <div>
                 <div>
-                  <div class="tabbed">
+                  <div class="tabbed" *ngIf="res.invoices!=undefined">
                     <input *ngFor="let obj of res.invoices; let i = index" [attr.data-index]="i" type="radio"
                       id="{{ i + 1 }}" name="css-tabs" checked />
 
@@ -523,7 +523,7 @@
                     </ul>
 
                     <div class="tab-content form-wrapper" *ngFor="let obj of res.invoices; let i = index"
-                      [attr.data-index]="i">
+                      [attr.data-index]="i" formArrayName="invoices">
                       <td class="full-input border1">
                         <label for="mawbno">INVOICE NO</label><input [(ngModel)]="obj.invoiceno" class="form-control p-3"
                           type="text" name="invoiceno{{ i + 1 }}" />
@@ -536,6 +536,40 @@
                         <label for="mawbno">CURRENCY</label>
                         <!-- <input [(ngModel)]="obj.currency" class="form-control p-3"
                           type="text" name="currency{{ i + 1 }}" /> -->
+                          <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                        [items]="this.CURRENCY_LIST"
+                        bindLabel="type"
+                        [multiple]="false"
+                        groupBy="selectedAllGroup"
+                        placeholder="Select PI/PO"
+                        name="currency"
+                        [(ngModel)]="obj.currency">
+                      </ng-select>
+                      </td>
+                    </div>
+                  </div>
+                  <div class="tabbed" *ngIf="res.invoices==undefined">
+                    <input *ngFor="let obj of [1]; let i = index" [attr.data-index]="i" type="radio"
+                      id="{{ i + 1 }}" name="css-tabs" checked />
+
+                    <ul class="tabs" style="padding-left:15px">
+                      <li class="tab" *ngFor="let obj of [1]; let i = index" [attr.data-index]="i">
+                        <label for="{{ i + 1 }}">Invoice {{ i + 1 }}</label>
+                      </li>
+                    </ul>
+
+                    <div class="tab-content form-wrapper"  formArrayName="invoices" *ngFor="let obj of [{invoiceno:'0',amount:'0'}]; let i = index"
+                      [attr.data-index]="i">
+                      <td class="full-input border1">
+                        <label for="mawbno">INVOICE NO</label><input [(ngModel)]="obj.invoiceno" class="form-control p-3"
+                          type="text" name="invoiceno" />
+                      </td>
+                      <td class="full-input border2">
+                        <label for="mawbno">AMOUNT</label><input [(ngModel)]="obj.amount" class="form-control p-3"
+                          type="text" name="amount" />
+                      </td>
+                      <td class="full-input border3">
+                        <label for="mawbno">CURRENCY</label>
                           <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                         [items]="this.CURRENCY_LIST"
                         bindLabel="type"

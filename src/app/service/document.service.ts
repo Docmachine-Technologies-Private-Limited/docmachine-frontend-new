@@ -134,6 +134,14 @@ export class DocumentService {
     return this.http.post(
       `${this.api_base}/orAdvice/getByIdBillNo`,{_id:id},httpOptions);
   }
+  getInvoice_No(query,table_name:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/orAdvice/getInvoice_No`,{query:query,tableName:table_name },httpOptions);
+  }
 
 
   updateByIr(data, _id) {
