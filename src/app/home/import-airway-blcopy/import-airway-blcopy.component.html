@@ -1,0 +1,159 @@
+<div class="content-wrap pb-2 scroll-bar-main">
+    <div class="import_export_sec">
+        <h3 class="heading_common_tag">Import Airway / BLCopy Documents</h3>
+    </div>
+    <main id="content" class="content table-padding" role="main">
+        <div class="filter_section_top">
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-12"></div>
+                <div class="col-md-8 col-sm-8 col-12">
+                    <div class="filter_right_new padding_new_top">
+                        <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
+                                class="ex_icon"></span>Export</button>
+                        <div class="filter_posit">
+                          <button (click)="filter_Popup.style.display='block'" type="button" class="btn btn-secondary"><span
+                            class="fi_icon"></span>Filter</button>
+                            <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup appFilterToggle>
+                                <form class="select_filter_options">
+                                  <div class="row">
+                                      <div class="col-md-6 col-12">
+                                          <label for="exampleFormControlInput1" class="form-label">Buyer name</label>
+                                          <select class="form-select form-control" aria-label="Default select example" name="Buyer_Name"
+                                           (change)="filter($event.target.value,'buyerName');filter_Popup.style.display='none'">
+                                                  <option value="">Buyer name</option>
+                                                  <option [value]="Buyer_Name" *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">{{Buyer_Name}}
+                                                  </option>
+                                              </select>
+                                      </div>
+                                      <div class="col-md-6 col-12">
+                                          <label for="exampleFormControlInput1" class="form-label">PI/PO No.</label>
+                                          <select class="form-select form-control" aria-label="Default select example"
+                                          (change)="filter($event.target.value,'pipo');filter_Popup.style.display='none'"
+                                           name="Company_Name">
+                                                  <option value="">PI/PO No.</option>
+                                                  <option [value]="PI_PO_No" *ngFor="let PI_PO_No of this.ALL_FILTER_DATA?.PI_PO_No">{{ PI_PO_No }}
+                                                  </option>
+                                              </select>
+                                      </div>
+                                      <div class="col-md-6 col-12">
+                                          <label for="exampleFormControlInput1" class="form-label">BL/Airway No.</label>
+                                          <select class="form-select form-control" aria-label="Default select example"
+                                          (change)="filter($event.target.value,'airwayBlCopyNumber');filter_Popup.style.display='none'" name="Origin">
+                                                  <option value="">BL/Airway No.</option>
+                                                  <option *ngFor="let Origin of this.ALL_FILTER_DATA?.BL_Airway_No">{{ Origin }}
+                                                  </option>
+                                              </select>
+                                      </div>
+                                      <div class="col-md-6 col-12">
+                                        <label for="exampleFormControlInput1" class="form-label">DATE</label>
+                                        <select class="form-select form-control" aria-label="Default select example"
+                                        (change)="filter($event.target.value,'airwayBlCopydate');filter_Popup.style.display='none'" name="date">
+                                          <option value="">DATE</option>
+                                          <option [value]="SB_DATE" *ngFor="let SB_DATE of this.ALL_FILTER_DATA?.DATE">{{ SB_DATE }}
+                                          </option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="footer_buttons">
+                                      <button type="button" class="btn btn-light" (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
+                                  </div>
+                              </form>
+                              <i></i>
+                          </div>
+                        </div>
+                        <button class="upload-button btn btn-success" [disabled]="this.USER_DATA?.result?.Role_Type!='Approver'? false : true" (click)="newCredit()">
+                            <span class="add_icon"></span>  ADD NEW
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="analytics">
+            <div style="width: 100%" class="analytics_top" #airwayBlCopy>
+                <!-- *ngIf="!showInvoice" -->
+                <div style="width: 100%" class="row">
+                    <div class="" id="container">
+                        <!-- *ngIf="!showInvoice" -->
+                        <section class="middle_datatable">
+                            <div class="widget-body p-0 support table-wrapper">
+                                <table class="table table-striped mb-0">
+                                    <!-- *ngIf='pipo' -->
+                                    <thead style="width: 100%;background: white;position: sticky;top: 0;">
+                                        <tr class="text-muted table-heading" style=" border-bottom: 1px solid #f2f4f8;">
+                                            <!-- <th class="rect">
+                                              <img src="./assets/Rectangle-13.png" />
+                                          </th> -->
+                                            <th scope="col"><span class="pl-3" style="margin-left: 9px;">DATE</span></th>
+                                            <th scope="col">PI/PO No.</th>
+                                            <th scope="col">BL/Airway No.</th>
+                                            <th scope="col">Beneficiary Name</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-dark">
+                                        <tr class="table-row" *ngFor="let data of  this.FILTER_VALUE_LIST; let i = index" [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                        this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')" >
+                                            <td>{{ data.airwayBlCopydate }}</td>
+
+                                            <td class="sb-no"> {{ getPipoNumbers(data) }} </td>
+
+                                            <td>
+                                                <div *ngIf="!optionsVisibility[i]">
+                                                    {{data.airwayBlCopyNumber}}
+                                                </div>
+
+                                                <div *ngIf="optionsVisibility[i]">
+                                                    <input class="tblInput form-control" name="airwayBlCopyNumber" type="text" placeholder="Airway BlCopy Number" [(ngModel)]="data.airwayBlCopyNumber">
+                                                </div>
+                                            </td>
+                                            <td>{{data.buyerName}}</td>
+                                            <td class="view_edit_button">
+                                                <a (click)=" openLetterOfCredit(content); viewCN(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                                <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
+                                                (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
+                                                    aria-hidden="true"></i></button>
+                                                    <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
+                                                     (click)="handleDelete(data._id,i)"><a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                    </button>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #content let-modal>
+
+            <div class="modal-body">
+                <div class="row no-gutter">
+                    <!-- The image half -->
+                    <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
+                    <!-- The content half -->
+                    <div class="col-md-7" style="margin: 10px;">
+                        <div class="login d-flex py-5" style="padding: 0px !important;">
+
+                            <!-- Demo content-->
+                            <div class="container popup">
+                                <div class="row">
+                                    <div class="col-lg-10 col-xl-7 mrg">
+                                        <h6 class="display-6">Airway/BlCopy</h6>
+
+                                        <iframe [src]="viewData" width="315%" height="500px"></iframe>
+                                        <button type="submit" style="margin-left: 250px;" class="submitBTN" (click)="modal.dismiss('Cross click')">OK</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>

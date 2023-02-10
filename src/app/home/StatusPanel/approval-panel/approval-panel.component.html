@@ -24,6 +24,9 @@
       </td>
       <td><div class="column flex-display">
         <button type="submit" class="btn btn-primary" (click)="detailsView(i,ApprovalDetails.style.display='block')">Details</button>
+        <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary" (click)="mergeAllPDFs('download',item?.documents)">Pdf</button>
+        <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary" (click)="mergeAllPDFs('zip',item?.documents)">Zip</button>
+        <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary" (click)="mergeAllPDFs('mail',item?.documents)">Send Mail</button>
       </div></td>
     </tr>
   </tbody>
@@ -42,7 +45,7 @@
        <div class="column" *ngIf="this.detailsViewdata.length!=0">
         <p class="done-by"><span class="bold-text">Done By :</span> {{this.detailsViewdata['userdetails']['fullName']}}</p>
         <p class="date-time"><span class="bold-text">Date & Time :</span> {{this.detailsViewdata['createdAt']}}</p>
-        <p class="status"><span class="bold-text">Status :</span> {{this.detailsViewdata['deleteflag']=='1'?'Approved':'Not Approved'}}</p>
+        <p class="status"><span class="bold-text">Status :</span> {{this.detailsViewdata['status']}}</p>
         <p class="comments"><span class="bold-text">Comments :</span> {{this.detailsViewdata['comment']}}</p>
        </div>
       </div>

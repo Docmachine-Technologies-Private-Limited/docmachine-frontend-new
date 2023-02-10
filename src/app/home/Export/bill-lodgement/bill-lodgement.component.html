@@ -21,9 +21,12 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <label for="email" class="form-label">Select PI/PO or shipping bill</label>
-                                        <app-custom-dropdown class="main-drop-down-class" name="example1"
-                                         [data]="this.SHIPPING_BILL_LIST" label-text="Sample Data 1"
-                                         (PopupShow)="DUMP_FUNCTION(changevalue,'Shipping bill',content1)" [(ngModel)]="changevalue"></app-custom-dropdown>
+                                        <ng-select
+                                        [items]="this.SHIPPING_BILL_LIST"
+                                        bindLabel="value"
+                                        [multiple]="false"
+                                        placeholder="Select PI/PO or shipping bill"
+                                        (change)="DUMP_FUNCTION($event?.value,'Shipping bill',content1)" #PI_PO_shipping_bill></ng-select>
                                         <div *ngIf='itemArray?.length >0'>
                                             <div *ngIf="ship" class="shpt_bill_sec">
                                                 <label>SHIPPING BILL NUMBER SELECTED</label>
@@ -90,7 +93,7 @@
                                                     <label for="email" class="form-label">Select letter of credit</label></div>
                                                 <div class="col-md-10 col-sm-10 col-9 pr-0">
                                                     <div class="select_rol">
-                                                        <ng-select [items]="this.ThirdPartydata" bindLabel="buyerName" placeholder="Select letter of credit" [(ngModel)]="ThirdPartydataselection" name="commodity" #ngSelect>
+                                                        <ng-select [items]="this.Letter_Of_Credit" bindLabel="letterOfCreditNumber" placeholder="Select letter of credit" [(ngModel)]="ThirdPartydataselection" name="commodity" #ngSelect>
                                                         </ng-select>
                                                     </div>
                                                 </div>
@@ -148,7 +151,7 @@
                                                 </div>
                                                 <div class="col-md-10 col-sm-10 col-9 pr-0">
                                                     <div class="select_rol">
-                                                        <ng-select [items]="this.ThirdPartydata" bindLabel="buyerName" placeholder="Select Tripartite agreement" [(ngModel)]="ThirPartyselection" name="commodity" #ngSelect>
+                                                        <ng-select [items]="this.ThirdPartydata" bindLabel="try_part_agreement" placeholder="Select Tripartite agreement" [(ngModel)]="ThirPartyselection" name="commodity" #ngSelect>
                                                         </ng-select>
                                                     </div>
                                                 </div>

@@ -17,13 +17,23 @@ import {CommonModule} from "@angular/common";
 import { FilternewPipe } from './filterpipo/filternew.pipe';
 import { FilterdatePipe } from './datefilter/filterdate.pipe';
 import { NumberToWordsPipe } from "./pipe/number-to-words.pipe";
-
+import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";
+import { PdfViewerModule } from "ng2-pdf-viewer";
+import { FiterbuyerPipe } from "./Export/fiterbuyer.pipe";
+import {CustomDropdownComponent} from '.././custom/custom-dropdown/custom-dropdown.component'
+import { NgSelectModule } from "@ng-select/ng-select";
+import {FilterToggleDirective} from "../custom/Filter/filter-toggle.directive";
+import { PipoDataService } from "../service/homeservices/pipo.service";
 @NgModule({
   declarations: [
     ConfirmDialogComponent,
     FilternewPipe,
     FilterdatePipe,
+    FiterbuyerPipe,
     NumberToWordsPipe,
+    CustomDropdownComponent,
+    PDFVIEWERComponent,
+    FilterToggleDirective
   ],
   imports: [
     CommonModule,
@@ -32,15 +42,18 @@ import { NumberToWordsPipe } from "./pipe/number-to-words.pipe";
     DragDropModule,
     MatProgressBarModule,
     MatTabsModule,
+    PdfViewerModule,
+    NgSelectModule,
     ModalModule.forRoot(),
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal,SharedDataService],
+  providers: [ConfirmDialogService, NgbModal,SharedDataService,PipoDataService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //   exports: [SharedProjectsModule]
   exports: [
     FilternewPipe,
     FilterdatePipe,
+    FiterbuyerPipe,
     NumberToWordsPipe,
     CommonModule,
     FormsModule,
@@ -48,6 +61,12 @@ import { NumberToWordsPipe } from "./pipe/number-to-words.pipe";
     DragDropModule,
     MatProgressBarModule,
     MatTabsModule,
-    ReactiveFormsModule],
+    ReactiveFormsModule,
+    PdfViewerModule,
+    NgSelectModule,
+    CustomDropdownComponent,
+    PDFVIEWERComponent,
+    FilterToggleDirective
+  ],
 })
 export class SharedHomeModule { }

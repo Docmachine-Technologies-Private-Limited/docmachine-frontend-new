@@ -12,15 +12,15 @@
                     <div class="login d-flex py-5" style="padding: 0px !important;">
 
                         <!-- Demo content-->
-                        <div class="container">
+                        <div class="container edit-bene">
                             <div class="row">
                                 <div class="col-lg-10 col-xl-7 mrg" *ngIf="is">
                                     <h6 class="display-5">Edit Beneficiary/ Customer</h6>
                                     <form #values="ngForm" (ngSubmit)="onSubmit(values)">
                                         <div class="form-group mb-3">
                                             <label>Name</label>
-                                            <input [(ngModel)]="item.beneName" placeholder="Beneficiary/ Customer name"
-                                                required="" class="form-control rounded-pill" name="beneName">
+                                            <input [(ngModel)]="item.benneName" placeholder="Beneficiary/ Customer name"
+                                                required="" class="form-control rounded-pill" name="benneName">
                                         </div>
                                         <div class="form-group mb-3">
                                             <label>Address</label>

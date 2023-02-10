@@ -1,7 +1,13 @@
-<div class="content-wrap scroll-bar-main pb-2">
-
+<div class="content-wrap scroll-bar-main pb-2"
+style="top: 17px;
+left: 205px;
+background: white;
+padding: 10px;
+border-radius: 5px;
+box-shadow: rgb(215 212 212) 0px 0px 10px 1px inset;
+overflow-x: hidden;">
     <main id="content" class="content table-padding bc" role="main">
-        <div id="mainId" class="bc" *ngIf="!done">
+        <div id="mainId" class="bc">
             <div id="first" class="bc" style="margin-left: 40px;">
                 <p> <b style="border-bottom: 2px solid black;">For Office use:</b> </p>
                 <table>
@@ -72,7 +78,7 @@
                         <td class="lc">Beneficiary Name, Address and <br>
                             country</td>
                         <td class="wtd1" colspan="5"><span style="outline: none;display: inline-block; width: 300px;"
-                                contenteditable="true">{{benneDetail.beneName}}</span> <br>
+                                contenteditable="true">{{benneDetail.benneName}}</span> <br>
                             <span style="outline: none;display: inline-block; width: 300px;"
                                 contenteditable="true">{{benneDetail.beneAdrs}}</span> <br>
                             <span style="outline: none;display: inline-block; width: 300px;"

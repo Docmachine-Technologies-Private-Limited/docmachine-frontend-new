@@ -33,7 +33,8 @@ export class SigninComponent implements OnInit {
   ngOnInit(): void {
 
     let token = this.authGuard.loadFromLocalStorage();
-    if (token) {
+    console.log(token,'tokenn....');
+    if (token && this.authGuard.getLocalStorage('LOGIN_OTP')==true) {
       this.router.navigate(["/home/dashboardTask"]);
     }
 
@@ -79,6 +80,7 @@ export class SigninComponent implements OnInit {
           data => {
             this.userService.addLoginData(data);
             this.data = data;
+            console.log(this.data,'oppppppppppppppppppppppppppppppp');
             if (data['result']) {
               this.userService.addToken(data['result'].token);
               if (data['result']['dataURL']) {
@@ -89,6 +91,7 @@ export class SigninComponent implements OnInit {
                 //   this.userService.addToken(data['result'].token);
                 this.userService.getUser().subscribe(
                   data1 => {
+                    console.log(data1),'sdfsdhdsgfjdsfhgsdfjsfgdsjfd';
                     this.data1 = data1
                   },
                   error1 => {
@@ -103,6 +106,7 @@ export class SigninComponent implements OnInit {
             this.loginError();
           });
     } else {
+      console.log(this.data1,'hjjjjjjjjjjjjjjjjjhhjjhjhhjjh')
       this.userService.loginVerfiy(this.value)
         .subscribe(
           data => {
@@ -112,6 +116,11 @@ export class SigninComponent implements OnInit {
               if (this.data1['data'][0]['emailIdVerified']) {
                 if (this.data1['data'][0]['verified'] == 'yes') {
                   if (data['status'] == 200) {
+                    this.authGuard.setLocalStorage('LOGIN_OTP',true);
+                    this.authGuard.setLocalStorage('PERMISSION',JSON.stringify({
+                      emailId:this.data1['data'][0].emailId,
+                      role:this.data['result']['role']
+                    }))
                     this.toastr.success(data['message']);
                     if (this.data['result']['role'] == 'ca') {
                       this.userService.role = this.data['result']['role'];
@@ -121,7 +130,11 @@ export class SigninComponent implements OnInit {
                       if (this.data1['data'][0].companyId) {
                         this.router.navigate(['/home/dashboardTask'])
                       } else {
-                        this.router.navigate(['createTeam']);
+                        if (this.data1['data'][0]?.role!='member') {
+                          this.router.navigate(['createTeam']);
+                        }else{
+                          this.router.navigate(['/home/dashboardTask'])
+                        }
                       }
                     }
                   } else {

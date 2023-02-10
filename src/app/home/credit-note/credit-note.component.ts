@@ -3,6 +3,8 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
 import {UserService} from './../../service/user.service';
+import * as data1 from '../../currency.json';
+
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -18,6 +20,10 @@ import {ActivatedRoute, Data, NavigationStart, Router} from '@angular/router';
 import * as xlsx from 'xlsx';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+
 
 @Component({
   selector: 'app-credit-note',
@@ -34,7 +40,16 @@ export class CreditNoteComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
-  filtervisible: boolean = false
+  filtervisible: boolean = false;
+  USER_DATA:any=[];
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    C_N_No: [],
+    Currency: [],
+    DATE: []
+  };
 
   constructor(
     private documentService: DocumentService,
@@ -44,30 +59,51 @@ export class CreditNoteComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private sharedData: SharedDataService,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public dialog: MatDialog,
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.FILTER_VALUE_LIST=[];
     this.wininfo.set_controller_of_width(270,'.content-wrap')
-    this.documentService.getCredit().subscribe(
-      (res: any) => {
-        console.log('HEre Responsesssssssss', res);
-        this.item = res.data;
-        for (let value of this.item) {
-          if (value['file'] == 'export') {
-
-            this.item1.push(value);
-            console.log("awwww", this.item1)
+    this.USER_DATA = await this.userService.getUserDetail();
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
+    console.log("this.USER_DATA", this.USER_DATA)
+    this.item1=[];
+      this.documentService.getCredit().subscribe(
+        (res: any) => {
+          for (let value of res.data) {
+            if (value['file'] == 'export') {
+              this.item1.push(value);
+              this.FILTER_VALUE_LIST.push(value);
+              if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+                this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+              }
+              value?.buyerName.forEach(element => {
+                if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+                  this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+                }
+              });
+              if ( this.ALL_FILTER_DATA['C_N_No'].includes(value?.creditNoteNumber)==false) {
+                this.ALL_FILTER_DATA['C_N_No'].push(value?.creditNoteNumber);
+              }
+              if ( this.ALL_FILTER_DATA['DATE'].includes(value?.date)==false) {
+                this.ALL_FILTER_DATA['DATE'].push(value?.date);
+              }
+            }
           }
-        }
-      },
-      (err) => console.log(err)
-    );
+          console.log(res,'yuyuyuyuyuyuyuuy')
+        },
+        (err) => console.log(err)
+      );
 
-  }
+    }
 
-  
+
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
       return x.pi_poNo;
@@ -128,10 +164,14 @@ export class CreditNoteComponent implements OnInit {
     this.router.navigate(['home/upload', {file: 'export', document: 'creditNote'}]);
   }
 
-  filter() {
-    // this.getPipoData()
-    this.filtervisible = !this.filtervisible
-
+  filter(value, key) {
+    this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
+    if (this.FILTER_VALUE_LIST.length== 0) {
+      this.FILTER_VALUE_LIST = this.item1;
+    }
+  }
+  resetFilter() {
+    this.FILTER_VALUE_LIST = this.item1;
   }
   onclick() {
     this.filtervisible = !this.filtervisible
@@ -149,4 +189,44 @@ export class CreditNoteComponent implements OnInit {
     this.optionsVisibility[index] = true;
     this.toastr.warning('PI/PO Is In Edit Mode');
   }
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+      this.documentService.deleteById({id:id,tableName:'creditnotes'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'creditnotes',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item1[index],
+        Types:'deletion',
+        TypeOfPage:'summary',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
+  }
+
+
 }

@@ -6,8 +6,13 @@ import {DocumentService} from 'src/app/service/document.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
+import * as data1 from '../../currency.json';
 import {UserService} from './../../service/user.service';
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+
 
 @Component({
   selector: 'app-bill-of-exchange',
@@ -23,7 +28,16 @@ export class BillOfExchangeComponent implements OnInit {
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
-
+  USER_DATA:any=[];
+  filtervisible: boolean = false;
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    Bill_Of_Exchange_No: [],
+    Currency: [],
+    DATE: []
+  };
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -32,27 +46,54 @@ export class BillOfExchangeComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private sharedData: SharedDataService,
-    public wininfo: WindowInformationService) {
+    public wininfo: WindowInformationService,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public dialog: MatDialog,
+  ) {
   }
-
-  ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
-    this.documentService.getBillExchange().subscribe(
+  async ngOnInit() {
+    this.wininfo.set_controller_of_width(270,'.content-wrap');
+    this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA);
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
+    this.item = [];
+    this.documentService.getBillExchangefile("export").subscribe(
       (res: any) => {
-        console.log('HEre Responsesssssssss', res);
-        // this.item = res.data;
+        this.item=res?.data;
+        this.FILTER_VALUE_LIST= this.item;
         for (let value of res.data) {
-          if (value['file'] == 'export') {
-
-            this.item.push(value);
+          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
           }
-        }
+          value?.buyerName.forEach(element => {
+            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+            }
+          });
+          if ( this.ALL_FILTER_DATA['Bill_Of_Exchange_No'].includes(value?.billExchangeNumber)==false) {
+            this.ALL_FILTER_DATA['Bill_Of_Exchange_No'].push(value?.billExchangeNumber);
+          }
+          if ( this.ALL_FILTER_DATA['DATE'].includes(value?.billOfExchangeDate)==false) {
+            this.ALL_FILTER_DATA['DATE'].push(value?.billOfExchangeDate);
+          }
+      }
+        console.log(res,'getBillExchangefile');
       },
       (err) => console.log(err)
-    );
-  }
-
-  openCreditNote(content) {
+      );
+    }
+    filter(value, key) {
+      this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+      if (this.FILTER_VALUE_LIST.length== 0) {
+        this.FILTER_VALUE_LIST = this.item;
+      }
+    }
+    resetFilter() {
+      this.FILTER_VALUE_LIST = this.item;
+    }
+  openBillofExchange(content) {
     this.modalService
       .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
       .result.then(
@@ -123,6 +164,44 @@ export class BillOfExchangeComponent implements OnInit {
   toEdit(index) {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Bill of Exchange Is In Edit Mode');
+  }
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+      this.documentService.deleteById({id:id,tableName:'billofexchanges'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'billofexchanges',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item[index],
+        Types:'deletion',
+        TypeOfPage:'summary',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
   }
 
 }

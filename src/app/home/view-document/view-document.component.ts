@@ -4,6 +4,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as xlsx from 'xlsx';
+import * as data1 from '../../currency.json';
+
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -15,8 +17,13 @@ import {
 } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
-import {ShippingbillDataService} from "../../service/homeservices/shippingbill.service";
+import { ShippingbillDataService } from "../../service/homeservices/shippingbill.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { UserService } from 'src/app/service/user.service';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-view-document',
@@ -31,6 +38,8 @@ export class ViewDocumentComponent implements OnInit {
   public item2 = [];
   public item3 = [];
   public item4 = [];
+  public viewData: any;
+  public closeResult: string;
   public user;
   public selectedRow;
   public showInvoice;
@@ -66,19 +75,45 @@ export class ViewDocumentComponent implements OnInit {
   boe: boolean;
   sb: boolean;
   docu: any;
+  USER_DATA: any = [];
+  PENDING_DATA: any = [];
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    Buyer_Name: [],
+    Company_Name: [],
+    Origin: [],
+    Destination: [],
+    Currency: [],
+    SB_DATE: []
+  };
+
   constructor(
     public documentService: DocumentService,
     public shippingBillService: ShippingbillDataService,
     private router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
+    private modalService: NgbModal,
     private toastr: ToastrService,
     private sharedData: SharedDataService,
-    public wininfo: WindowInformationService
-  ) {}
+    public wininfo: WindowInformationService,
+    private userService: UserService,
+    public dialog: MatDialog,
+    public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService
+  ) { }
 
-  ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
+  async ngOnInit() {
+    this.wininfo.set_controller_of_width(270, '.content-wrap');
+    this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA)
+    this.documentService.getRejectStatus(this.USER_DATA?.result?.sideMenu).subscribe((res: any) => {
+      this.PENDING_DATA = res;
+      console.log("this.PENDING_DATA", res)
+    })
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
+
     this.route.params.subscribe((params) => {
       this.file = this.route.snapshot.params['file'];
       if (this.file === 'sb') {
@@ -88,7 +123,26 @@ export class ViewDocumentComponent implements OnInit {
         this.sb = true;
         this.shippingBillService.getShippingBillList().then((res: any) => {
           this.shippingBillService.shippingbills$.subscribe((data: any) => {
+            console.log('getShippingBillList', data)
             this.item1 = data;
+            this.FILTER_VALUE_LIST = data;
+            for (let index = 0; index < data.length; index++) {
+              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(data[index]?.buyerName[0]) == false) {
+                this.ALL_FILTER_DATA['Buyer_Name'].push(data[index]?.buyerName[0]);
+              }
+              if (this.ALL_FILTER_DATA['Company_Name'].includes(data[index]?.consigneeName) == false) {
+                this.ALL_FILTER_DATA['Company_Name'].push(data[index]?.consigneeName);
+              }
+              if (this.ALL_FILTER_DATA['Origin'].includes(data[index]?.exporterLocationCode) == false) {
+                this.ALL_FILTER_DATA['Origin'].push(data[index]?.exporterLocationCode);
+              }
+              if (this.ALL_FILTER_DATA['Destination'].includes(data[index]?.countryOfFinaldestination) == false) {
+                this.ALL_FILTER_DATA['Destination'].push(data[index]?.countryOfFinaldestination);
+              }
+              if (this.ALL_FILTER_DATA['SB_DATE'].includes(data[index]?.sbdate) == false) {
+                this.ALL_FILTER_DATA['SB_DATE'].push(data[index]?.sbdate);
+              }
+            }
           });
         });
       } else if (this.file === 'boe') {
@@ -121,10 +175,14 @@ export class ViewDocumentComponent implements OnInit {
     });
   }
 
-  filter() {
-    // this.getPipoData()
-    this.filtervisible = !this.filtervisible
-
+  filter(value, key) {
+    this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
+    if (this.FILTER_VALUE_LIST.length== 0) {
+      this.FILTER_VALUE_LIST = this.item1;
+    }
+  }
+  resetFilter() {
+    this.FILTER_VALUE_LIST = this.item1;
   }
   onclick() {
     this.filtervisible = !this.filtervisible
@@ -241,6 +299,38 @@ export class ViewDocumentComponent implements OnInit {
     }
   }
 
+
+  openLetterOfCredit(content) {
+    this.modalService
+      .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+  }
+
+  private getDismissReason(reason: any): string {
+
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  viewCN(a) {
+
+    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+      a['doc']
+    );
+  }
+
   toSave(data, index) {
     this.optionsVisibility[index] = false;
     console.log(data);
@@ -263,5 +353,48 @@ export class ViewDocumentComponent implements OnInit {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Shipping Bill Row Is In Edit Mode');
   }
+  handleDelete(id, index: any) {
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
 
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], id, index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox: string, id: any, index: any) {
+    if (RoleCheckbox == '') {
+      this.documentService.deleteById({ id: id, tableName: 'masterrecord' }).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+      }, (err) => console.log(err))
+    } else if (RoleCheckbox == 'Maker' || RoleCheckbox == 'Checker' || RoleCheckbox == 'Approver') {
+      var approval_data: any = {
+        id: id,
+        tableName: 'masterrecord',
+        deleteflag: '-1',
+        userdetails: this.USER_DATA['result'],
+        status: 'pending',
+        dummydata: this.item1[index],
+        Types: 'deletion',
+        TypeOfPage: 'summary',
+        FileType: this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox, id, index, approval_data, () => {
+        this.ngOnInit();
+      });
+    }
+  }
+  transform(input: Array<any>): string {
+    return input.join(',');
+  }
 }

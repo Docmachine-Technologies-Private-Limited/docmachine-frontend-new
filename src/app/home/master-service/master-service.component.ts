@@ -5,10 +5,15 @@ import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
 import {UserService} from './../../service/user.service';
 import * as xlsx from 'xlsx';
+import * as data1 from '../../currency.json';
 import {Router} from '@angular/router';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import {FormsModule} from '@angular/forms';
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+import { PipoDataService } from 'src/app/service/homeservices/pipo.service';
 
 @Component({
   selector: 'app-master-service',
@@ -20,14 +25,23 @@ export class MasterServiceComponent implements OnInit {
 
   @ViewChild('epltable', {static: false}) epltable: ElementRef;
   public item: any;
-  public item1 = [];
+  public item1:any = [];
   public viewData: any;
   public closeResult: string;
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
+  USER_DATA:any=[];
   filtervisible: boolean = false;
-
+  TEMP_PI_PO_NUMBER:any=[];
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    M_S_A_No: [],
+    Currency: [],
+    DATE: []
+  };
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -36,39 +50,54 @@ export class MasterServiceComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private sharedData: SharedDataService,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    private pipoDataService: PipoDataService,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public dialog: MatDialog
   ) {
   }
-
-  ngOnInit(): void {
+  async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
-    this.documentService.getMasterService().subscribe(
-      (res: any) => {
-        console.log('Data fetched successfully', res);
-        this.item = res.data;
-        for (let value of this.item) {
-          for (let value1 of value.pipo) {
-            const newVal = {...value};
-            newVal['pipo1'] = value1
-            this.item1.push(newVal)
-          }
+    this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA)
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
+    this.item=[];
+      this.documentService.getMasterServiceFile("export").subscribe(
+        (res: any) => {
+          this.item=res?.data;
+          this.FILTER_VALUE_LIST= this.item;
+          for (let value of res.data) {
+            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+            }
+            value?.buyerName.forEach(element => {
+              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+              }
+            });
+            if ( this.ALL_FILTER_DATA['M_S_A_No'].includes(value?.masterServiceNumber)==false) {
+              this.ALL_FILTER_DATA['M_S_A_No'].push(value?.masterServiceNumber);
+            }
+            if ( this.ALL_FILTER_DATA['DATE'].includes(value?.date)==false) {
+              this.ALL_FILTER_DATA['DATE'].push(value?.date);
+            }
         }
-      },
-      (err) => console.log(err)
-    );
-
-  }
-
-  filter() {
-    // this.getPipoData()
-    this.filtervisible = !this.filtervisible
-
-  }
-  onclick() {
-    this.filtervisible = !this.filtervisible
-  }
-
-
+          console.log(res,'getMasterServiceFile');
+        },
+        (err) => console.log(err)
+        );
+    }
+    filter(value, key) {
+      this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+      if (this.FILTER_VALUE_LIST.length== 0) {
+        this.FILTER_VALUE_LIST = this.item;
+      }
+    }
+    resetFilter() {
+      this.FILTER_VALUE_LIST = this.item;
+    }
   openLetterOfCredit(content) {
     this.modalService
       .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
@@ -94,7 +123,7 @@ export class MasterServiceComponent implements OnInit {
   }
 
   getPipoNumbers(data) {
-    return data.pipo1.pi_poNo;
+    return data?.pipo[0]?.pi_poNo;
   }
 
   viewLC(a) {
@@ -130,6 +159,44 @@ export class MasterServiceComponent implements OnInit {
   toEdit(index) {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Master Service Row Is In Edit Mode');
+  }
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+      this.documentService.deleteById({id:id,tableName:'masterservices'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'masterservices',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item1[index],
+        Types:'deletion',
+        TypeOfPage:'summary',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
   }
 
   exportToExcel() {

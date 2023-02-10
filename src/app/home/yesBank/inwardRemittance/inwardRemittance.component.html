@@ -1,6 +1,12 @@
-<div class="content-wrap scroll-bar-main">
+<div class="content-wrap scroll-bar-main" style="    top: 17px;
+left: 205px;
+background: white;
+padding: 10px;
+border-radius: 5px;
+box-shadow: rgb(215 212 212) 0px 0px 10px 1px inset;
+overflow-x: hidden;">
   <main id="content" class="content table-padding bc" role="main">
-    <div id="mainId" class="bc" *ngIf="!done">
+    <div id="mainId" class="bc">
       <div id="first" class="bc">
         <div style="margin-left: 230px; width: 535px">
           <p class="heading">
@@ -116,7 +122,7 @@
                 <p style="
                 display: inline-block;
                 outline: none;
-              " contenteditable="true">
+              " contenteditable="true" *ngIf="amount">
                   {{ amount | numberToWords: amount }}
                 </p>
               </td>
@@ -187,7 +193,7 @@
                 display: inline-block;
                 outline: none;
               " contenteditable="true">
-                  {{ benneDetail.beneName }},
+                  {{ benneDetail.benneName }},
                   {{ benneDetail.beneAdrs }}
                 </p>
               </td>

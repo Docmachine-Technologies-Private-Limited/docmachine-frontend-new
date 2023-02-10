@@ -17,8 +17,8 @@ export class AprrovalPendingRejectTransactionsService {
     public wininfo: WindowInformationService,public CustomConfirmDialogModel:CustomConfirmDialogModelComponent) { }
 
 
-  deleteByRole_PI_PO_Type(roleType:string,id:any,index:any,data:any,callback:any){
-     if (roleType=='2'){
+  deleteByRole_PI_PO_Type(RoleCheckbox:string,id:any,index:any,data:any,callback:any){
+     if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
       this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
         var approval_data:any=data;
         approval_data['comment']=res.value.value;
@@ -30,20 +30,10 @@ export class AprrovalPendingRejectTransactionsService {
           })
         })
       });
-    } else if (roleType=='3'){
-      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
-        var approval_data:any=data;
-        approval_data['comment']=res.value.value;
-        this.documentService.deletflagPiPo({id:id,deleteflag:-1}).subscribe((res:any)=>{
-          this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
-            callback();
-          })
-        })
-      });
     }
   }
   DownloadByRole_Transaction_Type(roleType:string,data:any,callback:any){
-    if (roleType=='2'){
+    if (roleType=='Maker' || roleType=='Checker'){
      this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
          var approval_data:any=data;
          approval_data['comment']=res.value.value;
@@ -53,14 +43,15 @@ export class AprrovalPendingRejectTransactionsService {
            }
          })
      });
-   } else if (roleType=='3'){
-     this.CustomConfirmDialogModel.DropDownConfirmDialogModel('Please insert your comments','Comments',(res:any) => {
-       var approval_data:any=data;
-       approval_data['comment']=res.value.value;
-         this.documentService.adddeletflag(approval_data).subscribe((r:any)=>{
-           callback();
-         })
-     });
+   }else{
+    this.CustomConfirmDialogModel.Confirm_DialogModel("Approver can't access this feature",
+    'You have not access send for download pdf <br> please login maker/checker email id...');
    }
  }
+ truefalse(condition){
+  if (condition){
+    return '';
+  }
+  return 'none';
+}
 }

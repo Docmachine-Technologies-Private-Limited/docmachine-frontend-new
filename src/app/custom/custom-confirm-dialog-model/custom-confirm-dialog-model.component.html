@@ -11,15 +11,42 @@
         <p>{{this.CustomConfirmDialogModel.message}}</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="custommodel.style.display='none'">Ok</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="custommodel.style.display='none'">Close</button>
       </div>
     </div>
   </div>
 </div>
-
-
-<div class="modal DropDownInputConfirmDialog" tabindex="-1" role="dialog" #DropDownInputConfirmDialog [style]="this.MODEL_TYPE_VIEW['DropDownInputConfirmDialog']==true?'display: block;' : 'display: none;'" >
+<div class="modal Custom_Model" tabindex="-1" role="dialog" #Custom_Model [style]="this.MODEL_TYPE_VIEW['Custom_Model']==true?'display: flex;' : 'display: none;'" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" [innerHTML]="this.CustomConfirmDialogModel.titleheader"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="Custom_Model.style.display='none'">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p [innerHTML]="this.CustomConfirmDialogModel.message"></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal Notification_DialogModel" tabindex="-1" role="dialog" #Notification_DialogModel [style]="this.MODEL_TYPE_VIEW['Notification_DialogModel']==true?'display: flex;' : 'display: none;'" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" [innerHTML]="this.CustomConfirmDialogModel.titleheader"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="Notification_DialogModel.style.display='none'">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p [innerHTML]="this.CustomConfirmDialogModel.message"></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal DropDownInputConfirmDialog" tabindex="-1" role="dialog" #DropDownInputConfirmDialog [style]="this.MODEL_TYPE_VIEW['DropDownInputConfirmDialog']==true?'display: block;z-index:99999999;' : 'display: none;'" >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -84,8 +111,9 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
-         <iframe [src]="this.CustomConfirmDialogModel.url" width="450px" height="500px"></iframe>
+        <div class="form-group iframe-group">
+          <app-pdf-viewer [downloadShow]="true" *ngFor="let url of this.CustomConfirmDialogModel.url"
+           name="Documents" [src]="url" width="700px" height="500px"></app-pdf-viewer>
         </div>
       </div>
       <div class="modal-footer">
@@ -108,4 +136,20 @@
       </div>
     </div>
    </div>
+</div>
+
+<div class="modal DropDownInput" tabindex="-1" role="dialog" #DropDownInput [style]="this.MODEL_TYPE_VIEW['DropDownInput']==true?'display: block;z-index:99999999;' : 'display: none;'" >
+  <div class="modal-dialog" role="document">
+        <div class="form-group">
+           <app-custom-dropdown
+           name="depot_Name"
+           placeholdertext="Please select...."
+           key="depot_Name"
+           [labeltext]="this.CustomConfirmDialogModel.message"
+           limit="15"
+           [data]="this.CustomConfirmDialogModel.message"
+            #input autocomplete_on_off="off"
+           ></app-custom-dropdown>
+        </div>
+      </div>
 </div>

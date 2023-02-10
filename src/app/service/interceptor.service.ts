@@ -10,13 +10,12 @@ import { AuthGuard } from "./authguard.service";
   providedIn: 'root'
 })
 export class InterceptorService implements HttpInterceptor {
-
   constructor(public documentService: DocumentService,private router: Router,
     public authservice: AuthenticateService,
     public authGuard: AuthGuard) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    // console.log("intercept",req)
+    console.log("intercept",req)
     this.documentService.loading=true;
     let token = this.authGuard.loadFromLocalStorage();
      if (!token) {

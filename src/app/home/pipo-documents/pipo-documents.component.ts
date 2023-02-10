@@ -31,6 +31,9 @@ import { AppConfig } from '../../app.config';
 import * as xlsx from 'xlsx';
 import {PipoDataService} from "../../service/homeservices/pipo.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 
 @Component({
   selector: 'app-pipo-documents',
@@ -129,8 +132,22 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   public lcAmount: any;
   public lcCurrency: any;
   public buttonToggle1: any;
-  public buyer: boolean;
   public api_base: any;
+  USER_DATA:any=[];
+  PENDING_DATA:any=[];
+  filtervisible: boolean = false
+  startDate: any = '';
+  endDate: any = '';
+  buyer1: string = '';
+  buyer: boolean = false;
+
+  benneDetailArray: any;
+  locationArray: any;
+  commodityArray: any;
+  location: string = '';
+  commodity: string = '';
+  page: number = 0
+  limit: number = 10
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -144,7 +161,9 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     private modalService: NgbModal,
     public appconfig: AppConfig,
     private pipoDataService: PipoDataService,
-    public wininfo: WindowInformationService
+    public wininfo: WindowInformationService,
+    public dialog: MatDialog,
+    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
   ) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base);
@@ -153,6 +172,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     this.headers = {
       Authorization: this.authToken,
     };
+    this.getDropDownItems()
 
     if (isPlatformBrowser(this.platformId)) {
       console.log('asdkhsajvdsug');
@@ -180,12 +200,20 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     this.id = this.route.snapshot.params['id'];
     this.pipo_id = this.route.snapshot.params['pipo_id'];
     console.log(this.id, this.pipo_id);
+    this.item1 = [];
+    this.item = [];
+    this.item2;
+    this.item3 = [];
+    this.item4 = [];
+    this.item5 = [];
+    this.userService.getUserDetail().then((user:any) => {
+      this.USER_DATA =user;
+      console.log("this.USER_DATA", this.USER_DATA)
+    });
     this.documentService.getBoe(1).subscribe(
       (res: any) => {
         console.log(res), (this.item4 = res.data);
         console.log('data', this.item4);
-        // this.mergeBoe();
-        // this.mergeBOe1()
       },
       (err) => console.log(err)
     );
@@ -220,18 +248,6 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
         }
       );
     } else {
-      // this.route.params.subscribe(params => {
-      //   this.file = this.route.snapshot.params['id'];
-      //   this.documentService.getPipo().subscribe(
-      //     (res: any) => {
-      //       console.log("HEre Response", res), (this.item1 = res.data);
-      //     },
-      //     (err) => console.log(err)
-      //   );
-
-      //   this.showInvoice = false;
-      //   console.log("hello")
-      // });
       this.documentService.getPipo().subscribe(
         (res: any) => {
           console.log('Data fetched successfully', res);
@@ -296,6 +312,53 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     }
 
     this.item3 = filterboedata;
+    console.log('aaa',this.item3);
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
+  }
+  filter() {
+    this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  resetFilter() {
+    this.commodity = ''
+    this.location = ''
+    this.buyer1 = ''
+    this.getPipoData()
+    this.filtervisible = !this.filtervisible
+  }
+  getPipoData() {
+    console.log("-->", this.page, this.limit)
+    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer1 , 'export').subscribe((res: any) => {
+      this.item3 = res.docs
+      console.log("res", this.item3)
+    })
+  }
+  getDropDownItems() {
+    this.userService.getTeam().subscribe(
+      (data) => {
+
+
+        this.locationArray = data['data'][0]['location'];
+        this.commodityArray = data['data'][0]['commodity'];
+        console.log("--------->locationArray", this.locationArray)
+        console.log("--------->commodityArray", this.commodityArray)
+      },
+      (error) => {
+        console.log('error');
+      }
+    );
+
+    this.userService.getBuyer(1).subscribe(
+      (res: any) => {
+        this.benneDetailArray = res.data
+        console.log("--------->benneDetailArray", this.benneDetailArray)
+
+      },
+      (err) => console.log('Error', err)
+    );
   }
 
   lcFun(a) {
@@ -929,6 +992,24 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
       );
   }
 
+  openPipoNote(content) {
+    this.modalService
+      .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+      .result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+  }
+  viewCN(a) {
+
+    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
+      a['doc']
+    );
+  }
   private getDismissReason(reason: any): string {
 
     if (reason === ModalDismissReasons.ESC) {
@@ -980,4 +1061,44 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'Import -pipo.xlsx');
   }
+
+  handleDelete(id,index:any) {
+    console.log(id,index,'dfsfhsfgsdfgdss');
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+      }
+    });
+  }
+
+  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
+    if (RoleCheckbox==''){
+      this.documentService.deleteById({id:id,tableName:'pi_po'}).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+    }, (err) => console.log(err))
+    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
+      var approval_data:any={
+        id:id,
+        tableName:'pi_po',
+        deleteflag:'-1',
+        userdetails:this.USER_DATA['result'],
+        status:'pending',
+        dummydata:this.item1[index],
+        Types:'deletion',
+        TypeOfPage:'summary',
+        FileType:this.USER_DATA?.result?.sideMenu
+      }
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+        this.ngOnInit();
+      });
+    }
+  }
+
 }

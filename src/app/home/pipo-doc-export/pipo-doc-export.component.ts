@@ -58,9 +58,19 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
   public pipoArrayList: Array<PipoDisplayListViewItem> = [];
   public pipoDisplayListData: PipoDisplayListView;
-  public pipoData: PipoDisplayListViewItem;
+  public pipoData?: PipoDisplayListViewItem;
   public config: DropzoneConfigInterface;
   public config1: DropzoneConfigInterface;
+  filtervisible: boolean = false;
+
+  filter() {
+  // this.getPipoData()
+  this.filtervisible = !this.filtervisible
+
+}
+onclick() {
+  this.filtervisible = !this.filtervisible
+}
   piPoForm = new FormGroup({
     pi_poNo: new FormControl('', [
       Validators.required,
@@ -198,6 +208,7 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     public wininfo: WindowInformationService,
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
+
   ) {
     this.api_base = appconfig.apiUrl;
     this.loadFromLocalStorage();
@@ -271,7 +282,6 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
         console.log('second log agreement', this.item12);
         for (let value of this.item12) {
           if (value['file'] == 'export') {
-
             this.item13.push(value);
             // console.log('awwww', this.item11);
           }
@@ -427,16 +437,9 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
     this.toggle2 = false;
     this.toggle3 = false;
     this.toggle6 = false;
-    // console.log('*****************', this.item20);
     console.log('thihfdfsdfgdsfkjgsf', this.pipoData);
 
     let currentpipo = this.route.snapshot.params['id'];
-    // for(let item of this.item20){
-    //   if(item.sbno == this.pipoData.sbno){
-    //     this.selectedshippingdata = item
-    // }
-
-    // }
     console.log(this.selectedshippingdata, 'this is conslo');
 
     if (a == 'sb') {

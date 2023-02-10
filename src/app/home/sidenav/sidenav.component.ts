@@ -96,6 +96,9 @@ export class SidenavComponent implements OnInit {
   new26: boolean;
   new27: boolean;
   new28: boolean;
+  new29: boolean = false;
+  new30: boolean = false;
+  new31: boolean = false;
   userData:any=[];
 
   constructor(
@@ -105,13 +108,7 @@ export class SidenavComponent implements OnInit {
     private documentService: DocumentService,
     public userService: UserService,
     private toastr: ToastrService,
-    private sharedData: SharedDataService
-  ) {
-
-    // this.sharedData.currentDashBoard.subscribe(message => this.status5 = message)
-    // this.sharedData.currentExport.subscribe(message => this.status7 = message)
-
-
+    private sharedData: SharedDataService) {
     this.newHight()
   }
 
@@ -119,7 +116,9 @@ export class SidenavComponent implements OnInit {
 
   async ngOnInit() {
 
-    this.userData = await this.userService.getUserDetail();
+   await this.userService.getUserDetail().then(user => {
+    this.userData = user['result'];
+   });
     // this.userData = this.userData.result
     console.log("userData",this.userData)
 
@@ -1037,6 +1036,35 @@ export class SidenavComponent implements OnInit {
     this.new25 = false;
     this.new26 = false;
   }
+  public newSubImp14() {
+    this.router.navigate(["/home/outward-remittance-advice"]);
+    this.new14 = false;
+    this.new24 = false;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new6 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13 = false;
+    this.new16 = false;
+    this.new15 = false;
+    this.new22 = false;
+    this.new23 = false;
+    this.new25 = false;
+    this.new26 = false;
+    this.new27 = false;
+    this.new28 = false;
+    this.new29 = true;
+    this.new30 = false;
+  }
   public newSub15() {
     this.router.navigate(["/home/manage-customer/import"]);
     this.new15 = true;
@@ -1257,6 +1285,42 @@ export class SidenavComponent implements OnInit {
     this.new25 = false;
     this.new26 = false;
   }
+
+  public newSubImp22() {
+    this.router.navigate(["/home/import-airway-bl-copy"]);
+    this.new22 = true;
+    this.new24 = false;
+    this.new21 = false;
+    this.new20 = false;
+    this.new19 = false;
+    this.new18 = false;
+    this.new17 = false;
+    this.new15 = false;
+    this.new14 = false;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new6 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13 = false;
+    this.new23 = false;
+    this.new25 = false;
+    this.new26 = false;
+    this.new27 = false;
+    this.new28 = false;
+    this.new29 = false;
+    this.new30 = false;
+    this.new31 = false;
+  }
+
   public newSub23() {
     this.router.navigate(["/home/bill-of-exchange"]);
     this.new23 = true;
@@ -1343,6 +1407,43 @@ export class SidenavComponent implements OnInit {
     this.new12 = false;
     this.new8 = false;
     this.new13 = false;
+    this.new27 = false;
+    this.new28 = false;
+    this.new29 = false;
+    this.new30 = false;
+  }
+  public newSubImp25() {
+    this.router.navigate(["/home/import-commercial"]);
+    this.new25 = false;
+    this.new26 = false;
+    this.new23 = false;
+    this.new24 = false;
+    this.new22 = false;
+    this.new21 = false;
+    this.new20 = false;
+    this.new19 = false;
+    this.new18 = false;
+    this.new17 = false;
+    this.new15 = false;
+    this.new14 = false;
+    this.new = false;
+    this.new1 = false;
+    this.new2 = false;
+    this.new3 = false;
+    this.new4 = false;
+    this.new5 = false;
+    this.new6 = false;
+    this.new7 = false;
+    this.new9 = false;
+    this.new10 = false;
+    this.new11 = false;
+    this.new12 = false;
+    this.new8 = false;
+    this.new13 = false;
+    this.new27 = false;
+    this.new28 = false;
+    this.new29 = false;
+    this.new30 = true;
   }
   public newSub26() {
     this.router.navigate(["/home/packing-list"]);
@@ -1559,9 +1660,9 @@ export class SidenavComponent implements OnInit {
    if (this.documentService.EXPORT_IMPORT['callback']!=null && this.documentService.EXPORT_IMPORT['callback']!=undefined) {
       this.documentService.EXPORT_IMPORT['callback']();
    }
-    this.documentService.updateUserById(this.userData.result._id,sendData).subscribe(
+    this.documentService.updateUserById(this.userData._id,sendData).subscribe(
       (data) => {
-        this.userData.result = { ...this.userData.result ,sideMenu: type1  }
+        this.userData = { ...this.userData ,sideMenu: type1  }
         this.userService.addLoginData(this.userData)
       },
       (error) => {
@@ -1573,5 +1674,23 @@ export class SidenavComponent implements OnInit {
     // $(allclassname).removeClass(`activelink`);
     // console.log(event,'addhasgdasdsagda')
     // $(event.target).addClass(`activelink`);
+  }
+  SUB_MENU:any = {};
+
+  navigationByUrl(event:any,url: string): void {
+    $('.nav-link').removeClass(`active`);
+    $(event.target).addClass(`active`);
+    this.router.navigate(['/home/'+url]);
+    this.HIDE_ALL_SUB_MENU();
+  }
+  navigationByUrlParam(event:any,url: string,param:any): void {
+    $('.nav-link').removeClass(`active`);
+    $(event.target).addClass(`active`);
+    this.router.navigate(['home/'+url,param]);
+  }
+  HIDE_ALL_SUB_MENU(){
+    for (const key in this.SUB_MENU) {
+     this.SUB_MENU[key]=false;
+    }
   }
 }

@@ -16,7 +16,7 @@ import { AppConfig } from '../app.config';
   styleUrls: ['./create-team1.component.scss']
 })
 export class CreateTeam1Component implements OnInit, AfterViewInit {
-  
+
   @Input() que: any;
 
 
@@ -29,7 +29,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   authToken: any;
   headers: any;
   file: Array<any> = [];
-  loginForm: FormGroup;
+  loginForm:any=FormGroup;
   letterHead = false;
   roundSeal = false;
   forSeal = false;
@@ -131,8 +131,8 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
       product: new FormControl('')
     });
   }
-  
-  
+
+
 
   getCourses(form): any {
     return form.get('bankDetails').controls;
@@ -196,7 +196,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     const control = this.loginForm.controls.commodity as FormArray;
     control.push(this.initComo());
     this.isDisabled = false;
-    
+
   }
 
   removeAddress(i) {
@@ -301,7 +301,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-    
+
     console.log(this.loginForm.value.bankDetails)
     console.log(this.loginForm.value)
     console.log("1")
@@ -325,13 +325,13 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     console.log("3")
     this.loginForm.value.file = this.file
     console.log(this.loginForm.value)
-   
+
     let array1=[]
     this.loginForm.value.bankDetails.forEach((value, index) => {
       const newVal = { ...value };
       newVal['accType']=this.modo1[index]
       array1.push(newVal)
-     
+
   });
   this.loginForm.value.bankDetails=array1
     this.userService.creatTeam(this.loginForm.value)
@@ -341,8 +341,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
           console.log(data['data']._id)
           this.item = data
           this.toastr.success('Company details uploaded successfully!');
-          this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
-
+          this.router.navigate(['/home/dashboardTask'])
         },
         error => {
           this.toastr.error('something wrong, please check the details!');
