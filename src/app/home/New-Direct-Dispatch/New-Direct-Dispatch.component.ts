@@ -32,6 +32,7 @@ import { AppConfig } from '../../app.config';
 import { WindowInformationService } from '../../service/window-information.service';
 import { ShippingbillDataService } from 'src/app/service/homeservices/shippingbill.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 
 @Component({
   selector: 'app-Direct-Dispatch',
@@ -334,6 +335,11 @@ export class NewDirectDispatchComponent implements OnInit {
   Letter_Of_Credit: any = [];
   changevalue:any='';
   SHIPPING_BILL_DATA:any=[];
+  PREVIEWS_URL_LIST: any = [];
+  GetDownloadStatus: any = [];
+  USER_DATA: any = [];
+  Approval_URL: any = [];
+
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
@@ -346,14 +352,19 @@ export class NewDirectDispatchComponent implements OnInit {
     private route: ActivatedRoute,
     public shippingBillService: ShippingbillDataService,
     private modalService: NgbModal,
+    public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public wininfo: WindowInformationService) {
     this.api_base = appconfig.apiUrl;
     this.getDropdownData();
   }
 
   ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270, '.content_top_common')
+    this.wininfo.set_controller_of_width(230, '.content_top_common')
     this.file = this.route.snapshot.paramMap.get('doc_type');
+    this.userService.getUserDetail().then((status) => {
+      this.USER_DATA = status['result'];
+      console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
+    });
     this.headers = {
       Authorization: this.authToken,
       timeout: `${200000}`
@@ -376,19 +387,19 @@ export class NewDirectDispatchComponent implements OnInit {
     this.getBill_Lodgments();
   }
   BOOLEAN:boolean = false;
-  SlideToggle(event){
+  SlideToggle(event,id){
     console.log(event?.target?.parentElement,'SlideToggle')
     $(event?.target?.parentElement).parent(".accordion-item").find(".accordion-contant").slideToggle();
     console.log($(".accordion-contant").css('display'),'$(".accordion-contant")')
     if ($(".accordion-contant").is(':hidden')==false) {
       this.PDF_LIST=[];
-      for (let index = 0; index < this.temp.length; index++) {
-        this.userService.mergePdf(this.temp[index]?.pdf).subscribe((res: any) => {
+      for (let index = 0; index < this.temp[id].length; index++) {
+        this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
           console.log('downloadEachFile', res);
           res.arrayBuffer().then((data: any) => {
             this.PDF_LIST.push({
               pdf:data,
-              name:this.temp[index]['name']
+              name:this.temp[id][index]['name']
             })
             console.log('downloadEachFile',data);
           });
@@ -998,6 +1009,7 @@ onSubmit() {
 
 async generateDoc1() {
   //console.log(code, j)
+ if (this.advanceArray.length!=0) {
   this.generate = true;
   this.isGenerate = true;
 
@@ -1364,6 +1376,10 @@ async generateDoc1() {
     advanceRef: this.advanceRef,
     ir: this.Question5,
   };
+ }else{
+  this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',
+  `Please select a firx amount ${this.itemArray.length==0?'& also select Sb no.':''}...`)
+ }
 }
 
 getProper(a) {
@@ -2480,18 +2496,9 @@ async fillForm(a) {
 
   console.log(base64String);
   const x = 'data:application/pdf;base64,' + base64String;
-  console.log(x);
   this.formerge = x;
   this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
   this.newTask[0].generateDoc1 = x;
-  // const link: any = document.createElement("a");
-  // link.id = "dwnldLnk";
-  // link.style = "display:none;";
-  // document.body.appendChild(link);
-  // const dlnk: any = document.getElementById("dwnldLnk");
-  // dlnk.href = x;
-  // dlnk.download = 'file.pdf';
-  // dlnk.click();
 }
 
 _arrayBufferToBase64(buffer) {
@@ -3051,7 +3058,7 @@ temp:any=[];
 
 addTofilter1(event, id, data) {
   // this.itemArray = [];
-  this.temp=[];
+  this.temp[id]=[];
   if (data.blCopyDoc) {
     if (data.commercialDoc) {
       if (data.packingDoc) {
@@ -3075,25 +3082,25 @@ addTofilter1(event, id, data) {
           }
         }
         for (let index = 0; index < this.itemArray.length; index++) {
-          this.temp.push({
+          this.temp[id].push({
             pdf:(this.itemArray[index]['doc']),
             name:'Shipping Bill'
           })
         }
         for (let index = 0; index < this.itemArray.length; index++) {
-          this.temp.push({
+          this.temp[id].push({
             pdf:(this.itemArray[index]['blCopyDoc']),
             name:'blCopyDoc'
           })
         }
         for (let index = 0; index < this.itemArray.length; index++) {
-          this.temp.push({
+          this.temp[id].push({
             pdf:(this.itemArray[index]['commercialDoc']),
             name:'commercialDoc'
           })
         }
         for (let index = 0; index < this.itemArray.length; index++) {
-          this.temp.push({
+          this.temp[id].push({
             pdf:(this.itemArray[index]['packingDoc']),
             name:'packingDoc'
           })
@@ -3117,7 +3124,10 @@ addTofilter1(event, id, data) {
 }
 
 shippingMap: Map<number, any[]> = new Map<number, any[]>();
-
+Advance_Amount_Sum:any=[];
+PROCEED_BTN_DISABLED:boolean=false;
+filterSum:any=[];
+balanceAvai:any='';
 addToSbArray(irDataItem: any, e) {
   if (e.target.checked) {
     console.log('Checked');
@@ -3131,21 +3141,28 @@ addToSbArray(irDataItem: any, e) {
         irDataItem: irDataItem,
         sb: this.currentSbForAdvance,
       };
-      this.advanceArray.push(details);
-      this.ACCORDING_LIST['SB_'+this.currentSbForAdvance].push(irDataItem)
+      this.Advance_Amount_Sum.push(details)
+      this.balanceAvai=parseFloat(this.itemArray.filter((item) => item?.sbno?.indexOf(this.currentSbForAdvance) != -1)[0]?.balanceAvai)
+      this.filterSum=this.Advance_Amount_Sum.reduce( function(a, b){return a + b?.irDataItem?.amount}, 0);
+      if (this.filterSum>this.balanceAvai) {
+        e.target.checked=false;
+        this.PROCEED_BTN_DISABLED=false;
+        this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',"You've exceeded the maximum transaction amount set by your Sb amount..")
+        return;
+      }else{
+        this.PROCEED_BTN_DISABLED=true;
+        this.advanceArray.push(details);
+        this.ACCORDING_LIST['SB_'+this.currentSbForAdvance].push(irDataItem)
+      }
     }
   } else {
     console.log('removing, uncheked');
-    this.advanceArray = this.advanceArray.filter(
-      (item) => item.valueInternal !== irDataItem.billNo
-    );
+    this.advanceArray = this.advanceArray.filter((item) => item.valueInternal !== irDataItem.billNo);
+    this.Advance_Amount_Sum = this.Advance_Amount_Sum.filter((item) => item.valueInternal !== irDataItem.billNo);
   }
-  this.shippingMap.set(
-    this.refSbNo,
-    JSON.parse(JSON.stringify(this.advanceArray))
-  );
-  console.log(this.advanceArray,this.ACCORDING_LIST,'Deva Hello0*************************');
 
+  this.shippingMap.set(this.refSbNo,JSON.parse(JSON.stringify(this.advanceArray)));
+  console.log(this.advanceArray,this.balanceAvai,this.filterSum,this.Advance_Amount_Sum,this.ACCORDING_LIST,'Deva Hello0*************************');
 }
 
 clearData() {
@@ -3265,19 +3282,12 @@ openToPdf(content3, pipo) {
 
 addPdfToSelectedPdf(value, e) {
   if (e.target.checked) {
-    if (
-      this.selectedPdfs.includes(
-        value.changingThisBreaksApplicationSecurity
-      ) === false
-    ) {
+    if (this.selectedPdfs.includes(value.changingThisBreaksApplicationSecurity) === false) {
       this.selectedPdfs.push(value.changingThisBreaksApplicationSecurity);
     }
   } else if (!e.target.checked) {
-    this.selectedPdfs = this.selectedPdfs.filter(
-      (item) => item !== value.changingThisBreaksApplicationSecurity
-    );
+    this.selectedPdfs = this.selectedPdfs.filter((item) => item !== value.changingThisBreaksApplicationSecurity);
   }
-
   console.log(this.selectedPdfs);
 }
 
@@ -3352,12 +3362,8 @@ sendMail = async (pdfDoc: any) => {
   const byteNumbers = new Array(byteCharacters.length);
   for (let i = 0; i < byteCharacters.length; i++) {
     byteNumbers[i] = byteCharacters.charCodeAt(i);
-    // console.log("bytenumbers", byteNumbers[i])
   }
-  const byteArray = new Uint8Array(byteNumbers);
-  // this.BytePdfDoc = byteArray.toString();
-
-  // console.log("**BytePdfDoc",this.BytePdfDoc)
+  const byteArray = new Uint8Array(byteNumbers)
   console.log('**user id', this.id);
   console.log('99999999999999999999999', data_pdf);
 
@@ -3384,21 +3390,14 @@ sendMail = async (pdfDoc: any) => {
     const mergedPdfFile = await mergedPdf.save();
     var base64String = this._arrayBufferToBase64(mergedPdfFile);
     var genDoc = 'data:application/pdf;base64,' + base64String;
-    // console.log("line no. 3328", this.genDoc)
-
     this.doneDox(genDoc);
 
     this.userService.documentSend(this.id, base64String).subscribe(
       (data) => {
         console.log('king123');
         console.log(data);
-        // this.message = data['message']
-        // this.no = false;
-        //
       },
       (error) => {
-        // this.no = true;
-        // this.message = null;
         console.log('error');
       }
     );
@@ -3407,15 +3406,8 @@ sendMail = async (pdfDoc: any) => {
       (data) => {
         console.log('king123');
         console.log(data);
-        // this.message = data['message']
-        // this.no = false;
-        //
       },
-      (error) => {
-        // this.no = true;
-        // this.message = null;
-        console.log('error');
-      }
+      (error) => {console.log('error');}
     );
   }
 };
@@ -3424,9 +3416,6 @@ mergeAllPDFs = async (type: String) => {
   let urls = this.selectedPdfs;
   const numDocs = urls.length;
   const pdfDoc = await PDFDocument.create();
-
-  // download the single file to local.
-  // Append each pdfs to a single file
   var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
     if (currentpage < docLength) {
       console.log('Inside Page', currentpage, 'total pages', docLength);
@@ -3504,8 +3493,6 @@ downloadFile2 = (blob, fileName) => {
 // downloadFile(new Blob(['random data']), "myfile.txt");
 
 downloadAll = async (type: String) => {
-  // this.downloadALL = [];
-
   var proceedtoDownloadPdf = async (download, sbno) => {
     console.log('line 3377', download);
     let urls = download;
@@ -3539,9 +3526,6 @@ downloadAll = async (type: String) => {
           console.log(pdfDoc);
           await this.BulkDOwnload(pdfDoc, sbno);
         }
-        //   // else {
-        //   //   this.sendMail(pdfDoc);
-        //   // }
       }
     };
 
@@ -3654,18 +3638,10 @@ downloadAll = async (type: String) => {
 
       await proceedtoDownloadPdf(downloadALL, this.sbArray[index]);
       await bulkDownloadSingle(mainDoc1, index + 1);
-      // this.downloadALL.push(sb.changingThisBreaksApplicationSecurity)
     }
   };
 
   await bulkDownloadSingle(this.mainDoc1, 0);
-  // console.log("3530", thi)
-
-  // if (this.currentDownloadPdf.changingThisBreaksApplicationSecurity) {
-  //   this.downloadALL.push(
-  //     this.currentDownloadPdf.changingThisBreaksApplicationSecurity
-  //   );
-  // }
 };
 
 BulkDOwnload = async (pdfDoc: any, sbno: string) => {
@@ -3904,6 +3880,80 @@ DUMP_FUNCTION(condition1,condition2,popupshow){
 }
 OBJECT_LENGTH(data:any){
   return data!=undefined?data.length:0;
+}
+PREVIEWS_URL(id) {
+  this.PREVIEWS_URL_LIST=[];
+  this.PREVIEWS_URL_LIST[0] = this.formerge;
+  for (let i = 0; i < this.itemArray.length; i++) {
+    var element=this.itemArray[i]?._id;
+  for (let index = 0; index < this.temp[element].length; index++) {
+    this.userService.mergePdf(this.temp[element][index]?.pdf).subscribe((res: any) => {
+      console.log('downloadEachFile', res);
+      res.arrayBuffer().then((data: any) => {
+        this.PREVIEWS_URL_LIST.push(data)
+        console.log('downloadEachFile',data);
+      });
+    });
+  }
+ }
+  this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
+    console.log(res, 'dsdsdsdsdsdsds');
+    this.GetDownloadStatus = res[0];
+    if (res.length == 0) {
+      this.documentService.getDownloadStatus({ id: id, deleteflag: '1' }).subscribe((res: any) => {
+        console.log(res, 'dsdsdsdsdsdsds');
+        this.GetDownloadStatus = res[0];
+        if (res.length == 0) {
+          this.documentService.getDownloadStatus({ id: id, deleteflag: '2' }).subscribe((res: any) => {
+            console.log(res, 'dsdsdsdsdsdsds');
+            this.GetDownloadStatus = res[0];
+          })
+        }
+      })
+    }
+  })
+}
+SendApproval(Status: string, UniqueId: any) {
+  if(UniqueId!=null){
+    var temp_doc: any = [];
+    temp_doc[0] = this.value?.changingThisBreaksApplicationSecurity;
+    for (let i = 0; i < this.itemArray.length; i++) {
+      var element=this.itemArray[i]?._id;
+      for (let index = 0; index < this.temp[element].length; index++) {
+        if (this.temp[element][index]?.pdf != '' && this.temp[element][index]?.pdf != undefined) {
+          temp_doc.push(this.temp[element][index]?.pdf)
+        }
+      }
+    }
+    var approval_data: any = {
+      id: UniqueId,
+      tableName: 'Export Bill Lodgement',
+      deleteflag: '-1',
+      userdetails: this.USER_DATA,
+      status: 'pending',
+      documents: temp_doc,
+      Types: 'downloadPDF',
+      TypeOfPage: 'Transaction',
+      FileType: this.USER_DATA?.sideMenu
+    }
+    console.log(approval_data, 'approval_data')
+    if (Status == '' || Status == null || Status == 'Rejected') {
+      this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
+        this.ngOnInit();
+        this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
+          console.log(res, 'dsdsdsdsdsdsds');
+          this.GetDownloadStatus = res[0];
+          if (res.length == 0) {
+            this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '2' }).subscribe((res: any) => {
+              console.log(res, 'dsdsdsdsdsdsds');
+              this.GetDownloadStatus = res[0];
+            })
+          }
+        })
+      });
+    }
+  }
+  console.log(UniqueId, approval_data, 'uiiiiiiiiiiiiii')
 }
 }
 

@@ -23,6 +23,7 @@ import { FiterbuyerPipe } from "./Export/fiterbuyer.pipe";
 import {CustomDropdownComponent} from '.././custom/custom-dropdown/custom-dropdown.component'
 import { NgSelectModule } from "@ng-select/ng-select";
 import {FilterToggleDirective} from "../custom/Filter/filter-toggle.directive";
+import { PipoDataService } from "../service/homeservices/pipo.service";
 @NgModule({
   declarations: [
     ConfirmDialogComponent,
@@ -46,7 +47,7 @@ import {FilterToggleDirective} from "../custom/Filter/filter-toggle.directive";
     ModalModule.forRoot(),
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal,SharedDataService],
+  providers: [ConfirmDialogService, NgbModal,SharedDataService,PipoDataService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //   exports: [SharedProjectsModule]
   exports: [

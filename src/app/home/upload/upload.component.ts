@@ -1461,6 +1461,12 @@ export class UploadComponent implements OnInit {
     e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
+    this.documentService.getInvoice_No({
+      creditNoteNumber:e.form.value.creditNoteNumber
+    },'creditNote').subscribe((resp:any)=>{
+      console.log('creditNoteNumber Invoice_No',resp)
+    if (resp.data.length==0) {
+
     this.documentService.addCredit(e.form.value).subscribe(
       (res: any) => {
         this.toastr.success(`Credit Note Document Added Successfully`);
@@ -1496,6 +1502,10 @@ export class UploadComponent implements OnInit {
       },
       (err) => console.log('Error adding pipo')
     );
+    } else {
+      this.toastr.error(`Please check this sb no. : ${e.form.value.creditNoteNumber} already exit...`);
+    }
+    });
   }
 
   // Debit Note Submit button

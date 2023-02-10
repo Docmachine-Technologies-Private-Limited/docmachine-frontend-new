@@ -7,7 +7,8 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../confirm-dia
 import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { saveAs as importedSaveAs } from 'file-saver';
 import { async } from 'rxjs';
-
+import JSZip from 'jszip/dist/jszip';
+import * as FileSaver from 'file-saver';
 @Component({
   selector: 'app-approval-panel',
   templateUrl: './approval-panel.component.html',
@@ -82,6 +83,8 @@ export class ApprovalPanelComponent implements OnInit {
         } else {
           if (type == 'download') {
             this.downloadAsSingleFile('MergePdf_'+new Date().toUTCString(),pdfDoc);
+          }else if (type == 'zip') {
+            this.downloadZip('MergePdf_'+new Date().toUTCString(),values);
           } else {
             this.sendMail2(pdfDoc);
           }
@@ -161,4 +164,15 @@ export class ApprovalPanelComponent implements OnInit {
       }
     );
   };
+  downloadZip(name_zip,pdfByteArrays:any) {
+    var zip = new JSZip();
+    var pdf = zip.folder("pdfs");
+    pdfByteArrays.forEach((value,i) => {
+      pdf.file(i+'.pdf',value, { base64: true });
+    });
+    zip.generateAsync({ type: "blob" }).then(function (content) {
+      FileSaver.saveAs(content, name_zip+".zip");
+    });
+
+  }
 }

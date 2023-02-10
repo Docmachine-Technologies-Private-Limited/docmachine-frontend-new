@@ -1198,9 +1198,7 @@ body {
 .pdf_invoce_scroll {
   display: flex;
   overflow-y: auto;
-  max-height: 100%;
   width: 100%;
-  min-height: 100%;
   flex-direction: column;
   gap: 20px;
 }
@@ -1896,6 +1894,23 @@ body {
   text-align: center;
 }
 
-.sb-panel table tr td,.sb-panel table tr th{
+.sb-panel table tr td,
+.sb-panel table tr th {
   font-size: 12px;
+}
+
+.bottom_submit_section {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+.PREVIEW_PAGE .modal-content{
+  width: 75vw;
+  margin: auto;
+}
+.PREVIEW_PAGE .modal-body{
+  height: 80vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
 }

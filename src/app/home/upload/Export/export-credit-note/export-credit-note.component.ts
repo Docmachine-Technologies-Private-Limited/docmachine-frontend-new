@@ -226,7 +226,6 @@ export class ExportCreditNoteComponent implements OnInit {
     public wininfo: WindowInformationService,
     public CustomDropDown: CustomConfirmDialogModelComponent
   ) {
-    this.documentService.getCurrency().subscribe((res: any) => { console.log(res, 'getCurrency') })
     this.userData = this.userService.userData?.result
     if (this.userData) {
       this.documentType1 = this.userData?.sideMenu
@@ -377,8 +376,12 @@ export class ExportCreditNoteComponent implements OnInit {
       },
       (err) => console.log(err)
     );
-
-    this.documentService.getMaster(1).subscribe(
+    await this.pipoDataService.getPipoList('export').then((data) => {
+      console.log(data, 'data..................')
+      this.pipoDataService.pipolistModel$.subscribe((data) => {
+        console.log(this.PI_PO_NUMBER_LIST, 'PI_PO_NUMBER_LIST')
+      });
+    });    this.documentService.getMaster(1).subscribe(
       (res: any) => {
         console.log('Master Data File', res);
         this.item5 = res.data;
@@ -408,6 +411,11 @@ export class ExportCreditNoteComponent implements OnInit {
     e.form.value.currency = e.form.value?.currency?.type;
     e.form.value.file = 'export';
     console.log(e.form.value);
+    this.documentService.getInvoice_No({
+      creditNoteNumber:e.form.value.creditNoteNumber
+    },'creditNote').subscribe((resp:any)=>{
+      console.log('creditNoteNumber Invoice_No',resp)
+    if (resp.data.length==0) {
     this.documentService.addCredit(e.form.value).subscribe((res: any) => {
       this.toastr.success(`Credit Note Document Added Successfully`);
       let updatedData = {
@@ -428,6 +436,10 @@ export class ExportCreditNoteComponent implements OnInit {
         );
     },
       (err) => console.log('Error adding pipo'));
+    } else {
+      this.toastr.error(`Please check this sb no. : ${e.form.value.creditNoteNumber} already exit...`);
+    }
+    });
   }
   CommercialNumber: any = [];
   storeCommercialNumber(id: any, commercialnumber) {

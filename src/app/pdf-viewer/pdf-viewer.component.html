@@ -53,7 +53,19 @@
     </div>
   </div>
   <div class="pdf-viewer-viewer-window">
-    <pdf-viewer class="pdf-viewer" [src]="src"
+    <pdf-viewer class="pdf-viewer" *ngIf="this.base64_src!=''" [src]="src"
+    [original-size]="false"
+    [show-all]="showAll"
+    [fit-to-page]="fitToPage"
+    [zoom]="zoom"
+    [zoom-scale]="zoomScale"
+    [stick-to-page]="false"
+    [render-text]="true"
+    [external-link-target]="'blank'"
+    [autoresize]="autoresize"
+    [show-borders]="showBorders" [style.width]="width" [style.height]="height">
+    </pdf-viewer>
+    <pdf-viewer class="pdf-viewer" *ngIf="this.base64_src==''" [src]="src"
     [original-size]="false"
     [show-all]="showAll"
     [fit-to-page]="fitToPage"
