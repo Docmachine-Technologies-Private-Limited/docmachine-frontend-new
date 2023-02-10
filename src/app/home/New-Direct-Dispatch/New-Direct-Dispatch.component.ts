@@ -2932,11 +2932,10 @@ setradio(a) {
   console.log(a,'setradio');
   this.bankToggle = a;
   this.bankValue = a;
-
   this.newBankArray = [];
   this.bankArray.forEach((value, index) => {
     console.log('shshsh');
-    if (value.bank == a) {
+    if (value.bank.indexOf(a)!=-1) {
       this.newBankArray.push(value);
     }
   });
@@ -3147,6 +3146,8 @@ addToSbArray(irDataItem: any, e) {
       if (this.filterSum>this.balanceAvai) {
         e.target.checked=false;
         this.PROCEED_BTN_DISABLED=false;
+        this.Advance_Amount_Sum.pop();
+        this.filterSum=this.Advance_Amount_Sum.reduce( function(a, b){return a + b?.irDataItem?.amount}, 0);
         this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',"You've exceeded the maximum transaction amount set by your Sb amount..")
         return;
       }else{

@@ -61,9 +61,9 @@
                                   <div class="row">
                                     <div class="col-md-10 mb-3">
                                       <label for="exampleInputEmail1" class="form-label">Select bank*</label>
-                                      <select class="form-select" aria-label="Default select example" [ngModel]="bank" name="bank" (change)="setradio(bank)">
+                                      <select class="form-select" aria-label="Default select example" [ngModel]="bank" name="bank" (change)="setradio($event.target.value)">
                                         <option value="">Select bank</option>
-                                        <option *ngFor="let banklist of bankDetail">{{ banklist.bank }}
+                                        <option [value]="banklist.bank" *ngFor="let banklist of bankDetail">{{ banklist.bank }}
                                         </option>
                                       </select>
                                       <div *ngIf="submitted && form.bank.errors" class='errorText'>
@@ -636,7 +636,7 @@
                       </div>
                       <div class="bottom_submit_section">
                         <button type="button" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">CANCEL</button>
-                        <button type="button" class="btn btn-secondary" (click)='generateDoc1();this.PROCEED_BTN_DISABLED==true?Preview_btn.style.display="block" : ""'>PROCEED</button>
+                        <button type="button" class="btn btn-secondary" (click)='generateDoc1();this.advanceArray.length!=0?Preview_btn.style.display="block" : ""'>PROCEED</button>
                         <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;" (click)='PREVIEWS_URL(
                           "Export_Bill_Lodgement_"+this.itemArray[0]?._id);PREVIEW_PAGE.style.display="block"'>Preview</button>
                       </div>

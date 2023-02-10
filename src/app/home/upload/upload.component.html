@@ -512,7 +512,7 @@
               </div>
               <div>
                 <div>
-                  <div class="tabbed" *ngIf="res.invoices!=undefined">
+                  <div class="tabbed">
                     <input *ngFor="let obj of res.invoices; let i = index" [attr.data-index]="i" type="radio"
                       id="{{ i + 1 }}" name="css-tabs" checked />
 
@@ -521,9 +521,8 @@
                         <label for="{{ i + 1 }}">Invoice {{ i + 1 }}</label>
                       </li>
                     </ul>
-
                     <div class="tab-content form-wrapper" *ngFor="let obj of res.invoices; let i = index"
-                      [attr.data-index]="i" formArrayName="invoices">
+                      [attr.data-index]="i">
                       <td class="full-input border1">
                         <label for="mawbno">INVOICE NO</label><input [(ngModel)]="obj.invoiceno" class="form-control p-3"
                           type="text" name="invoiceno{{ i + 1 }}" />
@@ -534,8 +533,6 @@
                       </td>
                       <td class="full-input border3">
                         <label for="mawbno">CURRENCY</label>
-                        <!-- <input [(ngModel)]="obj.currency" class="form-control p-3"
-                          type="text" name="currency{{ i + 1 }}" /> -->
                           <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                         [items]="this.CURRENCY_LIST"
                         bindLabel="type"
@@ -548,7 +545,7 @@
                       </td>
                     </div>
                   </div>
-                  <div class="tabbed" *ngIf="res.invoices==undefined">
+                  <!-- <div class="tabbed" *ngIf="res.invoices==undefined">
                     <input *ngFor="let obj of [1]; let i = index" [attr.data-index]="i" type="radio"
                       id="{{ i + 1 }}" name="css-tabs" checked />
 
@@ -581,7 +578,7 @@
                       </ng-select>
                       </td>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
