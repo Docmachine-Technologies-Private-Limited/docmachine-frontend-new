@@ -55,6 +55,7 @@ import { AdminMemberGuard } from "./service/RolePermission/AdminMember/admin-mem
 import {DateFormatService} from "./DateFormat/date-format.service"
 import { JoinPipePipe } from './join-pipe.pipe';
 
+
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
   url: "https://httpbin.org/post",
@@ -84,7 +85,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         CheckboxComponentsComponent,
         CustomConfirmDialogModelComponent,
         AuthorizationComponent,
-        JoinPipePipe,        
+        JoinPipePipe,
+        
     ],
     providers: [{ provide: AppConfig },
         WindowInformationService,

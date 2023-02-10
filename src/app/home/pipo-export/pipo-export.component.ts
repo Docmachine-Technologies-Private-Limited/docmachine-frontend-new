@@ -65,9 +65,10 @@ export class PipoExportComponent implements OnInit {
   getPipoData() {
     console.log("-->", this.page, this.limit)
     this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer , 'export').subscribe((res: any) => {
-      this.dataSource = res.docs
-      console.log("res", this.dataSource)
-
+      var sort_of_deleteflag_1:any=res.docs.filter((item)=>item.deleteflag=='0');
+      var sort_of_deleteflag_2:any=res.docs.filter((item)=>item.deleteflag=='-1');
+      this.dataSource = sort_of_deleteflag_1.concat(sort_of_deleteflag_2);
+      console.log("res",sort_of_deleteflag_1,sort_of_deleteflag_2,this.dataSource)
       this.paginator.length = res.totalDocs
     })
   }
