@@ -24,10 +24,18 @@
         <main id="content" class="table-padding" role="main">
           <div class="new_document_list1">
             <div class="new_document_list_add_data">
-
               <form [formGroup]="pipoForm">
                 <div class="row">
                   <div class="col-md-7 col-sm-12 col-12">
+                    <div *ngIf='isGenerate'>
+                      <div>
+                          <div id="mainId" class="bc" style="margin-top:15px ;" *ngIf="isProceed == false">
+                              <!-- <iframe id="fileRequest" [src]="value" frameborder="0" class="sizes"></iframe> -->
+                              <app-pdf-viewer [downloadShow]="false"
+                              name="Bill Lodgement Pdf Viewer" [src]="this.formerge" width="100%" height="500px"></app-pdf-viewer>
+                          </div>
+                      </div>
+                  </div>
                     <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="this.PDF_LIST.length!=0">
                       <div *ngFor="let selItems of  this.PDF_LIST">
                              <app-pdf-viewer [downloadShow]="false"
@@ -40,105 +48,7 @@
                   </div>
                   <div class="col-md-5 col-sm-12 col-12">
                     <div class="right_form_new">
-                      <div class="row">
-                        <div class="col-md-6 col-12">
-                          <label for="exampleInputEmail1" class="form-label">Select
-                            bank*</label>
-                          <select class="form-select" aria-label="Default select example" [ngModel]="bank" name="bank" (change)="setradio(bank)">
-                            <option value="">Select bank</option>
-                            <option *ngFor="let banklist of bankDetail">{{ banklist.bank }}
-                            </option>
-                          </select>
-                          <div *ngIf="submitted && form.bank.errors" class='errorText'>
-                            <div *ngIf="form.bank.errors.required">Select bank is
-                              required
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                          <label for="exampleInputPassword1" class="form-label">Select buyer</label>
-                          <select class="form-select" aria-label="Default select example" [ngModel]="benneName"
-                            name="benneName" (change)=changepipo($event.target.value) #select_ben>
-                            <option value="">Select Buyer</option>
-                            <option value="{{ bene._id }}" *ngFor="let bene of benneDetail
-                                                                ">{{ bene.benneName }}
-                            </option>
-                          </select>
-                          <div *ngIf="submitted && form.benneName.errors" class='errorText'>
-                            <div *ngIf="form.benneName.errors.required">Select Buyer
-                              is required
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- <div *ngIf="pipoData?.length > 0">
-                        <div class="row" formArrayName="itemsTerm"
-                          *ngFor="let items of getItems(pipoForm); let i = index" [formGroupName]="i">
-                          <div class="col-md-5 col-12">
-                            <label for="exampleInputEmail1" class="form-label">Select
-                              PI</label>
-                            <select class="form-select" aria-label="Default select example" formControlName="pi_poNo"
-                              name="pi_poNo" autocomplete="off" (change)="choosenItems($event.target.value,i)"
-                              #multiplepipo>
-                              <option value="">Select PI/PO</option>
-
-                              <option value="{{pipolist._id}}" *ngFor="let pipolist of pipoData
-                                                    ">{{ pipolist.pi_poNo }}
-                              </option>
-                            </select>
-                            <div *ngIf="submitted && form.pi_poNo.errors" class='errorText'>
-                              <div *ngIf="form.pi_poNo.errors.required">PiPo is
-                                required
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-2 col-12 padding0">
-                            <label for="Currency" class="form-label">Currency</label>
-                            <select class="form-select" aria-label="Default select example" formControlName="currency"
-                              name="currency" autocomplete="off" [value]="this.LIST_PIPO[multiplepipo.value]?.currency">
-                              <option value="">Select Currency</option>
-
-                              <option value="{{currency}}" *ngFor="let currency of CurrencyData
-                                                    ">{{ currency }}
-                              </option>
-                            </select>
-
-
-                            <div *ngIf="submitted && form.currency.errors" class='errorText'>
-                              <div *ngIf="form.currency.errors.required"> Currency is
-                                required</div>
-                            </div>
-                          </div>
-                          <div class="col-md-3 col-12">
-                            <label for="Amount" class="form-label">Amount</label>
-                            <input type="text" class="form-control" formControlName="amount" id="amount" name="amount"
-                              [value]="this.LIST_PIPO[multiplepipo.value]?.amount" placeholder="Invoice Amount"
-                              autocomplete="off">
-                            <div *ngIf="submitted && form.amount.errors" class='errorText'>
-                              <div *ngIf="form.amount.errors.required">Invoice Amount
-                                is required</div>
-                            </div>
-
-                          </div>
-                          <div class="col-md-2 col-12 paddingleft0">
-                            <div class="removeamouts_new">
-                              <button type="button" class="btn btn-primary" (click)="removeItems(i)">-</button>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-                      <div class="row" *ngIf="select_ben.value!=''">
-                        <div class="col-md-6 col-sm-6 col-12">
-                          <div class="col-md-12">
-                            <div class="add_new_buttons">
-                              <button type="button" class="btn btn-success" (click)="addItems(pipoForm)">+ Add
-                                PI</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div> -->
-                    <div class="row m-0 d-flex flex-column align-items">
+                       <div class="row m-0 d-flex flex-column align-items">
                         <div class="content_white_background" style="padding: 0;
                         margin: auto;
                         margin-left: 0;
@@ -146,11 +56,23 @@
                           <main id="content" class="content" role="main">
                             <div class="analytics">
                               <div>
-                                <!-- P0102 -->
                                 <div class="space_bottom"></div>
                                 <div class="bill_lod_section">
                                   <div class="row">
-                                    <div class="col-md-12 mb-3">
+                                    <div class="col-md-10 mb-3">
+                                      <label for="exampleInputEmail1" class="form-label">Select bank*</label>
+                                      <select class="form-select" aria-label="Default select example" [ngModel]="bank" name="bank" (change)="setradio($event.target.value)">
+                                        <option value="">Select bank</option>
+                                        <option [value]="banklist.bank" *ngFor="let banklist of bankDetail">{{ banklist.bank }}
+                                        </option>
+                                      </select>
+                                      <div *ngIf="submitted && form.bank.errors" class='errorText'>
+                                        <div *ngIf="form.bank.errors.required">Select bank is
+                                          required
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-10 mb-3">
                                       <label for="email" class="form-label">Select PI/PO or shipping bill</label>
                                       <!-- <app-custom-dropdown class="main-drop-down-class" name="example1"
                                         [data]="this.SHIPPING_BILL_LIST" label-text="Sample Data 1"
@@ -357,6 +279,24 @@
                                             for="male">{{value.bank}}-{{value.accType}}</label>
                                         </div>
                                         <br>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-5 column" style="display: grid;
+                                    grid-template-columns: repeat(2,1fr);
+                                    max-width: 93%;
+                                    width: 100%;
+                                    flex: 90%;">
+                                      <div class="row d-flex flex-row" *ngIf="this.balanceAvai!=''">
+                                        <label for="email" class="form-label">Total SB Amount</label>
+                                        <input type="text" disabled [value]="this.balanceAvai" class="form-control">
+                                      </div>
+                                      <div class="row d-flex flex-row"  *ngIf="this.filterSum!=''">
+                                        <label for="email" class="form-label">Total FIRX Amount</label>
+                                        <input type="text" disabled [value]="this.filterSum" class="form-control">
+                                      </div>
+                                      <div class="row d-flex flex-row"  *ngIf="this.filterSum!=''">
+                                        <label for="email" class="form-label">Total Reaming Amount</label>
+                                        <input type="text" disabled [value]="this.balanceAvai-this.filterSum" class="form-control">
                                       </div>
                                     </div>
                                     <br>
@@ -645,11 +585,11 @@
                             </ng-template>
                           </main>
                         </div>
-                        <div class="content_white_background">
+                        <div class="content_white_background" *ngIf="this.itemArray.length!=0">
                           <h5 class="header-text">SB or Inward remittance Details</h5>
                           <div class="accordion">
                             <div class="accordion-item" *ngFor="let item of this.itemArray;let i=index">
-                                <div class="accordion-titel" (click)="SlideToggle($event)">
+                                <div class="accordion-titel" (click)="SlideToggle($event,item?._id)">
                                     <h2>SB No. : {{item?.sbno}} </h2>
                                 </div>
                                   <div class="accordion-contant">
@@ -694,53 +634,16 @@
                         </div>
                         </div>
                       </div>
-                      <div class="row" *ngIf="sumTotalAmount != 0 && sumTotalAmount > 200000">
-                        <div class="col-md-12 col-sm-12 col-12">
-                          <label for="Opinion" class="form-label">Opinion report
-                            available?</label><br>
-                          <div class="form-check">
-                            <input class="form-check-input" type="radio" name="opinionReport" value="1"
-                              id="flexRadioDefault1" (click)="showhideOpinionReport(1)">
-                            <label class="form-check-label" for="flexRadioDefault1">
-                              YES
-                            </label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="radio" name="opinionReport" value="0"
-                              id="flexRadioDefault2" (click)="showhideOpinionReport(0)">
-                            <label class="form-check-label" for="flexRadioDefault2">
-                              NO
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row" *ngIf="sumTotalAmount != 0 && sumTotalAmount > 200000 && showOpinionReport == 1">
-                        <div class="col-12">
-                          <label for="Opinion" class="form-label">Attach opinion
-                            report</label>
-                          <div cladss="file_addd_new" *ngIf="uploadUrl==null || uploadUrl==''">
-                            <input (error)="onUploadError($event)" (init)="onUploadInit($event)"
-                              (success)="onUploadSuccess($event)" (sending)="submit($event)"
-                              *ngIf="type === 'directive'" [dropzone]="config" class="dropzone dropzone-container"
-                              id="dropzone" />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="progressbar" *ngIf="uploading">
-                        <div class="meter">
-                          <span [style.width]="width + '%'"></span>
-                        </div>
-                      </div>
                       <div class="bottom_submit_section">
-                        <button type="button" class="btn btn-primary">CANCEL</button>
-                        <button type="button" class="btn btn-secondary">PROCEED</button>
+                        <button type="button" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">CANCEL</button>
+                        <button type="button" class="btn btn-secondary" (click)='generateDoc1();this.advanceArray.length!=0?Preview_btn.style.display="block" : ""'>PROCEED</button>
+                        <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;" (click)='PREVIEWS_URL(
+                          "Export_Bill_Lodgement_"+this.itemArray[0]?._id);PREVIEW_PAGE.style.display="block"'>Preview</button>
                       </div>
                     </div>
                   </div>
-
                 </div>
               </form>
-
             </div>
           </div>
         </main>
@@ -901,5 +804,34 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+<div class="modal PREVIEW_PAGE" tabindex="-1" #PREVIEW_PAGE style="display: none;background-color: #00000030;">
+  <div class="modal-dialog" style="width: 100% !important;">
+      <div class="modal-content" style="height: 90vh;">
+          <div class="modal-header">
+              <h5 class="modal-title">Preview Pdf</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="PREVIEW_PAGE.style.display='none'"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+              <app-pdf-viewer [downloadShow]="false" *ngFor="let item of this.PREVIEWS_URL_LIST" [src]="item" width="100%" height="500px"></app-pdf-viewer>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="PREVIEW_PAGE.style.display='none'">Close</button>
+              <div style="display:flex;">
+                 <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                      <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
+                          <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
+             this.GetDownloadStatus?.status=='verify'" (click)="SendApproval(this.GetDownloadStatus?.status,
+             'Export_Bill_Lodgement_'+this.itemArray[0]?._id);PREVIEW_PAGE.style.display='none'">Send for Approval</button>
+                      </div>
+                      <div *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
+                          <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
+            this.GetDownloadStatus?.status=='verify'">Wait for Approval</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
   </div>
 </div>

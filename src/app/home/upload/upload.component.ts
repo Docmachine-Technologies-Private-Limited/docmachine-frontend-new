@@ -1074,7 +1074,7 @@ export class UploadComponent implements OnInit {
 
   public onSubmit(e) {
     console.log('sjfskfbu');
-    console.log('LENGTH', this.res.invoices.length);
+    console.log('LENGTH', this.res?.invoices?.length);
     console.log(e);
     console.log(e.form.value['sno1']);
     let invoices = [];
@@ -1083,7 +1083,7 @@ export class UploadComponent implements OnInit {
     } else {
       e.form.value.file = this.documentType1;
     }
-    for (let i = 0; i < this.res.invoices.length; i++) {
+    for (let i = 0; i < this.res?.invoices?.length; i++) {
       invoices.push({
         sno: e.form.value[`sno${i + 1}`],
         invoiceno: e.form.value[`invoiceno${i + 1}`],
@@ -1092,112 +1092,124 @@ export class UploadComponent implements OnInit {
       });
     }
     console.log(invoices);
-    e.form.value.invoices = invoices;
+    e.form.value.invoices = invoices.length!=0?invoices:e.form.value.invoices;
+    e.form.value.fobCurrency = e.form.value.fobCurrency?.type!=undefined?e.form.value.fobCurrency.type:e.form.value.fobCurrency;
+    e.form.value.freightCurrency = e.form.value.freightCurrency?.type!=undefined?e.form.value.freightCurrency.type:e.form.value.freightCurrency;
+    e.form.value.insuranceCurrency = e.form.value.insuranceCurrency?.type!=undefined?e.form.value.insuranceCurrency.type:e.form.value.insuranceCurrency;
     e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.pipo = this.pipoArr;
     console.log('buyername for BL', e.form.value.buyerName);
-    e.form.value._id = this.res._id
+    e.form.value._id = this.res?._id
     console.log(e.form.value);
     // this.formData = new ShippingBill(e.form.value)
     // console.log(this.formData
-    if (this.message == 'This file already uploaded') {
-      console.log('inside file already exist');
-
-      this.documentService.updateMasterBySb(e.form.value, e.form.value.sbno, e.form.value._id).subscribe(
-          (res: any) => {
-            this.toastr.success(`Shippingbill updated Successfully`);
-            console.log('Shippingbill updated Successfully');
-            var updatedData:any =''
-            if (this.documentType1=='export') {
-              updatedData = {
-                "sbRef": [
-                  this.res._id,
-                ],
-              }
-            }else{
-              updatedData = {
-                "boeRef": [
-                  this.res._id,
-                ],
-              }
-            }
-
-            this.userService
-              .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc, updatedData)
-              .subscribe(
-                (data) => {
-                  //this.pipoData[`${this.pipoDoc}`] = args[1].data
-                  console.log('king123');
-                  console.log(data);
-
-                  this.toastr.success('shipping Bill added successfully.');
-                  if (this.retururl) {
-                    let url = this.retururl;
-                    this.sharedData.changeretunurl('');
-                    this.router.navigate(['/home/view-document/sb']);
-                  } else {
-                    this.router.navigate(['/home/view-document/sb']);
+    this.documentService.getInvoice_No({
+      sbno:e.form.value.sbno
+    },'masterrecord').subscribe((resp:any)=>{
+      console.log('getInvoice_No',resp)
+      if (resp?.data.length==0) {
+        if (this.message == 'This file already uploaded') {
+          console.log('inside file already exist');
+          this.documentService.updateMasterBySb(e.form.value, e.form.value.sbno, e.form.value._id).subscribe(
+              (res: any) => {
+                this.toastr.success(`Shippingbill updated Successfully`);
+                console.log('Shippingbill updated Successfully');
+                var updatedData:any =''
+                if (this.documentType1=='export') {
+                  updatedData = {
+                    "sbRef": [
+                      this.res?._id,
+                    ],
                   }
-                },
-                (error) => {
-                  // this.toastr.error('Invalid inputs, please check!');
-                  console.log('error');
+                }else{
+                  updatedData = {
+                    "boeRef": [
+                      this.res?._id,
+                    ],
+                  }
                 }
-              );
 
-            //this.router.navigate(['/login'], { queryParams: { registered: true }});
-          },
-          (error) => {
-            console.log('error');
-          }
-        );
-    } else {
-      this.documentService.updateMaster(e.form.value, this.res._id).subscribe(
-        (res: any) => {
-          this.toastr.success(`Shippingbill updated Successfully`);
-          console.log('Shippingbill updated Successfully');
-          var updatedData:any =''
-            if (this.documentType1=='export') {
-              updatedData = {
-                "sbRef": [
-                  this.res._id,
-                ],
-              }
-            }else{
-              updatedData = {
-                "boeRef": [
-                  this.res._id,
-                ],
-              }
-            }
-          this.userService
-            .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc, updatedData)
-            .subscribe(
-              (data) => {
-                //this.pipoData[`${this.pipoDoc}`] = args[1].data
-                console.log('king123');
-                console.log(data);
-                this.toastr.success('shipping Bill added successfully.');
-                if (this.retururl) {
-                  let url = this.retururl;
-                  this.sharedData.changeretunurl('');
-                  this.router.navigate(['/home/view-document/sb']);
-                } else {
-                  this.router.navigate(['/home/view-document/sb']);
-                }
+                this.userService
+                  .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc, updatedData)
+                  .subscribe(
+                    (data) => {
+                      //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                      console.log('king123');
+                      console.log(data);
+
+                      this.toastr.success('shipping Bill added successfully.');
+                      if (this.retururl) {
+                        let url = this.retururl;
+                        this.sharedData.changeretunurl('');
+                        this.router.navigate(['/home/view-document/sb']);
+                      } else {
+                        this.router.navigate(['/home/view-document/sb']);
+                      }
+                    },
+                    (error) => {
+                      // this.toastr.error('Invalid inputs, please check!');
+                      console.log('error');
+                    }
+                  );
+
+                //this.router.navigate(['/login'], { queryParams: { registered: true }});
               },
               (error) => {
-                // this.toastr.error('Invalid inputs, please check!');
                 console.log('error');
               }
             );
-          //this.router.navigate(['/login'], { queryParams: { registered: true }});
-        },
-        (error) => {
-          console.log('error');
+        } else {
+          this.documentService.updateMaster(e.form.value, this.res?._id).subscribe(
+            (res: any) => {
+              this.toastr.success(`Shippingbill updated Successfully`);
+              console.log('Shippingbill updated Successfully');
+              var updatedData:any =''
+                if (this.documentType1=='export') {
+                  updatedData = {
+                    "sbRef": [
+                      this.res?._id,
+                    ],
+                  }
+                }else{
+                  updatedData = {
+                    "boeRef": [
+                      this.res?._id,
+                    ],
+                  }
+                }
+              this.userService
+                .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc, updatedData)
+                .subscribe(
+                  (data) => {
+                    //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                    console.log('king123');
+                    console.log(data);
+                    this.toastr.success('shipping Bill added successfully.');
+                    if (this.retururl) {
+                      let url = this.retururl;
+                      this.sharedData.changeretunurl('');
+                      this.router.navigate(['/home/view-document/sb']);
+                    } else {
+                      this.router.navigate(['/home/view-document/sb']);
+                    }
+                  },
+                  (error) => {
+                    // this.toastr.error('Invalid inputs, please check!');
+                    console.log('error');
+                  }
+                );
+              //this.router.navigate(['/login'], { queryParams: { registered: true }});
+            },
+            (error) => {
+              console.log('error');
+            }
+          );
         }
-      );
-    }
+      } else {
+        this.toastr.error(`Please check this sb no. : ${e.form.value.sbno} already exit...`);
+      }
+    })
+
   }
 
   public submitType() {
@@ -1449,6 +1461,12 @@ export class UploadComponent implements OnInit {
     e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
+    this.documentService.getInvoice_No({
+      creditNoteNumber:e.form.value.creditNoteNumber
+    },'creditNote').subscribe((resp:any)=>{
+      console.log('creditNoteNumber Invoice_No',resp)
+    if (resp.data.length==0) {
+
     this.documentService.addCredit(e.form.value).subscribe(
       (res: any) => {
         this.toastr.success(`Credit Note Document Added Successfully`);
@@ -1484,6 +1502,10 @@ export class UploadComponent implements OnInit {
       },
       (err) => console.log('Error adding pipo')
     );
+    } else {
+      this.toastr.error(`Please check this sb no. : ${e.form.value.creditNoteNumber} already exit...`);
+    }
+    });
   }
 
   // Debit Note Submit button
