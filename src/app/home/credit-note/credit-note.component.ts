@@ -66,6 +66,7 @@ export class CreditNoteComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.FILTER_VALUE_LIST=[];
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     for (let index = 0; index < data1['default']?.length; index++) {
