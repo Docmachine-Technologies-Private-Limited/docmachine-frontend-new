@@ -316,6 +316,10 @@ export class NewDirectDispatchComponent implements OnInit {
   id: any;
   private genDoc: any;
   airwayBlCopy: any;
+
+  advanceForm = new FormGroup({
+    advance: new FormArray([this.initCourse()], Validators.required),
+  });
   sbDataArray: any[] = [];
   invoiceArr: any[];
   filterToggle = false;
@@ -352,6 +356,7 @@ export class NewDirectDispatchComponent implements OnInit {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public wininfo: WindowInformationService) {
     this.api_base = appconfig.apiUrl;
+    this.getDropdownData();
   }
 
   ngOnInit(): void {
@@ -399,6 +404,158 @@ export class NewDirectDispatchComponent implements OnInit {
         });
       }
     console.log('test2', this.itemArray, this.PDF_LIST);
+  }
+  getDropdownData() {
+    this.userService.getTeam()
+      .subscribe(
+        data => {
+          this.commodity = data['data'][0]['commodity']
+          this.LocationData = data['data'][0]['location']
+          this.bankDetail = data['data'][0]['bankDetails']
+        },error => {
+          console.log("error")
+        });
+
+    this.userService.getBene(1).subscribe((res: any) => {
+        this.benneDetail = res.data
+      },(err) => console.log("Error", err));
+  }
+
+  changepipo(value) {
+    this.pipoDataService.getPipoListByCustomer('import', value).then((data) => {
+      console.log(data, 'data..................')
+      this.pipoDataService.pipolistModel$.subscribe((data) => {
+        console.log(data, 'data2222..................')
+        this.pipoData = data;
+        for (let index = 0; index < data.length; index++) {
+          this.LIST_PIPO[data[index]['_id']] = data[index];
+        }
+        console.log('importpipolist', this.pipoData, this.LIST_PIPO);
+      });
+    });;
+  }
+  DATA: any = [];
+  slicedData(data: any[], id: any, value: any) {
+    if (value != '') {
+      var indexof = data.map(e => e?._id).indexOf(value);
+      if (indexof == -1) {
+        this.DATA[id] = data
+      } else {
+        delete data[indexof]
+        var temp: any = data;
+        for (let index = 0; index < temp.length; index++) {
+          this.DATA[id].push(temp[index]);
+        }
+      }
+    } else {
+      this.DATA[id] = data
+    }
+  }
+
+  choosenItems(id, i) {
+    let temp: any = [];
+    temp = this.pipoData.filter(items => {
+      console.log('items._id ', items._id);
+      console.log('id ', id);
+      console.log('items._id == id', items._id == id);
+      return items._id == id
+    });
+
+    temp = temp.map((items) => {
+      return {
+        pipo_id: items._id,
+        pipo_no: items.pi_poNo,
+        doc: items.doc ? this.sanitizer.bypassSecurityTrustResourceUrl(items.doc) : items.doc,
+        amount: items.amount,
+        currency: items.currency,
+      };
+    });
+    this.selectedItems[i] = temp.pop();
+    this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
+    this.showOpinionReport = 0;
+  }
+
+  showhideOpinionReport(value) {
+    this.showOpinionReport = value;
+  }
+
+  get form() {
+    return this.pipoForm.controls;
+  }
+
+  public onUploadError(args: any): void {
+    this.uploading = false;
+    console.log("onUploadError:", args, args[1].message);
+  }
+
+  public onUploadInit(args: any): void {
+    console.log("onUploadInit:", args);
+  }
+
+
+  public onUploadSuccess(args: any): void {
+    console.log("------ onUploadSuccess called")
+    console.log('args', args);
+    this.uploading = true;
+    this.isUploaded = true;
+    this.uploadUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+      args[1].data
+    );
+
+    console.log("this.uploadUrl", this.uploadUrl);
+  }
+
+  submit(e) {
+    this.uploading = true;
+    console.log(e[0].size);
+    this.size = this.formatBytes(e[0].size);
+    //document.getElementById("uploadError").style.display = "none";
+    this.runProgressBar(e[0].size);
+  }
+
+
+  public formatBytes(bytes) {
+    if (bytes < 1024) {
+      return bytes + " Bytes";
+    } else if (bytes < 1048576) {
+      return (bytes / 1024).toFixed(3) + " KB";
+    } else if (bytes < 1073741824) {
+      return (bytes / 1048576).toFixed(3) + " MB";
+    } else {
+      return (bytes / 1073741824).toFixed(3) + " GB";
+    }
+  }
+
+
+  isWidthWithinLimit() {
+    if (this.width === 100) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  runProgressBar(value) {
+    console.log(value / 1500);
+    timer(0, value / 2500)
+      .pipe(takeWhile(() => this.isWidthWithinLimit()))
+      .subscribe(() => {
+        this.width = this.width + 1;
+      });
+  }
+
+  getItems(form) {
+    return form.get('itemsTerm').controls;
+  }
+
+  removeItems(i) {
+    this.selectedItems = this.selectedItems.filter((items, index) => {
+      return index != i
+    });
+    console.log('this.selectedItems', this.selectedItems);
+    this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
+    let control = this.pipoForm.controls.itemsTerm as FormArray;
+    control.removeAt(i);
   }
 
 getBill_Lodgments() {
@@ -660,6 +817,100 @@ getBill_Lodgments() {
       console.log('line no.505 question5 data', this.Question5);
     }
 }
+searchData1(a) {
+  console.log('hello', a);
+  console.log(a.length);
+  if (a.length > 0) {
+    let arr = [];
+    for (let value of this.item1) {
+      console.log('value of buyername****', value);
+      console.log('value of buyername', value.buyerName);
+      if (value.buyerName.includes(a) || value.sbno.includes(a)) {
+        console.log('shaile***************', value.buyerName);
+        arr.push(value);
+      }
+    }
+    this.itemArray = arr;
+    this.filterToggle = true;
+    // console.log("shaile***************", this.itemArray)
+  } else {
+    this.filterToggle = false;
+    console.log('else');
+  }
+
+  // console.log("shailendra buyerName", a.buyerName)
+}
+
+fireEvent() {
+  const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
+    this.table.nativeElement
+  );
+  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  console.log(wb);
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  console.log(wb);
+  /* save to file */
+  XLSX.writeFile(wb, 'SheetJS.xlsx');
+}
+
+changeCheckbox1(a, data) {
+  // let value = a + " - " +
+  if (data.blCopyDoc) {
+    if (data.commercialDoc) {
+      if (data.packingDoc) {
+        let j = this.sbArray.indexOf(a);
+        if (j == -1) {
+          this.sbArray.push(a);
+          this.ACCORDING_LIST['SB_'+a]=[]
+        } else {
+          this.sbArray.splice(j, 1);
+          this.ACCORDING_LIST['SB_'+a]=[]
+        }
+        console.log('Shailendra//////////--', this.sbArray);
+      } else {
+        console.log("You Don't have packingDoc Document");
+      }
+    } else {
+      console.log("You Don't have Commercial Invoice");
+    }
+  } else {
+    console.log("You Don't have BLCopy Document");
+  }
+  // randomArray = []
+  // for(value of this.pipoArray){
+  //   for(value1 of ){
+  //     if(value.pi_poNo == value1){
+  //       randomArray.push(value)
+  //     }
+  //   }
+  // }
+  // console.log("ALL Data",)
+}
+
+
+changeCheckbox3(value) {
+  let j = this.lcArray.indexOf(value);
+  if (j == -1) {
+    this.lcArray.push(value);
+  } else {
+    this.lcArray.splice(j, 1);
+  }
+
+  console.log(this.lcArray);
+}
+
+initCourse() {
+  return this.formBuilder.group({
+    value: new FormArray([this.initCourse1()], Validators.required),
+  });
+}
+
+initCourse1() {
+  return this.formBuilder.group({
+    valueInternal: ['', Validators.required],
+    sb: ['', Validators.required],
+  });
+}
 
 
 async generateDoc1() {
@@ -832,21 +1083,21 @@ async generateDoc1() {
       // Invoice Reductionn logic
       console.log('sjjssjjsjsjsjsjsjsjsjsjsjssjsjjsjsjsjsjsjs');
 
-      // console.log(this.advanceForm.value);
+      console.log(this.advanceForm.value);
 
-      // mainArr.forEach((value1, index) => {
-      //   console.log('shshsh');
-      //   console.log(this.advanceForm.value.advance);
-      //   for (let a of adArr) {
-      //     if (a.sb == value1.sbno) {
-      //       const newVal = { ...value1 };
-      //       newVal['advance'] = a.valueInternal;
-      //       newVal['irAdviceId'] = a.irDataItem._id;
-      //       invoicearray.push(newVal);
-      //     }
-      //   }
-      //   console.log('aajsjss');
-      // });
+      mainArr.forEach((value1, index) => {
+        console.log('shshsh');
+        console.log(this.advanceForm.value.advance);
+        for (let a of adArr) {
+          if (a.sb == value1.sbno) {
+            const newVal = { ...value1 };
+            newVal['advance'] = a.valueInternal;
+            newVal['irAdviceId'] = a.irDataItem._id;
+            invoicearray.push(newVal);
+          }
+        }
+        console.log('aajsjss');
+      });
       let amountArr = [];
       for (let item of invoicearray) {
         amountArr.push(item.pipoValue.amount);
@@ -2481,10 +2732,140 @@ addToSbArray(irDataItem: any, e) {
   console.log(this.advanceArray,this.balanceAvai,this.filterSum,this.Advance_Amount_Sum,this.shippingMap,this.ACCORDING_LIST,'Deva Hello0*************************');
 }
 
+clearData() {
+  this.advanceArray = [];
+  console.log('Shippoinhg', this.shippingMap);
+}
+
+goBack() {
+  this.isGenerate = false;
+  window.location.reload();
+}
 TO_FIXED(amount:any,fixed_position:any){
   return (amount).toFixed(fixed_position);
 }
+exportToExcel() {
+  const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
+    this.billLodge.nativeElement
+  );
+  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  if (this.Question5 == 'yes') {
+    XLSX.writeFile(wb, 'Invoice Reduction.XLSX');
+  } else if (this.Question5 == 'no') {
+    XLSX.writeFile(wb, 'Shipping Details.XLSX');
+  }
+}
 
+public currentDownloadPdf;
+openToPdf(content3, pipo) {
+  this.generateChecked = true;
+  this.currentDownloadPdf = pipo;
+  this.selectedPdfs = [];
+  this.selectedPdfs2 = [];
+
+  console.log('selectedPdfs in line no 2958', this.selectedPdfs);
+  console.log('selectedPdfs in line no 2959', this.selectedPdfs2);
+
+  if (this.currentDownloadPdf.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(
+      this.currentDownloadPdf.changingThisBreaksApplicationSecurity
+    );
+  }
+  if (this.creditNote.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(
+      this.creditNote.changingThisBreaksApplicationSecurity
+    );
+  }
+  if (this.debitNote.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(
+      this.debitNote.changingThisBreaksApplicationSecurity
+    );
+  }
+  if (this.ebrc.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(this.ebrc.changingThisBreaksApplicationSecurity);
+  }
+  if (this.blcopyref.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(
+      this.blcopyref.changingThisBreaksApplicationSecurity
+    );
+  }
+  if (this.irAdvice.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(
+      this.irAdvice.changingThisBreaksApplicationSecurity
+    );
+  }
+  if (this.swiftCopy.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(
+      this.swiftCopy.changingThisBreaksApplicationSecurity
+    );
+  }
+  if (this.tryPartyAgreement.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(
+      this.tryPartyAgreement.changingThisBreaksApplicationSecurity
+    );
+  }
+  if (this.airwayBlCopy.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(
+      this.airwayBlCopy.changingThisBreaksApplicationSecurity
+    );
+  }
+  if (this.billOfExchange.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(
+      this.billOfExchange.changingThisBreaksApplicationSecurity
+    );
+  }
+  if (this.destruction.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(
+      this.destruction.changingThisBreaksApplicationSecurity
+    );
+  }
+  if (this.commercial.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(
+      this.commercial.changingThisBreaksApplicationSecurity
+    );
+  }
+  if (this.packingList.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(
+      this.packingList.changingThisBreaksApplicationSecurity
+    );
+  }
+  if (this.lcCopy.changingThisBreaksApplicationSecurity) {
+    this.selectedPdfs.push(this.lcCopy.changingThisBreaksApplicationSecurity);
+  }
+
+  console.log('selectedPDFs', this.selectedPdfs);
+
+  this.modalService
+    .open(content3, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
+    .result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+}
+
+addPdfToSelectedPdf(value, e) {
+  if (e.target.checked) {
+    if (this.selectedPdfs.includes(value.changingThisBreaksApplicationSecurity) === false) {
+      this.selectedPdfs.push(value.changingThisBreaksApplicationSecurity);
+    }
+  } else if (!e.target.checked) {
+    this.selectedPdfs = this.selectedPdfs.filter((item) => item !== value.changingThisBreaksApplicationSecurity);
+  }
+  console.log(this.selectedPdfs);
+}
+
+addPdfToSelectedPdf2(value, e) {
+  if (e.target.checked) {
+    this.generateChecked = true;
+  } else {
+    this.generateChecked = false;
+  }
+}
 
 downloadAsSingleFile = async (pdfDoc: any) => {
   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
