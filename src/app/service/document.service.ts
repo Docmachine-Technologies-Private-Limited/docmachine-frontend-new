@@ -1655,9 +1655,6 @@ export class DocumentService {
     );
   }
 
-
-
-
   addTask(data) {
     console.log('I am in service');
     this.loadFromLocalStorage();

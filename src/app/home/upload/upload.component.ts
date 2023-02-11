@@ -210,6 +210,7 @@ export class UploadComponent implements OnInit {
   PI_PO_NUMBER_LIST: any = [];
   USER_DATA: any = [];
   PDF_READER_DATA: any = [];
+  SHIPPING_BILL_LIST:any=[];
 
   get f() {
     return this.loginForm.controls;
@@ -2579,11 +2580,6 @@ export class UploadComponent implements OnInit {
     } else {
       console.log('x');
     }
-    if(PI_PO_LIST.length==0){
-      this.SHIPPINGBILL_LIST=[];
-      this.arrayData=[];
-      this.pipoArr=[];
-    }else{
       this.pipoDataService.getShippingNo(LAST_VALUE?._id,this.documentType1);
       this.documentService.getCommercialByFiletype(this.documentType1, LAST_VALUE?._id).subscribe(
         (res: any) => {
@@ -2593,6 +2589,20 @@ export class UploadComponent implements OnInit {
         },
         (err) => console.log(err)
       );
+    this.SHIPPING_BILL_LIST=[];
+    for (let index = 0; index < PI_PO_LIST.length; index++) {
+      for (let j = 0; j < this.item5.length; j++) {
+        for (let m = 0; m < this.item5[j]?.pipo.length; m++) {
+          if (this.item5[j]?.pipo[m]?._id.indexOf(PI_PO_LIST[index]?.value?._id)!=-1) {
+            if (this.item5[j]?.sbno!=undefined && this.item5[j]?.sbno!=null) {
+              this.SHIPPING_BILL_LIST.push({
+                sbno:this.item5[j]?.sbno,
+                _id:this.item5[j]?._id
+              })
+            }
+          }
+        }
+      }
     }
     console.log(this.arrayData, this.mainBene, 'mainBenemainBene');
     console.log('Array List', this.pipoArr, this.SHIPPINGBILL_LIST);

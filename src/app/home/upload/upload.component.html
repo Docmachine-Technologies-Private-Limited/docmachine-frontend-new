@@ -1309,9 +1309,9 @@
                   <label for="exampleInputEmail1" class="form-label"></label>
                   <div *ngIf="this.pipoArr.length!=0">
                     <select class="form-control p-3" aria-label="Default select example"
-                     class="form-control p-3" name="sbNo" ngModel placeholder="Location" *ngIf="this.pipoDataService?.SHIPPING_BILL_LIST?.length!=0">
+                     class="form-control p-3" name="sbNo" ngModel placeholder="Location" *ngIf="this.SHIPPING_BILL_LIST?.length!=0">
                       <option value="">Select SB Number</option>
-                      <option *ngFor="let sb of this.pipoDataService?.SHIPPING_BILL_LIST; let i=index"
+                      <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index"
                         [value]="sb._id">
                         {{ sb.sbno }}
                       </option>
@@ -1379,7 +1379,7 @@
                   <div>
                     <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
                       <option value="">Select SB Number</option>
-                      <option *ngFor="let sb of this.pipoDataService?.SHIPPING_BILL_LIST; let i=index"
+                      <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index"
                         [value]="sb._id">
                         {{ sb.sbno }}
                       </option>
@@ -1494,7 +1494,7 @@
                     <div>
                       <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
                         <option value="">Select SB Number</option>
-                        <option *ngFor="let sb of this.pipoDataService?.SHIPPING_BILL_LIST; let i=index"
+                        <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index"
                           [value]="sb._id">
                           {{ sb.sbno }}
                         </option>
@@ -1542,7 +1542,7 @@
                     <div>
                       <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
                         <option value="">Select SB Number</option>
-                        <option *ngFor="let sb of this.pipoDataService?.SHIPPING_BILL_LIST; let i=index"
+                        <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index"
                           [value]="sb._id">
                           {{ sb.sbno }}
                         </option>
