@@ -33,6 +33,7 @@ import { WindowInformationService } from '../../service/window-information.servi
 import { ShippingbillDataService } from 'src/app/service/homeservices/shippingbill.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-Direct-Dispatch',
@@ -315,10 +316,6 @@ export class NewDirectDispatchComponent implements OnInit {
   id: any;
   private genDoc: any;
   airwayBlCopy: any;
-
-  advanceForm = new FormGroup({
-    advance: new FormArray([this.initCourse()], Validators.required),
-  });
   sbDataArray: any[] = [];
   invoiceArr: any[];
   filterToggle = false;
@@ -355,7 +352,6 @@ export class NewDirectDispatchComponent implements OnInit {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public wininfo: WindowInformationService) {
     this.api_base = appconfig.apiUrl;
-    this.getDropdownData();
   }
 
   ngOnInit(): void {
@@ -387,12 +383,9 @@ export class NewDirectDispatchComponent implements OnInit {
     this.getBill_Lodgments();
   }
   BOOLEAN:boolean = false;
-  SlideToggle(event,id){
-    console.log(event?.target?.parentElement,'SlideToggle')
-    $(event?.target?.parentElement).parent(".accordion-item").find(".accordion-contant").slideToggle();
-    console.log($(".accordion-contant").css('display'),'$(".accordion-contant")')
-    if ($(".accordion-contant").is(':hidden')==false) {
-      this.PDF_LIST=[];
+  SlideToggle(event:MatTabChangeEvent){
+    const id = event.tab.content.viewContainerRef.element.nativeElement.id;
+    this.PDF_LIST=[];
       for (let index = 0; index < this.temp[id].length; index++) {
         this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
           console.log('downloadEachFile', res);
@@ -405,163 +398,7 @@ export class NewDirectDispatchComponent implements OnInit {
           });
         });
       }
-    }else{
-       this.PDF_LIST=[];
-    }
-
     console.log('test2', this.itemArray, this.PDF_LIST);
-  }
-  getDropdownData() {
-    this.userService.getTeam()
-      .subscribe(
-        data => {
-          this.commodity = data['data'][0]['commodity']
-          this.LocationData = data['data'][0]['location']
-          this.bankDetail = data['data'][0]['bankDetails']
-        },error => {
-          console.log("error")
-        });
-
-    this.userService.getBene(1).subscribe((res: any) => {
-        this.benneDetail = res.data
-      },(err) => console.log("Error", err));
-  }
-
-  changepipo(value) {
-    this.pipoDataService.getPipoListByCustomer('import', value).then((data) => {
-      console.log(data, 'data..................')
-      this.pipoDataService.pipolistModel$.subscribe((data) => {
-        console.log(data, 'data2222..................')
-        this.pipoData = data;
-        for (let index = 0; index < data.length; index++) {
-          this.LIST_PIPO[data[index]['_id']] = data[index];
-        }
-        console.log('importpipolist', this.pipoData, this.LIST_PIPO);
-      });
-    });;
-  }
-  DATA: any = [];
-  slicedData(data: any[], id: any, value: any) {
-    if (value != '') {
-      var indexof = data.map(e => e?._id).indexOf(value);
-      if (indexof == -1) {
-        this.DATA[id] = data
-      } else {
-        delete data[indexof]
-        var temp: any = data;
-        for (let index = 0; index < temp.length; index++) {
-          this.DATA[id].push(temp[index]);
-        }
-      }
-    } else {
-      this.DATA[id] = data
-    }
-  }
-
-  choosenItems(id, i) {
-    let temp: any = [];
-    temp = this.pipoData.filter(items => {
-      console.log('items._id ', items._id);
-      console.log('id ', id);
-      console.log('items._id == id', items._id == id);
-      return items._id == id
-    });
-
-    temp = temp.map((items) => {
-      return {
-        pipo_id: items._id,
-        pipo_no: items.pi_poNo,
-        doc: items.doc ? this.sanitizer.bypassSecurityTrustResourceUrl(items.doc) : items.doc,
-        amount: items.amount,
-        currency: items.currency,
-      };
-    });
-    this.selectedItems[i] = temp.pop();
-    this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
-    this.showOpinionReport = 0;
-  }
-
-  showhideOpinionReport(value) {
-    this.showOpinionReport = value;
-  }
-
-  get form() {
-    return this.pipoForm.controls;
-  }
-
-  public onUploadError(args: any): void {
-    this.uploading = false;
-    console.log("onUploadError:", args, args[1].message);
-  }
-
-  public onUploadInit(args: any): void {
-    console.log("onUploadInit:", args);
-  }
-
-
-  public onUploadSuccess(args: any): void {
-    console.log("------ onUploadSuccess called")
-    console.log('args', args);
-    this.uploading = true;
-    this.isUploaded = true;
-    this.uploadUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      args[1].data
-    );
-
-    console.log("this.uploadUrl", this.uploadUrl);
-  }
-
-  submit(e) {
-    this.uploading = true;
-    console.log(e[0].size);
-    this.size = this.formatBytes(e[0].size);
-    //document.getElementById("uploadError").style.display = "none";
-    this.runProgressBar(e[0].size);
-  }
-
-
-  public formatBytes(bytes) {
-    if (bytes < 1024) {
-      return bytes + " Bytes";
-    } else if (bytes < 1048576) {
-      return (bytes / 1024).toFixed(3) + " KB";
-    } else if (bytes < 1073741824) {
-      return (bytes / 1048576).toFixed(3) + " MB";
-    } else {
-      return (bytes / 1073741824).toFixed(3) + " GB";
-    }
-  }
-
-
-  isWidthWithinLimit() {
-    if (this.width === 100) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  runProgressBar(value) {
-    console.log(value / 1500);
-    timer(0, value / 2500)
-      .pipe(takeWhile(() => this.isWidthWithinLimit()))
-      .subscribe(() => {
-        this.width = this.width + 1;
-      });
-  }
-
-  getItems(form) {
-    return form.get('itemsTerm').controls;
-  }
-
-  removeItems(i) {
-    this.selectedItems = this.selectedItems.filter((items, index) => {
-      return index != i
-    });
-    console.log('this.selectedItems', this.selectedItems);
-    this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
-    let control = this.pipoForm.controls.itemsTerm as FormArray;
-    control.removeAt(i);
   }
 
 getBill_Lodgments() {
@@ -823,189 +660,7 @@ getBill_Lodgments() {
       console.log('line no.505 question5 data', this.Question5);
     }
 }
-searchData1(a) {
-  console.log('hello', a);
-  console.log(a.length);
-  if (a.length > 0) {
-    let arr = [];
-    for (let value of this.item1) {
-      console.log('value of buyername****', value);
-      console.log('value of buyername', value.buyerName);
-      if (value.buyerName.includes(a) || value.sbno.includes(a)) {
-        console.log('shaile***************', value.buyerName);
-        arr.push(value);
-      }
-    }
-    this.itemArray = arr;
-    this.filterToggle = true;
-    // console.log("shaile***************", this.itemArray)
-  } else {
-    this.filterToggle = false;
-    console.log('else');
-  }
 
-  // console.log("shailendra buyerName", a.buyerName)
-}
-
-fireEvent() {
-  const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
-    this.table.nativeElement
-  );
-  const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  console.log(wb);
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  console.log(wb);
-  /* save to file */
-  XLSX.writeFile(wb, 'SheetJS.xlsx');
-}
-
-changeCheckbox1(a, data) {
-  // let value = a + " - " +
-  if (data.blCopyDoc) {
-    if (data.commercialDoc) {
-      if (data.packingDoc) {
-        let j = this.sbArray.indexOf(a);
-        if (j == -1) {
-          this.sbArray.push(a);
-          this.ACCORDING_LIST['SB_'+a]=[]
-        } else {
-          this.sbArray.splice(j, 1);
-          this.ACCORDING_LIST['SB_'+a]=[]
-        }
-        console.log('Shailendra//////////--', this.sbArray);
-      } else {
-        console.log("You Don't have packingDoc Document");
-      }
-    } else {
-      console.log("You Don't have Commercial Invoice");
-    }
-  } else {
-    console.log("You Don't have BLCopy Document");
-  }
-  // randomArray = []
-  // for(value of this.pipoArray){
-  //   for(value1 of ){
-  //     if(value.pi_poNo == value1){
-  //       randomArray.push(value)
-  //     }
-  //   }
-  // }
-  // console.log("ALL Data",)
-}
-
-hello() {
-  // for (let value of this.sbArray) {
-  //   this.onAddCourse(value)
-  // }
-  for (var i = 1; i < this.sbArray.length; i++) {
-    //binary += String.fromCharCode(bytes[i]);
-    this.onAddCourse(i);
-  }
-  console.log();
-  console.log('ssjskskssk');
-}
-
-changeCheckbox2(value) {
-  let j = this.tryArray.indexOf(value);
-  if (j == -1) {
-    this.tryArray.push(value);
-  } else {
-    this.tryArray.splice(j, 1);
-  }
-
-  console.log(this.tryArray);
-}
-
-changeCheckbox3(value) {
-  let j = this.lcArray.indexOf(value);
-  if (j == -1) {
-    this.lcArray.push(value);
-  } else {
-    this.lcArray.splice(j, 1);
-  }
-
-  console.log(this.lcArray);
-}
-
-initCourse() {
-  return this.formBuilder.group({
-    value: new FormArray([this.initCourse1()], Validators.required),
-  });
-}
-
-initCourse1() {
-  return this.formBuilder.group({
-    valueInternal: ['', Validators.required],
-    sb: ['', Validators.required],
-  });
-}
-
-getCourses(form) {
-  return form.get('advance').controls;
-}
-
-getForexInfo(sbno: number) {
-  return this.shippingMap.get(sbno);
-}
-
-onAddCourse(e) {
-  // if (e.controls.bankDetails.invalid) {
-  //   //this.submitted1 = true
-  //   this.toastr.error('You can add another bank after filling first one!');
-  //   console.log("2")
-  //   //this.isDisabled = false;
-  //   return;
-  // }
-  console.log('fffff');
-  // this.currencyName.push('')
-  // this.bankName.push('')
-  const control = this.advanceForm.controls.advance as FormArray;
-  control.push(this.initCourse());
-  //this.isDisabled = false;
-}
-
-onAddCourse1(e) {
-  // if (e.controls.bankDetails.invalid) {
-  //   //this.submitted1 = true
-  //   this.toastr.error('You can add another bank after filling first one!');
-  //   console.log("2")
-  //   //this.isDisabled = false;
-  //   return;
-  // }
-  console.log('fffff');
-  console.log(e);
-  // this.currencyName.push('')
-  // this.bankName.push('') .controls.contacts
-  console.log(
-    this.advanceForm.controls.advance['controls'][e].controls.value
-  );
-  // console.log(this.advanceForm.controls.advance[e].controls.value)
-  // console.log(this.advanceForm.controls.advance[e])
-  const control = this.advanceForm.controls.advance['controls'][e].controls
-    .value as FormArray;
-  control.push(this.initCourse1());
-  //this.isDisabled = false;
-}
-
-removeAddress(i) {
-  // console.log(i)
-  // //console.log(this.control)
-  let control1 = this.advanceForm.controls.advance as FormArray;
-  // console.log(control1)
-  // console.log(control1.length)
-  // console.log(this.bankName)
-  // console.log(this.currencyName)
-  control1.removeAt(i);
-  // this.bankName.splice(i, 1)
-  // this.currencyName.splice(i, 1)
-  // console.log(this.bankName)
-  // console.log(this.currencyName)
-  // console.log(control1.length)
-}
-
-onSubmit() {
-  console.log('Testing *******************', this.advanceForm.value);
-}
 
 async generateDoc1() {
   //console.log(code, j)
@@ -1177,21 +832,21 @@ async generateDoc1() {
       // Invoice Reductionn logic
       console.log('sjjssjjsjsjsjsjsjsjsjsjsjssjsjjsjsjsjsjsjs');
 
-      console.log(this.advanceForm.value);
+      // console.log(this.advanceForm.value);
 
-      mainArr.forEach((value1, index) => {
-        console.log('shshsh');
-        console.log(this.advanceForm.value.advance);
-        for (let a of adArr) {
-          if (a.sb == value1.sbno) {
-            const newVal = { ...value1 };
-            newVal['advance'] = a.valueInternal;
-            newVal['irAdviceId'] = a.irDataItem._id;
-            invoicearray.push(newVal);
-          }
-        }
-        console.log('aajsjss');
-      });
+      // mainArr.forEach((value1, index) => {
+      //   console.log('shshsh');
+      //   console.log(this.advanceForm.value.advance);
+      //   for (let a of adArr) {
+      //     if (a.sb == value1.sbno) {
+      //       const newVal = { ...value1 };
+      //       newVal['advance'] = a.valueInternal;
+      //       newVal['irAdviceId'] = a.irDataItem._id;
+      //       invoicearray.push(newVal);
+      //     }
+      //   }
+      //   console.log('aajsjss');
+      // });
       let amountArr = [];
       for (let item of invoicearray) {
         amountArr.push(item.pipoValue.amount);
@@ -1420,44 +1075,6 @@ getProper(a) {
   this.myArr.push(this.str);
   this.str = '';
   console.log(this.str);
-}
-
-searchData(a, i) {
-  console.log(i);
-  console.log(a);
-  var reg = /^\d+$/;
-  let x = reg.test(a);
-  console.log(x);
-  if (x) {
-    this.amArr[i] = this.amArr[i] - a;
-    this.invoiceArr[i].pipoValue['damage'] = a;
-
-    this.invoiceArr[i].pipoValue['realized'] = this.amArr[i];
-  }
-  console.log('this is invice array', this.invoiceArr);
-
-  console.log(a);
-  console.log(this.amArr);
-}
-
-toEdit(index) {
-  console.log(
-    'this is damage value',
-    this.invoiceArr[index].pipoValue['damage']
-  );
-  this.optionsVisibility[index] = true;
-  this.toastr.warning('table Is In Edit Mode');
-}
-
-toSave(index) {
-  this.optionsVisibility[index] = false;
-  this.toastr.success('table updated successfully.');
-}
-
-updaterisevalue(i) {
-  this.invoiceArr[i].pipoValue.realized =
-    this.invoiceArr[i].pipoValue.amount - this.invoiceArr[i].pipoValue.damage;
-  console.log('this is rised', this.invoiceArr[i].pipoValue.realized);
 }
 
 async fillForm(a) {
@@ -2511,13 +2128,6 @@ _arrayBufferToBase64(buffer) {
   return window.btoa(binary);
 }
 
-onBack() {
-  this.isGenerate = false;
-  this.sbArray = [];
-  this.tryArray = [];
-  this.lcArray = [];
-}
-
 doneDox(genDoc) {
   this.doneToDox();
   console.log('genDoc', genDoc);
@@ -2676,184 +2286,6 @@ doneDox(genDoc) {
   }
 }
 
-exportAsPDF1() {
-  if (this.Question7 == 'yes') {
-    this.lc = 'lc';
-  } else if (this.Question7 == 'no') {
-    this.lc = 'nonLc';
-  }
-
-  this.scrutiny = this.Question8;
-  this.withDiscount = this.Question9;
-
-  const height =
-    Math.round($('#mainId').outerHeight() * 0.0104166667 * 10) / 10;
-  console.log($('#mainId').html());
-  this.documentService
-    .getPDF({
-      data: $('#mainId').html(),
-      filename: 'Final Report',
-      format: {
-        paperWidth: 7,
-        paperHeight: height + 5,
-        marginTop: 0,
-        marginBottom: 0,
-        marginLeft: 0,
-        marginRight: 0,
-      },
-      template:
-        './app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs',
-    })
-    .subscribe((data) => {
-      if (data && data.success) {
-        console.log(data);
-        this.data4 = data;
-        this.data5 = data.file.replace(
-          'application/octet-stream',
-          'application/pdf'
-        );
-        console.log(this.data5);
-        this.data6 = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.data5
-        );
-        console.log(this.data6);
-        this.data8 = this.data6;
-        //this.newTask.url1 = this.data5;
-        this.done = true;
-        const height =
-          Math.round($('#mainId').outerHeight() * 0.0104166667 * 10) / 10;
-        console.log($('#mainId').html());
-        this.documentService
-          .getPDF({
-            data: $('#mainId2').html(),
-            filename: 'Final Report',
-            format: {
-              paperWidth: 7,
-              paperHeight: 15,
-              marginTop: 0,
-              marginBottom: 0,
-              marginLeft: 0,
-              marginRight: 0,
-            },
-            template:
-              './app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs',
-          })
-          .subscribe((data) => {
-            if (data && data.success) {
-              console.log(data);
-              this.data4 = data;
-              this.data5 = data.file.replace(
-                'application/octet-stream',
-                'application/pdf'
-              );
-              console.log(this.data5);
-              this.data6 = this.sanitizer.bypassSecurityTrustResourceUrl(
-                this.data5
-              );
-              this.billOfCredit = this.data6;
-
-              if (this.Question5 == 'yes') {
-                const height1 =
-                  Math.round(
-                    $('#mainId1').outerHeight() * 0.0104166667 * 10
-                  ) / 10;
-                console.log($('#mainId1').html());
-                this.documentService
-                  .getPDF({
-                    data: $('#mainId1').html(),
-                    filename: 'Final Report',
-                    format: {
-                      paperWidth: 7,
-                      paperHeight: height1 + 5,
-                      marginTop: 0,
-                      marginBottom: 0,
-                      marginLeft: 0,
-                      marginRight: 0,
-                    },
-                    template:
-                      './app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs',
-                  })
-                  .subscribe((data) => {
-                    if (data && data.success) {
-                      console.log(data);
-                      this.data4 = data;
-                      this.data5 = data.file.replace(
-                        'application/octet-stream',
-                        'application/pdf'
-                      );
-                      console.log(this.data5);
-                      this.data6 =
-                        this.sanitizer.bypassSecurityTrustResourceUrl(
-                          this.data5
-                        );
-
-                      console.log(this.data6);
-                      this.dataImport = this.data6;
-                      this.dataImport2 = this.data6;
-                      //this.newTask.url1 = this.data5;
-                      this.done = true;
-                      this.newTask[0] = {
-                        sbNumbers: this.sbArray,
-                        sbUrls: this.mainDoc1,
-                        triPartyAgreementNumber: this.tryArray,
-                        tryUrls: this.mainDoc3,
-                        purposeCode: '',
-                        isLc: this.lc,
-                        letterOfCreditNumber: this.lcArray,
-                        lcUrls: this.mainDoc4,
-                        withScrutiny: this.scrutiny,
-                        withDiscount: this.withDiscount,
-                        bankRef: '',
-                        advanceRef: this.advanceRef,
-                        generateDoc1: this.data8,
-                        generateDoc2: this.billOfCredit,
-                        generateDoc3: this.dataImport,
-                        generateDoc4: this.dataImport2,
-                        ir: this.Question5,
-                      };
-                      //this.downloadPDF(data);
-                    }
-                  });
-
-                this.isProceed = true;
-              } else {
-                this.isProceed = true;
-                this.newTask[0] = {
-                  sbNumbers: this.sbArray,
-                  sbUrls: this.mainDoc1,
-                  triPartyAgreementNumber: this.tryArray,
-                  tryUrls: this.mainDoc3,
-                  purposeCode: '',
-                  isLc: this.lc,
-                  letterOfCreditNumber: this.lcArray,
-                  lcUrls: this.mainDoc4,
-                  withScrutiny: this.scrutiny,
-                  withDiscount: this.withDiscount,
-                  advanceRef: this.advanceRef,
-                  generateDoc1: this.data8,
-                  generateDoc2: this.billOfCredit,
-                  bankRef: '',
-                  ir: this.Question5,
-                };
-              }
-            }
-          });
-
-        //this.zToggle[i] = true;
-
-        // let allTrue = true;
-        // for (let value of this.zToggle) {
-        //   allTrue = allTrue && value;
-        // }
-        // if (allTrue) {
-        //   this.isDone = true;
-        // }
-
-        //this.downloadPDF(data);
-      }
-    });
-}
-
 change(e) {
   console.log(e.target.value);
   this.advanceRef = e.target.value;
@@ -2862,70 +2294,6 @@ change(e) {
 change1(e) {
   console.log(e.target.value);
   this.LcNumber = e.target.value;
-}
-
-downloadPDF() {
-  console.log(JSON.stringify(this.creditNote));
-  let headers = new HttpHeaders();
-  headers = headers.set('Accept', 'application/pdf');
-  let data = {
-    headers: headers,
-    url: this.creditNote['changingThisBreaksApplicationSecurity'],
-  };
-
-  this.documentService.downloadDocuments(data).subscribe((d) => {
-    console.log('sub', d);
-    importedSaveAs(new Blob([d], { type: 'application/pdf' }), 'CreditNote');
-  });
-
-  // console.log(this.mainDoc1.changingThisBreaksApplicationSecurity)
-  // console.log("hello",this.creditNote.changingThisBreaksApplicationSecurity)
-  // window.location.href = this.creditNote
-  // let pdfName= this.creditNote.changingThisBreaksApplicationSecurity.substring(this.creditNote.changingThisBreaksApplicationSecurity.lastIndexOf('/')+1);
-  // console.log(pdfName)
-  // const link = document.createElement('a');
-  // // link.id = "dwnldLnk";
-  // document.body.appendChild(link);
-  // // const dlnk: any = document.getElementById("dwnldLnk");
-  // // dlnk.href =
-  // // dlnk.download = this.creditNote.changingThisBreaksApplicationSecurity;
-  // // dlnk.click();
-  // link.setAttribute('target', '_blank');
-  // link.setAttribute('href', this.creditNote.changingThisBreaksApplicationSecurity);
-  // link.setAttribute('download', pdfName);
-  // link.download = pdfName;
-
-  // link.click();
-  // link.remove();
-
-  // this.durl = this.data3.replace('application/pdf', 'application/octet-stream')
-  //   console.log("DATA")
-  //   const link: any = document.createElement("a");
-  //   link.id = "dwnldLnk";
-  //   link.style = "display:none;";
-  //   document.body.appendChild(link);
-  //   const dlnk: any = document.getElementById("dwnldLnk");
-  //   dlnk.href = this.durl;
-  //   console.log(dlnk)
-  //   console.log(dlnk.href)
-  //   dlnk.download = "finalReport.pdf";
-  //   dlnk.click();
-
-  //     let link = document.createElement('a');
-  // link.setAttribute('type', 'hidden');
-  // link.href = 'abc.net/files/test.ino';
-  // link.download = 'https://storage.googleapis.com/doc-machine-bucket1/BOE-2.pdf';
-  // document.body.appendChild(link);
-  // link.click();
-  // link.remove();
-
-  // const link = document.createElement('a');
-  //     link.setAttribute('target', '_blank');
-  //     link.setAttribute('href', 'https://storage.googleapis.com/doc-machine-bucket1/BOE-2.pdf');
-  //     link.setAttribute('download', `products.pdf`);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     link.remove();
 }
 
 setradio(a) {
@@ -2995,62 +2363,8 @@ refSbNo: number;
 open2(content2, sbno) {
   this.currentSbForAdvance = sbno;
   this.refSbNo = sbno;
-  // this.modalService
-  //   .open(content2, { ariaLabelledBy: 'modal-basic-title' })
-  //   .result.then(
-  //     (result) => {
-  //       this.closeResult = `Closed with: ${result}`;
-  //     },
-  //     (reason) => {
-  //       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //     }
-  //   );
 }
 
-showPreview() {
-  console.log('All Details', this.invoiceArr);
-  // {_id:ObjectId('626a527df13ff52fd4871243')}
-  this.bgColor = true;
-  this.newDone = true;
-}
-
-hidePreview() {
-  this.bgColor = false;
-  this.newDone = false;
-}
-
-removepipo(i) {
-  this.itemArray1.splice(i, 1);
-}
-
-removeshipping(i) {
-  this.itemArray.splice(i, 1);
-  console.log('this is remove');
-}
-
-addTofilter(event, id) {
-  let removeArray = [];
-  this.pipo = true;
-  this.ship = false;
-  this.itemArray1 = [];
-  if (event.target.checked) {
-    for (let element of this.item) {
-      if (element._id == id) {
-        this.itemArray.push(element);
-      }
-    }
-  } else {
-    if (this.itemArray.length) {
-      this.itemArray.forEach((element) => {
-        if (element._id != id) {
-          removeArray.push(element);
-        }
-      });
-      this.itemArray = removeArray;
-    }
-  }
-  console.log('test', this.itemArray);
-}
 PDF_LIST:any=[];
 ACCORDING_LIST:any=[];
 temp:any=[];
@@ -3123,6 +2437,7 @@ addTofilter1(event, id, data) {
 }
 
 shippingMap: Map<number, any[]> = new Map<number, any[]>();
+SHIPPING_MAP:any=[];
 Advance_Amount_Sum:any=[];
 PROCEED_BTN_DISABLED:boolean=false;
 filterSum:any=[];
@@ -3141,7 +2456,7 @@ addToSbArray(irDataItem: any, e) {
         sb: this.currentSbForAdvance,
       };
       this.Advance_Amount_Sum.push(details)
-      this.balanceAvai=parseFloat(this.itemArray.filter((item) => item?.sbno?.indexOf(this.currentSbForAdvance) != -1)[0]?.balanceAvai)
+      this.balanceAvai=this.itemArray.reduce( function(a, b){return a + parseFloat(b?.balanceAvai)}, 0)
       this.filterSum=this.Advance_Amount_Sum.reduce( function(a, b){return a + b?.irDataItem?.amount}, 0);
       if (this.filterSum>this.balanceAvai) {
         e.target.checked=false;
@@ -3161,144 +2476,15 @@ addToSbArray(irDataItem: any, e) {
     this.advanceArray = this.advanceArray.filter((item) => item.valueInternal !== irDataItem.billNo);
     this.Advance_Amount_Sum = this.Advance_Amount_Sum.filter((item) => item.valueInternal !== irDataItem.billNo);
   }
-
+  this.SHIPPING_MAP[this.currentSbForAdvance]=this.advanceArray;
   this.shippingMap.set(this.refSbNo,JSON.parse(JSON.stringify(this.advanceArray)));
-  console.log(this.advanceArray,this.balanceAvai,this.filterSum,this.Advance_Amount_Sum,this.ACCORDING_LIST,'Deva Hello0*************************');
+  console.log(this.advanceArray,this.balanceAvai,this.filterSum,this.Advance_Amount_Sum,this.shippingMap,this.ACCORDING_LIST,'Deva Hello0*************************');
 }
 
-clearData() {
-  this.advanceArray = [];
-  console.log('Shippoinhg', this.shippingMap);
+TO_FIXED(amount:any,fixed_position:any){
+  return (amount).toFixed(fixed_position);
 }
 
-goBack() {
-  this.isGenerate = false;
-
-  window.location.reload();
-}
-
-exportToExcel() {
-  const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
-    this.billLodge.nativeElement
-  );
-  const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  if (this.Question5 == 'yes') {
-    XLSX.writeFile(wb, 'Invoice Reduction.XLSX');
-  } else if (this.Question5 == 'no') {
-    XLSX.writeFile(wb, 'Shipping Details.XLSX');
-  }
-}
-
-public currentDownloadPdf;
-openToPdf(content3, pipo) {
-  this.generateChecked = true;
-  this.currentDownloadPdf = pipo;
-  this.selectedPdfs = [];
-  this.selectedPdfs2 = [];
-
-  console.log('selectedPdfs in line no 2958', this.selectedPdfs);
-  console.log('selectedPdfs in line no 2959', this.selectedPdfs2);
-
-  if (this.currentDownloadPdf.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.currentDownloadPdf.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.creditNote.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.creditNote.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.debitNote.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.debitNote.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.ebrc.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(this.ebrc.changingThisBreaksApplicationSecurity);
-  }
-  if (this.blcopyref.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.blcopyref.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.irAdvice.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.irAdvice.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.swiftCopy.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.swiftCopy.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.tryPartyAgreement.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.tryPartyAgreement.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.airwayBlCopy.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.airwayBlCopy.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.billOfExchange.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.billOfExchange.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.destruction.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.destruction.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.commercial.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.commercial.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.packingList.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.packingList.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.lcCopy.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(this.lcCopy.changingThisBreaksApplicationSecurity);
-  }
-
-  console.log('selectedPDFs', this.selectedPdfs);
-
-  this.modalService
-    .open(content3, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
-    .result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
-}
-
-addPdfToSelectedPdf(value, e) {
-  if (e.target.checked) {
-    if (this.selectedPdfs.includes(value.changingThisBreaksApplicationSecurity) === false) {
-      this.selectedPdfs.push(value.changingThisBreaksApplicationSecurity);
-    }
-  } else if (!e.target.checked) {
-    this.selectedPdfs = this.selectedPdfs.filter((item) => item !== value.changingThisBreaksApplicationSecurity);
-  }
-  console.log(this.selectedPdfs);
-}
-
-addPdfToSelectedPdf2(value, e) {
-  if (e.target.checked) {
-    this.generateChecked = true;
-  } else {
-    this.generateChecked = false;
-  }
-}
 
 downloadAsSingleFile = async (pdfDoc: any) => {
   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
