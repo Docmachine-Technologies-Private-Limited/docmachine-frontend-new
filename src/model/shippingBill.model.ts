@@ -47,7 +47,7 @@ export class ShippingBill {
     public consigneeName: string;
     public exchangeRate: string
     public _id: any;
-    public irRef: any;
+    public irRef: any=[];
     public balanceAvai: any;
     public doc: any;
     public buyerName: any;
@@ -105,7 +105,7 @@ export class ShippingBill {
   computeIRMerge() {
     let finallist = [];
     let totalForex = 0;
-    if (this.irRef && this.irRef.length) {
+    if (this.irRef && this.irRef.length!=0) {
       for (let i in this.irRef) {
         let sbInfo:any = {
           ..._.cloneDeep(this)
@@ -120,7 +120,8 @@ export class ShippingBill {
         if (this.irRef[i] && this.irRef[i].exchangeRate) {
           exchangeRate = parseFloat(this.irRef[i].exchangeRate);
         }
-        this.irRef[i].recUSD = (amount - commision).toFixed(2);
+        var sum_amount:any=(amount!=undefined?amount:0 - commision!=undefined?commision:0)
+        this.irRef[i]['recUSD'] =sum_amount!=undefined?sum_amount.toFixed(2):0;
         this.irRef[i].convertedAmount = (
           this.irRef[i].recUSD * exchangeRate
         ).toFixed(2);

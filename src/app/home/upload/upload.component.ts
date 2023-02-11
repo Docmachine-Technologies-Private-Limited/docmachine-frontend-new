@@ -1605,7 +1605,7 @@ export class UploadComponent implements OnInit {
 
   //blCopy Submit buttton
   onSubmitblCopy(e) {
-    let selectedShippingBill = this.pipoDataService.getShippingBillById(e.form.value.sbNo);
+    let selectedShippingBill = this.SHIPPING_BILL_LIST.filter((item:any) => item?._id === e?.form?.value?.sbNo)[0];
     console.log('this is console of blcopy', e.form.value);
     e.form.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
@@ -1614,7 +1614,7 @@ export class UploadComponent implements OnInit {
     e.form.value.file = this.documentType1;
     e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.CommercialNumber = this.CommercialNumber
-    console.log(e.form.value, 'onSubmitblCopy');
+    console.log(e.form.value, selectedShippingBill,'onSubmitblCopy');
 
     this.documentService.addAirwayBlcopyFile(e.form.value).subscribe(
       (res: any) => {
@@ -1625,9 +1625,7 @@ export class UploadComponent implements OnInit {
             res.data._id,
           ],
         }
-        this.userService
-          .updateManyPipo(this.pipoArr, 'airwayBlcopy', this.pipourl1, updatedData)
-          .subscribe(
+        this.userService.updateManyPipo(this.pipoArr, 'airwayBlcopy', this.pipourl1, updatedData).subscribe(
             (data) => {
               console.log('king123');
               console.log(data);
@@ -1666,7 +1664,7 @@ export class UploadComponent implements OnInit {
 
   //commercial Invoice Submit buttton
   onSubmitCommercial(e) {
-    let selectedShippingBill = this.pipoDataService.getShippingBillById(e.form.value.sbNo);
+    let selectedShippingBill = this.SHIPPING_BILL_LIST.filter((item:any) => item?._id === e?.form?.value?.sbNo)[0];
     console.log('this is console of blcopy', e.form.value);
     e.form.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
@@ -1853,7 +1851,7 @@ export class UploadComponent implements OnInit {
 
   // Packing List Submit Button
   onSubmitPackingList(e) {
-    let selectedShippingBill = this.pipoDataService.getShippingBillById(e.form.value.sbNo);
+    let selectedShippingBill = this.SHIPPING_BILL_LIST.filter((item:any) => item?._id === e?.form?.value?.sbNo)[0];
     console.log('this is console of blcopy', e.form.value);
     e.form.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
