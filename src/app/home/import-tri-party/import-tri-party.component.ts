@@ -52,6 +52,7 @@ export class ImportTriPartyComponent implements OnInit {
 
 
   async ngOnInit() {
+    this.FILTER_VALUE_LIST=[];
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
@@ -64,6 +65,7 @@ export class ImportTriPartyComponent implements OnInit {
         console.log('Res', res);
         for (let value of res.data) {
           if (value['file'] == 'import') {
+            this.item1.push(value);
             this.FILTER_VALUE_LIST.push(value);
             if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
               this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
@@ -79,7 +81,6 @@ export class ImportTriPartyComponent implements OnInit {
             if ( this.ALL_FILTER_DATA['DATE'].includes(value?.date)==false) {
               this.ALL_FILTER_DATA['DATE'].push(value?.date);
             }
-            this.item1.push(value);
           }
         }
       },
