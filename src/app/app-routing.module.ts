@@ -66,9 +66,10 @@ const routes: Routes = [
     RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" }),
     SignupRoutingModule,
     SigninRoutingModule,
-    MatDialogModule
+    MatDialogModule,
+    HomeModule
   ],
-  exports: [RouterModule],
+  exports: [RouterModule,HomeModule],
 })
 export class AppRoutingModule {
   constructor(public router:Router){

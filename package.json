@@ -37,6 +37,7 @@
     "glyphicons-halflings": "1.9.1",
     "gzipper": "^6.0.0",
     "jasny-bootstrap": "4.0.0",
+    "jszip": "^3.10.1",
     "jwt-decode": "3.1.2",
     "ng-apexcharts": "^1.7.4",
     "ng2-pdf-viewer": "^9.1.3",

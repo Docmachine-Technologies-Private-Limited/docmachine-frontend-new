@@ -1,0 +1,837 @@
+<div class="content_top_common pb-2 scroll-bar-main">
+  <div class="content-wrap">
+    <div class="container-fluid">
+      <div class="import_export_sec">
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="Dashbord_sec">
+              <h2 class="title_dash">Export Bill Lodgement <span *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes"'>/Regularization</span></h2>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="float_right_page">
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a [routerLink]="['/home/new-Bill-Under-Collection']">Export Bill Lodgement</a>
+                  </li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content_white_background">
+        <main id="content" class="table-padding" role="main">
+          <div class="new_document_list1">
+            <div class="new_document_list_add_data">
+              <form [formGroup]="pipoForm">
+                <div class="row">
+                  <div class="col-md-7 col-sm-12 col-12">
+                    <div *ngIf='isGenerate'>
+                      <div>
+                          <div id="mainId" class="bc" style="margin-top:15px ;" *ngIf="isProceed == false">
+                              <!-- <iframe id="fileRequest" [src]="value" frameborder="0" class="sizes"></iframe> -->
+                              <app-pdf-viewer [downloadShow]="false"
+                              name="Bill Lodgement Pdf Viewer" [src]="this.formerge" width="100%" height="500px"></app-pdf-viewer>
+                          </div>
+                      </div>
+                  </div>
+                    <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="this.PDF_LIST.length!=0">
+                      <div *ngFor="let selItems of  this.PDF_LIST">
+                             <app-pdf-viewer [downloadShow]="false"
+                            [name]="selItems?.name" [src]="selItems?.pdf" width="100%" height="500px"></app-pdf-viewer>
+                      </div>
+                      <div *ngIf="isUploaded">
+                        <iframe *ngIf="uploadUrl!=''" style="border:none;" [src]="uploadUrl" width="100%"> </iframe>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-5 col-sm-12 col-12">
+                    <div class="right_form_new">
+                       <div class="row m-0 d-flex flex-column align-items">
+                        <div class="content_white_background" style="padding: 0;
+                        margin: auto;
+                        margin-left: 0;
+                        margin-top: 20px;">
+                          <main id="content" class="content" role="main">
+                            <div class="analytics">
+                              <div>
+                                <div class="space_bottom"></div>
+                                <div class="bill_lod_section">
+                                  <div class="row">
+                                    <div class="col-md-10 mb-3">
+                                      <label for="exampleInputEmail1" class="form-label">Select bank*</label>
+                                      <select class="form-select" aria-label="Default select example" [ngModel]="bank" name="bank" (change)="setradio($event.target.value)">
+                                        <option value="">Select bank</option>
+                                        <option [value]="banklist.bank" *ngFor="let banklist of bankDetail">{{ banklist.bank }}
+                                        </option>
+                                      </select>
+                                      <div *ngIf="submitted && form.bank.errors" class='errorText'>
+                                        <div *ngIf="form.bank.errors.required">Select bank is
+                                          required
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-10 mb-3">
+                                      <label for="email" class="form-label">Select PI/PO or shipping bill</label>
+                                      <!-- <app-custom-dropdown class="main-drop-down-class" name="example1"
+                                        [data]="this.SHIPPING_BILL_LIST" label-text="Sample Data 1"
+                                        (PopupShow)="DUMP_FUNCTION(PI_PO_shipping_bill.value,'Shipping bill',content1)"
+                                         #PI_PO_shipping_bill></app-custom-dropdown> -->
+                                         <ng-select
+                                         [items]="this.SHIPPING_BILL_LIST"
+                                         bindLabel="value"
+                                         [multiple]="false"
+                                         placeholder="Select PI/PO or shipping bill"
+                                         (change)="DUMP_FUNCTION($event?.value,'Shipping bill',content1)" #PI_PO_shipping_bill></ng-select>
+
+                                      <div *ngIf='itemArray?.length >0'>
+                                        <div *ngIf="ship" class="shpt_bill_sec">
+                                          <label>SHIPPING BILL NUMBER SELECTED</label>
+                                          <div class="form-check2" *ngFor="let item of itemArray; let i = index;">
+                                            <label class="form-check-label">
+                                              <p class="arrayData" style="display: inline-block;">
+                                                {{item.sbno}} - {{item.buyerName}}
+                                              </p>
+                                            </label>
+                                          </div>
+                                        </div>
+                                        <br>
+                                      </div>
+                                    </div>
+                                    <div class="space_bottom"></div>
+                                    <div class="col-md-8 col-sm-8 col-7">
+                                      <label for="email" class="form-label">Against advance receipt?</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-5">
+                                      <div class="check_box_button">
+                                        <button type="button" [class]="ClassRetrun('AgainstAdvanceReceipt','Hide','btn no-button active1',
+                                                                             'btn btn-primary remove-no-button','no')"
+                                          (click)="Changebutton('AgainstAdvanceReceipt','Hide','Show','no')">No</button>
+                                        <button type="button"
+                                          [class]="ClassRetrun('AgainstAdvanceReceipt','Show',
+                                                                            'btn yes-button active','btn yes-button','yes')"
+                                          (click)="Changebutton('AgainstAdvanceReceipt','Show','Hide','yes')">Yes</button>
+                                      </div>
+                                    </div>
+                                    <div style="margin: 10px 0px;"
+                                      *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes"'>
+                                      <div class="col-md-12">
+                                        <h3 style="font-size:17px;">Advance reference Number</h3>
+                                        <form class="" [formGroup]="advanceForm" (ngSubmit)="onSubmit()">
+                                          <div formArrayName="advance">
+                                            <div *ngFor="let course of getCourses(advanceForm); let i = index"
+                                              [formGroupName]="i" style="margin-bottom: 10px;">
+                                              <h3> {{sbArray[i]}} </h3>
+                                              <div formArrayName='value'>
+                                                <button class="button1"
+                                                  (click)="open2(content2.style.display='block', sbArray[i]);">Enter
+                                                  Forex
+                                                  Advice</button><br>
+                                                <label *ngFor="let data of getForexInfo(sbArray[i])"
+                                                  style="display: inline-block;">
+                                                  <span class="selecter1">{{data.valueInternal}}</span>
+                                                </label>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </form>
+                                      </div>
+                                    </div>
+                                    <div class="space_bottom"></div>
+                                    <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"' class="col-md-8 col-sm-8 col-7">
+                                      <label for="email" class="form-label">Under LC?</label>
+                                    </div>
+                                    <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"' class="col-md-4 col-sm-4 col-5">
+                                      <div class="check_box_button">
+                                        <button type="button" [class]="ClassRetrun('UnderLC','Hide','btn no-button active1',
+                                                                            'btn btn-primary remove-no-button','no')"
+                                          (click)="Changebutton('UnderLC','Hide','Show','no')">No</button>
+                                        <button type="button"
+                                          [class]="ClassRetrun('UnderLC','Show',
+                                                                            'btn yes-button active','btn yes-button','yes')"
+                                          (click)="Changebutton('UnderLC','Show','Hide','yes')">Yes</button>
+                                      </div>
+                                    </div>
+                                    <div class="space_bottom"></div>
+                                    <div *ngIf='this.Lodgement["UnderLC"]["Show"]==="yes"' style="width:100%;">
+                                      <div class="col-md-12">
+                                        <div class="row">
+                                          <div class="col-md-12">
+                                            <label for="email" class="form-label">Select letter of credit</label>
+                                          </div>
+                                          <div class="col-md-10 col-sm-10 col-9 pr-0">
+                                            <div class="select_rol">
+                                              <ng-select [items]="this.Letter_Of_Credit"
+                                                bindLabel="letterOfCreditNumber" placeholder="Select letter of credit"
+                                                [(ngModel)]="ThirdPartydataselection" name="commodity" #ngSelect>
+                                              </ng-select>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-2 col-sm-2 col-3 pl-0">
+                                            <div class="uplod_doc">
+                                              <button type="button" class="btn btn-danger">
+                                                <img src="../../../assets/Icon-feather-upload.svg" alt="">
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="space_bottom"></div>
+                                    </div>
+                                    <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"' class="col-md-8 col-sm-8 col-7">
+                                      <label for="email" class="form-label">With Scrutiny?</label>
+                                    </div>
+                                    <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"' class="col-md-4 col-sm-4 col-5">
+                                      <div class="check_box_button">
+                                        <button type="button" [class]="ClassRetrun('WithScrutiny','Hide','btn no-button active1',
+                                                                            'btn btn-primary remove-no-button','no')"
+                                          (click)="Changebutton('WithScrutiny','Hide','Show','no')">No</button>
+                                        <button type="button"
+                                          [class]="ClassRetrun('WithScrutiny','Show',
+                                                                            'btn yes-button active','btn yes-button','yes')"
+                                          (click)="Changebutton('WithScrutiny','Show','Hide','yes')">Yes</button>
+                                      </div>
+                                    </div>
+                                    <div class="space_bottom"></div>
+                                    <div class="col-md-8 col-sm-8 col-7">
+                                      <label for="email" class="form-label">With Discount?</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-5">
+                                      <div class="check_box_button">
+                                        <button type="button" [class]="ClassRetrun('WithDiscount','Hide','btn no-button active1',
+                                                                            'btn btn-primary remove-no-button','no')"
+                                          (click)="Changebutton('WithDiscount','Hide','Show','no')">No</button>
+                                        <button type="button"
+                                          [class]="ClassRetrun('WithDiscount','Show',
+                                                                            'btn yes-button active','btn yes-button','yes')"
+                                          (click)="Changebutton('WithDiscount','Show','Hide','yes')">Yes</button>
+                                      </div>
+                                    </div>
+                                    <div class="space_bottom"></div>
+                                    <div class="col-md-8 col-sm-8 col-7">
+                                      <label for="email" class="form-label">Is Buyer remitter different?</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-5">
+                                      <div class="check_box_button">
+                                        <button type="button" [class]="ClassRetrun('BuyerRemitterDifferent','Hide','btn no-button active1',
+                                                                            'btn btn-primary remove-no-button','no')"
+                                          (click)="Changebutton('BuyerRemitterDifferent','Hide','Show','no')">No</button>
+                                        <button type="button"
+                                          [class]="ClassRetrun('BuyerRemitterDifferent','Show',
+                                                                            'btn yes-button active','btn yes-button','yes')"
+                                          (click)="Changebutton('BuyerRemitterDifferent','Show','Hide','yes')">Yes</button>
+                                      </div>
+                                    </div>
+                                    <div style=" margin-bottom: 10px;"
+                                      *ngIf='this.Lodgement["BuyerRemitterDifferent"]["Show"]==="yes"'>
+                                      <div class="col-md-12">
+                                        <div class="row">
+                                          <div class="col-md-12">
+                                            <label for="email" class="form-label">Select Tri party agreement</label>
+                                          </div>
+                                          <div class="col-md-10 col-sm-10 col-9 pr-0">
+                                            <div class="select_rol">
+                                              <ng-select [items]="this.ThirdPartydata" bindLabel="try_part_agreement"
+                                                placeholder="Select Tripartite agreement"
+                                                [(ngModel)]="ThirPartyselection" name="commodity" #ngSelect>
+                                              </ng-select>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-2 col-sm-2 col-3 pl-0">
+                                            <div class="uplod_doc">
+                                              <button type="button" class="btn btn-danger"
+                                                [routerLink]="['/home/upload']">
+                                                <img src="../../../assets/Icon-feather-upload.svg" alt="">
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="space_bottom"></div>
+                                    <div class="col-md-8 col-sm-8 col-7">
+                                      <label for="email" class="form-label">Is Invoice reduction?</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-5">
+                                      <div class="check_box_button">
+                                        <button type="button" [class]="ClassRetrun('InvoiceReduction','Hide','btn no-button active1',
+                                                                            'btn btn-primary remove-no-button','no')"
+                                          (click)="Changebutton('InvoiceReduction','Hide','Show','no')">No</button>
+                                        <button type="button"
+                                          [class]="ClassRetrun('InvoiceReduction','Show',
+                                                                            'btn yes-button active','btn yes-button','yes')"
+                                          (click)="Changebutton('InvoiceReduction','Show','Hide','yes')">Yes</button>
+                                      </div>
+                                    </div>
+
+                                    <div class="space_bottom"></div>
+                                    <div *ngIf='bank!="" && newBankArray.length!=0' style="width:100%;">
+                                      <div class="col-md-12 col-sm-12 col-12">
+                                        Charges to {{bank}}*
+                                        <div *ngFor='let value of newBankArray'
+                                          style="display: flex; align-items: center;">
+                                          <input style="flex-direction:row;" [value]="value"
+                                            (click)="model1.option = value" [checked]="value === model1.option"
+                                            type="radio" id="options1" class="circular_input1"
+                                            (click)="chargesTo(value)">
+                                          <label style="flex-direction:row;" class="label1"
+                                            for="male">{{value.bank}}-{{value.accType}}</label>
+                                        </div>
+                                        <br>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-5 column" style="display: grid;
+                                    grid-template-columns: repeat(2,1fr);
+                                    max-width: 93%;
+                                    width: 100%;
+                                    flex: 90%;">
+                                      <div class="row d-flex flex-row" *ngIf="this.balanceAvai!=''">
+                                        <label for="email" class="form-label">Total SB Amount</label>
+                                        <input type="text" disabled [value]="this.balanceAvai" class="form-control">
+                                      </div>
+                                      <div class="row d-flex flex-row"  *ngIf="this.filterSum!=''">
+                                        <label for="email" class="form-label">Total FIRX Amount</label>
+                                        <input type="text" disabled [value]="this.filterSum" class="form-control">
+                                      </div>
+                                      <div class="row d-flex flex-row"  *ngIf="this.filterSum!=''">
+                                        <label for="email" class="form-label">Total Reaming Amount</label>
+                                        <input type="text" disabled [value]="this.balanceAvai-this.filterSum" class="form-control">
+                                      </div>
+                                    </div>
+                                    <br>
+                                  </div>
+                                </div>
+                               </div>
+                            </div>
+                            <ng-template #content let-modal>
+                              <div class="modal-body">
+                                <div class="container-fluid">
+                                  <div class="row no-gutter">
+                                    <button type="button" class="button2 topright" aria-label="Close"
+                                      (click)="modal.dismiss('Cross click')">
+                                      <span aria-hidden="true">OK</span>
+                                    </button>
+                                    <!-- The content half -->
+                                    <div class="col-md-7 ">
+                                      <div class="login d-flex py-5" style="padding: 0px !important;">
+
+                                        <!-- Demo content-->
+                                        <div class="container">
+                                          <div class="row">
+                                            <div class="col-lg-10 col-xl-7 mrg">
+                                              <h6 class="display-5">Select PI/PO</h6>
+                                              <div class="d-flex justify-content-between mb-1">
+                                                <select [(ngModel)]="nameSearch"
+                                                  style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
+                                                  <option value="">commodity</option>
+                                                  <option *ngFor="let item of item6; let i = index;"
+                                                    style="color: black;">{{item.como}}</option>
+                                                </select>
+
+                                                <select [(ngModel)]="nameSearch1"
+                                                  style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
+                                                  <option value="">location</option>
+                                                  <option *ngFor="let item of item7; let i = index;"
+                                                    style="color: black;">{{item.loc}}</option>
+                                                </select>
+                                                <select [(ngModel)]="nameSearch2"
+                                                  style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
+                                                  <option value="">BuyerName</option>
+                                                  <option *ngFor="let item of buyerDetail ; let i = index;"
+                                                    style="color: black;">{{item.buyerName}}</option>
+                                                </select>
+
+                                                <input type="date" placeholder="Start Date"
+                                                  style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;"
+                                                  [(ngModel)]="startDate" required />
+
+                                                <input type="date" placeholder="End Date"
+                                                  style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;"
+                                                  [(ngModel)]="endDate" required />
+
+                                                <button class="filter"
+                                                  (click)="startDate = '' ; endDate = '' ;nameSearch = '';nameSearch1 = '';nameSearch2 = '' ">Reset</button>
+                                              </div>
+                                              <section style="width: 157%; " class="box-shadow">
+                                                <table style="margin-left: -2.7rem;" class="table table-striped mb-0">
+
+                                                  <thead style="width: 100% ;height: 54px;">
+                                                    <tr class="text-muted table-heading"
+                                                      style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
+                                                      <th scope="col"></th>
+                                                      <th scope="col">DATE</th>
+                                                      <th scope="col">INVOICE NUMBER</th>
+                                                      <th scope="col">CONSIGNEE NAME</th>
+                                                      <th scope="col">COMMODITY</th>
+                                                      <th scope="col">LOCATION</th>
+                                                      <th scope="col">SB NO</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody class="text-dark">
+                                                    <tr class="table-row"
+                                                      *ngFor='let data of item | filterb:startDate:endDate | filtera:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index'
+                                                      (click)="changeCheckbox1(item.sbno, item)">
+                                                      <td><input type="checkbox"
+                                                          (change)="changeCheckbox1(item.sbno, item)" />
+                                                      </td>
+                                                      <td>
+                                                        {{data.date}}
+                                                      </td>
+                                                      <td>
+                                                        {{data.pi_poNo}}
+                                                      </td>
+                                                      <td>
+                                                        {{data.buyerName}}
+                                                      </td>
+                                                      <td>
+                                                        {{data.commodity}}
+                                                      </td>
+                                                      <td>
+                                                        {{data.location}}
+                                                      </td>
+                                                      <td>
+                                                        {{data.sbno}}
+                                                      </td>
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </section>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <!-- End -->
+                                      </div>
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+
+                            </ng-template>
+
+
+                            <ng-template #content3 let-modal>
+
+                              <div class="modal-body2">
+                                <div class="row no-gutter">
+                                  <div class="col-md-7" style="margin: 10px;">
+                                    <div class="login d-flex py-5" style="padding: 0px !important;">
+                                       <div class="container popup">
+                                        <div class="row">
+
+                                          <div class="col-lg-10 col-xl-7 mrg">
+                                            <p class="display-5" style="text-align: center; margin-left: 180px;">Select
+                                              Document To Download or Send to mail</p>
+                                            <div class="docStyle">
+                                              <p class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                          border-bottom: 4px solid #49A2D7;">Generated
+                                                Document</p>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf2(value, $event)">
+                                              <iframe [src]="value" height="500px" width="600px"></iframe>
+                                            </div>
+
+                                            <div class="docStyle">
+                                              <p class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                            border-bottom: 4px solid #49A2D7;">SB Data
+                                              </p>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(currentDownloadPdf, $event)">
+                                              <iframe [src]="currentDownloadPdf" height="500px" width="600px"></iframe>
+                                            </div>
+
+                                            <div class="docStyle" *ngIf="randomArray[0].creditNote">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                        border-bottom: 4px solid #49A2D7;"> Credit Note
+                                              </h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(creditNote , $event)">
+                                              <iframe style="flex-direction:row;" [src]="creditNote" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+
+                                            <div class="docStyle" *ngIf="randomArray[0].debitNote">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                        border-bottom: 4px solid #49A2D7;"> Debit Note
+                                              </h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(debitNote , $event)">
+                                              <iframe style="flex-direction:row;" [src]="debitNote" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+
+                                            <div class="docStyle" *ngIf="randomArray[0].EBRC">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                        border-bottom: 4px solid #49A2D7;">EBRC</h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(ebrc , $event)">
+                                              <iframe style="flex-direction:row;" [src]="ebrc" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+
+                                            <div class="docStyle" *ngIf="randomArray[0].blcopyref">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                        border-bottom: 4px solid #49A2D7;">BL Copyref
+                                              </h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(blcopyref , $event)">
+                                              <iframe style="flex-direction:row;" [src]="blcopyref" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+                                            <div class="docStyle" *ngIf="randomArray[0].irAdvice">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                        border-bottom: 4px solid #49A2D7;">IRAdvice
+                                              </h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(irAdvice , $event)">
+                                              <iframe style="flex-direction:row;" [src]="irAdvice" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+                                            <div class="docStyle" *ngIf="randomArray[0].swiftCopy">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                        border-bottom: 4px solid #49A2D7;">Swift Copy
+                                              </h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(swiftCopy , $event)">
+                                              <iframe style="flex-direction:row;" [src]="swiftCopy" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+                                            <div class="docStyle" *ngIf="randomArray[0].lcCopy">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                      border-bottom: 4px solid #49A2D7;">Letter Of
+                                                Credit</h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(lcCopy , $event)">
+                                              <iframe style="flex-direction:row;" [src]="lcCopy" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+                                            <div class="docStyle" *ngIf="randomArray[0].tryPartyAgreement">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                        border-bottom: 4px solid #49A2D7;">Tri Party
+                                                Agreement</h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(tryPartyAgreement , $event)">
+                                              <iframe style="flex-direction:row;" [src]="tryPartyAgreement"
+                                                height="500px" width="600px"></iframe>
+                                            </div>
+                                            <div class="docStyle" *ngIf="randomArray[0].opinionReport">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                      border-bottom: 4px solid #49A2D7;">Opinion Report
+                                              </h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(opinionReport , $event)">
+                                              <iframe style="flex-direction:row;" [src]="opinionReport" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+                                            <div class="docStyle" *ngIf="randomArray[0].airwayBlCopy">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                      border-bottom: 4px solid #49A2D7;">Airway/BlCopy
+                                              </h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(airwayBlCopy , $event)">
+                                              <iframe style="flex-direction:row;" [src]="airwayBlCopy" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+                                            <div class="docStyle" *ngIf="randomArray[0].billOfExchange">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                    border-bottom: 4px solid #49A2D7;">Bill Of Exchange
+                                              </h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(billOfExchange , $event)">
+                                              <iframe style="flex-direction:row;" [src]="billOfExchange" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+                                            <div class="docStyle" *ngIf="randomArray[0].destruction">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                  border-bottom: 4px solid #49A2D7;">Destruction</h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(destruction , $event)">
+                                              <iframe style="flex-direction:row;" [src]="destruction" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+                                            <div class="docStyle" *ngIf="randomArray[0].commercial">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                                border-bottom: 4px solid #49A2D7;">Commercial</h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(commercial , $event)">
+                                              <iframe style="flex-direction:row;" [src]="commercial" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+                                            <div class="docStyle" *ngIf="randomArray[0].packingList">
+                                              <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
+                                                              border-bottom: 4px solid #49A2D7;">Packing List Document
+                                              </h6>
+                                              <input type="checkBox" checked
+                                                (change)="addPdfToSelectedPdf(otherDoc , $event)">
+                                              <iframe style="flex-direction:row;" [src]="packingList" height="500px"
+                                                width="600px"></iframe>
+                                            </div>
+                                            <div
+                                              style="display: flex; width:100%; margin-left: 240px; margin-top: 20px; margin-bottom:20px; ">
+                                              <button type="submit" class="submitBTN" (click)="mergeAllPDFs('download')"
+                                                (click)="modal.dismiss('Cross click')">download PDF</button>
+                                              <button type="submit" class="submitBTN" (click)="mergeAllPDFs('sendMail')"
+                                                (click)="modal.dismiss('Cross click')">Send Mail</button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </ng-template>
+                          </main>
+                        </div>
+                        <div class="content_white_background" *ngIf="this.itemArray.length!=0">
+                          <h5 class="header-text">SB or Inward remittance Details</h5>
+                          <div class="accordion">
+                            <div class="accordion-item" *ngFor="let item of this.itemArray;let i=index">
+                                <div class="accordion-titel" (click)="SlideToggle($event,item?._id)">
+                                    <h2>SB No. : {{item?.sbno}} </h2>
+                                </div>
+                                  <div class="accordion-contant">
+                                    <div class="sb-panel">
+                                     <table class="table">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">SB no.</th>
+                                            <th scope="col">SB amount</th>
+                                            <th scope="col">SB Balance</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td scope="row">{{item?.sbno}}</td>
+                                            <td>{{item?.fobValue}}</td>
+                                            <td>{{item?.balanceAvai}}</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <div class="sb-panel">
+                                      <table class="table">
+                                         <thead>
+                                           <tr>
+                                             <th scope="col">I/R No.</th>
+                                             <th scope="col">I/R Amount</th>
+                                             <th scope="col">I/R Available Amount</th>
+                                           </tr>
+                                         </thead>
+                                         <tbody>
+                                           <tr *ngFor="let item1 of this.ACCORDING_LIST['SB_'+item?.sbno];let j=index" >
+                                             <td scope="row">{{item1?.billNo}}</td>
+                                             <td>{{item1?.amount}}</td>
+                                             <td>{{item1?.BalanceAvail}}</td>
+                                           </tr>
+                                         </tbody>
+                                       </table>
+                                     </div>
+                                  </div>
+                            </div>
+                        </div>
+                        </div>
+                      </div>
+                      <div class="bottom_submit_section">
+                        <button type="button" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">CANCEL</button>
+                        <button type="button" class="btn btn-secondary" (click)='generateDoc1();this.advanceArray.length!=0?Preview_btn.style.display="block" : ""'>PROCEED</button>
+                        <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;" (click)='PREVIEWS_URL(
+                          "Export_Bill_Lodgement_"+this.itemArray[0]?._id);PREVIEW_PAGE.style.display="block"'>Preview</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-black-opacity" #content1 class="content1">
+  <div class="modal custom-modal Select_Shipping" tabindex="-1" role="dialog">
+      <div class="modal-dialog p-4" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Select Shipping Bill</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+            (click)="content1.style.display='none'"> <span aria-hidden="true">&times;</span> </button>
+        </div>
+        <div class="modal-body" style="overflow: auto;height: 80vh;">
+          <div class="container-fluid">
+            <div class="middle_bts">
+              <div class="login py-5" style="padding: 0px !important; width:100%;">
+                <div class="container_innser">
+                  <div class="d-flex justify-content-between mb-1">
+                    <select [(ngModel)]="nameSearch4" class="form-control col-2 p-2"
+                      style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;
+                      font-size: 11px;">
+                      <option value="">BuyerName</option>
+                      <option *ngFor="let item of buyerName ; let i = index;" style="color: black;">{{item}}</option>
+                    </select>
+                    <button class="filter1" style="margin-left:-20px;" (click)="nameSearch4 = ''">Reset</button>
+                  </div>
+                  <section class="box-shadow">
+                    <table class="table table-striped mb-0">
+                      <thead style="width: 100% ;height: 54px;">
+                        <tr class="text-muted table-heading"
+                          style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
+                          <th scope="col"></th>
+                          <th scope="col">SB DATE</th>
+                          <th scope="col">SB NUMBER</th>
+                          <th scope="col">BUYER NAME</th>
+                          <th scope="col">CURRENCY</th>
+                          <th scope="col">SB AMOUNT</th>
+                          <th scope="col">AVAILABLE AMOUNT</th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-dark">
+                        <tr class="table-row"
+                          *ngFor='let data of item1 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
+                          <td><input type="checkbox"
+                              (change)="changeCheckbox1(data.sbno, data); addTofilter1($event ,data._id, data) " />
+                          </td>
+                          <td>
+                            {{data.sbdate}}
+                          </td>
+                          <td>
+                            {{data.sbno}}
+                          </td>
+                          <td>
+                            {{data.buyerName}}
+                          </td>
+                          <td>
+                            {{data.fobCurrency}}
+                          </td>
+                          <td>
+                            {{data.fobValue}}
+                          </td>
+                          <td>
+                            {{data.balanceAvai}}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </section>
+                </div>
+                <!-- End -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+  </div>
+</div>
+<div class="bg-black-opacity" #content2>
+  <div class="modal custom-modal Select_Shipping" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Search PI/PO numbers*</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+            (click)="content2.style.display='none'"> <span aria-hidden="true">&times;</span> </button>
+        </div>
+        <div class="modal-body">
+          <div class="Search_numbers" style="height: 80vh; overflow: auto;">
+            <div class="modal-body">
+              <div class="container_remove">
+                <div class="row_bt">
+                  <div class="DDDD">
+                    <div class="mt_bottom" style="margin-bottom:20px">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <select [(ngModel)]="nameSearch3" class="form-control">
+                            <option value="">Party Name</option>
+                            <option *ngFor="let item of irBuyerName ; let i = index;" style="color: black;">{{item}}
+                            </option>
+                          </select>
+                        </div>
+                        <div class="col-md-3">
+                          <button class="filter1 btn btn-primary" (click)="nameSearch3 = ''">Reset</button>
+                        </div>
+                      </div>
+                    </div>
+                    <section style="width: 100%;" class="box-shadow">
+                      <table class="table table-striped mb-0">
+                        <thead style="width: 100% ;height: 54px;">
+                          <tr class="text-muted table-heading"
+                            style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
+                            <th scope="col"></th>
+                            <th scope="col">FIRX Number/ID</th>
+                            <th scope="col">Party Name</th>
+                            <th scope="col">Recieved Amount USD</th>
+                            <th scope="col">Available Balance</th>
+                          </tr>
+                        </thead>
+                        <tbody class="text-dark" *ngIf="item13.length!=0">
+                          <tr class="table-row"
+                            *ngFor='let data of item13 | fiterbuyer:[{partyName:nameSearch3}]  let i = index'>
+                            <td><input type="checkbox" (change)="addToSbArray(data, $event)" />
+                            </td>
+                            <td>
+                              {{data.billNo}}
+                            </td>
+                            <td>
+                              {{data.partyName}}
+                            </td>
+                            <td>
+                              {{data.amount}}
+                            </td>
+                            <td>
+                              {{data.BalanceAvail}}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </section>
+                  </div>
+                  <div class="submit_right_button mt-2" style="float:right;">
+                    <button class="filter1 btn btn-secondary" aria-label="Close"
+                      (click)="content2.style.display='none'">Cancel</button>
+                    <button class="filter1 btn btn-primary" style="margin-left:16px"
+                      (click)="content2.style.display='none'">Sumbit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal PREVIEW_PAGE" tabindex="-1" #PREVIEW_PAGE style="display: none;background-color: #00000030;">
+  <div class="modal-dialog" style="width: 100% !important;">
+      <div class="modal-content" style="height: 90vh;">
+          <div class="modal-header">
+              <h5 class="modal-title">Preview Pdf</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="PREVIEW_PAGE.style.display='none'"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+              <app-pdf-viewer [downloadShow]="false" *ngFor="let item of this.PREVIEWS_URL_LIST" [src]="item" width="100%" height="500px"></app-pdf-viewer>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="PREVIEW_PAGE.style.display='none'">Close</button>
+              <div style="display:flex;">
+                 <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                      <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
+                          <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
+             this.GetDownloadStatus?.status=='verify'" (click)="SendApproval(this.GetDownloadStatus?.status,
+             'Export_Bill_Lodgement_'+this.itemArray[0]?._id);PREVIEW_PAGE.style.display='none'">Send for Approval</button>
+                      </div>
+                      <div *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
+                          <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
+            this.GetDownloadStatus?.status=='verify'">Wait for Approval</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

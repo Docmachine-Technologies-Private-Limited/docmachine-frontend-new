@@ -7,16 +7,11 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedDataService } from '../../shared-Data-Servies/shared-data.service';
 import {SharedHomeModule} from "../../shared-home.module";
 import {BillLodgementComponent} from "./bill-lodgement.component";
-import {FiterbuyerPipe} from "../fiterbuyer.pipe";
 import { NgSelectModule } from '@ng-select/ng-select';
-import { CustomDropdownComponent } from '../../../customdropdown/custom-dropdown/custom-dropdown.component';
-
 
 @NgModule({
   declarations: [
     BillLodgementComponent,
-    FiterbuyerPipe,
-    CustomDropdownComponent
   ],
   imports: [
     SharedHomeModule,
@@ -24,15 +19,12 @@ import { CustomDropdownComponent } from '../../../customdropdown/custom-dropdown
     RouterModule.forChild([
       {
         path: "",
-        component: BillLodgementComponent,
-        pathMatch: "full"
-      },
+        component:BillLodgementComponent,
+      }
     ]),
-    ModalModule.forRoot(),
   ],
   entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal,SharedDataService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  exports: [],
 })
 export class BillLodgementModule { }

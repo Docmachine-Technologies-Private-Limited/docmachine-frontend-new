@@ -15,7 +15,7 @@ export class CreateBeneComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      beneName: ['', Validators.required],
+      benneName: ['', Validators.required],
       beneAdrs: ['', Validators.required],
       beneBankName: ['', Validators.required],
       beneAccNo: ['', Validators.required],
@@ -29,6 +29,7 @@ export class CreateBeneComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.loginForm.value,'this.loginForm.value')
     this.userService.creatBene(this.loginForm.value)
       .subscribe(
         data => {

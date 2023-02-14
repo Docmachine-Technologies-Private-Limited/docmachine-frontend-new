@@ -248,6 +248,21 @@ export class UserService {
       httpOptions,
     );
   }
+  mergeListPdf(filename) {
+    return new Promise((resolve, reject) => {
+      var temp:any=[];
+      for (let index = 0; index < filename.length; index++) {
+        this.mergePdf(filename[index]).subscribe((res:any)=>{
+          res.arrayBuffer().then((r)=>{
+            temp.push(r);
+            if ((index+1)==filename.length) {
+              resolve(temp);
+            }
+          })
+        })
+      }
+    })
+  }
   mergePdfChecking(filename) {
     this.loadFromLocalStorage();
     const httpOptions: Object = {
@@ -432,7 +447,7 @@ export class UserService {
     return this.http
       .post(
         `${this.api_base}/bene/getByName`,
-        { beneName: name },
+        { benneName: name },
         httpOptions
       ).toPromise();
 

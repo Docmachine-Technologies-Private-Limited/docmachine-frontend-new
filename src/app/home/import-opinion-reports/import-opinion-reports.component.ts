@@ -11,9 +11,7 @@ import { WindowInformationService } from 'src/app/service/window-information.ser
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
-
-
-
+import * as data1 from '../../currency.json';
 @Component({
   selector: 'app-import-opinion-reports',
   templateUrl: './import-opinion-reports.component.html',
@@ -31,7 +29,14 @@ export class ImportOpinionReportsComponent implements OnInit {
   public id: any;
   USER_DATA:any=[];
   filtervisible: boolean = false;
-
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Buyer_Name: [],
+    O_R_No: [],
+    Currency: [],
+    DATE: []
+  };
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -51,26 +56,44 @@ export class ImportOpinionReportsComponent implements OnInit {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
     this.item=[];
     this.documentService.getOpinionReportfile("import").subscribe(
       (res: any) => {
         this.item=res?.data;
+        this.FILTER_VALUE_LIST= this.item;
+        for (let value of res.data) {
+          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+          }
+          value?.buyerName.forEach(element => {
+            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+            }
+          });
+          if ( this.ALL_FILTER_DATA['O_R_No'].includes(value?.opinionReportNumber)==false) {
+            this.ALL_FILTER_DATA['O_R_No'].push(value?.opinionReportNumber);
+          }
+          if ( this.ALL_FILTER_DATA['DATE'].includes(value?.date)==false) {
+            this.ALL_FILTER_DATA['DATE'].push(value?.date);
+          }
+      }
         console.log(res,'getOpinionReportfile');
       },
       (err) => console.log(err)
       );
     }
-
-  filter() {
-    // this.getPipoData()
-    this.filtervisible = !this.filtervisible
-
-  }
-  onclick() {
-    this.filtervisible = !this.filtervisible
-  }
-
-
+    filter(value, key) {
+      this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+      if (this.FILTER_VALUE_LIST.length== 0) {
+        this.FILTER_VALUE_LIST = this.item;
+      }
+    }
+    resetFilter() {
+      this.FILTER_VALUE_LIST = this.item;
+    }
   getPipoNumbers(data) {
     return data.pipo.map((x) => {
       return x.pi_poNo;
@@ -167,6 +190,7 @@ export class ImportOpinionReportsComponent implements OnInit {
         status:'pending',
         dummydata:this.item1[index],
         Types:'deletion',
+        TypeOfPage:'summary',
         FileType:this.USER_DATA?.result?.sideMenu
       }
       this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{

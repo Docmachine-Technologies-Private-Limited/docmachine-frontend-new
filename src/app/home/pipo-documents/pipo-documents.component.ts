@@ -132,10 +132,22 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   public lcAmount: any;
   public lcCurrency: any;
   public buttonToggle1: any;
-  public buyer: boolean;
   public api_base: any;
   USER_DATA:any=[];
   PENDING_DATA:any=[];
+  filtervisible: boolean = false
+  startDate: any = '';
+  endDate: any = '';
+  buyer1: string = '';
+  buyer: boolean = false;
+
+  benneDetailArray: any;
+  locationArray: any;
+  commodityArray: any;
+  location: string = '';
+  commodity: string = '';
+  page: number = 0
+  limit: number = 10
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -160,6 +172,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     this.headers = {
       Authorization: this.authToken,
     };
+    this.getDropDownItems()
 
     if (isPlatformBrowser(this.platformId)) {
       console.log('asdkhsajvdsug');
@@ -187,7 +200,12 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     this.id = this.route.snapshot.params['id'];
     this.pipo_id = this.route.snapshot.params['pipo_id'];
     console.log(this.id, this.pipo_id);
-
+    this.item1 = [];
+    this.item = [];
+    this.item2;
+    this.item3 = [];
+    this.item4 = [];
+    this.item5 = [];
     this.userService.getUserDetail().then((user:any) => {
       this.USER_DATA =user;
       console.log("this.USER_DATA", this.USER_DATA)
@@ -196,8 +214,6 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
       (res: any) => {
         console.log(res), (this.item4 = res.data);
         console.log('data', this.item4);
-        // this.mergeBoe();
-        // this.mergeBOe1()
       },
       (err) => console.log(err)
     );
@@ -232,18 +248,6 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
         }
       );
     } else {
-      // this.route.params.subscribe(params => {
-      //   this.file = this.route.snapshot.params['id'];
-      //   this.documentService.getPipo().subscribe(
-      //     (res: any) => {
-      //       console.log("HEre Response", res), (this.item1 = res.data);
-      //     },
-      //     (err) => console.log(err)
-      //   );
-
-      //   this.showInvoice = false;
-      //   console.log("hello")
-      // });
       this.documentService.getPipo().subscribe(
         (res: any) => {
           console.log('Data fetched successfully', res);
@@ -308,6 +312,53 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     }
 
     this.item3 = filterboedata;
+    console.log('aaa',this.item3);
+  }
+  onclick() {
+    this.filtervisible = !this.filtervisible
+  }
+  filter() {
+    this.getPipoData()
+    this.filtervisible = !this.filtervisible
+
+  }
+  resetFilter() {
+    this.commodity = ''
+    this.location = ''
+    this.buyer1 = ''
+    this.getPipoData()
+    this.filtervisible = !this.filtervisible
+  }
+  getPipoData() {
+    console.log("-->", this.page, this.limit)
+    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer1 , 'export').subscribe((res: any) => {
+      this.item3 = res.docs
+      console.log("res", this.item3)
+    })
+  }
+  getDropDownItems() {
+    this.userService.getTeam().subscribe(
+      (data) => {
+
+
+        this.locationArray = data['data'][0]['location'];
+        this.commodityArray = data['data'][0]['commodity'];
+        console.log("--------->locationArray", this.locationArray)
+        console.log("--------->commodityArray", this.commodityArray)
+      },
+      (error) => {
+        console.log('error');
+      }
+    );
+
+    this.userService.getBuyer(1).subscribe(
+      (res: any) => {
+        this.benneDetailArray = res.data
+        console.log("--------->benneDetailArray", this.benneDetailArray)
+
+      },
+      (err) => console.log('Error', err)
+    );
   }
 
   lcFun(a) {
@@ -1041,6 +1092,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
         status:'pending',
         dummydata:this.item1[index],
         Types:'deletion',
+        TypeOfPage:'summary',
         FileType:this.USER_DATA?.result?.sideMenu
       }
       this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{

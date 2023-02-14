@@ -134,6 +134,14 @@ export class DocumentService {
     return this.http.post(
       `${this.api_base}/orAdvice/getByIdBillNo`,{_id:id},httpOptions);
   }
+  getInvoice_No(query,table_name:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/orAdvice/getInvoice_No`,{query:query,tableName:table_name },httpOptions);
+  }
 
 
   updateByIr(data, _id) {
@@ -1178,7 +1186,14 @@ export class DocumentService {
 
         return this.http.get(`${this.api_base}/packingList/get`, httpOptions);
       }
-
+      getPackingListfile(type:string) {
+        this.loadFromLocalStorage();
+        console.log(this.authToken);
+        const httpOptions = {
+          headers: new HttpHeaders({ Authorization: this.authToken }),
+        };
+        return this.http.post(`${this.api_base}/packingList/filetype`, {file:type},httpOptions);
+      }
       getPackingListByPackingListValue(id) {
         this.loadFromLocalStorage();
         console.log(this.authToken);
@@ -1639,9 +1654,6 @@ export class DocumentService {
       httpOptions
     );
   }
-
-
-
 
   addTask(data) {
     console.log('I am in service');

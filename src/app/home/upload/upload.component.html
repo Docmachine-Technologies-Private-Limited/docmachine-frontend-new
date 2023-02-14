@@ -29,6 +29,8 @@
           <h3 class="heading pb-2" *ngIf='docu == "billOfExchange"'>Upload Bill of Exchange</h3>
           <h3 class="heading pb-2" *ngIf='docu == "destruction"'>Upload Destruction certificate</h3>
           <h3 class="heading pb-2" *ngIf='docu == "packingList"'>Upload Packing List Document</h3>
+          <h3 class="heading pb-2" *ngIf='docu == "import-packingList"'>Upload Packing List Document</h3>
+
 
           <h3 class="heading_doc" *ngIf='docu != "pipo" && docu != "boe" && docu != "sb" &&
              docu != "irAdvice" &&  docu != "orAdvice" &&
@@ -36,6 +38,7 @@
              docu !="insuranceCopy" && docu !="creditNote" &&
              docu !="agreement" && docu !="opinionReport" &&
              docu !="import-agreement" &&
+             docu !="import-packingList" &&
              docu !="import-opinionReport" &&
              docu !="tryPartyAgreement" && docu !="swiftCopy" &&
              docu !="EBRC" && docu !="blCopyref" && docu != "blCopy" &&
@@ -78,15 +81,15 @@
                       <option value="tryPartyAgreement">Tri Party Document</option>
                       <option value="debitNote">Debit Note</option>
                       <option value="creditNote">Credit Note</option>
-                      <option value="agreement">Agreement</option>
+                      <option value="import-agreement">Agreement</option>
                       <option value="import-opinionReport">Opinion Report</option>
                       <option value="lcCopy">LC Copy</option>
                       <option value="insuranceCopy">Insurance Copy</option>
                       <option value="deliveryOrder">Delivery Order</option>
-                      <option value="billOfExchange">Bill Of Exchange</option>
+                      <option value="import-billOfExchange">Bill Of Exchange</option>
                       <option value="orAdvice">Outward Remittance Advice</option>
-                      <option value="destruction">Destruction Certificate</option>
-                      <option value="packingList">Packing List Documents</option>
+                      <option value="import-destruction">Destruction Certificate</option>
+                      <option value="import-packingList">Packing List Documents</option>
                       <option value="import-blCopy">Airway/BL Copy</option>
                       <option value="import-commercial">Commercial Invoice</option>
                     </select>
@@ -123,8 +126,8 @@
                   <select class="form-control p-3" aria-label="Default select example" ngModel name="buyerName" placeholder="Select Beneficiary" id=""
                     (change)=changepipo($event.target.value)>
                     <option value="">Select Beneficiary</option>
-                    <option value="{{bene?.beneName}}" *ngFor="let bene of benneDetail
-                    ">{{ bene?.beneName }}
+                    <option value="{{bene?.benneName}}" *ngFor="let bene of benneDetail
+                    ">{{ bene?.benneName }}
                     </option>
                   </select>
                 </div>
@@ -192,13 +195,13 @@
             <label style="font-size: 20px; color: #303030;">Beneficiary Name*</label>
               <ng-select class="custom" *ngIf="this.benneDetail?.length!=0"
                 [items]="this.benneDetail"
-                bindLabel="beneName"
+                bindLabel="benneName"
                 [multiple]="false"
                 groupBy="selectedAllGroup"
                 [selectableGroup]="true"
                 placeholder="Select PI/PO"
                 bindValue="testFunctionID"
-                ngModel (change)="clickBene(bene?.selectedValues[0]?.beneName)" #bene>
+                ngModel (change)="clickBene(bene?.selectedValues[0]?.benneName)" #bene>
               </ng-select>
           </div>
           <div class="col-5 pt-2 d-flex flex-column">
@@ -272,20 +275,17 @@
             <i class="fas fa-file-upload"></i>
             <h5>Drag and Drop files here to upload</h5>
             <p>Files Supported: PDF, XSLS, Image, Scanner</p>
-
             <p>Maximum Size: 5MB</p>
           </div>
           <div *ngIf="documentType === 'orAdvice'" class="form" method="POST">
             <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-              (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config4"
+              (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config3"
               class="dropzone dropzone-container" id="dropzone" />
             <i class="fas fa-file-upload"></i>
             <h5>Drag and Drop files here to upload</h5>
             <p>Files Supported: PDF, XSLS, Image, Scanner</p>
-
             <p>Maximum Size: 5MB</p>
           </div>
-
           <div
             *ngIf="documentType === 'PI' || documentType === 'PO' ||
             documentType === 'tryPartyAgreement' || documentType === 'debitNote' ||
@@ -296,8 +296,9 @@
             documentType === 'swiftCopy' || documentType === 'lcCopy'|| documentType === 'import-lcCopy' || documentType === 'insuranceCopy' ||
             documentType === 'deliveryOrder' || documentType === 'tryPartyAgreement'|| documentType === 'EBRC' ||
             documentType === 'blCopyref' || documentType === 'commercial' ||
-            documentType === 'import-commercial' || documentType === 'billOfExchange' || documentType === 'import-billOfExchange' ||
-            documentType === 'destruction'  || documentType === 'import-destruction'|| documentType === 'packingList'"
+            documentType === 'import-commercial' || documentType === 'billOfExchange'||documentType === 'import-billOfExchange' ||
+            documentType === 'import-packingList' ||
+            documentType === 'destruction'  || documentType === 'import-destruction' || documentType === 'packingList'"
             class="form" method="POST">
             <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
               (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config1"
@@ -520,7 +521,6 @@
                         <label for="{{ i + 1 }}">Invoice {{ i + 1 }}</label>
                       </li>
                     </ul>
-
                     <div class="tab-content form-wrapper" *ngFor="let obj of res.invoices; let i = index"
                       [attr.data-index]="i">
                       <td class="full-input border1">
@@ -533,8 +533,6 @@
                       </td>
                       <td class="full-input border3">
                         <label for="mawbno">CURRENCY</label>
-                        <!-- <input [(ngModel)]="obj.currency" class="form-control p-3"
-                          type="text" name="currency{{ i + 1 }}" /> -->
                           <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                         [items]="this.CURRENCY_LIST"
                         bindLabel="type"
@@ -547,6 +545,40 @@
                       </td>
                     </div>
                   </div>
+                  <!-- <div class="tabbed" *ngIf="res.invoices==undefined">
+                    <input *ngFor="let obj of [1]; let i = index" [attr.data-index]="i" type="radio"
+                      id="{{ i + 1 }}" name="css-tabs" checked />
+
+                    <ul class="tabs" style="padding-left:15px">
+                      <li class="tab" *ngFor="let obj of [1]; let i = index" [attr.data-index]="i">
+                        <label for="{{ i + 1 }}">Invoice {{ i + 1 }}</label>
+                      </li>
+                    </ul>
+
+                    <div class="tab-content form-wrapper"  formArrayName="invoices" *ngFor="let obj of [{invoiceno:'0',amount:'0'}]; let i = index"
+                      [attr.data-index]="i">
+                      <td class="full-input border1">
+                        <label for="mawbno">INVOICE NO</label><input [(ngModel)]="obj.invoiceno" class="form-control p-3"
+                          type="text" name="invoiceno" />
+                      </td>
+                      <td class="full-input border2">
+                        <label for="mawbno">AMOUNT</label><input [(ngModel)]="obj.amount" class="form-control p-3"
+                          type="text" name="amount" />
+                      </td>
+                      <td class="full-input border3">
+                        <label for="mawbno">CURRENCY</label>
+                          <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                        [items]="this.CURRENCY_LIST"
+                        bindLabel="type"
+                        [multiple]="false"
+                        groupBy="selectedAllGroup"
+                        placeholder="Select PI/PO"
+                        name="currency"
+                        [(ngModel)]="obj.currency">
+                      </ng-select>
+                      </td>
+                    </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -1277,9 +1309,9 @@
                   <label for="exampleInputEmail1" class="form-label"></label>
                   <div *ngIf="this.pipoArr.length!=0">
                     <select class="form-control p-3" aria-label="Default select example"
-                     class="form-control p-3" name="sbNo" ngModel placeholder="Location" *ngIf="this.pipoDataService?.SHIPPING_BILL_LIST?.length!=0">
+                     class="form-control p-3" name="sbNo" ngModel placeholder="Location" *ngIf="this.SHIPPING_BILL_LIST?.length!=0">
                       <option value="">Select SB Number</option>
-                      <option *ngFor="let sb of this.pipoDataService?.SHIPPING_BILL_LIST; let i=index"
+                      <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index"
                         [value]="sb._id">
                         {{ sb.sbno }}
                       </option>
@@ -1347,7 +1379,7 @@
                   <div>
                     <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
                       <option value="">Select SB Number</option>
-                      <option *ngFor="let sb of this.pipoDataService?.SHIPPING_BILL_LIST; let i=index"
+                      <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index"
                         [value]="sb._id">
                         {{ sb.sbno }}
                       </option>
@@ -1462,7 +1494,55 @@
                     <div>
                       <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
                         <option value="">Select SB Number</option>
-                        <option *ngFor="let sb of this.pipoDataService?.SHIPPING_BILL_LIST; let i=index"
+                        <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index"
+                          [value]="sb._id">
+                          {{ sb.sbno }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
+          <!-- Other Documents import -->
+          <form class="iframecontroller" *ngIf="importpackingList && !override" #values="ngForm"
+            (ngSubmit)="onSubmitPackingList(values)">
+                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <div class="field">
+              <div class="form12 p-3">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Packing List Number*</label>
+                  <input ngModel class="form-control p-3" type="text"
+                    name="packingListNumber">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Packing List Amount</label>
+                  <input ngModel class="form-control p-3" type="text"
+                    name="packingListAmount">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Currency</label>
+                  <!-- <input ngModel class="form-control p-3" type="text"
+                    name="currency"> -->
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                    [items]="this.CURRENCY_LIST"
+                    bindLabel="type"
+                    [multiple]="false"
+                    groupBy="selectedAllGroup"
+                    placeholder="Select PI/PO"
+                    name="currency"
+                    ngModel>
+                  </ng-select>
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label"></label>
+                  <div>
+                    <div>
+                      <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
+                        <option value="">Select SB Number</option>
+                        <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index"
                           [value]="sb._id">
                           {{ sb.sbno }}
                         </option>
@@ -1766,7 +1846,7 @@
                             <form [formGroup]="loginForm" (ngSubmit)="onSubmitBene()" class="form11">
                               <div class="form-group mb-3">
                                 <label class="plable">Name</label>
-                                <input formControlName="beneName" placeholder="Beneficiary/ Customer name" required=""
+                                <input formControlName="benneName" placeholder="Beneficiary/ Customer name" required=""
                                   class="form-control p-4 rounded-pill">
                               </div>
                               <div class="form-group mb-3">

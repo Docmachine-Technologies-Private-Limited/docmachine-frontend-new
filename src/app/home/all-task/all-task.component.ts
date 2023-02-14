@@ -205,7 +205,7 @@ export class AllTaskComponent implements OnInit {
       this.router.navigateByUrl(`/home/packing-credit-request`);
     }
     else if (data.fileType == 'IRD') {
-      this.router.navigateByUrl(`/home/export-home`);
+      this.router.navigateByUrl(`/home/Export/export-home`);
     }
 
   }

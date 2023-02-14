@@ -132,10 +132,10 @@ export class UploadComponent implements OnInit {
     date: new FormControl('', Validators.required),
     dueDate: new FormControl('', Validators.required),
     location: new FormControl('', Validators.required),
-    beneName: new FormControl('', Validators.required),
+    benneName: new FormControl('', Validators.required),
   });
   loginForm = this.formBuilder.group({
-    beneName: ['', Validators.required],
+    benneName: ['', Validators.required],
     beneAdrs: ['', Validators.required],
     beneBankName: ['', Validators.required],
     beneAccNo: ['', Validators.required],
@@ -172,6 +172,7 @@ export class UploadComponent implements OnInit {
   opinionReport: boolean = false;
   importopinionReport: boolean = false;
   importagreement:boolean = false;
+  importpackingList: boolean = false;
   pipolist: any;
   item4: any;
   pipoArray: any = [];
@@ -209,6 +210,7 @@ export class UploadComponent implements OnInit {
   PI_PO_NUMBER_LIST: any = [];
   USER_DATA: any = [];
   PDF_READER_DATA: any = [];
+  SHIPPING_BILL_LIST:any=[];
 
   get f() {
     return this.loginForm.controls;
@@ -792,7 +794,19 @@ export class UploadComponent implements OnInit {
         this.pipoArr.push(this.pipoOut);
         this.mainBene = this.beneOut;
       }
-    } else if (this.docu == 'otherDoc') {
+    } else if (this.docu == 'import-packingList') {
+      this.documentType1 = 'import';
+      this.documentType = 'import-packingList';
+      this.documentType1 = 'import';
+      if (this.route.snapshot.paramMap.get('pipo_id')) {
+        this.pipoOut = this.route.snapshot.paramMap.get('pipo_id');
+        this.beneOut = this.route.snapshot.paramMap.get('bene');
+        let x = 'PI' + '-' + this.pipoOut + '-' + this.beneOut;
+        this.arrayData.push(x);
+        this.pipoArr.push(this.pipoOut);
+        this.mainBene = this.beneOut;
+      }
+    }else if (this.docu == 'otherDoc') {
       this.documentType1 = 'export';
       this.documentType = 'otherDoc';
       this.documentType1 = 'export';
@@ -805,7 +819,6 @@ export class UploadComponent implements OnInit {
         this.mainBene = this.beneOut;
       }
     }
-
 
     //console.log(this.route.snapshot.paramMap.get('document'))
     this.config = {
@@ -1062,7 +1075,7 @@ export class UploadComponent implements OnInit {
 
   public onSubmit(e) {
     console.log('sjfskfbu');
-    console.log('LENGTH', this.res.invoices.length);
+    console.log('LENGTH', this.res?.invoices?.length);
     console.log(e);
     console.log(e.form.value['sno1']);
     let invoices = [];
@@ -1071,7 +1084,7 @@ export class UploadComponent implements OnInit {
     } else {
       e.form.value.file = this.documentType1;
     }
-    for (let i = 0; i < this.res.invoices.length; i++) {
+    for (let i = 0; i < this.res?.invoices?.length; i++) {
       invoices.push({
         sno: e.form.value[`sno${i + 1}`],
         invoiceno: e.form.value[`invoiceno${i + 1}`],
@@ -1080,112 +1093,124 @@ export class UploadComponent implements OnInit {
       });
     }
     console.log(invoices);
-    e.form.value.invoices = invoices;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.invoices = invoices.length!=0?invoices:e.form.value.invoices;
+    e.form.value.fobCurrency = e.form.value.fobCurrency?.type!=undefined?e.form.value.fobCurrency.type:e.form.value.fobCurrency;
+    e.form.value.freightCurrency = e.form.value.freightCurrency?.type!=undefined?e.form.value.freightCurrency.type:e.form.value.freightCurrency;
+    e.form.value.insuranceCurrency = e.form.value.insuranceCurrency?.type!=undefined?e.form.value.insuranceCurrency.type:e.form.value.insuranceCurrency;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.pipo = this.pipoArr;
     console.log('buyername for BL', e.form.value.buyerName);
-    e.form.value._id = this.res._id
+    e.form.value._id = this.res?._id
     console.log(e.form.value);
     // this.formData = new ShippingBill(e.form.value)
     // console.log(this.formData
-    if (this.message == 'This file already uploaded') {
-      console.log('inside file already exist');
-
-      this.documentService.updateMasterBySb(e.form.value, e.form.value.sbno, e.form.value._id).subscribe(
-          (res: any) => {
-            this.toastr.success(`Shippingbill updated Successfully`);
-            console.log('Shippingbill updated Successfully');
-            var updatedData:any =''
-            if (this.documentType1=='export') {
-              updatedData = {
-                "sbRef": [
-                  this.res._id,
-                ],
-              }
-            }else{
-              updatedData = {
-                "boeRef": [
-                  this.res._id,
-                ],
-              }
-            }
-
-            this.userService
-              .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc, updatedData)
-              .subscribe(
-                (data) => {
-                  //this.pipoData[`${this.pipoDoc}`] = args[1].data
-                  console.log('king123');
-                  console.log(data);
-
-                  this.toastr.success('shipping Bill added successfully.');
-                  if (this.retururl) {
-                    let url = this.retururl;
-                    this.sharedData.changeretunurl('');
-                    this.router.navigate(['/home/view-document/sb']);
-                  } else {
-                    this.router.navigate(['/home/view-document/sb']);
+    this.documentService.getInvoice_No({
+      sbno:e.form.value.sbno
+    },'masterrecord').subscribe((resp:any)=>{
+      console.log('getInvoice_No',resp)
+      if (resp?.data.length==0) {
+        if (this.message == 'This file already uploaded') {
+          console.log('inside file already exist');
+          this.documentService.updateMasterBySb(e.form.value, e.form.value.sbno, e.form.value._id).subscribe(
+              (res: any) => {
+                this.toastr.success(`Shippingbill updated Successfully`);
+                console.log('Shippingbill updated Successfully');
+                var updatedData:any =''
+                if (this.documentType1=='export') {
+                  updatedData = {
+                    "sbRef": [
+                      this.res?._id,
+                    ],
                   }
-                },
-                (error) => {
-                  // this.toastr.error('Invalid inputs, please check!');
-                  console.log('error');
+                }else{
+                  updatedData = {
+                    "boeRef": [
+                      this.res?._id,
+                    ],
+                  }
                 }
-              );
 
-            //this.router.navigate(['/login'], { queryParams: { registered: true }});
-          },
-          (error) => {
-            console.log('error');
-          }
-        );
-    } else {
-      this.documentService.updateMaster(e.form.value, this.res._id).subscribe(
-        (res: any) => {
-          this.toastr.success(`Shippingbill updated Successfully`);
-          console.log('Shippingbill updated Successfully');
-          var updatedData:any =''
-            if (this.documentType1=='export') {
-              updatedData = {
-                "sbRef": [
-                  this.res._id,
-                ],
-              }
-            }else{
-              updatedData = {
-                "boeRef": [
-                  this.res._id,
-                ],
-              }
-            }
-          this.userService
-            .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc, updatedData)
-            .subscribe(
-              (data) => {
-                //this.pipoData[`${this.pipoDoc}`] = args[1].data
-                console.log('king123');
-                console.log(data);
-                this.toastr.success('shipping Bill added successfully.');
-                if (this.retururl) {
-                  let url = this.retururl;
-                  this.sharedData.changeretunurl('');
-                  this.router.navigate(['/home/view-document/sb']);
-                } else {
-                  this.router.navigate(['/home/view-document/sb']);
-                }
+                this.userService
+                  .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc, updatedData)
+                  .subscribe(
+                    (data) => {
+                      //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                      console.log('king123');
+                      console.log(data);
+
+                      this.toastr.success('shipping Bill added successfully.');
+                      if (this.retururl) {
+                        let url = this.retururl;
+                        this.sharedData.changeretunurl('');
+                        this.router.navigate(['/home/view-document/sb']);
+                      } else {
+                        this.router.navigate(['/home/view-document/sb']);
+                      }
+                    },
+                    (error) => {
+                      // this.toastr.error('Invalid inputs, please check!');
+                      console.log('error');
+                    }
+                  );
+
+                //this.router.navigate(['/login'], { queryParams: { registered: true }});
               },
               (error) => {
-                // this.toastr.error('Invalid inputs, please check!');
                 console.log('error');
               }
             );
-          //this.router.navigate(['/login'], { queryParams: { registered: true }});
-        },
-        (error) => {
-          console.log('error');
+        } else {
+          this.documentService.updateMaster(e.form.value, this.res?._id).subscribe(
+            (res: any) => {
+              this.toastr.success(`Shippingbill updated Successfully`);
+              console.log('Shippingbill updated Successfully');
+              var updatedData:any =''
+                if (this.documentType1=='export') {
+                  updatedData = {
+                    "sbRef": [
+                      this.res?._id,
+                    ],
+                  }
+                }else{
+                  updatedData = {
+                    "boeRef": [
+                      this.res?._id,
+                    ],
+                  }
+                }
+              this.userService
+                .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc, updatedData)
+                .subscribe(
+                  (data) => {
+                    //this.pipoData[`${this.pipoDoc}`] = args[1].data
+                    console.log('king123');
+                    console.log(data);
+                    this.toastr.success('shipping Bill added successfully.');
+                    if (this.retururl) {
+                      let url = this.retururl;
+                      this.sharedData.changeretunurl('');
+                      this.router.navigate(['/home/view-document/sb']);
+                    } else {
+                      this.router.navigate(['/home/view-document/sb']);
+                    }
+                  },
+                  (error) => {
+                    // this.toastr.error('Invalid inputs, please check!');
+                    console.log('error');
+                  }
+                );
+              //this.router.navigate(['/login'], { queryParams: { registered: true }});
+            },
+            (error) => {
+              console.log('error');
+            }
+          );
         }
-      );
-    }
+      } else {
+        this.toastr.error(`Please check this sb no. : ${e.form.value.sbno} already exit...`);
+      }
+    })
+
   }
 
   public submitType() {
@@ -1378,7 +1403,7 @@ export class UploadComponent implements OnInit {
   onSubmitThird(e) {
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
@@ -1434,9 +1459,15 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
+    this.documentService.getInvoice_No({
+      creditNoteNumber:e.form.value.creditNoteNumber
+    },'creditNote').subscribe((resp:any)=>{
+      console.log('creditNoteNumber Invoice_No',resp)
+    if (resp.data.length==0) {
+
     this.documentService.addCredit(e.form.value).subscribe(
       (res: any) => {
         this.toastr.success(`Credit Note Document Added Successfully`);
@@ -1472,6 +1503,10 @@ export class UploadComponent implements OnInit {
       },
       (err) => console.log('Error adding pipo')
     );
+    } else {
+      this.toastr.error(`Please check this sb no. : ${e.form.value.creditNoteNumber} already exit...`);
+    }
+    });
   }
 
   // Debit Note Submit button
@@ -1480,7 +1515,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
@@ -1532,7 +1567,7 @@ export class UploadComponent implements OnInit {
     console.log('pipoarrya', this.pipoArr);
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
     this.documentService.addBlcopyref(e.form.value).subscribe(
@@ -1570,16 +1605,16 @@ export class UploadComponent implements OnInit {
 
   //blCopy Submit buttton
   onSubmitblCopy(e) {
-    let selectedShippingBill = this.pipoDataService.getShippingBillById(e.form.value.sbNo);
+    let selectedShippingBill = this.SHIPPING_BILL_LIST.filter((item:any) => item?._id === e?.form?.value?.sbNo)[0];
     console.log('this is console of blcopy', e.form.value);
     e.form.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
     e.form.value.blCopyDoc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
     e.form.value.file = this.documentType1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.CommercialNumber = this.CommercialNumber
-    console.log(e.form.value, 'onSubmitblCopy');
+    console.log(e.form.value, selectedShippingBill,'onSubmitblCopy');
 
     this.documentService.addAirwayBlcopyFile(e.form.value).subscribe(
       (res: any) => {
@@ -1590,9 +1625,7 @@ export class UploadComponent implements OnInit {
             res.data._id,
           ],
         }
-        this.userService
-          .updateManyPipo(this.pipoArr, 'airwayBlcopy', this.pipourl1, updatedData)
-          .subscribe(
+        this.userService.updateManyPipo(this.pipoArr, 'airwayBlcopy', this.pipourl1, updatedData).subscribe(
             (data) => {
               console.log('king123');
               console.log(data);
@@ -1631,14 +1664,14 @@ export class UploadComponent implements OnInit {
 
   //commercial Invoice Submit buttton
   onSubmitCommercial(e) {
-    let selectedShippingBill = this.pipoDataService.getShippingBillById(e.form.value.sbNo);
+    let selectedShippingBill = this.SHIPPING_BILL_LIST.filter((item:any) => item?._id === e?.form?.value?.sbNo)[0];
     console.log('this is console of blcopy', e.form.value);
     e.form.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
     e.form.value.file = this.documentType1;
     e.form.value.commercialDoc = this.pipourl1;
     console.log('pipoDoc', this.pipourl1);
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     console.log(e.form.value);
     this.documentService.addCommercial(e.form.value).subscribe(
       (res: any) => {
@@ -1686,7 +1719,7 @@ export class UploadComponent implements OnInit {
     e.form.value.currency = e.form.value?.currency?.type;
     e.form.value.commercialDoc = this.pipourl1;
     console.log('pipoDoc', this.pipourl1);
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
 
     console.log(e.form.value);
     this.documentService.addCommercial(e.form.value).subscribe(
@@ -1732,7 +1765,7 @@ export class UploadComponent implements OnInit {
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
 
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
 
     console.log(e.form.value);
@@ -1777,7 +1810,7 @@ export class UploadComponent implements OnInit {
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
 
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     this.documentService.addDestruction(e.form.value).subscribe(
@@ -1818,7 +1851,7 @@ export class UploadComponent implements OnInit {
 
   // Packing List Submit Button
   onSubmitPackingList(e) {
-    let selectedShippingBill = this.pipoDataService.getShippingBillById(e.form.value.sbNo);
+    let selectedShippingBill = this.SHIPPING_BILL_LIST.filter((item:any) => item?._id === e?.form?.value?.sbNo)[0];
     console.log('this is console of blcopy', e.form.value);
     e.form.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
@@ -1826,7 +1859,7 @@ export class UploadComponent implements OnInit {
     e.form.value.packingDoc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
     e.form.value.file = this.documentType1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     this.documentService.addPackingList(e.form.value).subscribe(
@@ -1855,8 +1888,13 @@ export class UploadComponent implements OnInit {
                   (data) => {
                     console.log('king123');
                     console.log('DATA', data);
+                    // if (this.documentType1 == 'import') {
+                    //   this.router.navigate(['/home/packing-list']);
+                    // } else {
+                    //   this.router.navigate(['/home/packing-list']);
+                    // }
                     if (this.documentType1 == 'import') {
-                      this.router.navigate(['/home/packing-list']);
+                      this.router.navigate(['/home/import-packing-list']);
                     } else {
                       this.router.navigate(['/home/packing-list']);
                     }
@@ -1888,7 +1926,7 @@ export class UploadComponent implements OnInit {
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
 
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     // this.documentService.addOtherDoc(e.form.value).subscribe(
@@ -1931,7 +1969,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     e.form.value.file = this.documentType1;
@@ -1975,7 +2013,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
     e.form.value.file = this.documentType1;
     console.log(e.form.value);
@@ -2005,7 +2043,7 @@ export class UploadComponent implements OnInit {
   onSubmitInsurance(e) {
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value, 'onSubmitInsurance');
@@ -2054,7 +2092,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
 
@@ -2094,7 +2132,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
@@ -2140,7 +2178,7 @@ export class UploadComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.arrayData;
+    e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
     e.form.value.currency = e.form.value?.currency?.type;
 
@@ -2281,7 +2319,7 @@ export class UploadComponent implements OnInit {
         } else if (this.documentType === 'destruction') {
           this.destruction = true;
         } else if (this.documentType === 'import-destruction') {
-          this.destruction = true;  
+          this.destruction = true;
         } else if (this.documentType === 'billOfExchange') {
           this.billOfExchange = true;
         } else if (this.documentType === 'import-billOfExchange') {
@@ -2306,6 +2344,8 @@ export class UploadComponent implements OnInit {
           this.importopinionReport = true;
         } else if (this.documentType === 'packingList') {
           this.packingList = true;
+        } else if (this.documentType === 'import-packingList') {
+          this.importpackingList = true;
         } else if (this.documentType === 'otherDoc') {
           this.otherDoc = true;
         } else {
@@ -2517,6 +2557,7 @@ export class UploadComponent implements OnInit {
     }
   }
   SHIPPINGBILL_LIST: any = [];
+  BUYER_LIST: any = [];
   clickPipo(PI_PO_LIST) {
     var last_length = PI_PO_LIST.length - 1;
     var LAST_VALUE: any = PI_PO_LIST[last_length]?.value;
@@ -2525,6 +2566,9 @@ export class UploadComponent implements OnInit {
     this.pipoSelect = true;
     console.log('line 2361', this.pipoSelect);
 
+    if (this.BUYER_LIST.includes(LAST_VALUE?.id[1])==false) {
+      this.BUYER_LIST.push(LAST_VALUE?.id[1])
+    }
     this.mainBene = this.FILTER_VALUE(this.pipolist, LAST_VALUE?._id)[0]?.buyerName;
     let x = LAST_VALUE?.id[1];
     let j = this.arrayData.indexOf(LAST_VALUE?.id[1]);
@@ -2534,11 +2578,6 @@ export class UploadComponent implements OnInit {
     } else {
       console.log('x');
     }
-    if(PI_PO_LIST.length==0){
-      this.SHIPPINGBILL_LIST=[];
-      this.arrayData=[];
-      this.pipoArr=[];
-    }else{
       this.pipoDataService.getShippingNo(LAST_VALUE?._id,this.documentType1);
       this.documentService.getCommercialByFiletype(this.documentType1, LAST_VALUE?._id).subscribe(
         (res: any) => {
@@ -2548,6 +2587,20 @@ export class UploadComponent implements OnInit {
         },
         (err) => console.log(err)
       );
+    this.SHIPPING_BILL_LIST=[];
+    for (let index = 0; index < PI_PO_LIST.length; index++) {
+      for (let j = 0; j < this.item5.length; j++) {
+        for (let m = 0; m < this.item5[j]?.pipo.length; m++) {
+          if (this.item5[j]?.pipo[m]?._id.indexOf(PI_PO_LIST[index]?.value?._id)!=-1) {
+            if (this.item5[j]?.sbno!=undefined && this.item5[j]?.sbno!=null) {
+              this.SHIPPING_BILL_LIST.push({
+                sbno:this.item5[j]?.sbno,
+                _id:this.item5[j]?._id
+              })
+            }
+          }
+        }
+      }
     }
     console.log(this.arrayData, this.mainBene, 'mainBenemainBene');
     console.log('Array List', this.pipoArr, this.SHIPPINGBILL_LIST);
@@ -2631,7 +2684,7 @@ export class UploadComponent implements OnInit {
 
     console.log(this.loginForm.value);
 
-    this.beneValue = this.loginForm.value.beneName;
+    this.beneValue = this.loginForm.value.benneName;
     this.userService.creatBene(this.loginForm.value).subscribe(
       (data) => {
         console.log('king123');

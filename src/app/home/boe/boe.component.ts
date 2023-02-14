@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
 import {UserService} from './../../service/user.service';
+import * as data1 from '../../currency.json';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
@@ -33,15 +34,19 @@ export class BOEComponent implements OnInit {
   public optionsVisibility: any = [];
   filtervisible: boolean = false;
   USER_DATA:any=[];
-  
-  filter() {
-  // this.getPipoData()
-  this.filtervisible = !this.filtervisible
-
-}
-onclick() {
-  this.filtervisible = !this.filtervisible
-}
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    BOE_NUMBER: [],
+    Buyer_Name: [],
+    AD_CODE: [],
+    AD_BILL_NO: [],
+    IEC_CODE	: [],
+    IEC_NAME	: [],
+    ORIGIN: [],
+    DISCHARGE_PORT: [],
+    Currency: [],
+    DATE: []
+  };
 
   constructor(
     public documentService: DocumentService,
@@ -64,13 +69,46 @@ onclick() {
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
     this.item1=[];
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
       this.documentService.getBoe(1).subscribe(
         (res: any) => {
           for (let value of res.data) {
             if (value['file'] == 'import') {
               this.item1.push(value);
+              value?.benneName.forEach(element => {
+                if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+                  this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+                }
+              });
+              if ( this.ALL_FILTER_DATA['BOE_NUMBER'].includes(value?.boeNumber)==false) {
+                this.ALL_FILTER_DATA['BOE_NUMBER'].push(value?.boeNumber);
+              }
+              if ( this.ALL_FILTER_DATA['AD_CODE'].includes(value?.adCode)==false) {
+                this.ALL_FILTER_DATA['AD_CODE'].push(value?.adCode);
+              }
+              if ( this.ALL_FILTER_DATA['AD_BILL_NO'].includes(value?.adBillNo)==false) {
+                this.ALL_FILTER_DATA['AD_BILL_NO'].push(value?.adBillNo);
+              }
+              if ( this.ALL_FILTER_DATA['IEC_CODE'].includes(value?.iecCode)==false) {
+                this.ALL_FILTER_DATA['IEC_CODE'].push(value?.iecCode);
+              }
+              if ( this.ALL_FILTER_DATA['IEC_NAME'].includes(value?.iecName)==false) {
+                this.ALL_FILTER_DATA['IEC_NAME'].push(value?.iecName);
+              }
+              if ( this.ALL_FILTER_DATA['ORIGIN'].includes(value?.origin)==false) {
+                this.ALL_FILTER_DATA['ORIGIN'].push(value?.origin);
+              }
+              if ( this.ALL_FILTER_DATA['DISCHARGE_PORT'].includes(value?.dischargePort)==false) {
+                this.ALL_FILTER_DATA['DISCHARGE_PORT'].push(value?.dischargePort);
+              }
+              if ( this.ALL_FILTER_DATA['DATE'].includes(value?.boeDate)==false) {
+                this.ALL_FILTER_DATA['DATE'].push(value?.boeDate);
+              }
             }
           }
+          this.FILTER_VALUE_LIST= this.item1;
           console.log(res,'yuyuyuyuyuyuyuuy')
         },
         (err) => console.log(err)
@@ -90,9 +128,17 @@ onclick() {
         }
       );
     }
-    
+    filter(value, key) {
+      this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
+      if (this.FILTER_VALUE_LIST.length== 0) {
+        this.FILTER_VALUE_LIST = this.item1;
+      }
+    }
+    resetFilter() {
+      this.FILTER_VALUE_LIST = this.item1;
+    }
     private getDismissReason(reason: any): string {
-  
+
       if (reason === ModalDismissReasons.ESC) {
         return 'by pressing ESC';
       } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -204,6 +250,7 @@ onclick() {
         status:'pending',
         dummydata:this.item1[index],
         Types:'deletion',
+        TypeOfPage:'summary',
         FileType:this.USER_DATA?.result?.sideMenu
       }
       this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
