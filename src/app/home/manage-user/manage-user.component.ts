@@ -159,6 +159,7 @@ URL_CREATE(url){
         Role_Type:data['Role_Type'],
         RoleCheckbox:data['RoleCheckbox']
       }
+      this.SELECTED_EDIT_DATA=[];
       console.log(data,'getUserDetailByIdgetUserDetailById');
     })
   }
@@ -261,16 +262,40 @@ URL_CREATE(url){
                 this.ngOnInit()
                 this.SELECTED_EDIT_DATA=[];
                 this.SELECTED_INDEX=0;
+                this.EDIT_FORM_BUILDER={
+                  name:'',
+                  UnderSubscriptionCheckBox:'',
+                  imageUrl:'',
+                  UnderSubscription:'',
+                  Role_Type:'',
+                  RoleCheckbox:''
+                }
               }else{
                 this.toastr.error(data['message']);
                 this.SELECTED_EDIT_DATA=[];
                 this.SELECTED_INDEX=0;
+                this.EDIT_FORM_BUILDER={
+                  name:'',
+                  UnderSubscriptionCheckBox:'',
+                  imageUrl:'',
+                  UnderSubscription:'',
+                  Role_Type:'',
+                  RoleCheckbox:''
+                }
               }
             },
             error => {
               console.log("error")
               this.SELECTED_EDIT_DATA=[];
               this.SELECTED_INDEX=0;
+              this.EDIT_FORM_BUILDER={
+                name:'',
+                UnderSubscriptionCheckBox:'',
+                imageUrl:'',
+                UnderSubscription:'',
+                Role_Type:'',
+                RoleCheckbox:''
+              }
             });
       }else{
         for (const key in value) {
