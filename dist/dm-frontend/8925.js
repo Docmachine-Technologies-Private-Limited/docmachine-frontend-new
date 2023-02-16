@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkdm_frontend=self.webpackChunkdm_frontend||[]).push([[8925],{8925:(m,t,o)=>{o.r(t),o.d(t,{ImportOpinionReportsModule:()=>l});var r=o(843),a=o(2579),E=o(2258),s=o(8528),d=o(241),M=o(9408),O=o(4202),n=o(2560);let l=(()=>{class _{}return _.\u0275fac=function(D){return new(D||_)},_.\u0275mod=n.oAB({type:_}),_.\u0275inj=n.cJS({providers:[a.D,E.FF,d.g],imports:[M.$,r.Bz.forChild([{path:"",component:O.L,pathMatch:"full"}]),s.zk.forRoot()]}),_})()}}]);
+//# sourceMappingURL=8925.js.map
