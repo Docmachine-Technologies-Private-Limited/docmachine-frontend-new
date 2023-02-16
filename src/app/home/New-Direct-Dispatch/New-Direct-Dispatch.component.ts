@@ -3436,6 +3436,7 @@ async addToSbArray(irDataItem: any, e) {
         FileType: this.USER_DATA?.sideMenu
       }
       var tp:any={
+        firxNumber:[],
         firxDate:[],
         firxCurrency:[],
         firxAmount:[],
@@ -3444,6 +3445,7 @@ async addToSbArray(irDataItem: any, e) {
       };
       for (let index = 0; index < this.advanceArray.length; index++) {
         const element = this.advanceArray[index];
+        tp['firxNumber'].push(element?.irDataItem?.billNo)
         tp['firxDate'].push(element?.irDataItem?.date)
         tp['firxCurrency'].push(element?.irDataItem?.currency)
         tp['firxAmount'].push(element?.irDataItem?.amount)
@@ -3457,6 +3459,18 @@ async addToSbArray(irDataItem: any, e) {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
               this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
               this.documentService.addExportBillLodgment(this.ExportBillLodgement_Form.value).subscribe((res1: any) => {
+              for (let index = 0; index < this.ExportBillLodgement_Form.value?.Advance_reference_Number?.length; index++) {
+                const element =this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.irDataItem;
+                this.documentService.Update_Amount_by_Table({
+                  tableName:'iradvices',
+                  id:element._id,
+                  query:{
+                    sbno:[this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb]
+                  }
+                }).subscribe((list:any) => {
+                
+                })
+              }
               this.documentService.Update_Amount_by_Table({
                 tableName:'iradvices',
                 id:this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?._id,
@@ -3466,7 +3480,7 @@ async addToSbArray(irDataItem: any, e) {
                 }
               }).subscribe((r1:any)=>{
               var query:any={
-                  firxNumber:this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.billNo,
+                  firxNumber:tp?.firxNumber.toString(),
                   firxDate:tp?.firxDate.toString(),
                   firxCurrency:tp?.firxCurrency.toString(),
                   firxAmount:tp?.firxAmount.toString(),
@@ -3475,7 +3489,7 @@ async addToSbArray(irDataItem: any, e) {
                 }
                 if (this.ExportBillLodgement_Form.value?.Total_Reaming_Amount!=0) {
                   query={
-                    firxNumber:this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.billNo,
+                    firxNumber:tp?.firxNumber.toString(),
                     firxDate:tp?.firxDate.toString(),
                     firxCurrency:tp?.firxCurrency.toString(),
                     firxAmount:tp?.firxAmount.toString(),

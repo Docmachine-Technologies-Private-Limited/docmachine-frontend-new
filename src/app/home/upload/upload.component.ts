@@ -919,7 +919,7 @@ export class UploadComponent implements OnInit {
     console.log('onSubmitIrAdvice', e.form.value);
     this.documentService.getInvoice_No({
       billNo:e.form.value.billNo
-    },'MasterService').subscribe((resp:any)=>{
+    },'iradvices').subscribe((resp:any)=>{
       console.log('creditNoteNumber Invoice_No',resp)
     if (resp.data.length==0) {
       this.documentService.getBillNo(e.form.value.billNo).subscribe((res: any) => {
@@ -1010,7 +1010,7 @@ export class UploadComponent implements OnInit {
     console.log('onSubmitOrAdvice', e.form.value);
     this.documentService.getInvoice_No({
       billNo:e.form.value.billNo
-    },'MasterService').subscribe((resp:any)=>{
+    },'iradvices').subscribe((resp:any)=>{
       console.log('creditNoteNumber Invoice_No',resp)
     if (resp.data.length==0) {
       this.documentService.getBillNo(e.form.value.billNo).subscribe((res: any) => {

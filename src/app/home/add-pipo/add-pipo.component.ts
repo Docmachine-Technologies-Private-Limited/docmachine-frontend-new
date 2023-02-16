@@ -250,14 +250,22 @@ export class AddPipoComponent implements OnInit {
       this.pipoForm.value.doc1 = this.pipourl1
     }
     this.pipoForm.value.document = this.documentType
-
-    this.documentService.addPipo(this.pipoForm.value).subscribe(
-      (res) => {
-        this.toastr.success('PI/PO added successfully.');
-        this.router.navigateByUrl("/home/pipo");
-      },
-      (err) => console.log("Error adding pipo")
-    );
+    this.documentService.getInvoice_No({
+      pi_poNo:this.pipoForm.value.pi_poNo
+    },'pi_po').subscribe((resp:any)=>{
+      console.log('creditNoteNumber Invoice_No',resp)
+    if (resp.data.length==0) {
+      this.documentService.addPipo(this.pipoForm.value).subscribe(
+        (res) => {
+          this.toastr.success('PI/PO added successfully.');
+          this.router.navigateByUrl("/home/pipo");
+        },
+        (err) => console.log("Error adding pipo")
+      );
+	}else {
+    this.toastr.error(`Please check this sb no. : ${this.pipoForm.value.pi_poNo} already exit...`);
+  }});
+  
   }
 
   public onUploadError(args: any): void {
