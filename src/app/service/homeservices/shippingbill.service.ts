@@ -32,4 +32,14 @@ export class ShippingbillDataService {
       );
     });
   }
+  getShippingBillList_Master = () => {
+    return new Promise((resolve, reject) => {
+      this.documentService.getMaster(1).subscribe(
+        (res: any) => {
+          resolve(res?.data);
+        },
+        (err) => reject(err)
+      );
+    });
+  }
 }

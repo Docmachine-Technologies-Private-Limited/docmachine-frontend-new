@@ -249,19 +249,12 @@ export class UserService {
     );
   }
   mergeListPdf(filename) {
-    return new Promise((resolve, reject) => {
-      var temp:any=[];
-      for (let index = 0; index < filename.length; index++) {
-        this.mergePdf(filename[index]).subscribe((res:any)=>{
-          res.arrayBuffer().then((r)=>{
-            temp.push(r);
-            if ((index+1)==filename.length) {
-              resolve(temp);
-            }
-          })
-        })
-      }
-    })
+    this.loadFromLocalStorage();
+    const httpOptions: Object = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+      responseType:"arraybuffer"
+    };
+    return this.http.post(`${this.api_base}/pipo/doc_mergePdf`,{doclist: filename},httpOptions);
   }
   mergePdfChecking(filename) {
     this.loadFromLocalStorage();

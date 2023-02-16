@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import { DocumentService } from '../service/document.service';
 import { UserService } from '../service/user.service';
 
 @Component({
@@ -33,8 +34,9 @@ export class PDFVIEWERComponent implements OnInit {
   zoomScales = ['page-width', 'page-fit', 'page-height'];
   pdfQuery = '';
   totalPages: number;
-  BASE_64_URL:any=''
-  constructor( private userService: UserService){
+  BASE_64_URL:any='';
+  loader: boolean=false;
+  constructor( private userService: UserService,public documentService: DocumentService){
   }
 
   ngOnInit(){
@@ -79,14 +81,17 @@ export class PDFVIEWERComponent implements OnInit {
   }
   pageRendered(event) {
     console.log('pageRendered', event);
+    // setTimeout(()=> {this.loader=false},1500)
   }
   textLayerRendered(event) {
     console.log('textLayerRendered', event);
   }
+  
   onError(event) {
     console.error('onError', event);
   }
   onProgress(event) {
+    this.loader=true;
     console.log('onProgress', event);
   }
 

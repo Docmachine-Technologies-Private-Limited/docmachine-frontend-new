@@ -66,10 +66,14 @@
               "vendorChunk": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": false
+              "namedChunks": false,
+              "outputHashing": "none",
+              "aot": true,
+              "statsJson": false,
+              "progress": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",

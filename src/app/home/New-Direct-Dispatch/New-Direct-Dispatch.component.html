@@ -24,7 +24,7 @@
         <main id="content" class="table-padding" role="main">
           <div class="new_document_list1">
             <div class="new_document_list_add_data">
-              <form [formGroup]="pipoForm">
+              <form [formGroup]="this.ExportBillLodgement_Form">
                 <div class="row">
                   <div class="col-md-7 col-sm-12 col-12">
                     <div *ngIf='isGenerate'>
@@ -60,7 +60,7 @@
                                   <div class="row">
                                     <div class="col-md-10 mb-3">
                                       <label for="exampleInputEmail1" class="form-label">Select bank*</label>
-                                      <select class="form-select" aria-label="Default select example" #Bank_Name [ngModel]="bank" name="bank" (change)="setradio($event.target.value)">
+                                      <select class="form-select" aria-label="Default select example" ngModel #Bank_Name name="bank_name" (change)="setradio($event.target.value)">
                                         <option value="">Select bank</option>
                                         <option [value]="banklist.bank" *ngFor="let banklist of bankDetail">{{ banklist.bank }}
                                         </option>
@@ -75,8 +75,8 @@
                                          placeholder="Select PI/PO or shipping bill"
                                          (change)="DUMP_FUNCTION($event?.value,'Shipping bill',content1)" #PI_PO_shipping_bill></ng-select>
 
-                                      <div *ngIf='itemArray?.length >0'>
-                                        <div *ngIf="ship" class="shpt_bill_sec">
+                                      <div *ngIf='this.itemArray?.length!=0'>
+                                        <div class="shpt_bill_sec">
                                           <label>SHIPPING BILL NUMBER SELECTED</label>
                                           <div class="form-check2" *ngFor="let item of itemArray; let i = index;">
                                             <label class="form-check-label">
@@ -109,7 +109,7 @@
                                       <div class="col-12">
                                         <h3 style="font-size:17px;">Advance reference Number</h3>
                                           <div class="col-12">
-                                            <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" >
+                                            <mat-tab-group class="custom-1" mat-stretch-tabs="false" mat-align-tabs="start" >
                                               <mat-tab  [label]="'SB_No_'+item?.sbno" [id]="item?.sbno" *ngFor="let item of this.itemArray;let i=index">
                                                 <div class="custom">
                                                   <div class="col-12 d-flex flex-column">
@@ -260,6 +260,7 @@
                                         <div *ngFor='let value of newBankArray'
                                           style="display: flex; align-items: center;">
                                           <input style="flex-direction:row;" [value]="value"
+                                          name="Charges_to_Bank" ngModel
                                             (click)="model1.option = value" [checked]="value === model1.option"
                                             type="radio" id="options1" class="circular_input1"
                                             (click)="chargesTo(value)">
@@ -276,15 +277,15 @@
                                     flex: 90%;">
                                       <div class="row d-flex flex-row" *ngIf="this.balanceAvai!=''">
                                         <label for="email" class="form-label">Total SB Amount</label>
-                                        <input type="text" disabled [value]="TO_FIXED(this.balanceAvai,2)" class="form-control">
+                                        <input type="text" ngModel name="Total_SB_Amount" disabled class="form-control">
                                       </div>
                                       <div class="row d-flex flex-row"  *ngIf="this.filterSum!=''">
                                         <label for="email" class="form-label">Total FIRX Amount</label>
-                                        <input type="text" disabled [value]="TO_FIXED(this.filterSum,2)" class="form-control">
+                                        <input type="text" name="Total_FIRX_Amount" disabled ngModel class="form-control">
                                       </div>
                                       <div class="row d-flex flex-row"  *ngIf="this.filterSum!=''">
                                         <label for="email" class="form-label">Total Reaming Amount</label>
-                                        <input type="text" disabled [value]="TO_FIXED(this.balanceAvai-this.filterSum,2)" class="form-control">
+                                        <input type="text" name="Total_Reaming_Amount" disabled ngModel class="form-control">
                                       </div>
                                     </div>
                                     <br>
@@ -601,6 +602,7 @@
                                       <tr>
                                         <th scope="col">I/R No.</th>
                                         <th scope="col">I/R Amount</th>
+                                        <th scope="col">I/R Useses Amount</th>
                                         <th scope="col">I/R Available Amount</th>
                                       </tr>
                                     </thead>
@@ -608,6 +610,7 @@
                                       <tr *ngFor="let item1 of this.ACCORDING_LIST['SB_'+item?.sbno];let j=index" >
                                         <td scope="row">{{item1?.billNo}}</td>
                                         <td>{{item1?.amount}}</td>
+                                        <td>{{item1?.Used_Balance}}</td>
                                         <td>{{item1?.BalanceAvail}}</td>
                                       </tr>
                                     </tbody>
@@ -616,60 +619,11 @@
                             </mat-tab>
                           </mat-tab-group>
                          </div>
-                        <!-- <div class="content_white_background" *ngIf="this.itemArray.length!=0">
-                          <h5 class="header-text">SB or Inward remittance Details</h5>
-                          <div class="accordion">
-                            <div class="accordion-item" *ngFor="let item of this.itemArray;let i=index">
-                                <div class="accordion-titel" (click)="SlideToggle($event,item?._id)">
-                                    <h2>SB No. : {{item?.sbno}} </h2>
-                                </div>
-                                  <div class="accordion-contant">
-                                    <div class="sb-panel">
-                                     <table class="table">
-                                        <thead>
-                                          <tr>
-                                            <th scope="col">SB no.</th>
-                                            <th scope="col">SB amount</th>
-                                            <th scope="col">SB Balance</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr>
-                                            <td scope="row">{{item?.sbno}}</td>
-                                            <td>{{item?.fobValue}}</td>
-                                            <td>{{item?.balanceAvai}}</td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                    <div class="sb-panel">
-                                      <table class="table">
-                                         <thead>
-                                           <tr>
-                                             <th scope="col">I/R No.</th>
-                                             <th scope="col">I/R Amount</th>
-                                             <th scope="col">I/R Available Amount</th>
-                                           </tr>
-                                         </thead>
-                                         <tbody>
-                                           <tr *ngFor="let item1 of this.ACCORDING_LIST['SB_'+item?.sbno];let j=index" >
-                                             <td scope="row">{{item1?.billNo}}</td>
-                                             <td>{{item1?.amount}}</td>
-                                             <td>{{item1?.BalanceAvail}}</td>
-                                           </tr>
-                                         </tbody>
-                                       </table>
-                                     </div>
-                                  </div>
-                            </div>
-                        </div>
-                        </div> -->
-                      </div>
+                       </div>
                       <div class="bottom_submit_section">
                         <button type="button" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">CANCEL</button>
-                        <button type="button" class="btn btn-secondary" (click)='generateDoc1();this.advanceArray.length!=0?Preview_btn.style.display="block" : ""'>PROCEED</button>
-                        <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;" (click)='PREVIEWS_URL(
-                          "Export_Bill_Lodgement_"+this.itemArray[0]?._id);PREVIEW_PAGE.style.display="block"'>Preview</button>
+                        <button type="button" class="btn btn-secondary" (click)='generateDoc1(this.ExportBillLodgement_Form);this.advanceArray.length!=0?Preview_btn.style.display="block" : ""'>PROCEED</button>
+                        <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;" (click)='PREVIEWS_URL();PREVIEW_PAGE.style.display="block"'>Preview</button>
                       </div>
                     </div>
                   </div>
@@ -685,14 +639,14 @@
 
 <div class="bg-black-opacity" #content1 class="content1">
   <div class="modal custom-modal Select_Shipping" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog p-4" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Select Shipping Bill</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"
             (click)="content1.style.display='none'"> <span aria-hidden="true">&times;</span> </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="overflow: auto;height: 80vh;">
           <div class="container-fluid">
             <div class="middle_bts">
               <div class="login py-5" style="padding: 0px !important; width:100%;">
@@ -839,30 +793,31 @@
 </div>
 <div class="modal PREVIEW_PAGE" tabindex="-1" #PREVIEW_PAGE style="display: none;background-color: #00000030;">
   <div class="modal-dialog" style="width: 100% !important;">
-      <div class="modal-content" style="height: 90vh;">
+      <div class="modal-content" style="height: 85vh;">
           <div class="modal-header">
               <h5 class="modal-title">Preview Pdf</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="PREVIEW_PAGE.style.display='none'"><span aria-hidden="true">&times;</span></button>
           </div>
           <div class="modal-body">
-              <app-pdf-viewer [downloadShow]="false" *ngFor="let item of this.PREVIEWS_URL_LIST" [src]="item" width="100%" height="500px"></app-pdf-viewer>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="PREVIEW_PAGE.style.display='none'">Close</button>
-              <div style="display:flex;">
-                 <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
-                      <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
-                          <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
-             this.GetDownloadStatus?.status=='verify'" (click)="SendApproval(this.GetDownloadStatus?.status,
-             'Export_Bill_Lodgement_'+this.itemArray[0]?._id);PREVIEW_PAGE.style.display='none'">Send for Approval</button>
-                      </div>
-                      <div *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
-                          <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
-            this.GetDownloadStatus?.status=='verify'">Wait for Approval</button>
+              <div class="content_white_background" *ngIf="this.itemArray.length!=0">
+                <mat-tab-group class="custom-1" mat-stretch-tabs="false" mat-align-tabs="start">
+                  <mat-tab [id]="item?._id" [label]="'SB_No_'+item?.sbno" *ngFor="let item of this.itemArray;let i=index">
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" *ngFor="let item of this.PREVIEWS_URL_LIST[item?.sbno]" [src]="item" width="100%" height="500px"></app-pdf-viewer>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="PREVIEW_PAGE.style.display='none'">Close</button>
+                      <div style="display:flex;">
+                         <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                                  <button type="button" class="btn btn-primary" (click)="SendApproval(this.GetDownloadStatus?.status,
+                              item?._id,PREVIEW_PAGE);">Send for Approval</button>
+                          </div>
+                          <mat-error *ngIf="this.GetDownloadStatus?.status=='Approved'">You have not access to download pdf!</mat-error>
                       </div>
                   </div>
-              </div>
+                  </mat-tab>
+                </mat-tab-group>    
+               </div>
           </div>
+       
       </div>
   </div>
 </div>
