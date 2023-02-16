@@ -1840,6 +1840,31 @@ export class DocumentService {
     };
     return this.http.get(`${this.api_base}/exportTask/get`, httpOptions);
   }
+  
+  addExportBillLodgment(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ExportBillLodgement/add`,{data: data},httpOptions);
+  }
+  
+  Update_Amount_by_Table(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {headers: new HttpHeaders({ Authorization: this.authToken })};
+    return this.http.post(`${this.api_base}/ExportBillLodgement/Amount_Update`,data,httpOptions);
+  }
+  getExportBillLodgment(data) {
+    console.log('I am in service');
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/ExportBillLodgement/get`, httpOptions);
+  }
 
   getOneExportTask(data) {
     console.log('I am in service calling transacytions');

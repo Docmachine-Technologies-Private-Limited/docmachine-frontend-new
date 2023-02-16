@@ -7,26 +7,21 @@ import { ModalContentComponent1 } from './pipo-doc-export/pipo-doc-export.compon
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedDataService } from './shared-Data-Servies/shared-data.service';
 import {SharedHomeModule} from "./shared-home.module";
-// import {FbgWavierModule} from "./yesBank/advance-fbg-wavier/fbg-wavier.module";
 import { AgainstAdvanceComponent } from "./yesBank/against-advance/against-advance.component";
 import { RequestLetterComponent } from "./yesBank/request-letter/request-letter.component";
 import { LetterOfCreditImportComponent } from "./yesBank/letter-of-credit-import/letter-of-credit-import.component";
 import { A2cumAplicationComponent } from "./axisBank/a2cum-aplication/a2cum-aplication.component";
 import { NgSelectModule } from '@ng-select/ng-select';
-
 import { AdvanceRemitanceComponent } from "./axisBank/advance-remitance/advance-remitance.component";
 import { CreateBeneComponent } from "./create-bene/create-bene.component";
 import { EditBeneComponent } from "./edit-bene/edit-bene.component";
 import { ManageUserComponent } from "./manage-user/manage-user.component";
-// import { DashboardTaskComponent } from "./dashboard-task/dashboard-task.component";
 import { RequestComponent } from "./request/request.component";
 import { OutwardRemComponent } from './outward-rem/outward-rem.component';
 import { CaDocumentsComponent } from './ca-documents/ca-documents.component';
-import { AllTaskComponent } from './all-task/all-task.component';
 import { InwardRemmitanceComponent } from './inward-remmitance/inward-remmitance.component';
 import { InwardRemmitancep0103Component } from './yesBank/inward-remmitancep0103/inward-remmitancep0103.component';
 import { CompletedExportComponent } from './Export/completed-export/completed-export.component';
-// import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { BuyersLodgeComponent } from './yesBank/buyers-lodge/buyers-lodge.component';
 import { PowerAdminComponent } from './power-admin/power-admin.component';
 import { EditBuyerComponent } from './edit-buyer/edit-buyer.component';
@@ -44,29 +39,17 @@ import { UploadBankIntimationComponent } from './upload-bank-intimation/upload-b
 import { FooterComponent } from './footer/footer.component'
 import { MatTableModule } from '@angular/material/table'
 import { MatPaginatorModule } from '@angular/material/paginator'
-
-
-import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {DropzoneModule} from "ngx-dropzone-wrapper";
-import {DragDropModule} from "@angular/cdk/drag-drop";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTabsModule} from "@angular/material/tabs";
-
-import { CompletedTaskComponent } from './completed-task/completed-task.component';
 import { InwardRemittanceBoeComponent } from './yesBank/inward-remittance-boe/inward-remittance-boe.component';
-import { PaymentAcceptanceLetterComponent } from './yesBank/payment-acceptance-letter/payment-acceptance-letter.component';
 import { TradeRequestLetterComponent } from './yesBank/trade-request-letter/trade-request-letter.component';
 import { FbgBuyerFileComponent } from './yesBank/fbg-waiver-file/fbg-buyer-file.component';
 import { AdvanceRemitanceFbgComponent } from './axisBank/advance-remitance-fbg/advance-remitance-fbg.component';
 import { DirectImportAxisComponent } from './axisBank/direct-import-axis/direct-import-axis.component';
 import { BuyersCreditAxisComponent } from './axisBank/buyers-credit-axis/buyers-credit-axis.component';
 import { LetterOfCreditImportAxisComponent } from './axisBank/letter-of-credit-import-axis/letter-of-credit-import-axis.component';
-
-// --------------------------------?
-
 import { MatDatepickerModule } from '@angular/material/datepicker'
-
 import {  MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -85,33 +68,28 @@ import { SuperGuard } from "../service/RolePermission/SuperAdmin/super.guard";
 import { MemberGuard } from "../service/RolePermission/Member/member.guard";
 import { CreateNoteComponent } from "./upload/Import/create-note/create-note.component";
 import { DebitNoteComponent } from "./upload/Import/debit-note/debit-note.component";
-
 import { ExportCreditNoteComponent } from "./upload/Export/export-credit-note/export-credit-note.component";
 import { ExportDebitNoteComponent } from "./upload/Export/export-debit-note/export-debit-note.component";
 import { ImportBillOfExchangeComponent } from "./import-bill-of-exchange/import-bill-of-exchange.component";
 import { RemittanceFlowComponent } from './remittance-flow/remittance-flow.component';
 import { AdminMemberGuard } from "../service/RolePermission/AdminMember/admin-member.guard";
-
 import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remittance/add-advance-outward-remittance.component';
 import { UserProfilesComponent } from "./user-profiles/user-profiles.component";
 import { EmailValidatorDirective } from './Validator/email/email-validator.directive';
 import { PhoneValidatorDirective } from './Validator/phone/phone-validator.directive';
-
 import { EditRemittanceComponent } from './edit-remittance/edit-remittance.component';
 import { RemittanceSummaryComponent } from './remittance-summary/remittance-summary.component';
 import { AddRemittanceComponent } from './add-remittance/add-remittance.component';
 import { ImportOpinionReportsComponent } from "./import-opinion-reports/import-opinion-reports.component";
-
 import {EditCompanyComponent} from "./edit-company/edit-company.component";
 import { LetterOfCreditImportLCComponent } from "./letter-of-credit-import-lc/letter-of-credit-import-lc.component";
 import { MasterServiceComponent } from "./master-service/master-service.component";
 import { ImportMasterServiceComponent } from "./import-master-service/import-master-service.component";
 import { PdfViewerModule } from "ng2-pdf-viewer";
-import { ExportHomeModule } from "./Export/export-home/export-home.module";
-import { PDFVIEWERComponent } from "../pdf-viewer/pdf-viewer.component";
 import { NewBillUnderCollectionComponent } from "./new-bill-under-collection/Bill-Under-Collection.component";
 import { NewDirectDispatchComponent } from "./New-Direct-Dispatch/New-Direct-Dispatch.component";
-import { BillLodgementModule } from "./Export/bill-lodgement/bill-lodgement.module";
+import {MergePdfListService} from "./merge-pdf-list.service";
+
 @NgModule({
   declarations: [
     SidenavComponent,
@@ -583,7 +561,7 @@ import { BillLodgementModule } from "./Export/bill-lodgement/bill-lodgement.modu
     ModalModule.forRoot(),
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal,SharedDataService],
+  providers: [ConfirmDialogService, NgbModal,SharedDataService,MergePdfListService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [MatProgressBarModule, MatTabsModule,SharedHomeModule],
 })

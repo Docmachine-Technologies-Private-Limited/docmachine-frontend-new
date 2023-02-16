@@ -413,7 +413,7 @@ export class ExportCreditNoteComponent implements OnInit {
     console.log(e.form.value);
     this.documentService.getInvoice_No({
       creditNoteNumber:e.form.value.creditNoteNumber
-    },'creditNote').subscribe((resp:any)=>{
+    },'creditnotes').subscribe((resp:any)=>{
       console.log('creditNoteNumber Invoice_No',resp)
     if (resp.data.length==0) {
     this.documentService.addCredit(e.form.value).subscribe((res: any) => {

@@ -121,29 +121,27 @@ export class ViewDocumentComponent implements OnInit {
         this.pipo = false;
         this.boe = false;
         this.sb = true;
-        this.shippingBillService.getShippingBillList().then((res: any) => {
-          this.shippingBillService.shippingbills$.subscribe((data: any) => {
-            console.log('getShippingBillList', data)
-            this.item1 = data;
-            this.FILTER_VALUE_LIST = data;
-            for (let index = 0; index < data.length; index++) {
-              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(data[index]?.buyerName[0]) == false) {
-                this.ALL_FILTER_DATA['Buyer_Name'].push(data[index]?.buyerName[0]);
-              }
-              if (this.ALL_FILTER_DATA['Company_Name'].includes(data[index]?.consigneeName) == false) {
-                this.ALL_FILTER_DATA['Company_Name'].push(data[index]?.consigneeName);
-              }
-              if (this.ALL_FILTER_DATA['Origin'].includes(data[index]?.exporterLocationCode) == false) {
-                this.ALL_FILTER_DATA['Origin'].push(data[index]?.exporterLocationCode);
-              }
-              if (this.ALL_FILTER_DATA['Destination'].includes(data[index]?.countryOfFinaldestination) == false) {
-                this.ALL_FILTER_DATA['Destination'].push(data[index]?.countryOfFinaldestination);
-              }
-              if (this.ALL_FILTER_DATA['SB_DATE'].includes(data[index]?.sbdate) == false) {
-                this.ALL_FILTER_DATA['SB_DATE'].push(data[index]?.sbdate);
-              }
+        this.shippingBillService.getShippingBillList_Master().then((data: any) => {
+          console.log('getShippingBillList_Master', data)
+          this.item1 = data;
+          this.FILTER_VALUE_LIST = data;
+          for (let index = 0; index < data.length; index++) {
+            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(data[index]?.buyerName[0]) == false) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push(data[index]?.buyerName[0]);
             }
-          });
+            if (this.ALL_FILTER_DATA['Company_Name'].includes(data[index]?.consigneeName) == false) {
+              this.ALL_FILTER_DATA['Company_Name'].push(data[index]?.consigneeName);
+            }
+            if (this.ALL_FILTER_DATA['Origin'].includes(data[index]?.exporterLocationCode) == false) {
+              this.ALL_FILTER_DATA['Origin'].push(data[index]?.exporterLocationCode);
+            }
+            if (this.ALL_FILTER_DATA['Destination'].includes(data[index]?.countryOfFinaldestination) == false) {
+              this.ALL_FILTER_DATA['Destination'].push(data[index]?.countryOfFinaldestination);
+            }
+            if (this.ALL_FILTER_DATA['SB_DATE'].includes(data[index]?.sbdate) == false) {
+              this.ALL_FILTER_DATA['SB_DATE'].push(data[index]?.sbdate);
+            }
+          }
         });
       } else if (this.file === 'boe') {
         this.doc = 'BOE';
