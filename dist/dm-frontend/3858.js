@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkdm_frontend=self.webpackChunkdm_frontend||[]).push([[3858],{3858:(f,t,_)=>{_.r(t),_.d(t,{ImportBillOfExchangeModule:()=>s});var n=_(843),l=_(2579),E=_(2258),r=_(8528),d=_(241),M=_(9408),O=_(3192),a=_(2560);let s=(()=>{class o{}return o.\u0275fac=function(m){return new(m||o)},o.\u0275mod=a.oAB({type:o}),o.\u0275inj=a.cJS({providers:[l.D,E.FF,d.g],imports:[M.$,n.Bz.forChild([{path:"",component:O.W,pathMatch:"full"}]),r.zk.forRoot()]}),o})()}}]);
-//# sourceMappingURL=3858.js.map

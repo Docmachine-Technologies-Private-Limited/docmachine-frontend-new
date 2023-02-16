@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkdm_frontend=self.webpackChunkdm_frontend||[]).push([[7454],{7454:(P,t,_)=>{_.r(t),_.d(t,{CreateBeneModule:()=>s});var n=_(843),e=_(2579),r=_(2258),E=_(8528),d=_(241),M=_(9408),l=_(6145),a=_(2560);let s=(()=>{class o{}return o.\u0275fac=function(O){return new(O||o)},o.\u0275mod=a.oAB({type:o}),o.\u0275inj=a.cJS({providers:[e.D,r.FF,d.g],imports:[M.$,n.Bz.forChild([{path:"",component:l.i,pathMatch:"full"}]),E.zk.forRoot()]}),o})()}}]);
-//# sourceMappingURL=7454.js.map
