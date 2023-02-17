@@ -354,7 +354,7 @@ export class NewDirectDispatchComponent implements OnInit {
     public shippingBillService: ShippingbillDataService,
     private modalService: NgbModal,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public pdfmerge:MergePdfListService,
+    public pdfmerge: MergePdfListService,
     public wininfo: WindowInformationService) {
     this.api_base = appconfig.apiUrl;
     this.getDropdownData();
@@ -365,7 +365,7 @@ export class NewDirectDispatchComponent implements OnInit {
     this.file = this.route.snapshot.paramMap.get('doc_type');
     this.ExportBillLodgement_Form = this.formBuilder.group({
       bank_name: ['', [Validators.required]],
-      Shipping_bill_list:[[],[Validators.required]],
+      Shipping_bill_list: [[], [Validators.required]],
       Advance_reference_Number: [[], [Validators.required]],
       Under_LC: ['', [Validators.required]],
       With_Scrutiny: ['', [Validators.required]],
@@ -376,10 +376,10 @@ export class NewDirectDispatchComponent implements OnInit {
       Total_SB_Amount: ['', [Validators.required]],
       Total_FIRX_Amount: ['', [Validators.required]],
       Total_Reaming_Amount: ['', [Validators.required]],
-      documents:[[],[Validators.required]],
+      documents: [[], [Validators.required]],
       deleteflag: ['0', [Validators.required]],
       SbRef: ['', [Validators.required]],
-      Carry_Amount:[[],[Validators.required]],
+      Carry_Amount: [[], [Validators.required]],
     });
     this.userService.getUserDetail().then((status) => {
       this.USER_DATA = status['result'];
@@ -407,32 +407,32 @@ export class NewDirectDispatchComponent implements OnInit {
     this.getBill_Lodgments();
   }
   BOOLEAN: boolean = false;
-  MERGE_ALL_PDF:any=[];
+  MERGE_ALL_PDF: any = [];
   async SlideToggle(event: MatTabChangeEvent) {
-  var temp:any=[];
+    var temp: any = [];
     const id = event.tab.content.viewContainerRef.element.nativeElement.id;
     this.PDF_LIST = [];
     for (let index = 0; index < this.temp[id].length; index++) {
-    if (this.temp[id][index]?.pdf!=undefined && this.temp[id][index]?.pdf!=null) {
-      temp.push(this.temp[id][index]?.pdf)
-      this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
-        console.log('downloadEachFile', res);
-        res.arrayBuffer().then((data: any) => {
-          this.PDF_LIST.push({
-            pdf: data,
-            name: this.temp[id][index]['name']
-          })
-          console.log('downloadEachFile', data);
+      if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
+        temp.push(this.temp[id][index]?.pdf)
+        this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
+          console.log('downloadEachFile', res);
+          res.arrayBuffer().then((data: any) => {
+            this.PDF_LIST.push({
+              pdf: data,
+              name: this.temp[id][index]['name']
+            })
+            console.log('downloadEachFile', data);
+          });
         });
-      });
+      }
+      if ((index + 1) == this.temp[id].length) {
+        await this.pdfmerge.mergeAllPDF(temp).then((data: any) => {
+          console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
+          this.MERGE_ALL_PDF[0] = data.toString();
+        })
+      }
     }
-    if ((index+1)==this.temp[id].length) {
-      await this.pdfmerge.mergeAllPDF(temp).then((data: any) => {
-          console.log('mergeAllPDFmergeAllPDFmergeAllPDF',temp,data);
-          this.MERGE_ALL_PDF[0]=data.toString();
-       })
-    }
-  }
   }
   getDropdownData() {
     this.userService.getTeam()
@@ -653,7 +653,7 @@ export class NewDirectDispatchComponent implements OnInit {
       this.showInvoice = false;
       console.log('hello');
     });
-    this.item1=[];
+    this.item1 = [];
     this.shippingBillService.getShippingBillList().then((res: any) => {
       this.shippingBillService.shippingbills$.subscribe((data: any) => {
         console.log('getShippingBillList', data)
@@ -661,7 +661,7 @@ export class NewDirectDispatchComponent implements OnInit {
           console.log(res);
           for (let index = 0; index < res?.data.length; index++) {
             const element = res?.data[index];
-            if (element?.file=='export') {
+            if (element?.file == 'export') {
               this.item1.push(element);
             }
           }
@@ -781,7 +781,7 @@ export class NewDirectDispatchComponent implements OnInit {
       }
     );
     this.Letter_Of_Credit = [];
-    this.documentService.getLetterLC().subscribe(
+    this.documentService.getLetterLCfile("export").subscribe(
       (res: any) => {
         console.log('Res', res);
         for (let value of res.data) {
@@ -948,286 +948,567 @@ export class NewDirectDispatchComponent implements OnInit {
   }
 
 
-  async generateDoc1(form:any) {
-  console.log(form,'generateDoc1generateDoc1');
-    if (this.advanceArray.length != 0) {
-      this.generate = true;
-      this.isGenerate = true;
-      let generateDoc2: any = [];
-      let pipoValue;
-      let value;
-      let buyerValue;
-      for (let item of this.itemArray) {
-        for (let sb of this.sbArray) {
-          if (item.sbno === sb) {
-            pipoValue = item;
-            value = item.pipo;
-            buyerValue = item.buyerName;
-            this.dateArray.push(item.sbdate);
-            this.sbDataArray.push(item);
-            console.log('value', value);
-            generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(item.doc));
+  async generateDoc1(form: any) {
+    console.log(form, 'generateDoc1generateDoc1');
+    if (this.Lodgement['AgainstAdvanceReceipt']?.Hide != '') {
+      if (this.Lodgement['AgainstAdvanceReceipt']?.Hide == 'no') {
+        this.generate = true;
+        this.isGenerate = true;
+        let generateDoc2: any = [];
+        let pipoValue;
+        let value;
+        let buyerValue;
+        for (let item of this.itemArray) {
+          for (let sb of this.sbArray) {
+            if (item.sbno === sb) {
+              pipoValue = item;
+              value = item.pipo;
+              buyerValue = item.buyerName;
+              this.dateArray.push(item.sbdate);
+              this.sbDataArray.push(item);
+              console.log('value', value);
+              generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(item.doc));
+            }
           }
         }
-      }
 
-      console.log(pipoValue, 'pipovalue*****************************');
-      for (value of this.item) {
-        for (let value1 of pipoValue.pipo) {
-          if (value.pi_poNo == value1.pi_poNo) {
-            this.randomArray.push(value);
+        console.log(pipoValue, 'pipovalue*****************************');
+        for (value of this.item) {
+          for (let value1 of pipoValue.pipo) {
+            if (value.pi_poNo == value1.pi_poNo) {
+              this.randomArray.push(value);
+            }
           }
         }
-      }
-      console.log('random Array', this.randomArray);
-      console.log('random Array', this.randomArray[0].creditNote);
+        console.log('random Array', this.randomArray);
+        console.log('random Array', this.randomArray[0].creditNote);
 
-      this.sb = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['sb']
-      );
+        this.sb = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['sb']
+        );
 
-      this.creditNote = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['creditNote']
-      );
-      console.log('////*********************Credit Note', this.creditNote);
+        this.creditNote = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['creditNote']
+        );
+        console.log('////*********************Credit Note', this.creditNote);
 
-      this.debitNote = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['debitNote']
-      );
-      console.log('////*********************debit Note', this.debitNote);
+        this.debitNote = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['debitNote']
+        );
+        console.log('////*********************debit Note', this.debitNote);
 
-      this.advanceOutward = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['advanceOutward']
-      );
-      console.log('////*********************advanceOutward', this.advanceOutward);
+        this.advanceOutward = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['advanceOutward']
+        );
+        console.log('////*********************advanceOutward', this.advanceOutward);
 
-      this.ebrc = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['EBRC']
-      );
-      console.log('////*********************Ebrc', this.ebrc);
+        this.ebrc = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['EBRC']
+        );
+        console.log('////*********************Ebrc', this.ebrc);
 
-      this.blcopyref = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['blcopyref']
-      );
+        this.blcopyref = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['blcopyref']
+        );
 
-      this.irAdvice = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['irAdvice']
-      );
+        this.irAdvice = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['irAdvice']
+        );
 
-      this.lcCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['lcCopy']
-      );
-      console.log('****************Lc Copy', this.lcCopy);
+        this.lcCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['lcCopy']
+        );
+        console.log('****************Lc Copy', this.lcCopy);
 
-      this.swiftCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['swiftCopy']
-      );
+        this.swiftCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['swiftCopy']
+        );
 
-      this.tryPartyAgreement = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['tryPartyAgreement']
-      );
+        this.tryPartyAgreement = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['tryPartyAgreement']
+        );
 
-      this.opinionReport = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['opinionReport']
-      );
+        this.opinionReport = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['opinionReport']
+        );
 
-      this.airwayBlCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['airwayBlcopy']
-      );
+        this.airwayBlCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['airwayBlcopy']
+        );
 
-      this.billOfExchange = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['billOfExchange']
-      );
+        this.billOfExchange = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['billOfExchange']
+        );
 
-      this.commercial = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['commercial']
-      );
+        this.commercial = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['commercial']
+        );
 
-      this.destruction = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['destruction']
-      );
+        this.destruction = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['destruction']
+        );
 
-      this.packingList = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['packingList']
-      );
+        this.packingList = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]['packingList']
+        );
 
-      console.log('Random Array', this.randomArray);
-      console.log('Airway Docs****************--------------------------------', this.airwayBlCopy);
+        console.log('Random Array', this.randomArray);
+        console.log('Airway Docs****************--------------------------------', this.airwayBlCopy);
 
-      let mainArr = [];
-      let invoicearray = [];
-      console.log('line no.796 question5 data', this.Question5);
-      this.sbDataArray.forEach((value, index) => {
-        for (let a of value.pipo) {
-          this.arrayPipo.push(a);
-        }
-      });
-      if (this.Question6 == 'yes') {
-        let adArr = [];
-        console.log('Shipping Map For', this.shippingMap);
-        this.shippingMap.forEach((value) => {
-          console.log('Shipping Map For loop', value);
-          adArr = adArr.concat(value);
+        let mainArr = [];
+        let invoicearray = [];
+        console.log('line no.796 question5 data', this.Question5);
+        this.sbDataArray.forEach((value, index) => {
+          for (let a of value.pipo) {
+            this.arrayPipo.push(a);
+          }
         });
-        console.log('advArr', adArr);
-        console.log('sbDataArray', this.sbDataArray);
-
-        forkJoin(
-          this.sbDataArray.map((value) => {
-            let piponumbers = [];
-            for (let i in value.pipo) {
-              piponumbers.push(value.pipo[i].pi_poNo);
-            }
-            return this.userService.getManyPipo(piponumbers);
-          })
-        ).subscribe((resp: any[]) => {
-          console.log('Fork join resp', resp);
-          resp.forEach((data, i) => {
-            for (let item of data['data']) {
-              console.log(item);
-              const newVal = { ...this.sbDataArray[i] };
-              newVal['pipoValue'] = item;
-              mainArr.push(newVal);
-              console.log('fggfgfgf', mainArr);
-            }
+        if (this.Question6 == 'yes') {
+          let adArr = [];
+          console.log('Shipping Map For', this.shippingMap);
+          this.shippingMap.forEach((value) => {
+            console.log('Shipping Map For loop', value);
+            adArr = adArr.concat(value);
           });
-          console.log(this.advanceForm.value);
+          console.log('advArr', adArr);
+          console.log('sbDataArray', this.sbDataArray);
 
-          mainArr.forEach((value1, index) => {
-            console.log('shshsh');
-            console.log(this.advanceForm.value.advance);
-            for (let a of adArr) {
-              if (a.sb == value1.sbno) {
-                const newVal = { ...value1 };
-                newVal['advance'] = a.valueInternal;
-                newVal['irAdviceId'] = a.irDataItem._id;
-                invoicearray.push(newVal);
+          forkJoin(
+            this.sbDataArray.map((value) => {
+              let piponumbers = [];
+              for (let i in value.pipo) {
+                piponumbers.push(value.pipo[i].pi_poNo);
+              }
+              return this.userService.getManyPipo(piponumbers);
+            })
+          ).subscribe((resp: any[]) => {
+            console.log('Fork join resp', resp);
+            resp.forEach((data, i) => {
+              for (let item of data['data']) {
+                console.log(item);
+                const newVal = { ...this.sbDataArray[i] };
+                newVal['pipoValue'] = item;
+                mainArr.push(newVal);
+                console.log('fggfgfgf', mainArr);
+              }
+            });
+            console.log(this.advanceForm.value);
+
+            mainArr.forEach((value1, index) => {
+              console.log('shshsh');
+              console.log(this.advanceForm.value.advance);
+              for (let a of adArr) {
+                if (a.sb == value1.sbno) {
+                  const newVal = { ...value1 };
+                  newVal['advance'] = a.valueInternal;
+                  newVal['irAdviceId'] = a.irDataItem._id;
+                  invoicearray.push(newVal);
+                }
+              }
+              console.log('aajsjss');
+            });
+            let amountArr = [];
+            for (let item of invoicearray) {
+              amountArr.push(item.pipoValue.amount);
+            }
+            console.log(amountArr);
+            this.amArr = amountArr;
+            console.log('t', invoicearray);
+            this.invoiceArr = invoicearray;
+
+            console.log('hello line 884', this.invoiceArr);
+            console.log('line no.866 question5 data', this.Question5);
+          });
+        }
+
+        console.log('Rajuuuuu', pipoValue);
+        //this.arrayPipo = value
+        this.mainDoc1 = generateDoc2;
+        console.log(this.mainDoc1);
+        console.log('950', generateDoc2);
+        let generateDoc3: any = [];
+        if (this.Question2 == 'yes') {
+          for (let item of this.item4) {
+            for (let sb of this.tryArray) {
+              if (item.triPartyAgreementNumber === sb) {
+                generateDoc3.push(
+                  this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+                );
               }
             }
-            console.log('aajsjss');
-          });
-          let amountArr = [];
-          for (let item of invoicearray) {
-            amountArr.push(item.pipoValue.amount);
           }
-          console.log(amountArr);
-          this.amArr = amountArr;
-          console.log('t', invoicearray);
-          this.invoiceArr = invoicearray;
+        }
 
-          console.log('hello line 884', this.invoiceArr);
-          console.log('line no.866 question5 data', this.Question5);
+        let generateDoc4: any = [];
+        if (this.Question7 == 'yes') {
+          for (let item of this.item8) {
+            for (let sb of this.lcArray) {
+              if (item.letterOfCreditNumber === sb) {
+                generateDoc4.push(
+                  this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+                );
+              }
+            }
+          }
+        }
+        console.log(buyerValue);
+        const data: any = await this.userService.getBuyerByName(buyerValue);
+        console.log('shshhss', data.data);
+        this.buyerAds = data.data.buyerAdrs;
+
+        this.completewords4 = this.buyerAds.split(' ');
+        this.devideContent4 = this.completewords4.length;
+
+        for (let i = 0; i < this.completewords4.length; i++) {
+          if (i < 6) {
+            this.buyerAdd2.push(this.completewords4[i]);
+          } else if (i > 5 && i <= 11) {
+            this.buyerAdd3.push(this.completewords4[i]);
+          } else if (i > 11) {
+            this.buyerAdd4.push(this.completewords4[i]);
+          }
+        }
+
+        this.buyerAds1 = this.buyerAdd2.join(' ');
+        this.buyerAds2 = this.buyerAdd3.join(' ');
+        this.buyerAds3 = this.buyerAdd4.join(' ');
+
+        console.log('Shailendra Buyer Address*************', this.buyerAds1);
+        console.log('Shailendra Buyer Address*************', this.buyerAds2);
+
+        console.log('89999999999999999999999999999', this.buyerAds);
+        this.mainDoc3 = generateDoc3;
+        this.mainDoc4 = generateDoc4;
+        this.newTask[0] = {
+          sbNumbers: this.sbArray,
+          sbUrls: this.mainDoc1,
+          triPartyAgreementNumber: this.tryArray,
+          tryUrls: this.mainDoc3,
+          purposeCode: '',
+          isLc: this.lc,
+          letterOfCreditNumber: this.lcArray,
+          lcUrls: this.mainDoc4,
+          withScrutiny: this.scrutiny,
+          withDiscount: this.withDiscount,
+          bankRef: '',
+          advanceRef: this.advanceRef,
+          ir: this.Question5,
+        };
+        for (let value of this.dateArray) {
+          this.getProper(value);
+        }
+        this.myArr.sort(function (a, b) {
+          a = a.split('-').reverse().join('');
+          b = b.split('-').reverse().join('');
+          return a > b ? 1 : a < b ? -1 : 0;
+
+          // return a.localeCompare(b);         // <-- alternative
         });
-      }
+        console.log('Datesss', this.myArr);
+        console.log(this.myArr[0]);
+        console.log(this.myArr[this.myArr.length - 1]);
 
-      console.log('Rajuuuuu', pipoValue);
-      //this.arrayPipo = value
-      this.mainDoc1 = generateDoc2;
-      console.log(this.mainDoc1);
-      console.log('950', generateDoc2);
-      let generateDoc3: any = [];
-      if (this.Question2 == 'yes') {
-        for (let item of this.item4) {
-          for (let sb of this.tryArray) {
-            if (item.triPartyAgreementNumber === sb) {
-              generateDoc3.push(
-                this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
-              );
+        console.log(this.generate1);
+        console.log(this.c);
+        this.fillForm(pipoValue);
+        this.newTask[0] = {
+          sbNumbers: this.sbArray,
+          sbUrls: this.mainDoc1,
+          triPartyAgreementNumber: this.tryArray,
+          tryUrls: this.mainDoc3,
+          purposeCode: '',
+          isLc: this.lc,
+          letterOfCreditNumber: this.lcArray,
+          lcUrls: this.mainDoc4,
+          withScrutiny: this.scrutiny,
+          withDiscount: this.withDiscount,
+          bankRef: '',
+          advanceRef: this.advanceRef,
+          ir: this.Question5,
+        };
+      } else {
+        if (this.advanceArray.length != 0) {
+          this.generate = true;
+          this.isGenerate = true;
+          let generateDoc2: any = [];
+          let pipoValue;
+          let value;
+          let buyerValue;
+          for (let item of this.itemArray) {
+            for (let sb of this.sbArray) {
+              if (item.sbno === sb) {
+                pipoValue = item;
+                value = item.pipo;
+                buyerValue = item.buyerName;
+                this.dateArray.push(item.sbdate);
+                this.sbDataArray.push(item);
+                console.log('value', value);
+                generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(item.doc));
+              }
             }
           }
-        }
-      }
 
-      let generateDoc4: any = [];
-      if (this.Question7 == 'yes') {
-        for (let item of this.item8) {
-          for (let sb of this.lcArray) {
-            if (item.letterOfCreditNumber === sb) {
-              generateDoc4.push(
-                this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
-              );
+          console.log(pipoValue, 'pipovalue*****************************');
+          for (value of this.item) {
+            for (let value1 of pipoValue.pipo) {
+              if (value.pi_poNo == value1.pi_poNo) {
+                this.randomArray.push(value);
+              }
             }
           }
+          console.log('random Array', this.randomArray);
+          console.log('random Array', this.randomArray[0].creditNote);
+
+          this.sb = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['sb']
+          );
+
+          this.creditNote = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['creditNote']
+          );
+          console.log('////*********************Credit Note', this.creditNote);
+
+          this.debitNote = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['debitNote']
+          );
+          console.log('////*********************debit Note', this.debitNote);
+
+          this.advanceOutward = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['advanceOutward']
+          );
+          console.log('////*********************advanceOutward', this.advanceOutward);
+
+          this.ebrc = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['EBRC']
+          );
+          console.log('////*********************Ebrc', this.ebrc);
+
+          this.blcopyref = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['blcopyref']
+          );
+
+          this.irAdvice = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['irAdvice']
+          );
+
+          this.lcCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['lcCopy']
+          );
+          console.log('****************Lc Copy', this.lcCopy);
+
+          this.swiftCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['swiftCopy']
+          );
+
+          this.tryPartyAgreement = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['tryPartyAgreement']
+          );
+
+          this.opinionReport = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['opinionReport']
+          );
+
+          this.airwayBlCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['airwayBlcopy']
+          );
+
+          this.billOfExchange = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['billOfExchange']
+          );
+
+          this.commercial = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['commercial']
+          );
+
+          this.destruction = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['destruction']
+          );
+
+          this.packingList = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.randomArray[0]['packingList']
+          );
+
+          console.log('Random Array', this.randomArray);
+          console.log('Airway Docs****************--------------------------------', this.airwayBlCopy);
+
+          let mainArr = [];
+          let invoicearray = [];
+          console.log('line no.796 question5 data', this.Question5);
+          this.sbDataArray.forEach((value, index) => {
+            for (let a of value.pipo) {
+              this.arrayPipo.push(a);
+            }
+          });
+          if (this.Question6 == 'yes') {
+            let adArr = [];
+            console.log('Shipping Map For', this.shippingMap);
+            this.shippingMap.forEach((value) => {
+              console.log('Shipping Map For loop', value);
+              adArr = adArr.concat(value);
+            });
+            console.log('advArr', adArr);
+            console.log('sbDataArray', this.sbDataArray);
+
+            forkJoin(
+              this.sbDataArray.map((value) => {
+                let piponumbers = [];
+                for (let i in value.pipo) {
+                  piponumbers.push(value.pipo[i].pi_poNo);
+                }
+                return this.userService.getManyPipo(piponumbers);
+              })
+            ).subscribe((resp: any[]) => {
+              console.log('Fork join resp', resp);
+              resp.forEach((data, i) => {
+                for (let item of data['data']) {
+                  console.log(item);
+                  const newVal = { ...this.sbDataArray[i] };
+                  newVal['pipoValue'] = item;
+                  mainArr.push(newVal);
+                  console.log('fggfgfgf', mainArr);
+                }
+              });
+              console.log(this.advanceForm.value);
+
+              mainArr.forEach((value1, index) => {
+                console.log('shshsh');
+                console.log(this.advanceForm.value.advance);
+                for (let a of adArr) {
+                  if (a.sb == value1.sbno) {
+                    const newVal = { ...value1 };
+                    newVal['advance'] = a.valueInternal;
+                    newVal['irAdviceId'] = a.irDataItem._id;
+                    invoicearray.push(newVal);
+                  }
+                }
+                console.log('aajsjss');
+              });
+              let amountArr = [];
+              for (let item of invoicearray) {
+                amountArr.push(item.pipoValue.amount);
+              }
+              console.log(amountArr);
+              this.amArr = amountArr;
+              console.log('t', invoicearray);
+              this.invoiceArr = invoicearray;
+
+              console.log('hello line 884', this.invoiceArr);
+              console.log('line no.866 question5 data', this.Question5);
+            });
+          }
+
+          console.log('Rajuuuuu', pipoValue);
+          //this.arrayPipo = value
+          this.mainDoc1 = generateDoc2;
+          console.log(this.mainDoc1);
+          console.log('950', generateDoc2);
+          let generateDoc3: any = [];
+          if (this.Question2 == 'yes') {
+            for (let item of this.item4) {
+              for (let sb of this.tryArray) {
+                if (item.triPartyAgreementNumber === sb) {
+                  generateDoc3.push(
+                    this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+                  );
+                }
+              }
+            }
+          }
+
+          let generateDoc4: any = [];
+          if (this.Question7 == 'yes') {
+            for (let item of this.item8) {
+              for (let sb of this.lcArray) {
+                if (item.letterOfCreditNumber === sb) {
+                  generateDoc4.push(
+                    this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+                  );
+                }
+              }
+            }
+          }
+          console.log(buyerValue);
+          const data: any = await this.userService.getBuyerByName(buyerValue);
+          console.log('shshhss', data.data);
+          this.buyerAds = data.data.buyerAdrs;
+
+          this.completewords4 = this.buyerAds.split(' ');
+          this.devideContent4 = this.completewords4.length;
+
+          for (let i = 0; i < this.completewords4.length; i++) {
+            if (i < 6) {
+              this.buyerAdd2.push(this.completewords4[i]);
+            } else if (i > 5 && i <= 11) {
+              this.buyerAdd3.push(this.completewords4[i]);
+            } else if (i > 11) {
+              this.buyerAdd4.push(this.completewords4[i]);
+            }
+          }
+
+          this.buyerAds1 = this.buyerAdd2.join(' ');
+          this.buyerAds2 = this.buyerAdd3.join(' ');
+          this.buyerAds3 = this.buyerAdd4.join(' ');
+
+          console.log('Shailendra Buyer Address*************', this.buyerAds1);
+          console.log('Shailendra Buyer Address*************', this.buyerAds2);
+
+          console.log('89999999999999999999999999999', this.buyerAds);
+          this.mainDoc3 = generateDoc3;
+          this.mainDoc4 = generateDoc4;
+          this.newTask[0] = {
+            sbNumbers: this.sbArray,
+            sbUrls: this.mainDoc1,
+            triPartyAgreementNumber: this.tryArray,
+            tryUrls: this.mainDoc3,
+            purposeCode: '',
+            isLc: this.lc,
+            letterOfCreditNumber: this.lcArray,
+            lcUrls: this.mainDoc4,
+            withScrutiny: this.scrutiny,
+            withDiscount: this.withDiscount,
+            bankRef: '',
+            advanceRef: this.advanceRef,
+            ir: this.Question5,
+          };
+          for (let value of this.dateArray) {
+            this.getProper(value);
+          }
+          this.myArr.sort(function (a, b) {
+            a = a.split('-').reverse().join('');
+            b = b.split('-').reverse().join('');
+            return a > b ? 1 : a < b ? -1 : 0;
+
+            // return a.localeCompare(b);         // <-- alternative
+          });
+          console.log('Datesss', this.myArr);
+          console.log(this.myArr[0]);
+          console.log(this.myArr[this.myArr.length - 1]);
+
+          console.log(this.generate1);
+          console.log(this.c);
+          this.fillForm(pipoValue);
+          this.newTask[0] = {
+            sbNumbers: this.sbArray,
+            sbUrls: this.mainDoc1,
+            triPartyAgreementNumber: this.tryArray,
+            tryUrls: this.mainDoc3,
+            purposeCode: '',
+            isLc: this.lc,
+            letterOfCreditNumber: this.lcArray,
+            lcUrls: this.mainDoc4,
+            withScrutiny: this.scrutiny,
+            withDiscount: this.withDiscount,
+            bankRef: '',
+            advanceRef: this.advanceRef,
+            ir: this.Question5,
+          };
+        } else {
+          this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',
+            `Please select a firx amount ${this.itemArray.length == 0 ? '& also select Sb no.' : ''}...`)
         }
       }
-      console.log(buyerValue);
-      const data: any = await this.userService.getBuyerByName(buyerValue);
-      console.log('shshhss', data.data);
-      this.buyerAds = data.data.buyerAdrs;
-
-      this.completewords4 = this.buyerAds.split(' ');
-      this.devideContent4 = this.completewords4.length;
-
-      for (let i = 0; i < this.completewords4.length; i++) {
-        if (i < 6) {
-          this.buyerAdd2.push(this.completewords4[i]);
-        } else if (i > 5 && i <= 11) {
-          this.buyerAdd3.push(this.completewords4[i]);
-        } else if (i > 11) {
-          this.buyerAdd4.push(this.completewords4[i]);
-        }
-      }
-
-      this.buyerAds1 = this.buyerAdd2.join(' ');
-      this.buyerAds2 = this.buyerAdd3.join(' ');
-      this.buyerAds3 = this.buyerAdd4.join(' ');
-
-      console.log('Shailendra Buyer Address*************', this.buyerAds1);
-      console.log('Shailendra Buyer Address*************', this.buyerAds2);
-
-      console.log('89999999999999999999999999999', this.buyerAds);
-      this.mainDoc3 = generateDoc3;
-      this.mainDoc4 = generateDoc4;
-      this.newTask[0] = {
-        sbNumbers: this.sbArray,
-        sbUrls: this.mainDoc1,
-        triPartyAgreementNumber: this.tryArray,
-        tryUrls: this.mainDoc3,
-        purposeCode: '',
-        isLc: this.lc,
-        letterOfCreditNumber: this.lcArray,
-        lcUrls: this.mainDoc4,
-        withScrutiny: this.scrutiny,
-        withDiscount: this.withDiscount,
-        bankRef: '',
-        advanceRef: this.advanceRef,
-        ir: this.Question5,
-      };
-      for (let value of this.dateArray) {
-        this.getProper(value);
-      }
-      this.myArr.sort(function (a, b) {
-        a = a.split('-').reverse().join('');
-        b = b.split('-').reverse().join('');
-        return a > b ? 1 : a < b ? -1 : 0;
-
-        // return a.localeCompare(b);         // <-- alternative
-      });
-      console.log('Datesss', this.myArr);
-      console.log(this.myArr[0]);
-      console.log(this.myArr[this.myArr.length - 1]);
-
-      console.log(this.generate1);
-      console.log(this.c);
-      this.fillForm(pipoValue);
-      this.newTask[0] = {
-        sbNumbers: this.sbArray,
-        sbUrls: this.mainDoc1,
-        triPartyAgreementNumber: this.tryArray,
-        tryUrls: this.mainDoc3,
-        purposeCode: '',
-        isLc: this.lc,
-        letterOfCreditNumber: this.lcArray,
-        lcUrls: this.mainDoc4,
-        withScrutiny: this.scrutiny,
-        withDiscount: this.withDiscount,
-        bankRef: '',
-        advanceRef: this.advanceRef,
-        ir: this.Question5,
-      };
     } else {
-      this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',
-        `Please select a firx amount ${this.itemArray.length == 0 ? '& also select Sb no.' : ''}...`)
+      this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Against advance receipt?', `Please select a Against advance receipt?...`)
     }
   }
 
@@ -2623,60 +2904,60 @@ export class NewDirectDispatchComponent implements OnInit {
   PROCEED_BTN_DISABLED: boolean = false;
   filterSum: any = [];
   balanceAvai: any = '';
-async addToSbArray(irDataItem: any, e) {
-    this.balanceAvai = this.itemArray.reduce(function (a, b) { return a + parseFloat(b?.balanceAvai)}, 0)
-  if (this.filterSum.toString()!=this.balanceAvai.toString()) {
-    if (e.target.checked) {
-      console.log('Checked');
-      let advance = this.advanceArray.some(
-        (item) => item.valueInternal === irDataItem.billNo
-      );
-      if (!advance) {
-        console.log('Adding');
-        irDataItem.Used_Balance = irDataItem?.BalanceAvail;
-        let details = {
-          valueInternal: irDataItem.billNo,
-          irDataItem: irDataItem,
-          sb: this.currentSbForAdvance,
-        };
-        this.Advance_Amount_Sum.push(details)
-        this.filterSum = this.Advance_Amount_Sum.reduce(function (a, b) { return a + b?.irDataItem?.BalanceAvail }, 0);
-        if (this.filterSum > this.balanceAvai) {
-          this.Advance_Amount_Sum.pop();
-          var sum = this.Advance_Amount_Sum.reduce(function (a, b) { return a + b?.irDataItem?.BalanceAvail }, 0);
-          let temp=details;
-          var last_amount=parseFloat(this.TO_FIXED(this.balanceAvai-sum,2));
-          temp.irDataItem.BalanceAvail=parseFloat(this.TO_FIXED(details?.irDataItem?.BalanceAvail-last_amount,2));
-          this.advanceArray.push(temp)
-          this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(temp.irDataItem)
-          this.filterSum=parseFloat(this.TO_FIXED(sum+last_amount,2));
-          irDataItem.Used_Balance = last_amount;
-          this.ExportBillLodgement_Form.controls['Carry_Amount'].setValue(temp);
-          console.log(details.irDataItem.BalanceAvail,sum,this.filterSum,last_amount,'asdfasfadfsa')
-        } else {
-          this.PROCEED_BTN_DISABLED = true;
-          this.advanceArray.push(details);
-          this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(irDataItem)
+  async addToSbArray(irDataItem: any, e) {
+    this.balanceAvai = this.itemArray.reduce(function (a, b) { return a + parseFloat(b?.balanceAvai) }, 0)
+    if (this.filterSum.toString() != this.balanceAvai.toString()) {
+      if (e.target.checked) {
+        console.log('Checked');
+        let advance = this.advanceArray.some(
+          (item) => item.valueInternal === irDataItem.billNo
+        );
+        if (!advance) {
+          console.log('Adding');
+          irDataItem.Used_Balance = irDataItem?.BalanceAvail;
+          let details = {
+            valueInternal: irDataItem.billNo,
+            irDataItem: irDataItem,
+            sb: this.currentSbForAdvance,
+          };
+          this.Advance_Amount_Sum.push(details)
+          this.filterSum = this.Advance_Amount_Sum.reduce(function (a, b) { return a + b?.irDataItem?.BalanceAvail }, 0);
+          if (this.filterSum > this.balanceAvai) {
+            this.Advance_Amount_Sum.pop();
+            var sum = this.Advance_Amount_Sum.reduce(function (a, b) { return a + b?.irDataItem?.BalanceAvail }, 0);
+            let temp = details;
+            var last_amount = parseFloat(this.TO_FIXED(this.balanceAvai - sum, 2));
+            temp.irDataItem.BalanceAvail = parseFloat(this.TO_FIXED(details?.irDataItem?.BalanceAvail - last_amount, 2));
+            this.advanceArray.push(temp)
+            this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(temp.irDataItem)
+            this.filterSum = parseFloat(this.TO_FIXED(sum + last_amount, 2));
+            irDataItem.Used_Balance = last_amount;
+            this.ExportBillLodgement_Form.controls['Carry_Amount'].setValue(temp);
+            console.log(details.irDataItem.BalanceAvail, sum, this.filterSum, last_amount, 'asdfasfadfsa')
+          } else {
+            this.PROCEED_BTN_DISABLED = true;
+            this.advanceArray.push(details);
+            this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(irDataItem)
+          }
+          this.ExportBillLodgement_Form.controls['Total_SB_Amount'].setValue(this.TO_FIXED(this.balanceAvai, 2));
+          this.ExportBillLodgement_Form.controls['Total_FIRX_Amount'].setValue(this.TO_FIXED(this.filterSum, 2));
+          this.ExportBillLodgement_Form.controls['Total_Reaming_Amount'].setValue(this.TO_FIXED(this.balanceAvai - this.filterSum, 2));
         }
-        this.ExportBillLodgement_Form.controls['Total_SB_Amount'].setValue(this.TO_FIXED(this.balanceAvai,2));
-        this.ExportBillLodgement_Form.controls['Total_FIRX_Amount'].setValue(this.TO_FIXED(this.filterSum,2));
-        this.ExportBillLodgement_Form.controls['Total_Reaming_Amount'].setValue(this.TO_FIXED(this.balanceAvai-this.filterSum,2));
+      } else {
+        console.log('removing, uncheked');
+        this.advanceArray = this.advanceArray.filter((item) => item.valueInternal !== irDataItem.billNo);
+        this.Advance_Amount_Sum = this.Advance_Amount_Sum.filter((item) => item.valueInternal !== irDataItem.billNo);
       }
-    } else {
-      console.log('removing, uncheked');
-      this.advanceArray = this.advanceArray.filter((item) => item.valueInternal !== irDataItem.billNo);
-      this.Advance_Amount_Sum = this.Advance_Amount_Sum.filter((item) => item.valueInternal !== irDataItem.billNo);
-    }
-    this.SHIPPING_MAP[this.currentSbForAdvance] = this.advanceArray;
-    this.shippingMap.set(this.refSbNo, JSON.parse(JSON.stringify(this.advanceArray)));
-    this.ExportBillLodgement_Form.controls['Advance_reference_Number'].setValue(this.advanceArray);
-    this.ExportBillLodgement_Form.controls['Shipping_bill_list'].setValue(this.itemArray);
+      this.SHIPPING_MAP[this.currentSbForAdvance] = this.advanceArray;
+      this.shippingMap.set(this.refSbNo, JSON.parse(JSON.stringify(this.advanceArray)));
+      this.ExportBillLodgement_Form.controls['Advance_reference_Number'].setValue(this.advanceArray);
+      this.ExportBillLodgement_Form.controls['Shipping_bill_list'].setValue(this.itemArray);
 
-  }else{
-    e.target.checked = false;
-    this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount', "You've exceeded the maximum transaction amount set by your Sb amount..")
-  }
-  console.log(this.advanceArray, this.balanceAvai, this.filterSum, this.Advance_Amount_Sum, this.shippingMap, this.ACCORDING_LIST, 'Deva Hello0*************************');
+    } else {
+      e.target.checked = false;
+      this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount', "You've exceeded the maximum transaction amount set by your Sb amount..")
+    }
+    console.log(this.advanceArray, this.balanceAvai, this.filterSum, this.Advance_Amount_Sum, this.shippingMap, this.ACCORDING_LIST, 'Deva Hello0*************************');
   }
 
   clearData() {
@@ -3425,7 +3706,7 @@ async addToSbArray(irDataItem: any, e) {
         }
       }
       var approval_data: any = {
-        id:  'Export_Bill_Lodgement_'+UniqueId,
+        id: 'Export_Bill_Lodgement_' + UniqueId,
         tableName: 'Export Bill Lodgement',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
@@ -3435,13 +3716,13 @@ async addToSbArray(irDataItem: any, e) {
         TypeOfPage: 'Transaction',
         FileType: this.USER_DATA?.sideMenu
       }
-      var tp:any={
-        firxNumber:[],
-        firxDate:[],
-        firxCurrency:[],
-        firxAmount:[],
-        firxCommision:[],
-        firxRecAmo:[]
+      var tp: any = {
+        firxNumber: [],
+        firxDate: [],
+        firxCurrency: [],
+        firxAmount: [],
+        firxCommision: [],
+        firxRecAmo: []
       };
       for (let index = 0; index < this.advanceArray.length; index++) {
         const element = this.advanceArray[index];
@@ -3452,64 +3733,66 @@ async addToSbArray(irDataItem: any, e) {
         tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
         tp['firxRecAmo'].push(0)
       }
-      this.getStatusCheckerMaker('Export_Bill_Lodgement_'+UniqueId).then((res: any) => {
+      this.getStatusCheckerMaker('Export_Bill_Lodgement_' + UniqueId).then((res: any) => {
         console.log(approval_data, res, 'approval_data')
-        if (res?.id != 'Export_Bill_Lodgement_'+UniqueId) {
+        if (res?.id != 'Export_Bill_Lodgement_' + UniqueId) {
           if (Status == '' || Status == null || Status == 'Rejected') {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
               this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
-              this.documentService.addExportBillLodgment(this.ExportBillLodgement_Form.value).subscribe((res1: any) => {
-              for (let index = 0; index < this.ExportBillLodgement_Form.value?.Advance_reference_Number?.length; index++) {
-                const element =this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.irDataItem;
-                this.documentService.Update_Amount_by_Table({
-                  tableName:'iradvices',
-                  id:element._id,
-                  query:{
-                    sbno:[this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb]
+              if (this.Lodgement['AgainstAdvanceReceipt']?.Hide!='no') {
+                this.documentService.addExportBillLodgment(this.ExportBillLodgement_Form.value).subscribe((res1: any) => {
+                  for (let index = 0; index < this.ExportBillLodgement_Form.value?.Advance_reference_Number?.length; index++) {
+                    const element = this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.irDataItem;
+                    this.documentService.Update_Amount_by_Table({
+                      tableName: 'iradvices',
+                      id: element._id,
+                      query: {
+                        sbno: [this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb]
+                      }
+                    }).subscribe((list: any) => {
+  
+                    })
                   }
-                }).subscribe((list:any) => {
-                
+                  this.documentService.Update_Amount_by_Table({
+                    tableName: 'iradvices',
+                    id: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?._id,
+                    query: {
+                      BalanceAvail: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.BalanceAvail,
+                      sbno: [this.ExportBillLodgement_Form.value?.Carry_Amount?.sb]
+                    }
+                  }).subscribe((r1: any) => {
+                    var query: any = {
+                      firxNumber: tp?.firxNumber.toString(),
+                      firxDate: tp?.firxDate.toString(),
+                      firxCurrency: tp?.firxCurrency.toString(),
+                      firxAmount: tp?.firxAmount.toString(),
+                      firxCommision: tp?.firxCommision.toString(),
+                      firxRecAmo: '0'
+                    }
+                    if (this.ExportBillLodgement_Form.value?.Total_Reaming_Amount != 0) {
+                      query = {
+                        firxNumber: tp?.firxNumber.toString(),
+                        firxDate: tp?.firxDate.toString(),
+                        firxCurrency: tp?.firxCurrency.toString(),
+                        firxAmount: tp?.firxAmount.toString(),
+                        firxCommision: tp?.firxCommision.toString(),
+                        firxRecAmo: '0',
+                        fobValue: this.ExportBillLodgement_Form.value?.Total_Reaming_Amount
+                      }
+                    }
+                    this.documentService.Update_Amount_by_Table({
+                      tableName: 'masterrecord',
+                      id: UniqueId,
+                      query: query
+                    }).subscribe((r2: any) => {
+                      console.log(r2, 'masterrecord')
+                      model.style.display = 'none';
+                      this.router.navigate(['/home/dashboardTask'])
+                    })
+                  });
+                  console.log('addExportBillLodgment', res1);
                 })
               }
-              this.documentService.Update_Amount_by_Table({
-                tableName:'iradvices',
-                id:this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?._id,
-                query:{
-                  BalanceAvail:this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.BalanceAvail,
-                  sbno:[this.ExportBillLodgement_Form.value?.Carry_Amount?.sb]
-                }
-              }).subscribe((r1:any)=>{
-              var query:any={
-                  firxNumber:tp?.firxNumber.toString(),
-                  firxDate:tp?.firxDate.toString(),
-                  firxCurrency:tp?.firxCurrency.toString(),
-                  firxAmount:tp?.firxAmount.toString(),
-                  firxCommision:tp?.firxCommision.toString(),
-                  firxRecAmo:'0'
-                }
-                if (this.ExportBillLodgement_Form.value?.Total_Reaming_Amount!=0) {
-                  query={
-                    firxNumber:tp?.firxNumber.toString(),
-                    firxDate:tp?.firxDate.toString(),
-                    firxCurrency:tp?.firxCurrency.toString(),
-                    firxAmount:tp?.firxAmount.toString(),
-                    firxCommision:tp?.firxCommision.toString(),
-                    firxRecAmo:'0',
-                    fobValue:this.ExportBillLodgement_Form.value?.Total_Reaming_Amount
-                  }
-                }
-                this.documentService.Update_Amount_by_Table({
-                  tableName:'masterrecord',
-                  id:UniqueId,
-                  query:query
-                }).subscribe((r2:any)=>{
-                console.log(r2,'masterrecord')
-                model.style.display = 'none';
-                this.router.navigate(['/home/dashboardTask'])
-                })
-              });
-              console.log('addExportBillLodgment',res1); 
-            })
             });
           }
         } else {
@@ -3518,7 +3801,7 @@ async addToSbArray(irDataItem: any, e) {
         }
       });
     }
-    console.log('Export_Bill_Lodgement_'+UniqueId,UniqueId, approval_data, 'uiiiiiiiiiiiiii')
+    console.log('Export_Bill_Lodgement_' + UniqueId, UniqueId, approval_data, 'uiiiiiiiiiiiiii')
   }
   getStatusCheckerMaker(id) {
     return new Promise((resolve, reject) => {

@@ -426,3 +426,14 @@ body,html{
   background-color:white;
   box-shadow:0px 1px 6px #00000029;
 }
+
+.tree-component{
+  display: block;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: #0000004a;
+  top: 0;
+  left: 0;
+  z-index: 9999999;
+}

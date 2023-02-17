@@ -134,33 +134,17 @@
                                             </div>
                                         </td>
                                         <td class="sb-no" (click)="getSinglePipo(data._id, i)">{{data.pi_poNo}}</td>
-                                        <!-- <td> <span *ngIf='data.document == "PI"'> Proforma Invoice</span> <span *ngIf='data.document != "PI"'> Purchase Order</span></td> -->
                                         <td>
                                             {{data.date}}
                                         </td>
                                         <td>
                                             {{data.buyerName}}
                                         </td>
-                                        <!-- <td>
-                  <img class="image"
-                      src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                      height="30px" width="30px" /><img class="image image2"
-                      src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
-                      height="30px" width="30px" /> Lindsey Stroud
-              </td> -->
-                                        <!-- <td>{{data.amount}}</td> -->
-
-                                        <!-- <td style="color:#F5A623;">Pending Action</td> -->
-
                                         <td>
                                             <div>
                                                 {{data.location}}
                                             </div>
-                                            <!-- <div *ngIf="optionsVisibility[i]">
-                    <input class="tblInput form-control" name="commodity" type="text" placeholder="Commodity" [(ngModel)]="data.commodity">
-                </div> -->
-                                        </td>
-
+                                       </td>
                                         <td>
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.commodity}}
@@ -173,7 +157,6 @@
 
                                         <td>
                                             <div *ngIf="data.sbno">
-                                                <!-- invoice Value -->
                                                 {{data.sbno}}
                                             </div>
                                         </td>
@@ -194,7 +177,6 @@
                                         </td>
                                         <td>
                                             <div *ngIf="data.portCode">
-                                                <!-- {{data.portCode}} -->
                                                 {{data.portCode}}
                                             </div>
                                         </td>
@@ -202,99 +184,49 @@
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.ttDate}}
                                             </div>
-                                            <!-- <div *ngIf="optionsVisibility[i]">
-                      <input class="tblInput form-control" name="ttDate" type="text" placeholder="TT Date" [(ngModel)]="data.ttDate">
-                  </div> -->
-                                        </td>
+                                            </td>
                                         <td>
-
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.ttUSD}}
                                             </div>
-
-                                            <!-- <div *ngIf="optionsVisibility[i]">
-                      <input class="tblInput form-control" name="ttUSD" type="text" placeholder="TT USD" [(ngModel)]="data.ttUSD">
-                  </div> -->
                                         </td>
-
                                         <td>
-
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.recDate}}
                                             </div>
-
-                                            <!-- <div *ngIf="optionsVisibility[i]">
-                      <input class="tblInput form-control" name="recDate" type="text" placeholder="Received Date" [(ngModel)]="data.recDate">
-                  </div> -->
-
-                                        </td>
-
+                                            </td>
                                         <td>
 
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.recUSD}}
                                             </div>
-
-                                            <!-- <div *ngIf="optionsVisibility[i]">
-                      <input class="tblInput form-control" name="recUSD" type="text" placeholder="Received USD" [(ngModel)]="data.recUSD">
-                  </div> -->
-                                        </td>
+                                            </td>
                                         <td>
-
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.commission}}
                                             </div>
-
-                                            <!-- <div *ngIf="optionsVisibility[i]">
-                      <input class="tblInput form-control" name="commission" type="text" placeholder="Commission" [(ngModel)]="data.commission">
-                  </div> -->
-                                        </td>
-
+                                            </td>
                                         <td>
-
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.conversionDate}}
                                             </div>
-
-                                            <!-- <div *ngIf="optionsVisibility[i]">
-                      <input class="tblInput form-control" name="conversionDate" type="text" placeholder="Conversion Date" [(ngModel)]="data.conversionDate">
-                  </div> -->
                                         </td>
-
                                         <td>
-
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.conversionRate}}
                                             </div>
-
-                                            <!-- <div *ngIf="optionsVisibility[i]">
-                      <input class="tblInput form-control" name="conversionRate" type="text" placeholder="Conversion Rate" [(ngModel)]="data.conversionRate">
-                  </div> -->
                                         </td>
-
                                         <td>
-
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.convertedAmount}}
                                             </div>
-
-                                            <!-- <div *ngIf="optionsVisibility[i]">
-                      <input class="tblInput form-control" name="convertedAmount" type="text" placeholder="Converted Amount" [(ngModel)]="data.convertedAmount">
-                  </div> -->
-                                        </td>
-
+                                            </td>
                                         <td>
-
                                             <div>
                                                 {{data.firxNumber}}
                                             </div>
-
-                                            <!-- <div *ngIf="optionsVisibility[i]">
-                      <input class="tblInput form-control" name="firxNumber" type="text" placeholder="FIRX NUMBER/ID" [(ngModel)]="data.firxNumber">
-                  </div> -->
-                                        </td>
+                                            </td>
                                         <td>
-
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.invoiceValueUSD}}
                                             </div>
@@ -303,79 +235,52 @@
                                                 <input class="tblInput form-control" name="invoiceValueUSD" type="text" placeholder="INVOICE VALUE - USD" [(ngModel)]="data.invoiceValueUSD">
                                             </div>
                                         </td>
-
                                         <td>
-
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.exchRate}}
                                             </div>
-
                                             <div *ngIf="optionsVisibility[i]">
                                                 <input class="tblInput form-control" name="exchRate" type="text" placeholder="EXCH. RATE" [(ngModel)]="data.exchRate">
                                             </div>
                                         </td>
-
                                         <td>
                                             {{data.amount}}
                                         </td>
-
-
                                         <td>
-
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.discountAllowed}}
                                             </div>
-
                                             <div *ngIf="optionsVisibility[i]">
                                                 <input class="tblInput form-control input5" name="discountAllowed" type="number" placeholder="DISCOUNT ALLOWED/USD" [(ngModel)]="data.discountAllowed">
                                             </div>
                                         </td>
-
                                         <td>
-
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.damagesUSD}}
                                             </div>
-
                                             <div *ngIf="optionsVisibility[i]">
                                                 <input class="tblInput form-control input5" name="damagesUSD" type="number" placeholder="DAMAGES/USD" [(ngModel)]="data.damagesUSD">
                                             </div>
                                         </td>
-
                                         <td>
-
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.goodsShortageUSD}}
                                             </div>
-
                                             <div *ngIf="optionsVisibility[i]">
                                                 <input class="tblInput form-control input5" name="goodsShortageUSD" type="number" placeholder="GOODS SHORTAGE /USD" [(ngModel)]="data.goodsShortageUSD">
                                             </div>
                                         </td>
-
                                         <td>
-
-
                                             <div>
-                                                <!-- *ngIf="!optionsVisibility[i]" -->
                                                 {{data.discountAllowed + data.damagesUSD + data.goodsShortageUSD}}
                                             </div>
-
-                                            <!-- <div *ngIf="optionsVisibility[i]">
-                    <input class="tblInput form-control" name="xyz" type="text" placeholder="X+Y+Z" [(ngModel)]="data.xyz">
-                </div> -->
-                                        </td>
-
+                                            </td>
                                         <td>
 
                                             <div>
                                                 {{data.fobValue - data.discountAllowed - data.damagesUSD - data.goodsShortageUSD}}
                                             </div>
-
-                                            <!-- <div *ngIf="optionsVisibility[i]">
-                    <input class="tblInput form-control" name="waa" type="text" placeholder="W-AA" [(ngModel)]="data.waa">
-                </div> -->
-                                        </td>
+                                            </td>
 
                                         <td>
 
@@ -492,12 +397,9 @@
                                             <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
                     aria-hidden="true"></i></button>
                                             <a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                            <button title="Save" class="savBtn bgnone" (click)="TreeView(data, i)">Tree</button>
                                         </td>
                                     </tr>
-                                    <!-- <h2>Tree as Array of Nodes</h2>
-              <treetable>
-
-              </treetable> -->
                                 </tbody>
                             </table>
                         </div>
@@ -510,28 +412,10 @@
             <div class="table_top" style="margin-top: 28px;">
                 <div class="table_left" style="">
                     <span style="color: RGB(50, 62, 74); font-size: 14px; margin-left: 24px;">PI/PO Documents</span>
-                    <!-- <div style="background-color: #49A2D7; float: right;" class="customDropdown">
-          <span style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
-              <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
-          <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
-                  class="fas fa-angle-down"></i>
-              <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-          </span>
-          <div class="dropdown-content1" style="min-width: 200px; margin-left: -92px; font-family: Poppins,sans-serif; font-size: 15px;">
-              <p><a>New Credit Note</a></p>
-              <p (click)='pipoClick()'><a>New PI/PO</a></p>
-              <p><a>New Debit Note</a></p>
-              <p><a>New Issuance Document</a></p>
-              <p><a>New Letter of Credit</a></p>
-          </div>
-      </div> -->
-                    <div class="customDropdown" style="width: 102px; margin-bottom: 5px; float: right; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
+                  <div class="customDropdown" style="width: 102px; margin-bottom: 5px; float: right; background-color: #49A2D7; border: 1px solid #49A2D7 !important ; border-radius: 5px;">
                         <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
                         <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>New</span>
-                        <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
-            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-        </span> -->
-                        <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3" class="fas fa-angle-down"></i>
+                       <span class="dropIco" style="margin-left: 10px; color: #ffffff !important;"><i id="down3" class="fas fa-angle-down"></i>
                      <i id="up3" style="display: none" class="fas fa-angle-up"></i>
                 </span>
                         <div class="dropdown-content" style="min-width:200px; margin-left: -95px;">
@@ -543,8 +427,6 @@
                         </div>
                     </div>
                 </div>
-                <!----style="height: 35px; font-weight: 400"-->
-
                 <div style="width: 75.5%; font-weight: 300; padding-left: 1%; color: #323e4a">
                     <span style="font-size: 16px; color: RGB(50, 62, 74);">{{pipoNo}}</span>
                 </div>
@@ -555,7 +437,6 @@
                                                                                src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
                                                                                height="25px"
                                                                                width="25px"/></span>
-                    <!-------style="padding-left: 1%" class="pc1"-->
                 </div>
                 <div style="margin-right: 8%">
                     <img src="../../../assets/cross.png" (click)="hide3()" style="width: 20px; height: 20px;
@@ -566,7 +447,6 @@
 
             <div class="p-8 bc">
                 <div class="side_document_list">
-                    <!---class="col-12 mb-lg ph-38"-->
                     <div id="profile" class="profile_class" *ngFor="let data of pipoArrayList; let i = index" [ngClass]="lastIndex == i ? 'activeBtn' : ''" (click)="getSinglePipo(data._id, i)">
                         <!----------class="row p-2 bb hhu"-->
                         <div class="" style="display: flex; padding-top: 10px;">
@@ -2888,3 +2768,5 @@
         </div>
     </div>
 </ng-template>
+
+<app-tree-view *ngIf="TREE_VIEW==true" title="Shipping bill Details View" [data]="this.SB_Details"></app-tree-view>

@@ -1,0 +1,56 @@
+.tree-component {
+    display: block;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background: #0000004a;
+    top: 0;
+    left: 0;
+    z-index: 9999999;
+}
+
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    width: 320px;
+    overflow: auto;
+    height: calc(100vh - 175px);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 22% 78%;
+}
+
+.p-text {
+    border-radius: 20px;
+    border: 2px solid rgba(0, 0, 255, .368627451);
+    padding: 10px;
+    font-size: 12px;
+}
+
+.card-2 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    width: 100%;
+    overflow: auto;
+    height: calc(100vh - 175px);
+}
+
+.card-list ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.card-2 ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.custom ::ng-deep .mat-expansion-panel {
+    margin-bottom: 10px;
+}

@@ -89,6 +89,7 @@ import { PdfViewerModule } from "ng2-pdf-viewer";
 import { NewBillUnderCollectionComponent } from "./new-bill-under-collection/Bill-Under-Collection.component";
 import { NewDirectDispatchComponent } from "./New-Direct-Dispatch/New-Direct-Dispatch.component";
 import {MergePdfListService} from "./merge-pdf-list.service";
+import { TreeViewComponent } from './tree-view/tree-view.component';
 
 @NgModule({
   declarations: [

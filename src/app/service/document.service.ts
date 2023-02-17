@@ -140,6 +140,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
+    console.log(query,'getInvoice_No')
     return this.http.post(`${this.api_base}/orAdvice/getInvoice_No`,{query:query,tableName:table_name },httpOptions);
   }
 

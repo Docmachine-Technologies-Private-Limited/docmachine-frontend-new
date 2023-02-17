@@ -622,7 +622,7 @@
                        </div>
                       <div class="bottom_submit_section">
                         <button type="button" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">CANCEL</button>
-                        <button type="button" class="btn btn-secondary" (click)='generateDoc1(this.ExportBillLodgement_Form);this.advanceArray.length!=0?Preview_btn.style.display="block" : ""'>PROCEED</button>
+                        <button type="button" class="btn btn-secondary" (click)='generateDoc1(this.ExportBillLodgement_Form);this.advanceArray.length!=0 || Lodgement?.AgainstAdvanceReceipt?.Hide=="no"?Preview_btn.style.display="block" : ""'>PROCEED</button>
                         <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;" (click)='PREVIEWS_URL();PREVIEW_PAGE.style.display="block"'>Preview</button>
                       </div>
                     </div>

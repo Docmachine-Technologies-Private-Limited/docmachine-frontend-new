@@ -159,7 +159,6 @@ URL_CREATE(url){
         Role_Type:data['Role_Type'],
         RoleCheckbox:data['RoleCheckbox']
       }
-      this.SELECTED_EDIT_DATA=[];
       console.log(data,'getUserDetailByIdgetUserDetailById');
     })
   }
@@ -246,8 +245,8 @@ URL_CREATE(url){
   onEditSubmit(formmodel:any){
     this.submitted = true;
     this.EDIT_FORM_BUILDER['imageUrl'] = this.img!=undefined? this.img:this.SELECTED_EDIT_DATA['imageUrl'];
+    this.EDIT_FORM_BUILDER['Role_Type']=this.ROLE_TYPES!=''?this.ROLE_TYPES:this.userData?.result['Role_Type'];
     this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox']=this.ROLE_TYPES!=''?this.ROLE_TYPES:this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox'];
-    this.EDIT_FORM_BUILDER['Role_Type']=this.ROLE_TYPES!=''?this.ROLE_TYPES:this.EDIT_FORM_BUILDER['Role_Type'];
     console.log(this.EDIT_FORM_BUILDER)
     this.findEmptyObject(this.EDIT_FORM_BUILDER,[undefined,null,'','Select Subscription']).then((value:any)=>{
       if (value==true) {

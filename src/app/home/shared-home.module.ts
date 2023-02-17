@@ -7,6 +7,8 @@ import {
   DropzoneModule,
 } from "ngx-dropzone-wrapper";
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import {MatExpansionModule} from '@angular/material/expansion';
+
 import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -24,6 +26,7 @@ import {CustomDropdownComponent} from '.././custom/custom-dropdown/custom-dropdo
 import { NgSelectModule } from "@ng-select/ng-select";
 import {FilterToggleDirective} from "../custom/Filter/filter-toggle.directive";
 import { PipoDataService } from "../service/homeservices/pipo.service";
+import { TreeViewComponent } from "./tree-view/tree-view.component";
 @NgModule({
   declarations: [
     ConfirmDialogComponent,
@@ -33,7 +36,8 @@ import { PipoDataService } from "../service/homeservices/pipo.service";
     NumberToWordsPipe,
     CustomDropdownComponent,
     PDFVIEWERComponent,
-    FilterToggleDirective
+    FilterToggleDirective,
+    TreeViewComponent
   ],
   imports: [
     CommonModule,
@@ -44,10 +48,11 @@ import { PipoDataService } from "../service/homeservices/pipo.service";
     MatTabsModule,
     PdfViewerModule,
     NgSelectModule,
+    MatExpansionModule,
     ModalModule.forRoot(),
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal,SharedDataService,PipoDataService],
+  providers: [ConfirmDialogService, NgbModal,SharedDataService,PipoDataService,TreeViewComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //   exports: [SharedProjectsModule]
   exports: [
@@ -66,7 +71,9 @@ import { PipoDataService } from "../service/homeservices/pipo.service";
     NgSelectModule,
     CustomDropdownComponent,
     PDFVIEWERComponent,
-    FilterToggleDirective
+    FilterToggleDirective,
+    TreeViewComponent,
+    MatExpansionModule
   ],
 })
 export class SharedHomeModule { }
