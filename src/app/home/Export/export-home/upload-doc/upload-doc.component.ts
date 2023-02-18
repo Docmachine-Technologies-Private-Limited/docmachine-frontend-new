@@ -174,7 +174,9 @@ export class UploadDocComponent implements OnInit {
     }
   }
   BANK_DETAILS:any=[];
-
+  BANK:any=[];
+  UNIQUE_BANK:any=[];
+  
  async ngOnInit() {
     this.wininfo.set_controller_of_width(230,'.content_top_common')
     for (let index = 0; index < data1['default']?.length; index++) {
@@ -185,6 +187,12 @@ export class UploadDocComponent implements OnInit {
     this.userService.getTeam()
     .subscribe(
       data => {
+        this.BANK=data['data'][0]?.bankDetails;
+        for (let index = 0; index < this.BANK.length; index++) {
+          if(!this.UNIQUE_BANK.includes(this.BANK[index]?.bank)) {
+            this.UNIQUE_BANK.push(this.BANK[index]?.bank) 
+          } 
+        }
         for (let index = 0; index < data['data'][0]?.bankDetails.length; index++) {
           this.BANK_DETAILS.push({
             value:data['data'][0]?.bankDetails[index]['accNumber']+' | '+data['data'][0]?.bankDetails[index]['currency'],
@@ -193,11 +201,26 @@ export class UploadDocComponent implements OnInit {
             Bank_Name:data['data'][0]?.bankDetails[index]['bank']
           });
         }
-        console.log(this.BANK_DETAILS,'getTeam')
+        console.log(this.BANK_DETAILS,this.UNIQUE_BANK,'getTeam')
       },
       error => {
         console.log("error")
       });
+  }
+  
+  filterBankName(bankname:any){
+  console.log(bankname,this.BANK,'filterBankName')
+  this.BANK_DETAILS=[];
+  var temp:any=this.BANK.filter((item:any)=>item?.bank.includes(bankname))
+    for (let index = 0; index < temp.length; index++) {
+      this.BANK_DETAILS.push({
+        value:temp[index]['accNumber']+' | '+temp[index]['currency'],
+        accNumber:temp[index]['accNumber'],
+        currency:temp[index]['currency'],
+        Bank_Name:temp[index]['bank']
+      });
+    }
+    console.log(this.BANK_DETAILS,'getTeam')
   }
 
   public onUploadInit(args: any): void {

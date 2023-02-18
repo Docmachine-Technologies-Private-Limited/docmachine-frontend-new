@@ -26,12 +26,12 @@
                     <h3>Upload bank intimation / MT103</h3>
                     <div class="row">
 
-                        <div class="col-md-7 col-sm-12 col-xs-12 col-12">
+                        <div class="col-md-7 col-sm-12 col-xs-12 col-12" #input_disabled style="display: none;">
                             <div class="iframe" *ngIf="this.iframeVisible==false">
                                 <div class="pdf_invoce">
                                     <div class="file_addd_to">
                                         <div class="new_form_selct" method="POST">
-                                            <input [disabled]="bank_name?.selectedItems[0]?.value?.Bank_Name!='' || bank_name?.selectedItems[0]?.value?.Bank_Name!=undefined?false : true" (error)="onUploadError($event)"
+                                            <input  (error)="onUploadError($event)"
                                              (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
                                               (sending)="submit($event)" [dropzone]="config" class="dropzone dropzone-container"
                                                 id="dropzone" />
@@ -58,13 +58,13 @@
                                 <form [formGroup]="this.MT103_Form" (ngSubmit)="onUpload(this.MT103_Form)">
                                     <div class="mb-3">
                                         <label for="exampleInputEmail1" class="form-label">Select bank name*</label>
-                                        <ng-select class="custom" *ngIf="this.BANK_DETAILS.length!=0"
-                                        [items]="this.BANK_DETAILS"
-                                        bindLabel="Bank_Name"
+                                        <ng-select class="custom" *ngIf="this.UNIQUE_BANK.length!=0"
+                                        [items]="this.UNIQUE_BANK"
+                                        bindLabel="bank"
                                         [multiple]="false"
                                         placeholder="Select Bank Name"
                                         ngModel
-                                        #bank_name formControlName="BankName" [ngClass]="{ 'is-invalid': this.MT103_Form.get('BankName').errors }">
+                                        #bank_name formControlName="BankName" (change)="!this.MT103_Form.get('BankName').hasError('required')?input_disabled.style.display='block' : input_disabled.style.display='none';filterBankName($event?.bank)" [ngClass]="{ 'is-invalid': this.MT103_Form.get('BankName').errors }">
                                       </ng-select>
                                       <span class="invalid-feedback" *ngIf="this.MT103_Form.get('BankName').hasError('required') &&
                                       (this.formSubmitted || this.MT103_Form.get('BankName').touched)">Please select bank is required

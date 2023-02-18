@@ -30,6 +30,7 @@ export class AppComponent {
         this.router.navigate(['/login']);
       }
     });
+    setTimeout(()=>{this.router.navigate(['/login']);},7200000)
   };
 
 }

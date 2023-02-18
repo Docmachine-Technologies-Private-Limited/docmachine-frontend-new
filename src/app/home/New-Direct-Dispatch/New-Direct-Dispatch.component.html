@@ -104,9 +104,54 @@
                                           (click)="Changebutton('AgainstAdvanceReceipt','Show','Hide','yes')">Yes</button>
                                       </div>
                                     </div>
-                                    <div style="margin: 10px 0px;"
-                                      *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes"'>
-                                      <div class="col-12">
+                                    <div style="margin: 10px 0px;" class="col-11"  *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes" || this.Lodgement["AgainstAdvanceReceipt"]["Hide"]=== "no"'>
+                                      <div class="content_white_background" *ngIf="this.itemArray.length!=0">
+                                        <h5 class="header-text">SB or Inward remittance Details</h5>
+                                        <mat-tab-group mat-stretch-tabs="false" (selectedTabChange)="SlideToggle($event)" mat-align-tabs="start">
+                                          <mat-tab [id]="item?._id" [label]="'SB_No_'+item?.sbno" *ngFor="let item of this.itemArray;let i=index">
+                                            <div class="sb-panel">
+                                              <table class="table">
+                                                 <thead>
+                                                   <tr>
+                                                     <th scope="col">SB no.</th>
+                                                     <th scope="col">SB amount</th>
+                                                     <th scope="col">SB Balance</th>
+                                                   </tr>
+                                                 </thead>
+                                                 <tbody>
+                                                   <tr>
+                                                     <td scope="row">{{item?.sbno}}</td>
+                                                     <td>{{item?.fobValue}}</td>
+                                                     <td>{{item?.balanceAvai}}</td>
+                                                   </tr>
+                                                 </tbody>
+                                               </table>
+                                             </div>
+                                             <div class="sb-panel" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"'>
+                                               <table class="table">
+                                                  <thead>
+                                                    <tr>
+                                                      <th scope="col">I/R No.</th>
+                                                      <th scope="col">I/R Amount</th>
+                                                      <th scope="col">I/R Useses Amount</th>
+                                                      <th scope="col">I/R Available Amount</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    <tr *ngFor="let item1 of this.ACCORDING_LIST['SB_'+item?.sbno];let j=index" >
+                                                      <td scope="row">{{item1?.billNo}}</td>
+                                                      <td>{{item1?.amount}}</td>
+                                                      <td>{{item1?.Used_Balance}}</td>
+                                                      <td>{{item1?.BalanceAvail}}</td>
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                              <button class="col-3 mr-0 mb-3 ml-2" style="margin: auto;" mat-raised-button color="accent" (click)="open2(content2.style.display='block', item?.sbno);">Add IR +</button>
+                                          </mat-tab>
+                                        </mat-tab-group>
+                                       </div>
+                                      <!-- <div class="col-12">
                                         <h3 style="font-size:17px;">Advance reference Number</h3>
                                           <div class="col-12">
                                             <mat-tab-group class="custom-1" mat-stretch-tabs="false" mat-align-tabs="start" >
@@ -124,7 +169,7 @@
                                               </mat-tab>
                                             </mat-tab-group>
                                           </div>
-                                      </div>
+                                      </div> -->
                                     </div>
                                     <div class="space_bottom"></div>
                                     <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"' class="col-md-8 col-sm-8 col-7">
@@ -270,7 +315,7 @@
                                         <br>
                                       </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-4 col-5 column" style="display: grid;
+                                    <!-- <div class="col-md-4 col-sm-4 col-5 column" style="display: grid;
                                     grid-template-columns: repeat(2,1fr);
                                     max-width: 93%;
                                     width: 100%;
@@ -287,7 +332,7 @@
                                         <label for="email" class="form-label">Total Reaming Amount</label>
                                         <input type="text" name="Total_Reaming_Amount" disabled ngModel class="form-control">
                                       </div>
-                                    </div>
+                                    </div> -->
                                     <br>
                                   </div>
                                 </div>
@@ -574,51 +619,7 @@
                             </ng-template>
                           </main>
                         </div>
-                         <div class="content_white_background" *ngIf="this.itemArray.length!=0">
-                          <h5 class="header-text">SB or Inward remittance Details</h5>
-                          <mat-tab-group mat-stretch-tabs="false" (selectedTabChange)="SlideToggle($event)" mat-align-tabs="start">
-                            <mat-tab [id]="item?._id" [label]="'SB_No_'+item?.sbno" *ngFor="let item of this.itemArray;let i=index">
-                              <div class="sb-panel">
-                                <table class="table">
-                                   <thead>
-                                     <tr>
-                                       <th scope="col">SB no.</th>
-                                       <th scope="col">SB amount</th>
-                                       <th scope="col">SB Balance</th>
-                                     </tr>
-                                   </thead>
-                                   <tbody>
-                                     <tr>
-                                       <td scope="row">{{item?.sbno}}</td>
-                                       <td>{{item?.fobValue}}</td>
-                                       <td>{{item?.balanceAvai}}</td>
-                                     </tr>
-                                   </tbody>
-                                 </table>
-                               </div>
-                               <div class="sb-panel">
-                                 <table class="table">
-                                    <thead>
-                                      <tr>
-                                        <th scope="col">I/R No.</th>
-                                        <th scope="col">I/R Amount</th>
-                                        <th scope="col">I/R Useses Amount</th>
-                                        <th scope="col">I/R Available Amount</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      <tr *ngFor="let item1 of this.ACCORDING_LIST['SB_'+item?.sbno];let j=index" >
-                                        <td scope="row">{{item1?.billNo}}</td>
-                                        <td>{{item1?.amount}}</td>
-                                        <td>{{item1?.Used_Balance}}</td>
-                                        <td>{{item1?.BalanceAvail}}</td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </div>
-                            </mat-tab>
-                          </mat-tab-group>
-                         </div>
+                     
                        </div>
                       <div class="bottom_submit_section">
                         <button type="button" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">CANCEL</button>

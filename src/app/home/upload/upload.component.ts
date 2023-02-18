@@ -13,7 +13,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
@@ -338,15 +338,25 @@ export class UploadComponent implements OnInit {
 
   public a = 10;
   width: any = 0;
-
+  INTERVAL:any=[];
   runProgressBar(value) {
-    console.log(value / 1500);
-    timer(0, value / 2500)
-      .pipe(takeWhile(() => this.isWidthWithinLimit()))
-      .subscribe(() => {
-        this.width = this.width + 1;
-      });
-
+    this.INTERVAL = setInterval(()=> {
+      if(this.width < 100){
+        this.width = this.width+1;
+      }
+      else{
+        clearInterval(this.INTERVAL);
+        this.width = 100;
+      }
+    },value/1500);
+    // timer(0, value*10)
+    //   .pipe(takeWhile(() => this.isWidthWithinLimit()))
+    //   .subscribe(() => {
+    //     this.width = this.width + 1;
+    //   });
+    // setInterval(()=>{
+    
+    // },(value*10))
     this.userService.getBene(1).subscribe(
       (res: any) => {
         (this.benneDetail = res.data),
@@ -2318,6 +2328,25 @@ export class UploadComponent implements OnInit {
   }
 
   public onUploadInit(args: any): void {
+    // switch (event.type) {
+    //   case HttpEventType.Sent:
+    //     console.log('Request has been made!');
+    //     break;
+    //   case HttpEventType.ResponseHeader:
+    //     console.log('Response header has been received!');
+    //     break;
+    //   case HttpEventType.UploadProgress:
+    //     var eventTotal = event.total ? event.total : 0;
+    //     this.progress = Math.round(event.loaded / eventTotal * 100);
+    //     console.log(`Uploaded! ${this.progress}%`);
+    //     break;
+    //   case HttpEventType.Response:
+    //     console.log('Image Upload Successfully!', event.body);
+    //     setTimeout(() => {
+    //       this.progress = 0;
+    //     }, 1500);
+
+    // }
     console.log('onUploadInit:', args);
   }
 
