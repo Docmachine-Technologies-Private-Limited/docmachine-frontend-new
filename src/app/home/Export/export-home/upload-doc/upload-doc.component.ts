@@ -190,7 +190,9 @@ export class UploadDocComponent implements OnInit {
         this.BANK=data['data'][0]?.bankDetails;
         for (let index = 0; index < this.BANK.length; index++) {
           if(!this.UNIQUE_BANK.includes(this.BANK[index]?.bank)) {
-            this.UNIQUE_BANK.push(this.BANK[index]?.bank) 
+            this.UNIQUE_BANK.push({
+            bank:this.BANK[index]?.bank
+            }) 
           } 
         }
         for (let index = 0; index < data['data'][0]?.bankDetails.length; index++) {
