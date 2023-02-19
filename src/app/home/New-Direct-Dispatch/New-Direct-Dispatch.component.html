@@ -147,7 +147,7 @@
                                                   </tbody>
                                                 </table>
                                               </div>
-                                              <button class="col-3 mr-0 mb-3 ml-2" style="margin: auto;" mat-raised-button color="accent" (click)="open2(content2.style.display='block', item?.sbno);">Add IR +</button>
+                                              <button class="col-3 mr-0 mb-3 ml-2" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"' style="margin: auto;" mat-raised-button color="accent" (click)="open2(content2.style.display='block', item?.sbno);">Add IR +</button>
                                           </mat-tab>
                                         </mat-tab-group>
                                        </div>
@@ -308,7 +308,7 @@
                                           name="Charges_to_Bank" ngModel
                                             (click)="model1.option = value" [checked]="value === model1.option"
                                             type="radio" id="options1" class="circular_input1"
-                                            (click)="chargesTo(value)">
+                                            (click)="chargesTo(value);generateDoc1(this.ExportBillLodgement_Form)">
                                           <label style="flex-direction:row;" class="label1"
                                             for="male">{{value.bank}}-{{value.accType}}</label>
                                         </div>

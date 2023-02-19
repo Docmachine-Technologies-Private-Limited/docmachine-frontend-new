@@ -950,8 +950,283 @@ export class NewDirectDispatchComponent implements OnInit {
 
   async generateDoc1(form: any) {
     console.log(form, 'generateDoc1generateDoc1');
-    if (this.Lodgement['AgainstAdvanceReceipt']?.Hide != '') {
-      if (this.Lodgement['AgainstAdvanceReceipt']?.Hide == 'no') {
+    if (this.Lodgement['AgainstAdvanceReceipt']?.Hide == 'no') {
+      this.generate = true;
+      this.isGenerate = true;
+      let generateDoc2: any = [];
+      let pipoValue;
+      let value;
+      let buyerValue;
+      for (let item of this.itemArray) {
+        for (let sb of this.sbArray) {
+          if (item.sbno === sb) {
+            pipoValue = item;
+            value = item.pipo;
+            buyerValue = item.buyerName;
+            this.dateArray.push(item.sbdate);
+            this.sbDataArray.push(item);
+            console.log('value', value);
+            generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(item.doc));
+          }
+        }
+      }
+
+      console.log(pipoValue, 'pipovalue*****************************');
+      for (value of this.item) {
+        for (let value1 of pipoValue.pipo) {
+          if (value.pi_poNo == value1.pi_poNo) {
+            this.randomArray.push(value);
+          }
+        }
+      }
+      console.log('random Array', this.randomArray);
+      console.log('random Array', this.randomArray[0].creditNote);
+
+      this.sb = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['sb']
+      );
+
+      this.creditNote = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['creditNote']
+      );
+      console.log('////*********************Credit Note', this.creditNote);
+
+      this.debitNote = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['debitNote']
+      );
+      console.log('////*********************debit Note', this.debitNote);
+
+      this.advanceOutward = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['advanceOutward']
+      );
+      console.log('////*********************advanceOutward', this.advanceOutward);
+
+      this.ebrc = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['EBRC']
+      );
+      console.log('////*********************Ebrc', this.ebrc);
+
+      this.blcopyref = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['blcopyref']
+      );
+
+      this.irAdvice = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['irAdvice']
+      );
+
+      this.lcCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['lcCopy']
+      );
+      console.log('****************Lc Copy', this.lcCopy);
+
+      this.swiftCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['swiftCopy']
+      );
+
+      this.tryPartyAgreement = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['tryPartyAgreement']
+      );
+
+      this.opinionReport = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['opinionReport']
+      );
+
+      this.airwayBlCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['airwayBlcopy']
+      );
+
+      this.billOfExchange = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['billOfExchange']
+      );
+
+      this.commercial = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['commercial']
+      );
+
+      this.destruction = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['destruction']
+      );
+
+      this.packingList = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]['packingList']
+      );
+
+      console.log('Random Array', this.randomArray);
+      console.log('Airway Docs****************--------------------------------', this.airwayBlCopy);
+
+      let mainArr = [];
+      let invoicearray = [];
+      console.log('line no.796 question5 data', this.Question5);
+      this.sbDataArray.forEach((value, index) => {
+        for (let a of value.pipo) {
+          this.arrayPipo.push(a);
+        }
+      });
+      if (this.Question6 == 'yes') {
+        let adArr = [];
+        console.log('Shipping Map For', this.shippingMap);
+        this.shippingMap.forEach((value) => {
+          console.log('Shipping Map For loop', value);
+          adArr = adArr.concat(value);
+        });
+        console.log('advArr', adArr);
+        console.log('sbDataArray', this.sbDataArray);
+
+        forkJoin(
+          this.sbDataArray.map((value) => {
+            let piponumbers = [];
+            for (let i in value.pipo) {
+              piponumbers.push(value.pipo[i].pi_poNo);
+            }
+            return this.userService.getManyPipo(piponumbers);
+          })
+        ).subscribe((resp: any[]) => {
+          console.log('Fork join resp', resp);
+          resp.forEach((data, i) => {
+            for (let item of data['data']) {
+              console.log(item);
+              const newVal = { ...this.sbDataArray[i] };
+              newVal['pipoValue'] = item;
+              mainArr.push(newVal);
+              console.log('fggfgfgf', mainArr);
+            }
+          });
+          console.log(this.advanceForm.value);
+
+          mainArr.forEach((value1, index) => {
+            console.log('shshsh');
+            console.log(this.advanceForm.value.advance);
+            for (let a of adArr) {
+              if (a.sb == value1.sbno) {
+                const newVal = { ...value1 };
+                newVal['advance'] = a.valueInternal;
+                newVal['irAdviceId'] = a.irDataItem._id;
+                invoicearray.push(newVal);
+              }
+            }
+            console.log('aajsjss');
+          });
+          let amountArr = [];
+          for (let item of invoicearray) {
+            amountArr.push(item.pipoValue.amount);
+          }
+          console.log(amountArr);
+          this.amArr = amountArr;
+          console.log('t', invoicearray);
+          this.invoiceArr = invoicearray;
+
+          console.log('hello line 884', this.invoiceArr);
+          console.log('line no.866 question5 data', this.Question5);
+        });
+      }
+
+      console.log('Rajuuuuu', pipoValue);
+      //this.arrayPipo = value
+      this.mainDoc1 = generateDoc2;
+      console.log(this.mainDoc1);
+      console.log('950', generateDoc2);
+      let generateDoc3: any = [];
+      if (this.Question2 == 'yes') {
+        for (let item of this.item4) {
+          for (let sb of this.tryArray) {
+            if (item.triPartyAgreementNumber === sb) {
+              generateDoc3.push(
+                this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+              );
+            }
+          }
+        }
+      }
+
+      let generateDoc4: any = [];
+      if (this.Question7 == 'yes') {
+        for (let item of this.item8) {
+          for (let sb of this.lcArray) {
+            if (item.letterOfCreditNumber === sb) {
+              generateDoc4.push(
+                this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+              );
+            }
+          }
+        }
+      }
+      console.log(buyerValue);
+      const data: any = await this.userService.getBuyerByName(buyerValue);
+      console.log('shshhss', data.data);
+      this.buyerAds = data.data.buyerAdrs;
+
+      this.completewords4 = this.buyerAds.split(' ');
+      this.devideContent4 = this.completewords4.length;
+
+      for (let i = 0; i < this.completewords4.length; i++) {
+        if (i < 6) {
+          this.buyerAdd2.push(this.completewords4[i]);
+        } else if (i > 5 && i <= 11) {
+          this.buyerAdd3.push(this.completewords4[i]);
+        } else if (i > 11) {
+          this.buyerAdd4.push(this.completewords4[i]);
+        }
+      }
+
+      this.buyerAds1 = this.buyerAdd2.join(' ');
+      this.buyerAds2 = this.buyerAdd3.join(' ');
+      this.buyerAds3 = this.buyerAdd4.join(' ');
+
+      console.log('Shailendra Buyer Address*************', this.buyerAds1);
+      console.log('Shailendra Buyer Address*************', this.buyerAds2);
+
+      console.log('89999999999999999999999999999', this.buyerAds);
+      this.mainDoc3 = generateDoc3;
+      this.mainDoc4 = generateDoc4;
+      this.newTask[0] = {
+        sbNumbers: this.sbArray,
+        sbUrls: this.mainDoc1,
+        triPartyAgreementNumber: this.tryArray,
+        tryUrls: this.mainDoc3,
+        purposeCode: '',
+        isLc: this.lc,
+        letterOfCreditNumber: this.lcArray,
+        lcUrls: this.mainDoc4,
+        withScrutiny: this.scrutiny,
+        withDiscount: this.withDiscount,
+        bankRef: '',
+        advanceRef: this.advanceRef,
+        ir: this.Question5,
+      };
+      for (let value of this.dateArray) {
+        this.getProper(value);
+      }
+      this.myArr.sort(function (a, b) {
+        a = a.split('-').reverse().join('');
+        b = b.split('-').reverse().join('');
+        return a > b ? 1 : a < b ? -1 : 0;
+
+        // return a.localeCompare(b);         // <-- alternative
+      });
+      console.log('Datesss', this.myArr);
+      console.log(this.myArr[0]);
+      console.log(this.myArr[this.myArr.length - 1]);
+
+      console.log(this.generate1);
+      console.log(this.c);
+      this.fillForm(pipoValue);
+      this.newTask[0] = {
+        sbNumbers: this.sbArray,
+        sbUrls: this.mainDoc1,
+        triPartyAgreementNumber: this.tryArray,
+        tryUrls: this.mainDoc3,
+        purposeCode: '',
+        isLc: this.lc,
+        letterOfCreditNumber: this.lcArray,
+        lcUrls: this.mainDoc4,
+        withScrutiny: this.scrutiny,
+        withDiscount: this.withDiscount,
+        bankRef: '',
+        advanceRef: this.advanceRef,
+        ir: this.Question5,
+      };
+    } else {
+      if (this.advanceArray.length != 0) {
         this.generate = true;
         this.isGenerate = true;
         let generateDoc2: any = [];
@@ -1227,288 +1502,9 @@ export class NewDirectDispatchComponent implements OnInit {
           ir: this.Question5,
         };
       } else {
-        if (this.advanceArray.length != 0) {
-          this.generate = true;
-          this.isGenerate = true;
-          let generateDoc2: any = [];
-          let pipoValue;
-          let value;
-          let buyerValue;
-          for (let item of this.itemArray) {
-            for (let sb of this.sbArray) {
-              if (item.sbno === sb) {
-                pipoValue = item;
-                value = item.pipo;
-                buyerValue = item.buyerName;
-                this.dateArray.push(item.sbdate);
-                this.sbDataArray.push(item);
-                console.log('value', value);
-                generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(item.doc));
-              }
-            }
-          }
-
-          console.log(pipoValue, 'pipovalue*****************************');
-          for (value of this.item) {
-            for (let value1 of pipoValue.pipo) {
-              if (value.pi_poNo == value1.pi_poNo) {
-                this.randomArray.push(value);
-              }
-            }
-          }
-          console.log('random Array', this.randomArray);
-          console.log('random Array', this.randomArray[0].creditNote);
-
-          this.sb = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['sb']
-          );
-
-          this.creditNote = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['creditNote']
-          );
-          console.log('////*********************Credit Note', this.creditNote);
-
-          this.debitNote = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['debitNote']
-          );
-          console.log('////*********************debit Note', this.debitNote);
-
-          this.advanceOutward = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['advanceOutward']
-          );
-          console.log('////*********************advanceOutward', this.advanceOutward);
-
-          this.ebrc = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['EBRC']
-          );
-          console.log('////*********************Ebrc', this.ebrc);
-
-          this.blcopyref = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['blcopyref']
-          );
-
-          this.irAdvice = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['irAdvice']
-          );
-
-          this.lcCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['lcCopy']
-          );
-          console.log('****************Lc Copy', this.lcCopy);
-
-          this.swiftCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['swiftCopy']
-          );
-
-          this.tryPartyAgreement = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['tryPartyAgreement']
-          );
-
-          this.opinionReport = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['opinionReport']
-          );
-
-          this.airwayBlCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['airwayBlcopy']
-          );
-
-          this.billOfExchange = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['billOfExchange']
-          );
-
-          this.commercial = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['commercial']
-          );
-
-          this.destruction = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['destruction']
-          );
-
-          this.packingList = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.randomArray[0]['packingList']
-          );
-
-          console.log('Random Array', this.randomArray);
-          console.log('Airway Docs****************--------------------------------', this.airwayBlCopy);
-
-          let mainArr = [];
-          let invoicearray = [];
-          console.log('line no.796 question5 data', this.Question5);
-          this.sbDataArray.forEach((value, index) => {
-            for (let a of value.pipo) {
-              this.arrayPipo.push(a);
-            }
-          });
-          if (this.Question6 == 'yes') {
-            let adArr = [];
-            console.log('Shipping Map For', this.shippingMap);
-            this.shippingMap.forEach((value) => {
-              console.log('Shipping Map For loop', value);
-              adArr = adArr.concat(value);
-            });
-            console.log('advArr', adArr);
-            console.log('sbDataArray', this.sbDataArray);
-
-            forkJoin(
-              this.sbDataArray.map((value) => {
-                let piponumbers = [];
-                for (let i in value.pipo) {
-                  piponumbers.push(value.pipo[i].pi_poNo);
-                }
-                return this.userService.getManyPipo(piponumbers);
-              })
-            ).subscribe((resp: any[]) => {
-              console.log('Fork join resp', resp);
-              resp.forEach((data, i) => {
-                for (let item of data['data']) {
-                  console.log(item);
-                  const newVal = { ...this.sbDataArray[i] };
-                  newVal['pipoValue'] = item;
-                  mainArr.push(newVal);
-                  console.log('fggfgfgf', mainArr);
-                }
-              });
-              console.log(this.advanceForm.value);
-
-              mainArr.forEach((value1, index) => {
-                console.log('shshsh');
-                console.log(this.advanceForm.value.advance);
-                for (let a of adArr) {
-                  if (a.sb == value1.sbno) {
-                    const newVal = { ...value1 };
-                    newVal['advance'] = a.valueInternal;
-                    newVal['irAdviceId'] = a.irDataItem._id;
-                    invoicearray.push(newVal);
-                  }
-                }
-                console.log('aajsjss');
-              });
-              let amountArr = [];
-              for (let item of invoicearray) {
-                amountArr.push(item.pipoValue.amount);
-              }
-              console.log(amountArr);
-              this.amArr = amountArr;
-              console.log('t', invoicearray);
-              this.invoiceArr = invoicearray;
-
-              console.log('hello line 884', this.invoiceArr);
-              console.log('line no.866 question5 data', this.Question5);
-            });
-          }
-
-          console.log('Rajuuuuu', pipoValue);
-          //this.arrayPipo = value
-          this.mainDoc1 = generateDoc2;
-          console.log(this.mainDoc1);
-          console.log('950', generateDoc2);
-          let generateDoc3: any = [];
-          if (this.Question2 == 'yes') {
-            for (let item of this.item4) {
-              for (let sb of this.tryArray) {
-                if (item.triPartyAgreementNumber === sb) {
-                  generateDoc3.push(
-                    this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
-                  );
-                }
-              }
-            }
-          }
-
-          let generateDoc4: any = [];
-          if (this.Question7 == 'yes') {
-            for (let item of this.item8) {
-              for (let sb of this.lcArray) {
-                if (item.letterOfCreditNumber === sb) {
-                  generateDoc4.push(
-                    this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
-                  );
-                }
-              }
-            }
-          }
-          console.log(buyerValue);
-          const data: any = await this.userService.getBuyerByName(buyerValue);
-          console.log('shshhss', data.data);
-          this.buyerAds = data.data.buyerAdrs;
-
-          this.completewords4 = this.buyerAds.split(' ');
-          this.devideContent4 = this.completewords4.length;
-
-          for (let i = 0; i < this.completewords4.length; i++) {
-            if (i < 6) {
-              this.buyerAdd2.push(this.completewords4[i]);
-            } else if (i > 5 && i <= 11) {
-              this.buyerAdd3.push(this.completewords4[i]);
-            } else if (i > 11) {
-              this.buyerAdd4.push(this.completewords4[i]);
-            }
-          }
-
-          this.buyerAds1 = this.buyerAdd2.join(' ');
-          this.buyerAds2 = this.buyerAdd3.join(' ');
-          this.buyerAds3 = this.buyerAdd4.join(' ');
-
-          console.log('Shailendra Buyer Address*************', this.buyerAds1);
-          console.log('Shailendra Buyer Address*************', this.buyerAds2);
-
-          console.log('89999999999999999999999999999', this.buyerAds);
-          this.mainDoc3 = generateDoc3;
-          this.mainDoc4 = generateDoc4;
-          this.newTask[0] = {
-            sbNumbers: this.sbArray,
-            sbUrls: this.mainDoc1,
-            triPartyAgreementNumber: this.tryArray,
-            tryUrls: this.mainDoc3,
-            purposeCode: '',
-            isLc: this.lc,
-            letterOfCreditNumber: this.lcArray,
-            lcUrls: this.mainDoc4,
-            withScrutiny: this.scrutiny,
-            withDiscount: this.withDiscount,
-            bankRef: '',
-            advanceRef: this.advanceRef,
-            ir: this.Question5,
-          };
-          for (let value of this.dateArray) {
-            this.getProper(value);
-          }
-          this.myArr.sort(function (a, b) {
-            a = a.split('-').reverse().join('');
-            b = b.split('-').reverse().join('');
-            return a > b ? 1 : a < b ? -1 : 0;
-
-            // return a.localeCompare(b);         // <-- alternative
-          });
-          console.log('Datesss', this.myArr);
-          console.log(this.myArr[0]);
-          console.log(this.myArr[this.myArr.length - 1]);
-
-          console.log(this.generate1);
-          console.log(this.c);
-          this.fillForm(pipoValue);
-          this.newTask[0] = {
-            sbNumbers: this.sbArray,
-            sbUrls: this.mainDoc1,
-            triPartyAgreementNumber: this.tryArray,
-            tryUrls: this.mainDoc3,
-            purposeCode: '',
-            isLc: this.lc,
-            letterOfCreditNumber: this.lcArray,
-            lcUrls: this.mainDoc4,
-            withScrutiny: this.scrutiny,
-            withDiscount: this.withDiscount,
-            bankRef: '',
-            advanceRef: this.advanceRef,
-            ir: this.Question5,
-          };
-        } else {
-          this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',
-            `Please select a firx amount ${this.itemArray.length == 0 ? '& also select Sb no.' : ''}...`)
-        }
+        this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',
+          `Please select a firx amount ${this.itemArray.length == 0 ? '& also select Sb no.' : ''}...`)
       }
-    } else {
-      this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Against advance receipt?', `Please select a Against advance receipt?...`)
     }
   }
 
