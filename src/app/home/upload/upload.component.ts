@@ -217,7 +217,7 @@ export class UploadComponent implements OnInit {
     amount:'',
     currency:''
   };
-  
+  SHIPPING_BUNDEL:any=[];
   get f() {
     return this.loginForm.controls;
   }
@@ -903,9 +903,14 @@ export class UploadComponent implements OnInit {
         this.item5 = res.data;
         console.log('line 736', this.item5);
         this.item5.forEach((element, i) => {
+          element?.pipo.forEach((ele,j)=>{
+            this.SHIPPING_BUNDEL.push({pipo:ele,id:ele?._id,sbno:element?.sbno,SB_ID:element?._id});
+          });
+        });
+        this.item5.forEach((element, i) => {
           this.origin[i] = element.countryOfFinaldestination;
         });
-        console.log('Master Country', this.origin);
+        console.log('Master Country', this.SHIPPING_BUNDEL,this.origin);
         this.origin = this.origin.filter(
           (value, index) => this.origin.indexOf(value) === index
         );
@@ -2714,21 +2719,17 @@ export class UploadComponent implements OnInit {
       );
     this.SHIPPING_BILL_LIST=[];
     for (let index = 0; index < PI_PO_LIST.length; index++) {
-      for (let j = 0; j < this.item5.length; j++) {
-        for (let m = 0; m < this.item5[j]?.pipo.length; m++) {
-          if (this.item5[j]?.pipo[m]?._id.indexOf(PI_PO_LIST[index]?.value?._id)!=-1) {
-            if (this.item5[j]?.sbno!=undefined && this.item5[j]?.sbno!=null) {
+      for (let j = 0; j < this.SHIPPING_BUNDEL.length; j++) {
+          if (this.SHIPPING_BUNDEL[j]?.id==PI_PO_LIST[index]?.value?._id) {
               this.SHIPPING_BILL_LIST.push({
-                sbno:this.item5[j]?.sbno,
-                _id:this.item5[j]?._id
-              })
-            }
-          }
+                sbno:this.SHIPPING_BUNDEL[j]?.sbno,
+                _id:this.SHIPPING_BUNDEL[j]?.SB_ID
+             });
         }
       }
     }
-    console.log(this.arrayData, this.mainBene, 'mainBenemainBene');
-    console.log('Array List', this.pipoArr, this.SHIPPINGBILL_LIST);
+    console.log(this.arrayData, this.mainBene,this.SHIPPINGBILL_LIST, 'mainBenemainBene');
+    console.log('Array List', this.pipoArr);
 
   }
   FILTER_VALUE(array: any, value: any) {

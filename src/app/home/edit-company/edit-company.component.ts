@@ -11,6 +11,8 @@ import * as data1 from '../../currency.json';
 import { AppConfig } from 'src/app/app.config';
 import { WindowInformationService } from 'src/app/service/window-information.service';
 import $ from 'jquery'
+import { DomSanitizer } from '@angular/platform-browser';
+import { takeWhile, timer } from 'rxjs';
 @Component({
   selector: 'app-edit-company',
   templateUrl: './edit-company.component.html',
@@ -107,6 +109,7 @@ export class EditCompanyComponent implements OnInit {
   }];
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private router: Router, private toastr: ToastrService, public appconfig: AppConfig,
+    private sanitizer: DomSanitizer,
     public wininfo: WindowInformationService) {
     this.loadFromLocalStorage()
     this.api_base = appconfig.apiUrl;
@@ -231,7 +234,10 @@ export class EditCompanyComponent implements OnInit {
   public onUploadInit(args: any): void {
     console.log('onUploadInit:', args);
   }
-
+  uploading: boolean = false;
+  iframeVisible: boolean = false;
+  publicUrl: any = '';
+  
   public onUploadError(args: any): void {
     //this.uploading = false;
     console.log('onUploadError:', args, args[1].message);
@@ -245,6 +251,13 @@ export class EditCompanyComponent implements OnInit {
     this.letterHead = false;
     this.roundSeal = false;
     this.forSeal = false;
+    
+    this.uploading = false;
+    this.iframeVisible = true;
+    this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+      args[1].publicUrl
+    );
+    
     if (Object.keys(args[1].data)[0] == 'Letter Head') {
       this.letterHeadDone = true;
     }
@@ -256,7 +269,30 @@ export class EditCompanyComponent implements OnInit {
     }
 
   }
+  submit(e) {
+    this.uploading = true;
+    console.log(e[0].size, 'ajbkab')
+    this.runProgressBar(e[0].size);
+  }
+  public a = 10;
+  width: any = 0;
 
+  runProgressBar(value) {
+    console.log(this.config, 'directiveRef');
+    console.log(value / 1000);
+    timer(0, value / 1000)
+      .pipe(takeWhile(() => this.isWidthWithinLimit()))
+      .subscribe(() => {
+        this.width = this.width + 1;
+      });
+  }
+  isWidthWithinLimit() {
+    if (this.width === 100) {
+      return false;
+    } else {
+      return true;
+    }
+  }
   public sending(args: any, value) {
     args[2].append('fileType', value);
     if (value == 'Letter Head') {

@@ -440,7 +440,16 @@ export class NewDirectDispatchComponent implements OnInit {
         data => {
           this.commodity = data['data'][0]['commodity']
           this.LocationData = data['data'][0]['location']
-          this.bankDetail = data['data'][0]['bankDetails']
+          var temp:any=[]
+          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            temp.push(data['data'][0]['bankDetails'][index]?.bank)
+          }
+          var unique: any = temp.filter((value, index, array) => array.indexOf(value) === index);
+          for (let index = 0; index < unique.length; index++) {
+            this.bankDetail.push({
+              bank: unique[index]
+            })
+          }
         }, error => {
           console.log("error")
         });
@@ -1969,9 +1978,25 @@ export class NewDirectDispatchComponent implements OnInit {
     });
 
     // firx
-
+    var tp: any = {
+      firxNumber: [],
+      firxDate: [],
+      firxCurrency: [],
+      firxAmount: [],
+      firxCommision: [],
+      firxRecAmo: []
+    };
+    for (let index = 0; index < this.advanceArray.length; index++) {
+      const element = this.advanceArray[index];
+      tp['firxNumber'].push(element?.irDataItem?.billNo)
+      tp['firxDate'].push(element?.irDataItem?.date)
+      tp['firxCurrency'].push(element?.irDataItem?.currency)
+      tp['firxAmount'].push(element?.irDataItem?.amount)
+      tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
+      tp['firxRecAmo'].push(0)
+    }
     const text26 = form.createTextField('favorite25');
-    text26.setText('');
+    text26.setText(tp?.firxNumber.toString());
     text26.addToPage(firstpage, {
       x: 128,
       y: 348,
@@ -1982,7 +2007,7 @@ export class NewDirectDispatchComponent implements OnInit {
     });
 
     const text27 = form.createTextField('favorite26');
-    text27.setText('');
+    text27.setText(tp?.firxCurrency.toString());
     text27.addToPage(firstpage, {
       x: 128,
       y: 324,
@@ -1993,7 +2018,7 @@ export class NewDirectDispatchComponent implements OnInit {
     });
 
     const text28 = form.createTextField('favorite27');
-    text28.setText('');
+    text28.setText(tp?.firxDate.toString());
     text28.addToPage(firstpage, {
       x: 421,
       y: 348,
@@ -2003,8 +2028,9 @@ export class NewDirectDispatchComponent implements OnInit {
       // backgroundColor: rgb(255, 255, 255)
     });
 
+    const SumfirxAmount:any = tp?.firxAmount.reduce((partialSum, a) => partialSum + a, 0);
     const text29 = form.createTextField('favorite28');
-    text29.setText('');
+    text29.setText(SumfirxAmount.toString());
     text29.addToPage(firstpage, {
       x: 421,
       y: 324,
@@ -2015,9 +2041,22 @@ export class NewDirectDispatchComponent implements OnInit {
     });
 
     //bill details
-
+ // firx
+ var tp_bill: any = {
+  SbNumber: [],
+  SbDate: [],
+  SbCurrency: [],
+  SbAmount: []
+};
+  for (let index = 0; index < this.itemArray.length; index++) {
+    const element =this.itemArray[index];
+    tp_bill['SbNumber'].push(element?.sbno)
+    tp_bill['SbDate'].push(element?.sbdate)
+    tp_bill['SbCurrency'].push(element?.fobCurrency)
+    tp_bill['SbAmount'].push(element?.fobValue)
+  }
     const text30 = form.createTextField('favorite29');
-    text30.setText('');
+    text30.setText(tp_bill?.SbCurrency.toString());
     text30.addToPage(firstpage, {
       x: 128,
       y: 287,
@@ -2028,7 +2067,7 @@ export class NewDirectDispatchComponent implements OnInit {
     });
 
     const text31 = form.createTextField('favorite30');
-    text31.setText('');
+    text31.setText(tp_bill?.SbAmount.toString());
     text31.addToPage(firstpage, {
       x: 128,
       y: 266,
@@ -2039,7 +2078,7 @@ export class NewDirectDispatchComponent implements OnInit {
     });
 
     const text32 = form.createTextField('favorite31');
-    text32.setText('');
+    text32.setText(this.ConvertNumberToWords(tp_bill?.SbAmount.toString()));
     text32.addToPage(firstpage, {
       x: 388,
       y: 287,
@@ -2162,7 +2201,7 @@ export class NewDirectDispatchComponent implements OnInit {
     });
 
     const text39 = form.createTextField('favorite38');
-    text39.setText('');
+    text39.setText(tp_bill?.SbNumber.toString());
     text39.addToPage(firstpage, {
       x: 275,
       y: 146,
@@ -2586,7 +2625,87 @@ export class NewDirectDispatchComponent implements OnInit {
     this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
     this.newTask[0].generateDoc1 = x;
   }
-
+    ConvertNumberToWords(number:any) {
+      var words = new Array();
+      words[0] = '';
+      words[1] = 'One';
+      words[2] = 'Two';
+      words[3] = 'Three';
+      words[4] = 'Four';
+      words[5] = 'Five';
+      words[6] = 'Six';
+      words[7] = 'Seven';
+      words[8] = 'Eight';
+      words[9] = 'Nine';
+      words[10] = 'Ten';
+      words[11] = 'Eleven';
+      words[12] = 'Twelve';
+      words[13] = 'Thirteen';
+      words[14] = 'Fourteen';
+      words[15] = 'Fifteen';
+      words[16] = 'Sixteen';
+      words[17] = 'Seventeen';
+      words[18] = 'Eighteen';
+      words[19] = 'Nineteen';
+      words[20] = 'Twenty';
+      words[30] = 'Thirty';
+      words[40] = 'Forty';
+      words[50] = 'Fifty';
+      words[60] = 'Sixty';
+      words[70] = 'Seventy';
+      words[80] = 'Eighty';
+      words[90] = 'Ninety';
+      number = number.toString();
+      var atemp = number.split(".");
+      var number = atemp[0].split(",").join("");
+      var n_length = number.length;
+      var words_string = "";
+      if (n_length <= 9) {
+          var n_array:any = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
+          var received_n_array = new Array();
+          for (var i = 0; i <n_length; i++) {
+              received_n_array[i] = number.substr(i, 1);
+          }
+          for (var i =9 - n_length,j =0; i < 9; i++ , j++) {
+              n_array[i] = received_n_array[j];
+          }
+          for (var i =0,j =1; i < 9; i++ , j++) {
+              if (i == 0 || i == 2 || i == 4 || i == 7) {
+                  if (n_array[i] == 1) {
+                      n_array[j] = 10 + parseInt(n_array[j]);
+                      n_array[i] = 0;
+                  }
+              }
+          }
+         var value:any ="";
+          for (var i =0; i < 9; i++) {
+              if (i == 0 || i == 2 || i == 4 || i == 7) {
+                  value =n_array[i] * 10;
+              } else {
+                  value =n_array[i];
+              }
+              if (value != 0) {
+                  words_string += words[value] + " ";
+              }
+              if ((i == 1 && value != 0) || (i == 0 && value != 0 && n_array[i + 1] == 0)) {
+                  words_string += "Crores ";
+              }
+              if ((i == 3 && value != 0) || (i == 2 && value != 0 && n_array[i + 1] == 0)) {
+                  words_string += "Lakhs ";
+              }
+              if ((i == 5 && value != 0) || (i == 4 && value != 0 && n_array[i + 1] == 0)) {
+                  words_string += "Thousand ";
+              }
+              if (i == 6 && value != 0 && (n_array[i + 1] != 0 && n_array[i + 2] != 0)) {
+                  words_string += "Hundred and ";
+              } else if (i == 6 && value != 0) {
+                  words_string += "Hundred ";
+              }
+          }
+         words_string = words_string.split("  ").join(" ");
+      }
+      return words_string;
+  }
   _arrayBufferToBase64(buffer) {
     var binary = '';
     var bytes = new Uint8Array(buffer);
@@ -3646,6 +3765,10 @@ export class NewDirectDispatchComponent implements OnInit {
     'WithScrutiny': {
       Show: '',
       Hide: ''
+    },
+    'DirectDispatch': {
+      Show: '',
+      Hide: ''
     }
   }
   ClassRetrun(mainkey, key, class1, class2, condition) {
@@ -3655,6 +3778,9 @@ export class NewDirectDispatchComponent implements OnInit {
     else {
       return class2;
     }
+  }
+  Text_Changer(text:any){
+  return text;
   }
   Changebutton(mainkey, Showkey, hidekey, value) {
     this.Lodgement[mainkey][Showkey] = value

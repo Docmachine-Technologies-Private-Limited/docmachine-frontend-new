@@ -5,7 +5,9 @@
         <div class="row">
           <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="Dashbord_sec">
-              <h2 class="title_dash">Export Bill Lodgement <span *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes"'>/Regularization</span></h2>
+              <h2 class="title_dash">Export Bill Lodgement <span *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes" && this.Lodgement["DirectDispatch"]["Hide"]==="no"'> / Regularization</span>
+                <span *ngIf='this.Lodgement["DirectDispatch"]["Show"]=== "yes" && && this.Lodgement["AgainstAdvanceReceipt"]["Hide"]==="no"'> / Regularization</span>
+              </h2>
             </div>
           </div>
           <div class="col-md-6 col-sm-6 col-xs-12">
@@ -90,11 +92,11 @@
                                       </div>
                                     </div>
                                     <div class="space_bottom"></div>
-                                    <div class="col-md-8 col-sm-8 col-7">
+                                    <div class="col-md-8 col-sm-8 col-7" *ngIf='this.Lodgement["DirectDispatch"]["Show"]!= "yes"'>
                                       <label for="email" class="form-label">Against advance receipt?</label>
                                     </div>
                                     <div class="col-md-4 col-sm-4 col-5">
-                                      <div class="check_box_button">
+                                      <div class="check_box_button" *ngIf='this.Lodgement["DirectDispatch"]["Show"]!= "yes"'>
                                         <button type="button" [class]="ClassRetrun('AgainstAdvanceReceipt','Hide','btn no-button active1',
                                                                              'btn btn-primary remove-no-button','no')"
                                           (click)="Changebutton('AgainstAdvanceReceipt','Hide','Show','no')">No</button>
@@ -104,6 +106,7 @@
                                           (click)="Changebutton('AgainstAdvanceReceipt','Show','Hide','yes')">Yes</button>
                                       </div>
                                     </div>
+                                    
                                     <div style="margin: 10px 0px;" class="col-11"  *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes" || this.Lodgement["AgainstAdvanceReceipt"]["Hide"]=== "no"'>
                                       <div class="content_white_background" *ngIf="this.itemArray.length!=0">
                                         <h5 class="header-text">SB or Inward remittance Details</h5>
@@ -173,9 +176,24 @@
                                     </div>
                                     <div class="space_bottom"></div>
                                     <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"' class="col-md-8 col-sm-8 col-7">
+                                      <label for="email" class="form-label">Direct Dispatch</label>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-5" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"'>
+                                      <div class="check_box_button">
+                                        <button type="button" [class]="ClassRetrun('DirectDispatch','Hide','btn no-button active1',
+                                                                            'btn btn-primary remove-no-button','no')"
+                                          (click)="Changebutton('DirectDispatch','Hide','Show','no')">No</button>
+                                        <button type="button"
+                                          [class]="ClassRetrun('DirectDispatch','Show',
+                                                                            'btn yes-button active','btn yes-button','yes')"
+                                          (click)="Changebutton('DirectDispatch','Show','Hide','yes')">Yes</button>
+                                      </div>
+                                    </div>
+                                    <div class="space_bottom"></div>
+                                    <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"' class="col-md-8 col-sm-8 col-7">
                                       <label for="email" class="form-label">Under LC?</label>
                                     </div>
-                                    <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"' class="col-md-4 col-sm-4 col-5">
+                                    <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"' class="col-md-4 col-sm-4 col-5">
                                       <div class="check_box_button">
                                         <button type="button" [class]="ClassRetrun('UnderLC','Hide','btn no-button active1',
                                                                             'btn btn-primary remove-no-button','no')"
@@ -212,10 +230,10 @@
                                       </div>
                                       <div class="space_bottom"></div>
                                     </div>
-                                    <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"' class="col-md-8 col-sm-8 col-7">
+                                    <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"' class="col-md-8 col-sm-8 col-7">
                                       <label for="email" class="form-label">With Scrutiny?</label>
                                     </div>
-                                    <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"' class="col-md-4 col-sm-4 col-5">
+                                    <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"' class="col-md-4 col-sm-4 col-5">
                                       <div class="check_box_button">
                                         <button type="button" [class]="ClassRetrun('WithScrutiny','Hide','btn no-button active1',
                                                                             'btn btn-primary remove-no-button','no')"
@@ -227,10 +245,10 @@
                                       </div>
                                     </div>
                                     <div class="space_bottom"></div>
-                                    <div class="col-md-8 col-sm-8 col-7">
+                                    <div class="col-md-8 col-sm-8 col-7" *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                       <label for="email" class="form-label">With Discount?</label>
                                     </div>
-                                    <div class="col-md-4 col-sm-4 col-5">
+                                    <div class="col-md-4 col-sm-4 col-5" *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                       <div class="check_box_button">
                                         <button type="button" [class]="ClassRetrun('WithDiscount','Hide','btn no-button active1',
                                                                             'btn btn-primary remove-no-button','no')"
@@ -242,10 +260,10 @@
                                       </div>
                                     </div>
                                     <div class="space_bottom"></div>
-                                    <div class="col-md-8 col-sm-8 col-7">
+                                    <div class="col-md-8 col-sm-8 col-7" *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                       <label for="email" class="form-label">Is Buyer remitter different?</label>
                                     </div>
-                                    <div class="col-md-4 col-sm-4 col-5">
+                                    <div class="col-md-4 col-sm-4 col-5" *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                       <div class="check_box_button">
                                         <button type="button" [class]="ClassRetrun('BuyerRemitterDifferent','Hide','btn no-button active1',
                                                                             'btn btn-primary remove-no-button','no')"
@@ -257,7 +275,7 @@
                                       </div>
                                     </div>
                                     <div style=" margin-bottom: 10px;"
-                                      *ngIf='this.Lodgement["BuyerRemitterDifferent"]["Show"]==="yes"'>
+                                      *ngIf='this.Lodgement["BuyerRemitterDifferent"]["Show"]==="yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                       <div class="col-md-12">
                                         <div class="row">
                                           <div class="col-md-12">
@@ -283,10 +301,10 @@
                                       </div>
                                     </div>
                                     <div class="space_bottom"></div>
-                                    <div class="col-md-8 col-sm-8 col-7">
+                                    <div class="col-md-8 col-sm-8 col-7" *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                       <label for="email" class="form-label">Is Invoice reduction?</label>
                                     </div>
-                                    <div class="col-md-4 col-sm-4 col-5">
+                                    <div class="col-md-4 col-sm-4 col-5" *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                       <div class="check_box_button">
                                         <button type="button" [class]="ClassRetrun('InvoiceReduction','Hide','btn no-button active1',
                                                                             'btn btn-primary remove-no-button','no')"
