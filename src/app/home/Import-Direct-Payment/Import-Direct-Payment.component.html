@@ -384,7 +384,7 @@
                     (click)="PREVIEW_PAGE.style.display='none'"></button>
             </div>
             <div class="modal-body">
-                <app-pdf-viewer [downloadShow]="false" *ngFor="let item of this.PREVIEWS_URL_LIST" [src]="item"
+                <app-pdf-viewer [downloadShow]="false" [name]="item?.name" *ngFor="let item of this.PREVIEWS_URL_LIST" [src]="item?.pdf"
                     width="100%" height="500px"></app-pdf-viewer>
             </div>
             <div class="modal-footer">

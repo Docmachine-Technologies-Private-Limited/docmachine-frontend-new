@@ -266,8 +266,19 @@ export class ImportDirectPaymentComponent implements OnInit {
     for (let index = 0; index < temp2.length; index++) {
       this.temp1[i].push({
         pdf: (temp2[index]['doc']),
-        name: 'BOE'
+        name: 'BOE',
       });
+      for (let j = 0; j < temp2[index]?.pipo?.length; j++) {
+        var item:any=temp2[index]?.pipo[j];
+        this.temp1[i].push({
+          pdf: item?.airwayBlcopy,
+          name: 'airwayBlcopy',
+        });
+        this.temp1[i].push({
+          pdf: item?.commercial,
+          name: 'commercial',
+        });
+      }
     }
     console.log(this.temp1, temp2, 'selectedItemsselectedItems')
     this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
@@ -619,16 +630,22 @@ export class ImportDirectPaymentComponent implements OnInit {
 
   PREVIEWS_URL(id) {
     this.PREVIEWS_URL_LIST = [];
-    this.PREVIEWS_URL_LIST[0] = this.ORIGINAL_PDF;
+    this.PREVIEWS_URL_LIST[0] =  {
+      name:'Bank Format',
+      pdf:this.ORIGINAL_PDF
+    };
     if (this.uploadUrl != undefined && this.uploadUrl != '' && this.uploadUrl != null) {
-      this.PREVIEWS_URL_LIST[1] = this.uploadUrl;
+      this.PREVIEWS_URL_LIST[1] = {
+      name:'Oponin',
+      pdf:this.uploadUrl
+      };
     }
     for (let i = 0; i < this.selectedItems.length; i++) {
       for (let index = 0; index < this.temp1[i].length; index++) {
         if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != undefined) {
           this.userService.mergePdf(this.temp1[i][index]?.pdf).subscribe((res: any) => {
             res.arrayBuffer().then((data: any) => {
-              this.PREVIEWS_URL_LIST.push(data);
+              this.PREVIEWS_URL_LIST.push({name: this.temp1[i][index]['name'],pdf:data});
               console.log('downloadEachFile', this.PREVIEWS_URL_LIST);
             });
           });
