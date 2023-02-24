@@ -169,6 +169,8 @@
                         <img src="./assets/Rectangle-13.png" />
                       </th>
                       <th scope="col"><span class="pl-3">DATE</span></th>
+                      <th scope="col">PIPO NUMBER</th>
+                      <th scope="col">CI NUMBER</th>
                       <th scope="col">BOE NUMBER</th>
                       <th scope="col">AD CODE</th>
                       <th scope="col">AD BILL NO</th>
@@ -189,6 +191,7 @@
                         <th class="rect">
                         <img src="./assets/Rectangle-13.png" />
                       </th>
+                     
                       <th class="pl-4 fw-normal">
                         <div *ngIf="!optionsVisibility[i]">
                           {{ data.boeDate }}
@@ -198,6 +201,8 @@
                             [(ngModel)]="data.boeDate">
                         </div>
                       </th>
+                      <td class="pl-4 fw-normal">{{ getPipoNumbers(data) }}</td>
+                      <td class="pl-4 fw-normal"> {{ data.commercialNumber }}</td>
                       <td class="sb-no">
                         <div *ngIf="!optionsVisibility[i]" (click)="
                                                 getInvoices(data, i) && getTransactions(data)">

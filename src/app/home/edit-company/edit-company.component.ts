@@ -167,7 +167,19 @@ export class EditCompanyComponent implements OnInit {
           delete this.UPDATED_DETAILS['userId'];
           delete this.UPDATED_DETAILS['__v'];
           delete this.UPDATED_DETAILS['member'];
-
+          
+          if (Object.keys(this.UPDATED_DETAILS['Starhousecertificate_Details']).length==0) {
+            this.UPDATED_DETAILS['Starhousecertificate_Details']={
+              CertificateNo:'',
+              Issuesdate:'',
+              ExpiryDate:'',
+              file:''
+            };
+          }
+          this.iframeVisible = true;
+          this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.UPDATED_DETAILS['Starhousecertificate_Details']?.file
+          );
           this.isItem = true;
           console.log(this.item)
           // this.letterHead1 = data['data'][0].file[0]["Letter Head"]
@@ -245,7 +257,6 @@ export class EditCompanyComponent implements OnInit {
   public onUploadSuccess(args: any): void {
     //this.uploading = false;]
     console.log(args[1].data)
-    console.log(Object.keys(args[1].data)[0])
     this.file.push(args[1].data)
     console.log(this.file)
     this.letterHead = false;
@@ -255,9 +266,9 @@ export class EditCompanyComponent implements OnInit {
     this.uploading = false;
     this.iframeVisible = true;
     this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      args[1].publicUrl
+      args[1].data
     );
-    
+    console.log(this.publicUrl,'publicUrl')
     if (Object.keys(args[1].data)[0] == 'Letter Head') {
       this.letterHeadDone = true;
     }
@@ -322,6 +333,7 @@ export class EditCompanyComponent implements OnInit {
         if (caEmail==true && chaEmail==true) {
           var chaEmail:any=this.IEC_validation('iec',this.UPDATED_DETAILS['iec']);
           this.UPDATED_DETAILS['file'] = this.file;
+          this.UPDATED_DETAILS['Starhousecertificate_Details']['file']=this.publicUrl?.changingThisBreaksApplicationSecurity;
           console.log(this.UPDATED_DETAILS, 'this.UPDATED_DETAILS');
           this.userService.updateTeamById(this.UPDATED_DETAILS,id).subscribe(
               data => {
@@ -400,6 +412,9 @@ export class EditCompanyComponent implements OnInit {
   }
   add_ArrayForm_value(array_key, index, key, value) {
     this.UPDATED_DETAILS[array_key][index][key] = value;
+  }
+  add_ArrayForm_push(array_key,key,value) {
+    this.UPDATED_DETAILS[array_key][key]=(value);
   }
   getNonEmptyObj(obj) {
     var temp: any = [];

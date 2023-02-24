@@ -232,6 +232,12 @@ export class BOEComponent implements OnInit {
       }
     });
   }
+  
+  getPipoNumbers(data) {
+    return data.pipo.map((x) => {
+      return x.pi_poNo;
+    });
+  }
 
   deleteByRoleType(RoleCheckbox:string,id:any,index:any){
     if (RoleCheckbox==''){

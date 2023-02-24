@@ -45,22 +45,21 @@
              docu !="commercial" && docu !="billOfExchange" &&
              docu !="destruction" && docu !="packingList" && docu !="import-blCopy"
              && docu !="import-commercial"'>Upload Document</h3>
-             <!--  -->
+          <!--  -->
           <div *ngIf='docu != "pipo" && docu != "boe" && docu != "sb"' style="margin-bottom: 20px;">
             <div class="lastets_doc_sec">
               <div class="row p-3">
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="exampleInputPassword1"> Choose the type of document</label>
-                    <select class="form-control p-3"
-                    *ngIf="this.USER_DATA?.Subscription=='both'" aria-label="Default select example"
-                     [(ngModel)]="documentType1" name="" id="">
+                    <select class="form-control p-3" *ngIf="this.USER_DATA?.Subscription=='both'"
+                      aria-label="Default select example" [(ngModel)]="documentType1" name="" id="">
                       <option value="">Select Import/Export</option>
                       <option *ngIf="this.USER_DATA?.sideMenu=='import'" value="import">Import</option>
                       <option *ngIf="this.USER_DATA?.sideMenu=='export'" value="export">Export</option>
                     </select>
                     <select class="form-control p-3" *ngIf="this.USER_DATA?.Subscription!='both'"
-                    aria-label="Default select example" [(ngModel)]="documentType1" name="" id="">
+                      aria-label="Default select example" [(ngModel)]="documentType1" name="" id="">
                       <option value="">Select {{this.USER_DATA?.Subscription}}</option>
                       <option *ngIf="this.USER_DATA?.sideMenu=='import'" value="import">Import</option>
                       <option *ngIf="this.USER_DATA?.sideMenu=='export'" value="export">Export</option>
@@ -71,9 +70,9 @@
                   <div class="form-group">
                     <label *ngIf='documentType1 == "import" || documentType1 == "export"'>
                       Now you selected {{documentType1}}, select Type of {{documentType1}} document </label>
-                    <select class="form-control p-3" aria-label="Default select example" *ngIf='documentType1 == "import"'
-                     [(ngModel)]="documentType" name=""
-                      id="" (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
+                    <select class="form-control p-3" aria-label="Default select example"
+                      *ngIf='documentType1 == "import"' [(ngModel)]="documentType" name="" id=""
+                      (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
                       <option value="">Document Type</option>
                       <option value="boe">BOE</option>
                       <option value="PO">PO</option>
@@ -94,8 +93,8 @@
                       <option value="import-commercial">Commercial Invoice</option>
                     </select>
                     <select class="form-control p-3" aria-label="Default select example"
-                    *ngIf='documentType1 == "export"' [(ngModel)]="documentType"
-                     name="" id="" (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
+                      *ngIf='documentType1 == "export"' [(ngModel)]="documentType" name="" id=""
+                      (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
                       <option value="">Document Type</option>
                       <option value="sb">Shipping Bill</option>
                       <option value="PO">PO</option>
@@ -122,9 +121,10 @@
                   </div>
                 </div>
                 <div class="col-md-6" *ngIf='documentType== "import-blCopy" && documentType1 == "import"'>
-                  <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Buyer's name*</label>
-                  <select class="form-control p-3" aria-label="Default select example" ngModel name="buyerName" placeholder="Select Beneficiary" id=""
-                    (change)=changepipo($event.target.value)>
+                  <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Buyer's
+                    name*</label>
+                  <select class="form-control p-3" aria-label="Default select example" ngModel name="buyerName"
+                    placeholder="Select Beneficiary" id="" (change)=changepipo($event.target.value)>
                     <option value="">Select Beneficiary</option>
                     <option value="{{bene?.benneName}}" *ngFor="let bene of benneDetail
                     ">{{ bene?.benneName }}
@@ -134,116 +134,98 @@
                 <div class="col-md-6" *ngIf='documentType1 == "import"'>
                   <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
                     PI/PO*</label>
-                    <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
-                     [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
-                    bindLabel="pi_po_buyerName"
-                    [multiple]="true"
-                    groupBy="selectedAllGroup"
-                    [selectableGroup]="true"
-                    placeholder="Select PI/PO"
-                    bindValue="testFunctionID"
-                    ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
-                   </ng-select>
-                   <div *ngIf="documentType!='' && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length==0" style="color: red;font-size: 15px;">
-                        There were no results from that PIPO Summary.
-                   </div>
-                   <div *ngIf="documentType==''  && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0" style="color: red;font-size: 15px;">
+                  <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+                    [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME" bindLabel="pi_po_buyerName"
+                    [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
+                    bindValue="testFunctionID" ngModel (change)="clickPipo(CommercialNumber?.selectedItems)"
+                    #CommercialNumber>
+                  </ng-select>
+                  <div *ngIf="documentType!='' && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length==0"
+                    style="color: red;font-size: 15px;">
+                    There were no results from that PIPO Summary.
+                  </div>
+                  <div *ngIf="documentType==''  && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+                    style="color: red;font-size: 15px;">
                     Please select a {{documentType1}} Summary page
-               </div>
+                  </div>
                 </div>
 
                 <div class="col-md-6" *ngIf='documentType1 == "export"'>
                   <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
                     PI/PO*</label>
-                    <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
-                     [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
-                    bindLabel="pi_po_buyerName"
-                    [multiple]="true"
-                    groupBy="selectedAllGroup"
-                    [selectableGroup]="true"
-                    placeholder="Select PI/PO"
-                    bindValue="testFunctionID"
-                    ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
-                   </ng-select>
-                   <div *ngIf="documentType!='' && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length==0" style="color: red;font-size: 15px;">
-                        There were no results from that PIPO Summary.
-                   </div>
-                   <div *ngIf="documentType==''  && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0" style="color: red;font-size: 15px;">
+                  <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
+                    [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME" bindLabel="pi_po_buyerName"
+                    [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
+                    bindValue="testFunctionID" ngModel (change)="clickPipo(CommercialNumber?.selectedItems)"
+                    #CommercialNumber>
+                  </ng-select>
+                  <div *ngIf="documentType!='' && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length==0"
+                    style="color: red;font-size: 15px;">
+                    There were no results from that PIPO Summary.
+                  </div>
+                  <div *ngIf="documentType==''  && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
+                    style="color: red;font-size: 15px;">
                     Please select a {{documentType1}} Summary page
-               </div>
+                  </div>
                 </div>
-<!--
-                <div class="col-md-6" *ngIf='documentType!= "import-blCopy" && documentType1!= "import"'>
-                  <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
-                    PI/PO*</label>
-                    <ng-select *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
-                     [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
-                    bindLabel="pi_po_buyerName"
-                    [multiple]="true"
-                    groupBy="selectedAllGroup"
-                    [selectableGroup]="true"
-                    placeholder="Select PI/PO"
-                    bindValue="testFunctionID"
-                    ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
-                </ng-select>
-                </div> -->
               </div>
             </div>
-        </div>
-        <div *ngIf='docu == "pipo" && file =="import"' class="col-md-10 d-flex flex-column">
-          <div style="display: flex;flex-direction: column;" class="col-5">
-            <label style="font-size: 20px; color: #303030;">Beneficiary Name*</label>
-              <ng-select class="custom" *ngIf="this.benneDetail?.length!=0"
-                [items]="this.benneDetail"
-                bindLabel="benneName"
-                [multiple]="false"
-                groupBy="selectedAllGroup"
-                [selectableGroup]="true"
-                placeholder="Select PI/PO"
-                bindValue="testFunctionID"
-                ngModel (change)="clickBene(bene?.selectedValues[0]?.benneName)" #bene>
+          </div>
+          <div *ngIf='docu == "pipo" && file =="import"' class="col-md-10 d-flex flex-column">
+            <div style="display: flex;flex-direction: column;" class="col-5">
+              <label style="font-size: 20px; color: #303030;">Beneficiary Name*</label>
+              <ng-select class="custom" *ngIf="this.benneDetail?.length!=0" [items]="this.benneDetail"
+                bindLabel="benneName" [multiple]="false" groupBy="selectedAllGroup" [selectableGroup]="true"
+                placeholder="Select PI/PO" bindValue="testFunctionID" ngModel
+                (change)="clickBene(bene?.selectedValues[0]?.benneName)" #bene>
               </ng-select>
-          </div>
-          <div class="col-5 pt-2 d-flex flex-column">
-            <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
-            <div style="display: flex; align-items: center;">
-              <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
-                [(ngModel)]="documentType" value="PI">
-              <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
             </div>
-            <div style="display: flex; align-items: center;">
-              <input type="radio" style="flex-direction:row;" id="options2" class="circular_input"
-                [(ngModel)]="documentType" value="PO">
-              <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
+            <div class="col-5 pt-2 d-flex flex-column">
+              <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
+              <div style="display: flex; align-items: center;">
+                <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
+                  [(ngModel)]="documentType" value="PI">
+                <label style="flex-direction:row;" class="label1" for="male">Proforma Invoice</label>
+              </div>
+              <div style="display: flex; align-items: center;">
+                <input type="radio" style="flex-direction:row;" id="options2" class="circular_input"
+                  [(ngModel)]="documentType" value="PO">
+                <label class="label1" style="flex-direction:row;" for="female">Purchase Order</label>
+              </div>
             </div>
           </div>
-        </div>
-        <div *ngIf='docu == "sb"' style="margin-bottom: 20px;" class="col-md-6">
-          <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select PI/PO*</label>
+          <div *ngIf='docu == "sb"' style="margin-bottom: 20px;" class="col-md-6">
+            <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
+              PI/PO*</label>
             <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
-             [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
-            bindLabel="pi_po_buyerName"
-            [multiple]="true"
-            groupBy="selectedAllGroup"
-            [selectableGroup]="true"
-            placeholder="Select PI/PO"
-            bindValue="testFunctionID"
-            ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
-        </ng-select>
-        </div>
-        <div *ngIf='docu == "boe"' style="margin-bottom: 20px;" class="col-md-6">
-          <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select PI/PO*</label>
-            <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
-             [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
-            bindLabel="pi_po_buyerName"
-            [multiple]="true"
-            groupBy="selectedAllGroup"
-            [selectableGroup]="true"
-            placeholder="Select PI/PO"
-            bindValue="testFunctionID"
-            ngModel (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
-        </ng-select>
-        </div>
+              [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME" bindLabel="pi_po_buyerName"
+              [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
+              bindValue="testFunctionID" ngModel (change)="clickPipo(CommercialNumber?.selectedItems)"
+              #CommercialNumber>
+            </ng-select>
+          </div>
+          <div *ngIf='docu == "boe"' style="margin-bottom: 20px;" class="col-12 d-flex" style="gap:20px">
+            <div class="column col-5">
+              <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
+                PI/PO*</label>
+              <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
+                [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME" bindLabel="pi_po_buyerName"
+                [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
+                bindValue="testFunctionID" ngModel (change)="clickPipo(CommercialNumber?.selectedItems)"
+                #CommercialNumber>
+              </ng-select>
+            </div>
+            <div class="column col-5">
+              <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select Commercial
+                Number*</label>
+              <ng-select class="custom" *ngIf="this.COMMERCIAL_LIST?.length!=0" [items]="this.COMMERCIAL_LIST"
+                bindLabel="commercialNumber" [multiple]="false" placeholder="Select Commercial Number" ngModel
+                (change)="changeCommercial($event)" #Dev>
+              </ng-select>
+              <h5 class="error-h5" *ngIf="this.COMMERCIAL_LIST?.length==0" style="color:red;font-size: 15px;">no result
+                found...</h5>
+            </div>
+          </div>
 
           <!--sbbbbbbbbbbbbbbbbbbb ------ --------------------------- -->
           <div *ngIf="documentType === 'sb'" class="form" method="POST">
@@ -253,7 +235,6 @@
             <i class="fas fa-file-upload"></i>
             <h5>Drag and Drop files here</h5>
             <p>Files Supported: PDF, XSLS, Image, Scanner</p>
-
             <p>Maximum Size: 5MB</p>
           </div>
           <div *ngIf="documentType === 'boe' " class="form" method="POST">
@@ -263,10 +244,8 @@
             <i class="fas fa-file-upload"></i>
             <h5>Drag and Drop files here</h5>
             <p>Files Supported: PDF, XSLS, Image, Scanner</p>
-
             <p>Maximum Size: 5MB</p>
           </div>
-
 
           <div *ngIf="documentType === 'irAdvice'" class="form" method="POST">
             <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
@@ -286,8 +265,7 @@
             <p>Files Supported: PDF, XSLS, Image, Scanner</p>
             <p>Maximum Size: 5MB</p>
           </div>
-          <div
-            *ngIf="documentType === 'PI' || documentType === 'PO' ||
+          <div *ngIf="documentType === 'PI' || documentType === 'PO' ||
             documentType === 'tryPartyAgreement' || documentType === 'debitNote' ||
             documentType === 'creditNote' ||
             documentType === 'import-blCopy' || documentType === 'blCopy' ||
@@ -306,11 +284,9 @@
             <i class="fas fa-file-upload"></i>
             <h5>Drag and Drop files here</h5>
             <p>Files Supported: PDF, XSLS, Image, Scanner</p>
-
             <p>Maximum Size: 5MB</p>
           </div>
           <div class="progressbar" *ngIf="uploading">
-            <!-- <p class="processheading">Invoice-001</p> -->
             <div class="meter">
               <span [style.width]="width + '%'"></span>
             </div>
@@ -337,7 +313,7 @@
             <button [routerLink]="['/home/inward-remittance-advice']">No</button>
           </div>
           <form class="iframecontroller" *ngIf="sbNo && !override" #values="ngForm" (ngSubmit)="onSubmit(values)">
-                <iframe [src]="publicUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="publicUrl" width="100%" height="700px"> </iframe>
             <div class="field p-3">
               <div class="col-12">
                 <tr class="form-wrapper">
@@ -356,8 +332,8 @@
                   </td>
                   <br />
                   <td class="full-input border1">
-                    <label for="adCode">AD CODE</label><input [(ngModel)]="res.adCode" class="form-control p-3" type="text"
-                      name="adCode" />
+                    <label for="adCode">AD CODE</label><input [(ngModel)]="res.adCode" class="form-control p-3"
+                      type="text" name="adCode" />
                   </td>
                   <td class="full-input border2">
                     <label for="leodate">LEO DATE</label><input [(ngModel)]="res.leodate" class="form-control p-3"
@@ -367,21 +343,13 @@
                     <label for="processingStaus">PROCESSING STATUS</label><input [(ngModel)]="res.processingStaus"
                       class="form-control p-3" type="text" name="processingStaus" />
                   </td>
-                  <br />
 
                   <p class="sh1">FOB and FREIGHT</p>
                   <td class="full-input border1">
                     <label for="fobCurrency">FOB CURRENCY</label>
-                    <!-- <input [(ngModel)]="res.fobCurrency"
-                      class="form-control p-3" type="text" name="fobCurrency" /> -->
-                      <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                      [items]="this.CURRENCY_LIST"
-                      bindLabel="type"
-                      [multiple]="false"
-                      groupBy="selectedAllGroup"
-                      placeholder="Select PI/PO"
-                      name="fobCurrency"
-                      [(ngModel)]="res.fobCurrency">
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                      bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                      name="fobCurrency" [(ngModel)]="res.fobCurrency">
                     </ng-select>
                   </td>
                   <td class="full-input border2">
@@ -395,20 +363,14 @@
                   <br />
                   <td class="full-input border1">
                     <label for="equivalentFobValue">EQUIVALENT FOB VALUE</label><input
-                      [(ngModel)]="res.equivalentFobValue" class="form-control p-3" type="text" name="equivalentFobValue" />
+                      [(ngModel)]="res.equivalentFobValue" class="form-control p-3" type="text"
+                      name="equivalentFobValue" />
                   </td>
                   <td class="full-input border2">
                     <label for="freightCurrency">FREIGHT CURRENCY</label>
-                    <!-- <input [(ngModel)]="res.freightCurrency"
-                      class="form-control p-3" type="text" name="freightCurrency" /> -->
-                      <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                      [items]="this.CURRENCY_LIST"
-                      bindLabel="type"
-                      [multiple]="false"
-                      groupBy="selectedAllGroup"
-                      placeholder="Select PI/PO"
-                      name="freightCurrency"
-                      [(ngModel)]="res.freightCurrency">
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                      bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                      name="freightCurrency" [(ngModel)]="res.freightCurrency">
                     </ng-select>
                   </td>
                   <td class="full-input border3">
@@ -419,16 +381,9 @@
                   <p class="sh1">INSURANCE</p>
                   <td class="full-input border2">
                     <label for="insuranceCurrency">INSURANCE CURRENCY</label>
-                    <!-- <input [(ngModel)]="res.insuranceCurrency"
-                      class="form-control p-3" type="text" name="insuranceCurrency" /> -->
-                      <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                      [items]="this.CURRENCY_LIST"
-                      bindLabel="type"
-                      [multiple]="false"
-                      groupBy="selectedAllGroup"
-                      placeholder="Select PI/PO"
-                      name="insuranceCurrency"
-                      [(ngModel)]="res.insuranceCurrency">
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                      bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                      name="insuranceCurrency" [(ngModel)]="res.insuranceCurrency">
                     </ng-select>
                   </td>
                   <td class="full-input border3">
@@ -478,18 +433,14 @@
                     <label for="exchangeRate">EXCHANGE RATE</label><input [(ngModel)]="res.exchangeRate"
                       class="form-control p-3" type="text" name="exchangeRate" />
                   </td>
-                  <br />
-                  <br />
                 </tr>
               </div>
-
               <div class="new_shipping_input" style="padding: 16px;">
                 <div class="row p-3">
                   <div class="col-md-6 col-12">
                     <div class="mb-3">
                       <label for="exampleInputEmail1" class="form-label">AD BILL NUMBER</label>
                       <input [(ngModel)]="res.adBillNo" class="input form-control p-3" type="text" name="adBillNo" />
-
                     </div>
                   </div>
                   <div class="col-md-6 col-12">
@@ -507,7 +458,6 @@
                   <div class="col-md-6 col-12">
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </div>
-
                 </div>
               </div>
               <div>
@@ -515,7 +465,6 @@
                   <div class="tabbed">
                     <input *ngFor="let obj of res.invoices; let i = index" [attr.data-index]="i" type="radio"
                       id="{{ i + 1 }}" name="css-tabs" checked />
-
                     <ul class="tabs" style="padding-left:15px">
                       <li class="tab" *ngFor="let obj of res.invoices; let i = index" [attr.data-index]="i">
                         <label for="{{ i + 1 }}">Invoice {{ i + 1 }}</label>
@@ -524,8 +473,8 @@
                     <div class="tab-content form-wrapper" *ngFor="let obj of res.invoices; let i = index"
                       [attr.data-index]="i">
                       <td class="full-input border1">
-                        <label for="mawbno">INVOICE NO</label><input [(ngModel)]="obj.invoiceno" class="form-control p-3"
-                          type="text" name="invoiceno{{ i + 1 }}" />
+                        <label for="mawbno">INVOICE NO</label><input [(ngModel)]="obj.invoiceno"
+                          class="form-control p-3" type="text" name="invoiceno{{ i + 1 }}" />
                       </td>
                       <td class="full-input border2">
                         <label for="mawbno">AMOUNT</label><input [(ngModel)]="obj.amount" class="form-control p-3"
@@ -533,15 +482,10 @@
                       </td>
                       <td class="full-input border3">
                         <label for="mawbno">CURRENCY</label>
-                          <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                        [items]="this.CURRENCY_LIST"
-                        bindLabel="type"
-                        [multiple]="false"
-                        groupBy="selectedAllGroup"
-                        placeholder="Select PI/PO"
-                        name="currency"
-                        [(ngModel)]="obj.currency">
-                      </ng-select>
+                        <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                          bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                          name="currency" [(ngModel)]="obj.currency">
+                        </ng-select>
                       </td>
                     </div>
                   </div>
@@ -554,37 +498,421 @@
                     <div class="form-wrapper">
                       <td class="full-input border1">
                         <label for="mawbno">INVOICE NO</label>
-                        <input class="form-control p-3" type="text" (keyup)="INVOICE_LIST['invoiceno']=$event.target.value" />
+                        <input class="form-control p-3" type="text"
+                          (keyup)="INVOICE_LIST['invoiceno']=$event.target.value" />
                       </td>
                       <td class="full-input border2">
                         <label for="mawbno">AMOUNT</label>
-                        <input class="form-control p-3" type="text" (keyup)="INVOICE_LIST['amount']=$event.target.value" />
+                        <input class="form-control p-3" type="text"
+                          (keyup)="INVOICE_LIST['amount']=$event.target.value" />
                       </td>
                       <td class="full-input border3">
                         <label for="mawbno">CURRENCY</label>
-                          <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                        [items]="this.CURRENCY_LIST"
-                        bindLabel="type"
-                        [multiple]="false"
-                        groupBy="selectedAllGroup"
-                        placeholder="Select PI/PO"
-                        name="currency" (change)="INVOICE_LIST['currency']=$event.value">
-                      </ng-select>
+                        <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                          bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                          name="currency" (change)="INVOICE_LIST['currency']=$event.value">
+                        </ng-select>
                       </td>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
           </form>
-
 
           <form class="iframecontroller" *ngIf="boeNumber && !override" #values="ngForm"
             (ngSubmit)="onSubmitBoe(values)">
-              <iframe [src]="publicUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="publicUrl" width="100%" height="700px"> </iframe>
             <div class="field p-3">
-              <table class="field-table">
+              <div class="grid">
+                <div class="card" style="box-shadow: 0px 0px 2px 2px #00000045;padding: 20px;margin-bottom: 20px;">
+                  <div class="header">
+                    <p class="sh1 m-auto">BOE DETAILS</p>
+                  </div>
+                  <div class="main-panel-2">
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">BOE Number*</label>
+                      <input [(ngModel)]="res.boeNumber" class="form-control p-3" type="text" name="boeNumber"
+                        required />
+                      <div *ngIf="values?.controls?.boeNumber?.invalid && (SUBMIT_FORM || values?.controls?.boeNumber?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.boeNumber?.errors?.required"> BOE Number is required. </span>
+                      </div>
+                    </div>
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">BOE Date*</label>
+                      <input [(ngModel)]="res.boeDate" class="form-control p-3" type="date" name="boeDate" required/>
+                      <div *ngIf="values?.controls?.boeDate?.invalid && (SUBMIT_FORM || values?.controls?.boeDate?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.boeDate?.errors?.required"> BOE Date is required. </span>
+                    </div>
+                    </div>
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">AWB No.*</label>
+                      <input [(ngModel)]="res.AWBNo" class="form-control p-3" type="text" name="AWBNo" required/>
+                      <div *ngIf="values?.controls?.AWBNo?.invalid && (SUBMIT_FORM || values?.controls?.AWBNo?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.AWBNo?.errors?.required"> AWB No. is required. </span>
+                    </div>
+                    </div>
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">ORIGIN*</label>
+                      <input [(ngModel)]="res.origin" class="form-control p-3" type="text" name="origin" required/>
+                      <div *ngIf="values?.controls?.origin?.invalid && (SUBMIT_FORM || values?.controls?.origin?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.origin?.errors?.required"> ORIGIN is required. </span>
+                    </div>
+                    </div>
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">DISCHARGE PORT*</label>
+                      <input [(ngModel)]="res.dischargePort" class="form-control p-3" type="text"
+                        name="dischargePort" required/>
+                        <div *ngIf="values?.controls?.dischargePort?.invalid && (SUBMIT_FORM || values?.controls?.dischargePort?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.dischargePort?.errors?.required"> DISCHARGE PORT is required. </span>
+                      </div>
+                    </div>
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">IEC CODE*</label>
+                      <input [(ngModel)]="res.iecCode" class="form-control p-3" type="text" name="iecCode" required/>
+                      <div *ngIf="values?.controls?.iecCode?.invalid && (SUBMIT_FORM || values?.controls?.iecCode?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.iecCode?.errors?.required"> IEC CODE is required. </span>
+                    </div>
+                    </div>
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">IEC NAME*</label>
+                      <input [(ngModel)]="res.iecName" class="form-control p-3" type="text" name="iecName"required />
+                      <div *ngIf="values?.controls?.iecName?.invalid && (SUBMIT_FORM || values?.controls?.iecName?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.iecName?.errors?.required"> IEC NAME is required. </span>
+                    </div>
+                    </div>
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">AD CODE*</label>
+                      <input [(ngModel)]="res.adCode" class="form-control p-3" type="text" name="adCode" required/>
+                      <div *ngIf="values?.controls?.adCode?.invalid && (SUBMIT_FORM || values?.controls?.adCode?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.adCode?.errors?.required"> AD CODE is required. </span>
+                    </div>
+                    </div>
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">AD BILL CODE*</label>
+                      <input [(ngModel)]="res.adBillNo" class="form-control p-3" type="text" name="adBillNo" required />
+                      <div *ngIf="values?.controls?.adBillNo?.invalid && (SUBMIT_FORM || values?.controls?.adBillNo?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.adBillNo?.errors?.required"> AD BILL CODE is required. </span>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel" style="box-shadow: 0px 0px 2px 2px #00000045;padding: 20px;margin-bottom: 20px;border-radius: 5px;
+              display: flex;
+              gap: 10px;">
+                  <div class="card">
+                    <div class="header">
+                      <p class="sh1 m-auto">INVOICE DETAILS</p>
+                    </div>
+                    <div class="main-panel">
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">INVOICE NO*</label>
+                        <input [(ngModel)]="res.invoiceNumber" class="form-control p-3" type="text"
+                          name="invoiceNumber" required/>
+                          <div *ngIf="values?.controls?.invoiceNumber?.invalid && (SUBMIT_FORM || values?.controls?.invoiceNumber?.touched)"
+                          class="error-span">
+                          <span *ngIf="values?.controls?.invoiceNumber?.errors?.required"> INVOICE NO is required. </span>
+                        </div>
+                      </div>
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">INVOICE AMOUNT*</label>
+                        <input [(ngModel)]="res.invoiceAmount" class="form-control p-3" type="text"
+                          name="invoiceAmount" required/>
+                          <div *ngIf="values?.controls?.invoiceAmount?.invalid && (SUBMIT_FORM || values?.controls?.invoiceAmount?.touched)"
+                          class="error-span">
+                          <span *ngIf="values?.controls?.invoiceAmount?.errors?.required">INVOICE AMOUNT is required. </span>
+                        </div>
+                        <div *ngIf="(SUBMIT_FORM || values?.controls?.invoiceAmount?.touched ||
+                        values?.controls?.invoiceAmount?.value!=this.COMMERCIAL_DATA?.InsuranceValue)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.invoiceAmount?.value!=this.COMMERCIAL_DATA?.InsuranceValue">INVOICE AMOUNT and CI INVOICE AMOUNT should be equal is required. </span>
+                      </div>
+                      </div>
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">CURRENCY*</label>
+                        <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                          bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                          name="currency" [(ngModel)]="res.currency" required>
+                        </ng-select>
+                        <div *ngIf="values?.controls?.currency?.invalid && (SUBMIT_FORM || values?.controls?.currency?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.currency?.errors?.required"> CURRENCY is required. </span>
+                      </div>
+                      </div>
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">SETTELED AMOIUNT*</label>
+                        <input [(ngModel)]="res.settledAmount" class="form-control p-3" type="text"
+                          name="settledAmount" required/>
+                          <div *ngIf="values?.controls?.settledAmount?.invalid && (SUBMIT_FORM || values?.controls?.settledAmount?.touched)"
+                          class="error-span">
+                          <span *ngIf="values?.controls?.settledAmount?.errors?.required"> SETTELED AMOIUNT is required. </span>
+                        </div>
+                      </div>
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">STATUS*</label>
+                        <input [(ngModel)]="res.status" class="form-control p-3" type="text" name="status" required/>
+                        <div *ngIf="values?.controls?.status?.invalid && (SUBMIT_FORM || values?.controls?.status?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.status?.errors?.required"> STATUS is required. </span>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card" style="border-left: 2px solid black;
+                border-radius: 0;
+                padding-left: 10px;">
+                    <div class="header">
+                      <p class="sh1 m-auto">CI INVOICE DETAILS</p>
+                    </div>
+                    <div class="main-panel">
+                      <div class="mb-0" style="opacity: 0;">
+                        <label for="exampleInputEmail1" class="form-label">INVOICE NO*</label>
+                        <input class="form-control p-3" [value]="this.COMMERCIAL_DATA?.InvoiceNumber" disabled
+                          type="text" />
+                      </div>
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">INVOICE AMOUNT*</label>
+                        <input class="form-control p-3" [value]="this.COMMERCIAL_DATA?.InsuranceValue" disabled
+                          type="text" />
+                      </div>
+                      <!-- <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">CURRENCY*</label>
+                      <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                      [items]="this.CURRENCY_LIST"
+                      bindLabel="type"
+                      [multiple]="false"
+                      groupBy="selectedAllGroup"
+                      placeholder="Select PI/PO"
+                      name="currency"
+                      [(ngModel)]="res.currency">
+                    </ng-select> -->
+                      <!-- </div> -->
+                      <!-- <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">SETTELED AMOIUNT*</label>
+                      <input [(ngModel)]="res.settledAmount" class="form-control p-3" type="text" name="settledAmount" />
+                    </div>
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">STATUS*</label>
+                      <input [(ngModel)]="res.status" class="form-control p-3" type="text" name="status" />
+                    </div> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="panel" style="box-shadow: 0px 0px 2px 2px #00000045;padding: 20px;margin-bottom: 20px;border-radius: 5px;
+              display: flex;
+              gap: 10px;">
+                  <div class="card">
+                    <div class="header">
+                      <p class="sh1 m-auto">FOB and FREIGHT</p>
+                    </div>
+                    <div class="main-panel">
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">FREIGHT AMOUNT*</label>
+                        <input [(ngModel)]="res.freightAmount" class="form-control p-3" type="text"
+                          name="freightAmount" required/>
+                          <div *ngIf="values?.controls?.freightAmount?.invalid && (SUBMIT_FORM || values?.controls?.freightAmount?.touched)"
+                          class="error-span">
+                          <span *ngIf="values?.controls?.freightAmount?.errors?.required"> FREIGHT AMOUNT is required. </span>
+                        </div>
+                        <div *ngIf="(SUBMIT_FORM || values?.controls?.freightAmount?.touched ||
+                        values?.controls?.freightAmount?.value!=this.COMMERCIAL_DATA?.FreightValue)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.freightAmount?.value!=this.COMMERCIAL_DATA?.FreightValue">FREIGHT AMOUNT and CI FREIGHT AMOUNT should be equal is required. </span>
+                      </div>
+                      </div>
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">FREIGHT CURRENCY*</label>
+                        <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                          bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                          name="freightCurrency" [(ngModel)]="res.freightCurrency" required>
+                        </ng-select>
+                        <div *ngIf="values?.controls?.freightCurrency?.invalid && (SUBMIT_FORM || values?.controls?.freightCurrency?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.freightCurrency?.errors?.required"> FREIGHT CURRENCY is required. </span>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card" style="border-left: 2px solid black;
+              border-radius: 0;
+              padding-left: 10px;">
+                    <div class="header">
+                      <p class="sh1 m-auto">CI FOB and FREIGHT</p>
+                    </div>
+                    <div class="main-panel">
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">FREIGHT AMOUNT*</label>
+                        <input [value]="this.COMMERCIAL_DATA?.FreightValue" disabled class="form-control p-3"
+                          type="text"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel" style="box-shadow: 0px 0px 2px 2px #00000045;padding: 20px;margin-bottom: 20px;border-radius: 5px;
+              display: flex;
+              gap: 10px;">
+                  <div class="card">
+                    <div class="header">
+                      <p class="sh1 m-auto">INSURANCE</p>
+                    </div>
+                    <div class="main-panel">
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">INSURANCE AMOUNT*</label>
+                        <input [(ngModel)]="res.insuranceAmount" class="form-control p-3" type="text"
+                          name="insuranceAmount" required/>
+                          <div *ngIf="values?.controls?.insuranceAmount?.invalid && (SUBMIT_FORM || values?.controls?.insuranceAmount?.touched)"
+                          class="error-span">
+                          <span *ngIf="values?.controls?.insuranceAmount?.errors?.required">INSURANCE AMOUNT is required. </span>
+                        </div>
+                        <div *ngIf="(SUBMIT_FORM || values?.controls?.insuranceAmount?.touched ||
+                        values?.controls?.insuranceAmount?.value!=this.COMMERCIAL_DATA?.InsuranceValue)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.insuranceAmount?.value!=this.COMMERCIAL_DATA?.InsuranceValue">INSURANCE AMOUNT and CI INSURANCE AMOUNT should be equal is required. </span>
+                      </div>
+                      </div>
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">INSURANCE CURRENCY*</label>
+                        <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                          bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                          name="insuranceCurrency" [(ngModel)]="res.insuranceCurrency" required>
+                        </ng-select>
+                        <div *ngIf="values?.controls?.insuranceCurrency?.invalid && (SUBMIT_FORM || values?.controls?.insuranceCurrency?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.insuranceCurrency?.errors?.required"> INSURANCE CURRENCY is required. </span>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card" style="border-left: 2px solid black;
+              border-radius: 0;
+              padding-left: 10px;">
+                    <div class="header">
+                      <p class="sh1 m-auto">CI INSURANCE</p>
+                    </div>
+                    <div class="main-panel">
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">INSURANCE AMOUNT*</label>
+                        <input class="form-control p-3" type="text" disabled
+                          [value]="this.COMMERCIAL_DATA?.InsuranceValue" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card" style="box-shadow: 0px 0px 2px 2px #00000045;padding: 20px;margin-bottom: 20px;">
+                  <div class="header">
+                    <p class="sh1 m-auto">DISCOUNT</p>
+                  </div>
+                  <div class="main-panel-2">
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">DISCOUNT AMOUNT*</label>
+                      <input [(ngModel)]="res.discountAmount" class="form-control p-3" type="text"
+                        name="discountAmount" required/>
+                        <div *ngIf="values?.controls?.discountAmount?.invalid && (SUBMIT_FORM || values?.controls?.discountAmount?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.discountAmount?.errors?.required"> DISCOUNT AMOUNT is required. </span>
+                      </div>
+                    </div>
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">DISCOUNT CURRENCY*</label>
+                      <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                        bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                        name="discountCurrency" [(ngModel)]="res.discountCurrency" required>
+                      </ng-select>
+                      <div *ngIf="values?.controls?.discountCurrency?.invalid && (SUBMIT_FORM || values?.controls?.discountCurrency?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.discountCurrency?.errors?.required"> DISCOUNT CURRENCY is required. </span>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel" style="box-shadow: 0px 0px 2px 2px #00000045;padding: 20px;margin-bottom: 20px;border-radius: 5px;
+              display: flex;
+              gap: 10px;">
+                  <div class="card">
+                    <div class="header">
+                      <p class="sh1 m-auto">MISCELLANEOUS</p>
+                    </div>
+                    <div class="main-panel">
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">MISCELLANEOUS AMOUNT*</label>
+                        <input [(ngModel)]="res.miscellaneousAmount" class="form-control p-3" type="text"
+                          name="miscellaneousAmount" required/>
+                          <div *ngIf="values?.controls?.miscellaneousAmount?.invalid && (SUBMIT_FORM || values?.controls?.miscellaneousAmount?.touched)"
+                          class="error-span">
+                          <span *ngIf="values?.controls?.miscellaneousAmount?.errors?.required"> MISCELLANEOUS AMOUNT is required. </span>
+                        </div>
+                        <div *ngIf="(SUBMIT_FORM || values?.controls?.miscellaneousAmount?.touched ||
+                        values?.controls?.miscellaneousAmount?.value!=this.COMMERCIAL_DATA?.MiscCharges)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.miscellaneousAmount?.value!=this.COMMERCIAL_DATA?.MiscCharges">MISCELLANEOUS AMOUNT and CI MISCELLANEOUS AMOUNT should be equal is required. </span>
+                      </div>
+                      </div>
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">MISCELLANEOUS CURRENCY*</label>
+                        <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                          bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                          name="miscellaneousCurrency" [(ngModel)]="res.miscellaneousCurrency" required>
+                        </ng-select>
+                        <div *ngIf="values?.controls?.miscellaneousCurrency?.invalid && (SUBMIT_FORM || values?.controls?.miscellaneousCurrency?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.miscellaneousCurrency?.errors?.required"> MISCELLANEOUS CURRENCY is required. </span>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card" style="border-left: 2px solid black;
+              border-radius: 0;
+              padding-left: 10px;">
+                    <div class="header">
+                      <p class="sh1 m-auto">CI MISCELLANEOUS</p>
+                    </div>
+                    <div class="main-panel">
+                      <div class="mb-0">
+                        <label for="exampleInputEmail1" class="form-label">MISCELLANEOUS AMOUNT*</label>
+                        <input class="form-control p-3" disabled type="text"
+                          [value]="this.COMMERCIAL_DATA?.MiscCharges" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card" style="box-shadow: 0px 0px 2px 2px #00000045;padding: 20px;margin-bottom: 20px;">
+                  <div class="header">
+                    <p class="sh1 m-auto">COMMISSION</p>
+                  </div>
+                  <div class="main-panel-2">
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">COMMISSION AMOUNT*</label>
+                      <input [(ngModel)]="res.commissionAmount" class="form-control p-3" type="text"
+                        name="commissionAmount" required/>
+                        <div *ngIf="values?.controls?.commissionAmount?.invalid && (SUBMIT_FORM || values?.controls?.commissionAmount?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.commissionAmount?.errors?.required"> COMMISSION AMOUNT is required. </span>
+                      </div>
+                    </div>
+                    <div class="mb-0">
+                      <label for="exampleInputEmail1" class="form-label">COMMISSION CURRENCY*</label>
+                      <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                        bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                        name="commissionCurrency" [(ngModel)]="res.commissionCurrency" required>
+                      </ng-select>
+                      <div *ngIf="values?.controls?.commissionCurrency?.invalid && (SUBMIT_FORM || values?.controls?.commissionCurrency?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.commissionCurrency?.errors?.required"> COMMISSION CURRENCY is required. </span>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <!-- <table class="field-table">
                 <tr class="field-heading">
                   <td>BOE Number*</td>
                   <td>BOE Date</td>
@@ -598,9 +926,9 @@
                   </td>
                   <td><button type="submit" class="button">Submit</button></td>
                 </tr>
-              </table>
+              </table> 
               <tr class="form-wrapper">
-                <p class="sh1">SB DETAILS</p>
+                 <p class="sh1">SB DETAILS</p>
                 <td class="full-input border1">
                   <label for="origin">ORIGIN</label><input [(ngModel)]="res.origin" class="form-control p-3" type="text"
                     name="origin" />
@@ -625,9 +953,9 @@
                 <td class="full-input border1">
                   <label for="adBillNo">AD BILL CODE</label><input [(ngModel)]="res.adBillNo" class="form-control p-3"
                     type="text" name="adBillNo" />
-                </td>
+                </td> -->
 
-                <p class="sh1">INVOICE DETAILS</p>
+                <!-- <p class="sh1">INVOICE DETAILS</p>
                 <td class="full-input border1">
                   <label for="invoiceNumber">INVOICE NO</label><input [(ngModel)]="res.invoiceNumber"
                     class="form-control p-3" type="text" name="invoiceNumber" />
@@ -638,8 +966,6 @@
                 </td>
                 <td class="full-input border3">
                   <label for="currency">CURRENCY</label>
-                  <!-- <input [(ngModel)]="res.currency" class="form-control p-3"
-                    type="text" name="currency" /> -->
                     <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                     [items]="this.CURRENCY_LIST"
                     bindLabel="type"
@@ -659,17 +985,15 @@
                   <label for="status">STATUS</label><input [(ngModel)]="res.status" class="form-control p-3" type="text"
                     name="status" />
                 </td>
-                <br />
+                <br /> -->
 
-                <p class="sh1">FOB and FREIGHT</p>
+                <!-- <p class="sh1">FOB and FREIGHT</p>
                 <td class="full-input border2">
                   <label for="freightAmount">FREIGHT AMOUNT</label><input [(ngModel)]="res.freightAmount"
                     class="form-control p-3" type="text" name="freightAmount" />
                 </td>
                 <td class="full-input border3">
                   <label for="freightCurrency">FREIGHT CURRENCY</label>
-                  <!-- <input [(ngModel)]="res.freightCurrency"
-                    class="form-control p-3" type="text" name="freightCurrency" /> -->
                     <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                     [items]="this.CURRENCY_LIST"
                     bindLabel="type"
@@ -680,18 +1004,16 @@
                     [(ngModel)]="res.freightCurrency">
                   </ng-select>
                 </td>
-                <br />
+                <br /> -->
 
-                <p class="sh1">INSURANCE</p>
+                <!-- <p class="sh1">INSURANCE</p>
                 <td class="full-input border2">
                   <label for="insuranceAmount">INSURANCE AMOUNT</label><input [(ngModel)]="res.insuranceAmount"
                     class="form-control p-3" type="text" name="insuranceAmount" />
                 </td>
                 <td class="full-input border3">
                   <label for="insuranceCurrency">INSURANCE CURRENCY</label>
-                  <!-- <input [(ngModel)]="res.insuranceCurrency"
-                    class="form-control p-3" type="text" name="insuranceCurrency" /> -->
-                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                     [items]="this.CURRENCY_LIST"
                     bindLabel="type"
                     [multiple]="false"
@@ -700,17 +1022,15 @@
                     name="insuranceCurrency"
                     [(ngModel)]="res.insuranceCurrency">
                   </ng-select>
-                </td>
+                </td> -->
 
-                <p class="sh1">DISCOUNT</p>
+                <!-- <p class="sh1">DISCOUNT</p>
                 <td class="full-input border2">
                   <label for="discountAmount">DISCOUNT AMOUNT</label><input [(ngModel)]="res.discountAmount"
                     class="form-control p-3" type="text" name="discountAmount" />
                 </td>
                 <td class="full-input border3">
                   <label for="discountCurrency">DISCOUNT CURRENCY</label>
-                  <!-- <input [(ngModel)]="res.discountCurrency"
-                    class="form-control p-3" type="text" name="discountCurrency" /> -->
                     <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                     [items]="this.CURRENCY_LIST"
                     bindLabel="type"
@@ -721,9 +1041,9 @@
                     [(ngModel)]="res.discountCurrency">
                   </ng-select>
                 </td>
-                <br />
+                <br /> -->
 
-                <p class="sh1">MISCELLANEOUS</p>
+                <!-- <p class="sh1">MISCELLANEOUS</p>
                 <td class="full-input border2">
                   <label for="miscellaneousAmount">MISCELLANEOUS AMOUNT</label><input
                     [(ngModel)]="res.miscellaneousAmount" class="form-control p-3" type="text"
@@ -731,9 +1051,6 @@
                 </td>
                 <td class="full-input border3">
                   <label for="miscellaneousCurrency">MISCELLANEOUS CURRENCY</label>
-                  <!-- <input
-                    [(ngModel)]="res.miscellaneousCurrency" class="form-control p-3" type="text"
-                    name="miscellaneousCurrency" /> -->
                     <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                     [items]="this.CURRENCY_LIST"
                     bindLabel="type"
@@ -743,18 +1060,16 @@
                     name="miscellaneousCurrency"
                     [(ngModel)]="res.miscellaneousCurrency">
                   </ng-select>
-                </td>
+                </td> -->
 
-                <p class="sh1">COMMISSION</p>
+                <!-- <p class="sh1">COMMISSION</p>
                 <td class="full-input border2">
                   <label for="commissionAmount">COMMISSION AMOUNT</label><input [(ngModel)]="res.commissionAmount"
                     class="form-control p-3" type="text" name="commissionAmount" />
                 </td>
                 <td class="full-input border3">
                   <label for="commissionCurrency">COMMISSION CURRENCY</label>
-                  <!-- <input
-                    [(ngModel)]="res.commissionCurrency" class="form-control p-3" type="text" name="commissionCurrency" /> -->
-                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
                     [items]="this.CURRENCY_LIST"
                     bindLabel="type"
                     [multiple]="false"
@@ -764,15 +1079,57 @@
                     [(ngModel)]="res.commissionCurrency">
                   </ng-select>
                 </td>
-                <br />
-              </tr>
+                <br /> 
+              </tr>-->
+              </div>
+              <!-- <div class="rigth-side-panel grid">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Invoice Number*</label>
+                <input ngModel class="form-control p-3" type="text"
+                  name="InvoiceNumber">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Invoice Date*</label>
+                <input ngModel class="form-control p-3" type="date"
+                  name="InvoiceDate">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Airwaybill Number*</label>
+                <input ngModel class="form-control p-3" type="text"
+                  name="AirwaybillNumber">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Invoice Value*</label>
+                <input ngModel class="form-control p-3" type="text"
+                  name="InvoiceValue">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Freight Value*</label>
+                <input ngModel class="form-control p-3" type="text"
+                  name="FreightValue">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Insurance Value*</label>
+                <input ngModel class="form-control p-3" type="text"
+                  name="InsuranceValue">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Misc Charges*</label>
+                <input ngModel class="form-control p-3" type="text"
+                  name="MiscCharges">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Third Party*</label>
+                <input ngModel class="form-control p-3" type="text"
+                  name="ThirdParty">
+              </div>
+            </div> -->
+
             </div>
           </form>
 
 
           <!-- Forex Advice Bill -->
-
-
           <form class="iframecontroller" *ngIf="billNo && !override && documentType1 == 'export'" #values="ngForm"
             (ngSubmit)="onSubmitIrAdvice(values)">
             <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
@@ -780,45 +1137,35 @@
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">FOREX ADVICE DETAILS</label>
-                  <input class="form-control p-3" type="text"
-                    name="billNo" [(ngModel)]="PDF_READER_DATA.billNo">
+                  <input class="form-control p-3" type="text" name="billNo" [(ngModel)]="PDF_READER_DATA.billNo">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">PARTY NAME</label>
-                  <input class="form-control p-3" name="partyName"
-                    [(ngModel)]="PDF_READER_DATA.customer">
+                  <input class="form-control p-3" name="partyName" [(ngModel)]="PDF_READER_DATA.customer">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">TT AMOUNT</label>
-                  <input class="form-control p-3" name="amount"
-                    [(ngModel)]="PDF_READER_DATA.amount">
+                  <input class="form-control p-3" name="amount" [(ngModel)]="PDF_READER_DATA.amount">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">TT Date</label>
-                  <input class="form-control p-3"
-                   [(ngModel)]="PDF_READER_DATA.date"
-                   placeholder="Choose a date"
-                  name="date" type="date" autocomplete="off">
+                  <input class="form-control p-3" [(ngModel)]="PDF_READER_DATA.date" placeholder="Choose a date"
+                    name="date" type="date" autocomplete="off">
                 </div>
 
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Recieved Date</label>
-                  <input class="form-control p-3"
-                  type="date" placeholder="Choose a date"
-                  [(ngModel)]="PDF_READER_DATA.recievedDate"
-                  name="recievedDate" autocomplete="off">
+                  <input class="form-control p-3" type="date" placeholder="Choose a date"
+                    [(ngModel)]="PDF_READER_DATA.recievedDate" name="recievedDate" autocomplete="off">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Commission</label>
-                  <input  class="form-control p-3" name="commision"
-                    [(ngModel)]="this.PDF_READER_DATA.commision">
+                  <input class="form-control p-3" name="commision" [(ngModel)]="this.PDF_READER_DATA.commision">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Conversion Date</label>
-                  <input class="form-control p-3"
-                  type="date" placeholder="Choose a date"
-                  [(ngModel)]="PDF_READER_DATA.conversionDate"
-                  name="conversionDate" autocomplete="off">
+                  <input class="form-control p-3" type="date" placeholder="Choose a date"
+                    [(ngModel)]="PDF_READER_DATA.conversionDate" name="conversionDate" autocomplete="off">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Exchange Rate</label>
@@ -827,7 +1174,8 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Location</label>
-                  <select class="form-control p-3" aria-label="Default select example" name="location" ngModel placeholder="Location">
+                  <select class="form-control p-3" aria-label="Default select example" name="location" ngModel
+                    placeholder="Location">
                     <option value="">Select Location</option>
                     <option *ngFor="let bene of location" [value]="bene.loc">
                       {{ bene.loc }}
@@ -855,119 +1203,118 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>
-
           </form>
+
           <!-- Outward Remittance Start -->
           <form class="iframecontroller" *ngIf="billNo && !override && documentType1 == 'import'" #values="ngForm"
-          (ngSubmit)="onSubmitOrAdvice(values)">
-          <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
-          <div class="field p-3">
-            <div class="row">
-            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Bill No</label>
-                <input ngModel class="form-control p-3" type="text"
-                  name="billNo" [(ngModel)]="this.PDF_READER_DATA.billNo">
-              </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">PARTY NAME</label>
-                <input NgModel class="form-control p-3" name="partyName"
-                  [(ngModel)]="this.PDF_READER_DATA.customer">
-              </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">TT AMOUNT</label>
-                <input ngModel class="form-control p-3" name="amount"
-                  [(ngModel)]="this.PDF_READER_DATA.amount">
-              </div>
-            </div>
+            (ngSubmit)="onSubmitOrAdvice(values)">
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <div class="field p-3">
+              <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Bill No</label>
+                    <input ngModel class="form-control p-3" type="text" name="billNo"
+                      [(ngModel)]="this.PDF_READER_DATA.billNo">
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">PARTY NAME</label>
+                    <input NgModel class="form-control p-3" name="partyName"
+                      [(ngModel)]="this.PDF_READER_DATA.customer">
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">TT AMOUNT</label>
+                    <input ngModel class="form-control p-3" name="amount" [(ngModel)]="this.PDF_READER_DATA.amount">
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">TT Date</label>
+                    <input ngModel class="form-control p-3" type="date" name="date"
+                      [(ngModel)]="this.PDF_READER_DATA.date">
+                  </div>
+                </div>
 
-            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">TT Date</label>
-                <input ngModel class="form-control p-3" type="date" name="date"
-                  [(ngModel)]="this.PDF_READER_DATA.date">
-              </div>
-            </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Received Date</label>
+                    <input ngModel class="form-control p-3" type="date" name="recievedDate"
+                      [(ngModel)]="this.PDF_READER_DATA.recievedDate">
+                  </div>
+                </div>
 
-            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Received Date</label>
-                <input ngModel class="form-control p-3" type="date" name="recievedDate"
-                  [(ngModel)]="this.PDF_READER_DATA.recievedDate">
-              </div>
-            </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Commission</label>
+                    <input ngModel class="form-control p-3" name="commision"
+                      [(ngModel)]="this.PDF_READER_DATA.commision">
+                  </div>
+                </div>
 
-            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Commission</label>
-                <input ngModel class="form-control p-3" name="commision"
-                  [(ngModel)]="this.PDF_READER_DATA.commision">
-              </div>
-            </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Conversion Date</label>
+                    <input ngModel class="form-control p-3" type="date" name="conversionDate"
+                      [(ngModel)]="this.PDF_READER_DATA.conversionDate">
+                  </div>
+                </div>
 
-            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Conversion Date</label>
-                <input ngModel class="form-control p-3" type="date" name="conversionDate"
-                  [(ngModel)]="this.PDF_READER_DATA.conversionDate">
-              </div>
-            </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Exchange Rate</label>
+                    <input ngModel class="form-control p-3" name="exchangeRate"
+                      [(ngModel)]="this.PDF_READER_DATA.exchangeRate">
+                  </div>
+                </div>
 
-            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Exchange Rate</label>
-                <input ngModel class="form-control p-3" name="exchangeRate"
-                  [(ngModel)]="this.PDF_READER_DATA.exchangeRate">
-              </div>
-            </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Location</label>
+                    <select class="form-control p-3" aria-label="Default select example" name="location" ngModel
+                      placeholder="Location">
+                      <option value="">Select Location</option>
+                      <option *ngFor="let bene of location" [value]="bene.loc">
+                        {{ bene.loc }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
 
-            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Location</label>
-                <select class="form-control p-3" aria-label="Default select example" name="location" ngModel placeholder="Location">
-                  <option value="">Select Location</option>
-                  <option *ngFor="let bene of location" [value]="bene.loc">
-                    {{ bene.loc }}
-                  </option>
-                </select>
-              </div>
-            </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Commodity</label>
+                    <select class="form-control p-3" aria-label="Default select example" name="commodity" ngModel>
+                      <option value="">Select commodity</option>
+                      <option *ngFor="let como of commodity" [value]="como.como">
+                        {{ como.como }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
 
-            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Commodity</label>
-                <select class="form-control p-3" aria-label="Default select example" name="commodity" ngModel>
-                  <option value="">Select commodity</option>
-                  <option *ngFor="let como of commodity" [value]="como.como">
-                    {{ como.como }}
-                  </option>
-                </select>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Origin</label>
+                    <select class="form-control p-3" aria-label="Default select example" name="origin" ngModel>
+                      <option value="">Select Origin</option>
+                      <option *ngFor="let ori of origin" [value]="ori">
+                        {{ ori }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                  <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Origin</label>
-                <select class="form-control p-3" aria-label="Default select example" name="origin" ngModel>
-                  <option value="">Select Origin</option>
-                  <option *ngFor="let ori of origin" [value]="ori">
-                    {{ ori }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-              <div class="mb-3">
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        </form>
+          </form>
           <!-- Outward Remittance End -->
           <form class="iframecontroller" *ngIf="pIpO && !override" [formGroup]="piPoForm" (ngSubmit)="onSubmitPipo()">
             <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
@@ -990,14 +1337,9 @@
                   </div>
                   <div class="mb-3 flex-basis-1">
                     <label for="exampleInputPassword1" class="form-label">Currency</label>
-                      <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                      [items]="this.CURRENCY_LIST"
-                      bindLabel="type"
-                      [multiple]="false"
-                      groupBy="selectedAllGroup"
-                      placeholder="Select PI/PO"
-                      formControlName="currency"
-                      ngModel></ng-select>
+                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                      bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                      formControlName="currency" ngModel></ng-select>
                   </div>
                 </div>
                 <div class="row p-3">
@@ -1014,8 +1356,7 @@
                 <div class="row p-3">
                   <div class="mb-3 flex-basis-1">
                     <label for="settledAmount">Due Date</label>
-                    <input class="form-control p-3" type="date" formControlName="dueDate"
-                      placeholder="dd/mm/yyyy" />
+                    <input class="form-control p-3" type="date" formControlName="dueDate" placeholder="dd/mm/yyyy" />
                   </div>
                 </div>
                 <div class="row p-3">
@@ -1034,197 +1375,79 @@
               <div class="column col-12">
                 <label class="">Payment Terms*</label>
                 <div formArrayName="paymentTerm">
-                  <div *ngFor="let course of getCourses(piPoForm); let i = index" [formGroupName]="i" class="column col-12">
+                  <div *ngFor="let course of getCourses(piPoForm); let i = index" [formGroupName]="i"
+                    class="column col-12">
                     <div class="row p-3">
-                    <div class="mb-3 flex-basis-1">
-                      <label for="location">Date</label>
-                      <input formControlName="date" type="date" class="form-control p-3">
-                    </div>
-                    <div *ngIf='documentType1 == "import"' class="mb-3 flex-basis-1">
-                      <label for="Type">Type</label>
-                      <select class="form-control p-3" aria-label="Default select example" formControlName="type">
-                        <option id="aaa" value="">Select</option>
-                        <option value="Advance Payment">Advance Payment</option>
-                        <option value="Letter of Credit">Letter of Credit</option>
-                        <option value="Collection Bill">Collection Bill</option>
-                        <option value="Direct Import">Direct Import</option>
-                      </select>
-                    </div>
-                    <div *ngIf='documentType1 =="export"' class="mb-3 flex-basis-1">
-                      <label for="Type">Type</label>
-                      <select class="form-control p-3" aria-label="Default select example" name="" formControlName="type">
-                        <option id="aaa" value="">Select</option>
-                        <option value="Advance Payment">Advance Payment</option>
-                        <option value="Letter of Credit">Letter of Credit</option>
-                        <option value="Collection Bill">Collection Bill</option>
-                        <option value="Direct Import">Direct Dispatch</option>
-                      </select>
-                    </div>
+                      <div class="mb-3 flex-basis-1">
+                        <label for="location">Date</label>
+                        <input formControlName="date" type="date" class="form-control p-3">
+                      </div>
+                      <div *ngIf='documentType1 == "import"' class="mb-3 flex-basis-1">
+                        <label for="Type">Type</label>
+                        <select class="form-control p-3" aria-label="Default select example" formControlName="type">
+                          <option id="aaa" value="">Select</option>
+                          <option value="Advance Payment">Advance Payment</option>
+                          <option value="Letter of Credit">Letter of Credit</option>
+                          <option value="Collection Bill">Collection Bill</option>
+                          <option value="Direct Import">Direct Import</option>
+                        </select>
+                      </div>
+                      <div *ngIf='documentType1 =="export"' class="mb-3 flex-basis-1">
+                        <label for="Type">Type</label>
+                        <select class="form-control p-3" aria-label="Default select example" name=""
+                          formControlName="type">
+                          <option id="aaa" value="">Select</option>
+                          <option value="Advance Payment">Advance Payment</option>
+                          <option value="Letter of Credit">Letter of Credit</option>
+                          <option value="Collection Bill">Collection Bill</option>
+                          <option value="Direct Import">Direct Dispatch</option>
+                        </select>
+                      </div>
                     </div>
                     <div class="row p-3">
                       <div class="mb-3 flex-basis-1">
                         <label for="exampleInputPassword1" class="form-label">Currency</label>
-                          <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                          [items]="this.CURRENCY_LIST"
-                          bindLabel="type"
-                          [multiple]="false"
-                          groupBy="selectedAllGroup"
-                          placeholder="Select PI/PO"
-                          formControlName="currency"
-                          ngModel></ng-select>
+                        <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                          bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                          formControlName="currency" ngModel></ng-select>
                       </div>
-                    <div class="mb-3 flex-basis-1">
-                      <label for="Currency">Amount</label>
-                      <input formControlName="amount" class="form-control p-3" type="number">
-                    </div>
+                      <div class="mb-3 flex-basis-1">
+                        <label for="Currency">Amount</label>
+                        <input formControlName="amount" class="form-control p-3" type="number">
+                      </div>
                     </div>
                     <div class="row p-3">
-                    <a *ngIf='i>0' (click)='removeAddress(i)'><i style="margin-top: 30px; "
-                        class="fas fa-times"></i></a>
+                      <a *ngIf='i>0' (click)='removeAddress(i)'><i style="margin-top: 30px; "
+                          class="fas fa-times"></i></a>
                     </div>
                     <div class="row p-3">
                       <button type="submit" class="btn btn-primary mb-3">Submit</button>
                     </div>
                   </div>
-              </div>
-              </div>
-              <!-- <div class="column col-12">
-                <div class="row p-3">
-                  <div class="mb-3 flex-basis-1">
-                    <label for="invoiceAmount">Invoice Amount</label>
-                      <input class="form-control p-3" type="date" formControlName="amount"
-                        placeholder="dd/mm/yyyy" />
-                  </div>
-                  <div class="mb-3 flex-basis-1" *ngFor="let course of getCourses(piPoForm); let i = index">
-                    <label for="iecName">Currency</label>
-                      <input class="form-control p-3" type="text" formControlName="currency"
-                        [(ngModel)]="currencyName[i]" (input)="searchCurrency($any($event.target).value,i)" />
-                      <div *ngIf='toggle1' class="currencydrop" style="width: 75px ; padding-left: 5px;
-                                    background: white;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;z-index: 1;
-                                    border-radius: 6px;transform: translate(-14px, 4px);">
-                        <table *ngIf='y == i'>
-                          <p *ngFor="let currencyName of jsondata1 " (click)="currencyClick(currencyName.value,i)">
-                            {{currencyName.value}}</p>
-                        </table>
-                      </div>
-                  </div>
-                </div>
-                <div class="row p-3">
-                  <div class="mb-3 flex-basis-1">
-                    <label for="invoiceNumber">Incoterm</label><input class="form-control p-3" type="text"
-                    formControlName="incoterm" />
-                  </div>
-                  <div class="mb-3 flex-basis-1">
-                    <label for="invoiceAmount">Last Day Of Shipment</label><input class="form-control p-3"
-                    type="date" formControlName="lastDayShipment" placeholder="dd/mm/yyyy" />
-                  </div>
-                </div>
-
-                <div class="row p-3">
-                  <div class="mb-3 flex-basis-1">
-                    <label for="settledAmount">PC Ref No</label><input class="form-control p-3" type="text"
-                    formControlName="pcRefNo" />
-                  </div>
-                  <div class="mb-3 flex-basis-1">
-                    <label for="settledAmount">Due Date</label><input class="form-control p-3" type="date"
-                    formControlName="dueDate" placeholder="dd/mm/yyyy" />
-                  </div>
-                </div>
-                <div class="row p-3">
-                  <div class="mb-3 flex-basis-1">
-                    <label for="location">Location</label>
-                    <select aria-label="Default select example" formControlName="location" class="form-control p-3" ngModel>
-                          <option value="">Select Location</option>
-                          <option *ngFor="let bene of location" [value]="bene.loc">
-                            {{ bene.loc }}
-                          </option>
-                        </select>
-                  </div>
                 </div>
               </div>
-              <div class="column col-12">
-                <h5 class="h5">Payment Terms*</h5>
-                <div class="row p-3" *ngFor="let course of getCourses(piPoForm); let i = index" [formGroupName]="i">
-                  <div class="mb-3 flex-basis-1">
-                      <label for="date">Date</label>
-                      <input formControlName="date" type="date" class="form-control p-3">
-                  </div>
-                  <div class="mb-3 flex-basis-1">
-                    <label for="Type">Type</label>
-                    <div *ngIf='documentType1 == "import"'>
-                      <select aria-label="Default select example" formControlName="type" class="form-control p-3">
-                        <option id="aaa" value="">Select</option>
-                        <option value="Advance Payment">Advance Payment</option>
-                        <option value="Letter of Credit">Letter of Credit</option>
-                        <option value="Collection Bill">Collection Bill</option>
-                        <option value="Direct Import">Direct Import</option>
-                      </select>
-                    </div>
-                    <div *ngIf='documentType1 =="export"'>
-                      <select aria-label="Default select example" name="" formControlName="type" class="form-control p-3">
-                        <option id="aaa" value="">Select</option>
-                        <option value="Advance Payment">Advance Payment</option>
-                        <option value="Letter of Credit">Letter of Credit</option>
-                        <option value="Collection Bill">Collection Bill</option>
-                        <option value="Direct Import">Direct Dispatch</option>
-                      </select>
-                    </div>
-                  </div>
-                  </div>
-                  <div class="row p-3">
-                    <div class="mb-3 flex-basis-1">
-                      <label for="Currency">Currency</label>
-                      <input formControlName="description" [(ngModel)]="currencyName1[i]"
-                        (input)="searchCurrency1($any($event.target).value,i)" class="form-control p-3">
-                      <div *ngIf='toggle2' class="currencydrop" style="margin-left: 50px;width: 75px ; padding-left: 5px;
-                      position: relative;background: white;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;z-index: 1;
-                      border-radius: 6px;transform: translate(-14px, 4px);">
-                        <table *ngIf='z == i'>
-                          <tr *ngFor="let currencyName1 of jsondata1"
-                            (click)=currencyClick1(currencyName1.value,i)>
-                            {{currencyName1.value}}</tr>
-                        </table>
-                      </div>
-                  </div>
-                    <div class="mb-3 flex-basis-1">
-                      <label for="Amount">Amount</label>
-                      <input formControlName="amount" class="form-control p-3">
-                    <a *ngIf='i>0' (click)='removeAddress(i)'><i style="margin-top: 30px; "
-                        class="fas fa-times"></i></a>
-                        </div>
-                  </div>
-                <button type="submit" class="btn btn-primary mb-3">Submit</button>
-              </div> -->
             </div>
           </form>
 
           <!-- Third Party Input File -->
-
           <form class="iframecontroller" *ngIf="tryPartyAgreement && !override" #values="ngForm"
             (ngSubmit)="onSubmitThird(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Tri Party Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="triPartyAgreementNumber">
+                  <input ngModel class="form-control p-3" type="text" name="triPartyAgreementNumber">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Tri Party Amount</label>
-                  <input ngModel class="form-control p-3"
-                    name="triPartyAgreementAmount">
+                  <input ngModel class="form-control p-3" name="triPartyAgreementAmount">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="currency"
-                  ngModel></ng-select>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    name="currency" ngModel></ng-select>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
@@ -1232,41 +1455,37 @@
           </form>
 
           <!-- Credit Note Input File -->
-
           <form class="iframecontroller" *ngIf="creditNote && !override" #values="ngForm"
             (ngSubmit)="onSubmitCredit(values)">
-                  <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
-                  <div class="field">
-                    <div class="form12 p-3">
-                      <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Credit Note Number*</label>
-                        <input ngModel class="form-control p-3" type="text"
-                          name="creditNoteNumber">
-                      </div>
-                      <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Credit Note Amount</label>
-                        <input NgModel class="form-control p-3"
-                          name="creditNoteAmount">
-                      </div>
-                      <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Currency</label>
-                        <input ngModel class="form-control p-3" name="currency">
-                      </div>
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                  </div>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <div class="field">
+              <div class="form12 p-3">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Credit Note Number*</label>
+                  <input ngModel class="form-control p-3" type="text" name="creditNoteNumber">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Credit Note Amount</label>
+                  <input NgModel class="form-control p-3" name="creditNoteAmount">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Currency</label>
+                  <input ngModel class="form-control p-3" name="currency">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
           </form>
 
           <!-- swift-copy Input file -->
           <form class="iframecontroller" *ngIf="swiftCopy && !override" #values="ngForm"
             (ngSubmit)="onSubmitSwift(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Swift Copy Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="swiftcopyNumber">
+                  <input ngModel class="form-control p-3" type="text" name="swiftcopyNumber">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
@@ -1275,13 +1494,12 @@
           <!-- blcopyref Input file -->
           <form class="iframecontroller" *ngIf="blCopyref && !override" #values="ngForm"
             (ngSubmit)="onSubmitblcopyref(values)">
-                  <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">BlCopyRef Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="blcopyrefNumber">
+                  <input ngModel class="form-control p-3" type="text" name="blcopyrefNumber">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
@@ -1291,22 +1509,20 @@
           <!-- Airway / BL Copy -->
           <form class="iframecontroller" *ngIf="blCopy && documentType1== 'export' && !override" #values="ngForm"
             (ngSubmit)="onSubmitblCopy(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Airway / BlCopy Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="airwayBlCopyNumber">
+                  <input ngModel class="form-control p-3" type="text" name="airwayBlCopyNumber">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"></label>
                   <div *ngIf="this.pipoArr.length!=0">
-                    <select class="form-control p-3" aria-label="Default select example"
-                     class="form-control p-3" name="sbNo" ngModel placeholder="Location" *ngIf="this.SHIPPING_BILL_LIST?.length!=0">
+                    <select class="form-control p-3" aria-label="Default select example" class="form-control p-3"
+                      name="sbNo" ngModel placeholder="Location" *ngIf="this.SHIPPING_BILL_LIST?.length!=0">
                       <option value="">Select SB Number</option>
-                      <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index"
-                        [value]="sb._id">
+                      <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index" [value]="sb._id">
                         {{ sb.sbno }}
                       </option>
                     </select>
@@ -1319,62 +1535,50 @@
 
           <!-- Airway / BL Copy -->
           <form class="iframecontroller" *ngIf="blCopy && documentType1== 'import' && !override" #values="ngForm"
-          (ngSubmit)="onSubmitblCopy(values)">
-              <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
-          <div class="field">
-            <div class="form12 p-3">
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label"></label>
-                <div class="col-12 column d-flex Commercial" *ngFor="let item of this.pipoArr;let i=index">
-                  <label for="exampleInputEmail1" class="form-label">PI_PO_{{(i+1)}}</label>
-                  <!-- <ng-select [items]="this.MULITPLE_DROP_DOWN[item]"
-                  bindLabel="commercialNumber"
-                  [multiple]="true"
-                  groupBy="selectedAllGroup"
-                  [selectableGroup]="true"
-                  placeholder="Select cities"
-                  (change)="storeCommercialNumber(item,$event)"
-                   ngModel placeholder="Commercial Number" #CommercialNumber>
-                  </ng-select> -->
-                  <select class="form-control p-3" aria-label="Default select example"
-                   class="form-control p-3" [name]="'commercialNumber'" (change)="storeCommercialNumber(item,CommercialNumber.value)"
-                   #CommercialNumber>
-                    <option value="">Select Commercial Number</option>
-                    <option *ngFor="let comm of this.MULITPLE_DROP_DOWN[item]"
-                    [value]="comm?.commercialNumber">
-                    {{ comm?.commercialNumber }}
-                  </option>
-                  </select>
+            (ngSubmit)="onSubmitblCopy(values)">
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <div class="field">
+              <div class="form12 p-3">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label"></label>
+                  <div class="col-12 column d-flex Commercial" *ngFor="let item of this.pipoArr;let i=index">
+                    <label for="exampleInputEmail1" class="form-label">PI_PO_{{(i+1)}}</label>
+                    <select class="form-control p-3" aria-label="Default select example" class="form-control p-3"
+                      [name]="'commercialNumber'" (change)="storeCommercialNumber(item,CommercialNumber.value)"
+                      #CommercialNumber>
+                      <option value="">Select Commercial Number</option>
+                      <option *ngFor="let comm of this.MULITPLE_DROP_DOWN[item]" [value]="comm?.commercialNumber">
+                        {{ comm?.commercialNumber }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Airway / BlCopy Number*</label>
+                    <input ngModel class="form-control p-3" type="text" name="airwayBlCopyNumber">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Airway / BlCopy Number*</label>
-                <input ngModel class="form-control p-3" type="text"
-                  name="airwayBlCopyNumber">
-              </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-          </div>
-          </div>
-        </form>
+          </form>
 
           <!-- Commercial Invoice -->
           <form class="iframecontroller" *ngIf="commercial && documentType1== 'export' && !override" #values="ngForm"
             (ngSubmit)="onSubmitCommercial(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Commercial Invoice Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="commercialNumber">
+                  <input ngModel class="form-control p-3" type="text" name="commercialNumber">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"></label>
                   <div>
-                    <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
+                    <select class="form-control p-3" aria-label="Default select example" class="form-control p-3"
+                      name="sbNo" ngModel placeholder="Location">
                       <option value="">Select SB Number</option>
-                      <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index"
-                        [value]="sb._id">
+                      <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index" [value]="sb._id">
                         {{ sb.sbno }}
                       </option>
                     </select>
@@ -1387,49 +1591,64 @@
 
           <!-- Commercial Invoice -->
           <form class="iframecontroller" *ngIf="commercial && documentType1== 'import' && !override" #values="ngForm"
-          (ngSubmit)="onSubmitCommercialImport(values)">
-              <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
-          <div class="field">
-            <div class="form12 p-3">
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Commercial Invoice Number*</label>
-                <input ngModel class="form-control p-3" type="text"
-                  name="commercialNumber">
-              </div>
+            (ngSubmit)="onSubmitCommercialImport(values)">
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <div class="field">
+              <div class="form12 p-3">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Commercial Invoice Number*</label>
+                  <input ngModel class="form-control p-3" type="text" name="commercialNumber">
+                </div>
 
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Currency*</label>
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="currency"
-                  ngModel></ng-select>
-              </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Currency*</label>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    name="currency" ngModel></ng-select>
+                </div>
 
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Amount*</label>
-                <input ngModel class="form-control p-3" type="text"
-                  name="amount">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Amount*</label>
+                  <input ngModel class="form-control p-3" type="text" name="amount">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Invoice Date*</label>
+                  <input ngModel class="form-control p-3" type="date" name="InvoiceDate">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Commodity Amount*</label>
+                  <input ngModel class="form-control p-3" type="text" name="InvoiceValue">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Freight Amount*</label>
+                  <input ngModel class="form-control p-3" type="text" name="FreightValue">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Insurance Amount*</label>
+                  <input ngModel class="form-control p-3" type="text" name="InsuranceValue">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Misc Charges*</label>
+                  <input ngModel class="form-control p-3" type="text" name="MiscCharges">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Third Party*</label>
+                  <input ngModel class="form-control p-3" type="text" name="ThirdParty">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
               </div>
-
-              <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-          </div>
-        </form>
+          </form>
 
           <!-- Bill Of Exchange -->
           <form class="iframecontroller" *ngIf="billOfExchange && !override" #values="ngForm"
             (ngSubmit)="onSubmitBillExchange(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Bill Of Exchange Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="billExchangeNumber">
+                  <input ngModel class="form-control p-3" type="text" name="billExchangeNumber">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
@@ -1439,13 +1658,12 @@
           <!-- destruction certificate -->
           <form class="iframecontroller" *ngIf="destruction && !override" #values="ngForm"
             (ngSubmit)="onSubmitDestruction(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Destruction Certificate Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="destructionNumber">
+                  <input ngModel class="form-control p-3" type="text" name="destructionNumber">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
@@ -1455,41 +1673,32 @@
           <!-- Other Documents -->
           <form class="iframecontroller" *ngIf="packingList && !override" #values="ngForm"
             (ngSubmit)="onSubmitPackingList(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Packing List Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="packingListNumber">
+                  <input ngModel class="form-control p-3" type="text" name="packingListNumber">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Packing List Amount</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="packingListAmount">
+                  <input ngModel class="form-control p-3" type="text" name="packingListAmount">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Currency</label>
-                  <!-- <input ngModel class="form-control p-3" type="text"
-                    name="currency"> -->
-                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                    [items]="this.CURRENCY_LIST"
-                    bindLabel="type"
-                    [multiple]="false"
-                    groupBy="selectedAllGroup"
-                    placeholder="Select PI/PO"
-                    name="currency"
-                    ngModel>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    name="currency" ngModel>
                   </ng-select>
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"></label>
                   <div>
                     <div>
-                      <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
+                      <select class="form-control p-3" aria-label="Default select example" class="form-control p-3"
+                        name="sbNo" ngModel placeholder="Location">
                         <option value="">Select SB Number</option>
-                        <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index"
-                          [value]="sb._id">
+                        <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index" [value]="sb._id">
                           {{ sb.sbno }}
                         </option>
                       </select>
@@ -1503,41 +1712,34 @@
           <!-- Other Documents import -->
           <form class="iframecontroller" *ngIf="importpackingList && !override" #values="ngForm"
             (ngSubmit)="onSubmitPackingList(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Packing List Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="packingListNumber">
+                  <input ngModel class="form-control p-3" type="text" name="packingListNumber">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Packing List Amount</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="packingListAmount">
+                  <input ngModel class="form-control p-3" type="text" name="packingListAmount">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Currency</label>
                   <!-- <input ngModel class="form-control p-3" type="text"
                     name="currency"> -->
-                    <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                    [items]="this.CURRENCY_LIST"
-                    bindLabel="type"
-                    [multiple]="false"
-                    groupBy="selectedAllGroup"
-                    placeholder="Select PI/PO"
-                    name="currency"
-                    ngModel>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    name="currency" ngModel>
                   </ng-select>
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"></label>
                   <div>
                     <div>
-                      <select class="form-control p-3" aria-label="Default select example" class="form-control p-3" name="sbNo" ngModel placeholder="Location">
+                      <select class="form-control p-3" aria-label="Default select example" class="form-control p-3"
+                        name="sbNo" ngModel placeholder="Location">
                         <option value="">Select SB Number</option>
-                        <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index"
-                          [value]="sb._id">
+                        <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index" [value]="sb._id">
                           {{ sb.sbno }}
                         </option>
                       </select>
@@ -1551,13 +1753,12 @@
 
           <!-- EBRC Input file -->
           <form class="iframecontroller" *ngIf="EBRC && !override" #values="ngForm" (ngSubmit)="onSubmitEbrc(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">EBRC Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="swiftcopyNumber">
+                  <input ngModel class="form-control p-3" type="text" name="swiftcopyNumber">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
@@ -1568,31 +1769,23 @@
 
           <form class="iframecontroller" *ngIf="debitNote && !override" #values="ngForm"
             (ngSubmit)="onSubmitDebit(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Debit Note Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="debitNoteNumber">
+                  <input ngModel class="form-control p-3" type="text" name="debitNoteNumber">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Debit Note Amount</label>
-                  <input NgModel class="form-control p-3"
-                    name="totalDebitAmount">
+                  <input NgModel class="form-control p-3" name="totalDebitAmount">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <!-- <input ngModel class="form-control p-3" name="currency"> -->
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="currency"
-                  ngModel>
-                </ng-select>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    name="currency" ngModel>
+                  </ng-select>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
@@ -1600,16 +1793,14 @@
           </form>
 
           <!-- Insurance Document Input File -->
-
           <form class="iframecontroller" *ngIf="insuranceCopy && !override" #values="ngForm"
             (ngSubmit)="onSubmitInsurance(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Insurance Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="insuranceNumber">
+                  <input ngModel class="form-control p-3" type="text" name="insuranceNumber">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Insurance Amount</label>
@@ -1617,79 +1808,59 @@
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                    [items]="this.CURRENCY_LIST"
-                    bindLabel="type"
-                    [multiple]="false"
-                    groupBy="selectedAllGroup"
-                    placeholder="Select PI/PO"
-                    name="currency"
-                    ngModel>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    name="currency" ngModel>
                   </ng-select>
-                  </div>
+                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>
           </form>
 
           <!-- Letter of Credit LC Input File -->
-
           <form class="iframecontroller" *ngIf="lcCopy && !override" #values="ngForm"
             (ngSubmit)="onSubmitLetterLC(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Letter Of Credit Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="letterOfCreditNumber">
+                  <input ngModel class="form-control p-3" type="text" name="letterOfCreditNumber">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Letter Of Credit Amount</label>
-                  <input ngModel class="form-control p-3"
-                    name="letterOfCreditAmount" type="number">
+                  <input ngModel class="form-control p-3" name="letterOfCreditAmount" type="number">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="currency"
-                  ngModel></ng-select>
-                  </div>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    name="currency" ngModel></ng-select>
+                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>
           </form>
           <form class="iframecontroller" *ngIf="importlcCopy && !override" #values="ngForm"
             (ngSubmit)="onSubmitLetterLC(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Letter Of Credit Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="letterOfCreditNumber">
+                  <input ngModel class="form-control p-3" type="text" name="letterOfCreditNumber">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Letter Of Credit Amount</label>
-                  <input ngModel class="form-control p-3"
-                    name="letterOfCreditAmount" type="number">
+                  <input ngModel class="form-control p-3" name="letterOfCreditAmount" type="number">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="currency"
-                  ngModel></ng-select>
-                  </div>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    name="currency" ngModel></ng-select>
+                </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>
@@ -1699,129 +1870,101 @@
 
           <form class="iframecontroller" *ngIf="agreement && !override" #values="ngForm"
             (ngSubmit)="onSubmitMasterService(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-3">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Master Service Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="masterServiceNumber">
+                  <input ngModel class="form-control p-3" type="text" name="masterServiceNumber">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Master Service Amount</label>
-                  <input ngModel class="form-control p-3"
-                    name="masterServiceAmount">
+                  <input ngModel class="form-control p-3" name="masterServiceAmount">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="currency"
-                  ngModel></ng-select>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    name="currency" ngModel></ng-select>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>
           </form>
-           <!-- Master Service Input File-import-->
+          <!-- Master Service Input File-import-->
 
-           <form class="iframecontroller" *ngIf="importagreement && !override" #values="ngForm"
-           (ngSubmit)="onSubmitMasterService(values)">
-               <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
-           <div class="field">
-             <div class="form12 p-3">
-               <div class="mb-3">
-                 <label for="exampleInputEmail1" class="form-label">Master Service Number*</label>
-                 <input ngModel class="form-control p-3" type="text"
-                   name="masterServiceNumber">
-               </div>
-               <div class="mb-3">
-                 <label for="exampleInputPassword1" class="form-label">Master Service Amount</label>
-                 <input ngModel class="form-control p-3"
-                   name="masterServiceAmount">
-               </div>
-               <div class="mb-3">
-                 <label for="exampleInputPassword1" class="form-label">Currency</label>
-                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                 [items]="this.CURRENCY_LIST"
-                 bindLabel="type"
-                 [multiple]="false"
-                 groupBy="selectedAllGroup"
-                 placeholder="Select PI/PO"
-                 name="currency"
-                 ngModel></ng-select>
-               </div>
-               <button type="submit" class="btn btn-primary">Submit</button>
-             </div>
-           </div>
-         </form>
+          <form class="iframecontroller" *ngIf="importagreement && !override" #values="ngForm"
+            (ngSubmit)="onSubmitMasterService(values)">
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <div class="field">
+              <div class="form12 p-3">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Master Service Number*</label>
+                  <input ngModel class="form-control p-3" type="text" name="masterServiceNumber">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Master Service Amount</label>
+                  <input ngModel class="form-control p-3" name="masterServiceAmount">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Currency</label>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    name="currency" ngModel></ng-select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
 
           <!-- Letter of Opinion Report Input File -->
 
           <form class="iframecontroller" *ngIf="opinionReport && !override" #values="ngForm"
             (ngSubmit)="onSubmitOpinionReport(values)">
-                <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
             <div class="field">
               <div class="form12 p-2">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Opinion Report Number*</label>
-                  <input ngModel class="form-control p-3" type="text"
-                    name="opinionReportNumber">
+                  <input ngModel class="form-control p-3" type="text" name="opinionReportNumber">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Opinion Report Amount</label>
-                  <input ngModel class="form-control p-3" type="number"
-                    name="opinionReportAmount">
+                  <input ngModel class="form-control p-3" type="number" name="opinionReportAmount">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="currency"
-                  ngModel></ng-select>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    name="currency" ngModel></ng-select>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>
           </form>
           <form class="iframecontroller" *ngIf="importopinionReport && !override" #values="ngForm"
-          (ngSubmit)="onSubmitOpinionReport(values)">
-              <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
-          <div class="field">
-            <div class="form12 p-2">
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Opinion Report Number*</label>
-                <input ngModel class="form-control p-3" type="text"
-                  name="opinionReportNumber">
+            (ngSubmit)="onSubmitOpinionReport(values)">
+            <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
+            <div class="field">
+              <div class="form12 p-2">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Opinion Report Number*</label>
+                  <input ngModel class="form-control p-3" type="text" name="opinionReportNumber">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Opinion Report Amount</label>
+                  <input ngModel class="form-control p-3" type="number" name="opinionReportAmount">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Currency</label>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    name="currency" ngModel></ng-select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
               </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Opinion Report Amount</label>
-                <input ngModel class="form-control p-3" type="number"
-                  name="opinionReportAmount">
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Currency</label>
-                <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                [items]="this.CURRENCY_LIST"
-                bindLabel="type"
-                [multiple]="false"
-                groupBy="selectedAllGroup"
-                placeholder="Select PI/PO"
-                name="currency"
-                ngModel></ng-select>
-              </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-          </div>
-        </form>
+          </form>
 
 
           <ng-template #content let-modal>

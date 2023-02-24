@@ -1317,13 +1317,36 @@ export class UploadComponent implements OnInit {
 
     this.toggle2 = false;
   }
-
+  SELECTED_COMMERCIAL_NUMBER:any=[];
+  COMMERCIAL_DATA:any=[];
+  changeCommercial(commerical:any){
+  if (commerical!=undefined) {
+    if (!this.SELECTED_COMMERCIAL_NUMBER.includes(commerical?.commercialNumber)) {
+     this.SELECTED_COMMERCIAL_NUMBER.push(commerical?.commercialNumber)
+     this.documentService.getCommercialByCommercialValue(commerical?.commercialNumber).subscribe((res:any)=>{
+     console.log('getCommercialByCommercialValue',res)
+     this.COMMERCIAL_DATA=res?.data[0];
+     })
+   }
+  }else{
+    this.SELECTED_COMMERCIAL_NUMBER=[];
+  }
+ 
+  console.log(commerical,this.SELECTED_COMMERCIAL_NUMBER,'commerical')
+  }
+  SUBMIT_FORM:any=false;
   public onSubmitBoe(e) {
+    this.SUBMIT_FORM=true;
     console.log(this.selectCombo);
-    console.log('asjbakujfbkasjfbkuh');
     console.log(this.pubUrl);
     console.log(this.documentType);
     console.log(e.form.value);
+    if (e.form.invalid || e.form.value.invoiceAmount!=this.COMMERCIAL_DATA?.InsuranceValue || 
+    e.form.value.freightAmount!=this.COMMERCIAL_DATA?.FreightValue ||
+    e.form.value.insuranceAmount!=this.COMMERCIAL_DATA?.InsuranceValue ||
+    e.form.value.miscellaneousAmount!=this.COMMERCIAL_DATA?.MiscCharges) {
+      return;
+    }
     e.form.value.pipo = this.pipoArr;
     if (this.file) {
       e.form.value.file = this.file;
@@ -1334,19 +1357,22 @@ export class UploadComponent implements OnInit {
     e.form.value.benneName = this.arrayData;
     e.form.value.commissionCurrency = e.form.value?.commissionCurrency?.type;
     e.form.value.discountCurrency = e.form.value?.discountCurrency?.type;
-
+    e.form.value.commercialNumber = this.SELECTED_COMMERCIAL_NUMBER;
     console.log('Benne Name', e.form.value);
-    
+    e.form.value.CI_DETAILS=this.COMMERCIAL_DATA;
     this.documentService.getInvoice_No({
       boeNumber: e.form?.value?.boeNumber
     },'boerecords').subscribe((resp:any)=>{
       console.log('creditNoteNumber Invoice_No',resp)
     if (resp.data.length==0) {
-      this.documentService.addBoe(e.form.value).subscribe((data) => {
+      this.documentService.addBoe(e.form.value).subscribe((data:any) => {
         console.log('king123');
-        console.log(data);
+        console.log('addBoe',data);
         this.message = '';
-        this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pubUrl).subscribe(
+        let updatedData = {
+          "pipo":data?._id
+        }
+        this.userService.updateManyPipo(this.pipoArr, 'boerecords', this.pipourl1, updatedData).subscribe(
           (data) => {
             console.log('king123');
             console.log(data);
@@ -1354,6 +1380,7 @@ export class UploadComponent implements OnInit {
             this.router.navigate(['/home/boe']);
           },
           (error) => {
+            // this.toastr.error('Invalid inputs, please check!');
             console.log('error');
           }
         );
@@ -2688,6 +2715,7 @@ export class UploadComponent implements OnInit {
   }
   SHIPPINGBILL_LIST: any = [];
   BUYER_LIST: any = [];
+  COMMERCIAL_LIST:any=[]
   clickPipo(PI_PO_LIST) {
     var last_length = PI_PO_LIST.length - 1;
     var LAST_VALUE: any = PI_PO_LIST[last_length]?.value;
@@ -2708,11 +2736,16 @@ export class UploadComponent implements OnInit {
     } else {
       console.log('x');
     }
+    this.COMMERCIAL_LIST=[];
       this.pipoDataService.getShippingNo(LAST_VALUE?._id,this.documentType1);
-      this.documentService.getCommercialByFiletype(this.documentType1, LAST_VALUE?._id).subscribe(
-        (res: any) => {
+      this.documentService.getCommercialByFiletype(this.documentType1, LAST_VALUE?._id).subscribe((res: any) => {
           console.log('getCommercialImport', res);
           this.commerciallist = res.data;
+          for (let index = 0; index < res.data.length; index++) {
+            this.COMMERCIAL_LIST.push({
+              commercialNumber:res?.data[index]?.commercialNumber
+            })
+          }
           this.MULITPLE_DROP_DOWN[LAST_VALUE?._id] = res.data;
         },
         (err) => console.log(err)
@@ -2728,7 +2761,7 @@ export class UploadComponent implements OnInit {
         }
       }
     }
-    console.log(this.arrayData, this.mainBene,this.SHIPPINGBILL_LIST, 'mainBenemainBene');
+    console.log(this.arrayData, this.mainBene,this.SHIPPINGBILL_LIST,this.COMMERCIAL_LIST,'mainBenemainBene');
     console.log('Array List', this.pipoArr);
 
   }

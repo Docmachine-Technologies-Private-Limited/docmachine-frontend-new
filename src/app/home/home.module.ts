@@ -88,8 +88,11 @@ import { ImportMasterServiceComponent } from "./import-master-service/import-mas
 import { PdfViewerModule } from "ng2-pdf-viewer";
 import { NewBillUnderCollectionComponent } from "./new-bill-under-collection/Bill-Under-Collection.component";
 import { NewDirectDispatchComponent } from "./New-Direct-Dispatch/New-Direct-Dispatch.component";
+import { ImportNewDirectDispatchComponent } from "./Import-New-Direct-Dispatch/Import-New-Direct-Dispatch.component";
+
 import {MergePdfListService} from "./merge-pdf-list.service";
-import { TreeViewComponent } from './tree-view/tree-view.component';
+import { BoeBillService } from '../service/homeservices/BoeBill/boe-bill.service';
+import { ImportDirectPaymentComponent } from './Import-Direct-Payment/Import-Direct-Payment.component';
 
 @NgModule({
   declarations: [
@@ -129,7 +132,9 @@ import { TreeViewComponent } from './tree-view/tree-view.component';
     AddAdvanceOutwardRemittanceComponent,
     EditCompanyComponent,
     NewBillUnderCollectionComponent,
-    NewDirectDispatchComponent
+    NewDirectDispatchComponent,
+    ImportNewDirectDispatchComponent,
+    ImportDirectPaymentComponent
   ],
   imports: [
     SharedHomeModule,
@@ -545,6 +550,12 @@ import { TreeViewComponent } from './tree-view/tree-view.component';
             canActivate:[MemberGuard]
           },
           {
+            path: "Import-Direct-Payment",
+            component: ImportDirectPaymentComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
             path: "new-Bill-Under-Collection",
             component: NewBillUnderCollectionComponent,
             pathMatch: "full",
@@ -556,13 +567,19 @@ import { TreeViewComponent } from './tree-view/tree-view.component';
             pathMatch: "full",
             canActivate:[MemberGuard]
           },
+          {
+            path: "import-direct-dispatch",
+            component: ImportNewDirectDispatchComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
         ],
       },
     ]),
     ModalModule.forRoot(),
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal,SharedDataService,MergePdfListService],
+  providers: [ConfirmDialogService, NgbModal,SharedDataService,MergePdfListService,BoeBillService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [MatProgressBarModule, MatTabsModule,SharedHomeModule],
 })
