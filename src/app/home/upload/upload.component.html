@@ -632,9 +632,9 @@
                           <span *ngIf="values?.controls?.invoiceAmount?.errors?.required">INVOICE AMOUNT is required. </span>
                         </div>
                         <div *ngIf="(SUBMIT_FORM || values?.controls?.invoiceAmount?.touched ||
-                        values?.controls?.invoiceAmount?.value!=this.COMMERCIAL_DATA?.InsuranceValue)"
+                        values?.controls?.invoiceAmount?.value!=this.COMMERCIAL_DATA?.InvoiceValue)"
                         class="error-span">
-                        <span *ngIf="values?.controls?.invoiceAmount?.value!=this.COMMERCIAL_DATA?.InsuranceValue">INVOICE AMOUNT and CI INVOICE AMOUNT should be equal is required. </span>
+                        <span *ngIf="values?.controls?.invoiceAmount?.value!=this.COMMERCIAL_DATA?.InvoiceValue">INVOICE AMOUNT and CI INVOICE AMOUNT should be equal is required. </span>
                       </div>
                       </div>
                       <div class="mb-0">
@@ -681,7 +681,7 @@
                       </div>
                       <div class="mb-0">
                         <label for="exampleInputEmail1" class="form-label">INVOICE AMOUNT*</label>
-                        <input class="form-control p-3" [value]="this.COMMERCIAL_DATA?.InsuranceValue" disabled
+                        <input class="form-control p-3" [value]="this.COMMERCIAL_DATA?.InvoiceValue" disabled
                           type="text" />
                       </div>
                       <!-- <div class="mb-0">

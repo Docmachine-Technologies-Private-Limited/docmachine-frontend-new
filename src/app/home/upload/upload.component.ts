@@ -1341,22 +1341,20 @@ export class UploadComponent implements OnInit {
     console.log(this.pubUrl);
     console.log(this.documentType);
     console.log(e.form.value);
-    if (e.form.invalid || e.form.value.invoiceAmount!=this.COMMERCIAL_DATA?.InsuranceValue || 
+    if (e.form.invalid || e.form.value.invoiceAmount!=this.COMMERCIAL_DATA?.InvoiceValue || 
     e.form.value.freightAmount!=this.COMMERCIAL_DATA?.FreightValue ||
     e.form.value.insuranceAmount!=this.COMMERCIAL_DATA?.InsuranceValue ||
     e.form.value.miscellaneousAmount!=this.COMMERCIAL_DATA?.MiscCharges) {
       return;
     }
     e.form.value.pipo = this.pipoArr;
-    if (this.file) {
-      e.form.value.file = this.file;
-    } else {
-      e.form.value.file = this.documentType1;
-    }
+    e.form.value.file = 'import';
     e.form.value.doc = this.pubUrl;
     e.form.value.benneName = this.arrayData;
     e.form.value.commissionCurrency = e.form.value?.commissionCurrency?.type;
     e.form.value.discountCurrency = e.form.value?.discountCurrency?.type;
+    e.form.value.freightCurrency = e.form.value?.freightCurrency?.type;
+    e.form.value.insuranceCurrency = e.form.value?.insuranceCurrency?.type;
     e.form.value.commercialNumber = this.SELECTED_COMMERCIAL_NUMBER;
     console.log('Benne Name', e.form.value);
     e.form.value.CI_DETAILS=this.COMMERCIAL_DATA;
