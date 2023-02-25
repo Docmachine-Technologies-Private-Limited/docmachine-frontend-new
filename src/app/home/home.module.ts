@@ -93,6 +93,7 @@ import { ImportNewDirectDispatchComponent } from "./Import-New-Direct-Dispatch/I
 import {MergePdfListService} from "./merge-pdf-list.service";
 import { BoeBillService } from '../service/homeservices/BoeBill/boe-bill.service';
 import { ImportDirectPaymentComponent } from './Import-Direct-Payment/Import-Direct-Payment.component';
+import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-Credit-Request.component';
 
 @NgModule({
   declarations: [
@@ -134,7 +135,8 @@ import { ImportDirectPaymentComponent } from './Import-Direct-Payment/Import-Dir
     NewBillUnderCollectionComponent,
     NewDirectDispatchComponent,
     ImportNewDirectDispatchComponent,
-    ImportDirectPaymentComponent
+    ImportDirectPaymentComponent,
+    PackingCreditRequestComponent
   ],
   imports: [
     SharedHomeModule,
@@ -564,6 +566,12 @@ import { ImportDirectPaymentComponent } from './Import-Direct-Payment/Import-Dir
           {
             path: "direct-dispatch",
             component: NewDirectDispatchComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },
+          {
+            path: "Packing-Credit-Request-New",
+            component: PackingCreditRequestComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },

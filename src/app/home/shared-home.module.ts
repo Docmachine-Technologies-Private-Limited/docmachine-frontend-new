@@ -27,6 +27,9 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import {FilterToggleDirective} from "../custom/Filter/filter-toggle.directive";
 import { PipoDataService } from "../service/homeservices/pipo.service";
 import { TreeViewComponent } from "./tree-view/tree-view.component";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import {MatRadioModule} from '@angular/material/radio';
+
 @NgModule({
   declarations: [
     ConfirmDialogComponent,
@@ -49,6 +52,8 @@ import { TreeViewComponent } from "./tree-view/tree-view.component";
     PdfViewerModule,
     NgSelectModule,
     MatExpansionModule,
+    MatCheckboxModule,
+    MatRadioModule,
     ModalModule.forRoot(),
   ],
   entryComponents: [ModalContentComponent1],
@@ -73,7 +78,9 @@ import { TreeViewComponent } from "./tree-view/tree-view.component";
     PDFVIEWERComponent,
     FilterToggleDirective,
     TreeViewComponent,
-    MatExpansionModule
+    MatExpansionModule,
+    MatCheckboxModule,
+    MatRadioModule
   ],
 })
 export class SharedHomeModule { }
