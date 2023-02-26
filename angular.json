@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "optimization": false,
             "outputPath": "dist/dm-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -41,6 +42,7 @@
               "src/styles.scss"
             ],
             "scripts": [
+            "src/assets/kendo-html-pdf/kendo.all.min.js"
             ]
           },
           "configurations": {
@@ -67,15 +69,13 @@
             },
             "development": {
               "buildOptimizer": true,
-              "optimization": true,
-              "vendorChunk": false,
+              "optimization": false,
+              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": false,
+              "namedChunks": true,
               "outputHashing": "none",
-              "aot": true,
-              "statsJson": false,
-              "progress": true
+              "statsJson": false
             }
           },
           "defaultConfiguration": "development"
@@ -119,6 +119,7 @@
               "src/styles.scss"
             ],
             "scripts": [
+              "src/assets/kendo-html-pdf/kendo.all.min.js"
             ]
           }
         }

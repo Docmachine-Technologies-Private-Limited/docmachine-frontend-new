@@ -24,7 +24,6 @@
                 <main id="content" class="table-padding" role="main">
                     <div class="new_document_list1">
                         <div class="new_document_list_add_data">
-
                             <form [formGroup]="pipoForm">
                                 <div class="row">
                                     <div class="col-md-7 col-sm-12 col-12">
@@ -71,16 +70,16 @@
                                                     <label for="exampleInputPassword1" class="form-label">Select
                                                         beneficiary</label>
                                                     <select class="form-select" aria-label="Default select example"
-                                                        [(ngModel)]="benneName" formControlName="benneName"
+                                                    [ngModel]="form.benneName" formControlName="benneName"
                                                         (change)="changepipo($event.target.value)" #select_ben>
-                                                        <option value="">Select Buyer</option>
+                                                        <option value="">Select beneficiary</option>
 
                                                         <option value="{{ bene._id }}" *ngFor="let bene of benneDetail
                                                                 ">{{ bene.benneName }}
                                                         </option>
                                                     </select>
                                                     <div *ngIf="submitted && form.benneName.errors" class='errorText'>
-                                                        <div *ngIf="form.benneName.errors.required">Select Buyer is
+                                                        <div *ngIf="form.benneName.errors.required">Select beneficiary is
                                                             required
                                                         </div>
                                                     </div>
@@ -89,10 +88,9 @@
                                                     <label for="exampleInputEmail1" class="form-label">Select
                                                         bank*</label>
                                                     <select class="form-select" aria-label="Default select example"
-                                                        [(ngModel)]="bank" formControlName="bank"
+                                                    [ngModel]="form.bank" formControlName="bank"
                                                         (change)="onSelectBank($event.target.value)" autocomplete="off">
                                                         <option value="">Select bank</option>
-
                                                         <option value="{{banklist.accNumber}}" *ngFor="let banklist of bankDetail
                                                               ">{{ banklist.bank }}
                                                         </option>
@@ -104,19 +102,18 @@
                                                 </div>
                                             </div>
 
-                                            <div *ngIf="pipoData?.length > 0" formArrayName="pipoTerm">
+                                            <div *ngIf="pipoData?.length > 0" formArrayName="BOETerm">
                                                 <div class="row" *ngFor="let items of getItems(pipoForm); let i = index"
                                                     [formGroupName]="i">
                                                     <div class="col-md-12 col-12">
                                                         <label for="exampleInputEmail1" class="form-label">Select
                                                             BOE</label>
                                                         <select class="form-select" aria-label="Default select example"
-                                                            formControlName="pi_poNo" autocomplete="off"
-                                                            [value]="items?.pi_poNo"
+                                                            formControlName="BOE_Number" autocomplete="off"
+                                                            [ngModel]="items?.pi_poNo"
                                                             (change)="choosenItems($event.target.value,i)"
                                                             #multiplepipo>
                                                             <option value="">Select BOE</option>
-
                                                             <option value="{{pipolist._id}}" *ngFor="let pipolist of pipoData
                                                     ">{{ pipolist.boeNumber }}
                                                             </option>
@@ -130,16 +127,13 @@
                                                         <label for="Currency" class="form-label">Currency</label>
                                                         <select class="form-select" aria-label="Default select example"
                                                             formControlName="currency" autocomplete="off"
-                                                            [value]="this.LIST_PIPO[multiplepipo.value]?.currency"
-                                                            ngModel>
+                                                            [ngModel]="this.LIST_PIPO[multiplepipo.value]?.currency"
+                                                            >
                                                             <option value="">Select Currency</option>
-
                                                             <option value="{{currency}}" *ngFor="let currency of CurrencyData
                                                     ">{{ currency }}
                                                             </option>
                                                         </select>
-
-
                                                         <div *ngIf="submitted && form.currency.errors"
                                                             class='errorText'>
                                                             <div *ngIf="form.currency.errors.required"> Currency is
@@ -150,22 +144,21 @@
                                                     <div class="col-md-4 col-12">
                                                         <label for="Amount" class="form-label">BOE Amount</label>
                                                         <input type="text" disabled class="form-control"
-                                                            formControlName="invoice_amount" id="invoice_amount"
-                                                            [value]="this.LIST_PIPO[multiplepipo.value]?.invoiceAmount"
-                                                            placeholder="Invoice Amount" autocomplete="off" ngModel>
+                                                            formControlName="amount" id="invoice_amount"
+                                                            [ngModel]="this.LIST_PIPO[multiplepipo.value]?.invoiceAmount"
+                                                            placeholder="Invoice Amount" autocomplete="off">
                                                         <div *ngIf="submitted && form.amount.errors" class='errorText'>
                                                             <div *ngIf="form.amount.errors.required">BOE Amount is
                                                                 required</div>
                                                         </div>
-
                                                     </div>
                                                     <div class="col-md-4 col-12">
                                                         <label for="payableAmount" class="form-label">Balance
                                                             Amount</label>
                                                         <input type="text" disabled class="form-control"
                                                             formControlName="payableAmount" id="payableAmount"
-                                                            [value]="this.LIST_PIPO[multiplepipo.value]?.payableAmount??this.LIST_PIPO[multiplepipo.value]?.invoiceAmount"
-                                                            placeholder="Payable Amount" autocomplete="off" ngModel>
+                                                            [ngModel]="this.LIST_PIPO[multiplepipo.value]?.payableAmount??this.LIST_PIPO[multiplepipo.value]?.invoiceAmount"
+                                                            placeholder="Payable Amount" autocomplete="off">
                                                         <div *ngIf="submitted && form.payableAmount.errors"
                                                             class='errorText'>
                                                             <div *ngIf="form.payableAmount.errors.required">Balance
@@ -178,7 +171,7 @@
                                                             Amount</label>
                                                         <input type="text" class="form-control"
                                                             formControlName="remittanceAmount" id="remittanceAmount"
-                                                            placeholder="Remittance Amount" autocomplete="off" maxlength="this.sumTotalAmount.length"
+                                                            placeholder="Remittance Amount" ngModel autocomplete="off" maxlength="this.sumTotalAmount.length"
                                                             (keyup)="RemittanceAmount($event,$event.target.value);">
                                                         <div *ngIf="submitted && form.remittanceAmount.errors"
                                                             class='errorText'>
@@ -205,43 +198,20 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- <div *ngIf="select_ben.value!=''">
-                                                <div class="add_new_buttons">
-                                                    <div class="wdith_move" style="display: inline-block;width: 100%;">
-                                                        <div class="row">
-                                                            <div class="col-md-12"><label for="">Select
-                                                                    OUR/SHA/BEN</label></div>
-                                                            <div class="col-md-9 col-sm-9 col-9">
-                                                                <ng-select
-                                                                    [items]="[{value:'OUR'},{value:'SHA'},{value:'BEN'}]"
-                                                                    bindLabel="value" [multiple]="false"
-                                                                    (change)="OUR_SHA_BEN_FUNC($event.value)"
-                                                                    placeholder="Select OUR/SHA/BEN"
-                                                                    #PI_PO_shipping_bill></ng-select>
-                                                            </div>
-                                                            <div class="col-md-3 col-sm-3 col-3">
-                                                                <button style="width:100%;" type="button"
-                                                                    class="btn btn-primary" (click)="fillForm()">Fill
-                                                                    Pdf</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6 col-12">
                                                     <label for="TotalPIamount" class="form-label">Total BOE
                                                         amount</label>
                                                     <input type="text" class="form-control" id="TotalPIamount"
-                                                        [value]="sumTotalAmount" name="sumTotalAmount"
+                                                        [ngModel]="sumTotalAmount" formControlName="sumTotalAmount"
                                                         placeholder="Total PI amount" readonly>
                                                 </div>
                                                 <div class="col-md-6 col-sm-6 col-12">
                                                     <label for="totalremittanceAmount" class="form-label">Remittance
                                                         amount</label>
-                                                    <input type="text" formControlName="totalremittanceAmount"
+                                                    <input type="text" ngModel formControlName="totalremittanceAmount"
                                                         class="form-control" id="totalremittanceAmount"
-                                                        [value]="this.Remittance_Amount"
+                                                        [ngModel]="this.Remittance_Amount"
                                                         placeholder="Remittance amount" readonly>
                                                 </div>
                                             </div>
@@ -362,7 +332,7 @@
                                                 <!-- <button type="button" class="btn btn-secondary" (click)="onSubmit(this.pipoForm)">CREATE
                           DOCUMENT</button> -->
                                                 <button type="button" class="btn btn-primary"
-                                                    (click)="PREVIEW_PAGE.style.display='block';PREVIEWS_URL('MERGE_PDF_ADVANCE_REMITTANCE'+(sumTotalAmount-1))">PREVIEWS</button>
+                                                    (click)="PREVIEW_PAGE.style.display='block';PREVIEWS_URL('Import-Direct-Dispatch'+(sumTotalAmount-1))">PREVIEWS</button>
                                             </div>
                                         </div>
                                     </div>
@@ -402,7 +372,7 @@
                             <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
                this.GetDownloadStatus?.status=='verify'"
                                 (click)="SendApproval(this.GetDownloadStatus?.status,
-                sumTotalAmount!=0?'MERGE_PDF_ADVANCE_REMITTANCE'+(sumTotalAmount-1) :null);PREVIEW_PAGE.style.display='none'">Send for
+                sumTotalAmount!=0?'Import-Direct-Dispatch'+(sumTotalAmount-1) :null);PREVIEW_PAGE.style.display='none'">Send for
                                 Approval</button>
                         </div>
                         <div

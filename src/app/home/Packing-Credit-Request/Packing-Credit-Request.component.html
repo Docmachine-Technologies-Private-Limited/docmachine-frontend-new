@@ -25,7 +25,6 @@
         <main id="content" class="table-padding" role="main">
           <div class="new_document_list1">
             <div class="new_document_list_add_data">
-              <form [formGroup]="this.ExportBillLodgement_Form">
                 <div class="row">
                   <div class="col-md-7 col-sm-12 col-12">
                     <div class="new_left_sidedoc p-2 pdf_invoce_scroll">
@@ -61,7 +60,8 @@
                             number
                             <span
                               style="outline: none; display: inline-block; width: 150px; border-bottom: 1px solid #000000;"
-                              contenteditable="true">{{this.SET_CREDIT_DEBIT_LIST?.Credit?.accNumber}}</span>for the purpose of payment to supplier.
+                              contenteditable="true">{{this.SET_CREDIT_DEBIT_LIST?.Credit[0]?.accNumber}}</span>for the
+                            purpose of payment to supplier.
                             <br>
                           </div>
                           <br>
@@ -69,7 +69,8 @@
                             <table>
                               <tr>
                                 <th>LC order no & date : </th>
-                                <td>{{this.Advance_Amount_Sum?.PIPO_NO?.toString()}} & {{this.Advance_Amount_Sum?.Date?.toString()}}</td>
+                                <td>{{this.Advance_Amount_Sum?.PIPO_NO?.toString()}} &
+                                  {{this.Advance_Amount_Sum?.Date?.toString()}}</td>
                               </tr>
                               <tr>
                                 <th>Buyer : </th>
@@ -99,7 +100,7 @@
                               </tr>
                               <tr>
                                 <th>A/c no to be debit for all charges : </th>
-                                <td>{{this.SET_CREDIT_DEBIT_LIST?.Debit?.accNumber}}</td>
+                                <td>{{this.SET_CREDIT_DEBIT_LIST?.Credit[1]?.accNumber}}</td>
                               </tr>
                             </table>
                           </div>
@@ -234,49 +235,52 @@
                             <div class="analytics">
                               <div>
                                 <div class="space_bottom"></div>
+                                <form [formGroup]="this.Transaction_form">
                                 <div class="bill_lod_section">
                                   <div class="row">
                                     <div class="col-md-10 mb-0">
-                                      <label for="exampleInputEmail1" class="form-label">Select Credit bank*</label>
+                                      <label for="exampleInputEmail1" class="form-label">Select bank*</label>
                                       <ng-select [items]="this.bankDetail" *ngIf="this.bankDetail.length!=0"
-                                        name="bank_name" #bankName (change)="setradio('Credit',$event.bank)" ngModel
+                                      formcontrolname="bank_name" #bankName (change)="setradio('Credit',$event.bank)" ngModel
                                         bindLabel="bank" [multiple]="false" placeholder="Select Buyer Name"></ng-select>
+                                    </div>
+                                    <div class="col-md-10 mb-0" *ngIf="this.newBankArray['Credit'].length!=0">
                                       <div class="row mt-2">
+                                        <label for="exampleInputEmail1" class="form-label">Select Credit bank*</label>
                                         <mat-radio-group class="custom-checkbox" aria-label="Select an option">
-                                          <mat-radio-button [value]="item" (change)="setBank('Credit',item)"
-                                            *ngFor="let item of this.newBankArray['Credit']">{{item?.bank}} |
+                                          <mat-radio-button [value]="item" (change)="setBank($event,'Credit',0,item)"
+                                            *ngFor="let item of this.newBankArray['Credit'];let i=index">{{item?.bank}} |
                                             {{item?.accNumber}}</mat-radio-button>
                                         </mat-radio-group>
                                       </div>
                                     </div>
-                                    <div class="col-md-10 mb-2">
-                                      <label for="exampleInputEmail1" class="form-label">Select Debit bank*</label>
-                                      <ng-select [items]="this.bankDetail" *ngIf="this.bankDetail.length!=0"
-                                        name="bank_name" #bankName (change)="setradio('Debit',$event.bank)" ngModel
-                                        bindLabel="bank" [multiple]="false" placeholder="Select Buyer Name"></ng-select>
+                                    <div class="col-md-10 mb-2" *ngIf="this.newBankArray['Credit'].length!=0">
                                       <div class="row mt-2">
+                                        <label for="exampleInputEmail1" class="form-label">Select Debit bank*</label>
                                         <mat-radio-group class="custom-checkbox" aria-label="Select an option">
-                                          <mat-radio-button [value]="item" (change)="setBank('Debit',item)"
-                                            *ngFor="let item of this.newBankArray['Debit']">{{item?.bank}} |
+                                          <mat-radio-button [value]="item" (change)="setBank($event,'Credit',1,item)"
+                                            *ngFor="let item of this.newBankArray['Credit'];let i=index">{{item?.bank}} |
                                             {{item?.accNumber}}</mat-radio-button>
                                         </mat-radio-group>
                                       </div>
                                     </div>
                                     <div class="space_bottom"></div>
-                                    <div class="col-md-8 col-sm-8 col-7">
-                                      <label for="email" class="form-label">EPC/PCFC</label>
+                                    <div class="col-md-8 col-sm-8 col-7 toggle-btn">
+                                       <div class="import_export_button">
+                                          <div >
+                                            <button type="button" class="btn btn-primary btn no-button"
+                                              (click)="Changebutton('EPC_PCFC','Hide','Show','no')"
+                                              [ngClass]='this.Lodgement["EPC_PCFC"]["Hide"]=="no"?"type_active":""'>
+                                              <span class="icon_top"></span>EPC</button>
+                                            <button type="button" class="btn btn-primary btn no-button"
+                                               [ngClass]='this.Lodgement["EPC_PCFC"]["Show"]=="yes"?"type_active":""'
+                                               (click)="Changebutton('EPC_PCFC','Show','Hide','yes')">
+                                              <span class="icon_top "></span>PCFC
+                                            </button>
+                                          </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-4 col-5">
-                                      <div class="check_box_button">
-                                        <button type="button" [class]="ClassRetrun('EPC_PCFC','Hide','btn no-button active1',
-                                                                             'btn btn-primary remove-no-button','no')"
-                                          (click)="Changebutton('EPC_PCFC','Hide','Show','no')">No</button>
-                                        <button type="button"
-                                          [class]="ClassRetrun('EPC_PCFC','Show',
-                                                                            'btn yes-button active','btn yes-button','yes')"
-                                          (click)="Changebutton('EPC_PCFC','Show','Hide','yes')">Yes</button>
-                                      </div>
-                                    </div>
+
                                     <div class="col-md-8 col-sm-8 col-7">
                                       <label for="email" class="form-label">Running PC</label>
                                     </div>
@@ -297,8 +301,9 @@
                                       *ngIf='this.Lodgement["Running_PC"]["Show"]== "yes"'>
                                       <div class="col-md-10 mb-3">
                                         <label for="email" class="form-label">Select Buyer Name</label>
-                                        <ng-select [items]="this.buyerName" bindLabel="value" (change)="addToSbArray_2('buyerName',[$event.value]);addToSbArray_2('PIPO_NO',[1]);addToSbArray_2('Date',[CURRENT_DATE])" [multiple]="false"
-                                          placeholder="Select Buyer Name"></ng-select>
+                                        <ng-select [items]="this.buyerName" bindLabel="value"
+                                          (change)="addToSbArray_2('buyerName',[$event.value]);addToSbArray_2('PIPO_NO',[1]);addToSbArray_2('Date',[CURRENT_DATE])"
+                                          [multiple]="false" placeholder="Select Buyer Name"></ng-select>
                                       </div>
                                       <div class="col-md-10 mb-3">
                                         <label for="email" class="form-label">Select Incoterm (FOB/CIF)</label>
@@ -311,32 +316,38 @@
                                       </div>
                                       <div class="col-12 mb-2">
                                         <label for="email" class="form-label">Select PCFC Amount and Currency</label>
-                                        <div class="d-flex flex-column mt-2">
+                                        <div class="d-flex flex-column mt-2" formArrayName="PIPO_LIST">
                                           <div class="col-12" *ngFor="let item of [{amount:0}];let i=index">
                                             <div class="ui-panel">
                                               <div class="row w-row">
                                                 <div class="basic-column w-col w-col-3">
                                                   <div class="tag-wrapper">
-                                                    <div class="number-card number-card-content1">
+                                                    <div class="number-card number-card-content1" [formGroupName]="i">
                                                       <label for="email" class="form-label number-text"
                                                         style="margin: auto;margin-top:-20px;">{{(i+1)}}</label>
                                                       <div class="row col-12" style="flex-wrap: unset;
                                                       margin: auto;
                                                       margin-left: 0;">
                                                         <label class="number-card-number pl-1" style="color: white;">
-                                                          Currency : <ng-select class="custom-ng-select" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                                                            bindLabel="type" [multiple]="false" placeholder="Select Currency"
-                                                            name="currency" (change)="setCurrency($event.type)" #currency required>
+                                                          Currency : <ng-select class="custom-ng-select"
+                                                            *ngIf="this.CURRENCY_LIST?.length!=0"
+                                                            [items]="this.CURRENCY_LIST" bindLabel="type"
+                                                            [multiple]="false" placeholder="Select Currency"
+                                                            formcontrolname="currency" ngModel (change)="setCurrency($event.type)"
+                                                            #currency required>
                                                           </ng-select></label>
-                                                        <label class="number-card-number pl-1" style="color: white;">PCFC
-                                                          Amount : <input style="border: 0 !important;border-bottom: 2px solid white !important;
+                                                        <label class="number-card-number pl-1"
+                                                          style="color: white;">PCFC
+                                                          Amount : <input formcontrolname="PCFC_Amount" ngModel style="border: 0 !important;border-bottom: 2px solid white !important;
                                                             background: transparent;
                                                             color: white;
-                                                            border-radius: 0;" type="text" class="form-control" (keyup)="addToSbArray_2('AmountSum',$event.target.value)"></label>
+                                                            border-radius: 0;" type="text" class="form-control"
+                                                            (keyup)="addToSbArray_2('AmountSum',$event.target.value)"></label>
                                                       </div>
                                                       <div class="number-card-divider"></div>
                                                       <div class="number-card-progress-wrapper">
-                                                        <div class="tagline number-card-currency">{{this.SELECTED_CURRENCY}}</div>
+                                                        <div class="tagline number-card-currency">
+                                                          {{this.SELECTED_CURRENCY}}</div>
                                                         <div class="number-card-progress">0%</div>
                                                       </div>
                                                     </div>
@@ -350,7 +361,8 @@
                                       <div class="col-md-10 mb-3">
                                         <label for="email" class="form-label">Due Date (Show max Tenor from
                                           Account)</label>
-                                        <input type="date" class="form-control" placeholder="dd/mm/yyyy" (change)="this.Advance_Amount_Sum['Last_date_of_service']=$event.target.value">
+                                        <input type="date" class="form-control" placeholder="dd/mm/yyyy"
+                                          (change)="this.Advance_Amount_Sum['Last_date_of_service']=$event.target.value">
                                       </div>
                                       <div class="col-md-10 mb-3">
                                         <label for="email" class="form-label">Forward contract (Yes/NO)</label>
@@ -380,7 +392,6 @@
                                           </mat-radio-group>
                                         </div>
                                       </div>
-                                      <!-- this.advanceArray -->
                                       <div class="d-flex flex-column mt-2">
                                         <div class="col-12" *ngFor="let item of this.advanceArray;let i=index">
                                           <div class="ui-panel">
@@ -388,27 +399,32 @@
                                               <div class="basic-column w-col w-col-3">
                                                 <div class="tag-wrapper">
                                                   <div class="number-card number-card-content1">
-                                                    <label for="email" class="form-label number-text"
-                                                      style="margin: auto;margin-top:-20px;">{{(i+1)}}</label>
+                                                    <label for="email" class="form-label number-text" name="pi_poNo" [ngModel]="item?.pi_poNo"
+                                                      style="margin: auto;margin-top:-20px;">PIPO No. : {{(item?.pi_poNo)}}</label>
                                                     <div class="row col-12" style="flex-wrap: unset;
                                                     margin: auto;
                                                     margin-left: 0;">
                                                       <label class="number-card-number pl-1" style="color: white;">PIPO
-                                                        Amount : <input style="border: 0 !important;border-bottom: 2px solid white !important;
+                                                        Amount : <input name="PIPO_Amount" style="border: 0 !important;border-bottom: 2px solid white !important;
                                                           background: transparent;
                                                           color: white;
                                                           border-radius: 0;" type="text" class="form-control"
-                                                          [value]="item?.amount"></label>
+                                                          [value]="item?.amount" disabled></label>
                                                       <label class="number-card-number pl-1" style="color: white;">PCFC
-                                                        Amount : <input style="border: 0 !important;border-bottom: 2px solid white !important;
+                                                        Amount : <input name="PCFC_Amount" style="border: 0 !important;border-bottom: 2px solid white !important;
                                                           background: transparent;
                                                           color: white;
-                                                          border-radius: 0;" type="text" class="form-control"
-                                                          [value]="this.PERCENTAGE_AMOUNT(10,item?.amount)"></label>
+                                                          border-radius: 0;" type="number" class="form-control" 
+                                                          (keypress)="limitAmount($event,item?.amount,$event.target.value)"
+                                                          [value]="this.PERCENTAGE_AMOUNT(10,item?.amount)" maxlength="{{item?.amount?.length}}"></label>
                                                     </div>
                                                     <div class="number-card-divider"></div>
                                                     <div class="number-card-progress-wrapper">
-                                                      <div class="tagline number-card-currency">{{item?.currency}}</div>
+                                                      <div class="tagline number-card-currency"><ng-select class="custom-ng-select"
+                                                        [items]="[{type:item?.currency}]" bindLabel="type"
+                                                        [multiple]="false"
+                                                        name="currency" [selected]="item?.currency"
+                                                        #currency required></ng-select></div>
                                                       <div class="number-card-progress">10%</div>
                                                     </div>
                                                   </div>
@@ -432,6 +448,7 @@
                                     <br>
                                   </div>
                                 </div>
+                                </form>
                               </div>
                             </div>
                           </main>
@@ -443,12 +460,11 @@
                         <button type="button" class="btn btn-secondary"
                           (click)='Preview_btn.style.display="block"'>PROCEED</button>
                         <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;"
-                          (click)='PREVIEWS_URL("#first");PREVIEW_PAGE.style.display="block"'>Preview</button>
+                          (click)='PREVIEWS_URL("Packing-Credit-Request");PREVIEW_PAGE.style.display="block";'>Preview</button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </form>
             </div>
           </div>
         </main>
@@ -539,10 +555,19 @@
       </div>
       <div class="modal-body">
         <div class="content_white_background">
-          <app-pdf-viewer class="pt-3" [downloadShow]="false"
-          *ngFor="let item of this.PREVIEWS_URL_LIST" [src]="item" width="100%"
-          height="500px"></app-pdf-viewer>
+          <app-pdf-viewer class="pt-3" [downloadShow]="false" *ngFor="let item of this.PREVIEWS_URL_LIST" [src]="item"
+            width="100%" height="500px"></app-pdf-viewer>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="PREVIEW_PAGE.style.display='none'">Close</button>
+          <div style="display:flex;">
+             <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                      <button type="button" class="btn btn-primary" (click)="SendApproval(this.GetDownloadStatus?.status,
+                      this.Advance_Amount_Sum?.AmountSum,PREVIEW_PAGE);">Send for Approval</button>
+              </div>
+              <mat-error *ngIf="this.GetDownloadStatus?.status=='Approved'">You have not access to download pdf!</mat-error>
+          </div>
+      </div>
       </div>
     </div>
   </div>

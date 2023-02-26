@@ -3828,8 +3828,8 @@ export class NewDirectDispatchComponent implements OnInit {
         }
       }
       var approval_data: any = {
-        id: 'Export_Bill_Lodgement_' + UniqueId,
-        tableName: 'Export Bill Lodgement',
+        id: 'Export-Direct-Dispatch' + UniqueId,
+        tableName: 'Export-Direct-Dispatch',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
         status: 'pending',
@@ -3855,14 +3855,19 @@ export class NewDirectDispatchComponent implements OnInit {
         tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
         tp['firxRecAmo'].push(0)
       }
-      this.getStatusCheckerMaker('Export_Bill_Lodgement_' + UniqueId).then((res: any) => {
+      this.getStatusCheckerMaker('Export-Direct-Dispatch' + UniqueId).then((res: any) => {
         console.log(approval_data, res, 'approval_data')
-        if (res?.id != 'Export_Bill_Lodgement_' + UniqueId) {
+        if (res?.id != 'Export-Direct-Dispatch' + UniqueId) {
           if (Status == '' || Status == null || Status == 'Rejected') {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
               this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
               if (this.Lodgement['AgainstAdvanceReceipt']?.Hide!='no') {
-                this.documentService.addExportBillLodgment(this.ExportBillLodgement_Form.value).subscribe((res1: any) => {
+                var data:any={
+                  ExportBillLodgement:this.ExportBillLodgement_Form.value,
+                  TypeTransaction:'Export-Direct-Dispatch',
+                  fileType:'Export'
+                }
+                this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
                   for (let index = 0; index < this.ExportBillLodgement_Form.value?.Advance_reference_Number?.length; index++) {
                     const element = this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.irDataItem;
                     this.documentService.Update_Amount_by_Table({
@@ -3923,7 +3928,7 @@ export class NewDirectDispatchComponent implements OnInit {
         }
       });
     }
-    console.log('Export_Bill_Lodgement_' + UniqueId, UniqueId, approval_data, 'uiiiiiiiiiiiiii')
+    console.log('Export-Direct-Dispatch' + UniqueId, UniqueId, approval_data, 'uiiiiiiiiiiiiii')
   }
   getStatusCheckerMaker(id) {
     return new Promise((resolve, reject) => {

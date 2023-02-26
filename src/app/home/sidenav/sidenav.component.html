@@ -290,6 +290,16 @@
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/rejectpanel')">Reject</h6>
             </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="Transaction_DashBoard.style.display='block';this.HIDE_ALL_SUB_MENU();this.SUB_MENU['Transaction_DashBoard']=true">Transaction DashBoard</h6>
+              <div class="sub-menu navbar-nav ml-auto"
+              [style]="this.SUB_MENU['Transaction_DashBoard']==true ? 'display:block;' : 'display:none;'" #Transaction_DashBoard>
+              <h6 class="nav-link p-0"
+                (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcSight'})">Sight</h6>
+              <h6 class="nav-link p-0"
+                (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcUsance'})">Usance</h6>
+            </div>
+            </li>
           </ul>
 
           <ul class="navbar-nav ml-auto">

@@ -136,14 +136,12 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
     // buyerName commodity doc
 
-    this.pipoForm = this.formBuilder.group(
-      {
+    this.pipoForm = this.formBuilder.group({
         bank: new FormControl('', Validators.required),
         benneName: new FormControl('', Validators.required),
-        pi_poNo: new FormControl('', Validators.required),
-        currency: new FormControl("",),
-        amount: new FormControl("", Validators.required),
+        RemittanceTotalAmount: new FormControl("", Validators.required),
         pipoTerm: new FormArray([this.initItems()]),
+        Total_PI_Amount: new FormControl('', Validators.required)
       }
     );
   }
@@ -600,6 +598,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         }
       }
     }
+    console.log(this.pipoForm,'PREVIEWS_URL')
     this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
       console.log(res, 'dsdsdsdsdsdsds');
       this.GetDownloadStatus = res[0];
@@ -635,7 +634,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       }
       var approval_data: any = {
         id: UniqueId,
-        tableName: 'Advance Remittance flow',
+        tableName: 'Advance-Remittance-flow',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
         status: 'pending',
@@ -647,182 +646,31 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       console.log(approval_data, 'approval_data')
       if (Status == '' || Status == null || Status == 'Rejected') {
         this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
-          this.ngOnInit();
-          this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
-            console.log(res, 'dsdsdsdsdsdsds');
-            this.GetDownloadStatus = res[0];
-            if (res.length == 0) {
-              this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '2' }).subscribe((res: any) => {
-                console.log(res, 'dsdsdsdsdsdsds');
-                this.GetDownloadStatus = res[0];
-              })
-            }
-          })
+          var data:any={
+            data:this.pipoForm.value,
+            TypeTransaction:'Advance-Remittance-flow',
+            fileType:'Import'
+          } 
+          this.documentService.addExportBillLodgment(data).subscribe((res1: any) => { 
+            this.ngOnInit();
+            this.router.navigate(['/home/dashboardTask'])
+            this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
+              console.log(res, 'dsdsdsdsdsdsds');
+              this.GetDownloadStatus = res[0];
+              if (res.length == 0) {
+                this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '2' }).subscribe((res: any) => {
+                  console.log(res, 'dsdsdsdsdsdsds');
+                  this.GetDownloadStatus = res[0];
+                })
+              }
+            })
+          });
+        
         });
       }
     }
     console.log(UniqueId, approval_data, 'uiiiiiiiiiiiiii')
   }
-  mergeAllPDFs = async (type: String) => {
-    let urls = this.PREVIEWS_URL_LIST;
-    console.log("2542 Line", urls)
-    const numDocs = urls.length;
-    const pdfDoc = await PDFDocument.create();
-
-    var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
-      if (currentpage < docLength) {
-        console.log('Inside Page', currentpage, 'total pages', docLength);
-        const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [currentpage]);
-        pdfDoc.addPage(donorPage);
-        await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
-      }
-    };
-    var appendEachFile = async (bytes) => {
-      const donorPdfDoc = await PDFDocument.load(bytes);
-      const docLength = donorPdfDoc.getPageCount();
-      console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
-      await appendEachPage(donorPdfDoc, 0, docLength);
-    };
-    var appendAllFiles = async (pdflist, currentfile) => {
-      if (currentfile < numDocs) {
-        await appendEachFile(pdflist[currentfile]);
-        console.log('Inside file', currentfile);
-        await appendAllFiles(pdflist, currentfile + 1);
-      } else {
-        if (type == 'download') {
-          this.downloadAsSingleFile(pdfDoc);
-        } else {
-          this.sendMail2(pdfDoc);
-        }
-      }
-    };
-
-    // download single file;
-    let downloadEachFile = (filename) => {
-      return new Promise((resolve, reject) => {
-        this.userService.mergePdf(filename).subscribe((res: any) => {
-          console.log('downloadEachFile', res);
-          resolve(res.arrayBuffer());
-        },
-          (err) => reject('Failed to fetch the pdf')
-        );
-      });
-    };
-    // download all the pdfs
-    let downloadAllFiles = () => {
-      var promises = [];
-      for (var i = 0; i < urls.length; i++) {
-        if (urls[i]!='' && urls[i]!=undefined) {
-          promises.push(urls[i]);
-        }
-      }
-      Promise.all(promises).then((pdfList) => {
-        appendAllFiles(pdfList, 0);
-        console.log('pdfList2', pdfList);
-      }, (error) => {
-      }
-      );
-    };
-    downloadAllFiles();
-  };
-  downloadAsSingleFile = async (pdfDoc: any) => {
-    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-    if (true == true) {
-      var merge = 'data:application/pdf;base64,' + data_pdf //this.value
-      const mergedPdf = await PDFDocument.create();
-      const pdfA = await PDFDocument.load(this.formerge);
-      const pdfB = await PDFDocument.load(merge);
-      const copiedPagesA = await mergedPdf.copyPages(pdfA, pdfA.getPageIndices());
-      copiedPagesA.forEach((page) => mergedPdf.addPage(page));
-      const copiedPagesB = await mergedPdf.copyPages(pdfB, pdfB.getPageIndices());
-      copiedPagesB.forEach((page) => mergedPdf.addPage(page));
-      const mergedPdfFile = await mergedPdf.save();
-      var base64String = this._arrayBufferToBase64(mergedPdfFile);
-      const byteCharacters = atob(base64String);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      importedSaveAs(
-        new Blob([byteArray], { type: 'application/pdf' }),
-        'BankAttachment'
-      );
-    }
-    else {
-      const byteCharacters1 = atob(data_pdf);
-      const byteNumbers1 = new Array(byteCharacters1.length);
-      for (let i = 0; i < byteCharacters1.length; i++) {
-        byteNumbers1[i] = byteCharacters1.charCodeAt(i);
-      }
-      const byteArray1 = new Uint8Array(byteNumbers1);
-      importedSaveAs(
-        new Blob([byteArray1], { type: 'application/pdf' }),
-        'InwardRemittanceDisposal'
-      );
-
-    }
-  };
-
-  blobToSaveAs(fileName: string, exportText: any) {
-    try {
-      const linkSource = exportText;
-      const downloadLink = document.createElement("a");
-      downloadLink.href = linkSource;
-      downloadLink.download = fileName;
-      downloadLink.click();
-    } catch (e) {
-      console.error('BlobToSaveAs error', e);
-    }
-  }
-
-  sendMail2 = async (pdfDoc: any) => {
-    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-    console.log('5417****', pdfDataUri);
-    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-    const byteCharacters = atob(data_pdf);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    console.log('99999999999999999999999', data_pdf);
-    if (true == true) {
-      var merge = 'data:application/pdf;base64,' + data_pdf //this.value
-      const mergedPdf = await PDFDocument.create();
-      console.log("2679", this.formerge)
-      const pdfA = await PDFDocument.load(this.formerge);
-      const pdfB = await PDFDocument.load(merge);
-      const copiedPagesA = await mergedPdf.copyPages(pdfA, pdfA.getPageIndices());
-      copiedPagesA.forEach((page) => mergedPdf.addPage(page));
-
-      const copiedPagesB = await mergedPdf.copyPages(pdfB, pdfB.getPageIndices());
-      copiedPagesB.forEach((page) => mergedPdf.addPage(page));
-      const mergedPdfFile = await mergedPdf.save();
-      var base64String = this._arrayBufferToBase64(mergedPdfFile);
-      this.userService.documentSend(this.USER_DATA?.emailId, base64String).subscribe(
-        (data) => {
-          console.log('king123');
-          console.log(data);
-        },
-        (error) => {
-           console.log('error');
-        }
-      );
-    }
-    else {
-      this.userService.documentSend(this.USER_DATA?.emailId, data_pdf).subscribe(
-        (data) => {
-          console.log('king123');
-          console.log(data)
-        },
-        (error) => {
-          console.log('error');
-        }
-      );
-    }
-  };
 }
 
 // PROFORMA INVOICE
