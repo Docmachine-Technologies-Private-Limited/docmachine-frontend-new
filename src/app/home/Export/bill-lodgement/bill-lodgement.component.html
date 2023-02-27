@@ -21,9 +21,12 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <label for="email" class="form-label">Select PI/PO or shipping bill</label>
-                                        <app-custom-dropdown class="main-drop-down-class" name="example1"
-                                         [data]="this.SHIPPING_BILL_LIST" label-text="Sample Data 1"
-                                         (PopupShow)="DUMP_FUNCTION(changevalue,'Shipping bill',content1)" [(ngModel)]="changevalue"></app-custom-dropdown>
+                                        <ng-select
+                                        [items]="this.SHIPPING_BILL_LIST"
+                                        bindLabel="value"
+                                        [multiple]="false"
+                                        placeholder="Select PI/PO or shipping bill"
+                                        (change)="DUMP_FUNCTION($event?.value,'Shipping bill',content1)" #PI_PO_shipping_bill></ng-select>
                                         <div *ngIf='itemArray?.length >0'>
                                             <div *ngIf="ship" class="shpt_bill_sec">
                                                 <label>SHIPPING BILL NUMBER SELECTED</label>

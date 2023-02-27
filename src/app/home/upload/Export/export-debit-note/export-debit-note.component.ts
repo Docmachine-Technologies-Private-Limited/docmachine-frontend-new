@@ -128,7 +128,7 @@ export class ExportDebitNoteComponent implements OnInit {
     date: new FormControl('', Validators.required),
     dueDate: new FormControl('', Validators.required),
     location: new FormControl('', Validators.required),
-    beneName: new FormControl('', Validators.required),
+    benneName: new FormControl('', Validators.required),
   });
 
   // payment = this.formBuilder.group({
@@ -136,7 +136,7 @@ export class ExportDebitNoteComponent implements OnInit {
   // });
 
   loginForm = this.formBuilder.group({
-    beneName: ['', Validators.required],
+    benneName: ['', Validators.required],
     beneAdrs: ['', Validators.required],
     beneBankName: ['', Validators.required],
     beneAccNo: ['', Validators.required],
@@ -409,26 +409,35 @@ export class ExportDebitNoteComponent implements OnInit {
     e.form.value.currency = e.form.value?.currency?.type;
     e.form.value.file = 'export';
     console.log(e.form.value);
-    this.documentService.addDebit(e.form.value).subscribe((res: any) => {
-      this.toastr.success(`Credit Note Document Added Successfully`);
-      let updatedData = {
-        "debitNoteRef": [
-          res.data._id,
-        ],
-      }
-      this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1, updatedData)
-        .subscribe(
-          (data) => {
-            console.log(' credit Note document', this.pipourl1);
-            console.log(data);
-            this.router.navigate(['home/debit-note']);
-          },
-          (error) => {
-            console.log('error');
-          }
-        );
-    },
-      (err) => console.log('Error adding pipo'));
+    this.documentService.getInvoice_No({
+      debitNoteNumber:e.form.value.debitNoteNumber
+    },'debitnotes').subscribe((resp:any)=>{
+      console.log('debitNoteNumber Invoice_No',resp)
+    if (resp.data.length==0) {
+      this.documentService.addDebit(e.form.value).subscribe((res: any) => {
+        this.toastr.success(`debit Note Document Added Successfully`);
+        let updatedData = {
+          "debitNoteRef": [
+            res.data._id,
+          ],
+        }
+        this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1, updatedData)
+          .subscribe(
+            (data) => {
+              console.log(' credit Note document', this.pipourl1);
+              console.log(data);
+              this.router.navigate(['home/debit-note']);
+            },
+            (error) => {
+              console.log('error');
+            }
+          );
+      },
+        (err) => console.log('Error adding pipo'));
+	}else {
+    this.toastr.error(`Please check this sb no. : ${e.form.value.debitNoteNumber} already exit...`);
+  }});
+    
   }
   CommercialNumber: any = [];
   storeCommercialNumber(id: any, commercialnumber) {

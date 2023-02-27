@@ -62,7 +62,7 @@ export class ManageCustomerComponent implements OnInit {
       }
     });
     this.loginForm = this.formBuilder.group({
-      beneName: ['', Validators.required],
+      benneName: ['', Validators.required],
       beneAdrs: ['', Validators.required],
       beneBankName: ['', Validators.required],
       beneAccNo: ['', Validators.required],

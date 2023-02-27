@@ -1742,3 +1742,19 @@ span input {
 .ng-select.custom ::ng-deep .ng-select-container .ng-value-container .ng-placeholder{
   top: auto !important;
 }
+.field .card{
+width: 100%;
+}
+.field .main-panel-2{
+    display: grid;
+    align-content: space-between;
+    align-items: stretch;
+    grid-template-columns: repeat(2,1fr);
+    grid-column-gap: 20px;
+}
+.error-span{
+    color: red;
+    font-size: 10px;
+    padding-top: 5px;
+    padding-left: 10px;
+}

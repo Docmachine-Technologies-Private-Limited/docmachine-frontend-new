@@ -3503,11 +3503,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
         });
       });
     }
-    this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
+    this.documentService.getDownloadStatus({ id: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id, deleteflag: '-1' }).subscribe((res: any) => {
       console.log(res, 'dsdsdsdsdsdsds');
       this.GetDownloadStatus = res[0];
       if (res.length == 0) {
-        this.documentService.getDownloadStatus({ id: id, deleteflag: '2' }).subscribe((res: any) => {
+        this.documentService.getDownloadStatus({ id: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id, deleteflag: '2' }).subscribe((res: any) => {
           console.log(res, 'dsdsdsdsdsdsds');
           this.GetDownloadStatus = res[0];
         })
@@ -3725,8 +3725,13 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
   }
 
-  setradio(a) {
+  setradio(a,input,event) {
     console.log(a)
+    if (input=='') {
+      event.target.checked=false
+      alert('Please select pipo number');
+      return;
+    }
     this.bankToggle = true
     this.bankValue = a
     this.newBankArray = []
@@ -3738,12 +3743,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
 
     });
-
-    // for (let value of this.bankArray) {
-
-    // }
     console.log(a)
-
   }
 
   creditTo(a) {
@@ -4139,7 +4139,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
     var approval_data: any = {
       id: UniqueId,
-      tableName: 'PI_PO',
+      tableName: 'Export-Home',
       deleteflag: '-1',
       userdetails: this.USER_DATA,
       status: 'pending',
@@ -4151,7 +4151,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(approval_data,this.mainDoc,'approval_data')
     if (Status == '' || Status == null || Status == 'Rejected') {
       this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
-        this.ngOnInit();
+        // this.router.navigate(['/home/dashboardTask'])
         this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
           console.log(res, 'dsdsdsdsdsdsds');
           this.GetDownloadStatus = res[0];

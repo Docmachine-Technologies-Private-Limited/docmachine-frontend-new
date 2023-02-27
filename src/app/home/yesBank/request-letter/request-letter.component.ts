@@ -123,7 +123,7 @@ export class RequestLetterComponent implements OnInit, OnDestroy {
     console.log("inside")
     console.log(this.item2)
     const data: any = await this.userService.getBeneByName(
-      this.item2.beneName
+      this.item2.benneName
     );
     this.benneDetail = data.data;
     this.newTask.sbno = this.item2.sbno;

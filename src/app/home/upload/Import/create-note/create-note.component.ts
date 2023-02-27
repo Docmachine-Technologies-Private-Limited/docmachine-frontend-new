@@ -127,7 +127,7 @@ export class CreateNoteComponent implements OnInit {
     date: new FormControl('', Validators.required),
     dueDate: new FormControl('', Validators.required),
     location: new FormControl('', Validators.required),
-    beneName: new FormControl('', Validators.required),
+    benneName: new FormControl('', Validators.required),
   });
 
   // payment = this.formBuilder.group({
@@ -135,7 +135,7 @@ export class CreateNoteComponent implements OnInit {
   // });
 
   loginForm = this.formBuilder.group({
-    beneName: ['', Validators.required],
+    benneName: ['', Validators.required],
     beneAdrs: ['', Validators.required],
     beneBankName: ['', Validators.required],
     beneAccNo: ['', Validators.required],
@@ -405,30 +405,40 @@ export class CreateNoteComponent implements OnInit {
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
-    e.form.value.buyerName = this.mainBene;
+    e.form.value.buyerName = this.BUYER_NAME_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
     e.form.value.file = 'import';
     console.log(e.form.value);
-    this.documentService.addCredit(e.form.value).subscribe((res: any) => {
-      this.toastr.success(`Credit Note Document Added Successfully`);
-      let updatedData = {
-        "creditNoteRef": [
-          res.data._id,
-        ],
-      }
-      this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData)
-        .subscribe(
-          (data) => {
-            console.log(' credit Note document', this.pipourl1);
-            console.log(data);
-            this.router.navigate(['home/importCredit']);
-          },
-          (error) => {
-            console.log('error');
-          }
-        );
-    },
-      (err) => console.log('Error adding pipo'));
+    this.documentService.getInvoice_No({
+      creditNoteNumber:e.form.value.creditNoteNumber
+    },'creditnotes').subscribe((resp:any)=>{
+      console.log('creditNoteNumber Invoice_No',resp)
+    if (resp.data.length==0) {
+      this.documentService.addCredit(e.form.value).subscribe((res: any) => {
+        this.toastr.success(`Credit Note Document Added Successfully`);
+        let updatedData = {
+          "creditNoteRef": [
+            res.data._id,
+          ],
+        }
+        this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData)
+          .subscribe(
+            (data) => {
+              console.log(' credit Note document', this.pipourl1);
+              console.log(data);
+              this.router.navigate(['home/importCredit']);
+            },
+            (error) => {
+              console.log('error');
+            }
+          );
+      },
+        (err) => console.log('Error adding pipo'));
+	
+	}else {
+    this.toastr.error(`Please check this sb no. : ${e.form.value.creditNoteNumber} already exit...`);
+  }});
+    
   }
   CommercialNumber: any = [];
   storeCommercialNumber(id: any, commercialnumber) {
@@ -525,7 +535,7 @@ export class CreateNoteComponent implements OnInit {
     let control1 = this.piPoForm.controls.paymentTerm as FormArray;
     control1.removeAt(i);
   }
-
+  BUYER_NAME_LIST:any=[];
   clickPipo(PI_PO_LIST) {
     var last_length = PI_PO_LIST.length - 1;
     var LAST_VALUE: any = PI_PO_LIST[last_length]?.value;
@@ -534,6 +544,9 @@ export class CreateNoteComponent implements OnInit {
     this.pipoSelect = true;
     console.log('line 2361', this.pipoSelect);
 
+    if (this.BUYER_NAME_LIST.includes(PI_PO_LIST[last_length]?.value?.id[1])==false) {
+      this.BUYER_NAME_LIST.push(PI_PO_LIST[last_length]?.value?.id[1])
+    }
     this.mainBene = this.FILTER_VALUE(this.pipolist, LAST_VALUE?._id)[0]?.buyerName;
     let x = LAST_VALUE?.pi_po_buyerName;
     let j = this.arrayData.indexOf(LAST_VALUE?.pi_po_buyerName);

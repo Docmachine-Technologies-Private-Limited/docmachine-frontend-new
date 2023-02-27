@@ -17,6 +17,7 @@ import { WindowInformationService } from 'src/app/service/window-information.ser
 import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+import * as data1 from '../../currency.json';
 
 @Component({
   selector: 'app-import-outward-remittance-sheet',
@@ -50,7 +51,18 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
   public viewData: any;
   filtervisible: boolean = false;
   USER_DATA:any=[];
-
+  FILTER_VALUE_LIST: any = [];
+  ALL_FILTER_DATA: any = {
+    PI_PO_No: [],
+    Party_Name: [],
+    SB_Number	: [],
+    From: [],
+    Branch: [],
+    Description: [],
+    FIRX_Number_ID: [],
+    Currency: [],
+    DATE: []
+  };
   constructor(
     private toastr: ToastrService,
     private userService: UserService,
@@ -67,6 +79,10 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
 
   async ngOnInit() {
     this.wininfo.set_controller_of_width(270,'.content-wrap')
+
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
+    }
     this.documentService.getOrAdvice(1).subscribe(
       (res: any) => {
         console.log(res), (this.item = res.data);
@@ -75,6 +91,30 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
           if (value['file'] == 'import') {
             console.log('avvvvvvvvvv', value);
             this.item1.push(value);
+            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+            }
+            if ( this.ALL_FILTER_DATA['Party_Name'].includes(value?.partyName)==false) {
+              this.ALL_FILTER_DATA['Party_Name'].push(value?.partyName);
+            }
+            if ( this.ALL_FILTER_DATA['SB_Number'].includes(value?.sbNo)==false) {
+              this.ALL_FILTER_DATA['SB_Number'].push(value?.sbNo);
+            }
+            if ( this.ALL_FILTER_DATA['From'].includes(value?.origin)==false) {
+              this.ALL_FILTER_DATA['From'].push(value?.origin);
+            }
+            if ( this.ALL_FILTER_DATA['Branch'].includes(value?.location)==false) {
+              this.ALL_FILTER_DATA['Branch'].push(value?.location);
+            }
+            if ( this.ALL_FILTER_DATA['Description'].includes(value?.commodity)==false) {
+              this.ALL_FILTER_DATA['Description'].push(value?.commodity);
+            }
+            if ( this.ALL_FILTER_DATA['FIRX_Number_ID'].includes(value?.billNo)==false) {
+              this.ALL_FILTER_DATA['FIRX_Number_ID'].push(value?.billNo);
+            }
+            if ( this.ALL_FILTER_DATA['DATE'].includes(value?.date)==false) {
+              this.ALL_FILTER_DATA['DATE'].push(value?.date);
+            }
           }
         }
         this.item1.forEach((element, i) => {
@@ -87,6 +127,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
           ).toFixed(2);
           this.item1[i].convertedAmount = cv != "NaN" ? cv: null;
         });
+        this.FILTER_VALUE_LIST= this.item1;
         console.log('sjsjs', this.item1);
       },
       (err) => console.log(err)
@@ -154,17 +195,15 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       }
     );
   }
-
-
-
-  filter() {
-    this.filtervisible = !this.filtervisible
-
+  filter(value, key) {
+    this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
+    if (this.FILTER_VALUE_LIST.length== 0) {
+      this.FILTER_VALUE_LIST = this.item1;
+    }
   }
-  onclick() {
-    this.filtervisible = !this.filtervisible
+  resetFilter() {
+    this.FILTER_VALUE_LIST = this.item1;
   }
-
   toEdit(index) {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Forex Advice Row Is In Edit Mode');
@@ -306,6 +345,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         status:'pending',
         dummydata:this.item6[index],
         Types:'deletion',
+        TypeOfPage:'summary',
         FileType:this.USER_DATA?.result?.sideMenu
       }
       this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{

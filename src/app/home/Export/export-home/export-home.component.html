@@ -1167,27 +1167,27 @@
                       placeholder="Search for Buyer name or PI/PO Number to select PI/PO" class="form-control"
                       type="text" searchPIPONumbers id="SearchShippingBill" autocomplete="off"
                       [value]='StringConverter(selectPIPO)'
-                      (click)="loadPopupPIPONumbers(searchPIPONumbers,PIPONumbers.style.display='flex')">
+                      (click)="loadPopupPIPONumbers(searchPIPONumbers,PIPONumbers.style.display='flex')" #SearchPIPONumbers>
                     <span *ngIf='filterToggle'>Select PI/PO numbers*</span>
                     <br>
                     <h3 class="select_bg_new">Select a bank <span style="color:red;">*</span></h3>
                     <div *ngFor='let value of bank' style="display: flex; align-items: center;">
-                      <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
-                        (ngModel)="myRadio" value="value.bank" (click)="setradio(value)" s>
+                      <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [name]="value.bank"
+                         value="value.bank" (click)="setradio(value,SearchPIPONumbers.value,$event);" >
                       <label style="flex-direction:row;" class="label1" for="male">{{value}}</label>
                     </div>
                     <br>
                     <div *ngIf='bankToggle'> <span> Credit to {{bankValue}}*</span>
                       <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
                         <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
-                          (ngModel)="myRadio" value="value.bank" (click)="creditTo(value)">
+                           value="value.bank" (click)="creditTo(value)">
                         <label style="flex-direction:row;" class="label1"
                           for="male">{{value.bank}}-{{value.accType}}</label>
                       </div>
                       <br> <span> To {{bankValue}}*</span>
                       <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
                         <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
-                          (ngModel)="myRadio" value="value.bank" (click)="chargesTo(value)">
+                           value="value.bank" (click)="chargesTo(value)">
                         <label style="flex-direction:row;" class="label1"
                           for="male">{{value.bank}}-{{value.accType}}</label>
                       </div>
@@ -1266,7 +1266,7 @@
                                         *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
                                         <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px"
                                           [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
-                                          (click)="SendApproval(this.GetDownloadStatus?.status,code,this.selectedPdfs)">Send
+                                          (click)="SendApproval(this.GetDownloadStatus?.status,code+'_'+this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,this.selectedPdfs)">Send
                                           for Approval</button>
                                       </div>
                                       <div

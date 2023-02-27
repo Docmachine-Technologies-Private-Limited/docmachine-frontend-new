@@ -134,6 +134,15 @@ export class DocumentService {
     return this.http.post(
       `${this.api_base}/orAdvice/getByIdBillNo`,{_id:id},httpOptions);
   }
+  getInvoice_No(query,table_name:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    console.log(query,'getInvoice_No')
+    return this.http.post(`${this.api_base}/orAdvice/getInvoice_No`,{query:query,tableName:table_name },httpOptions);
+  }
 
 
   updateByIr(data, _id) {
@@ -1178,7 +1187,14 @@ export class DocumentService {
 
         return this.http.get(`${this.api_base}/packingList/get`, httpOptions);
       }
-
+      getPackingListfile(type:string) {
+        this.loadFromLocalStorage();
+        console.log(this.authToken);
+        const httpOptions = {
+          headers: new HttpHeaders({ Authorization: this.authToken }),
+        };
+        return this.http.post(`${this.api_base}/packingList/filetype`, {file:type},httpOptions);
+      }
       getPackingListByPackingListValue(id) {
         this.loadFromLocalStorage();
         console.log(this.authToken);
@@ -1640,9 +1656,6 @@ export class DocumentService {
     );
   }
 
-
-
-
   addTask(data) {
     console.log('I am in service');
     this.loadFromLocalStorage();
@@ -1827,6 +1840,31 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.get(`${this.api_base}/exportTask/get`, httpOptions);
+  }
+  
+  addExportBillLodgment(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ExportBillLodgement/add`,{data: data},httpOptions);
+  }
+  
+  Update_Amount_by_Table(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {headers: new HttpHeaders({ Authorization: this.authToken })};
+    return this.http.post(`${this.api_base}/ExportBillLodgement/Amount_Update`,data,httpOptions);
+  }
+  getExportBillLodgment(data) {
+    console.log('I am in service');
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/ExportBillLodgement/get`, httpOptions);
   }
 
   getOneExportTask(data) {

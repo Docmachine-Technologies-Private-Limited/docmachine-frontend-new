@@ -22,8 +22,8 @@
                                   <div class="filter_posit">
                                       <button (click)="onclick()" type="button" class="btn btn-secondary"><span
                                               class="fi_icon"></span>Filter</button>
-                                      <div *ngIf="filtervisible" class="bg-white filter_main_sec">
-                                          <form class="select_filter_options">
+                                              <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup appFilterToggle>
+                                                <form class="select_filter_options">
                                               <div class="row">
                                                   <div class="col-md-6 col-12">
                                                       <label for="exampleFormControlInput1"
@@ -75,6 +75,7 @@
                                                   <button type="submit" class="btn btn-primary" (click)="filter()">APPLY</button>
                                               </div>
                                           </form>
+                                          <i></i>
                                       </div>
                                   </div>
                                   <!-- <button type="button" class="btn btn-success" routerLink = '/home/add-pipo/export'><span class="add_icon"></span>ADD

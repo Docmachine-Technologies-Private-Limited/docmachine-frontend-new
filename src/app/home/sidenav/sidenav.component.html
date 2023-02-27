@@ -111,17 +111,30 @@
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-commercial')">Commercial Invoices</h6>
             </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-packing-list')">Packing List Documents</h6>
+            </li>
 
           </ul>
           <ul class="navbar-nav ml-auto">
             <label for="" class="label-form">Transactions</label>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/advance-outward-remittance')">Advance Outward
-                Remittance</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/add-advance-outward-remittance')">Advance remittance Flow</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-import-payment')">Direct Import Payment
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/advance-outward-remittance')">Advance Outward
+                Remittance(Old)</h6>
+            </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-import-payment')">Direct Import Payment(Old)
               </h6>
+            </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Import-Direct-Payment')">Direct Import Payment(New)
+              </h6>
+            </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-direct-dispatch')">Import Bill Lodgement</h6>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/a2cum-application-yesbank')">A2cum Application
@@ -237,23 +250,36 @@
           <ul class="navbar-nav ml-auto">
             <label for="" class="label-form">Transactions</label>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/remittance-flow')">Advance remittance Flow</h6>
-            </li>
-            <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Pdf-Upload')">Inward Remittance Disposal</h6>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/bill-lodgement')">Bill Under Collection</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/bill-lodgement')">Bill Under LC</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/new-Bill-Under-Collection')">New Bill Under Collection</h6>
+            </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0"
+                (click)="subbillunderlc.style.display='block';this.HIDE_ALL_SUB_MENU();this.SUB_MENU['Bills_Under_LC']=true">
+                Bills Under LC</h6>
+              <div class="sub-menu navbar-nav ml-auto"
+                [style]="this.SUB_MENU['Bills_Under_LC']==true ? 'display:block;' : 'display:none;'" #subbillunderlc>
+                <h6 class="nav-link p-0"
+                  (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcSight'})">Sight</h6>
+                <h6 class="nav-link p-0"
+                  (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcUsance'})">Usance</h6>
+              </div>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/packing-credit-request')">Packing Credit
-                Request</h6>
+                Request(Old)</h6>
             </li>
             <li class="nav-item">
-              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/packing-credit-request')">Direct Dispatch</h6>
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Packing-Credit-Request-New')">Packing Credit
+                Request(New)</h6>
+            </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-dispatch')">Export Bill Lodgement</h6>
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/pendingpanel')">Pending</h6>
@@ -263,6 +289,16 @@
             </li>
             <li class="nav-item">
               <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/rejectpanel')">Reject</h6>
+            </li>
+            <li class="nav-item">
+              <h6 class="nav-link p-0" (click)="Transaction_DashBoard.style.display='block';this.HIDE_ALL_SUB_MENU();this.SUB_MENU['Transaction_DashBoard']=true">Transaction DashBoard</h6>
+              <div class="sub-menu navbar-nav ml-auto"
+              [style]="this.SUB_MENU['Transaction_DashBoard']==true ? 'display:block;' : 'display:none;'" #Transaction_DashBoard>
+              <h6 class="nav-link p-0"
+                (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcSight'})">Sight</h6>
+              <h6 class="nav-link p-0"
+                (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcUsance'})">Usance</h6>
+            </div>
             </li>
           </ul>
 

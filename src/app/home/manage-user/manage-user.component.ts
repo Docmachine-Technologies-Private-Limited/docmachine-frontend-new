@@ -245,8 +245,8 @@ URL_CREATE(url){
   onEditSubmit(formmodel:any){
     this.submitted = true;
     this.EDIT_FORM_BUILDER['imageUrl'] = this.img!=undefined? this.img:this.SELECTED_EDIT_DATA['imageUrl'];
+    this.EDIT_FORM_BUILDER['Role_Type']=this.ROLE_TYPES!=''?this.ROLE_TYPES:this.userData?.result['Role_Type'];
     this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox']=this.ROLE_TYPES!=''?this.ROLE_TYPES:this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox'];
-    this.EDIT_FORM_BUILDER['Role_Type']=this.ROLE_TYPES!=''?this.ROLE_TYPES:this.EDIT_FORM_BUILDER['Role_Type'];
     console.log(this.EDIT_FORM_BUILDER)
     this.findEmptyObject(this.EDIT_FORM_BUILDER,[undefined,null,'','Select Subscription']).then((value:any)=>{
       if (value==true) {
@@ -261,16 +261,40 @@ URL_CREATE(url){
                 this.ngOnInit()
                 this.SELECTED_EDIT_DATA=[];
                 this.SELECTED_INDEX=0;
+                this.EDIT_FORM_BUILDER={
+                  name:'',
+                  UnderSubscriptionCheckBox:'',
+                  imageUrl:'',
+                  UnderSubscription:'',
+                  Role_Type:'',
+                  RoleCheckbox:''
+                }
               }else{
                 this.toastr.error(data['message']);
                 this.SELECTED_EDIT_DATA=[];
                 this.SELECTED_INDEX=0;
+                this.EDIT_FORM_BUILDER={
+                  name:'',
+                  UnderSubscriptionCheckBox:'',
+                  imageUrl:'',
+                  UnderSubscription:'',
+                  Role_Type:'',
+                  RoleCheckbox:''
+                }
               }
             },
             error => {
               console.log("error")
               this.SELECTED_EDIT_DATA=[];
               this.SELECTED_INDEX=0;
+              this.EDIT_FORM_BUILDER={
+                name:'',
+                UnderSubscriptionCheckBox:'',
+                imageUrl:'',
+                UnderSubscription:'',
+                Role_Type:'',
+                RoleCheckbox:''
+              }
             });
       }else{
         for (const key in value) {

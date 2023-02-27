@@ -45,7 +45,6 @@ import { HomeModule } from "./home/home.module";
 import { CheckboxComponentsComponent } from "./home/checkbox-components/checkbox-components.component";
 import {CustomConfirmDialogModelComponent} from './custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component'
 import {CustomConfirmDialogModelService} from './custom/custom-confirm-dialog-model/custom-confirm-dialog-model.service'
-import { CustomDropdownComponent } from "./custom/custom-dropdown/custom-dropdown.component";
 import { CustomdropdownservicesService } from "./custom/custom-dropdown/customdropdownservices.service";
 import { AprrovalPendingRejectTransactionsService } from './service/aprroval-pending-reject-transactions.service';
 import { AuthorizationComponent } from './Authorization/authorization/authorization.component';
@@ -84,9 +83,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         TwofactorauthComponent,
         CheckboxComponentsComponent,
         CustomConfirmDialogModelComponent,
-        CustomDropdownComponent,
         AuthorizationComponent,
-        JoinPipePipe,
+        JoinPipePipe
     ],
     providers: [{ provide: AppConfig },
         WindowInformationService,
@@ -111,7 +109,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         DragDropModule,
         SharedModule,
         SignupModule,
-        HomeModule,
         BsDatepickerModule.forRoot(),
         SigninModule,
         AppRoutingModule,

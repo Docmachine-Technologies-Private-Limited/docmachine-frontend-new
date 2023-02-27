@@ -25,12 +25,7 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              {
-                "glob": "**/*",
-                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
-                "output": "/assets/"
-              }
+              "src/assets"
             ],
             "styles": [
               "src/sass/application.scss",
@@ -63,10 +58,10 @@
             "development": {
               "buildOptimizer": true,
               "optimization": true,
-              "vendorChunk": false,
+              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": false
+              "namedChunks": true
             }
           },
           "defaultConfiguration": "production"

@@ -112,6 +112,11 @@ export class SigninComponent implements OnInit {
           data => {
             if (this.data1['data'][0].emailId == 'docmachinetec@gmail.com' || this.data1['data'][0].emailId == 'tramsdocmachine@gmail.com' || this.data1['data'][0].emailId == 'fintech.innovations2021@gmail.com') {
               this.router.navigate(['/home/powerAdmin/pending'])
+              this.authGuard.setLocalStorage('LOGIN_OTP',true);
+              this.authGuard.setLocalStorage('PERMISSION',JSON.stringify({
+                emailId:this.data1['data'][0].emailId,
+                role:this.data['result']['role']
+              }))
             } else {
               if (this.data1['data'][0]['emailIdVerified']) {
                 if (this.data1['data'][0]['verified'] == 'yes') {

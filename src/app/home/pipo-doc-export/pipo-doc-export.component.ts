@@ -48,7 +48,7 @@ import { PipoDisplayListViewItem, PipoDisplayListView } from '../../../model/pip
     './pipo-doc-export.component.scss',
   ],
 })
-export class PipoDocExportComponent implements OnInit, AfterViewInit {
+export class PipoDocExportComponent implements OnInit {
 
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
@@ -208,6 +208,7 @@ onclick() {
     public wininfo: WindowInformationService,
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
+    public treeview:TreeViewComponent
 
   ) {
     this.api_base = appconfig.apiUrl;
@@ -1367,17 +1368,43 @@ onclick() {
       return `with: ${reason}`;
     }
   }
-
-  ngAfterViewInit() {
-    // window["sidebarInit"]();
-    // if (isPlatformBrowser(this.platformId)) {
-    //   this.filePreview();
-    // }
+  TREE_VIEW:boolean=false;
+  SB_Details:any=[];
+  TreeView(data:any, i:any){
+    this.TREE_VIEW=true;
+  var data_format:any={
+    FIRX_NUMBER:data?.firxNumber.split(','),
+    FIRX_DATE:data?.firxNumber.split(','),
+    FIRX_CURRENCY:data?.firxNumber.split(','),
+    FIRX_AMOUNT:data?.firxNumber.split(','),
+    FIRX_COMMISION:data?.firxNumber.split(','),
+    FIRX_RECIEVED_AMOUNT:data?.firxNumber.split(','),
+    AVAILABLE_BALANCE:data?.firxNumber.split(',')
+  }
+  this.SB_Details={
+    SB_NO:[data?.sbno],
+    SB_DATE:[data?.sbdate],	
+    REGION:[data?.region],
+    FOB_VALUE_INR:[data?.fobvalue],
+    PORT_CODE:[data?.portCode],
+    TT_DATE:[data?.ttDate],
+    TT_USD:[data?.ttUSD],
+    Received_Date:[data?.recDate],
+    Received_USD:[data?.recUSD],
+    Commission_Bank_Charges:[data?.commission],
+    Conversion_Date:[data?.conversionDate],
+    Conversion_Rate:[data?.conversionRate],
+    Converted_Amount:[data?.convertedAmount],
+    FIRX_DETAILS:data_format
+  }
+  console.log(data,this.SB_Details,'TreeView');
+  this.treeview.TreeViewComponent_Open();
   }
 }
 
 import { PipoDataService } from "../../service/homeservices/pipo.service";
 import { WindowInformationService } from 'src/app/service/window-information.service';
+import { TreeViewComponent } from '../tree-view/tree-view.component';
 
 @Component({
   selector: 'modal-content',

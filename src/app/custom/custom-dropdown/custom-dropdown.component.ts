@@ -75,7 +75,7 @@ export class CustomDropdownComponent implements OnInit,ControlValueAccessor {
   @Input('labeltype') labeltype:any=[];
   @Input('prod') prod:any=[];
   @Output('event') event:EventEmitter<any> = new EventEmitter();
-
+  @Input('change') change:EventEmitter<any> = new EventEmitter();
 
   selectedIndex:any=-1;
   value:any;
@@ -131,6 +131,8 @@ async Object_to_Array(data:any){
     this.showMenu = false;
     this.value=item;
     this.event.emit(item);
+    this.change.emit(this.value);
+    console.log('valueChange',item,this.value);
   }
 
   instanceOfIDropdownItem(object: any):any {

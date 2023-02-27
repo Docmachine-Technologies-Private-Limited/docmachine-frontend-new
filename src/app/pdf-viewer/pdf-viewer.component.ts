@@ -1,12 +1,14 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import { DocumentService } from '../service/document.service';
+import { UserService } from '../service/user.service';
 
 @Component({
   selector: 'app-pdf-viewer',
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.scss']
 })
-export class PDFVIEWERComponent {
+export class PDFVIEWERComponent implements OnInit {
 
   title = 'angular-pdf-viewer-app';
   pdfSrc = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
@@ -16,6 +18,7 @@ export class PDFVIEWERComponent {
   @Input('height') height:any='500px';
   @Input('name') name:any='PDF Viewer';
   @Input('downloadShow') downloadShow:boolean=true;
+  @Input('base64_src') base64_src:any='';
 
   renderText = true;
   originalSize = false;
@@ -31,8 +34,22 @@ export class PDFVIEWERComponent {
   zoomScales = ['page-width', 'page-fit', 'page-height'];
   pdfQuery = '';
   totalPages: number;
+  BASE_64_URL:any='';
+  loader: boolean=false;
+  constructor( private userService: UserService,public documentService: DocumentService){
+  }
 
-  constructor(){
+  ngOnInit(){
+    if (this.base64_src!='') {
+      this.userService.mergePdf(this.base64_src).subscribe(
+        (res: any) => {
+          console.log('res', res);
+          res.arrayBuffer().then((data:any)=>{
+            this.BASE_64_URL=data;
+          })
+        },(err) => console.log('Failed to fetch the pdf'));
+    }
+
   }
   zoomIn() {
     this.zoom += 0.05;
@@ -64,19 +81,20 @@ export class PDFVIEWERComponent {
   }
   pageRendered(event) {
     console.log('pageRendered', event);
+    // setTimeout(()=> {this.loader=false},1500)
   }
   textLayerRendered(event) {
     console.log('textLayerRendered', event);
   }
+  
   onError(event) {
     console.error('onError', event);
   }
   onProgress(event) {
+    this.loader=true;
     console.log('onProgress', event);
   }
-  ngOnInit() {
 
-  }
   downloadPdf(pdf){
       let blob = new Blob([pdf], {
         type: 'application/pdf'

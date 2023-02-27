@@ -53,18 +53,30 @@
     </div>
   </div>
   <div class="pdf-viewer-viewer-window">
-    <pdf-viewer class="pdf-viewer" [src]="src"
-    [original-size]="false"
-    [show-all]="showAll"
+    <pdf-viewer class="pdf-viewer" *ngIf="this.base64_src!=''" [src]="src"
+    [original-size]="true"
+    [show-all]="true"
     [fit-to-page]="fitToPage"
     [zoom]="zoom"
     [zoom-scale]="zoomScale"
     [stick-to-page]="false"
     [render-text]="true"
-    [external-link-target]="'blank'"
     [autoresize]="autoresize"
     [show-borders]="showBorders" [style.width]="width" [style.height]="height">
     </pdf-viewer>
+    <pdf-viewer class="pdf-viewer" *ngIf="this.base64_src==''" [src]="src"
+    [original-size]="true"
+    [show-all]="true"
+    [fit-to-page]="fitToPage"
+    [zoom]="zoom"
+    [zoom-scale]="zoomScale"
+    [stick-to-page]="true"
+    [render-text]="true"
+    [autoresize]="autoresize"
+    [show-borders]="showBorders" [style.width]="width" [style.height]="height">
+    </pdf-viewer>
+    
+    <!-- <div class="lds-roller" *ngIf=><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
   </div>
 
 </div>

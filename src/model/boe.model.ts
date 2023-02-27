@@ -1,4 +1,7 @@
 export class BoeBill {
+    computeIRMerge() {
+      throw new Error("Method not implemented.");
+    }
     public userId: string;
     public dischargePort: string;
     public boeNumber: string;
@@ -21,6 +24,7 @@ export class BoeBill {
     public miscellaneousCurrency: string;
     public commissionAmount: string;
     public commissionCurrency: string;
+    public AWBNo: string;
     public _id: any;
     
 
@@ -47,6 +51,8 @@ export class BoeBill {
         this.miscellaneousCurrency = data.miscellaneousCurrency ? data.miscellaneousCurrency : '';
         this.commissionAmount = data.commissionAmount ? data.commissionAmount: '';
         this.commissionCurrency = data.commissionCurrency ? data.commissionCurrency: '';
+        this.commissionCurrency = data.commissionCurrency ? data.commissionCurrency: '';
+        this.AWBNo = data.AWBNo ? data.AWBNo: '';
         this._id = data._id;
     }
 }

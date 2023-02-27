@@ -248,6 +248,14 @@ export class UserService {
       httpOptions,
     );
   }
+  mergeListPdf(filename) {
+    this.loadFromLocalStorage();
+    const httpOptions: Object = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+      responseType:"arraybuffer"
+    };
+    return this.http.post(`${this.api_base}/pipo/doc_mergePdf`,{doclist: filename},httpOptions);
+  }
   mergePdfChecking(filename) {
     this.loadFromLocalStorage();
     const httpOptions: Object = {
@@ -432,7 +440,7 @@ export class UserService {
     return this.http
       .post(
         `${this.api_base}/bene/getByName`,
-        { beneName: name },
+        { benneName: name },
         httpOptions
       ).toPromise();
 

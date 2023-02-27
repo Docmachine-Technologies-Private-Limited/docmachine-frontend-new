@@ -1,16 +1,16 @@
 <div class="content-wrap">
-  
+
     <main id="content" class="content table-padding" role="main">
         <div class="container-fluid">
             <div class="row no-gutter">
                 <!-- The image half -->
                 <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
-          
-          
+
+
                 <!-- The content half -->
                 <div class="col-md-7 bg-dark">
                     <div class="login d-flex py-5" style="padding: 0px !important;">
-          
+
                         <!-- Demo content-->
                         <div class="container">
                             <div class="row">
@@ -19,7 +19,7 @@
                                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                                         <div class="form-group mb-3">
                                             <label >Name</label>
-                                            <input formControlName="beneName" placeholder="Beneficiary/ Customer name" required="" class="form-control rounded-pill">
+                                            <input formControlName="benneName" placeholder="Beneficiary/ Customer name" required="" class="form-control rounded-pill">
                                         </div>
                                         <div class="form-group mb-3">
                                             <label >Address</label>
@@ -46,7 +46,7 @@
                                             <label >Beneficiary’s bank’s address including country</label>
                                             <input formControlName="beneBankAdress" id="inputEmail" type="text" placeholder="Ex: street address, City. PIN" required="" class="form-control rounded-pill email">
                                         </div>
-                                        
+
                                         <div class="form-group mb-3">
                                             <label >Intermediary Bank details (if applicable) SWIFT code**</label>
                                             <input formControlName="interBankSwiftCode" placeholder="Ex: CC/OD/PC/PCFC/EBRD/BP/EEFC-USD/EUR/GBP/CHF/JPY ETC" required="" class="form-control rounded-pill">
@@ -55,25 +55,25 @@
                                             <label >Intermediary Bank Name (if any)</label>
                                             <input formControlName="interBankName" id="inputEmail" type="text" placeholder="Ex: Western union" required="" class="form-control rounded-pill">
                                         </div>
-          
+
                                         <div class="form-group mb-3">
                                             <label >Sort Code</label>
                                             <input formControlName="sortCode" placeholder="Ex: ESEIEC." required="" class="form-control rounded-pill">
                                         </div>
-                                        
+
                                         <button type="submit" class="btn">Create</button>
                                     </form>
-                                   
+
                                 </div>
-                            </div> 
+                            </div>
                         </div><!-- End -->
-          
+
                     </div>
                 </div>
-          
+
             </div>
           </div>
     </main>
-    
-   
+
+
 </div>
