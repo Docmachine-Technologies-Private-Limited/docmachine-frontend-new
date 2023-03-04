@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DocumentService } from 'src/app/service/document.service';
-import { UserService } from 'src/app/service/user.service';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { DocumentService } from '../../../service/document.service';
+import { UserService } from '../../../service/user.service';
+import { WindowInformationService } from '../../../service/window-information.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../confirm-dialog-box/confirm-dialog-box.component';
-import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
-import { saveAs as importedSaveAs } from 'file-saver';
-import { async } from 'rxjs';
+import { PDFDocument} from 'pdf-lib';
 import JSZip from 'jszip/dist/jszip';
 import * as FileSaver from 'file-saver';
 @Component({
@@ -23,7 +21,7 @@ export class ApprovalPanelComponent implements OnInit {
     public dialog: MatDialog, public userserivce: UserService) { }
   ngOnInit(): void {
     this.wininfo.set_controller_of_width(270, '.content_top_common');
-    this.userserivce.getUserDetail().then((status) => {
+    this.userserivce.getUserDetail().then((status:any) => {
       this.USER_DETAILS = status['result'];
       console.log(this.USER_DETAILS, this.USER_DETAILS?.sideMenu, 'USER_DETAILS');
       this.documentService.getApprovedStatus(this.USER_DETAILS?.sideMenu).subscribe((status) => {
@@ -106,7 +104,7 @@ export class ApprovalPanelComponent implements OnInit {
       };
       // download all the pdfs
       let downloadAllFiles =async () => {
-        var promises = [];
+        var promises:any = [];
         for (var i = 0; i < values.length; i++) {
           if (values[i]!='' && values[i]!=undefined) {
           await promises.push(values[i]);
@@ -165,8 +163,8 @@ export class ApprovalPanelComponent implements OnInit {
     );
   };
   downloadZip(name_zip,pdfByteArrays:any) {
-    var zip = new JSZip();
-    var pdf = zip.folder("pdfs");
+    var zip:any = new JSZip();
+    var pdf = zip.folder("pdfs") as any;
     pdfByteArrays.forEach((value,i) => {
       pdf.file(i+'.pdf',value, { base64: true });
     });

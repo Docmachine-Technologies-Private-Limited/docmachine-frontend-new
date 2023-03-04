@@ -39,7 +39,8 @@
             ],
             "styles": [
               "src/sass/application.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/css/css-style.css"
             ],
             "scripts": [
             "src/assets/kendo-html-pdf/kendo.all.min.js"
@@ -68,11 +69,11 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": true,
+              "buildOptimizer": false,
               "optimization": true,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
+              "sourceMap": false,
               "namedChunks": true,
               "outputHashing": "none",
               "statsJson": false

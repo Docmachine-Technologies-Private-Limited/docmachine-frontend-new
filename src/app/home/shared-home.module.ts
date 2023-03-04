@@ -29,6 +29,11 @@ import { PipoDataService } from "../service/homeservices/pipo.service";
 import { TreeViewComponent } from "./tree-view/tree-view.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import {MatRadioModule} from '@angular/material/radio';
+import { PopupOpenDirective } from "../custom/PopupOpen/popup-open.directive";
+import { CustomModelComponent } from '../custom/custom-model/custom-model.component';
+import { OpenPopUpDirective } from "../custom/custom-model/CustomPopupOpen/open-pop-up.directive";
+import { MergePdfService } from "../service/MergePdf/merge-pdf.service";
+
 @NgModule({
   declarations: [
     ConfirmDialogComponent,
@@ -39,7 +44,10 @@ import {MatRadioModule} from '@angular/material/radio';
     CustomDropdownComponent,
     PDFVIEWERComponent,
     FilterToggleDirective,
-    TreeViewComponent
+    PopupOpenDirective,
+    OpenPopUpDirective,
+    TreeViewComponent,
+    CustomModelComponent
   ],
   imports: [
     CommonModule,
@@ -56,7 +64,7 @@ import {MatRadioModule} from '@angular/material/radio';
     ModalModule.forRoot(),
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal,SharedDataService,PipoDataService,TreeViewComponent],
+  providers: [ConfirmDialogService, NgbModal,SharedDataService,PipoDataService,TreeViewComponent,MergePdfService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //   exports: [SharedProjectsModule]
   exports: [
@@ -76,10 +84,13 @@ import {MatRadioModule} from '@angular/material/radio';
     CustomDropdownComponent,
     PDFVIEWERComponent,
     FilterToggleDirective,
+    PopupOpenDirective,
+    OpenPopUpDirective,
     TreeViewComponent,
     MatExpansionModule,
     MatCheckboxModule,
-    MatRadioModule
+    MatRadioModule,
+    CustomModelComponent
   ],
 })
 export class SharedHomeModule { }

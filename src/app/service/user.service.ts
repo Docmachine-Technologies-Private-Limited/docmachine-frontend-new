@@ -248,6 +248,17 @@ export class UserService {
       httpOptions,
     );
   }
+  mergePdfPromise(filename) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions: Object = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+      responseType:"blob"
+    };
+    return new Promise((resolve,reject)=>{
+      this.http.post(`${this.api_base}/pipo/mergePdf`,{filename: filename},httpOptions).subscribe((res:any)=>resolve(res))
+    });
+  }
   mergeListPdf(filename) {
     this.loadFromLocalStorage();
     const httpOptions: Object = {

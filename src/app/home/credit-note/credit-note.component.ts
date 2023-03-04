@@ -1,4 +1,4 @@
-import {DocumentService} from 'src/app/service/document.service';
+import {DocumentService} from '../../service/document.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
@@ -19,8 +19,8 @@ import {
 import {ActivatedRoute, Data, NavigationStart, Router} from '@angular/router';
 import * as xlsx from 'xlsx';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { WindowInformationService } from '../../service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
@@ -34,7 +34,7 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog
 export class CreditNoteComponent implements OnInit {
   @ViewChild('creditnotes', {static: false}) creditnotes: ElementRef;
   public item: any;
-  public item1 = [];
+  public item1:any = [];
   public viewData: any;
   public closeResult: string;
   public optionsVisibility: any = [];

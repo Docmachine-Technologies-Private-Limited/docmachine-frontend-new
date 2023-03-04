@@ -7,20 +7,15 @@ import * as xlsx from 'xlsx';
 import * as data1 from '../../currency.json';
 
 import {
-  AfterViewInit,
-  ChangeDetectorRef,
   ElementRef,
-  Inject,
-  Input,
-  PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
 import { ShippingbillDataService } from "../../service/homeservices/shippingbill.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
-import { UserService } from 'src/app/service/user.service';
+import { WindowInformationService } from '../../service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
+import { UserService } from '../../service/user.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -174,7 +169,7 @@ export class ViewDocumentComponent implements OnInit {
   }
 
   filter(value, key) {
-    this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
+    this.FILTER_VALUE_LIST = this.item1.filter((item:any) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length== 0) {
       this.FILTER_VALUE_LIST = this.item1;
     }

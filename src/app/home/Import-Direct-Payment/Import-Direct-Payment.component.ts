@@ -20,12 +20,12 @@ import {
 
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
-import { AppConfig } from "src/app/app.config";
+import { AppConfig } from "../../app.config";
 import { DocumentService } from "../../service/document.service";
 import { PipoDataService } from "../../service/homeservices/pipo.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../service/window-information.service';
 import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 
 @Component({
   selector: 'app-Import-Direct-Payment',
@@ -44,7 +44,7 @@ export class ImportDirectPaymentComponent implements OnInit {
   selectedBenneId: string;
   selectedBenneName: string;
   uploading: boolean = false;
-  authToken: string;
+  authToken: any;
 
   CurrencyData: any = ['INR', 'USD', 'EUR', 'GBP', 'CHF', 'AUD', 'CAD', 'AED', 'SGD', 'SAR', 'JPY']
 
@@ -689,9 +689,15 @@ export class ImportDirectPaymentComponent implements OnInit {
       if (Status == '' || Status == null || Status == 'Rejected') {
         this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
           var data:any={
-            data:this.pipoForm.value,
-            TypeTransaction:'Import-Direct-Dispatch',
-            fileType:'Import'
+            data:{
+              formdata:this.pipoForm.value,
+              documents: temp_doc,
+              pipo: this.LIST_PIPO,
+              pipo_1:this.selectedItems
+            },
+            TypeTransaction:'Import-Direct-Import-Payment',
+            fileType:'Import',
+            UserDetails:approval_data?.id
           }         
           this.documentService.addExportBillLodgment(data).subscribe((res1: any) => { 
             console.log('Import-Direct-Dispatch', res1);

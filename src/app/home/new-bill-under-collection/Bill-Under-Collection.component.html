@@ -1,216 +1,214 @@
-<div class="content_top_common pb-2 scroll-bar-main">
-    <div class="content-wrap">
-        <div class="container-fluid">
-            <div class="import_export_sec">
-                <div class="row">
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <div class="Dashbord_sec">
-                            <h2 class="title_dash">Bill Under Collection</h2>
-                        </div>
+<div class="content-wrap ml-0 pb-2 scroll-bar-main">
+    <div class="container-fluid">
+        <div class="import_export_sec">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="Dashbord_sec">
+                        <h2 class="title_dash">Bill Under Collection</h2>
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                        <div class="float_right_page">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a [routerLink]="['/home/new-Bill-Under-Collection']">Bill Under Collection</a></li>
-                                </ol>
-                            </nav>
-                        </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="float_right_page">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a [routerLink]="['/home/new-Bill-Under-Collection']">Bill Under Collection</a></li>
+                            </ol>
+                        </nav>
                     </div>
                 </div>
             </div>
-            <div class="content_white_background">
-                <main id="content" class="table-padding" role="main">
-                    <div class="new_document_list1">
-                        <div class="new_document_list_add_data">
+        </div>
+        <div class="content_white_background">
+            <main id="content" class="table-padding" role="main">
+                <div class="new_document_list1">
+                    <div class="new_document_list_add_data">
 
-                            <form [formGroup]="pipoForm">
-                                <div class="row">
-                                    <div class="col-md-7 col-sm-12 col-12">
-                                        <!-- <div class="new_left_sidedoc">
-                                            <img src="/assets/Group3055.png" alt="Drag & drop files here or Browse" />
-                                        </div> -->
-                                        <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="selectedItems.length!=0">
-                                            <div *ngFor="let selItems of selectedItems">
-                                                <iframe *ngIf="selItems?.doc!=''" style="border:none;"  [src]="selItems?.doc" width="100%"> </iframe>
-                                            </div>
-                                            <div *ngIf="isUploaded">
-                                                <iframe *ngIf="uploadUrl!=''" style="border:none;"  [src]="uploadUrl" width="100%"> </iframe>
-                                            </div>
+                        <form [formGroup]="pipoForm">
+                            <div class="row">
+                                <div class="col-md-7 col-sm-12 col-12">
+                                    <!-- <div class="new_left_sidedoc">
+                                        <img src="/assets/Group3055.png" alt="Drag & drop files here or Browse" />
+                                    </div> -->
+                                    <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="selectedItems.length!=0">
+                                        <div *ngFor="let selItems of selectedItems">
+                                            <iframe *ngIf="selItems?.doc!=''" style="border:none;"  [src]="selItems?.doc" width="100%"> </iframe>
                                         </div>
-
-                                    </div>
-                                    <div class="col-md-5 col-sm-12 col-12">
-                                        <div class="right_form_new">
-                                            <div class="row">
-                                                <div class="col-md-6 col-12">
-                                                    <label for="exampleInputEmail1" class="form-label">Select
-                                                        bank*</label>
-                                                    <select class="form-select" aria-label="Default select example"
-                                                        [(ngModel)]="bank" name="bank">
-                                                        <option value="">Select bank</option>
-
-                                                        <option *ngFor="let banklist of bankDetail
-                                                                ">{{ banklist.bank }}
-                                                        </option>
-                                                    </select>
-                                                    <div *ngIf="submitted && form.bank.errors" class='errorText'>
-                                                        <div *ngIf="form.bank.errors.required">Select bank is
-                                                            required
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-12">
-                                                    <label for="exampleInputPassword1" class="form-label">Select
-                                                        beneficiary</label>
-                                                    <select class="form-select" aria-label="Default select example"
-                                                        [(ngModel)]="benneName" name="benneName"
-                                                        (change)=changepipo($event.target.value) #select_ben>
-                                                        <option value="">Select Buyer</option>
-
-                                                        <option value="{{ bene._id }}" *ngFor="let bene of benneDetail
-                                                                ">{{ bene.benneName }}
-                                                        </option>
-                                                    </select>
-                                                    <div *ngIf="submitted && form.benneName.errors" class='errorText'>
-                                                        <div *ngIf="form.benneName.errors.required">Select Buyer
-                                                            is required
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div *ngIf="pipoData?.length > 0">
-                                                <div class="row" formArrayName="itemsTerm"
-                                                    *ngFor="let items of getItems(pipoForm); let i = index"
-                                                    [formGroupName]="i">
-                                                    <div class="col-md-5 col-12">
-                                                        <label for="exampleInputEmail1" class="form-label">Select
-                                                            PI</label>
-                                                        <select class="form-select" aria-label="Default select example"
-                                                            formControlName="pi_poNo" name="pi_poNo" autocomplete="off"
-                                                            (change)="choosenItems($event.target.value,i)" #multiplepipo>
-                                                            <option value="">Select PI/PO</option>
-
-                                                            <option value="{{pipolist._id}}" *ngFor="let pipolist of pipoData
-                                                    ">{{ pipolist.pi_poNo }}
-                                                            </option>
-                                                        </select>
-                                                        <div *ngIf="submitted && form.pi_poNo.errors" class='errorText'>
-                                                            <div *ngIf="form.pi_poNo.errors.required">PiPo is
-                                                                required
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2 col-12 padding0">
-                                                        <label for="Currency" class="form-label">Currency</label>
-                                                        <select class="form-select" aria-label="Default select example"
-                                                            formControlName="currency" name="currency"
-                                                            autocomplete="off" [value]="this.LIST_PIPO[multiplepipo.value]?.currency">
-                                                            <option value="">Select Currency</option>
-
-                                                            <option value="{{currency}}" *ngFor="let currency of CurrencyData
-                                                    ">{{ currency }}
-                                                            </option>
-                                                        </select>
-
-
-                                                        <div *ngIf="submitted && form.currency.errors"
-                                                            class='errorText'>
-                                                            <div *ngIf="form.currency.errors.required"> Currency is
-                                                                required</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3 col-12">
-                                                        <label for="Amount" class="form-label">Amount</label>
-                                                        <input type="text" class="form-control" formControlName="amount"
-                                                            id="amount" name="amount"
-                                                            [value]="this.LIST_PIPO[multiplepipo.value]?.amount"
-                                                            placeholder="Invoice Amount" autocomplete="off">
-                                                        <div *ngIf="submitted && form.amount.errors" class='errorText'>
-                                                            <div *ngIf="form.amount.errors.required">Invoice Amount
-                                                                is required</div>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="col-md-2 col-12 paddingleft0">
-                                                        <div class="removeamouts_new">
-                                                            <button type="button" class="btn btn-primary"
-                                                                (click)="removeItems(i)">-</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="row" *ngIf="select_ben.value!=''">
-                                                <div class="col-md-6 col-sm-6 col-12">
-                                                    <div class="col-md-12">
-                                                        <div class="add_new_buttons">
-                                                            <button type="button" class="btn btn-success"
-                                                                (click)="addItems(pipoForm)">+ Add PI</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6 col-12">
-                                                    <label for="TotalPIamount" class="form-label">Total PI
-                                                        amount</label>
-                                                    <input type="text" class="form-control" id="TotalPIamount" [value]="sumTotalAmount" name="sumTotalAmount"
-                                                        placeholder="Select PI/PO" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="row" *ngIf="sumTotalAmount != 0 && sumTotalAmount > 200000">
-                                                <div class="col-md-12 col-sm-12 col-12">
-                                                    <label for="Opinion" class="form-label">Opinion report
-                                                        available?</label><br>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio"
-                                                            name="opinionReport" value="1" id="flexRadioDefault1" (click)="showhideOpinionReport(1)">
-                                                        <label class="form-check-label" for="flexRadioDefault1">
-                                                            YES
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio"
-                                                        name="opinionReport" value="0"  id="flexRadioDefault2" (click)="showhideOpinionReport(0)">
-                                                        <label class="form-check-label" for="flexRadioDefault2">
-                                                            NO
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row" *ngIf="sumTotalAmount != 0 && sumTotalAmount > 200000 && showOpinionReport == 1">
-                                                <div class="col-12">
-                                                    <label for="Opinion" class="form-label">Attach opinion
-                                                        report</label>
-                                                    <div cladss="file_addd_new" *ngIf="uploadUrl==null || uploadUrl==''">
-                                                        <input (error)="onUploadError($event)" (init)="onUploadInit($event)"
-                                                        (success)="onUploadSuccess($event)" (sending)="submit($event)"
-                                                        *ngIf="type === 'directive'" [dropzone]="config"
-                                                        class="dropzone dropzone-container" id="dropzone" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="progressbar" *ngIf="uploading">
-                                                <div class="meter">
-                                                    <span [style.width]="width + '%'"></span>
-                                                </div>
-                                            </div>
-                                            <div class="bottom_submit_section">
-                                                <button type="button" class="btn btn-primary">CANCEL</button>
-                                                <button type="button" class="btn btn-secondary">PROCEED</button>
-                                            </div>
+                                        <div *ngIf="isUploaded">
+                                            <iframe *ngIf="uploadUrl!=''" style="border:none;"  [src]="uploadUrl" width="100%"> </iframe>
                                         </div>
                                     </div>
 
                                 </div>
-                            </form>
+                                <div class="col-md-5 col-sm-12 col-12">
+                                    <div class="right_form_new">
+                                        <div class="row">
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleInputEmail1" class="form-label">Select
+                                                    bank*</label>
+                                                <select class="form-select" aria-label="Default select example"
+                                                    [(ngModel)]="bank" name="bank">
+                                                    <option value="">Select bank</option>
 
-                        </div>
+                                                    <option *ngFor="let banklist of bankDetail
+                                                            ">{{ banklist.bank }}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="submitted && form.bank.errors" class='errorText'>
+                                                    <div *ngIf="form.bank.errors.required">Select bank is
+                                                        required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label for="exampleInputPassword1" class="form-label">Select
+                                                    beneficiary</label>
+                                                <select class="form-select" aria-label="Default select example"
+                                                    [(ngModel)]="benneName" name="benneName"
+                                                    (change)=changepipo($event.target.value) #select_ben>
+                                                    <option value="">Select Buyer</option>
+
+                                                    <option value="{{ bene._id }}" *ngFor="let bene of benneDetail
+                                                            ">{{ bene.benneName }}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="submitted && form.benneName.errors" class='errorText'>
+                                                    <div *ngIf="form.benneName.errors.required">Select Buyer
+                                                        is required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="pipoData?.length > 0">
+                                            <div class="row" formArrayName="itemsTerm"
+                                                *ngFor="let items of getItems(pipoForm); let i = index"
+                                                [formGroupName]="i">
+                                                <div class="col-md-5 col-12">
+                                                    <label for="exampleInputEmail1" class="form-label">Select
+                                                        PI</label>
+                                                    <select class="form-select" aria-label="Default select example"
+                                                        formControlName="pi_poNo" name="pi_poNo" autocomplete="off"
+                                                        (change)="choosenItems($event.target.value,i)" #multiplepipo>
+                                                        <option value="">Select PI/PO</option>
+
+                                                        <option value="{{pipolist._id}}" *ngFor="let pipolist of pipoData
+                                                ">{{ pipolist.pi_poNo }}
+                                                        </option>
+                                                    </select>
+                                                    <div *ngIf="submitted && form.pi_poNo.errors" class='errorText'>
+                                                        <div *ngIf="form.pi_poNo.errors.required">PiPo is
+                                                            required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 col-12 padding0">
+                                                    <label for="Currency" class="form-label">Currency</label>
+                                                    <select class="form-select" aria-label="Default select example"
+                                                        formControlName="currency" name="currency"
+                                                        autocomplete="off" [value]="this.LIST_PIPO[multiplepipo.value]?.currency">
+                                                        <option value="">Select Currency</option>
+
+                                                        <option value="{{currency}}" *ngFor="let currency of CurrencyData
+                                                ">{{ currency }}
+                                                        </option>
+                                                    </select>
+
+
+                                                    <div *ngIf="submitted && form.currency.errors"
+                                                        class='errorText'>
+                                                        <div *ngIf="form.currency.errors.required"> Currency is
+                                                            required</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 col-12">
+                                                    <label for="Amount" class="form-label">Amount</label>
+                                                    <input type="text" class="form-control" formControlName="amount"
+                                                        id="amount" name="amount"
+                                                        [value]="this.LIST_PIPO[multiplepipo.value]?.amount"
+                                                        placeholder="Invoice Amount" autocomplete="off">
+                                                    <div *ngIf="submitted && form.amount.errors" class='errorText'>
+                                                        <div *ngIf="form.amount.errors.required">Invoice Amount
+                                                            is required</div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-2 col-12 paddingleft0">
+                                                    <div class="removeamouts_new">
+                                                        <button type="button" class="btn btn-primary"
+                                                            (click)="removeItems(i)">-</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row" *ngIf="select_ben.value!=''">
+                                            <div class="col-md-6 col-sm-6 col-12">
+                                                <div class="col-md-12">
+                                                    <div class="add_new_buttons">
+                                                        <button type="button" class="btn btn-success"
+                                                            (click)="addItems(pipoForm)">+ Add PI</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6 col-12">
+                                                <label for="TotalPIamount" class="form-label">Total PI
+                                                    amount</label>
+                                                <input type="text" class="form-control" id="TotalPIamount" [value]="sumTotalAmount" name="sumTotalAmount"
+                                                    placeholder="Select PI/PO" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row" *ngIf="sumTotalAmount != 0 && sumTotalAmount > 200000">
+                                            <div class="col-md-12 col-sm-12 col-12">
+                                                <label for="Opinion" class="form-label">Opinion report
+                                                    available?</label><br>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="opinionReport" value="1" id="flexRadioDefault1" (click)="showhideOpinionReport(1)">
+                                                    <label class="form-check-label" for="flexRadioDefault1">
+                                                        YES
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio"
+                                                    name="opinionReport" value="0"  id="flexRadioDefault2" (click)="showhideOpinionReport(0)">
+                                                    <label class="form-check-label" for="flexRadioDefault2">
+                                                        NO
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" *ngIf="sumTotalAmount != 0 && sumTotalAmount > 200000 && showOpinionReport == 1">
+                                            <div class="col-12">
+                                                <label for="Opinion" class="form-label">Attach opinion
+                                                    report</label>
+                                                <div cladss="file_addd_new" *ngIf="uploadUrl==null || uploadUrl==''">
+                                                    <input (error)="onUploadError($event)" (init)="onUploadInit($event)"
+                                                    (success)="onUploadSuccess($event)" (sending)="submit($event)"
+                                                    *ngIf="type === 'directive'" [dropzone]="config"
+                                                    class="dropzone dropzone-container" id="dropzone" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="progressbar" *ngIf="uploading">
+                                            <div class="meter">
+                                                <span [style.width]="width + '%'"></span>
+                                            </div>
+                                        </div>
+                                        <div class="bottom_submit_section">
+                                            <button type="button" class="btn btn-primary">CANCEL</button>
+                                            <button type="button" class="btn btn-secondary">PROCEED</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+
                     </div>
-                </main>
-            </div>
+                </div>
+            </main>
         </div>
     </div>
 </div>

@@ -51,9 +51,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from '../../app.config';
 import { PipoDataService } from "../../service/homeservices/pipo.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
-import { DateFormatService } from 'src/app/DateFormat/date-format.service';
+import { WindowInformationService } from '../../service/window-information.service';
+import { CustomConfirmDialogModelComponent } from '../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { DateFormatService } from '../../DateFormat/date-format.service';
 
 @Component({
   selector: 'app-upload',
@@ -64,13 +64,13 @@ export class UploadComponent implements OnInit {
   @Input() que: any;
   @Input() entities: any;
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
-  public type: string = 'directive';
+  public type: any = 'directive';
   public disabled: boolean = false;
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
   docu: any;
   public urls: any = [];
-  chosenMod: string = '';
+  chosenMod: any = '';
   public data1: any = [];
   public res;
   public name;
@@ -83,20 +83,20 @@ export class UploadComponent implements OnInit {
   public billNo = false;
   public pIpO = false;
   public override = false;
-  public message = '';
-  public documentType = '';
-  public documentType1 = '';
+  public message :any = '';
+  public documentType :any = '';
+  public documentType1 :any = '';
   public piPoUrl;
   public selectedDocumentType;
   public benneDetail: any = [];
   public buyerDetail: any = [];
   private subscription: Subscription;
-  public selectedBenne = '';
-  public beneSelect1: string;
+  public selectedBenne :any = '';
+  public beneSelect1: any;
   public selectCombo;
   public pipoSelect = false;
-  currencyName = [];
-  currencyName1 = [];
+  currencyName:any = [];
+  currencyName1:any = [];
   dataJson1: any;
   jsondata1: any;
   toggle1: boolean;
@@ -114,9 +114,9 @@ export class UploadComponent implements OnInit {
   shippingForm: FormGroup;
   // loginForm: FormGroup;
   public submitted = false;
-  authToken: string;
+  authToken: any;
   headers: any;
-  closeResult: string;
+  closeResult: any;
   APPEND_HTML: any = [];
   piPoForm: any = new FormGroup({
     pi_poNo: new FormControl('', [
@@ -188,8 +188,8 @@ export class UploadComponent implements OnInit {
   other: boolean;
   pipoArr: any = [];
   pubUrl: any;
-  pipoOut: string;
-  beneOut: string;
+  pipoOut: any;
+  beneOut: any;
   api_base: any;
   mainBene: any;
   location: any;
@@ -1116,7 +1116,7 @@ export class UploadComponent implements OnInit {
     console.log('LENGTH', this.res?.invoices?.length);
     console.log(e);
     console.log(e.form.value['sno1']);
-    let invoices = [];
+    let invoices:any = [];
     if (this.file) {
       e.form.value.file = this.file;
     } else {
@@ -2551,12 +2551,10 @@ export class UploadComponent implements OnInit {
       this.uploading = true;
       console.log(e[0].size);
       this.size = this.formatBytes(e[0].size);
-      //document.getElementById("uploadError").style.display = "none";
-
       this.runProgressBar(e[0].size);
     } else {
       console.log('Document type not given');
-      document.getElementById('uploadError').style.display = 'block';
+      $('#uploadError').css('display','block')
     }
   }
 
@@ -2816,7 +2814,7 @@ export class UploadComponent implements OnInit {
       );
   }
 
-  private getDismissReason(reason: any): string {
+  private getDismissReason(reason: any): any {
 
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';

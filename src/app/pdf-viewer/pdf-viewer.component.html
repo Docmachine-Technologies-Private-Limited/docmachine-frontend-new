@@ -1,48 +1,14 @@
-<div class="pdf-viewer-wrap" [style.width]="width" [style.height]="height">
+<div class="pdf-viewer-wrap" [style.width]="width">
   <div class="pdf-viewer-controls-wrap">
     <h2>{{name}}</h2>
     <div class="pdf-viewer-controls">
-      <!-- <div class="pdfv-control">
-        Select PDF:
-        <input (change)="onFileSelected()" type="file" id="file">
-        <div>Total Pages:{{totalPages}}</div>
-      </div> -->
-      <!-- <div class="pdfv-control">
-        <button (click)="originalSize = !originalSize">[original-size]="{{originalSize}}"</button>
+      <div class="pdfv-control">
+        <button (click)="zoomOut(this.SRC_UPDATE)">-</button>  <button (click)="zoomIn(this.SRC_UPDATE)">+</button>
       </div>
       <div class="pdfv-control">
-        <button (click)="fitToPage = !fitToPage">[fit-to-page]="{{fitToPage}}"</button>
-      </div>
-      <div class="pdfv-control">
-        <button (click)="showAll = !showAll">[show-all]="{{showAll}}"</button>
-      </div>
-      <div class="pdfv-control">
-        <button (click)="autoresize = !autoresize">[autoresize]="{{autoresize}}"</button>
-      </div>
-      <div class="pdfv-control">
-        <button (click)="showBorders = !showBorders">[show-borders]="{{showBorders}}"</button>
-      </div>
-      <div class="pdfv-control">
-        <button (click)="renderText = !renderText">[render-text]="{{renderText}}"</button>
-      </div> -->
-      <!-- <div class="pdfv-control">
-        Render Text Mode
-        <select name="renderTextMode" [(ngModel)]="renderTextMode">
-          <option [value]="o" *ngFor="let o of renderTextModes">{{o}}</option>
+        <select name="zoomScales" [(ngModel)]="zoomScale" (change)="fitScreen($event.target.value)">
+          <option [value]="o" [selected]="i==0?true : ''" *ngFor="let o of zoomScales;let i=index">{{o}}</option>
         </select>
-        <button (click)="renderTextMode = !renderTextMode">[render-text-mode]="{{renderTextMode}}"</button>
-      </div> -->
-      <div class="pdfv-control">
-        <button (click)="zoomOut()">-</button>  <button (click)="zoomIn()">+</button>
-      </div>
-      <div class="pdfv-control">
-        <select name="zoomScales" [(ngModel)]="zoomScale">
-          <option [value]="o" *ngFor="let o of zoomScales">{{o}}</option>
-        </select>
-      </div>
-      <div class="pdfv-control">
-        <button (click)="rotateDoc()"><i class="fas fa-snowman" data-fa-transform="rotate-90"></i>
-        </button>
       </div>
       <div class="pdfv-control" *ngIf="this.downloadShow==true">
         <button (click)="downloadPdf(src)" title="download"><i class="fa fa-download" aria-hidden="true"></i></button>
@@ -52,31 +18,37 @@
       </div>
     </div>
   </div>
-  <div class="pdf-viewer-viewer-window">
-    <pdf-viewer class="pdf-viewer" *ngIf="this.base64_src!=''" [src]="src"
-    [original-size]="true"
-    [show-all]="true"
-    [fit-to-page]="fitToPage"
-    [zoom]="zoom"
-    [zoom-scale]="zoomScale"
-    [stick-to-page]="false"
-    [render-text]="true"
-    [autoresize]="autoresize"
-    [show-borders]="showBorders" [style.width]="width" [style.height]="height">
-    </pdf-viewer>
-    <pdf-viewer class="pdf-viewer" *ngIf="this.base64_src==''" [src]="src"
-    [original-size]="true"
-    [show-all]="true"
-    [fit-to-page]="fitToPage"
-    [zoom]="zoom"
-    [zoom-scale]="zoomScale"
-    [stick-to-page]="true"
-    [render-text]="true"
-    [autoresize]="autoresize"
-    [show-borders]="showBorders" [style.width]="width" [style.height]="height">
-    </pdf-viewer>
-    
-    <!-- <div class="lds-roller" *ngIf=><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
+  <div class="pdf-viewer-viewer-window pb-2" *ngIf="this.src!=''">
+    <div class="container-fluid" [style.width]="width" [style.height]="100+'%'">
+      <ng-container *ngIf="isLoading$ | async; else notloading">
+        <div class="progress progress-modal">
+          <div
+            class="
+              progress-bar progress-bar-striped progress-bar-animated
+              bg-primary
+            "
+            role="progressbar"
+            style="width: 100%"
+            aria-valuenow="100"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          ></div>
+        </div>
+      </ng-container>
+      <ng-template #notloading>
+        <iframe
+          frameborder="0"
+          allowtransparency="true" 
+          style="background: #FFFFFF;" 
+          *ngIf="this.URL_IFRAME"
+          [src]="this.URL_IFRAME"
+          [style.width]="width" [style.height]="100+'%'"
+          webkitallowfullscreen
+          mozallowfullscreen
+          allowfullscreen
+        ></iframe>
+      </ng-template>
+    </div>
   </div>
 
 </div>

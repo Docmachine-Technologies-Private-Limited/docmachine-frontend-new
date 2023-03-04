@@ -42,10 +42,10 @@ export class FilterToggleDirective {
  }
  @HostListener('document:click', ['$event'])
  onClick(event): void {
-    if (!this.elementRef.nativeElement.contains(event.target) && ['fi_icon','btn btn-secondary'].includes(event.target.className)==false) {
+    if (!this.elementRef.nativeElement.contains(event.target) && ['fi_icon','filter-popup'].includes(event.target.className)==false) {
       this.elementRef.nativeElement.style.display = 'none';
     }else{
-      if (['fi_icon','btn btn-secondary'].includes(event.target.className)==true) {
+      if (['fi_icon','filter-popup'].includes(event.target.className)==true) {
         this.elementRef.nativeElement.style.display = 'block';
       }
     }

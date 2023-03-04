@@ -1,72 +1,73 @@
-<div class="content_top_common scroll-bar-main content_white_background">
-  <div class="content-wrap">
-    <div class="container-fluid">
-
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Id</th>
-      <th scope="col">Summary Page Name</th>
-      <th scope="col">Date</th>
-      <th scope="col">Status</th>
-      <th scope="col">Comments</th>
-      <th scope="col" *ngIf="this.USER_DETAILS?.RoleCheckbox!='Maker'">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of this.DATA_CREATE let i=index">
-      <td>{{i+1}}</td>
-      <td>del_000{{i+1}}</td>
-      <td>{{item['tableName']}} | {{item['TypeOfPage']}}</td>
-      <td>{{item['createdAt']}}</td>
-      <td>
-        <label>{{item['status']}}</label>
-      </td>
-      <td>
-        <label>{{item['comment']}}</label>
-      </td>
-      <td>
-        <div class="column flex-display" *ngIf="this.USER_DETAILS?.RoleCheckbox==='Approver' || this.USER_DETAILS?.RoleCheckbox==''">
-        <button type="submit" class="btn btn-success" (click)="Approved({
-          id: item['_id'],
-          Tableid: item['id'],
-          tableName:item['tableName'],
-          status:'Approved',
-          deleteflag:'2'
-        },i)">Approve</button>
-        <button type="submit" class="btn btn-danger" (click)="Reject({
-          id: item['_id'],
-          Tableid: item['id'],
-          tableName:item['tableName'],
-          status:'Rejected',
-          deleteflag:'0'
-        },i)">Reject</button>
-        <button type="submit" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'],i)">View</button>
-      </div>
-      <div class="column flex-display" *ngIf="this.USER_DETAILS?.RoleCheckbox==='Checker' && item['status']!='Verify'">
-        <button type="submit" class="btn btn-success" (click)="Approved({
-          id: item['_id'],
-          Tableid: item['id'],
-          tableName:item['tableName'],
-          status:'Verify',
-          deleteflag:'1'
-        },i)">Verify</button>
-        <button type="submit" class="btn btn-danger" (click)="Reject({
-          id: item['_id'],
-          Tableid: item['id'],
-          tableName:item['tableName'],
-          status:'Rejected',
-          deleteflag:'0'
-        },i)">Reject</button>
-        <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary"
-         (click)="openView(item?.documents,i)">View</button>
-        <button type="submit" *ngIf="item?.Types!='downloadPDF'" class="btn btn-primary" (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'],i)">View</button>
-      </div>
-    </td>
-    </tr>
-  </tbody>
-</table>
-    </div>
+<div class="content-wrap ml-0 scroll-bar-main content_white_background">
+  <div class="container-fluid">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Id</th>
+          <th scope="col">Summary Page Name</th>
+          <th scope="col">Date</th>
+          <th scope="col">Status</th>
+          <th scope="col">Comments</th>
+          <th scope="col" *ngIf="this.USER_DETAILS?.RoleCheckbox!='Maker'">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of this.DATA_CREATE let i=index">
+          <td>{{i+1}}</td>
+          <td>del_000{{i+1}}</td>
+          <td>{{item['tableName']}} | {{item['TypeOfPage']}}</td>
+          <td>{{item['createdAt']}}</td>
+          <td>
+            <label>{{item['status']}}</label>
+          </td>
+          <td>
+            <label>{{item['comment']}}</label>
+          </td>
+          <td>
+            <div class="column flex-display"
+              *ngIf="this.USER_DETAILS?.RoleCheckbox==='Approver' || this.USER_DETAILS?.RoleCheckbox==''">
+              <button type="submit" class="btn btn-success" (click)="Approved({
+              id: item['_id'],
+              Tableid: item['id'],
+              tableName:item['tableName'],
+              status:'Approved',
+              deleteflag:'2'
+            },i)">Approve</button>
+              <button type="submit" class="btn btn-danger" (click)="Reject({
+              id: item['_id'],
+              Tableid: item['id'],
+              tableName:item['tableName'],
+              status:'Rejected',
+              deleteflag:'0'
+            },i)">Reject</button>
+              <button type="submit" class="btn btn-primary"
+                (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'],i)">View</button>
+            </div>
+            <div class="column flex-display"
+              *ngIf="this.USER_DETAILS?.RoleCheckbox==='Checker' && item['status']!='Verify'">
+              <button type="submit" class="btn btn-success" (click)="Approved({
+              id: item['_id'],
+              Tableid: item['id'],
+              tableName:item['tableName'],
+              status:'Verify',
+              deleteflag:'1'
+            },i)">Verify</button>
+              <button type="submit" class="btn btn-danger" (click)="Reject({
+              id: item['_id'],
+              Tableid: item['id'],
+              tableName:item['tableName'],
+              status:'Rejected',
+              deleteflag:'0'
+            },i)">Reject</button>
+              <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary"
+                (click)="openView(item?.documents,i)">View</button>
+              <button type="submit" *ngIf="item?.Types!='downloadPDF'" class="btn btn-primary"
+                (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'],i)">View</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

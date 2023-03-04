@@ -9,7 +9,7 @@ import $ from 'jquery';
 import { DocumentService } from '../../../service/document.service';
 import { UserService } from '../../../service/user.service';
 import { ShippingbillDataService } from '../../../service/homeservices/shippingbill.service';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../../service/window-information.service';
 
 @Component({
   selector: 'app-sub-bill-lodgement',

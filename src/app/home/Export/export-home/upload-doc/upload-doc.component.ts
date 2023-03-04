@@ -22,8 +22,6 @@ import {
   DropzoneDirective,
   DropzoneConfigInterface,
 } from 'ngx-dropzone-wrapper';
-import { Subscription } from 'rxjs';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import {
   FormBuilder,
   FormGroup,
@@ -38,7 +36,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from '../../../../app.config';
 import {PipoDataService} from "../../../../service/homeservices/pipo.service";
 import $ from 'jquery';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../../../service/window-information.service';
 
 @Component({
   selector: 'app-upload-doc',
@@ -54,7 +52,7 @@ export class UploadDocComponent implements OnInit {
   shippingForm: FormGroup;
   // loginForm: FormGroup;
   public submitted = false;
-  authToken: string;
+  authToken:any;
   headers: any;
   closeResult: string;
   MT103_Form:any=[];
@@ -214,7 +212,7 @@ export class UploadDocComponent implements OnInit {
       });
   }
   removeDuplicates(arrayIn:any) {
-    var arrayOut = [];
+    var arrayOut:any = [];
     for (var a=0; a < arrayIn.length; a++) {
         if (arrayOut[arrayOut.length-1] != arrayIn[a]) {
             arrayOut.push(arrayIn[a]);

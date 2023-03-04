@@ -29,12 +29,11 @@ import { DocumentService } from "../../service/document.service";
 import { PipoDataService } from "../../service/homeservices/pipo.service";
 import { AppConfig } from '../../app.config';
 import { WindowInformationService } from '../../service/window-information.service';
-import { ShippingbillDataService } from 'src/app/service/homeservices/shippingbill.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { MergePdfListService } from '../merge-pdf-list.service';
-import { BoeBillService } from 'src/app/service/homeservices/BoeBill/boe-bill.service';
+import { BoeBillService } from '../../service/homeservices/BoeBill/boe-bill.service';
 
 @Component({
   selector: 'app-Direct-Dispatch',
@@ -116,7 +115,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
   @ViewChild('billLodge', { static: false }) billLodge: ElementRef;
   closeResult: string;
   public item1: any = [];
-  public itemArray = [];
+  public itemArray:any = [];
   public item2;
   public user;
   public selectedRow;
@@ -141,9 +140,9 @@ export class ImportNewDirectDispatchComponent implements OnInit {
   public Question10 = '';
   public allTransactions: any = [];
   public optionsVisibility: any = [];
-  public generateIndex;
-  public itemArray1 = [];
-  public irBuyerName = [];
+  public generateIndex:any;
+  public itemArray1:any = [];
+  public irBuyerName:any = [];
   lodgement1: any;
   lodgement2: any;
   Ax1: boolean;
@@ -215,7 +214,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
   dataImport: any;
   dataImport2: any;
   sbPurposeDone1: any = [];
-  item4 = [];
+  item4:any = [];
   item12: any;
   item13: any = [];
   bankRef: any;
@@ -310,10 +309,10 @@ export class ImportNewDirectDispatchComponent implements OnInit {
   ebrc: any;
   blcopyref: any;
   irAdvice: any;
-  selectedPdfs = [];
-  advanceArray = [];
+  selectedPdfs:any = [];
+  advanceArray:any = [];
   currentSbForAdvance: any;
-  buyerName = [];
+  buyerName:any = [];
   id: any;
   private genDoc: any;
   airwayBlCopy: any;
@@ -382,7 +381,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
       SbRef: ['', [Validators.required]],
       Carry_Amount: [[], [Validators.required]],
     });
-    this.userService.getUserDetail().then((status) => {
+    this.userService.getUserDetail().then((status:any) => {
       this.USER_DATA = status['result'];
       console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
     });
@@ -409,7 +408,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
   }
   BOOLEAN: boolean = false;
   MERGE_ALL_PDF: any = [];
-  async SlideToggle(event: MatTabChangeEvent) {
+  async SlideToggle(event:any) {
     var temp: any = [];
     const id = event.tab.content.viewContainerRef.element.nativeElement.id;
     this.PDF_LIST = [];
@@ -829,7 +828,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
       if (this.documentService.task.task[0].sbUrls) {
         console.log('this is sb');
         let k = 0;
-        let gene = [];
+        let gene:any = [];
 
         for (let value of this.documentService.task.task[0].sbUrls) {
           let r = value.changingThisBreaksApplicationSecurity;
@@ -841,7 +840,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
       }
       if (this.documentService.task.task[0].tryUrls) {
         let h = 0;
-        let gene = [];
+        let gene:any = [];
         for (let value of this.documentService.task.task[0].tryUrls) {
           gene.push(
             this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -856,7 +855,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
       }
       if (this.documentService.task.task[0].lcUrls) {
         let h = 0;
-        let gene = [];
+        let gene:any = [];
         for (let value of this.documentService.task.task[0].lcUrls) {
           gene.push(
             this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -877,7 +876,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
     console.log('hello', a);
     console.log(a.length);
     if (a.length > 0) {
-      let arr = [];
+      let arr:any = [];
       for (let value of this.item1) {
         console.log('value of buyername****', value);
         console.log('value of buyername', value.buyerName);
@@ -1075,8 +1074,8 @@ export class ImportNewDirectDispatchComponent implements OnInit {
       console.log('Random Array', this.randomArray);
       console.log('Airway Docs****************--------------------------------', this.airwayBlCopy);
 
-      let mainArr = [];
-      let invoicearray = [];
+      let mainArr:any = [];
+      let invoicearray:any = [];
       console.log('line no.796 question5 data', this.Question5);
       this.sbDataArray.forEach((value, index) => {
         for (let a of value.pipo) {
@@ -1084,7 +1083,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
         }
       });
       if (this.Question6 == 'yes') {
-        let adArr = [];
+        let adArr:any = [];
         console.log('Shipping Map For', this.shippingMap);
         this.shippingMap.forEach((value) => {
           console.log('Shipping Map For loop', value);
@@ -1095,7 +1094,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
 
         forkJoin(
           this.sbDataArray.map((value) => {
-            let piponumbers = [];
+            let piponumbers:any = [];
             for (let i in value.pipo) {
               piponumbers.push(value.pipo[i].pi_poNo);
             }
@@ -1114,12 +1113,12 @@ export class ImportNewDirectDispatchComponent implements OnInit {
           });
           console.log(this.advanceForm.value);
 
-          mainArr.forEach((value1, index) => {
+          mainArr.forEach((value1:any, index) => {
             console.log('shshsh');
             console.log(this.advanceForm.value.advance);
             for (let a of adArr) {
               if (a.sb == value1.sbno) {
-                const newVal = { ...value1 };
+                const newVal:any = { ...value1 };
                 newVal['advance'] = a.valueInternal;
                 newVal['irAdviceId'] = a.irDataItem._id;
                 invoicearray.push(newVal);
@@ -1127,7 +1126,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
             }
             console.log('aajsjss');
           });
-          let amountArr = [];
+          let amountArr:any = [];
           for (let item of invoicearray) {
             amountArr.push(item.pipoValue.amount);
           }
@@ -1351,8 +1350,8 @@ export class ImportNewDirectDispatchComponent implements OnInit {
         console.log('Random Array', this.randomArray);
         console.log('Airway Docs****************--------------------------------', this.airwayBlCopy);
 
-        let mainArr = [];
-        let invoicearray = [];
+        let mainArr:any = [];
+        let invoicearray:any = [];
         console.log('line no.796 question5 data', this.Question5);
         this.sbDataArray.forEach((value, index) => {
           for (let a of value.pipo) {
@@ -1360,7 +1359,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
           }
         });
         if (this.Question6 == 'yes') {
-          let adArr = [];
+          let adArr:any = [];
           console.log('Shipping Map For', this.shippingMap);
           this.shippingMap.forEach((value) => {
             console.log('Shipping Map For loop', value);
@@ -1371,7 +1370,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
 
           forkJoin(
             this.sbDataArray.map((value) => {
-              let piponumbers = [];
+              let piponumbers:any = [];
               for (let i in value.pipo) {
                 piponumbers.push(value.pipo[i].pi_poNo);
               }
@@ -1403,7 +1402,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
               }
               console.log('aajsjss');
             });
-            let amountArr = [];
+            let amountArr:any = [];
             for (let item of invoicearray) {
               amountArr.push(item.pipoValue.amount);
             }
@@ -1999,7 +1998,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
       firxRecAmo: []
     };
     for (let index = 0; index < this.advanceArray.length; index++) {
-      const element = this.advanceArray[index];
+      const element:any = this.advanceArray[index];
       tp['firxNumber'].push(element?.irDataItem?.billNo)
       tp['firxDate'].push(element?.irDataItem?.date)
       tp['firxCurrency'].push(element?.irDataItem?.currency)
@@ -2974,7 +2973,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
     if (data.blCopyDoc) {
       if (data.commercialDoc) {
         if (data.packingDoc) {
-          let removeArray = [];
+          let removeArray:any = [];
           if (event.target.checked) {
             for (let element of this.item1) {
               if (element._id == id) {
@@ -3036,8 +3035,8 @@ export class ImportNewDirectDispatchComponent implements OnInit {
     if (this.filterSum.toString() != this.balanceAvai.toString()) {
       if (e.target.checked) {
         console.log('Checked');
-        let advance = this.advanceArray.some(
-          (item) => item.valueInternal === irDataItem.billNo
+        let advance:any = this.advanceArray.some(
+          (item:any) => item.valueInternal === irDataItem.billNo
         );
         if (!advance) {
           console.log('Adding');
@@ -3246,7 +3245,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
       const mergedPdfFile = await mergedPdf.save();
       var base64String = this._arrayBufferToBase64(mergedPdfFile);
       console.log('merge doc', base64String);
-      var genDoc = 'data:application/pdf;base64,' + base64String;
+      var genDoc:any = 'data:application/pdf;base64,' + base64String;
       const byteCharacters = atob(base64String);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
@@ -3375,7 +3374,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
     };
     // download all the pdfs
     let downloadAllFiles = () => {
-      var promises = [];
+      var promises:any = [];
       for (var i = 0; i < numDocs; i++) {
         let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
         promises.push(downloadEachFile(filename));
@@ -3460,7 +3459,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
       };
       // download all the pdfs
       let downloadAllFiles = () => {
-        var promises = [];
+        var promises:any = [];
         for (var i = 0; i < numDocs; i++) {
           let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
           promises.push(downloadEachFile(filename));
@@ -3482,7 +3481,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
     var bulkDownloadSingle = async (mainDoc1, index) => {
       if (mainDoc1[index]) {
         let sb = mainDoc1[index];
-        var downloadALL = [];
+        var downloadALL:any = [];
         downloadALL.push(sb.changingThisBreaksApplicationSecurity);
         if (this.creditNote.changingThisBreaksApplicationSecurity) {
           downloadALL.push(
@@ -3594,8 +3593,8 @@ export class ImportNewDirectDispatchComponent implements OnInit {
   };
 
   public mergeIr() {
-    let filterSBdata = [];
-    let completedsb = [];
+    let filterSBdata:any = [];
+    let completedsb:any = [];
     let sbindex = 0;
     for (let sbNum of this.item1) {
       let totalForex = 0;
@@ -3642,7 +3641,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
   }
 
   public mergeIr2() {
-    let filterIrdata = [];
+    let filterIrdata:any = [];
     if (this.item1 && this.item1.length) {
       for (let irData of this.item9) {
         // item9 have forex details
@@ -3653,7 +3652,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
           for (let i = 0; i <= irData.sbNo.length; i++) {
             console.log('a');
             if (sbNum.sbno == irData.sbNo[i]) {
-              const newVal = { ...irData }
+              const newVal:any = { ...irData }
               console.log('Line no. 3706', newVal);
               let sbBalance = sbNum.fobValue;
               let irAmount = parseFloat(irData.amount);

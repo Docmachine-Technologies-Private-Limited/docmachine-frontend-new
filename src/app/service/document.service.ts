@@ -5,7 +5,7 @@ import { AppConfig } from '../../app/app.config';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentService {
-  authToken: string;
+  authToken:any;
   public headers;
   api_base: string;
   loading:boolean = false;
@@ -587,6 +587,13 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(`${this.api_base}/Approval/getApprovedStatus`,{FileType:id},httpOptions);
+  }
+ getApprovedData(id:any) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/get`,{id:id},httpOptions);
   }
   getRejectStatus(id:any) {
     this.loadFromLocalStorage();
@@ -1857,7 +1864,7 @@ export class DocumentService {
     const httpOptions = {headers: new HttpHeaders({ Authorization: this.authToken })};
     return this.http.post(`${this.api_base}/ExportBillLodgement/Amount_Update`,data,httpOptions);
   }
-  getExportBillLodgment(data) {
+  getExportBillLodgment() {
     console.log('I am in service');
     this.loadFromLocalStorage();
     console.log(this.authToken);

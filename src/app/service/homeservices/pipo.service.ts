@@ -39,7 +39,7 @@ export class PipoDataService {
       this.documentService.getPipo().subscribe(
         (res: any) => {
           console.log(res, 'resssss.................')
-          let temppipo = new PipoDisplayListView(res.data, type);
+          let temppipo:any = new PipoDisplayListView(res.data, type);
           this.pipolistModelSubsciber.next(temppipo.pipoModelList);
           this.pipolistSubsciber.next(temppipo.pipolist);
           console.log(temppipo, 'temppipo')
@@ -75,7 +75,7 @@ export class PipoDataService {
       this.documentService.getPipoByCustomer(type, customer).subscribe(
         (res: any) => {
           console.log(res, 'resssss.................')
-          let temppipo = new PipoDisplayListView(res.data, type);
+          let temppipo:any = new PipoDisplayListView(res.data, type);
           console.log(temppipo, 'temppipo')
           this.pipolistModelSubsciber.next(temppipo.pipoModelList);
           this.pipolistSubsciber.next(temppipo.pipolist);
@@ -109,7 +109,7 @@ export class PipoDataService {
 
 
   getShippingBillById(shippingBillId) {
-    let pipolist = this.pipolistModelSubsciber.value;
+    let pipolist:any = this.pipolistModelSubsciber.value;
     for (let i in pipolist) {
       if (pipolist[i]) {
         for (let j in pipolist[i].sbRef) {
@@ -122,7 +122,7 @@ export class PipoDataService {
   }
 
   getShippingBills(pipoid) {
-    let pipolist = this.pipolistModelSubsciber.value;
+    let pipolist:any = this.pipolistModelSubsciber.value;
     console.log('pipolist', pipolist);
     for (let i in pipolist) {
       if (pipolist[i]._id == pipoid) {
@@ -132,7 +132,7 @@ export class PipoDataService {
   }
   SHIPPING_BILL_LIST:any=[];
   getShippingNo(id: any,type: string) {
-    let pipolist = this.pipolistModelSubsciber.value;
+    let pipolist:any = this.pipolistModelSubsciber.value;
     console.log('pipolist',id,pipolist);
     this.SHIPPING_BILL_LIST = [];
     if (type=='export') {
@@ -156,5 +156,28 @@ export class PipoDataService {
       },(err) => console.log(err)
     );
     }
+  }
+  getPiPobyId(id,type){
+    return new Promise((resolve, reject) => {
+      this.documentService.getPipo().subscribe((res: any) => {
+          let temppipo:any = new PipoDisplayListView(res.data, type);
+          this.pipolistModelSubsciber.next(temppipo.pipoModelList);
+          this.pipolistSubsciber.next(temppipo.pipolist);
+          this.pipolistModelSubsciber.subscribe((pipo_lits: any) => {
+            var data: any = pipo_lits.filter((item:any)=>item?._id==id);
+            resolve(data[0]);          
+          })
+        },
+        (err) => reject(err)
+      );
+    });
+  }
+  getBoeBillById(id) {
+    return new Promise((resolve, reject) => {
+      this.documentService.getBoe(1).subscribe((res: any) => {
+            var data: any = res?.data?.filter((item:any)=>item?._id==id);
+            resolve(data[0]);          
+        },(err) => reject(err));
+    });
   }
 }

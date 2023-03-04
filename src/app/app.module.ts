@@ -84,7 +84,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         CheckboxComponentsComponent,
         CustomConfirmDialogModelComponent,
         AuthorizationComponent,
-        JoinPipePipe
+        JoinPipePipe,
     ],
     providers: [{ provide: AppConfig },
         WindowInformationService,

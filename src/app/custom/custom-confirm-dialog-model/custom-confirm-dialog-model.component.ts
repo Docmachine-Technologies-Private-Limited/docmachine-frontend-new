@@ -2,7 +2,7 @@ import { Component, Injectable, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import $ from 'jquery';
 import { Observable } from 'rxjs';
-import { DocumentService } from 'src/app/service/document.service';
+import { DocumentService } from '../../service/document.service';
 import { CustomConfirmDialogModelService } from './custom-confirm-dialog-model.service';
 
 

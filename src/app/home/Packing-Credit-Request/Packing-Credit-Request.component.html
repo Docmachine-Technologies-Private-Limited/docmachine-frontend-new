@@ -1,474 +1,472 @@
-<div class="content_top_common pb-2 scroll-bar-main">
-  <div class="content-wrap">
-    <div class="container-fluid">
-      <div class="import_export_sec">
-        <div class="row">
-          <div class="col-md-6 col-sm-6 col-xs-12">
-            <div class="Dashbord_sec">
-              <h2 class="title_dash">Packing Credit Request</h2>
-            </div>
+<div class="content-wrap ml-0 pb-2 scroll-bar-main">
+  <div class="container-fluid">
+    <div class="import_export_sec">
+      <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="Dashbord_sec">
+            <h2 class="title_dash">Packing Credit Request</h2>
           </div>
-          <div class="col-md-6 col-sm-6 col-xs-12">
-            <div class="float_right_page">
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a [routerLink]="['/home/Packing-Credit-Request-New']">Packing Credit
-                      Request</a>
-                  </li>
-                </ol>
-              </nav>
-            </div>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="float_right_page">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a [routerLink]="['/home/Packing-Credit-Request-New']">Packing Credit
+                    Request</a>
+                </li>
+              </ol>
+            </nav>
           </div>
         </div>
       </div>
-      <div class="content_white_background">
-        <main id="content" class="table-padding" role="main">
-          <div class="new_document_list1">
-            <div class="new_document_list_add_data">
-                <div class="row">
-                  <div class="col-md-7 col-sm-12 col-12">
-                    <div class="new_left_sidedoc p-2 pdf_invoce_scroll">
-                      <div id="first" class="fill-bank-format" #pdfTable *ngIf="this.newBankArray?.Credit!=''">
-                        <div>
-                          <p class="heading" style="align-items: center; text-align: center; "> <span
-                              style="border-bottom: 1px solid black;">{{this.Lodgement["EPC_PCFC"]["Show"]=='yes'?'PCFC':'EPC'}}
-                              request letter (service
-                              export)</span> </p>
-                        </div>
-                        <div style="margin-left: 40px; margin-top: 20px; width: 90%;" class="bc">
-                          <div style=" text-align:right">Date: <span style="
-                                                                    outline: none;
-                                                                    display: inline-block;
-                                                                    width: 150px;
-                                                                    border-bottom: 1px solid black;
-                                                                    text-align: center;"
-                              contenteditable="true">{{CURRENT_DATE}}</span></div>
-                          <div style="width:80%; margin-top: -20px;">To, <br> The Manager <br> YES Bank Ltd., <br>
-                            Branch address</div>
+    </div>
+    <div class="content_white_background">
+      <main id="content" class="table-padding" role="main">
+        <div class="new_document_list1">
+          <div class="new_document_list_add_data">
+              <div class="row">
+                <div class="col-md-7 col-sm-12 col-12">
+                  <div class="new_left_sidedoc p-2 pdf_invoce_scroll">
+                    <div id="first" class="fill-bank-format" #pdfTable *ngIf="this.newBankArray?.Credit!=''">
+                      <div>
+                        <p class="heading" style="align-items: center; text-align: center; "> <span
+                            style="border-bottom: 1px solid black;">{{this.Lodgement["EPC_PCFC"]["Show"]=='yes'?'PCFC':'EPC'}}
+                            request letter (service
+                            export)</span> </p>
+                      </div>
+                      <div style="margin-left: 40px; margin-top: 20px; width: 90%;" class="bc">
+                        <div style=" text-align:right">Date: <span style="
+                                                                  outline: none;
+                                                                  display: inline-block;
+                                                                  width: 150px;
+                                                                  border-bottom: 1px solid black;
+                                                                  text-align: center;"
+                            contenteditable="true">{{CURRENT_DATE}}</span></div>
+                        <div style="width:80%; margin-top: -20px;">To, <br> The Manager <br> YES Bank Ltd., <br>
+                          Branch address</div>
+                        <span
+                          style="outline: none; display: inline-block; width: 150px; border-bottom: 1px solid #000000;"
+                          contenteditable="true"></span> <br>
+                        <div style="margin-top: 10px;">Sub: Request for grant of
+                          {{this.Lodgement["EPC_PCFC"]["Show"]=='yes'?'PCFC':'EPC'}} <br> We enclose the
+                          following LC / purchase order as underlying for
+                          {{this.Lodgement["EPC_PCFC"]["Show"]=='yes'?'PCFC':'EPC'}} and request you to grant us
+                          {{this.Lodgement["EPC_PCFC"]["Show"]=='yes'?'PCFC':'EPC'}} of
                           <span
                             style="outline: none; display: inline-block; width: 150px; border-bottom: 1px solid #000000;"
-                            contenteditable="true"></span> <br>
-                          <div style="margin-top: 10px;">Sub: Request for grant of
-                            {{this.Lodgement["EPC_PCFC"]["Show"]=='yes'?'PCFC':'EPC'}} <br> We enclose the
-                            following LC / purchase order as underlying for
-                            {{this.Lodgement["EPC_PCFC"]["Show"]=='yes'?'PCFC':'EPC'}} and request you to grant us
-                            {{this.Lodgement["EPC_PCFC"]["Show"]=='yes'?'PCFC':'EPC'}} of
-                            <span
-                              style="outline: none; display: inline-block; width: 150px; border-bottom: 1px solid #000000;"
-                              contenteditable="true">{{this.Advance_Amount_Sum?.AmountSum}}</span> and credit the same
-                            to our account
-                            number
-                            <span
-                              style="outline: none; display: inline-block; width: 150px; border-bottom: 1px solid #000000;"
-                              contenteditable="true">{{this.SET_CREDIT_DEBIT_LIST?.Credit[0]?.accNumber}}</span>for the
-                            purpose of payment to supplier.
-                            <br>
-                          </div>
+                            contenteditable="true">{{this.Advance_Amount_Sum?.AmountSum}}</span> and credit the same
+                          to our account
+                          number
+                          <span
+                            style="outline: none; display: inline-block; width: 150px; border-bottom: 1px solid #000000;"
+                            contenteditable="true">{{this.SET_CREDIT_DEBIT_LIST?.Credit[0]?.accNumber}}</span>for the
+                          purpose of payment to supplier.
                           <br>
-                          <div class="custom-table grid">
-                            <table>
-                              <tr>
-                                <th>LC order no & date : </th>
-                                <td>{{this.Advance_Amount_Sum?.PIPO_NO?.toString()}} &
-                                  {{this.Advance_Amount_Sum?.Date?.toString()}}</td>
-                              </tr>
-                              <tr>
-                                <th>Buyer : </th>
-                                <td>{{this.Advance_Amount_Sum?.buyerName?.toString()}}</td>
-                              </tr>
-                              <tr>
-                                <th>Value : </th>
-                                <td>{{this.Advance_Amount_Sum?.AmountSum}}</td>
-                              </tr>
-                              <tr>
-                                <th>Last date of service :</th>
-                                <td>{{this.getTimeDifferenceContract(180)}}</td>
-                              </tr>
-                            </table>
-                            <table>
-                              <tr>
-                                <th>Loan requested up to (Date) : </th>
-                                <td>{{this.Advance_Amount_Sum?.Last_date_of_service}}</td>
-                              </tr>
-                              <tr>
-                                <th>Type of service : </th>
-                                <td>-</td>
-                              </tr>
-                              <tr>
-                                <th>IEC :</th>
-                                <td>{{this.item5?.iec}}</td>
-                              </tr>
-                              <tr>
-                                <th>A/c no to be debit for all charges : </th>
-                                <td>{{this.SET_CREDIT_DEBIT_LIST?.Credit[1]?.accNumber}}</td>
-                              </tr>
-                            </table>
-                          </div>
-                          <br>
-                          <p> <b style="border-bottom: 1px solid black;">Declaration – Cum – Undertaking:</b>
-                          </p>
-                          <p>
-                             We undertake to liquidate the above loan by submitting to you the relative export
-                            documents bills within the validity of LC / order or within maturity date of advance
-                            whichever is earlier. <br>  We are not in
-                            the caution list of RBI / ECGC. <br>  We will export the services as per the export
-                            schedule of the order / LC original copy enclosed without any delay. <br>  We are
-                            agreeable for commercial rate of interest in
-                            case of delay in liquidating the EPC within validity of order/ LC. <br>  We undertake
-                            that we have not taken any EPC from any other bank for this particular order. <br>  The
-                            proposal is a genuine case of export
-                            of services. <br>  The item of service export is covered under Appendix 10 of HBPv1.
-                            <br>  We are registered with □ Electronic and software EPC □ Services EPC □ Federation
-                            of Indian Export Organizations, as applicable.
-                            <br>  There is an Export Contract for the export of the service. <br>  There is a time
-                            lag between the outlay of working capital expense and actual receipt of payment from the
-                            service consumer or his principal
-                            abroad. <br>  There is a valid Working Capital gap i.e. service is provided first while
-                            the payment is received some time after an invoice is raised. <br>  Inward remittance
-                            would be received in Foreign Exchange.
-                            <br>  We will raise the invoice as per the contract. Where payment is received from
-                            overseas party, we would utilize the funds to repay the export credit availed of from
-                            the bank. <br>
-                          </p>
-                          <p>
-                            <b style="border-bottom: 1px solid black;">Enclosed documents:</b> <br> □ Purchase Order
-                            □ Letter of credit □ Labor Bill □ Any other
-                          </p>
-
-                          <p>
-                            <b style="border-bottom: 1px solid black;">Declaration – Cum – Undertaking:</b>
-                            <br> I/We hereby declare that the transaction, details of which are specifically
-                            mentioned in this request letter does not involve, and / is not designed for the purpose
-                            of any contravention or evasion of the provisions
-                            of FEMA 1999 or of any rules, regulations, notifications, directions or order made there
-                            under. I/We also hereby agree and undertake to give such information / documents as will
-                            reasonably satisfy you about this
-                            transaction in terms of the above declaration. I/We also understand that if I/We refuse
-                            to comply with any such requirement or make only unsatisfactory compliance therewith,
-                            the bank shall refuse in writing to undertake
-                            the transaction and shall, if it has reason to believe that any contravention / evasion
-                            is contemplated by me / us, report the matter to Reserve Bank of India. I/We further
-                            declare that the undersigned has / have
-                            the authority to give this declaration and undertaking on behalf of the company. <br>
-                            <br> I/we also declare that the transaction does not have linkage with any Specially
-                            Designated Nationals and Blocked Persons
-                            (SDN)/countries listed under OFAC in any manner. If the transaction involves linkage
-                            with any Specially Designated Nationals and Blocked Persons (SDN)/countries listed under
-                            OFAC in any manner, I/we undertake not
-                            to hold YES Bank Limited responsible for any of its action or inaction in respect of the
-                            OFAC-linked transactions. <br> <br> Note – Default GST registration details as updated
-                            in the Bank records will be considered
-                            for the said request. In case the no. to be considered is different, please notify
-                            below.
-                          </p>
-
-
-                          <p style="margin-bottom: 0px;">
-                            GSTIN Registration no.
-                          </p>
-                          <div class="span-div">
-                            <span
-                              style="outline: none;display: inline-block;width: 20px; border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[0]}}</span><span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[1]}}</span><span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[2]}}</span>
-                            <span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[3]}}</span><span
-                              style="outline: none;display: inline-block;width: 20px; border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[4]}}</span>
-                            <span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[5]}}</span><span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[6]}}</span>
-                            <span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[7]}}</span><span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[8]}}</span>
-                            <span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[9]}}</span><span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[10]}}</span>
-                            <span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[11]}}</span><span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[12]}}</span>
-                            <span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
-                              contenteditable="true">{{this.arr[13]}}</span><span
-                              style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;"
-                              contenteditable="true">{{this.arr[14]}}</span>
-                          </div>
-
-                          <div style="margin-top: 20px;">
-                            <p>
-                              Yours faithfully, <br> Authorized Signatory <br> Company Stamp / Seal
-                            </p>
-                          </div>
-                          <div>
-                            <p style="text-align: end; margin-top: -50px;">
-                              Date: <span
-                                style="outline: none;display: inline-block;width: 100px; border-bottom: 1px solid black;"
-                                contenteditable="true"></span> <br> Place: <span
-                                style="outline: none;display: inline-block;width: 100px; border-bottom: 1px solid black;"
-                                contenteditable="true"></span>
-                            </p>
-                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-5 col-sm-12 col-12">
-                    <div class="right_form_new">
-                      <div class="row m-0 d-flex flex-column align-items">
-                        <div class="content_white_background" style="padding: 0;
-                        margin: auto;
-                        margin-left: 0;
-                        margin-top: 20px;">
-                          <main id="content" class="content" role="main">
-                            <div class="analytics">
-                              <div>
-                                <div class="space_bottom"></div>
-                                <form [formGroup]="this.Transaction_form">
-                                <div class="bill_lod_section">
-                                  <div class="row">
-                                    <div class="col-md-10 mb-0">
-                                      <label for="exampleInputEmail1" class="form-label">Select bank*</label>
-                                      <ng-select [items]="this.bankDetail" *ngIf="this.bankDetail.length!=0"
-                                      formcontrolname="bank_name" #bankName (change)="setradio('Credit',$event.bank)" ngModel
-                                        bindLabel="bank" [multiple]="false" placeholder="Select Buyer Name"></ng-select>
-                                    </div>
-                                    <div class="col-md-10 mb-0" *ngIf="this.newBankArray['Credit'].length!=0">
-                                      <div class="row mt-2">
-                                        <label for="exampleInputEmail1" class="form-label">Select Credit bank*</label>
-                                        <mat-radio-group class="custom-checkbox" aria-label="Select an option">
-                                          <mat-radio-button [value]="item" (change)="setBank($event,'Credit',0,item)"
-                                            *ngFor="let item of this.newBankArray['Credit'];let i=index">{{item?.bank}} |
-                                            {{item?.accNumber}}</mat-radio-button>
-                                        </mat-radio-group>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-10 mb-2" *ngIf="this.newBankArray['Credit'].length!=0">
-                                      <div class="row mt-2">
-                                        <label for="exampleInputEmail1" class="form-label">Select Debit bank*</label>
-                                        <mat-radio-group class="custom-checkbox" aria-label="Select an option">
-                                          <mat-radio-button [value]="item" (change)="setBank($event,'Credit',1,item)"
-                                            *ngFor="let item of this.newBankArray['Credit'];let i=index">{{item?.bank}} |
-                                            {{item?.accNumber}}</mat-radio-button>
-                                        </mat-radio-group>
-                                      </div>
-                                    </div>
-                                    <div class="space_bottom"></div>
-                                    <div class="col-md-8 col-sm-8 col-7 toggle-btn">
-                                       <div class="import_export_button">
-                                          <div >
-                                            <button type="button" class="btn btn-primary btn no-button"
-                                              (click)="Changebutton('EPC_PCFC','Hide','Show','no')"
-                                              [ngClass]='this.Lodgement["EPC_PCFC"]["Hide"]=="no"?"type_active":""'>
-                                              <span class="icon_top"></span>EPC</button>
-                                            <button type="button" class="btn btn-primary btn no-button"
-                                               [ngClass]='this.Lodgement["EPC_PCFC"]["Show"]=="yes"?"type_active":""'
-                                               (click)="Changebutton('EPC_PCFC','Show','Hide','yes')">
-                                              <span class="icon_top "></span>PCFC
-                                            </button>
-                                          </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-8 col-sm-8 col-7">
-                                      <label for="email" class="form-label">Running PC</label>
-                                    </div>
-                                    <div class="col-md-4 col-sm-4 col-5">
-                                      <div class="check_box_button">
-                                        <button type="button" [class]="ClassRetrun('Running_PC','Hide','btn no-button active1',
-                                                                             'btn btn-primary remove-no-button','no')"
-                                          (click)="Changebutton('Running_PC','Hide','Show','no')">No</button>
-                                        <button type="button"
-                                          [class]="ClassRetrun('Running_PC','Show',
-                                                                            'btn yes-button active','btn yes-button','yes')"
-                                          (click)="Changebutton('Running_PC','Show','Hide','yes')">Yes</button>
-                                      </div>
-                                    </div>
-                                    <div class="space_bottom"></div>
-
-                                    <div class="panel-running-pcc-yes col-11"
-                                      *ngIf='this.Lodgement["Running_PC"]["Show"]== "yes"'>
-                                      <div class="col-md-10 mb-3">
-                                        <label for="email" class="form-label">Select Buyer Name</label>
-                                        <ng-select [items]="this.buyerName" bindLabel="value"
-                                          (change)="addToSbArray_2('buyerName',[$event.value]);addToSbArray_2('PIPO_NO',[1]);addToSbArray_2('Date',[CURRENT_DATE])"
-                                          [multiple]="false" placeholder="Select Buyer Name"></ng-select>
-                                      </div>
-                                      <div class="col-md-10 mb-3">
-                                        <label for="email" class="form-label">Select Incoterm (FOB/CIF)</label>
-                                        <div class="row">
-                                          <mat-radio-group class="custom-checkbox" aria-label="Select an option">
-                                            <mat-radio-button value="1">FOB</mat-radio-button>
-                                            <mat-radio-button value="2">CIF</mat-radio-button>
-                                          </mat-radio-group>
-                                        </div>
-                                      </div>
-                                      <div class="col-12 mb-2">
-                                        <label for="email" class="form-label">Select PCFC Amount and Currency</label>
-                                        <div class="d-flex flex-column mt-2" formArrayName="PIPO_LIST">
-                                          <div class="col-12" *ngFor="let item of [{amount:0}];let i=index">
-                                            <div class="ui-panel">
-                                              <div class="row w-row">
-                                                <div class="basic-column w-col w-col-3">
-                                                  <div class="tag-wrapper">
-                                                    <div class="number-card number-card-content1" [formGroupName]="i">
-                                                      <label for="email" class="form-label number-text"
-                                                        style="margin: auto;margin-top:-20px;">{{(i+1)}}</label>
-                                                      <div class="row col-12" style="flex-wrap: unset;
-                                                      margin: auto;
-                                                      margin-left: 0;">
-                                                        <label class="number-card-number pl-1" style="color: white;">
-                                                          Currency : <ng-select class="custom-ng-select"
-                                                            *ngIf="this.CURRENCY_LIST?.length!=0"
-                                                            [items]="this.CURRENCY_LIST" bindLabel="type"
-                                                            [multiple]="false" placeholder="Select Currency"
-                                                            formcontrolname="currency" ngModel (change)="setCurrency($event.type)"
-                                                            #currency required>
-                                                          </ng-select></label>
-                                                        <label class="number-card-number pl-1"
-                                                          style="color: white;">PCFC
-                                                          Amount : <input formcontrolname="PCFC_Amount" ngModel style="border: 0 !important;border-bottom: 2px solid white !important;
-                                                            background: transparent;
-                                                            color: white;
-                                                            border-radius: 0;" type="text" class="form-control"
-                                                            (keyup)="addToSbArray_2('AmountSum',$event.target.value)"></label>
-                                                      </div>
-                                                      <div class="number-card-divider"></div>
-                                                      <div class="number-card-progress-wrapper">
-                                                        <div class="tagline number-card-currency">
-                                                          {{this.SELECTED_CURRENCY}}</div>
-                                                        <div class="number-card-progress">0%</div>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="col-md-10 mb-3">
-                                        <label for="email" class="form-label">Due Date (Show max Tenor from
-                                          Account)</label>
-                                        <input type="date" class="form-control" placeholder="dd/mm/yyyy"
-                                          (change)="this.Advance_Amount_Sum['Last_date_of_service']=$event.target.value">
-                                      </div>
-                                      <div class="col-md-10 mb-3">
-                                        <label for="email" class="form-label">Forward contract (Yes/NO)</label>
-                                        <div class="row">
-                                          <mat-radio-group class="custom-checkbox" aria-label="Select an option">
-                                            <mat-radio-button value="1">YES</mat-radio-button>
-                                            <mat-radio-button value="2">NO</mat-radio-button>
-                                          </mat-radio-group>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="panel-running-pcc-no col-11"
-                                      *ngIf='this.Lodgement["Running_PC"]["Hide"]== "no"'>
-                                      <div class="col-md-10 mb-3">
-                                        <label for="email" class="form-label">Select PI/PO</label>
-                                        <ng-select [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
-                                          [multiple]="false" placeholder="Select PI/PO"
-                                          (change)="DUMP_FUNCTION($event?.value,'PIPO NUMBER',content2)"
-                                          #PI_PO_shipping_bill></ng-select>
-                                      </div>
-                                      <div class="col-md-10 mb-3">
-                                        <label for="email" class="form-label">Select Incoterm (FOB/CIF)</label>
-                                        <div class="row">
-                                          <mat-radio-group class="custom-checkbox" aria-label="Select an option">
-                                            <mat-radio-button value="1">FOB</mat-radio-button>
-                                            <mat-radio-button value="2">CIF</mat-radio-button>
-                                          </mat-radio-group>
-                                        </div>
-                                      </div>
-                                      <div class="d-flex flex-column mt-2">
-                                        <div class="col-12" *ngFor="let item of this.advanceArray;let i=index">
-                                          <div class="ui-panel">
-                                            <div class="row w-row">
-                                              <div class="basic-column w-col w-col-3">
-                                                <div class="tag-wrapper">
-                                                  <div class="number-card number-card-content1">
-                                                    <label for="email" class="form-label number-text" name="pi_poNo" [ngModel]="item?.pi_poNo"
-                                                      style="margin: auto;margin-top:-20px;">PIPO No. : {{(item?.pi_poNo)}}</label>
-                                                    <div class="row col-12" style="flex-wrap: unset;
-                                                    margin: auto;
-                                                    margin-left: 0;">
-                                                      <label class="number-card-number pl-1" style="color: white;">PIPO
-                                                        Amount : <input name="PIPO_Amount" style="border: 0 !important;border-bottom: 2px solid white !important;
-                                                          background: transparent;
-                                                          color: white;
-                                                          border-radius: 0;" type="text" class="form-control"
-                                                          [value]="item?.amount" disabled></label>
-                                                      <label class="number-card-number pl-1" style="color: white;">PCFC
-                                                        Amount : <input name="PCFC_Amount" style="border: 0 !important;border-bottom: 2px solid white !important;
-                                                          background: transparent;
-                                                          color: white;
-                                                          border-radius: 0;" type="number" class="form-control" 
-                                                          (keypress)="limitAmount($event,item?.amount,$event.target.value)"
-                                                          [value]="this.PERCENTAGE_AMOUNT(10,item?.amount)" maxlength="{{item?.amount?.length}}"></label>
-                                                    </div>
-                                                    <div class="number-card-divider"></div>
-                                                    <div class="number-card-progress-wrapper">
-                                                      <div class="tagline number-card-currency"><ng-select class="custom-ng-select"
-                                                        [items]="[{type:item?.currency}]" bindLabel="type"
-                                                        [multiple]="false"
-                                                        name="currency" [selected]="item?.currency"
-                                                        #currency required></ng-select></div>
-                                                      <div class="number-card-progress">10%</div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="col-md-10 mb-3">
-                                        <label for="email" class="form-label">Forward contract (Yes/NO)</label>
-                                        <div class="row">
-                                          <mat-radio-group class="custom-checkbox" aria-label="Select an option">
-                                            <mat-radio-button value="1">YES</mat-radio-button>
-                                            <mat-radio-button value="2">NO</mat-radio-button>
-                                          </mat-radio-group>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="space_bottom"></div>
-                                    <br>
-                                  </div>
-                                </div>
-                                </form>
-                              </div>
-                            </div>
-                          </main>
+                        <br>
+                        <div class="custom-table grid">
+                          <table>
+                            <tr>
+                              <th>LC order no & date : </th>
+                              <td>{{this.Advance_Amount_Sum?.PIPO_NO?.toString()}} &
+                                {{this.Advance_Amount_Sum?.Date?.toString()}}</td>
+                            </tr>
+                            <tr>
+                              <th>Buyer : </th>
+                              <td>{{this.Advance_Amount_Sum?.buyerName?.toString()}}</td>
+                            </tr>
+                            <tr>
+                              <th>Value : </th>
+                              <td>{{this.Advance_Amount_Sum?.AmountSum}}</td>
+                            </tr>
+                            <tr>
+                              <th>Last date of service :</th>
+                              <td>{{this.getTimeDifferenceContract(180)}}</td>
+                            </tr>
+                          </table>
+                          <table>
+                            <tr>
+                              <th>Loan requested up to (Date) : </th>
+                              <td>{{this.Advance_Amount_Sum?.Last_date_of_service}}</td>
+                            </tr>
+                            <tr>
+                              <th>Type of service : </th>
+                              <td>-</td>
+                            </tr>
+                            <tr>
+                              <th>IEC :</th>
+                              <td>{{this.item5?.iec}}</td>
+                            </tr>
+                            <tr>
+                              <th>A/c no to be debit for all charges : </th>
+                              <td>{{this.SET_CREDIT_DEBIT_LIST?.Credit[1]?.accNumber}}</td>
+                            </tr>
+                          </table>
                         </div>
-                      </div>
-                      <div class="bottom_submit_section">
-                        <button type="button" class="btn btn-primary"
-                          [routerLink]="['/home/dashboardTask']">CANCEL</button>
-                        <button type="button" class="btn btn-secondary"
-                          (click)='Preview_btn.style.display="block"'>PROCEED</button>
-                        <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;"
-                          (click)='PREVIEWS_URL("Packing-Credit-Request");PREVIEW_PAGE.style.display="block";'>Preview</button>
+                        <br>
+                        <p> <b style="border-bottom: 1px solid black;">Declaration – Cum – Undertaking:</b>
+                        </p>
+                        <p>
+                           We undertake to liquidate the above loan by submitting to you the relative export
+                          documents bills within the validity of LC / order or within maturity date of advance
+                          whichever is earlier. <br>  We are not in
+                          the caution list of RBI / ECGC. <br>  We will export the services as per the export
+                          schedule of the order / LC original copy enclosed without any delay. <br>  We are
+                          agreeable for commercial rate of interest in
+                          case of delay in liquidating the EPC within validity of order/ LC. <br>  We undertake
+                          that we have not taken any EPC from any other bank for this particular order. <br>  The
+                          proposal is a genuine case of export
+                          of services. <br>  The item of service export is covered under Appendix 10 of HBPv1.
+                          <br>  We are registered with □ Electronic and software EPC □ Services EPC □ Federation
+                          of Indian Export Organizations, as applicable.
+                          <br>  There is an Export Contract for the export of the service. <br>  There is a time
+                          lag between the outlay of working capital expense and actual receipt of payment from the
+                          service consumer or his principal
+                          abroad. <br>  There is a valid Working Capital gap i.e. service is provided first while
+                          the payment is received some time after an invoice is raised. <br>  Inward remittance
+                          would be received in Foreign Exchange.
+                          <br>  We will raise the invoice as per the contract. Where payment is received from
+                          overseas party, we would utilize the funds to repay the export credit availed of from
+                          the bank. <br>
+                        </p>
+                        <p>
+                          <b style="border-bottom: 1px solid black;">Enclosed documents:</b> <br> □ Purchase Order
+                          □ Letter of credit □ Labor Bill □ Any other
+                        </p>
+
+                        <p>
+                          <b style="border-bottom: 1px solid black;">Declaration – Cum – Undertaking:</b>
+                          <br> I/We hereby declare that the transaction, details of which are specifically
+                          mentioned in this request letter does not involve, and / is not designed for the purpose
+                          of any contravention or evasion of the provisions
+                          of FEMA 1999 or of any rules, regulations, notifications, directions or order made there
+                          under. I/We also hereby agree and undertake to give such information / documents as will
+                          reasonably satisfy you about this
+                          transaction in terms of the above declaration. I/We also understand that if I/We refuse
+                          to comply with any such requirement or make only unsatisfactory compliance therewith,
+                          the bank shall refuse in writing to undertake
+                          the transaction and shall, if it has reason to believe that any contravention / evasion
+                          is contemplated by me / us, report the matter to Reserve Bank of India. I/We further
+                          declare that the undersigned has / have
+                          the authority to give this declaration and undertaking on behalf of the company. <br>
+                          <br> I/we also declare that the transaction does not have linkage with any Specially
+                          Designated Nationals and Blocked Persons
+                          (SDN)/countries listed under OFAC in any manner. If the transaction involves linkage
+                          with any Specially Designated Nationals and Blocked Persons (SDN)/countries listed under
+                          OFAC in any manner, I/we undertake not
+                          to hold YES Bank Limited responsible for any of its action or inaction in respect of the
+                          OFAC-linked transactions. <br> <br> Note – Default GST registration details as updated
+                          in the Bank records will be considered
+                          for the said request. In case the no. to be considered is different, please notify
+                          below.
+                        </p>
+
+
+                        <p style="margin-bottom: 0px;">
+                          GSTIN Registration no.
+                        </p>
+                        <div class="span-div">
+                          <span
+                            style="outline: none;display: inline-block;width: 20px; border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[0]}}</span><span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[1]}}</span><span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[2]}}</span>
+                          <span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[3]}}</span><span
+                            style="outline: none;display: inline-block;width: 20px; border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[4]}}</span>
+                          <span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[5]}}</span><span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[6]}}</span>
+                          <span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[7]}}</span><span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[8]}}</span>
+                          <span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[9]}}</span><span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[10]}}</span>
+                          <span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[11]}}</span><span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[12]}}</span>
+                          <span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black;"
+                            contenteditable="true">{{this.arr[13]}}</span><span
+                            style="outline: none;display: inline-block;width: 20px;border-bottom: 1px solid black; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;"
+                            contenteditable="true">{{this.arr[14]}}</span>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                          <p>
+                            Yours faithfully, <br> Authorized Signatory <br> Company Stamp / Seal
+                          </p>
+                        </div>
+                        <div>
+                          <p style="text-align: end; margin-top: -50px;">
+                            Date: <span
+                              style="outline: none;display: inline-block;width: 100px; border-bottom: 1px solid black;"
+                              contenteditable="true"></span> <br> Place: <span
+                              style="outline: none;display: inline-block;width: 100px; border-bottom: 1px solid black;"
+                              contenteditable="true"></span>
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-            </div>
+                <div class="col-md-5 col-sm-12 col-12">
+                  <div class="right_form_new">
+                    <div class="row m-0 d-flex flex-column align-items">
+                      <div class="content_white_background" style="padding: 0;
+                      margin: auto;
+                      margin-left: 0;
+                      margin-top: 20px;">
+                        <main id="content" class="content" role="main">
+                          <div class="analytics">
+                            <div>
+                              <div class="space_bottom"></div>
+                              <form [formGroup]="this.Transaction_form">
+                              <div class="bill_lod_section">
+                                <div class="row">
+                                  <div class="col-md-10 mb-0">
+                                    <label for="exampleInputEmail1" class="form-label">Select bank*</label>
+                                    <ng-select [items]="this.bankDetail" *ngIf="this.bankDetail.length!=0"
+                                    formcontrolname="bank_name" #bankName (change)="setradio('Credit',$event.bank)" ngModel
+                                      bindLabel="bank" [multiple]="false" placeholder="Select Buyer Name"></ng-select>
+                                  </div>
+                                  <div class="col-md-10 mb-0" *ngIf="this.newBankArray['Credit'].length!=0">
+                                    <div class="row mt-2">
+                                      <label for="exampleInputEmail1" class="form-label">Select Credit bank*</label>
+                                      <mat-radio-group class="custom-checkbox" aria-label="Select an option">
+                                        <mat-radio-button [value]="item" (change)="setBank($event,'Credit',0,item)"
+                                          *ngFor="let item of this.newBankArray['Credit'];let i=index">{{item?.bank}} |
+                                          {{item?.accNumber}}</mat-radio-button>
+                                      </mat-radio-group>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-10 mb-2" *ngIf="this.newBankArray['Credit'].length!=0">
+                                    <div class="row mt-2">
+                                      <label for="exampleInputEmail1" class="form-label">Select Debit bank*</label>
+                                      <mat-radio-group class="custom-checkbox" aria-label="Select an option">
+                                        <mat-radio-button [value]="item" (change)="setBank($event,'Credit',1,item)"
+                                          *ngFor="let item of this.newBankArray['Credit'];let i=index">{{item?.bank}} |
+                                          {{item?.accNumber}}</mat-radio-button>
+                                      </mat-radio-group>
+                                    </div>
+                                  </div>
+                                  <div class="space_bottom"></div>
+                                  <div class="col-md-8 col-sm-8 col-7 toggle-btn">
+                                     <div class="import_export_button">
+                                        <div >
+                                          <button type="button" class="btn btn-primary btn no-button"
+                                            (click)="Changebutton('EPC_PCFC','Hide','Show','no')"
+                                            [ngClass]='this.Lodgement["EPC_PCFC"]["Hide"]=="no"?"type_active":""'>
+                                            <span class="icon_top"></span>EPC</button>
+                                          <button type="button" class="btn btn-primary btn no-button"
+                                             [ngClass]='this.Lodgement["EPC_PCFC"]["Show"]=="yes"?"type_active":""'
+                                             (click)="Changebutton('EPC_PCFC','Show','Hide','yes')">
+                                            <span class="icon_top "></span>PCFC
+                                          </button>
+                                        </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="col-md-8 col-sm-8 col-7">
+                                    <label for="email" class="form-label">Running PC</label>
+                                  </div>
+                                  <div class="col-md-4 col-sm-4 col-5">
+                                    <div class="check_box_button">
+                                      <button type="button" [class]="ClassRetrun('Running_PC','Hide','btn no-button active1',
+                                                                           'btn btn-primary remove-no-button','no')"
+                                        (click)="Changebutton('Running_PC','Hide','Show','no')">No</button>
+                                      <button type="button"
+                                        [class]="ClassRetrun('Running_PC','Show',
+                                                                          'btn yes-button active','btn yes-button','yes')"
+                                        (click)="Changebutton('Running_PC','Show','Hide','yes')">Yes</button>
+                                    </div>
+                                  </div>
+                                  <div class="space_bottom"></div>
+
+                                  <div class="panel-running-pcc-yes col-11"
+                                    *ngIf='this.Lodgement["Running_PC"]["Show"]== "yes"'>
+                                    <div class="col-md-10 mb-3">
+                                      <label for="email" class="form-label">Select Buyer Name</label>
+                                      <ng-select [items]="this.buyerName" bindLabel="value"
+                                        (change)="addToSbArray_2('buyerName',[$event.value]);addToSbArray_2('PIPO_NO',[1]);addToSbArray_2('Date',[CURRENT_DATE])"
+                                        [multiple]="false" placeholder="Select Buyer Name"></ng-select>
+                                    </div>
+                                    <div class="col-md-10 mb-3">
+                                      <label for="email" class="form-label">Select Incoterm (FOB/CIF)</label>
+                                      <div class="row">
+                                        <mat-radio-group class="custom-checkbox" aria-label="Select an option">
+                                          <mat-radio-button value="1">FOB</mat-radio-button>
+                                          <mat-radio-button value="2">CIF</mat-radio-button>
+                                        </mat-radio-group>
+                                      </div>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                      <label for="email" class="form-label">Select PCFC Amount and Currency</label>
+                                      <div class="d-flex flex-column mt-2" formArrayName="PIPO_LIST">
+                                        <div class="col-12" *ngFor="let item of [{amount:0}];let i=index">
+                                          <div class="ui-panel">
+                                            <div class="row w-row">
+                                              <div class="basic-column w-col w-col-3">
+                                                <div class="tag-wrapper">
+                                                  <div class="number-card number-card-content1" [formGroupName]="i">
+                                                    <label for="email" class="form-label number-text"
+                                                      style="margin: auto;margin-top:-20px;">{{(i+1)}}</label>
+                                                    <div class="row col-12" style="flex-wrap: unset;
+                                                    margin: auto;
+                                                    margin-left: 0;">
+                                                      <label class="number-card-number pl-1" style="color: white;">
+                                                        Currency : <ng-select class="custom-ng-select"
+                                                          *ngIf="this.CURRENCY_LIST?.length!=0"
+                                                          [items]="this.CURRENCY_LIST" bindLabel="type"
+                                                          [multiple]="false" placeholder="Select Currency"
+                                                          formcontrolname="currency" ngModel (change)="setCurrency($event.type)"
+                                                          #currency required>
+                                                        </ng-select></label>
+                                                      <label class="number-card-number pl-1"
+                                                        style="color: white;">PCFC
+                                                        Amount : <input formcontrolname="PCFC_Amount" ngModel style="border: 0 !important;border-bottom: 2px solid white !important;
+                                                          background: transparent;
+                                                          color: white;
+                                                          border-radius: 0;" type="text" class="form-control"
+                                                          (keyup)="addToSbArray_2('AmountSum',$event.target.value)"></label>
+                                                    </div>
+                                                    <div class="number-card-divider"></div>
+                                                    <div class="number-card-progress-wrapper">
+                                                      <div class="tagline number-card-currency">
+                                                        {{this.SELECTED_CURRENCY}}</div>
+                                                      <div class="number-card-progress">0%</div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-10 mb-3">
+                                      <label for="email" class="form-label">Due Date (Show max Tenor from
+                                        Account)</label>
+                                      <input type="date" class="form-control" placeholder="dd/mm/yyyy"
+                                        (change)="this.Advance_Amount_Sum['Last_date_of_service']=$event.target.value">
+                                    </div>
+                                    <div class="col-md-10 mb-3">
+                                      <label for="email" class="form-label">Forward contract (Yes/NO)</label>
+                                      <div class="row">
+                                        <mat-radio-group class="custom-checkbox" aria-label="Select an option">
+                                          <mat-radio-button value="1">YES</mat-radio-button>
+                                          <mat-radio-button value="2">NO</mat-radio-button>
+                                        </mat-radio-group>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="panel-running-pcc-no col-11"
+                                    *ngIf='this.Lodgement["Running_PC"]["Hide"]== "no"'>
+                                    <div class="col-md-10 mb-3">
+                                      <label for="email" class="form-label">Select PI/PO</label>
+                                      <ng-select [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
+                                        [multiple]="false" placeholder="Select PI/PO"
+                                        (change)="DUMP_FUNCTION($event?.value,'PIPO NUMBER',content2)"
+                                        #PI_PO_shipping_bill></ng-select>
+                                    </div>
+                                    <div class="col-md-10 mb-3">
+                                      <label for="email" class="form-label">Select Incoterm (FOB/CIF)</label>
+                                      <div class="row">
+                                        <mat-radio-group class="custom-checkbox" aria-label="Select an option">
+                                          <mat-radio-button value="1">FOB</mat-radio-button>
+                                          <mat-radio-button value="2">CIF</mat-radio-button>
+                                        </mat-radio-group>
+                                      </div>
+                                    </div>
+                                    <div class="d-flex flex-column mt-2">
+                                      <div class="col-12" *ngFor="let item of this.advanceArray;let i=index">
+                                        <div class="ui-panel">
+                                          <div class="row w-row">
+                                            <div class="basic-column w-col w-col-3">
+                                              <div class="tag-wrapper">
+                                                <div class="number-card number-card-content1">
+                                                  <label for="email" class="form-label number-text" name="pi_poNo" [ngModel]="item?.pi_poNo"
+                                                    style="margin: auto;margin-top:-20px;">PIPO No. : {{(item?.pi_poNo)}}</label>
+                                                  <div class="row col-12" style="flex-wrap: unset;
+                                                  margin: auto;
+                                                  margin-left: 0;">
+                                                    <label class="number-card-number pl-1" style="color: white;">PIPO
+                                                      Amount : <input name="PIPO_Amount" style="border: 0 !important;border-bottom: 2px solid white !important;
+                                                        background: transparent;
+                                                        color: white;
+                                                        border-radius: 0;" type="text" class="form-control"
+                                                        [value]="item?.amount" disabled></label>
+                                                    <label class="number-card-number pl-1" style="color: white;">PCFC
+                                                      Amount : <input name="PCFC_Amount" style="border: 0 !important;border-bottom: 2px solid white !important;
+                                                        background: transparent;
+                                                        color: white;
+                                                        border-radius: 0;" type="number" class="form-control" 
+                                                        (keypress)="limitAmount($event,item?.amount,$event.target.value)"
+                                                        [value]="this.PERCENTAGE_AMOUNT(10,item?.amount)" maxlength="{{item?.amount?.length}}"></label>
+                                                  </div>
+                                                  <div class="number-card-divider"></div>
+                                                  <div class="number-card-progress-wrapper">
+                                                    <div class="tagline number-card-currency"><ng-select class="custom-ng-select"
+                                                      [items]="[{type:item?.currency}]" bindLabel="type"
+                                                      [multiple]="false"
+                                                      name="currency" [selected]="item?.currency"
+                                                      #currency required></ng-select></div>
+                                                    <div class="number-card-progress">10%</div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-10 mb-3">
+                                      <label for="email" class="form-label">Forward contract (Yes/NO)</label>
+                                      <div class="row">
+                                        <mat-radio-group class="custom-checkbox" aria-label="Select an option">
+                                          <mat-radio-button value="1">YES</mat-radio-button>
+                                          <mat-radio-button value="2">NO</mat-radio-button>
+                                        </mat-radio-group>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="space_bottom"></div>
+                                  <br>
+                                </div>
+                              </div>
+                              </form>
+                            </div>
+                          </div>
+                        </main>
+                      </div>
+                    </div>
+                    <div class="bottom_submit_section">
+                      <button type="button" class="btn btn-primary"
+                        [routerLink]="['/home/dashboardTask']">CANCEL</button>
+                      <button type="button" class="btn btn-secondary"
+                        (click)='Preview_btn.style.display="block"'>PROCEED</button>
+                      <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;"
+                        (click)='PREVIEWS_URL("Packing-Credit-Request");PREVIEW_PAGE.style.display="block";'>Preview</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   </div>
 </div>

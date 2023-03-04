@@ -46,14 +46,14 @@ import { UserService } from '../../../../service/user.service';
 // import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from '../../../../app.config';
 import { PipoDataService } from "../../../../service/homeservices/pipo.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { WindowInformationService } from '../../../../service/window-information.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 
 @Component({
   selector: 'app-export-credit-note',
   templateUrl: './export-credit-note.component.html',
-  styleUrls: ['../../../upload/upload.component.scss']
+  styleUrls: ['../../../upload/upload.component.scss','./export-credit-note.component.scss']
 })
 export class ExportCreditNoteComponent implements OnInit {
   @Input() que: any;
@@ -109,7 +109,7 @@ export class ExportCreditNoteComponent implements OnInit {
   shippingForm: FormGroup;
   // loginForm: FormGroup;
   public submitted = false;
-  authToken: string;
+  authToken:any;
   headers: any;
   closeResult: string;
   APPEND_HTML: any = [];

@@ -37,11 +37,9 @@ export class ViewPipoComponent implements OnInit {
 
   getSBDetails(id) {
     this.documentService.getSBDetailsByPIPO(id).subscribe((Sbres: any) => {
-
       this.SbData = Sbres;
-
       console.log("SbData", this.SbData)
-      let result = [];
+      let result:any = [];
       this.SbData.reduce(function (res, value) {
         if (!res[value.fobCurrency]) {
           res[value.fobCurrency] = {
@@ -53,13 +51,8 @@ export class ViewPipoComponent implements OnInit {
           ;
         return res;
       }, {});
-
       this.SbAmountAndCurrency = result
-
-
-    }
-    )
-
+    })
   }
 
   getInwardData(id) {

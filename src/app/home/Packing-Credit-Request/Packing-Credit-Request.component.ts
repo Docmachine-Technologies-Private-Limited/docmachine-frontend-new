@@ -7,14 +7,10 @@ import { ActivatedRoute } from '@angular/router';
 import * as data from '../../inward.json';
 import $ from 'jquery'
 import { PDFDocument } from 'pdf-lib';
-import { saveAs as importedSaveAs } from 'file-saver';
 import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
 import * as XLSX from 'xlsx';
 import * as CURRENCY_JSON from '../../currency.json';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import htmlToPdfmake from 'html-to-pdfmake';
 declare var kendo:any;
 
@@ -35,9 +31,9 @@ import { DocumentService } from "../../service/document.service";
 import { PipoDataService } from "../../service/homeservices/pipo.service";
 import { AppConfig } from '../../app.config';
 import { WindowInformationService } from '../../service/window-information.service';
-import { ShippingbillDataService } from 'src/app/service/homeservices/shippingbill.service';
+import { ShippingbillDataService } from '../../service/homeservices/shippingbill.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { MergePdfListService } from '../merge-pdf-list.service';
 import { CommonModule } from '@angular/common';
@@ -239,7 +235,7 @@ export class PackingCreditRequestComponent implements OnInit {
   item10: any = [];
   item11: any = [];
   public buyerDetail: any = [];
-  advanceArray = [];
+  advanceArray:any = [];
   buyerName: any = [];
   id: any;
   SHIPPING_BILL: any = '';
@@ -300,7 +296,7 @@ export class PackingCreditRequestComponent implements OnInit {
       Last_date_of_service: new FormControl('', [Validators.required]),
       Credit_Debit_Account:new FormControl([], [Validators.required]),
     });
-    this.userService.getUserDetail().then((status) => {
+    this.userService.getUserDetail().then((status:any) => {
       this.USER_DATA = status['result'];
       console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
     });
@@ -784,7 +780,7 @@ export class PackingCreditRequestComponent implements OnInit {
       this.Transaction_form.value.Forward_Contract=this.Lodgement['Forward_Contract']
       this.Transaction_form.value.BuyerName=this.Advance_Amount_Sum['buyerName']
       this.Transaction_form.value.Due_Date=this.getTimeDifferenceContract(180)
-      this.Transaction_form.value.GSTNO=this.Lodgement['Running_PC']
+      this.Transaction_form.value.GSTNO=this.arr
       this.Transaction_form.value.Loan_requested_date=this.CURRENT_DATE
       this.Transaction_form.value.Type_of_service=''
       this.Transaction_form.value.Last_date_of_service=this.CURRENT_DATE
@@ -821,7 +817,8 @@ export class PackingCreditRequestComponent implements OnInit {
              var data:any={
                data:this.Transaction_form.value,
                TypeTransaction:'Packing-Credit-Request',
-               fileType:'Export'
+               fileType:'Export',
+               UserDetails:approval_data?.id
              }
              this.documentService.addExportBillLodgment(data).subscribe((res1: any) => { 
                   console.log('addExportBillLodgment', res1);

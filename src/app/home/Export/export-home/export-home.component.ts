@@ -10,12 +10,11 @@ import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.ser
 import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { formatDate } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { saveAs as importedSaveAs } from 'file-saver';
+import * as importedSaveAs  from 'file-saver';
 import { MatPaginator } from "@angular/material/paginator";
-import { WindowInformationService } from "src/app/service/window-information.service";
-import { AprrovalPendingRejectTransactionsService } from "src/app/service/aprroval-pending-reject-transactions.service";
-import { CustomConfirmDialogModelComponent } from "src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component";
-import { saveAs } from 'file-saver';
+import { WindowInformationService } from "../../../service/window-information.service";
+import { AprrovalPendingRejectTransactionsService } from "../../../service/aprroval-pending-reject-transactions.service";
+import { CustomConfirmDialogModelComponent } from "../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component";
 
 @Component({
   selector: 'app-export-home',
@@ -50,7 +49,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   public allTransactions: any = [];
   SBBuyerName: string = 'BuyerName';
   PIPONumbersBuyerName: string = 'BuyerName';
-  buyerName = [];
+  buyerName:any = [];
   selectSB = '';
 
   public generateIndex;
@@ -130,7 +129,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   data9: any = [];
   dataImport: any = [];
   sbPurposeDone1: any = [];
-  item4 = [];
+  item4:any = [];
   bankRef: any;
   newTask: any = [];
   z: any;
@@ -166,7 +165,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   model = { option: 'Bank options' };
   model1 = { option: 'Bank options' };
   model2 = { option: 'Bank options' };
-  selectedPdfs = [];
+  selectedPdfs:any = [];
   selectedPdfs2: any;
   generateChecked: boolean = true;
   formerge: string | ArrayBuffer | Uint8Array;
@@ -304,7 +303,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       this.Inward_Remittance_MT103=res?.data;
       this.userService.mergePdf(this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?.file).subscribe((res: any) => {
         res.arrayBuffer().then((data: any) => {
-          this.MT103_URL=(data);
+          var base64String = this._arrayBufferToBase64(data)
+          const x = 'data:application/pdf;base64,' + base64String;
+          this.MT103_URL=x;
          console.log('mergePdf_downloadEachFile',data);
        });
      });
@@ -340,7 +341,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.documentService.getPipo().subscribe(
       (res: any) => {
         console.log("HEre Response cheching for", res), (this.item3 = res.data);
-        let value1 = []
+        let value1:any = []
         for (let value of this.item3) {
           if (value.file == 'export') {
             value1.push(value)
@@ -426,7 +427,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       console.log('inside')
       this.proceed = false
       this.c = this.documentService.task.task[0].purposeCode;
-      let newArray = [];
+      let newArray:any = [];
       let i = 0;
       for (let value of this.documentService.task.task) {
 
@@ -438,7 +439,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           if (value.pipoUrls && !value.generateDoc1) {
             this.zToggle[i] = false
             this.generatePurpose[i] = value.purposeCode;
-            let gene = []
+            let gene:any = []
             for (let value1 of value.pipoUrls) {
               gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                 value1.changingThisBreaksApplicationSecurity
@@ -453,7 +454,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
             this.zToggle[i] = true
             this.generatePurpose[i] = value.purposeCode;
             this.donePurpose[i] = value.purposeCode;
-            let gene = []
+            let gene:any = []
             for (let value1 of value.pipoUrls) {
               gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                 value1.changingThisBreaksApplicationSecurity
@@ -481,7 +482,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               this.zToggle[i] = false
               this.sbPurpose[i] = value.purposeCode;
               if (value.sbUrls) {
-                let gene = []
+                let gene:any = []
                 for (let value1 of value.sbUrls) {
                   gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -492,7 +493,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               }
 
               if (value.tryUrls) {
-                let gene1 = []
+                let gene1:any = []
                 for (let value1 of value.tryUrls) {
                   gene1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -509,7 +510,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               this.zToggle[i] = true
 
               if (value.sbUrls) {
-                let gene = []
+                let gene:any = []
                 for (let value1 of value.sbUrls) {
                   gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -520,7 +521,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               }
 
               if (value.tryUrls) {
-                let gene1 = []
+                let gene1:any = []
                 for (let value1 of value.tryUrls) {
                   gene1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -557,7 +558,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               this.zToggle[i] = false
               this.sbPurpose[i] = value.purposeCode;
               if (value.sbUrls) {
-                let gene = []
+                let gene:any = []
                 for (let value1 of value.sbUrls) {
                   gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -568,7 +569,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               }
 
               if (value.tryUrls) {
-                let gene1 = []
+                let gene1:any = []
                 for (let value1 of value.tryUrls) {
                   gene1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -585,7 +586,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               this.zToggle[i] = true
 
               if (value.sbUrls) {
-                let gene = []
+                let gene:any = []
                 for (let value1 of value.sbUrls) {
                   gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -596,7 +597,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               }
 
               if (value.tryUrls) {
-                let gene1 = []
+                let gene1:any = []
                 for (let value1 of value.tryUrls) {
                   gene1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -720,7 +721,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           this.jsondata.push(data)
         }
         else {
-          let purpose = []
+          let purpose:any = []
           for (let value of data.purpose) {
             if (value.code.toLowerCase().indexOf(e.toLowerCase()) != -1
               || value.description.toLowerCase().indexOf(e.toLowerCase()) != -1) {
@@ -762,7 +763,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
             this.jsondata.push(data)
           }
           else {
-            let purpose = []
+            let purpose:any = []
             for (let value of data.purpose) {
               if (value.code.toLowerCase().indexOf(multipleselectedvalue[index].toLowerCase()) != -1
                 || value.description.toLowerCase().indexOf(multipleselectedvalue[index].toLowerCase()) != -1) {
@@ -3149,7 +3150,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
     this.donePurpose[i] = code;
     const height =
-      Math.round($("#mainId").outerHeight() * 0.0104166667 * 10) / 10;
+      Math.round($("#mainId").outerHeight() as any * 0.0104166667 * 10) / 10;
     console.log($("#mainId").html());
     this.documentService
       .getPDF({
@@ -3295,7 +3296,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(code, i)
     this.doneSbPurpose[i] = code;
     const height =
-      Math.round($("#mainId").outerHeight() * 0.0104166667 * 10) / 10;
+      Math.round($("#mainId").outerHeight() as any * 0.0104166667 * 10) / 10;
     console.log($("#mainId").html());
     this.documentService
       .getPDF({
@@ -3330,7 +3331,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           console.log(code)
           if (this.sbPurpose1[i] == code) {
             const height1 =
-              Math.round($("#mainId1").outerHeight() * 0.0104166667 * 10) / 10;
+              Math.round($("#mainId1").outerHeight() as any * 0.0104166667 * 10) / 10;
             console.log($("#mainId1").html());
             this.documentService
               .getPDF({
@@ -3430,8 +3431,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   exportAsPDF2(code, i) {
     console.log(code, i)
     this.doneImportPurpose[i] = code;
-    const height =
-      Math.round($("#mainId1").outerHeight() * 0.0104166667 * 10) / 10;
+    const height:any =
+      Math.round($("#mainId1").outerHeight() as any * 0.0104166667 * 10) / 10;
     console.log($("#mainId1").html());
     this.documentService
       .getPDF({
@@ -3498,7 +3499,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     for (let index = 0; index < this.STORE_URL.length; index++) {
       this.userService.mergePdf(this.STORE_URL[index]).subscribe((res: any) => {
          res.arrayBuffer().then((data: any) => {
-          this.ARRAY_BUFFER_PDF.push(data);
+          var base64String = this._arrayBufferToBase64(data)
+          const x = 'data:application/pdf;base64,' + base64String;
+          this.ARRAY_BUFFER_PDF.push(x);
           console.log('mergePdf_downloadEachFile',data);
         });
       });
@@ -3836,7 +3839,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     };
     // download all the pdfs
     let downloadAllFiles = () => {
-      var promises = [];
+      var promises:any = [];
       for (var i = 0; i < urls.length; i++) {
         if (urls[i]!='' && urls[i]!=undefined) {
           promises.push(urls[i]);
@@ -4043,7 +4046,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }).catch((error) => {
       this.Blcopyref = [];
     });
-    var timer = null;
+    var timer:any = null;
     $(inputid).keyup((e: any) => {
       clearTimeout(timer);
       timer = setTimeout(() => {
@@ -4057,7 +4060,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     });
   }
   loadPopupThirdParty(event, dropdownid) {
-    var timer = null;
+    var timer:any = null;
     clearTimeout(timer);
     $(dropdownid).css('display', 'none')
     timer = setTimeout(() => {
@@ -4152,16 +4155,24 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     if (Status == '' || Status == null || Status == 'Rejected') {
       this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
         // this.router.navigate(['/home/dashboardTask'])
-        this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
-          console.log(res, 'dsdsdsdsdsdsds');
-          this.GetDownloadStatus = res[0];
-          if (res.length == 0) {
-            this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '2' }).subscribe((res: any) => {
-              console.log(res, 'dsdsdsdsdsdsds');
-              this.GetDownloadStatus = res[0];
-            })
-          }
-        })
+        var data:any={
+          data:this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1],
+          TypeTransaction:'Export-Home',
+          fileType:'Export',
+          UserDetails:approval_data?.id
+        }
+        this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+          this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
+            console.log(res, 'dsdsdsdsdsdsds');
+            this.GetDownloadStatus = res[0];
+            if (res.length == 0) {
+              this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '2' }).subscribe((res: any) => {
+                console.log(res, 'dsdsdsdsdsdsds');
+                this.GetDownloadStatus = res[0];
+              })
+            }
+          })
+        });
       });
     } else if (Status == 'pending') {
       this.CustomConfirmDialogModel.YesNoDialogModel('Are you sure you want to delete this item?', 'Yes or No', (res: any) => {

@@ -19,3 +19,14 @@
   display: flex;
   gap: 10px;
 }
+
+.container-fluid {
+  height: calc(100vh - 100px);
+  background-color: white;
+  border-radius: 10px;
+  overflow: auto;
+}
+
+.content_white_background {
+  background-color: transparent;
+}

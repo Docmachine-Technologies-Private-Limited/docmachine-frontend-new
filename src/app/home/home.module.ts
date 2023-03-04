@@ -89,11 +89,11 @@ import { PdfViewerModule } from "ng2-pdf-viewer";
 import { NewBillUnderCollectionComponent } from "./new-bill-under-collection/Bill-Under-Collection.component";
 import { NewDirectDispatchComponent } from "./New-Direct-Dispatch/New-Direct-Dispatch.component";
 import { ImportNewDirectDispatchComponent } from "./Import-New-Direct-Dispatch/Import-New-Direct-Dispatch.component";
-
 import {MergePdfListService} from "./merge-pdf-list.service";
 import { BoeBillService } from '../service/homeservices/BoeBill/boe-bill.service';
 import { ImportDirectPaymentComponent } from './Import-Direct-Payment/Import-Direct-Payment.component';
 import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-Credit-Request.component';
+import { TransactionDashboardComponent } from "../transaction-dashboard/transaction-dashboard.component";
 
 @NgModule({
   declarations: [
@@ -136,7 +136,8 @@ import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-
     NewDirectDispatchComponent,
     ImportNewDirectDispatchComponent,
     ImportDirectPaymentComponent,
-    PackingCreditRequestComponent
+    PackingCreditRequestComponent,
+    TransactionDashboardComponent
   ],
   imports: [
     SharedHomeModule,
@@ -578,6 +579,11 @@ import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-
           {
             path: "import-direct-dispatch",
             component: ImportNewDirectDispatchComponent,
+            pathMatch: "full",
+            canActivate:[MemberGuard]
+          },{
+            path: "Transaction-Dashboard/:id",
+            component: TransactionDashboardComponent,
             pathMatch: "full",
             canActivate:[MemberGuard]
           },

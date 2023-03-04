@@ -1,0 +1,236 @@
+<div class="content-wrap ml-0 scroll-bar-main">
+  <div class="container-fluid">
+    <div class="content_white_background">
+      <main id="content" class="table-padding" role="main">
+        <div class="filter_section_top">
+          <div class="row">
+            <div class="col-12 mt-3">
+              <h5>{{this.TRANSACTION_NAME}}</h5>
+              <div class="filter_right_new">
+                <button type="button" class="btn btn-primary"><span class="ex_icon"></span>Export</button>
+                <div class="filter_posit">
+                  <button type="button" class="btn btn-secondary"><span class="fi_icon"></span>Filter</button>
+                  <div class="bg-white filter_main_sec mt-2" appFilterToggle>
+                    <!-- <form class="select_filter_options">
+                                      <div class="row">
+                                          <div class="col-md-6 col-12">
+                                              <label for="exampleFormControlInput1"
+                                                  class="form-label">Commodity</label>
+                                              <select class="form-select form-control"
+                                                  aria-label="Default select example"  [(ngModel)]="commodity" name="com">
+                                                  <option value=""> commodities</option>
+                                                  <option *ngFor="let buyer of commodityArray">{{buyer.como}}
+                                                  </option>
+                                              </select>
+                                          </div>
+                                          <div class="col-md-6 col-12">
+                                              <label for="exampleFormControlInput1"
+                                                  class="form-label">Location</label>
+                                              <select class="form-select form-control"
+                                                  aria-label="Default select example"  [(ngModel)]="location" name="location">
+                                                  <option value="">locations</option>
+                                                  <option *ngFor="let bene of locationArray">{{ bene.loc }}
+                                                  </option>
+                                              </select>
+                                          </div>
+                                          <div class="col-md-6 col-12">
+                                              <label for="exampleFormControlInput1"
+                                                  class="form-label">Buyer</label>
+                                              <select class="form-select form-control"
+                                                  aria-label="Default select example" [(ngModel)]="buyer" name="banee">
+                                                  <option value="">Buyers</option>
+                                                  <option *ngFor="let bene of benneDetailArray
+                                                  ">{{ bene.buyerName }}
+                                                  </option>
+
+                                              </select>
+                                          </div>
+                                          <div class="col-md-6 col-12">
+                                              <label for="exampleFormControlInput1" class="form-label">Start
+                                                  Date</label>
+                                              <input class="form-select form-control" type="date"
+                                                  placeholder="Start Date" [(ngModel)]="startDate" name="startdate" required />
+                                          </div>
+                                          <div class="col-md-6 col-12">
+                                              <label for="exampleFormControlInput1" class="form-label">End
+                                                  Date</label>
+                                              <input class="form-select form-control" type="date"
+                                                  placeholder="End Date" [(ngModel)]="endDate" name="enddate" required />
+                                          </div>
+                                      </div>
+                                      <div class="footer_buttons">
+                                          <button type="button" class="btn btn-light" (click)="resetFilter()">RESET</button>
+                                          <button type="submit" class="btn btn-primary" (click)="filter()">APPLY</button>
+                                      </div>
+                                  </form> -->
+                    <i></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="data_table_new">
+          <div class="record-container">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Sr.no.</th>
+                  <th scope="col" *ngFor="let item of displayedColumns">{{item}}</th>
+                  <th scope="col">User Details</th>
+                  <th scope="col">More Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of this.dataSource;let i=index">
+                  <td scope="row">{{(i+1)}}</td>
+                  <td scope="row" *ngFor="let column of displayedColumns">{{item[column]}}</td>
+                  <td scope="row"><a class="button white-btn table-btn"
+                      (click)="userview(item?.UserDetails);User_Details.style.display='block'">View..</a></td>
+                  <td scope="row">
+                  <a class="button white-btn table-btn PopupOpen" popup-close="TransactionView"
+                      (click)="transactionview(item);">View..</a>
+                     <button type="submit" popup-close="Upload" class="btn btn-primary PopupOpen">Upload RN</button>    
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" #User_Details>
+    <div class="col-11 mt-2" role="document" style="margin: auto;height: 98vh;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">User Name : {{this.USER_DATA_VIEW?.userdetails?.fullName}} | Email id :
+            {{this.USER_DATA_VIEW?.userdetails?.emailId}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" (click)="User_Details.style.display='none'">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="overflow-panel p-2">
+            <div class="grid" *ngIf="this.USER_DATA_VIEW!=''">
+              <div class="form-group mb-0 d-flex flex-column">
+                <label for="exampleInputEmail1">Summary Page Name</label>
+                <span>{{this.USER_DATA_VIEW?.tableName}}</span>
+              </div>
+              <div class="form-group mb-0 d-flex flex-column">
+                <label for="exampleInputEmail1">Type of Page</label>
+                <span>{{this.USER_DATA_VIEW?.TypeOfPage}}</span>
+              </div>
+              <div class="form-group mb-0 d-flex flex-column">
+                <label for="exampleInputEmail1">comment</label>
+                <span>{{this.USER_DATA_VIEW?.comment}}</span>
+              </div>
+              <div class="form-group mb-0 d-flex flex-column">
+                <label for="exampleInputEmail1">Approval Request Date</label>
+                <span>{{datetoString(this.USER_DATA_VIEW?.createdAt)}}</span>
+              </div>
+              <div class="form-group mb-0 d-flex flex-column">
+                <label for="exampleInputEmail1">Approved Request Date</label>
+                <span>{{datetoString(this.USER_DATA_VIEW?.updatedAt)}}</span>
+              </div>
+              <div class="form-group mb-0 d-flex flex-column" *ngIf="this.USER_DATA_VIEW?.rejectcomment!=''">
+                <label for="exampleInputEmail1">Reject Comment</label>
+                <span>{{this.USER_DATA_VIEW?.rejectcomment}}</span>
+              </div>
+
+            </div>
+            <div class="form-group mb-0 d-flex flex-column">
+              <label for="exampleInputEmail1">Documents</label>
+              <app-pdf-viewer [downloadShow]="false" *ngFor="let selItems of this.pdflist;let i=index"
+                [name]="'Document'+(i+1)" [src]="selItems" width="100%" height="500px"></app-pdf-viewer>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="User_Details.style.display='none'"
+            data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-custom-model height="98vh" id="TransactionView" [name]="this.TRANSACTION_NAME">
+    <div class="d-flex p-2 flex-row overflow-panel" *ngIf="this.pdflist.length!=0">
+      <div class="form-group mb-0 d-flex flex-column document-panel">
+        <app-pdf-viewer [downloadShow]="false" *ngFor="let selItems of this.pdflist;let i=index"
+          [name]="'Document'+(i+1)" [src]="selItems" width="100%" height="500px"></app-pdf-viewer>
+      </div>
+      <div class="right-panel" *ngIf="this.OBJECT_DATA.length!=0">
+         <div class="grid" *ngFor="let item of this.OBJECT_DATA;let i=index">
+          <div class="row w-row m-auto" style="width: 100%;">
+            <div class="basic-column w-col w-col-3">
+                <div class="tag-wrapper m-auto p-0">
+                    <div class="number-card number-card-content1">
+                        <h1 class="number-card-number" title="Inovice No.">{{item?.invoice_number}}</h1>
+                        <div class="number-card-divider"></div>
+                        <div class="number-card-progress-wrapper">
+                            <div class="tagline number-card-currency" title="Currency">{{item?.currency}}</div>
+                            <div class="number-card-progress" title="Amount">${{item?.amount}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </div>
+          <!-- <div class="form-group mb-0 d-flex flex-column">
+          <div class="col-12 row p-0">
+            <div class="d-flex flex-column col-9">
+              <label for="exampleInputEmail1">ORM Referance No.</label>
+              <span>{{this.TRANSACTION_DATA_VIEW?.userdetails?.rejectcomment}}</span>
+            </div>
+            <button type="submit" popup-close="Upload" class="btn btn-primary PopupOpen">upload</button>
+          </div>
+        </div> -->
+        </div>
+        <div class="sum-panel" *ngIf="this.INOVICE_SUM!=0">
+          <h5 class="sum-amount">Total Inovice Amount : ${{this.INOVICE_SUM}}</h5>
+        </div>
+      </div>
+    </div>
+  </app-custom-model>
+
+  <app-custom-model name="Upload Documents" id="Upload" (ModelChange)="UploadUrl=''">
+    <div class="overflow-panel p-2" style="height: calc(100vh - 363px);
+  display: flex;
+  gap: 20px;">
+      <div class="upload-panel col-12" style="height: 210px;" *ngIf="UploadUrl==''">
+        <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
+          (sending)="submit($event)" [dropzone]="config" class="dropzone dropzone-container" id="dropzone" />
+        <i class="fas fa-file-upload"></i>
+        <h5>Drag and Drop files here</h5>
+        <p>Files Supported: PDF, XSLS, Image, Scanner</p>
+        <p>Maximum Size: 5MB</p>
+      </div>
+      <div class="form-group col-12 mb-0 d-flex flex-column"
+        *ngIf="this.TRANSACTION_NAME==='Advance-Remittance-flow' && UploadUrl!=''">
+        <div class="col-12 p-0 d-flex">
+          <div style="height: 100%;
+        display: flex;
+        width: calc(100% - 220px);
+        gap: 20px;">
+            <app-pdf-viewer style="width: 96%;" [downloadShow]="false" name="Upload Document" [src]="UploadUrl"
+              width="100%" height="500px"></app-pdf-viewer>
+          </div>
+          <div class="d-flex flex-column" style="width: 220px;">
+            <label for="exampleInputEmail1">ORM Referance No.</label>
+            <input type="text" name="" id="" class="form-control">
+            <button type="submit" class="btn btn-primary mt-3 PopupClose" popup-close="Upload"
+              (click)="UpdateReferanceNo()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-custom-model>
+
+  <div class="loader-cls" *ngIf="this.LOADER_ON_OFF==true">
+    <div class="lds-ellipsis">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>

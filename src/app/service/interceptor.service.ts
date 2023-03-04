@@ -15,7 +15,6 @@ export class InterceptorService implements HttpInterceptor {
     public authGuard: AuthGuard) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    console.log("intercept",req)
     this.documentService.loading=true;
     let token = this.authGuard.loadFromLocalStorage();
      if (!token) {
