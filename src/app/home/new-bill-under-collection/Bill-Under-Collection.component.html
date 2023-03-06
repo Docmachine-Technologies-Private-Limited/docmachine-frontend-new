@@ -60,14 +60,12 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-12">
-                                                <label for="exampleInputPassword1" class="form-label">Select
-                                                    beneficiary</label>
+                                                <label for="exampleInputPassword1" class="form-label">Select Buyer</label>
                                                 <select class="form-select" aria-label="Default select example"
                                                     [(ngModel)]="benneName" name="benneName"
                                                     (change)=changepipo($event.target.value) #select_ben>
                                                     <option value="">Select Buyer</option>
-
-                                                    <option value="{{ bene._id }}" *ngFor="let bene of benneDetail
+                                                    <option value="{{ bene.benneName }}" *ngFor="let bene of benneDetail
                                                             ">{{ bene.benneName }}
                                                     </option>
                                                 </select>

@@ -79,53 +79,53 @@
                 <div class="" id="container">
                     <section class="middle_datatable">
                         <div class="widget-body p-0 support table-wrapper">
-                            <table class="table table-striped mb-0">
+                           <table class="table table-hover">
                                 <thead style="width: 100% ;background: white;position: sticky;top: 0; ">
-                                    <tr class="text-muted table-heading" style=" border-bottom: 1px solid #f2f4f8;">
+                                    <tr class="table-tr">
                                         <th scope="col" style="padding: 20px 35px;">DATE</th>
-                                        <th scope="col">INVOICE NUMBER</th>
-                                        <th scope="col">INVOICE DATE</th>
-                                        <th scope="col">CONSIGNEE NAME</th>
-                                        <th scope="col">BRANCH</th>
-                                        <th scope="col">COMMODITY</th>
-                                        <th scope="col">SB NO</th>
-                                        <th scope="col">SB DATE</th>
-                                        <th scope="col">REGION</th>
-                                        <th scope="col">FOB VALUE - INR</th>
-                                        <th scope="col">PORT CODE</th>
-                                        <th scope="col">TT DATE</th>
-                                        <th scope="col">TT USD</th>
-                                        <th scope="col">Received Date</th>
-                                        <th scope="col">Received USD</th>
-                                        <th scope="col">Commission/Bank Charges</th>
-                                        <th scope="col">Conversion Date</th>
-                                        <th scope="col">Conversion Rate</th>
-                                        <th scope="col">Converted Amount</th>
-                                        <th scope="col">FIRX NUMBER/ID</th>
-                                        <th scope="col">INVOICE VALUE - USD</th>
-                                        <th scope="col">EXCH. RATE</th>
-                                        <th scope="col">INVOICE VALUE - INR</th>
-                                        <th scope="col">DISCOUNT ALLOWED/USD</th>
-                                        <th scope="col">DAMGES/USD</th>
-                                        <th scope="col">GOODS SHORTEGE/USD</th>
-                                        <th scope="col">TOTAL DEDUCTIONS - USD</th>
-                                        <th scope="col">FINAL AMOUNT - USD</th>
-                                        <th scope="col">CREDIT NOTE STATUS</th>
-                                        <th scope="col">EGM NO</th>
-                                        <th scope="col">EGM DATE</th>
-                                        <th scope="col">STATUS OF RODTEP/MEIS/ROSCTL APPLICATION</th>
-                                        <th scope="col">RODTEP AMOUNT</th>
-                                        <th scope="col">ESCRIPT NOTE</th>
-                                        <th scope="col">STATUS OF DOC SUBMISSION IN BANK</th>
-                                        <th scope="col">STATUS OF BANK RECO.</th>
-                                        <th scope="col">FIRX NUMBER SETTLED AGAINST</th>
+                                        <th scope="col" class="col-td-th-3">INVOICE NUMBER</th>
+                                        <th scope="col" class="col-td-th-3">INVOICE DATE</th>
+                                        <th scope="col" class="col-td-th-3">CONSIGNEE NAME</th>
+                                        <th scope="col" class="col-td-th-3">BRANCH</th>
+                                        <th scope="col" class="col-td-th-3">COMMODITY</th>
+                                        <th scope="col" class="col-td-th-3">SB NO</th>
+                                        <th scope="col" class="col-td-th-3">SB DATE</th>
+                                        <th scope="col" class="col-td-th-3">REGION</th>
+                                        <th scope="col" class="col-td-th-3">FOB VALUE - INR</th>
+                                        <th scope="col" class="col-td-th-3">PORT CODE</th>
+                                        <th scope="col" class="col-td-th-3">TT DATE</th>
+                                        <th scope="col" class="col-td-th-3">TT USD</th>
+                                        <th scope="col" class="col-td-th-3">Received Date</th>
+                                        <th scope="col" class="col-td-th-3">Received USD</th>
+                                        <th scope="col" class="col-td-th-3">Commission/Bank Charges</th>
+                                        <th scope="col" class="col-td-th-3">Conversion Date</th>
+                                        <th scope="col" class="col-td-th-3">Conversion Rate</th>
+                                        <th scope="col" class="col-td-th-3">Converted Amount</th>
+                                        <th scope="col" class="col-td-th-3">FIRX NUMBER/ID</th>
+                                        <th scope="col" class="col-td-th-3">INVOICE VALUE - USD</th>
+                                        <th scope="col" class="col-td-th-3">EXCH. RATE</th>
+                                        <th scope="col" class="col-td-th-3">INVOICE VALUE - INR</th>
+                                        <th scope="col" class="col-td-th-3">DISCOUNT ALLOWED/USD</th>
+                                        <th scope="col" class="col-td-th-3">DAMGES/USD</th>
+                                        <th scope="col" class="col-td-th-3">GOODS SHORTEGE/USD</th>
+                                        <th scope="col" class="col-td-th-3">TOTAL DEDUCTIONS - USD</th>
+                                        <th scope="col" class="col-td-th-3">FINAL AMOUNT - USD</th>
+                                        <th scope="col" class="col-td-th-3">CREDIT NOTE STATUS</th>
+                                        <th scope="col" class="col-td-th-3">EGM NO</th>
+                                        <th scope="col" class="col-td-th-3">EGM DATE</th>
+                                        <th scope="col" class="col-td-th-3">STATUS OF RODTEP/MEIS/ROSCTL APPLICATION</th>
+                                        <th scope="col" class="col-td-th-3">RODTEP AMOUNT</th>
+                                        <th scope="col" class="col-td-th-3">ESCRIPT NOTE</th>
+                                        <th scope="col" class="col-td-th-3">STATUS OF DOC SUBMISSION IN BANK</th>
+                                        <th scope="col" class="col-td-th-3">STATUS OF BANK RECO.</th>
+                                        <th scope="col" class="col-td-th-3">FIRX NUMBER SETTLED AGAINST</th>
                                         <th scope="col" style="padding: 20px 35px;  ">BALANCE IF ANY</th>
-                                        <th scope="col">Action</th>
+                                        <th scope="col" class="col-td-th-3">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-dark">
-                                    <tr class="table-row" *ngFor='let data of pipoArrayList | filterdate:startDate:endDate | filternew:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index'>
-                                        <td>
+                                <tbody>
+                                    <tr class="table-tr" *ngFor='let data of pipoArrayList | filterdate:startDate:endDate | filternew:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index'>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.date}}
                                             </div>
@@ -134,18 +134,18 @@
                                             </div>
                                         </td>
                                         <td class="sb-no" (click)="getSinglePipo(data._id, i)">{{data.pi_poNo}}</td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             {{data.date}}
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             {{data.buyerName}}
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div>
                                                 {{data.location}}
                                             </div>
                                        </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.commodity}}
                                             </div>
@@ -155,78 +155,78 @@
                                             </div>
                                         </td>
 
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="data.sbno">
                                                 {{data.sbno}}
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="data.sbdate">
                                                 {{data.sbdate}}
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="data.region">
                                                 {{data.region}}
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="data.fobValue">
                                                 {{data.fobValue}}
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="data.portCode">
                                                 {{data.portCode}}
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.ttDate}}
                                             </div>
                                             </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.ttUSD}}
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.recDate}}
                                             </div>
                                             </td>
-                                        <td>
+                                        <td class="col-td-th-3">
 
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.recUSD}}
                                             </div>
                                             </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.commission}}
                                             </div>
                                             </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.conversionDate}}
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.conversionRate}}
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.convertedAmount}}
                                             </div>
                                             </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div>
                                                 {{data.firxNumber}}
                                             </div>
                                             </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.invoiceValueUSD}}
                                             </div>
@@ -235,7 +235,7 @@
                                                 <input class="tblInput form-control" name="invoiceValueUSD" type="text" placeholder="INVOICE VALUE - USD" [(ngModel)]="data.invoiceValueUSD">
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.exchRate}}
                                             </div>
@@ -243,10 +243,10 @@
                                                 <input class="tblInput form-control" name="exchRate" type="text" placeholder="EXCH. RATE" [(ngModel)]="data.exchRate">
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             {{data.amount}}
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.discountAllowed}}
                                             </div>
@@ -254,7 +254,7 @@
                                                 <input class="tblInput form-control input5" name="discountAllowed" type="number" placeholder="DISCOUNT ALLOWED/USD" [(ngModel)]="data.discountAllowed">
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.damagesUSD}}
                                             </div>
@@ -262,7 +262,7 @@
                                                 <input class="tblInput form-control input5" name="damagesUSD" type="number" placeholder="DAMAGES/USD" [(ngModel)]="data.damagesUSD">
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.goodsShortageUSD}}
                                             </div>
@@ -270,19 +270,19 @@
                                                 <input class="tblInput form-control input5" name="goodsShortageUSD" type="number" placeholder="GOODS SHORTAGE /USD" [(ngModel)]="data.goodsShortageUSD">
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="col-td-th-3">
                                             <div>
                                                 {{data.discountAllowed + data.damagesUSD + data.goodsShortageUSD}}
                                             </div>
                                             </td>
-                                        <td>
+                                        <td class="col-td-th-3">
 
                                             <div>
                                                 {{data.fobValue - data.discountAllowed - data.damagesUSD - data.goodsShortageUSD}}
                                             </div>
                                             </td>
 
-                                        <td>
+                                        <td class="col-td-th-3">
 
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.creditNoteStatus}}
@@ -293,7 +293,7 @@
                                             </div>
                                         </td>
 
-                                        <td>
+                                        <td class="col-td-th-3">
 
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.egmNO}}
@@ -304,7 +304,7 @@
                                             </div>
                                         </td>
 
-                                        <td>
+                                        <td class="col-td-th-3">
 
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.egmDate}}
@@ -315,7 +315,7 @@
                                             </div>
                                         </td>
 
-                                        <td>
+                                        <td class="col-td-th-3">
 
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.statusOfRodtep}}
@@ -326,7 +326,7 @@
                                             </div>
                                         </td>
 
-                                        <td>
+                                        <td class="col-td-th-3">
 
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.rodtepAmount}}
@@ -337,7 +337,7 @@
                                             </div>
                                         </td>
 
-                                        <td>
+                                        <td class="col-td-th-3">
 
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.escriptNote}}
@@ -348,7 +348,7 @@
                                             </div>
                                         </td>
 
-                                        <td>
+                                        <td class="col-td-th-3">
 
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.docSubmissionInBank}}
@@ -359,7 +359,7 @@
                                             </div>
                                         </td>
 
-                                        <td>
+                                        <td class="col-td-th-3">
 
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.statusOfBankReco}}
@@ -370,7 +370,7 @@
                                             </div>
                                         </td>
 
-                                        <td>
+                                        <td class="col-td-th-3">
 
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.firxNumberSettledAgainst}}
@@ -381,7 +381,7 @@
                                             </div>
                                         </td>
 
-                                        <td>
+                                        <td class="col-td-th-3">
 
                                             <div *ngIf="!optionsVisibility[i]">
                                                 {{data.balanceIfAny}}
@@ -391,7 +391,7 @@
                                                 <input class="tblInput form-control" name="balanceIfAny" type="text" placeholder="BALANCE IF ANY" [(ngModel)]="data.balanceIfAny">
                                             </div>
                                         </td>
-                                        <td class="view_edit_button">
+                                        <td class="col-td-th-3">
                                             <a (click)=" openLetterOfCredit(content); viewLC(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                             <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                             <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
@@ -1899,25 +1899,25 @@
                                             <thead style="height: 54px; ">
                                                 <tr style="opacity: 50%; font-size: 14px; color:black !important; font-weight: 300 !important; padding: 20px; border-bottom: 1px solid rgb(236 236 236);">
                                                     <td style="padding: 20px 35px;">DATE</td>
-                                                    <td>DOCUMENT NAME</td>
-                                                    <td>DOCUMENT NUMBER</td>
+                                                    <td class="col-td-th-3">DOCUMENT NAME</td>
+                                                    <td class="col-td-th-3">DOCUMENT NUMBER</td>
                                                     <td style="padding: 20px 35px;">PREVIEW</td>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr class="table-row" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
+                                                <tr class="table-tr" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
                                                     <td style="padding: 20px 35px;" colspan="4">No Documents</td>
                                                 </tr>
-                                                <!--                      <tr class="table-row" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">-->
+                                                <!--                      <tr class="table-tr" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">-->
                                                 <!--                        <td style="padding: 20px 35px;">Dec 14, 2018</td>-->
-                                                <!--                        <td class="sb-no">Shipping Bill</td>-->
-                                                <!--                        <td>SN565656</td>-->
+                                                <!--                        <td class="col-td-th-3">Shipping Bill</td>-->
+                                                <!--                        <td class="col-td-th-3">SN565656</td>-->
                                                 <!--                        <td style="padding: 20px 35px;">View</td>-->
                                                 <!--                      </tr>-->
-                                                <!--                      <tr class="table-row" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">-->
+                                                <!--                      <tr class="table-tr" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">-->
                                                 <!--                        <td style="padding: 20px 35px;">Dec 14, 2018</td>-->
-                                                <!--                        <td class="sb-no">Bill of Entry</td>-->
-                                                <!--                        <td>454544545</td>-->
+                                                <!--                        <td class="col-td-th-3">Bill of Entry</td>-->
+                                                <!--                        <td class="col-td-th-3">454544545</td>-->
                                                 <!--                        <td style="padding: 20px 35px;">View</td>-->
                                                 <!--                      </tr>-->
                                             </tbody>
@@ -1988,22 +1988,22 @@
                                         <thead style="height: 54px; ">
                                             <tr style="opacity: 50%; font-size: 14px; color:black !important; font-weight: 300 !important; padding: 20px; border-bottom: 1px solid rgb(236 236 236);; ">
                                                 <td style="padding: 20px 35px !important;">DATE</td>
-                                                <td>DETAIL</td>
-                                                <td>STATUS</td>
+                                                <td class="col-td-th-3">DETAIL</td>
+                                                <td class="col-td-th-3">STATUS</td>
                                                 <td style="padding: 20px 35px;">DOWNLOAD</td>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="table-row" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
+                                            <tr class="table-tr" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);">
                                                 <td style="padding: 20x 35px !important; padding-left: 35px;" colpan="4">No transactions</td>
-                                                <!--                      <td class="sb-no">Submitted to Bank</td>-->
-                                                <!--                      <td>Emailed</td>-->
+                                                <!--                      <td class="col-td-th-3">Submitted to Bank</td>-->
+                                                <!--                      <td class="col-td-th-3">Emailed</td>-->
                                                 <!--                      <td style="padding: 20px 35px;">View</td>-->
                                             </tr>
-                                            <!--                    <tr class="table-row" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);;">-->
+                                            <!--                    <tr class="table-tr" style="height: 40px; font-size: 14px; color: RGB(112, 118, 131);;">-->
                                             <!--                      <td style="padding: 20px 35px !important;">Dec 14, 2018</td>-->
-                                            <!--                      <td class="sb-no">Draft waiting for submission</td>-->
-                                            <!--                      <td>Draft</td>-->
+                                            <!--                      <td class="col-td-th-3">Draft waiting for submission</td>-->
+                                            <!--                      <td class="col-td-th-3">Draft</td>-->
                                             <!--                      <td style="padding: 20px 35px;">View</td>-->
                                             <!--                    </tr>-->
                                         </tbody>
@@ -2048,14 +2048,14 @@
                                 <td style="height: 30px !important;">PI/PO Date</td>
                             </tr>
                             <tr>
-                                <td>
+                                <td class="col-td-th-3">
                                     <input class="form-control input2" type="text" formControlName="pi_poNo" [(ngModel)]="pipoData.pi_poNo" />
                                 </td>
 
-                                <td>
+                                <td class="col-td-th-3">
                                     <input class="form-control input2" type="date" formControlName="date" [(ngModel)]="pipoData.date" style="width: 7100% 0%" />
                                 </td>
-                                <!-- <td><button type="submit" class="button">Submit</button></td> -->
+                                <!-- <td class="col-td-th-3"><button type="submit" class="button">Submit</button></td> -->
                             </tr>
                         </table>
                     </div>
@@ -2223,14 +2223,14 @@
                                 <td style="height: 30px !important;">Date</td>
                             </tr>
                             <tr>
-                                <td>
+                                <td class="col-td-th-3">
                                     <input class="form-control input2" type="text" formControlName="pi_poNo" [(ngModel)]="pipoData.pi_poNo" />
                                 </td>
 
-                                <td>
+                                <td class="col-td-th-3">
                                     <input class="form-control input2" type="date" formControlName="date" [(ngModel)]="pipoData.date" style="width: 7100% 0%" />
                                 </td>
-                                <!-- <td><button type="submit" class="button">Submit</button></td> -->
+                                <!-- <td class="col-td-th-3"><button type="submit" class="button">Submit</button></td> -->
                             </tr>
                         </table>
                     </div>
@@ -2345,18 +2345,18 @@
                         <div class="field">
                             <table class="field-table" style="width: 10% !important">
                                 <tr class="field-heading">
-                                    <td>AD BILL NUMBER</td>
-                                    <td>SB Number*</td>
-                                    <td>SB Date</td>
+                                    <td class="col-td-th-3">AD BILL NUMBER</td>
+                                    <td class="col-td-th-3">SB Number*</td>
+                                    <td class="col-td-th-3">SB Date</td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="col-td-th-3">
                                         <input [(ngModel)]="selectedshippingdata.adBillNo" value="selectedshippingdata.adBillNo" class="input" type="text" name="adBillNo" />
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-3">
                                         <input [(ngModel)]="selectedshippingdata.sbno" class="input" type="text" name="sbno" />
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-3">
                                         <input [(ngModel)]="selectedshippingdata.sbdate" class="input" type="text" name="sbdate" />
                                     </td>
                                 </tr>
@@ -2523,20 +2523,20 @@
                         <div class="field">
                             <table class="field-table" style="width: 10% !important">
                                 <tr class="field-heading">
-                                    <td>FOREX ADVICE DETAILS</td>
-                                    <td>PARTY NAME</td>
-                                    <td>TT AMOUNT</td>
+                                    <td class="col-td-th-3">FOREX ADVICE DETAILS</td>
+                                    <td class="col-td-th-3">PARTY NAME</td>
+                                    <td class="col-td-th-3">TT AMOUNT</td>
                                 </tr>
                                 <tr style="margin-left: -10%;">
-                                    <td>
+                                    <td class="col-td-th-3">
                                         <input ngModel class="form-control input2" type="text" name="billNo" [(ngModel)]="irdata.billNo" />
                                     </td>
 
-                                    <td>
+                                    <td class="col-td-th-3">
                                         <input ngModel class="form-control input2" style="width: 7100% 0%" name="partyName" [(ngModel)]="irdata.partyName" />
                                     </td>
 
-                                    <td>
+                                    <td class="col-td-th-3">
                                         <input ngModel class="form-control input2" style="width: 7100% 0%" name="amount" [(ngModel)]="irdata.amount" />
                                     </td>
 

@@ -76,27 +76,27 @@
                         <!-- *ngIf="!showInvoice" -->
                         <section class="middle_datatable">
                             <div class="widget-body p-0 support table-wrapper">
-                                <table class="table table-striped mb-0">
+                               <table class="table table-hover">
                                     <!-- *ngIf='pipo' -->
-                                    <thead style="width: 100%;background: white;position: sticky;top: 0;">
-                                        <tr class="text-muted table-heading" style="border-bottom: 1px solid #f2f4f8;">
+                                    <thead>
+                                        <tr class="table-tr">
                                             <!-- <th class="rect">
                                             <img src="./assets/Rectangle-13.png" />
                                         </th> -->
-                                            <th scope="col"><span class="pl-3" style="margin-left: 9px;">DATE</span></th>
-                                            <th scope="col">PI/PO No.</th>
-                                            <th scope="col">Bill Of Exchange No.</th>
-                                            <th scope="col">Beneficiary Name</th>
-                                            <th scope="col">Action</th>
+                                            <th scope="col" class="col-td-th-3"><span class="pl-3" style="margin-left: 9px;">DATE</span></th>
+                                            <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">Bill Of Exchange No.</th>
+                                            <th scope="col" class="col-td-th-3">Beneficiary Name</th>
+                                            <th scope="col" class="col-td-th-3">Action</th>
 
                                         </tr>
                                     </thead>
-                                    <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"[ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                    <tbody>
+                                        <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"[ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')" >
-                                            <td>{{ data.billOfExchangeDate }}</td>
-                                            <td class="sb-no"> {{ getPipoNumbers(data) }} </td>
-                                            <td>
+                                            <td class="col-td-th-3">{{ data.billOfExchangeDate }}</td>
+                                            <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
+                                            <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.billExchangeNumber}}
                                                 </div>
@@ -105,8 +105,8 @@
                                                     <input class="tblInput form-control" name="billExchangeNumber" type="text" placeholder="Bill Exchange Number" [(ngModel)]="data.billExchangeNumber">
                                                 </div>
                                             </td>
-                                            <td>{{data.buyerName}}</td>
-                                            <td class="view_edit_button">
+                                            <td class="col-td-th-3">{{data.buyerName}}</td>
+                                            <td class="col-td-th-3">
                                                 <a (click)=" openLetterOfCredit(content); viewCN(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                 <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                                 <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"

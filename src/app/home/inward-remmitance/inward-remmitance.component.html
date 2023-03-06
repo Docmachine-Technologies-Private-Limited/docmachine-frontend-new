@@ -56,8 +56,8 @@
                                     Description</th>
                             </tr>
                         </thead>
-                        <tbody class="text-dark">
-                            <tr class="table-row" style="font-size: 12px;" *ngFor="let purposeRow of purposeRows; let i = index">
+                        <tbody>
+                            <tr class="table-tr" style="font-size: 12px;" *ngFor="let purposeRow of purposeRows; let i = index">
                                 <td class="columH" *ngFor="let column of purposeRow;  let j = index" [attr.rowSpan]="column.rowSpan" style="vertical-align: top !important;" (click)='purposeClick(purposeRow[j]["text"], purposeRow[j+1]["text"])'>
                                     {{column.text}}
                                 </td>
@@ -80,32 +80,32 @@
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
-                                            <th scope="col"><span class="pl-3">DATE</span></th>
-                                            <th scope="col">SB NUMBER</th>
-                                            <th scope="col">AD CODE</th>
-                                            <th scope="col">COMPANY NAME</th>
-                                            <th scope="col">UPLOADED BY</th>
-                                            <th scope="col">BENE NAME</th>
+                                            <th scope="col" class="col-td-th-3"><span class="pl-3">DATE</span></th>
+                                            <th scope="col" class="col-td-th-3">SB NUMBER</th>
+                                            <th scope="col" class="col-td-th-3">AD CODE</th>
+                                            <th scope="col" class="col-td-th-3">COMPANY NAME</th>
+                                            <th scope="col" class="col-td-th-3">UPLOADED BY</th>
+                                            <th scope="col" class="col-td-th-3">BENE NAME</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of item1; let i = index" (click)="
+                                    <tbody>
+                                        <tr class="table-tr" *ngFor="let data of item1; let i = index" (click)="
                                 getInvoices(data, i) && getTransactions(data.sbno)
                               ">
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
                                             <th class="pl-4 fw-normal">{{ data.sbdate }}</th>
-                                            <td class="sb-no">{{ data.sbno }}</td>
-                                            <td>
+                                            <td class="col-td-th-3">{{ data.sbno }}</td>
+                                            <td class="col-td-th-3">
                                                 {{data.adBillNo}}
                                             </td>
-                                            <td>Random Company</td>
-                                            <td>
+                                            <td class="col-td-th-3">Random Company</td>
+                                            <td class="col-td-th-3">
                                                 <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
                                                     height="30px" width="30px" /> Lindsey Stroud
                                             </td>
-                                            <td>{{data.benneName}}</td>
+                                            <td class="col-td-th-3">{{data.benneName}}</td>
                                         </tr>
 
                                     </tbody>
@@ -312,12 +312,12 @@
                                                             let obj of selectedRow.invoices;
                                                             let i = index
                                                             ">
-                                                            <td><img src="./assets/Rectangle-13.png" /></td>
-                                                            <td>{{ i + 1 }}</td>
-                                                            <td>{{ obj.invoiceno }}</td>
-                                                            <td>{{ obj.amount }}</td>
-                                                            <td>{{ obj.currency }}</td>
-                                                            <td><img src="./assets/Rectangle-13.png" /></td>
+                                                            <td class="col-td-th-3"><img src="./assets/Rectangle-13.png" /></td>
+                                                            <td class="col-td-th-3">{{ i + 1 }}</td>
+                                                            <td class="col-td-th-3">{{ obj.invoiceno }}</td>
+                                                            <td class="col-td-th-3">{{ obj.amount }}</td>
+                                                            <td class="col-td-th-3">{{ obj.currency }}</td>
+                                                            <td class="col-td-th-3"><img src="./assets/Rectangle-13.png" /></td>
                                                         </tr>
                                                     </table>
 
@@ -380,21 +380,21 @@
                                                                 Transaction</span>
                                                         </div>
                                                     </section>
-                                                    <table class="table table-striped mb-0">
+                                                   <table class="table table-hover">
                                                         <thead>
                                                             <tr class="text-muted table-heading">
-                                                                <th scope="col">Date</th>
-                                                                <th scope="col">File</th>
-                                                                <th scope="col">Status</th>
-                                                                <th scope="col">Bank</th>
+                                                                <th scope="col" class="col-td-th-3">Date</th>
+                                                                <th scope="col" class="col-td-th-3">File</th>
+                                                                <th scope="col" class="col-td-th-3">Status</th>
+                                                                <th scope="col" class="col-td-th-3">Bank</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="text-dark">
+                                                        <tbody>
                                                             <tr *ngFor="let task of allTransactions" class="table-row" (click)="viewTask(task)">
                                                                 <th class="pl-4 fw-normal">
                                                                     {{ task.transactionDate }}
                                                                 </th>
-                                                                <td class="sb-no">{{ task.file }}</td>
+                                                                <td class="col-td-th-3">{{ task.file }}</td>
                                                                 <td *ngIf="task.completed === true">
                                                                     Completed
                                                                 </td>
@@ -402,7 +402,7 @@
                                                                     Pending
                                                                 </td>
 
-                                                                <td>{{ task.bank }}</td>
+                                                                <td class="col-td-th-3">{{ task.bank }}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -469,34 +469,34 @@
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
-                                            <th scope="col"><span class="pl-3">DATE</span></th>
-                                            <th scope="col">PI/PO No.</th>
-                                            <th scope="col">INVOICE NUMBER</th>
-                                            <th scope="col">COMPANY NAME</th>
-                                            <th scope="col">UPLOADED BY</th>
-                                            <th scope="col">AMOUNT</th>
+                                            <th scope="col" class="col-td-th-3"><span class="pl-3">DATE</span></th>
+                                            <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">INVOICE NUMBER</th>
+                                            <th scope="col" class="col-td-th-3">COMPANY NAME</th>
+                                            <th scope="col" class="col-td-th-3">UPLOADED BY</th>
+                                            <th scope="col" class="col-td-th-3">AMOUNT</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of item3; let i = index" (click)="
+                                    <tbody>
+                                        <tr class="table-tr" *ngFor="let data of item3; let i = index" (click)="
                                             getInvoices(data, i) && getTransactions(data.pi_poNo)
                                           ">
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
                                             <th class="pl-4 fw-normal">{{ data.date }}</th>
-                                            <td class="sb-no">{{ data.pi_poNo }}</td>
-                                            <td>
+                                            <td class="col-td-th-3">{{ data.pi_poNo }}</td>
+                                            <td class="col-td-th-3">
                                                 Invoice-<span *ngFor="let data1 of data.invoices; let i = index">
                                                     0{{ i + 1 }},
                                                 </span>
                                             </td>
-                                            <td>Random Company</td>
-                                            <td>
+                                            <td class="col-td-th-3">Random Company</td>
+                                            <td class="col-td-th-3">
                                                 <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
                                                     height="30px" width="30px" /> Lindsey Stroud
                                             </td>
-                                            <td>{{data.amount}}</td>
+                                            <td class="col-td-th-3">{{data.amount}}</td>
                                         </tr>
 
                                     </tbody>
@@ -629,27 +629,27 @@
                                               " class="widget pb-0 box-shadow">
                                                     <!-- <div class="widget-body p-0 support table-wrapper "
                                                                             style="overflow: hidden !important;">
-                                                                            <table class="table table-striped mb-0">
+                                                                           <table class="table table-hover">
                                                                                 <thead>
                                                                                     <tr class="text-muted table-heading fs12">
                                                                                         <th class="rect"><img
                                                                                                 src="./assets/Rectangle-13.png"></th>
-                                                                                        <th scope="col"><span class=" pl-3">Serial
+                                                                                        <th scope="col" class="col-td-th-3"><span class=" pl-3">Serial
                                                                                                 Number</span></th>
-                                                                                        <th scope="col">Invoice Number</th>
-                                                                                        <th scope="col">Invoice Amount</th>
-                                                                                        <th scope="col">Currency</th>
+                                                                                        <th scope="col" class="col-td-th-3">Invoice Number</th>
+                                                                                        <th scope="col" class="col-td-th-3">Invoice Amount</th>
+                                                                                        <th scope="col" class="col-td-th-3">Currency</th>
                                                                                     </tr>
                                                                                 </thead>
-                                                                                <tbody class="text-dark">
+                                                                                <tbody>
                                                                                     <tr class="table-row fs12"
                                                                                         *ngFor="let data of selectedRow.invoices">
                                                                                         <th class="rect"><img
                                                                                                 src="./assets/Rectangle-13.png"></th>
                                                                                         <th class="pl-4 fw-normal">{{data.sno}}</th>
-                                                                                        <td class="sb-no">{{data.invoiceno}}</td>
-                                                                                        <td>{{data.amount}}</td>
-                                                                                        <td>{{data.currency}}</td>
+                                                                                        <td class="col-td-th-3">{{data.invoiceno}}</td>
+                                                                                        <td class="col-td-th-3">{{data.amount}}</td>
+                                                                                        <td class="col-td-th-3">{{data.currency}}</td>
 
                                                                                     </tr>
 
@@ -945,21 +945,21 @@
                                                                 Transaction</span>
                                                         </div>
                                                     </section>
-                                                    <table class="table table-striped mb-0">
+                                                   <table class="table table-hover">
                                                         <thead>
                                                             <tr class="text-muted table-heading">
-                                                                <th scope="col">Date</th>
-                                                                <th scope="col">File</th>
-                                                                <th scope="col">Status</th>
-                                                                <th scope="col">Bank</th>
+                                                                <th scope="col" class="col-td-th-3">Date</th>
+                                                                <th scope="col" class="col-td-th-3">File</th>
+                                                                <th scope="col" class="col-td-th-3">Status</th>
+                                                                <th scope="col" class="col-td-th-3">Bank</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="text-dark">
+                                                        <tbody>
                                                             <tr *ngFor="let task of allTransactions" class="table-row" (click)="viewTask(task)">
                                                                 <th class="pl-4 fw-normal">
                                                                     {{ task.transactionDate }}
                                                                 </th>
-                                                                <td class="sb-no">{{ task.file }}</td>
+                                                                <td class="col-td-th-3">{{ task.file }}</td>
                                                                 <td *ngIf="task.completed === true">
                                                                     Completed
                                                                 </td>
@@ -967,7 +967,7 @@
                                                                     Pending
                                                                 </td>
 
-                                                                <td>{{ task.bank }}</td>
+                                                                <td class="col-td-th-3">{{ task.bank }}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

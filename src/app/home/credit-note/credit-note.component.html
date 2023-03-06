@@ -93,37 +93,30 @@
 
         <div class="analytics">
             <div style="width: 100%" class="new_analit" #creditnotes>
-                <!-- *ngIf="!showInvoice" -->
                 <div style="width: 100%" class="row">
                     <div class="" id="container">
-                        <!-- *ngIf="!showInvoice" -->
                         <section class="middle_datatable">
                             <div class="widget-body p-0 support table-wrapper">
-                                <table class="table table-striped mb-0">
-                                    <!-- *ngIf='pipo' -->
+                               <table class="table table-hover">
                                     <thead>
-                                        <tr class="text-muted table-heading"
-                                            style="font-size: 14px; color:black !important; font-weight: 300 !important; padding: 5px; border-bottom: 1px solid #f2f4f8;">
-                                            <!-- <th class="rect">
-                                                <img src="./assets/Rectangle-13.png" />
-                                            </th> -->
-                                            <th scope="col">DATE</th>
-                                            <th scope="col">PI/PO No.</th>
-                                            <th scope="col">C N No.</th>
-                                            <th scope="col">C N Amount</th>
-                                            <th scope="col">Currency</th>
-                                            <th scope="col">Buyer Name</th>
-                                            <th scope="col">Action</th>
+                                        <tr class="table-tr">
+                                            <th scope="col" class="col-td-th-3">DATE</th>
+                                            <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">C N No.</th>
+                                            <th scope="col" class="col-td-th-3">C N Amount</th>
+                                            <th scope="col" class="col-td-th-3">Currency</th>
+                                            <th scope="col" class="col-td-th-3">Buyer Name</th>
+                                            <th scope="col" class="col-td-th-3">Action</th>
 
                                         </tr>
                                     </thead>
-                                    <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
+                                    <tbody>
+                                        <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
                                             [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-                                            <td>{{ data.date }}</td>
-                                            <td> {{ getPipoNumbers(data) }} </td>
-                                            <td>
+                                            <td class="col-td-th-3">{{ data.date }}</td>
+                                            <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
+                                            <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.creditNoteNumber}}
                                                 </div>
@@ -133,7 +126,7 @@
                                                         [(ngModel)]="data.creditNoteNumber">
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.creditNoteAmount}}
                                                 </div>
@@ -143,7 +136,7 @@
                                                         [(ngModel)]="data.creditNoteAmount">
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.currency}}
                                                 </div>
@@ -152,8 +145,8 @@
                                                         placeholder="Currency" [(ngModel)]="data.currency">
                                                 </div>
                                             </td>
-                                            <td>{{data.buyerName}}</td>
-                                            <td class="view_edit_button">
+                                            <td class="col-td-th-3">{{data.buyerName}}</td>
+                                            <td class="col-td-th-3">
                                                 <a title="view" (click)=" openCreditNote(content); viewCN(data)"><i
                                                         class="fa fa-eye" aria-hidden="true"></i></a>
                                                 <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]"

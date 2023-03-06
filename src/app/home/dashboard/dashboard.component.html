@@ -112,28 +112,28 @@
                       <th class="rect">
                         <img src="./assets/Rectangle-13.png" />
                       </th>
-                      <th scope="col"><span class="pl-3">DATE</span></th>
-                      <th scope="col">SB ID</th>
-                      <th scope="col">INVOICE NUMBER</th>
-                      <th scope="col">COMPANY NAME</th>
-                      <th scope="col">UPLOADED BY</th>
-                      <th scope="col">AMOUNT</th>
+                      <th scope="col" class="col-td-th-3"><span class="pl-3">DATE</span></th>
+                      <th scope="col" class="col-td-th-3">SB ID</th>
+                      <th scope="col" class="col-td-th-3">INVOICE NUMBER</th>
+                      <th scope="col" class="col-td-th-3">COMPANY NAME</th>
+                      <th scope="col" class="col-td-th-3">UPLOADED BY</th>
+                      <th scope="col" class="col-td-th-3">AMOUNT</th>
                     </tr>
                   </thead>
-                  <tbody class="text-dark">
-                    <tr class="table-row" *ngFor="let data of item1; let i = index" (click)="getInvoices(data, i)">
+                  <tbody>
+                    <tr class="table-tr" *ngFor="let data of item1; let i = index" (click)="getInvoices(data, i)">
                       <th class="rect">
                         <img src="./assets/Rectangle-13.png" />
                       </th>
                       <th class="pl-4 fw-normal">{{ data.sbdate }}</th>
-                      <td class="sb-no">{{ data.sbno }}</td>
-                      <td>
+                      <td class="col-td-th-3">{{ data.sbno }}</td>
+                      <td class="col-td-th-3">
                         Invoice-<span *ngFor="let data1 of data.invoices; let i = index">
                           0{{ i + 1 }},
                         </span>
                       </td>
-                      <td>Random Company</td>
-                      <td>
+                      <td class="col-td-th-3">Random Company</td>
+                      <td class="col-td-th-3">
                         <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
                           height="30px" width="30px" /><img class="image image2"
                           src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
@@ -141,24 +141,24 @@
 
                         Lindsey Stroud
                       </td>
-                      <td>7800</td>
+                      <td class="col-td-th-3">7800</td>
                     </tr>
-                    <tr class="table-row" *ngFor="let data of item2; let j = index" (click)="getInvoices(data, j)">
+                    <tr class="table-tr" *ngFor="let data of item2; let j = index" (click)="getInvoices(data, j)">
                       <th class="rect">
                         <img src="./assets/Rectangle-13.png" />
                       </th>
                       <th class="pl-4 fw-normal">{{ data.boeDate }}</th>
-                      <td class="sb-no">{{ data.boeNumber }}</td>
-                      <td>Invoice-1</td>
-                      <td>Random Company</td>
-                      <td>
+                      <td class="col-td-th-3">{{ data.boeNumber }}</td>
+                      <td class="col-td-th-3">Invoice-1</td>
+                      <td class="col-td-th-3">Random Company</td>
+                      <td class="col-td-th-3">
                         <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
                           height="30px" width="30px" /><img class="image image2"
                           src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
                           width="30px" />
                         Lindsey Stroud
                       </td>
-                      <td>7800</td>
+                      <td class="col-td-th-3">7800</td>
                     </tr>
                   </tbody>
                 </table>
@@ -266,27 +266,27 @@
                         <section class="widget pb-0 box-shadow" style="padding-left: 12%">
                           <!-- <div class="widget-body p-0 support table-wrapper "
                                                         style="overflow: hidden !important;">
-                                                        <table class="table table-striped mb-0">
+                                                       <table class="table table-hover">
                                                             <thead>
                                                                 <tr class="text-muted table-heading fs12">
                                                                     <th class="rect"><img
                                                                             src="./assets/Rectangle-13.png"></th>
-                                                                    <th scope="col"><span class=" pl-3">Serial
+                                                                    <th scope="col" class="col-td-th-3"><span class=" pl-3">Serial
                                                                             Number</span></th>
-                                                                    <th scope="col">Invoice Number</th>
-                                                                    <th scope="col">Invoice Amount</th>
-                                                                    <th scope="col">Currency</th>
+                                                                    <th scope="col" class="col-td-th-3">Invoice Number</th>
+                                                                    <th scope="col" class="col-td-th-3">Invoice Amount</th>
+                                                                    <th scope="col" class="col-td-th-3">Currency</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody class="text-dark">
+                                                            <tbody>
                                                                 <tr class="table-row fs12"
                                                                     *ngFor="let data of selectedRow.invoices">
                                                                     <th class="rect"><img
                                                                             src="./assets/Rectangle-13.png"></th>
                                                                     <th class="pl-4 fw-normal">{{data.sno}}</th>
-                                                                    <td class="sb-no">{{data.invoiceno}}</td>
-                                                                    <td>{{data.amount}}</td>
-                                                                    <td>{{data.currency}}</td>
+                                                                    <td class="col-td-th-3">{{data.invoiceno}}</td>
+                                                                    <td class="col-td-th-3">{{data.amount}}</td>
+                                                                    <td class="col-td-th-3">{{data.currency}}</td>
 
                                                                 </tr>
 
@@ -427,12 +427,12 @@
                                 let obj of selectedRow.invoices;
                                 let i = index
                               ">
-                              <td><img src="./assets/Rectangle-13.png" /></td>
-                              <td>{{ i + 1 }}</td>
-                              <td>{{ obj.invoiceno }}</td>
-                              <td>{{ obj.amount }}</td>
-                              <td>{{ obj.currency }}</td>
-                              <td><img src="./assets/Rectangle-13.png" /></td>
+                              <td class="col-td-th-3"><img src="./assets/Rectangle-13.png" /></td>
+                              <td class="col-td-th-3">{{ i + 1 }}</td>
+                              <td class="col-td-th-3">{{ obj.invoiceno }}</td>
+                              <td class="col-td-th-3">{{ obj.amount }}</td>
+                              <td class="col-td-th-3">{{ obj.currency }}</td>
+                              <td class="col-td-th-3"><img src="./assets/Rectangle-13.png" /></td>
                             </tr>
                           </table>
                         </section>
@@ -615,29 +615,29 @@
                               <span class="ctb" (click)="onNewTrans()">Create New Transaction</span>
                             </div>
                           </section>
-                          <table class="table table-striped mb-0">
+                         <table class="table table-hover">
                             <thead>
                               <tr class="text-muted table-heading">
-                                <th scope="col">Date</th>
-                                <th scope="col">Detail</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Download</th>
+                                <th scope="col" class="col-td-th-3">Date</th>
+                                <th scope="col" class="col-td-th-3">Detail</th>
+                                <th scope="col" class="col-td-th-3">Status</th>
+                                <th scope="col" class="col-td-th-3">Download</th>
                               </tr>
                             </thead>
-                            <tbody class="text-dark">
-                              <tr class="table-row">
+                            <tbody>
+                              <tr class="table-tr">
                                 <th class="pl-4 fw-normal">Dec 14, 2018</th>
-                                <td class="sb-no">Submitted to Yes bank</td>
-                                <td>Emailed</td>
-                                <td>Download & Share icon</td>
+                                <td class="col-td-th-3">Submitted to Yes bank</td>
+                                <td class="col-td-th-3">Emailed</td>
+                                <td class="col-td-th-3">Download & Share icon</td>
                               </tr>
-                              <tr class="table-row">
+                              <tr class="table-tr">
                                 <th class="pl-4 fw-normal">Dec 14, 2018</th>
-                                <td class="sb-no">
+                                <td class="col-td-th-3">
                                   Draft waiting for Submission
                                 </td>
-                                <td>Draft</td>
-                                <td>Download & Share icon</td>
+                                <td class="col-td-th-3">Draft</td>
+                                <td class="col-td-th-3">Download & Share icon</td>
                               </tr>
                             </tbody>
                           </table>

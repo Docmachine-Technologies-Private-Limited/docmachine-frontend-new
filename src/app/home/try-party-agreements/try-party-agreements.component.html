@@ -86,30 +86,26 @@
                         <!-- *ngIf="!showInvoice" -->
                         <section class="middle_datatable">
                             <div class="widget-body p-0 support table-wrapper">
-                                <table class="table table-striped mb-0">
-                                    <!-- *ngIf='pipo' -->
-                                    <thead style="width: 100%;background: white;position: sticky;top: 0;">
-                                        <tr class="text-muted table-heading" style=" font-size: 14px; color:black;  border-bottom: 1px solid #f2f4f8;">
-                                            <!-- <th class="rect">
-                                                <img src="./assets/Rectangle-13.png" />
-                                            </th> -->
-                                            <th scope="col"><span>DATE</span></th>
-                                            <th scope="col">PI/PO No.</th>
-                                            <th scope="col">T P A No.</th>
-                                            <th scope="col">T P A Amount</th>
-                                            <th scope="col">Currency</th>
-                                            <th scope="col">Buyer Name</th>
-                                            <th scope="col">Action</th>
+                               <table class="table table-hover">
+                                    <thead>
+                                        <tr class="table-tr">
+                                            <th scope="col" class="col-td-th-3"><span>DATE</span></th>
+                                            <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">T P A No.</th>
+                                            <th scope="col" class="col-td-th-3">T P A Amount</th>
+                                            <th scope="col" class="col-td-th-3">Currency</th>
+                                            <th scope="col" class="col-td-th-3">Buyer Name</th>
+                                            <th scope="col" class="col-td-th-3">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of  this.FILTER_VALUE_LIST; let i = index"[ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                    <tbody>
+                                        <tr class="table-tr" *ngFor="let data of  this.FILTER_VALUE_LIST; let i = index"[ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-                                            <td>{{ data.date }}</td>
+                                            <td class="col-td-th-3">{{ data.date }}</td>
 
-                                            <td class="sb-no"> {{ getPipoNumbers(data) }} </td>
+                                            <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
 
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.triPartyAgreementNumber}}
                                                 </div>
@@ -118,7 +114,7 @@
                                                     <input class="tblInput form-control" name="triPartyAgreement" type="text" placeholder="Tri-Party Agreement Number" [(ngModel)]="data.triPartyAgreementNumber">
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.triPartyAgreementAmount}}
                                                 </div>
@@ -127,7 +123,7 @@
                                                     <input class="tblInput form-control" name="triPartyAgreementAmount" type="text" placeholder="Tri Party Agreement Amount" [(ngModel)]="data.triPartyAgreementAmount">
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.currency}}
                                                 </div>
@@ -136,8 +132,8 @@
                                                     <input class="tblInput form-control" name="currency" type="text" placeholder="currency" [(ngModel)]="data.currency">
                                                 </div>
                                             </td>
-                                            <td>{{data.buyerName}}</td>
-                                            <td class="view_edit_button">
+                                            <td class="col-td-th-3">{{data.buyerName}}</td>
+                                            <td class="col-td-th-3">
                                                 <a (click)=" openLetterOfCredit(content); viewLC(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                 <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                                 <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"

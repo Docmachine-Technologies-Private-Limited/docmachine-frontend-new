@@ -94,6 +94,7 @@ import { BoeBillService } from '../service/homeservices/BoeBill/boe-bill.service
 import { ImportDirectPaymentComponent } from './Import-Direct-Payment/Import-Direct-Payment.component';
 import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-Credit-Request.component';
 import { TransactionDashboardComponent } from "../transaction-dashboard/transaction-dashboard.component";
+import { UploadModule } from "./upload/upload.module";
 
 @NgModule({
   declarations: [
@@ -152,6 +153,7 @@ import { TransactionDashboardComponent } from "../transaction-dashboard/transact
     ProgressBarModule,
     ReactiveFormsModule,
     PdfViewerModule,
+    UploadModule,
     RouterModule.forChild([
       {
         path: "",

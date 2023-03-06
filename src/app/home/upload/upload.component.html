@@ -138,7 +138,8 @@
                 <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
                   [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME" bindLabel="pi_po_buyerName"
                   [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
-                  bindValue="testFunctionID" ngModel (change)="clickPipo(CommercialNumber?.selectedItems)"
+                  [(ngModel)]="this.PIPO_LIST"
+                  bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)"
                   #CommercialNumber>
                 </ng-select>
                 <div *ngIf="documentType!='' && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length==0"
@@ -157,9 +158,17 @@
                 <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
                   [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME" bindLabel="pi_po_buyerName"
                   [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
-                  bindValue="testFunctionID" ngModel (change)="clickPipo(CommercialNumber?.selectedItems)"
+                  bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)"
                   #CommercialNumber>
                 </ng-select>
+                
+                <!-- <ng-select class="custom"
+                  [items]="[]" bindLabel="pi_po_buyerName"
+                  [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION"
+                  [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO122"
+                  bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)"
+                  #CommercialNumber>
+                </ng-select> -->
                 <div *ngIf="documentType!='' && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length==0"
                   style="color: red;font-size: 15px;">
                   There were no results from that PIPO Summary.
@@ -177,7 +186,7 @@
             <label style="font-size: 20px; color: #303030;">Beneficiary Name*</label>
             <ng-select class="custom" *ngIf="this.benneDetail?.length!=0" [items]="this.benneDetail"
               bindLabel="benneName" [multiple]="false" groupBy="selectedAllGroup" [selectableGroup]="true"
-              placeholder="Select PI/PO" bindValue="testFunctionID" ngModel
+              placeholder="Select PI/PO" bindValue="testFunctionID"
               (change)="clickBene(bene?.selectedValues[0]?.benneName)" #bene>
             </ng-select>
           </div>
@@ -200,8 +209,9 @@
             PI/PO*</label>
           <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
             [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME" bindLabel="pi_po_buyerName"
+            [(ngModel)]="this.PIPO_LIST"
             [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
-            bindValue="testFunctionID" ngModel (change)="clickPipo(CommercialNumber?.selectedItems)"
+            bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)"
             #CommercialNumber>
           </ng-select>
         </div>
@@ -212,7 +222,8 @@
             <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
               [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME" bindLabel="pi_po_buyerName"
               [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
-              bindValue="testFunctionID" ngModel (change)="clickPipo(CommercialNumber?.selectedItems)"
+              [(ngModel)]="this.PIPO_LIST"
+              bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)"
               #CommercialNumber>
             </ng-select>
           </div>
@@ -915,17 +926,17 @@
               <button type="submit" class="btn btn-primary">Submit</button>
               <!-- <table class="field-table">
               <tr class="field-heading">
-                <td>BOE Number*</td>
-                <td>BOE Date</td>
+                <td class="col-td-th-3">BOE Number*</td>
+                <td class="col-td-th-3">BOE Date</td>
               </tr>
               <tr>
-                <td>
+                <td class="col-td-th-3">
                   <input [(ngModel)]="res.boeNumber" class="input2" type="text" name="boeNumber" />
                 </td>
-                <td>
+                <td class="col-td-th-3">
                   <input [(ngModel)]="res.boeDate" class="input2" type="date" name="boeDate" />
                 </td>
-                <td><button type="submit" class="button">Submit</button></td>
+                <td class="col-td-th-3"><button type="submit" class="button">Submit</button></td>
               </tr>
             </table> 
             <tr class="form-wrapper">

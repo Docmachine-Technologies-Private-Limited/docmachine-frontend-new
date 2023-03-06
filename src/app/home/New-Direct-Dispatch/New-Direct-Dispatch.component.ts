@@ -34,6 +34,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { MergePdfListService } from '../merge-pdf-list.service';
+import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
 
 @Component({
   selector: 'app-Direct-Dispatch',
@@ -353,6 +354,7 @@ export class NewDirectDispatchComponent implements OnInit {
     private route: ActivatedRoute,
     public shippingBillService: ShippingbillDataService,
     private modalService: NgbModal,
+    public mergerpdf: MergePdfService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public pdfmerge: MergePdfListService,
     public wininfo: WindowInformationService) {
@@ -418,8 +420,10 @@ export class NewDirectDispatchComponent implements OnInit {
         this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
           console.log('downloadEachFile', res);
           res.arrayBuffer().then((data: any) => {
+            var base64String = this._arrayBufferToBase64(data);
+            const x = 'data:application/pdf;base64,' + base64String;
             this.PDF_LIST.push({
-              pdf: data,
+              pdf: x,
               name: this.temp[id][index]['name']
             })
             console.log('downloadEachFile', data);
@@ -3799,21 +3803,22 @@ export class NewDirectDispatchComponent implements OnInit {
   OBJECT_LENGTH(data: any) {
     return data != undefined ? data.length : 0;
   }
-  PREVIEWS_URL() {
+ async PREVIEWS_URL() {
     this.PREVIEWS_URL_LIST = [];
+    var tep:any=[];
     for (let i = 0; i < this.itemArray.length; i++) {
       var element = this.itemArray[i]?._id;
-      this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno] = []
-      this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno].push(this.formerge);
+      tep[this.itemArray[i]?.sbno] = []
+      tep[this.itemArray[i]?.sbno].push(this.formerge);
       for (let index = 0; index < this.temp[element].length; index++) {
-        this.userService.mergePdf(this.temp[element][index]?.pdf).subscribe((res: any) => {
-          console.log('downloadEachFile', res);
-          res.arrayBuffer().then((data: any) => {
-            this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno].push(data)
-            console.log('downloadEachFile', data);
-          });
-        });
+        tep[this.itemArray[i]?.sbno].push(this.temp[element][index]?.pdf)
       }
+    }
+    for (let i = 0; i < this.itemArray.length; i++) {
+      this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno] = []
+      await this.mergerpdf.mergePdf(tep[this.itemArray[i]?.sbno]).then((merge: any) => {
+        this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno].push(merge)
+      })
     }
   }
   SendApproval(Status: string, UniqueId: any, model: any) {
@@ -3862,9 +3867,10 @@ export class NewDirectDispatchComponent implements OnInit {
           if (Status == '' || Status == null || Status == 'Rejected') {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
               this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
+              this.ExportBillLodgement_Form.controls['documents'].setValue(temp_doc);
               if (this.Lodgement['AgainstAdvanceReceipt']?.Hide!='no') {
                 var data:any={
-                  ExportBillLodgement:this.ExportBillLodgement_Form.value,
+                  data:this.ExportBillLodgement_Form.value,
                   TypeTransaction:'Export-Direct-Dispatch',
                   fileType:'Export',
                   UserDetails:approval_data?.id
@@ -3915,8 +3921,8 @@ export class NewDirectDispatchComponent implements OnInit {
                       query: query
                     }).subscribe((r2: any) => {
                       console.log(r2, 'masterrecord')
-                      model.style.display = 'none';
-                      this.router.navigate(['/home/dashboardTask'])
+                      // model.style.display = 'none';
+                      // this.router.navigate(['/home/dashboardTask'])
                     })
                   });
                   console.log('addExportBillLodgment', res1);

@@ -304,20 +304,20 @@
                                         <table class="newdatatable">
                                             <tbody>
                                                 <tr>
-                                                    <td><b>Bank name</b></td>
-                                                    <td>
+                                                    <td class="col-td-th-3"><b>Bank name</b></td>
+                                                    <td class="col-td-th-3">
                                                         <p>{{selectedBankName}}</p>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td><b>Beneficiary name</b></td>
-                                                    <td>
+                                                    <td class="col-td-th-3"><b>Beneficiary name</b></td>
+                                                    <td class="col-td-th-3">
                                                         <p>{{selectedBenne.benneName}}</p>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td><b>Beneficiary account</b></td>
-                                                    <td>
+                                                    <td class="col-td-th-3"><b>Beneficiary account</b></td>
+                                                    <td class="col-td-th-3">
                                                         <p>{{selectedBenne.beneAccNo}}</p>
                                                     </td>
                                                 </tr>
@@ -325,29 +325,29 @@
                                                     <td colspan="2"><strong>PI details</strong></td>
                                                 </tr>
                                                 <tr>
-                                                    <td><b>Total no. of PI</b></td>
-                                                    <td>
+                                                    <td class="col-td-th-3"><b>Total no. of PI</b></td>
+                                                    <td class="col-td-th-3">
                                                         <p>{{selectedItems.length}}</p>
                                                     </td>
                                                 </tr>
                                                 <tr *ngFor="let items of selectedItems">
-                                                    <td><b>{{items.pipo_no}} </b></td>
-                                                    <td>
+                                                    <td class="col-td-th-3"><b>{{items.pipo_no}} </b></td>
+                                                    <td class="col-td-th-3">
                                                         <p> ( Amount: {{items.amount}}, Date: {{items.date}}, Buyer
                                                             name: {{items.buyerName}} )
                                                         </p>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td><b>Total PI amount</b></td>
-                                                    <td>
+                                                    <td class="col-td-th-3"><b>Total PI amount</b></td>
+                                                    <td class="col-td-th-3">
                                                         <p>{{sumTotalAmount}}
                                                         </p>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td><b>Opinion report</b></td>
-                                                    <td>
+                                                    <td class="col-td-th-3"><b>Opinion report</b></td>
+                                                    <td class="col-td-th-3">
                                                         <p style="color:#51AEE5;">Opinion report.pdf</p>
                                                     </td>
                                                 </tr>

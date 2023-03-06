@@ -218,6 +218,8 @@ export class UploadComponent implements OnInit {
     currency:''
   };
   SHIPPING_BUNDEL:any=[];
+  PIPO_LIST: any=[];
+  
   get f() {
     return this.loginForm.controls;
   }
@@ -387,7 +389,7 @@ export class UploadComponent implements OnInit {
     }
   }
   CURRENCY_LIST: any = [];
-
+  PIPO_FORM: FormGroup;
   async ngOnInit() {
     this.wininfo.set_controller_of_width(230, '.content_top_common')
     for (let index = 0; index < data1['default']?.length; index++) {
@@ -422,12 +424,13 @@ export class UploadComponent implements OnInit {
     console.log(this.route.snapshot.paramMap.get('document'));
     this.file = this.route.snapshot.paramMap.get('file');
     this.redirectid = this.route.snapshot.paramMap.get('pipo_id');
+    var temp_pipo:any = this.route.snapshot.paramMap.get('pipo')?.split(',');
     this.redirectindex = this.route.snapshot.paramMap.get('index');
     this.redirectpage = this.route.snapshot.paramMap.get('page');
+  
     console.log('checking', this.file);
     this.docu = this.route.snapshot.paramMap.get('document');
-    console.log('this is doc', this.docu);
-
+    console.log('this is doc', this.docu);  
     if (this.docu == 'pipo') {
       this.documentType1 = this.route.snapshot.paramMap.get('file');
       console.log(this.documentType1, 'docType');
@@ -875,12 +878,12 @@ export class UploadComponent implements OnInit {
       (err) => console.log('Error', err)
     );
     console.log('DOCUMENT TYPE', this.documentType);
-    await this.pipoDataService.getPipoList(this.documentType1).then((data) => {
+    await this.pipoDataService.getPipoList1(this.documentType1,temp_pipo).then(async (data) => {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
         console.log(data, 'data2222..................')
         console.log(this.PI_PO_NUMBER_LIST, 'PI_PO_NUMBER_LIST')
-        this.pipolist = data;
+        this.pipolist = data
       });
     });
     this.documentService.getIrAdvice(1).subscribe(

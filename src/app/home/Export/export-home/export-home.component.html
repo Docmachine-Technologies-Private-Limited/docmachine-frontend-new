@@ -58,7 +58,7 @@
                     <th scope="col" style="width: 60%; border: 0.1px solid #d3d3d3;"> Description</th>
                   </tr>
                 </thead>
-                <tbody class="text-dark">
+                <tbody>
                   <tr class="table-row" style="font-size: 12px;"
                     *ngFor="let purposeRow of purposeRows; let i = index">
                     <td class="columH" *ngFor="let column of purposeRow;  let j = index"
@@ -1217,24 +1217,62 @@
                         (click)="doneDox()">Done </button>
                       <button *ngIf='newDone' class="button1" style="margin-right: 10px;"
                         (click)="hidePreview()">Edit</button>
-                      <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px"
-                        (click)="openToPdf(content2,this.PREVIWES_URL)">Send Mail / Download</button>
+                      <button *ngIf='newDone' class="button1 PopupOpen" popup-close="ExportTransactionView" style="margin-right: 10px; width:200px"
+                        (click)="openToPdf(containerpopup.style.display='block',this.PREVIWES_URL)">Send Mail / Download</button>
                       <button *ngIf='!newDone' class="button1" style="margin-right: 10px; margin-bottom: 30px;"
                         (click)="showPreview(code)">Proceed to Preview</button>
                     </div>
                   </div>
                 </div>
-                <ng-template #content2 let-modal>
+                <div class="container popup" style="display: none;" #containerpopup>
+                <app-custom-model height="98vh" id="ExportTransactionView" name="Select Document To Download">
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="docStyle">
+                          <p class="display-4" style="margin-top: 10px;width: 6 0px;
+                                              border-bottom: 4px solid #49A2D7;">Generated Document</p>
+                        </div>
+                         <div *ngIf='newDone'>
+                          <div class="docStyle" *ngFor="let pipo of this.ARRAY_BUFFER_PDF;let i=index">
+                            <input type="checkBox" checked (change)="addPdfToSelectedPdf(pipo , $event)">
+                              <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false" [name]="'PIPO  Document '+(i+1)" [src]="pipo" width="100%" height="500px"></app-pdf-viewer>
+                          </div>
+                        </div>
+                        <div
+                          style="display: flex; width:100%; margin-left: 240px; margin-top: 20px; margin-bottom:20px; ">
+                          <div
+                            *ngIf="this.GetDownloadStatus?.status=='Approved' && this.USER_DATA?.RoleCheckbox!='' && this.USER_DATA?.RoleCheckbox!=null">
+                            <button type="submit" class="submitBTN" (click)="mergeAllPDFs('download')"
+                              (click)="modal.dismiss('Cross click')">Download PDF</button>
+                            <button type="submit" class="submitBTN" (click)="mergeAllPDFs('sendMail')"
+                              (click)="modal.dismiss('Cross click')">Send Mail</button>
+                          </div>
+                          <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                            <div
+                              *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
+                              <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px"
+                                [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
+                                (click)="SendApproval(this.GetDownloadStatus?.status,'Inward_Remitance_Dispoal'+'_'+this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,this.selectedPdfs)">Send
+                                for Approval</button>
+                            </div>
+                            <div
+                              *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
+                              <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px"
+                                [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'">Wait
+                                for Approval</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </app-custom-model>
+                </div>
+                <!-- <ng-template #content2 let-modal>
                   <div class="modal-body2">
                     <div class="row no-gutter">
-                      <!-- The image half -->
-                      <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
-                      <!-- The content half -->
                       <div class="col-md-7" style="margin: 10px;">
                         <div class="login d-flex py-5" style="padding: 0px !important;">
-                          <!-- Demo content-->
                           <div class="container popup">
-                            <!--  -->
                             <div class="row">
                               <div class="col-lg-10 col-xl-7 mrg">
                                 <p class="display-5" style="text-align: center; margin-left: 180px;"> Select Document
@@ -1279,12 +1317,11 @@
                               </div>
                             </div>
                           </div>
-                          <!-- End -->
                         </div>
                       </div>
                     </div>
                   </div>
-                </ng-template>
+                </ng-template> -->
               </div>
             </div>
           </div>
@@ -1346,7 +1383,7 @@
                                   <th scope="col">LOCATION</th>
                                 </tr>
                               </thead>
-                              <tbody class="text-dark">
+                              <tbody>
                                 <tr class="table-row1"
                                   *ngFor='let data of item3 | filterb:startDate:endDate | filtera:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index'>
                                   <td>
@@ -1438,7 +1475,7 @@
                   </div>
                 </div>
                 <section style="width: 100%;" class="box-shadow">
-                  <table style="" class="table table-striped mb-0">
+                  <table class="table table-striped mb-0">
                     <thead style="width: 100% ;height: 54px;">
                       <tr class="text-muted table-heading"
                         style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
@@ -1451,7 +1488,7 @@
                         <th scope="col">AVAILABLE AMOUNT</th>
                       </tr>
                     </thead>
-                    <tbody class="text-dark">
+                    <tbody>
                       <tr class="table-row" *ngFor='let data of ShippingbillNumberfilter  let i = index'>
                         <td>
                           <input type="checkbox" (change)="changeCheckbox1(data.sbno, data); " />
@@ -1528,7 +1565,7 @@
                             <th scope="col">Payment Term</th>
                           </tr>
                         </thead>
-                        <tbody class="text-dark" *ngIf="dataSource.length!=0">
+                        <tbody *ngIf="dataSource.length!=0">
                           <tr class="table-row" *ngFor='let data of dataSource let i = index'>
                             <td>
                               <input type="checkbox" (change)="changeCheckboxPIPO(data['pi_poNo']); " />

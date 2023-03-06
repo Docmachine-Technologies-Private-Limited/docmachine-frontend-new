@@ -31,13 +31,13 @@
                   <div *ngIf='isGenerate'>
                     <div>
                         <div id="mainId" class="bc mt-2 mb-2" *ngIf="isProceed == false">
-                            <app-pdf-viewer [downloadShow]="false"
-                            name="Bill Lodgement Pdf Viewer" [src]="this.formerge" width="100%" height="500px"></app-pdf-viewer>
+                            <app-pdf-viewer [downloadShow]="false" 
+                            name="Bill Lodgement Pdf Viewer" [src]="selItems" *ngFor="let selItems of  [this.formerge]" width="100%" height="500px"></app-pdf-viewer>
                         </div>
                     </div>
                 </div>
                   <div class="new_left_sidedoc p-2 pdf_invoce_scroll" *ngIf="this.PDF_LIST.length!=0">
-                    <div *ngFor="let selItems of  this.PDF_LIST">
+                    <div *ngFor="let selItems of this.PDF_LIST">
                            <app-pdf-viewer [downloadShow]="false"
                           [name]="selItems?.name" [src]="selItems?.pdf" width="100%" height="500px"></app-pdf-viewer>
                     </div>
@@ -419,7 +419,7 @@
                                                     <th scope="col">SB NO</th>
                                                   </tr>
                                                 </thead>
-                                                <tbody class="text-dark">
+                                                <tbody>
                                                   <tr class="table-row"
                                                     *ngFor='let data of item | filterb:startDate:endDate | filtera:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index'
                                                     (click)="changeCheckbox1(item.sbno, item)">
@@ -691,7 +691,7 @@
                           <th scope="col">AVAILABLE AMOUNT</th>
                         </tr>
                       </thead>
-                      <tbody class="text-dark">
+                      <tbody>
                         <tr class="table-row"
                           *ngFor='let data of item1 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
                           <td><input type="checkbox"
@@ -771,7 +771,7 @@
                             <th scope="col">Available Balance</th>
                           </tr>
                         </thead>
-                        <tbody class="text-dark" *ngIf="item13.length!=0">
+                        <tbody *ngIf="item13.length!=0">
                           <tr class="table-row"
                             *ngFor='let data of item13 | fiterbuyer:[{partyName:nameSearch3}]  let i = index'>
                             <td><input type="checkbox" (change)="addToSbArray(data, $event)" />

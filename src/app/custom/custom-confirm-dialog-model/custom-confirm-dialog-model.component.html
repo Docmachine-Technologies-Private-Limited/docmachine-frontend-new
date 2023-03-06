@@ -100,8 +100,17 @@
     </div>
   </div>
 </div>
+<div class="iframecustommodel" tabindex="-1" role="dialog" #iframecustommodel [style]="this.MODEL_TYPE_VIEW['IframeModel']==true?'display: block;' : 'display: none;'" >
+  <app-custom-model height="98vh"
+  id="Documents_View" name="Document View" (ModelChange)="this.HIDE_ALL_MODELS('IframeModel');">
+  <div class="form-group iframe-group">
+    <app-pdf-viewer [downloadShow]="false" *ngFor="let url of this.CustomConfirmDialogModel.url"
+     name="Documents" [src]="url" width="100%" height="100%"></app-pdf-viewer>
+  </div>
+  </app-custom-model>
+</div>
 
-<div class="modal iframecustommodel" tabindex="-1" role="dialog" #iframecustommodel [style]="this.MODEL_TYPE_VIEW['IframeModel']==true?'display: block;' : 'display: none;'" >
+<!-- <div class="modal iframecustommodel" tabindex="-1" role="dialog" #iframecustommodel [style]="this.MODEL_TYPE_VIEW['IframeModel']==true?'display: block;' : 'display: none;'" >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -121,7 +130,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <div class="modal YesNoDialogModel" tabindex="-1" role="dialog" #YesNoDialogModel [style]="this.MODEL_TYPE_VIEW['YesNoDialogModel']==true?'display: block;' : 'display: none;'" >
   <div class="form-group YesNoDialogModel-group">

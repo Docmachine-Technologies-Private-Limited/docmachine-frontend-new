@@ -33,6 +33,7 @@
 
 body {
   overflow-x: hidden !important;
+  font-family: 'Inconsolata', monospace;
 }
 
 // custom drop down
@@ -207,9 +208,9 @@ html {
 }
 
 .content-wrap {
-  position: unset!important;
-  height: auto!important;
-  width: calc(100vw - 220px)!important;
+  position: unset !important;
+  height: auto !important;
+  width: calc(100vw - 220px) !important;
 }
 
 .scroll-bar-main {
@@ -600,14 +601,61 @@ table td {
   padding: 3px !important;
 }
 
-.maximum-size-modal{
+.maximum-size-modal {
   height: 98vh !important;
-  margin: auto!important;
-  min-width: 100vw!important;
-  width: 98vw!important;
+  margin: auto !important;
+  min-width: 100vw !important;
+  width: 98vw !important;
 }
-.maximum-size-modal .overflow-panel{
+
+.maximum-size-modal .overflow-panel {
   height: calc(100vh - 73px) !important;
   display: flex;
   gap: 20px;
+}
+
+.col-td-th-1 {
+  width: 80px;
+  border: 0 !important;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  word-break: break-all;
+}
+
+.col-td-th-2 {
+  width: 200px;
+  border: 0 !important;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  word-break: break-all;
+}
+
+.col-td-th-3 {
+  width: 100px;
+  border: 0 !important;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  word-break: break-all;
+}
+
+.table-tr {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #7e7b7b;
+  font-size: 11px;
+}
+
+.table-tr button {
+  font-size: 11px;
 }

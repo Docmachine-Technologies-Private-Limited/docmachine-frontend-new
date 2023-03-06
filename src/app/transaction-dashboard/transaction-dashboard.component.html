@@ -70,27 +70,28 @@
             </div>
           </div>
         </div>
-        <div class="data_table_new">
+        <div class="data_table_new" style="overflow: auto;height: 73vh;margin-bottom: 0;">
           <div class="record-container">
             <table class="table table-striped">
               <thead>
-                <tr>
-                  <th scope="col">Sr.no.</th>
-                  <th scope="col" *ngFor="let item of displayedColumns">{{item}}</th>
-                  <th scope="col">User Details</th>
-                  <th scope="col">More Details</th>
+                <tr class="table-tr">
+                  <th scope="col" class="col-td-th-3">Sr.no.</th>
+                  <th scope="col" class="col-td-th-2" *ngFor="let item of displayedColumns">{{item}}</th>
+                  <th scope="col" class="col-td-th-2">User Details</th>
+                  <th scope="col" class="col-td-th-2">More Details</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of this.dataSource;let i=index">
-                  <td scope="row">{{(i+1)}}</td>
-                  <td scope="row" *ngFor="let column of displayedColumns">{{item[column]}}</td>
-                  <td scope="row"><a class="button white-btn table-btn"
+                <tr class="table-tr" *ngFor="let item of this.dataSource;let i=index">
+                  <td class="col-td-th-3" scope="row">{{(i+1)}}</td>
+                  <td class="col-td-th-2" scope="row" *ngFor="let column of displayedColumns">{{item[column]}}</td>
+                  <td class="col-td-th-2" scope="row"><a class="button white-btn table-btn"
                       (click)="userview(item?.UserDetails);User_Details.style.display='block'">View..</a></td>
-                  <td scope="row">
-                  <a class="button white-btn table-btn PopupOpen" popup-close="TransactionView"
+                  <td class="col-td-th-2" scope="row">
+                    <a class="button white-btn table-btn PopupOpen" popup-close="TransactionView"
                       (click)="transactionview(item);">View..</a>
-                     <button type="submit" popup-close="Upload" class="btn btn-primary PopupOpen">Upload RN</button>    
+                    <button type="submit" class="btn btn-primary"
+                      (click)="navigationByUrlParam('upload',item?.MoreDetails?.Url_Redirect)">Upload RN</button>
                   </td>
                 </tr>
               </tbody>
@@ -158,36 +159,164 @@
     <div class="d-flex p-2 flex-row overflow-panel" *ngIf="this.pdflist.length!=0">
       <div class="form-group mb-0 d-flex flex-column document-panel">
         <app-pdf-viewer [downloadShow]="false" *ngFor="let selItems of this.pdflist;let i=index"
-          [name]="'Document'+(i+1)" [src]="selItems" width="100%" height="500px"></app-pdf-viewer>
+          [name]="this.TRANSACTION_NAME+' | Merge All Documents'" [src]="selItems" width="100%"
+          height="500px"></app-pdf-viewer>
       </div>
       <div class="right-panel" *ngIf="this.OBJECT_DATA.length!=0">
-         <div class="grid" *ngFor="let item of this.OBJECT_DATA;let i=index">
-          <div class="row w-row m-auto" style="width: 100%;">
-            <div class="basic-column w-col w-col-3">
+        <!-- <div class="dump" *ngIf="this.TRANSACTION_NAME!='Export-Home'">
+          <div class="grid" *ngFor="let item of this.OBJECT_DATA;let i=index">
+            <div class="row w-row m-auto" style="width: 100%;">
+              <div class="basic-column w-col w-col-3">
                 <div class="tag-wrapper m-auto p-0">
-                    <div class="number-card number-card-content1">
-                        <h1 class="number-card-number" title="Inovice No.">{{item?.invoice_number}}</h1>
-                        <div class="number-card-divider"></div>
-                        <div class="number-card-progress-wrapper">
-                            <div class="tagline number-card-currency" title="Currency">{{item?.currency}}</div>
-                            <div class="number-card-progress" title="Amount">${{item?.amount}}</div>
-                        </div>
+                  <div class="number-card number-card-content1">
+                    <h1 class="number-card-number" title="Inovice No.">{{item?.invoice_number}}</h1>
+                    <div class="number-card-divider"></div>
+                    <div class="number-card-progress-wrapper">
+                      <div class="tagline number-card-currency" title="Currency">{{item?.currency}}</div>
+                      <div class="number-card-progress" title="Amount">${{item?.amount}}</div>
                     </div>
+                  </div>
                 </div>
-            </div>        
-        </div>
-          <!-- <div class="form-group mb-0 d-flex flex-column">
-          <div class="col-12 row p-0">
-            <div class="d-flex flex-column col-9">
-              <label for="exampleInputEmail1">ORM Referance No.</label>
-              <span>{{this.TRANSACTION_DATA_VIEW?.userdetails?.rejectcomment}}</span>
+              </div>
             </div>
-            <button type="submit" popup-close="Upload" class="btn btn-primary PopupOpen">upload</button>
+          </div>
+          <div class="sum-panel" *ngIf="this.INOVICE_SUM!=0">
+            <h5 class="sum-amount">Total Inovice Amount : ${{this.INOVICE_SUM}}</h5>
           </div>
         </div> -->
+        <div class="dump" *ngIf="this.TRANSACTION_NAME=='Inward-Remitance-Dispoal'">
+          <div class="grid" *ngIf="this.OBJECT_DATA!=''" style="gap: 10px;">
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5">Bank Name : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.BankName}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Remitter_Name : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.Remitter_Name}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Inward_reference_number : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.Inward_reference_number}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Amount : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.amount}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Currency : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.currency}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Bill_lodgment_Number : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.Bill_lodgment_Number}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Charges_Account_Number : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.Charges_Account_Number}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Credit_Account_Number : </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.Credit_Account_Number}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Inward_amount_for_disposal: </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.Inward_amount_for_disposal}} </h5>
+            </div>
+
+          </div>
         </div>
-        <div class="sum-panel" *ngIf="this.INOVICE_SUM!=0">
-          <h5 class="sum-amount">Total Inovice Amount : ${{this.INOVICE_SUM}}</h5>
+        <div class="dump" *ngIf="this.TRANSACTION_NAME=='Import-Direct-Payment'">
+          <div class="grid" *ngIf="this.OBJECT_DATA!=''" style="gap: 10px;">
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5">Bank Name </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.bank}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Beneficiary Name </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.benneName}} </h5>
+            </div>
+            <div class="row w-row m-auto" style="width: 100%;" *ngFor="let item of this.OBJECT_DATA?.BOETerm">
+              <div class="basic-column w-col w-col-3">
+                <div class="tag-wrapper m-auto p-0">
+                  <div class="number-card number-card-content1">
+                    <h1 class="number-card-number" title="Boe No.">{{item?.BOE_Number}}</h1>
+                    <div class="number-card-dollars" title="Remittance Amount">${{item?.remittanceAmount}}</div>
+                    <div class="number-card-divider"></div>
+                    <div class="number-card-progress-wrapper">
+                      <div class="tagline number-card-currency" title="Currency">{{item?.currency}}</div>
+                      <div class="number-card-progress" title="Amount">${{item?.amount}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Total Amount </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.sumTotalAmount}} </h5>
+            </div>
+            <div class="d-flex noraml-panel">
+              <h5 class="left-h5"> Total Remittance Amount </h5>
+              <h5 class="right-h5"> {{this.OBJECT_DATA?.totalremittanceAmount}} </h5>
+            </div>
+          </div>
+        </div>
+        <div class="dump" *ngIf="this.TRANSACTION_NAME=='Export-Direct-Dispatch'">
+          <div class="grid" *ngIf="this.OBJECT_DATA!=''" style="gap: 10px;">
+            <div class="d-flex noraml-panel" style="background-color: blueviolet;height: auto;">
+              <h5 class="h5-text">Advance Reference Number</h5>
+              <div class="card-1" *ngFor="let item of this.OBJECT_DATA?.Advance_reference_Number;let i=index">
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5">billNo {{(i+1)}}</h5>
+                  <h5 class="right-h5"> {{item?.irDataItem?.billNo}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> SB No. </h5>
+                  <h5 class="right-h5"> {{item?.irDataItem?.sbno}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> Amount : </h5>
+                  <h5 class="right-h5"> {{item?.irDataItem?.amount}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> Used Balance : </h5>
+                  <h5 class="right-h5"> {{item?.irDataItem?.Used_Balance}} </h5>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex noraml-panel" style="background-color: blueviolet;height: auto;">
+              <h5 class="h5-text">Shipping Bill</h5>
+              <div class="card-1" *ngFor="let item of this.OBJECT_DATA?.Shipping_bill_list;let i=index">
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> SB No. {{(i+1)}}</h5>
+                  <h5 class="right-h5"> {{item?.sbno}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5">Buyer Name</h5>
+                  <h5 class="right-h5"> {{item?.buyerName}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> fobCurrency </h5>
+                  <h5 class="right-h5"> {{item?.fobCurrency}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> Amount : </h5>
+                  <h5 class="right-h5"> {{item?.fobValue}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5"> Used Balance : </h5>
+                  <h5 class="right-h5"> {{item?.balanceAvai}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5">iecName</h5>
+                  <h5 class="right-h5"> {{item?.iecName}} </h5>
+                </div>
+                <div class="d-flex noraml-panel">
+                  <h5 class="left-h5">ieccode</h5>
+                  <h5 class="right-h5"> {{item?.ieccode}} </h5>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

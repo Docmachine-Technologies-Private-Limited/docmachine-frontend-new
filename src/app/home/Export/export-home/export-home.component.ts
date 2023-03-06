@@ -3006,16 +3006,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       x: 50, y: 52, width: 100,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
-
-
     const pdfBytes = await pdfDoc.save()
-    //console.log(pdfBytes, "pdf")
-    //console.log(pdfBytes, "pdf")
     var base64String = this._arrayBufferToBase64(pdfBytes)
-
-    //console.log(base64String);
     var x: any = 'data:application/pdf;base64,' + base64String;
-    //console.log(x);
     this.formerge = x
     this.value = base64String;
     this.newTask[0].generateDoc1 = x
@@ -3029,7 +3022,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     dlnk.href = x;
     dlnk.download = 'file.pdf';
     dlnk.click();
-
   }
 
   _arrayBufferToBase64(buffer) {
@@ -3495,7 +3487,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log("2214 line", this.STORE_URL)
     this.bgColor = true
     this.newDone = true
-
+    this.ARRAY_BUFFER_PDF=[];
+    this.ARRAY_BUFFER_PDF[0]=this.formerge;
+    this.ARRAY_BUFFER_PDF[1]=this.MT103_URL;
     for (let index = 0; index < this.STORE_URL.length; index++) {
       this.userService.mergePdf(this.STORE_URL[index]).subscribe((res: any) => {
          res.arrayBuffer().then((data: any) => {
@@ -3771,14 +3765,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
     console.log('line no. 2493', this.selectedPdfs);
 
-    this.modalService.open(content2, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
+    // this.modalService.open(content2, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then(
+    //   (result) => {
+    //     this.closeResult = `Closed with: ${result}`;
+    //   },
+    //   (reason) => {
+    //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    //   }
+    // );
   }
 
   addPdfToSelectedPdf(value, e) {
@@ -4142,7 +4136,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
     var approval_data: any = {
       id: UniqueId,
-      tableName: 'Export-Home',
+      tableName: 'Inward-Remitance-Dispoal',
       deleteflag: '-1',
       userdetails: this.USER_DATA,
       status: 'pending',
@@ -4151,17 +4145,26 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       TypeOfPage:'Transaction',
       FileType: this.USER_DATA?.sideMenu
     }
-    console.log(approval_data,this.mainDoc,'approval_data')
+    var tempPipo:any=[];
+    for (let index = 0; index < this.selectPIPO.length; index++) {
+    var findPipo:any= this.item3.filter((item:any)=>item?.pi_poNo.indexOf(this.selectPIPO[index])!=-1)
+      tempPipo.push(findPipo[0])
+    }
+    var updatedata:any=this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1];
+    updatedata['pipolist']=tempPipo
+    updatedata['Url_Redirect']={file:'export',document:'irAdvice',pipo:this.selectPIPO.toString()}
+    updatedata['documents']=temp_doc;
+    console.log(approval_data,this.mainDoc,this.selectPIPO,this.item3,updatedata,'approval_data')
     if (Status == '' || Status == null || Status == 'Rejected') {
       this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
-        // this.router.navigate(['/home/dashboardTask'])
         var data:any={
-          data:this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1],
-          TypeTransaction:'Export-Home',
+          data:updatedata,
+          TypeTransaction:'Inward-Remitance-Dispoal',
           fileType:'Export',
-          UserDetails:approval_data?.id
+          UserDetails:approval_data?.id,
         }
         this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+          this.router.navigate(['/home/dashboardTask'])
           this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
             console.log(res, 'dsdsdsdsdsdsds');
             this.GetDownloadStatus = res[0];

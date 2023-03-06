@@ -88,19 +88,19 @@
                       <div class="table-responsive">
                         <table class="table">
                           <thead>
-                            <tr>
-                              <th scope="col">#</th>
-                              <th scope="col">SB no</th>
-                              <th scope="col">Lodgement no</th>
-                              <th scope="col">Party Name</th>
+                            <tr class="table-tr">
+                              <th scope="col" class="col-td-th-3">#</th>
+                              <th scope="col" class="col-td-th-3">SB no</th>
+                              <th scope="col" class="col-td-th-3">Lodgement no</th>
+                              <th scope="col" class="col-td-th-3">Party Name</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let item of this.ALL_DATA_FORMAT; let i=index">
+                            <tr class="table-tr" *ngFor="let item of this.ALL_DATA_FORMAT; let i=index">
                               <td scope="row">{{(i+1)}}</td>
-                              <td>{{item.SB_NO}}</td>
-                              <td>{{item.Lodgement_No}}</td>
-                              <td>{{item.Party_Name}}</td>
+                              <td class="col-td-th-3">{{item.SB_NO}}</td>
+                              <td class="col-td-th-3">{{item.Lodgement_No}}</td>
+                              <td class="col-td-th-3">{{item.Party_Name}}</td>
                             </tr>
                           </tbody>
                         </table>

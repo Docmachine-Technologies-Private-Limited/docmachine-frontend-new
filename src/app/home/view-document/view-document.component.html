@@ -179,35 +179,35 @@
                         <table *ngIf='pipo' style="width: 100%" class="table table-striped mb-0">
                             <thead
                                 style="width: 100%;height: 54px; background: white;position: sticky;top: 0; ">
-                                <tr class="text-muted table-heading">
+                                <tr>
                                     <th class="rect">
                                         <img src="./assets/Rectangle-13.png" />
                                     </th>
-                                    <th scope="col"><span class="pl-3">DATE</span></th>
-                                    <th scope="col">PI/PO No.</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">CONSIGNEE NAME</th>
-                                    <th scope="col">BRANCH</th>
-                                    <th scope="col">Bene Name</th>
+                                    <th scope="col" class="col-td-th-3"><span class="pl-3">DATE</span></th>
+                                    <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                    <th scope="col" class="col-td-th-3">Amount</th>
+                                    <th scope="col" class="col-td-th-3">CONSIGNEE NAME</th>
+                                    <th scope="col" class="col-td-th-3">BRANCH</th>
+                                    <th scope="col" class="col-td-th-3">Bene Name</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-dark">
-                                <tr class="table-row" *ngFor="let data of item1; let i = index" (click)="
+                            <tbody>
+                                <tr class="table-tr" *ngFor="let data of item1; let i = index" (click)="
                                         getInvoices(data, i) && getTransactions(data.pi_poNo)
                                     ">
                                     <th class="rect">
                                         <img src="./assets/Rectangle-13.png" />
                                     </th>
                                     <th class="pl-4 fw-normal">{{ data.date }}</th>
-                                    <td class="sb-no">{{ data.pi_poNo }}</td>
-                                    <td>
+                                    <td class="col-td-th-3">{{ data.pi_poNo }}</td>
+                                    <td class="col-td-th-3">
                                         {{data.amount}}
                                     </td>
-                                    <td>{{data.buyerName}}</td>
-                                    <td>
+                                    <td class="col-td-th-3">{{data.buyerName}}</td>
+                                    <td class="col-td-th-3">
                                         {{data.location}}
                                     </td>
-                                    <td>{{data.benneName}}</td>
+                                    <td class="col-td-th-3">{{data.benneName}}</td>
                                 </tr>
     
                             </tbody>
@@ -218,71 +218,67 @@
                                     <th class="rect">
                                         <img src="./assets/Rectangle-13.png" />
                                     </th>
-                                    <th scope="col"><span class="pl-3">DATE</span></th>
-                                    <th scope="col">BOE NUMBER</th>
-                                    <th scope="col">AD CODE</th>
-                                    <th scope="col">COMPANY NAME</th>
-                                    <th scope="col">UPLOADED BY</th>
-                                    <th scope="col">BENE NAME</th>
+                                    <th scope="col" class="col-td-th-3"><span class="pl-3">DATE</span></th>
+                                    <th scope="col" class="col-td-th-3">BOE NUMBER</th>
+                                    <th scope="col" class="col-td-th-3">AD CODE</th>
+                                    <th scope="col" class="col-td-th-3">COMPANY NAME</th>
+                                    <th scope="col" class="col-td-th-3">UPLOADED BY</th>
+                                    <th scope="col" class="col-td-th-3">BENE NAME</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-dark">
-                                <tr class="table-row" *ngFor="let data of item1; let i = index" (click)="
+                            <tbody>
+                                <tr class="table-tr" *ngFor="let data of item1; let i = index" (click)="
                                                 getInvoices(data, i) && getTransactions(data.pi_poNo)
                                               ">
                                     <th class="rect">
                                         <img src="./assets/Rectangle-13.png" />
                                     </th>
                                     <th class="pl-4 fw-normal">{{ data.boeDate }}</th>
-                                    <td class="sb-no">{{ data.boeNumber }}</td>
-                                    <td>
+                                    <td class="col-td-th-3">{{ data.boeNumber }}</td>
+                                    <td class="col-td-th-3">
                                         {{ data.adCode }}
                                     </td>
-                                    <td>Random Company</td>
-                                    <td>
+                                    <td class="col-td-th-3">Random Company</td>
+                                    <td class="col-td-th-3">
                                         <img class="image"
                                             src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
                                             height="30px" width="30px" /><img class="image image2"
                                             src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png"
                                             height="30px" width="30px" /> Lindsey Stroud
                                     </td>
-                                    <td>{{data.benneName}}</td>
+                                    <td class="col-td-th-3">{{data.benneName}}</td>
                                 </tr>
     
                             </tbody>
                         </table>
-                        <table *ngIf='sb' style="width: 100%;margin-left: 10px;" class="table table-striped mb-0">
-                            <thead style="width: 100%;height: 54px;background: white;position: sticky;top: 0;">
-                                <tr class="text-muted table-heading" style=" font-size: 14px; color:black !important; font-weight: 300 !important; padding: 5px;
-                                 border-bottom: 1px solid #f2f4f8;">
-                                    <!-- <th class="rect">
-                                        <img src="./assets/Rectangle-13.png" />
-                                    </th> -->
-                                    <th scope="col"><span>SB DATE</span></th>
-                                    <th scope="col">SB NUMBER</th>
-                                    <th scope="col">AD CODE</th>
-                                    <th scope="col">AD BILL NO</th>
-                                    <th scope="col">BUYER NAME</th>
-                                    <th scope="col">COMPANY NAME</th>
-                                    <th scope="col">ORIGIN</th>
-                                    <th scope="col">DESTINATION</th>
-                                    <th scope="col">CURRENCY</th>
-                                    <th scope="col">SB AMOUNT</th>
-                                    <th scope="col">FIRX NUMBER </th>
-                                    <th scope="col">FIRX DATE </th>
-                                    <th scope="col">FIRX CURRENCY </th>
-                                    <th scope="col">FIRX AMOUNT</th>
-                                    <th scope="col">FIRX COMMISION </th>
-                                    <th scope="col">FIRX RECIEVED AMOUNT </th>
-                                    <th scope="col">AVAILABLE BALANCE</th>
-                                    <th scope="col">Action </th>
+                        <table *ngIf='sb' class="table mb-0">
+                            <thead>
+                                <tr class="table-tr">
+                                    <th scope="col" class="col-td-th-3"><span>SB DATE</span></th>
+                                    <th scope="col" class="col-td-th-3">SB NUMBER</th>
+                                    <th scope="col" class="col-td-th-3">AD CODE</th>
+                                    <th scope="col" class="col-td-th-3">AD BILL NO</th>
+                                    <th scope="col" class="col-td-th-2">BUYER NAME</th>
+                                    <th scope="col" class="col-td-th-2">COMPANY NAME</th>
+                                    <th scope="col" class="col-td-th-3">ORIGIN</th>
+                                    <th scope="col" class="col-td-th-3">DESTINATION</th>
+                                    <th scope="col" class="col-td-th-3">CURRENCY</th>
+                                    <th scope="col" class="col-td-th-2">SB AMOUNT</th>
+                                    <th scope="col" class="col-td-th-2">FIRX NUMBER </th>
+                                    <th scope="col" class="col-td-th-2">FIRX DATE </th>
+                                    <th scope="col" class="col-td-th-2">FIRX CURRENCY </th>
+                                    <th scope="col" class="col-td-th-2">FIRX AMOUNT</th>
+                                    <th scope="col" class="col-td-th-2">FIRX COMMISION </th>
+                                    <th scope="col" class="col-td-th-2">FIRX RECIEVED AMOUNT </th>
+                                    <th scope="col" class="col-td-th-2">AVAILABLE BALANCE</th>
+                                    <th scope="col" class="col-td-th-2">Action </th>
                                 </tr>
                             </thead>
-                            <tbody class="text-dark">
-                                <tr class="table-row" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
+                            <tbody>
+                                <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
                                     [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0' || data['deleteflag']==0) ||
                                 this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-                                    <td>
+                                    <td class="col-td-th-3">
                                         <div *ngIf="!optionsVisibility[i]">
                                             {{ data.sbdate }}
                                         </div>
@@ -291,7 +287,7 @@
                                                 placeholder="Sb Date" [(ngModel)]="data.sbdate">
                                         </div>
                                     </td>
-                                    <td class="sb-no">
+                                    <td class="col-td-th-3">
                                         <div *ngIf="!optionsVisibility[i]" (click)="
                                         getInvoices(data, i) && getTransactions(data.pi_poNo)
                                       ">
@@ -302,7 +298,7 @@
                                                 placeholder="Sb No" [(ngModel)]="data.sbno">
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-3">
                                         <div *ngIf="!optionsVisibility[i]">
                                             {{ data.adCode }}
                                         </div>
@@ -311,7 +307,7 @@
                                                 placeholder="adCode" [(ngModel)]="data.adCode">
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-3">
                                         <div *ngIf="!optionsVisibility[i]">
                                             {{ data.adBillNo }}
                                         </div>
@@ -320,7 +316,7 @@
                                                 placeholder="ad Bill No" [(ngModel)]="data.adBillNo">
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-2">
                                         <div *ngIf="!optionsVisibility[i]">
                                             {{transform(data.buyerName)}}
                                         </div>
@@ -329,7 +325,7 @@
                                                 placeholder="Buyer Name" [(ngModel)]="data.buyerName">
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-2">
                                         <div *ngIf="!optionsVisibility[i]">
                                             {{data.consigneeName}}
                                         </div>
@@ -339,7 +335,7 @@
                                                 [(ngModel)]="data.consigneeName">
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-3">
                                         <div *ngIf="!optionsVisibility[i]">
                                             {{data.exporterLocationCode}}
                                         </div>
@@ -349,7 +345,7 @@
                                                 [(ngModel)]="data.exporterLocationCode">
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-3">
                                         <div *ngIf="!optionsVisibility[i]">
                                             {{data.countryOfFinaldestination}}
                                         </div>
@@ -360,7 +356,7 @@
                                                 [(ngModel)]="data.countryOfFinaldestination">
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-3">
                                         <div *ngIf="!optionsVisibility[i]">
                                             {{data.fobCurrency}}
                                         </div>
@@ -369,7 +365,7 @@
                                                 placeholder="Fob Currency" [(ngModel)]="data.fobCurrency">
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-2">
                                         <div *ngIf="!optionsVisibility[i]">
                                             {{data.fobValue}}
                                         </div>
@@ -378,28 +374,28 @@
                                                 placeholder="Fob Value" [(ngModel)]="data.fobValue">
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-2">
                                         {{data.firxNumber}}
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-2">
                                         {{data.firxDate}}
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-2">
                                         {{data.firxCurrency}}
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-2">
                                         {{data.firxAmount}}
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-2">
                                         {{data.firxCommision}}
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-2">
                                         {{data.firxRecAmo}}
                                     </td>
-                                    <td>
+                                    <td class="col-td-th-2">
                                         {{data.balanceAvai}}
                                     </td>
-                                    <td class="view_edit_button">
+                                    <td class="col-td-th-2">
                                         <a title="View" (click)=" openLetterOfCredit(content); viewCN(data)"><i
                                                 class="fa fa-eye" aria-hidden="true"></i></a>
                                         <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]"
@@ -1114,12 +1110,12 @@
                                                                     let obj of selectedRow.invoices;
                                                                     let i = index
                                                                   ">
-                                                            <!-- <td><img src="./assets/Rectangle-13.png" /></td> -->
-                                                            <td>{{ i + 1 }}</td>
-                                                            <td>{{ obj.invoiceno }}</td>
-                                                            <td>{{ obj.amount }}</td>
-                                                            <td>{{ obj.currency }}</td>
-                                                            <!-- <td><img src="./assets/Rectangle-13.png" /></td> -->
+                                                            <!-- <td class="col-td-th-3"><img src="./assets/Rectangle-13.png" /></td> -->
+                                                            <td class="col-td-th-3">{{ i + 1 }}</td>
+                                                            <td class="col-td-th-3">{{ obj.invoiceno }}</td>
+                                                            <td class="col-td-th-3">{{ obj.amount }}</td>
+                                                            <td class="col-td-th-3">{{ obj.currency }}</td>
+                                                            <!-- <td class="col-td-th-3"><img src="./assets/Rectangle-13.png" /></td> -->
                                                         </tr>
                                                     </table>
 

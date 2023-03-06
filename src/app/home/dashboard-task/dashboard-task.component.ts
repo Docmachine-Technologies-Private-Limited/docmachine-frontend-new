@@ -11,11 +11,9 @@ import {
 
 import { DocumentService } from '../../service/document.service';
 import { DashBoardService } from '../../service/dashboard.service';
-
-import { ThemePalette } from '@angular/material/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
 import { UserService } from "../../service/user.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../service/window-information.service';
 
 
 @Component({

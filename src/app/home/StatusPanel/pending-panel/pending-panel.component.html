@@ -2,29 +2,29 @@
   <div class="container-fluid">
     <table class="table">
       <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Id</th>
-          <th scope="col">Summary Page Name</th>
-          <th scope="col">Date</th>
-          <th scope="col">Status</th>
-          <th scope="col">Comments</th>
-          <th scope="col" *ngIf="this.USER_DETAILS?.RoleCheckbox!='Maker'">Action</th>
+        <tr class="table-tr">
+          <th scope="col" class="col-td-th-1">#</th>
+          <th scope="col" class="col-td-th-1">Id</th>
+          <th scope="col" class="col-td-th-2">Summary Page Name</th>
+          <th scope="col" class="col-td-th-2">Date</th>
+          <th scope="col" class="col-td-th-1">Status</th>
+          <th scope="col" class="col-td-th-2">Comments</th>
+          <th scope="col" class="col-td-th-2" *ngIf="this.USER_DETAILS?.RoleCheckbox!='Maker'">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of this.DATA_CREATE let i=index">
-          <td>{{i+1}}</td>
-          <td>del_000{{i+1}}</td>
-          <td>{{item['tableName']}} | {{item['TypeOfPage']}}</td>
-          <td>{{item['createdAt']}}</td>
-          <td>
+        <tr *ngFor="let item of this.DATA_CREATE let i=index" class="table-tr">
+          <td class="col-td-th-1">{{i+1}}</td>
+          <td class="col-td-th-1">del_000{{i+1}}</td>
+          <td class="col-td-th-2">{{item['tableName']}} | {{item['TypeOfPage']}}</td>
+          <td class="col-td-th-2">{{item['createdAt']}}</td>
+          <td class="col-td-th-1">
             <label>{{item['status']}}</label>
           </td>
-          <td>
+          <td class="col-td-th-2">
             <label>{{item['comment']}}</label>
           </td>
-          <td>
+          <td class="col-td-th-2">
             <div class="column flex-display"
               *ngIf="this.USER_DETAILS?.RoleCheckbox==='Approver' || this.USER_DETAILS?.RoleCheckbox==''">
               <button type="submit" class="btn btn-success" (click)="Approved({
@@ -60,9 +60,9 @@
               status:'Rejected',
               deleteflag:'0'
             },i)">Reject</button>
-              <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary"
+              <button type="submit" popup-close="Documents_View" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary PopupOpen"
                 (click)="openView(item?.documents,i)">View</button>
-              <button type="submit" *ngIf="item?.Types!='downloadPDF'" class="btn btn-primary"
+              <button type="submit" *ngIf="item?.Types!='downloadPDF'" class="btn btn-primary PopupOpen" popup-close="Documents_View"
                 (click)="openView(item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1'],i)">View</button>
             </div>
           </td>

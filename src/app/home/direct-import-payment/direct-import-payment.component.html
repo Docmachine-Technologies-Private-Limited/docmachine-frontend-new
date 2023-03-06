@@ -51,29 +51,29 @@
                     <div *ngIf="!showInvoice" class="col-12 mb-lg padding">
                         <section class="widget pb-0 box-shadow">
                             <div class="widget-body p-0 support table-wrapper">
-                                <table class="table table-striped mb-0">
+                               <table class="table table-hover">
                                     <thead style="width: 100%">
                                         <tr class="text-muted table-heading">
 
-                                            <th scope="col"><span class="pl-3">BOE DATE</span></th>
+                                            <th scope="col" class="col-td-th-3"><span class="pl-3">BOE DATE</span></th>
                                             <th scope="col" class="pl-3">BOE NUMBER</th>
                                             <th scope="col" class="pl-3">AD NUMBER</th>
                                             <th scope="col" class="pl-3">CURRENCY</th>
                                             <th scope="col" class="pl-3">BENE NAME</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of item3; let i = index" (click)="
+                                    <tbody>
+                                        <tr class="table-tr" *ngFor="let data of item3; let i = index" (click)="
                           getInvoices(data, i)
                         ">
 
                                             <th class="pl-4 fw-normal">{{ data.boeDate }}</th>
-                                            <td class="sb-no">{{ data.boeNumber }}</td>
-                                            <td>
+                                            <td class="col-td-th-3">{{ data.boeNumber }}</td>
+                                            <td class="col-td-th-3">
                                                 {{ data.adCode }}
                                             </td>
-                                            <td>{{ data.currency }}</td>
-                                            <td>
+                                            <td class="col-td-th-3">{{ data.currency }}</td>
+                                            <td class="col-td-th-3">
                                                 {{ data.benneName }}
                                             </td>
                                         </tr>
@@ -377,21 +377,21 @@
                                                                 Transaction</span>
                                                         </div>
                                                     </section>
-                                                    <table class="table table-striped mb-0">
+                                                   <table class="table table-hover">
                                                         <thead>
                                                             <tr class="text-muted table-heading">
-                                                                <th scope="col">Date</th>
-                                                                <th scope="col">Detail</th>
-                                                                <th scope="col">Status</th>
-                                                                <th scope="col">Download</th>
+                                                                <th scope="col" class="col-td-th-3">Date</th>
+                                                                <th scope="col" class="col-td-th-3">Detail</th>
+                                                                <th scope="col" class="col-td-th-3">Status</th>
+                                                                <th scope="col" class="col-td-th-3">Download</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="text-dark">
+                                                        <tbody>
                                                             <tr *ngFor="let task of allTransactions" class="table-row" (click)="viewTask(task)">
                                                                 <th class="pl-4 fw-normal">
                                                                     {{ task.transactionDate }}
                                                                 </th>
-                                                                <td class="sb-no">Submitted to Yes bank</td>
+                                                                <td class="col-td-th-3">Submitted to Yes bank</td>
                                                                 <td *ngIf="task.completed === true">
                                                                     Completed
                                                                 </td>
@@ -399,7 +399,7 @@
                                                                     Pending
                                                                 </td>
 
-                                                                <td>Download & Share icon</td>
+                                                                <td class="col-td-th-3">Download & Share icon</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

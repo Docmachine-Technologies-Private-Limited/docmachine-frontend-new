@@ -49,11 +49,8 @@
 }
 .iframe-group{
   overflow: auto;
-  max-height: 75vh;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 20px;
+  width: 100%;
+  padding: 10px;
 }
 .DropDownInputConfirmDialog{
   z-index: 99999999;

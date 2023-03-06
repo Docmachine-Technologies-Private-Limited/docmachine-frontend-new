@@ -19,7 +19,7 @@
     </div>
   </div>
   <div class="pdf-viewer-viewer-window pb-2" *ngIf="this.src!=''">
-    <div class="container-fluid" [style.width]="width" [style.height]="100+'%'">
+    <div class="container-fluid p-0" [style.width]="width" [style.height]="100+'%'">
       <ng-container *ngIf="isLoading$ | async; else notloading">
         <div class="progress progress-modal">
           <div

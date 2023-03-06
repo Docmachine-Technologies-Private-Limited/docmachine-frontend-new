@@ -26,6 +26,7 @@ import { PipoDataService } from "../../service/homeservices/pipo.service";
 import { WindowInformationService } from '../../service/window-information.service';
 import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
+import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
 
 @Component({
   selector: 'app-Import-Direct-Payment',
@@ -100,6 +101,7 @@ export class ImportDirectPaymentComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     public wininfo: WindowInformationService,
+    public mergerpdf: MergePdfService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
   ) {
     this.loadFromLocalStorage();
@@ -613,23 +615,28 @@ export class ImportDirectPaymentComponent implements OnInit {
       }
     }
   }
-
-  PREVIEWS_URL(id) {
+  MERGE_PDF:any=[];
+ async PREVIEWS_URL(id) {
     this.PREVIEWS_URL_LIST = [];
+    this.MERGE_PDF=[];
+    var temp:any=[];
     this.PREVIEWS_URL_LIST[0] =  {
       name:'Bank Format',
       pdf:this.ORIGINAL_PDF
     };
+    temp[0]=this.ORIGINAL_PDF;
     if (this.uploadUrl != undefined && this.uploadUrl != '' && this.uploadUrl != null) {
       this.PREVIEWS_URL_LIST[1] = {
       name:'Oponin',
       pdf:this.uploadUrl
       };
+      temp[1]=this.uploadUrl;
     }
     console.log('pipoForm',this.pipoForm)
     for (let i = 0; i < this.selectedItems.length; i++) {
       for (let index = 0; index < this.temp1[i].length; index++) {
         if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != undefined) {
+          temp.push(this.temp1[i][index]?.pdf)
           this.userService.mergePdf(this.temp1[i][index]?.pdf).subscribe((res: any) => {
             res.arrayBuffer().then((data: any) => {
               this.PREVIEWS_URL_LIST.push({name: this.temp1[i][index]['name'],pdf:data});
@@ -639,6 +646,10 @@ export class ImportDirectPaymentComponent implements OnInit {
         }
       }
     }
+    
+    await this.mergerpdf.mergePdf(temp).then((merge: any) => {
+      this.MERGE_PDF.push(merge)
+    })
     this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
       console.log(res, 'dsdsdsdsdsdsds');
       this.GetDownloadStatus = res[0];
@@ -676,7 +687,7 @@ export class ImportDirectPaymentComponent implements OnInit {
       }
       var approval_data: any = {
         id: UniqueId,
-        tableName: 'Import-Direct-Import-Payment',
+        tableName: 'Import-Direct-Payment',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
         status: 'pending',
@@ -693,14 +704,15 @@ export class ImportDirectPaymentComponent implements OnInit {
               formdata:this.pipoForm.value,
               documents: temp_doc,
               pipo: this.LIST_PIPO,
-              pipo_1:this.selectedItems
+              pipo_1:this.selectedItems,
+              Url_Redirect:{file:'import',document:'orAdvice'}
             },
-            TypeTransaction:'Import-Direct-Import-Payment',
+            TypeTransaction:'Import-Direct-Payment',
             fileType:'Import',
             UserDetails:approval_data?.id
           }         
           this.documentService.addExportBillLodgment(data).subscribe((res1: any) => { 
-            console.log('Import-Direct-Dispatch', res1);
+            console.log('Import-Direct-Payment', res1);
             this.ngOnInit();
             this.router.navigate(['/home/dashboardTask'])
             this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {

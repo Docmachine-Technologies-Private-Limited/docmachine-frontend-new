@@ -3,7 +3,7 @@ import { UserService } from '../service/user.service';
 import { WindowInformationService } from '../service/window-information.service';
 import { PDFDocument, PDFPage } from "pdf-lib";
 import { MatPaginator } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PipoDataService } from '../service/homeservices/pipo.service';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
@@ -30,7 +30,8 @@ export class TransactionDashboardComponent implements OnInit {
   api_base: any;
   authToken: any;
   headers: { Authorization: any; timeout: string; };
-
+  benneDetail:any=[];
+  
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
@@ -38,6 +39,7 @@ export class TransactionDashboardComponent implements OnInit {
     private documentService: DocumentService,
     private userService: UserService,
     public appconfig: AppConfig,
+    public router: Router,
     public sanitizer: DomSanitizer,
     public pipoDataService: PipoDataService,
     public mergerpdf: MergePdfService,
@@ -96,9 +98,13 @@ export class TransactionDashboardComponent implements OnInit {
           this.dataSource = temp;
           console.log(this.TRANSACTION_DASHBOARD_DATA, res, this.displayedColumns, this.dataSource, 'TRANSACTION_DASHBOARD_DATA')
         });
+        this.userService.getBene(1).subscribe((res: any) => {
+            console.log('benneDetail', res.data);
+            this.benneDetail=res?.data;
+          },(err) => console.log("Error", err));
       });
-
     });
+   
   }
   pdflist: any = [];
   pipolist: any = [];
@@ -121,7 +127,7 @@ export class TransactionDashboardComponent implements OnInit {
     this.OBJECT_DATA = [];
     this.UploadUrl = ''
     this.LOADER_ON_OFF = true;
-    this.INOVICE_SUM=0;
+    this.INOVICE_SUM = 0;
     console.log(data, 'sdfgdshdgfsdf')
     if (this.TRANSACTION_NAME == 'Advance-Remittance-flow') {
       try {
@@ -133,14 +139,63 @@ export class TransactionDashboardComponent implements OnInit {
             amount: element1?.remittanceAmount,
             currency: element1?.currency
           })
-          this.INOVICE_SUM+=parseFloat(element1?.remittanceAmount)
+          this.INOVICE_SUM += parseFloat(element1?.remittanceAmount)
         }
         console.log(this.OBJECT_DATA, 'OBJECT_DATA')
       } catch (error) {
         console.log(error, 'errror')
         this.LOADER_ON_OFF = false;
       }
-    } else if (this.TRANSACTION_NAME == 'Import-Direct-Import-Payment') {
+      try {
+        await this.mergerpdf.mergePdf(data?.MoreDetails?.documents).then((merge: any) => {
+          this.pdflist.push(merge)
+          this.LOADER_ON_OFF = false;
+        })
+      } catch (error) {
+        console.log(error, 'errror')
+        this.LOADER_ON_OFF = false;
+      }
+    } else if (this.TRANSACTION_NAME == 'Import-Direct-Payment') {
+      try {
+       this.OBJECT_DATA=data?.MoreDetails?.formdata;
+       var temp:any=this.benneDetail.filter((item:any)=> item?._id==this.OBJECT_DATA?.benneName)
+       this.OBJECT_DATA['benneName']=temp[0]?.benneName
+       this.LOADER_ON_OFF = false;
+        console.log(this.OBJECT_DATA, 'OBJECT_DATA')
+      } catch (error) {
+        console.log(error, 'errror')
+        this.LOADER_ON_OFF = false;
+      }
+      try {
+        await this.mergerpdf.mergePdf(data?.MoreDetails?.documents).then((merge: any) => {
+          this.pdflist.push(merge)
+          this.LOADER_ON_OFF = false;
+        })
+      } catch (error) {
+        console.log(error, 'errror')
+        this.LOADER_ON_OFF = false;
+      }
+    } else if (this.TRANSACTION_NAME == 'Inward-Remitance-Dispoal') {
+      try {
+        this.OBJECT_DATA = data?.MoreDetails;
+        console.log(this.OBJECT_DATA,data?.MoreDetails?.documents, 'OBJECT_DATA')
+      } catch (error) {
+        console.log(error, 'errror')
+        this.LOADER_ON_OFF = false;
+      }
+      if (data?.MoreDetails?.documents==undefined) {
+        this.LOADER_ON_OFF = false;
+      }
+      try {
+        await this.mergerpdf.mergePdf(data?.MoreDetails?.documents).then((merge: any) => {
+          this.pdflist.push(merge)
+          this.LOADER_ON_OFF = false;
+        })
+      } catch (error) {
+        console.log(error, 'errror')
+        this.LOADER_ON_OFF = false;
+      }
+    } else if (this.TRANSACTION_NAME == 'Packing-Credit-Request') {
       try {
         for (let index = 0; index < data?.MoreDetails?.formdata?.BOETerm.length; index++) {
           const element1: any = data?.MoreDetails?.formdata?.BOETerm[index];
@@ -150,21 +205,42 @@ export class TransactionDashboardComponent implements OnInit {
             amount: element1?.remittanceAmount,
             currency: element1?.currency
           })
-          this.INOVICE_SUM+=parseFloat(element1?.remittanceAmount)
+          this.INOVICE_SUM += parseFloat(element1?.remittanceAmount)
         }
         console.log(this.OBJECT_DATA, 'OBJECT_DATA')
       } catch (error) {
         console.log(error, 'errror')
         this.LOADER_ON_OFF = false;
       }
-    }
-    try {
-      await this.mergerpdf.mergePdf(data?.MoreDetails?.documents).then((merge: any) => {
-        this.pdflist.push(merge)
+      try {
+        await this.mergerpdf.mergePdf(data?.MoreDetails?.documents).then((merge: any) => {
+          this.pdflist.push(merge)
+          this.LOADER_ON_OFF = false;
+        })
+      } catch (error) {
+        console.log(error, 'errror')
         this.LOADER_ON_OFF = false;
-      })
-    } catch (error) {
-      console.log(error, 'errror')
+      }
+    }else if (this.TRANSACTION_NAME == 'Export-Direct-Dispatch') {
+      try {
+        this.OBJECT_DATA=data?.MoreDetails
+        this.LOADER_ON_OFF = false;
+        console.log(this.OBJECT_DATA, 'OBJECT_DATA')
+      } catch (error) {
+        console.log(error, 'errror')
+        this.LOADER_ON_OFF = false;
+      }
+      try {
+        await this.mergerpdf.mergePdf(data?.MoreDetails?.documents).then((merge: any) => {
+          this.pdflist.push(merge)
+          this.LOADER_ON_OFF = false;
+        })
+      } catch (error) {
+        console.log(error, 'errror')
+        this.LOADER_ON_OFF = false;
+      }
+    }
+    else {
       this.LOADER_ON_OFF = false;
     }
   }
@@ -222,6 +298,9 @@ export class TransactionDashboardComponent implements OnInit {
 
   UpdateReferanceNo() {
     this.UploadUrl = ''
+  }
+  navigationByUrlParam(url: string, param: any): void {
+    this.router.navigate(['home/' + url, param]);
   }
 
 }
