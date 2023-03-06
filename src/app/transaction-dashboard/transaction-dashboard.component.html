@@ -163,7 +163,7 @@
           height="500px"></app-pdf-viewer>
       </div>
       <div class="right-panel" *ngIf="this.OBJECT_DATA.length!=0">
-        <!-- <div class="dump" *ngIf="this.TRANSACTION_NAME!='Export-Home'">
+        <div class="dump" *ngIf="this.TRANSACTION_NAME=='Advance-Remittance-flow'">
           <div class="grid" *ngFor="let item of this.OBJECT_DATA;let i=index">
             <div class="row w-row m-auto" style="width: 100%;">
               <div class="basic-column w-col w-col-3">
@@ -183,7 +183,7 @@
           <div class="sum-panel" *ngIf="this.INOVICE_SUM!=0">
             <h5 class="sum-amount">Total Inovice Amount : ${{this.INOVICE_SUM}}</h5>
           </div>
-        </div> -->
+        </div>
         <div class="dump" *ngIf="this.TRANSACTION_NAME=='Inward-Remitance-Dispoal'">
           <div class="grid" *ngIf="this.OBJECT_DATA!=''" style="gap: 10px;">
             <div class="d-flex noraml-panel">
