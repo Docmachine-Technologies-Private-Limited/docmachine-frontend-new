@@ -168,6 +168,8 @@ export class PipoDisplayListViewItem {
   public ebrcRef: any;
   public swiftRef: any;
   public blcopyRefs: any;
+  public TransactionRef: any;
+  AdviceRef:any=[];
   constructor(data: any) {
     this.initValues(data);
   }
@@ -266,9 +268,11 @@ export class PipoDisplayListViewItem {
     this.ebrcRef = data?.ebrcRef? data?.ebrcRef: [];
     this.swiftRef = data?.swiftRef? data?.swiftRef: [];
     this.blcopyRefs = data?.blcopyRefs? data?.blcopyRefs: [];
+    this.TransactionRef=data?.TransactionRef? data?.TransactionRef: [];
+    this.AdviceRef=data?.AdviceRef? data?.AdviceRef: [];
   }
   computeForexSBPipoMerge() {
-    let finallist = [];
+    let finallist:any = [];
     function copyValues(source:any, dest:any, keys:any) {
       if (dest!=null) {
         for (let i in keys) {
@@ -279,7 +283,7 @@ export class PipoDisplayListViewItem {
     }
     function createSbIrinfo(pipoInfo, sbdata) {
       console.log(pipoInfo,sbdata,'sbdata')
-      let sbirmerged = [];
+      let sbirmerged:any = [];
       if (sbdata?.irRef?.length === 0) {
         sbirmerged.push(pipoInfo);
       }
@@ -357,7 +361,7 @@ export class PipoDisplayListView {
   }
 
   computeForexSBPipoMerge() {
-    let finaldata = [];
+    let finaldata:any = [];
     for (let i in this.pipolist) {
       let data = this.pipolist[i].computeForexSBPipoMerge();
       for (let j in data) {
