@@ -225,7 +225,6 @@ export class DebitNoteComponent implements OnInit {
     public wininfo: WindowInformationService,
     public CustomDropDown: CustomConfirmDialogModelComponent
   ) {
-    this.documentService.getCurrency().subscribe((res: any) => { console.log(res, 'getCurrency') })
     this.userData = this.userService.userData?.result
     if (this.userData) {
       this.documentType1 = this.userData?.sideMenu

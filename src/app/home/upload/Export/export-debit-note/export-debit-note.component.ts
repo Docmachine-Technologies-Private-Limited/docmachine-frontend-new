@@ -46,8 +46,8 @@ import { UserService } from '../../../../service/user.service';
 // import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from '../../../../app.config';
 import { PipoDataService } from "../../../../service/homeservices/pipo.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { WindowInformationService } from '../../../../service/window-information.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 
 @Component({
@@ -110,7 +110,7 @@ export class ExportDebitNoteComponent implements OnInit {
   shippingForm: FormGroup;
   // loginForm: FormGroup;
   public submitted = false;
-  authToken: string;
+  authToken:any;
   headers: any;
   closeResult: string;
   APPEND_HTML: any = [];
@@ -227,7 +227,6 @@ export class ExportDebitNoteComponent implements OnInit {
     public wininfo: WindowInformationService,
     public CustomDropDown: CustomConfirmDialogModelComponent
   ) {
-    this.documentService.getCurrency().subscribe((res: any) => { console.log(res, 'getCurrency') })
     this.userData = this.userService.userData?.result
     if (this.userData) {
       this.documentType1 = this.userData?.sideMenu

@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit,
+  SimpleChanges} from '@angular/core';
 import { DocumentService } from '../service/document.service';
 import { UserService } from '../service/user.service';
 import $ from 'jquery'
@@ -42,7 +43,7 @@ export class PDFVIEWERComponent implements OnInit {
   
   constructor( private userService: UserService,
     public sanitizer: DomSanitizer,
-  public documentService: DocumentService){
+    public documentService: DocumentService){
   }
   SRC_UPDATE:any='';
   ngOnInit(){

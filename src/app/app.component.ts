@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { AppConfig } from '../environments/environment';
 import '../sass/application.scss';
+import { AuthenticateService } from './service/authenticate.service';
 import { AuthGuard } from './service/authguard.service';
 import { DocumentService } from './service/document.service';
 import { UserService } from './service/user.service';
@@ -21,6 +22,7 @@ export class AppComponent {
     private translate: TranslateService,
     private router: Router,public doc:DocumentService,
     private userService: UserService,
+    public authservice: AuthenticateService,
     public authGuard: AuthGuard) {
     this.translate.setDefaultLang('en');
     console.log('AppConfig', AppConfig);
@@ -33,12 +35,16 @@ export class AppComponent {
       console.log("userData", this.userData)
       var session:any=JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
       if (this.authGuard.getLocalStorage('PERMISSION')==null || this.userData?.role!=session?.role) {
-        this.router.navigate(['/login']);
+          this.authservice.logout();
+          this.router.navigate(['/login']);
       }
     });
   };
   setTimeout() {
-    this.userActivity = setTimeout(() => {this.userInactive.next(undefined); this.router.navigate(['/login'])}, 7200000);
+    this.userActivity = setTimeout(() => {
+      this.userInactive.next(undefined);
+      this.authservice.logout();
+      this.router.navigate(['/login']);},7200000);
   }
 
   @HostListener('window:mousemove') refreshUserState() {

@@ -17,7 +17,7 @@ export class InterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     this.documentService.loading=true;
     let token = this.authGuard.loadFromLocalStorage();
-     if (!token) {
+     if (!token && this.router.url!=='/resetOTP') {
        this.router.navigate(["/login"]);
      }
     return next.handle(req).pipe(

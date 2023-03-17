@@ -1,6 +1,7 @@
 <div class="content_top_common">
-    <div class="content-wrap">
-        <div class="container-fluid">
+    <div class="content-wrap pl-0">
+        <div class="container-fluid" style="    height: calc(100vh - 80px) !important;
+        overflow: auto;">
             <div class="import_export_sec">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -28,20 +29,20 @@
                         <table class="leftshippting_info">
                             <tbody>
                                 <tr>
-                                    <td class="col-td-th-3"><label>Total no. of shipping bill</label></td>
-                                    <td class="col-td-th-3"><b>{{SbData?.length}}</b></td>
+                                    <td><label>Total no. of shipping bill</label></td>
+                                    <td><b>{{SbData?.length}}</b></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-td-th-3"><label>Shipping bill number</label></td>
-                                    <td class="col-td-th-3"><b *ngFor='let sb of SbData ; let i = index'> {{sb?.sbno}} <span *ngIf="SbData.length-1 !== i"> ,</span> </b></td>
+                                    <td><label>Shipping bill number</label></td>
+                                    <td><b *ngFor='let sb of SbData ; let i = index'> {{sb?.sbno}} <span *ngIf="SbData.length-1 !== i"> ,</span> </b></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-td-th-3"><label>Shipping bill date</label></td>
-                                    <td class="col-td-th-3"><b *ngFor='let sb of SbData; let i = index'> {{sb?.sbdate | date: 'dd/MM/yyyy'}}<span *ngIf="SbData.length-1 !== i"> ,</span> </b></td>
+                                    <td><label>Shipping bill date</label></td>
+                                    <td><b *ngFor='let sb of SbData; let i = index'> {{sb?.sbdate | date: 'dd/MM/yyyy'}}<span *ngIf="SbData.length-1 !== i"> ,</span> </b></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-td-th-3"><label>Total Shipping bill amount</label></td>
-                                    <td class="col-td-th-3"><b *ngFor='let sbAmount of SbAmountAndCurrency; let i = index'> {{sbAmount?.fobCurrency }} {{sbAmount?.fobValue}} <span *ngIf="SbAmountAndCurrency.length-1 !== i"> ,</span> </b></td>
+                                    <td><label>Total Shipping bill amount</label></td>
+                                    <td><b *ngFor='let sbAmount of SbAmountAndCurrency; let i = index'> {{sbAmount?.fobCurrency }} {{sbAmount?.fobValue}} <span *ngIf="SbAmountAndCurrency.length-1 !== i"> ,</span> </b></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -50,20 +51,20 @@
                         <table class="leftshippting_info">
                             <tbody>
                                 <tr>
-                                    <td class="col-td-th-3"><label>Total no. of inward remittances</label></td>
-                                    <td class="col-td-th-3"><b>{{inWardData?.length}}</b></td>
+                                    <td><label>Total no. of inward remittances</label></td>
+                                    <td><b>{{inWardData?.length}}</b></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-td-th-3"><label>Inward remittance number</label></td>
-                                    <td class="col-td-th-3"><b *ngFor='let inward of inWardData; let i = index'> {{inward?.billNo}}<span *ngIf="inWardData.length-1 !== i">, </span></b></td>
+                                    <td><label>Inward remittance number</label></td>
+                                    <td><b *ngFor='let inward of inWardData; let i = index'> {{inward?.billNo}}<span *ngIf="inWardData.length-1 !== i">, </span></b></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-td-th-3"><label>Inward remittance amount</label></td>
-                                    <td class="col-td-th-3"><b> {{inwardRemitanceAmount}}</b></td>
+                                    <td><label>Inward remittance amount</label></td>
+                                    <td><b> {{inwardRemitanceAmount}}</b></td>
                                 </tr>
                                 <tr>
-                                    <td class="col-td-th-3"><label>Balance amount</label></td>
-                                    <td class="col-td-th-3"><b>{{inwardBalanceAmount }}</b></td>
+                                    <td><label>Balance amount</label></td>
+                                    <td><b>{{inwardBalanceAmount }}</b></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -145,7 +146,7 @@
                                             <tbody>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-check-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                     
                                                          <b> Uploaded Purchase Order</b>
                                                         
@@ -158,7 +159,7 @@
                                                 <tr height="10 "></tr>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-check-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                         <b>Uploaded shipping bill</b><br/>
                                                         <label>Submitted on 20/10/2022</label>
                                                     </td>
@@ -167,7 +168,7 @@
                                                 <tr height="10 "></tr>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-check-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                         <b>Uploaded commercial invoice</b><br/>
                                                         <label>Submitted on 20/10/2022</label>
                                                     </td>
@@ -176,7 +177,7 @@
                                                 <tr height="10 "></tr>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-check-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                         <b>Uploaded destruction document</b><br/>
                                                         <label>Submitted on 20/10/2022</label>
                                                     </td>
@@ -185,7 +186,7 @@
                                                 <tr height="10 "></tr>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-check-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                         <b>Uploaded bill of exchange</b><br/>
                                                         <label>Submitted on 20/10/2022</label>
                                                     </td>
@@ -200,7 +201,7 @@
                                             <tbody>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                         <b>Create Inward Remittance disposal</b>
                                                     </td>
                                                     <td [width]="40 " align="right "><a href=" "><i class="fa fa-upload " aria-hidden="true "></i></a></td>
@@ -208,7 +209,7 @@
                                                 <tr height="10 "></tr>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                         <b>Upload SwiftCopy</b>
                                                     </td>
                                                     <td [width]="40 " align="right "><a href=" "><i class="fa fa-upload " aria-hidden="true "></i></a></td>
@@ -216,7 +217,7 @@
                                                 <tr height="10 "></tr>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                         <b>Upload Bank credit Advice Copy and provide reference number</b>
                                                     </td>
                                                     <td [width]="40 " align="right "><a href=" "><i class="fa fa-upload " aria-hidden="true "></i></a></td>
@@ -224,7 +225,7 @@
                                                 <tr height="10 "></tr>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                         <b>Create bill lodgement</b>
                                                     </td>
                                                     <td [width]="40 " align="right "><a href=" "><i class="fa fa-upload " aria-hidden="true "></i></a></td>
@@ -232,7 +233,7 @@
                                                 <tr height="10 "></tr>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                         <b>Bill lodgement reference number and advice copy</b>
                                                     </td>
                                                     <td [width]="40 " align="right "><a href=" "><i class="fa fa-upload " aria-hidden="true "></i></a></td>
@@ -240,7 +241,7 @@
                                                 <tr height="10 "></tr>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                         <b>EBRC- Export Realisation certificate.</b>
                                                     </td>
                                                     <td [width]="40 " align="right "><a href=" "><i class="fa fa-upload " aria-hidden="true "></i></a></td>
@@ -248,7 +249,7 @@
                                                 <tr height="10 "></tr>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                         <b>Upload Airway / BLCopy Document</b>
                                                     </td>
                                                     <td [width]="40 " align="right "><a href=" "><i class="fa fa-upload " aria-hidden="true "></i></a></td>
@@ -256,7 +257,7 @@
                                                 <tr height="10 "></tr>
                                                 <tr class="list_one ">
                                                     <td [width]="40 "><span class="pass_tick "><i class="fa fa-circle-o " aria-hidden="true "></i></span></td>
-                                                    <td class="col-td-th-3">
+                                                    <td>
                                                         <b>Upload Packing List Document</b>
                                                     </td>
                                                     <td [width]="40 " align="right "><a href=" "><i class="fa fa-upload " aria-hidden="true "></i></a></td>
@@ -272,20 +273,20 @@
                                             <table class="leftshippting_info ">
                                                 <tbody>
                                                     <tr>
-                                                        <td class="col-td-th-3"><label>Amount</label></td>
-                                                        <td class="col-td-th-3"><b>Amount</b></td>
+                                                        <td><label>Amount</label></td>
+                                                        <td><b>Amount</b></td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="col-td-th-3"><label>Incoterm</label></td>
-                                                        <td class="col-td-th-3"><b>Unpaid</b></td>
+                                                        <td><label>Incoterm</label></td>
+                                                        <td><b>Unpaid</b></td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="col-td-th-3"><label>PC reference number</label></td>
-                                                        <td class="col-td-th-3"><b>7635HARI</b></td>
+                                                        <td><label>PC reference number</label></td>
+                                                        <td><b>7635HARI</b></td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="col-td-th-3"><label>Last day of shipment</label></td>
-                                                        <td class="col-td-th-3"><b>30-10-2022</b></td>
+                                                        <td><label>Last day of shipment</label></td>
+                                                        <td><b>30-10-2022</b></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -296,16 +297,16 @@
                                             <table class="leftshippting_info ">
                                                 <tbody>
                                                     <tr>
-                                                        <td class="col-td-th-3"><label>Date</label></td>
-                                                        <td class="col-td-th-3"><b>20-10-2022</b></td>
+                                                        <td><label>Date</label></td>
+                                                        <td><b>20-10-2022</b></td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="col-td-th-3"><label>Type</label></td>
-                                                        <td class="col-td-th-3"><b>Advance payment</b></td>
+                                                        <td><label>Type</label></td>
+                                                        <td><b>Advance payment</b></td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="col-td-th-3"><label>Amount</label></td>
-                                                        <td class="col-td-th-3"><b>INR 56789</b></td>
+                                                        <td><label>Amount</label></td>
+                                                        <td><b>INR 56789</b></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -336,16 +337,16 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr class="table-row active ">
-                                                            <td class="col-td-th-3">Dec 14, 2018</td>
+                                                            <td>Dec 14, 2018</td>
                                                             <td class="sb-no ">Shipping Bill</td>
-                                                            <td class="col-td-th-3">SN565656</td>
-                                                            <td class="col-td-th-3"><a href=" "><i class="fa fa-eye " aria-hidden="true "></i></a></td>
+                                                            <td>SN565656</td>
+                                                            <td><a href=" "><i class="fa fa-eye " aria-hidden="true "></i></a></td>
                                                         </tr>
                                                         <tr class="table-row ">
-                                                            <td class="col-td-th-3">Dec 14, 2018</td>
+                                                            <td>Dec 14, 2018</td>
                                                             <td class="sb-no ">Bill of Entry</td>
-                                                            <td class="col-td-th-3">454544545</td>
-                                                            <td class="col-td-th-3"><a href=" "><i class="fa fa-eye " aria-hidden="true "></i></a></td>
+                                                            <td>454544545</td>
+                                                            <td><a href=" "><i class="fa fa-eye " aria-hidden="true "></i></a></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -378,16 +379,16 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr class="table-row active ">
-                                                                <td class="col-td-th-3">Dec 14, 2018</td>
+                                                                <td>Dec 14, 2018</td>
                                                                 <td class="sb-no ">Submitted to Bank</td>
-                                                                <td class="col-td-th-3">Emailed</td>
-                                                                <td class="col-td-th-3"><a href=" "><i class="fa fa-eye " aria-hidden="true "></i></a></td>
+                                                                <td>Emailed</td>
+                                                                <td><a href=" "><i class="fa fa-eye " aria-hidden="true "></i></a></td>
                                                             </tr>
                                                             <tr class="table-row ">
-                                                                <td class="col-td-th-3">Dec 14, 2018</td>
+                                                                <td>Dec 14, 2018</td>
                                                                 <td class="sb-no ">Draft waiting for submission</td>
-                                                                <td class="col-td-th-3">Draft</td>
-                                                                <td class="col-td-th-3"><a href=" "><i class="fa fa-eye " aria-hidden="true "></i></a></td>
+                                                                <td>Draft</td>
+                                                                <td><a href=" "><i class="fa fa-eye " aria-hidden="true "></i></a></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

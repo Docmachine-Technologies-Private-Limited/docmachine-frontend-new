@@ -1,0 +1,18 @@
+<div class="col-12">
+<div class="left">
+<button><span>&#10148;</span></button>
+</div>
+<div class="center">
+    <div 
+    [class.hidden]="isOut" 
+    [@slideInLeft]="isIn && left" 
+    [@slideInRight]="isIn && right" 
+    [@slideOutLeft]="isOut && left"
+    [@slideOutRight]="isOut && right"> 
+  <ng-content></ng-content>
+</div>
+</div>
+<div class="right">
+    <button><span>&#10148;</span></button>
+</div>
+</div>

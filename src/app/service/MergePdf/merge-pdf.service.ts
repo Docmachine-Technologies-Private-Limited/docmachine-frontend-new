@@ -15,14 +15,13 @@ export class MergePdfService {
       await this.getPdfArrayBuffer(data).then((res: any) => {
         this.mergeAllPDFs(res).then(async (pdfdata: any) => {
           const pdfDataUri = await pdfdata.saveAsBase64({ dataUri: true });
-          var data_pdf = await pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-          var merge = 'data:application/pdf;base64,' + data_pdf
+          const data_pdf = await pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
+          const merge = 'data:application/pdf;base64,' + data_pdf
            resolve(merge);
         });
       });
     } catch (error) {
       reejct(error)
-      console.log(error, 'errror')
     }
    })
    
@@ -31,7 +30,7 @@ export class MergePdfService {
     var promises: any = [];
     return new Promise(async (resolve, reject) => {
       for (let j = 0; j < data?.length; j++) {
-        this.userService.mergePdfPromise(data[j]).then(async (res: any) => {
+      await this.userService.mergePdfPromise(data[j]).then(async (res: any) => {
           await res.arrayBuffer().then(async (res1: any) => {
             promises.push(res1);
             if ((j + 1) == data.length) {

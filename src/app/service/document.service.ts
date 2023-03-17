@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpContext, HttpHeaders, HttpParams} from '@angular/common/http';
 import { observable, Observable, of } from 'rxjs';
 import { AppConfig } from '../../app/app.config';
+import * as data1 from './../currency.json';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentService {
@@ -1857,6 +1858,15 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/ExportBillLodgement/add`,{data: data},httpOptions);
   }
+  UpdateTransaction(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ExportBillLodgement/update`,data,httpOptions);
+  }
+  
   
   Update_Amount_by_Table(data) {
     this.loadFromLocalStorage();
@@ -1950,9 +1960,17 @@ export class DocumentService {
 
     return this.http.patch(`${this.api_base}/user/updateUserById/${id}`, data,httpOptions );
   }
-  getCurrency(){
-    return this.http.get("../../currency.json")
+ 
+ getCurrencyList(){
+ var CURRENCY_LIST:any=[];
+  for (let index = 0; index < data1['default']?.length; index++) {
+    CURRENCY_LIST.push({
+      type: data1['default'][index]['value']
+    })
   }
+  return CURRENCY_LIST;
+ }
+  
 }
 
 

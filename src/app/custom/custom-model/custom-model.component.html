@@ -1,7 +1,7 @@
-<div class="modal upload-modal" [id]="id" tabindex="-1" appOpenPopUp style="background-color: #0000004d;" role="dialog"
+<div class="modal dropdown-controller upload-modal" [id]="id" tabindex="-1" appOpenPopUp style="background-color: #0000004d;" role="dialog"
   #PopUpOpenClose>
   <div class="col-12 mt-2 hover-popup" Minimize_Maximize_PopUp [id]="id" role="document" [style.width]="width"
-    [style.height]="height" style="height: 63vh;margin: auto !important;">
+    [style.height]="height" [style]="customstyle" style="height: 63vh;margin: auto !important;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{name}}</h5>
@@ -19,12 +19,16 @@
             align-items: center;
             justify-content: unset;" class="close" data-dismiss="modal" aria-label="Close">
             <img style="width: 15px;" class="close-popup" [attr.popup-close]="id" (click)="ClosePopup()"
-              [attr.popup-close]="id" src="../../assets/close-circle-svgrepo-com.svg" alt="">
+              src="../../assets/close-circle-svgrepo-com.svg" alt="">
           </button>
         </div>
       </div>
-      <div class="modal-body p-0 height-controller">
+      <div class="modal-body p-0 height-controller"  [style.height]="modalbodyheight">
         <ng-content></ng-content>
+      </div>
+      <div class="modal-footer p-0" *ngIf="this.FooterButton!=false">
+        <button type="button" class="footer-btn"><span class="close-popup" data-bs-dismiss="modal" (click)="ClosePopup()"
+          [attr.popup-close]="id">{{this.FooterButtonText}}</span></button>
       </div>
     </div>
   </div>

@@ -153,7 +153,6 @@ import { UploadModule } from "./upload/upload.module";
     ProgressBarModule,
     ReactiveFormsModule,
     PdfViewerModule,
-    UploadModule,
     RouterModule.forChild([
       {
         path: "",

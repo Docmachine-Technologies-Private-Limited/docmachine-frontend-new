@@ -26,6 +26,7 @@ import { PipoDataService } from "../../service/homeservices/pipo.service";
 import { WindowInformationService } from '../../service/window-information.service';
 import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
+import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
 
 @Component({
   selector: 'app-add-advance-outward-remittance',
@@ -99,6 +100,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     public pipoDataService: PipoDataService,
     public router: Router,
     private route: ActivatedRoute,
+    public mergerpdf: MergePdfService,
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
   ) {
@@ -570,8 +572,10 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != undefined) {
           this.userService.mergePdf(this.temp1[i][index]?.pdf).subscribe((res: any) => {
             res.arrayBuffer().then((data: any) => {
+              var base64String = this._arrayBufferToBase64(data);
+              const x = 'data:application/pdf;base64,' + base64String;
               this.PDF_LIST[i].push({
-                pdf: data,
+                pdf: x,
                 name: this.temp1[i][index]['name']
               })
               console.log('downloadEachFile', data, this.PDF_LIST);
@@ -581,24 +585,18 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       }
     }
   }
-
-  PREVIEWS_URL(id) {
+  PREVIEWS_URL_STRING:any='';
+async PREVIEWS_URL(model,id) {
     this.PREVIEWS_URL_LIST=[];
-    this.PREVIEWS_URL_LIST[0] = this.ORIGINAL_PDF;
-    this.PREVIEWS_URL_LIST[1]=this.uploadUrl;
-    for (let i = 0; i < this.selectedItems.length; i++) {
-      for (let index = 0; index < this.temp1[i].length; index++) {
-        if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != undefined) {
-          this.userService.mergePdf(this.temp1[i][index]?.pdf).subscribe((res: any) => {
-            res.arrayBuffer().then((data: any) => {
-              this.PREVIEWS_URL_LIST.push(data);
-              console.log('downloadEachFile', this.PREVIEWS_URL_LIST);
-            });
-          });
-        }
-      }
-    }
-    console.log(this.pipoForm,'PREVIEWS_URL')
+    this.PromiseReturn().then(async (data:any)=>{
+      await this.mergerpdf.mergePdf(data).then((merge: any) => {
+        this.PREVIEWS_URL_LIST.push(merge)
+        this.PREVIEWS_URL_STRING=merge;
+        model.style.display='block';
+        console.log(this.pipoForm,merge,this.PREVIEWS_URL_LIST,'PREVIEWS_URL')
+      })
+    })
+    
     this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
       console.log(res, 'dsdsdsdsdsdsds');
       this.GetDownloadStatus = res[0];
@@ -614,6 +612,21 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
           }
         })
       }
+    })
+  }
+  PromiseReturn(){
+    var temp:any=[]; 
+    temp[0] =this.formerge;
+    temp[1]=this.uploadUrl;
+    return new Promise(async (resolve,reject)=>{
+      for (let i = 0; i < this.selectedItems.length; i++) {
+        for (let index = 0; index < this.temp1[i].length; index++) {
+          if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != undefined) {
+            temp.push(this.temp1[i][index]?.pdf);
+          }
+        }
+      }
+    await  resolve(temp);
     })
   }
   GetDownloadStatus: any = [];
@@ -646,20 +659,38 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       console.log(approval_data, 'approval_data')
       if (Status == '' || Status == null || Status == 'Rejected') {
         this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
+        var pipo_id:any=[];
+        var pipo_name:any=[];
+        for (let index = 0; index < this.selectedItems.length; index++) {
+          pipo_id.push(this.selectedItems[index]?.pipo_id)
+          pipo_name.push(this.selectedItems[index]?.pipo_no)
+        }
           var data:any={
             data:{
               formdata:this.pipoForm.value,
               documents: temp_doc,
-              pipo: this.LIST_PIPO,
-              pipo_1:this.selectedItems
+              pipo_1:this.selectedItems,
+              Url_Redirect:{file:'import',document:'orAdvice',pipo:pipo_name.toString()}
             },
             TypeTransaction:'Advance-Remittance-flow',
             fileType:'Import',
-            UserDetails:approval_data?.id
+            UserDetails:approval_data?.id,
+            pipo: pipo_id,
           } 
           this.documentService.addExportBillLodgment(data).subscribe((res1: any) => { 
-            this.ngOnInit();
-            this.router.navigate(['/home/dashboardTask'])
+            let updatedData = {
+              "TransactionRef": [
+                res1._id,
+              ]
+            }
+            this.userService.updateManyPipo(pipo_id,'import','', updatedData).subscribe((data) => {
+                console.log('king123');
+                console.log(data);
+                this.router.navigate(['/home/dashboardTask'])
+              },(error) => {
+                console.log('error');
+              }
+            );
             this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
               console.log(res, 'dsdsdsdsdsdsds');
               this.GetDownloadStatus = res[0];

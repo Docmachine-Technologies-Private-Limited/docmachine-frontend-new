@@ -7,6 +7,7 @@ import {
   Input,
   HostBinding
 } from '@angular/core';
+import $ from 'jquery'
 
 @Directive({
   selector: '[appOpenPopUp]'
@@ -42,15 +43,21 @@ export class OpenPopUpDirective {
       if (ClassList.length==0) {
          ClassList=event.target.className.split(' ')
       }
-      console.log(ClassList,'onClick')
-      if (ClassList?.includes('PopupOpen')==true) {
+      let children:any = Array.from(this.elementRef.nativeElement.children);
+      if (ClassList?.includes('PopupOpen')==true || ClassList?.includes('ng-option-label')==true) {
          if ($(this.elementRef.nativeElement).attr('id')===panel_id) {
-              this.elementRef.nativeElement.style.display='flex'
+              this.elementRef.nativeElement.style.display='flex';
+              setTimeout(()=>{
+                $(children[0]).css({'transform': 'translateY(0)','transition-duration': '.5s'});
+              },100)
          }
        }
       if (['close-popup','btn btn-primary mt-3 PopupClose'].includes(event.target.className)) {
           if ($(this.elementRef.nativeElement).attr('id')===panel_id) {
-              this.elementRef.nativeElement.style.display='none'
+              $(children[0]).css({'transform': 'translateY(-200%)','transition-duration': '.5s'});
+              setTimeout(()=>{
+                this.elementRef.nativeElement.style.display='none';
+              },300)
           }
       }
   }

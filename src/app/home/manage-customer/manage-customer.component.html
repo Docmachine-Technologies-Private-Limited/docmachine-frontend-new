@@ -39,8 +39,8 @@
                             <div class="widget-body p-0 support table-wrapper">
                                <table class="table table-hover">
                                     <thead>
-                                        <tr class="text-muted table-heading">
-                                            <th class="rect"></th>
+                                        <tr class="table-tr">
+                                            <th class="col-td-th-1"></th>
                                             <th scope="col" class="col-td-th-3"><span class="pl-3">Name</span></th>
                                             <th scope="col" class="col-td-th-3">Bank Name</th>
                                             <th scope="col" class="col-td-th-3">Account Number</th>
@@ -51,13 +51,13 @@
                                     </thead>
                                     <tbody>
                                         <tr class="table-tr" *ngFor="let data of item2">
-                                            <td class="rect"><input type="radio" /></td>
-                                            <td class="pl-4 fw-normal">{{ data.benneName }}</td>
+                                            <td class="col-td-th-1"><input type="radio" /></td>
+                                            <td class="col-td-th-3">{{ data.benneName }}</td>
                                             <td class="col-td-th-3">{{ data.beneBankName }}</td>
                                             <td class="col-td-th-3">{{ data.beneAccNo }}</td>
                                             <td class="col-td-th-3">{{ data.iban }}</td>
                                             <td class="col-td-th-3">{{ data.sortCode }}</td>
-                                            <td class="three bgremove" [routerLink]="'/home/editBene/' + data._id">
+                                            <td class="col-td-th-3" [routerLink]="'/home/editBene/' + data._id">
                                                 <img width="18px" src="../../../assets/dot3.png" alt="" />
                                             </td>
                                         </tr>
@@ -76,8 +76,8 @@
                                 <div class="support table-wrapper">
                                    <table class="table table-hover">
                                         <thead>
-                                            <tr class="text-muted table-heading">
-                                                <th class="rect"></th>
+                                            <tr class="table-tr">
+                                                <th class="col-td-th-1"></th>
                                                 <th scope="col" class="col-td-th-3"><span class="pl-3">Name</span></th>
                                                 <th scope="col" class="col-td-th-3">Address</th>
                                                 <th scope="col" class="col-td-th-3"></th>
@@ -85,10 +85,10 @@
                                         </thead>
                                         <tbody>
                                             <tr class="table-tr" *ngFor="let data of item2">
-                                                <td class="rect"><input type="radio" /></td>
-                                                <td class="pl-4 fw-normal">{{ data.buyerName }}</td>
+                                                <td class="col-td-th-1"><input type="radio" /></td>
+                                                <td class="col-td-th-3">{{ data.buyerName }}</td>
                                                 <td class="col-td-th-3">{{ data.buyerAdrs }}</td>
-                                                <td class="three bgremove" [routerLink]="'/home/editBuyer/' + data._id">
+                                                <td class="col-td-th-3" [routerLink]="'/home/editBuyer/' + data._id">
                                                     <img style="width: 10px; width: 10px" src="../../../assets/3-dots.png" alt="" />
                                                 </td>
                                             </tr>

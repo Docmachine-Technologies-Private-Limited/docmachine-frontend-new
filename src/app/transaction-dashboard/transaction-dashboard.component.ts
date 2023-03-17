@@ -20,9 +20,7 @@ declare var $: any;
 export class TransactionDashboardComponent implements OnInit {
   displayedColumns: string[] = ['Unique', 'Transaction Type', 'fileType'];
   dataSource: any = [];
-  TRANSACTION_DASHBOARD_DATA: any = [];
   USER_DATA_VIEW: any = [];
-  TRANSACTION_DATA_VIEW: any = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   TRANSACTION_NAME: any = ''
   LOADER_ON_OFF: any = false;
@@ -30,8 +28,7 @@ export class TransactionDashboardComponent implements OnInit {
   api_base: any;
   authToken: any;
   headers: { Authorization: any; timeout: string; };
-  benneDetail:any=[];
-  
+  benneDetail: any = [];
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
@@ -75,36 +72,94 @@ export class TransactionDashboardComponent implements OnInit {
       console.log('TransactionDashboardComponent', params.get('id'));
       this.userService.getUserDetail().then((data: any) => {
         console.log("this.USER_DATA", data?.result?.sideMenu)
-        this.TRANSACTION_NAME = params.get('id')
+        this.TRANSACTION_NAME = params.get('id');
+
         this.documentService.getExportBillLodgment().subscribe((res: any) => {
-          this.TRANSACTION_DASHBOARD_DATA = res?.result?.filter((item: any) => item?.TypeTransaction.toLowerCase() == params.get('id')?.toLowerCase()
-            && item?.fileType?.toLowerCase() == data?.result?.sideMenu?.toLowerCase());
-          var temp: any = []
-          for (let index = 0; index < this.TRANSACTION_DASHBOARD_DATA.length; index++) {
-            var element = this.TRANSACTION_DASHBOARD_DATA[index];
-            temp.push({
-              'Sr.no.': (index + 1),
-              'Unique': 'Unique' + element?._id,
-              'Transaction Type': element?.TypeTransaction,
-              'fileType': element?.fileType,
-              'MoreDetails': element?.data,
-            })
+          var filterType:any=[];
+          if (this.TRANSACTION_NAME=='Inward-Remitance-Dispoal') {
+            filterType=[this.TRANSACTION_NAME,'Export-Direct-Dispatch'];
+          } if (this.TRANSACTION_NAME=='Export-Direct-Dispatch'){
+            filterType=['Export-Direct-Dispatch','Inward-Remitance-Dispoal'];
+          } if (this.TRANSACTION_NAME=='Advance-Remittance-flow') {
+            filterType=[this.TRANSACTION_NAME,'Import-Direct-Payment'];
+          } if (this.TRANSACTION_NAME=='Import-Direct-Payment'){
+            filterType=['Import-Direct-Payment','Advance-Remittance-flow'];
           }
-          for (let index = 0; index < this.TRANSACTION_DASHBOARD_DATA.length; index++) {
-            this.documentService.getApprovedData(element?.UserDetails).subscribe((res1: any) => {
-              temp[index] = Object.assign({ 'UserDetails': element?.UserDetails != undefined ? res1[0] : '' }, temp[index])
-            })
-          }
-          this.dataSource = temp;
-          console.log(this.TRANSACTION_DASHBOARD_DATA, res, this.displayedColumns, this.dataSource, 'TRANSACTION_DASHBOARD_DATA')
+          this.mergeTransaction(res,data?.result?.sideMenu,filterType).then((mergeTransactionres:any)=>{
+            var merge:any=mergeTransactionres;
+            if (this.TRANSACTION_NAME == 'Inward-Remitance-Dispoal') {         
+              for (let index = 0; index < merge['Inward-Remitance-Dispoal'].length; index++) {
+                  if (compareArrays(merge['Inward-Remitance-Dispoal'][index].pipo[0]?._id,merge['Export-Direct-Dispatch'][index]?.pipo[0]?._id)) {
+                    merge['Inward-Remitance-Dispoal'][index].Ref_Data['blCopyRef']=merge['Export-Direct-Dispatch'][index];
+                  }
+              }
+            } else if (this.TRANSACTION_NAME == 'Export-Direct-Dispatch') {
+              for (let index = 0; index < merge['Export-Direct-Dispatch'].length; index++) {
+                if (compareArrays(merge['Export-Direct-Dispatch'][index]?.pipo[0]?._id,merge['Inward-Remitance-Dispoal'][index]?.pipo[0]?._id) && merge['Export-Direct-Dispatch'][index]?.Ref_Data!=undefined) {
+                    merge['Export-Direct-Dispatch'][index].Ref_Data['irRef']=merge['Inward-Remitance-Dispoal'][index];
+                }
+              }
+            }else if (this.TRANSACTION_NAME == 'Advance-Remittance-flow') {         
+              for (let index = 0; index < merge['Advance-Remittance-flow'].length; index++) {
+                  if (compareArrays(merge['Advance-Remittance-flow'][index].pipo[0]?._id,merge['Import-Direct-Payment'][index]?.pipo[0]?._id)) {
+                    merge['Advance-Remittance-flow'][index]['data']['ImportDirectPayment']=merge['Import-Direct-Payment'][index]?.data?.pipo_1[0][0];
+                  }
+              }
+            } else if (this.TRANSACTION_NAME == 'Import-Direct-Payment') {
+              for (let index = 0; index < merge['Import-Direct-Payment'].length; index++) {
+                if (compareArrays(merge['Import-Direct-Payment'][index].pipo[0]?._id,merge['Advance-Remittance-flow'][index].pipo[0]?._id) && merge['Advance-Remittance-flow'][index]?.Ref_Data!=undefined) {
+                    merge['Import-Direct-Payment'][index]['Ref_Data']=merge['Advance-Remittance-flow'][index]?.Ref_Data;
+                }
+              }
+            }
+              console.log(mergeTransactionres,merge,'mergeTransactionres')
+              var temp: any = []
+              for (let index = 0; index < merge[this.TRANSACTION_NAME].length; index++) {
+                var element =  merge[this.TRANSACTION_NAME][index];
+                temp.push({
+                  'Sr.no.': (index + 1),
+                  'Unique': 'Unique' + element?._id,
+                  'Transaction Type': element?.TypeTransaction,
+                  'fileType': element?.fileType,
+                  'MoreDetails': element?.data,
+                  pipo:element?.pipo,
+                  Ref_Data: element?.Ref_Data,
+                  _id: element?._id
+                })
+              }
+              for (let index = 0; index < merge[this.TRANSACTION_NAME].length; index++) {
+                this.documentService.getApprovedData(element?.UserDetails).subscribe((res1: any) => {
+                  temp[index] = Object.assign({ 'UserDetails': element?.UserDetails != undefined ? res1[0] : '' }, temp[index])
+                })
+              }
+              this.dataSource = temp;
+              console.log(res, this.displayedColumns, this.dataSource, 'TRANSACTION_DASHBOARD_DATA')
+          })
         });
         this.userService.getBene(1).subscribe((res: any) => {
-            console.log('benneDetail', res.data);
-            this.benneDetail=res?.data;
-          },(err) => console.log("Error", err));
+          console.log('benneDetail', res.data);
+          this.benneDetail = res?.data;
+        }, (err) => console.log("Error", err));
       });
     });
-   
+    const compareArrays = (a, b) => {
+      return JSON.stringify(a) === JSON.stringify(b);
+    };
+  }
+  mergeTransaction(res: any, fileType, filterType: any) {
+    var MERGE_TRANSACTION: any = [];
+    filterType.forEach(element => {
+      MERGE_TRANSACTION[element]=[];
+    });
+    return new Promise((resolve, reject) => {
+      for (let index = 0; index < filterType.length; index++) {
+        MERGE_TRANSACTION[filterType[index]]=(res?.result?.filter((item: any) => item?.TypeTransaction.toLowerCase() == filterType[index]?.toLowerCase()
+          && item?.fileType?.toLowerCase() == fileType.toLowerCase()));
+        if ((index + 1) == filterType.length) {
+          resolve(MERGE_TRANSACTION);
+        }
+      }
+    })
   }
   pdflist: any = [];
   pipolist: any = [];
@@ -157,10 +212,10 @@ export class TransactionDashboardComponent implements OnInit {
       }
     } else if (this.TRANSACTION_NAME == 'Import-Direct-Payment') {
       try {
-       this.OBJECT_DATA=data?.MoreDetails?.formdata;
-       var temp:any=this.benneDetail.filter((item:any)=> item?._id==this.OBJECT_DATA?.benneName)
-       this.OBJECT_DATA['benneName']=temp[0]?.benneName
-       this.LOADER_ON_OFF = false;
+        this.OBJECT_DATA = data?.MoreDetails?.formdata;
+        var temp: any = this.benneDetail.filter((item: any) => item?._id == this.OBJECT_DATA?.benneName)
+        this.OBJECT_DATA['benneName'] = temp[0]?.benneName
+        this.LOADER_ON_OFF = false;
         console.log(this.OBJECT_DATA, 'OBJECT_DATA')
       } catch (error) {
         console.log(error, 'errror')
@@ -178,12 +233,13 @@ export class TransactionDashboardComponent implements OnInit {
     } else if (this.TRANSACTION_NAME == 'Inward-Remitance-Dispoal') {
       try {
         this.OBJECT_DATA = data?.MoreDetails;
-        console.log(this.OBJECT_DATA,data?.MoreDetails?.documents, 'OBJECT_DATA')
+        this.OBJECT_DATA.Url_Redirect['Transaction_id'] = this.OBJECT_DATA?._id
+        console.log(this.OBJECT_DATA, data?.MoreDetails?.documents, 'OBJECT_DATA')
       } catch (error) {
         console.log(error, 'errror')
         this.LOADER_ON_OFF = false;
       }
-      if (data?.MoreDetails?.documents==undefined) {
+      if (data?.MoreDetails?.documents == undefined) {
         this.LOADER_ON_OFF = false;
       }
       try {
@@ -221,9 +277,17 @@ export class TransactionDashboardComponent implements OnInit {
         console.log(error, 'errror')
         this.LOADER_ON_OFF = false;
       }
-    }else if (this.TRANSACTION_NAME == 'Export-Direct-Dispatch') {
+    } else if (this.TRANSACTION_NAME == 'Export-Direct-Dispatch') {
       try {
-        this.OBJECT_DATA=data?.MoreDetails
+        this.OBJECT_DATA = data?.MoreDetails
+        // var pipolist: any = [];
+        // for (let index = 0; index < this.OBJECT_DATA?.Shipping_bill_list.length; index++) {
+        //   const element = this.OBJECT_DATA?.Shipping_bill_list[index];
+        //   element?.pipo.forEach(item => {
+        //     pipolist.push(item?.pi_poNo)
+        //   });
+        // }
+        // this.OBJECT_DATA.Url_Redirect['pipo'] = pipolist.toString();
         this.LOADER_ON_OFF = false;
         console.log(this.OBJECT_DATA, 'OBJECT_DATA')
       } catch (error) {
@@ -299,8 +363,21 @@ export class TransactionDashboardComponent implements OnInit {
   UpdateReferanceNo() {
     this.UploadUrl = ''
   }
-  navigationByUrlParam(url: string, param: any): void {
-    this.router.navigate(['home/' + url, param]);
+  Newtemp: any = [];
+  navigationByUrlParam(url: string, id: any, param: any): void {
+    this.Newtemp = param?.MoreDetails?.Url_Redirect;
+    this.Newtemp['Transaction_id'] = id;
+    if (this.TRANSACTION_NAME == 'Export-Direct-Dispatch') {
+      var pipolist: any = [];
+      for (let index = 0; index <  param?.MoreDetails?.Shipping_bill_list?.length; index++) {
+        const element =  param?.MoreDetails?.Shipping_bill_list[index];
+        element?.pipo.forEach(item => {
+          pipolist.push(item?.pi_poNo)
+        });
+      }
+       this.Newtemp['pipo'] =pipolist.toString();
+    }
+    this.router.navigate(['home/' + url, this.Newtemp]);
   }
 
 }

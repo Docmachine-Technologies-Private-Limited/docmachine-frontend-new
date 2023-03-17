@@ -15,6 +15,7 @@ import { MatPaginator } from "@angular/material/paginator";
 import { WindowInformationService } from "../../../service/window-information.service";
 import { AprrovalPendingRejectTransactionsService } from "../../../service/aprroval-pending-reject-transactions.service";
 import { CustomConfirmDialogModelComponent } from "../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component";
+import { PipoDataService } from "../../../service/homeservices/pipo.service";
 
 @Component({
   selector: 'app-export-home',
@@ -196,6 +197,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private confirmDialogService: ConfirmDialogService,
     public wininfo: WindowInformationService,
+    public pipoDataService: PipoDataService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public CustomConfirmDialogModel: CustomConfirmDialogModelComponent
   ) {
@@ -688,7 +690,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(this.sbArray)
   }
   selectPIPO: any = []
-  changeCheckboxPIPO(value) {
+  changeCheckboxPIPO(value,id) {
     let j = this.selectPIPO.indexOf(value)
     if (j == -1) {
       this.selectPIPO.push(value)
@@ -4148,10 +4150,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     var tempPipo:any=[];
     for (let index = 0; index < this.selectPIPO.length; index++) {
     var findPipo:any= this.item3.filter((item:any)=>item?.pi_poNo.indexOf(this.selectPIPO[index])!=-1)
-      tempPipo.push(findPipo[0])
+      tempPipo.push(findPipo[0]?._id)
     }
     var updatedata:any=this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1];
-    updatedata['pipolist']=tempPipo
     updatedata['Url_Redirect']={file:'export',document:'irAdvice',pipo:this.selectPIPO.toString()}
     updatedata['documents']=temp_doc;
     console.log(approval_data,this.mainDoc,this.selectPIPO,this.item3,updatedata,'approval_data')
@@ -4162,9 +4163,23 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           TypeTransaction:'Inward-Remitance-Dispoal',
           fileType:'Export',
           UserDetails:approval_data?.id,
+          pipo:tempPipo
         }
         this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
-          this.router.navigate(['/home/dashboardTask'])
+          console.log(res1,'addExportBillLodgment')
+          let updatedData = {
+            "TransactionRef": [
+              res1._id,
+            ]
+          }
+          this.userService.updateManyPipo(tempPipo,'export','', updatedData).subscribe((data) => {
+              console.log('king123');
+              console.log(data);
+              this.router.navigate(['/home/dashboardTask'])
+            },(error) => {
+              console.log('error');
+            }
+          );
           this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
             console.log(res, 'dsdsdsdsdsdsds');
             this.GetDownloadStatus = res[0];

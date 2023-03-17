@@ -61,21 +61,45 @@
                                 <div class="row">
                                   <div class="col-md-10 mb-3">
                                     <label for="exampleInputEmail1" class="form-label">Select bank*</label>
-                                    <select class="form-select" aria-label="Default select example" ngModel #Bank_Name name="bank_name" (change)="setradio($event.target.value)">
-                                      <option value="">Select bank</option>
-                                      <option [value]="banklist.bank" *ngFor="let banklist of bankDetail">{{ banklist.bank }}
-                                      </option>
-                                    </select>
+                                    <app-ng-dropdown-custom
+                                    placeHolderText="Select Bank Name"
+                                    #Bank_Name
+                                    [items]="this.bankDetail" bindLabel="bank"
+                                    [ngModel]="form?.bank_name" formControlName="bank_name"
+                                    (modelChanges)="form.bank_name=$event"
+                                    [multiple]="false" (modelChanges)="setradio($event)">
+                                   </app-ng-dropdown-custom>
                                   </div>
+                                  <div class="col-md-8 mt-2 col-sm-8 col-7" *ngIf='this.Lodgement["DirectDispatch"]["Show"]!= "yes"'>
+                                    <label for="email" class="form-label">Against advance receipt?</label>
+                                  </div>
+                                  <div class="col-md-4 col-sm-4 col-5">
+                                    <div class="check_box_button" *ngIf='this.Lodgement["DirectDispatch"]["Show"]!= "yes"'>
+                                      <button type="button" [class]="ClassRetrun('AgainstAdvanceReceipt','Hide','btn no-button active1',
+                                                                           'btn btn-primary remove-no-button','no')"
+                                        (click)="Changebutton('AgainstAdvanceReceipt','Hide','Show','no')">No</button>
+                                      <button type="button"
+                                        [class]="ClassRetrun('AgainstAdvanceReceipt','Show',
+                                                                          'btn yes-button active','btn yes-button','yes')"
+                                        (click)="Changebutton('AgainstAdvanceReceipt','Show','Hide','yes')">Yes</button>
+                                    </div>
+                                  </div>
+                                  
                                   <div class="col-md-10 mb-3">
                                     <label for="email" class="form-label">Select PI/PO or shipping bill</label>
-                                      <ng-select
+                                      <!-- <ng-select
                                        [items]="this.SHIPPING_BILL_LIST"
                                        bindLabel="value"
                                        [multiple]="false"
                                        placeholder="Select PI/PO or shipping bill"
-                                       (change)="DUMP_FUNCTION($event?.value,'Shipping bill',content1)" #PI_PO_shipping_bill></ng-select>
-
+                                       (change)="DUMP_FUNCTION($event?.value,'Shipping bill',content1)" #PI_PO_shipping_bill></ng-select> -->
+                                       <app-ng-dropdown-custom
+                                       class="PopupOpen" popup-close="ShippingBill"
+                                       placeHolderText="Select PI/PO or shipping bill"
+                                       [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
+                                       [multiple]="false" (modelChanges)="DUMP_FUNCTION($event,'Shipping bill',content1)" #PI_PO_shipping_bill>
+                                      </app-ng-dropdown-custom>
+                                   
                                     <div *ngIf='this.itemArray?.length!=0'>
                                       <div class="shpt_bill_sec">
                                         <label>SHIPPING BILL NUMBER SELECTED</label>
@@ -91,21 +115,7 @@
                                     </div>
                                   </div>
                                   <div class="space_bottom"></div>
-                                  <div class="col-md-8 col-sm-8 col-7" *ngIf='this.Lodgement["DirectDispatch"]["Show"]!= "yes"'>
-                                    <label for="email" class="form-label">Against advance receipt?</label>
-                                  </div>
-                                  <div class="col-md-4 col-sm-4 col-5">
-                                    <div class="check_box_button" *ngIf='this.Lodgement["DirectDispatch"]["Show"]!= "yes"'>
-                                      <button type="button" [class]="ClassRetrun('AgainstAdvanceReceipt','Hide','btn no-button active1',
-                                                                           'btn btn-primary remove-no-button','no')"
-                                        (click)="Changebutton('AgainstAdvanceReceipt','Hide','Show','no')">No</button>
-                                      <button type="button"
-                                        [class]="ClassRetrun('AgainstAdvanceReceipt','Show',
-                                                                          'btn yes-button active','btn yes-button','yes')"
-                                        (click)="Changebutton('AgainstAdvanceReceipt','Show','Hide','yes')">Yes</button>
-                                    </div>
-                                  </div>
-                                  
+                                
                                   <div style="margin: 10px 0px;" class="col-11"  *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes" || this.Lodgement["AgainstAdvanceReceipt"]["Hide"]=== "no"'>
                                     <div class="content_white_background1" *ngIf="this.itemArray.length!=0">
                                       <h5 class="header-text">SB or Inward remittance Details</h5>
@@ -114,42 +124,53 @@
                                           <div class="sb-panel">
                                             <table class="table" style="height: 100%;">
                                                <thead>
-                                                 <tr>
-                                                   <th scope="col">SB no.</th>
-                                                   <th scope="col">SB amount</th>
-                                                   <th scope="col">SB Balance</th>
+                                                 <tr class="table-tr">
+                                                   <th  scope="col" class="col-td-th-2">SB no.</th>
+                                                   <th  scope="col" class="col-td-th-2">SB amount</th>
+                                                   <th  scope="col" class="col-td-th-2">SB Balance</th>
                                                  </tr>
                                                </thead>
                                                <tbody>
-                                                 <tr>
-                                                   <td scope="row">{{item?.sbno}}</td>
-                                                   <td>{{item?.fobValue}}</td>
-                                                   <td>{{item?.balanceAvai}}</td>
+                                                 <tr class="table-tr">
+                                                   <td class="col-td-th-2">{{item?.sbno}}</td>
+                                                   <td class="col-td-th-2">{{item?.fobValue}}</td>
+                                                   <td class="col-td-th-2">{{item?.balanceAvai}}</td>
                                                  </tr>
                                                </tbody>
                                              </table>
                                            </div>
                                            <div class="sb-panel" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"'>
-                                             <table class="table">
-                                                <thead>
-                                                  <tr>
-                                                    <th scope="col">I/R No.</th>
-                                                    <th scope="col">I/R Amount</th>
-                                                    <th scope="col">I/R Useses Amount</th>
-                                                    <th scope="col">I/R Available Amount</th>
+                                            <table class="table">
+                                               <tbody style="background: white;
+                                               margin: 10px;
+                                               border-radius: 10px;
+                                               box-shadow: 0px 0px 2px 3px #d5d5d5;" *ngFor="let item1 of this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+item?.sbno];let j=index">
+                                                <tr class="table-tr">
+                                                  <th scope="col" class="col-td-th-2">CI No.</th>
+                                                  <th scope="col" class="col-td-th-2">CI Amount</th>
+                                                  <th scope="col" class="col-td-th-2">Debit Note Amount</th>
+                                                </tr>
+                                                 <tr class="table-tr">
+                                                   <td class="col-td-th-2">{{item1?.commercialNumber}}</td>
+                                                   <td class="col-td-th-2">{{item1?.amount}}</td>
+                                                   <td class="col-td-th-2">{{item1?.debitNoteRef[0]?.totalDebitAmount}}</td>  
+                                                 </tr>
+                                                 <thead>
+                                                  <tr class="table-tr">
+                                                    <th scope="col" class="col-td-th-2">I/R No.</th>
+                                                    <th scope="col" class="col-td-th-2">I/R Useses Amount</th>
+                                                    <th scope="col" class="col-td-th-2">I/R Available Amount</th>
+                                                  </tr>
+                                                  <tr class="table-tr" *ngFor="let irDataItemitem1 of item1?.IRADVICE_INFO;let j=index" >
+                                                    <td class="col-td-th-2">{{irDataItemitem1?.irDataItem?.billNo}}</td>
+                                                    <td class="col-td-th-2">{{irDataItemitem1?.irDataItem?.Used_Balance}}</td>
+                                                    <td class="col-td-th-2">{{irDataItemitem1?.irDataItem?.BalanceAvail}}</td>
                                                   </tr>
                                                 </thead>
-                                                <tbody>
-                                                  <tr *ngFor="let item1 of this.ACCORDING_LIST['SB_'+item?.sbno];let j=index" >
-                                                    <td scope="row">{{item1?.billNo}}</td>
-                                                    <td>{{item1?.amount}}</td>
-                                                    <td>{{item1?.Used_Balance}}</td>
-                                                    <td>{{item1?.BalanceAvail}}</td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                            </div>
-                                            <button class="col-3 mr-0 mb-3 ml-2" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"' style="margin: auto;" mat-raised-button color="accent" (click)="open2(content2.style.display='block', item?.sbno);">Add IR +</button>
+                                               </tbody>
+                                             </table>
+                                           </div>
+                                            <!-- <button class="col-3 mr-0 mb-3 ml-2" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"' style="margin: auto;" mat-raised-button color="accent" (click)="open2(content2.style.display='block', item?.sbno);">Add IR +</button> -->
                                         </mat-tab>
                                       </mat-tab-group>
                                      </div>
@@ -355,115 +376,7 @@
                               </div>
                              </div>
                           </div>
-                          <ng-template #content let-modal>
-                            <div class="modal-body">
-                              <div class="container-fluid">
-                                <div class="row no-gutter">
-                                  <button type="button" class="button2 topright" aria-label="Close"
-                                    (click)="modal.dismiss('Cross click')">
-                                    <span aria-hidden="true">OK</span>
-                                  </button>
-                                  <!-- The content half -->
-                                  <div class="col-md-7 ">
-                                    <div class="login d-flex py-5" style="padding: 0px !important;">
-
-                                      <!-- Demo content-->
-                                      <div class="container">
-                                        <div class="row">
-                                          <div class="col-lg-10 col-xl-7 mrg">
-                                            <h6 class="display-5">Select PI/PO</h6>
-                                            <div class="d-flex justify-content-between mb-1">
-                                              <select [(ngModel)]="nameSearch"
-                                                style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
-                                                <option value="">commodity</option>
-                                                <option *ngFor="let item of item6; let i = index;"
-                                                  style="color: black;">{{item.como}}</option>
-                                              </select>
-
-                                              <select [(ngModel)]="nameSearch1"
-                                                style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
-                                                <option value="">location</option>
-                                                <option *ngFor="let item of item7; let i = index;"
-                                                  style="color: black;">{{item.loc}}</option>
-                                              </select>
-                                              <select [(ngModel)]="nameSearch2"
-                                                style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;">
-                                                <option value="">BuyerName</option>
-                                                <option *ngFor="let item of buyerDetail ; let i = index;"
-                                                  style="color: black;">{{item.buyerName}}</option>
-                                              </select>
-
-                                              <input type="date" placeholder="Start Date"
-                                                style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;"
-                                                [(ngModel)]="startDate" required />
-
-                                              <input type="date" placeholder="End Date"
-                                                style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;font-size: 11px;height: 25px;"
-                                                [(ngModel)]="endDate" required />
-
-                                              <button class="filter"
-                                                (click)="startDate = '' ; endDate = '' ;nameSearch = '';nameSearch1 = '';nameSearch2 = '' ">Reset</button>
-                                            </div>
-                                            <section style="width: 157%; " class="box-shadow">
-                                              <table style="margin-left: -2.7rem;" class="table table-striped mb-0">
-
-                                                <thead style="width: 100% ;height: 54px;">
-                                                  <tr class="text-muted table-heading"
-                                                    style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
-                                                    <th scope="col"></th>
-                                                    <th scope="col">DATE</th>
-                                                    <th scope="col">INVOICE NUMBER</th>
-                                                    <th scope="col">CONSIGNEE NAME</th>
-                                                    <th scope="col">COMMODITY</th>
-                                                    <th scope="col">LOCATION</th>
-                                                    <th scope="col">SB NO</th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody>
-                                                  <tr class="table-row"
-                                                    *ngFor='let data of item | filterb:startDate:endDate | filtera:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index'
-                                                    (click)="changeCheckbox1(item.sbno, item)">
-                                                    <td><input type="checkbox"
-                                                        (change)="changeCheckbox1(item.sbno, item)" />
-                                                    </td>
-                                                    <td>
-                                                      {{data.date}}
-                                                    </td>
-                                                    <td>
-                                                      {{data.pi_poNo}}
-                                                    </td>
-                                                    <td>
-                                                      {{data.buyerName}}
-                                                    </td>
-                                                    <td>
-                                                      {{data.commodity}}
-                                                    </td>
-                                                    <td>
-                                                      {{data.location}}
-                                                    </td>
-                                                    <td>
-                                                      {{data.sbno}}
-                                                    </td>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                            </section>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <!-- End -->
-                                    </div>
-                                  </div>
-
-                                </div>
-                              </div>
-                            </div>
-
-                          </ng-template>
-
-
                           <ng-template #content3 let-modal>
-
                             <div class="modal-body2">
                               <div class="row no-gutter">
                                 <div class="col-md-7" style="margin: 10px;">
@@ -640,7 +553,7 @@
                      </div>
                     <div class="bottom_submit_section">
                       <button type="button" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">CANCEL</button>
-                      <button type="button" class="btn btn-secondary" (click)='generateDoc1(this.ExportBillLodgement_Form);this.advanceArray.length!=0 || Lodgement?.AgainstAdvanceReceipt?.Hide=="no"?Preview_btn.style.display="block" : ""'>PROCEED</button>
+                      <button type="button" class="btn btn-secondary" (click)='generateDoc1(this.ExportBillLodgement_Form);this.ObjectLength(this.advanceArray)!=0 || Lodgement?.AgainstAdvanceReceipt?.Hide=="no"?Preview_btn.style.display="block" : ""'>PROCEED</button>
                       <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;" (click)='PREVIEWS_URL();PREVIEW_PAGE.style.display="block"'>Preview</button>
                     </div>
                   </div>
@@ -654,159 +567,265 @@
   </div>
 </div>
 
-<div class="bg-black-opacity" #content1 class="content1">
-  <div class="modal custom-modal Select_Shipping" tabindex="-1" role="dialog">
-      <div class="modal-dialog p-4" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Select Shipping Bill</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-            (click)="content1.style.display='none'"> <span aria-hidden="true">&times;</span> </button>
-        </div>
-        <div class="modal-body" style="overflow: auto;height: 80vh;">
-          <div class="container-fluid">
-            <div class="middle_bts">
-              <div class="login py-5" style="padding: 0px !important; width:100%;">
-                <div class="container_innser">
-                  <div class="d-flex justify-content-between mb-1">
-                    <select [(ngModel)]="nameSearch4" class="form-control col-2 p-2"
-                      style="border: 1px solid #C6CBD4;color: black;padding: 0px 2px;font-weight: 100;margin-right: 5px;
-                      font-size: 11px;">
-                      <option value="">BuyerName</option>
-                      <option *ngFor="let item of buyerName ; let i = index;" style="color: black;">{{item}}</option>
-                    </select>
-                    <button class="filter1" style="margin-left:-20px;" (click)="nameSearch4 = ''">Reset</button>
-                  </div>
-                  <section class="box-shadow">
-                    <table class="table table-striped mb-0">
-                      <thead style="width: 100% ;height: 54px;">
-                        <tr class="text-muted table-heading"
-                          style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
-                          <th scope="col"></th>
-                          <th scope="col">SB DATE</th>
-                          <th scope="col">SB NUMBER</th>
-                          <th scope="col">BUYER NAME</th>
-                          <th scope="col">CURRENCY</th>
-                          <th scope="col">SB AMOUNT</th>
-                          <th scope="col">AVAILABLE AMOUNT</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="table-row"
-                          *ngFor='let data of item1 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
-                          <td><input type="checkbox"
-                              (change)="changeCheckbox1(data.sbno, data); addTofilter1($event ,data._id, data) " />
-                          </td>
-                          <td>
-                            {{data.sbdate}}
-                          </td>
-                          <td>
-                            {{data.sbno}}
-                          </td>
-                          <td>
-                            {{data.buyerName}}
-                          </td>
-                          <td>
-                            {{data.fobCurrency}}
-                          </td>
-                          <td>
-                            {{data.fobValue}}
-                          </td>
-                          <td>
-                            {{data.balanceAvai}}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </section>
-                </div>
-                <!-- End -->
+<div class="temp" #content1>
+  <app-custom-model [FooterButton]="true" [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="ShippingBill"
+  [name]="'Shipping Bill Against of : '+nameSearch4">
+  <div class="container-fluid mt-2">
+    <div class="middle_bts">
+      <div class="login py-5" style="padding: 0px !important; width:100%;">
+        <div class="container_innser" style="overflow: auto;height: calc(100vh - 100px);padding: 10px;">
+          <div class="d-flex justify-content-between mb-1 p-2">
+            <app-ng-dropdown-custom
+            placeHolderText="Select Buyer Name"
+            [items]="this.buyerName" bindLabel="value"
+            [multiple]="false" (modelChanges)="filterBuyerName($event)" #buyerNameSelection>
+           </app-ng-dropdown-custom> 
+           <app-ng-dropdown-custom *ngIf="this.Lodgement['ThirdPartyRemittance']['Show']=='yes'"
+           placeHolderText="Select Party Name"
+           [items]="this.irBuyerName" bindLabel="value"
+           [multiple]="false" style="margin: auto;margin-left: 10px; width: 280px;" #buyerNameSelection>
+          </app-ng-dropdown-custom>
+            <!-- <div class="streep-panel">
+                <label><span class="round-circel-strepper"></span> <span class="text-span">blCopy doc</span></label>
+                <label><span class="round-circel-strepper"></span> <span class="text-span">blCopy doc</span></label>
+                <label><span class="round-circel-strepper"></span> <span class="text-span">blCopy doc</span></label>
+            </div> -->
+            <div class="button-group mr-0">
+            <div class="d-flex" style="align-items: center;gap: 10px;">
+              <div class="temp">
+                <label for="email" class="form-label m-auto">Third Party Remittance</label>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-
-  </div>
-</div>
-<div class="bg-black-opacity" #content2>
-  <div class="modal custom-modal Select_Shipping" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Search PI/PO numbers*</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-            (click)="content2.style.display='none'"> <span aria-hidden="true">&times;</span> </button>
-        </div>
-        <div class="modal-body">
-          <div class="Search_numbers" style="height: 80vh; overflow: auto;">
-            <div class="modal-body">
-              <div class="container_remove">
-                <div class="row_bt">
-                  <div class="DDDD">
-                    <div class="mt_bottom" style="margin-bottom:20px">
-                      <div class="row">
-                        <div class="col-md-6">
-                          <select [(ngModel)]="nameSearch3" class="form-control">
-                            <option value="">Party Name</option>
-                            <option *ngFor="let item of irBuyerName ; let i = index;" style="color: black;">{{item}}
-                            </option>
-                          </select>
-                        </div>
-                        <div class="col-md-3">
-                          <button class="filter1 btn btn-primary" (click)="nameSearch3 = ''">Reset</button>
-                        </div>
-                      </div>
-                    </div>
-                    <section style="width: 100%;" class="box-shadow">
-                      <table class="table table-striped mb-0">
-                        <thead style="width: 100% ;height: 54px;">
-                          <tr class="text-muted table-heading"
-                            style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
-                            <th scope="col"></th>
-                            <th scope="col">FIRX Number/ID</th>
-                            <th scope="col">Party Name</th>
-                            <th scope="col">Recieved Amount USD</th>
-                            <th scope="col">Available Balance</th>
-                          </tr>
-                        </thead>
-                        <tbody *ngIf="item13.length!=0">
-                          <tr class="table-row"
-                            *ngFor='let data of item13 | fiterbuyer:[{partyName:nameSearch3}]  let i = index'>
-                            <td><input type="checkbox" (change)="addToSbArray(data, $event)" />
-                            </td>
-                            <td>
-                              {{data.billNo}}
-                            </td>
-                            <td>
-                              {{data.partyName}}
-                            </td>
-                            <td>
-                              {{data.amount}}
-                            </td>
-                            <td>
-                              {{data.BalanceAvail}}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </section>
-                  </div>
-                  <div class="submit_right_button mt-2" style="float:right;">
-                    <button class="filter1 btn btn-secondary" aria-label="Close"
-                      (click)="content2.style.display='none'">Cancel</button>
-                    <button class="filter1 btn btn-primary" style="margin-left:16px"
-                      (click)="content2.style.display='none'">Sumbit</button>
-                  </div>
+              <div class="temp">
+                <div class="check_box_button">
+                  <button type="button" [class]="ClassRetrun('ThirdPartyRemittance','Hide','btn no-button active1',
+                                                      'btn btn-primary remove-no-button','no')"
+                    (click)="Changebutton('ThirdPartyRemittance','Hide','Show','no')">No</button>
+                  <button type="button"
+                    [class]="ClassRetrun('ThirdPartyRemittance','Show',
+                                                      'btn yes-button active','btn yes-button','yes')"
+                    (click)="Changebutton('ThirdPartyRemittance','Show','Hide','yes')">Yes</button>
                 </div>
               </div>
+             </div>
+              <button type="button" class="btn btn-primary" (click)="nameSearch4 = ''">Reset</button>
+              <button type="button" class="btn btn-secondary" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"' (click)="HIDE_SHOW_POPUP('PANEL_1')">Back</button>
+              <button type="button" class="btn btn-secondary" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"'  (click)="HIDE_SHOW_POPUP('PANEL_2')">Next</button>
             </div>
           </div>
+          <section class="box-shadow" *ngIf="this.HIDE_SHOW['PANEL_1']==true && nameSearch4!=''" style="overflow: auto;
+          height: calc(100vh - 210px);
+          background-color: #ffffffd1;
+          border-radius: 10px;
+          box-shadow: inset 0px 0px 7px 0px #30303082;">
+            <table class="table mb-0">
+              <thead>
+                <tr class="table-tr">
+                  <th scope="col" class="col-td-th-1">#</th>
+                  <th scope="col" class="col-td-th-3">SB DATE</th>
+                  <th scope="col" class="col-td-th-3">SB NUMBER</th>
+                  <th scope="col" class="col-td-th-3">BUYER NAME</th>
+                  <th scope="col" class="col-td-th-3">CURRENCY</th>
+                  <th scope="col" class="col-td-th-3">SB AMOUNT</th>
+                  <th scope="col" class="col-td-th-3">AVAILABLE AMOUNT</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-tr"
+                  *ngFor='let data of item1 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
+                  <td class="col-td-th-1"><input type="checkbox" [checked]="this.CHECKEBOX_SELECTION?.SHIPPING_BILL[i]==true?true:false"
+                      (change)="changeCheckbox1($event,data.sbno, data); addTofilter1($event ,data._id, data,i) " />
+                  </td>
+                  <td class="col-td-th-3">
+                    {{data.sbdate}}
+                  </td>
+                  <td class="col-td-th-3">
+                    {{data.sbno}}
+                  </td>
+                  <td class="col-td-th-3">
+                    {{data.buyerName}}
+                  </td>
+                  <td class="col-td-th-3">
+                    {{data.fobCurrency}}
+                  </td>
+                  <td class="col-td-th-3">
+                    {{data.fobValue}}
+                  </td>
+                  <td class="col-td-th-3">
+                    {{data.balanceAvai}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="box-shadow" *ngIf="this.HIDE_SHOW['PANEL_2']==true" style="overflow: auto;
+          height: calc(100vh - 210px);
+          background-color: #ffffffd1;
+          border-radius: 10px;
+          box-shadow: inset 0px 0px 7px 0px #30303082;">
+          <mat-tab-group>
+            <mat-tab [label]="sbitem" *ngFor="let sbitem of this.sbArray">   
+            <table class="table mb-0">
+              <thead>
+                <tr class="table-tr">
+                  <th scope="col" class="col-td-th-1">#</th>
+                  <th scope="col" class="col-td-th-2">CI Date</th>
+                  <th scope="col" class="col-td-th-2">CI No.</th>
+                  <th scope="col" class="col-td-th-2">Port Code</th>
+                  <th scope="col" class="col-td-th-2">Shipping Bill No.</th>
+                  <th scope="col" class="col-td-th-2">Shipping Bill Date</th>
+                  <th scope="col" class="col-td-th-2">CI Value(USD)</th>
+                  <th scope="col" class="col-td-th-2">Damages / Deductions(Debit Note)</th>
+                  <th scope="col" class="col-td-th-2">SB Amout to be realized</th>
+                  <th scope="col" class="col-td-th-2">FIRX Option</th>
+                  <th scope="col" class="col-td-th-2">Value to be Realised in FIRX(USD)</th>
+                  <th scope="col" class="col-td-th-2">View IRM Details...</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-tr"
+                  *ngFor='let data of this.FILTER_DATA?.FILTER_COMMERCIAL["SB_"+sbitem] let i = index'>
+                  <td class="col-td-th-1">
+                    <input type="checkbox" [checked]="this.CHECKEBOX_SELECTION?.SHIPPING_BILL[i]==true?true:false"/>
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data.commercialDate}}
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data.commercialNumber}}
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data?.sbRef[0]?.portCode}}
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data.sbNo}}
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data?.sbRef[0]?.sbdate}}
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data.amount}}
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data.debitNoteRef[0]?.totalDebitAmount}}
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data?.SB_Amout_Realized}}
+                  </td>
+                  <td class="col-td-th-2"><button type="submit" class="PopupOpen btn btn-primary" popup-close="FIRX" 
+                  (click)="_SHIPPING_BILL(i,data,data.debitNoteRef[0]?.totalDebitAmount,content2)">Select IRM No.</button></td>
+                  <td class="col-td-th-2">
+                    {{data?.IRADVICE_SUM}}
+                  </td>
+                  <td class="col-td-th-2"><button type="submit" class="PopupOpen btn btn-primary" popup-close="FIRX_DEATILS" (click)="_VIEW_FIRX(i,data)">More...</button></td>
+                </tr>
+              </tbody>
+            </table> 
+            </mat-tab>
+           </mat-tab-group>
+          </section>
         </div>
       </div>
     </div>
   </div>
+  </app-custom-model>
+</div>
+<div class="temp" #content2>
+  <app-custom-model [FooterButton]="true" [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '50px !important'}" class="p-2" height="400px" id="FIRX"
+  [name]="'FIRX Number Against of : '+nameSearch4">
+  <div class="container-fluid mt-2 mb-2">
+    <div class="middle_bts">
+      <div class="login py-5" style="padding: 0px !important; width:100%;">
+        <div class="container_innser">
+          <section class="box-shadow" style="overflow: auto;
+          height: calc(100vh - 210px);
+          background-color: #ffffffd1;
+          border-radius: 10px;
+          box-shadow: inset 0px 0px 7px 0px #30303082;">
+           <div class="d-flex" style="color: white;padding: 10px;background: #1844ce;gap: 20px;">
+            <h5 style="margin: auto;margin-left: 30px;">SB No. : {{this.SELECTED_SHIPPING_BILL?.data?.sbNo}}</h5>
+            <h5 style="margin: auto;margin-right: 30px;">SB Amount : {{this.SELECTED_SHIPPING_BILL?.data?.SB_Amout_Realized}}</h5>
+            <h5 style="margin: auto;margin-right: 30px;">Total FIXR Amount : {{this.TOTAL_FIRX_AMOUNT}}</h5>
+       </div>
+            <table class="table mb-0">
+              <thead >
+                <tr class="table-tr">
+                  <th scope="col" class="col-td-th-1">#</th>
+                  <th scope="col" class="col-td-th-2">FIRX Number/ID</th>
+                  <th scope="col" class="col-td-th-2">Recieved Amount USD</th>
+                  <th scope="col" class="col-td-th-2">Available Balance</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="item13.length!=0">
+                <tr class="table-tr"
+                  *ngFor='let data of item13 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
+                  <td class="col-td-th-1"><input type="checkbox" (change)="addToSbArray(data, $event,i)"/>
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data.billNo}}
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data.amount}}
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data.BalanceAvail}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>     
+        </div>
+      </div>
+    </div>
+  </div>
+  </app-custom-model>
+</div>
+<div class="temp" #content2>
+  <app-custom-model [FooterButton]="true" [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '80px !important'}" class="p-2" height="400px" id="FIRX_DEATILS"
+  [name]="'FIRX Details Against of : '+nameSearch4">
+  <div class="container-fluid mt-2 mb-2">
+    <div class="middle_bts">
+      <div class="login py-5" style="padding: 0px !important; width:100%;">
+        <div class="container_innser">
+          <section class="box-shadow" style="overflow: auto;
+          height: calc(100vh - 210px);
+          background-color: #ffffffd1;
+          border-radius: 10px;
+          box-shadow: inset 0px 0px 7px 0px #30303082;">
+          <div class="d-flex" style="color: white;padding: 10px;background: #1844ce;gap: 20px;">
+               <h5 style="margin: auto;margin-left: 30px;">SB No. : {{this.SELECTED_VIEW_FIRX?.data?.sbNo}}</h5>
+               <h5  style="margin: auto;margin-right: 30px;">SB Amount : {{this.SELECTED_VIEW_FIRX?.data?.amount}}</h5>
+          </div>
+            <table class="table mb-0">
+              <thead >
+                <tr class="table-tr">
+                  <th scope="col" class="col-td-th-1">#</th>
+                  <th scope="col" class="col-td-th-2">FIRX Number/ID</th>
+                  <th scope="col" class="col-td-th-2">Recieved Amount USD</th>
+                  <th scope="col" class="col-td-th-2">Available Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-tr"
+                  *ngFor='let data of this.SELECTED_VIEW_FIRX?.data?.IRADVICE_INFO let i = index'>
+                  <td class="col-td-th-1">{{(i+1)}}</td>
+                  <td class="col-td-th-2">
+                    {{data?.irDataItem?.billNo}}
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data?.irDataItem?.amount}}
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data?.irDataItem?.BalanceAvail}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>     
+        </div>
+      </div>
+    </div>
+  </div>
+  </app-custom-model>
 </div>
 <div class="modal PREVIEW_PAGE" tabindex="-1" #PREVIEW_PAGE style="display: none;background-color: #00000030;">
   <div class="modal-dialog" style="width: 100% !important;">
@@ -817,9 +836,9 @@
           </div>
           <div class="modal-body">
               <div class="content_white_background" *ngIf="this.itemArray.length!=0">
-                <mat-tab-group class="custom-1" mat-stretch-tabs="false" mat-align-tabs="start">
-                  <mat-tab [id]="item?._id" [label]="'SB_No_'+item?.sbno" *ngFor="let item of this.itemArray;let i=index">
-                    <app-pdf-viewer class="pt-3" [downloadShow]="false" *ngFor="let item of this.PREVIEWS_URL_LIST[item?.sbno]" [src]="item" width="100%" height="500px"></app-pdf-viewer>
+                <mat-tab-group class="custom-1" mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="PreviewSlideToggle($event)">
+                  <mat-tab [id]="item?.sbno" [label]="'SB_No_'+item?.sbno" *ngFor="let item of this.itemArray;let i=index">
+                    <app-pdf-viewer class="pt-3" [downloadShow]="false" *ngFor="let item of this.PREVIEWS_URL_LIST" [src]="item" width="100%" height="500px"></app-pdf-viewer>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="PREVIEW_PAGE.style.display='none'">Close</button>
                       <div style="display:flex;">

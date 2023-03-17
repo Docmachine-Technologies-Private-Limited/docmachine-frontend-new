@@ -77,6 +77,41 @@
                 <tr class="table-tr">
                   <th scope="col" class="col-td-th-3">Sr.no.</th>
                   <th scope="col" class="col-td-th-2" *ngFor="let item of displayedColumns">{{item}}</th>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Inward-Remitance-Dispoal'">
+                    <th scope="col" class="col-td-th-2">Buyer Name</th>
+                    <th scope="col" class="col-td-th-2">PI/PO numner</th>
+                    <th scope="col" class="col-td-th-2">PI/PO amount</th>
+                    <th scope="col" class="col-td-th-2">currency</th>
+                    <th scope="col" class="col-td-th-2">IRM Reference No.</th>
+                    <th scope="col" class="col-td-th-2">IRM Amount</th>
+                    <th scope="col" class="col-td-th-2">Export BIll Reference Number</th>
+                    <th scope="col" class="col-td-th-2">Export BIll Amount</th>
+                    <th scope="col" class="col-td-th-2">SB Number</th>
+                    <th scope="col" class="col-td-th-2">SB Amount</th>
+                    <th scope="col" class="col-td-th-2">EBRC No.</th>
+                  </ng-container>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Export-Direct-Dispatch'">
+                    <th scope="col" class="col-td-th-2">Buyer Name</th>
+                    <th scope="col" class="col-td-th-2">PI/PO numner</th>
+                    <th scope="col" class="col-td-th-2">PI/PO amount</th>
+                    <th scope="col" class="col-td-th-2">currency</th>
+                    <th scope="col" class="col-td-th-2">Export bill Reference No.</th>
+                    <th scope="col" class="col-td-th-2">Export bill Reference Amount</th>
+                    <th scope="col" class="col-td-th-2">SB Number</th>
+                    <th scope="col" class="col-td-th-2">SB Amount</th>
+                    <th scope="col" class="col-td-th-2">IRM No.</th>
+                    <th scope="col" class="col-td-th-2">IRM Amount</th>
+                  </ng-container>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Import-Direct-Payment' || this.TRANSACTION_NAME=='Advance-Remittance-flow'">
+                    <th scope="col" class="col-td-th-2">Buyer Name</th>
+                    <th scope="col" class="col-td-th-2">PI/PO numner</th>
+                    <th scope="col" class="col-td-th-2">PI/PO amount</th>
+                    <th scope="col" class="col-td-th-2">currency</th>
+                    <th scope="col" class="col-td-th-2">ORM Reference No.</th>
+                    <th scope="col" class="col-td-th-2">ORM Amount</th>
+                    <th scope="col" class="col-td-th-2">BOE Number</th>
+                    <th scope="col" class="col-td-th-2">BOE Amount</th>
+                  </ng-container>
                   <th scope="col" class="col-td-th-2">User Details</th>
                   <th scope="col" class="col-td-th-2">More Details</th>
                 </tr>
@@ -85,13 +120,68 @@
                 <tr class="table-tr" *ngFor="let item of this.dataSource;let i=index">
                   <td class="col-td-th-3" scope="row">{{(i+1)}}</td>
                   <td class="col-td-th-2" scope="row" *ngFor="let column of displayedColumns">{{item[column]}}</td>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Inward-Remitance-Dispoal'">
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.buyerName}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.pi_poNo}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.amount}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.currency}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.irRef?.billNo}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.irRef?.amount}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.Ref_Data?.blCopyRef?.blcopyrefNumber}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.Ref_Data?.blCopyRef?.amount}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.data?.Shipping_bill_list[0]?.sbno}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.data?.Shipping_bill_list[0]?.fobValue}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.EbrcRef?.EbrcNumber}}</td>  
+                  </ng-container>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Export-Direct-Dispatch'">
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.buyerName}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.pi_poNo}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.amount}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.currency}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.blcopyrefNumber}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.blCopyRef?.amount}}</td>    
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.Shipping_bill_list!=undefined?item?.MoreDetails?.Shipping_bill_list[0]?.sbno:null}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.Shipping_bill_list!=undefined?item?.MoreDetails?.Shipping_bill_list[0]?.fobValue:null}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.Advance_reference_Number[0]?.irDataItem?.billNo}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.Advance_reference_Number[0]?.irDataItem?.amount}}</td>  
+                  </ng-container>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Advance-Remittance-flow'">
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.benneName}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.pi_poNo}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.amount}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.currency}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.orRef?.billNo}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.orRef?.amount}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.ImportDirectPayment?.boeNumber}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.ImportDirectPayment?.invoiceAmount}}</td>  
+                    <!-- <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.EbrcRef?.EbrcNumber}}</td>   -->
+                  </ng-container>
+                  <ng-container *ngIf="this.TRANSACTION_NAME=='Import-Direct-Payment'">
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.benneName}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.pi_poNo}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.amount}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.pipo[0]?.currency}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.orRef?.billNo}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.orRef?.amount}}</td>  
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.pipo_1[0][0]?.boeNumber}}</td>
+                    <td scope="col" class="col-td-th-2">{{item?.MoreDetails?.pipo_1[0][0]?.invoiceAmount}}</td>  
+                    <!-- <td scope="col" class="col-td-th-2">{{item?.Ref_Data?.EbrcRef?.EbrcNumber}}</td>   -->
+                  </ng-container>
                   <td class="col-td-th-2" scope="row"><a class="button white-btn table-btn"
                       (click)="userview(item?.UserDetails);User_Details.style.display='block'">View..</a></td>
                   <td class="col-td-th-2" scope="row">
                     <a class="button white-btn table-btn PopupOpen" popup-close="TransactionView"
                       (click)="transactionview(item);">View..</a>
-                    <button type="submit" class="btn btn-primary"
-                      (click)="navigationByUrlParam('upload',item?.MoreDetails?.Url_Redirect)">Upload RN</button>
+                    <button type="submit" [hidden]="this.TRANSACTION_NAME!='Inward-Remitance-Dispoal'" class="btn btn-primary"
+                    (click)="navigationByUrlParam('upload',item?._id,item)">Upload IRN</button>
+                    <button type="submit" [hidden]="this.TRANSACTION_NAME!='Import-Direct-Payment'" class="btn btn-primary"
+                    (click)="navigationByUrlParam('upload',item?._id,item)">Upload ORN</button>
+                    <button type="submit" [hidden]="this.TRANSACTION_NAME!='Advance-Remittance-flow'" class="btn btn-primary"
+                    (click)="navigationByUrlParam('upload',item?._id,item)">Upload ORN</button>
+                    <button type="submit" [hidden]="this.TRANSACTION_NAME!='Inward-Remitance-Dispoal'" class="btn btn-primary"
+                    (click)="navigationByUrlParam('upload',item?._id,{MoreDetails:{Url_Redirect:{file:'export',document:'EBRC',Transaction_id:'',pipo:item?.MoreDetails?.Url_Redirect?.pipo}}})">Upload EBRC</button>
+                    <button type="submit" [hidden]="this.TRANSACTION_NAME!='Export-Direct-Dispatch'" class="btn btn-primary"
+                    (click)="navigationByUrlParam('upload',item?._id,item)">Upload EBDRN</button>
                   </td>
                 </tr>
               </tbody>
@@ -355,6 +445,37 @@
     </div>
   </app-custom-model>
 
+  <app-custom-model name="Upload Documents" id="TableView">
+    <div class="data_table_new" style="overflow: auto;height: 73vh;margin-bottom: 0;">
+      <div class="record-container">
+        <table class="table table-striped">
+          <thead>
+            <tr class="table-tr">
+              <th scope="col" class="col-td-th-3">Sr.no.</th>
+              <th scope="col" class="col-td-th-2" *ngFor="let item of displayedColumns">{{item}}</th>
+              <th scope="col" class="col-td-th-2">User Details</th>
+              <th scope="col" class="col-td-th-2">More Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-tr" *ngFor="let item of this.dataSource;let i=index">
+              <td class="col-td-th-3" scope="row">{{(i+1)}}</td>
+              <td class="col-td-th-2" scope="row" *ngFor="let column of displayedColumns">{{item[column]}}</td>
+              <td class="col-td-th-2" scope="row"><a class="button white-btn table-btn"
+                  (click)="userview(item?.UserDetails);User_Details.style.display='block'">View..</a></td>
+              <td class="col-td-th-2" scope="row">
+                <a class="button white-btn table-btn PopupOpen" popup-close="TransactionView"
+                  (click)="transactionview(item);">View..</a>
+                <button type="submit" class="btn btn-primary"
+                  (click)="navigationByUrlParam('upload',item?._id,item)">Upload RN</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </app-custom-model>
+  
   <div class="loader-cls" *ngIf="this.LOADER_ON_OFF==true">
     <div class="lds-ellipsis">
       <div></div>

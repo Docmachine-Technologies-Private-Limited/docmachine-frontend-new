@@ -1,7 +1,6 @@
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatTabsModule } from "@angular/material/tabs";
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
-import { RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   DropzoneModule,
@@ -33,6 +32,15 @@ import { PopupOpenDirective } from "../custom/PopupOpen/popup-open.directive";
 import { CustomModelComponent } from '../custom/custom-model/custom-model.component';
 import { OpenPopUpDirective } from "../custom/custom-model/CustomPopupOpen/open-pop-up.directive";
 import { MergePdfService } from "../service/MergePdf/merge-pdf.service";
+import { NgDropdownCustomComponent } from "../custom/ng-dropdown-custom/ng-dropdown-custom.component";
+import { NgDropdownPopupControllerDirective } from "../custom/ng-dropdown-custom/ng-dropdown-popup-controller.directive";
+
+import { NgCustomCarouselComponent } from '../custom/ng-custom-carousel/ng-custom-carousel.component';
+import { CarouselItemDirective } from '../custom/ng-custom-carousel/carousel-item.directive';
+import { CarouselItemElementDirective } from '../custom/ng-custom-carousel/carousel-item-element.directive';
+import { CustomsliderComponent } from '../custom/customslider/customslider.component';
+import {MatStepperModule} from '@angular/material/stepper';
+
 
 @NgModule({
   declarations: [
@@ -47,7 +55,13 @@ import { MergePdfService } from "../service/MergePdf/merge-pdf.service";
     PopupOpenDirective,
     OpenPopUpDirective,
     TreeViewComponent,
-    CustomModelComponent
+    CustomModelComponent,
+    NgDropdownCustomComponent,
+    NgDropdownPopupControllerDirective,
+    NgCustomCarouselComponent,
+    CarouselItemDirective,
+    CarouselItemElementDirective,
+    CustomsliderComponent
   ],
   imports: [
     CommonModule,
@@ -90,7 +104,14 @@ import { MergePdfService } from "../service/MergePdf/merge-pdf.service";
     MatExpansionModule,
     MatCheckboxModule,
     MatRadioModule,
-    CustomModelComponent
+    CustomModelComponent,
+    NgDropdownCustomComponent,
+    NgDropdownPopupControllerDirective,
+    NgCustomCarouselComponent,
+    CarouselItemDirective,
+    CarouselItemElementDirective,
+    CustomsliderComponent,
+    MatStepperModule
   ],
 })
 export class SharedHomeModule { }

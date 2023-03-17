@@ -1,13 +1,13 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
 import { UserService } from "../../service/user.service";
-import { timer } from "rxjs";
+import { async, timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
 import * as data from './../../inward.json';
 import $ from 'jquery'
 import { PDFDocument } from 'pdf-lib';
-import { saveAs as importedSaveAs } from 'file-saver';
+import importedSaveAs from 'file-saver';
 import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
 import * as XLSX from 'xlsx';
@@ -22,6 +22,7 @@ import {
   FormControl,
   FormGroup, Validators
 } from '@angular/forms';
+import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
@@ -40,7 +41,12 @@ import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
   selector: 'app-Direct-Dispatch',
   templateUrl: './New-Direct-Dispatch.component.html',
   styleUrls: ['./New-Direct-Dispatch.component.scss'],
-
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: {displayDefaultIndicatorType: false},
+    },
+  ],
 })
 export class NewDirectDispatchComponent implements OnInit {
   LocationData: any = []
@@ -341,6 +347,12 @@ export class NewDirectDispatchComponent implements OnInit {
   GetDownloadStatus: any = [];
   USER_DATA: any = [];
   Approval_URL: any = [];
+  PIPO_LIST:any=[];
+  FILTER_DATA:any={
+    COMMERCIAL:[],
+    FILTER_COMMERCIAL:[],
+    PIPO:[]
+  };
   public ExportBillLodgement_Form: FormGroup;
   constructor(
     private userService: UserService,
@@ -382,6 +394,7 @@ export class NewDirectDispatchComponent implements OnInit {
       deleteflag: ['0', [Validators.required]],
       SbRef: ['', [Validators.required]],
       Carry_Amount: [[], [Validators.required]],
+      Url_Redirect:[{}, [Validators.required]]
     });
     this.userService.getUserDetail().then((status:any) => {
       this.USER_DATA = status['result'];
@@ -408,36 +421,7 @@ export class NewDirectDispatchComponent implements OnInit {
     };
     this.getBill_Lodgments();
   }
-  BOOLEAN: boolean = false;
-  MERGE_ALL_PDF: any = [];
-  async SlideToggle(event: any) {
-    var temp: any = [];
-    const id = event.tab.content.viewContainerRef.element.nativeElement.id;
-    this.PDF_LIST = [];
-    for (let index = 0; index < this.temp[id].length; index++) {
-      if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
-        temp.push(this.temp[id][index]?.pdf)
-        this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
-          console.log('downloadEachFile', res);
-          res.arrayBuffer().then((data: any) => {
-            var base64String = this._arrayBufferToBase64(data);
-            const x = 'data:application/pdf;base64,' + base64String;
-            this.PDF_LIST.push({
-              pdf: x,
-              name: this.temp[id][index]['name']
-            })
-            console.log('downloadEachFile', data);
-          });
-        });
-      }
-      if ((index + 1) == this.temp[id].length) {
-        await this.pdfmerge.mergeAllPDF(temp).then((data: any) => {
-          console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
-          this.MERGE_ALL_PDF[0] = data.toString();
-        })
-      }
-    }
-  }
+ 
   getDropdownData() {
     this.userService.getTeam()
       .subscribe(
@@ -600,7 +584,7 @@ export class NewDirectDispatchComponent implements OnInit {
     control.removeAt(i);
   }
 
-  getBill_Lodgments() {
+ async getBill_Lodgments() {
     this.redirectid = this.route.snapshot.paramMap.get('pipo');
     this.redirectindex = this.route.snapshot.paramMap.get('index');
     this.redirectpage = this.route.snapshot.paramMap.get('page');
@@ -615,6 +599,13 @@ export class NewDirectDispatchComponent implements OnInit {
     this.documentService.getPipo().subscribe(
       (res: any) => {
         console.log('Data fetched successfully', res);
+        for (let index = 0; index < res?.data.length; index++) {
+        if (res?.data[index]?.file=='') {
+          
+        }
+          this.PIPO_LIST.push(res?.data[index])
+
+        }
         (this.item = res.data), console.log('pipo', this.item);
       },
       (err) => console.log(err)
@@ -643,7 +634,7 @@ export class NewDirectDispatchComponent implements OnInit {
         this.mergeIr();
         this.mergeIr2();
         this.item9.forEach((element, i) => {
-          this.irBuyerName[i] = element.partyName;
+          this.irBuyerName.push({value:element.partyName,id:element._id});
         });
         this.irBuyerName = this.irBuyerName.filter(
           (value, index) => this.irBuyerName.indexOf(value) === index
@@ -667,6 +658,25 @@ export class NewDirectDispatchComponent implements OnInit {
       console.log('hello');
     });
     this.item1 = [];
+   await this.pipoDataService.getPipoList('export').then(async (res:any)=>{
+      this.FILTER_DATA.PIPO=res?.pipolist;
+      this.pipoDataService.pipolistModel$.subscribe((data:any) => {
+        console.log(data, 'data2222..................')
+        data?.forEach(element => {
+          element?.commercialRef?.forEach(commercialelement => {
+            var temp:any=commercialelement;
+            temp['debitNoteRef']=element?.debitNoteRef;
+            temp['TryPartyAgreement']=element?.tryPartyAgreementRef;
+            temp['SB_Amout_Realized']=this.ParseFloat(commercialelement.amount,element?.debitNoteRef[0]?.totalDebitAmount)
+            temp['IRADVICE_INFO']=[];
+            temp['IRADVICE_SUM']=0;
+            this.FILTER_DATA.COMMERCIAL.push(temp)
+          });
+        });    
+      });
+    
+      console.log(this.FILTER_DATA,res,'getPipoList')
+    })
     this.shippingBillService.getShippingBillList().then((res: any) => {
       this.shippingBillService.shippingbills$.subscribe((data: any) => {
         console.log('getShippingBillList', data)
@@ -679,13 +689,17 @@ export class NewDirectDispatchComponent implements OnInit {
             }
           }
           console.log('getMaster Data', this.item1);
+          this.buyerName[0] = {value:'Select Buyer Name',id:''};
           this.item1.forEach((element, i) => {
-            this.buyerName[i] = element.buyerName;
+            var buyerfilter:any=this.buyerName.filter((item:any)=>item?.value?.indexOf(element.buyerName[0])!=-1)
+            if (buyerfilter.length==0) {
+              this.buyerName.push({value:element.buyerName[0],id:element?._id});
+            }
           });
+          console.log('buyerName', this.buyerName);
           for (let index = 0; index < data.length; index++) {
             this.item1[index]['balanceAvai'] = data[index]?.balanceAvai != null && data[index]?.balanceAvai != undefined ? data[index]?.balanceAvai : '0';
           }
-          console.log('buyerName', this.buyerName);
         },
           (err) => console.log(err)
         );
@@ -900,41 +914,6 @@ export class NewDirectDispatchComponent implements OnInit {
     /* save to file */
     XLSX.writeFile(wb, 'SheetJS.xlsx');
   }
-
-  changeCheckbox1(a, data) {
-    // let value = a + " - " +
-    if (data.blCopyDoc) {
-      if (data.commercialDoc) {
-        if (data.packingDoc) {
-          let j = this.sbArray.indexOf(a);
-          if (j == -1) {
-            this.sbArray.push(a);
-            this.ACCORDING_LIST['SB_' + a] = []
-          } else {
-            this.sbArray.splice(j, 1);
-            this.ACCORDING_LIST['SB_' + a] = []
-          }
-          console.log('Shailendra//////////--', this.sbArray);
-        } else {
-          console.log("You Don't have packingDoc Document");
-        }
-      } else {
-        console.log("You Don't have Commercial Invoice");
-      }
-    } else {
-      console.log("You Don't have BLCopy Document");
-    }
-    // randomArray = []
-    // for(value of this.pipoArray){
-    //   for(value1 of ){
-    //     if(value.pi_poNo == value1){
-    //       randomArray.push(value)
-    //     }
-    //   }
-    // }
-    // console.log("ALL Data",)
-  }
-
 
   changeCheckbox3(value) {
     let j = this.lcArray.indexOf(value);
@@ -1213,8 +1192,6 @@ export class NewDirectDispatchComponent implements OnInit {
         a = a.split('-').reverse().join('');
         b = b.split('-').reverse().join('');
         return a > b ? 1 : a < b ? -1 : 0;
-
-        // return a.localeCompare(b);         // <-- alternative
       });
       console.log('Datesss', this.myArr);
       console.log(this.myArr[0]);
@@ -1222,7 +1199,7 @@ export class NewDirectDispatchComponent implements OnInit {
 
       console.log(this.generate1);
       console.log(this.c);
-      this.fillForm(pipoValue);
+      this.fillForm(pipoValue,'SB_'+this.itemArray[0]?.sbno);
       this.newTask[0] = {
         sbNumbers: this.sbArray,
         sbUrls: this.mainDoc1,
@@ -1239,7 +1216,7 @@ export class NewDirectDispatchComponent implements OnInit {
         ir: this.Question5,
       };
     } else {
-      if (this.advanceArray.length != 0) {
+      if (Object.keys(this.advanceArray).length != 0) {
         this.generate = true;
         this.isGenerate = true;
         let generateDoc2: any = [];
@@ -1498,7 +1475,7 @@ export class NewDirectDispatchComponent implements OnInit {
 
         console.log(this.generate1);
         console.log(this.c);
-        this.fillForm(pipoValue);
+        this.fillForm(pipoValue,'SB_'+this.itemArray[0]?.sbno);
         this.newTask[0] = {
           sbNumbers: this.sbArray,
           sbUrls: this.mainDoc1,
@@ -1561,13 +1538,11 @@ export class NewDirectDispatchComponent implements OnInit {
     console.log(this.str);
   }
 
-  async fillForm(a) {
-    console.log('Shailendra *************', a.buyerName);
-
+  async fillForm(a,sbno:any) {
+   return new Promise(async (resolve,reject)=>{
     this.buyer1 = a.buyerName;
     this.completewords3 = this.buyer1;;
     this.devideContent3 = this.completewords3.length;
-
     for (let i = 0; i < this.completewords3.length; i++) {
       if (i < 6) {
         this.buyer2.push(this.completewords3[i]);
@@ -1990,8 +1965,8 @@ export class NewDirectDispatchComponent implements OnInit {
       firxCommision: [],
       firxRecAmo: []
     };
-    for (let index = 0; index < this.advanceArray.length; index++) {
-      const element:any = this.advanceArray[index];
+    for (let index = 0; index < this.advanceArray[sbno]?.length; index++) {
+      const element:any = this.advanceArray[sbno][index];
       tp['firxNumber'].push(element?.irDataItem?.billNo)
       tp['firxDate'].push(element?.irDataItem?.date)
       tp['firxCurrency'].push(element?.irDataItem?.currency)
@@ -2052,8 +2027,9 @@ export class NewDirectDispatchComponent implements OnInit {
   SbCurrency: [],
   SbAmount: []
 };
-  for (let index = 0; index < this.itemArray.length; index++) {
-    const element =this.itemArray[index];
+  var filterSB:any=this.itemArray.filter((item:any)=>'SB_'+item.sbno==sbno)
+  for (let index = 0; index < filterSB?.length; index++) {
+    const element =filterSB[index];
     tp_bill['SbNumber'].push(element?.sbno)
     tp_bill['SbDate'].push(element?.sbdate)
     tp_bill['SbCurrency'].push(element?.fobCurrency)
@@ -2628,6 +2604,8 @@ export class NewDirectDispatchComponent implements OnInit {
     this.formerge = x;
     this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
     this.newTask[0].generateDoc1 = x;
+    resolve(x)
+   })
   }
     ConvertNumberToWords(number:any) {
       var words = new Array();
@@ -2950,18 +2928,120 @@ export class NewDirectDispatchComponent implements OnInit {
       );
   }
 
+  shippingMap: Map<number, any[]> = new Map<number, any[]>();
+  SHIPPING_MAP: any = [];
+  Advance_Amount_Sum: any = [];
+  PROCEED_BTN_DISABLED: boolean = false;
+  filterSum: any = [];
+  balanceAvai: any = '';
+  SELECTED_FIRX_INDEX:any=[];
   refSbNo: number;
-
-  open2(content2, sbno) {
-    this.currentSbForAdvance = sbno;
-    this.refSbNo = sbno;
-  }
-
   PDF_LIST: any = [];
   ACCORDING_LIST: any = [];
   temp: any = [];
+  CHECKEBOX_SELECTION:any={SHIPPING_BILL:[],INWARD_REMMITANCE:[]};
+  
+  async addToSbArray(irDataItem: any, e,i) {
+   let index:any = this.item13.findIndex(x => x.billNo ===irDataItem?.billNo);
+   this.balanceAvai = this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]?.SB_Amout_Realized
+   if (this.item13[index]['isEnabled']==false || this.item13[index]?.sbno?.includes(this.SELECTED_SHIPPING_BILL?.data?.sbNo)) {
+    if (parseFloat(this.balanceAvai)> parseFloat(this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'])) {
+      if (e.target.checked) {
+        console.log('Checked');
+        let advance = this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo]?.some(
+          (item:any) => item.valueInternal === irDataItem.billNo
+        );
+        if (!advance) {
+          console.log('Adding');
+          irDataItem.Used_Balance = irDataItem?.BalanceAvail;
+          let details:any = {
+            valueInternal: irDataItem.billNo,
+            irDataItem: irDataItem,
+            sb: this.currentSbForAdvance,
+          };
+          this.item13[index]['isEnabled']=true;
+          this.Advance_Amount_Sum['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details)
+          this.filterSum =  this.Advance_Amount_Sum['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+          if (this.filterSum > this.balanceAvai) {
+            this.Advance_Amount_Sum['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].pop();
+            var sum =  this.Advance_Amount_Sum['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+            let temp:any = details;
+            var last_amount:any = this.TO_FIXED(parseFloat(this.balanceAvai) - parseFloat(sum), 2);
+            temp.irDataItem.BalanceAvail = this.TO_FIXED(parseFloat(details?.irDataItem?.BalanceAvail) - parseFloat(last_amount), 2);
+            this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(temp)
+            this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(temp.irDataItem)
+            this.filterSum = this.TO_FIXED(sum + last_amount, 2);
+            irDataItem.Used_Balance = last_amount;
+            this.ExportBillLodgement_Form.controls['Carry_Amount'].setValue(temp);
+            console.log(details.irDataItem.BalanceAvail, sum, this.filterSum, last_amount, 'asdfasfadfsa')
+          } else {
+            this.PROCEED_BTN_DISABLED = true;
+            this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details);
+            this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(irDataItem)
+          }
+          this.ExportBillLodgement_Form.controls['Total_SB_Amount'].setValue(this.TO_FIXED(this.balanceAvai, 2));
+          this.ExportBillLodgement_Form.controls['Total_FIRX_Amount'].setValue(this.TO_FIXED(this.filterSum, 2));
+          this.ExportBillLodgement_Form.controls['Total_Reaming_Amount'].setValue(this.TO_FIXED(this.balanceAvai - this.filterSum, 2));
+        }
+      } else {
+        console.log('removing, uncheked');
+        this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo] = this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item:any) => item.valueInternal !== irDataItem.billNo);
+        this.Advance_Amount_Sum['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo] =  this.Advance_Amount_Sum['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item) => item.valueInternal !== irDataItem.billNo);
+        this.SELECTED_FIRX_INDEX['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo][i]=false;
+        this.item13[i]['isEnabled']=false;
+      }
+      this.SHIPPING_MAP[this.currentSbForAdvance] = this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo];
+      this.shippingMap.set(this.refSbNo, JSON.parse(JSON.stringify(this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo])));
+      this.ExportBillLodgement_Form.controls['Advance_reference_Number'].setValue(this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo]);
+      this.ExportBillLodgement_Form.controls['Shipping_bill_list'].setValue(this.itemArray);
 
-  addTofilter1(event, id, data) {
+    } else {
+      e.target.checked = false;
+      this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount', "You've exceeded the maximum transaction amount set by your Sb amount..")
+    }
+   } else {
+    e.target.checked = true;
+    this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Error', "You already selected this firx no. </br>Please select other firx no.")
+   }
+    this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO']=this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo];
+    var IRADVICE_SUM:any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
+    this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM']=parseFloat(IRADVICE_SUM).toFixed(3); 
+    
+    console.log(this.advanceArray, this.balanceAvai, this.filterSum, this.Advance_Amount_Sum, this.shippingMap, this.ACCORDING_LIST,
+    this.FILTER_DATA.FILTER_COMMERCIAL,this.SELECTED_FIRX_INDEX,this.item13,'Deva Hello0*************************');
+  }
+
+  changeCheckbox1(event,a, data) {
+    if (data.blCopyDoc) {
+      if (data.commercialDoc) {
+        if (data.packingDoc) {
+          let j = this.sbArray.indexOf(a);
+          if (j == -1) {
+            this.sbArray.push(a);
+          } else {
+            this.sbArray.splice(j, 1);
+            $(event.target).prop('checked',false)
+          }
+          this.currentSbForAdvance = a;
+          this.ACCORDING_LIST['SB_' + a] = [];
+          this.advanceArray['SB_'+a]=[];
+          this.Advance_Amount_Sum['SB_'+a]=[]
+          this.refSbNo = a;
+          this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+a]= this.FILTER_DATA?.COMMERCIAL?.filter((item:any)=>item?.sbNo===a);
+          this.SELECTED_FIRX_INDEX['SB_'+a]=[];
+          console.log('changeCheckbox1',data,this.FILTER_DATA,this.sbArray,this.ACCORDING_LIST);
+        } else {
+          console.log("You Don't have packingDoc Document");
+        }
+      } else {
+        console.log("You Don't have Commercial Invoice");
+      }
+    } else {
+      console.log("You Don't have BLCopy Document");
+    }
+  }
+ 
+  addTofilter1(event, id, data,i) {
     this.temp[id] = [];
     if (data.blCopyDoc) {
       if (data.commercialDoc) {
@@ -2987,7 +3067,10 @@ export class NewDirectDispatchComponent implements OnInit {
                 }]
               }
             }
+            this.CHECKEBOX_SELECTION.SHIPPING_BILL[i]=true;
           } else {
+            $(event.target).prop('checked',false);
+            this.CHECKEBOX_SELECTION.SHIPPING_BILL[i]=false;
             if (this.itemArray.length) {
               this.itemArray.forEach((element:any) => {
                 if (element._id != id) {
@@ -2997,86 +3080,27 @@ export class NewDirectDispatchComponent implements OnInit {
               this.itemArray = removeArray;
             }
           }
+          
           this.ExportBillLodgement_Form.controls['documents'].setValue(this.temp);
-
           console.log('test2', id, this.itemArray, this.temp, this.PDF_LIST);
         } else {
           this.toastr.error(
             "You Don't Have Any Packing List Documnet Linkend with this Shipping Bill"
           );
+          $(event.target).prop('checked',false);
         }
       } else {
         this.toastr.error(
           "You Don't Have Any Commercial Invoice Linkend with this Shipping Bill"
         );
+        $(event.target).prop('checked',false);
       }
     } else {
       this.toastr.error(
         "You Don't Have Any AirWay / BLCopy Documnet Linkend with this Shipping Bill"
       );
+      $(event.target).prop('checked',false);
     }
-  }
-
-  shippingMap: Map<number, any[]> = new Map<number, any[]>();
-  SHIPPING_MAP: any = [];
-  Advance_Amount_Sum: any = [];
-  PROCEED_BTN_DISABLED: boolean = false;
-  filterSum: any = [];
-  balanceAvai: any = '';
-  async addToSbArray(irDataItem: any, e) {
-    this.balanceAvai = this.itemArray.reduce(function (a, b) { return a + parseFloat(b?.balanceAvai) }, 0)
-    if (this.filterSum.toString() != this.balanceAvai.toString()) {
-      if (e.target.checked) {
-        console.log('Checked');
-        let advance = this.advanceArray.some(
-          (item:any) => item.valueInternal === irDataItem.billNo
-        );
-        if (!advance) {
-          console.log('Adding');
-          irDataItem.Used_Balance = irDataItem?.BalanceAvail;
-          let details:any = {
-            valueInternal: irDataItem.billNo,
-            irDataItem: irDataItem,
-            sb: this.currentSbForAdvance,
-          };
-          this.Advance_Amount_Sum.push(details)
-          this.filterSum = this.Advance_Amount_Sum.reduce(function (a, b) { return a + b?.irDataItem?.BalanceAvail }, 0);
-          if (this.filterSum > this.balanceAvai) {
-            this.Advance_Amount_Sum.pop();
-            var sum = this.Advance_Amount_Sum.reduce(function (a, b) { return a + b?.irDataItem?.BalanceAvail }, 0);
-            let temp:any = details;
-            var last_amount = parseFloat(this.TO_FIXED(this.balanceAvai - sum, 2));
-            temp.irDataItem.BalanceAvail = parseFloat(this.TO_FIXED(details?.irDataItem?.BalanceAvail - last_amount, 2));
-            this.advanceArray.push(temp)
-            this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(temp.irDataItem)
-            this.filterSum = parseFloat(this.TO_FIXED(sum + last_amount, 2));
-            irDataItem.Used_Balance = last_amount;
-            this.ExportBillLodgement_Form.controls['Carry_Amount'].setValue(temp);
-            console.log(details.irDataItem.BalanceAvail, sum, this.filterSum, last_amount, 'asdfasfadfsa')
-          } else {
-            this.PROCEED_BTN_DISABLED = true;
-            this.advanceArray.push(details);
-            this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(irDataItem)
-          }
-          this.ExportBillLodgement_Form.controls['Total_SB_Amount'].setValue(this.TO_FIXED(this.balanceAvai, 2));
-          this.ExportBillLodgement_Form.controls['Total_FIRX_Amount'].setValue(this.TO_FIXED(this.filterSum, 2));
-          this.ExportBillLodgement_Form.controls['Total_Reaming_Amount'].setValue(this.TO_FIXED(this.balanceAvai - this.filterSum, 2));
-        }
-      } else {
-        console.log('removing, uncheked');
-        this.advanceArray = this.advanceArray.filter((item:any) => item.valueInternal !== irDataItem.billNo);
-        this.Advance_Amount_Sum = this.Advance_Amount_Sum.filter((item) => item.valueInternal !== irDataItem.billNo);
-      }
-      this.SHIPPING_MAP[this.currentSbForAdvance] = this.advanceArray;
-      this.shippingMap.set(this.refSbNo, JSON.parse(JSON.stringify(this.advanceArray)));
-      this.ExportBillLodgement_Form.controls['Advance_reference_Number'].setValue(this.advanceArray);
-      this.ExportBillLodgement_Form.controls['Shipping_bill_list'].setValue(this.itemArray);
-
-    } else {
-      e.target.checked = false;
-      this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount', "You've exceeded the maximum transaction amount set by your Sb amount..")
-    }
-    console.log(this.advanceArray, this.balanceAvai, this.filterSum, this.Advance_Amount_Sum, this.shippingMap, this.ACCORDING_LIST, 'Deva Hello0*************************');
   }
 
   clearData() {
@@ -3089,7 +3113,7 @@ export class NewDirectDispatchComponent implements OnInit {
     window.location.reload();
   }
   TO_FIXED(amount: any, fixed_position: any) {
-    return (amount).toFixed(fixed_position);
+    return !isNaN(amount)?parseFloat(amount).toFixed(fixed_position):0;
   }
   exportToExcel() {
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
@@ -3639,7 +3663,8 @@ export class NewDirectDispatchComponent implements OnInit {
       }
     }
   }
-
+  
+TOTAL_FIRX_AMOUNT:any=0;
   public mergeIr2() {
     let filterIrdata:any = [];
     if (this.item1 && this.item1.length) {
@@ -3689,9 +3714,11 @@ export class NewDirectDispatchComponent implements OnInit {
         filterIrdata.push(newVal);
       }
     }
-    this.item13 = filterIrdata
+    this.item13 = filterIrdata;
+    this.item13?.forEach(element => {
+       element['isEnabled']=false;
+    });
     console.log("filterForex", filterIrdata, this.item13)
-
   }
 
   doneToDox() {
@@ -3774,6 +3801,10 @@ export class NewDirectDispatchComponent implements OnInit {
     'DirectDispatch': {
       Show: '',
       Hide: ''
+    },
+    'ThirdPartyRemittance': {
+      Show: '',
+      Hide: ''
     }
   }
   ClassRetrun(mainkey, key, class1, class2, condition) {
@@ -3804,127 +3835,205 @@ export class NewDirectDispatchComponent implements OnInit {
     return data != undefined ? data.length : 0;
   }
  async PREVIEWS_URL() {
-    this.PREVIEWS_URL_LIST = [];
-    var tep:any=[];
-    for (let i = 0; i < this.itemArray.length; i++) {
-      var element = this.itemArray[i]?._id;
-      tep[this.itemArray[i]?.sbno] = []
-      tep[this.itemArray[i]?.sbno].push(this.formerge);
-      for (let index = 0; index < this.temp[element].length; index++) {
-        tep[this.itemArray[i]?.sbno].push(this.temp[element][index]?.pdf)
-      }
-    }
-    for (let i = 0; i < this.itemArray.length; i++) {
-      this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno] = []
-      await this.mergerpdf.mergePdf(tep[this.itemArray[i]?.sbno]).then((merge: any) => {
-        this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno].push(merge)
-      })
-    }
+ this.PreviewSlideToggle(this.itemArray[0]?.sbno)
+    // for (let i = 0; i < this.itemArray.length; i++) {
+    //   var element = this.itemArray[i]?._id;
+    //   tep[this.itemArray[i]?.sbno] = []
+    //   tep[this.itemArray[i]?.sbno][0]=this.formerge;
+    //   for (let index = 0; index < this.temp[element].length; index++) {
+    //     tep[this.itemArray[i]?.sbno].push(this.temp[element][index]?.pdf)
+    //   }
+    // }
+    // for (let i = 0; i < this.itemArray.length; i++) {
+    //   this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno] = []
+    //   await this.mergerpdf.mergePdf(tep[this.itemArray[i]?.sbno]).then((merge: any) => {
+    //     this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno].push(merge)
+    //   })
+    // }
   }
-  SendApproval(Status: string, UniqueId: any, model: any) {
-    if (UniqueId != null) {
-      var temp_doc: any = [];
-      temp_doc[0] = this.value?.changingThisBreaksApplicationSecurity;
-      for (let i = 0; i < this.itemArray.length; i++) {
-        var element = this.itemArray[i]?._id;
-        for (let index = 0; index < this.temp[element].length; index++) {
-          if (this.temp[element][index]?.pdf != '' && this.temp[element][index]?.pdf != undefined) {
-            temp_doc.push(this.temp[element][index]?.pdf)
-          }
+  temp_doc: any = [];
+  tp: any = {
+    firxNumber: [],
+    firxDate: [],
+    firxCurrency: [],
+    firxAmount: [],
+    firxCommision: [],
+    firxRecAmo: [],
+    id: [],
+  };
+  BOOLEAN: boolean = false;
+  MERGE_ALL_PDF: any = [];
+  async SlideToggle(event: any) {
+    var temp: any = [];
+    const id = event.tab.content.viewContainerRef.element.nativeElement.id;
+    this.PDF_LIST = [];
+    var sbfilter=this.itemArray.filter((item:any)=>item?._id==id);
+    this.fillForm(sbfilter[0],'SB_'+sbfilter[0]?.sbno).then(async ()=>{
+      for (let index = 0; index < this.temp[id].length; index++) {
+        if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
+          temp.push(this.temp[id][index]?.pdf)
+          this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
+            console.log('downloadEachFile', res);
+            res.arrayBuffer().then((data: any) => {
+              var base64String = this._arrayBufferToBase64(data);
+              const x = 'data:application/pdf;base64,' + base64String;
+              this.PDF_LIST.push({
+                pdf: x,
+                name: this.temp[id][index]['name']
+              })
+              console.log('downloadEachFile', data);
+            });
+          });
+        }
+        if ((index + 1) == this.temp[id].length) {
+          await this.pdfmerge.mergeAllPDF(temp).then((data: any) => {
+            console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
+            this.MERGE_ALL_PDF[0] = data.toString();
+          })
         }
       }
+    });
+   
+  }
+  async PreviewSlideToggle(event: any) {
+    const id:any = event?.tab?.content?.viewContainerRef?.element?.nativeElement?.id!=undefined?event.tab.content.viewContainerRef.element.nativeElement.id:event;
+    var tempfilter:any=this.itemArray.filter((item:any)=>item?.sbno==id);
+   
+    await this.fillForm(tempfilter[0],'SB_'+id).then(async (fillpdf:any)=>{
+      this.PDF_LIST = [];
+      this.PREVIEWS_URL_LIST = [];
+      var tep:any=[];
+      var temppdflits:any=[];
+      tep[tempfilter[0]?._id] = []
+      tep[tempfilter[0]?._id][0]=fillpdf;
+      temppdflits[0]=fillpdf;
+      for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+          tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
+          if (this.temp[tempfilter[0]?._id][index]?.pdf!=undefined) {
+            temppdflits.push(this.temp[tempfilter[0]?._id][index]?.pdf)
+          }
+          if ((index+1)==this.temp[tempfilter[0]?._id].length) {
+            await this.mergerpdf.mergePdf(temppdflits).then((merge: any) => {
+              this.PREVIEWS_URL_LIST.push(merge);
+              console.log(this.tp,this.temp_doc,this.PREVIEWS_URL_LIST,'PreviewSlideToggle')
+            });
+          }
+      }
+      for (let index = 0; index < this.advanceArray['SB_'+id].length; index++) {
+        const element:any = this.advanceArray['SB_'+id][index];
+        this.tp['firxNumber'].push(element?.irDataItem?.billNo)
+        this.tp['firxDate'].push(element?.irDataItem?.date)
+        this.tp['firxCurrency'].push(element?.irDataItem?.currency)
+        this.tp['firxAmount'].push(element?.irDataItem?.amount)
+        this.tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
+        this.tp['firxRecAmo'].push(0);        
+        this.tp['id'].push(element?.irDataItem?._id)
+      }
+      this.temp_doc[0] = this.value?.changingThisBreaksApplicationSecurity;
+        for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+          if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+            this.temp_doc.push(this.temp[tempfilter[0]?._id][index]?.pdf)
+          }
+        }
+    });
+  }
+  SendApproval(Status: string, UniqueId: any, model: any) {
+    if (UniqueId != null) { 
+     
       var approval_data: any = {
-        id: 'Export-Direct-Dispatch' + UniqueId,
+        id: 'Export-Direct-Dispatch' + this.tp?.firxAmount,
         tableName: 'Export-Direct-Dispatch',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
         status: 'pending',
-        documents: temp_doc,
+        documents: this.temp_doc,
         Types: 'downloadPDF',
         TypeOfPage: 'Transaction',
         FileType: this.USER_DATA?.sideMenu
       }
-      var tp: any = {
-        firxNumber: [],
-        firxDate: [],
-        firxCurrency: [],
-        firxAmount: [],
-        firxCommision: [],
-        firxRecAmo: []
-      };
-      for (let index = 0; index < this.advanceArray.length; index++) {
-        const element:any = this.advanceArray[index];
-        tp['firxNumber'].push(element?.irDataItem?.billNo)
-        tp['firxDate'].push(element?.irDataItem?.date)
-        tp['firxCurrency'].push(element?.irDataItem?.currency)
-        tp['firxAmount'].push(element?.irDataItem?.amount)
-        tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
-        tp['firxRecAmo'].push(0)
-      }
-      this.getStatusCheckerMaker('Export-Direct-Dispatch' + UniqueId).then((res: any) => {
+      var pipo:any=this.itemArray.filter((item:any)=>item?._id.indexOf(UniqueId)!=-1)[0]?.pipo;
+      var pipo_id:any=[];
+      pipo.forEach(element => {
+        pipo_id.push(element?._id)
+      });
+      this.getStatusCheckerMaker('Export-Direct-Dispatch' + this.tp?.firxAmount).then((res: any) => {
         console.log(approval_data, res, 'approval_data')
-        if (res?.id != 'Export-Direct-Dispatch' + UniqueId) {
+        if (res?.id != 'Export-Direct-Dispatch' + this.tp?.firxAmount) {
           if (Status == '' || Status == null || Status == 'Rejected') {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
               this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
-              this.ExportBillLodgement_Form.controls['documents'].setValue(temp_doc);
+              this.ExportBillLodgement_Form.controls['documents'].setValue(this.temp_doc);
+              this.ExportBillLodgement_Form.controls['Url_Redirect'].setValue({file:'export',document:'blCopyref'})
               if (this.Lodgement['AgainstAdvanceReceipt']?.Hide!='no') {
                 var data:any={
                   data:this.ExportBillLodgement_Form.value,
                   TypeTransaction:'Export-Direct-Dispatch',
                   fileType:'Export',
-                  UserDetails:approval_data?.id
+                  UserDetails:approval_data?.id,
+                  pipo:pipo_id
                 }
                 this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
-                  for (let index = 0; index < this.ExportBillLodgement_Form.value?.Advance_reference_Number?.length; index++) {
-                    const element = this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.irDataItem;
-                    this.documentService.Update_Amount_by_Table({
-                      tableName: 'iradvices',
-                      id: element._id,
-                      query: {
-                        sbno: [this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb]
-                      }
-                    }).subscribe((list: any) => {
-  
-                    })
+                  let updatedData = {
+                    "TransactionRef": [
+                      res1._id,
+                    ]
                   }
-                  this.documentService.Update_Amount_by_Table({
-                    tableName: 'iradvices',
-                    id: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?._id,
-                    query: {
-                      BalanceAvail: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.BalanceAvail,
-                      sbno: [this.ExportBillLodgement_Form.value?.Carry_Amount?.sb]
-                    }
-                  }).subscribe((r1: any) => {
-                    var query: any = {
-                      firxNumber: tp?.firxNumber.toString(),
-                      firxDate: tp?.firxDate.toString(),
-                      firxCurrency: tp?.firxCurrency.toString(),
-                      firxAmount: tp?.firxAmount.toString(),
-                      firxCommision: tp?.firxCommision.toString(),
-                      firxRecAmo: '0'
-                    }
-                    if (this.ExportBillLodgement_Form.value?.Total_Reaming_Amount != 0) {
-                      query = {
-                        firxNumber: tp?.firxNumber.toString(),
-                        firxDate: tp?.firxDate.toString(),
-                        firxCurrency: tp?.firxCurrency.toString(),
-                        firxAmount: tp?.firxAmount.toString(),
-                        firxCommision: tp?.firxCommision.toString(),
-                        firxRecAmo: '0',
-                        fobValue: this.ExportBillLodgement_Form.value?.Total_Reaming_Amount
+                  this.userService.updateManyPipo(pipo_id,'export','', updatedData).subscribe((data) => {
+                      console.log('king123');
+                      console.log(data);
+                      for (let index = 0; index < this.ExportBillLodgement_Form.value?.Advance_reference_Number?.length; index++) {
+                        const element = this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.irDataItem;
+                        this.documentService.Update_Amount_by_Table({
+                          tableName: 'iradvices',
+                          id: element._id,
+                          query: {
+                            sbno: [this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb]
+                          }
+                        }).subscribe((list: any) => {
+      
+                        })
                       }
+                      this.documentService.Update_Amount_by_Table({
+                        tableName: 'iradvices',
+                        id: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?._id,
+                        query: {
+                          BalanceAvail: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.BalanceAvail,
+                          sbno: [this.ExportBillLodgement_Form.value?.Carry_Amount?.sb]
+                        }
+                      }).subscribe((r1: any) => {
+                        var query: any = {
+                          firxNumber: this.tp?.firxNumber.toString(),
+                          firxDate: this.tp?.firxDate.toString(),
+                          firxCurrency: this.tp?.firxCurrency.toString(),
+                          firxAmount: this.tp?.firxAmount.toString(),
+                          firxCommision: this.tp?.firxCommision.toString(),
+                          firxRecAmo: '0'
+                        }
+                        if (this.ExportBillLodgement_Form.value?.Total_Reaming_Amount != 0) {
+                          query = {
+                            firxNumber: this.tp?.firxNumber.toString(),
+                            firxDate: this.tp?.firxDate.toString(),
+                            firxCurrency: this.tp?.firxCurrency.toString(),
+                            firxAmount: this.tp?.firxAmount.toString(),
+                            firxCommision: this.tp?.firxCommision.toString(),
+                            firxRecAmo: '0',
+                            fobValue: this.ExportBillLodgement_Form.value?.Total_Reaming_Amount
+                          }
+                        }
+                        this.documentService.Update_Amount_by_Table({
+                          tableName: 'masterrecord',
+                          id: UniqueId,
+                          query: query
+                        }).subscribe((r2: any) => {
+                          console.log(r2, 'masterrecord')
+                          // model.style.display = 'none';
+                          // this.router.navigate(['/home/dashboardTask'])
+                        })
+                      });
+                    },(error) => {
+                      console.log('error');
                     }
-                    this.documentService.Update_Amount_by_Table({
-                      tableName: 'masterrecord',
-                      id: UniqueId,
-                      query: query
-                    }).subscribe((r2: any) => {
-                      console.log(r2, 'masterrecord')
-                      // model.style.display = 'none';
-                      // this.router.navigate(['/home/dashboardTask'])
-                    })
-                  });
+                  );
                   console.log('addExportBillLodgment', res1);
                 })
               }
@@ -3936,12 +4045,65 @@ export class NewDirectDispatchComponent implements OnInit {
         }
       });
     }
-    console.log('Export-Direct-Dispatch' + UniqueId, UniqueId, approval_data, 'uiiiiiiiiiiiiii')
+   
+    console.log('Export-Direct-Dispatch' + UniqueId, UniqueId,pipo,approval_data, 'uiiiiiiiiiiiiii')
   }
   getStatusCheckerMaker(id) {
     return new Promise((resolve, reject) => {
       this.documentService.getDownloadStatus({ id: id, $or: [{ "deleteflag": '-1' }, { "deleteflag": '1' }, { "deleteflag": '2' }] }).subscribe((res: any) => resolve(res[0]))
     })
+  }
+  HIDE_SHOW:any={
+    PANEL_1:true,
+    PANEL_2:false
+  };
+  HIDE_SHOW_POPUP(key){
+    if (this.sbArray.length==0) {
+      this.toastr.warning('Please select at least one shipping bill...');
+      return;
+    }else{
+      for (const key in this.HIDE_SHOW) {
+        this.HIDE_SHOW[key]=false;
+      }
+      
+      this.HIDE_SHOW[key]=true;
+    }
+  }
+  filterBuyerName($event){
+    if($event!='Select Buyer Name'){
+      this.nameSearch4=$event;
+      var temp_filter:any=this.item13.filter((item:any)=>item?.buyerName.includes($event));
+      this.TOTAL_FIRX_AMOUNT=parseFloat(temp_filter.reduce((a, b)=> parseFloat(a) + parseFloat(b?.BalanceAvail),0)).toFixed(3);
+    }else{
+      this.nameSearch4=''
+    }
+    this.CHECKEBOX_SELECTION.SHIPPING_BILL=[]
+  }
+  ParseFloat(num1, num2) {
+    var val: any = parseFloat(num2) != undefined ? parseFloat(num1) - parseFloat(num2) : 0
+    return !isNaN(val) ? parseFloat(val).toFixed(2) : num1;
+  }
+  SELECTED_SHIPPING_BILL:any=[];
+  _SHIPPING_BILL(i,data:any,amount:any,model:any){
+    if (this.percentCalculation(data?.amount,25)>parseFloat(amount)) {
+      console.log(data,'_SHIPPING_BILL')
+      this.SELECTED_SHIPPING_BILL={index:i,data:data}; 
+    }else{
+      model.style.display='none'
+      this.toastr.error('Max permissible discount amount exceeded,Please select write off module.')
+    }
+  }
+  percentCalculation(a, b){
+    var c:any = (parseFloat(a)*parseFloat(b))/100;
+    return parseFloat(c);
+  }
+  SELECTED_VIEW_FIRX:any=[];
+  _VIEW_FIRX(i,data:any){
+    console.log(data,'_VIEW_FIRX')
+    this.SELECTED_VIEW_FIRX={index:i,data:data};
+  }
+  ObjectLength(data){
+  return Object.keys(data)?.length;
   }
 }
 

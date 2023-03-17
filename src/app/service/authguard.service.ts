@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 export class AuthGuard {
   public token: any;
   public role: any;
-    authToken: string;
+    authToken: any;
 
   constructor(public router: Router) { }
 

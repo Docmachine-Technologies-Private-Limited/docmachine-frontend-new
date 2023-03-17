@@ -64,6 +64,14 @@ export class UserService {
       httpOptions
     );
   }
+  
+  public getUserbyEmail(loginData) {
+    const httpOptions = {
+      headers: new HttpHeaders({"Content-Type": "application/json"}),
+    };
+    console.log(httpOptions);
+    return this.http.post(`${this.api_base}/authenticate/getUserbyEmail`,loginData,httpOptions);
+  }
 
   public updatePsw(data, email) {
     return this.http.put(`${this.api_base}/authenticate/updatepsw`, {
