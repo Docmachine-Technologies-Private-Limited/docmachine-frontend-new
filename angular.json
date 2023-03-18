@@ -84,10 +84,10 @@
             "development": {
               "buildOptimizer": true,
               "optimization": true,
-              "vendorChunk": true,
+              "vendorChunk": false,
               "extractLicenses": false,
               "sourceMap": false,
-              "namedChunks": true,
+              "namedChunks": false,
               "outputHashing": "none",
               "statsJson": false
             }
