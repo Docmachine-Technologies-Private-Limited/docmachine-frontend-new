@@ -589,7 +589,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 async PREVIEWS_URL(model,id) {
     this.PREVIEWS_URL_LIST=[];
     this.PromiseReturn().then(async (data:any)=>{
-      await this.mergerpdf.mergePdf(data).then((merge: any) => {
+      var temp:any=data.filter(n => n)
+      await this.mergerpdf.mergePdf(temp).then((merge: any) => {
         this.PREVIEWS_URL_LIST.push(merge)
         this.PREVIEWS_URL_STRING=merge;
         model.style.display='block';
@@ -621,7 +622,7 @@ async PREVIEWS_URL(model,id) {
     return new Promise(async (resolve,reject)=>{
       for (let i = 0; i < this.selectedItems.length; i++) {
         for (let index = 0; index < this.temp1[i].length; index++) {
-          if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != undefined) {
+          if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != null && this.temp1[i][index]?.pdf != undefined) {
             temp.push(this.temp1[i][index]?.pdf);
           }
         }

@@ -3886,7 +3886,8 @@ TOTAL_FIRX_AMOUNT:any=0;
           });
         }
         if ((index + 1) == this.temp[id].length) {
-          await this.pdfmerge.mergeAllPDF(temp).then((data: any) => {
+          var fitertemp:any=temp.filter(n => n)
+          await this.pdfmerge.mergeAllPDF(fitertemp).then((data: any) => {
             console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
             this.MERGE_ALL_PDF[0] = data.toString();
           })
@@ -3913,7 +3914,8 @@ TOTAL_FIRX_AMOUNT:any=0;
             temppdflits.push(this.temp[tempfilter[0]?._id][index]?.pdf)
           }
           if ((index+1)==this.temp[tempfilter[0]?._id].length) {
-            await this.mergerpdf.mergePdf(temppdflits).then((merge: any) => {
+            var fitertemp:any=temppdflits.filter(n => n)
+            await this.pdfmerge.mergeAllPDF(fitertemp).then((merge: any) => {
               this.PREVIEWS_URL_LIST.push(merge);
               console.log(this.tp,this.temp_doc,this.PREVIEWS_URL_LIST,'PreviewSlideToggle')
             });

@@ -2510,7 +2510,7 @@ export class UploadComponent implements OnInit {
         console.log('My Code');
         this.message = args[1].message;
         this.override = true;
-        if (args[1].data.sbno) {
+        if (args[1].data.sbno && this.documentType=='sb') {
           this.res = new ShippingBill(args[1].data);
           this.sbNo = true;
           console.log(this.res);
@@ -2520,7 +2520,7 @@ export class UploadComponent implements OnInit {
           this.res = new BoeBill(args[1].data);
           this.boeNumber = true;
           console.log(this.res);
-        } else if (args[1].data.billNo) {
+        } else if (args[1].data.billNo && this.documentType=='irAdvice' || this.documentType=='orAdvice') {
           this.res = new IRAdvice(args[1].data);
           this.billNo = true;
           this.PDF_READER_DATA = args[1].data;

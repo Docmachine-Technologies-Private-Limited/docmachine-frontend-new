@@ -143,7 +143,7 @@ export class TransactionDashboardComponent implements OnInit {
       });
     });
     const compareArrays = (a, b) => {
-      return JSON.stringify(a) === JSON.stringify(b);
+      return a!=undefined?JSON.stringify(a) === JSON.stringify(b):null;
     };
   }
   mergeTransaction(res: any, fileType, filterType: any) {

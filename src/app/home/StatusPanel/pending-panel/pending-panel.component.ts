@@ -97,7 +97,8 @@ async openView(url: any, index: any) {
     if (url!=undefined && url!='') {
       if (this.DATA_CREATE[index]['Types'] == 'downloadPDF') {
         try {
-          await this.mergerpdf.mergePdf(url).then((merge: any) => {
+          var temp:any=url.filter(n => n)
+          await this.mergerpdf.mergePdf(temp).then((merge: any) => {
             this.CustomConfirmDialogModel.IframeConfirmDialogModel('View',[merge],this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
           })
         } catch (error) {
