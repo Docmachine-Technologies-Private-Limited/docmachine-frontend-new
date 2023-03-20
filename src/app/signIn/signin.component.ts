@@ -31,13 +31,11 @@ export class SigninComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     let token = this.authGuard.loadFromLocalStorage();
     console.log(token,'tokenn....');
     if (token && this.authGuard.getLocalStorage('LOGIN_OTP')==true) {
       this.router.navigate(["/home/dashboardTask"]);
     }
-
     this.password = 'password';
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],

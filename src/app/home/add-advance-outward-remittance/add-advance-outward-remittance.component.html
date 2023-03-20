@@ -171,8 +171,7 @@
                                                         Amount</label>
                                                     <input type="text" class="form-control"
                                                         formControlName="remittanceAmount" id="remittanceAmount"
-                                                        placeholder="Remittance Amount" autocomplete="off"
-                                                        (ngModelChange)="addNums()" ngModel>
+                                                        placeholder="Remittance Amount" autocomplete="off" (keyup)="InputKeyPress()" ngModel>
                                                     <div *ngIf="submitted && form.remittanceAmount.errors"
                                                         class='errorText'>
                                                         <div *ngIf="form.remittanceAmount.errors.required">
@@ -234,7 +233,7 @@
                                                     amount</label>
                                                 <input type="text" formControlName="RemittanceTotalAmount"
                                                     class="form-control" id="totalremittanceAmount"
-                                                    [ngModel]="sumTotalAmount" placeholder="Remittance amount" readonly>
+                                                    [ngModel]="this.REMIITANCE_SUM" placeholder="Remittance amount" readonly>
                                             </div>
                                         </div>
                                         <div class="row" *ngIf="sumTotalAmount != 0 && sumTotalAmount > 200000">

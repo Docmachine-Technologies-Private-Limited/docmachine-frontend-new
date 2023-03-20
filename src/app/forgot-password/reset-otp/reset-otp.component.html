@@ -5,7 +5,7 @@
                 class="card-title text-center">
             <p *ngIf="otp_url==''" class="text">Enter your registered email address.<br>
         </div>
-        <div submit *ngIf="otp_url==''">
+        <div *ngIf="otp_url==''">
             <label class="lable " for="">Enter your email address</label> <br>
             <input formControlName="emailId" class="input-mail" placeholder="Your email address" type="text" #email>
             <br>

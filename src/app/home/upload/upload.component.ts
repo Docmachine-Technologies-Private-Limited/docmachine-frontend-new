@@ -1212,6 +1212,7 @@ export class UploadComponent implements OnInit {
     e.form.value.fobCurrency = e.form.value.fobCurrency?.type != undefined ? e.form.value.fobCurrency.type : e.form.value.fobCurrency;
     e.form.value.freightCurrency = e.form.value.freightCurrency?.type != undefined ? e.form.value.freightCurrency.type : e.form.value.freightCurrency;
     e.form.value.insuranceCurrency = e.form.value.insuranceCurrency?.type != undefined ? e.form.value.insuranceCurrency.type : e.form.value.insuranceCurrency;
+    e.form.value.currency = e.form.value.currency?.type != undefined ? e.form.value.currency.type : e.form.value.currency;
     e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.pipo = this.pipoArr;
     console.log('buyername for BL', e.form.value.buyerName);
@@ -1480,7 +1481,6 @@ export class UploadComponent implements OnInit {
     var temp: any = {
       ...this.piPoForm.value,
     }
-    this.piPoForm.value.currency = this.piPoForm.value?.currency?.type;
 
     if (this.file) {
       if (this.file == 'import') {

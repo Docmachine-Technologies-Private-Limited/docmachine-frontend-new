@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -13,7 +13,7 @@ import { UserService } from './service/user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   userData: any = [];
   userActivity;
   userInactive: Subject<any> = new Subject();
@@ -28,13 +28,24 @@ export class AppComponent {
     console.log('AppConfig', AppConfig);
     this.setTimeout();
     this.userInactive.subscribe(() => console.log('user has been inactive for 3s'));
+    this.userService.getUserDetail().then((user: any) => {
+      this.userData = user?.result
+      console.log("AppComponentuserData", this.userData)
+      let token = this.authGuard.loadFromLocalStorage();
+      var session:any=JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
+      if (this.authGuard.getLocalStorage('PERMISSION')==null || this.userData?.role!=session?.role && !token) {
+          this.authservice.logout();
+          this.router.navigate(['/login']);
+      }
+    });
   }
   ngOnInit(): void {
     this.userService.getUserDetail().then((user: any) => {
       this.userData = user?.result
-      console.log("userData", this.userData)
+      console.log("AppComponentuserData", this.userData)
+      let token = this.authGuard.loadFromLocalStorage();
       var session:any=JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
-      if (this.authGuard.getLocalStorage('PERMISSION')==null || this.userData?.role!=session?.role) {
+      if (this.authGuard.getLocalStorage('PERMISSION')==null || this.userData?.role!=session?.role && !token) {
           this.authservice.logout();
           this.router.navigate(['/login']);
       }

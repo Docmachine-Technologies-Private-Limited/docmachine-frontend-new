@@ -310,7 +310,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     })
 
     const text1Field = form.createTextField('best.text1')
-    text1Field.setText(this.sumTotalAmount.toString())
+    text1Field.setText(this.REMIITANCE_SUM.toString())
     text1Field.addToPage(firstpage, {
       x: 409, y: 555, width: 132,
       height: 12, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
@@ -537,7 +537,14 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.authToken = token;
     return this.authToken;
   }
-
+  REMIITANCE_SUM:any=0;
+  InputKeyPress(){
+    this.REMIITANCE_SUM = this.pipoForm?.controls?.pipoTerm?.value.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
+    setTimeout(()=>{
+      this.fillForm()
+    },500)
+    console.log(this.pipoForm.controls.pipoTerm,'this.pipoForm.controls.pipoTerm')
+  }
   // ----------------------------- end handle image upload ----------------------------------
 
 

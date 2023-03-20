@@ -1,13 +1,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div style="padding-right: 0 !important; overflow: hidden" class="container-fluid">
     <div style="display: flex; width: 100%" class="no-gutter">
-        <!-- The image half -->
-
-        <div class="bg-dark mainClass">
+        <div class="bg-dark mainClass" style="overflow: auto;height: 100vh;">
             <div style="margin-top: 3%; width: 90%; text-align: right">
-                <button style="cursor: pointer" class="leftl btn1" [class.disable]="isVisible" [disabled]="isVisible" (click)="onLogin()">
-          Login
-        </button>
+                <button style="cursor: pointer" class="leftl btn1" [class.disable]="isVisible" [disabled]="isVisible"
+                    (click)="onLogin()">
+                    Login
+                </button>
             </div>
             <div class="col-lg-10 col-xl-9 mx-auto form-element">
                 <h6 class="display-5">Signup</h6>
@@ -17,7 +16,8 @@
                 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                     <div class="form-group mb-3">
                         <label>Name</label>
-                        <input id="fullName" type="name" autocomplete="off" formControlName="fullName" placeholder="Your Full Name" required="" autofocus="" class="
+                        <input id="fullName" type="name" autocomplete="off" formControlName="fullName"
+                            placeholder="Your Full Name" required="" autofocus="" class="
                       form-control
                       rounded-pill
                       border-0
@@ -32,8 +32,10 @@
                     </div>
                     <div class="form-group mb-3">
                         <label>Email</label>
-                        <input id="inputEmail" type="email" formControlName="email" placeholder="Your Email" required="" class="
-                      form-control rounded-pill border-0 shadow-sm px-4 email input" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" autocomplete="off" />
+                        <input id="inputEmail" type="email" formControlName="email" placeholder="Your Email" required=""
+                            class="
+                      form-control rounded-pill border-0 shadow-sm px-4 email input"
+                            [ngClass]="{ 'is-invalid': submitted && f.email.errors }" autocomplete="off" />
                         <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                             <div *ngIf="f.email.errors.required" style="margin-left: 15px;">Email is required</div>
                             <div *ngIf="f.email.errors.pattern" style="margin-left: 15px;">Not an Email</div>
@@ -42,7 +44,8 @@
 
                     <div class="form-group mb-3">
                         <label>Password</label>
-                        <input [type]="password" formControlName="password" autocomplete="off" id="password" type="password" placeholder="Your Password" required="" class="
+                        <input [type]="password" formControlName="password" autocomplete="off" id="password"
+                            type="password" placeholder="Your Password" required="" class="
                       form-control
                       rounded-pill
                       border-0
@@ -57,16 +60,19 @@
                             <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show"></i>
                         </div>
                         <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                            <div *ngIf="f.password.errors.required" style="margin-left: 15px; margin-top: -16px;">Please enter password
+                            <div *ngIf="f.password.errors.required" style="margin-left: 15px; margin-top: -16px;">Please
+                                enter password
                             </div>
-                            <div *ngIf="f.password.errors.minlength" style="margin-left: 15px; margin-top: -16px;">Password should be more than 6 letter
+                            <div *ngIf="f.password.errors.minlength" style="margin-left: 15px; margin-top: -16px;">
+                                Password should be more than 6 letter
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group mb-3">
                         <label>Confirm Password</label>
-                        <input [type]="password1" formControlName="confirmPassword" autocomplete="off" id="password" type="password" placeholder="Confirm Your Password" required="" class="
+                        <input [type]="password1" formControlName="confirmPassword" autocomplete="off" id="password"
+                            type="password" placeholder="Confirm Your Password" required="" class="
                       form-control
                       rounded-pill
                       border-0
@@ -81,23 +87,28 @@
                             <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show1"></i>
                         </div>
                         <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
-                            <div *ngIf="f.confirmPassword.errors.required" style="margin-left: 15px; margin-top: -16px;">
+                            <div *ngIf="f.confirmPassword.errors.required"
+                                style="margin-left: 15px; margin-top: -16px;">
                                 Please enter confirm password
                             </div>
-                            <div *ngIf="f.confirmPassword.errors.minlength" style="margin-left: 15px; margin-top: -16px;">
+                            <div *ngIf="f.confirmPassword.errors.minlength"
+                                style="margin-left: 15px; margin-top: -16px;">
                                 Password should be more than 6 letter
                             </div>
                         </div>
                     </div>
                     <p class="text-muted mb-4 bottom-text">
-                        <input style="cursor: pointer;" formControlName="termsAndCondition" type="checkbox" required="" class="checkbox" (change)="onCheck($event)" /> By continuing, you agree to DocMachine
-                        <a style="cursor: pointer;" (click)="open(content)">Terms of service</a> we will manage information as described in our <a style="cursor: pointer;">privacy
-            policy agrement</a>
+                        <input style="cursor: pointer;" formControlName="termsAndCondition" type="checkbox" required=""
+                            class="checkbox" (change)="onCheck($event)" /> By continuing, you agree to DocMachine
+                        <a style="cursor: pointer;" (click)="open(content)">Terms of service</a> we will manage
+                        information as described in our <a style="cursor: pointer;">privacy
+                            policy agrement</a>
 
                     </p>
 
-                    <button type="submit" class="btn" style="margin-bottom: 20px" [class.disable]="isDisabled" [disabled]="isDisabled">Register
-          </button>
+                    <button type="submit" class="btn" style="margin-bottom: 20px" [class.disable]="isDisabled"
+                        [disabled]="isDisabled">Register
+                    </button>
                 </form>
             </div>
         </div>
@@ -115,34 +126,24 @@
 </div>
 
 <ng-template #content let-modal>
-
     <div class="modal-body">
         <div class="row no-gutter">
-            <!-- The image half -->
-            <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
-
-
-            <!-- The content half -->
-            <!-- DB_URL=mongodb://localhost:27017/docMachine -->
-            <div class="col-md-7 bg-dark" style="margin: 10px;">
+                <div class="col-md-7 bg-dark" style="margin: 10px;">
                 <div class="d-flex py-5" style="padding: 0px !important;">
-
-                    <!-- Demo content-->
                     <div class="container popup">
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 mrg">
                                 <h6 class="display-6">SOFTWARE LICENSE AGREEMENT</h6>
-
-                                <iframe src="./../../assets/T&C.html" width="580%" height="500px" style="border: none;"></iframe>
-                                <button type="submit" style="margin-left: 250px;" class="btn" (click)="modal.dismiss('Cross click')">
-                  OK
-                </button>
+                                <iframe src="./../../assets/T&C.html" width="580%" height="500px"
+                                    style="border: none;"></iframe>
+                                <button type="submit" style="margin-left: 250px;" class="btn"
+                                    (click)="modal.dismiss('Cross click')">
+                                    OK
+                                </button>
 
                             </div>
                         </div>
                     </div>
-                    <!-- End -->
-
                 </div>
             </div>
 

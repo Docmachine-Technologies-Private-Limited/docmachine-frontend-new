@@ -56,7 +56,7 @@ export class PDFVIEWERComponent implements OnInit {
           })
         },(err) => console.log('Failed to fetch the pdf'));
     }
-    this.SRC_UPDATE=this.src+'#toolbar=0'
+    this.SRC_UPDATE=this.src+'#toolbar=0&&embedded=true'
     this.URL_IFRAME=this.sanitizer.bypassSecurityTrustResourceUrl(this.SRC_UPDATE)
   }
   zoomIn(url:any) {

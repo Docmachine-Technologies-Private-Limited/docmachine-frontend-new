@@ -1059,14 +1059,16 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
       const text20Field = form.createTextField('best.text20')
       let amount = a['amount'].toString()
-      text20Field.setText(amount)
+      var updatedata:any=this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1];
+      console.log(updatedata,'updatedata')
+      text20Field.setText(updatedata?.Inward_amount_for_disposal)
       text20Field.addToPage(firstpage, {
         x: 150, y: 565, width: 80,
         height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
       })
 
       const text21Field = form.createTextField('best.text21')
-      text21Field.setText('')
+      text21Field.setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal))
       text21Field.addToPage(firstpage, {
         x: 340, y: 580, width: 220,
         height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
@@ -2146,14 +2148,16 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
     const text20Field = form.createTextField('best.text20')
     let amount = a['amount'].toString()
-    text20Field.setText(this.replaceText(data_temp['Amount'], '32A '))
+    var updatedata:any=this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1];
+    console.log(updatedata,'updatedata')
+    text20Field.setText(updatedata?.Inward_amount_for_disposal)
     text20Field.addToPage(firstpage, {
       x: 150, y: 565, width: 80,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text21Field = form.createTextField('best.text21')
-    text21Field.setText(this.Number_to_word(this.replaceText(data_temp['Amount'], '32A ')))
+    text21Field.setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal))
     text21Field.addToPage(firstpage, {
       x: 340, y: 580, width: 220,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,

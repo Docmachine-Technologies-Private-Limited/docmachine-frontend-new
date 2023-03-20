@@ -62,15 +62,15 @@
                                             <div class="col-md-6 col-12">
                                                 <label for="exampleInputPassword1" class="form-label">Select Buyer</label>
                                                 <select class="form-select" aria-label="Default select example"
-                                                    [(ngModel)]="benneName" name="benneName"
+                                                    ngModel name="buyerName"
                                                     (change)=changepipo($event.target.value) #select_ben>
                                                     <option value="">Select Buyer</option>
-                                                    <option value="{{ bene.benneName }}" *ngFor="let bene of benneDetail
-                                                            ">{{ bene.benneName }}
+                                                    <option value="{{ bene.buyer }}" *ngFor="let bene of this.buyerDetail
+                                                            ">{{ bene.buyer }}
                                                     </option>
                                                 </select>
-                                                <div *ngIf="submitted && form.benneName.errors" class='errorText'>
-                                                    <div *ngIf="form.benneName.errors.required">Select Buyer
+                                                <div *ngIf="submitted && form.buyerName.errors" class='errorText'>
+                                                    <div *ngIf="form.buyerName.errors.required">Select Buyer
                                                         is required
                                                     </div>
                                                 </div>

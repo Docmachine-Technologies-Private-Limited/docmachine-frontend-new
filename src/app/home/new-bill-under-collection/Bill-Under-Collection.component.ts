@@ -100,6 +100,8 @@ export class NewBillUnderCollectionComponent implements OnInit {
   LIST_PIPO: any = [];
   sumTotalAmount = 0;
   showOpinionReport = 0;
+  buyerDetail:any=[];
+  
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
@@ -143,7 +145,7 @@ export class NewBillUnderCollectionComponent implements OnInit {
 
     this.pipoForm = this.formBuilder.group({
         bank: new FormControl('', Validators.required),
-        benneName: new FormControl('', Validators.required),
+        buyerName: new FormControl('', Validators.required),
         pi_poNo: new FormControl('', Validators.required),
         currency: new FormControl("",),
         amount: new FormControl("", Validators.required),
@@ -174,14 +176,20 @@ export class NewBillUnderCollectionComponent implements OnInit {
         },error => {
           console.log("error")
         });
-
+        this.userService.getBuyer(1).subscribe(
+          (res: any) => {
+            (this.buyerDetail = res.data),
+              console.log('Benne Detail4', this.buyerDetail);
+          },
+          (err) => console.log('Error', err)
+        );
     this.userService.getBene(1).subscribe((res: any) => {
         this.benneDetail = res.data
       },(err) => console.log("Error", err));
   }
 
   changepipo(value) {
-    this.pipoDataService.getPipoListByCustomer('import', value).then((data) => {
+    this.pipoDataService.getPipoListByCustomer('export', value).then((data) => {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
         console.log(data, 'data2222..................')

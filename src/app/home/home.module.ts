@@ -1,6 +1,6 @@
 import { SidenavComponent } from "./sidenav/sidenav.component";
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, OnInit } from "@angular/core";
+import { Router, RouterModule } from "@angular/router";
 import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ModalContentComponent1 } from './pipo-doc-export/pipo-doc-export.component';
@@ -95,6 +95,10 @@ import { ImportDirectPaymentComponent } from './Import-Direct-Payment/Import-Dir
 import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-Credit-Request.component';
 import { TransactionDashboardComponent } from "../transaction-dashboard/transaction-dashboard.component";
 import { UploadModule } from "./upload/upload.module";
+import { DocumentService } from "../service/document.service";
+import { UserService } from "../service/user.service";
+import { AuthenticateService } from "../service/authenticate.service";
+import { AuthGuard } from "../service/authguard.service";
 
 @NgModule({
   declarations: [
@@ -598,4 +602,24 @@ import { UploadModule } from "./upload/upload.module";
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [MatProgressBarModule, MatTabsModule,SharedHomeModule],
 })
-export class HomeModule { }
+export class HomeModule implements OnInit {
+  userData: any = [];
+  userActivity;
+  
+  constructor(
+    private router: Router,public doc:DocumentService,
+    private userService: UserService,
+    public authservice: AuthenticateService,
+    public authGuard: AuthGuard) {
+      let token = this.authGuard.loadFromLocalStorage();
+      var session:any=JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
+      if (this.authGuard.getLocalStorage('PERMISSION')==null || this.userData?.role!=session?.role && !token) {
+          this.authservice.logout();
+          this.router.navigate(['/login']);
+      }
+  }
+  ngOnInit(): void {
+  console.log('gfdgdgfdgfdgf')
+
+  };
+}

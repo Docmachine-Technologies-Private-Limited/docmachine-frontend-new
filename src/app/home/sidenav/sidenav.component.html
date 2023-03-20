@@ -179,7 +179,7 @@
                 </li>
               </ul>
             </li>
-            <li class="active"  *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
+            <li  *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
               <a href="#Transactions" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Transactions</a>
               <ul class="collapse list-unstyled" id="Transactions">
                 <li class="nav-item">
@@ -240,9 +240,9 @@
                 </li>
               </ul>
             </li>
-            <li class="active"  *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
-              <a href="#Documents" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Documents</a>
-              <ul class="collapse list-unstyled" id="Documents">
+            <li  *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
+              <a href="#ExportDocuments" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Documents</a>
+              <ul class="collapse list-unstyled" id="ExportDocuments">
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/pipo')">PI/PO Summary <i
                       style="font-size: 12px; margin-left:10px;" class="fas fa-plus-circle">
@@ -301,9 +301,9 @@
                 </li>
               </ul>
             </li>
-            <li class="active"  *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
-              <a href="#Transactions" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Transactions</a>
-              <ul class="collapse list-unstyled" id="Transactions">
+            <li  *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
+              <a href="#ExportTransactions" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Transactions</a>
+              <ul class="collapse list-unstyled" id="ExportTransactions">
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Pdf-Upload')">Inward Remittance Disposal</h6>
                 </li>
@@ -338,7 +338,7 @@
                 </li>
               </ul>
             </li>
-            <li class="active" *ngIf="this.userData['role']=='member'">
+            <li *ngIf="this.userData['role']=='member'">
               <a href="#TransactionDashBoard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Transaction Summary</a>
               <ul class="collapse list-unstyled" id="TransactionDashBoard">
                 <li class="nav-item" *ngFor="let item of this.TRANSACTION_DASHBOARD_LIST">
@@ -346,7 +346,7 @@
                 </li>
               </ul>
             </li>
-            <li class="active" *ngIf="this.userData['role']=='member'">
+            <li *ngIf="this.userData['role']=='member'">
               <a href="#EDPMS" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">EDPMS</a>
               <ul class="collapse list-unstyled" id="EDPMS">
                 <li class="nav-item">
@@ -360,7 +360,7 @@
                 </li>
               </ul>
             </li>
-            <li class="active" *ngIf="this.userData['role']=='member'">
+            <li *ngIf="this.userData['role']=='member'">
               <a href="#ApprovalPanel" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Status Panel</a>
               <ul class="collapse list-unstyled" id="ApprovalPanel">
                 <li class="nav-item">
@@ -374,7 +374,7 @@
                 </li>
               </ul>
             </li>
-            <li class="active" *ngIf="this.userData['role']=='member'">
+            <li *ngIf="this.userData['role']=='member'">
               <a href="#Other" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Other</a>
               <ul class="collapse list-unstyled" id="Other">
                 <li class="nav-item">

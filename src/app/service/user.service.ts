@@ -559,6 +559,11 @@ export class UserService {
       httpOptions
     );
   }
+  public QR_RESET(userdetails) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    return this.http.post(`${this.api_base}/authenticate/qrreset`,{userdetails:userdetails,});
+  }
   public UpdateMemeber(id, member) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
