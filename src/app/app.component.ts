@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   userActivity;
   userInactive: Subject<any> = new Subject();
   DelayTime: any = '';
-  WithoutAuthorization: any = ['verifyEmail', 'updatePassword', 'membersignin'];
+  WithoutAuthorization: any = ['verifyEmail', 'updatePassword', 'membersignin','signup','forgotpassword','resetOTP'];
   constructor(
     private translate: TranslateService,
     private router: Router, public doc: DocumentService,
