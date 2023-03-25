@@ -3,6 +3,7 @@ import { HttpClient, HttpContext, HttpHeaders, HttpParams } from '@angular/commo
 import { observable, Observable, of, Subject } from 'rxjs';
 import { AppConfig } from '../../app/app.config';
 import * as data1 from './../currency.json';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentService {
@@ -20,7 +21,7 @@ export class DocumentService {
   OUTWARD_REMITTANCE_ADVICE_SHEET: any = [];
   MT102_SUBJECT: any = []
 
-  constructor(public http: HttpClient, public appconfig: AppConfig) {
+  constructor(public http: HttpClient, public appconfig: AppConfig, private router: Router,) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base);
   }

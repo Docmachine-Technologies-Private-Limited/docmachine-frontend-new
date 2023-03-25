@@ -611,12 +611,6 @@ export class HomeModule implements OnInit {
     private userService: UserService,
     public authservice: AuthenticateService,
     public authGuard: AuthGuard) {
-      let token = this.authGuard.loadFromLocalStorage();
-      var session:any=JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
-      if (this.authGuard.getLocalStorage('PERMISSION')==null || this.userData?.role!=session?.role && !token) {
-          this.authservice.logout();
-          this.router.navigate(['/login']);
-      }
   }
   ngOnInit(): void {
   console.log('gfdgdgfdgfdgf')

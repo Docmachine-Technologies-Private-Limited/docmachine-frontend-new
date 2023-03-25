@@ -34,38 +34,46 @@ export class AppComponent implements OnInit {
     console.log('AppConfig', AppConfig);
     this.DelayTime = new Date(new Date().getTime() + (1 * 60 * 1000));
     this.setTimeoutNew();
-    this.userService.getUserDetail().then((user: any) => {
-      this.userData = user?.result
-      let token = this.authGuard.loadFromLocalStorage();
-      // let val: any = jwt_decode.default(token);
-      var session: any = JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
-      if (this.authGuard.getLocalStorage('PERMISSION') == null || this.userData?.role != session?.role && !token) {
-        this.authservice.logout();
-        this.router.navigate(['/login']);
+    router.events.forEach((event) => {
+      if (event instanceof NavigationStart) {
+        if (event?.url.indexOf('/verifyEmail/') == -1 || event?.url.indexOf('/updatePassword/') == -1 || event?.url.indexOf('/membersignin/') == -1) {
+          console.log(event,event?.url.includes('/verifyEmail/'), 'ygffyfggfgffg')
+        }else{
+          this.userService.getUserDetail().then((user: any) => {
+            this.userData = user?.result
+            let token = this.authGuard.loadFromLocalStorage();
+            // let val: any = jwt_decode.default(token);
+              var session: any = JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
+              if (this.authGuard.getLocalStorage('PERMISSION') == null || this.userData?.role != session?.role && !token) {
+                this.authservice.logout();
+                this.router.navigate(['/login']);
+              }
+          });
+        }
       }
     });
-
+  
   }
 
   ngOnInit(): void {
-    this.userService.getUserDetail().then((user: any) => {
-      this.userData = user?.result
-      console.log("AppComponentuserData", this.userData)
-      let token = this.authGuard.loadFromLocalStorage();
-      var session: any = JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
-      if (this.authGuard.getLocalStorage('PERMISSION') == null || this.userData?.role != session?.role && !token) {
-        this.authservice.logout();
-        this.router.navigate(['/login']);
-      }
-    }).catch((reserror) => {
-      let token = this.authGuard.loadFromLocalStorage();
-      let val: any = jwt_decode.default(token);
-      if (reserror?.error == "Unauthorized") {
-        this.authservice.logout();
-        this.router.navigate(['/login']);
-      }
-      console.log("AppComponentuserData", reserror, val, Date.now(), token.exp * 1000)
-    });
+    // this.userService.getUserDetail().then((user: any) => {
+    //   this.userData = user?.result
+    //   console.log("AppComponentuserData", this.userData)
+    //   let token = this.authGuard.loadFromLocalStorage();
+    //   var session: any = JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
+    //   if (this.authGuard.getLocalStorage('PERMISSION') == null || this.userData?.role != session?.role && !token) {
+    //     this.authservice.logout();
+    //     this.router.navigate(['/login']);
+    //   }
+    // }).catch((reserror) => {
+    //   let token = this.authGuard.loadFromLocalStorage();
+    //   let val: any = jwt_decode.default(token);
+    //   if (reserror?.error == "Unauthorized") {
+    //     this.authservice.logout();
+    //     this.router.navigate(['/login']);
+    //   }
+    //   console.log("AppComponentuserData", reserror, val, Date.now(), token.exp * 1000)
+    // });
   };
   setTimeoutNew() {
     this.userActivity = setTimeout(() => {
@@ -90,8 +98,8 @@ export class AppComponent implements OnInit {
     //   },1000)
     // }
   }
-    addMinutes(minutes) {
-      return new Date(new Date().getTime() + minutes*60000);
+  addMinutes(minutes) {
+    return new Date(new Date().getTime() + minutes * 60000);
   }
 
   @HostListener('window:mousemove') refreshUserState() {
