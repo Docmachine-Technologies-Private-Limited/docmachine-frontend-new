@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { DocumentService } from '../../service/document.service';
 import { CustomConfirmDialogModelService } from './custom-confirm-dialog-model.service';
 
-
 @Injectable({
   providedIn: 'root'
 })

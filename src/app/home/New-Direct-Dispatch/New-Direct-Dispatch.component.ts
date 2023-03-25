@@ -22,7 +22,7 @@ import {
   FormControl,
   FormGroup, Validators
 } from '@angular/forms';
-import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
@@ -36,6 +36,7 @@ import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { MergePdfListService } from '../merge-pdf-list.service';
 import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
+import { StorageEncryptionDecryptionService } from '../../Storage/storage-encryption-decryption.service';
 
 @Component({
   selector: 'app-Direct-Dispatch',
@@ -44,7 +45,7 @@ import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: {displayDefaultIndicatorType: false},
+      useValue: { displayDefaultIndicatorType: false },
     },
   ],
 })
@@ -122,7 +123,7 @@ export class NewDirectDispatchComponent implements OnInit {
   @ViewChild('billLodge', { static: false }) billLodge: ElementRef;
   closeResult: string;
   public item1: any = [];
-  public itemArray:any = [];
+  public itemArray: any = [];
   public item2;
   public user;
   public selectedRow;
@@ -148,8 +149,8 @@ export class NewDirectDispatchComponent implements OnInit {
   public allTransactions: any = [];
   public optionsVisibility: any = [];
   public generateIndex;
-  public itemArray1:any = [];
-  public irBuyerName:any = [];
+  public itemArray1: any = [];
+  public irBuyerName: any = [];
   lodgement1: any;
   lodgement2: any;
   Ax1: boolean;
@@ -221,7 +222,7 @@ export class NewDirectDispatchComponent implements OnInit {
   dataImport: any;
   dataImport2: any;
   sbPurposeDone1: any = [];
-  item4:any = [];
+  item4: any = [];
   item12: any;
   item13: any = [];
   bankRef: any;
@@ -316,10 +317,10 @@ export class NewDirectDispatchComponent implements OnInit {
   ebrc: any;
   blcopyref: any;
   irAdvice: any;
-  selectedPdfs:any = [];
-  advanceArray:any = [];
+  selectedPdfs: any = [];
+  advanceArray: any = [];
   currentSbForAdvance: any;
-  buyerName:any = [];
+  buyerName: any = [];
   id: any;
   private genDoc: any;
   airwayBlCopy: any;
@@ -347,11 +348,11 @@ export class NewDirectDispatchComponent implements OnInit {
   GetDownloadStatus: any = [];
   USER_DATA: any = [];
   Approval_URL: any = [];
-  PIPO_LIST:any=[];
-  FILTER_DATA:any={
-    COMMERCIAL:[],
-    FILTER_COMMERCIAL:[],
-    PIPO:[]
+  PIPO_LIST: any = [];
+  FILTER_DATA: any = {
+    COMMERCIAL: [],
+    FILTER_COMMERCIAL: [],
+    PIPO: []
   };
   public ExportBillLodgement_Form: FormGroup;
   constructor(
@@ -360,7 +361,7 @@ export class NewDirectDispatchComponent implements OnInit {
     private sanitizer: DomSanitizer,
     public appconfig: AppConfig,
     private formBuilder: FormBuilder,
-    private documentService: DocumentService,
+    public documentService: DocumentService,
     public pipoDataService: PipoDataService,
     public router: Router,
     private route: ActivatedRoute,
@@ -369,6 +370,7 @@ export class NewDirectDispatchComponent implements OnInit {
     public mergerpdf: MergePdfService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public pdfmerge: MergePdfListService,
+    public sessionstorage:StorageEncryptionDecryptionService,
     public wininfo: WindowInformationService) {
     this.api_base = appconfig.apiUrl;
     this.getDropdownData();
@@ -394,9 +396,10 @@ export class NewDirectDispatchComponent implements OnInit {
       deleteflag: ['0', [Validators.required]],
       SbRef: ['', [Validators.required]],
       Carry_Amount: [[], [Validators.required]],
-      Url_Redirect:[{}, [Validators.required]]
+      Url_Redirect: [{}, [Validators.required]],
+      extradata: [[], [Validators.required]]
     });
-    this.userService.getUserDetail().then((status:any) => {
+    this.userService.getUserDetail().then((status: any) => {
       this.USER_DATA = status['result'];
       console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
     });
@@ -421,14 +424,14 @@ export class NewDirectDispatchComponent implements OnInit {
     };
     this.getBill_Lodgments();
   }
- 
+
   getDropdownData() {
     this.userService.getTeam()
       .subscribe(
         data => {
           this.commodity = data['data'][0]['commodity']
           this.LocationData = data['data'][0]['location']
-          var temp:any=[]
+          var temp: any = []
           for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
             temp.push(data['data'][0]['bankDetails'][index]?.bank)
           }
@@ -584,7 +587,7 @@ export class NewDirectDispatchComponent implements OnInit {
     control.removeAt(i);
   }
 
- async getBill_Lodgments() {
+  async getBill_Lodgments() {
     this.redirectid = this.route.snapshot.paramMap.get('pipo');
     this.redirectindex = this.route.snapshot.paramMap.get('index');
     this.redirectpage = this.route.snapshot.paramMap.get('page');
@@ -600,9 +603,9 @@ export class NewDirectDispatchComponent implements OnInit {
       (res: any) => {
         console.log('Data fetched successfully', res);
         for (let index = 0; index < res?.data.length; index++) {
-        if (res?.data[index]?.file=='') {
-          
-        }
+          if (res?.data[index]?.file == '') {
+
+          }
           this.PIPO_LIST.push(res?.data[index])
 
         }
@@ -634,7 +637,7 @@ export class NewDirectDispatchComponent implements OnInit {
         this.mergeIr();
         this.mergeIr2();
         this.item9.forEach((element, i) => {
-          this.irBuyerName.push({value:element.partyName,id:element._id});
+          this.irBuyerName.push({ value: element.partyName, id: element._id });
         });
         this.irBuyerName = this.irBuyerName.filter(
           (value, index) => this.irBuyerName.indexOf(value) === index
@@ -658,25 +661,29 @@ export class NewDirectDispatchComponent implements OnInit {
       console.log('hello');
     });
     this.item1 = [];
-   await this.pipoDataService.getPipoList('export').then(async (res:any)=>{
-      this.FILTER_DATA.PIPO=res?.pipolist;
-      this.pipoDataService.pipolistModel$.subscribe((data:any) => {
+    await this.pipoDataService.getPipoList('export').then(async (res: any) => {
+      this.FILTER_DATA.PIPO = res?.pipolist;
+      this.pipoDataService.pipolistModel$.subscribe((data: any) => {
         console.log(data, 'data2222..................')
         data?.forEach(element => {
           element?.commercialRef?.forEach(commercialelement => {
-            var temp:any=commercialelement;
-            temp['debitNoteRef']=element?.debitNoteRef;
-            temp['TryPartyAgreement']=element?.tryPartyAgreementRef;
-            temp['SB_Amout_Realized']=this.ParseFloat(commercialelement.amount,element?.debitNoteRef[0]?.totalDebitAmount)
-            temp['IRADVICE_INFO']=[];
-            temp['IRADVICE_SUM']=0;
+            var temp: any = commercialelement;
+            temp['debitNoteRef'] = element?.debitNoteRef;
+            temp['TryPartyAgreement'] = element?.tryPartyAgreementRef;
+            temp['SB_Amout_Realized'] = this.ParseFloat(commercialelement.amount, element?.debitNoteRef[0]?.totalDebitAmount)
+            temp['IRADVICE_INFO'] = [];
+            temp['IRADVICE_SUM'] = 0;
+            temp['debitAmount'] = 0;
             this.FILTER_DATA.COMMERCIAL.push(temp)
           });
-        });    
+        });
       });
-    
-      console.log(this.FILTER_DATA,res,'getPipoList')
+
+      console.log(this.FILTER_DATA, res, 'getPipoList')
     })
+    console.log(this.sessionstorage.get('MT102'))
+    this.documentService.MT102_SUBJECT=this.sessionstorage.get('MT102')!=''?JSON.parse(this.sessionstorage.get('MT102')):'';
+    console.log(this.documentService.MT102_SUBJECT,'MT102_SUBJECT')
     this.shippingBillService.getShippingBillList().then((res: any) => {
       this.shippingBillService.shippingbills$.subscribe((data: any) => {
         console.log('getShippingBillList', data)
@@ -689,11 +696,11 @@ export class NewDirectDispatchComponent implements OnInit {
             }
           }
           console.log('getMaster Data', this.item1);
-          this.buyerName[0] = {value:'Select Buyer Name',id:''};
+          this.buyerName[0] = { value: 'Select Buyer Name', id: '' };
           this.item1.forEach((element, i) => {
-            var buyerfilter:any=this.buyerName.filter((item:any)=>item?.value?.indexOf(element.buyerName[0])!=-1)
-            if (buyerfilter.length==0) {
-              this.buyerName.push({value:element.buyerName[0],id:element?._id});
+            var buyerfilter: any = this.buyerName.filter((item: any) => item?.value?.indexOf(element.buyerName[0]) != -1)
+            if (buyerfilter.length == 0) {
+              this.buyerName.push({ value: element.buyerName[0], id: element?._id });
             }
           });
           console.log('buyerName', this.buyerName);
@@ -835,7 +842,7 @@ export class NewDirectDispatchComponent implements OnInit {
       if (this.documentService.task.task[0].sbUrls) {
         console.log('this is sb');
         let k = 0;
-        let gene:any = [];
+        let gene: any = [];
 
         for (let value of this.documentService.task.task[0].sbUrls) {
           let r = value.changingThisBreaksApplicationSecurity;
@@ -847,7 +854,7 @@ export class NewDirectDispatchComponent implements OnInit {
       }
       if (this.documentService.task.task[0].tryUrls) {
         let h = 0;
-        let gene:any = [];
+        let gene: any = [];
         for (let value of this.documentService.task.task[0].tryUrls) {
           gene.push(
             this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -862,7 +869,7 @@ export class NewDirectDispatchComponent implements OnInit {
       }
       if (this.documentService.task.task[0].lcUrls) {
         let h = 0;
-        let gene:any = [];
+        let gene: any = [];
         for (let value of this.documentService.task.task[0].lcUrls) {
           gene.push(
             this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -883,7 +890,7 @@ export class NewDirectDispatchComponent implements OnInit {
     console.log('hello', a);
     console.log(a.length);
     if (a.length > 0) {
-      let arr:any = [];
+      let arr: any = [];
       for (let value of this.item1) {
         console.log('value of buyername****', value);
         console.log('value of buyername', value.buyerName);
@@ -946,16 +953,16 @@ export class NewDirectDispatchComponent implements OnInit {
       this.generate = true;
       this.isGenerate = true;
       let generateDoc2: any = [];
-      let pipoValue;
-      let value;
-      let buyerValue;
+      let pipoValue:any=[];
+      let value:any=[];
+      let buyerValue:any=[];
       for (let item of this.itemArray) {
         for (let sb of this.sbArray) {
-          if (item.sbno === sb) {
+          if (item?.sbno === sb) {
             pipoValue = item;
-            value = item.pipo;
-            buyerValue = item.buyerName;
-            this.dateArray.push(item.sbdate);
+            value = item?.pipo;
+            buyerValue = item?.buyerName;
+            this.dateArray.push(item?.sbdate);
             this.sbDataArray.push(item);
             console.log('value', value);
             generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(item.doc));
@@ -965,8 +972,8 @@ export class NewDirectDispatchComponent implements OnInit {
 
       console.log(pipoValue, 'pipovalue*****************************');
       for (value of this.item) {
-        for (let value1 of pipoValue.pipo) {
-          if (value.pi_poNo == value1.pi_poNo) {
+        for (let value1 of pipoValue?.pipo) {
+          if (value?.pi_poNo == value1?.pi_poNo) {
             this.randomArray.push(value);
           }
         }
@@ -1046,8 +1053,8 @@ export class NewDirectDispatchComponent implements OnInit {
       console.log('Random Array', this.randomArray);
       console.log('Airway Docs****************--------------------------------', this.airwayBlCopy);
 
-      let mainArr:any = [];
-      let invoicearray:any = [];
+      let mainArr: any = [];
+      let invoicearray: any = [];
       console.log('line no.796 question5 data', this.Question5);
       this.sbDataArray.forEach((value, index) => {
         for (let a of value.pipo) {
@@ -1055,7 +1062,7 @@ export class NewDirectDispatchComponent implements OnInit {
         }
       });
       if (this.Question6 == 'yes') {
-        let adArr:any = [];
+        let adArr: any = [];
         console.log('Shipping Map For', this.shippingMap);
         this.shippingMap.forEach((value) => {
           console.log('Shipping Map For loop', value);
@@ -1066,7 +1073,7 @@ export class NewDirectDispatchComponent implements OnInit {
 
         forkJoin(
           this.sbDataArray.map((value) => {
-            let piponumbers:any = [];
+            let piponumbers: any = [];
             for (let i in value.pipo) {
               piponumbers.push(value.pipo[i].pi_poNo);
             }
@@ -1077,7 +1084,7 @@ export class NewDirectDispatchComponent implements OnInit {
           resp.forEach((data, i) => {
             for (let item of data['data']) {
               console.log(item);
-              const newVal:any = { ...this.sbDataArray[i] };
+              const newVal: any = { ...this.sbDataArray[i] };
               newVal['pipoValue'] = item;
               mainArr.push(newVal);
               console.log('fggfgfgf', mainArr);
@@ -1090,7 +1097,7 @@ export class NewDirectDispatchComponent implements OnInit {
             console.log(this.advanceForm.value.advance);
             for (let a of adArr) {
               if (a.sb == value1.sbno) {
-                const newVal:any = { ...value1 };
+                const newVal: any = { ...value1 };
                 newVal['advance'] = a.valueInternal;
                 newVal['irAdviceId'] = a.irDataItem._id;
                 invoicearray.push(newVal);
@@ -1098,7 +1105,7 @@ export class NewDirectDispatchComponent implements OnInit {
             }
             console.log('aajsjss');
           });
-          let amountArr:any = [];
+          let amountArr: any = [];
           for (let item of invoicearray) {
             amountArr.push(item.pipoValue.amount);
           }
@@ -1199,7 +1206,7 @@ export class NewDirectDispatchComponent implements OnInit {
 
       console.log(this.generate1);
       console.log(this.c);
-      this.fillForm(pipoValue,'SB_'+this.itemArray[0]?.sbno);
+      this.fillForm(pipoValue, 'SB_' + this.itemArray[0]?.sbno);
       this.newTask[0] = {
         sbNumbers: this.sbArray,
         sbUrls: this.mainDoc1,
@@ -1220,16 +1227,16 @@ export class NewDirectDispatchComponent implements OnInit {
         this.generate = true;
         this.isGenerate = true;
         let generateDoc2: any = [];
-        let pipoValue;
-        let value;
-        let buyerValue;
+        let pipoValue:any=[];
+        let value:any=[];
+        let buyerValue:any=[];
         for (let item of this.itemArray) {
           for (let sb of this.sbArray) {
             if (item.sbno === sb) {
               pipoValue = item;
-              value = item.pipo;
-              buyerValue = item.buyerName;
-              this.dateArray.push(item.sbdate);
+              value = item?.pipo;
+              buyerValue = item?.buyerName;
+              this.dateArray.push(item?.sbdate);
               this.sbDataArray.push(item);
               console.log('value', value);
               generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(item.doc));
@@ -1239,8 +1246,8 @@ export class NewDirectDispatchComponent implements OnInit {
 
         console.log(pipoValue, 'pipovalue*****************************');
         for (value of this.item) {
-          for (let value1 of pipoValue.pipo) {
-            if (value.pi_poNo == value1.pi_poNo) {
+          for (let value1 of pipoValue?.pipo) {
+            if (value?.pi_poNo == value1?.pi_poNo) {
               this.randomArray.push(value);
             }
           }
@@ -1320,8 +1327,8 @@ export class NewDirectDispatchComponent implements OnInit {
         console.log('Random Array', this.randomArray);
         console.log('Airway Docs****************--------------------------------', this.airwayBlCopy);
 
-        let mainArr:any = [];
-        let invoicearray:any = [];
+        let mainArr: any = [];
+        let invoicearray: any = [];
         console.log('line no.796 question5 data', this.Question5);
         this.sbDataArray.forEach((value, index) => {
           for (let a of value.pipo) {
@@ -1329,7 +1336,7 @@ export class NewDirectDispatchComponent implements OnInit {
           }
         });
         if (this.Question6 == 'yes') {
-          let adArr:any = [];
+          let adArr: any = [];
           console.log('Shipping Map For', this.shippingMap);
           this.shippingMap.forEach((value) => {
             console.log('Shipping Map For loop', value);
@@ -1340,7 +1347,7 @@ export class NewDirectDispatchComponent implements OnInit {
 
           forkJoin(
             this.sbDataArray.map((value) => {
-              let piponumbers:any = [];
+              let piponumbers: any = [];
               for (let i in value.pipo) {
                 piponumbers.push(value.pipo[i].pi_poNo);
               }
@@ -1351,7 +1358,7 @@ export class NewDirectDispatchComponent implements OnInit {
             resp.forEach((data, i) => {
               for (let item of data['data']) {
                 console.log(item);
-                const newVal:any = { ...this.sbDataArray[i] };
+                const newVal: any = { ...this.sbDataArray[i] };
                 newVal['pipoValue'] = item;
                 mainArr.push(newVal);
                 console.log('fggfgfgf', mainArr);
@@ -1372,7 +1379,7 @@ export class NewDirectDispatchComponent implements OnInit {
               }
               console.log('aajsjss');
             });
-            let amountArr:any = [];
+            let amountArr: any = [];
             for (let item of invoicearray) {
               amountArr.push(item.pipoValue.amount);
             }
@@ -1475,7 +1482,7 @@ export class NewDirectDispatchComponent implements OnInit {
 
         console.log(this.generate1);
         console.log(this.c);
-        this.fillForm(pipoValue,'SB_'+this.itemArray[0]?.sbno);
+        this.fillForm(pipoValue, 'SB_' + this.itemArray[0]?.sbno);
         this.newTask[0] = {
           sbNumbers: this.sbArray,
           sbUrls: this.mainDoc1,
@@ -1538,1155 +1545,1155 @@ export class NewDirectDispatchComponent implements OnInit {
     console.log(this.str);
   }
 
-  async fillForm(a,sbno:any) {
-   return new Promise(async (resolve,reject)=>{
-    this.buyer1 = a.buyerName;
-    this.completewords3 = this.buyer1;;
-    this.devideContent3 = this.completewords3.length;
-    for (let i = 0; i < this.completewords3.length; i++) {
-      if (i < 6) {
-        this.buyer2.push(this.completewords3[i]);
-      } else if (i > 5 && i <= 11) {
-        this.buyer3.push(this.completewords3[i]);
+  async fillForm(a, sbno: any) {
+    return new Promise(async (resolve, reject) => {
+      this.buyer1 = a.buyerName;
+      this.completewords3 = this.buyer1;;
+      this.devideContent3 = this.completewords3.length;
+      for (let i = 0; i < this.completewords3.length; i++) {
+        if (i < 6) {
+          this.buyer2.push(this.completewords3[i]);
+        } else if (i > 5 && i <= 11) {
+          this.buyer3.push(this.completewords3[i]);
+        }
       }
-    }
-
-    this.buyName1 = this.buyer2.join(' ');
-    this.buyName2 = this.buyer3.join(' ');
-
-    console.log('Shailendra *************', this.buyName1);
-    console.log('Shailendra *************', this.buyName2);
-
-    const formUrl = './../../assets/billUnder.pdf';
-
-    const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
-
-    const pdfDoc = await PDFDocument.load(formPdfBytes);
-
-    const form = pdfDoc.getForm();
-    const pages = pdfDoc.getPages();
-    const firstpage = pages[0];
-
-    const text1 = form.createTextField('favorite0');
-    text1.setText('');
-    text1.addToPage(firstpage, {
-      x: 156,
-      y: 752,
-      width: 250,
-      height: 12,
-      borderWidth: 0,
-      //backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text2 = form.createTextField('favorite1');
-    text2.setText('');
-    text2.addToPage(firstpage, {
-      x: 482,
-      y: 752,
-      width: 20,
-      height: 13,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const textf3 = form.createTextField('favorite2');
-    textf3.setText('');
-    textf3.addToPage(firstpage, {
-      x: 510,
-      y: 752,
-      width: 20,
-      height: 13,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text4 = form.createTextField('favorite3');
-    text4.setText('');
-    text4.addToPage(firstpage, {
-      x: 539,
-      y: 752,
-      width: 15,
-      height: 13,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text5 = form.createTextField('favorite4');
-    text5.setText('');
-    text5.addToPage(firstpage, {
-      x: 570,
-      y: 752,
-      width: 12,
-      height: 13,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    //exporter
-
-    const text6 = form.createTextField('favorite5');
-    text6.setText(this.team1);
-    text6.addToPage(firstpage, {
-      x: 18,
-      y: 684,
-      width: 295,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text7 = form.createTextField('favorite6');
-    // if(this.team2.length > 0){
-    text7.setText(this.team2);
-    text7.addToPage(firstpage, {
-      x: 18,
-      y: 665,
-      width: 295,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-    // }
-    // else{
-    //   text7.setText(this.item5.adress)
-    //   text7.addToPage(firstpage, {
-
-    //     x: 18,
-    //     y: 665,
-    //     width: 295,
-    //     height: 14,
-    //     borderWidth: 0,
-    //     // backgroundColor: rgb(255, 255, 255)
-    //   })
-    // }
-
-    const text8 = form.createTextField('favorite7');
-    // if(this.team2.length > 0 && this.team3.length == 0){
-    text8.setText(this.address1);
-    text8.addToPage(firstpage, {
-      x: 18,
-      y: 646,
-      width: 295,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-    // }
-    // else{
-    //   text8.setText(this.team3)
-    //   text8.addToPage(firstpage, {
-    //     x: 18,
-    //     y: 646,
-    //     width: 295,
-    //     height: 14,
-    //     borderWidth: 0,
-    //     // backgroundColor: rgb(255, 255, 255)
-
-    //   })
-    // }
-
-    const text9 = form.createTextField('favorite8');
-    //  if(this.team2.length > 0 && this.team3.length > 0){
-    text9.setText(this.address2);
-    text9.addToPage(firstpage, {
-      x: 18,
-      y: 628,
-      width: 295,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-    // }
-
-    const text10 = form.createTextField('favorite9');
-    text10.setText(this.address3);
-    text10.addToPage(firstpage, {
-      x: 18,
-      y: 612,
-      width: 295,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text11 = form.createTextField('favorite10');
-    text11.setText('');
-    text11.addToPage(firstpage, {
-      x: 18,
-      y: 594,
-      width: 295,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    //buyer
-
-    const text12 = form.createTextField('favorite11');
-    text12.setText(this.buyName1);
-    text12.addToPage(firstpage, {
-      x: 320,
-      y: 684,
-      width: 255,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text13 = form.createTextField('favorite12');
-    text13.setText(this.buyName2);
-    text13.addToPage(firstpage, {
-      x: 320,
-      y: 665,
-      width: 255,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text14 = form.createTextField('favorite13');
-    text14.setText(this.buyerAds1);
-    text14.addToPage(firstpage, {
-      x: 320,
-      y: 646,
-      width: 255,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text15 = form.createTextField('favorite14');
-    text15.setText(this.buyerAds2);
-    text15.addToPage(firstpage, {
-      x: 320,
-      y: 628,
-      width: 255,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text16 = form.createTextField('favorite15');
-    text16.setText(this.buyerAds3);
-    text16.addToPage(firstpage, {
-      x: 320,
-      y: 612,
-      width: 255,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text17 = form.createTextField('favorite16');
-    text17.setText('');
-    text17.addToPage(firstpage, {
-      x: 320,
-      y: 594,
-      width: 255,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    //checkbox
-
-    const checkbox1 = form.createCheckBox('check1');
-    checkbox1.addToPage(firstpage, {
-      x: 150,
-      y: 575,
-      width: 8,
-      height: 8,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const checkbox2 = form.createCheckBox('check2');
-    checkbox2.addToPage(firstpage, {
-      x: 369,
-      y: 575,
-      width: 8,
-      height: 8,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const checkbox3 = form.createCheckBox('check3');
-    checkbox3.addToPage(firstpage, {
-      x: 570,
-      y: 575,
-      width: 8,
-      height: 8,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    //draw bank details
-
-    const text18 = form.createTextField('favorite17');
-    text18.setText('');
-    text18.addToPage(firstpage, {
-      x: 219,
-      y: 553,
-      width: 360,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text19 = form.createTextField('favorite18');
-    text19.setText('');
-    text19.addToPage(firstpage, {
-      x: 219,
-      y: 538,
-      width: 360,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text20 = form.createTextField('favorite19');
-    text20.setText('');
-    text20.addToPage(firstpage, {
-      x: 219,
-      y: 521,
-      width: 360,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text21 = form.createTextField('favorite20');
-    text21.setText('');
-    text21.addToPage(firstpage, {
-      x: 219,
-      y: 506,
-      width: 360,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text22 = form.createTextField('favorite21');
-    text22.setText('');
-    text22.addToPage(firstpage, {
-      x: 219,
-      y: 491,
-      width: 360,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text23 = form.createTextField('favorite22');
-    text23.setText('');
-    text23.addToPage(firstpage, {
-      x: 219,
-      y: 478,
-      width: 360,
-      height: 10,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    //checkbox
-
-    const checkbox4 = form.createCheckBox('check4');
-    checkbox4.addToPage(firstpage, {
-      x: 245,
-      y: 456,
-      width: 5,
-      height: 5,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const checkbox5 = form.createCheckBox('check5');
-    checkbox5.addToPage(firstpage, {
-      x: 453,
-      y: 463,
-      width: 5,
-      height: 5,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    //text
-
-    const text24 = form.createTextField('favorite23');
-    text24.setText('');
-    text24.addToPage(firstpage, {
-      x: 219,
-      y: 412,
-      width: 360,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text25 = form.createTextField('favorite24');
-    text25.setText('');
-    text25.addToPage(firstpage, {
-      x: 219,
-      y: 390,
-      width: 360,
-      height: 16,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    //checkbox
-
-    const checkbox6 = form.createCheckBox('check6');
-    checkbox6.addToPage(firstpage, {
-      x: 389,
-      y: 375,
-      width: 8,
-      height: 8,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const checkbox7 = form.createCheckBox('check7');
-    checkbox7.addToPage(firstpage, {
-      x: 550,
-      y: 375,
-      width: 8,
-      height: 8,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    // firx
-    var tp: any = {
-      firxNumber: [],
-      firxDate: [],
-      firxCurrency: [],
-      firxAmount: [],
-      firxCommision: [],
-      firxRecAmo: []
-    };
-    for (let index = 0; index < this.advanceArray[sbno]?.length; index++) {
-      const element:any = this.advanceArray[sbno][index];
-      tp['firxNumber'].push(element?.irDataItem?.billNo)
-      tp['firxDate'].push(element?.irDataItem?.date)
-      tp['firxCurrency'].push(element?.irDataItem?.currency)
-      tp['firxAmount'].push(element?.irDataItem?.amount)
-      tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
-      tp['firxRecAmo'].push(0)
-    }
-    const text26 = form.createTextField('favorite25');
-    text26.setText(tp?.firxNumber.toString());
-    text26.addToPage(firstpage, {
-      x: 128,
-      y: 348,
-      width: 187,
-      height: 20,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text27 = form.createTextField('favorite26');
-    text27.setText(tp?.firxCurrency.toString());
-    text27.addToPage(firstpage, {
-      x: 128,
-      y: 324,
-      width: 187,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text28 = form.createTextField('favorite27');
-    text28.setText(tp?.firxDate.toString());
-    text28.addToPage(firstpage, {
-      x: 421,
-      y: 348,
-      width: 160,
-      height: 20,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const SumfirxAmount:any = tp?.firxAmount.reduce((partialSum, a) => partialSum + a, 0);
-    const text29 = form.createTextField('favorite28');
-    text29.setText(SumfirxAmount.toString());
-    text29.addToPage(firstpage, {
-      x: 421,
-      y: 324,
-      width: 160,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    //bill details
- // firx
- var tp_bill: any = {
-  SbNumber: [],
-  SbDate: [],
-  SbCurrency: [],
-  SbAmount: []
-};
-  var filterSB:any=this.itemArray.filter((item:any)=>'SB_'+item.sbno==sbno)
-  for (let index = 0; index < filterSB?.length; index++) {
-    const element =filterSB[index];
-    tp_bill['SbNumber'].push(element?.sbno)
-    tp_bill['SbDate'].push(element?.sbdate)
-    tp_bill['SbCurrency'].push(element?.fobCurrency)
-    tp_bill['SbAmount'].push(element?.fobValue)
-  }
-    const text30 = form.createTextField('favorite29');
-    text30.setText(tp_bill?.SbCurrency.toString());
-    text30.addToPage(firstpage, {
-      x: 128,
-      y: 287,
-      width: 140,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text31 = form.createTextField('favorite30');
-    text31.setText(tp_bill?.SbAmount.toString());
-    text31.addToPage(firstpage, {
-      x: 128,
-      y: 266,
-      width: 140,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text32 = form.createTextField('favorite31');
-    text32.setText(this.ConvertNumberToWords(tp_bill?.SbAmount.toString()));
-    text32.addToPage(firstpage, {
-      x: 388,
-      y: 287,
-      width: 188,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text33 = form.createTextField('favorite32');
-    text33.setText('');
-    text33.addToPage(firstpage, {
-      x: 388,
-      y: 266,
-      width: 188,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    //checkbox
-
-    const checkbox8 = form.createCheckBox('check8');
-    checkbox8.addToPage(firstpage, {
-      x: 141,
-      y: 251,
-      width: 5,
-      height: 5,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const checkbox9 = form.createCheckBox('check9');
-    checkbox9.addToPage(firstpage, {
-      x: 288,
-      y: 251,
-      width: 5,
-      height: 5,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text01 = form.createTextField('favorite01');
-    text01.setText('');
-    text01.addToPage(firstpage, {
-      x: 393,
-      y: 253,
-      width: 30,
-      height: 10,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text02 = form.createTextField('favorite02');
-    text02.setText('');
-    text02.addToPage(firstpage, {
-      x: 453,
-      y: 242,
-      width: 60,
-      height: 10,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    // description of goods
-
-    const text34 = form.createTextField('favorite33');
-    text34.setText('');
-    text34.addToPage(firstpage, {
-      x: 128,
-      y: 211,
-      width: 250,
-      height: 20,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text35 = form.createTextField('favorite34');
-    text35.setText('');
-    text35.addToPage(firstpage, {
-      x: 128,
-      y: 190,
-      width: 140,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text36 = form.createTextField('favorite35');
-    text36.setText('');
-    text36.addToPage(firstpage, {
-      x: 448,
-      y: 211,
-      width: 132,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text37 = form.createTextField('favorite36');
-    text37.setText('');
-    text37.addToPage(firstpage, {
-      x: 388,
-      y: 190,
-      width: 188,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text38 = form.createTextField('favorite37');
-    text38.setText('');
-    text38.addToPage(firstpage, {
-      x: 275,
-      y: 170,
-      width: 300,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text39 = form.createTextField('favorite38');
-    text39.setText(tp_bill?.SbNumber.toString());
-    text39.addToPage(firstpage, {
-      x: 275,
-      y: 146,
-      width: 300,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text40 = form.createTextField('favorite39');
-    text40.setText('');
-    text40.addToPage(firstpage, {
-      x: 128,
-      y: 126,
-      width: 140,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text41 = form.createTextField('favorite40');
-    text41.setText(
-      `${this.myArr[0]}  to  ${this.myArr[this.myArr.length - 1]}`
-    );
-    // console.log(this.myArr[0])
-    // console.log(this.myArr[this.myArr.length - 1])
-    text41.addToPage(firstpage, {
-      x: 388,
-      y: 126,
-      width: 188,
-      height: 18,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    // const texta41 = form.createTextField('favorite404')
-    // texta41.setText(`${this.myArr.length}`)
-    // // console.log(this.myArr[0])
-    // // console.log(this.myArr[this.myArr.length - 1])
-    // texta41.addToPage(firstpage, {
-    //   x: 266,
-    //   y: 106,
-    //   width: 188,
-    //   height: 18,
-    //   borderWidth: 0,
-    //   // backgroundColor: rgb(255, 255, 255)
-    // })
-
-    //table1
-    const text421 = form.createTextField('favorite411');
-    text421.setText(`${this.myArr.length}`);
-    text421.addToPage(firstpage, {
-      x: 228,
-      y: 108,
-      width: 10,
-      height: 16,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text42 = form.createTextField('favorite41');
-    text42.setText('');
-    text42.addToPage(firstpage, {
-      x: 97,
-      y: 62,
-      width: 45,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text43 = form.createTextField('favorite42');
-    text43.setText('');
-    text43.addToPage(firstpage, {
-      x: 148,
-      y: 62,
-      width: 50,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text44 = form.createTextField('favorite43');
-    text44.setText('');
-    text44.addToPage(firstpage, {
-      x: 206,
-      y: 62,
-      width: 65,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text45 = form.createTextField('favorite44');
-    text45.setText('');
-    text45.addToPage(firstpage, {
-      x: 276,
-      y: 62,
-      width: 41,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text46 = form.createTextField('favorite45');
-    text46.setText('');
-    text46.addToPage(firstpage, {
-      x: 320,
-      y: 62,
-      width: 45,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text47 = form.createTextField('favorite46');
-    text47.setText('');
-    text47.addToPage(firstpage, {
-      x: 370,
-      y: 62,
-      width: 33,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text48 = form.createTextField('favorite47');
-    text48.setText('');
-    text48.addToPage(firstpage, {
-      x: 408,
-      y: 62,
-      width: 80,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text49 = form.createTextField('favorite48');
-    text49.setText('');
-    text49.addToPage(firstpage, {
-      x: 492,
-      y: 62,
-      width: 50,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text50 = form.createTextField('favorite49');
-    text50.setText('');
-    text50.addToPage(firstpage, {
-      x: 547,
-      y: 62,
-      width: 33,
-      height: 14,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text51 = form.createTextField('favorite50');
-    text51.setText('');
-    text51.addToPage(firstpage, {
-      x: 97,
-      y: 51,
-      width: 45,
-      height: 9,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text52 = form.createTextField('favorite51');
-    text52.setText('');
-    text52.addToPage(firstpage, {
-      x: 148,
-      y: 51,
-      width: 50,
-      height: 9,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text53 = form.createTextField('favorite52');
-    text53.setText('');
-    text53.addToPage(firstpage, {
-      x: 206,
-      y: 51,
-      width: 65,
-      height: 9,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text54 = form.createTextField('favorite53');
-    text54.setText('');
-    text54.addToPage(firstpage, {
-      x: 276,
-      y: 51,
-      width: 41,
-      height: 9,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text55 = form.createTextField('favorite54');
-    text55.setText('');
-    text55.addToPage(firstpage, {
-      x: 320,
-      y: 51,
-      width: 45,
-      height: 9,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text56 = form.createTextField('favorite55');
-    text56.setText('');
-    text56.addToPage(firstpage, {
-      x: 370,
-      y: 51,
-      width: 33,
-      height: 9,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text57 = form.createTextField('favorite56');
-    text57.setText('');
-    text57.addToPage(firstpage, {
-      x: 408,
-      y: 51,
-      width: 80,
-      height: 9,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text58 = form.createTextField('favorite57');
-    text58.setText('');
-    text58.addToPage(firstpage, {
-      x: 492,
-      y: 51,
-      width: 50,
-      height: 9,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text59 = form.createTextField('favorite58');
-    text59.setText('');
-    text59.addToPage(firstpage, {
-      x: 547,
-      y: 51,
-      width: 33,
-      height: 9,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    //table2
-
-    const text60 = form.createTextField('favorite59');
-    text60.setText(this.charge[0]);
-    text60.addToPage(firstpage, {
-      x: 135,
-      y: 10,
-      width: 30,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text61 = form.createTextField('favorite60');
-    text61.setText(this.charge[1]);
-    text61.addToPage(firstpage, {
-      x: 167,
-      y: 10,
-      width: 30,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text62 = form.createTextField('favorite61');
-    text62.setText(this.charge[2]);
-    text62.addToPage(firstpage, {
-      x: 201,
-      y: 10,
-      width: 30,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text63 = form.createTextField('favorite62');
-    text63.setText(this.charge[3]);
-    text63.addToPage(firstpage, {
-      x: 235,
-      y: 10,
-      width: 30,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text64 = form.createTextField('favorite63');
-    text64.setText(this.charge[4]);
-    text64.addToPage(firstpage, {
-      x: 266,
-      y: 10,
-      width: 30,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text65 = form.createTextField('favorite64');
-    text65.setText(this.charge[5]);
-    text65.addToPage(firstpage, {
-      x: 300,
-      y: 10,
-      width: 30,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text66 = form.createTextField('favorite65');
-    text66.setText(this.charge[6]);
-    text66.addToPage(firstpage, {
-      x: 331,
-      y: 10,
-      width: 30,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text67 = form.createTextField('favorite66');
-    text67.setText(this.charge[7]);
-    text67.addToPage(firstpage, {
-      x: 363,
-      y: 10,
-      width: 30,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text68 = form.createTextField('favorite67');
-    text68.setText(this.charge[8]);
-    text68.addToPage(firstpage, {
-      x: 397,
-      y: 10,
-      width: 34,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text69 = form.createTextField('favorite68');
-    text69.setText(this.charge[9]);
-    text69.addToPage(firstpage, {
-      x: 434,
-      y: 10,
-      width: 30,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text70 = form.createTextField('favorite69');
-    text70.setText(this.charge[10]);
-    text70.addToPage(firstpage, {
-      x: 469,
-      y: 10,
-      width: 27,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text71 = form.createTextField('favorite70');
-    text71.setText(this.charge[11]);
-    text71.addToPage(firstpage, {
-      x: 501,
-      y: 10,
-      width: 28,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text72 = form.createTextField('favorite71');
-    text72.setText(this.charge[12]);
-    text72.addToPage(firstpage, {
-      x: 534,
-      y: 10,
-      width: 28,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const text73 = form.createTextField('favorite72');
-    text73.setText(this.charge[13]);
-    text73.addToPage(firstpage, {
-      x: 565,
-      y: 10,
-      width: 15,
-      height: 25,
-      borderWidth: 0,
-      // backgroundColor: rgb(255, 255, 255)
-    });
-
-    const pdfBytes = await pdfDoc.save();
-    console.log(pdfBytes, 'pdf');
-    console.log(pdfBytes, 'pdf');
-    var base64String = this._arrayBufferToBase64(pdfBytes);
-    const x = 'data:application/pdf;base64,' + base64String;
-    this.formerge = x;
-    this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
-    this.newTask[0].generateDoc1 = x;
-    resolve(x)
-   })
-  }
-    ConvertNumberToWords(number:any) {
-      var words = new Array();
-      words[0] = '';
-      words[1] = 'One';
-      words[2] = 'Two';
-      words[3] = 'Three';
-      words[4] = 'Four';
-      words[5] = 'Five';
-      words[6] = 'Six';
-      words[7] = 'Seven';
-      words[8] = 'Eight';
-      words[9] = 'Nine';
-      words[10] = 'Ten';
-      words[11] = 'Eleven';
-      words[12] = 'Twelve';
-      words[13] = 'Thirteen';
-      words[14] = 'Fourteen';
-      words[15] = 'Fifteen';
-      words[16] = 'Sixteen';
-      words[17] = 'Seventeen';
-      words[18] = 'Eighteen';
-      words[19] = 'Nineteen';
-      words[20] = 'Twenty';
-      words[30] = 'Thirty';
-      words[40] = 'Forty';
-      words[50] = 'Fifty';
-      words[60] = 'Sixty';
-      words[70] = 'Seventy';
-      words[80] = 'Eighty';
-      words[90] = 'Ninety';
-      number = number.toString();
-      var atemp = number.split(".");
-      var number = atemp[0].split(",").join("");
-      var n_length = number.length;
-      var words_string = "";
-      if (n_length <= 9) {
-          var n_array:any = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
-          var received_n_array = new Array();
-          for (var i = 0; i <n_length; i++) {
-              received_n_array[i] = number.substr(i, 1);
-          }
-          for (var i =9 - n_length,j =0; i < 9; i++ , j++) {
-              n_array[i] = received_n_array[j];
-          }
-          for (var i =0,j =1; i < 9; i++ , j++) {
-              if (i == 0 || i == 2 || i == 4 || i == 7) {
-                  if (n_array[i] == 1) {
-                      n_array[j] = 10 + parseInt(n_array[j]);
-                      n_array[i] = 0;
-                  }
-              }
-          }
-         var value:any ="";
-          for (var i =0; i < 9; i++) {
-              if (i == 0 || i == 2 || i == 4 || i == 7) {
-                  value =n_array[i] * 10;
-              } else {
-                  value =n_array[i];
-              }
-              if (value != 0) {
-                  words_string += words[value] + " ";
-              }
-              if ((i == 1 && value != 0) || (i == 0 && value != 0 && n_array[i + 1] == 0)) {
-                  words_string += "Crores ";
-              }
-              if ((i == 3 && value != 0) || (i == 2 && value != 0 && n_array[i + 1] == 0)) {
-                  words_string += "Lakhs ";
-              }
-              if ((i == 5 && value != 0) || (i == 4 && value != 0 && n_array[i + 1] == 0)) {
-                  words_string += "Thousand ";
-              }
-              if (i == 6 && value != 0 && (n_array[i + 1] != 0 && n_array[i + 2] != 0)) {
-                  words_string += "Hundred and ";
-              } else if (i == 6 && value != 0) {
-                  words_string += "Hundred ";
-              }
-          }
-         words_string = words_string.split("  ").join(" ");
+
+      this.buyName1 = this.buyer2.join(' ');
+      this.buyName2 = this.buyer3.join(' ');
+
+      console.log('Shailendra *************', this.buyName1);
+      console.log('Shailendra *************', this.buyName2);
+
+      const formUrl = './../../assets/billUnder.pdf';
+
+      const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
+
+      const pdfDoc = await PDFDocument.load(formPdfBytes);
+
+      const form = pdfDoc.getForm();
+      const pages = pdfDoc.getPages();
+      const firstpage = pages[0];
+
+      const text1 = form.createTextField('favorite0');
+      text1.setText('');
+      text1.addToPage(firstpage, {
+        x: 156,
+        y: 752,
+        width: 250,
+        height: 12,
+        borderWidth: 0,
+        //backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text2 = form.createTextField('favorite1');
+      text2.setText('');
+      text2.addToPage(firstpage, {
+        x: 482,
+        y: 752,
+        width: 20,
+        height: 13,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const textf3 = form.createTextField('favorite2');
+      textf3.setText('');
+      textf3.addToPage(firstpage, {
+        x: 510,
+        y: 752,
+        width: 20,
+        height: 13,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text4 = form.createTextField('favorite3');
+      text4.setText('');
+      text4.addToPage(firstpage, {
+        x: 539,
+        y: 752,
+        width: 15,
+        height: 13,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text5 = form.createTextField('favorite4');
+      text5.setText('');
+      text5.addToPage(firstpage, {
+        x: 570,
+        y: 752,
+        width: 12,
+        height: 13,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      //exporter
+
+      const text6 = form.createTextField('favorite5');
+      text6.setText(this.team1);
+      text6.addToPage(firstpage, {
+        x: 18,
+        y: 684,
+        width: 295,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text7 = form.createTextField('favorite6');
+      // if(this.team2.length > 0){
+      text7.setText(this.team2);
+      text7.addToPage(firstpage, {
+        x: 18,
+        y: 665,
+        width: 295,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+      // }
+      // else{
+      //   text7.setText(this.item5.adress)
+      //   text7.addToPage(firstpage, {
+
+      //     x: 18,
+      //     y: 665,
+      //     width: 295,
+      //     height: 14,
+      //     borderWidth: 0,
+      //     // backgroundColor: rgb(255, 255, 255)
+      //   })
+      // }
+
+      const text8 = form.createTextField('favorite7');
+      // if(this.team2.length > 0 && this.team3.length == 0){
+      text8.setText(this.address1);
+      text8.addToPage(firstpage, {
+        x: 18,
+        y: 646,
+        width: 295,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+      // }
+      // else{
+      //   text8.setText(this.team3)
+      //   text8.addToPage(firstpage, {
+      //     x: 18,
+      //     y: 646,
+      //     width: 295,
+      //     height: 14,
+      //     borderWidth: 0,
+      //     // backgroundColor: rgb(255, 255, 255)
+
+      //   })
+      // }
+
+      const text9 = form.createTextField('favorite8');
+      //  if(this.team2.length > 0 && this.team3.length > 0){
+      text9.setText(this.address2);
+      text9.addToPage(firstpage, {
+        x: 18,
+        y: 628,
+        width: 295,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+      // }
+
+      const text10 = form.createTextField('favorite9');
+      text10.setText(this.address3);
+      text10.addToPage(firstpage, {
+        x: 18,
+        y: 612,
+        width: 295,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text11 = form.createTextField('favorite10');
+      text11.setText('');
+      text11.addToPage(firstpage, {
+        x: 18,
+        y: 594,
+        width: 295,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      //buyer
+
+      const text12 = form.createTextField('favorite11');
+      text12.setText(this.buyName1);
+      text12.addToPage(firstpage, {
+        x: 320,
+        y: 684,
+        width: 255,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text13 = form.createTextField('favorite12');
+      text13.setText(this.buyName2);
+      text13.addToPage(firstpage, {
+        x: 320,
+        y: 665,
+        width: 255,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text14 = form.createTextField('favorite13');
+      text14.setText(this.buyerAds1);
+      text14.addToPage(firstpage, {
+        x: 320,
+        y: 646,
+        width: 255,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text15 = form.createTextField('favorite14');
+      text15.setText(this.buyerAds2);
+      text15.addToPage(firstpage, {
+        x: 320,
+        y: 628,
+        width: 255,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text16 = form.createTextField('favorite15');
+      text16.setText(this.buyerAds3);
+      text16.addToPage(firstpage, {
+        x: 320,
+        y: 612,
+        width: 255,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text17 = form.createTextField('favorite16');
+      text17.setText('');
+      text17.addToPage(firstpage, {
+        x: 320,
+        y: 594,
+        width: 255,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      //checkbox
+
+      const checkbox1 = form.createCheckBox('check1');
+      checkbox1.addToPage(firstpage, {
+        x: 150,
+        y: 575,
+        width: 8,
+        height: 8,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const checkbox2 = form.createCheckBox('check2');
+      checkbox2.addToPage(firstpage, {
+        x: 369,
+        y: 575,
+        width: 8,
+        height: 8,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const checkbox3 = form.createCheckBox('check3');
+      checkbox3.addToPage(firstpage, {
+        x: 570,
+        y: 575,
+        width: 8,
+        height: 8,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      //draw bank details
+
+      const text18 = form.createTextField('favorite17');
+      text18.setText('');
+      text18.addToPage(firstpage, {
+        x: 219,
+        y: 553,
+        width: 360,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text19 = form.createTextField('favorite18');
+      text19.setText('');
+      text19.addToPage(firstpage, {
+        x: 219,
+        y: 538,
+        width: 360,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text20 = form.createTextField('favorite19');
+      text20.setText('');
+      text20.addToPage(firstpage, {
+        x: 219,
+        y: 521,
+        width: 360,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text21 = form.createTextField('favorite20');
+      text21.setText('');
+      text21.addToPage(firstpage, {
+        x: 219,
+        y: 506,
+        width: 360,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text22 = form.createTextField('favorite21');
+      text22.setText('');
+      text22.addToPage(firstpage, {
+        x: 219,
+        y: 491,
+        width: 360,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text23 = form.createTextField('favorite22');
+      text23.setText('');
+      text23.addToPage(firstpage, {
+        x: 219,
+        y: 478,
+        width: 360,
+        height: 10,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      //checkbox
+
+      const checkbox4 = form.createCheckBox('check4');
+      checkbox4.addToPage(firstpage, {
+        x: 245,
+        y: 456,
+        width: 5,
+        height: 5,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const checkbox5 = form.createCheckBox('check5');
+      checkbox5.addToPage(firstpage, {
+        x: 453,
+        y: 463,
+        width: 5,
+        height: 5,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      //text
+
+      const text24 = form.createTextField('favorite23');
+      text24.setText('');
+      text24.addToPage(firstpage, {
+        x: 219,
+        y: 412,
+        width: 360,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text25 = form.createTextField('favorite24');
+      text25.setText('');
+      text25.addToPage(firstpage, {
+        x: 219,
+        y: 390,
+        width: 360,
+        height: 16,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      //checkbox
+
+      const checkbox6 = form.createCheckBox('check6');
+      checkbox6.addToPage(firstpage, {
+        x: 389,
+        y: 375,
+        width: 8,
+        height: 8,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const checkbox7 = form.createCheckBox('check7');
+      checkbox7.addToPage(firstpage, {
+        x: 550,
+        y: 375,
+        width: 8,
+        height: 8,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      // firx
+      var tp: any = {
+        firxNumber: [],
+        firxDate: [],
+        firxCurrency: [],
+        firxAmount: [],
+        firxCommision: [],
+        firxRecAmo: []
+      };
+      for (let index = 0; index < this.advanceArray[sbno]?.length; index++) {
+        const element: any = this.advanceArray[sbno][index];
+        tp['firxNumber'].push(element?.irDataItem?.billNo)
+        tp['firxDate'].push(element?.irDataItem?.date)
+        tp['firxCurrency'].push(element?.irDataItem?.currency)
+        tp['firxAmount'].push(element?.irDataItem?.amount)
+        tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
+        tp['firxRecAmo'].push(0)
       }
-      return words_string;
+      const text26 = form.createTextField('favorite25');
+      text26.setText(tp?.firxNumber.toString());
+      text26.addToPage(firstpage, {
+        x: 128,
+        y: 348,
+        width: 187,
+        height: 20,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text27 = form.createTextField('favorite26');
+      text27.setText(tp?.firxCurrency.toString());
+      text27.addToPage(firstpage, {
+        x: 128,
+        y: 324,
+        width: 187,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text28 = form.createTextField('favorite27');
+      text28.setText(tp?.firxDate.toString());
+      text28.addToPage(firstpage, {
+        x: 421,
+        y: 348,
+        width: 160,
+        height: 20,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const SumfirxAmount: any = tp?.firxAmount.reduce((partialSum, a) => partialSum + a, 0);
+      const text29 = form.createTextField('favorite28');
+      text29.setText(SumfirxAmount.toString());
+      text29.addToPage(firstpage, {
+        x: 421,
+        y: 324,
+        width: 160,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      //bill details
+      // firx
+      var tp_bill: any = {
+        SbNumber: [],
+        SbDate: [],
+        SbCurrency: [],
+        SbAmount: []
+      };
+      var filterSB: any = this.itemArray.filter((item: any) => 'SB_' + item.sbno == sbno)
+      for (let index = 0; index < filterSB?.length; index++) {
+        const element = filterSB[index];
+        tp_bill['SbNumber'].push(element?.sbno)
+        tp_bill['SbDate'].push(element?.sbdate)
+        tp_bill['SbCurrency'].push(element?.fobCurrency)
+        tp_bill['SbAmount'].push(element?.fobValue)
+      }
+      const text30 = form.createTextField('favorite29');
+      text30.setText(tp_bill?.SbCurrency.toString());
+      text30.addToPage(firstpage, {
+        x: 128,
+        y: 287,
+        width: 140,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text31 = form.createTextField('favorite30');
+      text31.setText(tp_bill?.SbAmount.toString());
+      text31.addToPage(firstpage, {
+        x: 128,
+        y: 266,
+        width: 140,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text32 = form.createTextField('favorite31');
+      text32.setText(this.ConvertNumberToWords(tp_bill?.SbAmount.toString()));
+      text32.addToPage(firstpage, {
+        x: 388,
+        y: 287,
+        width: 188,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text33 = form.createTextField('favorite32');
+      text33.setText('');
+      text33.addToPage(firstpage, {
+        x: 388,
+        y: 266,
+        width: 188,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      //checkbox
+
+      const checkbox8 = form.createCheckBox('check8');
+      checkbox8.addToPage(firstpage, {
+        x: 141,
+        y: 251,
+        width: 5,
+        height: 5,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const checkbox9 = form.createCheckBox('check9');
+      checkbox9.addToPage(firstpage, {
+        x: 288,
+        y: 251,
+        width: 5,
+        height: 5,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text01 = form.createTextField('favorite01');
+      text01.setText('');
+      text01.addToPage(firstpage, {
+        x: 393,
+        y: 253,
+        width: 30,
+        height: 10,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text02 = form.createTextField('favorite02');
+      text02.setText('');
+      text02.addToPage(firstpage, {
+        x: 453,
+        y: 242,
+        width: 60,
+        height: 10,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      // description of goods
+
+      const text34 = form.createTextField('favorite33');
+      text34.setText('');
+      text34.addToPage(firstpage, {
+        x: 128,
+        y: 211,
+        width: 250,
+        height: 20,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text35 = form.createTextField('favorite34');
+      text35.setText('');
+      text35.addToPage(firstpage, {
+        x: 128,
+        y: 190,
+        width: 140,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text36 = form.createTextField('favorite35');
+      text36.setText('');
+      text36.addToPage(firstpage, {
+        x: 448,
+        y: 211,
+        width: 132,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text37 = form.createTextField('favorite36');
+      text37.setText('');
+      text37.addToPage(firstpage, {
+        x: 388,
+        y: 190,
+        width: 188,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text38 = form.createTextField('favorite37');
+      text38.setText('');
+      text38.addToPage(firstpage, {
+        x: 275,
+        y: 170,
+        width: 300,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text39 = form.createTextField('favorite38');
+      text39.setText(tp_bill?.SbNumber.toString());
+      text39.addToPage(firstpage, {
+        x: 275,
+        y: 146,
+        width: 300,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text40 = form.createTextField('favorite39');
+      text40.setText('');
+      text40.addToPage(firstpage, {
+        x: 128,
+        y: 126,
+        width: 140,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text41 = form.createTextField('favorite40');
+      text41.setText(
+        `${this.myArr[0]}  to  ${this.myArr[this.myArr.length - 1]}`
+      );
+      // console.log(this.myArr[0])
+      // console.log(this.myArr[this.myArr.length - 1])
+      text41.addToPage(firstpage, {
+        x: 388,
+        y: 126,
+        width: 188,
+        height: 18,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      // const texta41 = form.createTextField('favorite404')
+      // texta41.setText(`${this.myArr.length}`)
+      // // console.log(this.myArr[0])
+      // // console.log(this.myArr[this.myArr.length - 1])
+      // texta41.addToPage(firstpage, {
+      //   x: 266,
+      //   y: 106,
+      //   width: 188,
+      //   height: 18,
+      //   borderWidth: 0,
+      //   // backgroundColor: rgb(255, 255, 255)
+      // })
+
+      //table1
+      const text421 = form.createTextField('favorite411');
+      text421.setText(`${this.myArr.length}`);
+      text421.addToPage(firstpage, {
+        x: 228,
+        y: 108,
+        width: 10,
+        height: 16,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text42 = form.createTextField('favorite41');
+      text42.setText('');
+      text42.addToPage(firstpage, {
+        x: 97,
+        y: 62,
+        width: 45,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text43 = form.createTextField('favorite42');
+      text43.setText('');
+      text43.addToPage(firstpage, {
+        x: 148,
+        y: 62,
+        width: 50,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text44 = form.createTextField('favorite43');
+      text44.setText('');
+      text44.addToPage(firstpage, {
+        x: 206,
+        y: 62,
+        width: 65,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text45 = form.createTextField('favorite44');
+      text45.setText('');
+      text45.addToPage(firstpage, {
+        x: 276,
+        y: 62,
+        width: 41,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text46 = form.createTextField('favorite45');
+      text46.setText('');
+      text46.addToPage(firstpage, {
+        x: 320,
+        y: 62,
+        width: 45,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text47 = form.createTextField('favorite46');
+      text47.setText('');
+      text47.addToPage(firstpage, {
+        x: 370,
+        y: 62,
+        width: 33,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text48 = form.createTextField('favorite47');
+      text48.setText('');
+      text48.addToPage(firstpage, {
+        x: 408,
+        y: 62,
+        width: 80,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text49 = form.createTextField('favorite48');
+      text49.setText('');
+      text49.addToPage(firstpage, {
+        x: 492,
+        y: 62,
+        width: 50,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text50 = form.createTextField('favorite49');
+      text50.setText('');
+      text50.addToPage(firstpage, {
+        x: 547,
+        y: 62,
+        width: 33,
+        height: 14,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text51 = form.createTextField('favorite50');
+      text51.setText('');
+      text51.addToPage(firstpage, {
+        x: 97,
+        y: 51,
+        width: 45,
+        height: 9,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text52 = form.createTextField('favorite51');
+      text52.setText('');
+      text52.addToPage(firstpage, {
+        x: 148,
+        y: 51,
+        width: 50,
+        height: 9,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text53 = form.createTextField('favorite52');
+      text53.setText('');
+      text53.addToPage(firstpage, {
+        x: 206,
+        y: 51,
+        width: 65,
+        height: 9,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text54 = form.createTextField('favorite53');
+      text54.setText('');
+      text54.addToPage(firstpage, {
+        x: 276,
+        y: 51,
+        width: 41,
+        height: 9,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text55 = form.createTextField('favorite54');
+      text55.setText('');
+      text55.addToPage(firstpage, {
+        x: 320,
+        y: 51,
+        width: 45,
+        height: 9,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text56 = form.createTextField('favorite55');
+      text56.setText('');
+      text56.addToPage(firstpage, {
+        x: 370,
+        y: 51,
+        width: 33,
+        height: 9,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text57 = form.createTextField('favorite56');
+      text57.setText('');
+      text57.addToPage(firstpage, {
+        x: 408,
+        y: 51,
+        width: 80,
+        height: 9,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text58 = form.createTextField('favorite57');
+      text58.setText('');
+      text58.addToPage(firstpage, {
+        x: 492,
+        y: 51,
+        width: 50,
+        height: 9,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text59 = form.createTextField('favorite58');
+      text59.setText('');
+      text59.addToPage(firstpage, {
+        x: 547,
+        y: 51,
+        width: 33,
+        height: 9,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      //table2
+
+      const text60 = form.createTextField('favorite59');
+      text60.setText(this.charge[0]);
+      text60.addToPage(firstpage, {
+        x: 135,
+        y: 10,
+        width: 30,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text61 = form.createTextField('favorite60');
+      text61.setText(this.charge[1]);
+      text61.addToPage(firstpage, {
+        x: 167,
+        y: 10,
+        width: 30,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text62 = form.createTextField('favorite61');
+      text62.setText(this.charge[2]);
+      text62.addToPage(firstpage, {
+        x: 201,
+        y: 10,
+        width: 30,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text63 = form.createTextField('favorite62');
+      text63.setText(this.charge[3]);
+      text63.addToPage(firstpage, {
+        x: 235,
+        y: 10,
+        width: 30,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text64 = form.createTextField('favorite63');
+      text64.setText(this.charge[4]);
+      text64.addToPage(firstpage, {
+        x: 266,
+        y: 10,
+        width: 30,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text65 = form.createTextField('favorite64');
+      text65.setText(this.charge[5]);
+      text65.addToPage(firstpage, {
+        x: 300,
+        y: 10,
+        width: 30,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text66 = form.createTextField('favorite65');
+      text66.setText(this.charge[6]);
+      text66.addToPage(firstpage, {
+        x: 331,
+        y: 10,
+        width: 30,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text67 = form.createTextField('favorite66');
+      text67.setText(this.charge[7]);
+      text67.addToPage(firstpage, {
+        x: 363,
+        y: 10,
+        width: 30,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text68 = form.createTextField('favorite67');
+      text68.setText(this.charge[8]);
+      text68.addToPage(firstpage, {
+        x: 397,
+        y: 10,
+        width: 34,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text69 = form.createTextField('favorite68');
+      text69.setText(this.charge[9]);
+      text69.addToPage(firstpage, {
+        x: 434,
+        y: 10,
+        width: 30,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text70 = form.createTextField('favorite69');
+      text70.setText(this.charge[10]);
+      text70.addToPage(firstpage, {
+        x: 469,
+        y: 10,
+        width: 27,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text71 = form.createTextField('favorite70');
+      text71.setText(this.charge[11]);
+      text71.addToPage(firstpage, {
+        x: 501,
+        y: 10,
+        width: 28,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text72 = form.createTextField('favorite71');
+      text72.setText(this.charge[12]);
+      text72.addToPage(firstpage, {
+        x: 534,
+        y: 10,
+        width: 28,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const text73 = form.createTextField('favorite72');
+      text73.setText(this.charge[13]);
+      text73.addToPage(firstpage, {
+        x: 565,
+        y: 10,
+        width: 15,
+        height: 25,
+        borderWidth: 0,
+        // backgroundColor: rgb(255, 255, 255)
+      });
+
+      const pdfBytes = await pdfDoc.save();
+      console.log(pdfBytes, 'pdf');
+      console.log(pdfBytes, 'pdf');
+      var base64String = this._arrayBufferToBase64(pdfBytes);
+      const x = 'data:application/pdf;base64,' + base64String;
+      this.formerge = x;
+      this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
+      this.newTask[0].generateDoc1 = x;
+      resolve(x)
+    })
+  }
+  ConvertNumberToWords(number: any) {
+    var words = new Array();
+    words[0] = '';
+    words[1] = 'One';
+    words[2] = 'Two';
+    words[3] = 'Three';
+    words[4] = 'Four';
+    words[5] = 'Five';
+    words[6] = 'Six';
+    words[7] = 'Seven';
+    words[8] = 'Eight';
+    words[9] = 'Nine';
+    words[10] = 'Ten';
+    words[11] = 'Eleven';
+    words[12] = 'Twelve';
+    words[13] = 'Thirteen';
+    words[14] = 'Fourteen';
+    words[15] = 'Fifteen';
+    words[16] = 'Sixteen';
+    words[17] = 'Seventeen';
+    words[18] = 'Eighteen';
+    words[19] = 'Nineteen';
+    words[20] = 'Twenty';
+    words[30] = 'Thirty';
+    words[40] = 'Forty';
+    words[50] = 'Fifty';
+    words[60] = 'Sixty';
+    words[70] = 'Seventy';
+    words[80] = 'Eighty';
+    words[90] = 'Ninety';
+    number = number.toString();
+    var atemp = number.split(".");
+    var number = atemp[0].split(",").join("");
+    var n_length = number.length;
+    var words_string = "";
+    if (n_length <= 9) {
+      var n_array: any = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
+      var received_n_array = new Array();
+      for (var i = 0; i < n_length; i++) {
+        received_n_array[i] = number.substr(i, 1);
+      }
+      for (var i = 9 - n_length, j = 0; i < 9; i++, j++) {
+        n_array[i] = received_n_array[j];
+      }
+      for (var i = 0, j = 1; i < 9; i++, j++) {
+        if (i == 0 || i == 2 || i == 4 || i == 7) {
+          if (n_array[i] == 1) {
+            n_array[j] = 10 + parseInt(n_array[j]);
+            n_array[i] = 0;
+          }
+        }
+      }
+      var value: any = "";
+      for (var i = 0; i < 9; i++) {
+        if (i == 0 || i == 2 || i == 4 || i == 7) {
+          value = n_array[i] * 10;
+        } else {
+          value = n_array[i];
+        }
+        if (value != 0) {
+          words_string += words[value] + " ";
+        }
+        if ((i == 1 && value != 0) || (i == 0 && value != 0 && n_array[i + 1] == 0)) {
+          words_string += "Crores ";
+        }
+        if ((i == 3 && value != 0) || (i == 2 && value != 0 && n_array[i + 1] == 0)) {
+          words_string += "Lakhs ";
+        }
+        if ((i == 5 && value != 0) || (i == 4 && value != 0 && n_array[i + 1] == 0)) {
+          words_string += "Thousand ";
+        }
+        if (i == 6 && value != 0 && (n_array[i + 1] != 0 && n_array[i + 2] != 0)) {
+          words_string += "Hundred and ";
+        } else if (i == 6 && value != 0) {
+          words_string += "Hundred ";
+        }
+      }
+      words_string = words_string.split("  ").join(" ");
+    }
+    return words_string;
   }
   _arrayBufferToBase64(buffer) {
     var binary = '';
@@ -2698,7 +2705,7 @@ export class NewDirectDispatchComponent implements OnInit {
     return window.btoa(binary);
   }
 
-  doneDox(genDoc:any) {
+  doneDox(genDoc: any) {
     this.doneToDox();
     console.log('genDoc', genDoc);
     console.log(this.newTask);
@@ -2934,84 +2941,86 @@ export class NewDirectDispatchComponent implements OnInit {
   PROCEED_BTN_DISABLED: boolean = false;
   filterSum: any = [];
   balanceAvai: any = '';
-  SELECTED_FIRX_INDEX:any=[];
+  SELECTED_FIRX_INDEX: any = [];
   refSbNo: number;
   PDF_LIST: any = [];
   ACCORDING_LIST: any = [];
   temp: any = [];
-  CHECKEBOX_SELECTION:any={SHIPPING_BILL:[],INWARD_REMMITANCE:[]};
-  
-  async addToSbArray(irDataItem: any, e,i) {
-   let index:any = this.item13.findIndex(x => x.billNo ===irDataItem?.billNo);
-   this.balanceAvai = this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]?.SB_Amout_Realized
-   if (this.item13[index]['isEnabled']==false || this.item13[index]?.sbno?.includes(this.SELECTED_SHIPPING_BILL?.data?.sbNo)) {
-    if (parseFloat(this.balanceAvai)> parseFloat(this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'])) {
-      if (e.target.checked) {
-        console.log('Checked');
-        let advance = this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo]?.some(
-          (item:any) => item.valueInternal === irDataItem.billNo
-        );
-        if (!advance) {
-          console.log('Adding');
-          irDataItem.Used_Balance = irDataItem?.BalanceAvail;
-          let details:any = {
-            valueInternal: irDataItem.billNo,
-            irDataItem: irDataItem,
-            sb: this.currentSbForAdvance,
-          };
-          this.item13[index]['isEnabled']=true;
-          this.Advance_Amount_Sum['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details)
-          this.filterSum =  this.Advance_Amount_Sum['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
-          if (this.filterSum > this.balanceAvai) {
-            this.Advance_Amount_Sum['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].pop();
-            var sum =  this.Advance_Amount_Sum['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
-            let temp:any = details;
-            var last_amount:any = this.TO_FIXED(parseFloat(this.balanceAvai) - parseFloat(sum), 2);
-            temp.irDataItem.BalanceAvail = this.TO_FIXED(parseFloat(details?.irDataItem?.BalanceAvail) - parseFloat(last_amount), 2);
-            this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(temp)
-            this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(temp.irDataItem)
-            this.filterSum = this.TO_FIXED(sum + last_amount, 2);
-            irDataItem.Used_Balance = last_amount;
-            this.ExportBillLodgement_Form.controls['Carry_Amount'].setValue(temp);
-            console.log(details.irDataItem.BalanceAvail, sum, this.filterSum, last_amount, 'asdfasfadfsa')
-          } else {
-            this.PROCEED_BTN_DISABLED = true;
-            this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details);
-            this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(irDataItem)
+  CHECKEBOX_SELECTION: any = { SHIPPING_BILL: [], INWARD_REMMITANCE: [] };
+  OK_BUTTON_CONDITION:any='';
+  async addToSbArray(irDataItem: any, e, i) {
+    let index: any = this.item13.findIndex(x => x.billNo === irDataItem?.billNo);
+    this.balanceAvai = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]?.SB_Amout_Realized
+    if (this.item13[index]['isEnabled'] == false || !this.item13[index]?.sbno?.includes(this.SELECTED_SHIPPING_BILL?.data?.sbNo)) {
+      if (parseFloat(this.balanceAvai) > parseFloat(this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'])) {
+        if (e.target.checked) {
+          console.log('Checked');
+          let advance = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo]?.some(
+            (item: any) => item.valueInternal === irDataItem.billNo
+          );
+          if (!advance) {
+            console.log('Adding');
+            irDataItem.Used_Balance = irDataItem?.BalanceAvail;
+            let details: any = {
+              valueInternal: irDataItem.billNo,
+              irDataItem: irDataItem,
+              sb: this.currentSbForAdvance,
+            };
+            this.item13[index]['isEnabled'] = true;
+            this.OK_BUTTON_CONDITION=true;
+            this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details)
+            this.filterSum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+            if (this.filterSum > this.balanceAvai) {
+              this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].pop();
+              var sum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+              let temp: any = details;
+              var last_amount: any = this.TO_FIXED(parseFloat(this.balanceAvai) - parseFloat(sum), 2);
+              temp.irDataItem.BalanceAvail = this.TO_FIXED(parseFloat(details?.irDataItem?.BalanceAvail) - parseFloat(last_amount), 2);
+              this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(temp)
+              this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(temp.irDataItem)
+              this.filterSum = this.TO_FIXED(sum + last_amount, 2);
+              irDataItem.Used_Balance = last_amount;
+              this.ExportBillLodgement_Form.controls['Carry_Amount'].setValue(temp);
+              console.log(details.irDataItem.BalanceAvail, sum, this.filterSum, last_amount, 'asdfasfadfsa')
+            } else {
+              this.PROCEED_BTN_DISABLED = true;
+              this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details);
+              this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(irDataItem)
+            }
+            this.ExportBillLodgement_Form.controls['Total_SB_Amount'].setValue(this.TO_FIXED(this.balanceAvai, 2));
+            this.ExportBillLodgement_Form.controls['Total_FIRX_Amount'].setValue(this.TO_FIXED(this.filterSum, 2));
+            this.ExportBillLodgement_Form.controls['Total_Reaming_Amount'].setValue(this.TO_FIXED(this.balanceAvai - this.filterSum, 2));
           }
-          this.ExportBillLodgement_Form.controls['Total_SB_Amount'].setValue(this.TO_FIXED(this.balanceAvai, 2));
-          this.ExportBillLodgement_Form.controls['Total_FIRX_Amount'].setValue(this.TO_FIXED(this.filterSum, 2));
-          this.ExportBillLodgement_Form.controls['Total_Reaming_Amount'].setValue(this.TO_FIXED(this.balanceAvai - this.filterSum, 2));
+        } else {
+          console.log('removing, uncheked');
+          this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item: any) => item.valueInternal !== irDataItem.billNo);
+          this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo] = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item) => item.valueInternal !== irDataItem.billNo);
+          this.SELECTED_FIRX_INDEX['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][i] = false;
+          this.item13[i]['isEnabled'] = false;
+          this.OK_BUTTON_CONDITION='';
         }
-      } else {
-        console.log('removing, uncheked');
-        this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo] = this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item:any) => item.valueInternal !== irDataItem.billNo);
-        this.Advance_Amount_Sum['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo] =  this.Advance_Amount_Sum['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item) => item.valueInternal !== irDataItem.billNo);
-        this.SELECTED_FIRX_INDEX['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo][i]=false;
-        this.item13[i]['isEnabled']=false;
-      }
-      this.SHIPPING_MAP[this.currentSbForAdvance] = this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo];
-      this.shippingMap.set(this.refSbNo, JSON.parse(JSON.stringify(this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo])));
-      this.ExportBillLodgement_Form.controls['Advance_reference_Number'].setValue(this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo]);
-      this.ExportBillLodgement_Form.controls['Shipping_bill_list'].setValue(this.itemArray);
+        this.SHIPPING_MAP[this.currentSbForAdvance] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo];
+        this.shippingMap.set(this.refSbNo, JSON.parse(JSON.stringify(this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo])));
+        this.ExportBillLodgement_Form.controls['Advance_reference_Number'].setValue(this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo]);
+        this.ExportBillLodgement_Form.controls['Shipping_bill_list'].setValue(this.itemArray);
 
+      } else {
+        e.target.checked = false;
+        this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount', "You've exceeded the maximum transaction amount set by your Sb amount..")
+      }
     } else {
-      e.target.checked = false;
-      this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount', "You've exceeded the maximum transaction amount set by your Sb amount..")
+      e.target.checked = true;
+      this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Error', "You already selected this firx no. </br>Please select other firx no.")
     }
-   } else {
-    e.target.checked = true;
-    this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Error', "You already selected this firx no. </br>Please select other firx no.")
-   }
-    this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO']=this.advanceArray['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo];
-    var IRADVICE_SUM:any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
-    this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM']=parseFloat(IRADVICE_SUM).toFixed(3); 
-    
+    this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo];
+    var IRADVICE_SUM: any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
+    this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'] = parseFloat(IRADVICE_SUM).toFixed(3);
+
     console.log(this.advanceArray, this.balanceAvai, this.filterSum, this.Advance_Amount_Sum, this.shippingMap, this.ACCORDING_LIST,
-    this.FILTER_DATA.FILTER_COMMERCIAL,this.SELECTED_FIRX_INDEX,this.item13,'Deva Hello0*************************');
+      this.FILTER_DATA.FILTER_COMMERCIAL, this.SELECTED_FIRX_INDEX, this.item13, 'Deva Hello0*************************');
   }
 
-  changeCheckbox1(event,a, data) {
+  changeCheckbox1(event, a, data) {
     if (data.blCopyDoc) {
       if (data.commercialDoc) {
         if (data.packingDoc) {
@@ -3020,16 +3029,16 @@ export class NewDirectDispatchComponent implements OnInit {
             this.sbArray.push(a);
           } else {
             this.sbArray.splice(j, 1);
-            $(event.target).prop('checked',false)
+            $(event.target).prop('checked', false)
           }
           this.currentSbForAdvance = a;
           this.ACCORDING_LIST['SB_' + a] = [];
-          this.advanceArray['SB_'+a]=[];
-          this.Advance_Amount_Sum['SB_'+a]=[]
+          this.advanceArray['SB_' + a] = [];
+          this.Advance_Amount_Sum['SB_' + a] = []
           this.refSbNo = a;
-          this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+a]= this.FILTER_DATA?.COMMERCIAL?.filter((item:any)=>item?.sbNo===a);
-          this.SELECTED_FIRX_INDEX['SB_'+a]=[];
-          console.log('changeCheckbox1',data,this.FILTER_DATA,this.sbArray,this.ACCORDING_LIST);
+          this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + a] = this.FILTER_DATA?.COMMERCIAL?.filter((item: any) => item?.sbNo === a);
+          this.SELECTED_FIRX_INDEX['SB_' + a] = [];
+          console.log('changeCheckbox1', data, this.FILTER_DATA, this.sbArray, this.ACCORDING_LIST);
         } else {
           console.log("You Don't have packingDoc Document");
         }
@@ -3040,13 +3049,13 @@ export class NewDirectDispatchComponent implements OnInit {
       console.log("You Don't have BLCopy Document");
     }
   }
- 
-  addTofilter1(event, id, data,i) {
+
+  addTofilter1(event, id, data, i) {
     this.temp[id] = [];
     if (data.blCopyDoc) {
       if (data.commercialDoc) {
         if (data.packingDoc) {
-          let removeArray:any = [];
+          let removeArray: any = [];
           if (event.target.checked) {
             for (let element of this.item1) {
               if (element._id == id) {
@@ -3064,15 +3073,21 @@ export class NewDirectDispatchComponent implements OnInit {
                 }, {
                   pdf: (element['packingDoc']),
                   name: 'packingDoc'
+                },{
+                  pdf: (element['DebitNote']),
+                  name: 'debitNotedoc'
+                }, {
+                  pdf:this.documentService.MT102_SUBJECT?.file,
+                  name:'MT103'
                 }]
               }
             }
-            this.CHECKEBOX_SELECTION.SHIPPING_BILL[i]=true;
+            this.CHECKEBOX_SELECTION.SHIPPING_BILL[i] = true;
           } else {
-            $(event.target).prop('checked',false);
-            this.CHECKEBOX_SELECTION.SHIPPING_BILL[i]=false;
+            $(event.target).prop('checked', false);
+            this.CHECKEBOX_SELECTION.SHIPPING_BILL[i] = false;
             if (this.itemArray.length) {
-              this.itemArray.forEach((element:any) => {
+              this.itemArray.forEach((element: any) => {
                 if (element._id != id) {
                   removeArray.push(element);
                 }
@@ -3080,26 +3095,26 @@ export class NewDirectDispatchComponent implements OnInit {
               this.itemArray = removeArray;
             }
           }
-          
+
           this.ExportBillLodgement_Form.controls['documents'].setValue(this.temp);
-          console.log('test2', id, this.itemArray, this.temp, this.PDF_LIST);
+          console.log('test2', id, this.documentService.MT102_SUBJECT,this.itemArray, this.temp, this.PDF_LIST);
         } else {
           this.toastr.error(
             "You Don't Have Any Packing List Documnet Linkend with this Shipping Bill"
           );
-          $(event.target).prop('checked',false);
+          $(event.target).prop('checked', false);
         }
       } else {
         this.toastr.error(
           "You Don't Have Any Commercial Invoice Linkend with this Shipping Bill"
         );
-        $(event.target).prop('checked',false);
+        $(event.target).prop('checked', false);
       }
     } else {
       this.toastr.error(
         "You Don't Have Any AirWay / BLCopy Documnet Linkend with this Shipping Bill"
       );
-      $(event.target).prop('checked',false);
+      $(event.target).prop('checked', false);
     }
   }
 
@@ -3113,7 +3128,7 @@ export class NewDirectDispatchComponent implements OnInit {
     window.location.reload();
   }
   TO_FIXED(amount: any, fixed_position: any) {
-    return !isNaN(amount)?parseFloat(amount).toFixed(fixed_position):0;
+    return !isNaN(amount) ? parseFloat(amount).toFixed(fixed_position) : 0;
   }
   exportToExcel() {
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
@@ -3129,7 +3144,7 @@ export class NewDirectDispatchComponent implements OnInit {
   }
 
 
-  currentDownloadPdf:any=[];
+  currentDownloadPdf: any = [];
   openToPdf(content3, pipo) {
     this.generateChecked = true;
     this.currentDownloadPdf = pipo;
@@ -3220,7 +3235,7 @@ export class NewDirectDispatchComponent implements OnInit {
       );
   }
 
-  addPdfToSelectedPdf(value:any, e:any) {
+  addPdfToSelectedPdf(value: any, e: any) {
     if (e.target.checked) {
       if (this.selectedPdfs.includes(value.changingThisBreaksApplicationSecurity) === false) {
         this.selectedPdfs.push(value.changingThisBreaksApplicationSecurity);
@@ -3263,7 +3278,7 @@ export class NewDirectDispatchComponent implements OnInit {
       const mergedPdfFile = await mergedPdf.save();
       var base64String = this._arrayBufferToBase64(mergedPdfFile);
       console.log('merge doc', base64String);
-      var genDoc:any = 'data:application/pdf;base64,' + base64String;
+      var genDoc: any = 'data:application/pdf;base64,' + base64String;
       const byteCharacters = atob(base64String);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
@@ -3353,7 +3368,7 @@ export class NewDirectDispatchComponent implements OnInit {
   };
 
   mergeAllPDFs = async (type: String) => {
-    let urls:any = this.selectedPdfs;
+    let urls: any = this.selectedPdfs;
     const numDocs = urls.length;
     const pdfDoc = await PDFDocument.create();
     var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
@@ -3398,9 +3413,9 @@ export class NewDirectDispatchComponent implements OnInit {
     };
     // download all the pdfs
     let downloadAllFiles = () => {
-      var promises:any = [];
+      var promises: any = [];
       for (var i = 0; i < numDocs; i++) {
-        let filename:any = urls[i].substring(urls[i].lastIndexOf('/') + 1);
+        let filename: any = urls[i].substring(urls[i].lastIndexOf('/') + 1);
         promises.push(downloadEachFile(filename));
       }
       Promise.all(promises).then(
@@ -3483,7 +3498,7 @@ export class NewDirectDispatchComponent implements OnInit {
       };
       // download all the pdfs
       let downloadAllFiles = () => {
-        var promises:any = [];
+        var promises: any = [];
         for (var i = 0; i < numDocs; i++) {
           let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
           promises.push(downloadEachFile(filename));
@@ -3504,8 +3519,8 @@ export class NewDirectDispatchComponent implements OnInit {
 
     var bulkDownloadSingle = async (mainDoc1, index) => {
       if (mainDoc1[index]) {
-        let sb:any = mainDoc1[index];
-        var downloadALL:any = [];
+        let sb: any = mainDoc1[index];
+        var downloadALL: any = [];
         downloadALL.push(sb.changingThisBreaksApplicationSecurity);
         if (this.creditNote.changingThisBreaksApplicationSecurity) {
           downloadALL.push(
@@ -3617,8 +3632,8 @@ export class NewDirectDispatchComponent implements OnInit {
   };
 
   public mergeIr() {
-    let filterSBdata:any = [];
-    let completedsb:any = [];
+    let filterSBdata: any = [];
+    let completedsb: any = [];
     let sbindex = 0;
     for (let sbNum of this.item1) {
       let totalForex = 0;
@@ -3663,10 +3678,10 @@ export class NewDirectDispatchComponent implements OnInit {
       }
     }
   }
-  
-TOTAL_FIRX_AMOUNT:any=0;
+
+  TOTAL_FIRX_AMOUNT: any = 0;
   public mergeIr2() {
-    let filterIrdata:any = [];
+    let filterIrdata: any = [];
     if (this.item1 && this.item1.length) {
       for (let irData of this.item9) {
         // item9 have forex details
@@ -3716,7 +3731,7 @@ TOTAL_FIRX_AMOUNT:any=0;
     }
     this.item13 = filterIrdata;
     this.item13?.forEach(element => {
-       element['isEnabled']=false;
+      element['isEnabled'] = false;
     });
     console.log("filterForex", filterIrdata, this.item13)
   }
@@ -3815,8 +3830,8 @@ TOTAL_FIRX_AMOUNT:any=0;
       return class2;
     }
   }
-  Text_Changer(text:any){
-  return text;
+  Text_Changer(text: any) {
+    return text;
   }
   Changebutton(mainkey, Showkey, hidekey, value) {
     this.Lodgement[mainkey][Showkey] = value
@@ -3834,8 +3849,8 @@ TOTAL_FIRX_AMOUNT:any=0;
   OBJECT_LENGTH(data: any) {
     return data != undefined ? data.length : 0;
   }
- async PREVIEWS_URL() {
- this.PreviewSlideToggle(this.itemArray[0]?.sbno)
+  async PREVIEWS_URL() {
+    this.PreviewSlideToggle(this.itemArray[0]?.sbno)
     // for (let i = 0; i < this.itemArray.length; i++) {
     //   var element = this.itemArray[i]?._id;
     //   tep[this.itemArray[i]?.sbno] = []
@@ -3867,8 +3882,8 @@ TOTAL_FIRX_AMOUNT:any=0;
     var temp: any = [];
     const id = event.tab.content.viewContainerRef.element.nativeElement.id;
     this.PDF_LIST = [];
-    var sbfilter=this.itemArray.filter((item:any)=>item?._id==id);
-    this.fillForm(sbfilter[0],'SB_'+sbfilter[0]?.sbno).then(async ()=>{
+    var sbfilter = this.itemArray.filter((item: any) => item?._id == id);
+    this.fillForm(sbfilter[0], 'SB_' + sbfilter[0]?.sbno).then(async () => {
       for (let index = 0; index < this.temp[id].length; index++) {
         if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
           temp.push(this.temp[id][index]?.pdf)
@@ -3886,7 +3901,7 @@ TOTAL_FIRX_AMOUNT:any=0;
           });
         }
         if ((index + 1) == this.temp[id].length) {
-          var fitertemp:any=temp.filter(n => n)
+          var fitertemp: any = temp.filter(n => n)
           await this.pdfmerge.mergeAllPDF(fitertemp).then((data: any) => {
             console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
             this.MERGE_ALL_PDF[0] = data.toString();
@@ -3894,85 +3909,105 @@ TOTAL_FIRX_AMOUNT:any=0;
         }
       }
     });
-   
+
   }
   async PreviewSlideToggle(event: any) {
-    const id:any = event?.tab?.content?.viewContainerRef?.element?.nativeElement?.id!=undefined?event.tab.content.viewContainerRef.element.nativeElement.id:event;
-    var tempfilter:any=this.itemArray.filter((item:any)=>item?.sbno==id);
-   
-    await this.fillForm(tempfilter[0],'SB_'+id).then(async (fillpdf:any)=>{
+    const id: any = event?.tab?.content?.viewContainerRef?.element?.nativeElement?.id != undefined ? event.tab.content.viewContainerRef.element.nativeElement.id : event;
+    var tempfilter: any = this.itemArray.filter((item: any) => item?.sbno == id);
+
+    await this.fillForm(tempfilter[0], 'SB_' + id).then(async (fillpdf: any) => {
       this.PDF_LIST = [];
       this.PREVIEWS_URL_LIST = [];
-      var tep:any=[];
-      var temppdflits:any=[];
+      var tep: any = [];
+      var temppdflits: any = [];
       tep[tempfilter[0]?._id] = []
-      tep[tempfilter[0]?._id][0]=fillpdf;
-      temppdflits[0]=fillpdf;
+      tep[tempfilter[0]?._id][0] = fillpdf;
+      temppdflits[0] = fillpdf;
       for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
-          tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
-          if (this.temp[tempfilter[0]?._id][index]?.pdf!=undefined) {
-            temppdflits.push(this.temp[tempfilter[0]?._id][index]?.pdf)
-          }
-          if ((index+1)==this.temp[tempfilter[0]?._id].length) {
-            var fitertemp:any=temppdflits.filter(n => n)
-            await this.pdfmerge.mergeAllPDF(fitertemp).then((merge: any) => {
-              this.PREVIEWS_URL_LIST.push(merge);
-              console.log(this.tp,this.temp_doc,this.PREVIEWS_URL_LIST,'PreviewSlideToggle')
-            });
-          }
+        tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
+        if (this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+          temppdflits.push(this.temp[tempfilter[0]?._id][index]?.pdf)
+        }
+        if ((index + 1) == this.temp[tempfilter[0]?._id].length) {
+          var fitertemp: any = temppdflits.filter(n => n)
+          await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
+            this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
+            console.log(this.tp, this.temp_doc,merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+          });
+        }
       }
-      for (let index = 0; index < this.advanceArray['SB_'+id].length; index++) {
-        const element:any = this.advanceArray['SB_'+id][index];
+      for (let index = 0; index < this.advanceArray['SB_' + id].length; index++) {
+        const element: any = this.advanceArray['SB_' + id][index];
         this.tp['firxNumber'].push(element?.irDataItem?.billNo)
         this.tp['firxDate'].push(element?.irDataItem?.date)
         this.tp['firxCurrency'].push(element?.irDataItem?.currency)
         this.tp['firxAmount'].push(element?.irDataItem?.amount)
         this.tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
-        this.tp['firxRecAmo'].push(0);        
+        this.tp['firxRecAmo'].push(0);
         this.tp['id'].push(element?.irDataItem?._id)
       }
+      this.temp_doc=[];
       this.temp_doc[0] = this.value?.changingThisBreaksApplicationSecurity;
-        for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
-          if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
-            this.temp_doc.push(this.temp[tempfilter[0]?._id][index]?.pdf)
-          }
+      for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+        if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+          this.temp_doc.push(this.temp[tempfilter[0]?._id][index]?.pdf)
         }
+      }
     });
   }
   SendApproval(Status: string, UniqueId: any, model: any) {
-    if (UniqueId != null) { 
-     
-      var approval_data: any = {
-        id: 'Export-Direct-Dispatch' + this.tp?.firxAmount,
-        tableName: 'Export-Direct-Dispatch',
-        deleteflag: '-1',
-        userdetails: this.USER_DATA,
-        status: 'pending',
-        documents: this.temp_doc,
-        Types: 'downloadPDF',
-        TypeOfPage: 'Transaction',
-        FileType: this.USER_DATA?.sideMenu
+    if (UniqueId != null) {
+      var approval_data: any=[];
+      if (this.documentService.MT102_SUBJECT?.file!='') {
+        approval_data = {
+          id: 'IRDR' + UniqueId,
+          tableName: 'Inward-Remitance-Dispoal-Realization',
+          deleteflag: '-1',
+          userdetails: this.USER_DATA,
+          status: 'pending',
+          documents: this.temp_doc,
+          Types: 'downloadPDF',
+          TypeOfPage: 'Transaction',
+          FileType: this.USER_DATA?.sideMenu
+        }
+      } else {
+        approval_data = {
+          id: 'Export-Direct-Dispatch' + this.tp?.firxAmount,
+          tableName: 'Export-Direct-Dispatch',
+          deleteflag: '-1',
+          userdetails: this.USER_DATA,
+          status: 'pending',
+          documents: this.temp_doc,
+          Types: 'downloadPDF',
+          TypeOfPage: 'Transaction',
+          FileType: this.USER_DATA?.sideMenu
+        }
       }
-      var pipo:any=this.itemArray.filter((item:any)=>item?._id.indexOf(UniqueId)!=-1)[0]?.pipo;
-      var pipo_id:any=[];
+     
+      var pipo: any = this.itemArray.filter((item: any) => item?._id.indexOf(UniqueId) != -1)[0]?.pipo;
+      var pipo_id: any = [];
+      var pipo_name: any = [];
       pipo.forEach(element => {
         pipo_id.push(element?._id)
+        pipo_name.push(element?.pi_poNo)
       });
-      this.getStatusCheckerMaker('Export-Direct-Dispatch' + this.tp?.firxAmount).then((res: any) => {
+      this.getStatusCheckerMaker(approval_data?.id).then((res: any) => {
         console.log(approval_data, res, 'approval_data')
-        if (res?.id != 'Export-Direct-Dispatch' + this.tp?.firxAmount) {
+        if (res?.id != approval_data?.id) {
           if (Status == '' || Status == null || Status == 'Rejected') {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
               this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
+              this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
               this.ExportBillLodgement_Form.controls['documents'].setValue(this.temp_doc);
-              this.ExportBillLodgement_Form.controls['Url_Redirect'].setValue({file:'export',document:'blCopyref'})
-              if (this.Lodgement['AgainstAdvanceReceipt']?.Hide!='no') {
-                var data:any={
-                  data:this.ExportBillLodgement_Form.value,
-                  TypeTransaction:'Export-Direct-Dispatch',
-                  fileType:'Export',
-                  UserDetails:approval_data?.id,
-                  pipo:pipo_id
+              this.ExportBillLodgement_Form.controls['Url_Redirect'].setValue({ file: 'export', document: 'blCopyref',SbRef:UniqueId})
+              this.ExportBillLodgement_Form.controls['extradata'].setValue(this.FILTER_DATA)
+              if (this.Lodgement['AgainstAdvanceReceipt']?.Hide != 'no') {
+                var data: any = {
+                  data: this.ExportBillLodgement_Form.value,
+                  TypeTransaction: 'Export-Direct-Dispatch',
+                  fileType: 'Export',
+                  UserDetails: approval_data?.id,
+                  pipo: pipo_id
                 }
                 this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
                   let updatedData = {
@@ -3980,7 +4015,8 @@ TOTAL_FIRX_AMOUNT:any=0;
                       res1._id,
                     ]
                   }
-                  this.userService.updateManyPipo(pipo_id,'export','', updatedData).subscribe((data) => {
+                  if (this.documentService.MT102_SUBJECT?.file=='') {
+                    this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
                       console.log('king123');
                       console.log(data);
                       for (let index = 0; index < this.ExportBillLodgement_Form.value?.Advance_reference_Number?.length; index++) {
@@ -3992,7 +4028,7 @@ TOTAL_FIRX_AMOUNT:any=0;
                             sbno: [this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb]
                           }
                         }).subscribe((list: any) => {
-      
+  
                         })
                       }
                       this.documentService.Update_Amount_by_Table({
@@ -4032,10 +4068,29 @@ TOTAL_FIRX_AMOUNT:any=0;
                           // this.router.navigate(['/home/dashboardTask'])
                         })
                       });
-                    },(error) => {
+                    }, (error) => {
                       console.log('error');
                     }
-                  );
+                    );
+                  }
+                 
+                  console.log('addExportBillLodgment', res1);
+                })
+              }else{
+               var changevalue:any=this.documentService.MT102_SUBJECT;
+               changevalue['pipo']=pipo_id;
+               changevalue['SbRef']=this.itemArray;
+               changevalue['Url_Redirect']={file: 'export', document: 'blCopyref',SbRef:UniqueId,pipo:pipo_name.toString()};
+                var data: any = {
+                  data:changevalue,
+                  TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
+                  fileType: 'Export',
+                  UserDetails: approval_data?.id,
+                  pipo: pipo_id
+                }
+                this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                    this.router.navigate(['/home/dashboardTask']);
+                    this.sessionstorage.remove('MT102')
                   console.log('addExportBillLodgment', res1);
                 })
               }
@@ -4047,65 +4102,84 @@ TOTAL_FIRX_AMOUNT:any=0;
         }
       });
     }
-   
-    console.log('Export-Direct-Dispatch' + UniqueId, UniqueId,pipo,approval_data, 'uiiiiiiiiiiiiii')
+
+    console.log('Export-Direct-Dispatch' + UniqueId, UniqueId, pipo, approval_data, 'uiiiiiiiiiiiiii')
   }
   getStatusCheckerMaker(id) {
     return new Promise((resolve, reject) => {
       this.documentService.getDownloadStatus({ id: id, $or: [{ "deleteflag": '-1' }, { "deleteflag": '1' }, { "deleteflag": '2' }] }).subscribe((res: any) => resolve(res[0]))
     })
   }
-  HIDE_SHOW:any={
-    PANEL_1:true,
-    PANEL_2:false
+  HIDE_SHOW: any = {
+    PANEL_1: true,
+    PANEL_2: false
   };
-  HIDE_SHOW_POPUP(key){
-    if (this.sbArray.length==0) {
+  HIDE_SHOW_POPUP(key) {
+    if (this.sbArray.length == 0) {
       this.toastr.warning('Please select at least one shipping bill...');
       return;
-    }else{
+    } else {
       for (const key in this.HIDE_SHOW) {
-        this.HIDE_SHOW[key]=false;
+        this.HIDE_SHOW[key] = false;
       }
-      
-      this.HIDE_SHOW[key]=true;
+
+      this.HIDE_SHOW[key] = true;
     }
   }
-  filterBuyerName($event){
-    if($event!='Select Buyer Name'){
-      this.nameSearch4=$event;
-      var temp_filter:any=this.item13.filter((item:any)=>item?.buyerName.includes($event));
-      this.TOTAL_FIRX_AMOUNT=parseFloat(temp_filter.reduce((a, b)=> parseFloat(a) + parseFloat(b?.BalanceAvail),0)).toFixed(3);
-    }else{
-      this.nameSearch4=''
+  filterBuyerName($event) {
+    if ($event != 'Select Buyer Name') {
+      this.nameSearch4 = $event;
+      var temp_filter: any = this.item13.filter((item: any) => item?.buyerName.includes($event));
+      this.TOTAL_FIRX_AMOUNT = parseFloat(temp_filter.reduce((a, b) => parseFloat(a) + parseFloat(b?.BalanceAvail), 0)).toFixed(3);
+    } else {
+      this.nameSearch4 = ''
     }
-    this.CHECKEBOX_SELECTION.SHIPPING_BILL=[]
+    this.CHECKEBOX_SELECTION.SHIPPING_BILL = []
   }
   ParseFloat(num1, num2) {
     var val: any = parseFloat(num2) != undefined ? parseFloat(num1) - parseFloat(num2) : 0
     return !isNaN(val) ? parseFloat(val).toFixed(2) : num1;
   }
-  SELECTED_SHIPPING_BILL:any=[];
-  _SHIPPING_BILL(i,data:any,amount:any,model:any){
-    if (this.percentCalculation(data?.amount,25)>parseFloat(amount)) {
-      console.log(data,'_SHIPPING_BILL')
-      this.SELECTED_SHIPPING_BILL={index:i,data:data}; 
-    }else{
-      model.style.display='none'
+  SELECTED_SHIPPING_BILL: any = [];
+  _SHIPPING_BILL(i, data: any, amount: any, model: any) {
+    if (this.percentCalculation(data?.amount, 25) > parseFloat(amount)) {
+      console.log(data, '_SHIPPING_BILL')
+      this.SELECTED_SHIPPING_BILL = { index: i, data: data };
+    } else {
+      model.style.display = 'none'
       this.toastr.error('Max permissible discount amount exceeded,Please select write off module.')
     }
   }
-  percentCalculation(a, b){
-    var c:any = (parseFloat(a)*parseFloat(b))/100;
+  percentCalculation(a, b) {
+    var c: any = (parseFloat(a) * parseFloat(b)) / 100;
     return parseFloat(c);
   }
-  SELECTED_VIEW_FIRX:any=[];
-  _VIEW_FIRX(i,data:any){
-    console.log(data,'_VIEW_FIRX')
-    this.SELECTED_VIEW_FIRX={index:i,data:data};
+  SELECTED_VIEW_FIRX: any = [];
+  _VIEW_FIRX(i, data: any) {
+    console.log(data, '_VIEW_FIRX')
+    this.SELECTED_VIEW_FIRX = { index: i, data: data };
   }
-  ObjectLength(data){
-  return Object.keys(data)?.length;
+  SELECTED_DEBIT_AMOUNT: any = [];
+  _VIEW_DEBIT_AMOUNT(i, data: any, SbItem: any) {
+    this.SELECTED_DEBIT_AMOUNT = { index: i, data: data, SbItem: SbItem };
+    console.log(data, SbItem, '_VIEW_DEBIT_AMOUNT')
+  }
+  _DEBIT_AMOUNT(i, data: any, event: any) {
+    $('.debitAmount').prop('checked', false);
+    $(event.target).prop('checked', true);
+    this.FILTER_DATA.FILTER_COMMERCIAL["SB_" + this.SELECTED_DEBIT_AMOUNT?.SbItem][this.SELECTED_DEBIT_AMOUNT?.index]['debitAmount'] = data?.totalDebitAmount;
+    console.log(data, this.FILTER_DATA?.FILTER_COMMERCIAL["SB_" + this.SELECTED_DEBIT_AMOUNT?.SbItem], event, '_DEBIT_AMOUNT')
+  }
+  FIRX_CHECK(value: any) {
+    console.log(value, 'FIRX_CHECK')
+    if (this.OK_BUTTON_CONDITION== '' && this.Lodgement['AgainstAdvanceReceipt']['Show']=='yes') {
+      this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX No. not Selected', `Please select firx no.`)
+    } else {
+      value.style.display = 'none';
+    }
+  }
+  ObjectLength(data) {
+    return Object.keys(data)?.length;
   }
 }
 

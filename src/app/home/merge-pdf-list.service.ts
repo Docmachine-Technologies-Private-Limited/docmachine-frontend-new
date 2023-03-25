@@ -23,8 +23,7 @@ export class MergePdfListService {
         } else {
           const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
           var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-          var merge = 'data:application/pdf;base64,' + data_pdf //this.value
-          // resolve(await pdfDoc.save())
+          var merge = 'data:application/pdf;base64,' + data_pdf 
           resolve(merge)
         }
       };
@@ -59,6 +58,54 @@ export class MergePdfListService {
     });
    });
   }
+  mergeallpdf = async (editabledpdf,doc: any) => {
+    return new Promise(async (resolve, reject) => {
+     const pdfDoc = await PDFDocument.create();
+     Promise.all(this.DOC_QUEUE(doc)).then((values:any) => {
+       console.log(values);
+       var appendAllFiles = async (pdflist, currentfile) => {
+         if (currentfile < values.length) {
+           await appendEachFile(pdflist[currentfile]);
+           console.log('Inside file', currentfile);
+           await appendAllFiles(pdflist, currentfile + 1);
+         } else {
+           const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+           var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
+           var merge = 'data:application/pdf;base64,' + data_pdf 
+           resolve(merge)
+         }
+       };
+       var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
+         if (currentpage < docLength) {
+           console.log('Inside Page', currentpage, 'total pages', docLength);
+           const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [currentpage]);
+           pdfDoc.addPage(donorPage);
+           await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
+         }
+       };
+       var appendEachFile = async (bytes) => {
+         const donorPdfDoc = await PDFDocument.load(bytes);
+         const docLength = donorPdfDoc.getPageCount();
+         console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
+         await appendEachPage(donorPdfDoc, 0, docLength);
+       };
+       // download all the pdfs
+       let downloadAllFiles =async () => {
+         var promises:any = [];
+         for (var i = 0; i < values.length; i++) {
+           if (values[i]!='' && values[i]!=undefined) {
+           await promises.push(values[i]);
+           }
+         }
+         Promise.all(promises).then(async (pdfList) => {
+         await appendAllFiles(pdfList, 0);
+           console.log('pdfList2', pdfList);
+         });
+       };
+       downloadAllFiles();
+     });
+    });
+   }
   DOC_QUEUE(doc:any){
     var temp:any=[];
     for (let index = 0; index < doc.length; index++) {
@@ -93,5 +140,10 @@ export class MergePdfListService {
       console.error('BlobToSaveAs error', e);
     }
   }
-
+  _multiple_merge_pdf(doclist:any){
+    return new Promise(async (resolve, reject) => {
+    console.log(doclist,'_multiple_merge_pdf')
+      this.userService.MultipleMergePdf(doclist).subscribe((res)=>{resolve(res)},error=>reject(error))
+    })
+  }
 }

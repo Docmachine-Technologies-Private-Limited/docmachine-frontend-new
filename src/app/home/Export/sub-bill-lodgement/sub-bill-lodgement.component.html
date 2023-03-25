@@ -90,17 +90,25 @@
                           <thead>
                             <tr class="table-tr">
                               <th scope="col" class="col-td-th-3">#</th>
+                              <th scope="col" class="col-td-th-3">Party Name</th>
                               <th scope="col" class="col-td-th-3">SB no</th>
                               <th scope="col" class="col-td-th-3">Lodgement no</th>
-                              <th scope="col" class="col-td-th-3">Party Name</th>
+                              <th scope="col" class="col-td-th-3">Currency</th>
+                              <th scope="col" class="col-td-th-3">Amount</th>
+                              <th scope="col" class="col-td-th-3">Realized Amount</th>
+                              <th scope="col" class="col-td-th-3">Balance Amount</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr class="table-tr" *ngFor="let item of this.ALL_DATA_FORMAT; let i=index">
-                              <td scope="row">{{(i+1)}}</td>
-                              <td class="col-td-th-3">{{item.SB_NO}}</td>
-                              <td class="col-td-th-3">{{item.Lodgement_No}}</td>
-                              <td class="col-td-th-3">{{item.Party_Name}}</td>
+                            <tr class="table-tr" *ngFor="let item of this.dataSource; let i=index">
+                              <td scope="row" class="col-td-th-3">{{(i+1)}}</td>
+                              <td class="col-td-th-3">{{item?.pipo[0]?.buyerName}}</td>
+                              <td class="col-td-th-3">{{item?.SbRef[0]?.sbno}}</td>
+                              <td class="col-td-th-3">{{item?.blcopyrefNumber}}</td>
+                              <td class="col-td-th-3">{{item?.SbRef[0]?.currency}}</td>
+                              <td class="col-td-th-3">{{item?.amount}}</td>
+                              <td class="col-td-th-3">{{item?.LodgementData?.data?.amount}}</td>
+                              <td class="col-td-th-3">{{this.calculateAmount(item?.amount,item?.LodgementData?.data?.amount)}}</td>
                             </tr>
                           </tbody>
                         </table>

@@ -412,9 +412,10 @@ export class DebitNoteComponent implements OnInit {
       console.log('debitNoteNumber Invoice_No',resp)
     if (resp.data.length==0) {
     this.documentService.addDebit(e.form.value).subscribe((res: any) => {
+      console.log(res,'addDebit')
       this.toastr.success(`Credit Note Document Added Successfully`);
       let updatedData = {
-        "debitNoteRef": [
+        "blcopyRefs": [
           res.data._id,
         ],
       }

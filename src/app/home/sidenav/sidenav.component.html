@@ -121,7 +121,7 @@
           </a>
         <div class="scroll-bar">
           <ul class="list-unstyled components mb-5 p-3">
-            <li class="active"  *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
               <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Documents</a>
               <ul class="collapse list-unstyled" id="homeSubmenu">
                 <li class="nav-item">

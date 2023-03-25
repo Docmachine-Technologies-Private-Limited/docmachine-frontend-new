@@ -256,6 +256,14 @@ export class UserService {
       httpOptions,
     );
   }
+  MultipleMergePdf(filename) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions: Object = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/pipo/multiplemergePdf`,{filename: filename}, httpOptions);
+  }
   mergePdfPromise(filename) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

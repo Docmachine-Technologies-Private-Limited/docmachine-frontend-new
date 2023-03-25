@@ -84,6 +84,8 @@ export class TransactionDashboardComponent implements OnInit {
             filterType=[this.TRANSACTION_NAME,'Import-Direct-Payment'];
           } if (this.TRANSACTION_NAME=='Import-Direct-Payment'){
             filterType=['Import-Direct-Payment','Advance-Remittance-flow'];
+          }if (this.TRANSACTION_NAME=='Inward-Remitance-Dispoal-Realization'){
+            filterType=['Inward-Remitance-Dispoal-Realization'];
           }
           this.mergeTransaction(res,data?.result?.sideMenu,filterType).then((mergeTransactionres:any)=>{
             var merge:any=mergeTransactionres;
@@ -369,8 +371,8 @@ export class TransactionDashboardComponent implements OnInit {
     this.Newtemp['Transaction_id'] = id;
     if (this.TRANSACTION_NAME == 'Export-Direct-Dispatch') {
       var pipolist: any = [];
-      for (let index = 0; index <  param?.MoreDetails?.Shipping_bill_list?.length; index++) {
-        const element =  param?.MoreDetails?.Shipping_bill_list[index];
+      for (let index = 0; index <param?.MoreDetails?.Shipping_bill_list?.length; index++) {
+        const element = param?.MoreDetails?.Shipping_bill_list[index];
         element?.pipo.forEach(item => {
           pipolist.push(item?.pi_poNo)
         });

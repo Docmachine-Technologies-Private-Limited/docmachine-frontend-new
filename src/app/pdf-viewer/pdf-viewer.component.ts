@@ -1,5 +1,8 @@
-import { Component, Input, OnInit,
-  SimpleChanges} from '@angular/core';
+import {
+  AfterViewInit, Component, ElementRef, Input, OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { DocumentService } from '../service/document.service';
 import { UserService } from '../service/user.service';
 import $ from 'jquery'
@@ -11,17 +14,18 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.scss']
 })
-export class PDFVIEWERComponent implements OnInit {
+export class PDFVIEWERComponent implements OnInit, AfterViewInit {
 
   title = 'angular-pdf-viewer-app';
   pdfSrc = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
 
-  @Input('src') src:any='';
-  @Input('width') width:any='500px';
-  @Input('height') height:any='500px';
-  @Input('name') name:any='PDF Viewer';
-  @Input('downloadShow') downloadShow:boolean=true;
-  @Input('base64_src') base64_src:any='';
+  @Input('src') src: any = '';
+  @Input('width') width: any = '500px';
+  @Input('height') height: any = '500px';
+  @Input('name') name: any = 'PDF Viewer';
+  @Input('downloadShow') downloadShow: boolean = true;
+  @Input('base64_src') base64_src: any = '';
+  @Input('htmlload') htmlload: boolean = false;
 
   renderText = true;
   originalSize = false;
@@ -34,50 +38,52 @@ export class PDFVIEWERComponent implements OnInit {
   rotation = 0;
   zoom = 1;
   zoomScale = 'page-width';
-  zoomScales = ['FitH','FitW'];
+  zoomScales = ['FitH', 'FitW'];
   pdfQuery = '';
   totalPages: number;
-  BASE_64_URL:any='';
-  loader: boolean=false;
-  URL_IFRAME:any='';
-  
-  constructor( private userService: UserService,
+  BASE_64_URL: any = '';
+  loader: boolean = false;
+  URL_IFRAME: any = '';
+  @ViewChild('iframe') iframe: ElementRef;
+  Sppinloader:boolean=true;
+  constructor(private userService: UserService,
     public sanitizer: DomSanitizer,
-    public documentService: DocumentService){
+    public documentService: DocumentService) {
   }
-  SRC_UPDATE:any='';
-  ngOnInit(){
-    if (this.base64_src!='') {
+  SRC_UPDATE: any = '';
+  ngOnInit() {
+    if (this.base64_src != '') {
       this.userService.mergePdf(this.base64_src).subscribe(
         (res: any) => {
           console.log('res', res);
-          res.arrayBuffer().then((data:any)=>{
-            this.BASE_64_URL=data;
+          res.arrayBuffer().then((data: any) => {
+            this.BASE_64_URL = data;
           })
-        },(err) => console.log('Failed to fetch the pdf'));
+        }, (err) => console.log('Failed to fetch the pdf'));
     }
-    this.SRC_UPDATE=this.src+'#toolbar=0&&embedded=true'
-    this.URL_IFRAME=this.sanitizer.bypassSecurityTrustResourceUrl(this.SRC_UPDATE)
+    this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+    this.URL_IFRAME = this.sanitizer.bypassSecurityTrustResourceUrl(this.SRC_UPDATE);
+    this.Sppinloader=false
   }
-  zoomIn(url:any) {
+  zoomIn(url: any) {
     this.zoom += 100;
-    this._isLoading$.next(true);
+    this.Sppinloader=true;
     this.cleanup();
-    this.URL_IFRAME = this.bypassAndSanitize(url+'&zoom='+this.zoom);
+    this.URL_IFRAME = this.bypassAndSanitize(url + '&zoom=' + this.zoom);
     setTimeout(() => {
-      this._isLoading$.next(false);
+      this.Sppinloader=false
     }, 150);
   }
 
   zoomOut(url) {
     if (this.zoom > 100)
       this.zoom -= 100;
-      this._isLoading$.next(true);
-      this.cleanup();
-      this.URL_IFRAME = this.bypassAndSanitize(url+'&zoom='+this.zoom);
-      setTimeout(() => {
-        this._isLoading$.next(false);
-      }, 150);
+     this.Sppinloader=true;
+    this.cleanup();
+    this.URL_IFRAME = this.bypassAndSanitize(url + '&zoom=' + this.zoom);
+    setTimeout(() => {
+      this.Sppinloader=false
+    }, 150);
   }
 
   rotateDoc() {
@@ -106,36 +112,36 @@ export class PDFVIEWERComponent implements OnInit {
   textLayerRendered(event) {
     console.log('textLayerRendered', event);
   }
-  
+
   onError(event) {
     console.error('onError', event);
   }
   onProgress(event) {
-    this.loader=true;
+    this.loader = true;
     console.log('onProgress', event);
   }
 
-  downloadPdf(pdf){
+  downloadPdf(pdf) {
     var link = document.createElement('a');
     link.href = pdf;
     link.download = 'samplePDFFile.pdf';
     link.click();
     window.URL.revokeObjectURL(link.href);
   }
-  printPdf(pdf){
-    const iframe:any = document.createElement('iframe');
+  printPdf(pdf) {
+    const iframe: any = document.createElement('iframe');
     iframe.style.display = 'none';
     iframe.src = pdf;
     document.body.appendChild(iframe);
     iframe.contentWindow.print();
   }
-  fitScreen(value:any){
+  fitScreen(value: any) {
     console.log(value)
-    this._isLoading$.next(true);
+     this.Sppinloader=true;
     this.cleanup();
-    this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE+'&view='+value);
+    this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE + '&view=' + value);
     setTimeout(() => {
-      this._isLoading$.next(false);
+      this.Sppinloader=false
     }, 150);
   }
   Newsrc: SafeResourceUrl;
@@ -149,5 +155,28 @@ export class PDFVIEWERComponent implements OnInit {
 
   bypassAndSanitize(url): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+  ngAfterViewInit() {
+    this.RecusrionHiddenIframeElements();
+  }
+  interval: any = ''
+  RecusrionHiddenIframeElements() {
+    if (this.htmlload == true) {
+      $('#iframeId').css('display', 'none')
+      this.Sppinloader=true;
+      this.interval = setInterval(() => {
+        if ($('#iframeId').contents().find('.main_nave').length!=0) {
+          $('#iframeId').css('display', 'block')
+          $('#iframeId').contents().find('.main_nave').css({ display: 'none' });
+          $('#iframeId').contents().find('#sidebar').css({ display: 'none' });
+          $('#iframeId').contents().find('.scroll-bar-main').addClass("width-full");
+          $('#iframeId').contents().find('.scroll-bar-main').css('width', '100vw !important');
+          clearInterval(this.interval);
+          this.interval='';
+          this.Sppinloader=false;
+        }
+        // console.log($('#iframeId').contents().find('.main_nave'),'sdfdsfdsfsdfdsfds')
+      },1000)
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 declare var $: any;
 
 @Component({
@@ -16,12 +16,20 @@ export class CustomModelComponent implements OnInit {
   @Input('minheight') minheight: any;
   @Input('customstyle') customstyle: any;
   @Input('modalbodyheight') modalbodyheight: any;
-  @Input('FooterButton') FooterButton:boolean=false;
-  @Input('FooterButtonText') FooterButtonText:any='Ok';
+  @Input('modalbodystyle') modalbodystyle: any;
+  @Input('FooterButton') FooterButton: boolean = false;
+  @Input('EventButton') EventButton: boolean = false;
+  @Input('FooterButtonText') FooterButtonText: any = 'Ok';
   @Input('id') id: any;
   @Output('ModelChange') ModelChange = new EventEmitter<any>();
-  constructor() { }
+  @Input('condition') condition: any = '';
+  @Output('footerbutton') footerbutton = new EventEmitter<any>();
+  @ViewChild('PopUpOpenClose')PopUpOpenClose:ElementRef;
+
+  footerbuttontext: any = [];
+  constructor(public element: ElementRef) { }
   ngOnInit(): void {
+    this.footerbuttontext[this.id] = this.condition;
   }
 
   get displayHidden() {
@@ -29,5 +37,13 @@ export class CustomModelComponent implements OnInit {
   }
   ClosePopup() {
     this.ModelChange.emit('null');
+  }
+  OKBUTTON(PopUpOpenClose: any) {
+    if (this.condition == true) {
+      this.footerbutton.emit(this.condition);
+      PopUpOpenClose.style.display = "none";
+    } else {
+      this.footerbutton.emit(false);
+    }
   }
 }

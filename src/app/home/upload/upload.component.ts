@@ -219,11 +219,9 @@ export class UploadComponent implements OnInit {
   };
   SHIPPING_BUNDEL: any = [];
   PIPO_LIST: any = [];
-  selectedAccount: any = [
-    { pi_po_buyerName: 'PI-TEST29-BMW', id: Array(2), _id: '63d5e71b0de4151ea68fb97d' },
-    { pi_po_buyerName: 'PI-BMWTEST02-BMW', id: Array(2), _id: '63d50db42db5241ba1c79dfd' },
-    { pi_po_buyerName: 'PI-BMWTEST01-BMW', id: Array(2), _id: '63d2b309129401548f23fb14' }
-  ];
+  SHIPPING_LIST:any=[];
+  LodgementData:any=[];
+  
   get f() {
     return this.loginForm.controls;
   }
@@ -345,6 +343,8 @@ export class UploadComponent implements OnInit {
   public a = 10;
   width: any = 0;
   INTERVAL: any = [];
+  BUYER_DETAILS:any=[];
+  BUYER_ADDRESS_DETAILS:any=[];
   runProgressBar(value) {
     this.INTERVAL = setInterval(() => {
       if (this.width < 100) {
@@ -373,8 +373,12 @@ export class UploadComponent implements OnInit {
 
     this.userService.getBuyer(1).subscribe(
       (res: any) => {
-        (this.buyerDetail = res.data),
-          console.log('Benne Detail111', this.buyerDetail);
+        this.buyerDetail = res.data
+        this.buyerDetail.forEach(element => {
+          this.BUYER_DETAILS.push({value:element.buyerName,id:element?._id,Address:element?.buyerAdrs})
+          // this.BUYER_ADDRESS_DETAILS[element?._id]={value:element.buyerName,id:element?._id,Address:element?.buyerAdrs}
+        });
+          console.log('Benne Detail111', this.buyerDetail,this.BUYER_DETAILS);
       },
       (err) => console.log('Error', err)
     );
@@ -431,7 +435,6 @@ export class UploadComponent implements OnInit {
     var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
     this.redirectindex = this.route.snapshot.paramMap.get('index');
     this.redirectpage = this.route.snapshot.paramMap.get('page');
-
     console.log('checking', this.file);
     this.docu = this.route.snapshot.paramMap.get('document');
     console.log('this is doc', this.docu);
@@ -914,6 +917,9 @@ export class UploadComponent implements OnInit {
             this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
           });
         });
+        this.SHIPPING_LIST=this.item5.filter((Sbitem:any)=>Sbitem?._id==this.route.snapshot.paramMap.get('SbRef'));
+        console.log(this.SHIPPING_LIST,'SHIPPING_LIST')
+        
         this.item5.forEach((element, i) => {
           this.origin[i] = element.countryOfFinaldestination;
         });
@@ -929,8 +935,11 @@ export class UploadComponent implements OnInit {
         }
       },
       (err) => console.log(err));
+      
+      await this.documentService.getByIdExportBillLodgment(this.route.snapshot.paramMap.get('Transaction_id')).subscribe((resp: any) => {
+       this.LodgementData = resp?.result[0];
+      });
   }
-
   onSubmitIrAdvice(e) {
     var temp: any = [];
     for (let index = 0; index < this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION.length; index++) {
@@ -1554,6 +1563,9 @@ export class UploadComponent implements OnInit {
     e.form.value.doc = this.pipourl1;
     e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
+    e.form.value.PartyName1 = e.form.value.PartyName1?.value;
+    e.form.value.PartyName2 = e.form.value.PartyName1?.value;
+    e.form.value.PartyName3 = e.form.value.PartyName1?.value;
     e.form.value.currency = e.form.value?.currency?.type;
     console.log(e.form.value);
     this.documentService.getInvoice_No({
@@ -1731,59 +1743,77 @@ export class UploadComponent implements OnInit {
     }
   }
   //blCopyref Submit buttton
-  onSubmitblcopyref(e) {
+ async onSubmitblcopyref(e:any) {
     console.log('this is console of blcopy', e.form.value);
     var temp: any = [];
     for (let index = 0; index < this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION.length; index++) {
       const element = this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION[index];
       temp.push(element?._id)
     }
+    e.form.value['SbRef']=[]
     e.form.value.pipo = temp.length != 0 ? temp : this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
     e.form.value.doc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
     e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.file = this.documentType1;
+    var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
+    if (TransactionSbRef != '') {
+      e.form.value.LodgementData = this.LodgementData;
+    }
     console.log(e.form.value);
     this.documentService.getInvoice_No({
       blcopyrefNumber: e.form.value.blcopyrefNumber
     }, 'blcopyref').subscribe((resp: any) => {
       console.log('creditNoteNumber Invoice_No', resp)
       if (resp.data.length == 0) {
-        this.documentService.addBlcopyref(e.form.value).subscribe(
-          (res: any) => {
+        this.documentService.addBlcopyref(e.form.value).subscribe((res: any) => {
+            console.log(res,'addBlcopyref');
             this.toastr.success(`addBlcopyref Document Added Successfully`);
             console.log('addBlcopyref Document Added Successfully');
+          
+            var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
+              if (TransactionSbRef != '') {
+                let updatedData = {
+                  "SbRef": [
+                    TransactionSbRef
+                  ],
+                }
+                this.documentService.updateBlcopyrefSB(updatedData,res.data._id).subscribe((res: any) => {
+                    console.log('updateBlcopyrefSB',res);
+                });
+              }
             let updatedData = {
               "blcopyRefs": [
                 res.data._id,
               ],
             }
-            this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1, updatedData)
-              .subscribe((data) => {
-                console.log('king123');
-                console.log(data);
-                var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
-                if (Transaction_id != '') {
-                  this.documentService.UpdateTransaction({ id: Transaction_id, data: { blCopyRef: e.form.value } }).subscribe((res: any) => {
-                    if (this.documentType1 == 'import') {
-                      this.router.navigate(['/home/import-airway-bl-copy']);
-                    } else {
-                      this.router.navigate(['/home/airway-bl-copy']);
-                    }
-                  });
-                } else {
+            this.userService.updateManyPipo(res?.data?.pipo,this.documentType,this.pipourl1,updatedData)
+            .subscribe((data) => {
+              console.log('king123');
+              console.log(data);
+            
+              var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
+              if (Transaction_id != '') {
+                this.documentService.UpdateTransaction({ id: Transaction_id, data: { blCopyRef: e.form.value } }).subscribe((res: any) => {
                   if (this.documentType1 == 'import') {
                     this.router.navigate(['/home/import-airway-bl-copy']);
                   } else {
                     this.router.navigate(['/home/airway-bl-copy']);
                   }
+                });
+              } else {
+                if (this.documentType1 == 'import') {
+                  this.router.navigate(['/home/import-airway-bl-copy']);
+                } else {
+                  this.router.navigate(['/home/airway-bl-copy']);
                 }
-              },
-                (error) => {
-                  console.log('error');
-                }
-              );
+              }
+            },
+              (error) => {
+                console.log('error');
+              }
+            );
           },
           (err) => console.log('Error adding pipo')
         );
@@ -2166,7 +2196,10 @@ export class UploadComponent implements OnInit {
     });
 
   }
-
+  buyerselect(value,index){
+    this.BUYER_ADDRESS_DETAILS[index]=value
+     console.log(value,'buyerselect')
+  }
   //EBRC Submit button
   onSubmitEbrc(e) {
     console.log(e.form.value);

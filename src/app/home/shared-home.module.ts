@@ -40,6 +40,7 @@ import { CarouselItemDirective } from '../custom/ng-custom-carousel/carousel-ite
 import { CarouselItemElementDirective } from '../custom/ng-custom-carousel/carousel-item-element.directive';
 import { CustomsliderComponent } from '../custom/customslider/customslider.component';
 import {MatStepperModule} from '@angular/material/stepper';
+import { CustomEventDirective } from "../custom/custom-model/custom-event.directive";
 
 
 @NgModule({
@@ -61,7 +62,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     NgCustomCarouselComponent,
     CarouselItemDirective,
     CarouselItemElementDirective,
-    CustomsliderComponent
+    CustomsliderComponent,
+    CustomEventDirective
   ],
   imports: [
     CommonModule,
@@ -111,7 +113,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     CarouselItemDirective,
     CarouselItemElementDirective,
     CustomsliderComponent,
-    MatStepperModule
+    MatStepperModule,
+    CustomEventDirective
   ],
 })
 export class SharedHomeModule { }

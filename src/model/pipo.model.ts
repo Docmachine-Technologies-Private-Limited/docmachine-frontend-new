@@ -282,7 +282,7 @@ export class PipoDisplayListViewItem {
       return source;
     }
     function createSbIrinfo(pipoInfo, sbdata) {
-      console.log(pipoInfo,sbdata,'sbdata')
+      // console.log(pipoInfo,sbdata,'sbdata')
       let sbirmerged:any = [];
       if (sbdata?.irRef?.length === 0) {
         sbirmerged.push(pipoInfo);

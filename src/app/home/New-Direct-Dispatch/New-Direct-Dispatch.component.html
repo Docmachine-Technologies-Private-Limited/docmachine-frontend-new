@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-6 col-sm-6 col-xs-12">
           <div class="Dashbord_sec">
-            <h2 class="title_dash">Export Bill Lodgement <span *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes" && this.Lodgement["DirectDispatch"]["Hide"]==="no"'> / Regularization</span>
+            <h2 class="title_dash">Export Bill Lodgement <span *ngIf="this.documentService.MT102_SUBJECT!=''">/ Realization</span> <span *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes" && this.Lodgement["DirectDispatch"]["Hide"]==="no"'> / Regularization</span>
               <span *ngIf='this.Lodgement["DirectDispatch"]["Show"]=== "yes" && this.Lodgement["AgainstAdvanceReceipt"]["Hide"]==="no"'> / Direct Dispatch</span>
             </h2>
           </div>
@@ -26,7 +26,7 @@
         <div class="new_document_list1">
           <div class="new_document_list_add_data">
             <form [formGroup]="this.ExportBillLodgement_Form">
-              <div class="row">
+              <div class="row pb-2">
                 <div class="col-md-7 col-sm-12 col-12">
                   <div *ngIf='isGenerate'>
                     <div>
@@ -552,7 +552,7 @@
                    
                      </div>
                     <div class="bottom_submit_section">
-                      <button type="button" class="btn btn-primary" [routerLink]="['/home/dashboardTask']">CANCEL</button>
+                      <button type="button" class="btn btn-primary"  *ngIf="this.documentService.MT102_SUBJECT==''" [routerLink]="['/home/dashboardTask']">CANCEL</button>
                       <button type="button" class="btn btn-secondary" (click)='generateDoc1(this.ExportBillLodgement_Form);this.ObjectLength(this.advanceArray)!=0 || Lodgement?.AgainstAdvanceReceipt?.Hide=="no"?Preview_btn.style.display="block" : ""'>PROCEED</button>
                       <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;" (click)='PREVIEWS_URL();PREVIEW_PAGE.style.display="block"'>Preview</button>
                     </div>
@@ -568,12 +568,14 @@
 </div>
 
 <div class="temp" #content1>
-  <app-custom-model [FooterButton]="true" [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="ShippingBill"
-  [name]="'Shipping Bill Against of : '+nameSearch4">
+  <app-custom-model [FooterButton]="false"
+  [condition]=" this.OK_BUTTON_CONDITION!=''?true:false"
+  [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="ShippingBill"
+  [name]="'Shipping Bill Against of : '+nameSearch4" #ShippingBill>
   <div class="container-fluid mt-2">
     <div class="middle_bts">
       <div class="login py-5" style="padding: 0px !important; width:100%;">
-        <div class="container_innser" style="overflow: auto;height: calc(100vh - 100px);padding: 10px;">
+        <div class="container_innser" style="overflow: auto;height: calc(100vh - 170px);padding: 10px;">
           <div class="d-flex justify-content-between mb-1 p-2">
             <app-ng-dropdown-custom
             placeHolderText="Select Buyer Name"
@@ -668,12 +670,13 @@
               <thead>
                 <tr class="table-tr">
                   <th scope="col" class="col-td-th-1">#</th>
-                  <th scope="col" class="col-td-th-2">CI Date</th>
-                  <th scope="col" class="col-td-th-2">CI No.</th>
-                  <th scope="col" class="col-td-th-2">Port Code</th>
-                  <th scope="col" class="col-td-th-2">Shipping Bill No.</th>
-                  <th scope="col" class="col-td-th-2">Shipping Bill Date</th>
-                  <th scope="col" class="col-td-th-2">CI Value(USD)</th>
+                  <th scope="col" class="col-td-th-3">CI Date</th>
+                  <th scope="col" class="col-td-th-3">CI No.</th>
+                  <th scope="col" class="col-td-th-3">Port Code</th>
+                  <th scope="col" class="col-td-th-3">Shipping Bill No.</th>
+                  <th scope="col" class="col-td-th-3">Shipping Bill Date</th>
+                  <th scope="col" class="col-td-th-3">CI Value(USD)</th>
+                  <th scope="col" class="col-td-th-2">Select DNN</th>
                   <th scope="col" class="col-td-th-2">Damages / Deductions(Debit Note)</th>
                   <th scope="col" class="col-td-th-2">SB Amout to be realized</th>
                   <th scope="col" class="col-td-th-2">FIRX Option</th>
@@ -687,32 +690,36 @@
                   <td class="col-td-th-1">
                     <input type="checkbox" [checked]="this.CHECKEBOX_SELECTION?.SHIPPING_BILL[i]==true?true:false"/>
                   </td>
-                  <td class="col-td-th-2">
+                  <td class="col-td-th-3">
                     {{data.commercialDate}}
                   </td>
-                  <td class="col-td-th-2">
+                  <td class="col-td-th-3">
                     {{data.commercialNumber}}
                   </td>
-                  <td class="col-td-th-2">
+                  <td class="col-td-th-3">
                     {{data?.sbRef[0]?.portCode}}
                   </td>
-                  <td class="col-td-th-2">
+                  <td class="col-td-th-3">
                     {{data.sbNo}}
                   </td>
-                  <td class="col-td-th-2">
+                  <td class="col-td-th-3">
                     {{data?.sbRef[0]?.sbdate}}
                   </td>
-                  <td class="col-td-th-2">
+                  <td class="col-td-th-3">
                     {{data.amount}}
                   </td>
                   <td class="col-td-th-2">
-                    {{data.debitNoteRef[0]?.totalDebitAmount}}
+                    <button type="submit" class="PopupOpen btn btn-primary" popup-close="DEBIT_NOTE" 
+                    (click)="_VIEW_DEBIT_AMOUNT(i,data.debitNoteRef,sbitem)">Select DNN No.</button>
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data?.debitAmount}}
                   </td>
                   <td class="col-td-th-2">
                     {{data?.SB_Amout_Realized}}
                   </td>
                   <td class="col-td-th-2"><button type="submit" class="PopupOpen btn btn-primary" popup-close="FIRX" 
-                  (click)="_SHIPPING_BILL(i,data,data.debitNoteRef[0]?.totalDebitAmount,content2)">Select IRM No.</button></td>
+                  (click)="_SHIPPING_BILL(i,data,data?.debitAmount)">Select IRM No.</button></td>
                   <td class="col-td-th-2">
                     {{data?.IRADVICE_SUM}}
                   </td>
@@ -725,12 +732,15 @@
           </section>
         </div>
       </div>
+      <div class="modal-footer p-0 mt-2">
+        <button type="button" class="footer-btn"><span (click)="FIRX_CHECK(ShippingBill?.PopUpOpenClose?.nativeElement)">OK</span></button>
+      </div>
     </div>
   </div>
   </app-custom-model>
 </div>
 <div class="temp" #content2>
-  <app-custom-model [FooterButton]="true" [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '50px !important'}" class="p-2" height="400px" id="FIRX"
+  <app-custom-model [FooterButton]="true" EventButton="false" [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '50px !important'}" class="p-2" height="400px" id="FIRX"
   [name]="'FIRX Number Against of : '+nameSearch4">
   <div class="container-fluid mt-2 mb-2">
     <div class="middle_bts">
@@ -780,7 +790,7 @@
   </app-custom-model>
 </div>
 <div class="temp" #content2>
-  <app-custom-model [FooterButton]="true" [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '80px !important'}" class="p-2" height="400px" id="FIRX_DEATILS"
+  <app-custom-model [FooterButton]="true" EventButton="false" [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '80px !important'}" class="p-2" height="400px" id="FIRX_DEATILS"
   [name]="'FIRX Details Against of : '+nameSearch4">
   <div class="container-fluid mt-2 mb-2">
     <div class="middle_bts">
@@ -816,6 +826,48 @@
                   </td>
                   <td class="col-td-th-2">
                     {{data?.irDataItem?.BalanceAvail}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>     
+        </div>
+      </div>
+    </div>
+  </div>
+  </app-custom-model>
+</div>
+
+<div class="temp" #content3>
+  <app-custom-model [FooterButton]="true" EventButton="false" [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '50px !important'}" class="p-2"
+  height="400px" id="DEBIT_NOTE"
+  [name]="'Debit Note Details Against of : '+nameSearch4">
+  <div class="container-fluid mt-2 mb-2">
+    <div class="middle_bts">
+      <div class="login py-5" style="padding: 0px !important; width:100%;">
+        <div class="container_innser">
+          <section class="box-shadow" style="overflow: auto;
+          height: calc(100vh - 210px);
+          background-color: #ffffffd1;
+          border-radius: 10px;
+          box-shadow: inset 0px 0px 7px 0px #30303082;">
+            <table class="table mb-0">
+              <thead >
+                <tr class="table-tr">
+                  <th scope="col" class="col-td-th-1">#</th>
+                  <th scope="col" class="col-td-th-2">Debit Note Number</th>
+                  <th scope="col" class="col-td-th-2">Debit Note Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-tr"
+                  *ngFor='let data of this.SELECTED_DEBIT_AMOUNT?.data let i = index'>
+                  <td class="col-td-th-1"><input type="checkbox" class="debitAmount" name="debitAmount" (change)="_DEBIT_AMOUNT(i,data,$event)" #debitAmount/></td>
+                  <td class="col-td-th-2">
+                    {{data?.debitNoteNumber}}
+                  </td>
+                  <td class="col-td-th-2">
+                    {{data?.totalDebitAmount}}
                   </td>
                 </tr>
               </tbody>

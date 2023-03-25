@@ -25,11 +25,11 @@
               <button type="submit" class="btn btn-primary"
                 (click)="detailsView(i,ApprovalDetails.style.display='block')">Details</button>
               <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary"
-                (click)="mergeAllPDFs('download',item?.documents)">Pdf</button>
+                (click)="mergeAllPDFs('download',item?.documents,item['tableName'])">Pdf</button>
               <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary"
-                (click)="mergeAllPDFs('zip',item?.documents)">Zip</button>
+                (click)="mergeAllPDFs('zip',item?.documents,item['tableName'])">Zip</button>
               <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary"
-                (click)="mergeAllPDFs('mail',item?.documents)">Send Mail</button>
+                (click)="mergeAllPDFs('mail',item?.documents,item['tableName'],item['SendMailData'])">Send Mail</button>
             </div>
           </td>
         </tr>

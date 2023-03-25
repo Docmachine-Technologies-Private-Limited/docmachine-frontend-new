@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpContext, HttpHeaders, HttpParams} from '@angular/common/http';
-import { observable, Observable, of } from 'rxjs';
+import { observable, Observable, of, Subject } from 'rxjs';
 import { AppConfig } from '../../app/app.config';
 import * as data1 from './../currency.json';
 
@@ -18,6 +18,8 @@ export class DocumentService {
   PDF_DOCUMENTS_DATA:any=[];
   pipolist:any=[];
   OUTWARD_REMITTANCE_ADVICE_SHEET: any=[];
+  MT102_SUBJECT:any=[]
+
   constructor(public http: HttpClient, public appconfig: AppConfig) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base);
@@ -907,6 +909,15 @@ export class DocumentService {
       },
       httpOptions
     );
+  }
+  updateBlcopyrefSB(data,id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/blcopy/updateSB`,{data:data,id:id},httpOptions);
   }
 
   //get airway blcopy and advice copy api
@@ -1866,8 +1877,7 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/ExportBillLodgement/update`,data,httpOptions);
   }
-  
-  
+
   Update_Amount_by_Table(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -1882,6 +1892,14 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.get(`${this.api_base}/ExportBillLodgement/get`, httpOptions);
+  }
+  getByIdExportBillLodgment(id:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ExportBillLodgement/getById`,{id:id},httpOptions);
   }
 
   getOneExportTask(data) {
@@ -1936,6 +1954,18 @@ export class DocumentService {
 
     return this.http.post(
       `${this.api_base}/task/exportEmail`,
+      data,
+      httpOptions
+    );
+  }
+  SendMail_TextPdf(data){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/task/textpdf`,
       data,
       httpOptions
     );

@@ -59,8 +59,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="table-row" style="font-size: 12px;"
-                    *ngFor="let purposeRow of purposeRows; let i = index">
+                  <tr class="table-row" style="font-size: 12px;" *ngFor="let purposeRow of purposeRows; let i = index">
                     <td class="columH" *ngFor="let column of purposeRow;  let j = index"
                       [ngClass]='onClass(column.text)' [attr.rowSpan]="column.rowSpan"
                       style="vertical-align: top !important;"
@@ -109,9 +108,10 @@
                     <div class="row">
                       <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                         <h3> bank reference number</h3><br>
-                        <input #bnk_reff [value]="SELECT_bankreferencenumber" id="bnk_reff"
-                          class="bnk_reff form-control" type="text" autocomplete="off" (keyup)="change($event)"
-                          (click)="loadPopup(searchbankname,custommodal.style.display='flex')">
+                        <input #bnk_reff [value]="this.ArrayToString(SELECT_bankreferencenumber)" id="bnk_reff"
+                          class="bnk_reff form-control PopupOpen" type="text" popup-close="BillLodgementNumber" autocomplete="off" (keyup)="change($event)"
+                          (click)="loadPopup(searchbankname,custommodal.style.display='flex');"
+                          (change)="change($event)">
                       </div>
                     </div>
                     <div class="space_div"></div>
@@ -199,14 +199,26 @@
                           Generate Invoice Reduction </button>
                       </div>
                       <div *ngIf="this.Lodgement[selection]['InvoiceReduction2']['Hide']== 'no'">
-                        <button class="opt right_buttons_new" style="margin-right: 1%"
+                        <!-- <button class="opt right_buttons_new" style="margin-right: 1%"
                           (click)='generateDoc2(this.Lodgement[selection]["InvoiceReduction2"]["Show"],code,j)'>
-                          Proceed to preview </button>
+                          Proceed to preview </button> -->
+                          <button class="button1" style="margin-right: 10px; width:200px"
+                              [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
+                              (click)="SendApproval(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,code)">Send
+                              for Approval</button>
                       </div>
                     </div>
                     <div *ngIf="this.Lodgement[selection]['BuyerRemitterDifferent']['Hide']== 'no'">
-                      <Button class="button1" style="margin-bottom: 40px;" (click)="sendMail(j,code)">Send
-                        Mail</Button>
+                      <!-- <Button class="button1" style="margin-bottom: 40px;" (click)="sendMail(j,code)">Send
+                        Mail</Button> -->
+                        <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                          <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
+                            <button class="button1" style="margin-right: 10px; width:200px"
+                              [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
+                              (click)="SendApproval_2(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,code)">Send
+                              for Approval</button>
+                          </div>
+                        </div>
                     </div>
                   </div>
                   <div *ngIf='this.Lodgement[selection]["Lodgement"]["Hide"]==="no"'>
@@ -218,13 +230,14 @@
                         <div class="space_div"></div>
                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                           <div class="form-check-new">
-                            <input #preantsearchShippingBillnumber autocomplete="off" [value]="selectSB"
-                              class="form-control" type="text" (click)="ShippingBillnumber.style.display='flex'">
+                            <input #preantsearchShippingBillnumber popup-close="ShippingBill" autocomplete="off"
+                              [value]="selectSB" class="form-control PopupOpen" type="text"
+                              (click)="InputClick();ShippingBillnumber.style.display='flex'">
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-8 col-8">
                           <h3>Is Buyer remitter different?</h3>
@@ -242,7 +255,7 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                     <div *ngIf='this.Lodgement[selection]["BuyerRemitter"]["Show"]=== "yes"'>
                       <div class="form-group">
                         <div class="row">
@@ -277,7 +290,7 @@
                                               <label style="color: #5dc9e9;text-decoration: underline;"
                                                   [routerLink]="['/home/upload']">Upload Tripartite agreement</label> -->
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-8 col-8">
                           <h3>Is Invoice reduction?</h3>
@@ -295,7 +308,7 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                     <div *ngIf='this.Lodgement[selection]["BuyerRemitter"]["Hide"]=== "no" ||
                                                      this.Lodgement[selection]["BuyerRemitter"]["Show"]=== "yes" &&
                                                      this.Lodgement[selection]["Invoicereduction"]["Show"]=="yes" ||
@@ -313,17 +326,12 @@
                     </div>
                   </div>
                 </div>
-                <div *ngIf='code === c && importPurpose[j] == code'>
-                  <div id="mainId1" class="bc" *ngIf="doneImportPurpose[j] != code">
+                <div [style.display]="code === c && importPurpose[j] == code?'block':'none'">
+                  <div id="HTML_PDF_TABLE" #tablefulld_width class="bc" [style.display]="doneImportPurpose[j] != code?'block':'none'">
                     <div id="first" class="bc">
                       <div class="bc new_table_lits_view">
                         <div class="tablefulld_width">
-                          <!-- <div style="margin-left: 29px;">
-                                                                                              <img src="../../../assets/back.png" (click)="hide1( code,j)"
-                                                                                                      style="width: 20px; height: 20px;"><span style="margin-left: 10px;" (click)="hide()"
-                                                                                                      >Back</span>
-                                                                                                 </div> -->Our Ref
-                          No.: <span style="outline: none; display: inline-block;width: 150px;"
+                        Our Ref No.: <span style="outline: none; display: inline-block;width: 150px;"
                             contenteditable="true"></span>
                           <br> Date: <span style="outline: none; display: inline-block;width: 150px;"
                             contenteditable="true"></span>
@@ -340,7 +348,7 @@
                             have negotiated/sent the bills for collection
                             and details of the bills are as below: </p>
                         </div>
-                        <table style="width:100%;">
+                        <table style="width:100%;height: auto;">
                           <tr class="border1">
                             <td class="wtd4 border1"> Sr</td>
                             <td class="wtd4 border1"> Negotiated/Sent
@@ -366,77 +374,23 @@
                               <br> of Invoice
                             </td>
                           </tr>
-                          <tr class="border1">
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none; display: inline-block; width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                          </tr>
-                          <tr class="border1">
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                          </tr>
-                          <tr class="border1">
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none; display: inline-block; width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                          </tr>
-                          <tr class="border1">
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
-                            <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                contenteditable="true"></span> </td>
+                          <tr class="border1" *ngFor="let item of this.GENRATE_DOCMENTS_FILL;let i=index">
+                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                                contenteditable="true">{{(i+1)}}</span> </td>
+                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                                contenteditable="true">--</span> </td>
+                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                                contenteditable="true">{{item?.blcopyrefNumber}}</span> </td>
+                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                                contenteditable="true">{{item?.SbRef[0]?.buyerName}}</span> </td>
+                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                                contenteditable="true">{{item?.blcopyrefNumber}}</span> </td>
+                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                                contenteditable="true">{{item?.amount}}</span> </td>
+                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                                contenteditable="true">{{item?.blcopyrefNumber}}</span> </td>
+                            <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
+                                contenteditable="true">NA</span> </td>
                           </tr>
                         </table>
                         <br>
@@ -473,13 +427,21 @@
                   <div *ngIf="doneImportPurpose[j] != code" style="
                                                       float: right;
                                                       display: block;">
-                    <div class="button1" title="Share As PDF" (click)="exportAsPDF2(code,j)"> Proceed to Preview
+                    <div class="button1" title="Share As PDF" (click)="exportAsPDF2(code,j)">Proceed to Preview
                     </div>
                   </div>
                   <div *ngIf="doneImportPurpose[j] == code">
                     <p>Setup: 3 Preview</p>
-                    <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button>
-                    <button class="button1" style="margin-bottom: 40px;">Send it via Email</button>
+                    <!-- <button class="button1" style="margin-right: 10px;" (click)="downloadPDF()">Download</button>
+                    <button class="button1" style="margin-bottom: 40px;">Send it via Email</button> -->
+                    <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                      <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
+                        <button class="button1" style="margin-right: 10px; width:200px"
+                          [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
+                          (click)="SendApproval(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,code)">Send
+                          for Approval</button>
+                      </div>
+                    </div>
                     <br> Generated Document
                     <div>
                       <iframe class='iframe-controller' [src]="data9[j]" height="500px" width="400px"></iframe>
@@ -492,8 +454,7 @@
                     <br>
                     <br>
                     <button class="button1" style="margin-right: 10px;" (click)="edit()">Edit</button>
-                    <button class="button1" style="margin-right: 10px;" *ngIf="isDone"
-                      (click)="doneDox()">Done</button>
+                    <button class="button1" style="margin-right: 10px;" *ngIf="isDone" (click)="doneDox()">Done</button>
                   </div>
                 </div>
                 <div *ngIf='code === c && sbPurpose[j] == code'>
@@ -516,8 +477,7 @@
                             <br> YES Bank Ltd.,
                             <br> Branch address
                           </div>
-                          <span
-                            style="
+                          <span style="
                                                       outline: none;
                                                                                                                               display: inline-block;
                                                                                                                               width: 150px;
@@ -942,8 +902,7 @@
                       <div id="first" class="bc">
                         <div style=" margin-top: 20px; width: 75%;" class="bc">
                           <div style="width:80%;"> Our Ref No.: <span
-                              style="outline: none; display: inline-block;width: 150px;"
-                              contenteditable="true"></span>
+                              style="outline: none; display: inline-block;width: 150px;" contenteditable="true"></span>
                             <br> Date: <span style="outline: none; display: inline-block;width: 150px;"
                               contenteditable="true"></span>
                             <br> Dear Sir/ Madam,
@@ -989,77 +948,21 @@
                               </td>
                             </tr>
                             <tr class="border1">
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span
-                                  style="outline: none; display: inline-block; width: 90px;"
+                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block; width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                            </tr>
-                            <tr class="border1">
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                            </tr>
-                            <tr class="border1">
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span
-                                  style="outline: none; display: inline-block; width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                            </tr>
-                            <tr class="border1">
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
-                                  contenteditable="true"></span> </td>
-                              <td class="wtd3 border1"> <span style="outline: none;display: inline-block;width: 90px;"
+                              <td class="wtd3 border1"> <span style="border:1px solid black;display: inline-block;width: 90px;"
                                   contenteditable="true"></span> </td>
                             </tr>
                           </table>
@@ -1163,30 +1066,30 @@
               <div *ngFor="let code of selectedPurpose; let j = index">
                 <div *ngIf='code === c && generatePurpose[j] != code || Select_A_bank[code]'>
                   <input style="width: 50%; margin-top: 10px;margin-bottom: 10px;"
-                    placeholder="Search for Buyer name or PI/PO Number to select PI/PO" class="form-control"
-                    type="text" searchPIPONumbers id="SearchShippingBill" autocomplete="off"
-                    [value]='StringConverter(selectPIPO)'
-                    (click)="loadPopupPIPONumbers(searchPIPONumbers,PIPONumbers.style.display='flex')" #SearchPIPONumbers>
+                    placeholder="Search for Buyer name or PI/PO Number to select PI/PO" class="form-control" type="text"
+                    searchPIPONumbers id="SearchShippingBill" autocomplete="off" [value]='StringConverter(selectPIPO)'
+                    (click)="loadPopupPIPONumbers(searchPIPONumbers,PIPONumbers.style.display='flex')"
+                    #SearchPIPONumbers>
                   <span *ngIf='filterToggle'>Select PI/PO numbers*</span>
                   <br>
                   <h3 class="select_bg_new">Select a bank <span style="color:red;">*</span></h3>
                   <div *ngFor='let value of bank' style="display: flex; align-items: center;">
-                    <input style="flex-direction:row;" type="radio" id="options1" class="circular_input" [name]="value.bank"
-                       value="value.bank" (click)="setradio(value,SearchPIPONumbers.value,$event);" >
+                    <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
+                      [name]="value.bank" value="value.bank" (click)="setradio(value,SearchPIPONumbers.value,$event);">
                     <label style="flex-direction:row;" class="label1" for="male">{{value}}</label>
                   </div>
                   <br>
                   <div *ngIf='bankToggle'> <span> Credit to {{bankValue}}*</span>
                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
                       <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
-                         value="value.bank" (click)="creditTo(value)">
+                        value="value.bank" (click)="creditTo(value)">
                       <label style="flex-direction:row;" class="label1"
                         for="male">{{value.bank}}-{{value.accType}}</label>
                     </div>
                     <br> <span> To {{bankValue}}*</span>
                     <div *ngFor='let value of newBankArray' style="display: flex; align-items: center; ">
                       <input style="flex-direction:row;" type="radio" id="options1" class="circular_input"
-                         value="value.bank" (click)="chargesTo(value)">
+                        value="value.bank" (click)="chargesTo(value)">
                       <label style="flex-direction:row;" class="label1"
                         for="male">{{value.bank}}-{{value.accType}}</label>
                     </div>
@@ -1197,19 +1100,24 @@
                 <div *ngIf='code === c && generatePurpose[j] == code'>
                   <div *ngIf="value!='' && value!=undefined">
                     <div id="mainId" class="bc" *ngIf="donePurpose[j] != code">
-                        <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"  name="Documents" [src]="'data:application/pdf;base64,'+value" width="700px" height="500px"></app-pdf-viewer>
+                      <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
+                        name="Documents" [src]="'data:application/pdf;base64,'+value" width="700px"
+                        height="500px"></app-pdf-viewer>
                     </div>
                     <br>
                     <div *ngIf='newDone'>
                       <br>
                       <div style="display: flex; align-items: center;" *ngIf="this.MT103_URL!=''">
-                        <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false" name="MT103 Documents" [src]="this.MT103_URL" width="700px" height="500px"></app-pdf-viewer>
+                        <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
+                          name="MT103 Documents" [src]="this.MT103_URL" width="700px" height="500px"></app-pdf-viewer>
                       </div>
                       <br>
                     </div>
                     <div *ngIf='newDone' style="display: flex;flex-direction: column;gap: 20px;">
-                      <div class="docStyle" style="width: 500px;" *ngFor="let pipo of this.ARRAY_BUFFER_PDF;let i=index">
-                        <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false" [name]="'PIPO  Document '+(i+1)" [src]="pipo" width="700px" height="500px"></app-pdf-viewer>
+                      <div class="docStyle" style="width: 500px;"
+                        *ngFor="let pipo of this.ARRAY_BUFFER_PDF;let i=index">
+                        <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
+                          [name]="'PIPO  Document '+(i+1)" [src]="pipo" width="700px" height="500px"></app-pdf-viewer>
                       </div>
                     </div>
                     <div *ngIf="donePurpose[j] != code" style="display: block; width: 78%;  margin-top: 40px;">
@@ -1217,25 +1125,29 @@
                         (click)="doneDox()">Done </button>
                       <button *ngIf='newDone' class="button1" style="margin-right: 10px;"
                         (click)="hidePreview()">Edit</button>
-                      <button *ngIf='newDone' class="button1 PopupOpen" popup-close="ExportTransactionView" style="margin-right: 10px; width:200px"
-                        (click)="openToPdf(containerpopup.style.display='block',this.PREVIWES_URL)">Send Mail / Download</button>
+                      <button *ngIf='newDone' class="button1 PopupOpen" popup-close="ExportTransactionView"
+                        style="margin-right: 10px; width:200px"
+                        (click)="openToPdf(containerpopup.style.display='block',this.PREVIWES_URL)">Send Mail /
+                        Download</button>
                       <button *ngIf='!newDone' class="button1" style="margin-right: 10px; margin-bottom: 30px;"
                         (click)="showPreview(code)">Proceed to Preview</button>
                     </div>
                   </div>
                 </div>
                 <div class="container popup" style="display: none;" #containerpopup>
-                <app-custom-model height="98vh" id="ExportTransactionView" name="Select Document To Download">
+                  <app-custom-model height="98vh" id="ExportTransactionView" name="Select Document To Download">
                     <div class="row">
                       <div class="col-12">
                         <div class="docStyle">
                           <p class="display-4" style="margin-top: 10px;width: 6 0px;
                                               border-bottom: 4px solid #49A2D7;">Generated Document</p>
                         </div>
-                         <div *ngIf='newDone'>
+                        <div *ngIf='newDone'>
                           <div class="docStyle" *ngFor="let pipo of this.ARRAY_BUFFER_PDF;let i=index">
                             <input type="checkBox" checked (change)="addPdfToSelectedPdf(pipo , $event)">
-                              <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false" [name]="'PIPO  Document '+(i+1)" [src]="pipo" width="100%" height="500px"></app-pdf-viewer>
+                            <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
+                              [name]="'PIPO  Document '+(i+1)" [src]="pipo" width="100%"
+                              height="500px"></app-pdf-viewer>
                           </div>
                         </div>
                         <div
@@ -1265,7 +1177,7 @@
                         </div>
                       </div>
                     </div>
-                </app-custom-model>
+                  </app-custom-model>
                 </div>
                 <!-- <ng-template #content2 let-modal>
                   <div class="modal-body2">
@@ -1413,8 +1325,48 @@
     </div>
   </div>
 </div>
-<div class="bg-black-opacity" #custommodal>
-  <div class="modal custom-modal" tabindex="-1" role="dialog">
+
+
+<div class="other" #custommodal>
+  <app-custom-model [FooterButton]="true" EventButton="false"
+    [customstyle]="{'margin':'90px auto auto !important','max-width': '55vw !important','margin-right': '0px !important'}"
+    class="p-2" id="BillLodgementNumber"
+    [modalbodystyle]="{'height': '500px'}"
+    name="Bill Lodgement Number Selection Panel">
+    <div class="col-12 pt-3">
+      <div class="col-5" *ngIf="this.PARTY_NAME.length!=0">
+        <ng-select [items]="this.PARTY_NAME" placeholder="Search party name" (change)="SearchSelectValue(PARTY_NAMEselection)"
+          [(ngModel)]="PARTY_NAMEselection" name="commodity" #ngSelect> </ng-select>
+      </div>
+      <table class="table mb-0 mt-2">
+        <thead>
+          <tr class="table-tr">
+            <th scope="col" class="col-td-th-1">#</th>
+            <th scope="col" class="col-td-th-3">Party Name</th>
+            <th scope="col" class="col-td-th-3">SB NUMBER</th>
+            <th scope="col" class="col-td-th-3">Lodgement no</th>
+            <th scope="col" class="col-td-th-3">Currency</th>
+            <th scope="col" class="col-td-th-3">Amount</th>
+            <th scope="col" class="col-td-th-3">SB AMOUNT</th>
+            <th scope="col" class="col-td-th-3">AVAILABLE AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-tr" *ngFor='let item of this.Export_Direct_Dispatch let i = index'>
+            <td class="col-td-th-1"><input type="checkbox" (change)="ClickbankNumber(item?.blcopyrefNumber,'.bnk_reff','')" /></td>
+            <td class="col-td-th-3">{{item?.pipo[0]?.buyerName}}</td>
+            <td class="col-td-th-3">{{item?.SbRef[0]?.sbno}}</td>
+            <td class="col-td-th-3">{{item?.blcopyrefNumber}}</td>
+            <td class="col-td-th-3">{{item?.SbRef[0]?.currency}}</td>
+            <td class="col-td-th-3">{{item?.amount}}</td>
+            <td class="col-td-th-3">{{item?.LodgementData?.data?.amount}}</td>
+            <td class="col-td-th-3">{{this.calculateAmount(item?.amount,item?.LodgementData?.data?.amount)}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </app-custom-model>
+  <!-- <div class="modal custom-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -1423,30 +1375,70 @@
             (click)="custommodal.style.display='none'"> <span aria-hidden="true">&times;</span> </button>
         </div>
         <div class="modal-body">
-          <div *ngIf="this.PARTY_NAME.length!=0">
-            <!-- <select #SelectPartyName name="" id="" class="form-select form-select-1" aria-label="Default select example"
-                            (change)="SearchSelectValue(SelectPartyName.value)">
-                             <option value="Select Tripartite agreement">Select party name</option>
-                             <option [value]="item" *ngFor="let item of this.PARTY_NAME">{{item}}</option>
-                            </select> -->
-            <ng-select [items]="this.PARTY_NAME" placeholder="Search party name"
-              (keyup)="SearchSelectValue(PARTY_NAMEselection)" (change)="SearchSelectValue(PARTY_NAMEselection)"
-              [(ngModel)]="PARTY_NAMEselection" name="commodity" #ngSelect> </ng-select>
-          </div>
-          <div id="new_popups_added" class="" *ngIf="this.Blcopyref.length!=0">
+ <div id="new_popups_added" class="" *ngIf="this.Blcopyref.length!=0">
             <label class="h5 class-append-text" *ngFor="let item of this.Blcopyref let i=index" (click)="ClickbankNumber(item['blcopyrefNumber'],
                         '.bnk_reff',custommodal.style.display='none')">
               {{item['blcopyrefNumber']}}</label>
-          </div>
+          </div> 
           <div class="text-center" *ngIf="this.Blcopyref.length==0">Data not found..</div>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 <!-- Shipping Bill number -->
-<div class="bg-black-opacity" #ShippingBillnumber>
-  <div class="modal custom-modal row no-gutter Select Shipping bill number Select_Shipping" tabindex="-1" role="dialog">
+<div class="custom-div" #ShippingBillnumber>
+  <app-custom-model [FooterButton]="false" modalbodystyle="max-height:90vh" (ModelChange)="removeSession()"
+    [customstyle]="{'max-width':'98vw !important'}" class="p-2" height="98vh" id="ShippingBill" name="Shipping Bill"
+    #ShippingBill>
+    <div class="DDDD p-3" *ngIf="this.documentService.MT102_SUBJECT!=''">
+      <app-pdf-viewer [htmlload]="true" class="pt-3" [downloadShow]="false" src="home/direct-dispatch" width="100%"
+        height="500px"></app-pdf-viewer>
+      <!-- <div class="mt_bottom" style="margin-bottom:20px">
+      <div class="row">
+        <div class="col-md-6">
+          <app-ng-dropdown-custom
+          placeHolderText="Select Buyer Name"
+          [items]="this.buyerName" bindLabel="value"
+          [multiple]="false" (modelChanges)="ShippingBillnumberFil($event)" #buyerNameSelection>
+         </app-ng-dropdown-custom> 
+        </div>
+        <div class="col-md-3">
+          <button class="filter1 btn btn-primary" (click)="ShippingBillnumberFil('')">Reset</button>
+        </div>
+      </div>
+    </div> -->
+      <!-- <section style="width: 100%;" class="box-shadow">
+      <table class="table table-striped mb-0">
+        <thead style="width: 100% ;height: 54px;">
+          <tr class="table-tr">
+            <th scope="col" class="col-td-th-1">#</th>
+            <th scope="col" class="col-td-th-3">SB DATE</th>
+            <th scope="col" class="col-td-th-3">SB NUMBER</th>
+            <th scope="col" class="col-td-th-3">BUYER NAME</th>
+            <th scope="col" class="col-td-th-3">CURRENCY</th>
+            <th scope="col" class="col-td-th-3">SB AMOUNT</th>
+            <th scope="col" class="col-td-th-3">AVAILABLE AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-tr" *ngFor='let data of ShippingbillNumberfilter let i = index'>
+            <td class="col-td-th-1">
+              <input type="checkbox" (change)="changeCheckbox1(data.sbno, data); " />
+            </td>
+            <td class="col-td-th-3"> {{data.sbdate}} </td>
+            <td class="col-td-th-3"> {{data.sbno}} </td>
+            <td class="col-td-th-3"> {{data.buyerName}} </td>
+            <td class="col-td-th-3"> {{data.fobCurrency}} </td>
+            <td class="col-td-th-3"> {{data.fobValue}} </td>
+            <td class="col-td-th-3"> {{data.balanceAvai}} </td>
+          </tr>
+        </tbody>
+      </table>
+    </section> -->
+    </div>
+  </app-custom-model>
+  <!-- <div class="modal custom-modal row no-gutter Select Shipping bill number Select_Shipping" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -1515,7 +1507,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 <div class="bg-black-opacity" #PIPONumbers>
   <div class="modal custom-modal Select_Shipping" tabindex="-1" role="dialog">

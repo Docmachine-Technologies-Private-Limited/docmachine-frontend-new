@@ -210,7 +210,11 @@ html {
 .content-wrap {
   position: unset !important;
   height: auto !important;
-  width: calc(100vw - 220px) !important;
+  width: calc(100vw - 200px) !important;
+}
+
+.width-full{
+  width: 100vw !important;
 }
 
 .scroll-bar-main {

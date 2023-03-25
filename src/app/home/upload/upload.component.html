@@ -174,7 +174,7 @@
                   [multiple]="true"
                   #CommercialNumber disabled>
                 </ng-select>
-                
+              
                 <div *ngIf="documentType!='' && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length==0"
                   style="color: red;font-size: 15px;">
                   There were no results from that PIPO Summary.
@@ -182,6 +182,18 @@
                 <div *ngIf="documentType==''  && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
                   style="color: red;font-size: 15px;">
                   Please select a {{documentType1}} Summary page
+                </div>
+              </div>
+              <div *ngIf='docu == "blCopyref"' class="col-md-6 d-flex flex-column">
+                <div style="display: flex;flex-direction: column;" class="col-12">
+                  <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Shipping Bill*</label>
+                  <ng-select class="custom" *ngIf="this.SHIPPING_LIST?.length!=0"
+                    [items]="[]"
+                    bindLabel="sbno"
+                    [(ngModel)]="this.SHIPPING_LIST"
+                    [multiple]="true"
+                    placeholder="Select Shipping Bill" disabled>
+                  </ng-select>
                 </div>
               </div>
             </div>
@@ -196,6 +208,7 @@
               (change)="clickBene(bene?.selectedValues[0]?.benneName)" #bene>
             </ng-select>
           </div>
+         
           <div class="col-5 pt-2 d-flex flex-column">
             <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
             <div style="display: flex; align-items: center;">
@@ -1476,33 +1489,39 @@
                   <label for="exampleInputPassword1" class="form-label">Party Name and Address 1</label>
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Party Name</label>
-                    <input ngModel class="form-control p-3" name="PartyName1">
+                    <ng-select class="custom" *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
+                    bindLabel="value" [multiple]="false" placeholder="Select Buyer Name"
+                    name="PartyName1" (change)="buyerselect($event,0)" ngModel #PartyName1></ng-select>
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Address</label>
-                    <input ngModel class="form-control p-3" name="PartyAddress1">
+                    <input ngModel [value]="this.BUYER_ADDRESS_DETAILS.length!=0?this.BUYER_ADDRESS_DETAILS[0]?.Address:''" class="form-control p-3" name="PartyAddress1" disabled>
                   </div>
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Party Name and Address 2</label>
                    <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Party Name</label>
-                    <input ngModel class="form-control p-3" name="PartyName2">
+                    <ng-select class="custom" *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
+                    bindLabel="value" [multiple]="false" placeholder="Select Buyer Name"
+                    name="PartyName2" ngModel (change)="buyerselect($event,1)"  #PartyName2></ng-select>
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Address</label>
-                    <input ngModel class="form-control p-3" name="PartyAddress2">
+                    <input ngModel [value]="this.BUYER_ADDRESS_DETAILS.length!=0?this.BUYER_ADDRESS_DETAILS[1]?.Address:''" class="form-control p-3" name="PartyAddress2" disabled>
                   </div>
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Party Name and Address 3</label>
                    <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Party Name</label>
-                    <input ngModel class="form-control p-3" name="PartyName3">
+                    <ng-select class="custom" *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
+                    bindLabel="value" [multiple]="false" placeholder="Select Buyer Name"
+                    name="PartyName3" ngModel (change)="buyerselect($event,2)" ></ng-select>
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Address</label>
-                    <input ngModel class="form-control p-3" name="PartyAddress3">
+                    <input ngModel class="form-control p-3" [value]="this.BUYER_ADDRESS_DETAILS.length!=0?this.BUYER_ADDRESS_DETAILS[2]?.Address:''" name="PartyAddress3" disabled>
                   </div>
                 </div>
               </div>

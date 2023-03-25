@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="content_white_background">
+    <div class="content_white_background" style="height: auto;">
       <main id="content" class="table-padding" role="main">
         <div class="new_document_list1">
           <div class="new_document_list_add_data">
@@ -68,38 +68,38 @@
                           <table>
                             <tr>
                               <th>LC order no & date : </th>
-                              <td class="col-td-th-3">{{this.Advance_Amount_Sum?.PIPO_NO?.toString()}} &
+                              <td>{{this.Advance_Amount_Sum?.PIPO_NO?.toString()}} &
                                 {{this.Advance_Amount_Sum?.Date?.toString()}}</td>
                             </tr>
                             <tr>
                               <th>Buyer : </th>
-                              <td class="col-td-th-3">{{this.Advance_Amount_Sum?.buyerName?.toString()}}</td>
+                              <td>{{this.Advance_Amount_Sum?.buyerName?.toString()}}</td>
                             </tr>
                             <tr>
                               <th>Value : </th>
-                              <td class="col-td-th-3">{{this.Advance_Amount_Sum?.AmountSum}}</td>
+                              <td>{{this.Advance_Amount_Sum?.AmountSum}}</td>
                             </tr>
                             <tr>
                               <th>Last date of service :</th>
-                              <td class="col-td-th-3">{{this.getTimeDifferenceContract(180)}}</td>
+                              <td>{{this.getTimeDifferenceContract(180)}}</td>
                             </tr>
                           </table>
                           <table>
                             <tr>
                               <th>Loan requested up to (Date) : </th>
-                              <td class="col-td-th-3">{{this.Advance_Amount_Sum?.Last_date_of_service}}</td>
+                              <td>{{this.Advance_Amount_Sum?.Last_date_of_service}}</td>
                             </tr>
                             <tr>
                               <th>Type of service : </th>
-                              <td class="col-td-th-3">-</td>
+                              <td>-</td>
                             </tr>
                             <tr>
                               <th>IEC :</th>
-                              <td class="col-td-th-3">{{this.item5?.iec}}</td>
+                              <td>{{this.item5?.iec}}</td>
                             </tr>
                             <tr>
                               <th>A/c no to be debit for all charges : </th>
-                              <td class="col-td-th-3">{{this.SET_CREDIT_DEBIT_LIST?.Credit[1]?.accNumber}}</td>
+                              <td>{{this.SET_CREDIT_DEBIT_LIST?.Credit[1]?.accNumber}}</td>
                             </tr>
                           </table>
                         </div>
@@ -229,7 +229,7 @@
                       <div class="content_white_background" style="padding: 0;
                       margin: auto;
                       margin-left: 0;
-                      margin-top: 20px;">
+                      margin-top: 20px;height: auto;">
                         <main id="content" class="content" role="main">
                           <div class="analytics">
                             <div>
@@ -244,7 +244,7 @@
                                       bindLabel="bank" [multiple]="false" placeholder="Select Buyer Name"></ng-select>
                                   </div>
                                   <div class="col-md-10 mb-0" *ngIf="this.newBankArray['Credit'].length!=0">
-                                    <div class="row mt-2">
+                                    <div class="col mt-2">
                                       <label for="exampleInputEmail1" class="form-label">Select Credit bank*</label>
                                       <mat-radio-group class="custom-checkbox" aria-label="Select an option">
                                         <mat-radio-button [value]="item" (change)="setBank($event,'Credit',0,item)"
@@ -254,7 +254,7 @@
                                     </div>
                                   </div>
                                   <div class="col-md-10 mb-2" *ngIf="this.newBankArray['Credit'].length!=0">
-                                    <div class="row mt-2">
+                                    <div class="col mt-2">
                                       <label for="exampleInputEmail1" class="form-label">Select Debit bank*</label>
                                       <mat-radio-group class="custom-checkbox" aria-label="Select an option">
                                         <mat-radio-button [value]="item" (change)="setBank($event,'Credit',1,item)"
@@ -501,9 +501,8 @@
                     </div>
                     <section style="width: 100%;" class="box-shadow">
                      <table class="table table-hover">
-                        <thead style="width: 100% ;height: 54px;">
-                          <tr class="text-muted table-heading"
-                            style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
+                        <thead>
+                          <tr class="table-tr">
                             <th scope="col" class="col-td-th-3"></th>
                             <th scope="col" class="col-td-th-3">PIPO No.</th>
                             <th scope="col" class="col-td-th-3">Recieved Amount</th>
