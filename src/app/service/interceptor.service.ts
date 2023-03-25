@@ -16,17 +16,15 @@ export class InterceptorService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     this.documentService.loading = true;
-    // pipe(
-    //   finalize(() => setTimeout(()=> {this.documentService.loading=false},1500))
-    // );
-    return next.handle(req).pipe(map((event: HttpEvent<any>) => {
-      if (event instanceof HttpResponse) {
-        event = event.clone({ body: this.modifyBody(event.body) });
-      }
-      return event;
-    }));
-  }
-  private modifyBody(body: any) {
-    setTimeout(()=> {this.documentService.loading=false},1500)
+    return next.handle(req).pipe(
+      finalize(() => setTimeout(()=> {this.documentService.loading=false},1500))
+    );
+    // return next.handle(req).pipe(map((event: HttpEvent<any>) => {
+    //   if (event instanceof HttpResponse) {
+    //   console.log()
+    //     setTimeout(()=> {this.documentService.loading=false},1500)
+    //   }
+    //   return event;
+    // }));
   }
 }

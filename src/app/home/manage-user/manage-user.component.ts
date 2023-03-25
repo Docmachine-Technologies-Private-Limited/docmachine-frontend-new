@@ -4,8 +4,8 @@ import { UserService } from './../../service/user.service';
 import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AppConfig } from 'src/app/app.config';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { AppConfig } from '../../app.config';
+import { WindowInformationService } from '../../service/window-information.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 @Component({

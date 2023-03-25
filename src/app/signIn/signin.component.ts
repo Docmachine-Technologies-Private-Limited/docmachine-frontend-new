@@ -131,12 +131,12 @@ export class SigninComponent implements OnInit {
                     } else {
                       this.userService.role = this.data['result']['role'];
                       if (this.data1['data'][0].companyId) {
-                        this.router.navigate(['/home/dashboardTask'])
+                        this.router.navigate(['/home'])
                       } else {
                         if (this.data1['data'][0]?.role!='member') {
                           this.router.navigate(['createTeam']);
                         }else{
-                          this.router.navigate(['/home/dashboardTask'])
+                          this.router.navigate(['/home'])
                         }
                       }
                     }

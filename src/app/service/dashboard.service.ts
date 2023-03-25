@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({ providedIn: "root" })
 export class DashBoardService {
   api_base: string;
-  authToken: string;
+  authToken: any;
   DASH_BOARD_TYPES:string='';
 
   public loginData = new BehaviorSubject({});
@@ -14,7 +14,6 @@ export class DashBoardService {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base)
   }
-
 
   public loadFromLocalStorage() {
     const token = localStorage.getItem('token');

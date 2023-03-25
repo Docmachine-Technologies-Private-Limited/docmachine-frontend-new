@@ -107,7 +107,19 @@
         </button>
       </div>
       <div class="p-0 pt-5" id="sidebar1">
-          <a [routerLink]="['/home/dashboardTask']" class="sidebar-content" style="color: black;
+          <a *ngIf="this.userData['role']!='manager'" [routerLink]="['/home/dashboardTask']" class="sidebar-content" style="color: black;
+          padding-left: 0;
+          font-size: 20px;
+          display: flex;
+          background: white;
+          max-width: 100%;
+          width: 200px !important;
+          border-radius: 0px;
+          padding: 5px;
+          font-weight: 600;">
+            <span class="icon side-icon"><img style="width: 17px;filter: hue-rotate(358deg);" src="./assets/new-img/dashboard.svg" /> Dashboard</span> 
+          </a>
+          <a *ngIf="this.userData['role']=='manager'" class="sidebar-content" style="color: black;
           padding-left: 0;
           font-size: 20px;
           display: flex;

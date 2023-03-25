@@ -188,10 +188,10 @@
                     *ngFor="let location of this.UPDATED_DETAILS?.location;let i=index">
                     <input type="text" (keyup)="add_ArrayForm_value('location',i,'loc',$event.target.value)"
                       class="form-control col-12" [value]="location?.loc" id="exampleInputPassword1">
-                    <button type="submit" *ngIf="(i)!=0 && location?.loc==''" class="btn danger-primary remove-btn"
+                    <button type="submit" *ngIf="this.ADD_REMOVE_OPTION.Location[i]==true" class="btn danger-primary remove-btn"
                       style="background-color: #fd5f00;" (click)="remove_location(i)"><span>&#215;</span></button>
                     <button type="submit" *ngIf="(i+1)==this.UPDATED_DETAILS?.location.length"
-                      class="btn btn-primary remove-btn" (click)="add_location()"><span>&#43;</span></button>
+                      class="btn btn-primary remove-btn" (click)="add_location(i)"><span>&#43;</span></button>
                   </div>
                 </div>
                 <div class="form-group">
@@ -200,10 +200,10 @@
                     *ngFor="let comm of this.UPDATED_DETAILS?.commodity;let i=index">
                     <input type="text" (keyup)="add_ArrayForm_value('commodity',i,'como',$event.target.value)"
                       class="form-control col-12" [value]="comm?.como" aria-describedby="emailHelp">
-                    <button type="submit" *ngIf="(i)!=0 && comm?.como==''" class="btn danger-primary remove-btn"
+                    <button type="submit" *ngIf="this.ADD_REMOVE_OPTION.Commodity[i]==true" class="btn danger-primary remove-btn"
                       style="background-color: #fd5f00;" (click)="remove_commodity(i)"><span>&#215;</span></button>
                     <button type="submit" *ngIf="(i+1)==this.UPDATED_DETAILS?.commodity.length"
-                      class="btn btn-primary remove-btn" (click)="add_commodity()"><span>&#43;</span></button>
+                      class="btn btn-primary remove-btn" (click)="add_commodity(i)"><span>&#43;</span></button>
                   </div>
                 </div>
                 <div class="form-group">
@@ -214,19 +214,23 @@
                       <div class="row bank-header p-1 m-auto">
                         <h4>Bank Details_{{i+1}}</h4>
                         <div class="row mr-2">
-                          <button type="submit" *ngIf="(i)!=0 && course?.bank==''"
+                          <button type="submit" *ngIf="this.ADD_REMOVE_OPTION.Bank_Details[i]==true"
                             class="btn danger-primary remove-btn mr-2" style="background-color: #fd5f00;"
                             (click)="remove_more_Bank(i)"><span>&#215;</span></button>
                           <button type="submit" *ngIf="(i+1)==this.UPDATED_DETAILS?.bankDetails.length"
                             class="btn btn-primary remove-btn mr-2"
-                            (click)="add_more_Bank()"><span>&#43;</span></button>
+                            (click)="add_more_Bank(i)"><span>&#43;</span></button>
                         </div>
                       </div>
                       <div class="column">
                         <label class="bank">*Bank Name</label>
-                        <input type="text" (keyup)="add_ArrayForm_value('bankDetails',i,'bank',$event.target.value)"
+                        <!-- <input type="text" (keyup)="add_ArrayForm_value('bankDetails',i,'bank',$event.target.value)"
                           placeholder="bank name" [value]="course?.bank"
-                          class="form-control rounded-pill password password1">
+                          class="form-control rounded-pill password password1"> -->
+                          <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST" bindLabel="value"
+                          [multiple]="false" placeholder="Select Bank Name" name="accType" [ngModel]="course?.bank"
+                          (change)="add_ArrayForm_value('bankDetails',i,'bank',$event?.value)"
+                          ></ng-select>
                         <label class="bank">*Account Number</label>
                         <input type="text"
                           (keyup)="add_ArrayForm_value('bankDetails',i,'accNumber',$event.target.value)"
@@ -240,11 +244,11 @@
                         <label class="bank">Account Type</label>
                         <ng-select *ngIf="this.Account_Type?.length!=0" [items]="this.Account_Type" bindLabel="type"
                           [multiple]="false" placeholder="Select AccType" name="accType" [ngModel]="course?.accType"
-                          (change)="add_ArrayForm_value('bankDetails',i,'accType',$event.type)"></ng-select>
+                          (change)="add_ArrayForm_value('bankDetails',i,'accType',$event?.type)"></ng-select>
                         <label class="bank">Currency Type</label>
                         <ng-select *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST" bindLabel="type"
                           [multiple]="false" placeholder="Select Currency" name="currency" [ngModel]="course?.currency"
-                          (change)="add_ArrayForm_value('bankDetails',i,'currency',$event.type)"></ng-select>
+                          (change)="add_ArrayForm_value('bankDetails',i,'currency',$event?.type)"></ng-select>
                       </div>
                     </div>
                   </div>

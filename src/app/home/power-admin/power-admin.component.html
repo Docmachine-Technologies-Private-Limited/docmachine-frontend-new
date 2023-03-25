@@ -14,21 +14,21 @@
                                <table class="table table-hover">
                                     <thead>
                                         <tr class="text-muted table-heading">
-                                            <th scope="col" class="col-td-th-3"><span class="pl-3">Date</span></th>
-                                            <th scope="col" class="col-td-th-3">Customer's Name</th>
-                                            <th scope="col" class="col-td-th-3">Role</th>
-                                            <th scope="col" class="col-td-th-3">Company Name</th>
-                                            <th scope="col" class="col-td-th-3">Status</th>
+                                            <th scope="col"><span class="pl-3">Date</span></th>
+                                            <th scope="col">Customer's Name</th>
+                                            <th scope="col">Role</th>
+                                            <th scope="col">Company Name</th>
+                                            <th scope="col">Status</th>
                                         </tr>
                                     </thead>
                                     <!--  -->
                                     <tbody *ngIf='pending' class="text-dark">
                                         <tr class="table-tr" *ngFor="let data of value; let i = index">
                                             <th class="pl-4 fw-normal">{{data.date}}</th>
-                                            <td class="col-td-th-3">{{data.fullName}}</td>
-                                            <td class="col-td-th-3">{{data.role}}</td>
-                                            <td class="col-td-th-3">{{data.companyName}}</td>
-                                            <td class="col-td-th-3"> <button class="button" style="margin-right: 10px;"
+                                            <td>{{data.fullName}}</td>
+                                            <td>{{data.role}}</td>
+                                            <td>{{data.companyName}}</td>
+                                            <td> <button class="button" style="margin-right: 10px;"
                                                     (click)='submit(data._id, i, data.emailId)'>Approve</button> <button
                                                     class="button" style="background-color: orange; margin-right: 10px;"
                                                     (click)='decline(data._id, i, data.emailId)'>Decline</button>
@@ -40,10 +40,10 @@
                                     <tbody *ngIf='approved' class="text-dark">
                                         <tr class="table-tr" *ngFor="let data of value; let i = index">
                                             <th class="pl-4 fw-normal">{{data.date}}</th>
-                                            <td class="col-td-th-3">{{data.fullName}}</td>
-                                            <td class="col-td-th-3">{{data.role}}</td>
-                                            <td class="col-td-th-3">{{data.companyName}}</td>
-                                            <td class="col-td-th-3"> <button class="button" style="margin-right: 10px;"
+                                            <td>{{data.fullName}}</td>
+                                            <td>{{data.role}}</td>
+                                            <td>{{data.companyName}}</td>
+                                            <td> <button class="button" style="margin-right: 10px;"
                                                     (click)='submit(data._id, i, data.emailId)'>Revoke</button>
                                                 <button class="button" style="background-color: red;"
                                                     (click)='delete(data._id, i)'>Delete</button>
@@ -53,10 +53,10 @@
                                     <tbody *ngIf='declined' class="text-dark">
                                         <tr class="table-tr" *ngFor="let data of value; let i = index">
                                             <th class="pl-4 fw-normal">{{data.date}}</th>
-                                            <td class="col-td-th-3">{{data.fullName}}</td>
-                                            <td class="col-td-th-3">{{data.role}}</td>
-                                            <td class="col-td-th-3">{{data.companyName}}</td>
-                                            <td class="col-td-th-3"> <button class="button" style="margin-right: 10px;"
+                                            <td>{{data.fullName}}</td>
+                                            <td>{{data.role}}</td>
+                                            <td>{{data.companyName}}</td>
+                                            <td> <button class="button" style="margin-right: 10px;"
                                                     (click)='submit(data._id, i, data.emailId)'>Approve</button> <button
                                                     class="button" style="background-color: red;"
                                                     (click)='delete(data._id, i)'>Delete</button>

@@ -8,11 +8,12 @@ import { isPlatformBrowser } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import * as data from '../../bank.json';
 import * as data1 from '../../currency.json';
-import { AppConfig } from 'src/app/app.config';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { AppConfig } from '../../app.config';
+import { WindowInformationService } from '../../service/window-information.service';
 import $ from 'jquery'
 import { DomSanitizer } from '@angular/platform-browser';
 import { takeWhile, timer } from 'rxjs';
+import { DocumentService } from '../../service/document.service';
 @Component({
   selector: 'app-edit-company',
   templateUrl: './edit-company.component.html',
@@ -107,9 +108,22 @@ export class EditCompanyComponent implements OnInit {
   },{
     type:'EBRD- Bill discounting accoun'
   }];
-  constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
-    private userService: UserService, private router: Router, private toastr: ToastrService, public appconfig: AppConfig,
+  
+  BANK_NAME_LIST:any=[];
+  ADD_REMOVE_OPTION:any={
+    Location:[],
+    Commodity:[],
+    Bank_Details:[]
+  }
+  constructor(@Inject(PLATFORM_ID) public platformId, 
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private userService: UserService, 
+    private router: Router, 
+    private toastr: ToastrService, 
+    public appconfig: AppConfig,
     private sanitizer: DomSanitizer,
+    public docservice:DocumentService,
     public wininfo: WindowInformationService) {
     this.loadFromLocalStorage()
     this.api_base = appconfig.apiUrl;
@@ -137,8 +151,6 @@ export class EditCompanyComponent implements OnInit {
 
   }
 
-
-
   async ngOnInit() {
      this.wininfo.set_controller_of_width(250, '.content-wrap');
      await this.userService.getUserDetail().then((user: any) => {
@@ -151,7 +163,9 @@ export class EditCompanyComponent implements OnInit {
       }
       console.log(this.CURRENCY_LIST,'CURRENCY_LIST')
     });
-
+    
+    this.BANK_NAME_LIST=this.docservice.getBankNameList();
+    console.log(this.BANK_NAME_LIST,'BANK_NAME_LIST')
     this.jsondata = data['default'];
     this.dataJson = data['default']
     this.jsondata1 = data1['default'];
@@ -168,7 +182,7 @@ export class EditCompanyComponent implements OnInit {
           delete this.UPDATED_DETAILS['__v'];
           delete this.UPDATED_DETAILS['member'];
           
-          if (Object.keys(this.UPDATED_DETAILS['Starhousecertificate_Details']).length==0) {
+          if (this.UPDATED_DETAILS['Starhousecertificate_Details']==undefined) {
             this.UPDATED_DETAILS['Starhousecertificate_Details']={
               CertificateNo:'',
               Issuesdate:'',
@@ -377,7 +391,7 @@ export class EditCompanyComponent implements OnInit {
     this.authToken = token;
     return this.authToken;
   }
-  add_more_Bank() {
+  add_more_Bank(i:any) {
     this.UPDATED_DETAILS.bankDetails.push({
       bank: '',
       accNumber: '',
@@ -385,26 +399,32 @@ export class EditCompanyComponent implements OnInit {
       accType: '',
       currency: ''
     })
+    this.ADD_REMOVE_OPTION.Bank_Details[i+1]=(true);
   }
   remove_more_Bank(index: any) {
     if (index != 0) {
       this.UPDATED_DETAILS.bankDetails.splice(index, 1);
+      this.ADD_REMOVE_OPTION.Bank_Details.splice(index, 1);
     }
   }
-  add_location() {
+  add_location(i) {
     this.UPDATED_DETAILS.location.push({ loc: '' })
+    this.ADD_REMOVE_OPTION.Location[i+1]=(true);
   }
   remove_location(index: any) {
     if (index != 0) {
       this.UPDATED_DETAILS.location.splice(index, 1);
+      this.ADD_REMOVE_OPTION.Location.splice(index, 1);
     }
   }
-  add_commodity() {
+  add_commodity(i) {
     this.UPDATED_DETAILS.commodity.push({ como: '' })
+    this.ADD_REMOVE_OPTION.Commodity[i+1]=(true);
   }
   remove_commodity(index: any) {
     if (index != 0) {
       this.UPDATED_DETAILS.commodity.splice(index, 1);
+      this.ADD_REMOVE_OPTION.Commodity.splice(index, 1);
     }
   }
   add_Form_value(key, value) {

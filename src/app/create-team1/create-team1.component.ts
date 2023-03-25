@@ -41,8 +41,8 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   isDisabled: boolean = false;
   jsondata: any;
   dataJson: any;
-  bankName = [];
-  currencyName = [];
+  bankName:any = [];
+  currencyName:any = [];
   toggle: boolean;
   dataJson1: any;
   jsondata1: any;
@@ -326,7 +326,7 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     this.loginForm.value.file = this.file
     console.log(this.loginForm.value)
 
-    let array1=[]
+    let array1:any=[]
     this.loginForm.value.bankDetails.forEach((value, index) => {
       const newVal = { ...value };
       newVal['accType']=this.modo1[index]
