@@ -165,7 +165,7 @@ export class DashboardTaskComponent implements OnInit {
         // Import data..
         this.pipoCurrencyImportData = res?.pipo?.import?.currencyWise;
         this.pipoBuyerImportData = res?.pipo?.import?.buyerWise;
-        console.log("pipoBuyerImportData", this.pipoBuyerImportData)
+        console.log("pipoBuyerImportData", res,this.pipoBuyerImportData)
         this.pipoCurrencyImportData = this.pipoCurrencyImportData.filter(data => {
           if (data._id !== null && data._id !== '') {
             return data

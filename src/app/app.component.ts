@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent } from '@angular/router';
+import { Event, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { AppConfig } from '../environments/environment';
@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   userActivity;
   userInactive: Subject<any> = new Subject();
   DelayTime: any = '';
-
+  WithoutAuthorization: any = ['verifyEmail', 'updatePassword', 'membersignin'];
   constructor(
     private translate: TranslateService,
     private router: Router, public doc: DocumentService,
@@ -34,25 +34,52 @@ export class AppComponent implements OnInit {
     console.log('AppConfig', AppConfig);
     this.DelayTime = new Date(new Date().getTime() + (1 * 60 * 1000));
     this.setTimeoutNew();
-    router.events.forEach((event) => {
-      if (event instanceof NavigationStart) {
-        if (event?.url.indexOf('/verifyEmail/') == -1 || event?.url.indexOf('/updatePassword/') == -1 || event?.url.indexOf('/membersignin/') == -1) {
-          console.log(event,event?.url.includes('/verifyEmail/'), 'ygffyfggfgffg')
-        }else{
-          this.userService.getUserDetail().then((user: any) => {
-            this.userData = user?.result
-            let token = this.authGuard.loadFromLocalStorage();
-            // let val: any = jwt_decode.default(token);
-              var session: any = JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
-              if (this.authGuard.getLocalStorage('PERMISSION') == null || this.userData?.role != session?.role && !token) {
-                this.authservice.logout();
-                this.router.navigate(['/login']);
-              }
-          });
+    router.events.subscribe((event: Event) => {
+      console.log(event);
+      if (event instanceof NavigationEnd) {
+        var splitUrl: any = event?.url?.split('/')
+        // console.log(this.CheckIng(this.WithoutAuthorization, splitUrl[1]), splitUrl, 'CheckIng')
+        if (this.CheckIng(this.WithoutAuthorization, splitUrl[1]).length != 0) {
+          console.log(event, event, 'ygffyfggfgffg')
+        } else {
+          let token = this.authGuard.loadFromLocalStorage();
+          if (token == null) {
+            this.authservice.logout();
+            this.router.navigate(['/login']);
+          }
         }
       }
     });
-  
+
+    // router.events.forEach((event) => {
+    //   if (event instanceof NavigationStart) {
+    //     var splitUrl:any=event?.url?.split('/')
+    //     console.log(this.CheckIng(this.WithoutAuthorization,splitUrl[1]),splitUrl,'CheckIng')
+    //     if (this.CheckIng(this.WithoutAuthorization,splitUrl[1]).length!=0) {
+    //       console.log(event,event, 'ygffyfggfgffg')
+    //     } else {
+    //       let token = this.authGuard.loadFromLocalStorage();
+    //       if (token == null) {
+    //         this.authservice.logout();
+    //         this.router.navigate(['/login']);
+    //       }
+    //     }
+    //   }
+    // });
+
+    this.userService.getUserDetail().then((user: any) => {
+      this.userData = user?.result
+      // let val: any = jwt_decode.default(token);
+      let token = this.authGuard.loadFromLocalStorage();
+      var session: any = JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
+      if (this.authGuard.getLocalStorage('PERMISSION') == null || this.userData?.role != session?.role && !token) {
+        this.authservice.logout();
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+  CheckIng(data: any, value: any) {
+    return data.filter((item: any) => item?.includes(value) == true)
   }
 
   ngOnInit(): void {
