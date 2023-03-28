@@ -13,10 +13,10 @@
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
-                                            <th scope="col"><span class="pl-3">DATE</span></th>
-                                            <th scope="col">PI/PO No.</th>
-                                            <th scope="col">Purpose Code</th>
-                                            <th scope="col">Bank Name</th>
+                                            <th scope="col" class="col-td-th-3"><span class="pl-3">DATE</span></th>
+                                            <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">Purpose Code</th>
+                                            <th scope="col" class="col-td-th-3">Bank Name</th>
                                             <th scope="col" *ngIf="pending || completed">Upload</th>
                                         </tr>
                                     </thead>
@@ -26,11 +26,11 @@
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
                                             <th class="pl-4 fw-normal">{{ data.transactionDate}}</th>
-                                            <td class="sb-no">{{ data.pi_poNo }}</td>
-                                            <td>
+                                            <td class="col-td-th-3">{{ data.pi_poNo }}</td>
+                                            <td class="col-td-th-3">
                                                 {{ data.file }}
                                             </td>
-                                            <td>{{ data.bank }}</td>
+                                            <td class="col-td-th-3">{{ data.bank }}</td>
 
                                         </tr>
                                         <tr *ngIf="pending && data.caDone == 'no'" class="table-row">
@@ -44,7 +44,7 @@
                                                 {{ data.file }}
                                             </td>
                                             <td (click)="viewTask(data)">{{ data.bank }}</td>
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 <form method="POST">
                                                     <div>
                                                         <input class="customfile1" (error)="onUploadError($event)" placeholder="Choose File" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" (click)="clicked(data)" *ngIf="type === 'directive'" [dropzone]="config">
@@ -62,12 +62,12 @@
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
                                             <th class="pl-4 fw-normal">{{ data.transactionDate}}</th>
-                                            <td class="sb-no">{{ data.pi_poNo }}</td>
-                                            <td>
+                                            <td class="col-td-th-3">{{ data.pi_poNo }}</td>
+                                            <td class="col-td-th-3">
                                                 {{ data.file }}
                                             </td>
-                                            <td>{{ data.bank }}</td>
-                                            <td>Done</td>
+                                            <td class="col-td-th-3">{{ data.bank }}</td>
+                                            <td class="col-td-th-3">Done</td>
                                         </tr>
 
                                     </tbody>

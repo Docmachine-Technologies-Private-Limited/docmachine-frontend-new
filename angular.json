@@ -17,12 +17,17 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "optimization": false,
             "outputPath": "dist/dm-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "allowedCommonJsDependencies": [
+              "rxjs-compat",
+              "lodash"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -34,9 +39,25 @@
             ],
             "styles": [
               "src/sass/application.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/css/css-style.css",
+              "src/assets/LoginPage/vendor/bootstrap/css/bootstrap.min.css",
+              "src/assets/LoginPage/fonts/font-awesome-4.7.0/css/font-awesome.min.css",
+              "src/assets/LoginPage/vendor/animate/animate.css",
+              "src/assets/LoginPage/vendor/css-hamburgers/hamburgers.min.css",
+              "src/assets/LoginPage/vendor/select2/select2.min.css",
+              "src/assets/LoginPage/css/util.css",
+              "src/assets/LoginPage/css/main.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/kendo-html-pdf/kendo.all.min.js",
+              "src/assets/LoginPage/vendor/jquery/jquery-3.2.1.min.js",
+              "src/assets/LoginPage/vendor/bootstrap/js/popper.js",
+              "src/assets/LoginPage/vendor/bootstrap/js/bootstrap.min.js",
+              "src/assets/LoginPage/vendor/select2/select2.min.js",
+              "src/assets/LoginPage/vendor/tilt/tilt.jquery.min.js"
+
+            ]
           },
           "configurations": {
             "production": {
@@ -63,13 +84,15 @@
             "development": {
               "buildOptimizer": true,
               "optimization": true,
-              "vendorChunk": false,
+              "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": false
+              "sourceMap": false,
+              "namedChunks": true,
+              "outputHashing": "none",
+              "statsJson": false
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -109,7 +132,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/kendo-html-pdf/kendo.all.min.js"
+            ]
           }
         }
       }

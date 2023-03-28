@@ -21,9 +21,12 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <label for="email" class="form-label">Select PI/PO or shipping bill</label>
-                                        <app-custom-dropdown class="main-drop-down-class" name="example1"
-                                         [data]="this.SHIPPING_BILL_LIST" label-text="Sample Data 1"
-                                         (PopupShow)="DUMP_FUNCTION(changevalue,'Shipping bill',content1)" [(ngModel)]="changevalue"></app-custom-dropdown>
+                                        <ng-select
+                                        [items]="this.SHIPPING_BILL_LIST"
+                                        bindLabel="value"
+                                        [multiple]="false"
+                                        placeholder="Select PI/PO or shipping bill"
+                                        (change)="DUMP_FUNCTION($event?.value,'Shipping bill',content1)" #PI_PO_shipping_bill></ng-select>
                                         <div *ngIf='itemArray?.length >0'>
                                             <div *ngIf="ship" class="shpt_bill_sec">
                                                 <label>SHIPPING BILL NUMBER SELECTED</label>
@@ -438,7 +441,7 @@
                                                 <td style="border: 0.5px solid black;">
                                                     {{value.advance}}
                                                 </td>
-                                                <td>
+                                                <td class="col-td-th-3">
                                                     <button class="savBtn" *ngIf="optionsVisibility[i]" (click)="toSave(i)">Save</button>
                                                     <button class="savBtn" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">Edit</button>
                                                 </td>
@@ -575,35 +578,35 @@
 
                                                                 <thead style="width: 100% ;height: 54px;">
                                                                     <tr class="text-muted table-heading" style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
-                                                                        <th scope="col"></th>
-                                                                        <th scope="col">DATE</th>
-                                                                        <th scope="col">INVOICE NUMBER</th>
-                                                                        <th scope="col">CONSIGNEE NAME</th>
-                                                                        <th scope="col">COMMODITY</th>
-                                                                        <th scope="col">LOCATION</th>
-                                                                        <th scope="col">SB NO</th>
+                                                                        <th scope="col" class="col-td-th-3"></th>
+                                                                        <th scope="col" class="col-td-th-3">DATE</th>
+                                                                        <th scope="col" class="col-td-th-3">INVOICE NUMBER</th>
+                                                                        <th scope="col" class="col-td-th-3">CONSIGNEE NAME</th>
+                                                                        <th scope="col" class="col-td-th-3">COMMODITY</th>
+                                                                        <th scope="col" class="col-td-th-3">LOCATION</th>
+                                                                        <th scope="col" class="col-td-th-3">SB NO</th>
                                                                     </tr>
                                                                 </thead>
-                                                                <tbody class="text-dark">
-                                                                    <tr class="table-row" *ngFor='let data of item | filterb:startDate:endDate | filtera:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index' (click)="changeCheckbox1(item.sbno, item)">
-                                                                        <td><input type="checkbox" (change)="changeCheckbox1(item.sbno, item)" />
+                                                                <tbody>
+                                                                    <tr class="table-tr" *ngFor='let data of item | filterb:startDate:endDate | filtera:[{commodity:nameSearch},{location:nameSearch1},{buyerName:nameSearch2}]  let i = index' (click)="changeCheckbox1(item.sbno, item)">
+                                                                        <td class="col-td-th-3"><input type="checkbox" (change)="changeCheckbox1(item.sbno, item)" />
                                                                         </td>
-                                                                        <td>
+                                                                        <td class="col-td-th-3">
                                                                             {{data.date}}
                                                                         </td>
-                                                                        <td>
+                                                                        <td class="col-td-th-3">
                                                                             {{data.pi_poNo}}
                                                                         </td>
-                                                                        <td>
+                                                                        <td class="col-td-th-3">
                                                                             {{data.buyerName}}
                                                                         </td>
-                                                                        <td>
+                                                                        <td class="col-td-th-3">
                                                                             {{data.commodity}}
                                                                         </td>
-                                                                        <td>
+                                                                        <td class="col-td-th-3">
                                                                             {{data.location}}
                                                                         </td>
-                                                                        <td>
+                                                                        <td class="col-td-th-3">
                                                                             {{data.sbno}}
                                                                         </td>
                                                                     </tr>
@@ -789,40 +792,40 @@
                                 <button class="filter1" style="margin-left:-20px;" (click)="nameSearch4 = ''">Reset</button>
                             </div>
                             <section class="box-shadow">
-                                <table class="table table-striped mb-0">
+                               <table class="table table-hover">
 
                                     <thead style="width: 100% ;height: 54px;">
                                         <tr class="text-muted table-heading" style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
-                                            <th scope="col"></th>
-                                            <th scope="col">SB DATE</th>
-                                            <th scope="col">SB NUMBER</th>
-                                            <th scope="col">BUYER NAME</th>
-                                            <th scope="col">CURRENCY</th>
-                                            <th scope="col">SB AMOUNT</th>
-                                            <th scope="col">AVAILABLE AMOUNT</th>
+                                            <th scope="col" class="col-td-th-3"></th>
+                                            <th scope="col" class="col-td-th-3">SB DATE</th>
+                                            <th scope="col" class="col-td-th-3">SB NUMBER</th>
+                                            <th scope="col" class="col-td-th-3">BUYER NAME</th>
+                                            <th scope="col" class="col-td-th-3">CURRENCY</th>
+                                            <th scope="col" class="col-td-th-3">SB AMOUNT</th>
+                                            <th scope="col" class="col-td-th-3">AVAILABLE AMOUNT</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor='let data of item1 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
-                                            <td><input type="checkbox" (change)="changeCheckbox1(data.sbno, data); addTofilter1($event ,data._id, data) " />
+                                    <tbody>
+                                        <tr class="table-tr" *ngFor='let data of item1 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
+                                            <td class="col-td-th-3"><input type="checkbox" (change)="changeCheckbox1(data.sbno, data); addTofilter1($event ,data._id, data) " />
                                             </td>
                                             <!-- (change)=" -->
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 {{data.sbdate}}
                                             </td>
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 {{data.sbno}}
                                             </td>
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 {{data.buyerName}}
                                             </td>
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 {{data.fobCurrency}}
                                             </td>
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 {{data.fobValue}}
                                             </td>
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 {{data.balanceAvai}}
                                             </td>
 
@@ -869,30 +872,30 @@
                                           </div>
                                       </div>
                                       <section style="width: 100%;" class="box-shadow">
-                                          <table class="table table-striped mb-0">
+                                         <table class="table table-hover">
                                               <thead style="width: 100% ;height: 54px;">
                                                   <tr class="text-muted table-heading" style="opacity: 50%; font-size: 10px; color:black !important; font-weight: 300 !important; padding: 0px; border-bottom: 1px solid #f2f4f8;">
-                                                    <th scope="col"></th>
-                                                    <th scope="col">FIRX Number/ID</th>
-                                                    <th scope="col">Party Name</th>
-                                                    <th scope="col">Recieved Amount USD</th>
-                                                    <th scope="col">Available Balance</th>
+                                                    <th scope="col" class="col-td-th-3"></th>
+                                                    <th scope="col" class="col-td-th-3">FIRX Number/ID</th>
+                                                    <th scope="col" class="col-td-th-3">Party Name</th>
+                                                    <th scope="col" class="col-td-th-3">Recieved Amount USD</th>
+                                                    <th scope="col" class="col-td-th-3">Available Balance</th>
                                                   </tr>
                                               </thead>
-                                              <tbody class="text-dark" *ngIf="item13.length!=0">
-                                                  <tr class="table-row" *ngFor='let data of item13 | fiterbuyer:[{partyName:nameSearch3}]  let i = index'>
-                                                    <td><input type="checkbox" (change)="addToSbArray(data, $event)" />
+                                              <tbody *ngIf="item13.length!=0">
+                                                  <tr class="table-tr" *ngFor='let data of item13 | fiterbuyer:[{partyName:nameSearch3}]  let i = index'>
+                                                    <td class="col-td-th-3"><input type="checkbox" (change)="addToSbArray(data, $event)" />
                                                     </td>
-                                                    <td>
+                                                    <td class="col-td-th-3">
                                                         {{data.billNo}}
                                                     </td>
-                                                    <td>
+                                                    <td class="col-td-th-3">
                                                         {{data.partyName}}
                                                     </td>
-                                                    <td>
+                                                    <td class="col-td-th-3">
                                                         {{data.amount}}
                                                     </td>
-                                                    <td>
+                                                    <td class="col-td-th-3">
                                                         {{data.BalanceAvail}}
                                                     </td>
                                                   </tr>

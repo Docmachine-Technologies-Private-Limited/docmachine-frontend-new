@@ -1,12 +1,17 @@
 <div class="content-wrap">
     <main id="content" class="content table-padding" role="main">
         <div class="analytics" style="width: 90%">
-            <div style="width: 100%" class="analytics-side">
+            <div style="overflow: auto;
+            height: calc(100vh - 80px);
+            width: calc(100vw - 260px) !important;
+            margin: auto;
+            margin-top: 10px;
+            margin-left: 30px;" class="analytics-side">
                 <div class="row">
                     <div class="col-12 mb-lg padding">
                         <section class="widget pb-0 box-shadow">
                             <div class="widget-body p-0 support table-wrapper">
-                                <table class="table mb-0">
+                               <table class="table table-hover">
                                     <thead>
                                         <tr class="text-muted table-heading">
                                             <th scope="col"><span class="pl-3">Date</span></th>
@@ -18,7 +23,7 @@
                                     </thead>
                                     <!--  -->
                                     <tbody *ngIf='pending' class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of value; let i = index">
+                                        <tr class="table-tr" *ngFor="let data of value; let i = index">
                                             <th class="pl-4 fw-normal">{{data.date}}</th>
                                             <td>{{data.fullName}}</td>
                                             <td>{{data.role}}</td>
@@ -33,7 +38,7 @@
                                         </tr>
                                     </tbody>
                                     <tbody *ngIf='approved' class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of value; let i = index">
+                                        <tr class="table-tr" *ngFor="let data of value; let i = index">
                                             <th class="pl-4 fw-normal">{{data.date}}</th>
                                             <td>{{data.fullName}}</td>
                                             <td>{{data.role}}</td>
@@ -46,7 +51,7 @@
                                         </tr>
                                     </tbody>
                                     <tbody *ngIf='declined' class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of value; let i = index">
+                                        <tr class="table-tr" *ngFor="let data of value; let i = index">
                                             <th class="pl-4 fw-normal">{{data.date}}</th>
                                             <td>{{data.fullName}}</td>
                                             <td>{{data.role}}</td>

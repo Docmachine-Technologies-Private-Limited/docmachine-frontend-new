@@ -43,6 +43,9 @@ export class AprrovalPendingRejectTransactionsService {
            }
          })
      });
+   }else{
+    this.CustomConfirmDialogModel.Confirm_DialogModel("Approver can't access this feature",
+    'You have not access send for download pdf <br> please login maker/checker email id...');
    }
  }
  truefalse(condition){

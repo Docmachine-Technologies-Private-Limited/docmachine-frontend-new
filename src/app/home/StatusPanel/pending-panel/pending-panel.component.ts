@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
-import { DocumentService } from 'src/app/service/document.service';
-import { UserService } from 'src/app/service/user.service';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { CustomConfirmDialogModelComponent } from '../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { DocumentService } from '../../../service/document.service';
+import { MergePdfService } from '../../../service/MergePdf/merge-pdf.service';
+import { UserService } from '../../../service/user.service';
+import { WindowInformationService } from '../../../service/window-information.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../confirm-dialog-box/confirm-dialog-box.component';
 
 @Component({
@@ -16,10 +17,11 @@ export class PendingPanelComponent implements OnInit {
   DATA_CREATE: any = [];
   USER_DETAILS: any = [];
   constructor(public wininfo: WindowInformationService, public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
+    public mergerpdf: MergePdfService,
     public documentService: DocumentService, public dialog: MatDialog, private sanitizer: DomSanitizer, public userserivce: UserService,) { }
   ngOnInit(): void {
     this.wininfo.set_controller_of_width(270, '.content_top_common')
-    this.userserivce.getUserDetail().then((status) => {
+    this.userserivce.getUserDetail().then((status: any) => {
       this.USER_DETAILS = status['result'];
       console.log(this.USER_DETAILS, 'USER_DETAILS');
 
@@ -41,9 +43,13 @@ export class PendingPanelComponent implements OnInit {
   Approved(data: any, index: any) {
     if (this.DATA_CREATE[index]['Types'] == 'downloadPDF') {
       var download = {
-        _id: data['id'],
-        status: data['status'],
-        deleteflag: data['deleteflag']
+        data: {
+          _id: data['id'],
+          status: data['status'],
+          deleteflag: data['deleteflag']
+        },
+        TransactionTableName: 'ExportTransaction',
+        TransactionTableId:data?.Tableid
       }
       this.documentService.setDownloadStatus(download).subscribe((res: any) => {
         console.log(res, 'dfsdfhsdfdsjhdsfgdsfds')
@@ -89,35 +95,30 @@ export class PendingPanelComponent implements OnInit {
       });
     }
   }
-  openView(url: any, index: any) {
-    console.log(url, 'sdfgsfhsdgfdfsd')
+  async openView(item: any, index: any) {
+    console.log(item, 'sdfgsfhsdgfdfsd')
     var temp: any = [];
-    if (url!=undefined && url!='') {
-      if (this.DATA_CREATE[index]['Types'] == 'downloadPDF') {
-        for (let index = 0; index < url.length; index++) {
-          this.userserivce.mergePdf(url[index]).subscribe((res: any) => {
-            console.log('downloadEachFile', res);
-            res.arrayBuffer().then((data: any) => {
-              temp.push(data)
-              console.log('mergePdf_downloadEachFile',data);
-            });
-          });
-          if ((index+1)==url.length) {
-            this.CustomConfirmDialogModel.IframeConfirmDialogModel('View',temp,this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null);
-          }
+    if (item != undefined && item != '') {
+      if (item?.Types === 'downloadPDF') {
+        try {
+          var temp: any = item?.documents.filter(n => n)
+          await this.mergerpdf.mergePdf(temp).then((merge: any) => {
+            this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
+          })
+        } catch (error) {
+          console.log(error, 'errror')
         }
       } else {
-        this.userserivce.mergePdf(url).subscribe((res: any) => {
-          console.log('downloadEachFile', res);
-          res.arrayBuffer().then((data: any) => {
-            temp.push(data)
-            console.log('mergePdf_downloadEachFile',data);
-          });
-          this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', temp,this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null);
-        });
+        try {
+          await this.mergerpdf.mergePdf([item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1']]).then((merge: any) => {
+            this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
+          })
+        } catch (error) {
+          console.log(error, 'errror')
+        }
       }
     } else {
-      this.CustomConfirmDialogModel.ConfirmDialogModel('Pdf View','Pdf not found!', null);
+      this.CustomConfirmDialogModel.ConfirmDialogModel('Pdf View', 'Pdf not found!', null);
     }
 
   }

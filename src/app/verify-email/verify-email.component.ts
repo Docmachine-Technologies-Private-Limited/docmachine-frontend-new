@@ -20,7 +20,7 @@ export class VerifyEmailComponent implements OnInit {
     private router: Router, private route: ActivatedRoute, private toastr: ToastrService) { }
   ngOnInit(): void {
     this.token = this.route.snapshot.params['id'];
-    let val = jwt_decode.default(this.token);
+    let val:any = jwt_decode.default(this.token);
     console.log(val)
     this.email = val['_id'];
 

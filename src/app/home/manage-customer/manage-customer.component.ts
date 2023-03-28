@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { DocumentService } from "../../service/document.service";
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { WindowInformationService } from "src/app/service/window-information.service";
+import { WindowInformationService } from "../../service/window-information.service";
 @Component({
   selector: "app-manage-customer",
   templateUrl: "./manage-customer.component.html",
@@ -62,7 +62,7 @@ export class ManageCustomerComponent implements OnInit {
       }
     });
     this.loginForm = this.formBuilder.group({
-      beneName: ['', Validators.required],
+      benneName: ['', Validators.required],
       beneAdrs: ['', Validators.required],
       beneBankName: ['', Validators.required],
       beneAccNo: ['', Validators.required],

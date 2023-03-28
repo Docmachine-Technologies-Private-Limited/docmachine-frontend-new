@@ -46,14 +46,14 @@ import { UserService } from '../../../../service/user.service';
 // import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from '../../../../app.config';
 import { PipoDataService } from "../../../../service/homeservices/pipo.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { WindowInformationService } from '../../../../service/window-information.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 
 @Component({
   selector: 'app-export-credit-note',
   templateUrl: './export-credit-note.component.html',
-  styleUrls: ['../../../upload/upload.component.scss']
+  styleUrls: ['../../../upload/upload.component.scss','./export-credit-note.component.scss']
 })
 export class ExportCreditNoteComponent implements OnInit {
   @Input() que: any;
@@ -109,7 +109,7 @@ export class ExportCreditNoteComponent implements OnInit {
   shippingForm: FormGroup;
   // loginForm: FormGroup;
   public submitted = false;
-  authToken: string;
+  authToken:any;
   headers: any;
   closeResult: string;
   APPEND_HTML: any = [];
@@ -127,7 +127,7 @@ export class ExportCreditNoteComponent implements OnInit {
     date: new FormControl('', Validators.required),
     dueDate: new FormControl('', Validators.required),
     location: new FormControl('', Validators.required),
-    beneName: new FormControl('', Validators.required),
+    benneName: new FormControl('', Validators.required),
   });
 
   // payment = this.formBuilder.group({
@@ -135,7 +135,7 @@ export class ExportCreditNoteComponent implements OnInit {
   // });
 
   loginForm = this.formBuilder.group({
-    beneName: ['', Validators.required],
+    benneName: ['', Validators.required],
     beneAdrs: ['', Validators.required],
     beneBankName: ['', Validators.required],
     beneAccNo: ['', Validators.required],
@@ -226,7 +226,6 @@ export class ExportCreditNoteComponent implements OnInit {
     public wininfo: WindowInformationService,
     public CustomDropDown: CustomConfirmDialogModelComponent
   ) {
-    this.documentService.getCurrency().subscribe((res: any) => { console.log(res, 'getCurrency') })
     this.userData = this.userService.userData?.result
     if (this.userData) {
       this.documentType1 = this.userData?.sideMenu
@@ -377,8 +376,12 @@ export class ExportCreditNoteComponent implements OnInit {
       },
       (err) => console.log(err)
     );
-
-    this.documentService.getMaster(1).subscribe(
+    await this.pipoDataService.getPipoList('export').then((data) => {
+      console.log(data, 'data..................')
+      this.pipoDataService.pipolistModel$.subscribe((data) => {
+        console.log(this.PI_PO_NUMBER_LIST, 'PI_PO_NUMBER_LIST')
+      });
+    });    this.documentService.getMaster(1).subscribe(
       (res: any) => {
         console.log('Master Data File', res);
         this.item5 = res.data;
@@ -408,6 +411,11 @@ export class ExportCreditNoteComponent implements OnInit {
     e.form.value.currency = e.form.value?.currency?.type;
     e.form.value.file = 'export';
     console.log(e.form.value);
+    this.documentService.getInvoice_No({
+      creditNoteNumber:e.form.value.creditNoteNumber
+    },'creditnotes').subscribe((resp:any)=>{
+      console.log('creditNoteNumber Invoice_No',resp)
+    if (resp.data.length==0) {
     this.documentService.addCredit(e.form.value).subscribe((res: any) => {
       this.toastr.success(`Credit Note Document Added Successfully`);
       let updatedData = {
@@ -428,6 +436,10 @@ export class ExportCreditNoteComponent implements OnInit {
         );
     },
       (err) => console.log('Error adding pipo'));
+    } else {
+      this.toastr.error(`Please check this sb no. : ${e.form.value.creditNoteNumber} already exit...`);
+    }
+    });
   }
   CommercialNumber: any = [];
   storeCommercialNumber(id: any, commercialnumber) {

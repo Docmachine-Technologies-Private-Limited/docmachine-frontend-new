@@ -46,8 +46,8 @@ import { UserService } from '../../../../service/user.service';
 // import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from '../../../../app.config';
 import { PipoDataService } from "../../../../service/homeservices/pipo.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { WindowInformationService } from '../../../../service/window-information.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 
 @Component({
@@ -110,7 +110,7 @@ export class ExportDebitNoteComponent implements OnInit {
   shippingForm: FormGroup;
   // loginForm: FormGroup;
   public submitted = false;
-  authToken: string;
+  authToken:any;
   headers: any;
   closeResult: string;
   APPEND_HTML: any = [];
@@ -128,7 +128,7 @@ export class ExportDebitNoteComponent implements OnInit {
     date: new FormControl('', Validators.required),
     dueDate: new FormControl('', Validators.required),
     location: new FormControl('', Validators.required),
-    beneName: new FormControl('', Validators.required),
+    benneName: new FormControl('', Validators.required),
   });
 
   // payment = this.formBuilder.group({
@@ -136,7 +136,7 @@ export class ExportDebitNoteComponent implements OnInit {
   // });
 
   loginForm = this.formBuilder.group({
-    beneName: ['', Validators.required],
+    benneName: ['', Validators.required],
     beneAdrs: ['', Validators.required],
     beneBankName: ['', Validators.required],
     beneAccNo: ['', Validators.required],
@@ -227,7 +227,6 @@ export class ExportDebitNoteComponent implements OnInit {
     public wininfo: WindowInformationService,
     public CustomDropDown: CustomConfirmDialogModelComponent
   ) {
-    this.documentService.getCurrency().subscribe((res: any) => { console.log(res, 'getCurrency') })
     this.userData = this.userService.userData?.result
     if (this.userData) {
       this.documentType1 = this.userData?.sideMenu
@@ -402,41 +401,66 @@ export class ExportDebitNoteComponent implements OnInit {
   }
 
   onSubmitDebit(e) {
+    var selectedShippingBill:any=this.commerciallistselected.filter((item:any)=>item?.value?.includes(this.CommercialNumber))
     console.log(e.form.value);
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1;
     e.form.value.buyerName = this.mainBene;
     e.form.value.currency = e.form.value?.currency?.type;
     e.form.value.file = 'export';
-    console.log(e.form.value);
-    this.documentService.addDebit(e.form.value).subscribe((res: any) => {
-      this.toastr.success(`Credit Note Document Added Successfully`);
-      let updatedData = {
-        "debitNoteRef": [
-          res.data._id,
-        ],
-      }
-      this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1, updatedData)
-        .subscribe(
-          (data) => {
-            console.log(' credit Note document', this.pipourl1);
-            console.log(data);
-            this.router.navigate(['home/debit-note']);
-          },
-          (error) => {
-            console.log('error');
-          }
-        );
-    },
-      (err) => console.log('Error adding pipo'));
+    e.form.value.commercialNumber=this.CommercialNumber;
+    e.form.value.DebitNote = this.pipourl1;
+    console.log(e.form.value,selectedShippingBill);
+    this.documentService.getInvoice_No({
+      debitNoteNumber:e.form.value.debitNoteNumber
+    },'debitnotes').subscribe((resp:any)=>{
+      console.log('debitNoteNumber Invoice_No',resp)
+    if (resp.data.length==0) {
+      this.documentService.addDebit(e.form.value).subscribe((res: any) => {
+        this.toastr.success(`debit Note Document Added Successfully`);
+        let updatedData = {
+          "blcopyRefs": [
+            res.data._id,
+          ],
+        }
+        this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1, updatedData)
+          .subscribe(
+            (data) => {
+              console.log(' credit Note document', this.pipourl1);
+              console.log(data);
+              this.documentService
+              .updateMasterBySb(
+                e.form.value,
+                selectedShippingBill[0]?.sbno,
+                selectedShippingBill[0]?.sbid
+              ).subscribe(
+                (data) => {
+                  console.log('king123');
+                  console.log('DATA', data);
+                  this.router.navigate(['home/debit-note']);
+                },
+                (error) => {
+                  console.log('error');
+                }
+              );
+            },
+            (error) => {
+              console.log('error');
+            }
+          );
+      },
+        (err) => console.log('Error adding pipo'));
+	}else {
+    this.toastr.error(`Please check this sb no. : ${e.form.value.debitNoteNumber} already exit...`);
+  }});
+    
   }
   CommercialNumber: any = [];
-  storeCommercialNumber(id: any, commercialnumber) {
-    console.log(this.CommercialNumber, 'CommercialNumber')
-    if (!this.CommercialNumber.includes(commercialnumber)) {
-      this.CommercialNumber.push(commercialnumber)
-    }
+  storeCommercialNumber(commercialnumber) {
+    this.CommercialNumber=commercialnumber?.value
+    console.log(this.CommercialNumber,commercialnumber,'CommercialNumber')
   }
+
 
   public onUploadInit(args: any): void {
     console.log('onUploadInit:', args);
@@ -530,10 +554,7 @@ export class ExportDebitNoteComponent implements OnInit {
     var last_length = PI_PO_LIST.length - 1;
     var LAST_VALUE: any = PI_PO_LIST[last_length]?.value;
     console.log(PI_PO_LIST[last_length]?.value, 'clickPipoclickPipoclickPipo')
-    console.log('line 2359', this.pipoSelect);
     this.pipoSelect = true;
-    console.log('line 2361', this.pipoSelect);
-
     this.mainBene = this.FILTER_VALUE(this.pipolist, LAST_VALUE?._id)[0]?.buyerName;
     let x = LAST_VALUE?.pi_po_buyerName;
     let j = this.arrayData.indexOf(LAST_VALUE?.pi_po_buyerName);
@@ -543,6 +564,9 @@ export class ExportDebitNoteComponent implements OnInit {
     } else {
       console.log('x');
     }
+    this.pipoArr.forEach(element => {
+      this.changedCommercial(element)
+    });
     console.log(this.arrayData, this.mainBene, 'mainBenemainBene');
     console.log('Array List', this.pipoArr);
   }
@@ -551,8 +575,11 @@ export class ExportDebitNoteComponent implements OnInit {
   }
   commerciallistselected: any = [];
   changedCommercial(pipo: any) {
-    this.documentService.getCommercialByFiletype(this.documentType1, pipo).subscribe((res: any) => {
-      this.commerciallistselected[pipo] = res.data;
+    this.documentService.getCommercialByFiletype('export', pipo).subscribe((res: any) => {
+      res?.data.forEach(element => {
+        this.commerciallistselected.push({value:element?.commercialNumber,id:element?._id,sbno:element?.sbNo,sbid:element?.sbRef[0]});
+      });
+      console.log('changedCommercial',res,this.commerciallistselected)
     },
       (err) => {
         console.log(err)

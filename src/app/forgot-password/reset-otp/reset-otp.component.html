@@ -1,0 +1,23 @@
+<div class="card login-form ">
+    <div class="card-body card-content">
+        <div style="text-align: center;">
+            <img height="60px" width="180px" src="../../../assets/images/2df3c6e3b7dcfda591bf650efe2942d54e8aed0e.png"
+                class="card-title text-center">
+            <p *ngIf="otp_url==''" class="text">Enter your registered email address.<br>
+        </div>
+        <div *ngIf="otp_url==''">
+            <label class="lable " for="">Enter your email address</label> <br>
+            <input formControlName="emailId" class="input-mail" placeholder="Your email address" type="text" #email>
+            <br>
+            <button type="submit" (click)="emailCheck({emailId:email.value})" class="button">Reset Your OTP</button>
+        </div>
+        <div *ngIf="otp_url!=''" class="two-factor">
+            <p style="text-align: center;">Scan the QR code and used the secret key Using Google Authenticator
+                Application</p>
+            <img [src]="otp_url" alt="" class="img-thumbnail" style="display:block;margin:auto">
+        </div>
+        <div style="text-align: center">
+            <p class="button1" style="padding: 5px;" [routerLink]="['/login']">Login</p>
+        </div>
+    </div>
+</div>

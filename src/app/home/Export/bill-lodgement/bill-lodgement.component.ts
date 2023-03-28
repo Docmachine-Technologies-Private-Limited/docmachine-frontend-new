@@ -26,8 +26,8 @@ import {
 import { HttpHeaders } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import * as xlsx from 'xlsx';
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { ShippingbillDataService } from 'src/app/service/homeservices/shippingbill.service';
+import { WindowInformationService } from '../../../service/window-information.service';
+import { ShippingbillDataService } from '../../../service/homeservices/shippingbill.service';
 
 @Component({
   selector: 'app-bill-lodgement',
@@ -39,7 +39,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   @ViewChild('billLodge', { static: false }) billLodge: ElementRef;
   closeResult: string;
   public item1:any=[];
-  public itemArray = [];
+  public itemArray:any = [];
   public item2;
   public user;
   public selectedRow;
@@ -65,8 +65,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   public allTransactions: any = [];
   public optionsVisibility: any = [];
   public generateIndex;
-  public itemArray1 = [];
-  public irBuyerName = [];
+  public itemArray1:any = [];
+  public irBuyerName:any = [];
   lodgement1: any;
   lodgement2: any;
   Ax1: boolean;
@@ -140,7 +140,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   dataImport: any;
   dataImport2: any;
   sbPurposeDone1: any = [];
-  item4 = [];
+  item4:any = [];
   item12: any;
   item13:any = [];
   bankRef: any;
@@ -249,10 +249,10 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   destruction: any;
   otherDoc: any;
   packingList: any;
-  selectedPdfs = [];
-  advanceArray = [];
+  selectedPdfs:any = [];
+  advanceArray:any = [];
   currentSbForAdvance: any;
-  buyerName = [];
+  buyerName:any = [];
   id: any;
   private genDoc: any;
 
@@ -268,7 +268,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   generateChecked: boolean = true;
   forexSbDetail: any;
   SHIPPING_BILL:any='';
-  SHIPPING_BILL_LIST:any=['Shipping bill'];
+  SHIPPING_BILL_LIST:any=[{
+    value:'Shipping bill'
+  }];
   ThirdPartydata: any = [];
   Letter_Of_Credit: any = [];
   changevalue:any=''
@@ -508,7 +510,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       if (this.documentService.task.task[0].sbUrls) {
         console.log('this is sb');
         let k = 0;
-        let gene = [];
+        let gene:any = [];
 
         for (let value of this.documentService.task.task[0].sbUrls) {
           let r = value.changingThisBreaksApplicationSecurity;
@@ -520,7 +522,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       }
       if (this.documentService.task.task[0].tryUrls) {
         let h = 0;
-        let gene = [];
+        let gene:any = [];
         for (let value of this.documentService.task.task[0].tryUrls) {
           gene.push(
             this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -535,7 +537,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       }
       if (this.documentService.task.task[0].lcUrls) {
         let h = 0;
-        let gene = [];
+        let gene:any = [];
         for (let value of this.documentService.task.task[0].lcUrls) {
           gene.push(
             this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -557,7 +559,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     console.log('hello', a);
     console.log(a.length);
     if (a.length > 0) {
-      let arr = [];
+      let arr:any = [];
       for (let value of this.item1) {
         console.log('value of buyername****', value);
         console.log('value of buyername', value.buyerName);
@@ -854,9 +856,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
     console.log('ALL Data');
 
-    let mainArr = [];
-
-    let invoicearray = [];
+    let mainArr:any = [];
+    let invoicearray:any = [];
     // this.Question5 = 'no';
     console.log('line no.796 question5 data', this.Question5);
     this.sbDataArray.forEach((value, index) => {
@@ -865,7 +866,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       }
     });
     if (this.Question6 == 'yes') {
-      let adArr = [];
+      let adArr:any = [];
       console.log('Shipping Map For', this.shippingMap);
       this.shippingMap.forEach((value) => {
         console.log('Shipping Map For loop', value);
@@ -884,7 +885,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
       forkJoin(
         this.sbDataArray.map((value) => {
-          let piponumbers = [];
+          let piponumbers:any = [];
           for(let i in value.pipo) {
             piponumbers.push(value.pipo[i].pi_poNo);
           }
@@ -912,7 +913,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           console.log(this.advanceForm.value.advance);
           for (let a of adArr) {
             if (a.sb == value1.sbno) {
-              const newVal = { ...value1 };
+              const newVal:any = { ...value1 };
               newVal['advance'] = a.valueInternal;
               newVal['irAdviceId'] = a.irDataItem._id;
               invoicearray.push(newVal);
@@ -920,7 +921,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           }
           console.log('aajsjss');
         });
-        let amountArr = [];
+        let amountArr:any = [];
         for (let item of invoicearray) {
           amountArr.push(item.pipoValue.amount);
         }
@@ -2251,7 +2252,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     this.lcArray = [];
   }
 
-  doneDox(genDoc) {
+  doneDox(genDoc:any) {
     this.doneToDox();
     console.log('genDoc', genDoc);
     console.log(this.newTask);
@@ -2419,8 +2420,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     this.scrutiny = this.Question8;
     this.withDiscount = this.Question9;
 
-    const height =
-      Math.round($('#mainId').outerHeight() * 0.0104166667 * 10) / 10;
+    const height = Math.round($('#mainId').outerHeight() as any * 0.0104166667 * 10 ) / 10;
     console.log($('#mainId').html());
     this.documentService
       .getPDF({
@@ -2454,7 +2454,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
           //this.newTask.url1 = this.data5;
           this.done = true;
           const height =
-            Math.round($('#mainId').outerHeight() * 0.0104166667 * 10) / 10;
+            Math.round($('#mainId').outerHeight() as any * 0.0104166667 * 10) / 10;
           console.log($('#mainId').html());
           this.documentService
             .getPDF({
@@ -2488,7 +2488,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
                 if (this.Question5 == 'yes') {
                   const height1 =
                     Math.round(
-                      $('#mainId1').outerHeight() * 0.0104166667 * 10
+                      $('#mainId1').outerHeight() as any * 0.0104166667 * 10
                     ) / 10;
                   console.log($('#mainId1').html());
                   this.documentService
@@ -2597,16 +2597,6 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     this.LcNumber = e.target.value;
   }
 
-  edit() {}
-
-  // showDialog(): any {
-  //   console.log('hhhhhh')
-  //   this.confirmDialogService.confirmThis('Are you sure to delete ?', () => {
-  //     alert('Yes clicked');
-  //   }, () => {
-  //     alert('No clicked');
-  //   });
-  // }
 
   downloadPDF() {
     console.log(JSON.stringify(this.creditNote));
@@ -2813,7 +2803,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   }
 
   addTofilter(event, id) {
-    let removeArray = [];
+    let removeArray:any = [];
     this.pipo = true;
     this.ship = false;
     this.itemArray1 = [];
@@ -2841,7 +2831,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     if (data.blCopyDoc) {
       if (data.commercialDoc) {
         if (data.packingDoc) {
-          let removeArray = [];
+          let removeArray:any = [];
           this.ship = true;
           this.pipo = false;
           if (event.target.checked) {
@@ -2883,8 +2873,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   addToSbArray(irDataItem: any, e) {
     if (e.target.checked) {
       console.log('Checked');
-      let advance = this.advanceArray.some(
-        (item) => item.valueInternal === irDataItem.billNo
+      let advance:any = this.advanceArray.some(
+        (item:any) => item.valueInternal === irDataItem.billNo
       );
       if (!advance) {
         console.log('Adding');
@@ -2898,7 +2888,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     } else {
       console.log('removing, uncheked');
       this.advanceArray = this.advanceArray.filter(
-        (item) => item.valueInternal !== irDataItem.billNo
+        (item:any) => item.valueInternal !== irDataItem.billNo
       );
     }
     this.shippingMap.set(
@@ -3073,7 +3063,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       const mergedPdfFile = await mergedPdf.save();
       var base64String = this._arrayBufferToBase64(mergedPdfFile);
       console.log('merge doc', base64String);
-      var genDoc = 'data:application/pdf;base64,' + base64String;
+      var genDoc:any = 'data:application/pdf;base64,' + base64String;
       const byteCharacters = atob(base64String);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
@@ -3216,7 +3206,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     };
 
     // download single file;
-    let downloadEachFile = (filename) => {
+    let downloadEachFile = (filename:any) => {
       return new Promise((resolve, reject) => {
         this.userService.mergePdf(filename).subscribe(
           (res: any) => {
@@ -3229,9 +3219,9 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     };
     // download all the pdfs
     let downloadAllFiles = () => {
-      var promises = [];
+      var promises:any = [];
       for (var i = 0; i < numDocs; i++) {
-        let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
+        let filename:any = urls[i].substring(urls[i].lastIndexOf('/') + 1);
         promises.push(downloadEachFile(filename));
       }
       Promise.all(promises).then(
@@ -3319,7 +3309,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
       };
       // download all the pdfs
       let downloadAllFiles = () => {
-        var promises = [];
+        var promises:any = [];
         for (var i = 0; i < numDocs; i++) {
           let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
           promises.push(downloadEachFile(filename));
@@ -3340,8 +3330,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
 
     var bulkDownloadSingle = async (mainDoc1, index) => {
       if (mainDoc1[index]) {
-        let sb = mainDoc1[index];
-        var downloadALL = [];
+        let sb:any = mainDoc1[index];
+        var downloadALL:any = [];
         downloadALL.push(sb.changingThisBreaksApplicationSecurity);
         if (this.creditNote.changingThisBreaksApplicationSecurity) {
           downloadALL.push(
@@ -3461,8 +3451,8 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   };
 
   public mergeIr() {
-    let filterSBdata = [];
-    let completedsb = [];
+    let filterSBdata:any = [];
+    let completedsb:any = [];
     let sbindex = 0;
     for (let sbNum of this.item1) {
       let totalForex = 0;
@@ -3509,7 +3499,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
   }
 
   public mergeIr2() {
-    let filterIrdata = [];
+    let filterIrdata:any = [];
     if (this.item1 && this.item1.length) {
       for (let irData of this.item9) {
         // item9 have forex details
@@ -3543,7 +3533,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     }
     for (let irData of this.item9) {
       if(irData.sbNo.length == 0){
-        const newVal = { ...irData };
+        const newVal:any = { ...irData };
           let availableBal = irData.amount;
           newVal['BalanceAvail'] = availableBal;
           filterIrdata.push(newVal);
@@ -3552,7 +3542,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     }
     } else {
       for(let ir of this.item9){
-        const newVal = { ...ir };
+        const newVal:any = { ...ir };
         let availableBal = ir.amount;
           newVal['BalanceAvail'] = availableBal;
           filterIrdata.push(newVal);
@@ -3655,6 +3645,7 @@ export class BillLodgementComponent implements OnInit, OnDestroy {
     console.log(this.Lodgement,'Lodgement')
   }
   DUMP_FUNCTION(condition1,condition2,popupshow){
+    console.log(condition1,'condition1')
      if (condition1===condition2) {
       popupshow.style.display='flex'
      } else {

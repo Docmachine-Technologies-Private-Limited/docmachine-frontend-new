@@ -12,6 +12,9 @@ export class DateFormatService {
   removeAllUnderscore(string: string){
     return string.replace(/_/g, "").toString();
   }
+  removeUnadvantageText(string:string,replaceText){
+    return string.replace(replaceText, "").toString();
+  }
   removeAllMinus(string: string){
     return string.replace(/_/g, "").toString();
   }

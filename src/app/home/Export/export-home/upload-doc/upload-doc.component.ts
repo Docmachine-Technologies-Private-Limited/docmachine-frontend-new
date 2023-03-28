@@ -22,8 +22,6 @@ import {
   DropzoneDirective,
   DropzoneConfigInterface,
 } from 'ngx-dropzone-wrapper';
-import { Subscription } from 'rxjs';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
 import {
   FormBuilder,
   FormGroup,
@@ -38,7 +36,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from '../../../../app.config';
 import {PipoDataService} from "../../../../service/homeservices/pipo.service";
 import $ from 'jquery';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../../../service/window-information.service';
 
 @Component({
   selector: 'app-upload-doc',
@@ -54,7 +52,7 @@ export class UploadDocComponent implements OnInit {
   shippingForm: FormGroup;
   // loginForm: FormGroup;
   public submitted = false;
-  authToken: string;
+  authToken:any;
   headers: any;
   closeResult: string;
   MT103_Form:any=[];
@@ -174,7 +172,9 @@ export class UploadDocComponent implements OnInit {
     }
   }
   BANK_DETAILS:any=[];
-
+  BANK:any=[];
+  UNIQUE_BANK:any=[];
+  
  async ngOnInit() {
     this.wininfo.set_controller_of_width(230,'.content_top_common')
     for (let index = 0; index < data1['default']?.length; index++) {
@@ -185,6 +185,18 @@ export class UploadDocComponent implements OnInit {
     this.userService.getTeam()
     .subscribe(
       data => {
+        this.BANK=data['data'][0]?.bankDetails;
+        var temp:any=[];
+        for (let index = 0; index < this.BANK.length; index++) {
+          temp.push(this.BANK[index]?.bank)
+        }
+        this.UNIQUE_BANK=[]
+        var unique:any =temp.filter((value, index, array) => array.indexOf(value) === index);
+          for (let index = 0; index < unique.length; index++) {
+           this.UNIQUE_BANK.push({
+              bank:unique[index]
+           })
+          }
         for (let index = 0; index < data['data'][0]?.bankDetails.length; index++) {
           this.BANK_DETAILS.push({
             value:data['data'][0]?.bankDetails[index]['accNumber']+' | '+data['data'][0]?.bankDetails[index]['currency'],
@@ -193,11 +205,34 @@ export class UploadDocComponent implements OnInit {
             Bank_Name:data['data'][0]?.bankDetails[index]['bank']
           });
         }
-        console.log(this.BANK_DETAILS,'getTeam')
+        console.log(this.BANK_DETAILS,this.UNIQUE_BANK,'getTeam')
       },
       error => {
         console.log("error")
       });
+  }
+  removeDuplicates(arrayIn:any) {
+    var arrayOut:any = [];
+    for (var a=0; a < arrayIn.length; a++) {
+        if (arrayOut[arrayOut.length-1] != arrayIn[a]) {
+            arrayOut.push(arrayIn[a]);
+        }
+    }
+    return arrayOut;
+}
+  filterBankName(bankname:any){
+  console.log(bankname,this.BANK,'filterBankName')
+  this.BANK_DETAILS=[];
+  var temp:any=this.BANK.filter((item:any)=>item?.bank.includes(bankname))
+    for (let index = 0; index < temp.length; index++) {
+      this.BANK_DETAILS.push({
+        value:temp[index]['accNumber']+' | '+temp[index]['currency'],
+        accNumber:temp[index]['accNumber'],
+        currency:temp[index]['currency'],
+        Bank_Name:temp[index]['bank']
+      });
+    }
+    console.log(this.BANK_DETAILS,'getTeam')
   }
 
   public onUploadInit(args: any): void {
@@ -257,7 +292,7 @@ dataPdf:any=[];
      console.log('-------------------->Selected Document type', this.publicUrl);
   }
   onUpload(e){
-    e.value.BankName=e.value?.BankName?.Bank_Name!=undefined?e.value?.BankName?.Bank_Name:e.value?.BankName
+    e.value.BankName=e.value?.BankName?.bank!=undefined?e.value?.BankName?.bank:e.value?.BankName
     e.value.Charges_Account_Number=e.value?.Charges_Account_Number?.accNumber!=undefined?e.value?.Charges_Account_Number?.accNumber:e.value?.Charges_Account_Number
     e.value.Credit_Account_Number=e.value?.Credit_Account_Number?.accNumber!=undefined?e.value?.Credit_Account_Number?.accNumber:e.value?.Credit_Account_Number
     e.value.currency =e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;

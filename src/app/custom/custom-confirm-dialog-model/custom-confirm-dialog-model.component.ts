@@ -2,9 +2,8 @@ import { Component, Injectable, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import $ from 'jquery';
 import { Observable } from 'rxjs';
-import { DocumentService } from 'src/app/service/document.service';
+import { DocumentService } from '../../service/document.service';
 import { CustomConfirmDialogModelService } from './custom-confirm-dialog-model.service';
-
 
 @Injectable({
   providedIn: 'root'
@@ -21,11 +20,13 @@ export class CustomConfirmDialogModelComponent implements OnInit {
   message:'';
   MODEL_TYPE_VIEW:any={
     ConfirmDialog:false,
+    Custom_Model:false,
     DropDownInputConfirmDialog:false,
     InputConfirmDialog:false,
     IframeModel:false,
     YesNoDialogModel:false,
-    DropDownInput:false
+    DropDownInput:false,
+    Notification_DialogModel:false
   };
   DATA_RECIVED:any=[];
   DownloadStatus:boolean=false;
@@ -41,6 +42,23 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     this.CustomConfirmDialogModel.titleheader=titleheader;
     this.CustomConfirmDialogModel.message=message;
     $('.custommodel').css('display', 'block');
+    window.scroll(0,0)
+  }
+  Confirm_DialogModel(title_header:any,message:any){
+    this.HIDE_ALL_MODELS('Custom_Model');
+    this.CustomConfirmDialogModel.titleheader=title_header;
+    this.CustomConfirmDialogModel.message=message;
+    $('.Custom_Model').css('display', 'flex');
+    window.scroll(0,0)
+  }
+  timeout:any=''
+  Notification_DialogModel(title_header:any,message:any){
+    clearTimeout(this.timeout);
+    this.HIDE_ALL_MODELS('Notification_DialogModel');
+    this.CustomConfirmDialogModel.titleheader=title_header;
+    this.CustomConfirmDialogModel.message=message;
+    $('.Notification_DialogModel').css('display', 'flex');
+    this.timeout=setTimeout(()=>{$('.Notification_DialogModel').css('display', 'none');},10000)
     window.scroll(0,0)
   }
 

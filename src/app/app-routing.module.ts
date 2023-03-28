@@ -21,6 +21,7 @@ import { PdfComponent } from "./pdf/pdf.component";
 import { TwofactorauthComponent } from "./shared/components/twofactorauth/twofactorauth.component";
 import { AuthorizationComponent } from "./Authorization/authorization/authorization.component";
 import { AdminGuard } from "./service/RolePermission/Admin/admin.guard";
+import { ResetOTPComponent } from "./forgot-password/reset-otp/reset-otp.component";
 const routes: Routes = [
   {
     path: "",
@@ -33,6 +34,11 @@ const routes: Routes = [
   {
     path: "forgotpassword",
     component: ForgotPasswordComponent,
+    pathMatch: "full",
+  },
+  {
+    path: "resetOTP",
+    component: ResetOTPComponent,
     pathMatch: "full",
   },
   {
@@ -66,9 +72,10 @@ const routes: Routes = [
     RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" }),
     SignupRoutingModule,
     SigninRoutingModule,
-    MatDialogModule
+    MatDialogModule,
+    HomeModule
   ],
-  exports: [RouterModule],
+  exports: [RouterModule,HomeModule],
 })
 export class AppRoutingModule {
   constructor(public router:Router){

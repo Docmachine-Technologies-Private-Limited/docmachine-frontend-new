@@ -20,6 +20,16 @@
   height: 100vh;
   margin: auto;
   align-items: center;
+  z-index: 9999999;
+}
+
+.Custom_Model {
+  background-color: #2828286e;
+  width: 100vw;
+  height: 100vh;
+  margin: auto;
+  align-items: center;
+  z-index: 9999999;
 }
 
 .YesNoDialogModel-btn {
@@ -39,15 +49,30 @@
 }
 .iframe-group{
   overflow: auto;
-  max-height: 75vh;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 20px;
+  width: 100%;
+  padding: 10px;
 }
 .DropDownInputConfirmDialog{
   z-index: 99999999;
 }
 .modal-dialog{
   max-width: 60vw !important;
+}
+
+.Notification_DialogModel{
+  position: absolute;
+    width: 100vw;
+    right: 0;
+    top: 0;
+    height: auto;
+    padding: 20px;
+    color: red;
+    z-index: 9999999999;
+    background: rgba(0,0,0,.1803921569);
+    align-items: center;
+    justify-content: center;
+}
+
+.Notification_DialogModel .modal-dialog{
+  max-width: 100% !important;
 }

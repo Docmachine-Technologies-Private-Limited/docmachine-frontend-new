@@ -11,54 +11,64 @@
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                                 class="ex_icon"></span>Export</button>
                         <div class="filter_posit">
-                            <button (click)="onclick()" type="button" class="btn btn-secondary"><span
-                                    class="fi_icon"></span>Filter</button>
-                            <div *ngIf="filtervisible" class="bg-white filter_main_sec">
+                          <button (click)="filter_Popup.style.display='block'" type="button" class="btn btn-secondary filter-popup"><span
+                            class="fi_icon"></span>Filter</button>
+                            <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup appFilterToggle>
                                 <form class="select_filter_options">
-                                    <div class="row">
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Commodity</label>
-                                            <select class="form-select form-control" aria-label="Default select example" [(ngModel)]="commodity" name="com">
-                                                <option value=""> commodities</option>
-                                                <option *ngFor="let buyer of commodityArray">{{buyer.como}}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Location</label>
-                                            <select class="form-select form-control" aria-label="Default select example" [(ngModel)]="location" name="location">
-                                                <option value="">locations</option>
-                                                <option *ngFor="let bene of locationArray">{{ bene.loc }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Buyer</label>
-                                            <select class="form-select form-control" aria-label="Default select example" [(ngModel)]="buyer" name="banee">
-                                                <option value="">Buyers</option>
-                                                <option *ngFor="let bene of benneDetailArray
-                                                ">{{ bene.buyerName }}
-                                                </option>
-
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">Start
-                                                Date</label>
-                                            <input class="form-select form-control" type="date" placeholder="Start Date" [(ngModel)]="startDate" name="startdate" required />
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <label for="exampleFormControlInput1" class="form-label">End
-                                                Date</label>
-                                            <input class="form-select form-control" type="date" placeholder="End Date" [(ngModel)]="endDate" name="enddate" required />
-                                        </div>
+                                  <div class="row">
+                                      <div class="col-md-6 col-12">
+                                          <label for="exampleFormControlInput1" class="form-label">Buyer name</label>
+                                          <select class="form-select form-control" aria-label="Default select example" name="Buyer_Name"
+                                           (change)="filter($event.target.value,'buyerName');filter_Popup.style.display='none'">
+                                                  <option value="">Buyer name</option>
+                                                  <option [value]="Buyer_Name" *ngFor="let Buyer_Name of this.ALL_FILTER_DATA?.Buyer_Name">{{Buyer_Name}}
+                                                  </option>
+                                              </select>
+                                      </div>
+                                      <div class="col-md-6 col-12">
+                                          <label for="exampleFormControlInput1" class="form-label">PI/PO No.</label>
+                                          <select class="form-select form-control" aria-label="Default select example"
+                                          (change)="filter($event.target.value,'pipo');filter_Popup.style.display='none'"
+                                           name="Company_Name">
+                                                  <option value="">PI/PO No.</option>
+                                                  <option [value]="PI_PO_No" *ngFor="let PI_PO_No of this.ALL_FILTER_DATA?.PI_PO_No">{{ PI_PO_No }}
+                                                  </option>
+                                              </select>
+                                      </div>
+                                      <div class="col-md-6 col-12">
+                                          <label for="exampleFormControlInput1" class="form-label">M S A No.</label>
+                                          <select class="form-select form-control" aria-label="Default select example"
+                                          (change)="filter($event.target.value,'masterServiceNumber');filter_Popup.style.display='none'" name="Origin">
+                                                  <option value="">M S A No.</option>
+                                                  <option *ngFor="let Origin of this.ALL_FILTER_DATA?.M_S_A_No">{{ Origin }}
+                                                  </option>
+                                              </select>
+                                      </div>
+                                      <div class="col-md-6 col-12">
+                                          <label for="exampleFormControlInput1" class="form-label">Currency</label>
+                                          <select class="form-select form-control" aria-label="Default select example"
+                                          (change)="filter($event.target.value,'currency');filter_Popup.style.display='none'" name="Currency">
+                                            <option value="">Currency</option>
+                                            <option *ngFor="let Currency of this.ALL_FILTER_DATA?.Currency" [value]="Currency">{{ Currency }}
+                                            </option>
+                                        </select>
+                                      </div>
+                                      <div class="col-md-6 col-12">
+                                        <label for="exampleFormControlInput1" class="form-label">DATE</label>
+                                        <select class="form-select form-control" aria-label="Default select example"
+                                        (change)="filter($event.target.value,'date');filter_Popup.style.display='none'" name="date">
+                                          <option value="">DATE</option>
+                                          <option [value]="SB_DATE" *ngFor="let SB_DATE of this.ALL_FILTER_DATA?.DATE">{{ SB_DATE }}
+                                          </option>
+                                      </select>
                                     </div>
-                                    <div class="footer_buttons">
-                                        <button type="button" class="btn btn-light" (click)="resetFilter()">RESET</button>
-                                        <button type="submit" class="btn btn-primary" (click)="filter()">APPLY</button>
-                                    </div>
-                                </form>
-                            </div>
+                                  </div>
+                                  <div class="footer_buttons">
+                                      <button type="button" class="btn btn-light" (click)="resetFilter();filter_Popup.style.display='none'">RESET</button>
+                                  </div>
+                              </form>
+                              <i></i>
+                          </div>
                         </div>
                         <button class="upload-button btn btn-success" (click)="masterSer()">
                             <span class="add_icon"></span>  ADD NEW
@@ -76,37 +86,26 @@
                         <!-- *ngIf="!showInvoice" -->
                         <section class="middle_datatable">
                             <div class="widget-body p-0 support table-wrapper">
-                                <table class="table table-striped mb-0">
+                               <table class="table table-hover">
                                     <!-- *ngIf='pipo' -->
-                                    <thead style="width: 100%;background: white;position: sticky;top: 0;">
-                                        <tr class="text-muted table-heading" style="font-size: 14px; color:black; border-bottom: 1px solid #f2f4f8;">
-                                            <!-- <th class="rect">
-                                              <img src="./assets/Rectangle-13.png" />
-                                          </th> -->
-                                            <th scope="col"><span class="pl-3" style="margin-left: 9px;">DATE</span></th>
-                                            <th scope="col">PI/PO No.</th>
-                                            <th scope="col">M S A No.</th>
-                                            <th scope="col">M S A Amount</th>
-                                            <th scope="col">Currency</th>
-                                            <th scope="col">Buyer Name</th>
-                                            <th scope="col">Action</th>
+                                    <thead>
+                                        <tr class="table-tr">
+                                            <th scope="col" class="col-td-th-3">DATE</th>
+                                            <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">M S A No.</th>
+                                            <th scope="col" class="col-td-th-3">M S A Amount</th>
+                                            <th scope="col" class="col-td-th-3">Currency</th>
+                                            <th scope="col" class="col-td-th-3">Buyer Name</th>
+                                            <th scope="col" class="col-td-th-3">Action</th>
 
                                         </tr>
                                     </thead>
-                                    <tbody class="text-dark">
-                                        <tr class="table-row" *ngFor="let data of item; let i = index" [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
+                                    <tbody>
+                                        <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index" [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')" >
-
-                                            <!-- (click)="
-                                      getInvoices(data, i) && getTransactions(data.pi_poNo) -->
-                                            <!-- <th class="rect">
-                                              <img src="./assets/Rectangle-13.png" />
-                                          </th> -->
-                                            <td>{{ data.date }}</td>
-
-                                            <td class="sb-no"> {{ getPipoNumbers(data) }} </td>
-
-                                            <td>
+                                            <td class="col-td-th-3">{{ data.date }}</td>
+                                            <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
+                                            <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.masterServiceNumber}}
                                                 </div>
@@ -115,7 +114,7 @@
                                                     <input class="tblInput form-control" name="masterServiceNumber" type="text" placeholder="Master Service Number" [(ngModel)]="data.masterServiceNumber">
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.masterServiceAmount}}
                                                 </div>
@@ -124,7 +123,7 @@
                                                     <input class="tblInput form-control" name="masterServiceAmount" type="text" placeholder="Master Service Amount" [(ngModel)]="data.masterServiceAmount">
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.currency}}
                                                 </div>
@@ -133,15 +132,15 @@
                                                     <input class="tblInput form-control" name="currency" type="text" placeholder="Currency" [(ngModel)]="data.currency">
                                                 </div>
                                             </td>
-                                            <td>{{data.buyerName}}</td>
-                                            <td class="view_edit_button">
+                                            <td class="col-td-th-3">{{data.buyerName}}</td>
+                                            <td class="col-td-th-3">
                                                 <a (click)=" openLetterOfCredit(content); viewLC(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                 <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                                 <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
                                                     aria-hidden="true"></i></button>
                                                     <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
                                                     (click)="handleDelete(data._id,i)"><a title="Delete" href="javascript:void(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                   </button>    
+                                                   </button>
                                             </td>
                                         </tr>
                                     </tbody>

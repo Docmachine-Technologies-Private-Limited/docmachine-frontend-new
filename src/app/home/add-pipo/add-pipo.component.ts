@@ -249,45 +249,24 @@ export class AddPipoComponent implements OnInit {
     else if (this.documentType == 'PO') {
       this.pipoForm.value.doc1 = this.pipourl1
     }
-
-    // if (this.documentType1 == 'import') {
-    //   // this.pipoForm.value.benneName = this.beneValue
-    // }
-    // else if (this.documentType1 == 'export') {
-    //   this.pipoForm.value.buyerName = this.buyer
-    //   this.pipoForm.value.commodity = this.commodityData
-    // }
-
-
     this.pipoForm.value.document = this.documentType
-
-    this.documentService.addPipo(this.pipoForm.value).subscribe(
-      (res) => {
-        this.router.navigateByUrl("/home/pipo");
-        // if (this.documentType1 == 'import' && this.documentType == 'PI'){
-        // this.router.navigateByUrl("/home/pipoDoc");}
-        // else if( this.documentType1 == 'import' && this.documentType == 'PO'){
-        //   this.router.navigateByUrl("/home/pipoDoc");
-        // }
-        // else if (this.documentType1 == 'export' && this.documentType == 'PI') {
-        //   this.router.navigateByUrl("/home/pipoDocExport");
-        // }
-        // else if (this.documentType1 == 'export' && this.documentType == 'PO') {
-        //   this.router.navigateByUrl("/home/pipoDocExport");
-        // }
-        // else{
-        //   this.router.navigateByUrl("/home/dashboardNew");
-        // }
-      },
-      (err) => console.log("Error adding pipo")
-    );
+    this.documentService.getInvoice_No({
+      pi_poNo:this.pipoForm.value.pi_poNo
+    },'pi_po').subscribe((resp:any)=>{
+      console.log('creditNoteNumber Invoice_No',resp)
+    if (resp.data.length==0) {
+      this.documentService.addPipo(this.pipoForm.value).subscribe(
+        (res) => {
+          this.toastr.success('PI/PO added successfully.');
+          this.router.navigateByUrl("/home/pipo");
+        },
+        (err) => console.log("Error adding pipo")
+      );
+	}else {
+    this.toastr.error(`Please check this sb no. : ${this.pipoForm.value.pi_poNo} already exit...`);
+  }});
+  
   }
-
-
-
-
-  //  ------------------------- handle image upload------------------------------------------
-
 
   public onUploadError(args: any): void {
     this.uploading = false;

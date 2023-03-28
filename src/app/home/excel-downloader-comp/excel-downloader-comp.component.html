@@ -2,19 +2,19 @@
   <div class="table-responsive">
       <table class="table">
           <thead>
-              <tr>
-                  <th>SI No.</th>
-                  <th>Table Name</th>
-                  <th>Count</th>
-                  <th>Action</th>
+              <tr class="table-tr">
+                  <th scope="col" class="col-td-th-3">SI No.</th>
+                  <th scope="col" class="col-td-th-3">Table Name</th>
+                  <th scope="col" class="col-td-th-3">Count</th>
+                  <th scope="col" class="col-td-th-3">Action</th>
               </tr>
           </thead>
           <tbody *ngIf="this.TABLE_LIST_PIPO.length!=0">
-              <tr *ngFor="let item of this.TABLE_LIST_PIPO; let i=index">
-                  <td>{{(i+1)}}</td>
-                  <td>{{item}}</td>
-                  <td>{{(this.COUNT[item])}}</td>
-                  <td><button type="button" class="btn -btn-primary" (click)="excelgenrator(item);"
+              <tr class="table-tr" *ngFor="let item of this.TABLE_LIST_PIPO; let i=index">
+                  <td class="col-td-th-3">{{(i+1)}}</td>
+                  <td class="col-td-th-3">{{item}}</td>
+                  <td class="col-td-th-3">{{(this.COUNT[item])}}</td>
+                  <td class="col-td-th-3"><button type="button" class="btn -btn-primary" (click)="excelgenrator(item);"
                        title="download (.xls)"><img src="assets/export.png" alt=""></button></td>
               </tr>
           </tbody>

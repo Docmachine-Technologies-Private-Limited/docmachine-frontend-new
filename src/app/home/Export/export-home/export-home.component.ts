@@ -10,12 +10,17 @@ import { ConfirmDialogService } from "../../../confirm-dialog/confirm-dialog.ser
 import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { formatDate } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { saveAs as importedSaveAs } from 'file-saver';
+import * as importedSaveAs from 'file-saver';
 import { MatPaginator } from "@angular/material/paginator";
-import { WindowInformationService } from "src/app/service/window-information.service";
-import { AprrovalPendingRejectTransactionsService } from "src/app/service/aprroval-pending-reject-transactions.service";
-import { CustomConfirmDialogModelComponent } from "src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component";
-import { saveAs } from 'file-saver';
+import { WindowInformationService } from "../../../service/window-information.service";
+import { AprrovalPendingRejectTransactionsService } from "../../../service/aprroval-pending-reject-transactions.service";
+import { CustomConfirmDialogModelComponent } from "../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component";
+import { PipoDataService } from "../../../service/homeservices/pipo.service";
+import { StorageEncryptionDecryptionService } from "../../../Storage/storage-encryption-decryption.service";
+import { MergePdfListService } from "../../merge-pdf-list.service";
+import $ from "jquery";
+import htmlToPdfmake from 'html-to-pdfmake';
+declare var kendo: any;
 
 @Component({
   selector: 'app-export-home',
@@ -50,7 +55,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   public allTransactions: any = [];
   SBBuyerName: string = 'BuyerName';
   PIPONumbersBuyerName: string = 'BuyerName';
-  buyerName = [];
+  buyerName: any = [];
   selectSB = '';
 
   public generateIndex;
@@ -130,7 +135,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   data9: any = [];
   dataImport: any = [];
   sbPurposeDone1: any = [];
-  item4 = [];
+  item4: any = [];
   bankRef: any;
   newTask: any = [];
   z: any;
@@ -152,7 +157,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   allBank: any = [];
   newBankArray: any = [];
   credit: any;
-  charge: any;
+  charge: any=[];
   value: any;
   newDone = false;
   bgColor = false
@@ -166,7 +171,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   model = { option: 'Bank options' };
   model1 = { option: 'Bank options' };
   model2 = { option: 'Bank options' };
-  selectedPdfs = [];
+  selectedPdfs: any = [];
   selectedPdfs2: any;
   generateChecked: boolean = true;
   formerge: string | ArrayBuffer | Uint8Array;
@@ -181,11 +186,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   ThirdPartydata: any = [];
   Inward_Remittancefilter: any = [];
   SELECT_ThirdPartydata: any = '';
-  SELECT_bankreferencenumber: any = '';
+  SELECT_bankreferencenumber: any = [];
   Lodgement: any = [];
   selection: any = [];
   Select_A_bank: any = [];
   GetDownloadStatus: any = [];
+  Export_Direct_Dispatch: any = []
 
   constructor(
     public documentService: DocumentService,
@@ -197,8 +203,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private confirmDialogService: ConfirmDialogService,
     public wininfo: WindowInformationService,
+    public pipoDataService: PipoDataService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent
+    public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
+    public sessionstorage: StorageEncryptionDecryptionService,
+    public pdfmerge: MergePdfListService,
   ) {
     console.log("hello")
     this.jstoday = formatDate(this.today, 'dd-MM-yyyy', 'en-US', '+0530');
@@ -269,7 +278,26 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.documentService.getBlcopyrefPromies().then((res: any) => {
       this.Blcopyref = res;
       this.Blcopyrefoldata = res;
-      console.log(res, 'getBlcopyref')
+      this.Export_Direct_Dispatch = res;
+      // this.Blcopyref.forEach(element => {
+      //   element?.pipo.forEach(pipoelement => {
+      //     pipoelement?.TransactionRef.forEach(Transactionelement => {
+      //       if (Transactionelement?.TypeTransaction=="Export-Direct-Dispatch") {
+      //         Transactionelement?.data?.extradata?.COMMERCIAL.forEach(Advance_reference_Numberelement => {
+      //           Advance_reference_Numberelement?.IRADVICE_INFO.forEach((IRADVICE_INFOElement:any) => {
+      //             IRADVICE_INFOElement['irDataItem']['SB_Amount_Realized']=Advance_reference_Numberelement?.SB_Amout_Realized
+      //             IRADVICE_INFOElement['irDataItem']['balanceAvai']=Advance_reference_Numberelement?.sbRef[0]?.balanceAvai
+      //             IRADVICE_INFOElement['irDataItem']['SB_Amount']=Advance_reference_Numberelement?.sbRef[0]?.fobValue
+      //             IRADVICE_INFOElement['irDataItem']['billrefno']=element?.blcopyrefNumber
+      //             this.Export_Direct_Dispatch.push(IRADVICE_INFOElement?.irDataItem)
+      //         });
+      //       });
+      //       }
+      //     });
+      //   });
+      // });
+      console.log(res, this.Export_Direct_Dispatch, 'getBlcopyref')
+
     }).catch((error) => {
       this.Blcopyref = [];
     });
@@ -300,16 +328,19 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(this.jsondata[0].purpose)
     this.dataJson = this.jsondata
     this.purposeFun(this.default_value)
-    this.documentService.getInward_remittance().subscribe((res:any)=>{
-      this.Inward_Remittance_MT103=res?.data;
-      this.userService.mergePdf(this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?.file).subscribe((res: any) => {
+    this.documentService.getInward_remittance().subscribe((res: any) => {
+      this.Inward_Remittance_MT103 = res?.data;
+      this.userService.mergePdf(this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file).subscribe((res: any) => {
         res.arrayBuffer().then((data: any) => {
-          this.MT103_URL=(data);
-         console.log('mergePdf_downloadEachFile',data);
-       });
-     });
-      console.log(res,'getInward_remittance')
+          var base64String = this._arrayBufferToBase64(data)
+          const x = 'data:application/pdf;base64,' + base64String;
+          this.MT103_URL = x;
+          console.log('mergePdf_downloadEachFile', data);
+        });
+      });
+      console.log(res, 'getInward_remittance')
     })
+
     this.documentService.getThird().subscribe(
       (res: any) => {
         console.log('Data fetched successfully', res);
@@ -340,7 +371,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.documentService.getPipo().subscribe(
       (res: any) => {
         console.log("HEre Response cheching for", res), (this.item3 = res.data);
-        let value1 = []
+        let value1: any = []
         for (let value of this.item3) {
           if (value.file == 'export') {
             value1.push(value)
@@ -351,19 +382,22 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       },
       (err) => console.log(err)
     );
+    this.buyerName = [];
     this.documentService.getMaster(1).subscribe(
       (res: any) => {
         this.item1 = res.data;
         this.ShippingbillNumberfilter = res.data;
+        var tempbuyer: any = [];
         this.item1.forEach((element, i) => {
-          if (element.buyerName != null && element.buyerName != undefined) {
-            this.buyerName[i] = element.buyerName;
+          var temp: any = this.buyerName.filter((itemtemp: any) => itemtemp?.value?.indexOf(element.buyerName) != -1)
+          if (element.buyerName != null && element.buyerName != undefined && temp.length == 0) {
+            tempbuyer.push(element.buyerName)
           }
         });
-        this.buyerName = this.buyerName.filter(
-          (value, index) => this.buyerName.indexOf(value) === index
-        );
-
+        var fitertemp: any = tempbuyer.filter(n => n)
+        fitertemp.forEach(element => {
+          this.buyerName.push({ value: element })
+        });
       },
       (err) => console.log(err)
     );
@@ -426,7 +460,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       console.log('inside')
       this.proceed = false
       this.c = this.documentService.task.task[0].purposeCode;
-      let newArray = [];
+      let newArray: any = [];
       let i = 0;
       for (let value of this.documentService.task.task) {
 
@@ -438,7 +472,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           if (value.pipoUrls && !value.generateDoc1) {
             this.zToggle[i] = false
             this.generatePurpose[i] = value.purposeCode;
-            let gene = []
+            let gene: any = []
             for (let value1 of value.pipoUrls) {
               gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                 value1.changingThisBreaksApplicationSecurity
@@ -453,7 +487,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
             this.zToggle[i] = true
             this.generatePurpose[i] = value.purposeCode;
             this.donePurpose[i] = value.purposeCode;
-            let gene = []
+            let gene: any = []
             for (let value1 of value.pipoUrls) {
               gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                 value1.changingThisBreaksApplicationSecurity
@@ -481,7 +515,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               this.zToggle[i] = false
               this.sbPurpose[i] = value.purposeCode;
               if (value.sbUrls) {
-                let gene = []
+                let gene: any = []
                 for (let value1 of value.sbUrls) {
                   gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -492,7 +526,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               }
 
               if (value.tryUrls) {
-                let gene1 = []
+                let gene1: any = []
                 for (let value1 of value.tryUrls) {
                   gene1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -509,7 +543,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               this.zToggle[i] = true
 
               if (value.sbUrls) {
-                let gene = []
+                let gene: any = []
                 for (let value1 of value.sbUrls) {
                   gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -520,7 +554,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               }
 
               if (value.tryUrls) {
-                let gene1 = []
+                let gene1: any = []
                 for (let value1 of value.tryUrls) {
                   gene1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -557,7 +591,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               this.zToggle[i] = false
               this.sbPurpose[i] = value.purposeCode;
               if (value.sbUrls) {
-                let gene = []
+                let gene: any = []
                 for (let value1 of value.sbUrls) {
                   gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -568,7 +602,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               }
 
               if (value.tryUrls) {
-                let gene1 = []
+                let gene1: any = []
                 for (let value1 of value.tryUrls) {
                   gene1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -585,7 +619,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               this.zToggle[i] = true
 
               if (value.sbUrls) {
-                let gene = []
+                let gene: any = []
                 for (let value1 of value.sbUrls) {
                   gene.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -596,7 +630,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
               }
 
               if (value.tryUrls) {
-                let gene1 = []
+                let gene1: any = []
                 for (let value1 of value.tryUrls) {
                   gene1.push(this.sanitizer.bypassSecurityTrustResourceUrl(
                     value1.changingThisBreaksApplicationSecurity
@@ -636,6 +670,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
     this.INPUT_SERACH = $('.search_box_new');
     console.log(this.mainDoc, 'dfsdfdfdfsd')
+  }
+  InputClick() {
+    this.sessionstorage.set('MT102', JSON.stringify(this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]), 1)
+    this.documentService.MT102_SUBJECT = (this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]);
+  }
+  removeSession() {
+    this.sessionstorage.remove('MT102')
+    this.documentService.MT102_SUBJECT = []
   }
   myFunction() {
     console.log("windwow", window.scroll)
@@ -687,7 +729,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(this.sbArray)
   }
   selectPIPO: any = []
-  changeCheckboxPIPO(value) {
+  changeCheckboxPIPO(value, id) {
     let j = this.selectPIPO.indexOf(value)
     if (j == -1) {
       this.selectPIPO.push(value)
@@ -720,7 +762,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           this.jsondata.push(data)
         }
         else {
-          let purpose = []
+          let purpose: any = []
           for (let value of data.purpose) {
             if (value.code.toLowerCase().indexOf(e.toLowerCase()) != -1
               || value.description.toLowerCase().indexOf(e.toLowerCase()) != -1) {
@@ -762,7 +804,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
             this.jsondata.push(data)
           }
           else {
-            let purpose = []
+            let purpose: any = []
             for (let value of data.purpose) {
               if (value.code.toLowerCase().indexOf(multipleselectedvalue[index].toLowerCase()) != -1
                 || value.description.toLowerCase().indexOf(multipleselectedvalue[index].toLowerCase()) != -1) {
@@ -1056,14 +1098,16 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
       const text20Field = form.createTextField('best.text20')
       let amount = a['amount'].toString()
-      text20Field.setText(amount)
+      var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
+      console.log(updatedata, 'updatedata')
+      text20Field.setText(updatedata?.Inward_amount_for_disposal)
       text20Field.addToPage(firstpage, {
         x: 150, y: 565, width: 80,
         height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
       })
 
       const text21Field = form.createTextField('best.text21')
-      text21Field.setText('')
+      text21Field.setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal))
       text21Field.addToPage(firstpage, {
         x: 340, y: 580, width: 220,
         height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
@@ -2143,14 +2187,16 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
     const text20Field = form.createTextField('best.text20')
     let amount = a['amount'].toString()
-    text20Field.setText(this.replaceText(data_temp['Amount'], '32A '))
+    var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
+    console.log(updatedata, 'updatedata')
+    text20Field.setText(updatedata?.Inward_amount_for_disposal)
     text20Field.addToPage(firstpage, {
       x: 150, y: 565, width: 80,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
 
     const text21Field = form.createTextField('best.text21')
-    text21Field.setText(this.Number_to_word(this.replaceText(data_temp['Amount'], '32A ')))
+    text21Field.setText(this.Number_to_word(updatedata?.Inward_amount_for_disposal))
     text21Field.addToPage(firstpage, {
       x: 340, y: 580, width: 220,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
@@ -3005,16 +3051,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       x: 50, y: 52, width: 100,
       height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
     })
-
-
     const pdfBytes = await pdfDoc.save()
-    //console.log(pdfBytes, "pdf")
-    //console.log(pdfBytes, "pdf")
     var base64String = this._arrayBufferToBase64(pdfBytes)
-
-    //console.log(base64String);
     var x: any = 'data:application/pdf;base64,' + base64String;
-    //console.log(x);
     this.formerge = x
     this.value = base64String;
     this.newTask[0].generateDoc1 = x
@@ -3028,7 +3067,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     dlnk.href = x;
     dlnk.download = 'file.pdf';
     dlnk.click();
-
   }
 
   _arrayBufferToBase64(buffer) {
@@ -3104,11 +3142,18 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(this.generate1)
     console.log(this.c)
   }
-
+  GENRATE_DOCMENTS_FILL: any = [];
   generateDoc2(SHOW_HIDE_CODE, code, j) {
     console.log(code, j)
     this.generate = true;
     this.ir = SHOW_HIDE_CODE
+    this.SELECT_bankreferencenumber.forEach(element => {
+      const tempfilter = this.Blcopyref.filter((item: any) => item?.blcopyrefNumber.includes(element));
+      tempfilter.forEach((filterItem) => {
+        this.GENRATE_DOCMENTS_FILL.push(filterItem)
+      })
+    });
+    console.log(this.GENRATE_DOCMENTS_FILL, 'this.GENRATE_DOCMENTS_FILL')
     if (SHOW_HIDE_CODE == 'yes') {
       this.importPurpose[j] = code;
     }
@@ -3119,15 +3164,11 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     for (let item of this.item4) {
       for (let sb of this.tryArray) {
         if (item.thirdNumber === sb) {
-          generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(
-            item.doc
-          ))
+          generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(item.doc))
         }
       }
     }
-
     this.mainDoc2[j] = generateDoc2
-
     this.newTask[j] = {
       tryNumbers: this.tryArray,
       tryUrls: this.mainDoc2[j],
@@ -3136,9 +3177,6 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       ir: this.ir,
       br: 'yes'
     }
-
-
-
   }
 
   exportAsPDF(code, i) {
@@ -3149,7 +3187,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
     this.donePurpose[i] = code;
     const height =
-      Math.round($("#mainId").outerHeight() * 0.0104166667 * 10) / 10;
+      Math.round($("#mainId").outerHeight() as any * 0.0104166667 * 10) / 10;
     console.log($("#mainId").html());
     this.documentService
       .getPDF({
@@ -3295,7 +3333,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(code, i)
     this.doneSbPurpose[i] = code;
     const height =
-      Math.round($("#mainId").outerHeight() * 0.0104166667 * 10) / 10;
+      Math.round($("#mainId").outerHeight() as any * 0.0104166667 * 10) / 10;
     console.log($("#mainId").html());
     this.documentService
       .getPDF({
@@ -3330,7 +3368,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           console.log(code)
           if (this.sbPurpose1[i] == code) {
             const height1 =
-              Math.round($("#mainId1").outerHeight() * 0.0104166667 * 10) / 10;
+              Math.round($("#mainId1").outerHeight() as any * 0.0104166667 * 10) / 10;
             console.log($("#mainId1").html());
             this.documentService
               .getPDF({
@@ -3426,88 +3464,132 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
         }
       });
   }
-
+  calculateAmount(amount1, amount2) {
+    return !isNaN(parseFloat(amount1)) ? parseFloat(amount1) - parseFloat(amount2) : 0;
+  }
+  P102_PDF: any = ''
   exportAsPDF2(code, i) {
     console.log(code, i)
-    this.doneImportPurpose[i] = code;
-    const height =
-      Math.round($("#mainId1").outerHeight() * 0.0104166667 * 10) / 10;
-    console.log($("#mainId1").html());
-    this.documentService
-      .getPDF({
-        data: $("#mainId1").html(),
-        filename: "Final Report",
-        format: {
-          paperWidth: 7,
-          paperHeight: height + 5,
-          marginTop: 0,
-          marginBottom: 0,
-          marginLeft: 0,
-          marginRight: 0,
-        },
-        template:
-          "./app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs",
-      })
-      .subscribe((data) => {
-        if (data && data.success) {
-          console.log(data);
-          this.data4 = data
-          this.data5 = data.file.replace('application/octet-stream', 'application/pdf')
-          console.log(this.data5)
-          this.data6 = this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.data5
-          );
-          console.log(this.data6)
-          this.data9[i] = this.data6
-          console.log(this.data9[i])
-          //this.newTask.url1 = this.data5;
-          this.done = true;
-          //this.downloadPDF(data);
-          this.zToggle[i] = true;
-          this.newTask[i] = {
-            tryNumbers: this.tryArray,
-            tryUrls: this.mainDoc2[i],
-            purposeCode: code,
-            generateDoc1: this.data9[i],
-            lodgeDone: 'yes',
-            ir: 'no',
-            br: 'yes'
-          }
-          let allTrue = true;
-          for (let value of this.zToggle) {
-            allTrue = allTrue && value;
-          }
-          if (allTrue) {
-            this.isDone = true;
-          }
+    $(document).ready(() => {
+      kendo.drawing.drawDOM($("#HTML_PDF_TABLE")).then(function (group) {
+        return kendo.drawing.exportPDF(group, {
+          paperSize: "auto",
+          margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
+        });
+      }).done((data) => {
+        console.log('hhjjhhjjh', data, this.mainDoc2)
+        this.P102_PDF = data;
+        this.data9[i] = this.sanitizer.bypassSecurityTrustResourceUrl(data);
+        this.doneImportPurpose[i] = code;
+        this.done = true;
+        this.zToggle[i] = true;
+        this.newTask[i] = {
+          tryNumbers: this.tryArray,
+          tryUrls: this.mainDoc2[i],
+          purposeCode: code,
+          generateDoc1: this.data9[i],
+          lodgeDone: 'yes',
+          ir: 'no',
+          br: 'yes'
         }
+        let allTrue = true;
+        for (let value of this.zToggle) {
+          allTrue = allTrue && value;
+        }
+        if (allTrue) {
+          this.isDone = true;
+        }
+        this.documentService.getDownloadStatus({ id: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?._id, deleteflag: '-1' }).subscribe((res: any) => {
+          console.log(res, 'dsdsdsdsdsdsds');
+          this.GetDownloadStatus = res[0];
+          if (res.length == 0) {
+            this.documentService.getDownloadStatus({ id: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?._id, deleteflag: '2' }).subscribe((res: any) => {
+              console.log(res, 'dsdsdsdsdsdsds');
+              this.GetDownloadStatus = res[0];
+            })
+          }
+        })
       });
+    });
+    // this.documentService
+    //   .getPDF({
+    //     data: $("#mainId1").html(),
+    //     filename: "Final Report",
+    //     format: {
+    //       paperWidth: 7,
+    //       paperHeight: height + 5,
+    //       marginTop: 0,
+    //       marginBottom: 0,
+    //       marginLeft: 0,
+    //       marginRight: 0,
+    //     },
+    //     template:
+    //       "./app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs",
+    //   })
+    //   .subscribe((data) => {
+    //     if (data && data.success) {
+    //       console.log(data);
+    //       this.data4 = data
+    //       this.data5 = data.file.replace('application/octet-stream', 'application/pdf')
+    //       console.log(this.data5)
+    //       this.data6 = this.sanitizer.bypassSecurityTrustResourceUrl(
+    //         this.data5
+    //       );
+    //       console.log(this.data6)
+    //       this.data9[i] = this.data6
+    //       console.log(this.data9[i])
+    //       //this.newTask.url1 = this.data5;
+    //       this.done = true;
+    //       //this.downloadPDF(data);
+    //       this.zToggle[i] = true;
+    //       this.newTask[i] = {
+    //         tryNumbers: this.tryArray,
+    //         tryUrls: this.mainDoc2[i],
+    //         purposeCode: code,
+    //         generateDoc1: this.data9[i],
+    //         lodgeDone: 'yes',
+    //         ir: 'no',
+    //         br: 'yes'
+    //       }
+    //       let allTrue = true;
+    //       for (let value of this.zToggle) {
+    //         allTrue = allTrue && value;
+    //       }
+    //       if (allTrue) {
+    //         this.isDone = true;
+    //       }
+    //     }
+    //   });
   }
 
   change(e) {
     console.log(e.target.value);
     this.bankRef = e.target.value
   }
-  ARRAY_BUFFER_PDF:any=[];
+  ARRAY_BUFFER_PDF: any = [];
   showPreview(id: any) {
     // this.PREVIWES_URL='./../../assets/DXB.pdf'
     console.log("2214 line", this.STORE_URL)
     this.bgColor = true
     this.newDone = true
-
+    this.ARRAY_BUFFER_PDF = [];
+    this.ARRAY_BUFFER_PDF[0] = this.formerge;
+    this.ARRAY_BUFFER_PDF[1] = this.MT103_URL;
     for (let index = 0; index < this.STORE_URL.length; index++) {
       this.userService.mergePdf(this.STORE_URL[index]).subscribe((res: any) => {
-         res.arrayBuffer().then((data: any) => {
-          this.ARRAY_BUFFER_PDF.push(data);
-          console.log('mergePdf_downloadEachFile',data);
+        res.arrayBuffer().then((data: any) => {
+          var base64String = this._arrayBufferToBase64(data)
+          const x = 'data:application/pdf;base64,' + base64String;
+          this.ARRAY_BUFFER_PDF.push(x);
+          console.log('mergePdf_downloadEachFile', data);
         });
       });
     }
-    this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
+    this.documentService.getDownloadStatus({ id: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?._id, deleteflag: '-1' }).subscribe((res: any) => {
       console.log(res, 'dsdsdsdsdsdsds');
       this.GetDownloadStatus = res[0];
       if (res.length == 0) {
-        this.documentService.getDownloadStatus({ id: id, deleteflag: '2' }).subscribe((res: any) => {
+        this.documentService.getDownloadStatus({ id: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?._id, deleteflag: '2' }).subscribe((res: any) => {
           console.log(res, 'dsdsdsdsdsdsds');
           this.GetDownloadStatus = res[0];
         })
@@ -3521,57 +3603,75 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
 
   sendMail(j, code) {
-    let val = {
-      file: this.bankRef
+    var filterValue: any = {
+      Amount: [],
+      Number: [],
+      Documents: []
     }
-    this.documentService.exportEmail({ task: val }).subscribe(
-      (res2) => {
-        this.toastr.success('Message sent successfully!');
-        console.log("Email Sent");
-        if (this.Question4 == 'no') {
-          this.mailArray[j] = code
-          this.newTask[j] = {
-            tryNumbers: this.tryArray,
-            tryUrls: this.mainDoc2[j],
-            purposeCode: code,
-            bankRef: this.bankRef,
-            lodgeDone: 'yes',
-            ir: 'no',
-            br: 'yes'
+    this.SELECT_bankreferencenumber.forEach(element => {
+      const tempfilter = this.Blcopyref.filter((item: any) => item?.blcopyrefNumber.includes(element));
+      tempfilter.forEach((filterItem) => {
+        filterValue['Amount'].push(filterItem?.amount)
+        filterValue['Number'].push(filterItem?.blcopyrefNumber)
+        filterValue['Documents'].push(filterItem?.doc)
+      })
+    });
+    this.pdfmerge._multiple_merge_pdf(filterValue?.Documents).then((mergeres: any) => {
+      console.log('mergePdf_downloadEachFile', data);
+      let val = {
+        number: filterValue['Number'].toString(),
+        amount: filterValue['Amount'].toString(),
+        pdf: mergeres?.withoutBase64
+      }
+      console.log(val, 'sendMail')
+      this.documentService.SendMail_TextPdf({ task: val }).subscribe(
+        (res2) => {
+          this.toastr.success('Message sent successfully!');
+          console.log("Email Sent");
+          if (this.Question4 == 'no') {
+            this.mailArray[j] = code
+            this.newTask[j] = {
+              tryNumbers: this.tryArray,
+              tryUrls: this.mainDoc2[j],
+              purposeCode: code,
+              bankRef: this.bankRef,
+              lodgeDone: 'yes',
+              ir: 'no',
+              br: 'yes'
+            }
+            this.zToggle[j] = true;
+            let allTrue = true;
+            for (let value of this.zToggle) {
+              allTrue = allTrue && value;
+            }
+            if (allTrue) {
+              this.isDone = true;
+            }
           }
-          this.zToggle[j] = true;
-          let allTrue = true;
-          for (let value of this.zToggle) {
-            allTrue = allTrue && value;
+          else {
+            this.mailArray[j] = code
+            this.newTask[j] = {
+              purposeCode: code,
+              bankRef: this.bankRef,
+              lodgeDone: 'yes',
+              ir: 'no',
+              br: 'no'
+            }
+            this.zToggle[j] = true;
+            let allTrue = true;
+            for (let value of this.zToggle) {
+              allTrue = allTrue && value;
+            }
+            if (allTrue) {
+              this.isDone = true;
+            }
           }
-          if (allTrue) {
-            this.isDone = true;
-          }
-        }
-        else {
-          this.mailArray[j] = code
-          this.newTask[j] = {
-            purposeCode: code,
-            bankRef: this.bankRef,
-            lodgeDone: 'yes',
-            ir: 'no',
-            br: 'no'
-          }
-          this.zToggle[j] = true;
-          let allTrue = true;
-          for (let value of this.zToggle) {
-            allTrue = allTrue && value;
-          }
-          if (allTrue) {
-            this.isDone = true;
-          }
-        }
+        },
+        (err) => console.log("ERROR")
+      );
+    });
 
 
-        //this.router.navigate(["/home/advance-outward-remittance"]);
-      },
-      (err) => console.log("ERROR")
-    );
   }
   OLD_INPUT_VALUE: string = '';
   purposeClick(e, f, inputid: any) {
@@ -3725,25 +3825,30 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
 
   }
 
-  setradio(a) {
+  setradio(a, input, event) {
     console.log(a)
+    if (input == '') {
+      event.target.checked = false
+      alert('Please select pipo number');
+      return;
+    }
     this.bankToggle = true
     this.bankValue = a
     this.newBankArray = []
-    this.bankArray.forEach((value, index) => {
-      console.log('shshsh')
-      if (value.bank == a) {
-        this.newBankArray.push(value)
-      }
-
-
-    });
-
-    // for (let value of this.bankArray) {
-
-    // }
+    var bankformat:any=this.documentService?.getBankFormat()?.filter((item:any)=>item.value?.indexOf(this.bankValue)!=-1);
+    console.log(this.newBankArray,bankformat,'this.newBankArray')
+    if (bankformat.length!=0 && bankformat[0]?.urlpdf!='') {
+      this.bankArray.forEach((value, index) => {
+        console.log('shshsh')
+        if (value.bank == a) {
+          this.newBankArray.push(value)
+        }
+      });
+    }else{
+      event.target.checked = false
+      this.toastr.error("You don't have bank format,please select valid bank name!");
+    }
     console.log(a)
-
   }
 
   creditTo(a) {
@@ -3768,14 +3873,14 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
     console.log('line no. 2493', this.selectedPdfs);
 
-    this.modalService.open(content2, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
+    // this.modalService.open(content2, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then(
+    //   (result) => {
+    //     this.closeResult = `Closed with: ${result}`;
+    //   },
+    //   (reason) => {
+    //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    //   }
+    // );
   }
 
   addPdfToSelectedPdf(value, e) {
@@ -3836,9 +3941,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     };
     // download all the pdfs
     let downloadAllFiles = () => {
-      var promises = [];
+      var promises: any = [];
       for (var i = 0; i < urls.length; i++) {
-        if (urls[i]!='' && urls[i]!=undefined) {
+        if (urls[i] != '' && urls[i] != undefined) {
           promises.push(urls[i]);
         }
       }
@@ -4013,15 +4118,8 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }
   }
   ShippingBillnumberFil(searchvalue) {
-    if (searchvalue != null && searchvalue != undefined && searchvalue != 'BuyerName') {
-      this.ShippingbillNumberfilter = this.item1.filter((e) => {
-        var temp = (e['buyerName']);
-        if (temp != null && temp != undefined) {
-          if ((temp.toLowerCase()).indexOf(searchvalue.toLowerCase()) != -1) {
-            return e;
-          }
-        }
-      });
+    if (searchvalue != '' && searchvalue[0] != null && searchvalue[0] != undefined && searchvalue[0] != 'BuyerName') {
+      this.ShippingbillNumberfilter = this.item1.filter((e: any) => e?.buyerName[0]?.indexOf(searchvalue[0]) != -1);
     }
     else {
       this.ShippingbillNumberfilter = this.item1;
@@ -4029,10 +4127,18 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     console.log(this.ShippingbillNumberfilter, this.item1, 'ShippingbillNumberfilter');
 
   }
-
   ClickbankNumber(name: any, inputsetvalue: any, hiddenprops) {
-    this.SELECT_bankreferencenumber = name;
-    console.log(name, inputsetvalue, 'bnk_reff')
+    let indexof = this.SELECT_bankreferencenumber.indexOf(name);
+    if (indexof == -1) {
+      this.SELECT_bankreferencenumber.push(name);
+    } else {
+      this.SELECT_bankreferencenumber.splice(indexof, 1);
+    }
+    console.log(name, this.SELECT_bankreferencenumber, inputsetvalue, 'bnk_reff')
+    this.bankRef = name;
+  }
+  ArrayToString(array: any) {
+    return array.length != 0 ? array.toString() : '';
   }
   loadPopup(inputid, hidden_props) {
     var oldata: any = [];
@@ -4043,7 +4149,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     }).catch((error) => {
       this.Blcopyref = [];
     });
-    var timer = null;
+    var timer: any = null;
     $(inputid).keyup((e: any) => {
       clearTimeout(timer);
       timer = setTimeout(() => {
@@ -4057,7 +4163,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     });
   }
   loadPopupThirdParty(event, dropdownid) {
-    var timer = null;
+    var timer: any = null;
     clearTimeout(timer);
     $(dropdownid).css('display', 'none')
     timer = setTimeout(() => {
@@ -4130,45 +4236,211 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       return outputText;
     }
   }
-  SendApproval(Status: string, UniqueId: any, url: any) {
-    var temp_doc:any=[];
-    temp_doc[0]='data:application/pdf;base64,'+this.value;
-    temp_doc[1]=this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?.file;
-    for (let index = 0; index < this.mainDoc[0].length; index++) {
-     temp_doc.push(this.mainDoc[0][index]?.changingThisBreaksApplicationSecurity)
-    }
-    var approval_data: any = {
-      id: UniqueId,
-      tableName: 'PI_PO',
-      deleteflag: '-1',
-      userdetails: this.USER_DATA,
-      status: 'pending',
-      documents:temp_doc,
-      Types: 'downloadPDF',
-      TypeOfPage:'Transaction',
-      FileType: this.USER_DATA?.sideMenu
-    }
-    console.log(approval_data,this.mainDoc,'approval_data')
-    if (Status == '' || Status == null || Status == 'Rejected') {
-      this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
-        this.ngOnInit();
-        this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
-          console.log(res, 'dsdsdsdsdsdsds');
-          this.GetDownloadStatus = res[0];
-          if (res.length == 0) {
-            this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '2' }).subscribe((res: any) => {
-              console.log(res, 'dsdsdsdsdsdsds');
-              this.GetDownloadStatus = res[0];
-            })
-          }
+  SendApproval(Status: string, UniqueId: any, code: any) {
+    var temp_doc: any = [];
+    var approval_data: any = []
+    if (code == 'P0102') {
+      temp_doc[0] = this.P102_PDF;
+      temp_doc[1] = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
+      var filterValue: any = {
+        Amount: [],
+        Number: [],
+        Documents: []
+      }
+      var tempPipo: any = [];
+      var P102_DATA: any = [];
+      this.SELECT_bankreferencenumber.forEach(element => {
+        const tempfilter = this.Blcopyref.filter((item: any) => item?.blcopyrefNumber.includes(element));
+        tempfilter.forEach((filterItem) => {
+          P102_DATA.push(filterItem?._id);
+          filterValue['Amount'].push(filterItem?.amount)
+          filterValue['Number'].push(filterItem?.blcopyrefNumber)
+          filterValue['Documents'].push(filterItem?.doc)
+          tempPipo.push(filterItem?.pipo[0]?._id)
         })
       });
-    } else if (Status == 'pending') {
-      this.CustomConfirmDialogModel.YesNoDialogModel('Are you sure you want to delete this item?', 'Yes or No', (res: any) => {
-
-      });
+      approval_data = {
+        id: 'IRDR' + '_' + UniqueId,
+        tableName: 'Inward-Remitance-Dispoal-Realization',
+        deleteflag: '-1',
+        userdetails: this.USER_DATA,
+        status: 'pending',
+        documents: temp_doc,
+        Types: 'downloadPDF',
+        TypeOfPage: 'Transaction',
+        FileType: this.USER_DATA?.sideMenu,
+        SendMailData: filterValue,
+      }
+      var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
+      updatedata['documents'] = temp_doc;
+      updatedata['extradata'] = P102_DATA;
+      console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
+      if (Status == '' || Status == null || Status == 'Rejected') {
+        this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
+          var data: any = {
+            data: updatedata,
+            TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
+            fileType: 'Export',
+            UserDetails: approval_data?.id,
+            pipo: tempPipo,
+            UniqueId: approval_data?.id
+          }
+          this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+            console.log(res1, 'addExportBillLodgment')
+            let updatedData = {
+              "TransactionRef": [
+                res1._id,
+              ]
+            }
+            this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
+              console.log('king123');
+              console.log(data);
+              this.router.navigate(['/home/dashboardTask'])
+            }, (error) => {
+              console.log('error');
+            });
+          });
+        });
+      }
+    } else {
+      temp_doc[0] = 'data:application/pdf;base64,' + this.value;
+      temp_doc[1] = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
+      for (let index = 0; index < this.mainDoc[0].length; index++) {
+        temp_doc.push(this.mainDoc[0][index]?.changingThisBreaksApplicationSecurity)
+      }
+      approval_data = {
+        id: 'Inward_Remitance_Dispoal' + '_' + UniqueId,
+        tableName: 'Inward-Remitance-Dispoal',
+        deleteflag: '-1',
+        userdetails: this.USER_DATA,
+        status: 'pending',
+        documents: temp_doc,
+        Types: 'downloadPDF',
+        TypeOfPage: 'Transaction',
+        FileType: this.USER_DATA?.sideMenu,
+      }
+      var tempPipo: any = [];
+      for (let index = 0; index < this.selectPIPO.length; index++) {
+        var findPipo: any = this.item3.filter((item: any) => item?.pi_poNo.indexOf(this.selectPIPO[index]) != -1)
+        tempPipo.push(findPipo[0]?._id)
+      }
+      var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
+      updatedata['documents'] = temp_doc;
+      console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
+      if (Status == '' || Status == null || Status == 'Rejected') {
+        this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
+          var data: any = {
+            data: updatedata,
+            TypeTransaction: 'Inward-Remitance-Dispoal',
+            fileType: 'Export',
+            UserDetails: approval_data?.id,
+            pipo: tempPipo,
+            UniqueId: approval_data?.id
+          }
+          this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+            console.log(res1, 'addExportBillLodgment')
+            let updatedData = {
+              "TransactionRef": [
+                res1._id,
+              ]
+            }
+            this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
+              console.log('king123');
+              console.log(data);
+              this.router.navigate(['/home/dashboardTask'])
+            }, (error) => {
+              console.log('error');
+            });
+          });
+        });
+      }
     }
     console.log(UniqueId, approval_data, 'uiiiiiiiiiiiiii')
+  }
+
+  SendApproval_2(Status: string, UniqueId: any, code: any) {
+    var temp_doc: any = [];
+    var approval_data: any = [];
+    this.checkapproval('IRDR').then((res)=>{
+      if (code == 'P0102') {
+        temp_doc[0] = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
+        var filterValue: any = {
+          Amount: [],
+          Number: [],
+          Documents: []
+        }
+        var tempPipo: any = [];
+        var P102_DATA: any = [];
+        this.SELECT_bankreferencenumber.forEach(element => {
+          const tempfilter = this.Blcopyref.filter((item: any) => item?.blcopyrefNumber.includes(element));
+          tempfilter.forEach((filterItem) => {
+            P102_DATA.push(filterItem?._id);
+            filterValue['Amount'].push(filterItem?.amount)
+            filterValue['Number'].push(filterItem?.blcopyrefNumber)
+            filterValue['Documents'].push(filterItem?.doc)
+            tempPipo.push(filterItem?.pipo[0]?._id)
+          })
+        });
+        approval_data = {
+          id: 'IRDR' + '_' + UniqueId,
+          tableName: 'Inward-Remitance-Dispoal-Realization',
+          deleteflag: '-1',
+          userdetails: this.USER_DATA,
+          status: 'pending',
+          documents: temp_doc,
+          Types: 'downloadPDF',
+          TypeOfPage: 'Transaction',
+          FileType: this.USER_DATA?.sideMenu,
+          SendMailData: filterValue,
+        }
+        var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
+        updatedata['documents'] = temp_doc;
+        updatedata['extradata'] = P102_DATA;
+        console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, P102_DATA, 'approval_data')
+        if (Status == '' || Status == null || Status == 'Rejected') {
+          this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
+            var data: any = {
+              data: updatedata,
+              TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
+              fileType: 'Export',
+              UserDetails: approval_data?.id,
+              pipo: tempPipo,
+              UniqueId: approval_data?.id
+            }
+            console.log(UniqueId, approval_data, data, 'uiiiiiiiiiiiiii')
+            this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+              console.log(res1, 'addExportBillLodgment')
+              let updatedData = {
+                "TransactionRef": [
+                  res1._id,
+                ]
+              }
+              this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
+                console.log('king123');
+                console.log(data);
+                this.router.navigate(['/home/dashboardTask'])
+              }, (error) => {
+                console.log('error');
+              });
+            });
+          });
+        }
+      }
+    });
+
+  }
+  checkapproval(name: any) {
+    return new Promise((resolve, reject) => {
+      this.documentService.getApprovedData(name + '_' + this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?._id).subscribe((res: any) => {
+        console.log(res, 'dsdsdsdsdsdsds');
+        if (res.length == 0) {
+          resolve(true)
+        } else {
+          reject(false);
+          this.CustomConfirmDialogModel.Confirm_DialogModel("Apporval Status",'Already you send for Apporval');
+        }
+      })
+    })
   }
 }
 

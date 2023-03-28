@@ -45,7 +45,6 @@ import { HomeModule } from "./home/home.module";
 import { CheckboxComponentsComponent } from "./home/checkbox-components/checkbox-components.component";
 import {CustomConfirmDialogModelComponent} from './custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component'
 import {CustomConfirmDialogModelService} from './custom/custom-confirm-dialog-model/custom-confirm-dialog-model.service'
-import { CustomDropdownComponent } from "./custom/custom-dropdown/custom-dropdown.component";
 import { CustomdropdownservicesService } from "./custom/custom-dropdown/customdropdownservices.service";
 import { AprrovalPendingRejectTransactionsService } from './service/aprroval-pending-reject-transactions.service';
 import { AuthorizationComponent } from './Authorization/authorization/authorization.component';
@@ -55,6 +54,7 @@ import { MemberGuard } from "./service/RolePermission/Member/member.guard";
 import { AdminMemberGuard } from "./service/RolePermission/AdminMember/admin-member.guard";
 import {DateFormatService} from "./DateFormat/date-format.service"
 import { JoinPipePipe } from './join-pipe.pipe';
+import { ResetOTPComponent } from './forgot-password/reset-otp/reset-otp.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -84,9 +84,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         TwofactorauthComponent,
         CheckboxComponentsComponent,
         CustomConfirmDialogModelComponent,
-        CustomDropdownComponent,
         AuthorizationComponent,
         JoinPipePipe,
+        ResetOTPComponent,
     ],
     providers: [{ provide: AppConfig },
         WindowInformationService,
@@ -111,7 +111,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         DragDropModule,
         SharedModule,
         SignupModule,
-        HomeModule,
         BsDatepickerModule.forRoot(),
         SigninModule,
         AppRoutingModule,

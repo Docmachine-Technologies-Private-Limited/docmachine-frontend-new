@@ -1,21 +1,31 @@
-import { Component, Input, ViewChild } from '@angular/core';
-import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import {
+  AfterViewInit, Component, ElementRef, Input, OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import { DocumentService } from '../service/document.service';
+import { UserService } from '../service/user.service';
+import $ from 'jquery'
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-pdf-viewer',
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.scss']
 })
-export class PDFVIEWERComponent {
+export class PDFVIEWERComponent implements OnInit, AfterViewInit {
 
   title = 'angular-pdf-viewer-app';
   pdfSrc = "https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf";
 
-  @Input('src') src:any=[];
-  @Input('width') width:any='500px';
-  @Input('height') height:any='500px';
-  @Input('name') name:any='PDF Viewer';
-  @Input('downloadShow') downloadShow:boolean=true;
+  @Input('src') src: any = '';
+  @Input('width') width: any = '500px';
+  @Input('height') height: any = '500px';
+  @Input('name') name: any = 'PDF Viewer';
+  @Input('downloadShow') downloadShow: boolean = true;
+  @Input('base64_src') base64_src: any = '';
+  @Input('htmlload') htmlload: boolean = false;
 
   renderText = true;
   originalSize = false;
@@ -28,19 +38,52 @@ export class PDFVIEWERComponent {
   rotation = 0;
   zoom = 1;
   zoomScale = 'page-width';
-  zoomScales = ['page-width', 'page-fit', 'page-height'];
+  zoomScales = ['FitH', 'FitW'];
   pdfQuery = '';
   totalPages: number;
-
-  constructor(){
+  BASE_64_URL: any = '';
+  loader: boolean = false;
+  URL_IFRAME: any = '';
+  @ViewChild('iframe') iframe: ElementRef;
+  Sppinloader: boolean = true;
+  constructor(private userService: UserService,
+    public sanitizer: DomSanitizer,
+    public documentService: DocumentService) {
   }
-  zoomIn() {
-    this.zoom += 0.05;
+  SRC_UPDATE: any = '';
+  ngOnInit() {
+    if (this.base64_src != '') {
+      this.userService.mergePdf(this.base64_src).subscribe(
+        (res: any) => {
+          console.log('res', res);
+          res.arrayBuffer().then((data: any) => {
+            this.BASE_64_URL = data;
+          })
+        }, (err) => console.log('Failed to fetch the pdf'));
+    }
+    this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+    this.URL_IFRAME = this.sanitizer.bypassSecurityTrustResourceUrl(this.SRC_UPDATE);
+    this.Sppinloader = false
+  }
+  zoomIn(url: any) {
+    this.zoom += 100;
+    this.Sppinloader = true;
+    this.cleanup();
+    setTimeout(() => {
+      this.URL_IFRAME = this.bypassAndSanitize(url + '&zoom=' + this.zoom);
+      this.Sppinloader = false
+    }, 300);
   }
 
-  zoomOut() {
-    if (this.zoom > 0.05)
-      this.zoom -= 0.05;
+  zoomOut(url) {
+    if (this.zoom > 100)
+      this.zoom -= 100;
+    this.Sppinloader = true;
+    this.cleanup();
+    setTimeout(() => {
+      this.URL_IFRAME = this.bypassAndSanitize(url + '&zoom=' + this.zoom);
+      this.Sppinloader = false
+    }, 300);
   }
 
   rotateDoc() {
@@ -64,36 +107,75 @@ export class PDFVIEWERComponent {
   }
   pageRendered(event) {
     console.log('pageRendered', event);
+    // setTimeout(()=> {this.loader=false},1500)
   }
   textLayerRendered(event) {
     console.log('textLayerRendered', event);
   }
+
   onError(event) {
     console.error('onError', event);
   }
   onProgress(event) {
+    this.loader = true;
     console.log('onProgress', event);
   }
-  ngOnInit() {
 
-  }
-  downloadPdf(pdf){
-      let blob = new Blob([pdf], {
-        type: 'application/pdf'
-    });
+  downloadPdf(pdf) {
     var link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
+    link.href = pdf;
     link.download = 'samplePDFFile.pdf';
     link.click();
     window.URL.revokeObjectURL(link.href);
   }
-  printPdf(pdf){
-    var blob = new Blob([pdf], {type: 'application/pdf'});
-    const blobUrl = URL.createObjectURL(blob);
-      const iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      iframe.src = blobUrl;
-      document.body.appendChild(iframe);
-      iframe.contentWindow.print();
+  printPdf(pdf) {
+    const iframe: any = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = pdf;
+    document.body.appendChild(iframe);
+    iframe.contentWindow.print();
+  }
+  fitScreen(value: any) {
+    console.log(value)
+    this.Sppinloader = true;
+    this.cleanup();
+    setTimeout(() => {
+      this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE + '&view=' + value);
+      this.Sppinloader = false
+    }, 300);
+  }
+  Newsrc: SafeResourceUrl;
+  private _isLoading$ = new BehaviorSubject<boolean>(false);
+  get isLoading$() {
+    return this._isLoading$.asObservable();
+  }
+  cleanup() {
+    this.URL_IFRAME = null;
+  }
+
+  bypassAndSanitize(url): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+  ngAfterViewInit() {
+    this.RecusrionHiddenIframeElements();
+  }
+  interval: any = ''
+  RecusrionHiddenIframeElements() {
+    if (this.htmlload == true) {
+      $('#iframeId').css('display', 'none')
+      this.Sppinloader = true;
+      this.interval = setInterval(() => {
+        if ($('#iframeId').contents().find('.main_nave').length != 0) {
+          $('#iframeId').css('display', 'block')
+          $('#iframeId').contents().find('.main_nave').css({ display: 'none' });
+          $('#iframeId').contents().find('#sidebar').css({ display: 'none' });
+          $('#iframeId').contents().find('.scroll-bar-main').addClass("width-full");
+          $('#iframeId').contents().find('.scroll-bar-main').css('width', '100vw !important');
+          clearInterval(this.interval);
+          this.interval = '';
+          this.Sppinloader = false;
+        }
+      }, 1000)
+    }
   }
 }

@@ -11,11 +11,9 @@ import {
 
 import { DocumentService } from '../../service/document.service';
 import { DashBoardService } from '../../service/dashboard.service';
-
-import { ThemePalette } from '@angular/material/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
 import { UserService } from "../../service/user.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../service/window-information.service';
 
 
 @Component({
@@ -167,7 +165,7 @@ export class DashboardTaskComponent implements OnInit {
         // Import data..
         this.pipoCurrencyImportData = res?.pipo?.import?.currencyWise;
         this.pipoBuyerImportData = res?.pipo?.import?.buyerWise;
-        console.log("pipoBuyerImportData", this.pipoBuyerImportData)
+        console.log("pipoBuyerImportData", res,this.pipoBuyerImportData)
         this.pipoCurrencyImportData = this.pipoCurrencyImportData.filter(data => {
           if (data._id !== null && data._id !== '') {
             return data

@@ -31,18 +31,17 @@ export class SigninComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     let token = this.authGuard.loadFromLocalStorage();
     console.log(token,'tokenn....');
     if (token && this.authGuard.getLocalStorage('LOGIN_OTP')==true) {
       this.router.navigate(["/home/dashboardTask"]);
     }
-
     this.password = 'password';
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+    this.setTextAnimation(0.1,6,2,'ease','#ffffff',true);
     // this.documentService.loading=false
   }
 
@@ -112,6 +111,11 @@ export class SigninComponent implements OnInit {
           data => {
             if (this.data1['data'][0].emailId == 'docmachinetec@gmail.com' || this.data1['data'][0].emailId == 'tramsdocmachine@gmail.com' || this.data1['data'][0].emailId == 'fintech.innovations2021@gmail.com') {
               this.router.navigate(['/home/powerAdmin/pending'])
+              this.authGuard.setLocalStorage('LOGIN_OTP',true);
+              this.authGuard.setLocalStorage('PERMISSION',JSON.stringify({
+                emailId:this.data1['data'][0].emailId,
+                role:this.data['result']['role']
+              }))
             } else {
               if (this.data1['data'][0]['emailIdVerified']) {
                 if (this.data1['data'][0]['verified'] == 'yes') {
@@ -128,12 +132,12 @@ export class SigninComponent implements OnInit {
                     } else {
                       this.userService.role = this.data['result']['role'];
                       if (this.data1['data'][0].companyId) {
-                        this.router.navigate(['/home/dashboardTask'])
+                        this.router.navigate(['/home'])
                       } else {
                         if (this.data1['data'][0]?.role!='member') {
                           this.router.navigate(['createTeam']);
                         }else{
-                          this.router.navigate(['/home/dashboardTask'])
+                          this.router.navigate(['/home'])
                         }
                       }
                     }
@@ -185,4 +189,18 @@ export class SigninComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
+  setTextAnimation(delay, duration, strokeWidth, timingFunction, strokeColor,repeat) {
+    let paths = document.querySelectorAll("path");
+    let mode=repeat?'infinite':'forwards'
+    for (let i = 0; i < paths.length; i++) {
+        const path = paths[i];
+        const length = path.getTotalLength();
+        path.style["stroke-dashoffset"] = `${length}px`;
+        path.style["stroke-dasharray"] = `${length}px`;
+        path.style["stroke-width"] = `${strokeWidth}px`;
+        path.style["stroke"] = `${strokeColor}`;
+        path.style["animation"] = `${duration}s svg-text-anim ${mode} ${timingFunction}`;
+        path.style["animation-delay"] = `${i * delay}s`;
+    }
+}
 }

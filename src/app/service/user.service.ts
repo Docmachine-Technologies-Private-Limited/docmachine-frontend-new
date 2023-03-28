@@ -64,6 +64,14 @@ export class UserService {
       httpOptions
     );
   }
+  
+  public getUserbyEmail(loginData) {
+    const httpOptions = {
+      headers: new HttpHeaders({"Content-Type": "application/json"}),
+    };
+    console.log(httpOptions);
+    return this.http.post(`${this.api_base}/authenticate/getUserbyEmail`,loginData,httpOptions);
+  }
 
   public updatePsw(data, email) {
     return this.http.put(`${this.api_base}/authenticate/updatepsw`, {
@@ -247,6 +255,33 @@ export class UserService {
       },
       httpOptions,
     );
+  }
+  MultipleMergePdf(filename) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions: Object = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/pipo/multiplemergePdf`,{filename: filename}, httpOptions);
+  }
+  mergePdfPromise(filename) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions: Object = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+      responseType:"blob"
+    };
+    return new Promise((resolve,reject)=>{
+      this.http.post(`${this.api_base}/pipo/mergePdf`,{filename: filename},httpOptions).subscribe((res:any)=>resolve(res))
+    });
+  }
+  mergeListPdf(filename) {
+    this.loadFromLocalStorage();
+    const httpOptions: Object = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+      responseType:"arraybuffer"
+    };
+    return this.http.post(`${this.api_base}/pipo/doc_mergePdf`,{doclist: filename},httpOptions);
   }
   mergePdfChecking(filename) {
     this.loadFromLocalStorage();
@@ -432,7 +467,7 @@ export class UserService {
     return this.http
       .post(
         `${this.api_base}/bene/getByName`,
-        { beneName: name },
+        { benneName: name },
         httpOptions
       ).toPromise();
 
@@ -531,6 +566,11 @@ export class UserService {
       },
       httpOptions
     );
+  }
+  public QR_RESET(userdetails) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    return this.http.post(`${this.api_base}/authenticate/qrreset`,{userdetails:userdetails,});
   }
   public UpdateMemeber(id, member) {
     this.loadFromLocalStorage();
