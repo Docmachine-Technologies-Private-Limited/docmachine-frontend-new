@@ -157,7 +157,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   allBank: any = [];
   newBankArray: any = [];
   credit: any;
-  charge: any;
+  charge: any=[];
   value: any;
   newDone = false;
   bgColor = false
@@ -3835,14 +3835,19 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.bankToggle = true
     this.bankValue = a
     this.newBankArray = []
-    this.bankArray.forEach((value, index) => {
-      console.log('shshsh')
-      if (value.bank == a) {
-        this.newBankArray.push(value)
-      }
-
-
-    });
+    var bankformat:any=this.documentService?.getBankFormat()?.filter((item:any)=>item.value?.indexOf(this.bankValue)!=-1);
+    console.log(this.newBankArray,bankformat,'this.newBankArray')
+    if (bankformat.length!=0 && bankformat[0]?.urlpdf!='') {
+      this.bankArray.forEach((value, index) => {
+        console.log('shshsh')
+        if (value.bank == a) {
+          this.newBankArray.push(value)
+        }
+      });
+    }else{
+      event.target.checked = false
+      this.toastr.error("You don't have bank format,please select valid bank name!");
+    }
     console.log(a)
   }
 

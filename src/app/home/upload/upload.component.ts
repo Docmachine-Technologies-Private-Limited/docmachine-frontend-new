@@ -1242,13 +1242,13 @@ export class UploadComponent implements OnInit {
               if (this.documentType1 == 'export') {
                 updatedData = {
                   "sbRef": [
-                    res?.data?.upserted[0]?._id,
+                    e.form.value._id,
                   ],
                 }
               } else {
                 updatedData = {
                   "boeRef": [
-                    res?.data?.upserted[0]?._id,
+                    e.form.value._id,
                   ],
                 }
               }
@@ -1291,13 +1291,13 @@ export class UploadComponent implements OnInit {
               if (this.documentType1 == 'export') {
                 updatedData = {
                   "sbRef": [
-                   res?.data?.upserted[0]?._id,
+                  e.form.value._id,
                   ],
                 }
               } else {
                 updatedData = {
                   "boeRef": [
-                   res?.data?.upserted[0]?._id,
+                  e.form.value._id,
                   ],
                 }
               }
@@ -1835,6 +1835,8 @@ export class UploadComponent implements OnInit {
     e.form.value.file = this.documentType1;
     e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.CommercialNumber = this.CommercialNumber
+    e.form.value.sbNo =selectedShippingBill?.sbno;
+    e.form.value.sbRef =[selectedShippingBill?._id];
     console.log(e.form.value, selectedShippingBill, 'onSubmitblCopy');
     this.documentService.getInvoice_No({
       airwayBlCopyNumber: e.form.value.airwayBlCopyNumber
@@ -2135,6 +2137,8 @@ export class UploadComponent implements OnInit {
     e.form.value.file = this.documentType1;
     e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
+    e.form.value.sbNo =selectedShippingBill?.sbno;
+    e.form.value.sbRef =[selectedShippingBill?._id];
     console.log(e.form.value);
     this.documentService.getInvoice_No({
       packingListNumber: e.form.value.packingListNumber
@@ -2548,7 +2552,8 @@ export class UploadComponent implements OnInit {
           this.sbNo = true;
           console.log(this.res);
           this.res['leodate'] = this.date_format.formatDate(this.res['leodate'], '-')
-          this.res['sbdate'] = this.date_format.formatDate(this.date_format.removeAllUnderscore(this.res['sbdate']), '-')
+          // __—_—
+          this.res['sbdate'] = this.date_format.formatDate(this.date_format.removeUnadvantageText(this.date_format.removeAllUnderscore(this.res['sbdate']),'__—_—'), '-')
         } else if (args[1].data.boeNumber) {
           this.res = new BoeBill(args[1].data);
           this.boeNumber = true;
@@ -2568,7 +2573,7 @@ export class UploadComponent implements OnInit {
         this.sbNo = true;
         console.log(this.res);
         this.res['leodate'] = this.date_format.formatDate(this.res['leodate'], '-')
-        this.res['sbdate'] = this.date_format.formatDate(this.date_format.removeAllUnderscore(this.res['sbdate']), '-')
+        this.res['sbdate'] = this.date_format.formatDate(this.date_format.removeUnadvantageText(this.date_format.removeAllUnderscore(this.res['sbdate']),'__—_—'), '-')
       } else if (args[1].data.boeNumber) {
         console.log('Here data type', args[1].data);
         this.res = new BoeBill(args[1].data);

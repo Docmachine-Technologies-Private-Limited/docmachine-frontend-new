@@ -79,6 +79,7 @@
                                         <tr class="table-tr">
                                             <th scope="col" class="col-td-th-3"><span class="pl-3" style="margin-left: 9px;">DATE</span></th>
                                             <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">SB No.</th>
                                             <th scope="col" class="col-td-th-3">Commercial Invoice No.</th>
                                             <th scope="col" class="col-td-th-3">Buyer Name</th>
                                             <th scope="col" class="col-td-th-3">Action</th>
@@ -89,17 +90,17 @@
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
                                         <td class="col-td-th-3">{{ data.commercialDate }}</td>
                                             <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
+                                            <td class="col-td-th-3">{{data.sbNo}}</td>
                                             <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.commercialNumber}}
                                                 </div>
-
                                                 <div *ngIf="optionsVisibility[i]">
                                                     <input class="tblInput form-control" name="commercialNumber" type="text" placeholder="Commercial Number" [(ngModel)]="data.commercialNumber">
                                                 </div>
                                             </td>
+                                            
                                             <td class="col-td-th-3">{{data.buyerName}}</td>
-
                                             <td class="col-td-th-3">
                                                 <a (click)=" openCreditNote(content); viewCN(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                 <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>

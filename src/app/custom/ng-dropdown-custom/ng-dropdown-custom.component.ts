@@ -26,8 +26,11 @@ export class NgDropdownCustomComponent implements OnInit,ControlValueAccessor {
 @Input('value') value:any='';
 @Input('selectedItems') selectedItems:any='';
 @Output('NgModal') NgModal:any= new EventEmitter<any>();
+@Input('GET_ARRAY_VALUES') GET_ARRAY_VALUES:boolean=false;
+
 @Input('id') id:any='';
 @Input('disabled') disabled:any=false;
+arryavalue:any=[];
 LABLE_BIND_LIST:any=[];
 FILTER_DROPDOWN:any=[];
 constructor() { }
@@ -35,7 +38,8 @@ constructor() { }
     this.id=this.randomNameGenerator();
     this.LABLE_BIND_LIST[this.id.toString()]={
       bindLabel:this.bindLabel,
-      bindValue:this.bindValue
+      bindValue:this.bindValue,
+      GET_ARRAY_VALUES:this.GET_ARRAY_VALUES
     }
   }
   
@@ -48,16 +52,28 @@ constructor() { }
     $('.custom-dropdown').removeClass('custom-dropdown-active');
     if (this.LABLE_BIND_LIST[uq_id]?.bindValue!='') {
       $(inputid).val(val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
-      this.modelChanges.emit(this.LABLE_BIND_LIST[uq_id]?.bindValue!=''?val[this.LABLE_BIND_LIST[uq_id]?.bindValue]:val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
       this.NgModal.emit(this.LABLE_BIND_LIST[uq_id]?.bindValue!=''?val[this.LABLE_BIND_LIST[uq_id]?.bindValue]:val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
-      this.value=this.LABLE_BIND_LIST[uq_id]?.bindValue!=''?val[this.LABLE_BIND_LIST[uq_id]?.bindValue]:val;
       this.selectedItems=val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
+      this.arryavalue=val;
+      if (this.LABLE_BIND_LIST[uq_id]?.GET_ARRAY_VALUES==true) {
+        this.value=val;
+        this.modelChanges.emit(this.value);
+      }else{
+        this.value=this.LABLE_BIND_LIST[uq_id]?.bindValue!=''?val[this.LABLE_BIND_LIST[uq_id]?.bindValue]:val;
+        this.modelChanges.emit(this.LABLE_BIND_LIST[uq_id]?.bindValue!=''?val[this.LABLE_BIND_LIST[uq_id]?.bindValue]:val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
+      }
     } else if (this.LABLE_BIND_LIST[uq_id]?.bindValue=='') {
       $(inputid).val(val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
-      this.modelChanges.emit(val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
       this.NgModal.emit(val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
-      this.value=val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
       this.selectedItems=val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
+      this.arryavalue=val;
+      if (this.LABLE_BIND_LIST[uq_id]?.GET_ARRAY_VALUES==true) {
+        this.value=val;
+        this.modelChanges.emit(this.value);
+      }else{
+        this.value=val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
+        this.modelChanges.emit(val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
+      }
     }
   }
   filterdropdown($event:any,val:any){

@@ -433,14 +433,14 @@ export class NewDirectDispatchComponent implements OnInit {
           this.LocationData = data['data'][0]['location']
           var temp: any = []
           for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-            temp.push(data['data'][0]['bankDetails'][index]?.bank)
+            this.bankDetail.push({value:data['data'][0]['bankDetails'][index]?.bank,id:data['data'][0]['bankDetails'][index]?.BankUniqueId})
           }
-          var unique: any = temp.filter((value, index, array) => array.indexOf(value) === index);
-          for (let index = 0; index < unique.length; index++) {
-            this.bankDetail.push({
-              bank: unique[index]
-            })
-          }
+          // var unique: any = temp.filter((value, index, array) => array?.value.indexOf(value) === index);
+          // for (let index = 0; index < unique.length; index++) {
+          //   this.bankDetail.push({
+          //     bank: unique[index]
+          //   })
+          // }
         }, error => {
           console.log("error")
         });
@@ -979,75 +979,75 @@ export class NewDirectDispatchComponent implements OnInit {
         }
       }
       console.log('random Array', this.randomArray);
-      console.log('random Array', this.randomArray[0].creditNote);
+      console.log('random Array', this.randomArray[0]?.creditNote);
 
       this.sb = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['sb']
+        this.randomArray[0]?.sb
       );
 
       this.creditNote = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['creditNote']
+        this.randomArray[0]?.creditNote
       );
       console.log('////*********************Credit Note', this.creditNote);
 
       this.debitNote = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['debitNote']
+        this.randomArray[0]?.debitNote
       );
       console.log('////*********************debit Note', this.debitNote);
 
       this.advanceOutward = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['advanceOutward']
+        this.randomArray[0]?.advanceOutward
       );
       console.log('////*********************advanceOutward', this.advanceOutward);
 
       this.ebrc = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['EBRC']
+        this.randomArray[0]?.EBRC
       );
       console.log('////*********************Ebrc', this.ebrc);
 
       this.blcopyref = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['blcopyref']
+        this.randomArray[0]?.blcopyref
       );
 
       this.irAdvice = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['irAdvice']
+        this.randomArray[0]?.irAdvice
       );
 
       this.lcCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['lcCopy']
+        this.randomArray[0]?.lcCopy
       );
       console.log('****************Lc Copy', this.lcCopy);
 
       this.swiftCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['swiftCopy']
+        this.randomArray[0]?.swiftCopy
       );
 
       this.tryPartyAgreement = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['tryPartyAgreement']
+        this.randomArray[0]?.tryPartyAgreement
       );
 
       this.opinionReport = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['opinionReport']
+        this.randomArray[0]?.opinionReport
       );
 
       this.airwayBlCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['airwayBlcopy']
+        this.randomArray[0]?.airwayBlcopy
       );
 
       this.billOfExchange = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['billOfExchange']
+        this.randomArray[0]?.billOfExchange
       );
 
       this.commercial = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['commercial']
+        this.randomArray[0]?.commercial
       );
 
       this.destruction = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['destruction']
+        this.randomArray[0]?.destruction
       );
 
       this.packingList = this.sanitizer.bypassSecurityTrustResourceUrl(
-        this.randomArray[0]['packingList']
+        this.randomArray[0]?.packingList
       );
 
       console.log('Random Array', this.randomArray);
@@ -1253,75 +1253,75 @@ export class NewDirectDispatchComponent implements OnInit {
           }
         }
         console.log('random Array', this.randomArray);
-        console.log('random Array', this.randomArray[0].creditNote);
+        console.log('random Array', this.randomArray[0]?.creditNote);
 
         this.sb = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['sb']
+          this.randomArray[0]?.sb
         );
 
         this.creditNote = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['creditNote']
+          this.randomArray[0]?.creditNote
         );
         console.log('////*********************Credit Note', this.creditNote);
 
         this.debitNote = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['debitNote']
+          this.randomArray[0]?.debitNote
         );
         console.log('////*********************debit Note', this.debitNote);
 
         this.advanceOutward = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['advanceOutward']
+          this.randomArray[0]?.advanceOutward
         );
         console.log('////*********************advanceOutward', this.advanceOutward);
 
         this.ebrc = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['EBRC']
+          this.randomArray[0]?.EBRC
         );
         console.log('////*********************Ebrc', this.ebrc);
 
         this.blcopyref = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['blcopyref']
+          this.randomArray[0]?.blcopyref
         );
 
         this.irAdvice = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['irAdvice']
+          this.randomArray[0]?.irAdvice
         );
 
         this.lcCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['lcCopy']
+          this.randomArray[0]?.lcCopy
         );
         console.log('****************Lc Copy', this.lcCopy);
 
         this.swiftCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['swiftCopy']
+          this.randomArray[0]?.swiftCopy
         );
 
         this.tryPartyAgreement = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['tryPartyAgreement']
+          this.randomArray[0]?.tryPartyAgreement
         );
 
         this.opinionReport = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['opinionReport']
+          this.randomArray[0]?.opinionReport
         );
 
         this.airwayBlCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['airwayBlcopy']
+          this.randomArray[0]?.airwayBlcopy
         );
 
         this.billOfExchange = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['billOfExchange']
+          this.randomArray[0]?.billOfExchange
         );
 
         this.commercial = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['commercial']
+          this.randomArray[0]?.commercial
         );
 
         this.destruction = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['destruction']
+          this.randomArray[0]?.destruction
         );
 
         this.packingList = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.randomArray[0]['packingList']
+          this.randomArray[0]?.packingList
         );
 
         console.log('Random Array', this.randomArray);
@@ -1547,6 +1547,9 @@ export class NewDirectDispatchComponent implements OnInit {
 
   async fillForm(a, sbno: any) {
     return new Promise(async (resolve, reject) => {
+      var bankformat:any=this.documentService?.getBankFormat()?.filter((item:any)=>item.BankUniqueId.indexOf(this.bankValue)!=-1);
+      console.log(this.newBankArray,bankformat,'this.newBankArray')
+      if (bankformat.length!=0 && bankformat[0]?.urlpdf!='') {
       this.buyer1 = a.buyerName;
       this.completewords3 = this.buyer1;;
       this.devideContent3 = this.completewords3.length;
@@ -1564,7 +1567,7 @@ export class NewDirectDispatchComponent implements OnInit {
       console.log('Shailendra *************', this.buyName1);
       console.log('Shailendra *************', this.buyName2);
 
-      const formUrl = './../../assets/billUnder.pdf';
+      const formUrl = bankformat[0]?.urlpdf;
 
       const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
 
@@ -2612,6 +2615,9 @@ export class NewDirectDispatchComponent implements OnInit {
       this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
       this.newTask[0].generateDoc1 = x;
       resolve(x)
+    }else{
+      this.toastr.error("You don't have bank format!")
+    }
     })
   }
   ConvertNumberToWords(number: any) {
@@ -2878,10 +2884,10 @@ export class NewDirectDispatchComponent implements OnInit {
     this.bankToggle = a;
     this.bankValue = a;
     this.newBankArray = [];
+    console.log(this.bankArray,'this.bankArray')
     this.bankArray.forEach((value, index) => {
-      console.log('shshsh');
-      if (value.bank.indexOf(a) != -1) {
-        this.newBankArray.push(value);
+      if (value.BankUniqueId.includes(a)==true) {
+        this.newBankArray.push(value)
       }
     });
   }
@@ -2895,7 +2901,17 @@ export class NewDirectDispatchComponent implements OnInit {
   chargesTo(a) {
     var n = a.accNumber;
     this.charge = n.split('');
-    console.log(this.charge);
+    if (this.Lodgement['AgainstAdvanceReceipt']?.Hide == 'no') {
+      this.generateDoc1(this.ExportBillLodgement_Form)
+    } else {
+      if (Object.keys(this.advanceArray).length!=0) {
+        this.generateDoc1(this.ExportBillLodgement_Form)
+      }else{
+        this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',
+        `Please select a firx amount ${this.itemArray.length == 0 ? '& also select Sb no.' : ''}...`)
+      }
+    }
+   
   }
 
   private getDismissReason(reason: any): string {
@@ -3882,8 +3898,37 @@ export class NewDirectDispatchComponent implements OnInit {
     var temp: any = [];
     const id = event.tab.content.viewContainerRef.element.nativeElement.id;
     this.PDF_LIST = [];
+    console.log(this.newBankArray,bankformat,id,'this.newBankArray')
     var sbfilter = this.itemArray.filter((item: any) => item?._id == id);
-    this.fillForm(sbfilter[0], 'SB_' + sbfilter[0]?.sbno).then(async () => {
+    var bankformat:any=this.documentService?.getBankFormat()?.filter((item:any)=>item.BankUniqueId.indexOf(this.bankValue)!=-1);
+    if (bankformat.length!=0 && bankformat[0]?.urlpdf!='') {
+      this.fillForm(sbfilter[0], 'SB_' + sbfilter[0]?.sbno).then(async () => {
+        for (let index = 0; index < this.temp[id].length; index++) {
+          if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
+            temp.push(this.temp[id][index]?.pdf)
+            this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
+              console.log('downloadEachFile', res);
+              res.arrayBuffer().then((data: any) => {
+                var base64String = this._arrayBufferToBase64(data);
+                const x = 'data:application/pdf;base64,' + base64String;
+                this.PDF_LIST.push({
+                  pdf: x,
+                  name: this.temp[id][index]['name']
+                })
+                console.log('downloadEachFile', data);
+              });
+            });
+          }
+          if ((index + 1) == this.temp[id].length) {
+            var fitertemp: any = temp.filter(n => n)
+            await this.pdfmerge.mergeAllPDF(fitertemp).then((data: any) => {
+              console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
+              this.MERGE_ALL_PDF[0] = data.toString();
+            })
+          }
+        }
+      });
+    }else{
       for (let index = 0; index < this.temp[id].length; index++) {
         if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
           temp.push(this.temp[id][index]?.pdf)
@@ -3908,21 +3953,60 @@ export class NewDirectDispatchComponent implements OnInit {
           })
         }
       }
-    });
+    }
+    
 
   }
   async PreviewSlideToggle(event: any) {
     const id: any = event?.tab?.content?.viewContainerRef?.element?.nativeElement?.id != undefined ? event.tab.content.viewContainerRef.element.nativeElement.id : event;
     var tempfilter: any = this.itemArray.filter((item: any) => item?.sbno == id);
-
-    await this.fillForm(tempfilter[0], 'SB_' + id).then(async (fillpdf: any) => {
+    var bankformat:any=this.documentService?.getBankFormat()?.filter((item:any)=>item.BankUniqueId.indexOf(this.bankValue)!=-1);
+    if (bankformat.length!=0 && bankformat[0]?.urlpdf!='') {
+      await this.fillForm(tempfilter[0], 'SB_' + id).then(async (fillpdf: any) => {
+        this.PDF_LIST = [];
+        this.PREVIEWS_URL_LIST = [];
+        var tep: any = [];
+        var temppdflits: any = [];
+        tep[tempfilter[0]?._id] = []
+        tep[tempfilter[0]?._id][0] = fillpdf;
+        temppdflits[0] = fillpdf;
+        for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+          tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
+          if (this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+            temppdflits.push(this.temp[tempfilter[0]?._id][index]?.pdf)
+          }
+          if ((index + 1) == this.temp[tempfilter[0]?._id].length) {
+            var fitertemp: any = temppdflits.filter(n => n)
+            await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
+              this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
+              console.log(this.tp, this.temp_doc,merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+            });
+          }
+        }
+        for (let index = 0; index < this.advanceArray['SB_' + id].length; index++) {
+          const element: any = this.advanceArray['SB_' + id][index];
+          this.tp['firxNumber'].push(element?.irDataItem?.billNo)
+          this.tp['firxDate'].push(element?.irDataItem?.date)
+          this.tp['firxCurrency'].push(element?.irDataItem?.currency)
+          this.tp['firxAmount'].push(element?.irDataItem?.amount)
+          this.tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
+          this.tp['firxRecAmo'].push(0);
+          this.tp['id'].push(element?.irDataItem?._id)
+        }
+        this.temp_doc=[];
+        this.temp_doc[0] = this.value?.changingThisBreaksApplicationSecurity;
+        for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+          if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+            this.temp_doc.push(this.temp[tempfilter[0]?._id][index]?.pdf)
+          }
+        }
+      });
+    }else{
       this.PDF_LIST = [];
       this.PREVIEWS_URL_LIST = [];
       var tep: any = [];
       var temppdflits: any = [];
       tep[tempfilter[0]?._id] = []
-      tep[tempfilter[0]?._id][0] = fillpdf;
-      temppdflits[0] = fillpdf;
       for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
         tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
         if (this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
@@ -3953,12 +4037,12 @@ export class NewDirectDispatchComponent implements OnInit {
           this.temp_doc.push(this.temp[tempfilter[0]?._id][index]?.pdf)
         }
       }
-    });
+    }
   }
   SendApproval(Status: string, UniqueId: any, model: any) {
     if (UniqueId != null) {
       var approval_data: any=[];
-      if (this.documentService.MT102_SUBJECT?.file!='') {
+      if (this.documentService.MT102_SUBJECT!='' && this.documentService.MT102_SUBJECT!=null) {
         approval_data = {
           id: 'IRDR' + UniqueId,
           tableName: 'Inward-Remitance-Dispoal-Realization',
@@ -4077,22 +4161,50 @@ export class NewDirectDispatchComponent implements OnInit {
                   console.log('addExportBillLodgment', res1);
                 })
               }else{
-               var changevalue:any=this.documentService.MT102_SUBJECT;
-               changevalue['pipo']=pipo_id;
-               changevalue['SbRef']=this.itemArray;
-               changevalue['Url_Redirect']={file: 'export', document: 'blCopyref',SbRef:UniqueId,pipo:pipo_name.toString()};
-                var data: any = {
-                  data:changevalue,
-                  TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
-                  fileType: 'Export',
-                  UserDetails: approval_data?.id,
-                  pipo: pipo_id
+                if (this.documentService.MT102_SUBJECT!='' && this.documentService.MT102_SUBJECT!=null) {
+                     var changevalue:any=this.documentService.MT102_SUBJECT;
+                     changevalue['pipo']=pipo_id;
+                     changevalue['SbRef']=this.itemArray;
+                     changevalue['Url_Redirect']={file: 'export', document: 'blCopyref',SbRef:UniqueId,pipo:pipo_name.toString()};
+                      var data: any = {
+                        data:changevalue,
+                        TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
+                        fileType: 'Export',
+                        UserDetails: approval_data?.id,
+                        pipo: pipo_id
+                      }
+                      this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                          this.router.navigate(['/home/dashboardTask']);
+                          this.sessionstorage.remove('MT102')
+                        console.log('addExportBillLodgment', res1);
+                      })
+                }else{
+                  if (this.Lodgement['AgainstAdvanceReceipt']?.Hide== 'no') {
+                    var data: any = {
+                      data: this.ExportBillLodgement_Form.value,
+                      TypeTransaction: 'Export-Direct-Dispatch',
+                      fileType: 'Export',
+                      UserDetails: approval_data?.id,
+                      pipo: pipo_id
+                    }
+                    this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                      let updatedData = {
+                        "TransactionRef": [
+                          res1._id,
+                        ]
+                      }
+                      this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
+                        console.log('king123');
+                        console.log(data);
+                        this.router.navigate(['/home/dashboardTask']);
+                      }, (error) => {
+                        console.log('error');
+                      }
+                      );
+                      console.log('addExportBillLodgment', res1);
+                    })
+                  }
                 }
-                this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
-                    this.router.navigate(['/home/dashboardTask']);
-                    this.sessionstorage.remove('MT102')
-                  console.log('addExportBillLodgment', res1);
-                })
               }
             });
           }

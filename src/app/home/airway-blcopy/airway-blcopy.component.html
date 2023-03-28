@@ -82,6 +82,7 @@
                                         <tr class="table-tr">
                                             <th scope="col" class="col-td-th-3">DATE</th>
                                             <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">SB No.</th>
                                             <th scope="col" class="col-td-th-3">BL/Airway No.</th>
                                             <th scope="col" class="col-td-th-3">Buyer Name</th>
                                             <th scope="col" class="col-td-th-3">Action</th>
@@ -91,9 +92,8 @@
                                         <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"  [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')" >
                                             <td class="col-td-th-3">{{ data.airwayBlCopydate }}</td>
-
                                             <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
-
+                                            <td class="col-td-th-3"> {{ data?.sbNo }} </td>
                                             <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.airwayBlCopyNumber}}

@@ -64,9 +64,10 @@
                                     <app-ng-dropdown-custom
                                     placeHolderText="Select Bank Name"
                                     #Bank_Name
-                                    [items]="this.bankDetail" bindLabel="bank"
+                                    [items]="this.bankDetail" bindLabel="value"
                                     [ngModel]="form?.bank_name" formControlName="bank_name"
                                     (modelChanges)="form.bank_name=$event"
+                                    bindValue="id"
                                     [multiple]="false" (modelChanges)="setradio($event)">
                                    </app-ng-dropdown-custom>
                                   </div>
@@ -337,16 +338,16 @@
                                   </div>
 
                                   <div class="space_bottom"></div>
-                                  <div *ngIf='Bank_Name.value!=""' style="width:100%;">
+                                  <div *ngIf='Bank_Name.selectedItems!=""' style="width:100%;">
                                     <div class="col-md-12 col-sm-12 col-12">
-                                      Charges to {{Bank_Name.value}}*
+                                      Charges to {{Bank_Name.selectedItems}}*
                                       <div *ngFor='let value of newBankArray'
                                         style="display: flex; align-items: center;">
                                         <input style="flex-direction:row;" [value]="value"
                                         name="Charges_to_Bank" ngModel
                                           (click)="model1.option = value" [checked]="value === model1.option"
                                           type="radio" id="options1" class="circular_input1"
-                                          (click)="chargesTo(value);generateDoc1(this.ExportBillLodgement_Form)">
+                                          (click)="chargesTo(value);">
                                         <label style="flex-direction:row;" class="label1"
                                           for="male">{{value.bank}}-{{value.accType}}</label>
                                       </div>

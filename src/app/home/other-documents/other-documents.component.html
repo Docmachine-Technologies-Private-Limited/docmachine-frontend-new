@@ -95,6 +95,7 @@
                                     </th> -->
                                             <th scope="col" class="col-td-th-3"><span>DATE</span></th>
                                             <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">SB No.</th>
                                             <th scope="col" class="col-td-th-3">Packing List No.</th>
                                             <th scope="col" class="col-td-th-3">Packing List Amount</th>
                                             <th scope="col" class="col-td-th-3">Currency</th>
@@ -108,6 +109,7 @@
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
                                             <td class="col-td-th-3">{{ data.packingListDate }}</td>
                                             <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
+                                            <td class="col-td-th-3"> {{ data?.sbNo }} </td>
                                             <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.packingListNumber}}

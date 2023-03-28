@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Event, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -10,19 +10,19 @@ import { DocumentService } from './service/document.service';
 import { UserService } from './service/user.service';
 import * as jwt_decode from 'jwt-decode';
 import { StorageEncryptionDecryptionService } from './Storage/storage-encryption-decryption.service';
-
+import $ from 'jquery'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   userData: any = [];
   userActivity;
   userInactive: Subject<any> = new Subject();
   DelayTime: any = '';
-  WithoutAuthorization: any = ['verifyEmail', 'updatePassword', 'membersignin','signup','forgotpassword','resetOTP'];
+  WithoutAuthorization: any = ['verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP'];
   constructor(
     private translate: TranslateService,
     private router: Router, public doc: DocumentService,
@@ -31,9 +31,24 @@ export class AppComponent implements OnInit {
     public sessionstorage: StorageEncryptionDecryptionService,
     public authGuard: AuthGuard) {
     this.translate.setDefaultLang('en');
-    console.log('AppConfig', AppConfig);
+    console.log('AppConfig', AppConfig, window.close);
     this.DelayTime = new Date(new Date().getTime() + (1 * 60 * 1000));
     this.setTimeoutNew();
+    window.addEventListener("beforeunload", () => {
+      // this.authservice.logout();
+      // this.router.navigate(['/login'])
+    });
+    window.onbeforeunload = function (e) {
+      window.onunload = function (event:any) {
+      console.log(event,'sdfgdsjfhdsgfsdjgdjfdsgfdsjf')
+        window.localStorage.isMySessionActive = "false";
+      }
+      return undefined;
+    };
+
+    window.onload = function () {
+      window.localStorage.isMySessionActive = "true";
+    };
     router.events.subscribe((event: Event) => {
       console.log(event);
       if (event instanceof NavigationEnd) {
@@ -50,23 +65,6 @@ export class AppComponent implements OnInit {
         }
       }
     });
-
-    // router.events.forEach((event) => {
-    //   if (event instanceof NavigationStart) {
-    //     var splitUrl:any=event?.url?.split('/')
-    //     console.log(this.CheckIng(this.WithoutAuthorization,splitUrl[1]),splitUrl,'CheckIng')
-    //     if (this.CheckIng(this.WithoutAuthorization,splitUrl[1]).length!=0) {
-    //       console.log(event,event, 'ygffyfggfgffg')
-    //     } else {
-    //       let token = this.authGuard.loadFromLocalStorage();
-    //       if (token == null) {
-    //         this.authservice.logout();
-    //         this.router.navigate(['/login']);
-    //       }
-    //     }
-    //   }
-    // });
-
     this.userService.getUserDetail().then((user: any) => {
       this.userData = user?.result
       // let val: any = jwt_decode.default(token);
@@ -79,28 +77,11 @@ export class AppComponent implements OnInit {
     });
   }
   CheckIng(data: any, value: any) {
-    return data.filter((item: any) => item?.includes(value) == true)
+    return value != '' && value != undefined && value != null ? data.filter((item: any) => item?.includes(value) == true) : []
   }
 
   ngOnInit(): void {
-    // this.userService.getUserDetail().then((user: any) => {
-    //   this.userData = user?.result
-    //   console.log("AppComponentuserData", this.userData)
-    //   let token = this.authGuard.loadFromLocalStorage();
-    //   var session: any = JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
-    //   if (this.authGuard.getLocalStorage('PERMISSION') == null || this.userData?.role != session?.role && !token) {
-    //     this.authservice.logout();
-    //     this.router.navigate(['/login']);
-    //   }
-    // }).catch((reserror) => {
-    //   let token = this.authGuard.loadFromLocalStorage();
-    //   let val: any = jwt_decode.default(token);
-    //   if (reserror?.error == "Unauthorized") {
-    //     this.authservice.logout();
-    //     this.router.navigate(['/login']);
-    //   }
-    //   console.log("AppComponentuserData", reserror, val, Date.now(), token.exp * 1000)
-    // });
+
   };
   setTimeoutNew() {
     this.userActivity = setTimeout(() => {
@@ -138,5 +119,11 @@ export class AppComponent implements OnInit {
     console.log('restart active session 2hours')
     clearTimeout(this.userActivity);
     this.setTimeoutNew();
+  }
+  ngOnDestroy(): void {
+    confirm('dgsdfjgfjfdgfdsjhgsdfjfdsg')
+  }
+  doBeforeUnload(event) {
+    console.log(window.event, 'window.event')
   }
 }

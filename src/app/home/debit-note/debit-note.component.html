@@ -100,6 +100,7 @@
                                         <tr class="table-tr">
                                             <th scope="col" class="col-td-th-3">DATE</th>
                                             <th scope="col" class="col-td-th-3">PI/PO no.</th>
+                                            <th scope="col" class="col-td-th-3">CI no.</th>
                                             <th scope="col" class="col-td-th-3">D N No.</th>
                                             <th scope="col" class="col-td-th-3">D N Amount</th>
                                             <th scope="col" class="col-td-th-3">Currency</th>
@@ -113,6 +114,7 @@
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
                                             <td class="col-td-th-3">{{ data.date }}</td>
                                             <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
+                                            <td class="col-td-th-3"> {{ data?.commercialNumber }} </td>
                                             <td class="col-td-th-3">
                                                 <div >
                                                     {{data.debitNoteNumber}}

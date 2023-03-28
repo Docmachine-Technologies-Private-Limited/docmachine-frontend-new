@@ -586,21 +586,14 @@
     .container-login100 {
         width: 100%;
         min-height: 100vh;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -moz-box;
-        display: -ms-flexbox;
         display: flex;
-        flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-        padding: 15px;
-        background: #00000047;
+        gap: 50px;
     }
 
     .wrap-login100 {
-        width: 80%;
-        max-width: 435px;
+        width: 500px;
         background: #fff;
         border-radius: 10px;
         overflow: hidden;
@@ -611,17 +604,14 @@
         padding: 0;
         box-shadow: 0 0 13px 4px #847f7f7d;
         margin: auto;
-        margin-left: 10px;
     }
 
     /*------------------------------------------------------------------
   [  ]*/
     .login100-pic {
-        margin: 0 auto auto;
-        position: absolute;
-        right: 70px;
-        z-index: 99999999999999;
-        top: 150px;
+        height: 100vh;
+        margin: auto 0 auto auto;
+        display: flex;
     }
 
     /*------------------------------------------------------------------
@@ -10697,8 +10687,41 @@
         color: #57b846 !important;
     }
 
-    .container-login100 {
-        background-image: url(../../assets/LoginPage/images/Fluid-10s-1536px.svg);
-        background-position: 30% 80%;
+    .limiter {
+        background-image: linear-gradient(to right, #ffffff, #d4d3d8, #a9a9b3, #7f828f, #575c6d, #414a5a, #2b3847, #162734, #102129, #0d1b1f, #081416, #030b0b);;
+        width: 100%;
         background-repeat: no-repeat;
+        background-size: auto;
     }
+    
+    @-webkit-keyframes svg-text-anim {
+        40% {
+           stroke-dashoffset: 0;
+           fill: transparent;
+         }
+         60% {
+           stroke-dashoffset: 0;
+           fill: #ffffff;
+         }
+         100% {
+           stroke-dashoffset: 0;
+           fill: #ffffff;
+         }
+         
+     }
+     /* Most browsers */
+     @keyframes svg-text-anim {
+        40% {
+           stroke-dashoffset: 0;
+           fill: transparent;
+         }
+         60% {
+           stroke-dashoffset: 0;
+           fill: #ffffff;
+         }
+         100% {
+           stroke-dashoffset: 0;
+           fill: #ffffff;
+         }
+         
+     }

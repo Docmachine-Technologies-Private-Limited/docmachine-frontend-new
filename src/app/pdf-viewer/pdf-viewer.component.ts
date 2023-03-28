@@ -45,7 +45,7 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
   loader: boolean = false;
   URL_IFRAME: any = '';
   @ViewChild('iframe') iframe: ElementRef;
-  Sppinloader:boolean=true;
+  Sppinloader: boolean = true;
   constructor(private userService: UserService,
     public sanitizer: DomSanitizer,
     public documentService: DocumentService) {
@@ -63,27 +63,27 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
     }
     this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
     this.URL_IFRAME = this.sanitizer.bypassSecurityTrustResourceUrl(this.SRC_UPDATE);
-    this.Sppinloader=false
+    this.Sppinloader = false
   }
   zoomIn(url: any) {
     this.zoom += 100;
-    this.Sppinloader=true;
+    this.Sppinloader = true;
     this.cleanup();
-    this.URL_IFRAME = this.bypassAndSanitize(url + '&zoom=' + this.zoom);
     setTimeout(() => {
-      this.Sppinloader=false
-    }, 150);
+      this.URL_IFRAME = this.bypassAndSanitize(url + '&zoom=' + this.zoom);
+      this.Sppinloader = false
+    }, 300);
   }
 
   zoomOut(url) {
     if (this.zoom > 100)
       this.zoom -= 100;
-     this.Sppinloader=true;
+    this.Sppinloader = true;
     this.cleanup();
-    this.URL_IFRAME = this.bypassAndSanitize(url + '&zoom=' + this.zoom);
     setTimeout(() => {
-      this.Sppinloader=false
-    }, 150);
+      this.URL_IFRAME = this.bypassAndSanitize(url + '&zoom=' + this.zoom);
+      this.Sppinloader = false
+    }, 300);
   }
 
   rotateDoc() {
@@ -137,12 +137,12 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
   }
   fitScreen(value: any) {
     console.log(value)
-     this.Sppinloader=true;
+    this.Sppinloader = true;
     this.cleanup();
-    this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE + '&view=' + value);
     setTimeout(() => {
-      this.Sppinloader=false
-    }, 150);
+      this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE + '&view=' + value);
+      this.Sppinloader = false
+    }, 300);
   }
   Newsrc: SafeResourceUrl;
   private _isLoading$ = new BehaviorSubject<boolean>(false);
@@ -163,20 +163,19 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
   RecusrionHiddenIframeElements() {
     if (this.htmlload == true) {
       $('#iframeId').css('display', 'none')
-      this.Sppinloader=true;
+      this.Sppinloader = true;
       this.interval = setInterval(() => {
-        if ($('#iframeId').contents().find('.main_nave').length!=0) {
+        if ($('#iframeId').contents().find('.main_nave').length != 0) {
           $('#iframeId').css('display', 'block')
           $('#iframeId').contents().find('.main_nave').css({ display: 'none' });
           $('#iframeId').contents().find('#sidebar').css({ display: 'none' });
           $('#iframeId').contents().find('.scroll-bar-main').addClass("width-full");
           $('#iframeId').contents().find('.scroll-bar-main').css('width', '100vw !important');
           clearInterval(this.interval);
-          this.interval='';
-          this.Sppinloader=false;
+          this.interval = '';
+          this.Sppinloader = false;
         }
-        // console.log($('#iframeId').contents().find('.main_nave'),'sdfdsfdsfsdfdsfds')
-      },1000)
+      }, 1000)
     }
   }
 }
