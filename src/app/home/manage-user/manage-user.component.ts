@@ -26,7 +26,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   item1: any = [];
   authToken: any;
   headers: any;
-  img: any;
+  img: any = '';
   toggle = false;
   submitted = false;
 
@@ -35,16 +35,10 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
 
   FORM_BUILDER: any = {
     email: "",
-    imageUrl: "",
     name: ""
   }
   EDIT_FORM_BUILDER: any = {
-    name: '',
-    UnderSubscriptionCheckBox: '',
-    imageUrl: '',
-    UnderSubscription: '',
-    Role_Type: '',
-    RoleCheckbox: ''
+    name: ''
   }
   SELECTED_EDIT_DATA: any = [];
   SELECTED_INDEX = 0;
@@ -59,18 +53,18 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     '3': 'Maker checker and Approver'
   }
   LIST_ROLE = {
-    'Without maker/checker':1,
-    'Maker and Approver':2,
-    'Maker checker and Approver':3
+    'Without maker/checker': 1,
+    'Maker and Approver': 2,
+    'Maker checker and Approver': 3
   }
   constructor(@Inject(PLATFORM_ID) public platformId,
-    private route?: ActivatedRoute, private formBuilder?: FormBuilder,
+    public route?: ActivatedRoute, public formBuilder?: FormBuilder,
     public userService?: UserService, public appconfig?: AppConfig,
-    private sanitizer?: DomSanitizer, private toastr?: ToastrService,
-    private elRef?: ElementRef,
+    public sanitizer?: DomSanitizer, public toastr?: ToastrService,
+    public elRef?: ElementRef,
     public wininfo?: WindowInformationService) {
     this.loadFromLocalStorage()
-    this.api_base = appconfig.apiUrl;
+    this.api_base = appconfig?.apiUrl;
     console.log(this.api_base)
     console.log(this.authToken)
     this.headers = {
@@ -97,21 +91,19 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
+    this.wininfo?.set_controller_of_width(270, '.content-wrap')
     this.toggle = false;
-    this.id = this.route.snapshot.queryParams['id'];
+    this.id = this.route?.snapshot.queryParams['id'];
     console.log(this.id)
-    this.userData = await this.userService.getUserDetail();
+    this.userData = await this.userService?.getUserDetail();
     // this.userData = this.userData.result
     console.log("userData", this.userData)
-    this.memeberForm = this.formBuilder.group({
+    this.memeberForm = this.formBuilder?.group({
       name: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-      UnderSubscription: ['Select Subscription', [Validators.required]],
-      UnderSubscriptionCheckBox: [false, [Validators.requiredTrue]],
+      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]]
     });
 
-    this.userService.getMemeber(this.id)
+    this.userService?.getMemeber(this.id)
       .subscribe(
         data => {
           console.log("king123")
@@ -125,7 +117,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   }
 
   URL_CREATE(url) {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    return this.sanitizer?.bypassSecurityTrustResourceUrl(url);
   }
   public onUploadInit(args: any): void {
     console.log('onUploadInit:', args);
@@ -139,62 +131,84 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     //this.uploading = false;
     console.log(args)
     console.log(args[1].data)
-    this.img = args[1].data
     this.toggle = true;
   }
   OpenPopup(formmodel: any) {
     if (this.userData['result']['Login_Limit'] > this.item1.length) {
+      this.img ='';
       formmodel.style.display = 'block'
     } else {
       formmodel.style.display = 'none';
-      this.toastr.error('Yours add member limit exceeded...');
+      this.toastr?.error('Yours add member limit exceeded...');
     }
+  }
+  CONSOLE(value: any) {
+    const file = value[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      console.log(reader.result);
+      this.img = reader.result
+    };
+    console.log(value, 'console')
   }
   EditData(temp: any, data: any) {
     this.SELECTED_INDEX = 1;
-    this.SELECTED_EDIT_DATA = this.item1[data['index']];
     console.log(this.SELECTED_EDIT_DATA, 'sdhfjsdfsdfsdf');
-    this.userService.getUserDetailById(this.SELECTED_EDIT_DATA['email']).then((data) => {
-      this.MEMBER_DATA = data;
+    this.MEMBER_DATA=[]
+    this.userService?.getEamilByIdUserMemberDetails(this.item1[data['index']]['email']).then((data: any) => {
+      this.MEMBER_DATA = data?.UserDetails!=null?data?.UserDetails:data?.MemberDetails;
+      this.SELECTED_EDIT_DATA =data?.MemberDetails
+      this.img=data?.MemberDetails?.imageUrl
       this.EDIT_FORM_BUILDER = {
-        name: data['fullName'],
-        UnderSubscriptionCheckBox: data['RoleCheckbox'],
-        imageUrl: this.SELECTED_EDIT_DATA['imageUrl'],
-        UnderSubscription: data['Subscription'],
-        Role_Type: data['Role_Type'],
-        RoleCheckbox: data['RoleCheckbox']
+        name: data?.MemberDetails?.name
       }
       console.log(data, 'getUserDetailByIdgetUserDetailById');
     })
   }
+  cleardata() {
+    this.FORM_BUILDER=[]
+  }
   onSubmit(formmodel: any) {
     this.submitted = true;
-    this.FORM_BUILDER['imageUrl'] = this.img;
-    this.FORM_BUILDER['UnderSubscriptionCheckBox'] = this.ROLE_TYPES;
-    this.FORM_BUILDER['Subscription'] = this.FORM_BUILDER['UnderSubscription'];
     console.log(this.FORM_BUILDER)
     this.findEmptyObject(this.FORM_BUILDER, [undefined, null, '', 'Select Subscription']).then((value: any) => {
       if (value == true) {
+        this.FORM_BUILDER['UnderSubscriptionCheckBox'] = this.ROLE_TYPES != '' ? this.ROLE_TYPES : 'NA'
+        this.FORM_BUILDER['Subscription'] = this.FORM_BUILDER['UnderSubscription'];
+        this.FORM_BUILDER['imageUrl'] = this.img;
         console.log(this.FORM_BUILDER, 'this.memeberForm')
-        this.userService.addMemeber(this.id, this.FORM_BUILDER)
-          .subscribe(
-            data => {
-              console.log("king123")
-              console.log(data)
-              if (data['data'] != undefined && data['data'] != null) {
-                formmodel.style.display = 'none'
-                this.toastr.success('Added Successfully data...');
-                this.ngOnInit()
-              } else {
-                this.toastr.error(data['message']);
-              }
-            },
-            error => {
-              console.log("error")
-            });
+        this.userService?.getEamilByIdUserMember(this.FORM_BUILDER['email']).then((emailvalidation: any) => {
+          console.log(emailvalidation, 'sdshdfjdsfhsdgfsdhfgjsd')
+          if (emailvalidation.length == 0) {
+            this.userService?.addMemeber(this.id, this.FORM_BUILDER)
+              .subscribe(
+                data => {
+                  console.log("king123")
+                  console.log(data)
+                  if (data['data'] != undefined && data['data'] != null) {
+                    formmodel.style.display = 'none'
+                    this.toastr?.success('Added Successfully data...');
+                    this.ngOnInit()
+                  } else {
+                    this.toastr?.error(data['message']);
+                  }
+                },
+                error => {
+                  console.log("error")
+                });
+          } else {
+            this.toastr?.error('This email id already exit please used different email id.');
+          }
+
+        },
+          error => {
+            console.log("error")
+          });
+
       } else {
         for (const key in value) {
-          this.toastr.error(value[key]);
+          this.toastr?.error(value[key]);
         }
       }
     });
@@ -206,7 +220,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   }
 
   get f(): { [key: string]: AbstractControl } {
-    return this.memeberForm.controls;
+    return this.memeberForm?.controls as any;
   }
   ngAfterViewInit() {
   }
@@ -240,7 +254,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   }
 
   deleteuser(data: any) {
-    this.userService.deleteUser_Role(data['email']).subscribe((res: any) => {
+    this.userService?.deleteUser_Role(data['email']).subscribe((res: any) => {
       if (res['status'] == true) {
         this.ngOnInit()
       }
@@ -249,51 +263,42 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   }
   onEditSubmit(formmodel: any) {
     this.submitted = true;
-    this.EDIT_FORM_BUILDER['imageUrl'] = this.img != undefined ? this.img : this.SELECTED_EDIT_DATA['imageUrl'];
-    this.EDIT_FORM_BUILDER['Role_Type'] = this.ROLE_TYPES != '' ? this.ROLE_TYPES : this.userData?.result['Role_Type'];
-    this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox'] = this.ROLE_TYPES != '' ? this.ROLE_TYPES : this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox'];
     console.log(this.EDIT_FORM_BUILDER)
     this.findEmptyObject(this.EDIT_FORM_BUILDER, [undefined, null, '', 'Select Subscription']).then((value: any) => {
       if (value == true) {
+        this.EDIT_FORM_BUILDER['UnderSubscription'] = this.EDIT_FORM_BUILDER['UnderSubscription'] != undefined ? this.EDIT_FORM_BUILDER['UnderSubscription'] : this.SELECTED_EDIT_DATA['Subscription'];
+        this.EDIT_FORM_BUILDER['imageUrl'] = this.img != undefined ? this.img : this.SELECTED_EDIT_DATA['imageUrl'];
+        this.EDIT_FORM_BUILDER['Role_Type'] = this.ROLE_TYPES != '' ? this.ROLE_TYPES : this.userData?.result['Role_Type'];
+        this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox'] = this.ROLE_TYPES != '' ? this.ROLE_TYPES : this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox'];
         console.log(this.EDIT_FORM_BUILDER, 'this.memeberForm')
-        this.userService.UpdateUserMemeber(this.SELECTED_EDIT_DATA['email'], this.EDIT_FORM_BUILDER)
+        this.userService?.UpdateUserMemeber(this.SELECTED_EDIT_DATA['email'], this.EDIT_FORM_BUILDER)
           .subscribe(
             data => {
               console.log(data, 'UpdateMemeber')
               if (data['data'] != undefined && data['data'] != null) {
                 formmodel.style.display = 'none'
-                this.toastr.success('Successfully Update data...');
+                this.toastr?.success('Successfully Update data...');
                 this.ngOnInit()
                 this.SELECTED_EDIT_DATA = [];
                 this.SELECTED_INDEX = 0;
                 this.EDIT_FORM_BUILDER = {
                   name: '',
-                  UnderSubscriptionCheckBox: '',
-                  imageUrl: '',
-                  UnderSubscription: '',
-                  Role_Type: '',
-                  RoleCheckbox: ''
                 }
-                this.userService.getMemeber(this.id).subscribe(data => {
-                    console.log("king123")
-                    console.log(data)
-                    this.item1 = data['data']
-                    console.log(this.item1['length'])
-                  },
+                this.userService?.getMemeber(this.id).subscribe(data => {
+                  console.log("king123")
+                  console.log(data)
+                  this.item1 = data['data']
+                  console.log(this.item1['length'])
+                },
                   error => {
                     console.log("error")
                   });
               } else {
-                this.toastr.error(data['message']);
+                this.toastr?.error(data['message']);
                 this.SELECTED_EDIT_DATA = [];
                 this.SELECTED_INDEX = 0;
                 this.EDIT_FORM_BUILDER = {
-                  name: '',
-                  UnderSubscriptionCheckBox: '',
-                  imageUrl: '',
-                  UnderSubscription: '',
-                  Role_Type: '',
-                  RoleCheckbox: ''
+                  name: ''
                 }
               }
             },
@@ -302,17 +307,12 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
               this.SELECTED_EDIT_DATA = [];
               this.SELECTED_INDEX = 0;
               this.EDIT_FORM_BUILDER = {
-                name: '',
-                UnderSubscriptionCheckBox: '',
-                imageUrl: '',
-                UnderSubscription: '',
-                Role_Type: '',
-                RoleCheckbox: ''
+                name: ''
               }
             });
       } else {
         for (const key in value) {
-          this.toastr.error(value[key]);
+          this.toastr?.error(value[key]);
         }
       }
     });

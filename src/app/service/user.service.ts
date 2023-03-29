@@ -671,6 +671,17 @@ export class UserService {
     };
     return this.http.post(`${this.api_base}/user/getprofilebyId`,{email:id}, httpOptions).toPromise();
   }
+  getEamilByIdUserMember(id:any) {
+    return this.http.post(`${this.api_base}/authenticate/getEamilByIdUserMember`,{email:id}).toPromise();
+  }
+  getEamilByIdUserMemberDetails(id:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/user/getEamilByIdUserMember`,{email:id},httpOptions).toPromise();
+  }
  Url_Change_Authorization(name_url:any){
   this.router.navigate([name_url]);
  }

@@ -1098,8 +1098,8 @@
                   <button class="opt" style="float:right" (click)='generateDoc(code,j)'> Generate Document </button>
                 </div>
                 <div *ngIf='code === c && generatePurpose[j] == code'>
-                  <div *ngIf="value!='' && value!=undefined">
-                    <div id="mainId" class="bc" *ngIf="donePurpose[j] != code">
+                  <div >
+                    <div id="mainId" class="bc" *ngIf="donePurpose[j] != code && value!='' && value!=undefined">
                       <app-pdf-viewer [downloadShow]="this.GetDownloadStatus?.status=='Approved'?true : false"
                         name="Documents" [src]="'data:application/pdf;base64,'+value" width="700px"
                         height="500px"></app-pdf-viewer>
@@ -1129,7 +1129,7 @@
                         style="margin-right: 10px; width:200px"
                         (click)="openToPdf(containerpopup.style.display='block',this.PREVIWES_URL)">Send Mail /
                         Download</button>
-                      <button *ngIf='!newDone' class="button1" style="margin-right: 10px; margin-bottom: 30px;"
+                      <button *ngIf='!newDone' id="ProceedPreview" class="button1" style="margin-right: 10px; margin-bottom: 30px;"
                         (click)="showPreview(code)">Proceed to Preview</button>
                     </div>
                   </div>

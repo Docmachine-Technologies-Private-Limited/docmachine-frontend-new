@@ -157,7 +157,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   allBank: any = [];
   newBankArray: any = [];
   credit: any;
-  charge: any=[];
+  charge: any = [];
   value: any;
   newDone = false;
   bgColor = false
@@ -1963,33 +1963,40 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
         height: 16, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
       })
 
-      const pdfBytes = await pdfDoc.save()
-      console.log(pdfDoc, "pdf")
-      console.log(pdfBytes, "pdfBytes")
-      console.log(form, "form")
-      var base64String = this._arrayBufferToBase64(pdfBytes)
+      var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.value?.indexOf(this.bankValue) != -1);
+      console.log(this.newBankArray, bankformat, 'this.newBankArray')
+      if (bankformat.length != 0 && bankformat[0]?.urlpdf != '') {
+        const pdfBytes = await pdfDoc.save()
+        console.log(pdfDoc, "pdf")
+        console.log(pdfBytes, "pdfBytes")
+        console.log(form, "form")
+        var base64String = this._arrayBufferToBase64(pdfBytes)
 
-      const x = 'data:application/pdf;base64,' + base64String;
+        const x = 'data:application/pdf;base64,' + base64String;
 
-      const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
-      console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
-      this.formerge = x
-      this.value = base64String;
-      this.newTask[0].generateDoc1 = x
+        const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
+        console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
+        this.formerge = x
+        this.value = base64String;
+        this.newTask[0].generateDoc1 = x
 
-      const mergedPdf = await PDFDocument.create();
-      const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-      copiedPages.forEach((page) => {
-        mergedPdf.addPage(page);
-      });
-      const mergedPdfFile = await mergedPdf.save();
-      const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-      await this.disabledTextbox(pdfDoc)
-      const mergedPdfFileload = await mergedPdfload.save();
-      var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-      const x1 = 'data:application/pdf;base64,' + base64String1;
-      this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
-      console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+        const mergedPdf = await PDFDocument.create();
+        const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+        copiedPages.forEach((page) => {
+          mergedPdf.addPage(page);
+        });
+        const mergedPdfFile = await mergedPdf.save();
+        const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+        await this.disabledTextbox(pdfDoc)
+        const mergedPdfFileload = await mergedPdfload.save();
+        var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
+        const x1 = 'data:application/pdf;base64,' + base64String1;
+        this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
+        console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+      } else {
+        this.newDone = false;
+        $('#ProceedPreview').click()
+      }
     } else {
       this.uploadingData(data_temp, a)
     }
@@ -3573,8 +3580,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.bgColor = true
     this.newDone = true
     this.ARRAY_BUFFER_PDF = [];
-    this.ARRAY_BUFFER_PDF[0] = this.formerge;
-    this.ARRAY_BUFFER_PDF[1] = this.MT103_URL;
+    if (this.formerge != null && this.formerge != '') {
+      this.ARRAY_BUFFER_PDF[0] = this.formerge;
+      this.ARRAY_BUFFER_PDF[1] = this.MT103_URL;
+    } else {
+      this.ARRAY_BUFFER_PDF[0] = this.MT103_URL;
+    }
     for (let index = 0; index < this.STORE_URL.length; index++) {
       this.userService.mergePdf(this.STORE_URL[index]).subscribe((res: any) => {
         res.arrayBuffer().then((data: any) => {
@@ -3835,17 +3846,22 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.bankToggle = true
     this.bankValue = a
     this.newBankArray = []
-    var bankformat:any=this.documentService?.getBankFormat()?.filter((item:any)=>item.value?.indexOf(this.bankValue)!=-1);
-    console.log(this.newBankArray,bankformat,'this.newBankArray')
-    if (bankformat.length!=0 && bankformat[0]?.urlpdf!='') {
+    var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.value?.indexOf(this.bankValue) != -1);
+    console.log(this.newBankArray, bankformat, 'this.newBankArray')
+    if (bankformat.length != 0 && bankformat[0]?.urlpdf != '') {
       this.bankArray.forEach((value, index) => {
         console.log('shshsh')
         if (value.bank == a) {
           this.newBankArray.push(value)
         }
       });
-    }else{
-      event.target.checked = false
+    } else {
+      this.bankArray.forEach((value, index) => {
+        console.log('shshsh')
+        if (value.bank == a) {
+          this.newBankArray.push(value)
+        }
+      });
       this.toastr.error("You don't have bank format,please select valid bank name!");
     }
     console.log(a)
@@ -4303,8 +4319,12 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
         });
       }
     } else {
-      temp_doc[0] = 'data:application/pdf;base64,' + this.value;
-      temp_doc[1] = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
+      if (this.value != '' && this.value != null) {
+        temp_doc[0] = 'data:application/pdf;base64,' + this.value;
+        temp_doc[1] = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
+      } else {
+        temp_doc[0] = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
+      }
       for (let index = 0; index < this.mainDoc[0].length; index++) {
         temp_doc.push(this.mainDoc[0][index]?.changingThisBreaksApplicationSecurity)
       }
@@ -4361,7 +4381,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
   SendApproval_2(Status: string, UniqueId: any, code: any) {
     var temp_doc: any = [];
     var approval_data: any = [];
-    this.checkapproval('IRDR').then((res)=>{
+    this.checkapproval('IRDR').then((res) => {
       if (code == 'P0102') {
         temp_doc[0] = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
         var filterValue: any = {
@@ -4437,11 +4457,13 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           resolve(true)
         } else {
           reject(false);
-          this.CustomConfirmDialogModel.Confirm_DialogModel("Apporval Status",'Already you send for Apporval');
+          this.CustomConfirmDialogModel.Confirm_DialogModel("Apporval Status", 'Already you send for Apporval');
         }
       })
     })
   }
+
+
 }
 
 

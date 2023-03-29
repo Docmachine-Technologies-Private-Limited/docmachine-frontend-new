@@ -28,6 +28,10 @@
                             <div class="row">
                                 <div class="col-md-2 col-sm-2 col-12">
                                     <div class="dy_images_new">
+                                        <div *ngIf="data.imageUrl">
+                                            <img *ngIf="data.imageUrl" class="img2" src="{{data.imageUrl}}"
+                                                [alt]="data.name+' \nimage not found...'">
+                                        </div>
                                         <img *ngIf="data.imageUrl" class="img2" src="{{data.imageUrl}}"
                                             [alt]="data.name+' \nimage not found...'">
                                         <img *ngIf="!data.imageUrl" class="img4" src="./assets/ic_mail-2.png">
@@ -36,7 +40,7 @@
                                 <div class="col-md-7 col-sm-7 col-12 padding-left0">
                                     <div class="content1 lefttext_move">
                                         <h6 class="name">{{data?.name}} <span
-                                                class="role_based">{{data?.UnderSubscriptionCheckBox}}</span></h6>
+                                                class="role_based" *ngIf="data?.UnderSubscriptionCheckBox">{{data?.UnderSubscriptionCheckBox}}</span></h6>
                                         <h6 class="email">{{data?.email}}</h6>
                                         <label class="email">Subscription : <span
                                                 class="subcolor">{{data?.Subscription}}</span></label>
@@ -46,7 +50,7 @@
                                     <div class="row pb-3 flex-display new_editi_buttons">
                                         <div class="bottom"
                                             (click)="EditData(Editformmodel.style.display='block',{id:data['_id'],index:i})">
-                                            <i aria-hidden="true" class="fa fa-eye"></i>
+                                            <i aria-hidden="true" class="fas fa-edit"></i>
                                         </div>
                                         <div class="bottom bottom1" (click)="deleteuser(data)">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
@@ -71,32 +75,26 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add New Member</h5>
                     <button type="button" class="btn-close buton_right_new"
-                        (click)="formmodel.style.display='none'"><span aria-hidden="true">&times;</span></button>
+                        (click)="formmodel.style.display='none';cleardata()"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="add_new_members_lus">
-                        <div class="">
-                            <div class="">
-                                <div class="button-wrapper">
-                                    <form class="form" method="POST">
-                                        <span class="label">
-                                            <img *ngIf="!toggle" class="img1" src="./assets/Icon-feather-upload.svg">
-                                            <img *ngIf="toggle" class="img3" src="{{img}}"
-                                                style="height: 70px; width: 70px;">
-                                        </span>
-                                        <p class="heading">Add New Member</p>
-                                        <div *ngIf="!toggle" class="upload-div">
-                                            <input name="upload" class="upload-box" placeholder="Upload File"
-                                                (error)="onUploadError($event)" (init)="onUploadInit($event)"
-                                                (success)="onUploadSuccess($event)" *ngIf="type === 'directive'"
-                                                [dropzone]="config" class="dropzone dropzone-container" id="dropzone">
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
                         <form [formGroup]="memeberForm" (ngSubmit)="onSubmit(formmodel)" class="edit_form_new_sec">
+                            <div class="button-wrapper">
+                               <img *ngIf="this.img!=''" [src]="this.img" style="width: 200px;border-radius: 10px;">
+                               <div *ngIf="this.img==''">
+                                <span class="label">
+                                    <img class="img1" src="./assets/Icon-feather-upload.svg">
+                                </span>
+                                <p class="heading" style="font-size: 12px;">Upload Profile</p>
+                                <div class="upload-div">
+                                    <input name="upload" (change)="CONSOLE($event.target.files)"
+                                        type="file" class="upload-box" placeholder="Upload File"
+                                        accept=".png, .jpg, .jpeg, .gif"
+                                        class="dropzone dropzone-container" id="dropzone">
+                                </div>
+                               </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-6 col-12">
                                     <label for="recipient-name" class="col-form-label">Name</label>
@@ -231,7 +229,9 @@
                 <div class="modal-body">
                     <div class="add_new_members_lus">
                         <div class="">
-                            <div class="">
+                            <form [formGroup]="memeberForm" (ngSubmit)="onEditSubmit(Editformmodel)"
+                            class="edit_form_new_sec">
+                            <!-- <div class="">
                                 <div class="button-wrapper">
                                     <form class="form" method="POST">
                                         <p class="heading">Update Member</p>
@@ -247,10 +247,23 @@
                                         </div>
                                     </form>
                                 </div>
-                            </div>
-
-                            <form [formGroup]="memeberForm" (ngSubmit)="onEditSubmit(Editformmodel)"
-                                class="edit_form_new_sec">
+                            </div> -->
+                            <div class="button-wrapper">
+                                <img  [src]="this.img" style="width: 200px;border-radius: 10px;">
+                                <div>
+                                 <span class="label">
+                                     <img class="img1" src="./assets/Icon-feather-upload.svg">
+                                 </span>
+                                 <p class="heading" style="font-size: 12px;">Upload Profile</p>
+                                 <div class="upload-div">
+                                     <input name="upload" (change)="CONSOLE($event.target.files)"
+                                         type="file" class="upload-box" placeholder="Upload File"
+                                         accept=".png, .jpg, .jpeg, .gif"
+                                         class="dropzone dropzone-container" id="dropzone">
+                                 </div>
+                                </div>
+                             </div>
+                           
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="recipient-name" class="col-form-label">Name</label>
@@ -278,27 +291,29 @@
                                     <div class="col-md-6">
                                         <label for="message-text" class="col-form-label">Subscription</label>
                                         <select class="form-select" aria-label="Default select example"
-                                            [disabled]="this.userData?.result['Subscription']!='both'? true : false"
+                                            [disabled]="this.userData?.result?.Subscription!='both'? true : false"
                                             [ngClass]="{ 'is-invalid': submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
                                             this.FORM_BUILDER['UnderSubscription']==='Select Subscription' }"
                                             (change)="EDIT_FORM_BUILDER_INSERT_VALUE('UnderSubscription',$event.target.value)"
-                                            [value]="this.MEMBER_DATA['Subscription']" #editSubscription>
-                                            <option *ngIf="this.userData?.result['Subscription']!='both'"
-                                                [value]="this.userData?.result['Subscription']">
-                                                {{this.userData?.result['Subscription']}}</option>
-                                            <option *ngIf="this.userData?.result['Subscription']=='both'" value="">
+                                            [value]="this.MEMBER_DATA?.Subscription" #editSubscription>
+                                            <option *ngIf="this.userData?.result?.Subscription!='both'"
+                                                [value]="this.userData?.result?.Subscription">
+                                                {{this.userData?.result?.Subscription}}</option>
+                                            <option *ngIf="this.userData?.result?.Subscription=='both'" value="">
                                                 Select Option</option>
-                                            <option *ngIf="this.userData?.result['Subscription']=='both'"
+                                            <option *ngIf="this.userData?.result?.Subscription=='both'"
                                                 value="Export">Export</option>
-                                            <option *ngIf="this.userData?.result['Subscription']=='both'"
+                                            <option *ngIf="this.userData?.result?.Subscription=='both'"
                                                 value="Import">Import</option>
-                                            <option *ngIf="this.userData?.result['Subscription']=='both'" value="both">
+                                            <option *ngIf="this.userData?.result?.Subscription=='both'" value="both">
                                                 both</option>
                                         </select>
                                         <div *ngIf="submitted && this.FORM_BUILDER['UnderSubscription']=='' ||
-                                             this.FORM_BUILDER['UnderSubscription']=='Select Subscription'" class="invalid-feedback">
+                                             this.FORM_BUILDER['UnderSubscription']=='Select Subscription'"
+                                            class="invalid-feedback">
                                             <div *ngIf="this.FORM_BUILDER['UnderSubscription']=='' ||
-                                             this.FORM_BUILDER['UnderSubscription']=='Select Subscription'">UnderSubscription is required</div>
+                                             this.FORM_BUILDER['UnderSubscription']=='Select Subscription'">
+                                                UnderSubscription is required</div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -312,9 +327,11 @@
                                                 {{this.ROLE_LIST[this.userData?.result['Role_Type']]}}</option>
                                         </select>
                                         <div *ngIf="submitted && this.FORM_BUILDER['Role_Type']=='' ||
-                                                this.FORM_BUILDER['Role_Type']=='Select Subscription'" class="invalid-feedback">
+                                                this.FORM_BUILDER['Role_Type']=='Select Subscription'"
+                                            class="invalid-feedback">
                                             <div *ngIf="this.FORM_BUILDER['Role_Type']=='' ||
-                                                 this.FORM_BUILDER['Role_Type']=='Select Subscription'">Role_Type is required</div>
+                                                 this.FORM_BUILDER['Role_Type']=='Select Subscription'">Role_Type is
+                                                required</div>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -364,9 +381,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="modal-footer">
-
-                </div> -->
             </div>
         </div>
     </div>

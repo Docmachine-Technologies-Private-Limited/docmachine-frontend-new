@@ -34,23 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
     console.log('AppConfig', AppConfig, window.close);
     this.DelayTime = new Date(new Date().getTime() + (1 * 60 * 1000));
     this.setTimeoutNew();
-    window.addEventListener("beforeunload", () => {
-      // this.authservice.logout();
-      // this.router.navigate(['/login'])
-    });
-    window.onbeforeunload = function (e) {
-      window.onunload = function (event:any) {
-      console.log(event,'sdfgdsjfhdsgfsdjgdjfdsgfdsjf')
-        window.localStorage.isMySessionActive = "false";
-      }
-      return undefined;
-    };
-
-    window.onload = function () {
-      window.localStorage.isMySessionActive = "true";
-    };
     router.events.subscribe((event: Event) => {
-      console.log(event);
       if (event instanceof NavigationEnd) {
         var splitUrl: any = event?.url?.split('/')
         // console.log(this.CheckIng(this.WithoutAuthorization, splitUrl[1]), splitUrl, 'CheckIng')
@@ -61,13 +45,22 @@ export class AppComponent implements OnInit, OnDestroy {
           if (token == null) {
             this.authservice.logout();
             this.router.navigate(['/login']);
+          }else{
+            this.userService.getUserDetail().then((user: any) => {
+              this.userData = user?.result
+              let token = this.authGuard.loadFromLocalStorage();
+              var session: any = JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
+              if (this.authGuard.getLocalStorage('PERMISSION') == null || this.userData?.role != session?.role && !token) {
+                this.authservice.logout();
+                this.router.navigate(['/login']);
+              }
+            });
           }
         }
       }
     });
     this.userService.getUserDetail().then((user: any) => {
       this.userData = user?.result
-      // let val: any = jwt_decode.default(token);
       let token = this.authGuard.loadFromLocalStorage();
       var session: any = JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
       if (this.authGuard.getLocalStorage('PERMISSION') == null || this.userData?.role != session?.role && !token) {
@@ -81,7 +74,15 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
+    this.userService.getUserDetail().then((user: any) => {
+      this.userData = user?.result
+      let token = this.authGuard.loadFromLocalStorage();
+      var session: any = JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
+      if (this.authGuard.getLocalStorage('PERMISSION') == null || this.userData?.role != session?.role && !token) {
+        this.authservice.logout();
+        this.router.navigate(['/login']);
+      }
+    });
   };
   setTimeoutNew() {
     this.userActivity = setTimeout(() => {
