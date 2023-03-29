@@ -2567,25 +2567,12 @@ export class UploadComponent implements OnInit {
           this.PDF_READER_DATA['conversionDate'] = this.date_format.formatDate(this.PDF_READER_DATA['conversionDate'], '-')
           console.log('PDF_READER_DATA', this.PDF_READER_DATA, this.res);
         }
-      } else if (args[1].data.sbno) {
-        console.log('Here data type', args[1].data);
-        this.res = new ShippingBill(args[1].data);
-        this.sbNo = true;
-        console.log(this.res);
-        this.res['leodate'] = this.date_format.formatDate(this.res['leodate'], '-')
-        this.res['sbdate'] = this.date_format.formatDate(this.date_format.removeUnadvantageText(this.date_format.removeAllUnderscore(this.res['sbdate']),'__—_—'), '-')
       } else if (args[1].data.boeNumber) {
         console.log('Here data type', args[1].data);
         this.res = new BoeBill(args[1].data);
         this.boeNumber = true;
         console.log(this.res);
-      } else if (args[1].data.billNo) {
-        console.log('Here data type', args[1].data);
-        this.res = new IRAdvice(args[1].data);
-        this.billNo = true;
-        console.log('sjsjsjsj', this.res);
-      }
-      else if (args[1].data.pdfflag) {
+      } else if (args[1].data.pdfflag) {
         // BoE.pdf Except other document upload code
         this.res = args[1].data.pdfflag;
         console.log('Sample Other PDF FLAG CONDITION');
