@@ -1,0 +1,139 @@
+<div class="content-wrap pb-2 ml-0 scroll-bar-main">
+    <div class="background-color">
+        <mat-tab-group>
+            <mat-tab label="Admin Panel">
+              <div class="top-panel">
+                <div class="left-panel">
+                    <label for="" class="label-text">Total Member : <span>5</span></label>
+                </div>
+                <div class="right-panel col-5">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control border-radius" placeholder="Search customer by name or email"
+                            aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+                    </div>
+                </div>
+            </div>
+            <div class="center-panel">
+                <table class="table">
+                    <thead>
+                        <tr class="table-tr">
+                            <!-- <th scope="col" class="col-td-th-1"><input type="checkbox" class="form-control" name="" id="">
+                            </th> -->
+                            <th scope="col" class="td-th-w-1">Name | Email</th>
+                            <th scope="col" class="col-td-th-3">Status</th>
+                            <th scope="col" class="col-td-th-3">Role Type</th>
+                            <th scope="col" class="col-td-th-3">Role Assign</th>
+                            <th scope="col" class="col-td-th-3">Last Login</th>
+                            <th scope="col" class="col-td-th-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-tr" *ngFor="let item of this.USER_DEATILS?.UserDetails;let i=index">
+                            <!-- <td class="col-td-th-1"><input type="checkbox" class="form-control" name="" id=""></td> -->
+                            <td class="td-th-w-1" *ngIf="item?.imageUrl!=undefined"><img [src]="item?.imageUrl" class="img-icon">{{item?.fullName}} | {{item?.emailId}}</td>
+                            <td class="td-th-w-1" *ngIf="item?.imageUrl==undefined"><span class="img-text">{{this.initialName(item?.fullName)}}</span>{{item?.fullName}} | {{item?.emailId}}</td>
+                            <td class="col-td-th-3">
+                                <span class="active-status" *ngIf="item?.isLoggin==true">Active</span>
+                                <span class="InActive" *ngIf="item?.isLoggin==false">InActive</span>
+                            </td>
+                            <td class="col-td-th-3">{{item?.role}}</td>
+                            <td class="col-td-th-3">{{item?.RoleCheckbox}}</td>
+                            <td class="col-td-th-3">{{ item?.LastLogin}} ago</td>
+                            <td class="col-td-th-3 btn-td">
+                                <button class="btn btn-primary PopupOpen"  popup-close="MEMBER_VIEW" (click)="View('UserDetails',i)"><i class="fa fa-eye PopupOpen" popup-close="MEMBER_VIEW" aria-hidden="true"></i></button>
+                                <button class="btn btn-primary"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> </mat-tab>
+            <mat-tab label="Member Panel">  
+            <div class="top-panel">
+                <div class="left-panel">
+                    <label for="" class="label-text">Total Member : <span>5</span></label>
+                </div>
+                <div class="right-panel col-5">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control border-radius" placeholder="Search customer by name or email"
+                            aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+                    </div>
+                </div>
+            </div>
+            <div class="center-panel">
+                <table class="table">
+                    <thead>
+                        <tr class="table-tr">
+                            <!-- <th scope="col" class="col-td-th-1"><input type="checkbox" class="form-control" name="" id="">
+                            </th> -->
+                            <th scope="col" class="td-th-w-1">Name | Email</th>
+                            <th scope="col" class="col-td-th-3">Status</th>
+                            <th scope="col" class="col-td-th-3">Role Type</th>
+                            <th scope="col" class="col-td-th-3">Role Assign</th>
+                            <th scope="col" class="col-td-th-3">Last Login</th>
+                            <th scope="col" class="col-td-th-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-tr" *ngFor="let item of this.USER_DEATILS?.result?.members_list;let i=index">
+                            <!-- <td class="col-td-th-1"><input type="checkbox" class="form-control" name="" id=""></td> -->
+                            <td class="td-th-w-1"><img [src]="item?.imageUrl" alt="" class="img-icon">{{item?.name}} |
+                                {{item?.email}}</td>
+                            <td class="col-td-th-3"><span class="completed">Active</span></td>
+                            <td class="col-td-th-3">{{item?.name}}</td>
+                            <td class="col-td-th-3">{{item?.name}}</td>
+                            <td class="col-td-th-3">1 min ago</td>
+                            <td class="col-td-th-3 btn-td">
+                                <button class="btn btn-primary PopupOpen"  popup-close="MEMBER_VIEW" (click)="View(i)"><i class="fa fa-eye PopupOpen" popup-close="MEMBER_VIEW" aria-hidden="true"></i></button>
+                                <button class="btn btn-primary"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> </mat-tab>
+          </mat-tab-group>
+        <div class="footer-panel"></div>
+    </div>
+</div>
+<ng-custom-card-model
+    [customstyle]="{'margin':'auto !important','max-width': '530px !important','margin-top': '50px !important'}"
+    class="p-2" height="400px" id="MEMBER_VIEW">
+    <div class="Userlist" *ngIf="this.index_Selected!=''">
+     <div class="col-12">
+        <div class="display">
+            <div class="display-item">
+                <div class="card seamus">
+                    <div class="card-top"></div>
+                    <div class="card-profile">
+                        <div class="profile-image" *ngIf="this.USER_DEATILS?.UserDetails[this.index_Selected]?.imageUrl!=undefined" [title]="this.USER_DEATILS?.UserDetails[this.index_Selected]?.isLoggin==true?'User Active':'User Not Active'" [ngClass]="{'border-active':this.USER_DEATILS?.UserDetails[this.index_Selected]?.isLoggin==true,'border-inactive':this.USER_DEATILS?.UserDetails[this.index_Selected]?.isLoggin==false}">
+                            <img  [src]="this.USER_DEATILS?.UserDetails[this.index_Selected]?.imageUrl" alt="" srcset="">
+                        </div>
+                        <div class="profile-image" *ngIf="this.USER_DEATILS?.UserDetails[this.index_Selected]?.imageUrl==undefined" 
+                        [title]="this.USER_DEATILS?.UserDetails[this.index_Selected]?.isLoggin==true?'User Active':'User Not Active'">
+                            <span  class="img-text">{{this.initialName(this.USER_DEATILS?.UserDetails[this.index_Selected]?.fullName)}}</span>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <div class="info-title">
+                            <h2>{{this.USER_DEATILS?.UserDetails[this.index_Selected]?.fullName }}</h2>
+                            <h3>{{this.USER_DEATILS?.UserDetails[this.index_Selected]?.emailId }}</h3>
+                            <h4>{{this.USER_DEATILS?.UserDetails[this.index_Selected]?.role }}</h4>
+                        </div>
+                        <div class="info-follow">
+                            <div class="follow-followers">
+                                <span style="font-size: 16px;">{{this.USER_DEATILS?.UserDetails[this.index_Selected]?.companyName }}</span><br />
+                                <span style="font-weight: 700;">Company Name</span>
+                            </div>
+                            <div class="follow-following">
+                                <span style="font-size: 16px;">{{this.USER_DEATILS?.UserDetails[this.index_Selected]?.companyId }}</span><br />
+                                <span style="font-weight: 700;">Company Id</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</ng-custom-card-model>
