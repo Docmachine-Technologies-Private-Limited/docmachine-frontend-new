@@ -252,7 +252,7 @@
     word-break: break-all;
 }
 
-::ng-deep .mat-tab-body-content{
+.background-color ::ng-deep .mat-tab-body-content{
     width: calc(100vw - 220px);
     height: calc(100vh - 130px) !important;
     overflow: auto;

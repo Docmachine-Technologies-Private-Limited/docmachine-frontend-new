@@ -88,7 +88,7 @@
                             <td class="col-td-th-3">{{item?.Subscription}}</td>
                             <td class="td-th-w-2">{{ item?.LastLogin!=undefined?item?.LastLogin+' ago':'Not found..'}}</td>
                             <td class="col-td-th-3 btn-td">
-                                <button class="btn btn-primary PopupOpen"  popup-close="MEMBER_VIEW" (click)="View(i)"><i class="fa fa-eye PopupOpen" popup-close="MEMBER_VIEW" aria-hidden="true"></i></button>
+                                <!-- <button class="btn btn-primary PopupOpen"  popup-close="MEMBER_VIEW" (click)="View(i)"><i class="fa fa-eye PopupOpen" popup-close="MEMBER_VIEW" aria-hidden="true"></i></button> -->
                                 <button class="btn btn-primary" (click)="deleteMember(item?.email)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                             </td>
                         </tr>

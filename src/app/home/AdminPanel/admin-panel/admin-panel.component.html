@@ -39,7 +39,7 @@
                                 <td class="col-td-th-3">{{item?.Subscription}}</td>
                                 <td class="td-th-w-2">{{ item?.LastLogin!=undefined?item?.LastLogin+' ago':'Not found..'}}</td>
                                 <td class="col-td-th-3 btn-td">
-                                    <button class="btn btn-primary PopupOpen"  popup-close="MEMBER_VIEW" (click)="View(i)"><i class="fa fa-eye PopupOpen" popup-close="MEMBER_VIEW" aria-hidden="true"></i></button>
+                                    <!-- <button class="btn btn-primary PopupOpen"  popup-close="MEMBER_VIEW" (click)="View(i)"><i class="fa fa-eye PopupOpen" popup-close="MEMBER_VIEW" aria-hidden="true"></i></button> -->
                                     <button class="btn btn-primary" (click)="deleteMember(item?.email)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                 </td>
                             </tr>
@@ -129,7 +129,7 @@
 <ng-custom-card-model
     [customstyle]="{'margin':'auto !important','max-width': '530px !important','margin-top': '50px !important'}"
     class="p-2" height="400px" id="MEMBER_VIEW">
-    <div class="Userlist" *ngIf="this.index_Selected!=''">
+    <div class="Userlist" *ngIf="this.VIEWDATA!=''">
         <div class="col-12">
             <div class="display">
                 <div class="display-item">
@@ -137,35 +137,35 @@
                         <div class="card-top"></div>
                         <div class="card-profile">
                             <div class="profile-image"
-                                *ngIf="this.filterdata.UserDetails[this.index_Selected]?.imageUrl!=undefined"
-                                [title]="this.filterdata.UserDetails[this.index_Selected]?.isLoggin==true?'User Active':'User Not Active'"
-                                [ngClass]="{'border-active':this.filterdata.UserDetails[this.index_Selected]?.isLoggin==true,'border-inactive':this.filterdata.UserDetails[this.index_Selected]?.isLoggin==false}">
-                                <img [src]="this.filterdata.UserDetails[this.index_Selected]?.imageUrl" alt=""
+                                *ngIf="this.VIEWDATA?.imageUrl!=undefined"
+                                [title]="this.VIEWDATA?.isLoggin==true?'User Active':'User Not Active'"
+                                [ngClass]="{'border-active':this.VIEWDATA?.isLoggin==true,'border-inactive':this.VIEWDATA?.isLoggin==false}">
+                                <img [src]="this.VIEWDATA?.imageUrl" alt=""
                                     srcset="">
                             </div>
                             <div class="profile-image"
-                                *ngIf="this.filterdata.UserDetails[this.index_Selected]?.imageUrl==undefined"
-                                [title]="this.filterdata.UserDetails[this.index_Selected]?.isLoggin==true?'User Active':'User Not Active'">
+                                *ngIf="this.VIEWDATA?.imageUrl==undefined"
+                                [title]="this.VIEWDATA?.isLoggin==true?'User Active':'User Not Active'">
                                 <span
-                                    class="img-text">{{this.initialName(this.filterdata.UserDetails[this.index_Selected]?.fullName)}}</span>
+                                    class="img-text">{{this.initialName(this.VIEWDATA?.fullName)}}</span>
                             </div>
                         </div>
                         <div class="card-info">
                             <div class="info-title">
-                                <h2>{{this.filterdata.UserDetails[this.index_Selected]?.fullName }}</h2>
-                                <h3>{{this.filterdata.UserDetails[this.index_Selected]?.emailId }}</h3>
-                                <h4>{{this.filterdata.UserDetails[this.index_Selected]?.role }}</h4>
+                                <h2>{{this.VIEWDATA?.fullName }}</h2>
+                                <h3>{{this.VIEWDATA?.emailId }}</h3>
+                                <h4>{{this.VIEWDATA?.role }}</h4>
                             </div>
                             <div class="info-follow">
                                 <div class="follow-followers">
                                     <span
-                                        style="font-size: 16px;">{{this.filterdata.UserDetails[this.index_Selected]?.companyName
+                                        style="font-size: 16px;">{{this.VIEWDATA?.companyName
                                         }}</span><br />
                                     <span style="font-weight: 700;">Company Name</span>
                                 </div>
                                 <div class="follow-following">
                                     <span
-                                        style="font-size: 16px;">{{this.filterdata.UserDetails[this.index_Selected]?.companyId
+                                        style="font-size: 16px;">{{this.VIEWDATA?.companyId
                                         }}</span><br />
                                     <span style="font-weight: 700;">Company Id</span>
                                 </div>

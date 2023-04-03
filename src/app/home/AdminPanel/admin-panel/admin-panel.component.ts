@@ -76,7 +76,7 @@ export class AdminPanelComponent implements OnInit {
       this.MEMBER_DATA=data?.result?.members_list;
     });
     this.ORIGNAL_DATA.UserDetails.forEach(element => {
-      this.ORIGNAL_DATA.MemberDetails.forEach(MemberDetailsElement => {
+      this.MEMBER_DATA.forEach(MemberDetailsElement => {
         if (element?.emailId.includes(MemberDetailsElement?.email)) {
           element['imageUrl'] = MemberDetailsElement?.imageUrl;
         }
@@ -90,12 +90,12 @@ export class AdminPanelComponent implements OnInit {
         element['LastLogin'] = this.SubtractDates(new Date(element?.updatedAt), new Date());
       });
 
-      this.ORIGNAL_DATA.MemberDetails.forEach(Memberelement => {
+      this.MEMBER_DATA.forEach((Memberelement,index) => {
         this.ORIGNAL_DATA.UserDetails.forEach(Userelement => {
           if (Memberelement?.email.includes(Userelement?.emailId)) {
             Memberelement['LastLogin'] = this.SubtractDates(new Date(Userelement?.updatedAt), new Date());
-            Memberelement['isLoggin'] = Userelement?.isLoggin;
-          }
+            Memberelement['7'] = Userelement?.isLoggin;
+          } 
         });
       });
     }, 1000);
@@ -170,9 +170,11 @@ export class AdminPanelComponent implements OnInit {
       this.value = x
     }
   }
-  View(type: any, i: any) {
+  VIEWDATA:any=''
+  View(i: any) {
     this.index_Selected = i;
-    console.log(this.USER_DEATILS[type][i], 'members_list')
+    this.VIEWDATA=this.MEMBER_DATA[i]
+    console.log(this.MEMBER_DATA[i], 'members_list')
   }
 
   getTimeSecondMinutes(time: any) {
@@ -181,7 +183,7 @@ export class AdminPanelComponent implements OnInit {
   }
   initialName(words) {
     'use strict'
-    return (words.charAt(0) + words.charAt(1)).toUpperCase();
+    return words!=null && words!='' && words!=undefined?(words?.charAt(0) + words?.charAt(1))?.toUpperCase():'';
   }
 
   public SubtractDates(startDate: Date, endDate: Date): any {
