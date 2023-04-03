@@ -27,13 +27,11 @@ export class PendingPanelComponent implements OnInit {
 
       this.documentService.getPendingStatus(this.USER_DETAILS?.sideMenu).subscribe((status) => {
         this.DATA_CREATE = status;
-        if (this.USER_DETAILS?.RoleCheckbox != 'Checker') {
-          this.documentService.getVerifyStatus(this.USER_DETAILS?.sideMenu).subscribe((status2: any) => {
-            for (let index = 0; index < status2.length; index++) {
-              this.DATA_CREATE.push(status2[index]);
-            }
-          })
-        }
+        this.documentService.getVerifyStatus(this.USER_DETAILS?.sideMenu).subscribe((status2: any) => {
+          for (let index = 0; index < status2.length; index++) {
+            this.DATA_CREATE.push(status2[index]);
+          }
+        })
         console.log(this.DATA_CREATE, 'statusstatusstatusstatusstatus');
       })
     })
@@ -49,7 +47,7 @@ export class PendingPanelComponent implements OnInit {
           deleteflag: data['deleteflag']
         },
         TransactionTableName: 'ExportTransaction',
-        TransactionTableId:data?.Tableid
+        TransactionTableId: data?.Tableid
       }
       this.documentService.setDownloadStatus(download).subscribe((res: any) => {
         console.log(res, 'dfsdfhsdfdsjhdsfgdsfds')
@@ -110,7 +108,7 @@ export class PendingPanelComponent implements OnInit {
         }
       } else {
         try {
-          await this.mergerpdf.mergePdf([item['dummydata']['doc']!=''? item['dummydata']['doc'] : item['dummydata']['doc1']]).then((merge: any) => {
+          await this.mergerpdf.mergePdf([item['dummydata']['doc'] != '' ? item['dummydata']['doc'] : item['dummydata']['doc1']]).then((merge: any) => {
             this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
           })
         } catch (error) {

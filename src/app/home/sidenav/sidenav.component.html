@@ -387,10 +387,6 @@
                 </li>
               </ul>
             </li>
-            <li *ngIf="this.userData['role']=='member'" class="nav-item">
-              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/AdminPanel')">Admin
-                User List</h6>
-            </li>
             <li *ngIf="this.userData['role']=='member'">
               <a href="#Other" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Other</a>
               <ul class="collapse list-unstyled" id="Other">

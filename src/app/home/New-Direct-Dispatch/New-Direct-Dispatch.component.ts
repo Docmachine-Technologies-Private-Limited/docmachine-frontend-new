@@ -2886,7 +2886,7 @@ export class NewDirectDispatchComponent implements OnInit {
     this.newBankArray = [];
     console.log(this.bankArray,'this.bankArray')
     this.bankArray.forEach((value, index) => {
-      if (value.BankUniqueId.includes(a)==true) {
+      if (value?.BankUniqueId?.includes(a)==true) {
         this.newBankArray.push(value)
       }
     });
@@ -2902,10 +2902,12 @@ export class NewDirectDispatchComponent implements OnInit {
     var n = a.accNumber;
     this.charge = n.split('');
     if (this.Lodgement['AgainstAdvanceReceipt']?.Hide == 'no') {
-      this.generateDoc1(this.ExportBillLodgement_Form)
+      this.generateDoc1(this.ExportBillLodgement_Form);
+      this.SlideToggle(null,this.itemArray[0]?._id)
     } else {
       if (Object.keys(this.advanceArray).length!=0) {
         this.generateDoc1(this.ExportBillLodgement_Form)
+        this.SlideToggle(null,this.itemArray[0]?._id)
       }else{
         this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',
         `Please select a firx amount ${this.itemArray.length == 0 ? '& also select Sb no.' : ''}...`)
@@ -3894,9 +3896,9 @@ export class NewDirectDispatchComponent implements OnInit {
   };
   BOOLEAN: boolean = false;
   MERGE_ALL_PDF: any = [];
-  async SlideToggle(event: any) {
+  async SlideToggle(event: any,sbid:any) {
     var temp: any = [];
-    const id = event.tab.content.viewContainerRef.element.nativeElement.id;
+    const id = event!=null?event.tab.content.viewContainerRef.element.nativeElement.id:sbid;
     this.PDF_LIST = [];
     console.log(this.newBankArray,bankformat,id,'this.newBankArray')
     var sbfilter = this.itemArray.filter((item: any) => item?._id == id);
