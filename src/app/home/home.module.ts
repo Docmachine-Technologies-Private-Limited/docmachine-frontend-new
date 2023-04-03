@@ -99,6 +99,7 @@ import { UserService } from "../service/user.service";
 import { AuthenticateService } from "../service/authenticate.service";
 import { AuthGuard } from "../service/authguard.service";
 import { AdminPanelComponent } from './AdminPanel/admin-panel/admin-panel.component';
+import { SuperAdminPanelComponent } from './SuperAdminPanel/admin-panel/admin-panel.component';
 
 @NgModule({
   declarations: [
@@ -143,7 +144,8 @@ import { AdminPanelComponent } from './AdminPanel/admin-panel/admin-panel.compon
     ImportDirectPaymentComponent,
     PackingCreditRequestComponent,
     TransactionDashboardComponent,
-    AdminPanelComponent
+    AdminPanelComponent,
+    SuperAdminPanelComponent
   ],
   imports: [
     SharedHomeModule,
@@ -594,7 +596,8 @@ import { AdminPanelComponent } from './AdminPanel/admin-panel/admin-panel.compon
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
-          { path: "AdminPanel", pathMatch: "full",component:AdminPanelComponent, canActivate: [SuperGuard] },
+          { path: "SuperAdminPanel", pathMatch: "full",component:SuperAdminPanelComponent, canActivate: [SuperGuard] },
+          { path: "AdminPanel", pathMatch: "full",component:AdminPanelComponent, canActivate: [AdminGuard] },
         ],
       },
     ]),

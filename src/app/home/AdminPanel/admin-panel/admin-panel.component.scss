@@ -145,6 +145,7 @@
     background: -webkit-linear-gradient(bottom left, rgba(3, 30, 248, 1.0), rgba(145, 21, 125, 1.0));
     background: -moz-linear-gradient(bottom left, rgba(3, 30, 248, 1.0), rgba(145, 21, 125, 1.0));
     background: linear-gradient(to top right, rgba(3, 30, 248, 1.0), rgba(145, 21, 125, 1.0));
+    display: flex;
 }
 
 .card .card-profile {
@@ -256,3 +257,42 @@
     height: calc(100vh - 130px) !important;
     overflow: auto;
 }
+
+.Approve_Reject_Delete ::ng-deep .mat-tab-body-content{
+    width: calc(100vw - 220px);
+    height: calc(100vh - 180px)!important;
+}
+
+.card-top button {
+    background: transparent;
+    outline: none;
+    border: none;
+    margin: auto;
+    margin-right: 0;
+    margin-top: 0;
+}
+
+.SUBCRIPTION_CHANGES{
+    margin: auto;
+    height: 380px;
+    overflow: auto;
+    padding: 30px;
+}
+.flex-label{
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+  

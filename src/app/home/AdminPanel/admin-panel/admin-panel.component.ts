@@ -1,4 +1,4 @@
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '.././../../service/user.service';
 import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, interval, timeInterval } from 'rxjs';
 import { AuthenticateService } from '../../../service/authenticate.service';
 import { AuthGuard } from '../../../service/authguard.service';
+import { DocumentService } from '../../../service/document.service';
 
 @Component({
   selector: 'app-admin-panel',
@@ -30,15 +31,24 @@ export class AdminPanelComponent implements OnInit {
   pending: boolean;
   declined: boolean;
   SUBCRIPTION_DATA: any = [];
-
+  SUBCRIPTION_CHANGES: any = FormGroup;
+  USER_DATA:any=[];
+  MEMBER_DATA:any=[];
   constructor(public route?: ActivatedRoute, public formBuilder?: FormBuilder,
     public userService?: UserService, public appconfig?: AppConfig,
     public sanitizer?: DomSanitizer, public toastr?: ToastrService,
     public elRef?: ElementRef,
     public router?: Router,
     public authGuard?: AuthGuard,
+    public docserivce?: DocumentService,
     public authservice?: AuthenticateService,
-    public wininfo?: WindowInformationService) { }
+    public wininfo?: WindowInformationService) {
+    this.SUBCRIPTION_CHANGES = this.formBuilder?.group({
+      Login_Limit: ['', Validators.required],
+      Role_Type: ['', Validators.required],
+      Subscription: ['', Validators.required]
+    });
+  }
 
   async ngOnInit() {
     let token = this.authGuard?.loadFromLocalStorage();
@@ -49,21 +59,23 @@ export class AdminPanelComponent implements OnInit {
       //   this.loaddata()
       // })
     }
+  
     this.ORIGNAL_DATA = await this.userService?.getAllUserMember();
     this.USER_DEATILS = this.ORIGNAL_DATA;
     this.loaddata();
     this.ApprovalRejectDelete(null, 'approved')
     console.log(this.USER_DEATILS, 'this.USER_DEATILS')
   }
-  loaddata() {
+  async loaddata() {
     this.SUBCRIPTION_DATA = [];
     let buyerDetail: any = [];
     let BenneDetail: any = [];
-
+    this.userService?.getUserDetail().then((data: any) => {
+      console.log("this.USER_DATA", data?.result?.sideMenu)
+      this.SUBCRIPTION_DATA[0]=data?.result;
+      this.MEMBER_DATA=data?.result?.members_list;
+    });
     this.ORIGNAL_DATA.UserDetails.forEach(element => {
-      if (element?.role == 'manager') {
-        this.SUBCRIPTION_DATA.push(element);
-      }
       this.ORIGNAL_DATA.MemberDetails.forEach(MemberDetailsElement => {
         if (element?.emailId.includes(MemberDetailsElement?.email)) {
           element['imageUrl'] = MemberDetailsElement?.imageUrl;
@@ -289,6 +301,33 @@ export class AdminPanelComponent implements OnInit {
       }
       console.log(res, 'dfsdfdsfsgdsfhdsgfd');
     })
+  }
+  SUBCRIPTION_ID: any = ''
+  SELECTED_SUBCRIPTION_DATA:any=[];
+  ChangeSubcriptionData(data: any, id: any) {
+    console.log(data, 'ChangeSubcriptionData')
+    this.SUBCRIPTION_ID = id;
+    this.SELECTED_SUBCRIPTION_DATA=data;
+    this.SUBCRIPTION_CHANGES = this.formBuilder?.group({
+      Login_Limit: [data?.Login_Limit, Validators.required],
+      Role_Type: [data?.Role_Type, Validators.required],
+      Subscription: [data?.Subscription, Validators.required]
+    });
+  }
+  SUBCRIPTION_Submit(form_value: any,displayHidden:any) {
+    console.log(form_value,displayHidden, 'SUBCRIPTION_Submit')
+    if (this.SUBCRIPTION_ID!='' && this.SUBCRIPTION_ID!=undefined && this.SUBCRIPTION_ID!=null) {
+      this.docserivce?.updateUserById(this.SUBCRIPTION_ID, form_value?.value).subscribe((res: any) => {
+        console.log(res,'SUBCRIPTION_Submit');
+          this.toastr?.success('Updated Succesfully...');
+          this.ngOnInit()
+          this.SUBCRIPTION_ID='';
+          displayHidden.PopUpOpenClose.nativeElement.style.display='none';
+      })
+    } else {
+      this.toastr?.error('Id not found...');
+    }
+   
   }
 }
 
