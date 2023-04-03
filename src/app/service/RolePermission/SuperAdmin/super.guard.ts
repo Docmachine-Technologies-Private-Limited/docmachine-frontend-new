@@ -18,7 +18,7 @@ export class SuperGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot) {
       this.role=this.authGuard.getLocalStorage('PERMISSION')!=null?JSON.parse(this.authGuard.getLocalStorage('PERMISSION')):[];
-      return this.role['emailId']=='docmachinetec@gmail.com'?true:this.FALSE();
+      return this.role['emailId']=='docmachinetec@gmail.com' || this.role['emailId']=='it@bharathexim.com'?true:this.FALSE();
   }
   FALSE() {
     this.user_service.Url_Change_Authorization('/authorization');

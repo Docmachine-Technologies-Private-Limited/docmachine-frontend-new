@@ -594,7 +594,7 @@ import { AdminPanelComponent } from './AdminPanel/admin-panel/admin-panel.compon
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
-          { path: "AdminPanel", pathMatch: "full",component:AdminPanelComponent, canActivate: [MemberGuard] },
+          { path: "AdminPanel", pathMatch: "full",component:AdminPanelComponent, canActivate: [SuperGuard] },
         ],
       },
     ]),

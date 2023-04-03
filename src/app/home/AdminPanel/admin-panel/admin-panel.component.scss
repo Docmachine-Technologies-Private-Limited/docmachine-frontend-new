@@ -46,7 +46,14 @@
     font-weight: bold;
     padding-left: 30px;
 }
-
+.td-th-w-2 {
+    width: 200px;
+    display: flex;
+    border: none;
+    justify-content: center !important;
+    align-items: center;
+    gap: 5px;
+}
 .img-icon {
     width: 30px;
     border-radius: 50%;
@@ -103,6 +110,7 @@
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+    height: 100%;
 }
 
 .display .display-item {
@@ -220,4 +228,31 @@
     font-size: 5em;
     color: white;
     border: 0;
+}
+
+.subcription-panel{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    align-items: center;
+}
+
+.subcription-panel .card{
+    width: 100%;
+}
+
+.subcription-panel table .col-td-th-1 {
+    width: 150px;
+    border: 0!important;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    word-break: break-all;
+}
+
+::ng-deep .mat-tab-body-content{
+    width: calc(100vw - 220px);
+    height: calc(100vh - 130px) !important;
+    overflow: auto;
 }

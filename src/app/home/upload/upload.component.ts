@@ -2550,10 +2550,10 @@ export class UploadComponent implements OnInit {
         if (args[1].data.sbno && this.documentType=='sb') {
           this.res = new ShippingBill(args[1].data);
           this.sbNo = true;
-          console.log(this.res);
-          this.res['leodate'] = this.date_format.formatDate(this.res['leodate'], '-')
-          // __—_—
-          this.res['sbdate'] = this.date_format.formatDate(this.date_format.removeUnadvantageText(this.date_format.removeAllUnderscore(this.res['sbdate']),'__—_—'), '-')
+          this.res['leodate'] = this.date_format.formatDate(this.res['leodate'], '-');
+          let removeother:any=this.date_format.removeUnadvantageText(this.res['sbdate'],'__—_—');
+          console.log(this.res,removeother,'removeUnadvantageText');
+          this.res['sbdate'] = this.date_format.formatDate(this.date_format.removeAllUnderscore(removeother), '-')
         } else if (args[1].data.boeNumber) {
           this.res = new BoeBill(args[1].data);
           this.boeNumber = true;

@@ -999,3 +999,17 @@ body {
   height: calc(100vh - 140px);
   overflow: auto;
 }
+
+.profile-panel h6{
+  margin: auto;
+  margin-left: 10px;
+}
+.profile-panel span{
+  margin-left: 10px;
+}
+.profile-panel {
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}

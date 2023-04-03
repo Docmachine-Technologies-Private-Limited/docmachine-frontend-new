@@ -19,12 +19,5 @@ export class InterceptorService implements HttpInterceptor {
     return next.handle(req).pipe(
       finalize(() => setTimeout(()=> {this.documentService.loading=false},1500))
     );
-    // return next.handle(req).pipe(map((event: HttpEvent<any>) => {
-    //   if (event instanceof HttpResponse) {
-    //   console.log()
-    //     setTimeout(()=> {this.documentService.loading=false},1500)
-    //   }
-    //   return event;
-    // }));
   }
 }

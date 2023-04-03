@@ -54,11 +54,12 @@
 }
 
 .tooltips-modal {
-    max-width: 500px;
-    width: 340px;
+    max-width: 100%;
+    width: 100%;
     left: auto;
-    right: -15px;
+    right: 5px;
     top: 62px;
+    justify-content: end;
 }
 
 .modal-content {
