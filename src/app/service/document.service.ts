@@ -129,6 +129,15 @@ export class DocumentService {
       httpOptions
     );
   }
+  
+  addIrAdvice(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/orAdvice/add`,{data: data},httpOptions);
+  }
   getBillNo(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -383,7 +392,14 @@ export class DocumentService {
     );
   }
 
-
+  addMasterBySb(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/master/add`,{data:data},httpOptions);
+  }
   updateBoe(user, _id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

@@ -959,109 +959,36 @@ export class UploadComponent implements OnInit {
     }, 'iradvices').subscribe((resp: any) => {
       console.log('creditNoteNumber Invoice_No', resp)
       if (resp.data.length == 0) {
-        this.documentService.getBillNo(e.form.value.billNo).subscribe((res: any) => {
-          console.log(res, 'getBillNo')
-          if (res.length != 0) {
-            console.log('inside file already exist');
-            console.log('document value', e.form.value);
-            this.documentService.updateByOrAdvice(e.form.value, e.form.value.billNo).subscribe(
-              (data: any) => {
-                console.log('updateByOrAdvice', data);
-                this.message = '';
-                if (this.retururl) {
+        this.documentService.addIrAdvice(e.form.value).subscribe((data: any) => {
+            console.log('addIrAdvice', data);
+            this.message = '';
+            let updatedData = {
+              "MasterServiceRef": [
+                data?.data._id,
+              ],
+              "AdviceRef": [
+                data?.data._id,
+              ]
+            }
+            this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1, updatedData).subscribe((data) => {
+              var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
+              if (Transaction_id != '') {
+                this.documentService.UpdateTransaction({ id: Transaction_id, data: { irRef: e.form.value } }).subscribe((res: any) => {
+                  this.toastr.success('Firex Document added successfully.');
                   this.router.navigate(['/home/inward-remittance-advice']);
-                } else {
-                  this.router.navigate(['/home/inward-remittance-advice']);
-                }
-                let updatedData = {
-                  "MasterServiceRef": [
-                    data.data[0]._id,
-                  ]
-                }
-                this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1, updatedData).subscribe(
-                  (data1) => {
-                    console.log('king123');
-                    console.log(data);
-                    let updatedData = {
-                      "AdviceRef": [
-                        data.data[0]._id,
-                      ],
-                    }
-                    this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1, updatedData).subscribe((data) => {
-                    var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
-                    if (Transaction_id != '') {
-                      this.documentService.UpdateTransaction({ id: Transaction_id, data: { irRef: e.form.value } }).subscribe((res: any) => {
-                        this.toastr.success('Firex Document added successfully.');
-                        this.router.navigate(['/home/inward-remittance-advice']);
-                      });
-                    } else {
-                      this.toastr.success('Firex Document added successfully.');
-                      this.router.navigate(['/home/inward-remittance-advice']);
-                    }
-                  },(error) => {
-                    console.log('error');
-                  });
-                  },
-                  (error) => {
-                    console.log('error');
-                  }
-                );
-              },
-              (error) => {
-                console.log('error');
+                });
+              } else {
+                this.toastr.success('Firex Document added successfully.');
+                this.router.navigate(['/home/inward-remittance-advice']);
               }
-            );
-          } else {
-            console.log('updateOrAdvice', e.form.value.doc, this.res);
-            this.documentService.updateOrAdvice(e.form.value, this.res._id).subscribe(
-              (res: any) => {
-                this.toastr.success(`Ir document updated successfully`);
-                console.log('Ir document updated successfully');
-                var updatedData = {
-                  "masterRef": [
-                    res.data[0]._id,
-                  ],
-                }
-                this.userService
-                  .updateManyPipo(this.pipoArr, this.documentType, this.pubUrl, updatedData)
-                  .subscribe(
-                    (data) => {
-                      console.log('king123');
-                      console.log(data);
-                      var updatedData = {
-                        "AdviceRef": [
-                          res.data[0]._id,
-                        ],
-                      }
-                      this.userService.updateManyPipo(this.pipoArr, this.documentType, this.pipourl1, updatedData).subscribe((data) => {
-                      this.toastr.success('Firex Document added successfully.');
-                      var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
-                      if (Transaction_id != '') {
-                        this.documentService.UpdateTransaction({ id: Transaction_id, data: { irRef: e.form.value } }).subscribe((res: any) => {
-                          this.toastr.success('Firex Document added successfully.');
-                          this.router.navigate(['/home/inward-remittance-advice']);
-                        });
-                      } else {
-                        this.toastr.success('Firex Document added successfully.');
-                        this.router.navigate(['/home/inward-remittance-advice']);
-                      }
-                        },
-                        (error) => {
-                          console.log('error');
-                        }
-                      );
-                    },
-                    (error) => {
-                      console.log('error');
-                    }
-                  );
-              },
-              (error) => {
-                console.log('error');
-              }
-            );
+            },(error) => {
+              console.log('error');
+            });
+          },
+          (error) => {
+            console.log('error');
           }
-        })
+        );
       } else {
         this.toastr.error(`Please check this sb no. : ${e.form.value.billNo} already exit...`);
       }
@@ -1225,110 +1152,53 @@ export class UploadComponent implements OnInit {
     e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.pipo = this.pipoArr;
     console.log('buyername for BL', e.form.value.buyerName);
-    e.form.value._id = this.res?._id
     console.log(e.form.value);
     this.documentService.getInvoice_No({
       sbno: e.form.value.sbno
     }, 'masterrecord').subscribe((resp: any) => {
       console.log('getInvoice_No', resp)
       if (resp?.data.length == 0) {
-        if (this.message == 'This file already uploaded') {
-          console.log('inside file already exist');
-          this.documentService.updateMasterBySb(e.form.value, e.form.value.sbno, e.form.value._id).subscribe(
-            (res: any) => {
-              this.toastr.success(`Shippingbill updated Successfully`);
-              console.log('Shippingbill updated Successfully');
-              let updatedData: any = ''
-              if (this.documentType1 == 'export') {
-                updatedData = {
-                  "sbRef": [
-                    e.form.value._id,
-                  ],
-                }
-              } else {
-                updatedData = {
-                  "boeRef": [
-                    e.form.value._id,
-                  ],
-                }
+        this.documentService.addMasterBySb(e.form.value).subscribe((res: any) => {
+            this.toastr.success(`Shippingbill updated Successfully`);
+            console.log('Shippingbill updated Successfully');
+            let updatedData: any = ''
+            if (this.documentType1 == 'export') {
+              updatedData = {
+                "sbRef": [
+                  res?.data._id,
+                ],
               }
-
-              this.userService
-                .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc, updatedData)
-                .subscribe(
-                  (data) => {
-                    //this.pipoData[`${this.pipoDoc}`] = args[1].data
-                    console.log('king123');
-                    console.log(data);
-
-                    this.toastr.success('shipping Bill added successfully.');
-                    if (this.retururl) {
-                      let url = this.retururl;
-                      this.sharedData.changeretunurl('');
-                      this.router.navigate(['/home/view-document/sb']);
-                    } else {
-                      this.router.navigate(['/home/view-document/sb']);
-                    }
-                  },
-                  (error) => {
-                    // this.toastr.error('Invalid inputs, please check!');
-                    console.log('error');
-                  }
-                );
-
-              //this.router.navigate(['/login'], { queryParams: { registered: true }});
-            },
-            (error) => {
-              console.log('error');
-            }
-          );
-        } else {
-          this.documentService.updateMaster(e.form.value, this.res?._id).subscribe(
-            (res: any) => {
-              this.toastr.success(`Shippingbill updated Successfully`);
-              console.log('Shippingbill updated Successfully');
-              let updatedData: any = ''
-              if (this.documentType1 == 'export') {
-                updatedData = {
-                  "sbRef": [
-                  e.form.value._id,
-                  ],
-                }
-              } else {
-                updatedData = {
-                  "boeRef": [
-                  e.form.value._id,
-                  ],
-                }
+            } else {
+              updatedData = {
+                "boeRef": [
+                  res?.data._id,
+                ],
               }
-              this.userService
-                .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc, updatedData)
-                .subscribe(
-                  (data) => {
-                    //this.pipoData[`${this.pipoDoc}`] = args[1].data
-                    console.log('king123');
-                    console.log(data);
-                    this.toastr.success('shipping Bill added successfully.');
-                    if (this.retururl) {
-                      let url = this.retururl;
-                      this.sharedData.changeretunurl('');
-                      this.router.navigate(['/home/view-document/sb']);
-                    } else {
-                      this.router.navigate(['/home/view-document/sb']);
-                    }
-                  },
-                  (error) => {
-                    // this.toastr.error('Invalid inputs, please check!');
-                    console.log('error');
-                  }
-                );
-              //this.router.navigate(['/login'], { queryParams: { registered: true }});
-            },
-            (error) => {
-              console.log('error');
             }
-          );
-        }
+
+            this.userService
+              .updateManyPipo(this.pipoArr, this.documentType, this.pipourl1.doc, updatedData)
+              .subscribe(
+                (data) => {
+                  console.log(data);
+                  this.toastr.success('shipping Bill added successfully.');
+                  if (this.retururl) {
+                    let url = this.retururl;
+                    this.sharedData.changeretunurl('');
+                    this.router.navigate(['/home/view-document/sb']);
+                  } else {
+                    this.router.navigate(['/home/view-document/sb']);
+                  }
+                },
+                (error) => {
+                  console.log('error');
+                }
+              );
+          },
+          (error) => {
+            console.log('error');
+          }
+        );
       } else {
         this.toastr.error(`Please check this sb no. : ${e.form.value.sbno} already exit...`);
       }
@@ -2543,120 +2413,10 @@ export class UploadComponent implements OnInit {
       console.log('jhsjshsjshjsh', args[1].data.billNo);
       console.log('Message Message', args[1].message);
       console.log('Sample PDF other doc', args[1].data.pdfflag);
-      if (args[1].message == 'This file already uploaded') {
-        console.log('My Code');
-        this.message = args[1].message;
-        this.override = true;
-        if (args[1].data.sbno && this.documentType=='sb') {
-          this.res = new ShippingBill(args[1].data);
-          this.sbNo = true;
-          this.res['leodate'] = this.date_format.formatDate(this.res['leodate'], '-');
-          let removeother:any=this.date_format.removeUnadvantageText(this.res['sbdate'],'__—_—');
-          console.log(this.res,removeother,'removeUnadvantageText');
-          this.res['sbdate'] = this.date_format.formatDate(this.date_format.removeAllUnderscore(removeother), '-')
-        } else if (args[1].data.boeNumber) {
-          this.res = new BoeBill(args[1].data);
-          this.boeNumber = true;
-          console.log(this.res);
-        } else if (args[1].data.billNo && this.documentType=='irAdvice' || this.documentType=='orAdvice') {
-          this.res = new IRAdvice(args[1].data);
-          this.billNo = true;
-          this.PDF_READER_DATA = args[1].data;
-          this.PDF_READER_DATA['recievedDate'] = this.date_format.formatDate(this.PDF_READER_DATA['recievedDate'], '-')
-          this.PDF_READER_DATA['date'] = this.date_format.formatDate(this.PDF_READER_DATA['date'], '-')
-          this.PDF_READER_DATA['conversionDate'] = this.date_format.formatDate(this.PDF_READER_DATA['conversionDate'], '-')
-          console.log('PDF_READER_DATA', this.PDF_READER_DATA, this.res);
-        }
-      } else if (args[1].data.boeNumber) {
-        console.log('Here data type', args[1].data);
-        this.res = new BoeBill(args[1].data);
-        this.boeNumber = true;
-        console.log(this.res);
-      } else if (args[1].data.pdfflag) {
-        // BoE.pdf Except other document upload code
-        this.res = args[1].data.pdfflag;
-        console.log('Sample Other PDF FLAG CONDITION');
-        this.boeNumber = true;
-      }
-      else {
-        console.log('this.documentType', this.documentType);
-        // this.res = new BoeBill(args[1].data);
-        if (this.documentType === 'PI' || this.documentType === 'PO') {
-          this.pIpO = true;
-        } else if (this.documentType === 'tryPartyAgreement') {
-          this.tryPartyAgreement = true;
-        } else if (this.documentType === 'creditNote') {
-          this.creditNote = true;
-        } else if (this.documentType === 'swiftCopy') {
-          this.swiftCopy = true;
-        } else if (this.documentType === 'blCopyref') {
-          this.blCopyref = true;
-        } else if (this.documentType === 'blCopy') {
-          this.blCopy = true;
-        } else if (this.documentType === 'import-blCopy') {
-          this.blCopy = true;
-          for (let index = 0; index < this.pipoArr.length; index++) {
-            this.documentService.getCommercialByFiletype(this.documentType1, this.pipoArr[index]).subscribe(
-              (res: any) => {
-                console.log('getCommercialImport', res);
-                this.MULITPLE_DROP_DOWN[this.pipoArr[index]] = res.data;
-              },
-              (err) => console.log(err)
-            );
-          }
-        } else if (this.documentType === 'commercial') {
-          this.commercial = true;
-        } else if (this.documentType === 'import-commercial') {
-          this.commercial = true;
-        } else if (this.documentType === 'destruction') {
-          this.destruction = true;
-        } else if (this.documentType === 'import-destruction') {
-          this.destruction = true;
-        } else if (this.documentType === 'billOfExchange') {
-          this.billOfExchange = true;
-        } else if (this.documentType === 'import-billOfExchange') {
-          this.billOfExchange = true;
-        } else if (this.documentType === 'EBRC') {
-          this.EBRC = true;
-        } else if (this.documentType === 'debitNote') {
-          this.debitNote = true;
-        } else if (this.documentType === 'insuranceCopy') {
-          this.insuranceCopy = true;
-        } else if (this.documentType === 'lcCopy') {
-          this.lcCopy = true;
-        } else if (this.documentType === 'import-lcCopy') {
-          this.importlcCopy = true;
-        } else if (this.documentType === 'agreement') {
-          this.agreement = true;
-        } else if (this.documentType === 'import-agreement') {
-          this.importagreement = true;
-        } else if (this.documentType === 'opinionReport') {
-          this.opinionReport = true;
-        } else if (this.documentType === 'import-opinionReport') {
-          this.importopinionReport = true;
-        } else if (this.documentType === 'packingList') {
-          this.packingList = true;
-        } else if (this.documentType === 'import-packingList') {
-          this.importpackingList = true;
-        } else if (this.documentType === 'otherDoc') {
-          this.otherDoc = true;
-        } else {
-          this.other = true;
-          // this.userService.updateManyPipo(this.pipoArr, this.documentType, args[1].data).subscribe(
-          //   (data) => {
-          //     console.log('king123');
-          //     console.log(data);
-          //     this.toastr.success('PI/PO updated successfully.');
-          //   },
-          //   (error) => {
-          //     console.log('error');
-          //   }
-          // );
-          args[1].message= 'This file already uploaded';
-          this.onUploadSuccess(args)
-        }
-        console.log(this.res);
-      }
+      console.log('My Code');
+      this.message = args[1].message;
+      this.override = false;
+      console.log(this.res);       
       this.pubUrl = args[1].publicUrl;
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
         args[1].publicUrl
@@ -2677,8 +2437,114 @@ export class UploadComponent implements OnInit {
       console.log(this.publicUrl);
       console.log(this.piPoUrl);
       console.log(this.res);
-    } else {
-      console.log('Document type not given');
+      if (args[1].data.sbno && this.documentType=='sb') {
+        this.res = new ShippingBill(args[1].data);
+        this.sbNo = true;
+        this.res['leodate'] = this.date_format.formatDate(this.res['leodate'], '-');
+        let removeother:any=this.date_format.removeUnadvantageText(this.res['sbdate'],'__—_—');
+        console.log(this.res,removeother,'removeUnadvantageText');
+        this.res['sbdate'] = this.date_format.formatDate(this.date_format.removeAllUnderscore(removeother), '-')
+      } else if (args[1].data.boeNumber) {
+        this.res = new BoeBill(args[1].data);
+        this.boeNumber = true;
+        console.log(this.res);
+      } else if (args[1].data.billNo && this.documentType=='irAdvice' || this.documentType=='orAdvice') {
+        this.res = new IRAdvice(args[1].data);
+        this.billNo = true;
+        this.PDF_READER_DATA = args[1].data;
+        this.PDF_READER_DATA['recievedDate'] = this.date_format.formatDate(this.PDF_READER_DATA['recievedDate'], '-')
+        this.PDF_READER_DATA['date'] = this.date_format.formatDate(this.PDF_READER_DATA['date'], '-')
+        this.PDF_READER_DATA['conversionDate'] = this.date_format.formatDate(this.PDF_READER_DATA['conversionDate'], '-')
+        console.log('PDF_READER_DATA', this.PDF_READER_DATA, this.res);
+      }
+    } else if (args[1].data.boeNumber) {
+      console.log('Here data type', args[1].data);
+      this.res = new BoeBill(args[1].data);
+      this.boeNumber = true;
+      console.log(this.res);
+    } else if (args[1].data.pdfflag) {
+      // BoE.pdf Except other document upload code
+      this.res = args[1].data.pdfflag;
+      console.log('Sample Other PDF FLAG CONDITION');
+      this.boeNumber = true;
+    }
+    else {
+      console.log('this.documentType', this.documentType);
+      // this.res = new BoeBill(args[1].data);
+      if (this.documentType === 'PI' || this.documentType === 'PO') {
+        this.pIpO = true;
+      } else if (this.documentType === 'tryPartyAgreement') {
+        this.tryPartyAgreement = true;
+      } else if (this.documentType === 'creditNote') {
+        this.creditNote = true;
+      } else if (this.documentType === 'swiftCopy') {
+        this.swiftCopy = true;
+      } else if (this.documentType === 'blCopyref') {
+        this.blCopyref = true;
+      } else if (this.documentType === 'blCopy') {
+        this.blCopy = true;
+      } else if (this.documentType === 'import-blCopy') {
+        this.blCopy = true;
+        for (let index = 0; index < this.pipoArr.length; index++) {
+          this.documentService.getCommercialByFiletype(this.documentType1, this.pipoArr[index]).subscribe(
+            (res: any) => {
+              console.log('getCommercialImport', res);
+              this.MULITPLE_DROP_DOWN[this.pipoArr[index]] = res.data;
+            },
+            (err) => console.log(err)
+          );
+        }
+      } else if (this.documentType === 'commercial') {
+        this.commercial = true;
+      } else if (this.documentType === 'import-commercial') {
+        this.commercial = true;
+      } else if (this.documentType === 'destruction') {
+        this.destruction = true;
+      } else if (this.documentType === 'import-destruction') {
+        this.destruction = true;
+      } else if (this.documentType === 'billOfExchange') {
+        this.billOfExchange = true;
+      } else if (this.documentType === 'import-billOfExchange') {
+        this.billOfExchange = true;
+      } else if (this.documentType === 'EBRC') {
+        this.EBRC = true;
+      } else if (this.documentType === 'debitNote') {
+        this.debitNote = true;
+      } else if (this.documentType === 'insuranceCopy') {
+        this.insuranceCopy = true;
+      } else if (this.documentType === 'lcCopy') {
+        this.lcCopy = true;
+      } else if (this.documentType === 'import-lcCopy') {
+        this.importlcCopy = true;
+      } else if (this.documentType === 'agreement') {
+        this.agreement = true;
+      } else if (this.documentType === 'import-agreement') {
+        this.importagreement = true;
+      } else if (this.documentType === 'opinionReport') {
+        this.opinionReport = true;
+      } else if (this.documentType === 'import-opinionReport') {
+        this.importopinionReport = true;
+      } else if (this.documentType === 'packingList') {
+        this.packingList = true;
+      } else if (this.documentType === 'import-packingList') {
+        this.importpackingList = true;
+      } else if (this.documentType === 'otherDoc') {
+        this.otherDoc = true;
+      } else {
+        this.other = true;
+        // this.userService.updateManyPipo(this.pipoArr, this.documentType, args[1].data).subscribe(
+        //   (data) => {
+        //     console.log('king123');
+        //     console.log(data);
+        //     this.toastr.success('PI/PO updated successfully.');
+        //     args[1].message= 'This file already uploaded';
+        //     this.onUploadSuccess(args)
+        //   },
+        //   (error) => {
+        //     console.log('error');
+        //   }
+        // );
+      }
     }
 
     console.log('Selected Document type', this.selectedDocumentType);
