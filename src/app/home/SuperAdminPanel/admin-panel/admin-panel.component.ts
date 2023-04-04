@@ -12,6 +12,8 @@ import { Observable, interval, timeInterval } from 'rxjs';
 import { AuthenticateService } from '../../../service/authenticate.service';
 import { AuthGuard } from '../../../service/authguard.service';
 import { DocumentService } from '../../../service/document.service';
+import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../confirm-dialog-box/confirm-dialog-box.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-admin-panel',
@@ -40,6 +42,7 @@ export class SuperAdminPanelComponent implements OnInit {
     public authGuard?: AuthGuard,
     public docserivce?: DocumentService,
     public authservice?: AuthenticateService,
+    public dialog?: MatDialog,
     public wininfo?: WindowInformationService) {
     this.SUBCRIPTION_CHANGES = this.formBuilder?.group({
       Login_Limit: ['', Validators.required],
@@ -269,62 +272,96 @@ export class SuperAdminPanelComponent implements OnInit {
 
   delete(id, i) {
     console.log(id)
-    this.userService?.deleteUser(id).subscribe(async data => {
-      console.log("king123")
-      console.log(data)
-      this.value.splice(i, 1)
-      this.toastr?.success('Account Deleted');
-    },
-      error => {
-        console.log("error")
-      });
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef: any = this.dialog?.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.userService?.deleteUser(id).subscribe(async data => {
+          console.log("king123")
+          console.log(data)
+          this.value.splice(i, 1)
+          this.toastr?.success('Account Deleted');
+        },
+          error => {
+            console.log("error")
+          });
+      }
+    });
   }
   deleteAdmin(id) {
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef: any = this.dialog?.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
     console.log(id)
-    this.userService?.deleteUser(id).subscribe(async data => {
-      console.log(data)
-      this.toastr?.success('Account Deleted');
-      this.ngOnInit();
-    },
-      error => {
-        console.log("error")
-      });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.userService?.deleteUser(id).subscribe(async data => {
+          console.log(data)
+          this.toastr?.success('Account Deleted');
+          this.ngOnInit();
+        },
+          error => {
+            console.log("error")
+          });
+      }
+    });
   }
   deleteMember(emailId: any) {
-    this.userService?.deleteUser_Role(emailId).subscribe((res: any) => {
-      if (res['status'] == true) {
-        this.toastr?.success('Account Deleted');
-        this.ngOnInit()
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef: any = this.dialog?.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.userService?.deleteUser_Role(emailId).subscribe((res: any) => {
+          if (res['status'] == true) {
+            this.toastr?.success('Account Deleted');
+            this.ngOnInit()
+          }
+          console.log(res, 'dfsdfdsfsgdsfhdsgfd');
+        })
       }
-      console.log(res, 'dfsdfdsfsgdsfhdsgfd');
-    })
+    });
+
   }
   SUBCRIPTION_ID: any = ''
-  SELECTED_SUBCRIPTION_DATA:any=[];
+  SELECTED_SUBCRIPTION_DATA: any = [];
   ChangeSubcriptionData(data: any, id: any) {
     console.log(data, 'ChangeSubcriptionData')
     this.SUBCRIPTION_ID = id;
-    this.SELECTED_SUBCRIPTION_DATA=data;
+    this.SELECTED_SUBCRIPTION_DATA = data;
     this.SUBCRIPTION_CHANGES = this.formBuilder?.group({
       Login_Limit: [data?.Login_Limit, Validators.required],
       Role_Type: [data?.Role_Type, Validators.required],
       Subscription: [data?.Subscription, Validators.required]
     });
   }
-  SUBCRIPTION_Submit(form_value: any,displayHidden:any) {
-    console.log(form_value,displayHidden, 'SUBCRIPTION_Submit')
-    if (this.SUBCRIPTION_ID!='' && this.SUBCRIPTION_ID!=undefined && this.SUBCRIPTION_ID!=null) {
+  SUBCRIPTION_Submit(form_value: any, displayHidden: any) {
+    console.log(form_value, displayHidden, 'SUBCRIPTION_Submit')
+    if (this.SUBCRIPTION_ID != '' && this.SUBCRIPTION_ID != undefined && this.SUBCRIPTION_ID != null) {
       this.docserivce?.updateUserById(this.SUBCRIPTION_ID, form_value?.value).subscribe((res: any) => {
-        console.log(res,'SUBCRIPTION_Submit');
-          this.toastr?.success('Updated Succesfully...');
-          this.ngOnInit()
-          this.SUBCRIPTION_ID='';
-          displayHidden.PopUpOpenClose.nativeElement.style.display='none';
+        console.log(res, 'SUBCRIPTION_Submit');
+        this.toastr?.success('Updated Succesfully...');
+        this.ngOnInit()
+        this.SUBCRIPTION_ID = '';
+        displayHidden.PopUpOpenClose.nativeElement.style.display = 'none';
       })
     } else {
       this.toastr?.error('Id not found...');
     }
-   
+
   }
 }
 

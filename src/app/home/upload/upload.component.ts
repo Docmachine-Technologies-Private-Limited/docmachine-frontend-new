@@ -2642,16 +2642,18 @@ export class UploadComponent implements OnInit {
           this.otherDoc = true;
         } else {
           this.other = true;
-          this.userService.updateManyPipo(this.pipoArr, this.documentType, args[1].data).subscribe(
-            (data) => {
-              console.log('king123');
-              console.log(data);
-              this.toastr.success('PI/PO updated successfully.');
-            },
-            (error) => {
-              console.log('error');
-            }
-          );
+          // this.userService.updateManyPipo(this.pipoArr, this.documentType, args[1].data).subscribe(
+          //   (data) => {
+          //     console.log('king123');
+          //     console.log(data);
+          //     this.toastr.success('PI/PO updated successfully.');
+          //   },
+          //   (error) => {
+          //     console.log('error');
+          //   }
+          // );
+          args[1].message= 'This file already uploaded';
+          this.onUploadSuccess(args)
         }
         console.log(this.res);
       }

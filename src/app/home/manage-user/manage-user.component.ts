@@ -135,7 +135,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   }
   OpenPopup(formmodel: any) {
     if (this.userData['result']['Login_Limit'] > this.item1.length) {
-      this.img ='';
+      this.img = '';
       formmodel.style.display = 'block'
     } else {
       formmodel.style.display = 'none';
@@ -155,11 +155,11 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   EditData(temp: any, data: any) {
     this.SELECTED_INDEX = 1;
     console.log(this.SELECTED_EDIT_DATA, 'sdhfjsdfsdfsdf');
-    this.MEMBER_DATA=[]
+    this.MEMBER_DATA = []
     this.userService?.getEamilByIdUserMemberDetails(this.item1[data['index']]['email']).then((data: any) => {
-      this.MEMBER_DATA = data?.UserDetails!=null?data?.UserDetails:data?.MemberDetails;
-      this.SELECTED_EDIT_DATA =data?.MemberDetails
-      this.img=data?.MemberDetails?.imageUrl
+      this.MEMBER_DATA = data?.UserDetails != null ? data?.UserDetails : data?.MemberDetails;
+      this.SELECTED_EDIT_DATA = data?.MemberDetails
+      this.img = data?.MemberDetails?.imageUrl
       this.EDIT_FORM_BUILDER = {
         name: data?.MemberDetails?.name
       }
@@ -167,7 +167,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     })
   }
   cleardata() {
-    this.FORM_BUILDER=[]
+    this.FORM_BUILDER = []
   }
   onSubmit(formmodel: any) {
     this.submitted = true;
@@ -189,21 +189,36 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
                   if (data['data'] != undefined && data['data'] != null) {
                     formmodel.style.display = 'none'
                     this.toastr?.success('Added Successfully data...');
-                    this.ngOnInit()
+                    this.resetform();
+                    this.FORM_BUILDER = {};
+                    this.FORM_BUILDER = {
+                      email: "",
+                      name: ""
+                    }
+                    this.userService?.getMemeber(this.id).subscribe(data => {
+                        console.log("king123")
+                        console.log(data)
+                        this.item1 = data['data']
+                        console.log(this.item1['length'])
+                      },
+                      error => {
+                        console.log("error")
+                      });
                   } else {
                     this.toastr?.error(data['message']);
                   }
                 },
                 error => {
                   console.log("error")
+                  this.resetform();
                 });
           } else {
             this.toastr?.error('This email id already exit please used different email id.');
           }
-
         },
           error => {
             console.log("error")
+            this.resetform();
           });
 
       } else {
@@ -252,7 +267,16 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
+  resetform() {
+    $('.edit_form_new_sec').find('input:text, input:password, input:file, select, textarea').each(function () {
+      $(this).val('');
+    });
+    $('.edit_form_new_sec').find('input:radio,input:checkbox').each(function () {
+      $(this).removeAttr('checked');
+      $(this).removeAttr('selected');
+      $(this).prop('checked', false); // Unchecks it
+    });
+  }
   deleteuser(data: any) {
     this.userService?.deleteUser_Role(data['email']).subscribe((res: any) => {
       if (res['status'] == true) {
@@ -301,6 +325,7 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
                   name: ''
                 }
               }
+              this.resetform();
             },
             error => {
               console.log("error")

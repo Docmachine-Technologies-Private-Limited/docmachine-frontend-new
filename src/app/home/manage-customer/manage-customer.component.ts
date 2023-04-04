@@ -91,6 +91,7 @@ export class ManageCustomerComponent implements OnInit {
             (res: any) => {
               this.item2 = res["data"];
               this.modalService.dismissAll();
+              this.loginForm.reset();
             },
             (err) => console.log("Error", err)
           );
@@ -111,6 +112,7 @@ export class ManageCustomerComponent implements OnInit {
             (res: any) => {
               this.item2 = res["data"];
               this.modalService.dismissAll();
+              this.buyerForm.reset();
             },
             (err) => console.log("Error", err)
           );

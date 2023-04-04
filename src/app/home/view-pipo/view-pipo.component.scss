@@ -993,22 +993,24 @@ body {
 .top_invoice_section {
     display: inline-block;
     width: 100%;
-    background: #51AEE5 0% 0% no-repeat padding-box;
+    background: white;
     border-radius: 10px;
     opacity: 1;
-    min-height: 225px;
-    padding: 20px 25px;
+    height: auto;
+    min-height: 0;
+    padding: 10px;
     margin-bottom: 15px;
 }
 
 .invoice_title {
     display: inline-block;
     width: 100%;
-    font-size: 18px !important;
-    font-weight: 500 !important;
-    color: #fff;
-    margin: 0px;
+    font-size: 18px!important;
+    font-weight: 500!important;
+    color: black;
+    margin: 0;
     padding: 0 0 8px;
+    margin-bottom: 20px;
 }
 
 .leftshippting_info {
@@ -1301,7 +1303,7 @@ body {
 }
 
 .mat-tab-body-content {
-    overflow: inherit!important;
+    overflow: inherit !important;
 }
 
 .file_uploade {
@@ -1463,4 +1465,66 @@ body {
     width: 100%;
     margin-top: 20px;
     margin-bottom: 30px;
+}
+
+.leftshippting_info tr {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.leftshippting_info tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.d-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    align-items: center;
+    justify-content: center;
+    grid-template-rows: repeat(1,1fr);
+    color: white;
+}
+
+.right-label p {
+    margin: 0;
+}
+
+.left-label{
+    background: #262222;
+    border-top-left-radius: 30px;
+    padding: 10px;
+    border-bottom-left-radius: 30px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.right-label{
+    background: #0a3449;
+    border-bottom-right-radius: 30px;
+    padding: 10px;
+    border-top-right-radius: 30px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.right_border{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.rows{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 5px;
 }
