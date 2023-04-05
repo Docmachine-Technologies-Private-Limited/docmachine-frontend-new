@@ -19,7 +19,7 @@ export class ManageCustomerComponent implements OnInit {
   buyerForm: FormGroup;
   closeResult: string;
   file: any;
-
+  BANK_NAME_LIST:any=[];
   constructor(
     private documentService: DocumentService,
     public router: Router,
@@ -77,8 +77,11 @@ export class ManageCustomerComponent implements OnInit {
     this.buyerForm = this.formBuilder.group({
       buyerName: ['', Validators.required],
       buyerAdrs: ['', Validators.required],
+      buyerbank:['', Validators.required],
+      buyerbankaddress:['', Validators.required]
     });
-
+    this.BANK_NAME_LIST=this.documentService.getBankNameList();
+    console.log(this.BANK_NAME_LIST,'BANK_NAME_LIST')
   }
 
   onSubmit() {
