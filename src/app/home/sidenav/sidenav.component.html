@@ -178,11 +178,11 @@
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/add-advance-outward-remittance')">Advance
                     remittance Flow</h6>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/advance-outward-remittance')">Advance
                     Outward
                     Remittance(Old)</h6>
-                </li>
+                </li> -->
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-import-payment')">Direct Import
                     Payment(Old)
@@ -312,14 +312,14 @@
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Pdf-Upload')">Inward Remittance Disposal
                   </h6>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/bill-lodgement')">Bill Under Collection
                   </h6>
-                </li>
-                <li class="nav-item">
+                </li> -->
+                <!-- <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/new-Bill-Under-Collection')">New Bill Under
                     Collection</h6>
-                </li>
+                </li> -->
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
                     (click)="subbillunderlc.style.display='block';this.HIDE_ALL_SUB_MENU();this.SUB_MENU['Bills_Under_LC']=true">
@@ -333,10 +333,10 @@
                       (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcUsance'})">Usance</h6>
                   </div>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/packing-credit-request')">Packing Credit
                     Request(Old)</h6>
-                </li>
+                </li> -->
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Packing-Credit-Request-New')">Packing
                     Credit
@@ -348,10 +348,26 @@
                 </li>
               </ul>
             </li>
-            <li *ngIf="this.userData['role']=='member'">
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
               <a href="#TransactionDashBoard" data-toggle="collapse" aria-expanded="false"
                 class="dropdown-toggle">Transaction Summary</a>
               <ul class="collapse list-unstyled" id="TransactionDashBoard">
+                <li class="nav-item">
+                  <!-- <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard','Packing-Credit-Request')">Packing-Credit-Request
+                  </h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard','Export-Bill-Lodgement')">Export Bill Lodgement
+                  </h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard','Inward-Remittance-Disposal')">Inward Remittance Disposal
+                  </h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard','Inward-Remittance-Disposal-Relization')">Inward Remittance Disposal Relization
+                  </h6>
+                </li> -->
                 <li class="nav-item" *ngFor="let item of this.TRANSACTION_DASHBOARD_LIST">
                   <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard',item)">{{item}}
                   </h6>

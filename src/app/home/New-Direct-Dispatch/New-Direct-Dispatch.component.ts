@@ -3911,6 +3911,7 @@ export class NewDirectDispatchComponent implements OnInit {
             this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
               console.log('downloadEachFile', res);
               res.arrayBuffer().then((data: any) => {
+              
                 var base64String = this._arrayBufferToBase64(data);
                 const x = 'data:application/pdf;base64,' + base64String;
                 this.PDF_LIST.push({
@@ -3923,7 +3924,10 @@ export class NewDirectDispatchComponent implements OnInit {
           }
           if ((index + 1) == this.temp[id].length) {
             var fitertemp: any = temp.filter(n => n)
-            await this.pdfmerge.mergeAllPDF(fitertemp).then((data: any) => {
+            await this.pdfmerge._multiple_merge_pdf(fitertemp).then((data: any) => {
+              var file3 = new Blob([data._body], {type: 'application/pdf'});
+              // this.dataLocalUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(file3));
+
               console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
               this.MERGE_ALL_PDF[0] = data.toString();
             })
@@ -4044,6 +4048,7 @@ export class NewDirectDispatchComponent implements OnInit {
   SendApproval(Status: string, UniqueId: any, model: any) {
     if (UniqueId != null) {
       var approval_data: any=[];
+      let sbAmountSum:any=this.itemArray.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.fobValue) }, 0);
       if (this.documentService.MT102_SUBJECT!='' && this.documentService.MT102_SUBJECT!=null) {
         approval_data = {
           id: 'IRDR' + UniqueId,
@@ -4058,7 +4063,7 @@ export class NewDirectDispatchComponent implements OnInit {
         }
       } else {
         approval_data = {
-          id: 'Export-Direct-Dispatch' + this.tp?.firxAmount,
+          id: 'Export-Direct-Dispatch' + this.tp?.firxAmount!=undefined && this.tp?.firxAmount!=null && this.tp?.firxAmount!=''?this.tp?.firxAmount:sbAmountSum,
           tableName: 'Export-Direct-Dispatch',
           deleteflag: '-1',
           userdetails: this.USER_DATA,
