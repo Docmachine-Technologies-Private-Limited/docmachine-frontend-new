@@ -1334,3 +1334,15 @@ select.is-invalid {
     padding: 11px 0;
     border-bottom: 1px solid #ededed;
 }
+.Role_Type{
+    display: flex;
+    width: 100%;
+    padding: 0 6px;
+    border-radius: 5px;
+    background: white;
+    border: 1px solid #e3e3e3;
+    height: 40px;
+    font-size: 13px;
+    color: #919191;
+    align-items: center;
+}

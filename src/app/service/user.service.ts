@@ -170,6 +170,15 @@ export class UserService {
       httpOptions
     );
   }
+  
+  loginlogout(bool) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/otp/loginlogout`,{status: bool},httpOptions);
+  }
 
 
   deleteUser_Role(data){
@@ -681,6 +690,14 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(`${this.api_base}/user/getEamilByIdUserMember`,{email:id},httpOptions).toPromise();
+  }
+  getAllUserMember() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/user/getAllUserMember`,httpOptions).toPromise();
   }
  Url_Change_Authorization(name_url:any){
   this.router.navigate([name_url]);

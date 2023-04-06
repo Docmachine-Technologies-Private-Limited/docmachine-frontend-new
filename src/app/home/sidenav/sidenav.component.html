@@ -13,7 +13,8 @@
               <input id="main-search" type="text " placeholder="Type to search. . . " />
             </div>
             <div class="col-custom mr-0">
-              <div class="import_export_button m-auto" *ngIf="this.userData['role']!='manager' && this.userData['role']!='admin'">
+              <div class="import_export_button m-auto"
+                *ngIf="this.userData['role']!='manager' && this.userData['role']!='admin'">
                 <div *ngIf="this.userData?.Subscription=='Export'">
                   <button type="button" (click)="typeChange('export','import')" class="type_active">
                     <span class="icon_top "></span>Export
@@ -51,43 +52,12 @@
                         </span></a></li>
                     <li>
                       <a routerLinkActive="active " ariaCurrentWhenActive="page ">
-                        <span class="icon "><img src="./assets/new-img/header-user.svg " />
+                        <span class="icon "><img src="./assets/new-img/header-user.svg " class="Tooltips" tooltips-close="UserToolTips"/>
                         </span>
                       </a>
-                      <div class="after_login_drop_down">
-                        <div class="user_icons_top">
-                          <div class="left_user_pic">
-                            <img class="manager" src="./assets/new-img/user_pice.png" alt="" />
-                          </div>
-                          <div class="left_user_info">
-                            <h5 class="name">{{name}}</h5>
-                            <h6 class="side-name" *ngIf="this.userData['role'] == 'member'">
-                              {{this.userData['RoleCheckbox']!=''?this.userData['RoleCheckbox']:this.userData['role']}}
-                            </h6>
-                            <h6 class="side-name" *ngIf="role == 'admin'">Admin</h6>
-                            <h6 class="side-name" *ngIf="role == 'ca'">CA</h6>
-                            <h6 class="side-name" *ngIf="role == 'manager'">Manager</h6>
-                          </div>
-                        </div>
-                        <ul class="navbar-nav ml-auto" style="padding-left: 10px !important;">
-                          <li class="nav-item" style="display: flex;">
-                            <span class="account_icon"></span>
-                            <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/user-profiles')">Profile</h6>
-                          </li>
-                          <li class="nav-item" style="display: flex;">
-                            <span class="account_icon"></span>
-                            <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/account')">Account</h6>
-                          </li>
-                          <li class="nav-item" style="display: flex;">
-                            <span class="setting_icon"></span>
-                            <h6 class="nav-link p-0">Settings</h6>
-                          </li>
-                          <li class="nav-item" style="display: flex;">
-                            <span class="logout_icons"></span>
-                            <h6 class="nav-link p-0" (click)="logout() ">Log Out</h6>
-                          </li>
-                        </ul>
-                      </div>
+                     
+                      <!-- <div class="after_login_drop_down">
+                       </div> -->
                     </li>
                   </ul>
                 </div>
@@ -107,7 +77,8 @@
         </button>
       </div>
       <div class="p-0 pt-5" id="sidebar1">
-          <a *ngIf="this.userData['role']!='manager'" [routerLink]="['/home/dashboardTask']" class="sidebar-content" style="color: black;
+        <a *ngIf="this.userData['role']!='manager'" [routerLink]="['/home/dashboardTask']" class="sidebar-content"
+          style="color: black;
           padding-left: 0;
           font-size: 20px;
           display: flex;
@@ -117,9 +88,10 @@
           border-radius: 0px;
           padding: 5px;
           font-weight: 600;">
-            <span class="icon side-icon"><img style="width: 17px;filter: hue-rotate(358deg);" src="./assets/new-img/dashboard.svg" /> Dashboard</span> 
-          </a>
-          <a *ngIf="this.userData['role']=='manager'" class="sidebar-content" style="color: black;
+          <span class="icon side-icon"><img style="width: 17px;filter: hue-rotate(358deg);"
+              src="./assets/new-img/dashboard.svg" /> Dashboard</span>
+        </a>
+        <a *ngIf="this.userData['role']=='manager'" class="sidebar-content" style="color: black;
           padding-left: 0;
           font-size: 20px;
           display: flex;
@@ -129,8 +101,9 @@
           border-radius: 0px;
           padding: 5px;
           font-weight: 600;">
-            <span class="icon side-icon"><img style="width: 17px;filter: hue-rotate(358deg);" src="./assets/new-img/dashboard.svg" /> Dashboard</span> 
-          </a>
+          <span class="icon side-icon"><img style="width: 17px;filter: hue-rotate(358deg);"
+              src="./assets/new-img/dashboard.svg" /> Dashboard</span>
+        </a>
         <div class="scroll-bar">
           <ul class="list-unstyled components mb-5 p-3">
             <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
@@ -152,7 +125,8 @@
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/importInsurance')">Insurance Documents</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/letterofcredit-import-lc')">Letter of Credit
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/letterofcredit-import-lc')">Letter of
+                    Credit
                     (LC)</h6>
                 </li>
                 <li class="nav-item">
@@ -164,7 +138,8 @@
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/importTriParty')">Tri party agreements</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-opinion-report')">Opinion Reports</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-opinion-report')">Opinion Reports
+                  </h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/outward-remittance-advice')">Outward
@@ -172,48 +147,59 @@
                     Advice</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-airway-bl-copy')">Airway/BL Copy</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-airway-bl-copy')">Airway/BL Copy
+                  </h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-bill-of-exchange')">Bill Of Exchange
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-destruction')">Destruction Certificate
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-destruction')">Destruction
+                    Certificate
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-commercial')">Commercial Invoices</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-commercial')">Commercial Invoices
+                  </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-packing-list')">Packing List Documents
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-packing-list')">Packing List
+                    Documents
                   </h6>
                 </li>
               </ul>
             </li>
-            <li  *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
-              <a href="#Transactions" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Transactions</a>
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
+              <a href="#Transactions" data-toggle="collapse" aria-expanded="false"
+                class="dropdown-toggle">Transactions</a>
               <ul class="collapse list-unstyled" id="Transactions">
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/add-advance-outward-remittance')">Advance remittance Flow</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/add-advance-outward-remittance')">Advance
+                    remittance Flow</h6>
                 </li>
-                <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/advance-outward-remittance')">Advance Outward
+                <!-- <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/advance-outward-remittance')">Advance
+                    Outward
                     Remittance(Old)</h6>
-                </li>
+                </li> -->
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-import-payment')">Direct Import Payment(Old)
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-import-payment')">Direct Import
+                    Payment(Old)
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Import-Direct-Payment')">Direct Import Payment(New)
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Import-Direct-Payment')">Direct Import
+                    Payment(New)
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-direct-dispatch')">Import Bill Lodgement</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-direct-dispatch')">Import Bill
+                    Lodgement</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/a2cum-application-yesbank')">A2cum Application
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/a2cum-application-yesbank')">A2cum
+                    Application
                   </h6>
                 </li>
                 <li class="nav-item">
@@ -243,7 +229,8 @@
                     (click)="subbillunderlc.style.display='block';this.HIDE_ALL_SUB_MENU();this.SUB_MENU['Bills_Under_LC']=true">
                     Bills Under LC</h6>
                   <div class="sub-menu navbar-nav ml-auto"
-                    [style]="this.SUB_MENU['Bills_Under_LC']==true ? 'display:block;' : 'display:none;'" #subbillunderlc>
+                    [style]="this.SUB_MENU['Bills_Under_LC']==true ? 'display:block;' : 'display:none;'"
+                    #subbillunderlc>
                     <h6 class="nav-link p-0"
                       (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcSight'})">Sight</h6>
                     <h6 class="nav-link p-0"
@@ -252,8 +239,9 @@
                 </li>
               </ul>
             </li>
-            <li  *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
-              <a href="#ExportDocuments" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Documents</a>
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
+              <a href="#ExportDocuments" data-toggle="collapse" aria-expanded="false"
+                class="dropdown-toggle">Documents</a>
               <ul class="collapse list-unstyled" id="ExportDocuments">
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/pipo')">PI/PO Summary <i
@@ -270,10 +258,12 @@
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/debit-note')">Debit Notes</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/insurance-document')">Insurance Documents</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/insurance-document')">Insurance Documents
+                  </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/letterofcredit-lc')">Letter of Credit (LC)</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/letterofcredit-lc')">Letter of Credit (LC)
+                  </h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/master-services')">Master Service Agreement
@@ -286,10 +276,11 @@
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/opinion-report')">Opinion Reports</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/inward-remittance-advice')">Inward Remittance
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/inward-remittance-advice')">Inward
+                    Remittance
                     Advice</h6>
                 </li>
-    
+
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/airway-bl-copy')">Airway/BL Copy</h6>
                 </li>
@@ -313,48 +304,73 @@
                 </li>
               </ul>
             </li>
-            <li  *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
-              <a href="#ExportTransactions" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Transactions</a>
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
+              <a href="#ExportTransactions" data-toggle="collapse" aria-expanded="false"
+                class="dropdown-toggle">Transactions</a>
               <ul class="collapse list-unstyled" id="ExportTransactions">
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Pdf-Upload')">Inward Remittance Disposal</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Pdf-Upload')">Inward Remittance Disposal
+                  </h6>
                 </li>
-                <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/bill-lodgement')">Bill Under Collection</h6>
-                </li>
-                <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/new-Bill-Under-Collection')">New Bill Under Collection</h6>
-                </li>
+                <!-- <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/bill-lodgement')">Bill Under Collection
+                  </h6>
+                </li> -->
+                <!-- <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/new-Bill-Under-Collection')">New Bill Under
+                    Collection</h6>
+                </li> -->
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
                     (click)="subbillunderlc.style.display='block';this.HIDE_ALL_SUB_MENU();this.SUB_MENU['Bills_Under_LC']=true">
                     Bills Under LC</h6>
                   <div class="sub-menu navbar-nav ml-auto"
-                    [style]="this.SUB_MENU['Bills_Under_LC']==true ? 'display:block;' : 'display:none;'" #subbillunderlc>
+                    [style]="this.SUB_MENU['Bills_Under_LC']==true ? 'display:block;' : 'display:none;'"
+                    #subbillunderlc>
                     <h6 class="nav-link p-0"
                       (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcSight'})">Sight</h6>
                     <h6 class="nav-link p-0"
                       (click)="navigationByUrlParam($event,'/bill-under-collection',{file:'nonlcUsance'})">Usance</h6>
                   </div>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/packing-credit-request')">Packing Credit
                     Request(Old)</h6>
-                </li>
+                </li> -->
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Packing-Credit-Request-New')">Packing Credit
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Packing-Credit-Request-New')">Packing
+                    Credit
                     Request(New)</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-dispatch')">Export Bill Lodgement</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-dispatch')">Export Bill Lodgement
+                  </h6>
                 </li>
               </ul>
             </li>
-            <li *ngIf="this.userData['role']=='member'">
-              <a href="#TransactionDashBoard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Transaction Summary</a>
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
+              <a href="#TransactionDashBoard" data-toggle="collapse" aria-expanded="false"
+                class="dropdown-toggle">Transaction Summary</a>
               <ul class="collapse list-unstyled" id="TransactionDashBoard">
+                <li class="nav-item">
+                  <!-- <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard','Packing-Credit-Request')">Packing-Credit-Request
+                  </h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard','Export-Bill-Lodgement')">Export Bill Lodgement
+                  </h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard','Inward-Remittance-Disposal')">Inward Remittance Disposal
+                  </h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard','Inward-Remittance-Disposal-Relization')">Inward Remittance Disposal Relization
+                  </h6>
+                </li> -->
                 <li class="nav-item" *ngFor="let item of this.TRANSACTION_DASHBOARD_LIST">
-                  <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard',item)">{{item}}</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard',item)">{{item}}
+                  </h6>
                 </li>
               </ul>
             </li>
@@ -373,7 +389,8 @@
               </ul>
             </li>
             <li *ngIf="this.userData['role']=='member'">
-              <a href="#ApprovalPanel" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Status Panel</a>
+              <a href="#ApprovalPanel" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Status
+                Panel</a>
               <ul class="collapse list-unstyled" id="ApprovalPanel">
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/pendingpanel')">Pending</h6>
@@ -390,40 +407,44 @@
               <a href="#Other" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Other</a>
               <ul class="collapse list-unstyled" id="Other">
                 <li class="nav-item">
-                <a [routerLink]="[ '/home/upload'] " class="sidebar-content ">
-                  <span class="icon side-icon "><img src="./assets/new-img/upload.svg " /></span> Upload Documents
-                </a>
-               </li>
-               <li class="nav-item">
-                 <a class="sidebar-content ">
-                   <span class="icon side-icon ">
-                     <img src="./assets/new-img/transport.svg " />
-                   </span> Transaction
-                 </a>
-              </li>
-              <li class="nav-item">
-              <a href="#ViewDocument" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">View Document </a>
-              <ul id="ViewDocument" class="collapse list-unstyled">
-                <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/view-document/sb')">Shipping Bill</h6>
+                  <a [routerLink]="[ '/home/upload'] " class="sidebar-content ">
+                    <span class="icon side-icon "><img src="./assets/new-img/upload.svg " /></span> Upload Documents
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/view-document/boe')">BOE Documents</h6>
+                  <a class="sidebar-content ">
+                    <span class="icon side-icon ">
+                      <img src="./assets/new-img/transport.svg " />
+                    </span> Transaction
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/view-document/pipo')">PI/PO Documents</h6>
+                  <a href="#ViewDocument" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">View
+                    Document </a>
+                  <ul id="ViewDocument" class="collapse list-unstyled">
+                    <li class="nav-item">
+                      <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/view-document/sb')">Shipping Bill</h6>
+                    </li>
+                    <li class="nav-item">
+                      <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/view-document/boe')">BOE Documents</h6>
+                    </li>
+                    <li class="nav-item">
+                      <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/view-document/pipo')">PI/PO Documents
+                      </h6>
+                    </li>
+                  </ul>
                 </li>
               </ul>
             </li>
-             </ul>
-            </li>
             <li *ngIf="this.userData['role']=='manager'">
-              <a href="#ManagerPanel" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Manager Panel</a>
-             <ul id="ManagerPanel" class="collapse list-unstyled">
-              <li class="nav-item"><a class="sidebar-content" [routerLink]="['/home/manageUser'] ">Manage User</a>
-              </li>
-              <li class="nav-item">
-                  <a href="#ManageCustomer" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Manage Customer</a>
+              <a href="#ManagerPanel" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Manager
+                Panel</a>
+              <ul id="ManagerPanel" class="collapse list-unstyled">
+                <li class="nav-item"><a class="sidebar-content" [routerLink]="['/home/manageUser'] ">Manage User</a>
+                </li>
+                <li class="nav-item">
+                  <a href="#ManageCustomer" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Manage
+                    Customer</a>
                   <ul id="ManageCustomer" class="collapse list-unstyled">
                     <li class="nav-item">
                       <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/manage-customer/import')">Import</h6>
@@ -432,29 +453,40 @@
                       <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/manage-customer/export')">Export</h6>
                     </li>
                   </ul>
-              </li>           
-             </ul>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item" *ngIf="role == 'admin' || this.userData['emailId']=='it@bharathexim.com'">
+              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/SuperAdminPanel')">Super Admin Panel</h6>
+            </li>
+            <li class="nav-item" *ngIf="this.userData['role']=='manager' || this.userData['emailId']=='it@bharathexim.com'">
+              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/AdminPanel')">Admin Panel</h6>
             </li>
             <li class="nav-item" *ngIf="role == 'admin'">
-              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/powerAdmin/pending')">Admin User List</h6>
+              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/powerAdmin/pending')">
+                Admin User List</h6>
             </li>
             <li class="nav-item" *ngIf="role == 'admin'">
-              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/powerAdmin/approved')">Approved</h6>
+              <h6 class="nav-link p-0" style="font-size: 11px;"
+                (click)="navigationByUrl($event,'/powerAdmin/approved')">Approved</h6>
             </li>
             <li class="nav-item" *ngIf="role == 'admin'">
-              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/powerAdmin/declined')">Declined</h6>
+              <h6 class="nav-link p-0" style="font-size: 11px;"
+                (click)="navigationByUrl($event,'/powerAdmin/declined')">Declined</h6>
             </li>
           </ul>
           <div class="footer col-12">
             <ul class="list-unstyled components">
               <li class="nav-item mt-2">
-                <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/help')">Need Help?</h6>
+                <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/help')">Need Help?
+                </h6>
               </li>
               <li class="nav-item">
                 <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/')">Contact Us</h6>
               </li>
               <li class="nav-item">
-                <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/t&c')">Terms & Condition</h6>
+                <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/t&c')">Terms &
+                  Condition</h6>
               </li>
             </ul>
             <h5 class="footer-heading">DocMachine 2023.</h5>
@@ -469,3 +501,42 @@
     </div>
   </div>
 </div>
+
+<ng-custom-tooltips id="UserToolTips">
+   <custom-header-tooltips>
+    <div class="user_icons_top">
+      <div class="left_user_pic">
+        <img class="manager" src="./assets/new-img/user_pice.png" alt="" />
+      </div>
+      <div class="left_user_info">
+        <h5 class="name">{{name}}</h5>
+        <h6 class="side-name" *ngIf="this.userData['role'] == 'member'">
+          {{this.userData['RoleCheckbox']!=''?this.userData['RoleCheckbox']:this.userData['role']}}
+        </h6>
+        <h6 class="side-name" *ngIf="role == 'admin'">Admin</h6>
+        <h6 class="side-name" *ngIf="role == 'ca'">CA</h6>
+        <h6 class="side-name" *ngIf="role == 'manager'">Manager</h6>
+      </div>
+    </div>
+   </custom-header-tooltips>
+   <custom-content-tooltips>
+    <ul class="navbar-nav ml-auto" style="padding-left: 10px !important;margin: auto;margin-left: 15px!important;">
+      <li class="nav-item profile-panel" style="display: flex;">
+        <span class="fa fa-user"></span>
+        <h6 class="p-0" class="close-tooltips" [attr.tooltips-close]="'UserToolTips'" (click)="navigationByUrl($event,'/user-profiles')">Profile</h6>
+      </li>
+      <li class="nav-item profile-panel" style="display: flex;">
+        <span class="fas fa-restroom"></span>
+        <h6 class="p-0" class="close-tooltips" [attr.tooltips-close]="'UserToolTips'" (click)="navigationByUrl($event,'/account')">Account</h6>
+      </li>
+      <li class="nav-item profile-panel" style="display: flex;">
+        <span class="fa fa-cog"></span>
+        <h6 class="p-0">Settings</h6>
+      </li>
+      <li class="nav-item profile-panel" style="display: flex;">
+        <span class="fa fa-sign-out"></span>
+        <h6 class="p-0" class="close-tooltips" [attr.tooltips-close]="'UserToolTips'" (click)="logout() ">Log Out</h6>
+      </li>
+    </ul>
+   </custom-content-tooltips>
+</ng-custom-tooltips>

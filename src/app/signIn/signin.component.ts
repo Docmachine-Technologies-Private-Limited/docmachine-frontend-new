@@ -109,6 +109,7 @@ export class SigninComponent implements OnInit {
       this.userService.loginVerfiy(this.value)
         .subscribe(
           data => {
+           this.userService.loginlogout(true).subscribe((res:any)=>console.log(res,'loginlogout'))
             if (this.data1['data'][0].emailId == 'docmachinetec@gmail.com' || this.data1['data'][0].emailId == 'tramsdocmachine@gmail.com' || this.data1['data'][0].emailId == 'fintech.innovations2021@gmail.com') {
               this.router.navigate(['/home/powerAdmin/pending'])
               this.authGuard.setLocalStorage('LOGIN_OTP',true);
@@ -131,13 +132,17 @@ export class SigninComponent implements OnInit {
                       this.router.navigate(['/home/caDocuments/all'])
                     } else {
                       this.userService.role = this.data['result']['role'];
-                      if (this.data1['data'][0].companyId) {
+                      if (this.data1['data'][0]?.role=='manager') {
                         this.router.navigate(['/home'])
-                      } else {
-                        if (this.data1['data'][0]?.role!='member') {
-                          this.router.navigate(['createTeam']);
-                        }else{
-                          this.router.navigate(['/home'])
+                      }else{
+                        if (this.data1['data'][0].companyId) {
+                          this.router.navigate(['/home/dashboardTask'])
+                        } else {
+                          if (this.data1['data'][0]?.role!='member') {
+                            this.router.navigate(['createTeam']);
+                          }else{
+                            this.router.navigate(['/home/dashboardTask'])
+                          }
                         }
                       }
                     }

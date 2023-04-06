@@ -611,8 +611,8 @@
               </div>
              </div>
               <button type="button" class="btn btn-primary" (click)="nameSearch4 = ''">Reset</button>
-              <button type="button" class="btn btn-secondary" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"' (click)="HIDE_SHOW_POPUP('PANEL_1')">Back</button>
-              <button type="button" class="btn btn-secondary" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"'  (click)="HIDE_SHOW_POPUP('PANEL_2')">Next</button>
+              <button type="button" class="btn btn-primary" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"' (click)="HIDE_SHOW_POPUP('PANEL_1')">Back</button>
+              <button type="button" class="btn btn-primary" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"'  (click)="HIDE_SHOW_POPUP('PANEL_2')">Next</button>
             </div>
           </div>
           <section class="box-shadow" *ngIf="this.HIDE_SHOW['PANEL_1']==true && nameSearch4!=''" style="overflow: auto;
@@ -734,7 +734,7 @@
         </div>
       </div>
       <div class="modal-footer p-0 mt-2">
-        <button type="button" class="footer-btn"><span (click)="FIRX_CHECK(ShippingBill?.PopUpOpenClose?.nativeElement)">OK</span></button>
+        <button type="button" class="footer-btn" [ngClass]="{'btn-disabled':this.OK_BUTTON_CONDITION== '' && this.Lodgement['AgainstAdvanceReceipt']['Show']=='yes'}"><span (click)="FIRX_CHECK(ShippingBill?.PopUpOpenClose?.nativeElement)">OK</span></button>
       </div>
     </div>
   </div>
@@ -889,7 +889,7 @@
           </div>
           <div class="modal-body">
               <div class="content_white_background" *ngIf="this.itemArray.length!=0">
-                <mat-tab-group class="custom-1" mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="PreviewSlideToggle($event)">
+                <mat-tab-group class="custom-1" mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="PreviewSlideToggle($event,'')">
                   <mat-tab [id]="item?.sbno" [label]="'SB_No_'+item?.sbno" *ngFor="let item of this.itemArray;let i=index">
                     <app-pdf-viewer class="pt-3" [downloadShow]="false" *ngFor="let item of this.PREVIEWS_URL_LIST" [src]="item" width="100%" height="500px"></app-pdf-viewer>
                     <div class="modal-footer">

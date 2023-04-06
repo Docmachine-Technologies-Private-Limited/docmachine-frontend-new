@@ -32,7 +32,7 @@ export class SidenavComponent implements OnInit {
   name: any;
   ct: boolean;
   userData: any = [];
-  TRANSACTION_DASHBOARD_LIST: any = [];
+  TRANSACTION_DASHBOARD_LIST: any = ["Packing-Credit-Request","Export-Bill-Lodgement","Inward-Remittance-Disposal","Inward-Remittance-Disposal-Relization"];
 
   constructor(
     public router: Router,

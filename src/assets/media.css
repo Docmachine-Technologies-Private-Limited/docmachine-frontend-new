@@ -20,9 +20,3 @@
     .import_export_sec .import_export_button .import_buttons,.import_export_sec .import_export_button .import_buttons{font-size: 15px;}
     }
     
-    @media screen and (max-width:768px){
-    .sidebar_left #sidebar{position:inherit; width:100%!important;}
-    .main_nave .page-controls.navbar-dashboard,.content_top_common .content-wrap{padding-left:0px!important;}
-    .top_spavce{min-height: 5px;}	
-    .content_top_common .content-wrap{padding-left:0px;}
-    }

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Event, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -11,6 +11,7 @@ import { UserService } from './service/user.service';
 import * as jwt_decode from 'jwt-decode';
 import { StorageEncryptionDecryptionService } from './Storage/storage-encryption-decryption.service';
 import $ from 'jquery'
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -22,20 +23,23 @@ export class AppComponent implements OnInit, OnDestroy {
   userActivity;
   userInactive: Subject<any> = new Subject();
   DelayTime: any = '';
-  WithoutAuthorization: any = ['verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP'];
+  WithoutAuthorization: any = ['verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP','2FA','notVerified','authorization','newUser'];
   constructor(
     private translate: TranslateService,
     private router: Router, public doc: DocumentService,
     private userService: UserService,
     public authservice: AuthenticateService,
     public sessionstorage: StorageEncryptionDecryptionService,
+    public toastr: ToastrService,
+    public elRef: ElementRef,
     public authGuard: AuthGuard) {
     this.translate.setDefaultLang('en');
-    console.log('AppConfig', AppConfig, window.close);
-    this.DelayTime = new Date(new Date().getTime() + (1 * 60 * 1000));
+    let token = this.authGuard.loadFromLocalStorage();
+   
     this.setTimeoutNew();
     router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
+      
         var splitUrl: any = event?.url?.split('/')
         // console.log(this.CheckIng(this.WithoutAuthorization, splitUrl[1]), splitUrl, 'CheckIng')
         if (this.CheckIng(this.WithoutAuthorization, splitUrl[1]).length != 0) {
@@ -45,14 +49,24 @@ export class AppComponent implements OnInit, OnDestroy {
           if (token == null) {
             this.authservice.logout();
             this.router.navigate(['/login']);
-          }else{
+          } else {
             this.userService.getUserDetail().then((user: any) => {
               this.userData = user?.result
               let token = this.authGuard.loadFromLocalStorage();
               var session: any = JSON.parse(this.authGuard.getLocalStorage('PERMISSION'));
-              if (this.authGuard.getLocalStorage('PERMISSION') == null || this.userData?.role != session?.role && !token) {
+              if (this.authGuard.getLocalStorage('PERMISSION') == null || this.userData?.role != session?.role) {
                 this.authservice.logout();
                 this.router.navigate(['/login']);
+              }
+              if (token != null) {
+                const jwtToken: any = jwt_decode.default(token);
+                const timeout = jwtToken.exp - new Date().getTime();
+                setTimeout(() => {
+                  this.authservice.logout();
+                  this.router.navigate(['/login']);
+                  this.toastr?.warning('Your token expired....')
+                }, timeout);
+                console.log('AppConfig', AppConfig,jwtToken.exp, timeout);
               }
             });
           }
@@ -126,5 +140,12 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   doBeforeUnload(event) {
     console.log(window.event, 'window.event')
+  }
+  getTokenExpirationDate(token: string): any {
+    const decodedToken: any = jwt_decode.default(token);
+    if (decodedToken.exp === undefined) { return null; }
+    const date = new Date(0);
+    date.setUTCSeconds(decodedToken.exp);
+    return date;
   }
 }

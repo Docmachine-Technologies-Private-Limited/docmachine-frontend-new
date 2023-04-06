@@ -41,7 +41,12 @@ import { CarouselItemElementDirective } from '../custom/ng-custom-carousel/carou
 import { CustomsliderComponent } from '../custom/customslider/customslider.component';
 import {MatStepperModule} from '@angular/material/stepper';
 import { CustomEventDirective } from "../custom/custom-model/custom-event.directive";
-
+import { NgCustomTooltipsDirective } from "../custom/ng-custom-tooltips/ng-custom-tooltips.directive";
+import { NgCustomTooltipsComponent } from "../custom/ng-custom-tooltips/ng-custom-tooltips.component";
+import { CustomHeaderTooltipsComponent } from "../custom/ng-custom-tooltips/custom-header-tooltips/custom-header-tooltips.component";
+import { CustomFooterTooltipsComponent } from "../custom/ng-custom-tooltips/custom-footer-tooltips/custom-footer-tooltips.component";
+import { CustomContentTooltipsComponent } from "../custom/ng-custom-tooltips/custom-content-tooltips/custom-content-tooltips.component";
+import { NgCustomCardModelComponent } from "../custom/ng-custom-card-model/ng-custom-card-model.component";
 
 @NgModule({
   declarations: [
@@ -63,7 +68,13 @@ import { CustomEventDirective } from "../custom/custom-model/custom-event.direct
     CarouselItemDirective,
     CarouselItemElementDirective,
     CustomsliderComponent,
-    CustomEventDirective
+    CustomEventDirective,
+    NgCustomTooltipsComponent,
+    NgCustomTooltipsDirective,
+    CustomHeaderTooltipsComponent,
+    CustomFooterTooltipsComponent,
+    CustomContentTooltipsComponent,
+    NgCustomCardModelComponent
   ],
   imports: [
     CommonModule,
@@ -114,7 +125,13 @@ import { CustomEventDirective } from "../custom/custom-model/custom-event.direct
     CarouselItemElementDirective,
     CustomsliderComponent,
     MatStepperModule,
-    CustomEventDirective
+    CustomEventDirective,
+    NgCustomTooltipsComponent,
+    NgCustomTooltipsDirective,
+    CustomHeaderTooltipsComponent,
+    CustomFooterTooltipsComponent,
+    CustomContentTooltipsComponent,
+    NgCustomCardModelComponent
   ],
 })
 export class SharedHomeModule { }
