@@ -74,7 +74,7 @@ import { NgCustomCardModelComponent } from "../custom/ng-custom-card-model/ng-cu
     CustomHeaderTooltipsComponent,
     CustomFooterTooltipsComponent,
     CustomContentTooltipsComponent,
-    NgCustomCardModelComponent
+    NgCustomCardModelComponent,
   ],
   imports: [
     CommonModule,
@@ -93,7 +93,6 @@ import { NgCustomCardModelComponent } from "../custom/ng-custom-card-model/ng-cu
   entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal,SharedDataService,PipoDataService,TreeViewComponent,MergePdfService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  //   exports: [SharedProjectsModule]
   exports: [
     FilternewPipe,
     FilterdatePipe,
@@ -131,7 +130,7 @@ import { NgCustomCardModelComponent } from "../custom/ng-custom-card-model/ng-cu
     CustomHeaderTooltipsComponent,
     CustomFooterTooltipsComponent,
     CustomContentTooltipsComponent,
-    NgCustomCardModelComponent
+    NgCustomCardModelComponent,
   ],
 })
 export class SharedHomeModule { }

@@ -533,7 +533,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   }
 
   public loadFromLocalStorage() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     this.authToken = token;
     return this.authToken;
   }

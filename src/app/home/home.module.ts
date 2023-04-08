@@ -608,18 +608,6 @@ import { SuperAdminPanelComponent } from './SuperAdminPanel/admin-panel/admin-pa
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [MatProgressBarModule, MatTabsModule, SharedHomeModule],
 })
-export class HomeModule implements OnInit {
-  userData: any = [];
-  userActivity;
+export class HomeModule {
 
-  constructor(
-    private router: Router, public doc: DocumentService,
-    private userService: UserService,
-    public authservice: AuthenticateService,
-    public authGuard: AuthGuard) {
-  }
-  ngOnInit(): void {
-    console.log('gfdgdgfdgfdgf')
-
-  };
 }

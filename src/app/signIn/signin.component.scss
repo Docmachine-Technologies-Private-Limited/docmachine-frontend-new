@@ -21,6 +21,7 @@
         left: 0;
         height: 100vh;
     }
+
     .display-5 {
         font-weight: 400;
         color: #606670;
@@ -263,6 +264,7 @@
             // width: 100%;
             display: none;
         }
+
         .display-5 {
             font-weight: 500;
             color: #606670;
@@ -10688,40 +10690,51 @@
     }
 
     .limiter {
-        background-image: linear-gradient(to right, #ffffff, #d4d3d8, #a9a9b3, #7f828f, #575c6d, #414a5a, #2b3847, #162734, #102129, #0d1b1f, #081416, #030b0b);;
+        background-image: linear-gradient(to right, #ffffff, #d4d3d8, #a9a9b3, #7f828f, #575c6d, #414a5a, #2b3847, #162734, #102129, #0d1b1f, #081416, #030b0b);
+        ;
         width: 100%;
         background-repeat: no-repeat;
         background-size: auto;
     }
-    
+
     @-webkit-keyframes svg-text-anim {
         40% {
-           stroke-dashoffset: 0;
-           fill: transparent;
-         }
-         60% {
-           stroke-dashoffset: 0;
-           fill: #ffffff;
-         }
-         100% {
-           stroke-dashoffset: 0;
-           fill: #ffffff;
-         }
-         
-     }
-     /* Most browsers */
-     @keyframes svg-text-anim {
+            stroke-dashoffset: 0;
+            fill: transparent;
+        }
+
+        60% {
+            stroke-dashoffset: 0;
+            fill: #ffffff;
+        }
+
+        100% {
+            stroke-dashoffset: 0;
+            fill: #ffffff;
+        }
+
+    }
+
+    /* Most browsers */
+    @keyframes svg-text-anim {
         40% {
-           stroke-dashoffset: 0;
-           fill: transparent;
-         }
-         60% {
-           stroke-dashoffset: 0;
-           fill: #ffffff;
-         }
-         100% {
-           stroke-dashoffset: 0;
-           fill: #ffffff;
-         }
-         
-     }
+            stroke-dashoffset: 0;
+            fill: transparent;
+        }
+
+        60% {
+            stroke-dashoffset: 0;
+            fill: #ffffff;
+        }
+
+        100% {
+            stroke-dashoffset: 0;
+            fill: #ffffff;
+        }
+
+    }
+
+    @media (max-width: 1300px) {
+        .rigth-panel {display: none;}
+
+    }

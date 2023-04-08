@@ -26,11 +26,11 @@ export class UserService {
 
   public addToken(token) {
     console.log(token);
-    localStorage.setItem("token", token);
+    sessionStorage.setItem("token", token);
     this.authToken = token;
   }
   public loadFromLocalStorage() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     this.authToken = token;
     return this.authToken;
   }

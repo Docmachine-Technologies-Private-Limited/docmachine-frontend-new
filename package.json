@@ -59,6 +59,7 @@
     "rxjs": "~7.5.0",
     "rxjs-compat": "6.6.7",
     "secure-ls": "^1.2.6",
+    "socket.io-client": "^4.6.1",
     "tslib": "^2.3.0",
     "webpack-sources": "^3.2.3",
     "xlsx": "^0.18.5",

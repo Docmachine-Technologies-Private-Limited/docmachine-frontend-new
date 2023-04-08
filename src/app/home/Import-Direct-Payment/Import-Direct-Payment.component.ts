@@ -5,7 +5,7 @@ import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
 import $, { event } from 'jquery'
-declare var Flickity:any;
+declare var Flickity: any;
 
 import {
   DropzoneDirective,
@@ -27,6 +27,7 @@ import { WindowInformationService } from '../../service/window-information.servi
 import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
+import { forEach } from 'jszip';
 
 @Component({
   selector: 'app-Import-Direct-Payment',
@@ -94,23 +95,24 @@ export class ImportDirectPaymentComponent implements OnInit {
     PIPO_NAME_LIST: [],
     data: [],
     original_data: [],
-    SINGLE_BOE_INFO:[],
-    Multiple_PIPO_INFO:[],
-    Multiple_BOE_INFO:[],
-    TransactionRef:[]
+    SINGLE_BOE_INFO: [],
+    Multiple_PIPO_INFO: [],
+    Multiple_BOE_INFO: [],
+    TransactionRef: []
   };
   SHIPPING_BILL_LIST: any = [{
     value: 'Single BOE'
-  },{ 
-    value: 'Multiple PIPO'},{
+  }, {
+    value: 'Multiple PIPO'
+  }, {
     value: 'Multiple BOE'
   }];
-  ALL_DROPDOWN_VALUE_LIST:any={
-    BOE_PIPO:[],
-    Beneficiary:[],
-    Bank:[],
-    DROPDOWN_BOE:''
-   }
+  ALL_DROPDOWN_VALUE_LIST: any = {
+    BOE_PIPO: [],
+    Beneficiary: [],
+    Bank: [],
+    DROPDOWN_BOE: ''
+  }
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
@@ -170,6 +172,7 @@ export class ImportDirectPaymentComponent implements OnInit {
       console.log('Data fetched successfully', res);
       for (let index = 0; index < res?.data.length; index++) {
         if (res?.data[index]?.file == 'import') {
+          res.data[index]['isExpand'] = false;
           this.PIPO_LIST['data'].push(res?.data[index]);
           this.PIPO_LIST['original_data'].push(res?.data[index])
           if (res?.data[index]?.pi_poNo != '' && !this.PIPO_LIST['PIPO_NAME_LIST'].includes(res?.data[index]?.pi_poNo)) {
@@ -177,15 +180,15 @@ export class ImportDirectPaymentComponent implements OnInit {
           }
           if (res?.data[index]?.boeRef != '') {
             res?.data[index]?.boeRef.forEach(element => {
-              this.PIPO_LIST['SINGLE_BOE_INFO'].push({data:element,pipo:res?.data[index]})
-          });
-         }
+              this.PIPO_LIST['SINGLE_BOE_INFO'].push({ data: element, pipo: res?.data[index] })
+            });
+          }
           if (res?.data[index]?.TransactionRef?.length != 0) {
             res?.data[index]?.TransactionRef?.forEach(element => {
-            if (element?.Ref_Data?.orRef!=undefined) {
-              this.PIPO_LIST['TransactionRef'].push({data:element?.Ref_Data?.orRef,pipo:res?.data[index]})
-            }
-          });
+              if (element?.Ref_Data?.orRef != undefined) {
+                this.PIPO_LIST['TransactionRef'].push({ data: element?.Ref_Data?.orRef, pipo: res?.data[index] })
+              }
+            });
           }
         }
       }
@@ -198,7 +201,7 @@ export class ImportDirectPaymentComponent implements OnInit {
       //   selectedAttraction: 0.03,
       //   friction: 0.15
       // });
-      console.log(this.PIPO_LIST,'sdfsdfdsfsdffsfsdfdsfsdfsdf')
+      console.log(this.PIPO_LIST, 'sdfsdfdsfsdffsfsdfdsfsdfsdf')
     },
       (err) => console.log(err)
     );
@@ -212,11 +215,11 @@ export class ImportDirectPaymentComponent implements OnInit {
       remittanceAmount: ['', Validators.required],
     });
   }
-  SELECTED_VALUE:any=[];
+  SELECTED_VALUE: any = [];
   DUMP_FUNCTION(condition1, condition2, popupshow) {
     console.log(condition1, this.pipoForm, 'DUMP_FUNCTION')
     if (condition2.includes(condition1)) {
-      this.SELECTED_VALUE=condition1;
+      this.SELECTED_VALUE = condition1;
       popupshow.style.display = 'flex';
     } else {
       popupshow.style.display = 'none'
@@ -246,12 +249,9 @@ export class ImportDirectPaymentComponent implements OnInit {
       },
       (err) => console.log("Error", err)
     );
-
-
   }
 
   changepipo(id) {
-
     let temp = [];
     temp = this.benneDetail.filter(items => {
       return items._id == id
@@ -636,7 +636,7 @@ export class ImportDirectPaymentComponent implements OnInit {
   }
 
   public loadFromLocalStorage() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     this.authToken = token;
     return this.authToken;
   }
@@ -825,13 +825,13 @@ export class ImportDirectPaymentComponent implements OnInit {
     var val: any = parseFloat(num2) != undefined ? parseFloat(num1) - parseFloat(num2) : 0
     return !isNaN(val) ? parseFloat(val).toFixed(2) : num1;
   }
-  FILTER_PIPO_DATA:any=[];
+  FILTER_PIPO_DATA: any = [];
   filterData(value: any) {
     console.log(value, 'ddsgfjsgdjfhgfds')
     this.PIPO_LIST['data'] = this.PIPO_LIST['original_data'].filter((item: any) => item?._id?.indexOf(value) != -1);
-    this.FILTER_PIPO_DATA=this.PIPO_LIST['data'][0];
+    this.FILTER_PIPO_DATA = this.PIPO_LIST['data'][0];
     for (let index = 0; index < this.FILTER_PIPO_DATA?.boeRef.length; index++) {
-      this.ADVANCE_REMMITANCE[this.FILTER_PIPO_DATA?.boeRef[index]?.boeNumber]=[];
+      this.ADVANCE_REMMITANCE[this.FILTER_PIPO_DATA?.boeRef[index]?.boeNumber] = [];
     }
   }
   AmountValidation(event: any, amount: any) {
@@ -839,35 +839,66 @@ export class ImportDirectPaymentComponent implements OnInit {
     if (targervalue > parseInt(amount)) {
       event.preventDefault();
       $(event?.target).val(amount);
-      this.toastr.warning(`Your amount limit only : `+amount+`,don't type extra amount...`)
+      this.toastr.warning(`Your amount limit only : ` + amount + `,don't type extra amount...`)
     }
   }
-  ADVANCE_REMMITANCE_CHECKBOX:any=[];
-  ADVANCE_REMMITANCE:any=[];
-  REAMAING_AMOUNT:any={
-    PIPO_SUM:0,
-    ADVANCE_SUM:0
+  ADVANCE_REMMITANCE_CHECKBOX: any = [];
+  ADVANCE_REMMITANCE: any = [];
+  REAMAING_AMOUNT: any = {
+    PIPO_SUM: 0,
+    ADVANCE_SUM: 0
   };
-  SelectAdvanceRemmitance($event:any,i,value,boeitem){
-    console.log(value,boeitem,'SelectAdvanceRemmitance')
-    if (value?.amount>boeitem?.invoiceAmount) {
+  SelectAdvanceRemmitance($event: any, i, value, boeitem) {
+    console.log(value, boeitem, 'SelectAdvanceRemmitance')
+    if (value?.amount > boeitem?.invoiceAmount) {
       $($event.target).prop('checked', false);
       this.toastr.warning(`You have not engouh boe amount: ${boeitem?.invoiceAmount}`)
       return;
-    }else{
-        // var temp_filter:any=this.ADVANCE_REMMITANCE[boeitem?.boeNumber].filter((item:any)=>item?.billNo.indexOf(value?.billNo)!=-1);
-        if (this.ADVANCE_REMMITANCE_CHECKBOX[i]==undefined || this.ADVANCE_REMMITANCE_CHECKBOX[i]=='') {
-          this.ADVANCE_REMMITANCE[boeitem?.boeNumber].push(value)
-          this.ADVANCE_REMMITANCE_CHECKBOX[i]=true;
-        }else{
-          $($event.target).prop('checked', false);
-          this.ADVANCE_REMMITANCE_CHECKBOX[i]='';
-          this.ADVANCE_REMMITANCE[boeitem?.boeNumber].splice(i,1);
-        }
-        var sumAdvanceAmount=this.ADVANCE_REMMITANCE[boeitem?.boeNumber].reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
-        this.REAMAING_AMOUNT['ADVANCE_SUM']=sumAdvanceAmount;
-        this.REAMAING_AMOUNT['PIPO_SUM']=parseFloat(this.FILTER_PIPO_DATA?.amount)-parseFloat(sumAdvanceAmount);
+    } else {
+      // var temp_filter:any=this.ADVANCE_REMMITANCE[boeitem?.boeNumber].filter((item:any)=>item?.billNo.indexOf(value?.billNo)!=-1);
+      if (this.ADVANCE_REMMITANCE_CHECKBOX[i] == undefined || this.ADVANCE_REMMITANCE_CHECKBOX[i] == '') {
+        this.ADVANCE_REMMITANCE[boeitem?.boeNumber].push(value)
+        this.ADVANCE_REMMITANCE_CHECKBOX[i] = true;
+      } else {
+        $($event.target).prop('checked', false);
+        this.ADVANCE_REMMITANCE_CHECKBOX[i] = '';
+        this.ADVANCE_REMMITANCE[boeitem?.boeNumber].splice(i, 1);
       }
+      var sumAdvanceAmount = this.ADVANCE_REMMITANCE[boeitem?.boeNumber].reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
+      this.REAMAING_AMOUNT['ADVANCE_SUM'] = sumAdvanceAmount;
+      this.REAMAING_AMOUNT['PIPO_SUM'] = parseFloat(this.FILTER_PIPO_DATA?.amount) - parseFloat(sumAdvanceAmount);
+    }
+  }
+  PIPO_SELECTED_DATA_INDEX: any = [];
+  PIPO_SELECTED_INDEX(index: any, data: any) {
+    console.log(index, data, 'PIPO_SELECTED_INDEX')
+    this.PIPO_SELECTED_DATA_INDEX = { index: index, data: data }
+  }
+  ORM_SELECTION_DATA: any = [];
+  ORM_SELECTION_DATA_LIST: any = { ORM_NUMBER: [], Amount_Sum: [] };
+  ORM_SELECTION(event: any, index: any, data: any) {
+    if (event.target.checked) {
+      this.ORM_SELECTION_DATA.push(data)
+    } else {
+      this.ORM_SELECTION_DATA.splice(index, 1);
+      event.target.checked = false;
+    }
+    this.ORM_SELECTION_DATA_LIST = { ORM_NUMBER: [], Amount_Sum: [] };
+    for (let index = 0; index < this.ORM_SELECTION_DATA.length; index++) {
+      const element = this.ORM_SELECTION_DATA[index];
+      this.ORM_SELECTION_DATA_LIST.ORM_NUMBER[index] = element?.billNo;
+      this.ORM_SELECTION_DATA_LIST.Amount_Sum[index] = element?.amount;
+    }
+    this.PIPO_LIST.data[this.PIPO_SELECTED_DATA_INDEX.index]['AdviceRefNo'] = this.ORM_SELECTION_DATA_LIST.ORM_NUMBER.toString();
+    this.PIPO_LIST.data[this.PIPO_SELECTED_DATA_INDEX.index]['AdviceRefAmount'] = this.ORM_SELECTION_DATA_LIST.Amount_Sum.toString();
+    this.PIPO_LIST.data[this.PIPO_SELECTED_DATA_INDEX.index]['AdviceRefData'] = this.ORM_SELECTION_DATA;
+    var totalSum: any = this.ORM_SELECTION_DATA.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
+    console.log(data, index, totalSum, this.ORM_SELECTION_DATA, this.PIPO_LIST.data, 'ORM_SELECTION');
+  }
+  CloseAllExpand(event: any, data: any, index: any) {
+    $('.table-type').removeClass('table-active')
+    $('.table-tr-1').removeClass('Table-Show')
+    $('.table-tr-1').addClass('Table-Hide')
   }
 }
 

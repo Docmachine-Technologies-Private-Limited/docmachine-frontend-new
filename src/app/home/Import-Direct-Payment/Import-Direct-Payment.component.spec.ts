@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddAdvanceOutwardRemittanceComponent } from './add-advance-outward-remittance.component';
+import { ImportDirectPaymentComponent } from './Import-Direct-Payment.component';
 
-describe('AddAdvanceOutwardRemittanceComponent', () => {
-  let component: AddAdvanceOutwardRemittanceComponent;
-  let fixture: ComponentFixture<AddAdvanceOutwardRemittanceComponent>;
+describe('ImportDirectPaymentComponent', () => {
+  let component: ImportDirectPaymentComponent;
+  let fixture: ComponentFixture<ImportDirectPaymentComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddAdvanceOutwardRemittanceComponent ]
+      declarations: [ ImportDirectPaymentComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddAdvanceOutwardRemittanceComponent);
+    fixture = TestBed.createComponent(ImportDirectPaymentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -144,7 +144,7 @@ onclick() {
   nameSearch2: string = '';
   startDate: any = '';
   endDate: any = '';
-  authToken: string;
+  authToken: any;
   headers: any;
   payTerm = [];
   benneDetail: any;
@@ -412,7 +412,7 @@ onclick() {
   }
 
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }

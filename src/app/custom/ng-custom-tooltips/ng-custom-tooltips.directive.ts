@@ -21,6 +21,8 @@ export class NgCustomTooltipsDirective {
   }
 
   ngOnInit() {
+  
+  console.log('fgdfkgfdkjghdfgkfd')
   }
   @HostListener('mouseenter', ['$event']) mouseover(event:any) {
     if (event!=undefined) {

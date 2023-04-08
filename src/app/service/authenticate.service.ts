@@ -9,16 +9,12 @@ export class AuthenticateService {
 
     public addToken(token) {
       console.log(token)
-      localStorage.setItem('token', token);
+      sessionStorage.setItem('token', token);
       this.authToken = token;
     }
-    
     public logout() {
       this.userService.loginlogout(false).subscribe((res:any)=>{console.log(res,'loginlogout');this.authToken = null;
-      localStorage.clear();})
-        
+      sessionStorage.clear();})
     }
-
-   
      
 }

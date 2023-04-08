@@ -353,7 +353,7 @@ export class TransactionDashboardComponent implements OnInit {
     }, value / 1500);
   }
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }

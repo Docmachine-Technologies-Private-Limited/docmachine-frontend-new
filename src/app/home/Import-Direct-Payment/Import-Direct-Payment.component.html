@@ -434,7 +434,7 @@
 
 <div class="PREVIEW_PAGE" tabindex="-1" #boedropdown style="display: none;background-color: #00000030;">
     <div class="col-12" *ngIf="this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=='Single BOE'">
-        <app-custom-model [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="boedropdown"
+        <app-custom-model [modalbodystyle]="{'max-height':'100vh !important'}" [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="boedropdown"
             name="Single BOE Selection Modal">
             <div class="p-2">
                 <div class="row p-2 modal-bg">
@@ -452,14 +452,16 @@
                         <p class="seleted-text" *ngIf="select_boe_list.selectedItems!=''"><span>BOE No. : </span>
                             {{select_boe_list.selectedItems}}</p>
                     </div>
-                    <div class="d-flex" style="height: 70vh;">
+                    <div class="d-flex" style="height: 76vh;">
                         <div class="row mt-0">
                             <table class="table">
                                 <thead>
                                     <tr class="table-tr">
                                         <th scope="col" class="col-td-th-1">#</th>
+                                        <th scope="col" class="col-td-th-1">#</th>
                                         <th scope="col" class="col-td-th-2">PI_PO No.</th>
-                                        <th scope="col" class="col-td-th-3">Pipo Amount</th>
+                                        <th scope="col" class="col-td-th-3">PI_PO Amount</th>
+                                        <th scope="col" class="col-td-th-3">Select ORM No.</th>
                                         <th scope="col" class="col-td-th-2">Advance ref no.</th>
                                         <th scope="col" class="col-td-th-2">Advance Payment</th>
                                         <th scope="col" class="col-td-th-2">Balance PI_PO Amount</th>
@@ -467,23 +469,68 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="table-tr" *ngFor="let item of this.PIPO_LIST['data'];let i=index">
-                                        <td scope="col" class="col-td-th-1"><input type="checkbox" /></td>
-                                        <td scope="col" class="col-td-th-2">{{item?.pi_poNo}}</td>
-                                        <td scope="col" class="col-td-th-3">{{item?.amount}}</td>
-                                        <td scope="col" class="col-td-th-2">
-                                            {{item?.TransactionRef[0]?.Ref_Data?.orRef?.billNo}}</td>
-                                        <td scope="col" class="col-td-th-2">
-                                            {{item?.TransactionRef[0]?.Ref_Data?.orRef?.amount}}</td>
-                                        <td scope="col" class="col-td-th-2"><input type="text" name="balance_amount"
-                                                disabled
-                                                [value]="this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount)">
-                                        </td>
-                                        <td scope="col" class="col-td-th-2"><input type="text" name="balance_amount"
-                                                (keyup)="AmountValidation($event,this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount))"
-                                                [value]="this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount)">
-                                        </td>
-                                    </tr>
+                                    <div class="table-type" *ngFor="let item of this.PIPO_LIST['data'];let i=index"
+                                        [ngClass]="{'table-active':item.isExpand==true}">
+                                        <tr class="table-tr added-active" title="click here see more details">
+                                            <td title="ORM Data Showing and Hide" scope="col" class="col-td-th-1"
+                                                (click)="item.isExpand=!item.isExpand;CloseAllExpand($event,this.PIPO_LIST['data'],i)">
+                                                <span *ngIf="item.isExpand==true" class="fa fa-chevron-up"></span>
+                                                <span *ngIf="item.isExpand==false" class="fa fa-chevron-down"></span>
+                                            </td>
+                                            <td scope="col" class="col-td-th-1"><input type="checkbox" /></td>
+                                            <td scope="col" class="col-td-th-2">{{item?.pi_poNo}}</td>
+                                            <td scope="col" class="col-td-th-3">{{item?.amount}}</td>
+                                            <td scope="col" class="col-td-th-3">
+                                                <button class="btn btn-primary PopupOpen" popup-close="ORM_POPUP_2"
+                                                    (click)="PIPO_SELECTED_INDEX(i,item)">Select</button>
+                                            </td>
+                                            <td scope="col" class="col-td-th-2">
+                                                {{item?.AdviceRefNo}}</td>
+                                            <td scope="col" class="col-td-th-2">
+                                                {{item?.AdviceRefAmount}}</td>
+                                            <td scope="col" class="col-td-th-2"><input type="text" name="balance_amount"
+                                                    disabled
+                                                    [value]="this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount)">
+                                            </td>
+                                            <td scope="col" class="col-td-th-2"><input type="text" name="balance_amount"
+                                                    (keyup)="AmountValidation($event,this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount))"
+                                                    [value]="this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount)">
+                                            </td>
+                                        </tr>
+                                        <tr class="table-tr table-tr-1"
+                                            [ngClass]="{'Table-Show':item.isExpand==true,'Table-Hide':item.isExpand==false}">
+                                            <td colspan="4" style="width: 100%;border: none;">
+                                                <div class="header">
+                                                    <h5>ORM Advice Against to this PIPO No. : {{item?.pi_poNo}}</h5>
+                                                </div>
+                                                <div class="center-panel">
+                                                    <table class="table table-style">
+                                                        <thead>
+                                                            <tr class="table-tr">
+                                                                <th class="col-td-th-2">Bill No.</th>
+                                                                <th class="col-td-th-2">Buyer</th>
+                                                                <th class="col-td-th-2">Party Name</th>
+                                                                <th class="col-td-th-2">Amount</th>
+                                                                <th class="col-td-th-2">Available Amount</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="table-tr"
+                                                                *ngFor="let Adviceitem of item?.AdviceRefData">
+                                                                <td class="col-td-th-2">{{ Adviceitem?.billNo }}</td>
+                                                                <td class="col-td-th-2">{{ Adviceitem?.buyerName }}</td>
+                                                                <td class="col-td-th-2">{{ Adviceitem?.partyName }}</td>
+                                                                <td class="col-td-th-2">{{ Adviceitem?.amount }}</td>
+                                                                <td class="col-td-th-2">{{ Adviceitem?.AvailableAmount
+                                                                    }}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </div>
                                 </tbody>
                             </table>
                         </div>
@@ -506,18 +553,20 @@
                             {{partyname.selectedItems}}</p>
                         <p class="seleted-text" *ngIf="partyname.selectedItems!=''"><span>PIPO Amount : </span>
                             {{this.PIPO_LIST['data'][0]?.amount}}</p>
-                            
-                        <p class="seleted-text" *ngIf="this.REAMAING_AMOUNT['PIPO_SUM']!=''"><span>PIPO Remmaing Amount : </span>
-                                {{this.REAMAING_AMOUNT['PIPO_SUM']}}</p>
+
+                        <p class="seleted-text" *ngIf="this.REAMAING_AMOUNT['PIPO_SUM']!=''"><span>PIPO Remmaing Amount
+                                : </span>
+                            {{this.REAMAING_AMOUNT['PIPO_SUM']}}</p>
                     </div>
                     <div class="d-flex" style="height: 70vh;
                     padding-right: 0;
                     gap: 10px;
                     width: calc(100vw - 58px);">
-                         <div class="row mt-0 col-12 p-0" style="overflow: auto;">
-                            <div class='col-12 grid-template'  *ngFor="let item of this.PIPO_LIST['data'];let i=index">
+                        <div class="row mt-0 col-12 p-0" style="overflow: auto;">
+                            <div class='col-12 grid-template' *ngFor="let item of this.PIPO_LIST['data'];let i=index">
                                 <div class='card' *ngFor="let boeitem of item?.boeRef;let i=index">
-                                    <h2 class='card__title' title="BOE Number">{{boeitem?.boeNumber}}<span title="BOE Amount" class='card__titleSpan'>
+                                    <h2 class='card__title' title="BOE Number">{{boeitem?.boeNumber}}<span
+                                            title="BOE Amount" class='card__titleSpan'>
                                             | {{boeitem?.invoiceAmount}}</span></h2>
                                     <div class='card__content'>
                                         <h3 class='card__subTitle'>Advance Details</h3>
@@ -533,8 +582,9 @@
                                                 <tbody>
                                                     <tr class="table-tr"
                                                         *ngFor="let adviceitem of item['AdviceRef'];let j=index">
-                                                        <td scope="col" class="col-td-th-1"><input type="checkbox" [checked]="this.ADVANCE_REMMITANCE_CHECKBOX[j]" 
-                                                        (change)="SelectAdvanceRemmitance($event,j,adviceitem,boeitem)"/>
+                                                        <td scope="col" class="col-td-th-1"><input type="checkbox"
+                                                                [checked]="this.ADVANCE_REMMITANCE_CHECKBOX[j]"
+                                                                (change)="SelectAdvanceRemmitance($event,j,adviceitem,boeitem)" />
                                                         </td>
                                                         <td scope="col" class="col-td-th-2">{{adviceitem?.billNo}}</td>
                                                         <td scope="col" class="col-td-th-2">{{adviceitem?.amount}}</td>
@@ -627,9 +677,9 @@
                                         <td scope="col" class="col-td-th-2">{{item?.pi_poNo}}</td>
                                         <td scope="col" class="col-td-th-3">{{item?.amount}}</td>
                                         <td scope="col" class="col-td-th-2">
-                                            {{item?.TransactionRef[0]?.Ref_Data?.orRef?.billNo}}</td>
+                                            {{item?.AdviceRefNo}}</td>
                                         <td scope="col" class="col-td-th-2">
-                                            {{item?.TransactionRef[0]?.Ref_Data?.orRef?.amount}}</td>
+                                            {{item?.AdviceRefAmount}}</td>
                                         <td scope="col" class="col-td-th-2"><input type="text" name="balance_amount"
                                                 disabled
                                                 [value]="this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount)">
@@ -696,3 +746,36 @@
         </app-custom-model>
     </div>
 </div>
+
+<app-custom-model modalbodyheight="70vh" [customstyle]="{'max-width':'85vw !important'}" class="p-2 mt-2" height="80vh"
+    id="ORM_POPUP_2" [name]="'ORM Selection Against Of : '+this.PIPO_SELECTED_DATA_INDEX?.data?.pi_poNo">
+    <div class="p-2">
+        <div class="row p-2 col-12 modal-bg">
+            <div class="d-flex col-12" style="height:80vh;">
+                <div class="row col-12 mt-0">
+                    <table class="table">
+                        <thead>
+                            <tr class="table-tr">
+                                <th scope="col" class="col-td-th-1">#</th>
+                                <th scope="col" class="col-td-th-2">Advance ref no.</th>
+                                <th scope="col" class="col-td-th-2">Advance Amount</th>
+                                <th scope="col" class="col-td-th-2">Advance Available Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-tr"
+                                *ngFor="let item of this.PIPO_SELECTED_DATA_INDEX?.data?.AdviceRef;let i=index">
+                                <td scope="col" class="col-td-th-1"><input type="checkbox"
+                                        (change)="ORM_SELECTION($event,i,item)" /></td>
+                                <td scope="col" class="col-td-th-2">{{item?.billNo}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.amount}}</td>
+                                <td scope="col" class="col-td-th-2">
+                                    {{item?.AvailableAmount!='0'?item?.AvailableAmount:item?.amount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-custom-model>

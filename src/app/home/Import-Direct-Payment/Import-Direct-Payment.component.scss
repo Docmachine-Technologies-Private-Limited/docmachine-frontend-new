@@ -1998,3 +1998,80 @@ h1 {
 .card__title {
     font-size: 16px;
 }
+
+.col-td-th-1,
+.col-td-th-2,
+.col-td-th-3 {
+    color: black;
+}
+
+.table-tr {
+    cursor: pointer;
+}
+
+.table-style {
+    border-radius: 10px;
+    padding: 10px !important;
+    width: 100%;
+    margin: auto;
+    background-color: transparent;
+}
+
+table .table-tr {
+    cursor: pointer;
+    box-shadow: 0px 0px 2px 2px #00000036;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 0.5rem;
+}
+
+table .table-tr-1 {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 0.5rem;
+    box-shadow: none;
+    transition: opacity 1s ease-in-out;
+}
+
+.header h5 {
+    background-color: #1d1724;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin: auto;
+    padding: 8px;
+    color: white;
+}
+
+.center-panel {
+    background: #eaeaea;
+    padding: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.table-active {
+    background: #fbfbfb;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 0px 5px 3px #c3c0c09e;
+    transition: opacity .5s ease-in-out;
+}
+
+.Table-Hide {
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+}
+
+.Table-Show {
+    opacity: 1;
+    visibility: visible;
+}
