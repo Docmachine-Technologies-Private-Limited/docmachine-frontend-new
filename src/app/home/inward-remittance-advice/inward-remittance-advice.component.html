@@ -128,6 +128,7 @@
                                                 <th scope="col" class="col-td-th-3">PI/PO No.</th>
                                                 <th scope="col" class="col-td-th-3">SB Number</th>
                                                 <th scope="col" class="col-td-th-2">Party Name</th>
+                                                <th scope="col" class="col-td-th-2">Bank Name</th>
                                                 <th scope="col" class="col-td-th-3">TT Amount USD</th>
                                                 <th scope="col" class="col-td-th-3">From</th>
                                                 <th scope="col" class="col-td-th-3">Branch</th>
@@ -174,7 +175,7 @@
                                                   </select>
                                                     </div>
                                                 </td>
-
+                                               
                                                 <td class="col-td-th-3">
                                                     <div *ngIf="!optionsVisibility[i]">
                                                         {{data.sbno}}
@@ -194,6 +195,12 @@
                                                         <input class="tblInput form-control" name="partyName" type="text" placeholder="Party Name" [(ngModel)]="data.partyName">
                                                     </div>
                                                 </td>
+                                                <td class="col-td-th-2">
+                                                    <div *ngIf="!optionsVisibility[i]">
+                                                        {{data.BankName?.value}}
+                                                    </div>
+                                                </td>
+                                                
                                                 <td class="col-td-th-3">
                                                     <div *ngIf="!optionsVisibility[i]">
                                                         {{data.amount}}

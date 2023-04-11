@@ -95,7 +95,7 @@ export class ShippingBill {
     }
 
     createInvoice(data) {
-      let invoice = [];
+      let invoice:any = [];
       for (let i in data) {
         invoice.push(new Invoice(i))
       }
@@ -103,7 +103,7 @@ export class ShippingBill {
     }
 
   computeIRMerge() {
-    let finallist = [];
+    let finallist:any = [];
     let totalForex = 0;
     if (this.irRef && this.irRef.length) {
       for (let i in this.irRef) {
@@ -158,7 +158,7 @@ export class ShippingBillDisplayListViewItem {
   }
 
   computeIRMerge() {
-    let finaldata = [];
+    let finaldata:any = [];
     for (let i in this.shippingBillList) {
       let data = this.shippingBillList[i].computeIRMerge();
       for (let j in data) {

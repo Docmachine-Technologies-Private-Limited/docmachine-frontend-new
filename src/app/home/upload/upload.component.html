@@ -258,38 +258,38 @@
         </div>
 
         <!--sbbbbbbbbbbbbbbbbbbb ------ --------------------------- -->
-        <div *ngIf="documentType === 'sb'" class="form" method="POST">
-          <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-            (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="ConfigforSB"
-            class="dropzone dropzone-container" id="dropzone" />
+        <div *ngIf="documentType === 'sb'" class="form" method="POST" (click)="fileopen.click()">
+          <input style="pointer-events: none;" (error)="onUploadError($event)" (init)="onUploadInit($event)"
+            (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="ConfigforSB"
+            class="dropzone dropzone-container" id="dropzone" #fileopen />
           <i class="fas fa-file-upload"></i>
           <h5>Drag and Drop files here</h5>
           <p>Files Supported: PDF, XSLS, Image, Scanner</p>
           <p>Maximum Size: 5MB</p>
         </div>
-        <div *ngIf="documentType === 'boe' " class="form" method="POST">
-          <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-            (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config2"
-            class="dropzone dropzone-container" id="dropzone" />
+        <div *ngIf="documentType === 'boe' " class="form" method="POST" (click)="fileopen.click()">
+          <input style="pointer-events: none;" (error)="onUploadError($event)" (init)="onUploadInit($event)"
+            (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="config2"
+            class="dropzone dropzone-container" id="dropzone" #fileopen />
           <i class="fas fa-file-upload"></i>
           <h5>Drag and Drop files here</h5>
           <p>Files Supported: PDF, XSLS, Image, Scanner</p>
           <p>Maximum Size: 5MB</p>
         </div>
 
-        <div *ngIf="documentType === 'irAdvice'" class="form" method="POST">
-          <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-            (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config3"
-            class="dropzone dropzone-container" id="dropzone" />
+        <div *ngIf="documentType === 'irAdvice'" class="form" method="POST" (click)="fileopen.click()">
+          <input style="pointer-events: none;" (error)="onUploadError($event)" (init)="onUploadInit($event)"
+            (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="ConfigforInwardOutward"
+            class="dropzone dropzone-container" id="dropzone" #fileopen />
           <i class="fas fa-file-upload"></i>
           <h5>Drag and Drop files here to upload</h5>
           <p>Files Supported: PDF, XSLS, Image, Scanner</p>
           <p>Maximum Size: 5MB</p>
         </div>
-        <div *ngIf="documentType === 'orAdvice'" class="form" method="POST">
-          <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-            (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config3"
-            class="dropzone dropzone-container" id="dropzone" />
+        <div *ngIf="documentType === 'orAdvice'" class="form" method="POST" (click)="fileopen.click()">
+          <input style="pointer-events: none;" (error)="onUploadError($event)" (init)="onUploadInit($event)"
+            (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="ConfigforInwardOutward"
+            class="dropzone dropzone-container" id="dropzone" #fileopen />
           <i class="fas fa-file-upload"></i>
           <h5>Drag and Drop files here to upload</h5>
           <p>Files Supported: PDF, XSLS, Image, Scanner</p>
@@ -307,16 +307,17 @@
           documentType === 'import-commercial' || documentType === 'billOfExchange'||documentType === 'import-billOfExchange' ||
           documentType === 'import-packingList' ||
           documentType === 'destruction'  || documentType === 'import-destruction' || documentType === 'packingList'"
-          class="form" method="POST">
-          <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-            (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config1"
-            class="dropzone dropzone-container" id="dropzone" />
+          class="form" method="POST" (click)="fileopen.click()">
+          <input style="pointer-events: none;" (error)="onUploadError($event)" (init)="onUploadInit($event)"
+            (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="config1"
+            class="dropzone dropzone-container" id="dropzone" #fileopen />
           <i class="fas fa-file-upload"></i>
           <h5>Drag and Drop files here</h5>
           <p>Files Supported: PDF, XSLS, Image, Scanner</p>
           <p>Maximum Size: 5MB</p>
         </div>
         <div class="progressbar" *ngIf="uploading">
+          <span style="display: flex;">{{this.SocketioserviceMessage}} <span class="loader"></span></span>
           <div class="meter">
             <span [style.width]="width + '%'"></span>
           </div>
@@ -404,7 +405,7 @@
                   </ng-select>
                 </td>
                 <td class="full-input border3">
-                  <label for="realizedFreightValue">FREIGHT VALUE</label><input [(ngModel)]="res.realizedFreightValue"
+                  <label for="realizedFreightValue">FREIGHT VALUE</label><input [(ngModel)]="res.realizedfreightValue"
                     class="form-control p-3" type="text" name="realizedFreightValue" />
                 </td>
                 <br />
@@ -421,7 +422,7 @@
                     class="form-control p-3" type="text" name="insuranceValue" />
                 </td>
                 <td class="full-input border1">
-                  <label for="realizedInsuranceValue">INSURANCE VALUE</label><input
+                  <label for="realizedInsuranceValue">Realized INSURANCE VALUE</label><input
                     [(ngModel)]="res.realizedInsuranceValue" class="form-control p-3" type="text"
                     name="realizedInsuranceValue" />
                 </td>
@@ -990,6 +991,12 @@
           <div class="field">
             <div class="form12 p-3">
               <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Bank Name*</label>
+                <ng-select class="custom" *ngIf="this.bankDetail?.length!=0" [items]="this.bankDetail" bindLabel="value"
+                  [multiple]="false" placeholder="Select Bank Name" name="BankName" ngModel required>
+                </ng-select>
+              </div>
+              <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">FOREX ADVICE DETAILS</label>
                 <input class="form-control p-3" type="text" name="billNo" [(ngModel)]="PDF_READER_DATA.billNo">
               </div>
@@ -1066,6 +1073,12 @@
             <div class="row">
               <div class="col-md-6 col-sm-6 col-xs-12 col-12">
                 <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Bank Name*</label>
+                  <ng-select class="custom" *ngIf="this.bankDetail?.length!=0" [items]="this.bankDetail" bindLabel="value"
+                    [multiple]="false" placeholder="Select Bank Name" name="BankName" ngModel required>
+                  </ng-select>
+                </div>
+                <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Bill No</label>
                   <input ngModel class="form-control p-3" type="text" name="billNo"
                     [(ngModel)]="this.PDF_READER_DATA.billNo">
@@ -1074,7 +1087,7 @@
               <div class="col-md-6 col-sm-6 col-xs-12 col-12">
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">PARTY NAME</label>
-                  <input ngModel class="form-control p-3" name="partyName" [(ngModel)]="this.PDF_READER_DATA.customer">
+                  <input ngModel class="form-control p-3" name="partyName" [(ngModel)]="this.PDF_READER_DATA.partyName">
                 </div>
               </div>
               <div class="col-md-6 col-sm-6 col-xs-12 col-12">

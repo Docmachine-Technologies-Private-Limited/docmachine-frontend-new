@@ -1,11 +1,12 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { AuthGuard } from './service/authguard.service';
 
 @Injectable()
 export class AppConfig {
     public apiUrl = '';
 
-    constructor(@Inject(PLATFORM_ID) public platformId: Object) {
+    constructor(@Inject(PLATFORM_ID) public platformId: Object,public authGuard: AuthGuard) {
       console.log(platformId,'pllllllllllllllllllllllllll')
         if (isPlatformBrowser(this.platformId)) {
             // Client only code.
@@ -20,8 +21,9 @@ export class AppConfig {
 
     public getConstantsAtServer() {
         // this.apiUrl = `https://stagingapi.bharathexim.com/v1`;
-        this.apiUrl = `https://demoapi.bharathexim.com/v1`;
-        // this.apiUrl = `http://localhost:8080/v1`;
+        // localStorage.setItem('apiurl','https://demoapi.bharathexim.com/v1')
+        // this.apiUrl = `https://demoapi.bharathexim.com/v1`;
+        this.apiUrl = `http://localhost:8080/v1`;
         // this.apiUrl = `https://devappapi.bharathexim.com/v1`;
     }
 
