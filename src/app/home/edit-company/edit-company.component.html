@@ -74,10 +74,41 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="display: flex;flex-direction: column;">
                   <label for="exampleInputEmail1">Letter Head</label>
-                  <input type="text" class="form-control" style="height: 150px;border-radius: 5px;"
-                    aria-describedby="emailHelp" disabled>
+                  <div class="col-12">
+                    <div class="row col-12" style="gap:20px">
+                      <div class="form-group col-12 p-0">
+                        <div class="d-flex col-12">
+                          <input type="text" name="CertificateNo" disabled class="form-control"
+                            value="letter head found"
+                            style="border-radius: 5px;" aria-describedby="emailHelp">
+                          <button type="submit" class="btn btn-primary"
+                            (click)="letterImageView.style.display='flex';letterheadView(this.item?.letterHead)">View</button>
+                        </div>
+                      </div>
+
+                      <!-- <div class="form-group">
+                        <label for="exampleInputEmail1">Issues date</label>
+                        <input type="date" name="Issuesdate" disabled class="form-control"
+                  [value]="this.UPDATED_DETAILS?.Starhousecertificate_Details?.Issuesdate"
+                          style="border-radius: 5px;" aria-describedby="emailHelp">
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputEmail1">Expiry Date</label>
+                        <input type="date" name="ExpiryDate" disabled class="form-control"
+                  [value]="this.UPDATED_DETAILS?.Starhousecertificate_Details?.ExpiryDate"
+                          style="border-radius: 5px;" aria-describedby="emailHelp">
+                      </div> -->
+                    </div>
+                    <!-- <div class="sb2">
+                      <iframe [src]="publicUrl" width="100%" height="700px"> </iframe>
+                    </div> -->
+                  </div>
+                  <!-- <img [src]="this.item?.letterHead" style="width: 360px;
+                  height: 360px;
+                  border-radius: 5px;
+                  box-shadow: 0px 0px 2px 2px #d6d5d5;"> -->
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Round Seal</label>
@@ -188,8 +219,9 @@
                     *ngFor="let location of this.UPDATED_DETAILS?.location;let i=index">
                     <input type="text" (keyup)="add_ArrayForm_value('location',i,'loc',$event.target.value)"
                       class="form-control col-12" [value]="location?.loc" id="exampleInputPassword1">
-                    <button type="submit" *ngIf="this.ADD_REMOVE_OPTION.Location[i]==true" class="btn danger-primary remove-btn"
-                      style="background-color: #fd5f00;" (click)="remove_location(i)"><span>&#215;</span></button>
+                    <button type="submit" *ngIf="this.ADD_REMOVE_OPTION.Location[i]==true"
+                      class="btn danger-primary remove-btn" style="background-color: #fd5f00;"
+                      (click)="remove_location(i)"><span>&#215;</span></button>
                     <button type="submit" *ngIf="(i+1)==this.UPDATED_DETAILS?.location.length"
                       class="btn btn-primary remove-btn" (click)="add_location(i)"><span>&#43;</span></button>
                   </div>
@@ -200,8 +232,9 @@
                     *ngFor="let comm of this.UPDATED_DETAILS?.commodity;let i=index">
                     <input type="text" (keyup)="add_ArrayForm_value('commodity',i,'como',$event.target.value)"
                       class="form-control col-12" [value]="comm?.como" aria-describedby="emailHelp">
-                    <button type="submit" *ngIf="this.ADD_REMOVE_OPTION.Commodity[i]==true" class="btn danger-primary remove-btn"
-                      style="background-color: #fd5f00;" (click)="remove_commodity(i)"><span>&#215;</span></button>
+                    <button type="submit" *ngIf="this.ADD_REMOVE_OPTION.Commodity[i]==true"
+                      class="btn danger-primary remove-btn" style="background-color: #fd5f00;"
+                      (click)="remove_commodity(i)"><span>&#215;</span></button>
                     <button type="submit" *ngIf="(i+1)==this.UPDATED_DETAILS?.commodity.length"
                       class="btn btn-primary remove-btn" (click)="add_commodity(i)"><span>&#43;</span></button>
                   </div>
@@ -227,10 +260,10 @@
                         <!-- <input type="text" (keyup)="add_ArrayForm_value('bankDetails',i,'bank',$event.target.value)"
                           placeholder="bank name" [value]="course?.bank"
                           class="form-control rounded-pill password password1"> -->
-                          <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST" bindLabel="value"
-                          [multiple]="false" placeholder="Select Bank Name" name="accType" [ngModel]="course?.bank"
-                          (change)="add_ArrayForm_value('bankDetails',i,'bank',$event?.value)"
-                          ></ng-select>
+                        <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST"
+                          bindLabel="value" [multiple]="false" placeholder="Select Bank Name" name="accType"
+                          [ngModel]="course?.bank"
+                          (change)="add_ArrayForm_value('bankDetails',i,'bank',$event?.value)"></ng-select>
                         <label class="bank">*Account Number</label>
                         <input type="text"
                           (keyup)="add_ArrayForm_value('bankDetails',i,'accNumber',$event.target.value)"
@@ -255,8 +288,15 @@
                 </div>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Letter Head</label>
-                  <input type="text" class="form-control" style="height: 150px;border-radius: 5px;"
-                    aria-describedby="emailHelp" disabled>
+                  <div class="upload-letter-head" style="display: flex;gap: 5px;">
+                    <input type='file' accept='image/*' (change)="letterheadUpload($event)" class="form-control"
+                      style="height: 150px;border-radius: 5px;" aria-describedby="emailHelp">
+                    <button type="submit" class="btn btn-primary"
+                      style="width: 40px;background-color: aliceblue;border-radius: 4px;"
+                      (click)="uploadletterhead(this.item._id)">
+                      <img src="assets/new-img/Icon-feather-upload.svg" style="width: 18px;" alt="Drag & drop files here or Browse" />
+                    </button>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Round Seal</label>
@@ -397,6 +437,22 @@
             <div class="sb2">
               <iframe [src]="publicUrl" width="100%" height="700px"> </iframe>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" tabindex="-1" #letterImageView style="display: none;">
+    <div class="col-5 m-auto d-flex">
+      <div class="modal-content" style="height: 80vh;overflow: auto;top: 10px;">
+        <div class="modal-header">
+          <h5 class="modal-title">Letter Head Image View</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="letterImageView.style.display='none'"><span>&#215;</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="col-12">
+          <img [src]="letterheadUrl" style="width: 500px;height: 500px;" alt="">
           </div>
         </div>
       </div>

@@ -418,6 +418,21 @@ export class ExportDebitNoteComponent implements OnInit {
     if (resp.data.length==0) {
       this.documentService.addDebit(e.form.value).subscribe((res: any) => {
         this.toastr.success(`debit Note Document Added Successfully`);
+        let updatedDataSB = {
+          "debitnotedetails": [
+            res.data._id,
+          ],
+        }
+        this.documentService.updateMasterBySb(
+          updatedDataSB,
+          selectedShippingBill?.sbno,
+          selectedShippingBill?._id
+        ).subscribe((data) => {
+            console.log('updateMasterBySbupdateMasterBySb', data);
+          },(error) => {
+            console.log('error');
+          }
+        );
         let updatedData = {
           "blcopyRefs": [
             res.data._id,

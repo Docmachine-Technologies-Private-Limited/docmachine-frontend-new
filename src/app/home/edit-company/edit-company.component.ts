@@ -81,49 +81,49 @@ export class EditCompanyComponent implements OnInit {
   userData: any = [];
   TEXT_CHANGED: string = 'Details';
   UPDATED_DETAILS: any = [];
-  VALIDATION_FORM:any={
-    adress:'',
-    bankDetails:[],
-    caEmail:'',
-    chaEmail:'',
-    commodity:[],
+  VALIDATION_FORM: any = {
+    adress: '',
+    bankDetails: [],
+    caEmail: '',
+    chaEmail: '',
+    commodity: [],
     file: [],
-    gst:'',
-    iec:'',
+    gst: '',
+    iec: '',
     location: [],
-    phone:'',
-    teamName:''
+    phone: '',
+    teamName: ''
   };
   CURRENCY_LIST: any = [];
-  Account_Type:any=[{
-    type:'OD-over draft'
-  },{
-    type:'CC-cash credit'
-  },{
-    type:'CA-Current account'
-  },{
-    type:'EEFC - Exchange earner Foreign currency'
-  },{
-    type:'PCFC- packing credit Foreign currency'
-  },{
-    type:'EBRD- Bill discounting accoun'
+  Account_Type: any = [{
+    type: 'OD-over draft'
+  }, {
+    type: 'CC-cash credit'
+  }, {
+    type: 'CA-Current account'
+  }, {
+    type: 'EEFC - Exchange earner Foreign currency'
+  }, {
+    type: 'PCFC- packing credit Foreign currency'
+  }, {
+    type: 'EBRD- Bill discounting accoun'
   }];
-  
-  BANK_NAME_LIST:any=[];
-  ADD_REMOVE_OPTION:any={
-    Location:[],
-    Commodity:[],
-    Bank_Details:[]
+
+  BANK_NAME_LIST: any = [];
+  ADD_REMOVE_OPTION: any = {
+    Location: [],
+    Commodity: [],
+    Bank_Details: []
   }
-  constructor(@Inject(PLATFORM_ID) public platformId, 
+  constructor(@Inject(PLATFORM_ID) public platformId,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private userService: UserService, 
-    private router: Router, 
-    private toastr: ToastrService, 
+    private userService: UserService,
+    private router: Router,
+    private toastr: ToastrService,
     public appconfig: AppConfig,
     private sanitizer: DomSanitizer,
-    public docservice:DocumentService,
+    public docservice: DocumentService,
     public wininfo: WindowInformationService) {
     this.loadFromLocalStorage()
     this.api_base = appconfig.apiUrl;
@@ -152,8 +152,8 @@ export class EditCompanyComponent implements OnInit {
   }
 
   async ngOnInit() {
-     this.wininfo.set_controller_of_width(250, '.content-wrap');
-     await this.userService.getUserDetail().then((user: any) => {
+    this.wininfo.set_controller_of_width(250, '.content-wrap');
+    await this.userService.getUserDetail().then((user: any) => {
       this.userData = user?.result
       console.log("userData", this.userData)
       for (let index = 0; index < data1['default']?.length; index++) {
@@ -161,11 +161,11 @@ export class EditCompanyComponent implements OnInit {
           type: data1['default'][index]['value']
         })
       }
-      console.log(this.CURRENCY_LIST,'CURRENCY_LIST')
+      console.log(this.CURRENCY_LIST, 'CURRENCY_LIST')
     });
-    
-    this.BANK_NAME_LIST=this.docservice.getBankNameList();
-    console.log(this.BANK_NAME_LIST,'BANK_NAME_LIST')
+
+    this.BANK_NAME_LIST = this.docservice.getBankNameList();
+    console.log(this.BANK_NAME_LIST, 'BANK_NAME_LIST')
     this.jsondata = data['default'];
     this.dataJson = data['default']
     this.jsondata1 = data1['default'];
@@ -181,13 +181,13 @@ export class EditCompanyComponent implements OnInit {
           delete this.UPDATED_DETAILS['userId'];
           delete this.UPDATED_DETAILS['__v'];
           delete this.UPDATED_DETAILS['member'];
-          
-          if (this.UPDATED_DETAILS['Starhousecertificate_Details']==undefined) {
-            this.UPDATED_DETAILS['Starhousecertificate_Details']={
-              CertificateNo:'',
-              Issuesdate:'',
-              ExpiryDate:'',
-              file:''
+
+          if (this.UPDATED_DETAILS['Starhousecertificate_Details'] == undefined) {
+            this.UPDATED_DETAILS['Starhousecertificate_Details'] = {
+              CertificateNo: '',
+              Issuesdate: '',
+              ExpiryDate: '',
+              file: ''
             };
           }
           this.iframeVisible = true;
@@ -218,7 +218,7 @@ export class EditCompanyComponent implements OnInit {
     //   bankDetails: new FormArray([this.initCourse()], Validators.required)
     // });
   }
-  email_validation(key,value):any{
+  email_validation(key, value): any {
     var validRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (value.match(validRegex)) {
       return true;
@@ -226,15 +226,15 @@ export class EditCompanyComponent implements OnInit {
       return `Please check your ${key} email is invalid`;
     }
   }
-  IEC_validation(key,value){
-    var validRegex=/^[a-zA-Z0-9 _]{10}$/;
+  IEC_validation(key, value) {
+    var validRegex = /^[a-zA-Z0-9 _]{10}$/;
     if (value.match(validRegex)) {
       return true;
     } else {
       return `Please check your ${key} email is invalid`;
     }
   }
-  phone_validation(key,value):any{
+  phone_validation(key, value): any {
     var validRegex = /^[0-9 _]{10}$/;
     if (value.match(validRegex)) {
       return true;
@@ -263,7 +263,7 @@ export class EditCompanyComponent implements OnInit {
   uploading: boolean = false;
   iframeVisible: boolean = false;
   publicUrl: any = '';
-  
+
   public onUploadError(args: any): void {
     //this.uploading = false;
     console.log('onUploadError:', args, args[1].message);
@@ -276,13 +276,13 @@ export class EditCompanyComponent implements OnInit {
     this.letterHead = false;
     this.roundSeal = false;
     this.forSeal = false;
-    
+
     this.uploading = false;
     this.iframeVisible = true;
     this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
       args[1].data
     );
-    console.log(this.publicUrl,'publicUrl')
+    console.log(this.publicUrl, 'publicUrl')
     if (Object.keys(args[1].data)[0] == 'Letter Head') {
       this.letterHeadDone = true;
     }
@@ -342,38 +342,39 @@ export class EditCompanyComponent implements OnInit {
     var Bank_Details_validation = this.getNonEmptyObj_2(this.UPDATED_DETAILS, 'bankDetails');
     if (validationData == true) {
       if (location_validation == true && Commodity_validation == true && Bank_Details_validation == true) {
-        var caEmail:any=this.email_validation('caEmail',this.UPDATED_DETAILS['caEmail']);
-        var chaEmail:any=this.email_validation('chaEmail',this.UPDATED_DETAILS['chaEmail']);
-        if (caEmail==true && chaEmail==true) {
-          var chaEmail:any=this.IEC_validation('iec',this.UPDATED_DETAILS['iec']);
+        var caEmail: any = this.email_validation('caEmail', this.UPDATED_DETAILS['caEmail']);
+        var chaEmail: any = this.email_validation('chaEmail', this.UPDATED_DETAILS['chaEmail']);
+        if (caEmail == true && chaEmail == true) {
+          var chaEmail: any = this.IEC_validation('iec', this.UPDATED_DETAILS['iec']);
           this.UPDATED_DETAILS['file'] = this.file;
-          this.UPDATED_DETAILS['Starhousecertificate_Details']['file']=this.publicUrl?.changingThisBreaksApplicationSecurity;
+          this.UPDATED_DETAILS['Starhousecertificate_Details']['file'] = this.publicUrl?.changingThisBreaksApplicationSecurity;
           console.log(this.UPDATED_DETAILS, 'this.UPDATED_DETAILS');
-          this.userService.updateTeamById(this.UPDATED_DETAILS,id).subscribe(
-              data => {
-                console.log("king123")
-                console.log(data['data'])
-                this.toastr.success('Company details updated successfully.');
-                this.Update('.back','.front')
-              },
-              error => {
-                this.toastr.error('Invalid inputs, please check!');
-                console.log("error")
-              });
+          this.userService.updateTeamById(this.UPDATED_DETAILS, id).subscribe(
+            data => {
+              console.log("king123")
+              console.log(data['data'])
+              this.toastr.success('Company details updated successfully.');
+              this.Update('.back', '.front');
+              this.ngOnInit();
+            },
+            error => {
+              this.toastr.error('Invalid inputs, please check!');
+              console.log("error")
+            });
         } else {
-          var error=caEmail==true?chaEmail:caEmail
+          var error = caEmail == true ? chaEmail : caEmail
           this.toastr.error(error);
         }
       } else {
-        if (location_validation!==true) {
+        if (location_validation !== true) {
           for (const key in location_validation) {
             this.toastr.error(location_validation[key]);
           }
-        }else if (Commodity_validation!==true) {
+        } else if (Commodity_validation !== true) {
           for (const key in Commodity_validation) {
             this.toastr.error(Commodity_validation[key]);
           }
-        }else if (Bank_Details_validation!==true) {
+        } else if (Bank_Details_validation !== true) {
           for (const key in Bank_Details_validation) {
             this.toastr.error(Bank_Details_validation[key]);
           }
@@ -385,13 +386,16 @@ export class EditCompanyComponent implements OnInit {
       }
     }
   }
-
+  letterheadUrl:any=''
+  letterheadView(url:any){
+   this.letterheadUrl=url;
+  }
   public loadFromLocalStorage() {
     const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }
-  add_more_Bank(i:any) {
+  add_more_Bank(i: any) {
     this.UPDATED_DETAILS.bankDetails.push({
       bank: '',
       accNumber: '',
@@ -399,7 +403,7 @@ export class EditCompanyComponent implements OnInit {
       accType: '',
       currency: ''
     })
-    this.ADD_REMOVE_OPTION.Bank_Details[i+1]=(true);
+    this.ADD_REMOVE_OPTION.Bank_Details[i + 1] = (true);
   }
   remove_more_Bank(index: any) {
     if (index != 0) {
@@ -409,7 +413,7 @@ export class EditCompanyComponent implements OnInit {
   }
   add_location(i) {
     this.UPDATED_DETAILS.location.push({ loc: '' })
-    this.ADD_REMOVE_OPTION.Location[i+1]=(true);
+    this.ADD_REMOVE_OPTION.Location[i + 1] = (true);
   }
   remove_location(index: any) {
     if (index != 0) {
@@ -419,7 +423,7 @@ export class EditCompanyComponent implements OnInit {
   }
   add_commodity(i) {
     this.UPDATED_DETAILS.commodity.push({ como: '' })
-    this.ADD_REMOVE_OPTION.Commodity[i+1]=(true);
+    this.ADD_REMOVE_OPTION.Commodity[i + 1] = (true);
   }
   remove_commodity(index: any) {
     if (index != 0) {
@@ -433,8 +437,8 @@ export class EditCompanyComponent implements OnInit {
   add_ArrayForm_value(array_key, index, key, value) {
     this.UPDATED_DETAILS[array_key][index][key] = value;
   }
-  add_ArrayForm_push(array_key,key,value) {
-    this.UPDATED_DETAILS[array_key][key]=(value);
+  add_ArrayForm_push(array_key, key, value) {
+    this.UPDATED_DETAILS[array_key][key] = (value);
   }
   getNonEmptyObj(obj) {
     var temp: any = [];
@@ -458,8 +462,35 @@ export class EditCompanyComponent implements OnInit {
     }
     return Object.keys(temp).length == 0 ? true : temp;
   };
-  ID:number=-1;
-  view_bank_details(id){
-    this.ID=id;
+  ID: number = -1;
+  view_bank_details(id) {
+    this.ID = id;
+  }
+  fileinput:any=''
+  letterheadUpload(f:any){
+    this.fileinput=f;
+  }
+  uploadletterhead(id) {
+    var input = this.fileinput.target;
+    var reader = new FileReader();
+    reader.onload = (event:any)=> {
+      var dataUri = event.target.result;
+      this.userService.updateTeamById({letterHead:dataUri}, id).subscribe(
+        data => {
+          console.log("king123")
+          this.toastr.success('update letter head successfully.');
+          this.Update('.back', '.front');
+          this.ngOnInit();
+        },
+        error => {
+          this.toastr.error('Invalid inputs, please check!');
+          console.log("error")
+        });
+    };
+    reader.onerror = function (event:any) {
+      console.log("File could not be read: " + event.target.error.code);
+    };
+    reader.readAsDataURL(input.files[0]);
+    
   }
 }

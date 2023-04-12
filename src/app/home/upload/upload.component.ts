@@ -1646,6 +1646,7 @@ export class UploadComponent implements OnInit {
   //blCopyref Submit buttton
   async onSubmitblcopyref(e: any) {
     console.log('this is console of blcopy', e.form.value);
+    let selectedShippingBill = this.SHIPPING_BILL_LIST.filter((item: any) => item?._id === e?.form?.value?.sbNo)[0];
     var temp: any = [];
     for (let index = 0; index < this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION.length; index++) {
       const element = this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION[index];
@@ -1672,7 +1673,7 @@ export class UploadComponent implements OnInit {
           console.log(res, 'addBlcopyref');
           this.toastr.success(`addBlcopyref Document Added Successfully`);
           console.log('addBlcopyref Document Added Successfully');
-
+         
           var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
           if (TransactionSbRef != '') {
             let updatedData = {
@@ -1748,6 +1749,21 @@ export class UploadComponent implements OnInit {
           (res: any) => {
             this.toastr.success(`addAirwayBlcopy Document Added Successfully`);
             console.log('addAirwayBlcopy Document Added Successfully');
+            let updatedDataSB = {
+              "blcopydetails": [
+                res.data._id,
+              ],
+            }
+            this.documentService.updateMasterBySb(
+              updatedDataSB,
+              selectedShippingBill?.sbno,
+              selectedShippingBill?._id
+            ).subscribe((data) => {
+                console.log('updateMasterBySbupdateMasterBySb', data);
+              },(error) => {
+                console.log('error');
+              }
+            );
             let updatedData = {
               "airwayBlCopyRef": [
                 res.data._id,
@@ -1818,6 +1834,21 @@ export class UploadComponent implements OnInit {
           (res: any) => {
             this.toastr.success(`Commercial Invoice Added Successfully`);
             console.log('Commercial Invoice Added Successfully');
+            let updatedDataSB = {
+              "commercialdetails": [
+                res.data._id,
+              ],
+            }
+            this.documentService.updateMasterBySb(
+              updatedDataSB,
+              selectedShippingBill?.sbno,
+              selectedShippingBill?._id
+            ).subscribe((data) => {
+                console.log('updateMasterBySbupdateMasterBySb', data);
+              },(error) => {
+                console.log('error');
+              }
+            );
             let updatedData = {
               "commercialRef": [
                 res.data._id,
@@ -2050,6 +2081,21 @@ export class UploadComponent implements OnInit {
           (res: any) => {
             this.toastr.success(`Packing List Added Successfully`);
             console.log('Packing List Added Successfully');
+            let updatedDataSB = {
+              "packingdetails": [
+                res.data._id,
+              ],
+            }
+            this.documentService.updateMasterBySb(
+              updatedDataSB,
+              selectedShippingBill?.sbno,
+              selectedShippingBill?._id
+            ).subscribe((data) => {
+                console.log('updateMasterBySbupdateMasterBySb', data);
+              },(error) => {
+                console.log('error');
+              }
+            );
             let updatedData = {
               "packingListRef": [
                 res.data._id,

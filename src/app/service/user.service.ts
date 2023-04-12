@@ -218,7 +218,14 @@ export class UserService {
     };
     return this.http.post(`${this.api_base}/team/get`,{team: "team"},httpOptions);
   }
-
+  public getTeambyId(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/team/getbyid`,{id:id},httpOptions);
+  }
   public getTeamByUser(id:any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

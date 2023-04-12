@@ -52,7 +52,10 @@ export class ShippingBill {
     public doc: any;
     public buyerName: any;
     public deleteflag: any;
-
+    public blcopydetails:any;
+    public commercialdetails:any;
+    public packingdetails:any;
+    public debitnotedetails:any;
 
     constructor(data: any) {
       console.log(data,'ShippingBill')
@@ -87,6 +90,10 @@ export class ShippingBill {
         this.countryOfFinaldestination = data.countryOfFinaldestination ? data.countryOfFinaldestination : '';
         this.consigneeName = data.consigneeName ? data.consigneeName : '';
         this.exchangeRate = data.exchangeRate ? data.exchangeRate : '';
+        this.blcopydetails = data.blcopydetails ? data.blcopydetails : '';
+        this.commercialdetails = data.commercialdetails ? data.commercialdetails : '';
+        this.packingdetails = data.packingdetails ? data.packingdetails : '';
+        this.debitnotedetails = data.debitnotedetails ? data.debitnotedetails : '';
         this._id = data._id;
         this.irRef = data.irRef ? data.irRef: [];
         this.doc = data.doc ? data.doc: '';

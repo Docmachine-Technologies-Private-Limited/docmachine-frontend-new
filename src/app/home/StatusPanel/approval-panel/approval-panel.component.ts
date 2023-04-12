@@ -74,53 +74,59 @@ export class ApprovalPanelComponent implements OnInit {
     console.log(this.detailsViewdata, 'detailsViewdata')
   }
   mergeAllPDFs = async (type: String, doc: any, tableName: any, emaildata: any) => {
-    const pdfDoc = await PDFDocument.create();
-    Promise.all(this.DOC_QUEUE(doc)).then((values) => {
-      console.log(values);
-      var appendAllFiles = async (pdflist, currentfile) => {
-        if (currentfile < values.length) {
-          await appendEachFile(pdflist[currentfile]);
-          console.log('Inside file', currentfile);
-          await appendAllFiles(pdflist, currentfile + 1);
-        } else {
-          if (type == 'download') {
-            this.downloadAsSingleFile('MergePdf_' + new Date().toUTCString(), pdfDoc);
-          } else if (type == 'zip') {
-            this.downloadZip('MergePdf_' + new Date().toUTCString(), values);
+    if (type == 'download') {
+      var fitertemp: any = doc.filter(n => n)
+      await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
+        console.log(merge, 'mergeAllPDFs')
+        this.downloadAsSingleFile('MergePdf_' + new Date().toUTCString(), merge?.pdfurl);
+      });
+    }else{
+      const pdfDoc = await PDFDocument.create();
+      Promise.all(this.DOC_QUEUE(doc)).then((values) => {
+        console.log(values);
+        var appendAllFiles = async (pdflist, currentfile) => {
+          if (currentfile < values.length) {
+            await appendEachFile(pdflist[currentfile]);
+            console.log('Inside file', currentfile);
+            await appendAllFiles(pdflist, currentfile + 1);
           } else {
-            this.sendMail2(pdfDoc, tableName, emaildata);
+            if (type == 'zip') {
+              this.downloadZip('MergePdf_' + new Date().toUTCString(), values);
+            } else {
+              this.sendMail2(pdfDoc, tableName, emaildata);
+            }
           }
-        }
-      };
-      var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
-        if (currentpage < docLength) {
-          console.log('Inside Page', currentpage, 'total pages', docLength);
-          const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [currentpage]);
-          pdfDoc.addPage(donorPage);
-          await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
-        }
-      };
-      var appendEachFile = async (bytes) => {
-        const donorPdfDoc = await PDFDocument.load(bytes);
-        const docLength = donorPdfDoc.getPageCount();
-        console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
-        await appendEachPage(donorPdfDoc, 0, docLength);
-      };
-      // download all the pdfs
-      let downloadAllFiles = async () => {
-        var promises: any = [];
-        for (var i = 0; i < values.length; i++) {
-          if (values[i] != '' && values[i] != undefined) {
-            await promises.push(values[i]);
+        };
+        var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
+          if (currentpage < docLength) {
+            console.log('Inside Page', currentpage, 'total pages', docLength);
+            const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [currentpage]);
+            pdfDoc.addPage(donorPage);
+            await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
           }
-        }
-        Promise.all(promises).then(async (pdfList) => {
-          await appendAllFiles(pdfList, 0);
-          console.log('pdfList2', pdfList);
-        });
-      };
-      downloadAllFiles();
-    });
+        };
+        var appendEachFile = async (bytes) => {
+          const donorPdfDoc = await PDFDocument.load(bytes);
+          const docLength = donorPdfDoc.getPageCount();
+          console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
+          await appendEachPage(donorPdfDoc, 0, docLength);
+        };
+        // download all the pdfs
+        let downloadAllFiles = async () => {
+          var promises: any = [];
+          for (var i = 0; i < values.length; i++) {
+            if (values[i] != '' && values[i] != undefined) {
+              await promises.push(values[i]);
+            }
+          }
+          Promise.all(promises).then(async (pdfList) => {
+            await appendAllFiles(pdfList, 0);
+            console.log('pdfList2', pdfList);
+          });
+        };
+        downloadAllFiles();
+      });
+    }
   }
   DOC_QUEUE(doc: any) {
     var temp: any = [];
@@ -137,10 +143,7 @@ export class ApprovalPanelComponent implements OnInit {
     })
   }
   downloadAsSingleFile = async (filename, pdfDoc: any) => {
-    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-    var merge = 'data:application/pdf;base64,' + data_pdf //this.value
-    this.blobToSaveAs(filename, merge)
+    this.blobToSaveAs(filename, pdfDoc)
   };
 
   blobToSaveAs(fileName: string, exportText: any) {
