@@ -263,7 +263,7 @@
                         <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST"
                           bindLabel="value" [multiple]="false" placeholder="Select Bank Name" name="accType"
                           [ngModel]="course?.bank"
-                          (change)="add_ArrayForm_value('bankDetails',i,'bank',$event?.value)"></ng-select>
+                          (change)="add_ArrayForm_value('bankDetails',i,'bank',$event?.value);bankClick($event, i)"></ng-select>
                         <label class="bank">*Account Number</label>
                         <input type="text"
                           (keyup)="add_ArrayForm_value('bankDetails',i,'accNumber',$event.target.value)"

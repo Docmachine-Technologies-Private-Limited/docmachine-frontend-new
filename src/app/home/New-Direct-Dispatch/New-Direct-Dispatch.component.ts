@@ -4019,21 +4019,20 @@ export class NewDirectDispatchComponent implements OnInit {
       var temppdflits: any = [];
       tep[tempfilter[0]?._id] = []
       $(document).ready(() => {
-        function mm(val) {
-          return val * 2.8347;
-        }
         kendo.drawing.drawDOM($("#first"), {
-          paperSize: "a2",
-          margin: "2cm",
+          paperSize: "A4",
+          margin: "1cm",
+          scale: 0.5,
           forcePageBreak: ".page-break"
         }).then(function (group) {
           var PAGE_RECT = new kendo.geometry.Rect(
-            [0, 0], [mm(210 - 20), mm(297 - 20)]
+            [0,0], [30*2.8347,25*2.8347]
           );
           kendo.drawing.fit(group, PAGE_RECT)
           return kendo.drawing.exportPDF(group, {
-            paperSize: "auto",
-            margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
+            paperSize: "A4",
+            margin: "1cm",
+            scale: 0.5
           });
         }).done(async (data) => {
           console.log('exportPDF', data,tep)
@@ -4073,6 +4072,9 @@ export class NewDirectDispatchComponent implements OnInit {
       });
      
     }
+  }
+  mm(val) {
+    return val *2.8347;
   }
   SendApproval(Status: string, UniqueId: any, model: any) {
     if (UniqueId != null) {

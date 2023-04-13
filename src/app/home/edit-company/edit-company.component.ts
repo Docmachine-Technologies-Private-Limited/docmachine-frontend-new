@@ -57,7 +57,7 @@ export class EditCompanyComponent implements OnInit {
   showLess = false;
   jsondata: any;
   dataJson: any;
-  bankName = [];
+  bankName:any = [];
   currencyName = [];
   toggle: boolean;
   dataJson1: any;
@@ -347,7 +347,7 @@ export class EditCompanyComponent implements OnInit {
         if (caEmail == true && chaEmail == true) {
           var chaEmail: any = this.IEC_validation('iec', this.UPDATED_DETAILS['iec']);
           this.UPDATED_DETAILS['file'] = this.file;
-          this.UPDATED_DETAILS['Starhousecertificate_Details']['file'] = this.publicUrl?.changingThisBreaksApplicationSecurity;
+          this.UPDATED_DETAILS['Starhousecertificate_Details']['file'] = this.publicUrl?.changingThisBreaksApplicationSecurity;          
           console.log(this.UPDATED_DETAILS, 'this.UPDATED_DETAILS');
           this.userService.updateTeamById(this.UPDATED_DETAILS, id).subscribe(
             data => {
@@ -401,7 +401,8 @@ export class EditCompanyComponent implements OnInit {
       accNumber: '',
       bicAddress: '',
       accType: '',
-      currency: ''
+      currency: '',
+      BankUniqueId: '',
     })
     this.ADD_REMOVE_OPTION.Bank_Details[i + 1] = (true);
   }
@@ -491,6 +492,10 @@ export class EditCompanyComponent implements OnInit {
       console.log("File could not be read: " + event.target.error.code);
     };
     reader.readAsDataURL(input.files[0]);
-    
+  }
+  bankClick(e, i) {
+    this.bankName[i] = e;
+    this.UPDATED_DETAILS.bankDetails[i]['BankUniqueId']=e?.BankUniqueId
+    console.log(this.bankName,e,'this.loginForm.value.bankDetails.')    
   }
 }

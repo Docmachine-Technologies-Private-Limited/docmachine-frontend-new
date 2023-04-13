@@ -82,7 +82,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": true,
+              "buildOptimizer": false,
               "optimization": true,
               "vendorChunk": true,
               "extractLicenses": false,
