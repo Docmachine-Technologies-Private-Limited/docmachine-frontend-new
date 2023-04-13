@@ -65,6 +65,7 @@
                     </div>
                 </div>
             </div>
+            <p class="p-text">GR / Shipping Bill / Softex Form No.As mentioned Above  FIRC # <span class="amount">{{this.ARRAY_TO_STRING(this.FIRX_DATE_NO?.NUMBER)}}</span> Dt : <span class="amount">{{this.ARRAY_TO_STRING(this.FIRX_DATE_NO?.DATE)}}</span></p>
             <p class="p-text">Debit all charges for processing of above-mentioned documents from account no. <span class="amount" *ngIf="this.data[2]!=undefined && this.data[2]!=null && this.data[2]!=''">{{this.data[2][0]?.accNumber}}</span> with your Erode branch.</p>
             <p class="p-text">We are eligible to export the above mentioned goods under the current Foreign Trade policy </p>
             <p class="p-text">in place and our Importer Exporter Code is : <span class="amount">{{this.data[0][0]?.ieccode}}</span></p>
