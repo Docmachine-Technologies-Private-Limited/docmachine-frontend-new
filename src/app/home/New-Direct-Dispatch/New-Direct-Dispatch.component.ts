@@ -4094,7 +4094,7 @@ export class NewDirectDispatchComponent implements OnInit {
         }
       } else {
         approval_data = {
-          id: 'Export-Direct-Dispatch' + this.tp?.firxAmount != undefined && this.tp?.firxAmount != null && this.tp?.firxAmount != '' ? this.tp?.firxAmount : sbAmountSum,
+          id: 'Export-Direct-Dispatch' + this.tp?.firxAmount != undefined && this.tp?.firxAmount != null && this.tp?.firxAmount != '' ? this.tp?.firxAmount.join(',') : sbAmountSum,
           tableName: 'Export-Direct-Dispatch',
           deleteflag: '-1',
           userdetails: this.USER_DATA,

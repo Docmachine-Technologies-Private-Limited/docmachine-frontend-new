@@ -15,8 +15,8 @@
                     <thead>
                         <tr class="table-tr">
                             <th scope="col" class="col-td-th-1">#</th>
-                            <th scope="col" class="col-td-th-3">Documents</th>
-                            <th scope="col" class="col-td-th-2">Invoice</th>
+                            <th scope="col" class="col-td-th-1">Documents</th>
+                            <th scope="col" class="col-td-th-1">Invoice</th>
                             <th scope="col" class="col-td-th-2">Transport Doc. (B/L /AWB/ LR)</th>
                             <th scope="col" class="col-td-th-2">Foreign Inward Remit. Cert (FIRC)</th>
                             <th scope="col" class="col-td-th-2" colspan="3">GR / S.B. / SOFTEX FORM</th>
@@ -25,8 +25,8 @@
                     <tbody>
                         <div class="table-tr" *ngFor="let item of this.data[0];let i=index">
                             <td class="col-td-th-1">{{i+1}}</td>
-                            <td class="col-td-th-3">Duplicate</td>
-                            <td class="col-td-th-2">{{item?.invoices[0]?.invoiceno}}</td>
+                            <td class="col-td-th-1">Duplicate</td>
+                            <td class="col-td-th-1">{{item?.invoices[0]?.invoiceno}}</td>
                             <td class="col-td-th-2">{{item?.blcopydetails[0]?.airwayBlCopyNumber}}</td>
                             <div style="flex-direction: column;" class="col-td-th-2">
                                 <p *ngFor="let IR_item of this.data[1]['SB_'+item?.sbno];let i=index">{{this.CURRENCY | uppercase}} {{IR_item?.irDataItem?.Used_Balance}}</p>
@@ -34,9 +34,9 @@
                             <td class="col-td-th-2">{{item?.sbno}}</td>
                         </div>
                         <tr class="table-tr">
-                            <td class="col-td-th-3"></td>
-                            <td class="col-td-th-3"></td>
-                            <td class="col-td-th-3"></td>
+                            <td class="col-td-th-1"></td>
+                            <td class="col-td-th-1"></td>
+                            <td class="col-td-th-1"></td>
                             <td class="col-td-th-2">
                                 <div>
                                     <p>TOTAL</p>
@@ -83,6 +83,7 @@
                 reason to believe that any contravention /evasion is contemplated by me /us report the
                 matter to Reserve Bank Of India. *I / We further declare that the undersigned has/have
                 the authority to give this declaration and undertaking on behalf of the firm / company.
+                <br>
                 <br>
                 <span class="amount">For KKSK INTERNATIONAL,</span><br>
                 <br><br><br>
