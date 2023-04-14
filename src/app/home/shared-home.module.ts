@@ -47,7 +47,8 @@ import { CustomHeaderTooltipsComponent } from "../custom/ng-custom-tooltips/cust
 import { CustomFooterTooltipsComponent } from "../custom/ng-custom-tooltips/custom-footer-tooltips/custom-footer-tooltips.component";
 import { CustomContentTooltipsComponent } from "../custom/ng-custom-tooltips/custom-content-tooltips/custom-content-tooltips.component";
 import { NgCustomCardModelComponent } from "../custom/ng-custom-card-model/ng-custom-card-model.component";
-import { LetterheadComponent } from "../custom/letterhead/letterhead.component";
+import { LetterheadComponent } from "../custom/letterhead/ExportLetterHead/letterhead.component";
+import { ImportLetterheadComponent } from "../custom/letterhead/ImportLetterHead/ImportLetterhead.component";
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { LetterheadComponent } from "../custom/letterhead/letterhead.component";
     CustomFooterTooltipsComponent,
     CustomContentTooltipsComponent,
     NgCustomCardModelComponent,
-    LetterheadComponent
+    LetterheadComponent,
+    ImportLetterheadComponent
   ],
   imports: [
     CommonModule,
@@ -133,7 +135,8 @@ import { LetterheadComponent } from "../custom/letterhead/letterhead.component";
     CustomFooterTooltipsComponent,
     CustomContentTooltipsComponent,
     NgCustomCardModelComponent,
-    LetterheadComponent
+    LetterheadComponent,
+    ImportLetterheadComponent,
   ],
 })
 export class SharedHomeModule { }

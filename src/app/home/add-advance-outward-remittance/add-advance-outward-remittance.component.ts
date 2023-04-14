@@ -106,8 +106,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   ) {
     this.loadFromLocalStorage();
     this.api_base = appconfig.apiUrl;
-    this.getDropdownData()
-
   }
 
  async ngOnInit() {
@@ -137,7 +135,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
 
     // buyerName commodity doc
-
+    this.getDropdownData()
     this.pipoForm = this.formBuilder.group({
         bank: new FormControl('', Validators.required),
         benneName: new FormControl('', Validators.required),
@@ -164,13 +162,15 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   endDate: any = '';
 
   getDropdownData() {
-
     this.userService.getTeam()
       .subscribe(
         data => {
           this.commodity = data['data'][0]['commodity']
           this.LocationData = data['data'][0]['location']
-          this.bankDetail = data['data'][0]['bankDetails']
+          // this.bankDetail = data['data'][0]['bankDetails']
+          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId })
+          }
         },
         error => {
           console.log("error")

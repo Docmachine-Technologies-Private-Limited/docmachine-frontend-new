@@ -2455,10 +2455,10 @@ export class UploadComponent implements OnInit {
   SocketioserviceMessage: any = ''
   public onUploadInit(args: any): void {
     this.width=0
-    this.socketioservice?.socket.on('uploadImageInwardOutward', (res) => {
-      this.SocketioserviceMessage = res;
-      console.log(res, 'Socket uploadImageInwardOutward')
-    });
+    // this.socketioservice?.socket.on('uploadImageInwardOutward', (res) => {
+    //   this.SocketioserviceMessage = res;
+    //   console.log(res, 'Socket uploadImageInwardOutward')
+    // });
     console.log('onUploadInit:', args);
   }
 

@@ -10,6 +10,6 @@ export class SocketIoService {
   constructor() { }
 
   connectionOn() {
-    this.socket = io(AppConfig.SOCKET_ENDPONT)
+    // this.socket = io(AppConfig.SOCKET_ENDPONT)
   }
 }

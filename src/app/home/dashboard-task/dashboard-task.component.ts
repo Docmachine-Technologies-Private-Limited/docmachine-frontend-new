@@ -142,9 +142,9 @@ export class DashboardTaskComponent implements OnInit {
 
 
 
-    this.getDashboardData()
-    this.ChartMethod()
-    this.getOrderShipmentData()
+   await this.getDashboardData()
+   await this.ChartMethod()
+   await this.getOrderShipmentData()
   }
   public manage1Task() {
     this.nt = !this.nt;
@@ -160,6 +160,7 @@ export class DashboardTaskComponent implements OnInit {
   }
 
   getDashboardData = () => {
+  return new Promise((resolve,reject)=>{
     this.dashboardService.getDashboardData().subscribe(
       (res: any) => {
         // Import data..
@@ -180,19 +181,19 @@ export class DashboardTaskComponent implements OnInit {
 
         this.inwardCurrencyImportData = res?.inward?.import?.currencyWise;
         this.inwardBuyerImportData = res?.inward?.import?.buyerWise;
-        this.inwardCurrencyImportData = this.inwardCurrencyImportData.filter(data => {
+        this.inwardCurrencyImportData = this.inwardCurrencyImportData?.filter(data => {
           if (data._id !== null && data._id !== '') {
             return data
           }
         });
-        this.inwardBuyerImportData = this.inwardBuyerImportData.filter(data => {
+        this.inwardBuyerImportData = this.inwardBuyerImportData?.filter(data => {
           if (data._id) {
             return data
           }
         });
         this.SBCurrrenycyImportData = res?.ShippingBill?.currencyWise;
         this.SBbuyerImportData = res?.ShippingBill?.import?.buyerWise;
-        this.SBbuyerImportData = this.SBbuyerImportData.filter(data => {
+        this.SBbuyerImportData = this.SBbuyerImportData?.filter(data => {
           if (data._id) {
             return data
           }
@@ -204,12 +205,12 @@ export class DashboardTaskComponent implements OnInit {
         // Export data
         this.pipoCurrencyExportData = res?.pipo?.export?.currencyWise;
         this.pipoBuyerExportData = res?.pipo?.export?.buyerWise;
-        this.pipoCurrencyExportData = this.pipoCurrencyExportData.filter(data => {
+        this.pipoCurrencyExportData = this.pipoCurrencyExportData?.filter(data => {
           if (data._id !== null && data._id !== '') {
             return data
           }
         })
-        this.pipoBuyerExportData = this.pipoBuyerExportData.filter(data => {
+        this.pipoBuyerExportData = this.pipoBuyerExportData?.filter(data => {
           if (data._id !== null && data._id !== '') {
             return data
           }
@@ -217,12 +218,12 @@ export class DashboardTaskComponent implements OnInit {
 
         this.inwardCurrencyExportData = res?.inward?.export?.currencyWise;
         this.inwardBuyerExportData = res?.inward?.export?.buyerWise;
-        this.inwardCurrencyExportData = this.inwardCurrencyExportData.filter(data => {
+        this.inwardCurrencyExportData = this.inwardCurrencyExportData?.filter(data => {
           if (data._id !== null && data._id !== '') {
             return data
           }
         })
-        this.inwardBuyerExportData = this.inwardBuyerExportData.filter(data => {
+        this.inwardBuyerExportData = this.inwardBuyerExportData?.filter(data => {
           if (data._id) {
             return data
           }
@@ -230,7 +231,7 @@ export class DashboardTaskComponent implements OnInit {
         this.SBCurrencyExportData = res?.ShippingBill?.currencyWise;
         this.SBbuyerExportData = res?.ShippingBill?.export?.buyerWise;
 
-        this.SBbuyerExportData = this.SBbuyerExportData.filter(data => {
+        this.SBbuyerExportData = this.SBbuyerExportData?.filter(data => {
           if (data._id) {
             return data
           }
@@ -240,10 +241,11 @@ export class DashboardTaskComponent implements OnInit {
         this.EDPMSData = res?.EDPMSData;
         this.shipmentPendingExport = res?.sbPendingData?.export;
         this.shipmentSubmitExport = res?.docSubmitedAndNoAwaitedData?.export;
-        this.shipmentSubmitExport = this.shipmentSubmitExport.map(data => {
+        this.shipmentSubmitExport = this.shipmentSubmitExport?.map(data => {
           let conut = data?.blcopyrefNumber?.filter(x => !x)?.length
           return { ...data, awaitSubmit: conut }
         })
+        this.ChartMethod()
         if (this.documentService.EXPORT_IMPORT['import'] == true) {
           this.handleImportData();
         } else {
@@ -260,6 +262,7 @@ export class DashboardTaskComponent implements OnInit {
       },
       (err) => console.log(err)
     );
+  })
   }
 
   getOrderShipmentData = () => {
@@ -274,7 +277,7 @@ export class DashboardTaskComponent implements OnInit {
     })
   }
 
-  ChartMethod = () => {
+  ChartMethod() {
     // pipi chart
     this.pipoChartOptions = {
       chart: {
@@ -695,21 +698,15 @@ export class DashboardTaskComponent implements OnInit {
       ]
     };
 
-
-
-
     this.pipoChart = new ApexCharts(document.querySelector('#pipiChart'), this.pipoChartOptions);
     this.pipoChart.render();
-
-
 
     this.sbChart = new ApexCharts(document.querySelector('#SBChart'), this.shippingBillChartOptions);
     this.sbChart.render();
 
-
     this.inwardChart = new ApexCharts(document.querySelector('#inwardChart'), this.inwardChartOptions);
     this.inwardChart.render();
-    console.log(this.edpmsChartOptions, 'this.edpmsChartOptions')
+    
     this.EDPMSChart = new ApexCharts(document.querySelector('#EdpmsChart'), this.edpmsChartOptions);
     this.EDPMSChart.render();
 
@@ -724,56 +721,29 @@ export class DashboardTaskComponent implements OnInit {
 
     this.totalBillLodgedChart = new ApexCharts(document.querySelector('#TotalBillLodgedChart'), this.totalBillLodgedChartOptions);
     this.totalBillLodgedChart.render();
-
     // this.edpmsChart.series = [this.EDPMSData.pendingData, this.EDPMSData.uploadData]
     // this.edpmsChart.labels = ['Pending', "Upload"]
-
-
   }
 
 
 
   handleImportData = () => {
     this.isImport = true
-    // this.pipoChart.updateOptions({
-    //   series: this.pipoBuyerImportData?.map(data => data.totalItems),
-    //   labels: this.pipoBuyerImportData?.map(data => data._id),
-    //   chartData: this.pipoBuyerImportData
-    // });
-
     this.pipoChart.updateOptions({
       series: [44, 55, 41, 17],
       labels: ['Buyer 1', 'Buyer 2', 'Buyer 3', 'Buyer 4'],
       // chartData: this.pipoBuyerImportData
     });
 
-    // this.sbChart.updateOptions({
-    //   series: this.SBbuyerImportData?.map(data => data.totalItems),
-    //   labels: this.SBbuyerImportData?.map(data => data._id),
-    //   chartData: this.SBbuyerImportData
-    // });
-
     this.sbChart.updateOptions({
       series: [44, 55, 41, 17],
       labels: ['Buyer 1', 'Buyer 2', 'Buyer 3', 'Buyer 4'],
     });
 
-    this.inwardChart.updateOptions({
+    this.inwardChart?.updateOptions({
       series: [60, 15, 25, 51],
       labels: ['Buyer 1', 'Buyer 2', 'Buyer 3', 'Buyer 4'],
     });
-
-    // this.inwardChart.updateOptions({
-    //   series: this.inwardBuyerImportData?.map(data => data.totalItems),
-    //   labels: this.inwardBuyerImportData?.map(data => data._id),
-    //   chartData: this.inwardBuyerImportData
-    // });
-
-    // this.EDPMSChart.updateOptions({
-    //   series: [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
-    //   labels: ["Pending", "Upload"],
-
-    // });
 
     this.EDPMSChart.updateOptions({
       series: [15, 80],
@@ -841,14 +811,7 @@ export class DashboardTaskComponent implements OnInit {
       chartData: this.SBbuyerExportData
     });
 
-    this.inwardChart.updateOptions({
-      series: this.inwardBuyerExportData?.map(data => data.totalItems),
-      labels: this.inwardBuyerExportData?.map(data => data._id),
-      chartData: this.inwardBuyerExportData
-    });
-
-
-    this.inwardChart.updateOptions({
+    this.inwardChart?.updateOptions({
       series: this.inwardBuyerExportData?.map(data => data.totalItems),
       labels: this.inwardBuyerExportData?.map(data => data._id),
       chartData: this.inwardBuyerExportData

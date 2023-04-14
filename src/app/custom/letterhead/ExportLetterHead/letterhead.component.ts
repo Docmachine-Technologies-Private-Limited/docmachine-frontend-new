@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import $ from 'jquery'
-import { UserService } from '../../service/user.service';
+import { UserService } from '../../../service/user.service';
 
 @Component({
   selector: 'app-letterhead',

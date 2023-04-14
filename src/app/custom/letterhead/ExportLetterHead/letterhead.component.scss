@@ -1,6 +1,6 @@
 @font-face {
     font-family: "TimeRoman";
-    src: url("../../../assets/font/TimesNewRoman/timesnewroman.ttf") format("truetype");
+    src: url("../../../../assets/font/TimesNewRoman/timesnewroman.ttf") format("truetype");
 }
 
 .letter-panel {
@@ -20,7 +20,7 @@
 }
 
 .hdf-bank {
-    background-image: url(../../../assets/LetterHeadImage/HDFC_BANK_LETTER_HEAD.jpg);
+    background-image: url(../../../../assets/LetterHeadImage/HDFC_BANK_LETTER_HEAD.jpg);
     background-size: 100%;
     padding-top: 100px;
     background-repeat: no-repeat;

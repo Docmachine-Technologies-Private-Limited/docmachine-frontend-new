@@ -98,7 +98,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.authservice.logout();
         this.router.navigate(['/login']);
       }
-      this.socketioservice?.socket.emit('received', JSON.stringify(this.userData));
+      // this.socketioservice?.socket.emit('received', JSON.stringify(this.userData));
     });
     // this.socketioservice?.socket.on('data1', (res) => {
     //   console.log(res,'socket data1')
