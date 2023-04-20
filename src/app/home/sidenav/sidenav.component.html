@@ -1,9 +1,15 @@
 <div class="grid">
   <div class="main_nave">
-    <header class="logo d-none d-md-block">
+    <header class="logo d-none d-md-block" style="display: flex !important;">
       <a routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">
         <img class="mlogo" src="./assets/new-img/LogoFinal.png" />
       </a>
+      <div class="toggle-menu" style="margin: auto;margin-left: -20px;">
+        <button type="button" id="sidebarCollapse" class="btn btn-primary" style="background: transparent;border: none;outline: none;color: black;">
+          <i class="fa fa-bars"></i>
+          <span class="sr-only">Toggle Menu</span>
+        </button>
+      </div>
     </header>
     <div class="main_nave_haeders">
       <nav class="navbar-dashboard">
@@ -52,7 +58,7 @@
                         </span></a></li>
                     <li>
                       <a routerLinkActive="active " ariaCurrentWhenActive="page ">
-                        <span class="icon "><img src="./assets/new-img/header-user.svg " class="Tooltips" tooltips-close="UserToolTips"/>
+                        <span class="icon "><img src="./assets/new-img/header-user.svg " class="Tooltips" [attr.tooltips-close]="'UserToolTips'"/>
                         </span>
                       </a>
                      
@@ -70,12 +76,7 @@
   </div>
   <div class="wrapper d-flex align-items-stretch">
     <nav id="sidebar">
-      <div class="custom-menu">
-        <button type="button" id="sidebarCollapse" class="btn btn-primary">
-          <i class="fa fa-bars"></i>
-          <span class="sr-only">Toggle Menu</span>
-        </button>
-      </div>
+   
       <div class="p-0 pt-5" id="sidebar1">
         <a *ngIf="this.userData['role']!='manager'" [routerLink]="['/home/dashboardTask']" class="sidebar-content"
           style="color: black;
@@ -239,6 +240,17 @@
                 </li>
               </ul>
             </li>
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
+              <a href="#ImportTransactionDashBoard" data-toggle="collapse" aria-expanded="false"
+                class="dropdown-toggle">Transaction Summary</a>
+              <ul class="collapse list-unstyled" id="ImportTransactionDashBoard">
+                <li class="nav-item">
+                <li class="nav-item" *ngFor="let item of this.TRANSACTION_DASHBOARD_LIST?.Import">
+                  <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard',item)">{{item}}
+                  </h6>
+                </li>
+              </ul>
+            </li>
             <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
               <a href="#ExportDocuments" data-toggle="collapse" aria-expanded="false"
                 class="dropdown-toggle">Documents</a>
@@ -368,7 +380,7 @@
                   <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard','Inward-Remittance-Disposal-Relization')">Inward Remittance Disposal Relization
                   </h6>
                 </li> -->
-                <li class="nav-item" *ngFor="let item of this.TRANSACTION_DASHBOARD_LIST">
+                <li class="nav-item" *ngFor="let item of this.TRANSACTION_DASHBOARD_LIST?.Export">
                   <h6 class="nav-link p-0" (click)="navigationByUrlParam($event,'/Transaction-Dashboard',item)">{{item}}
                   </h6>
                 </li>

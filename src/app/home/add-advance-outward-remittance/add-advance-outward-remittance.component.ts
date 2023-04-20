@@ -5,7 +5,7 @@ import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
 import $ from 'jquery'
-import { saveAs as importedSaveAs } from 'file-saver';
+declare var kendo: any;
 
 import {
   DropzoneDirective,
@@ -27,6 +27,7 @@ import { WindowInformationService } from '../../service/window-information.servi
 import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
+import { MergePdfListService } from '../merge-pdf-list.service';
 
 @Component({
   selector: 'app-add-advance-outward-remittance',
@@ -45,7 +46,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   selectedBenneId: string;
   selectedBenneName: string;
   uploading: boolean = false;
-  authToken:any;
+  authToken: any;
 
   CurrencyData: any = ['INR', 'USD', 'EUR', 'GBP', 'CHF', 'AUD', 'CAD', 'AED', 'SGD', 'SAR', 'JPY']
 
@@ -102,13 +103,14 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     private route: ActivatedRoute,
     public mergerpdf: MergePdfService,
     public wininfo: WindowInformationService,
+    public pdfmerge: MergePdfListService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
   ) {
     this.loadFromLocalStorage();
     this.api_base = appconfig.apiUrl;
   }
 
- async ngOnInit() {
+  async ngOnInit() {
     this.wininfo.set_controller_of_width(270, '.content_top_common')
     this.headers = {
       Authorization: this.authToken,
@@ -137,12 +139,12 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     // buyerName commodity doc
     this.getDropdownData()
     this.pipoForm = this.formBuilder.group({
-        bank: new FormControl('', Validators.required),
-        benneName: new FormControl('', Validators.required),
-        RemittanceTotalAmount: new FormControl("", Validators.required),
-        pipoTerm: new FormArray([this.initItems()]),
-        Total_PI_Amount: new FormControl('', Validators.required)
-      }
+      bank: new FormControl('', Validators.required),
+      benneName: new FormControl('', Validators.required),
+      RemittanceTotalAmount: new FormControl("", Validators.required),
+      pipoTerm: new FormArray([this.initItems()]),
+      Total_PI_Amount: new FormControl('', Validators.required)
+    }
     );
   }
 
@@ -160,7 +162,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   filtervisible: boolean = false
   startDate: any = '';
   endDate: any = '';
-
+  ORIGNAL_BANK_DETAILS: any = [];
   getDropdownData() {
     this.userService.getTeam()
       .subscribe(
@@ -169,7 +171,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
           this.LocationData = data['data'][0]['location']
           // this.bankDetail = data['data'][0]['bankDetails']
           for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-            this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId })
+            this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId, org: data['data'][0]['bankDetails'][index] })
           }
         },
         error => {
@@ -263,6 +265,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
     this.showOpinionReport = 0;
     this.fillForm();
+    this.OTHER_BANK_VISIBLE =false;
+    setTimeout(()=>{ this.OTHER_BANK_VISIBLE = true;},150)
   }
 
   showhideOpinionReport(value) {
@@ -282,116 +286,133 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     console.log('this.pipoForm.controls;', this.pipoForm.controls);
     this.showSummaryPage = value;
   }
-
+  BANK_DETAILS: any = [];
+  OTHER_BANK_VISIBLE: boolean = false
   onSelectBank(value) {
     this.selectedBankName = value;
-    this.fillForm();
+    this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value))[0]?.org;
+    console.log(this.BANK_DETAILS, 'this.BANK_DETAILS')
+    this.bankformat = ''
+    this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
+    console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
+    if (this.bankformat.length != 0 && this.bankformat[0]?.urlpdf != '') {
+      this.OTHER_BANK_VISIBLE = false;
+      this.fillForm();
+    } else {
+      this.OTHER_BANK_VISIBLE = true;
+      this.toastr.error("You don't have bank format!")
+    }
   }
   OUR_SHA_BEN: any = '';
-  ORIGINAL_PDF:any='';
+  ORIGINAL_PDF: any = '';
+  bankformat: any = ''
   async fillForm() {
-    const formUrl = './../../assets/advanceoutward.pdf'
-    const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
-    const pdfDoc = await PDFDocument.load(formPdfBytes)
-    const form = pdfDoc.getForm()
-    const pages = pdfDoc.getPages()
-    const firstpage = pages[0]
-    var INVOICE_NO: any = [];
-    for (let index = 0; index < this.ITEM_FILL_PDF.length; index++) {
-      INVOICE_NO.push(this.ITEM_FILL_PDF[index][0]?.pi_poNo);
-    }
-    console.log(this.selectedBenne, this.ITEM_FILL_PDF, INVOICE_NO, 'fillForm')
-    const textField = form.createTextField('best.text')
-    let result = this.selectedBenne?.benneName.concat(" ", this.selectedBenne?.beneAdrs);
-    textField.setText(result)
-    textField.addToPage(firstpage, {
-      x: 409, y: 570, width: 132,
-      height: 28, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
+    this.bankformat = ''
+    this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
+    console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
+    if (this.bankformat.length != 0 && this.bankformat[0]?.urlpdf != '') {
+      const formUrl = './../../assets/advanceoutward.pdf'
+      const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
+      const pdfDoc = await PDFDocument.load(formPdfBytes)
+      const form = pdfDoc.getForm()
+      const pages = pdfDoc.getPages()
+      const firstpage = pages[0]
+      var INVOICE_NO: any = [];
+      for (let index = 0; index < this.ITEM_FILL_PDF.length; index++) {
+        INVOICE_NO.push(this.ITEM_FILL_PDF[index][0]?.pi_poNo);
+      }
+      console.log(this.selectedBenne, this.ITEM_FILL_PDF, INVOICE_NO, 'fillForm')
+      const textField = form.createTextField('best.text')
+      let result = this.selectedBenne?.benneName.concat(" ", this.selectedBenne?.beneAdrs);
+      textField.setText(result)
+      textField.addToPage(firstpage, {
+        x: 409, y: 570, width: 132,
+        height: 28, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
 
-    const text1Field = form.createTextField('best.text1')
-    text1Field.setText(this.REMIITANCE_SUM.toString())
-    text1Field.addToPage(firstpage, {
-      x: 409, y: 555, width: 132,
-      height: 12, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
+      const text1Field = form.createTextField('best.text1')
+      text1Field.setText(this.REMIITANCE_SUM.toString())
+      text1Field.addToPage(firstpage, {
+        x: 409, y: 555, width: 132,
+        height: 12, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
 
-    const text2Field = form.createTextField('best.text2')
-    text2Field.setText(INVOICE_NO.toString())
-    text2Field.addToPage(firstpage, {
-      x: 409, y: 538, width: 132,
-      height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
-    const text3Field = form.createTextField('best.text3')
-    text3Field.setText('')
-    text3Field.addToPage(firstpage, {
-      x: 409, y: 515, width: 132,
-      height: 20, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
+      const text2Field = form.createTextField('best.text2')
+      text2Field.setText(INVOICE_NO.toString())
+      text2Field.addToPage(firstpage, {
+        x: 409, y: 538, width: 132,
+        height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
+      const text3Field = form.createTextField('best.text3')
+      text3Field.setText('')
+      text3Field.addToPage(firstpage, {
+        x: 409, y: 515, width: 132,
+        height: 20, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
 
-    let result1 = this.selectedBenne?.beneBankName.concat(" ", this.selectedBenne?.beneBankAdress);
-    const text4Field = form.createTextField('best.text4')
-    text4Field.setText(result1)
-    text4Field.addToPage(firstpage, {
-      x: 409, y: 464, width: 132,
-      height: 47, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
+      let result1 = this.selectedBenne?.beneBankName.concat(" ", this.selectedBenne?.beneBankAdress);
+      const text4Field = form.createTextField('best.text4')
+      text4Field.setText(result1)
+      text4Field.addToPage(firstpage, {
+        x: 409, y: 464, width: 132,
+        height: 47, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
 
-    const text5Field = form.createTextField('best.text5')
-    text5Field.setText(this.selectedBenne?.beneAccNo)
-    text5Field.addToPage(firstpage, {
-      x: 409, y: 442, width: 132,
-      height: 20, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
-    let result2 = this.selectedBenne?.interBankName.concat(" ", this.selectedBenne?.interBankSwiftCode);
-    const text6Field = form.createTextField('best.text6')
-    text6Field.setText(result2)
-    text6Field.addToPage(firstpage, {
-      x: 409, y: 420, width: 132,
-      height: 18, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
+      const text5Field = form.createTextField('best.text5')
+      text5Field.setText(this.selectedBenne?.beneAccNo)
+      text5Field.addToPage(firstpage, {
+        x: 409, y: 442, width: 132,
+        height: 20, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
+      let result2 = this.selectedBenne?.interBankName.concat(" ", this.selectedBenne?.interBankSwiftCode);
+      const text6Field = form.createTextField('best.text6')
+      text6Field.setText(result2)
+      text6Field.addToPage(firstpage, {
+        x: 409, y: 420, width: 132,
+        height: 18, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
 
-    const text7Field = form.createTextField('best.text7')
-    text7Field.setText(this.selectedBenne?.iban)
-    text7Field.addToPage(firstpage, {
-      x: 409, y: 390, width: 132,
-      height: 25, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
+      const text7Field = form.createTextField('best.text7')
+      text7Field.setText(this.selectedBenne?.iban)
+      text7Field.addToPage(firstpage, {
+        x: 409, y: 390, width: 132,
+        height: 25, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
 
-    const text8Field = form.createTextField('best.text8')
-    text8Field.setText(this.OUR_SHA_BEN)
-    text8Field.addToPage(firstpage, {
-      x: 409, y: 364, width: 132,
-      height: 20, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
+      const text8Field = form.createTextField('best.text8')
+      text8Field.setText(this.OUR_SHA_BEN)
+      text8Field.addToPage(firstpage, {
+        x: 409, y: 364, width: 132,
+        height: 20, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
 
-    const pdfBytes = await pdfDoc.save()
-    console.log(pdfDoc, "pdf")
-    console.log(pdfBytes, "pdfBytes")
-    // this.getPdfFile(pdfBytes);
-    console.log(form, "form")
-    var base64String = this._arrayBufferToBase64(pdfBytes)
-    const x = 'data:application/pdf;base64,' + base64String;
-    const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
-    console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
-    this.formerge = x
-    this.remittanceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(x);
-    const mergedPdf = await PDFDocument.create();
-    const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-    copiedPages.forEach((page) => {
-      mergedPdf.addPage(page);
-    });
-    const mergedPdfFile = await mergedPdf.save();
-    const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-    await this.disabledTextbox(pdfDoc)
-    const mergedPdfFileload = await mergedPdfload.save();
-    var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-    const x1 = 'data:application/pdf;base64,' + base64String1;
-    console.log("line no. 1735", this.remittanceUrl)
-    this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
-    console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-    this.ORIGINAL_PDF=pdfBytes;
-
+      const pdfBytes = await pdfDoc.save()
+      console.log(pdfDoc, "pdf")
+      console.log(pdfBytes, "pdfBytes")
+      // this.getPdfFile(pdfBytes);
+      console.log(form, "form")
+      var base64String = this._arrayBufferToBase64(pdfBytes)
+      const x = 'data:application/pdf;base64,' + base64String;
+      const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
+      console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
+      this.formerge = x
+      this.remittanceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(x);
+      const mergedPdf = await PDFDocument.create();
+      const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+      copiedPages.forEach((page) => {
+        mergedPdf.addPage(page);
+      });
+      const mergedPdfFile = await mergedPdf.save();
+      const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+      await this.disabledTextbox(pdfDoc)
+      const mergedPdfFileload = await mergedPdfload.save();
+      var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
+      const x1 = 'data:application/pdf;base64,' + base64String1;
+      console.log("line no. 1735", this.remittanceUrl)
+      this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
+      console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+      this.ORIGINAL_PDF = pdfBytes;
+    } 
   }
   OUR_SHA_BEN_FUNC(data: any) {
     this.OUR_SHA_BEN = data;
@@ -481,10 +502,10 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     console.log('args', args);
     this.uploading = true;
     this.isUploaded = true;
-    this.uploadUrl_Original=args[1].data;
+    this.uploadUrl_Original = args[1].data;
     this.userService.mergePdf(args[1].data).subscribe((res: any) => {
       res.arrayBuffer().then((data: any) => {
-        this.uploadUrl=data;
+        this.uploadUrl = data;
       });
     });
 
@@ -537,13 +558,15 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.authToken = token;
     return this.authToken;
   }
-  REMIITANCE_SUM:any=0;
-  InputKeyPress(){
+  REMIITANCE_SUM: any = 0;
+  InputKeyPress() {
+    this.OTHER_BANK_VISIBLE =false;
     this.REMIITANCE_SUM = this.pipoForm?.controls?.pipoTerm?.value.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
-    setTimeout(()=>{
+    setTimeout(() => {
       this.fillForm()
-    },500)
-    console.log(this.pipoForm.controls.pipoTerm,'this.pipoForm.controls.pipoTerm')
+      this.OTHER_BANK_VISIBLE = true;
+    }, 500)
+    console.log(this.pipoForm.controls.pipoTerm, 'this.pipoForm.controls.pipoTerm')
   }
   // ----------------------------- end handle image upload ----------------------------------
 
@@ -592,19 +615,68 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       }
     }
   }
-  PREVIEWS_URL_STRING:any='';
-async PREVIEWS_URL(model,id) {
-    this.PREVIEWS_URL_LIST=[];
-    this.PromiseReturn().then(async (data:any)=>{
-      var temp:any=data.filter(n => n)
-      await this.mergerpdf.mergePdf(temp).then((merge: any) => {
-        this.PREVIEWS_URL_LIST.push(merge)
-        this.PREVIEWS_URL_STRING=merge;
-        model.style.display='block';
-        console.log(this.pipoForm,merge,this.PREVIEWS_URL_LIST,'PREVIEWS_URL')
+  PREVIEWS_URL_STRING: any = '';
+  async PREVIEWS_URL(model, id) {
+    this.PREVIEWS_URL_LIST = [];
+    this.bankformat = ''
+    this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
+    console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
+    if (this.bankformat.length != 0 && this.bankformat[0]?.urlpdf != '') {
+      this.PromiseReturn().then(async (data: any) => {
+        var fitertemp: any = data.filter(n => n)
+        await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
+          this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
+          console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+          this.PREVIEWS_URL_STRING = merge?.pdfurl;
+          model.style.display = 'block';
+          console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
+        });
       })
-    })
-    
+    }else{
+      this.PromiseReturn().then(async (data: any) => {
+        $(document).ready(() => {
+          kendo.pdf.defineFont({
+            "DejaVu Sans"             : "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
+            "DejaVu Sans|Bold"        : "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
+            "DejaVu Sans|Bold|Italic" : "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+            "DejaVu Sans|Italic"      : "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+            "WebComponentsIcons"      : "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
+        });
+          kendo.drawing.drawDOM($("#first"), {
+            paperSize: "A4",
+            margin: "2cm",
+            scale: 0.8,
+            forcePageBreak: ".page-break",
+            keepTogether: ".prevent-split"
+          }).then(function (group) {
+            var PAGE_RECT = new kendo.geometry.Rect(
+              [0,0], [10*2.8347,5*2.8347]
+            );
+            kendo.drawing.fit(group, PAGE_RECT)
+            return kendo.drawing.exportPDF(group, {
+              paperSize: "A4",
+              keepTogether: ".prevent-split"
+            });
+          }).done(async (pdfdata) => {
+            console.log('exportPDF', data,data)
+            if (data[0]==undefined || data[0]=='') {
+              data[0]=pdfdata;
+            }
+            var fitertemp: any = data.filter(n => n)
+            await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
+              this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
+              console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+              this.PREVIEWS_URL_STRING = merge?.pdfurl;
+              model.style.display = 'block';
+             
+              console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
+            });
+          });
+        });
+      })
+    }
+   
+
     this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
       console.log(res, 'dsdsdsdsdsdsds');
       this.GetDownloadStatus = res[0];
@@ -622,11 +694,11 @@ async PREVIEWS_URL(model,id) {
       }
     })
   }
-  PromiseReturn(){
-    var temp:any=[]; 
-    temp[0] =this.formerge;
-    temp[1]=this.uploadUrl;
-    return new Promise(async (resolve,reject)=>{
+  PromiseReturn() {
+    var temp: any = [];
+    temp[0] = this.formerge;
+    temp[1] = this.uploadUrl;
+    return new Promise(async (resolve, reject) => {
       for (let i = 0; i < this.selectedItems.length; i++) {
         for (let index = 0; index < this.temp1[i].length; index++) {
           if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != null && this.temp1[i][index]?.pdf != undefined) {
@@ -634,7 +706,7 @@ async PREVIEWS_URL(model,id) {
           }
         }
       }
-    await  resolve(temp);
+      await resolve(temp);
     })
   }
   GetDownloadStatus: any = [];
@@ -642,9 +714,13 @@ async PREVIEWS_URL(model,id) {
   Approval_URL: any = [];
 
   SendApproval(Status: string, UniqueId: any) {
-    if(UniqueId!=null){
+    if (UniqueId != null) {
       var temp_doc: any = [];
-      temp_doc[0] = this.PREVIWES_URL?.changingThisBreaksApplicationSecurity;
+      if (this.PREVIWES_URL?.changingThisBreaksApplicationSecurity==null) {
+        temp_doc[0] =this.PREVIEWS_URL_STRING;
+      }else{
+        temp_doc[0] = this.PREVIWES_URL?.changingThisBreaksApplicationSecurity;
+      }
       temp_doc[1] = this.uploadUrl_Original;
       for (let i = 0; i < this.selectedItems.length; i++) {
         for (let index = 0; index < this.temp1[i].length; index++) {
@@ -667,37 +743,37 @@ async PREVIEWS_URL(model,id) {
       console.log(approval_data, 'approval_data')
       if (Status == '' || Status == null || Status == 'Rejected') {
         this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
-        var pipo_id:any=[];
-        var pipo_name:any=[];
-        for (let index = 0; index < this.selectedItems.length; index++) {
-          pipo_id.push(this.selectedItems[index]?.pipo_id)
-          pipo_name.push(this.selectedItems[index]?.pipo_no)
-        }
-          var data:any={
-            data:{
-              formdata:this.pipoForm.value,
+          var pipo_id: any = [];
+          var pipo_name: any = [];
+          for (let index = 0; index < this.selectedItems.length; index++) {
+            pipo_id.push(this.selectedItems[index]?.pipo_id)
+            pipo_name.push(this.selectedItems[index]?.pipo_no)
+          }
+          var data: any = {
+            data: {
+              formdata: this.pipoForm.value,
               documents: temp_doc,
-              pipo_1:this.selectedItems,
-              Url_Redirect:{file:'import',document:'orAdvice',pipo:pipo_name.toString()}
+              pipo_1: this.selectedItems,
+              Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() }
             },
-            TypeTransaction:'Advance-Remittance-flow',
-            fileType:'Import',
-            UserDetails:approval_data?.id,
+            TypeTransaction: 'Advance-Remittance-flow',
+            fileType: 'Import',
+            UserDetails: approval_data?.id,
             pipo: pipo_id,
-          } 
-          this.documentService.addExportBillLodgment(data).subscribe((res1: any) => { 
+          }
+          this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
             let updatedData = {
               "TransactionRef": [
                 res1._id,
               ]
             }
-            this.userService.updateManyPipo(pipo_id,'import','', updatedData).subscribe((data) => {
-                console.log('king123');
-                console.log(data);
-                this.router.navigate(['/home/dashboardTask'])
-              },(error) => {
-                console.log('error');
-              }
+            this.userService.updateManyPipo(pipo_id, 'import', '', updatedData).subscribe((data) => {
+              console.log('king123');
+              console.log(data);
+              this.router.navigate(['/home/dashboardTask'])
+            }, (error) => {
+              console.log('error');
+            }
             );
             this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
               console.log(res, 'dsdsdsdsdsdsds');
@@ -710,7 +786,7 @@ async PREVIEWS_URL(model,id) {
               }
             })
           });
-        
+
         });
       }
     }

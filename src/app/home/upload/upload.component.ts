@@ -915,13 +915,13 @@ export class UploadComponent implements OnInit {
       },
       (err) => console.log('Error', err)
     );
-    this.documentService.getPipoTask(1).subscribe(
-      (res: any) => {
-        (this.buyerDetail34 = res.data),
-          console.log('Benne Detail4354545345435', this.buyerDetail34);
-      },
-      (err) => console.log('Error', err)
-    );
+    // this.documentService.getPipoTask(1).subscribe(
+    //   (res: any) => {
+    //     (this.buyerDetail34 = res.data),
+    //       console.log('Benne Detail4354545345435', this.buyerDetail34);
+    //   },
+    //   (err) => console.log('Error', err)
+    // );
     console.log('DOCUMENT TYPE', this.documentType);
     await this.pipoDataService.getPipoList1(this.documentType1, temp_pipo).then(async (data) => {
       console.log(data, 'data..................')

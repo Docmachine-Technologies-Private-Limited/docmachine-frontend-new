@@ -39,6 +39,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { MergePdfListService } from '../merge-pdf-list.service';
 import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
 import { StorageEncryptionDecryptionService } from '../../Storage/storage-encryption-decryption.service';
+import { BehaviorSubjectListService } from '../CommanSubjectApi/BehaviorSubjectListService/BehaviorSubjectList.service';
 
 @Component({
   selector: 'app-Direct-Dispatch',
@@ -374,12 +375,13 @@ export class NewDirectDispatchComponent implements OnInit {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public pdfmerge: MergePdfListService,
     public sessionstorage: StorageEncryptionDecryptionService,
-    public wininfo: WindowInformationService) {
+    public wininfo: WindowInformationService,
+    public behaviorsubjectlist: BehaviorSubjectListService) {
     this.api_base = appconfig.apiUrl;
     this.getDropdownData();
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.wininfo.set_controller_of_width(230, '.content_top_common')
     this.file = this.route.snapshot.paramMap.get('doc_type');
     this.ExportBillLodgement_Form = this.formBuilder.group({
@@ -402,6 +404,9 @@ export class NewDirectDispatchComponent implements OnInit {
       Url_Redirect: [{}, [Validators.required]],
       extradata: [[], [Validators.required]]
     });
+    //  await this.userService.SubjectListService.getUserDetail().then((value:any)=>{
+    //     console.log(value,'behaviorsubjectlist')
+    //   })
     this.userService.getUserDetail().then((status: any) => {
       this.USER_DATA = status['result'];
       console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
@@ -3929,9 +3934,6 @@ export class NewDirectDispatchComponent implements OnInit {
           if ((index + 1) == this.temp[id].length) {
             var fitertemp: any = temp.filter(n => n)
             await this.pdfmerge._multiple_merge_pdf(fitertemp).then((data: any) => {
-              var file3 = new Blob([data._body], { type: 'application/pdf' });
-              // this.dataLocalUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(file3));
-
               console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
               this.MERGE_ALL_PDF[0] = data.toString();
             })
@@ -3970,13 +3972,13 @@ export class NewDirectDispatchComponent implements OnInit {
     const id: any = event?.tab?.content?.viewContainerRef?.element?.nativeElement?.id != undefined ? event.tab.content.viewContainerRef.element.nativeElement.id : event;
     var tempfilter: any = this.itemArray.filter((item: any) => item?.sbno == id);
     var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.bankValue) != -1);
-   
+
     if (bankformat.length != 0 && bankformat[0]?.urlpdf != '') {
       await this.fillForm(tempfilter[0], 'SB_' + id).then(async (fillpdf: any) => {
         this.PDF_LIST = [];
         this.PREVIEWS_URL_LIST = [];
         var tep: any = [];
-        
+
         var temppdflits: any = [];
         tep[tempfilter[0]?._id] = []
         tep[tempfilter[0]?._id][0] = fillpdf;
@@ -4005,10 +4007,10 @@ export class NewDirectDispatchComponent implements OnInit {
           this.tp['id'].push(element?.irDataItem?._id)
         }
         this.temp_doc = [];
-        this.temp_doc[0] = this.value?.changingThisBreaksApplicationSecurity;
+        this.temp_doc[0] = { pdf: this.value?.changingThisBreaksApplicationSecurity, name: bankformat[0]?.value };
         for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
           if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
-            this.temp_doc.push(this.temp[tempfilter[0]?._id][index]?.pdf)
+            this.temp_doc.push({ pdf: this.temp[tempfilter[0]?._id][index]?.pdf, name: this.temp[tempfilter[0]?._id][index]?.name })
           }
         }
       });
@@ -4026,7 +4028,7 @@ export class NewDirectDispatchComponent implements OnInit {
           forcePageBreak: ".page-break"
         }).then(function (group) {
           var PAGE_RECT = new kendo.geometry.Rect(
-            [0,0], [30*2.8347,25*2.8347]
+            [0, 0], [30 * 2.8347, 25 * 2.8347]
           );
           kendo.drawing.fit(group, PAGE_RECT)
           return kendo.drawing.exportPDF(group, {
@@ -4035,7 +4037,7 @@ export class NewDirectDispatchComponent implements OnInit {
             scale: 0.5
           });
         }).done(async (data) => {
-          console.log('exportPDF', data,tep)
+          console.log('exportPDF', data, tep)
           temppdflits.push(data)
           for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
             tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
@@ -4044,9 +4046,15 @@ export class NewDirectDispatchComponent implements OnInit {
             }
             if ((index + 1) == this.temp[tempfilter[0]?._id].length) {
               var fitertemp: any = temppdflits.filter(n => n)
-              await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
-                this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
-                console.log(this.tp, this.temp_doc, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+              await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+                await this.userService?.UploadS3Buket({
+                  fileName: 'mergealldocuments.pdf', buffer: merge?.pdfurl,
+                  type: 'application/pdf'
+                }).subscribe((response: any) => {
+                  console.log(response, 'response')
+                  this.PREVIEWS_URL_LIST.push(response?.url);
+                  console.log(this.tp, this.temp_doc, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+                })
               });
             }
           }
@@ -4061,163 +4069,82 @@ export class NewDirectDispatchComponent implements OnInit {
             this.tp['id'].push(element?.irDataItem?._id)
           }
           this.temp_doc = [];
-          this.temp_doc[0] = this.value?.changingThisBreaksApplicationSecurity;
-          this.temp_doc[1] = data;
+          this.temp_doc[0] = { pdf: this.value?.changingThisBreaksApplicationSecurity, name: bankformat[0]?.value };
+          this.temp_doc[1] = { pdf: data, name: bankformat[0]?.value };
           for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
             if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
-              this.temp_doc.push(this.temp[tempfilter[0]?._id][index]?.pdf)
+              this.temp_doc.push({ pdf: this.temp[tempfilter[0]?._id][index]?.pdf, name: this.temp[tempfilter[0]?._id][index]?.name })
             }
           }
         });
       });
-     
     }
   }
-  mm(val) {
-    return val *2.8347;
-  }
-  SendApproval(Status: string, UniqueId: any, model: any) {
-    if (UniqueId != null) {
-      var approval_data: any = [];
-      let sbAmountSum: any = this.itemArray.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.fobValue) }, 0);
-      if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
-        approval_data = {
-          id: 'IRDR' + UniqueId,
-          tableName: 'Inward-Remitance-Dispoal-Realization',
-          deleteflag: '-1',
-          userdetails: this.USER_DATA,
-          status: 'pending',
-          documents: this.temp_doc,
-          Types: 'downloadPDF',
-          TypeOfPage: 'Transaction',
-          FileType: this.USER_DATA?.sideMenu
-        }
-      } else {
-        approval_data = {
-          id: 'Export-Direct-Dispatch' + this.tp?.firxAmount != undefined && this.tp?.firxAmount != null && this.tp?.firxAmount != '' ? this.tp?.firxAmount.join(',') : sbAmountSum,
-          tableName: 'Export-Direct-Dispatch',
-          deleteflag: '-1',
-          userdetails: this.USER_DATA,
-          status: 'pending',
-          documents: this.temp_doc,
-          Types: 'downloadPDF',
-          TypeOfPage: 'Transaction',
-          FileType: this.USER_DATA?.sideMenu
+  async SendApproval(Status: string, UniqueId: any, event: any) {
+    var UpdatedUrl: any = []
+    for (let index = 0; index < this.temp_doc.length; index++) {
+      if (this.temp_doc[index]?.pdf != '' && this.temp_doc[index]?.pdf != undefined) {
+        if (this.temp_doc[index]?.pdf.indexOf('data:application/pdf;base64,') != -1) {
+          await this.userService?.UploadS3Buket({
+            fileName: this.temp_doc[index]?.name + '.pdf', buffer: this.temp_doc[index]?.pdf,
+            type: 'application/pdf'
+          }).subscribe((response: any) => {
+            console.log(response, 'response')
+            UpdatedUrl.push(response?.url)
+          })
+        } else {
+          UpdatedUrl.push(this.temp_doc[index]?.pdf)
         }
       }
+      if ((index + 1) == this.temp_doc.length) {
+        if (UniqueId != null) {
+          var approval_data: any = {};
+          let sbAmountSum: any = this.itemArray.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.fobValue) }, 0);
+          if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
+            approval_data = {
+              id: 'IRDR' + '_' + UniqueId,
+              tableName: 'Inward-Remitance-Dispoal-Realization',
+              deleteflag: '-1',
+              userdetails: this.USER_DATA,
+              status: 'pending',
+              documents: UpdatedUrl?.reverse(),
+              Types: 'downloadPDF',
+              TypeOfPage: 'Transaction',
+              FileType: this.USER_DATA?.sideMenu
+            }
+          } else {
+            const ID_APPROVAL:any=this.tp?.firxAmount != undefined && this.tp?.firxAmount != null && this.tp?.firxAmount != '' ? this.tp?.firxAmount.join(',') : sbAmountSum
+            approval_data = {
+              id: 'Export-Direct-Dispatch' + '_' + ID_APPROVAL,
+              tableName: 'Export-Direct-Dispatch',
+              deleteflag: '-1',
+              userdetails: this.USER_DATA,
+              status: 'pending',
+              documents: UpdatedUrl?.reverse(),
+              Types: 'downloadPDF',
+              TypeOfPage: 'Transaction',
+              FileType: this.USER_DATA?.sideMenu
+            }
+          }
 
-      var pipo: any = this.itemArray.filter((item: any) => item?._id.indexOf(UniqueId) != -1)[0]?.pipo;
-      var pipo_id: any = [];
-      var pipo_name: any = [];
-      pipo.forEach(element => {
-        pipo_id.push(element?._id)
-        pipo_name.push(element?.pi_poNo)
-      });
-      this.getStatusCheckerMaker(approval_data?.id).then((res: any) => {
-        console.log(approval_data, res, 'approval_data')
-        if (res?.id != approval_data?.id) {
-          if (Status == '' || Status == null || Status == 'Rejected') {
-            this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
-              this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
-              this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
-              this.ExportBillLodgement_Form.controls['documents'].setValue(this.temp_doc);
-              this.ExportBillLodgement_Form.controls['Url_Redirect'].setValue({ file: 'export', document: 'blCopyref', SbRef: UniqueId })
-              this.ExportBillLodgement_Form.controls['extradata'].setValue(this.FILTER_DATA)
-              if (this.Lodgement['AgainstAdvanceReceipt']?.Hide != 'no') {
-                var data: any = {
-                  data: this.ExportBillLodgement_Form.value,
-                  TypeTransaction: 'Export-Direct-Dispatch',
-                  fileType: 'Export',
-                  UserDetails: approval_data?.id,
-                  pipo: pipo_id
-                }
-                this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
-                  let updatedData = {
-                    "TransactionRef": [
-                      res1._id,
-                    ]
-                  }
-                  if (this.documentService.MT102_SUBJECT?.file == '') {
-                    this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
-                      console.log('king123');
-                      console.log(data);
-                      for (let index = 0; index < this.ExportBillLodgement_Form.value?.Advance_reference_Number?.length; index++) {
-                        const element = this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.irDataItem;
-                        this.documentService.Update_Amount_by_Table({
-                          tableName: 'iradvices',
-                          id: element._id,
-                          query: {
-                            sbno: [this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb]
-                          }
-                        }).subscribe((list: any) => {
-
-                        })
-                      }
-                      this.documentService.Update_Amount_by_Table({
-                        tableName: 'iradvices',
-                        id: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?._id,
-                        query: {
-                          BalanceAvail: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.BalanceAvail,
-                          sbno: [this.ExportBillLodgement_Form.value?.Carry_Amount?.sb]
-                        }
-                      }).subscribe((r1: any) => {
-                        var query: any = {
-                          firxNumber: this.tp?.firxNumber.toString(),
-                          firxDate: this.tp?.firxDate.toString(),
-                          firxCurrency: this.tp?.firxCurrency.toString(),
-                          firxAmount: this.tp?.firxAmount.toString(),
-                          firxCommision: this.tp?.firxCommision.toString(),
-                          firxRecAmo: '0'
-                        }
-                        if (this.ExportBillLodgement_Form.value?.Total_Reaming_Amount != 0) {
-                          query = {
-                            firxNumber: this.tp?.firxNumber.toString(),
-                            firxDate: this.tp?.firxDate.toString(),
-                            firxCurrency: this.tp?.firxCurrency.toString(),
-                            firxAmount: this.tp?.firxAmount.toString(),
-                            firxCommision: this.tp?.firxCommision.toString(),
-                            firxRecAmo: '0',
-                            fobValue: this.ExportBillLodgement_Form.value?.Total_Reaming_Amount
-                          }
-                        }
-                        this.documentService.Update_Amount_by_Table({
-                          tableName: 'masterrecord',
-                          id: UniqueId,
-                          query: query
-                        }).subscribe((r2: any) => {
-                          console.log(r2, 'masterrecord')
-                          // model.style.display = 'none';
-                          // this.router.navigate(['/home/dashboardTask'])
-                        })
-                      });
-                    }, (error) => {
-                      console.log('error');
-                    }
-                    );
-                  }
-
-                  console.log('addExportBillLodgment', res1);
-                })
-              } else {
-                if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
-                  var changevalue: any = this.documentService.MT102_SUBJECT;
-                  changevalue['pipo'] = pipo_id;
-                  changevalue['SbRef'] = this.itemArray;
-                  changevalue['Url_Redirect'] = { file: 'export', document: 'blCopyref', SbRef: UniqueId, pipo: pipo_name.toString() };
-                  var data: any = {
-                    data: changevalue,
-                    TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
-                    fileType: 'Export',
-                    UserDetails: approval_data?.id,
-                    pipo: pipo_id
-                  }
-                  this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
-                    this.router.navigate(['/home/dashboardTask']);
-                    this.sessionstorage.remove('MT102')
-                    console.log('addExportBillLodgment', res1);
-                  })
-                } else {
-                  if (this.Lodgement['AgainstAdvanceReceipt']?.Hide == 'no') {
+          var pipo: any = this.itemArray.filter((item: any) => item?._id.indexOf(UniqueId) != -1)[0]?.pipo;
+          var pipo_id: any = [];
+          var pipo_name: any = [];
+          pipo.forEach(element => {
+            pipo_id.push(element?._id)
+            pipo_name.push(element?.pi_poNo)
+          });
+          this.getStatusCheckerMaker(approval_data?.id).then((res: any) => {
+            console.log(approval_data, res, 'approval_data')
+            if (res?.id != approval_data?.id) {
+              if (Status == '' || Status == null || Status == 'Rejected') {
+                this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
+                  this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
+                  this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
+                  this.ExportBillLodgement_Form.controls['documents'].setValue(UpdatedUrl?.reverse());
+                  this.ExportBillLodgement_Form.controls['Url_Redirect'].setValue({ file: 'export', document: 'blCopyref', SbRef: UniqueId })
+                  this.ExportBillLodgement_Form.controls['extradata'].setValue(this.FILTER_DATA)
+                  if (this.Lodgement['AgainstAdvanceReceipt']?.Hide != 'no') {
                     var data: any = {
                       data: this.ExportBillLodgement_Form.value,
                       TypeTransaction: 'Export-Direct-Dispatch',
@@ -4231,29 +4158,125 @@ export class NewDirectDispatchComponent implements OnInit {
                           res1._id,
                         ]
                       }
-                      this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
-                        console.log('king123');
-                        console.log(data);
-                        this.router.navigate(['/home/dashboardTask']);
-                      }, (error) => {
-                        console.log('error');
+                      if (this.documentService.MT102_SUBJECT?.file == '') {
+                        this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
+                          console.log('king123');
+                          console.log(data);
+                          for (let index = 0; index < this.ExportBillLodgement_Form.value?.Advance_reference_Number?.length; index++) {
+                            const element = this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.irDataItem;
+                            this.documentService.Update_Amount_by_Table({
+                              tableName: 'iradvices',
+                              id: element._id,
+                              query: {
+                                sbno: [this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb]
+                              }
+                            }).subscribe((list: any) => {
+
+                            })
+                          }
+                          this.documentService.Update_Amount_by_Table({
+                            tableName: 'iradvices',
+                            id: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?._id,
+                            query: {
+                              BalanceAvail: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.BalanceAvail,
+                              sbno: [this.ExportBillLodgement_Form.value?.Carry_Amount?.sb]
+                            }
+                          }).subscribe((r1: any) => {
+                            var query: any = {
+                              firxNumber: this.tp?.firxNumber.toString(),
+                              firxDate: this.tp?.firxDate.toString(),
+                              firxCurrency: this.tp?.firxCurrency.toString(),
+                              firxAmount: this.tp?.firxAmount.toString(),
+                              firxCommision: this.tp?.firxCommision.toString(),
+                              firxRecAmo: '0'
+                            }
+                            if (this.ExportBillLodgement_Form.value?.Total_Reaming_Amount != 0) {
+                              query = {
+                                firxNumber: this.tp?.firxNumber.toString(),
+                                firxDate: this.tp?.firxDate.toString(),
+                                firxCurrency: this.tp?.firxCurrency.toString(),
+                                firxAmount: this.tp?.firxAmount.toString(),
+                                firxCommision: this.tp?.firxCommision.toString(),
+                                firxRecAmo: '0',
+                                fobValue: this.ExportBillLodgement_Form.value?.Total_Reaming_Amount
+                              }
+                            }
+                            this.documentService.Update_Amount_by_Table({
+                              tableName: 'masterrecord',
+                              id: UniqueId,
+                              query: query
+                            }).subscribe((r2: any) => {
+                              console.log(r2, 'masterrecord')
+                              // model.style.display = 'none';
+                              // this.router.navigate(['/home/dashboardTask'])
+                            })
+                          });
+                        }, (error) => {
+                          console.log('error');
+                        }
+                        );
                       }
-                      );
+
                       console.log('addExportBillLodgment', res1);
                     })
+                  } else {
+                    if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
+                      var changevalue: any = this.documentService.MT102_SUBJECT;
+                      changevalue['pipo'] = pipo_id;
+                      changevalue['SbRef'] = this.itemArray;
+                      changevalue['Url_Redirect'] = { file: 'export', document: 'blCopyref', SbRef: UniqueId, pipo: pipo_name.toString() };
+                      var data: any = {
+                        data: changevalue,
+                        TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
+                        fileType: 'Export',
+                        UserDetails: approval_data?.id,
+                        pipo: pipo_id
+                      }
+                      this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                        this.router.navigate(['/home/dashboardTask']);
+                        this.sessionstorage.remove('MT102')
+                        console.log('addExportBillLodgment', res1);
+                      })
+                    } else {
+                      if (this.Lodgement['AgainstAdvanceReceipt']?.Hide == 'no') {
+                        var data: any = {
+                          data: this.ExportBillLodgement_Form.value,
+                          TypeTransaction: 'Export-Direct-Dispatch',
+                          fileType: 'Export',
+                          UserDetails: approval_data?.id,
+                          pipo: pipo_id
+                        }
+                        this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                          let updatedData = {
+                            "TransactionRef": [
+                              res1._id,
+                            ]
+                          }
+                          this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
+                            console.log('king123');
+                            console.log(data);
+                            this.router.navigate(['/home/dashboardTask']);
+                          }, (error) => {
+                            console.log('error');
+                          }
+                          );
+                          console.log('addExportBillLodgment', res1);
+                        })
+                      }
+                    }
                   }
-                }
+                });
               }
-            });
-          }
-        } else {
-          this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Send for Approval',
-            `You already send for approval <br>&<br>also check ${res?.status} panel`)
+            } else {
+              this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Send for Approval',
+                `You already send for approval <br>&<br>also check ${res?.status} panel`)
+            }
+          });
         }
-      });
-    }
 
-    console.log('Export-Direct-Dispatch' + UniqueId, UniqueId, pipo, approval_data, 'uiiiiiiiiiiiiii')
+        console.log('Export-Direct-Dispatch' + UniqueId, UniqueId, pipo, approval_data, 'uiiiiiiiiiiiiii')
+      }
+    }
   }
   getStatusCheckerMaker(id) {
     return new Promise((resolve, reject) => {

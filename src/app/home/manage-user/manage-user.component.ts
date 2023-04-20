@@ -143,15 +143,20 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     }
   }
   CONSOLE(value: any) {
-    const file = value[0];
+    const file:any = value[0];
+    console.log(file,'sdfjsdggfdsjfsdf')
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
       console.log(reader.result);
-      this.img = reader.result
+      this.userService?.UploadS3Buket({fileName:file?.name,buffer:reader.result,type:file?.type}).subscribe((response:any)=>{
+        console.log(response,'response')
+        this.img = response?.url;
+      })
     };
     console.log(value, 'console')
   }
+  
   EditData(temp: any, data: any) {
     this.SELECTED_INDEX = 1;
     console.log(this.SELECTED_EDIT_DATA, 'sdhfjsdfsdfsdf');

@@ -86,6 +86,8 @@ export class TransactionDashboardComponent implements OnInit {
             filterType=['Import-Direct-Payment','Advance-Remittance-flow'];
           }if (this.TRANSACTION_NAME=='Inward-Remitance-Dispoal-Realization'){
             filterType=['Inward-Remitance-Dispoal-Realization'];
+          }if (this.TRANSACTION_NAME=='Packing-Credit-Request'){
+            filterType=['Packing-Credit-Request'];
           }
           this.mergeTransaction(res,data?.result?.sideMenu,filterType).then((mergeTransactionres:any)=>{
             var merge:any=mergeTransactionres;

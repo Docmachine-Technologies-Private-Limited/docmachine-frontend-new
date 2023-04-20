@@ -1,11 +1,12 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnInit } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AppConfig } from '../../app/app.config';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from "@angular/router";
+import { BehaviorSubjectListService } from "../home/CommanSubjectApi/BehaviorSubjectListService/BehaviorSubjectList.service";
 
 @Injectable({ providedIn: "root" })
-export class UserService {
+export class UserService implements OnInit {
   public role;
   public authToken;
   public name;
@@ -14,11 +15,14 @@ export class UserService {
   USER_RESULT:any=[];
   public loginData = new BehaviorSubject({});
   public userDataListener$ = this.loginData.asObservable();
-   constructor(private http: HttpClient, public appconfig: AppConfig,public router:Router) {
+   constructor(private http: HttpClient, public appconfig: AppConfig,public router:Router,public SubjectListService:BehaviorSubjectListService) {
     this.api_base = appconfig.apiUrl;
     console.log(this.api_base)
+   
   }
-
+  ngOnInit(): void {
+    // this.SubjectListService.callAllCommonApi();
+  }
   public addLoginData(data) {
     this.loginData.next(data);
     this.userData = data
@@ -611,6 +615,14 @@ export class UserService {
     };
     return this.http.post(`${this.api_base}/member/UPDATE_USER_MEMBER`,{email:id,member: member},httpOptions);
   }
+  public UploadS3Buket(data:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/documents/uploadFiletoS3Bucket`,data,httpOptions);
+  }
   public getMemeber(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -667,9 +679,7 @@ export class UserService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http
-      .get(`${this.api_base}/user/profile`, httpOptions)
-      .toPromise();
+    return this.http.get(`${this.api_base}/user/profile`, httpOptions).toPromise();
   }
   getUser_Profile() {
     this.loadFromLocalStorage();

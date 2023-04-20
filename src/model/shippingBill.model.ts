@@ -1,5 +1,6 @@
 import {PipoDisplayListViewItem, PipoModel} from "./pipo.model";
 import _ from 'lodash';
+
 class Invoice {
   public sno: string;
   public invoiceno: string;
@@ -58,7 +59,7 @@ export class ShippingBill {
     public debitnotedetails:any;
 
     constructor(data: any) {
-      console.log(data,'ShippingBill')
+      // console.log(data,'ShippingBill')
         this.userId = data.userId ? data.userId : '';
         this.sbno = data.sbno ? data.sbno : '';
         this.sbdate = data.sbdate ? data.sbdate : '';

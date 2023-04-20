@@ -7,6 +7,7 @@ import { MergePdfService } from '../../../service/MergePdf/merge-pdf.service';
 import { UserService } from '../../../service/user.service';
 import { WindowInformationService } from '../../../service/window-information.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../confirm-dialog-box/confirm-dialog-box.component';
+import { MergePdfListService } from '../../merge-pdf-list.service';
 
 @Component({
   selector: 'app-pending-panel',
@@ -18,6 +19,7 @@ export class PendingPanelComponent implements OnInit {
   USER_DETAILS: any = [];
   constructor(public wininfo: WindowInformationService, public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public mergerpdf: MergePdfService,
+    public pdfmerge: MergePdfListService,
     public documentService: DocumentService, public dialog: MatDialog, private sanitizer: DomSanitizer, public userserivce: UserService,) { }
   ngOnInit(): void {
     this.wininfo.set_controller_of_width(270, '.content_top_common')
@@ -98,19 +100,24 @@ export class PendingPanelComponent implements OnInit {
     var temp: any = [];
     if (item != undefined && item != '') {
       if (item?.Types === 'downloadPDF') {
-        try {
-          var temp: any = item?.documents.filter(n => n)
-          await this.mergerpdf.mergePdf(temp).then((merge: any) => {
-            this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
-          })
-        } catch (error) {
-          console.log(error, 'errror')
+        if (item?.documents.length != 0) {
+          try {
+            var temp: any = item?.documents.filter(n => n)
+            await this.pdfmerge._multiple_merge_pdf(temp).then(async (merge: any) => {
+              this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge?.pdfurl], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
+            });
+          } catch (error) {
+            console.log(error, 'errror')
+          }
+        } else {
+          this.CustomConfirmDialogModel.ConfirmDialogModel('Pdf View', "Sorry's documents not found!", null);
         }
+
       } else {
         try {
-          await this.mergerpdf.mergePdf([item['dummydata']['doc'] != '' ? item['dummydata']['doc'] : item['dummydata']['doc1']]).then((merge: any) => {
-            this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
-          })
+          await this.pdfmerge._multiple_merge_pdf([item['dummydata']['doc'] != '' ? item['dummydata']['doc'] : item['dummydata']['doc1']]).then(async (merge: any) => {
+            this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge?.pdfurl], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
+          });
         } catch (error) {
           console.log(error, 'errror')
         }

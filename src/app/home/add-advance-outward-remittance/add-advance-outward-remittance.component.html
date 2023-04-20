@@ -33,15 +33,9 @@
                                         <iframe class='iframe-controller' *ngIf="this.PREVIWES_URL!=''"
                                             style="flex-direction:row;" [src]="this.PREVIWES_URL" id="frame1"
                                             height="600px" width="100%"></iframe>
-                                        <!-- <custom-container-panel>
-                                            <custom-left-panel>
-
-                                            </custom-left-panel>
-                                            <custom-right-panel>
-
-                                            </custom-right-panel>
-                                        </custom-container-panel> -->
-                                        <app-import-letterhead [data]="[0,0,0]"></app-import-letterhead>
+                                            <div id="first">
+                                                <app-import-letterhead *ngIf="this.OTHER_BANK_VISIBLE==true" [data]="[this.BANK_DETAILS,this.selectedItems,this.selectedBenne,this.REMIITANCE_SUM]"></app-import-letterhead>
+                                            </div>
                                         <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="selectedItems.length!=0">
                                             <div class="content_white_background">
                                                 <h5 class="header-text">PI_PO or Advance Outward remittance Details

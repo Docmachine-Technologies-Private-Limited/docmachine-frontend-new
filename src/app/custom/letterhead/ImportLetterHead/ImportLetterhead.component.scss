@@ -11,6 +11,12 @@
 }
 
 .body-letter {
+    font-size: 15px;
+    background: white;
+    display: block;
+    margin: 0 auto;
+    width: 210mm;
+    min-height: 297mm;
     overflow: auto;
 }
 
@@ -35,6 +41,7 @@
 
 .p-text {
     font-family: 'Times New Roman', Times, serif;
+    color: black;
 }
 
 .amount {
@@ -51,4 +58,42 @@
     font-weight: bold;
     padding: 10px;
     padding-bottom: 0px;
+}
+
+.grid-display {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.temp table>thead>tr:last-child {
+    border-bottom: none;
+}
+
+[contenteditable]:focus {
+    outline: 2px solid rgb(136, 135, 135);
+}
+
+.font-weight-600 {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.letter-table-tr {
+    display: grid;
+    grid-template-columns: 7cm 8cm;
+    width: 100%;
+    align-items: center;
+    border-bottom: 1px solid #7e7b7b;
+    font-size: 11px;
+    word-break: break-all;
+}
+
+.letter-table-tr .letter-col-td-th-1 {
+    height: 100% !important;
+    border: none;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    color: black;
 }
