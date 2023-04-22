@@ -11,6 +11,7 @@ import importedSaveAs from 'file-saver';
 import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
 import * as XLSX from 'xlsx';
+import { jsPDF } from 'jspdf'
 
 declare var kendo: any;
 
@@ -4021,64 +4022,83 @@ export class NewDirectDispatchComponent implements OnInit {
       var temppdflits: any = [];
       tep[tempfilter[0]?._id] = []
       $(document).ready(() => {
+        kendo.pdf.defineFont({
+          "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
+          "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
+          "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+          "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+          "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
+        });
         kendo.drawing.drawDOM($("#first"), {
           paperSize: "A4",
-          margin: "1cm",
-          scale: 0.5,
+          margin: "0cm",
+          scale: 0.7,
           forcePageBreak: ".page-break"
         }).then(function (group) {
-          var PAGE_RECT = new kendo.geometry.Rect(
-            [0, 0], [30 * 2.8347, 25 * 2.8347]
-          );
-          kendo.drawing.fit(group, PAGE_RECT)
           return kendo.drawing.exportPDF(group, {
             paperSize: "A4",
-            margin: "1cm",
-            scale: 0.5
+            margin: "0cm",
+            scale: 0.7,
+            forcePageBreak: ".page-break"
           });
         }).done(async (data) => {
           console.log('exportPDF', data, tep)
-          temppdflits.push(data)
-          for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
-            tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
-            if (this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
-              temppdflits.push(this.temp[tempfilter[0]?._id][index]?.pdf)
+          await this.userService?.UploadS3Buket({
+            fileName: this.guid() + '.pdf', buffer: data,
+            type: 'application/pdf'
+          }).subscribe(async (pdfresponse: any) => {
+            console.log(pdfresponse, 'response')
+            await temppdflits.push(pdfresponse?.url);
+            for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+              tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
+              if (this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+                temppdflits.push(this.temp[tempfilter[0]?._id][index]?.pdf)
+              }
+              if ((index + 1) == this.temp[tempfilter[0]?._id].length) {
+                var fitertemp: any = await temppdflits.filter(n => n)
+                await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+                  await this.userService?.UploadS3Buket({
+                    fileName: this.guid() + '.pdf', buffer: merge?.pdfurl,
+                    type: 'application/pdf'
+                  }).subscribe((response: any) => {
+                    console.log(response, 'response')
+                    this.PREVIEWS_URL_LIST.push(response?.url);
+                    console.log(this.tp, this.temp_doc, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+                  })
+                });
+              }
             }
-            if ((index + 1) == this.temp[tempfilter[0]?._id].length) {
-              var fitertemp: any = temppdflits.filter(n => n)
-              await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-                await this.userService?.UploadS3Buket({
-                  fileName: 'mergealldocuments.pdf', buffer: merge?.pdfurl,
-                  type: 'application/pdf'
-                }).subscribe((response: any) => {
-                  console.log(response, 'response')
-                  this.PREVIEWS_URL_LIST.push(response?.url);
-                  console.log(this.tp, this.temp_doc, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
-                })
-              });
+            for (let index = 0; index < this.advanceArray['SB_' + id].length; index++) {
+              const element: any = this.advanceArray['SB_' + id][index];
+              this.tp['firxNumber'].push(element?.irDataItem?.billNo)
+              this.tp['firxDate'].push(element?.irDataItem?.date)
+              this.tp['firxCurrency'].push(element?.irDataItem?.currency)
+              this.tp['firxAmount'].push(element?.irDataItem?.amount)
+              this.tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
+              this.tp['firxRecAmo'].push(0);
+              this.tp['id'].push(element?.irDataItem?._id)
             }
-          }
-          for (let index = 0; index < this.advanceArray['SB_' + id].length; index++) {
-            const element: any = this.advanceArray['SB_' + id][index];
-            this.tp['firxNumber'].push(element?.irDataItem?.billNo)
-            this.tp['firxDate'].push(element?.irDataItem?.date)
-            this.tp['firxCurrency'].push(element?.irDataItem?.currency)
-            this.tp['firxAmount'].push(element?.irDataItem?.amount)
-            this.tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
-            this.tp['firxRecAmo'].push(0);
-            this.tp['id'].push(element?.irDataItem?._id)
-          }
-          this.temp_doc = [];
-          this.temp_doc[0] = { pdf: this.value?.changingThisBreaksApplicationSecurity, name: bankformat[0]?.value };
-          this.temp_doc[1] = { pdf: data, name: bankformat[0]?.value };
-          for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
-            if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
-              this.temp_doc.push({ pdf: this.temp[tempfilter[0]?._id][index]?.pdf, name: this.temp[tempfilter[0]?._id][index]?.name })
+            this.temp_doc = [];
+            this.temp_doc[0] = { pdf: this.value?.changingThisBreaksApplicationSecurity, name: bankformat[0]?.value };
+            this.temp_doc[1] = { pdf: data, name: bankformat[0]?.value };
+            for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+              if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+                this.temp_doc.push({ pdf: this.temp[tempfilter[0]?._id][index]?.pdf, name: this.temp[tempfilter[0]?._id][index]?.name })
+              }
             }
-          }
+          })
+
         });
       });
     }
+  }
+  guid() {
+    let s4 = () => {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '_' + s4() + '_' + s4() + '_' + s4() + '_' + s4() + s4() + s4();
   }
   async SendApproval(Status: string, UniqueId: any, event: any) {
     var UpdatedUrl: any = []
@@ -4113,7 +4133,7 @@ export class NewDirectDispatchComponent implements OnInit {
               FileType: this.USER_DATA?.sideMenu
             }
           } else {
-            const ID_APPROVAL:any=this.tp?.firxAmount != undefined && this.tp?.firxAmount != null && this.tp?.firxAmount != '' ? this.tp?.firxAmount.join(',') : sbAmountSum
+            const ID_APPROVAL: any = this.tp?.firxAmount != undefined && this.tp?.firxAmount != null && this.tp?.firxAmount != '' ? this.tp?.firxAmount.join(',') : sbAmountSum
             approval_data = {
               id: 'Export-Direct-Dispatch' + '_' + ID_APPROVAL,
               tableName: 'Export-Direct-Dispatch',

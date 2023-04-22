@@ -1,18 +1,11 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, } from '@angular/core';
 import { UserService } from "../../service/user.service";
-import { timer } from "rxjs";
-import { takeWhile } from "rxjs/operators";
-import { OutletContext, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
 import * as data from '../../inward.json';
 import $ from 'jquery'
-import { PDFDocument } from 'pdf-lib';
-import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { forkJoin } from 'rxjs';
-import * as XLSX from 'xlsx';
 import * as CURRENCY_JSON from '../../currency.json';
-import htmlToPdfmake from 'html-to-pdfmake';
-declare var kendo:any;
+declare var kendo: any;
 
 import {
   DropzoneDirective,
@@ -34,9 +27,7 @@ import { WindowInformationService } from '../../service/window-information.servi
 import { ShippingbillDataService } from '../../service/homeservices/shippingbill.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { MergePdfListService } from '../merge-pdf-list.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-Direct-Dispatch',
@@ -60,7 +51,6 @@ export class PackingCreditRequestComponent implements OnInit {
 
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
-  // ----------------------------------
   pipoArray: any = [];
 
   document: any;
@@ -235,7 +225,7 @@ export class PackingCreditRequestComponent implements OnInit {
   item10: any = [];
   item11: any = [];
   public buyerDetail: any = [];
-  advanceArray:any = [];
+  advanceArray: any = [];
   buyerName: any = [];
   id: any;
   SHIPPING_BILL: any = '';
@@ -256,8 +246,6 @@ export class PackingCreditRequestComponent implements OnInit {
   public Transaction_form: FormGroup;
   constructor(
     private userService: UserService,
-    private toastr: ToastrService,
-    private sanitizer: DomSanitizer,
     public appconfig: AppConfig,
     private formBuilder: FormBuilder,
     private documentService: DocumentService,
@@ -265,7 +253,6 @@ export class PackingCreditRequestComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     public shippingBillService: ShippingbillDataService,
-    private modalService: NgbModal,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public pdfmerge: MergePdfListService,
     public wininfo: WindowInformationService) {
@@ -282,21 +269,21 @@ export class PackingCreditRequestComponent implements OnInit {
       })
     }
     this.Transaction_form = this.formBuilder.group({
-      bank_name:  new FormControl('', [Validators.required]),
+      bank_name: new FormControl('', [Validators.required]),
       Running_PC: new FormControl('', [Validators.required]),
       EPC_PCFC: new FormControl('', [Validators.required]),
       PIPO_LIST: new FormArray([this.initItems()]),
       Incoterm_FOB_CIF: new FormControl('', [Validators.required]),
       Forward_Contract: new FormControl('', [Validators.required]),
-      BuyerName:new FormControl([], [Validators.required]),
+      BuyerName: new FormControl([], [Validators.required]),
       Due_Date: new FormControl('', [Validators.required]),
       GSTNO: new FormControl('', [Validators.required]),
       Loan_requested_date: new FormControl('', [Validators.required]),
       Type_of_service: new FormControl('', [Validators.required]),
       Last_date_of_service: new FormControl('', [Validators.required]),
-      Credit_Debit_Account:new FormControl([], [Validators.required]),
+      Credit_Debit_Account: new FormControl([], [Validators.required]),
     });
-    this.userService.getUserDetail().then((status:any) => {
+    this.userService.getUserDetail().then((status: any) => {
       this.USER_DATA = status['result'];
       console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
     });
@@ -396,7 +383,6 @@ export class PackingCreditRequestComponent implements OnInit {
     // used details
     this.userService.getUserDetail().then((res: any) => {
       console.log('********USer Details', res);
-
       this.id = res.result.emailId;
       console.log('***********userId', this.id);
     });
@@ -619,32 +605,32 @@ export class PackingCreditRequestComponent implements OnInit {
     AmountSum: 0,
     PIPO_NO: [],
     buyerName: [],
-    Date:[],
-    Last_date_of_service:''
+    Date: [],
+    Last_date_of_service: ''
   };
   PROCEED_BTN_DISABLED: boolean = false;
   filterBuyer: any = [];
   balanceAvai: any = '';
   SET_CREDIT_DEBIT_LIST: any = {
-   Credit:[]
+    Credit: []
   };
 
-  setBank(event:any,key: any,index, bank: any) {
-    var len:any=this.SET_CREDIT_DEBIT_LIST[key].filter((item)=>item?.bank==bank?.bank)
-    if (len?.length==0) {
-      event.source.checked=true;
-      this.SET_CREDIT_DEBIT_LIST[key][index]=(bank);
+  setBank(event: any, key: any, index, bank: any) {
+    var len: any = this.SET_CREDIT_DEBIT_LIST[key].filter((item) => item?.bank == bank?.bank)
+    if (len?.length == 0) {
+      event.source.checked = true;
+      this.SET_CREDIT_DEBIT_LIST[key][index] = (bank);
     } else {
-      event.source.checked=false;
+      event.source.checked = false;
       this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Account Selection',
-      `You select other account number <br> becasue you already selected..`)
+        `You select other account number <br> becasue you already selected..`)
     }
-    console.log('SET_CREDIT_DEBIT_LIST',event,this.SET_CREDIT_DEBIT_LIST)
+    console.log('SET_CREDIT_DEBIT_LIST', event, this.SET_CREDIT_DEBIT_LIST)
   }
   setBuyer(key: any, bank: any) {
     console.log('SET_CREDIT_DEBIT_LIST', this.SET_CREDIT_DEBIT_LIST)
   }
-  filterBuyerName(a){
+  filterBuyerName(a) {
     this.item1.forEach((value, index) => {
       if (value.buyerName[0]?.toLowerCase().indexOf(a?.toLowerCase()) != -1) {
         this.filterBuyer.push(value);
@@ -656,11 +642,11 @@ export class PackingCreditRequestComponent implements OnInit {
   }
   async addToSbArray(data: any, e) {
     console.log(data, 'addToSbArray');
-    if (this.advanceArray.length==0 || this.advanceArray[0]?.currency==data?.currency) {
+    if (this.advanceArray.length == 0 || this.advanceArray[0]?.currency == data?.currency) {
       if (e.target.checked) {
         this.advanceArray.push(data);
       } else {
-        e.target.checked=false;
+        e.target.checked = false;
         this.advanceArray = this.advanceArray.filter((item) => item._id !== data._id);
       }
       var sum = this.advanceArray.reduce(function (a, b) { return a + b?.amount }, 0);
@@ -668,33 +654,33 @@ export class PackingCreditRequestComponent implements OnInit {
         AmountSum: sum,
         PIPO_NO: [],
         buyerName: [],
-        Date:[]
+        Date: []
       }
       for (let index = 0; index < this.advanceArray.length; index++) {
         this.Advance_Amount_Sum['PIPO_NO'].push(this.advanceArray[index]?.pi_poNo);
         this.Advance_Amount_Sum['buyerName'].push(this.advanceArray[index]?.buyerName);
         this.Advance_Amount_Sum['Date'].push(this.advanceArray[index]?.date);
       }
-    }else{
-      e.target.checked=false;
+    } else {
+      e.target.checked = false;
       this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Currency Waring',
-      `You select same currency..`)
+        `You select same currency..`)
     }
-    
+
   }
-  async addToSbArray_2(key,value) {
-    this.Advance_Amount_Sum[key]=value;
-    console.log(this.Advance_Amount_Sum,'addToSbArray222222');
+  async addToSbArray_2(key, value) {
+    this.Advance_Amount_Sum[key] = value;
+    console.log(this.Advance_Amount_Sum, 'addToSbArray222222');
   }
   clearData() {
     this.advanceArray = [];
     console.log('Shippoinhg', this.shippingMap);
   }
-  
+
   TO_FIXED(amount: any, fixed_position: any) {
     return (amount).toFixed(fixed_position);
   }
-  
+
 
   Lodgement: any = {
     'Running_PC': {
@@ -705,11 +691,11 @@ export class PackingCreditRequestComponent implements OnInit {
       Show: '',
       Hide: ''
     },
-    "Incoterm_FOB_CIF":{
+    "Incoterm_FOB_CIF": {
       Show: '',
       Hide: ''
     },
-    Forward_Contract:{
+    Forward_Contract: {
       Show: '',
       Hide: ''
     }
@@ -725,20 +711,20 @@ export class PackingCreditRequestComponent implements OnInit {
   Text_Changer(text: any) {
     return text;
   }
-  limitAmount(event:any,limitAmount:any,value:any){
-  console.log(limitAmount,value)
+  limitAmount(event: any, limitAmount: any, value: any) {
+    console.log(limitAmount, value)
     const charCode = (event.which) ? event.which : event.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57) || parseInt(event.target.value)>=parseInt(limitAmount)) {
+    if (charCode > 31 && (charCode < 48 || charCode > 57) || parseInt(event.target.value) >= parseInt(limitAmount)) {
       this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Amount limitaion',
-      `You have not much engouh amount`)
-      event.target.value=value.substr(0, value.length - 1)
+        `You have not much engouh amount`)
+      event.target.value = value.substr(0, value.length - 1)
       return false;
     }
     return true;
   }
   numberOnly(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57) || event.target.value>=100) {
+    if (charCode > 31 && (charCode < 48 || charCode > 57) || event.target.value >= 100) {
       return false;
     }
     return true;
@@ -760,42 +746,63 @@ export class PackingCreditRequestComponent implements OnInit {
   OBJECT_LENGTH(data: any) {
     return data != undefined ? data.length : 0;
   }
-  PREVIEWS_URL(className:any) {
-    this.PREVIEWS_URL_LIST=[];
-    $(document).ready(()=> {
-          kendo.drawing.drawDOM($("#first")).then(function(group) {
-              return kendo.drawing.exportPDF(group, {
-                  paperSize: "auto",
-                  margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
-              });
-          }).done((data)=> {
-              this.PREVIEWS_URL_LIST.push(data);
-              console.log('hhjjhhjjh',data)
-          });
-      });    
-      this.Transaction_form.value.Running_PC=this.Lodgement['Running_PC'];
-      this.Transaction_form.value.EPC_PCFC=this.Lodgement['EPC_PCFC']
-      this.Transaction_form.value.PIPO_LIST=this.advanceArray
-      this.Transaction_form.value.Incoterm_FOB_CIF=this.Lodgement['Incoterm_FOB_CIF']
-      this.Transaction_form.value.Forward_Contract=this.Lodgement['Forward_Contract']
-      this.Transaction_form.value.BuyerName=this.Advance_Amount_Sum['buyerName']
-      this.Transaction_form.value.Due_Date=this.getTimeDifferenceContract(180)
-      this.Transaction_form.value.GSTNO=this.arr
-      this.Transaction_form.value.Loan_requested_date=this.CURRENT_DATE
-      this.Transaction_form.value.Type_of_service=''
-      this.Transaction_form.value.Last_date_of_service=this.CURRENT_DATE
-      this.Transaction_form.value.Credit_Debit_Account=this.SET_CREDIT_DEBIT_LIST['Credit']
-
-      console.log(this.Transaction_form,'Transaction_form')
+  PREVIEWS_URL(className: any) {
+    this.PREVIEWS_URL_LIST = [];
+    $(document).ready(() => {
+    console.log()
+      kendo.drawing.drawDOM($("#first"), {
+        paperSize: "A4",
+        margin: "0cm",
+        scale: 0.7,
+        forcePageBreak: ".page-break"
+      }).then(function (group) {
+        return kendo.drawing.exportPDF(group, {
+          paperSize: "A4",
+          margin: "0cm",
+          scale: 0.7,
+          forcePageBreak: ".page-break"
+        });
+      }).done(async (data) => {
+        await this.userService?.UploadS3Buket({
+          fileName: this.guid() + '.pdf', buffer: data,
+          type: 'application/pdf'
+        }).subscribe((response: any) => {
+          console.log(response, 'response')
+          this.PREVIEWS_URL_LIST.push(response?.url);
+          console.log(data, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+          this.Transaction_form.value.Running_PC = this.Lodgement['Running_PC'];
+          this.Transaction_form.value.EPC_PCFC = this.Lodgement['EPC_PCFC']
+          this.Transaction_form.value.PIPO_LIST = this.advanceArray
+          this.Transaction_form.value.Incoterm_FOB_CIF = this.Lodgement['Incoterm_FOB_CIF']
+          this.Transaction_form.value.Forward_Contract = this.Lodgement['Forward_Contract']
+          this.Transaction_form.value.BuyerName = this.Advance_Amount_Sum['buyerName']
+          this.Transaction_form.value.Due_Date = this.getTimeDifferenceContract(180)
+          this.Transaction_form.value.GSTNO = this.arr
+          this.Transaction_form.value.Loan_requested_date = this.CURRENT_DATE
+          this.Transaction_form.value.Type_of_service = ''
+          this.Transaction_form.value.Last_date_of_service = this.CURRENT_DATE
+          this.Transaction_form.value.Credit_Debit_Account = this.SET_CREDIT_DEBIT_LIST['Credit']
+          console.log(this.Transaction_form, 'Transaction_form')
+        })
+      });
+    });
+  }
+  guid() {
+    let s4 = () => {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '_' + s4() + '_' + s4() + '_' + s4() + '_' + s4() + s4() + s4();
   }
   toArrayBuffer(myBuf) {
     var myBuffer = new ArrayBuffer(myBuf.length);
     var res = new Uint8Array(myBuffer);
     for (var i = 0; i < myBuf.length; ++i) {
-       res[i] = myBuf[i];
+      res[i] = myBuf[i];
     }
     return myBuffer;
- }
+  }
   SendApproval(Status: string, UniqueId: any, model: any) {
     if (UniqueId != null) {
       var approval_data: any = {
@@ -814,16 +821,16 @@ export class PackingCreditRequestComponent implements OnInit {
         if (res?.id != 'Packing-Credit-Request' + UniqueId) {
           if (Status == '' || Status == null || Status == 'Rejected') {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
-             var data:any={
-               data:this.Transaction_form.value,
-               TypeTransaction:'Packing-Credit-Request',
-               fileType:'Export',
-               UserDetails:approval_data?.id
-             }
-             this.documentService.addExportBillLodgment(data).subscribe((res1: any) => { 
-                  console.log('addExportBillLodgment', res1);
-                  this.ngOnInit();
-                  this.router.navigate(['/home/dashboardTask'])
+              var data: any = {
+                data: this.Transaction_form.value,
+                TypeTransaction: 'Packing-Credit-Request',
+                fileType: 'Export',
+                UserDetails: approval_data?.id
+              }
+              this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                console.log('addExportBillLodgment', res1);
+                this.ngOnInit();
+                this.router.navigate(['/home/dashboardTask'])
               })
             });
           }
@@ -843,17 +850,17 @@ export class PackingCreditRequestComponent implements OnInit {
   PERCENTAGE_AMOUNT(partialValue: any, totalValue: any): any {
     return (parseFloat(totalValue) - ((parseFloat(totalValue) / 100) * partialValue)).toFixed(2);
   }
-  getTimeDifferenceContract(tenureTime:any) {
+  getTimeDifferenceContract(tenureTime: any) {
     var someDate = new Date();
     var numberOfDaysToAdd = tenureTime;
     var result = someDate.setDate(someDate.getDate() + numberOfDaysToAdd);
     return new Date(result).toDateString();
-}
-bufferToBase64(buf) {
-  var binstr = Array.prototype.map.call(buf, function (ch) {
+  }
+  bufferToBase64(buf) {
+    var binstr = Array.prototype.map.call(buf, function (ch) {
       return String.fromCharCode(ch);
-  }).join('');
-  return btoa(binstr);
-}
+    }).join('');
+    return btoa(binstr);
+  }
 }
 

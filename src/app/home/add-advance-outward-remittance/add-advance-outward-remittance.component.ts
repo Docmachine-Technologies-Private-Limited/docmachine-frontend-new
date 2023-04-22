@@ -265,8 +265,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
     this.showOpinionReport = 0;
     this.fillForm();
-    this.OTHER_BANK_VISIBLE =false;
-    setTimeout(()=>{ this.OTHER_BANK_VISIBLE = true;},150)
+    this.OTHER_BANK_VISIBLE = false;
+    setTimeout(() => { this.OTHER_BANK_VISIBLE = true; }, 150)
   }
 
   showhideOpinionReport(value) {
@@ -412,7 +412,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
       console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
       this.ORIGINAL_PDF = pdfBytes;
-    } 
+    }
   }
   OUR_SHA_BEN_FUNC(data: any) {
     this.OUR_SHA_BEN = data;
@@ -560,7 +560,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   }
   REMIITANCE_SUM: any = 0;
   InputKeyPress() {
-    this.OTHER_BANK_VISIBLE =false;
+    this.OTHER_BANK_VISIBLE = false;
     this.REMIITANCE_SUM = this.pipoForm?.controls?.pipoTerm?.value.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
     setTimeout(() => {
       this.fillForm()
@@ -632,35 +632,36 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
           console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
         });
       })
-    }else{
+    } else {
       this.PromiseReturn().then(async (data: any) => {
         $(document).ready(() => {
           kendo.pdf.defineFont({
-            "DejaVu Sans"             : "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
-            "DejaVu Sans|Bold"        : "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
-            "DejaVu Sans|Bold|Italic" : "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
-            "DejaVu Sans|Italic"      : "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
-            "WebComponentsIcons"      : "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
-        });
+            "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
+            "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
+            "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+            "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+            "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
+          });
           kendo.drawing.drawDOM($("#first"), {
             paperSize: "A4",
-            margin: "2cm",
-            scale: 0.8,
-            forcePageBreak: ".page-break",
-            keepTogether: ".prevent-split"
+            margin: "0cm",
+            scale: 0.7,
+            forcePageBreak: ".page-break"
           }).then(function (group) {
-            var PAGE_RECT = new kendo.geometry.Rect(
-              [0,0], [10*2.8347,5*2.8347]
-            );
-            kendo.drawing.fit(group, PAGE_RECT)
+            // var PAGE_RECT = new kendo.geometry.Rect(
+            //   [0,0], [10*2.8347,5*2.8347]
+            // );
+            // kendo.drawing.fit(group, PAGE_RECT)
             return kendo.drawing.exportPDF(group, {
               paperSize: "A4",
-              keepTogether: ".prevent-split"
+              margin: "0cm",
+              scale: 0.7,
+              forcePageBreak: ".page-break"
             });
           }).done(async (pdfdata) => {
-            console.log('exportPDF', data,data)
-            if (data[0]==undefined || data[0]=='') {
-              data[0]=pdfdata;
+            console.log('exportPDF', data, data)
+            if (data[0] == undefined || data[0] == '') {
+              data[0] = pdfdata;
             }
             var fitertemp: any = data.filter(n => n)
             await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
@@ -668,14 +669,13 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
               console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
               this.PREVIEWS_URL_STRING = merge?.pdfurl;
               model.style.display = 'block';
-             
               console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
             });
           });
         });
       })
     }
-   
+
 
     this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
       console.log(res, 'dsdsdsdsdsdsds');
@@ -716,9 +716,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   SendApproval(Status: string, UniqueId: any) {
     if (UniqueId != null) {
       var temp_doc: any = [];
-      if (this.PREVIWES_URL?.changingThisBreaksApplicationSecurity==null) {
-        temp_doc[0] =this.PREVIEWS_URL_STRING;
-      }else{
+      if (this.PREVIWES_URL?.changingThisBreaksApplicationSecurity == null) {
+        temp_doc[0] = this.PREVIEWS_URL_STRING;
+      } else {
         temp_doc[0] = this.PREVIWES_URL?.changingThisBreaksApplicationSecurity;
       }
       temp_doc[1] = this.uploadUrl_Original;

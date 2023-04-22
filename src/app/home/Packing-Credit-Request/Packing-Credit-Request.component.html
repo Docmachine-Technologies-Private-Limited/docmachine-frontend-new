@@ -1,5 +1,5 @@
 <div class="content-wrap ml-0 pb-2 scroll-bar-main">
-  <div class="container-fluid">
+  <div class="container-fluid p-0">
     <div class="import_export_sec">
       <div class="row">
         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -26,8 +26,8 @@
           <div class="new_document_list_add_data">
               <div class="row">
                 <div class="col-md-7 col-sm-12 col-12">
-                  <div class="new_left_sidedoc p-2 pdf_invoce_scroll">
-                    <div id="first" class="fill-bank-format" #pdfTable *ngIf="this.newBankArray?.Credit!=''">
+                  <div class="new_left_sidedoc p-2 pdf_invoce_scroll" id="first">
+                    <div class="fill-bank-format" #pdfTable *ngIf="this.newBankArray?.Credit!=''">
                       <div>
                         <p class="heading" style="align-items: center; text-align: center; "> <span
                             style="border-bottom: 1px solid black;">{{this.Lodgement["EPC_PCFC"]["Show"]=='yes'?'PCFC':'EPC'}}

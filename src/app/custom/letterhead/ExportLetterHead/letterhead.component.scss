@@ -11,6 +11,12 @@
 }
 
 .body-letter {
+    font-size: 15px;
+    background: white;
+    display: block;
+    margin: 0 auto;
+    width: 210mm;
+    min-height: 297mm;
     overflow: auto;
 }
 
@@ -24,6 +30,7 @@
     background-size: 100%;
     padding-top: 100px;
     background-repeat: no-repeat;
+    overflow: auto;
 }
 
 .btn-yes-no {
@@ -35,6 +42,8 @@
 
 .p-text {
     font-family: 'Times New Roman', Times, serif;
+    color: black;
+    font-weight: 600;
 }
 
 .amount {
@@ -43,3 +52,5 @@
 .added-trick{
   content: "\2713";
 }
+
+.col-td-th-1,.col-td-th-2,.col-td-th-1{color: black;}

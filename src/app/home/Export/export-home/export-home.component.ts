@@ -4252,136 +4252,175 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       return outputText;
     }
   }
-  SendApproval(Status: string, UniqueId: any, code: any) {
+ async SendApproval(Status: string, UniqueId: any, code: any) {
     var temp_doc: any = [];
-    var approval_data: any = []
+    var approval_data: any = [];
+    var UpdatedUrl:any=[];
     if (code == 'P0102') {
-      temp_doc[0] = this.P102_PDF;
-      temp_doc[1] = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
-      var filterValue: any = {
-        Amount: [],
-        Number: [],
-        Documents: []
+      temp_doc[0] = {name:'P0102',pdf:this.P102_PDF};
+      temp_doc[1] = {name:'Inward_Remittance_MT103',pdf:this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file};
+      for (let index = 0; index < this.selectedPdfs.length; index++) {
+        temp_doc.push({name:'documents_'+(index+1),pdf:this.selectedPdfs[index]})
       }
-      var tempPipo: any = [];
-      var P102_DATA: any = [];
-      this.SELECT_bankreferencenumber.forEach(element => {
-        const tempfilter = this.Blcopyref.filter((item: any) => item?.blcopyrefNumber.includes(element));
-        tempfilter.forEach((filterItem) => {
-          P102_DATA.push(filterItem?._id);
-          filterValue['Amount'].push(filterItem?.amount)
-          filterValue['Number'].push(filterItem?.blcopyrefNumber)
-          filterValue['Documents'].push(filterItem?.doc)
-          tempPipo.push(filterItem?.pipo[0]?._id)
-        })
-      });
-      approval_data = {
-        id: 'IRDR' + '_' + UniqueId,
-        tableName: 'Inward-Remitance-Dispoal-Realization',
-        deleteflag: '-1',
-        userdetails: this.USER_DATA,
-        status: 'pending',
-        documents: temp_doc,
-        Types: 'downloadPDF',
-        TypeOfPage: 'Transaction',
-        FileType: this.USER_DATA?.sideMenu,
-        SendMailData: filterValue,
-      }
-      var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
-      updatedata['documents'] = temp_doc;
-      updatedata['extradata'] = P102_DATA;
-      console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
-      if (Status == '' || Status == null || Status == 'Rejected') {
-        this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
-          var data: any = {
-            data: updatedata,
-            TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
-            fileType: 'Export',
-            UserDetails: approval_data?.id,
-            pipo: tempPipo,
-            UniqueId: approval_data?.id
+      for (let index = 0; index < temp_doc.length; index++) {
+        if (temp_doc[index]?.pdf != '' && temp_doc[index]?.pdf != undefined) {
+          if (temp_doc[index]?.pdf.indexOf('data:application/pdf;base64,') != -1) {
+            await this.userService?.UploadS3Buket({
+              fileName: temp_doc[index]?.name + '.pdf', buffer: temp_doc[index]?.pdf,
+              type: 'application/pdf'
+            }).subscribe((response: any) => {
+              console.log(response, 'response')
+              UpdatedUrl.push(response?.url)
+            })
+          } else {
+            UpdatedUrl.push(temp_doc[index]?.pdf)
           }
-          this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
-            console.log(res1, 'addExportBillLodgment')
-            let updatedData = {
-              "TransactionRef": [
-                res1._id,
-              ]
-            }
-            this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
-              console.log('king123');
-              console.log(data);
-              this.router.navigate(['/home/dashboardTask'])
-            }, (error) => {
-              console.log('error');
-            });
+        }
+        if ((index+1==temp_doc.length)) {
+          var filterValue: any = {
+            Amount: [],
+            Number: [],
+            Documents: []
+          }
+          var tempPipo: any = [];
+          var P102_DATA: any = [];
+          this.SELECT_bankreferencenumber.forEach(element => {
+            const tempfilter = this.Blcopyref.filter((item: any) => item?.blcopyrefNumber.includes(element));
+            tempfilter.forEach((filterItem) => {
+              P102_DATA.push(filterItem?._id);
+              filterValue['Amount'].push(filterItem?.amount)
+              filterValue['Number'].push(filterItem?.blcopyrefNumber)
+              filterValue['Documents'].push(filterItem?.doc)
+              tempPipo.push(filterItem?.pipo[0]?._id)
+            })
           });
-        });
+          approval_data = {
+            id: 'IRDR' + '_' + UniqueId,
+            tableName: 'Inward-Remitance-Dispoal-Realization',
+            deleteflag: '-1',
+            userdetails: this.USER_DATA,
+            status: 'pending',
+            documents: UpdatedUrl,
+            Types: 'downloadPDF',
+            TypeOfPage: 'Transaction',
+            FileType: this.USER_DATA?.sideMenu,
+            SendMailData: filterValue,
+          }
+          var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
+          updatedata['documents'] = UpdatedUrl;
+          updatedata['extradata'] = P102_DATA;
+          console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
+          if (Status == '' || Status == null || Status == 'Rejected') {
+            this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
+              var data: any = {
+                data: updatedata,
+                TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
+                fileType: 'Export',
+                UserDetails: approval_data?.id,
+                pipo: tempPipo,
+                UniqueId: approval_data?.id
+              }
+              this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                console.log(res1, 'addExportBillLodgment')
+                let updatedData = {
+                  "TransactionRef": [
+                    res1._id,
+                  ]
+                }
+                this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
+                  console.log('king123');
+                  console.log(data);
+                  this.router.navigate(['/home/dashboardTask'])
+                }, (error) => {
+                  console.log('error');
+                });
+              });
+            });
+          }
+        }
       }
+     
     } else {
       if (this.value != '' && this.value != null) {
-        temp_doc[0] = 'data:application/pdf;base64,' + this.value;
-        temp_doc[1] = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
+        temp_doc[0] = {name:'Bank format',pdf:'data:application/pdf;base64,' + this.value};
+        temp_doc[1] = {name:'Inward_Remittance_MT103',pdf:this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file};
       } else {
-        temp_doc[0] = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
+        temp_doc[0] ={name:'Inward_Remittance_MT103',pdf:this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file};
       }
       for (let index = 0; index < this.mainDoc[0].length; index++) {
-        temp_doc.push(this.mainDoc[0][index]?.changingThisBreaksApplicationSecurity)
+        temp_doc.push({name:'documents'+(index+1),pdf:this.mainDoc[0][index]?.changingThisBreaksApplicationSecurity})
       }
-      approval_data = {
-        id: 'Inward_Remitance_Dispoal' + '_' + UniqueId,
-        tableName: 'Inward-Remitance-Dispoal',
-        deleteflag: '-1',
-        userdetails: this.USER_DATA,
-        status: 'pending',
-        documents: temp_doc,
-        Types: 'downloadPDF',
-        TypeOfPage: 'Transaction',
-        FileType: this.USER_DATA?.sideMenu,
-      }
-      var tempPipo: any = [];
-      for (let index = 0; index < this.selectPIPO.length; index++) {
-        var findPipo: any = this.item3.filter((item: any) => item?.pi_poNo.indexOf(this.selectPIPO[index]) != -1)
-        tempPipo.push(findPipo[0]?._id)
-      }
-      var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
-      updatedata['documents'] = temp_doc;
-      console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
-      if (Status == '' || Status == null || Status == 'Rejected') {
-        this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
-          var data: any = {
-            data: updatedata,
-            TypeTransaction: 'Inward-Remitance-Dispoal',
-            fileType: 'Export',
-            UserDetails: approval_data?.id,
-            pipo: tempPipo,
-            UniqueId: approval_data?.id
+      for (let index = 0; index < temp_doc.length; index++) {
+        if (temp_doc[index]?.pdf != '' && temp_doc[index]?.pdf != undefined) {
+          if (temp_doc[index]?.pdf.indexOf('data:application/pdf;base64,') != -1) {
+            await this.userService?.UploadS3Buket({
+              fileName: temp_doc[index]?.name + '.pdf', buffer: temp_doc[index]?.pdf,
+              type: 'application/pdf'
+            }).subscribe((response: any) => {
+              console.log(response, 'response')
+              UpdatedUrl.push(response?.url)
+            })
+          } else {
+            UpdatedUrl.push(temp_doc[index]?.pdf)
           }
-          this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
-            console.log(res1, 'addExportBillLodgment')
-            let updatedData = {
-              "TransactionRef": [
-                res1._id,
-              ]
-            }
-            this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
-              console.log('king123');
-              console.log(data);
-              this.router.navigate(['/home/dashboardTask'])
-            }, (error) => {
-              console.log('error');
+        }
+        if ((index+1==temp_doc.length)) {
+          approval_data = {
+            id: 'Inward_Remitance_Dispoal' + '_' + UniqueId,
+            tableName: 'Inward-Remitance-Dispoal',
+            deleteflag: '-1',
+            userdetails: this.USER_DATA,
+            status: 'pending',
+            documents: UpdatedUrl,
+            Types: 'downloadPDF',
+            TypeOfPage: 'Transaction',
+            FileType: this.USER_DATA?.sideMenu,
+          }
+          var tempPipo: any = [];
+          for (let index = 0; index < this.selectPIPO.length; index++) {
+            var findPipo: any = this.item3.filter((item: any) => item?.pi_poNo.indexOf(this.selectPIPO[index]) != -1)
+            tempPipo.push(findPipo[0]?._id)
+          }
+          var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
+          updatedata['documents'] = UpdatedUrl;
+          console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
+          if (Status == '' || Status == null || Status == 'Rejected') {
+            this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
+              var data: any = {
+                data: updatedata,
+                TypeTransaction: 'Inward-Remitance-Dispoal',
+                fileType: 'Export',
+                UserDetails: approval_data?.id,
+                pipo: tempPipo,
+                UniqueId: approval_data?.id
+              }
+              this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                console.log(res1, 'addExportBillLodgment')
+                let updatedData = {
+                  "TransactionRef": [
+                    res1._id,
+                  ]
+                }
+                this.userService.updateManyPipo(tempPipo, 'export', '', updatedData).subscribe((data) => {
+                  console.log('king123');
+                  console.log(data);
+                  this.router.navigate(['/home/dashboardTask'])
+                }, (error) => {
+                  console.log('error');
+                });
+              });
             });
-          });
-        });
+          }
+        }
       }
     }
     console.log(UniqueId, approval_data, 'uiiiiiiiiiiiiii')
   }
 
-  SendApproval_2(Status: string, UniqueId: any, code: any) {
+ async SendApproval_2(Status: string, UniqueId: any, code: any) {
     var temp_doc: any = [];
     var approval_data: any = [];
-    this.checkapproval('IRDR').then((res) => {
+    this.checkapproval('IRDR').then(async (res) => {
       if (code == 'P0102') {
         temp_doc[0] = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
         var filterValue: any = {

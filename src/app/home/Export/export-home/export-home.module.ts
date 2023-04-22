@@ -11,7 +11,6 @@ import { CommonModule } from "@angular/common";
 @NgModule({
   declarations: [
     ExportHomeComponent,
-    UploadDocComponent,
   ],
   imports: [
     SharedHomeModule,
