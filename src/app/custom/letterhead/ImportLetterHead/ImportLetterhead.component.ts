@@ -41,6 +41,13 @@ export class ImportLetterheadComponent implements OnInit {
       this.CURRENCY = element?.currency;
       PIPO_NO.push(element?.pi_poNo)
       PIPO_DATE.push(element?.date)
+      if (element?.pi_poNo == undefined || element?.pi_poNo == null || element?.pi_poNo == '') {
+        element?.pipo?.forEach(pipoelement => {
+          this.CURRENCY = pipoelement?.currency;
+          PIPO_NO.push(pipoelement?.pi_poNo)
+          PIPO_DATE.push(pipoelement?.date)
+        });
+      }
     });
     this.TOTAL_PIPO_NUMBER = PIPO_NO.join(',');
     this.TOTAL_PIPO_DATE = PIPO_DATE.join(',')
@@ -121,7 +128,9 @@ export class ImportLetterheadComponent implements OnInit {
   TICK_MARKED15: boolean = false;
   TICK_MARKED16: boolean = false;
   TICK_MARKED17: boolean = false;
-  
+  TICK_MARKED18: boolean = false;
+  TICK_MARKED19: boolean = false;
+
   TickMark1() {
     this.TICK_MARKED1 = !this.TICK_MARKED1;
     this.TICK_MARKED2 = false;
@@ -180,5 +189,13 @@ export class ImportLetterheadComponent implements OnInit {
   }
   TickMark17() {
     this.TICK_MARKED17 = !this.TICK_MARKED17;
+  }
+  TickMark18() {
+    this.TICK_MARKED18 = !this.TICK_MARKED18;
+    this.TICK_MARKED19 = false;
+  }
+  TickMark19() {
+    this.TICK_MARKED19 = !this.TICK_MARKED19;
+    this.TICK_MARKED18 = false;
   }
 }

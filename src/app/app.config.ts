@@ -25,7 +25,7 @@ export class AppConfig {
         // this.apiUrl = `https://demoapi.bharathexim.com/v1`;
         this.apiUrl = `https://dockerapi.bharathexim.com/v1`;
         // this.apiUrl = `https://devappapi.bharathexim.com/v1`;
-        // this.apiUrl = `http://localhost:8084/v1`;
+        // this.apiUrl = `http://localhost:8081/v1`;
     }
 
 

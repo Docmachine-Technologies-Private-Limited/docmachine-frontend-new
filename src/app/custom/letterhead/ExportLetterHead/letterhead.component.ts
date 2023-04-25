@@ -25,8 +25,6 @@ export class LetterheadComponent implements OnInit {
         console.log(res, 'getTeamByUser');
         if (res?.data[0]?.letterHead != '' && res?.data[0]?.letterHead != undefined) {
           $('.hdf-bank').css('background-image', 'url(' + res?.data[0]?.letterHead + ')')
-        } else {
-          alert("You don't  have any letter head...")
         }
       })
     });

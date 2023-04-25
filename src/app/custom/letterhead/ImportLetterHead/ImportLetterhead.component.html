@@ -2,6 +2,7 @@
     <div class="header-letter"></div>
     <div class="hdf-bank">
         <div class="body-letter">
+            <p class="p-text col-12 text-align mb-5" style="font-weight: bold;text-align: center;">REQUEST LETTER FOR IMPORT PAYMENT <span *ngIf="this.TICK_MARKED18==true">[ √ ]</span><span *ngIf="this.TICK_MARKED18==false">[  ]</span> <span (click)="TickMark18()" style="cursor: pointer;"> ADVANCE</span> <span *ngIf="this.TICK_MARKED19==true">[ √ ]</span><span *ngIf="this.TICK_MARKED19==false">[  ]</span> <span (click)="TickMark19()" style="cursor: pointer;"> DIRECT</span></p>
             <p class="p-text mb-0">Ref. No.: <span contenteditable="true">XXXX-XXXX-XXXX-XXXX</span></p>
             <p class="p-text mb-0">{{this.CURRENT_DATE}}</p>
             <p class="p-text mb-0" contenteditable="true">To</p>
@@ -10,7 +11,7 @@
             <p class="p-text mb-0" contenteditable="true">141, Sathy Road,</p>
             <p class="p-text mb-0" contenteditable="true">Kandakottam Complex,</p>
             <p class="p-text mb-0" contenteditable="true">Opp To Bus Stand,</p>
-            <p class="p-text mb-0" contenteditable="true">Erode – 638 003.</p>
+            <p class="p-text mb-0" contenteditable="true">Erode 0– 638 003.</p>
             <p class="p-text mt-3">We wish to make an advance payment towards import of <span contenteditable="true">WET SALTED OX HEIFFER HIDES</span>
                 (Goods / <span style="text-decoration: line-through;">Services</span>) as part of our
                 Raw Material / <span style="text-decoration: line-through;">Capital Goods</span> requirement:</p>
@@ -151,20 +152,20 @@
                 <table class="table mb-0" style="border-collapse: collapse;border: 2px solid #c8c5c5;">
                     <thead>
                         <tr class="table-tr">
-                            <th scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">Bill of Entry No. and date</th>
-                            <th scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">Bill of Entry CCY &amp; Amount</th>
-                            <th scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">Bill of Entry Utilized amount</th>
-                            <th scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">Fob Value</th>
-                            <th scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">AD Code No</th>
-                            <th scope="col" [style.width]="150+'px'" class="col-td-th-1">Port Code</th>
+                            <th scope="col" [style.width]="115+'px'" style="height: 65px !important;" class="col-td-th-1">Bill of Entry No. and date</th>
+                            <th scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">Bill of Entry CCY &amp; Amount</th>
+                            <th scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">Bill of Entry Utilized amount</th>
+                            <th scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">Fob Value</th>
+                            <th scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">AD Code No</th>
+                            <th scope="col" [style.width]="115+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;">Port Code</th>
                         </tr>
-                        <tr class="table-tr">
-                            <td scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
-                            <td scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
-                            <td scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
-                            <td scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
-                            <td scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
-                            <td scope="col" [style.width]="150+'px'"></td>
+                        <tr class="table-tr" *ngFor="let item of data[1];let i=index;">
+                            <td scope="col" [style.width]="115+'px'" style="height: 65px !important;" class="col-td-th-1">{{item?.boeNumber}} and {{item?.boeDate}}</td>
+                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.currency}} | {{item?.invoiceAmount}}</td>
+                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.boeDate}}</td>
+                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.invoiceAmount}}</td>
+                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.adCode}}</td>
+                            <td scope="col" [style.width]="115+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;"></td>
                         </tr>
                     </thead>
                 </table>
@@ -201,17 +202,17 @@
                 <p class="p-text mt-3 ml-2">We hold SPFC account with ………………. bank/s, but has no balance in this/these accounts to make the captioned remittance”</p>
             <p class="p-text mt-3 font-weight-600">Details of Part Payment already done under this invoice - (If Applicable)</p>
             <div class="table-added temp mt-1">
-                <table class="table mb-0" style="border-collapse: collapse;border: 2px solid #c8c5c5;">
+                <table class="table mb-0 col-9" style="border-collapse: collapse;border: 2px solid #c8c5c5;">
                     <thead>
                         <tr class="table-tr">
-                            <th scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">Bill Reference No</th>
-                            <th scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">CCY</th>
-                            <th scope="col" [style.width]="150+'px'" class="col-td-th-1">Amount Remitted</th>
+                            <th scope="col" [style.width]="110+'px'" style="height: 65px !important;" class="col-td-th-1">Bill Reference No</th>
+                            <th scope="col" [style.width]="110+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">CCY</th>
+                            <th scope="col" [style.width]="110+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;">Amount Remitted</th>
                         </tr>
-                        <tr class="table-tr">
-                            <td scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
-                            <td scope="col" [style.width]="150+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
-                            <td scope="col" [style.width]="150+'px'" class="col-td-th-1"></td>
+                        <tr class="table-tr" *ngFor="let item of data[1];let i=index;">
+                            <td scope="col" [style.width]="110+'px'" style="height: 65px !important;" class="col-td-th-1">{{item?.boeNumber}}</td>
+                            <td scope="col" [style.width]="110+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.currency}} | {{item?.invoiceAmount}}</td>
+                            <td scope="col" [style.width]="110+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;">{{item?.invoiceAmount}}</td>
                         </tr>
                     </thead>
                 </table>

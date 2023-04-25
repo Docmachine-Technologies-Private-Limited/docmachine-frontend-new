@@ -34,7 +34,7 @@ export class SidenavComponent implements OnInit {
   userData: any = [];
   TRANSACTION_DASHBOARD_LIST: any = {
     Export: ["Packing-Credit-Request", "Export-Direct-Dispatch", "Inward-Remitance-Dispoal", "Inward-Remitance-Dispoal-Realization"],
-    Import:["Packing-Credit-Request","Export-Bill-Lodgement","Inward-Remittance-Disposal","Inward-Remittance-Disposal-Relization"]
+    Import:["Import-Direct-Payment","Advance-Remittance-flow"]
   };
 
   constructor(

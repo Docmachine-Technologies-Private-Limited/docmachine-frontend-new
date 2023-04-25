@@ -2625,9 +2625,7 @@ export class NewDirectDispatchComponent implements OnInit {
         this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
         this.newTask[0].generateDoc1 = x;
         resolve(x)
-      } else {
-        this.toastr.error("You don't have bank format!")
-      }
+      } 
     })
   }
   ConvertNumberToWords(number: any) {

@@ -300,7 +300,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       this.fillForm();
     } else {
       this.OTHER_BANK_VISIBLE = true;
-      this.toastr.error("You don't have bank format!")
     }
   }
   OUR_SHA_BEN: any = '';
@@ -644,9 +643,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
           });
           kendo.drawing.drawDOM($("#first"), {
             paperSize: "A4",
-            margin: "0cm",
+            margin: [-10,0,0,0],
             scale: 0.7,
-            forcePageBreak: ".page-break"
           }).then(function (group) {
             // var PAGE_RECT = new kendo.geometry.Rect(
             //   [0,0], [10*2.8347,5*2.8347]
@@ -654,9 +652,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
             // kendo.drawing.fit(group, PAGE_RECT)
             return kendo.drawing.exportPDF(group, {
               paperSize: "A4",
-              margin: "0cm",
-              scale: 0.7,
-              forcePageBreak: ".page-break"
+              margin:[-10,0,0,0],
             });
           }).done(async (pdfdata) => {
             console.log('exportPDF', data, data)

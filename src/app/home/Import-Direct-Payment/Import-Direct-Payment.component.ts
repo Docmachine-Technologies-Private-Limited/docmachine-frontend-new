@@ -4,8 +4,9 @@ import { timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
-import $, { event } from 'jquery'
+import $, { data, event } from 'jquery'
 declare var Flickity: any;
+declare var kendo: any;
 
 import {
   DropzoneDirective,
@@ -28,6 +29,7 @@ import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
 import { forEach } from 'jszip';
+import { MergePdfListService } from '../merge-pdf-list.service';
 
 @Component({
   selector: 'app-Import-Direct-Payment',
@@ -100,13 +102,7 @@ export class ImportDirectPaymentComponent implements OnInit {
     Multiple_BOE_INFO: [],
     TransactionRef: []
   };
-  SHIPPING_BILL_LIST: any = [{
-    value: 'Single BOE'
-  }, {
-    value: 'Multiple PIPO'
-  }, {
-    value: 'Multiple BOE'
-  }];
+  SHIPPING_BILL_LIST: any = [{ value: 'Select BOE' }];
   ALL_DROPDOWN_VALUE_LIST: any = {
     BOE_PIPO: [],
     Beneficiary: [],
@@ -125,6 +121,7 @@ export class ImportDirectPaymentComponent implements OnInit {
     private route: ActivatedRoute,
     public wininfo: WindowInformationService,
     public mergerpdf: MergePdfService,
+    public pdfmerge: MergePdfListService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
   ) {
     this.loadFromLocalStorage();
@@ -157,10 +154,6 @@ export class ImportDirectPaymentComponent implements OnInit {
       previewTemplate:
         '<div  class="dz-preview dz-file-preview" style="text-align: right; margin-right:3px;">\n <div class="dz-image" style="text-align: right; margin-right:3px;"> <img data-dz-thumbnail /></div>\n <div class="dz-details">\n    <div class="dz-size"><span data-dz-size></span></div>\n    <div class="dz-filename"><span data-dz-name></span></div>\n  </div>\n  <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>\n  <div class="dz-error-message"><span data-dz-errormessage></span></div>\n  <div class="dz-success-mark">\n    <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">\n      <title>Check</title>\n      <defs></defs>\n      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">\n        <path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>\n      </g>\n    </svg>\n  </div>\n  <div class="dz-error-mark">\n    <i style="color: red; text-align: center;font-size: 30px;" class="fa fa-exclamation-circle"></i>\n  </div>\n</div>',
     };
-
-
-    // buyerName commodity doc
-
     this.pipoForm = this.formBuilder.group({
       bank: new FormControl('', Validators.required),
       benneName: new FormControl('', Validators.required),
@@ -168,43 +161,6 @@ export class ImportDirectPaymentComponent implements OnInit {
       totalremittanceAmount: new FormControl("", Validators.required),
       BOETerm: new FormArray([this.initItems()]),
     });
-    this.documentService.getPipo().subscribe((res: any) => {
-      console.log('Data fetched successfully', res);
-      for (let index = 0; index < res?.data.length; index++) {
-        if (res?.data[index]?.file == 'import') {
-          res.data[index]['isExpand'] = false;
-          this.PIPO_LIST['data'].push(res?.data[index]);
-          this.PIPO_LIST['original_data'].push(res?.data[index])
-          if (res?.data[index]?.pi_poNo != '' && !this.PIPO_LIST['PIPO_NAME_LIST'].includes(res?.data[index]?.pi_poNo)) {
-            this.PIPO_LIST['PIPO_NAME_LIST'].push({ value: res?.data[index]?.pi_poNo, id: res?.data[index]?._id })
-          }
-          if (res?.data[index]?.boeRef != '') {
-            res?.data[index]?.boeRef.forEach(element => {
-              this.PIPO_LIST['SINGLE_BOE_INFO'].push({ data: element, pipo: res?.data[index] })
-            });
-          }
-          if (res?.data[index]?.TransactionRef?.length != 0) {
-            res?.data[index]?.TransactionRef?.forEach(element => {
-              if (element?.Ref_Data?.orRef != undefined) {
-                this.PIPO_LIST['TransactionRef'].push({ data: element?.Ref_Data?.orRef, pipo: res?.data[index] })
-              }
-            });
-          }
-        }
-      }
-      // var elem = document.querySelector('.carousel');
-      // var flkty = new Flickity( elem, {
-      //   // options
-      //   cellalign: 'right',
-      //   pageDots: false,
-      //   groupCells: '40%',
-      //   selectedAttraction: 0.03,
-      //   friction: 0.15
-      // });
-      console.log(this.PIPO_LIST, 'sdfsdfdsfsdffsfsdfdsfsdfsdf')
-    },
-      (err) => console.log(err)
-    );
   }
 
   initItems() {
@@ -229,6 +185,7 @@ export class ImportDirectPaymentComponent implements OnInit {
   filtervisible: boolean = false
   startDate: any = '';
   endDate: any = '';
+  OTHER_BANK_VISIBLE: boolean = false;
 
   getDropdownData() {
     this.userService.getTeam()
@@ -236,39 +193,48 @@ export class ImportDirectPaymentComponent implements OnInit {
         data => {
           this.commodity = data['data'][0]['commodity']
           this.LocationData = data['data'][0]['location']
-          this.bankDetail = data['data'][0]['bankDetails']
+          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId, org: data['data'][0]['bankDetails'][index] })
+          }
         },
         error => {
           console.log("error")
         });
 
-    this.userService.getBene(1).subscribe(
-      (res: any) => {
-        console.log('benneDetail', res.data);
-        this.benneDetail = res.data
-      },
+    this.userService.getBene(1).subscribe((res: any) => {
+      console.log('benneDetail', res.data);
+      this.benneDetail = res.data
+    },
       (err) => console.log("Error", err)
     );
   }
-
-  changepipo(id) {
-    let temp = [];
-    temp = this.benneDetail.filter(items => {
-      return items._id == id
-    });
-    this.selectedBenne = temp.pop();
-    console.log('this.selectedBenneName', this.selectedBenne);
-    this.documentService.getBoe('1').subscribe(
-      (res: any) => {
-        console.log('getBoe', res);
-        this.pipoData = res.data;
-        for (let index = 0; index < res.data.length; index++) {
-          this.LIST_PIPO[res.data[index]['_id']] = res.data[index];
+  ORM_BY_PARTY_NAME: any = [];
+  changepipo(value) {
+    this.selectedBenne = this.benneDetail.filter((item)=>item?.benneName?.includes(value))[0];
+    this.documentService.getBoedatabyPartName(value).subscribe((res: any) => {
+      console.log('Data fetched successfully', res);
+      this.pipoData = res.data;
+      for (let index = 0; index < res.data.length; index++) {
+        this.LIST_PIPO[res.data[index]['_id']] = res.data[index];
+      }
+      console.log('importpipolist', this.pipoData, this.LIST_PIPO);
+      for (let index = 0; index < res?.data.length; index++) {
+        res.data[index]['isExpand'] = false;
+        this.PIPO_LIST['data'].push(res?.data[index]);
+        this.PIPO_LIST['original_data'].push(res?.data[index])
+        if (res?.data[index]?.pi_poNo != '' && !this.PIPO_LIST['PIPO_NAME_LIST'].includes(res?.data[index]?.pi_poNo)) {
+          this.PIPO_LIST['PIPO_NAME_LIST'].push({ value: res?.data[index]?.pi_poNo, id: res?.data[index]?._id })
         }
-        console.log('importpipolist', this.pipoData, this.LIST_PIPO);
-      },
+      }
+      this.documentService.getbyPartyName(value).subscribe((res: any) => {
+        console.log(res, 'getbyPartyName');
+        this.ORM_BY_PARTY_NAME = res?.data
+      });
+      console.log(this.PIPO_LIST, 'sdfsdfdsfsdffsfsdfdsfsdfsdf')
+    },
       (err) => console.log(err)
     );
+    console.log('this.selectedBenneName', this.selectedBenne);
   }
   DATA: any = [];
   slicedData(data: any[], id: any, value: any) {
@@ -290,31 +256,24 @@ export class ImportDirectPaymentComponent implements OnInit {
   ITEM_FILL_PDF: any = [];
   temp1: any = [];
   MAIN_DATA: any = [];
-  choosenItems(id, i) {
+  choosenItems(event, id, i) {
     let temp: any = [];
     let temp2: any = [];
-    temp = this.pipoData.filter(items => {
-      return items._id == id
-    });
-    temp2 = this.pipoData.filter(items => {
-      return items._id == id
-    });
+    temp = this.PIPO_LIST['data']?.filter(items => items?._id?.includes(id));
+    temp2 = this.PIPO_LIST['data']?.filter(items => items?._id?.includes(id));
+    this.OTHER_BANK_VISIBLE = false;
+    if (event.target.checked == true) {
+      this.ITEM_FILL_PDF[i] = temp[0];
+      event.target.checked = true;
+      setTimeout(() => { this.OTHER_BANK_VISIBLE = true }, 500)
+    } else {
+      this.ITEM_FILL_PDF[i] = [];
+      event.target.checked = false;
+      setTimeout(() => { this.OTHER_BANK_VISIBLE = true }, 500)
+    }
     this.temp1[i] = [];
-    this.ITEM_FILL_PDF[i] = temp;
-    temp = temp.map((items) => {
-      return {
-        pipo_id: items._id,
-        boeNumber: items.boeNumber,
-        doc: items.doc ? this.sanitizer.bypassSecurityTrustResourceUrl(items.doc) : items.doc,
-        amount: items.invoiceAmount,
-        currency: items.currency,
-        buyerName: items.benneName,
-        date: items.boeDate,
-        balanceAmount: items?.balanceAmount ?? "",
-      };
-    });
-    this.selectedItems[i] = temp.pop();
-    temp2[0] = temp2.pop();
+    this.selectedItems[i] = temp;
+    temp2[0] = temp2;
     for (let index = 0; index < temp2.length; index++) {
       this.temp1[i].push({
         pdf: (temp2[index]['doc']),
@@ -333,8 +292,8 @@ export class ImportDirectPaymentComponent implements OnInit {
       }
     }
     this.MAIN_DATA[i] = temp2[0];
-    console.log(this.temp1, temp2, this.MAIN_DATA, 'selectedItemsselectedItems')
-    this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
+    console.log(this.temp1, temp2, this.MAIN_DATA, this.ITEM_FILL_PDF, 'selectedItemsselectedItems')
+    this.sumTotalAmount = this.ITEM_FILL_PDF.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.invoiceAmount), 0);
     this.showOpinionReport = 0;
     this.fillForm();
   }
@@ -353,148 +312,164 @@ export class ImportDirectPaymentComponent implements OnInit {
       this.isCheckedYes = false;
       this.isCheckedNo = true;
     }
-
   }
 
   showhideSummaryPage(value) {
     console.log('this.pipoForm.controls;', this.pipoForm.controls);
     this.showSummaryPage = value;
   }
-
-  onSelectBank(value) {
-    this.selectedBankName = value;
-    this.fillForm();
-  }
   OUR_SHA_BEN: any = '';
   ORIGINAL_PDF: any = '';
   Remittance_Amount: any = 0;
   timeout: any = ''
+  BANK_DETAILS: any = [];
+  bankformat: any = ''
+
+  onSelectBank(value) {
+    this.selectedBankName = value;
+    this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value))[0]?.org;
+    console.log(this.BANK_DETAILS, 'this.BANK_DETAILS')
+    this.bankformat = ''
+    this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
+    console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
+    if (this.bankformat.length != 0 && this.bankformat[0]?.urlpdf != '') {
+      this.OTHER_BANK_VISIBLE = false;
+      this.fillForm();
+    } else {
+      this.OTHER_BANK_VISIBLE = true;
+    }
+  }
+
   RemittanceAmount(event, value) {
-    var temp: any = false;
     clearTimeout(this.timeout);
+    this.OTHER_BANK_VISIBLE = false;
     this.timeout = setTimeout(() => {
       this.Remittance_Amount = this.pipoForm?.value?.BOETerm.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
       console.log(this.pipoForm, 'pipoFormpipoFormpipoForm')
+      this.OTHER_BANK_VISIBLE = true;
       this.fillForm()
-      temp = true;
     }, 500)
   }
   async fillForm() {
-    const formUrl = './../../assets/Import_direct_Payment.pdf'
-    const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
-    const pdfDoc = await PDFDocument.load(formPdfBytes)
-    const form = pdfDoc.getForm()
-    const pages = pdfDoc.getPages()
-    const firstpage = pages[0]
-    var INVOICE_NO: any = {
-      INVOICE_NO: [],
-      BEO_NO: [],
-      AWBNo: []
-    };
-    for (let index = 0; index < this.ITEM_FILL_PDF.length; index++) {
-      INVOICE_NO['INVOICE_NO'].push(this.ITEM_FILL_PDF[index][0]?.invoiceNumber);
-      INVOICE_NO['BEO_NO'].push(this.ITEM_FILL_PDF[index][0]?.boeNumber);
-      INVOICE_NO['AWBNo'].push(this.ITEM_FILL_PDF[index][0]?.AWBNo);
+    this.bankformat = ''
+    this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
+    console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
+    if (this.bankformat.length != 0 && this.bankformat[0]?.urlpdf != '') {
+      const formUrl = './../../assets/Import_direct_Payment.pdf'
+      const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer())
+      const pdfDoc = await PDFDocument.load(formPdfBytes)
+      const form = pdfDoc.getForm()
+      const pages = pdfDoc.getPages()
+      const firstpage = pages[0]
+      var INVOICE_NO: any = {
+        INVOICE_NO: [],
+        BEO_NO: [],
+        AWBNo: []
+      };
+      for (let index = 0; index < this.ITEM_FILL_PDF.length; index++) {
+        INVOICE_NO['INVOICE_NO'].push(this.ITEM_FILL_PDF[index][0]?.invoiceNumber);
+        INVOICE_NO['BEO_NO'].push(this.ITEM_FILL_PDF[index][0]?.boeNumber);
+        INVOICE_NO['AWBNo'].push(this.ITEM_FILL_PDF[index][0]?.AWBNo);
+      }
+      console.log(this.selectedBenne, this.ITEM_FILL_PDF, INVOICE_NO, 'fillForm')
+      const textField = form.createTextField('best.text')
+      let result = this.selectedBenne?.benneName.concat(" ", this.selectedBenne?.beneAdrs);
+      textField.setText(result)
+      textField.addToPage(firstpage, {
+        x: 392, y: 575, width: 127,
+        height: 28, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
+
+      const text1Field = form.createTextField('best.text1')
+      text1Field.setText(this.Remittance_Amount.toString())
+      text1Field.addToPage(firstpage, {
+        x: 392, y: 563, width: 127,
+        height: 12, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
+
+      const text2Field = form.createTextField('best.text2')
+      text2Field.setText(INVOICE_NO['INVOICE_NO'].toString())
+      text2Field.addToPage(firstpage, {
+        x: 392, y: 545, width: 127,
+        height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
+      const text3Field = form.createTextField('best.text3')
+      text3Field.setText(INVOICE_NO['AWBNo'].toString())
+      text3Field.addToPage(firstpage, {
+        x: 392, y: 528, width: 127,
+        height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
+
+      const text4Field = form.createTextField('best.text4')
+      text4Field.setText(INVOICE_NO['BEO_NO'].toString())
+      text4Field.addToPage(firstpage, {
+        x: 392, y: 510, width: 127,
+        height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
+
+      let result1 = this.selectedBenne?.beneBankName.concat(" ", this.selectedBenne?.beneBankAdress);
+      const text4Field1 = form.createTextField('best.text41')
+      text4Field1.setText(result1)
+      text4Field1.addToPage(firstpage, {
+        x: 392, y: 483, width: 127,
+        height: 25, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
+
+      const text5Field = form.createTextField('best.text5')
+      text5Field.setText(this.selectedBenne?.beneAccNo)
+      text5Field.addToPage(firstpage, {
+        x: 392, y: 460, width: 127,
+        height: 18, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
+      let result2 = this.selectedBenne?.interBankName.concat(" ", this.selectedBenne?.interBankSwiftCode);
+      const text6Field = form.createTextField('best.text6')
+      text6Field.setText(result2)
+      text6Field.addToPage(firstpage, {
+        x: 392, y: 440, width: 127,
+        height: 18, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
+
+      const text7Field = form.createTextField('best.text7')
+      text7Field.setText(this.selectedBenne?.iban)
+      text7Field.addToPage(firstpage, {
+        x: 392, y: 420, width: 127,
+        height: 18, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
+
+      const text8Field = form.createTextField('best.text8')
+      text8Field.setText(this.selectedBankName)
+      text8Field.addToPage(firstpage, {
+        x: 181, y: 355, width: 67,
+        height: 14, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
+      })
+
+      const pdfBytes = await pdfDoc.save()
+      console.log(pdfDoc, "pdf")
+      console.log(pdfBytes, "pdfBytes")
+      // this.getPdfFile(pdfBytes);
+      console.log(form, "form")
+      var base64String = this._arrayBufferToBase64(pdfBytes)
+      const x = 'data:application/pdf;base64,' + base64String;
+      const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
+      console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
+      this.formerge = x
+      this.remittanceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(x);
+      const mergedPdf = await PDFDocument.create();
+      const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+      copiedPages.forEach((page) => {
+        mergedPdf.addPage(page);
+      });
+      const mergedPdfFile = await mergedPdf.save();
+      const mergedPdfload = await PDFDocument.load(mergedPdfFile);
+      await this.disabledTextbox(pdfDoc)
+      const mergedPdfFileload = await mergedPdfload.save();
+      var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
+      const x1 = 'data:application/pdf;base64,' + base64String1;
+      console.log("line no. 1735", this.remittanceUrl)
+      this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
+      console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+      this.ORIGINAL_PDF = pdfBytes;
     }
-    console.log(this.selectedBenne, this.ITEM_FILL_PDF, INVOICE_NO, 'fillForm')
-    const textField = form.createTextField('best.text')
-    let result = this.selectedBenne?.benneName.concat(" ", this.selectedBenne?.beneAdrs);
-    textField.setText(result)
-    textField.addToPage(firstpage, {
-      x: 392, y: 575, width: 127,
-      height: 28, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
-
-    const text1Field = form.createTextField('best.text1')
-    text1Field.setText(this.Remittance_Amount.toString())
-    text1Field.addToPage(firstpage, {
-      x: 392, y: 563, width: 127,
-      height: 12, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
-
-    const text2Field = form.createTextField('best.text2')
-    text2Field.setText(INVOICE_NO['INVOICE_NO'].toString())
-    text2Field.addToPage(firstpage, {
-      x: 392, y: 545, width: 127,
-      height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
-    const text3Field = form.createTextField('best.text3')
-    text3Field.setText(INVOICE_NO['AWBNo'].toString())
-    text3Field.addToPage(firstpage, {
-      x: 392, y: 528, width: 127,
-      height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
-
-    const text4Field = form.createTextField('best.text4')
-    text4Field.setText(INVOICE_NO['BEO_NO'].toString())
-    text4Field.addToPage(firstpage, {
-      x: 392, y: 510, width: 127,
-      height: 15, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
-
-    let result1 = this.selectedBenne?.beneBankName.concat(" ", this.selectedBenne?.beneBankAdress);
-    const text4Field1 = form.createTextField('best.text41')
-    text4Field1.setText(result1)
-    text4Field1.addToPage(firstpage, {
-      x: 392, y: 483, width: 127,
-      height: 25, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
-
-    const text5Field = form.createTextField('best.text5')
-    text5Field.setText(this.selectedBenne?.beneAccNo)
-    text5Field.addToPage(firstpage, {
-      x: 392, y: 460, width: 127,
-      height: 18, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
-    let result2 = this.selectedBenne?.interBankName.concat(" ", this.selectedBenne?.interBankSwiftCode);
-    const text6Field = form.createTextField('best.text6')
-    text6Field.setText(result2)
-    text6Field.addToPage(firstpage, {
-      x: 392, y: 440, width: 127,
-      height: 18, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
-
-    const text7Field = form.createTextField('best.text7')
-    text7Field.setText(this.selectedBenne?.iban)
-    text7Field.addToPage(firstpage, {
-      x: 392, y: 420, width: 127,
-      height: 18, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
-
-    const text8Field = form.createTextField('best.text8')
-    text8Field.setText(this.selectedBankName)
-    text8Field.addToPage(firstpage, {
-      x: 181, y: 355, width: 67,
-      height: 14, textColor: rgb(0, 0, 0), backgroundColor: rgb(1, 1, 1), borderWidth: 0,
-    })
-
-    const pdfBytes = await pdfDoc.save()
-    console.log(pdfDoc, "pdf")
-    console.log(pdfBytes, "pdfBytes")
-    // this.getPdfFile(pdfBytes);
-    console.log(form, "form")
-    var base64String = this._arrayBufferToBase64(pdfBytes)
-    const x = 'data:application/pdf;base64,' + base64String;
-    const url = window.URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' }));
-    console.log(url, 'dsjkfhsdkjfsdhfksfhsd')
-    this.formerge = x
-    this.remittanceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(x);
-    const mergedPdf = await PDFDocument.create();
-    const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-    copiedPages.forEach((page) => {
-      mergedPdf.addPage(page);
-    });
-    const mergedPdfFile = await mergedPdf.save();
-    const mergedPdfload = await PDFDocument.load(mergedPdfFile);
-    await this.disabledTextbox(pdfDoc)
-    const mergedPdfFileload = await mergedPdfload.save();
-    var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
-    const x1 = 'data:application/pdf;base64,' + base64String1;
-    console.log("line no. 1735", this.remittanceUrl)
-    this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
-    console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-    this.ORIGINAL_PDF = pdfBytes;
-
   }
   OUR_SHA_BEN_FUNC(data: any) {
     this.OUR_SHA_BEN = data;
@@ -554,20 +529,14 @@ export class ImportDirectPaymentComponent implements OnInit {
     return data[id];
   }
   onSubmit(e): void {
-
     this.submitted = true;
-
     console.log("this.pipoForm.invalid", this.pipoForm.invalid)
     console.log("this.pipoForm.invalid", this.pipoForm)
     console.log('this.pipoForm.value', this.pipoForm.value);
     if (this.pipoForm.invalid) {
       return;
     }
-    else {
-
-    }
-  }  //  ------------------------- handle image upload------------------------------------------
-
+  }
 
   public onUploadError(args: any): void {
     this.uploading = false;
@@ -641,13 +610,9 @@ export class ImportDirectPaymentComponent implements OnInit {
     return this.authToken;
   }
 
-  // ----------------------------- end handle image upload ----------------------------------
-
-
   getItems(form) {
     return form.get('BOETerm').controls;
   }
-
 
   addItems(index, id) {
     const control = this.pipoForm.controls.BOETerm as FormArray;
@@ -687,57 +652,159 @@ export class ImportDirectPaymentComponent implements OnInit {
     }
   }
   MERGE_PDF: any = [];
+  ALL_DOCUMENTS:any=[];
+  
   async PREVIEWS_URL(modal: any, id) {
+    this.ALL_DOCUMENTS=[];
     this.PREVIEWS_URL_LIST = [];
     this.MERGE_PDF = [];
-    var temp: any = [];
-    this.PREVIEWS_URL_LIST[0] = {
-      name: 'Bank Format',
-      pdf: this.ORIGINAL_PDF
-    };
-    temp[0] = this.formerge;
-    if (this.uploadUrl != undefined && this.uploadUrl != '' && this.uploadUrl != null) {
-      this.PREVIEWS_URL_LIST[1] = {
-        name: 'Oponin',
-        pdf: this.uploadUrl
+    console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
+    if (this.bankformat.length != 0 && this.bankformat[0]?.urlpdf != '') {
+      this.PREVIEWS_URL_LIST[0] = {
+        name: 'Bank Format',
+        pdf: this.ORIGINAL_PDF
       };
-      temp[1] = this.uploadUrl;
-    }
-    console.log('pipoForm', this.pipoForm)
-    for (let i = 0; i < this.selectedItems.length; i++) {
-      for (let index = 0; index < this.temp1[i].length; index++) {
-        if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != undefined) {
-          temp.push(this.temp1[i][index]?.pdf)
-          this.userService.mergePdf(this.temp1[i][index]?.pdf).subscribe((res: any) => {
-            res.arrayBuffer().then((data: any) => {
-              this.PREVIEWS_URL_LIST.push({ name: this.temp1[i][index]['name'], pdf: data });
-              console.log('downloadEachFile', this.PREVIEWS_URL_LIST);
-            });
+      this.ALL_DOCUMENTS.push(this.formerge);
+      if (this.uploadUrl != undefined && this.uploadUrl != '' && this.uploadUrl != null) {
+        this.PREVIEWS_URL_LIST[1] = {
+          name: 'Oponin',
+          pdf: this.uploadUrl
+        };
+        this.ALL_DOCUMENTS.push(this.uploadUrl);
+      }
+      console.log('pipoForm', this.pipoForm)
+      for (let i = 0; i < this.ITEM_FILL_PDF.length; i++) {
+        this.ALL_DOCUMENTS.push(this.ITEM_FILL_PDF[i]?.doc)
+        if (this.ITEM_FILL_PDF[i]?.pipo) {
+          this.ITEM_FILL_PDF[i]?.pipo?.forEach(element => {
+            this.ALL_DOCUMENTS.push(element?.doc)
+            this.ALL_DOCUMENTS.push(element?.commercial)
           });
+          if ((i + 1) == this.ITEM_FILL_PDF.length) {
+            var fitertemp: any = await this.ALL_DOCUMENTS.filter(n => n)
+            await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+              await this.userService?.UploadS3Buket({
+                fileName: this.guid() + '.pdf', buffer: merge?.pdfurl,
+                type: 'application/pdf'
+              }).subscribe((response: any) => {
+                console.log(response, 'response')
+                this.PREVIEWS_URL_LIST.push(response?.url);
+                console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+              })
+            });
+          }
         }
       }
-    }
 
-    await this.mergerpdf.mergePdf(temp).then((merge: any) => {
-      this.MERGE_PDF.push(merge)
-      modal.style.display = 'block';
-    })
-    this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
-      console.log(res, 'dsdsdsdsdsdsds');
-      this.GetDownloadStatus = res[0];
-      if (res.length == 0) {
-        this.documentService.getDownloadStatus({ id: id, deleteflag: '1' }).subscribe((res: any) => {
-          console.log(res, 'dsdsdsdsdsdsds');
-          this.GetDownloadStatus = res[0];
-          if (res.length == 0) {
-            this.documentService.getDownloadStatus({ id: id, deleteflag: '2' }).subscribe((res: any) => {
-              console.log(res, 'dsdsdsdsdsdsds');
-              this.GetDownloadStatus = res[0];
-            })
-          }
-        })
+      await this.mergerpdf.mergePdf(this.ALL_DOCUMENTS).then((merge: any) => {
+        this.MERGE_PDF.push(merge)
+      })
+      this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
+        console.log(res, 'dsdsdsdsdsdsds');
+        this.GetDownloadStatus = res[0];
+        if (res.length == 0) {
+          this.documentService.getDownloadStatus({ id: id, deleteflag: '1' }).subscribe((res: any) => {
+            console.log(res, 'dsdsdsdsdsdsds');
+            this.GetDownloadStatus = res[0];
+            if (res.length == 0) {
+              this.documentService.getDownloadStatus({ id: id, deleteflag: '2' }).subscribe((res: any) => {
+                console.log(res, 'dsdsdsdsdsdsds');
+                this.GetDownloadStatus = res[0];
+              })
+            }
+          })
+        }
+      })
+    }else{
+      this.PREVIEWS_URL_LIST.push(this.ORIGINAL_PDF)
+      this.ALL_DOCUMENTS.push(this.ORIGINAL_PDF)
+      if (this.uploadUrl != undefined && this.uploadUrl != '' && this.uploadUrl != null) {
+        this.PREVIEWS_URL_LIST.push(this.uploadUrl)
+        this.ALL_DOCUMENTS.push( this.uploadUrl)
       }
-    })
+      console.log('pipoForm', this.pipoForm)
+      $(document).ready(() => {
+        kendo.pdf.defineFont({
+          "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
+          "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
+          "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+          "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+          "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
+        });
+        kendo.drawing.drawDOM($("#first"), {
+          paperSize: "A4",
+          margin: "0cm",
+          scale: 0.7,
+          forcePageBreak: ".page-break"
+        }).then(function (group) {
+          return kendo.drawing.exportPDF(group, {
+            paperSize: "A4",
+            margin: "0cm",
+            scale: 0.7,
+            forcePageBreak: ".page-break"
+          });
+        }).done(async (data) => {
+          console.log('exportPDF', data)
+          await this.userService?.UploadS3Buket({
+            fileName: this.guid() + '.pdf', buffer: data,
+            type: 'application/pdf'
+          }).subscribe(async (pdfresponse: any) => {
+            console.log(pdfresponse, 'response')
+            this.ALL_DOCUMENTS.push(pdfresponse?.url)
+            for (let i = 0; i < this.ITEM_FILL_PDF.length; i++) {
+              this.ALL_DOCUMENTS.push(this.ITEM_FILL_PDF[i]?.doc)
+              if (this.ITEM_FILL_PDF[i]?.pipo) {
+                this.ITEM_FILL_PDF[i]?.pipo?.forEach(element => {
+                  this.ALL_DOCUMENTS.push(element?.doc)
+                  this.ALL_DOCUMENTS.push(element?.commercial)
+                });
+                if ((i + 1) == this.ITEM_FILL_PDF.length) {
+                  var fitertemp: any = await this.ALL_DOCUMENTS.filter(n => n)
+                  await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+                    await this.userService?.UploadS3Buket({
+                      fileName: this.guid() + '.pdf', buffer: merge?.pdfurl,
+                      type: 'application/pdf'
+                    }).subscribe((response: any) => {
+                      this.PREVIEWS_URL_LIST=[];
+                      console.log(response, 'response')
+                      this.PREVIEWS_URL_LIST.push(response?.url);
+                      console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+                    })
+                  });
+                }
+              }
+            }
+          })
+        });
+      });
+      await this.mergerpdf.mergePdf(this.ALL_DOCUMENTS).then((merge: any) => {
+        this.MERGE_PDF.push(merge)
+      })
+      this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
+        console.log(res, 'dsdsdsdsdsdsds');
+        this.GetDownloadStatus = res[0];
+        if (res.length == 0) {
+          this.documentService.getDownloadStatus({ id: id, deleteflag: '1' }).subscribe((res: any) => {
+            console.log(res, 'dsdsdsdsdsdsds');
+            this.GetDownloadStatus = res[0];
+            if (res.length == 0) {
+              this.documentService.getDownloadStatus({ id: id, deleteflag: '2' }).subscribe((res: any) => {
+                console.log(res, 'dsdsdsdsdsdsds');
+                this.GetDownloadStatus = res[0];
+              })
+            }
+          })
+        }
+      })
+    }
+  }
+  guid() {
+    let s4 = () => {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '_' + s4() + '_' + s4() + '_' + s4() + '_' + s4() + s4() + s4();
   }
   GetDownloadStatus: any = [];
   USER_DATA: any = [];
@@ -745,25 +812,13 @@ export class ImportDirectPaymentComponent implements OnInit {
 
   SendApproval(Status: string, UniqueId: any) {
     if (UniqueId != null) {
-      var temp_doc: any = [];
-      temp_doc[0] = this.PREVIWES_URL?.changingThisBreaksApplicationSecurity;
-      if (this.uploadUrl_Original != undefined && this.uploadUrl_Original != '' && this.uploadUrl_Original != null) {
-        temp_doc[1] = this.uploadUrl_Original;
-      }
-      for (let i = 0; i < this.selectedItems.length; i++) {
-        for (let index = 0; index < this.temp1[i].length; index++) {
-          if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != undefined) {
-            temp_doc.push(this.temp1[i][index]?.pdf)
-          }
-        }
-      }
       var approval_data: any = {
         id: UniqueId,
         tableName: 'Import-Direct-Payment',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
         status: 'pending',
-        documents: temp_doc,
+        documents: this.ALL_DOCUMENTS,
         Types: 'downloadPDF',
         TypeOfPage: 'Transaction',
         FileType: this.USER_DATA?.sideMenu
@@ -773,15 +828,15 @@ export class ImportDirectPaymentComponent implements OnInit {
         this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
           var pipo_id: any = [];
           var pipo_name: any = [];
-          for (let index = 0; index < this.MAIN_DATA.length; index++) {
-            pipo_id.push(this.MAIN_DATA[index]?.pipo[0]?._id)
-            pipo_name.push(this.MAIN_DATA[index]?.pipo[0]?.pi_poNo)
+          for (let index = 0; index < this.ITEM_FILL_PDF.length; index++) {
+            pipo_id.push(this.ITEM_FILL_PDF[index]?.pipo[0]?._id)
+            pipo_name.push(this.ITEM_FILL_PDF[index]?.pipo[0]?.pi_poNo)
           }
           var data: any = {
             data: {
               formdata: this.pipoForm.value,
-              documents: temp_doc,
-              pipo_1: [this.MAIN_DATA, this.selectedItems],
+              documents: this.ALL_DOCUMENTS,
+              pipo_1: [this.ITEM_FILL_PDF, this.selectedItems],
               Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() }
             },
             TypeTransaction: 'Import-Direct-Payment',
@@ -815,7 +870,6 @@ export class ImportDirectPaymentComponent implements OnInit {
               }
             })
           })
-
         });
       }
     }
@@ -827,12 +881,12 @@ export class ImportDirectPaymentComponent implements OnInit {
   }
   FILTER_PIPO_DATA: any = [];
   filterData(value: any) {
-    console.log(value, 'ddsgfjsgdjfhgfds')
     this.PIPO_LIST['data'] = this.PIPO_LIST['original_data'].filter((item: any) => item?._id?.indexOf(value) != -1);
     this.FILTER_PIPO_DATA = this.PIPO_LIST['data'][0];
-    for (let index = 0; index < this.FILTER_PIPO_DATA?.boeRef.length; index++) {
-      this.ADVANCE_REMMITANCE[this.FILTER_PIPO_DATA?.boeRef[index]?.boeNumber] = [];
-    }
+    console.log(value, this.PIPO_LIST['data'], 'ddsgfjsgdjfhgfds')
+    // for (let index = 0; index < this.FILTER_PIPO_DATA?.boeRef.length; index++) {
+    //   this.ADVANCE_REMMITANCE[this.FILTER_PIPO_DATA?.boeRef[index]?.boeNumber] = [];
+    // }
   }
   AmountValidation(event: any, amount: any) {
     var targervalue: any = $(event?.target).val()
@@ -889,6 +943,7 @@ export class ImportDirectPaymentComponent implements OnInit {
       this.ORM_SELECTION_DATA_LIST.ORM_NUMBER[index] = element?.billNo;
       this.ORM_SELECTION_DATA_LIST.Amount_Sum[index] = element?.amount;
     }
+
     this.PIPO_LIST.data[this.PIPO_SELECTED_DATA_INDEX.index]['AdviceRefNo'] = this.ORM_SELECTION_DATA_LIST.ORM_NUMBER.toString();
     this.PIPO_LIST.data[this.PIPO_SELECTED_DATA_INDEX.index]['AdviceRefAmount'] = this.ORM_SELECTION_DATA_LIST.Amount_Sum.toString();
     this.PIPO_LIST.data[this.PIPO_SELECTED_DATA_INDEX.index]['AdviceRefData'] = this.ORM_SELECTION_DATA;
