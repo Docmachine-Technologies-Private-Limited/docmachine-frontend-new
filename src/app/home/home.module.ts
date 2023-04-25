@@ -100,6 +100,7 @@ import { AuthenticateService } from "../service/authenticate.service";
 import { AuthGuard } from "../service/authguard.service";
 import { AdminPanelComponent } from './AdminPanel/admin-panel/admin-panel.component';
 import { SuperAdminPanelComponent } from './SuperAdminPanel/admin-panel/admin-panel.component';
+import {ExportHomeComponent} from "./Export/export-home/export-home.component";
 
 @NgModule({
   declarations: [
@@ -145,7 +146,9 @@ import { SuperAdminPanelComponent } from './SuperAdminPanel/admin-panel/admin-pa
     PackingCreditRequestComponent,
     TransactionDashboardComponent,
     AdminPanelComponent,
-    SuperAdminPanelComponent
+    SuperAdminPanelComponent,
+    ExportHomeComponent,
+    UploadDocComponent
   ],
   imports: [
     SharedHomeModule,
@@ -214,7 +217,7 @@ import { SuperAdminPanelComponent } from './SuperAdminPanel/admin-panel/admin-pa
           { path: "edpms-recon", loadChildren: () => import('./edpms-recon/edpms-recon.module').then(mod => mod.EdpmsReconModule), canActivate: [MemberGuard] },
           { path: "bill-lodgement", loadChildren: () => import('./Export/bill-lodgement/bill-lodgement.module').then(mod => mod.BillLodgementModule), canActivate: [MemberGuard] },
           { path: "packing-credit-request", loadChildren: () => import('./Export/packing-credit/packing-credit.module').then(mod => mod.PackingCreditModule), canActivate: [MemberGuard] },
-          { path: "export-home", loadChildren: () => import('./Export/export-home/export-home.module').then(mod => mod.ExportHomeModule), canActivate: [MemberGuard] },
+          { path: "export-home",component:ExportHomeComponent, canActivate: [MemberGuard] },
           { path: "completed-task", loadChildren: () => import('./completed-task/completed-task.module').then(mod => mod.CompletedTaskModule), canActivate: [MemberGuard] },
           { path: "tasks", loadChildren: () => import('./all-task/all-task.module').then(mod => mod.AllTaskModule), canActivate: [MemberGuard] },
           { path: "letter-of-credit", loadChildren: () => import('./yesBank/letter-of-credit/letter-of-credit.module').then(mod => mod.LetterOfCreditModule), canActivate: [MemberGuard] },
@@ -608,18 +611,6 @@ import { SuperAdminPanelComponent } from './SuperAdminPanel/admin-panel/admin-pa
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [MatProgressBarModule, MatTabsModule, SharedHomeModule],
 })
-export class HomeModule implements OnInit {
-  userData: any = [];
-  userActivity;
+export class HomeModule {
 
-  constructor(
-    private router: Router, public doc: DocumentService,
-    private userService: UserService,
-    public authservice: AuthenticateService,
-    public authGuard: AuthGuard) {
-  }
-  ngOnInit(): void {
-    console.log('gfdgdgfdgfdgf')
-
-  };
 }

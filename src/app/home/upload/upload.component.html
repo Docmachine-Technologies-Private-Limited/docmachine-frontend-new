@@ -1,8 +1,6 @@
 <script async src="//jsfiddle.net/g7mvaosL/embed/"></script>
 <div class="content-wrap ml-0 scroll-bar-main">
-  <div class="container-fluid" style="padding: 0;
-  margin: auto;
-  padding-left: 30px;">
+  <div class="container-fluid" style="padding: 0;margin: auto;">
     <div class="content_white_background p-0">
       <main id="content" role="main" style="height: calc(100vh - 90px);overflow: auto;padding: 20px;">
         <h3 class="heading pb-2" *ngIf='docu == "pipo"'>New Proforma invoice/ Purchase Order</h3>
@@ -53,14 +51,18 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="exampleInputPassword1"> Choose the type of document</label>
-                  <select class="form-control p-3" [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0?true:false" *ngIf="this.USER_DATA?.Subscription=='both'"
-                    aria-label="Default select example" [(ngModel)]="documentType1" name="" id="">
+                  <select class="form-control p-3"
+                    [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0?true:false"
+                    *ngIf="this.USER_DATA?.Subscription=='both'" aria-label="Default select example"
+                    [(ngModel)]="documentType1" name="" id="">
                     <option value="">Select Import/Export</option>
                     <option *ngIf="this.USER_DATA?.sideMenu=='import'" value="import">Import</option>
                     <option *ngIf="this.USER_DATA?.sideMenu=='export'" value="export">Export</option>
                   </select>
-                  <select class="form-control p-3" [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0?true:false" *ngIf="this.USER_DATA?.Subscription!='both'"
-                    aria-label="Default select example" [(ngModel)]="documentType1" name="" id="">
+                  <select class="form-control p-3"
+                    [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0?true:false"
+                    *ngIf="this.USER_DATA?.Subscription!='both'" aria-label="Default select example"
+                    [(ngModel)]="documentType1" name="" id="">
                     <option value="">Select {{this.USER_DATA?.Subscription}}</option>
                     <option *ngIf="this.USER_DATA?.sideMenu=='import'" value="import">Import</option>
                     <option *ngIf="this.USER_DATA?.sideMenu=='export'" value="export">Export</option>
@@ -71,9 +73,10 @@
                 <div class="form-group">
                   <label *ngIf='documentType1 == "import" || documentType1 == "export"'>
                     Now you selected {{documentType1}}, select Type of {{documentType1}} document </label>
-                  <select class="form-control p-3" [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0?true:false" aria-label="Default select example"
-                    *ngIf='documentType1 == "import"' [(ngModel)]="documentType" name="" id=""
-                    (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
+                  <select class="form-control p-3"
+                    [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0?true:false"
+                    aria-label="Default select example" *ngIf='documentType1 == "import"' [(ngModel)]="documentType"
+                    name="" id="" (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
                     <option value="">Document Type</option>
                     <option value="boe">BOE</option>
                     <option value="PO">PO</option>
@@ -93,9 +96,10 @@
                     <option value="import-blCopy">Airway/BL Copy</option>
                     <option value="import-commercial">Commercial Invoice</option>
                   </select>
-                  <select class="form-control p-3" [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0?true:false" aria-label="Default select example"
-                    *ngIf='documentType1 == "export"' [(ngModel)]="documentType" name="" id=""
-                    (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
+                  <select class="form-control p-3"
+                    [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0?true:false"
+                    aria-label="Default select example" *ngIf='documentType1 == "export"' [(ngModel)]="documentType"
+                    name="" id="" (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
                     <option value="">Document Type</option>
                     <option value="sb">Shipping Bill</option>
                     <option value="PO">PO</option>
@@ -135,19 +139,18 @@
               <div class="col-md-6" *ngIf='documentType1 == "import"'>
                 <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
                   PI/PO*</label>
-                <ng-select class="custom"  *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length==0"
+                <ng-select class="custom"
+                  *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length==0"
                   [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME" bindLabel="pi_po_buyerName"
                   [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
-                  [(ngModel)]="this.PIPO_LIST"
-                  bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)"
-                  #CommercialNumber>
+                  [(ngModel)]="this.PIPO_LIST" bindValue="testFunctionID"
+                  (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
                 </ng-select>
                 <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0"
-                [items]="[]" bindLabel="pi_po_buyerName"
-                [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION"
-                [multiple]="true"
-                #CommercialNumber disabled>
-              </ng-select>
+                  [items]="[]" bindLabel="pi_po_buyerName"
+                  [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION" [multiple]="true"
+                  #CommercialNumber disabled>
+                </ng-select>
                 <div *ngIf="documentType!='' && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length==0"
                   style="color: red;font-size: 15px;">
                   There were no results from that PIPO Summary.
@@ -161,20 +164,19 @@
               <div class="col-md-6" *ngIf='documentType1 == "export"'>
                 <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
                   PI/PO*</label>
-                <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length==0"
+                <ng-select class="custom"
+                  *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length==0"
                   [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME" bindLabel="pi_po_buyerName"
                   [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
-                  bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)"
-                  #CommercialNumber>
+                  bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
                 </ng-select>
-                
+
                 <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0"
                   [items]="[]" bindLabel="pi_po_buyerName"
-                  [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION"
-                  [multiple]="true"
+                  [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION" [multiple]="true"
                   #CommercialNumber disabled>
                 </ng-select>
-              
+
                 <div *ngIf="documentType!='' && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length==0"
                   style="color: red;font-size: 15px;">
                   There were no results from that PIPO Summary.
@@ -186,13 +188,10 @@
               </div>
               <div *ngIf='docu == "blCopyref"' class="col-md-6 d-flex flex-column">
                 <div style="display: flex;flex-direction: column;" class="col-12">
-                  <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Shipping Bill*</label>
-                  <ng-select class="custom" *ngIf="this.SHIPPING_LIST?.length!=0"
-                    [items]="[]"
-                    bindLabel="sbno"
-                    [(ngModel)]="this.SHIPPING_LIST"
-                    [multiple]="true"
-                    placeholder="Select Shipping Bill" disabled>
+                  <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Shipping
+                    Bill*</label>
+                  <ng-select class="custom" *ngIf="this.SHIPPING_LIST?.length!=0" [items]="[]" bindLabel="sbno"
+                    [(ngModel)]="this.SHIPPING_LIST" [multiple]="true" placeholder="Select Shipping Bill" disabled>
                   </ng-select>
                 </div>
               </div>
@@ -208,7 +207,7 @@
               (change)="clickBene(bene?.selectedValues[0]?.benneName)" #bene>
             </ng-select>
           </div>
-         
+
           <div class="col-5 pt-2 d-flex flex-column">
             <span style="color: #303030; font-size: 20px;">Choose the type of document *</span>
             <div style="display: flex; align-items: center;">
@@ -228,9 +227,8 @@
             PI/PO*</label>
           <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
             [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME" bindLabel="pi_po_buyerName"
-            [(ngModel)]="this.PIPO_LIST"
-            [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
-            bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)"
+            [(ngModel)]="this.PIPO_LIST" [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true"
+            placeholder="Select PI/PO" bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)"
             #CommercialNumber>
           </ng-select>
         </div>
@@ -241,9 +239,8 @@
             <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
               [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME" bindLabel="pi_po_buyerName"
               [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
-              [(ngModel)]="this.PIPO_LIST"
-              bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)"
-              #CommercialNumber>
+              [(ngModel)]="this.PIPO_LIST" bindValue="testFunctionID"
+              (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
             </ng-select>
           </div>
           <div class="column col-5">
@@ -259,38 +256,38 @@
         </div>
 
         <!--sbbbbbbbbbbbbbbbbbbb ------ --------------------------- -->
-        <div *ngIf="documentType === 'sb'" class="form" method="POST">
-          <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-            (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config"
-            class="dropzone dropzone-container" id="dropzone" />
+        <div *ngIf="documentType === 'sb'" class="form" method="POST" (click)="fileopen.click()">
+          <input style="pointer-events: none;" (error)="onUploadError($event)" (init)="onUploadInit($event)"
+            (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="ConfigforSB"
+            class="dropzone dropzone-container" id="dropzone" #fileopen />
           <i class="fas fa-file-upload"></i>
           <h5>Drag and Drop files here</h5>
           <p>Files Supported: PDF, XSLS, Image, Scanner</p>
           <p>Maximum Size: 5MB</p>
         </div>
-        <div *ngIf="documentType === 'boe' " class="form" method="POST">
-          <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-            (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config2"
-            class="dropzone dropzone-container" id="dropzone" />
+        <div *ngIf="documentType === 'boe' " class="form" method="POST" (click)="fileopen.click()">
+          <input style="pointer-events: none;" (error)="onUploadError($event)" (init)="onUploadInit($event)"
+            (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="config2"
+            class="dropzone dropzone-container" id="dropzone" #fileopen />
           <i class="fas fa-file-upload"></i>
           <h5>Drag and Drop files here</h5>
           <p>Files Supported: PDF, XSLS, Image, Scanner</p>
           <p>Maximum Size: 5MB</p>
         </div>
 
-        <div *ngIf="documentType === 'irAdvice'" class="form" method="POST">
-          <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-            (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config3"
-            class="dropzone dropzone-container" id="dropzone" />
+        <div *ngIf="documentType === 'irAdvice'" class="form" method="POST" (click)="fileopen.click()">
+          <input style="pointer-events: none;" (error)="onUploadError($event)" (init)="onUploadInit($event)"
+            (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="ConfigforInwardOutward"
+            class="dropzone dropzone-container" id="dropzone" #fileopen />
           <i class="fas fa-file-upload"></i>
           <h5>Drag and Drop files here to upload</h5>
           <p>Files Supported: PDF, XSLS, Image, Scanner</p>
           <p>Maximum Size: 5MB</p>
         </div>
-        <div *ngIf="documentType === 'orAdvice'" class="form" method="POST">
-          <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-            (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config3"
-            class="dropzone dropzone-container" id="dropzone" />
+        <div *ngIf="documentType === 'orAdvice'" class="form" method="POST" (click)="fileopen.click()">
+          <input style="pointer-events: none;" (error)="onUploadError($event)" (init)="onUploadInit($event)"
+            (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="ConfigforInwardOutward"
+            class="dropzone dropzone-container" id="dropzone" #fileopen />
           <i class="fas fa-file-upload"></i>
           <h5>Drag and Drop files here to upload</h5>
           <p>Files Supported: PDF, XSLS, Image, Scanner</p>
@@ -308,16 +305,17 @@
           documentType === 'import-commercial' || documentType === 'billOfExchange'||documentType === 'import-billOfExchange' ||
           documentType === 'import-packingList' ||
           documentType === 'destruction'  || documentType === 'import-destruction' || documentType === 'packingList'"
-          class="form" method="POST">
-          <input (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-            (sending)="submit($event)" *ngIf="type === 'directive'" [dropzone]="config1"
-            class="dropzone dropzone-container" id="dropzone" />
+          class="form" method="POST" (click)="fileopen.click()">
+          <input style="pointer-events: none;" (error)="onUploadError($event)" (init)="onUploadInit($event)"
+            (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="config1"
+            class="dropzone dropzone-container" id="dropzone" #fileopen />
           <i class="fas fa-file-upload"></i>
           <h5>Drag and Drop files here</h5>
           <p>Files Supported: PDF, XSLS, Image, Scanner</p>
           <p>Maximum Size: 5MB</p>
         </div>
         <div class="progressbar" *ngIf="uploading">
+          <span style="display: flex;">{{this.SocketioserviceMessage}} <span class="loader"></span></span>
           <div class="meter">
             <span [style.width]="width + '%'"></span>
           </div>
@@ -405,7 +403,7 @@
                   </ng-select>
                 </td>
                 <td class="full-input border3">
-                  <label for="realizedFreightValue">FREIGHT VALUE</label><input [(ngModel)]="res.realizedFreightValue"
+                  <label for="realizedFreightValue">FREIGHT VALUE</label><input [(ngModel)]="res.realizedfreightValue"
                     class="form-control p-3" type="text" name="realizedFreightValue" />
                 </td>
                 <br />
@@ -422,7 +420,7 @@
                     class="form-control p-3" type="text" name="insuranceValue" />
                 </td>
                 <td class="full-input border1">
-                  <label for="realizedInsuranceValue">INSURANCE VALUE</label><input
+                  <label for="realizedInsuranceValue">Realized INSURANCE VALUE</label><input
                     [(ngModel)]="res.realizedInsuranceValue" class="form-control p-3" type="text"
                     name="realizedInsuranceValue" />
                 </td>
@@ -504,8 +502,8 @@
                   <div class="tab-content form-wrapper" *ngFor="let obj of res.invoices; let i = index"
                     [attr.data-index]="i">
                     <td class="full-input border1">
-                      <label for="mawbno">INVOICE NO</label><input [(ngModel)]="obj.invoiceno"
-                        class="form-control p-3" type="text" name="invoiceno{{ i + 1 }}" />
+                      <label for="mawbno">INVOICE NO</label><input [(ngModel)]="obj.invoiceno" class="form-control p-3"
+                        type="text" name="invoiceno{{ i + 1 }}" />
                     </td>
                     <td class="full-input border2">
                       <label for="mawbno">AMOUNT</label><input [(ngModel)]="obj.amount" class="form-control p-3"
@@ -551,8 +549,7 @@
           </div>
         </form>
 
-        <form class="iframecontroller" *ngIf="boeNumber && !override" #values="ngForm"
-          (ngSubmit)="onSubmitBoe(values)">
+        <form class="iframecontroller" *ngIf="boeNumber && !override" #values="ngForm" (ngSubmit)="onSubmitBoe(values)">
           <iframe [src]="publicUrl" width="100%" height="700px"> </iframe>
           <div class="field p-3">
             <div class="grid">
@@ -563,77 +560,83 @@
                 <div class="main-panel-2">
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">BOE Number*</label>
-                    <input [(ngModel)]="res.boeNumber" class="form-control p-3" type="text" name="boeNumber"
-                      required />
-                    <div *ngIf="values?.controls?.boeNumber?.invalid && (SUBMIT_FORM || values?.controls?.boeNumber?.touched)"
+                    <input [(ngModel)]="res.boeNumber" class="form-control p-3" type="text" name="boeNumber" required />
+                    <div
+                      *ngIf="values?.controls?.boeNumber?.invalid && (SUBMIT_FORM || values?.controls?.boeNumber?.touched)"
                       class="error-span">
                       <span *ngIf="values?.controls?.boeNumber?.errors?.required"> BOE Number is required. </span>
                     </div>
                   </div>
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">BOE Date*</label>
-                    <input [(ngModel)]="res.boeDate" class="form-control p-3" type="date" name="boeDate" required/>
-                    <div *ngIf="values?.controls?.boeDate?.invalid && (SUBMIT_FORM || values?.controls?.boeDate?.touched)"
-                    class="error-span">
-                    <span *ngIf="values?.controls?.boeDate?.errors?.required"> BOE Date is required. </span>
-                  </div>
+                    <input [(ngModel)]="res.boeDate" class="form-control p-3" type="date" name="boeDate" required />
+                    <div
+                      *ngIf="values?.controls?.boeDate?.invalid && (SUBMIT_FORM || values?.controls?.boeDate?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.boeDate?.errors?.required"> BOE Date is required. </span>
+                    </div>
                   </div>
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">AWB No.*</label>
-                    <input [(ngModel)]="res.AWBNo" class="form-control p-3" type="text" name="AWBNo" required/>
+                    <input [(ngModel)]="res.AWBNo" class="form-control p-3" type="text" name="AWBNo" required />
                     <div *ngIf="values?.controls?.AWBNo?.invalid && (SUBMIT_FORM || values?.controls?.AWBNo?.touched)"
-                    class="error-span">
-                    <span *ngIf="values?.controls?.AWBNo?.errors?.required"> AWB No. is required. </span>
-                  </div>
+                      class="error-span">
+                      <span *ngIf="values?.controls?.AWBNo?.errors?.required"> AWB No. is required. </span>
+                    </div>
                   </div>
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">ORIGIN*</label>
-                    <input [(ngModel)]="res.origin" class="form-control p-3" type="text" name="origin" required/>
+                    <input [(ngModel)]="res.origin" class="form-control p-3" type="text" name="origin" required />
                     <div *ngIf="values?.controls?.origin?.invalid && (SUBMIT_FORM || values?.controls?.origin?.touched)"
-                    class="error-span">
-                    <span *ngIf="values?.controls?.origin?.errors?.required"> ORIGIN is required. </span>
-                  </div>
+                      class="error-span">
+                      <span *ngIf="values?.controls?.origin?.errors?.required"> ORIGIN is required. </span>
+                    </div>
                   </div>
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">DISCHARGE PORT*</label>
-                    <input [(ngModel)]="res.dischargePort" class="form-control p-3" type="text"
-                      name="dischargePort" required/>
-                      <div *ngIf="values?.controls?.dischargePort?.invalid && (SUBMIT_FORM || values?.controls?.dischargePort?.touched)"
+                    <input [(ngModel)]="res.dischargePort" class="form-control p-3" type="text" name="dischargePort"
+                      required />
+                    <div
+                      *ngIf="values?.controls?.dischargePort?.invalid && (SUBMIT_FORM || values?.controls?.dischargePort?.touched)"
                       class="error-span">
-                      <span *ngIf="values?.controls?.dischargePort?.errors?.required"> DISCHARGE PORT is required. </span>
+                      <span *ngIf="values?.controls?.dischargePort?.errors?.required"> DISCHARGE PORT is required.
+                      </span>
                     </div>
                   </div>
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">IEC CODE*</label>
-                    <input [(ngModel)]="res.iecCode" class="form-control p-3" type="text" name="iecCode" required/>
-                    <div *ngIf="values?.controls?.iecCode?.invalid && (SUBMIT_FORM || values?.controls?.iecCode?.touched)"
-                    class="error-span">
-                    <span *ngIf="values?.controls?.iecCode?.errors?.required"> IEC CODE is required. </span>
-                  </div>
+                    <input [(ngModel)]="res.iecCode" class="form-control p-3" type="text" name="iecCode" required />
+                    <div
+                      *ngIf="values?.controls?.iecCode?.invalid && (SUBMIT_FORM || values?.controls?.iecCode?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.iecCode?.errors?.required"> IEC CODE is required. </span>
+                    </div>
                   </div>
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">IEC NAME*</label>
-                    <input [(ngModel)]="res.iecName" class="form-control p-3" type="text" name="iecName"required />
-                    <div *ngIf="values?.controls?.iecName?.invalid && (SUBMIT_FORM || values?.controls?.iecName?.touched)"
-                    class="error-span">
-                    <span *ngIf="values?.controls?.iecName?.errors?.required"> IEC NAME is required. </span>
-                  </div>
+                    <input [(ngModel)]="res.iecName" class="form-control p-3" type="text" name="iecName" required />
+                    <div
+                      *ngIf="values?.controls?.iecName?.invalid && (SUBMIT_FORM || values?.controls?.iecName?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.iecName?.errors?.required"> IEC NAME is required. </span>
+                    </div>
                   </div>
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">AD CODE*</label>
-                    <input [(ngModel)]="res.adCode" class="form-control p-3" type="text" name="adCode" required/>
+                    <input [(ngModel)]="res.adCode" class="form-control p-3" type="text" name="adCode" required />
                     <div *ngIf="values?.controls?.adCode?.invalid && (SUBMIT_FORM || values?.controls?.adCode?.touched)"
-                    class="error-span">
-                    <span *ngIf="values?.controls?.adCode?.errors?.required"> AD CODE is required. </span>
-                  </div>
+                      class="error-span">
+                      <span *ngIf="values?.controls?.adCode?.errors?.required"> AD CODE is required. </span>
+                    </div>
                   </div>
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">AD BILL CODE*</label>
                     <input [(ngModel)]="res.adBillNo" class="form-control p-3" type="text" name="adBillNo" required />
-                    <div *ngIf="values?.controls?.adBillNo?.invalid && (SUBMIT_FORM || values?.controls?.adBillNo?.touched)"
-                    class="error-span">
-                    <span *ngIf="values?.controls?.adBillNo?.errors?.required"> AD BILL CODE is required. </span>
-                  </div>
+                    <div
+                      *ngIf="values?.controls?.adBillNo?.invalid && (SUBMIT_FORM || values?.controls?.adBillNo?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.adBillNo?.errors?.required"> AD BILL CODE is required. </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -647,26 +650,29 @@
                   <div class="main-panel">
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">INVOICE NO*</label>
-                      <input [(ngModel)]="res.invoiceNumber" class="form-control p-3" type="text"
-                        name="invoiceNumber" required/>
-                        <div *ngIf="values?.controls?.invoiceNumber?.invalid && (SUBMIT_FORM || values?.controls?.invoiceNumber?.touched)"
+                      <input [(ngModel)]="res.invoiceNumber" class="form-control p-3" type="text" name="invoiceNumber"
+                        required />
+                      <div
+                        *ngIf="values?.controls?.invoiceNumber?.invalid && (SUBMIT_FORM || values?.controls?.invoiceNumber?.touched)"
                         class="error-span">
                         <span *ngIf="values?.controls?.invoiceNumber?.errors?.required"> INVOICE NO is required. </span>
                       </div>
                     </div>
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">INVOICE AMOUNT*</label>
-                      <input [(ngModel)]="res.invoiceAmount" class="form-control p-3" type="text"
-                        name="invoiceAmount" required/>
-                        <div *ngIf="values?.controls?.invoiceAmount?.invalid && (SUBMIT_FORM || values?.controls?.invoiceAmount?.touched)"
+                      <input [(ngModel)]="res.invoiceAmount" class="form-control p-3" type="text" name="invoiceAmount"
+                        required />
+                      <div
+                        *ngIf="values?.controls?.invoiceAmount?.invalid && (SUBMIT_FORM || values?.controls?.invoiceAmount?.touched)"
                         class="error-span">
-                        <span *ngIf="values?.controls?.invoiceAmount?.errors?.required">INVOICE AMOUNT is required. </span>
+                        <span *ngIf="values?.controls?.invoiceAmount?.errors?.required">INVOICE AMOUNT is required.
+                        </span>
                       </div>
                       <div *ngIf="(SUBMIT_FORM || values?.controls?.invoiceAmount?.touched ||
-                      values?.controls?.invoiceAmount?.value!=this.COMMERCIAL_DATA?.InvoiceValue)"
-                      class="error-span">
-                      <span *ngIf="values?.controls?.invoiceAmount?.value!=this.COMMERCIAL_DATA?.InvoiceValue">INVOICE AMOUNT and CI INVOICE AMOUNT should be equal is required. </span>
-                    </div>
+                      values?.controls?.invoiceAmount?.value!=this.COMMERCIAL_DATA?.InvoiceValue)" class="error-span">
+                        <span *ngIf="values?.controls?.invoiceAmount?.value!=this.COMMERCIAL_DATA?.InvoiceValue">INVOICE
+                          AMOUNT and CI INVOICE AMOUNT should be equal is required. </span>
+                      </div>
                     </div>
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">CURRENCY*</label>
@@ -674,27 +680,31 @@
                         bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
                         name="currency" [(ngModel)]="res.currency" required>
                       </ng-select>
-                      <div *ngIf="values?.controls?.currency?.invalid && (SUBMIT_FORM || values?.controls?.currency?.touched)"
-                      class="error-span">
-                      <span *ngIf="values?.controls?.currency?.errors?.required"> CURRENCY is required. </span>
-                    </div>
+                      <div
+                        *ngIf="values?.controls?.currency?.invalid && (SUBMIT_FORM || values?.controls?.currency?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.currency?.errors?.required"> CURRENCY is required. </span>
+                      </div>
                     </div>
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">SETTELED AMOIUNT*</label>
-                      <input [(ngModel)]="res.settledAmount" class="form-control p-3" type="text"
-                        name="settledAmount" required/>
-                        <div *ngIf="values?.controls?.settledAmount?.invalid && (SUBMIT_FORM || values?.controls?.settledAmount?.touched)"
+                      <input [(ngModel)]="res.settledAmount" class="form-control p-3" type="text" name="settledAmount"
+                        required />
+                      <div
+                        *ngIf="values?.controls?.settledAmount?.invalid && (SUBMIT_FORM || values?.controls?.settledAmount?.touched)"
                         class="error-span">
-                        <span *ngIf="values?.controls?.settledAmount?.errors?.required"> SETTELED AMOIUNT is required. </span>
+                        <span *ngIf="values?.controls?.settledAmount?.errors?.required"> SETTELED AMOIUNT is required.
+                        </span>
                       </div>
                     </div>
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">STATUS*</label>
-                      <input [(ngModel)]="res.status" class="form-control p-3" type="text" name="status" required/>
-                      <div *ngIf="values?.controls?.status?.invalid && (SUBMIT_FORM || values?.controls?.status?.touched)"
-                      class="error-span">
-                      <span *ngIf="values?.controls?.status?.errors?.required"> STATUS is required. </span>
-                    </div>
+                      <input [(ngModel)]="res.status" class="form-control p-3" type="text" name="status" required />
+                      <div
+                        *ngIf="values?.controls?.status?.invalid && (SUBMIT_FORM || values?.controls?.status?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.status?.errors?.required"> STATUS is required. </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -748,17 +758,19 @@
                   <div class="main-panel">
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">FREIGHT AMOUNT*</label>
-                      <input [(ngModel)]="res.freightAmount" class="form-control p-3" type="text"
-                        name="freightAmount" required/>
-                        <div *ngIf="values?.controls?.freightAmount?.invalid && (SUBMIT_FORM || values?.controls?.freightAmount?.touched)"
+                      <input [(ngModel)]="res.freightAmount" class="form-control p-3" type="text" name="freightAmount"
+                        required />
+                      <div
+                        *ngIf="values?.controls?.freightAmount?.invalid && (SUBMIT_FORM || values?.controls?.freightAmount?.touched)"
                         class="error-span">
-                        <span *ngIf="values?.controls?.freightAmount?.errors?.required"> FREIGHT AMOUNT is required. </span>
+                        <span *ngIf="values?.controls?.freightAmount?.errors?.required"> FREIGHT AMOUNT is required.
+                        </span>
                       </div>
                       <div *ngIf="(SUBMIT_FORM || values?.controls?.freightAmount?.touched ||
-                      values?.controls?.freightAmount?.value!=this.COMMERCIAL_DATA?.FreightValue)"
-                      class="error-span">
-                      <span *ngIf="values?.controls?.freightAmount?.value!=this.COMMERCIAL_DATA?.FreightValue">FREIGHT AMOUNT and CI FREIGHT AMOUNT should be equal is required. </span>
-                    </div>
+                      values?.controls?.freightAmount?.value!=this.COMMERCIAL_DATA?.FreightValue)" class="error-span">
+                        <span *ngIf="values?.controls?.freightAmount?.value!=this.COMMERCIAL_DATA?.FreightValue">FREIGHT
+                          AMOUNT and CI FREIGHT AMOUNT should be equal is required. </span>
+                      </div>
                     </div>
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">FREIGHT CURRENCY*</label>
@@ -766,10 +778,12 @@
                         bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
                         name="freightCurrency" [(ngModel)]="res.freightCurrency" required>
                       </ng-select>
-                      <div *ngIf="values?.controls?.freightCurrency?.invalid && (SUBMIT_FORM || values?.controls?.freightCurrency?.touched)"
-                      class="error-span">
-                      <span *ngIf="values?.controls?.freightCurrency?.errors?.required"> FREIGHT CURRENCY is required. </span>
-                    </div>
+                      <div
+                        *ngIf="values?.controls?.freightCurrency?.invalid && (SUBMIT_FORM || values?.controls?.freightCurrency?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.freightCurrency?.errors?.required"> FREIGHT CURRENCY is required.
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -783,7 +797,7 @@
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">FREIGHT AMOUNT*</label>
                       <input [value]="this.COMMERCIAL_DATA?.FreightValue" disabled class="form-control p-3"
-                        type="text"/>
+                        type="text" />
                     </div>
                   </div>
                 </div>
@@ -799,16 +813,20 @@
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">INSURANCE AMOUNT*</label>
                       <input [(ngModel)]="res.insuranceAmount" class="form-control p-3" type="text"
-                        name="insuranceAmount" required/>
-                        <div *ngIf="values?.controls?.insuranceAmount?.invalid && (SUBMIT_FORM || values?.controls?.insuranceAmount?.touched)"
+                        name="insuranceAmount" required />
+                      <div
+                        *ngIf="values?.controls?.insuranceAmount?.invalid && (SUBMIT_FORM || values?.controls?.insuranceAmount?.touched)"
                         class="error-span">
-                        <span *ngIf="values?.controls?.insuranceAmount?.errors?.required">INSURANCE AMOUNT is required. </span>
+                        <span *ngIf="values?.controls?.insuranceAmount?.errors?.required">INSURANCE AMOUNT is required.
+                        </span>
                       </div>
                       <div *ngIf="(SUBMIT_FORM || values?.controls?.insuranceAmount?.touched ||
                       values?.controls?.insuranceAmount?.value!=this.COMMERCIAL_DATA?.InsuranceValue)"
-                      class="error-span">
-                      <span *ngIf="values?.controls?.insuranceAmount?.value!=this.COMMERCIAL_DATA?.InsuranceValue">INSURANCE AMOUNT and CI INSURANCE AMOUNT should be equal is required. </span>
-                    </div>
+                        class="error-span">
+                        <span
+                          *ngIf="values?.controls?.insuranceAmount?.value!=this.COMMERCIAL_DATA?.InsuranceValue">INSURANCE
+                          AMOUNT and CI INSURANCE AMOUNT should be equal is required. </span>
+                      </div>
                     </div>
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">INSURANCE CURRENCY*</label>
@@ -816,10 +834,12 @@
                         bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
                         name="insuranceCurrency" [(ngModel)]="res.insuranceCurrency" required>
                       </ng-select>
-                      <div *ngIf="values?.controls?.insuranceCurrency?.invalid && (SUBMIT_FORM || values?.controls?.insuranceCurrency?.touched)"
-                      class="error-span">
-                      <span *ngIf="values?.controls?.insuranceCurrency?.errors?.required"> INSURANCE CURRENCY is required. </span>
-                    </div>
+                      <div
+                        *ngIf="values?.controls?.insuranceCurrency?.invalid && (SUBMIT_FORM || values?.controls?.insuranceCurrency?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.insuranceCurrency?.errors?.required"> INSURANCE CURRENCY is
+                          required. </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -845,11 +865,13 @@
                 <div class="main-panel-2">
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">DISCOUNT AMOUNT*</label>
-                    <input [(ngModel)]="res.discountAmount" class="form-control p-3" type="text"
-                      name="discountAmount" required/>
-                      <div *ngIf="values?.controls?.discountAmount?.invalid && (SUBMIT_FORM || values?.controls?.discountAmount?.touched)"
+                    <input [(ngModel)]="res.discountAmount" class="form-control p-3" type="text" name="discountAmount"
+                      required />
+                    <div
+                      *ngIf="values?.controls?.discountAmount?.invalid && (SUBMIT_FORM || values?.controls?.discountAmount?.touched)"
                       class="error-span">
-                      <span *ngIf="values?.controls?.discountAmount?.errors?.required"> DISCOUNT AMOUNT is required. </span>
+                      <span *ngIf="values?.controls?.discountAmount?.errors?.required"> DISCOUNT AMOUNT is required.
+                      </span>
                     </div>
                   </div>
                   <div class="mb-0">
@@ -858,10 +880,12 @@
                       bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
                       name="discountCurrency" [(ngModel)]="res.discountCurrency" required>
                     </ng-select>
-                    <div *ngIf="values?.controls?.discountCurrency?.invalid && (SUBMIT_FORM || values?.controls?.discountCurrency?.touched)"
-                    class="error-span">
-                    <span *ngIf="values?.controls?.discountCurrency?.errors?.required"> DISCOUNT CURRENCY is required. </span>
-                  </div>
+                    <div
+                      *ngIf="values?.controls?.discountCurrency?.invalid && (SUBMIT_FORM || values?.controls?.discountCurrency?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.discountCurrency?.errors?.required"> DISCOUNT CURRENCY is required.
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -876,16 +900,20 @@
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">MISCELLANEOUS AMOUNT*</label>
                       <input [(ngModel)]="res.miscellaneousAmount" class="form-control p-3" type="text"
-                        name="miscellaneousAmount" required/>
-                        <div *ngIf="values?.controls?.miscellaneousAmount?.invalid && (SUBMIT_FORM || values?.controls?.miscellaneousAmount?.touched)"
+                        name="miscellaneousAmount" required />
+                      <div
+                        *ngIf="values?.controls?.miscellaneousAmount?.invalid && (SUBMIT_FORM || values?.controls?.miscellaneousAmount?.touched)"
                         class="error-span">
-                        <span *ngIf="values?.controls?.miscellaneousAmount?.errors?.required"> MISCELLANEOUS AMOUNT is required. </span>
+                        <span *ngIf="values?.controls?.miscellaneousAmount?.errors?.required"> MISCELLANEOUS AMOUNT is
+                          required. </span>
                       </div>
                       <div *ngIf="(SUBMIT_FORM || values?.controls?.miscellaneousAmount?.touched ||
                       values?.controls?.miscellaneousAmount?.value!=this.COMMERCIAL_DATA?.MiscCharges)"
-                      class="error-span">
-                      <span *ngIf="values?.controls?.miscellaneousAmount?.value!=this.COMMERCIAL_DATA?.MiscCharges">MISCELLANEOUS AMOUNT and CI MISCELLANEOUS AMOUNT should be equal is required. </span>
-                    </div>
+                        class="error-span">
+                        <span
+                          *ngIf="values?.controls?.miscellaneousAmount?.value!=this.COMMERCIAL_DATA?.MiscCharges">MISCELLANEOUS
+                          AMOUNT and CI MISCELLANEOUS AMOUNT should be equal is required. </span>
+                      </div>
                     </div>
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">MISCELLANEOUS CURRENCY*</label>
@@ -893,10 +921,12 @@
                         bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
                         name="miscellaneousCurrency" [(ngModel)]="res.miscellaneousCurrency" required>
                       </ng-select>
-                      <div *ngIf="values?.controls?.miscellaneousCurrency?.invalid && (SUBMIT_FORM || values?.controls?.miscellaneousCurrency?.touched)"
-                      class="error-span">
-                      <span *ngIf="values?.controls?.miscellaneousCurrency?.errors?.required"> MISCELLANEOUS CURRENCY is required. </span>
-                    </div>
+                      <div
+                        *ngIf="values?.controls?.miscellaneousCurrency?.invalid && (SUBMIT_FORM || values?.controls?.miscellaneousCurrency?.touched)"
+                        class="error-span">
+                        <span *ngIf="values?.controls?.miscellaneousCurrency?.errors?.required"> MISCELLANEOUS CURRENCY
+                          is required. </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -923,10 +953,12 @@
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">COMMISSION AMOUNT*</label>
                     <input [(ngModel)]="res.commissionAmount" class="form-control p-3" type="text"
-                      name="commissionAmount" required/>
-                      <div *ngIf="values?.controls?.commissionAmount?.invalid && (SUBMIT_FORM || values?.controls?.commissionAmount?.touched)"
+                      name="commissionAmount" required />
+                    <div
+                      *ngIf="values?.controls?.commissionAmount?.invalid && (SUBMIT_FORM || values?.controls?.commissionAmount?.touched)"
                       class="error-span">
-                      <span *ngIf="values?.controls?.commissionAmount?.errors?.required"> COMMISSION AMOUNT is required. </span>
+                      <span *ngIf="values?.controls?.commissionAmount?.errors?.required"> COMMISSION AMOUNT is required.
+                      </span>
                     </div>
                   </div>
                   <div class="mb-0">
@@ -935,227 +967,17 @@
                       bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
                       name="commissionCurrency" [(ngModel)]="res.commissionCurrency" required>
                     </ng-select>
-                    <div *ngIf="values?.controls?.commissionCurrency?.invalid && (SUBMIT_FORM || values?.controls?.commissionCurrency?.touched)"
-                    class="error-span">
-                    <span *ngIf="values?.controls?.commissionCurrency?.errors?.required"> COMMISSION CURRENCY is required. </span>
-                  </div>
+                    <div
+                      *ngIf="values?.controls?.commissionCurrency?.invalid && (SUBMIT_FORM || values?.controls?.commissionCurrency?.touched)"
+                      class="error-span">
+                      <span *ngIf="values?.controls?.commissionCurrency?.errors?.required"> COMMISSION CURRENCY is
+                        required. </span>
+                    </div>
                   </div>
                 </div>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
-              <!-- <table class="field-table">
-              <tr class="field-heading">
-                <td class="col-td-th-3">BOE Number*</td>
-                <td class="col-td-th-3">BOE Date</td>
-              </tr>
-              <tr>
-                <td class="col-td-th-3">
-                  <input [(ngModel)]="res.boeNumber" class="input2" type="text" name="boeNumber" />
-                </td>
-                <td class="col-td-th-3">
-                  <input [(ngModel)]="res.boeDate" class="input2" type="date" name="boeDate" />
-                </td>
-                <td class="col-td-th-3"><button type="submit" class="button">Submit</button></td>
-              </tr>
-            </table> 
-            <tr class="form-wrapper">
-               <p class="sh1">SB DETAILS</p>
-              <td class="full-input border1">
-                <label for="origin">ORIGIN</label><input [(ngModel)]="res.origin" class="form-control p-3" type="text"
-                  name="origin" />
-              </td>
-              <td class="full-input border1">
-                <label for="dischargePort">DISCHARGE PORT</label><input [(ngModel)]="res.dischargePort"
-                  class="form-control p-3" type="text" name="dischargePort" />
-              </td>
-              <td class="full-input border2">
-                <label for="iecCode">IEC CODE</label><input [(ngModel)]="res.iecCode" class="form-control p-3"
-                  type="text" name="iecCode" />
-              </td>
-              <td class="full-input border3">
-                <label for="iecName">IEC NAME</label><input [(ngModel)]="res.iecName" class="form-control p-3"
-                  type="text" name="iecName" />
-              </td>
-              <br />
-              <td class="full-input border1">
-                <label for="adCode">AD CODE</label><input [(ngModel)]="res.adCode" class="form-control p-3" type="text"
-                  name="adCode" />
-              </td>
-              <td class="full-input border1">
-                <label for="adBillNo">AD BILL CODE</label><input [(ngModel)]="res.adBillNo" class="form-control p-3"
-                  type="text" name="adBillNo" />
-              </td> -->
-
-              <!-- <p class="sh1">INVOICE DETAILS</p>
-              <td class="full-input border1">
-                <label for="invoiceNumber">INVOICE NO</label><input [(ngModel)]="res.invoiceNumber"
-                  class="form-control p-3" type="text" name="invoiceNumber" />
-              </td>
-              <td class="full-input border2">
-                <label for="invoiceAmount">INVOICE AMOUNT</label><input [(ngModel)]="res.invoiceAmount"
-                  class="form-control p-3" type="text" name="invoiceAmount" />
-              </td>
-              <td class="full-input border3">
-                <label for="currency">CURRENCY</label>
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="currency"
-                  [(ngModel)]="res.currency">
-                </ng-select>
-              </td>
-              <br />
-              <td class="full-input border1">
-                <label for="settledAmount">SETTELED AMOIUNT</label><input [(ngModel)]="res.settledAmount"
-                  class="form-control p-3" type="text" name="settledAmount" />
-              </td>
-              <td class="full-input border2">
-                <label for="status">STATUS</label><input [(ngModel)]="res.status" class="form-control p-3" type="text"
-                  name="status" />
-              </td>
-              <br /> -->
-
-              <!-- <p class="sh1">FOB and FREIGHT</p>
-              <td class="full-input border2">
-                <label for="freightAmount">FREIGHT AMOUNT</label><input [(ngModel)]="res.freightAmount"
-                  class="form-control p-3" type="text" name="freightAmount" />
-              </td>
-              <td class="full-input border3">
-                <label for="freightCurrency">FREIGHT CURRENCY</label>
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="freightCurrency"
-                  [(ngModel)]="res.freightCurrency">
-                </ng-select>
-              </td>
-              <br /> -->
-
-              <!-- <p class="sh1">INSURANCE</p>
-              <td class="full-input border2">
-                <label for="insuranceAmount">INSURANCE AMOUNT</label><input [(ngModel)]="res.insuranceAmount"
-                  class="form-control p-3" type="text" name="insuranceAmount" />
-              </td>
-              <td class="full-input border3">
-                <label for="insuranceCurrency">INSURANCE CURRENCY</label>
-                <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="insuranceCurrency"
-                  [(ngModel)]="res.insuranceCurrency">
-                </ng-select>
-              </td> -->
-
-              <!-- <p class="sh1">DISCOUNT</p>
-              <td class="full-input border2">
-                <label for="discountAmount">DISCOUNT AMOUNT</label><input [(ngModel)]="res.discountAmount"
-                  class="form-control p-3" type="text" name="discountAmount" />
-              </td>
-              <td class="full-input border3">
-                <label for="discountCurrency">DISCOUNT CURRENCY</label>
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="discountCurrency"
-                  [(ngModel)]="res.discountCurrency">
-                </ng-select>
-              </td>
-              <br /> -->
-
-              <!-- <p class="sh1">MISCELLANEOUS</p>
-              <td class="full-input border2">
-                <label for="miscellaneousAmount">MISCELLANEOUS AMOUNT</label><input
-                  [(ngModel)]="res.miscellaneousAmount" class="form-control p-3" type="text"
-                  name="miscellaneousAmount" />
-              </td>
-              <td class="full-input border3">
-                <label for="miscellaneousCurrency">MISCELLANEOUS CURRENCY</label>
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="miscellaneousCurrency"
-                  [(ngModel)]="res.miscellaneousCurrency">
-                </ng-select>
-              </td> -->
-
-              <!-- <p class="sh1">COMMISSION</p>
-              <td class="full-input border2">
-                <label for="commissionAmount">COMMISSION AMOUNT</label><input [(ngModel)]="res.commissionAmount"
-                  class="form-control p-3" type="text" name="commissionAmount" />
-              </td>
-              <td class="full-input border3">
-                <label for="commissionCurrency">COMMISSION CURRENCY</label>
-                <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0"
-                  [items]="this.CURRENCY_LIST"
-                  bindLabel="type"
-                  [multiple]="false"
-                  groupBy="selectedAllGroup"
-                  placeholder="Select PI/PO"
-                  name="commissionCurrency"
-                  [(ngModel)]="res.commissionCurrency">
-                </ng-select>
-              </td>
-              <br /> 
-            </tr>-->
             </div>
-            <!-- <div class="rigth-side-panel grid">
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Invoice Number*</label>
-              <input ngModel class="form-control p-3" type="text"
-                name="InvoiceNumber">
-            </div>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Invoice Date*</label>
-              <input ngModel class="form-control p-3" type="date"
-                name="InvoiceDate">
-            </div>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Airwaybill Number*</label>
-              <input ngModel class="form-control p-3" type="text"
-                name="AirwaybillNumber">
-            </div>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Invoice Value*</label>
-              <input ngModel class="form-control p-3" type="text"
-                name="InvoiceValue">
-            </div>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Freight Value*</label>
-              <input ngModel class="form-control p-3" type="text"
-                name="FreightValue">
-            </div>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Insurance Value*</label>
-              <input ngModel class="form-control p-3" type="text"
-                name="InsuranceValue">
-            </div>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Misc Charges*</label>
-              <input ngModel class="form-control p-3" type="text"
-                name="MiscCharges">
-            </div>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Third Party*</label>
-              <input ngModel class="form-control p-3" type="text"
-                name="ThirdParty">
-            </div>
-          </div> -->
-
           </div>
         </form>
 
@@ -1166,6 +988,12 @@
           <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
           <div class="field">
             <div class="form12 p-3">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Bank Name*</label>
+                <ng-select class="custom" *ngIf="this.bankDetail?.length!=0" [items]="this.bankDetail" bindLabel="value"
+                  [multiple]="false" placeholder="Select Bank Name" name="BankName" ngModel required>
+                </ng-select>
+              </div>
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">FOREX ADVICE DETAILS</label>
                 <input class="form-control p-3" type="text" name="billNo" [(ngModel)]="PDF_READER_DATA.billNo">
@@ -1200,8 +1028,7 @@
               </div>
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Exchange Rate</label>
-                <input ngModel class="form-control p-3" name="exchangeRate"
-                  [(ngModel)]="PDF_READER_DATA.exchangeRate">
+                <input ngModel class="form-control p-3" name="exchangeRate" [(ngModel)]="PDF_READER_DATA.exchangeRate">
               </div>
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Location</label>
@@ -1244,6 +1071,12 @@
             <div class="row">
               <div class="col-md-6 col-sm-6 col-xs-12 col-12">
                 <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Bank Name*</label>
+                  <ng-select class="custom" *ngIf="this.bankDetail?.length!=0" [items]="this.bankDetail" bindLabel="value"
+                    [multiple]="false" placeholder="Select Bank Name" name="BankName" ngModel required>
+                  </ng-select>
+                </div>
+                <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Bill No</label>
                   <input ngModel class="form-control p-3" type="text" name="billNo"
                     [(ngModel)]="this.PDF_READER_DATA.billNo">
@@ -1252,8 +1085,7 @@
               <div class="col-md-6 col-sm-6 col-xs-12 col-12">
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">PARTY NAME</label>
-                  <input ngModel class="form-control p-3" name="partyName"
-                    [(ngModel)]="this.PDF_READER_DATA.customer">
+                  <input ngModel class="form-control p-3" name="partyName" [(ngModel)]="this.PDF_READER_DATA.partyName">
                 </div>
               </div>
               <div class="col-md-6 col-sm-6 col-xs-12 col-12">
@@ -1281,8 +1113,7 @@
               <div class="col-md-6 col-sm-6 col-xs-12 col-12">
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Commission</label>
-                  <input ngModel class="form-control p-3" name="commision"
-                    [(ngModel)]="this.PDF_READER_DATA.commision">
+                  <input ngModel class="form-control p-3" name="commision" [(ngModel)]="this.PDF_READER_DATA.commision">
                 </div>
               </div>
 
@@ -1490,38 +1321,44 @@
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Party Name</label>
                     <ng-select class="custom" *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
-                    bindLabel="value" [multiple]="false" placeholder="Select Buyer Name"
-                    name="PartyName1" (change)="buyerselect($event,0)" ngModel #PartyName1></ng-select>
+                      bindLabel="value" [multiple]="false" placeholder="Select Buyer Name" name="PartyName1"
+                      (change)="buyerselect($event,0)" ngModel #PartyName1></ng-select>
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Address</label>
-                    <input ngModel [value]="this.BUYER_ADDRESS_DETAILS.length!=0?this.BUYER_ADDRESS_DETAILS[0]?.Address:''" class="form-control p-3" name="PartyAddress1" disabled>
+                    <input ngModel
+                      [value]="this.BUYER_ADDRESS_DETAILS.length!=0?this.BUYER_ADDRESS_DETAILS[0]?.Address:''"
+                      class="form-control p-3" name="PartyAddress1" disabled>
                   </div>
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Party Name and Address 2</label>
-                   <div class="mb-3">
+                  <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Party Name</label>
                     <ng-select class="custom" *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
-                    bindLabel="value" [multiple]="false" placeholder="Select Buyer Name"
-                    name="PartyName2" ngModel (change)="buyerselect($event,1)"  #PartyName2></ng-select>
+                      bindLabel="value" [multiple]="false" placeholder="Select Buyer Name" name="PartyName2" ngModel
+                      (change)="buyerselect($event,1)" #PartyName2></ng-select>
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Address</label>
-                    <input ngModel [value]="this.BUYER_ADDRESS_DETAILS.length!=0?this.BUYER_ADDRESS_DETAILS[1]?.Address:''" class="form-control p-3" name="PartyAddress2" disabled>
+                    <input ngModel
+                      [value]="this.BUYER_ADDRESS_DETAILS.length!=0?this.BUYER_ADDRESS_DETAILS[1]?.Address:''"
+                      class="form-control p-3" name="PartyAddress2" disabled>
                   </div>
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Party Name and Address 3</label>
-                   <div class="mb-3">
+                  <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Party Name</label>
                     <ng-select class="custom" *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
-                    bindLabel="value" [multiple]="false" placeholder="Select Buyer Name"
-                    name="PartyName3" ngModel (change)="buyerselect($event,2)" ></ng-select>
+                      bindLabel="value" [multiple]="false" placeholder="Select Buyer Name" name="PartyName3" ngModel
+                      (change)="buyerselect($event,2)"></ng-select>
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Address</label>
-                    <input ngModel class="form-control p-3" [value]="this.BUYER_ADDRESS_DETAILS.length!=0?this.BUYER_ADDRESS_DETAILS[2]?.Address:''" name="PartyAddress3" disabled>
+                    <input ngModel class="form-control p-3"
+                      [value]="this.BUYER_ADDRESS_DETAILS.length!=0?this.BUYER_ADDRESS_DETAILS[2]?.Address:''"
+                      name="PartyAddress3" disabled>
                   </div>
                 </div>
               </div>
@@ -2078,13 +1915,13 @@
                             </div>
                             <div class="form-group mb-3">
                               <label class="plable">Address</label>
-                              <input formControlName="beneAdrs" placeholder="Ex: street address, City. PIN"
-                                required="" class="form-control p-4 rounded-pill password password1">
+                              <input formControlName="beneAdrs" placeholder="Ex: street address, City. PIN" required=""
+                                class="form-control p-4 rounded-pill password password1">
                             </div>
                             <div class="form-group mb-3">
                               <label class="plable">Bank Name</label>
-                              <input formControlName="beneBankName" id="password1" type=""
-                                placeholder="Ex: 23489234324" required="" class="form-control p-4 rounded-pill">
+                              <input formControlName="beneBankName" id="password1" type="" placeholder="Ex: 23489234324"
+                                required="" class="form-control p-4 rounded-pill">
                             </div>
                             <div class="form-group mb-3">
                               <label class="plable">Account No</label>
@@ -2171,8 +2008,8 @@
                             </div>
                             <div class="form-group mb-3">
                               <label class="plable">Address</label>
-                              <input formControlName="buyerAdrs" placeholder="Ex: street address, City. PIN"
-                                required="" class="form-control p-4 rounded-pill password password1">
+                              <input formControlName="buyerAdrs" placeholder="Ex: street address, City. PIN" required=""
+                                class="form-control p-4 rounded-pill password password1">
                             </div>
                             <button type="submit" class="btn11">Create</button>
                           </form>

@@ -1,18 +1,25 @@
 import {
   AfterViewInit, Component, ElementRef, Input, OnInit,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  forwardRef
 } from '@angular/core';
 import { DocumentService } from '../service/document.service';
 import { UserService } from '../service/user.service';
 import $ from 'jquery'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-pdf-viewer',
   templateUrl: './pdf-viewer.component.html',
-  styleUrls: ['./pdf-viewer.component.scss']
+  styleUrls: ['./pdf-viewer.component.scss'],
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    multi: true,
+    useExisting: forwardRef(() => PDFVIEWERComponent)
+  }]
 })
 export class PDFVIEWERComponent implements OnInit, AfterViewInit {
 
@@ -62,7 +69,8 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
         }, (err) => console.log('Failed to fetch the pdf'));
     }
     this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
-    this.URL_IFRAME = this.sanitizer.bypassSecurityTrustResourceUrl(this.SRC_UPDATE);
+    this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
+    console.log(this.URL_IFRAME, 'sdsfdfsdfdsfsdfdsfdsfsdfdsfdfsd');
     this.Sppinloader = false
   }
   zoomIn(url: any) {
@@ -177,5 +185,43 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
         }
       }, 1000)
     }
+  }
+
+  onChange: (_: any) => void = (_: any) => { };
+  onTouched: () => void = () => { };
+  updateChanges() {
+    this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+    this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
+    console.log(this.URL_IFRAME, 'sdsfdfsdfdsfsdfdsfdsfsdfdsfdfsd');
+    this.onChange(()=>{
+      this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+      this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
+      console.log(this.URL_IFRAME,'sdsfdfsdfdsfsdfdsfdsfsdfdsfdfsd');
+    });
+  }
+  /**
+   * Writes a new item to the element.
+   * @param value the value
+   */
+  writeValue(value: any): void {
+    //  console.log(value,'sdfsdfdsfsdf')
+    //  this.value = value;
+    this.updateChanges();
+  }
+
+  /**
+   * Registers a callback function that should be called when the control's value changes in the UI.
+   * @param fn
+   */
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  /**
+   * Registers a callback function that should be called when the control receives a blur event.
+   * @param fn
+   */
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
   }
 }

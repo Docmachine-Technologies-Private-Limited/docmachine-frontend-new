@@ -1,0 +1,101 @@
+@font-face {
+    font-family: "TimeRoman";
+    src: url("../../../../assets/font/TimesNewRoman/timesnewroman.ttf") format("truetype");
+}
+
+.letter-panel {
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+.body-letter {
+    font-size: 15px;
+    background: white;
+    display: block;
+    margin: 0 auto;
+}
+
+.gap {
+    gap: 10px;
+    align-items: center;
+}
+
+.hdf-bank {
+    background-image: url(../../../../assets/LetterHeadImage/HDFC_BANK_LETTER_HEAD.jpg);
+    background-size: 100%;
+    padding-top: 80px;
+    background-repeat: no-repeat;
+}
+
+.btn-yes-no {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    cursor: pointer;
+}
+
+.p-text {
+    font-family: 'Times New Roman', Times, serif;
+    color: black;
+    width: 100%;
+    word-break: break-all;
+    line-height: 1.3;
+    font-size: 13px;
+}
+
+.amount {
+    font-weight: bold;
+}
+
+.added-trick {
+    content: "\2713";
+}
+
+.p-under-line-text {
+    text-align: center;
+    border-bottom: 2px solid #989595;
+    font-weight: bold;
+    padding: 10px;
+    padding-bottom: 0px;
+}
+
+.grid-display {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+}
+
+.temp table>thead>tr:last-child {
+    border-bottom: none;
+}
+
+[contenteditable]:focus {
+    outline: 2px solid rgb(136, 135, 135);
+}
+
+.font-weight-600 {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.letter-table-tr {
+    display: grid;
+    grid-template-columns: 7cm auto;
+    width: 100%;
+    align-items: center;
+    border-bottom: 1px solid #7e7b7b;
+    word-break: break-all;
+    font-size: 10px;
+}
+
+.letter-table-tr .letter-col-td-th-1 {
+    height: 100% !important;
+    border: none;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    color: black;
+}
+
+.col-td-th-1,.col-td-th-2,.col-td-th-1{color: black;}

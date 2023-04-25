@@ -55,6 +55,7 @@ import { AdminMemberGuard } from "./service/RolePermission/AdminMember/admin-mem
 import {DateFormatService} from "./DateFormat/date-format.service"
 import { JoinPipePipe } from './join-pipe.pipe';
 import { ResetOTPComponent } from './forgot-password/reset-otp/reset-otp.component';
+import { BehaviorSubjectListService } from "./home/CommanSubjectApi/BehaviorSubjectListService/BehaviorSubjectList.service";
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -86,7 +87,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         CustomConfirmDialogModelComponent,
         AuthorizationComponent,
         JoinPipePipe,
-        ResetOTPComponent
+        ResetOTPComponent,
     ],
     providers: [{ provide: AppConfig },
         WindowInformationService,
@@ -98,6 +99,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         MemberGuard,
         AdminMemberGuard,
         DateFormatService,
+        BehaviorSubjectListService,
         { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
     ],
     bootstrap: [AppComponent],
@@ -126,4 +128,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         ToastrModule.forRoot(),
     ]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(public behaviorsubjectlist:BehaviorSubjectListService){
+    this.behaviorsubjectlist.callAllCommonApi();
+  }
+}

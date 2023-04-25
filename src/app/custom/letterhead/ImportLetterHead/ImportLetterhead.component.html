@@ -1,0 +1,290 @@
+<div class="ml-0 pb-2 letter-panel">
+    <div class="header-letter"></div>
+    <div class="hdf-bank">
+        <div class="body-letter">
+            <p class="p-text col-12 text-align mb-2" style="font-weight: bold;text-align: center;">REQUEST LETTER FOR IMPORT PAYMENT <span *ngIf="this.TICK_MARKED18==true">[ √ ]</span><span *ngIf="this.TICK_MARKED18==false">[  ]</span> <span (click)="TickMark18()" style="cursor: pointer;"> ADVANCE</span> <span *ngIf="this.TICK_MARKED19==true">[ √ ]</span><span *ngIf="this.TICK_MARKED19==false">[  ]</span> <span (click)="TickMark19()" style="cursor: pointer;"> DIRECT</span></p>
+            <p class="p-text mb-0">Ref. No.: <span contenteditable="true">XXXX-XXXX-XXXX-XXXX</span></p>
+            <p class="p-text mb-0">{{this.CURRENT_DATE}}</p>
+            <p class="p-text mb-0" contenteditable="true">To</p>
+            <p class="p-text mb-0" contenteditable="true">The Branch Manager</p>
+            <p class="p-text mb-0" contenteditable="true">HDFC Bank Ltd.</p>
+            <p class="p-text mb-0" contenteditable="true">141, Sathy Road,</p>
+            <p class="p-text mb-0" contenteditable="true">Kandakottam Complex,</p>
+            <p class="p-text mb-0" contenteditable="true">Opp To Bus Stand,</p>
+            <p class="p-text mb-0" contenteditable="true">Erode 0– 638 003.</p>
+            <p class="p-text mt-1 mb-0">We wish to make an advance payment towards import of <span contenteditable="true">WET SALTED OX HEIFFER HIDES</span>
+                (Goods / <span style="text-decoration: line-through;">Services</span>) as part of our
+                Raw Material / <span style="text-decoration: line-through;">Capital Goods</span> requirement:</p>
+            <p class="p-text mb-0 mt-2">Request you to process the Import remittance by <span *ngIf="this.TICK_MARKED1==false">[ ]</span><span *ngIf="this.TICK_MARKED1==true">[√ ]</span> <span style="cursor: pointer;" (click)="TickMark1()"> Swift </span> <span *ngIf="this.TICK_MARKED2==false">[ ]</span><span *ngIf="this.TICK_MARKED2==true">[√ ]</span> <span style="cursor: pointer;" (click)="TickMark2()"> Demand</span> Draft as per
+                following request</p>
+            <div class="table-added temp mb-0 mt-2">
+                <table class="table mb-0" style="border-collapse: collapse;border: 2px solid #c8c5c5;">
+                    <thead>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1">Name &amp; Address of the customer</th>
+                            <td scope="col" class="letter-col-td-th-1"  style="display: block;text-align: left;border-left: 2px solid rgb(195, 195, 195) !important;">{{this.COMPANY_DETAILS?.teamName}} & {{this.COMPANY_DETAILS?.adress}}</td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1">Importer Exporter Code (IEC)</th>
+                            <td scope="col" class="letter-col-td-th-1"  style="display: block;text-align: left;border-left: 2px solid rgb(195, 195, 195) !important;">{{this.COMPANY_DETAILS?.iec}}</td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1" >Account to be debited as applicable</th>
+                            <td scope="col" class="letter-col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;display: block;text-align: left;" >
+                                <div class="grid-display">
+                                    <p>INR A/C No : <span *ngIf="this.CURRENCY=='INR'">{{this.data[0]?.accNumber}}</span> <span *ngIf="this.CURRENCY!='INR'" contenteditable="true">NIL</span></p>
+                                    <p>For: (CCY &amp; AMT) <span *ngIf="this.CURRENCY!='INR'" contenteditable="true">NIL</span> <span contenteditable="true" *ngIf="this.CURRENCY=='INR'">{{this.CURRENCY}} {{this.TOTAL_SUM_PIPO_SUM}}/-</span></p>
+                                    <p>FCY A/C No : <span *ngIf="this.CURRENCY!='INR'" contenteditable="true"> {{this.data[0]?.accNumber}}</span> <span *ngIf="this.CURRENCY=='INR'">NIL</span></p>
+                                    <p>For: (CCY &amp; AMT) <span *ngIf="this.CURRENCY!='INR'" contenteditable="true">{{this.CURRENCY}} {{this.TOTAL_SUM_PIPO_SUM}}/-</span> <span *ngIf="this.CURRENCY=='INR'">NIL</span></p>
+                                </div>
+                                <p>(Remittance by SEZ units from INR accounts to beneficiaries within India not allowed)</p>
+                            </td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1" >Account to be debited for charges of HDFC Bank Ltd.</th>
+                            <td scope="col" class="letter-col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important; display: block;text-align: left;" >
+                                <div style="display: block;">
+                                    <p style="cursor: pointer;" (click)="TickMark3()"><span *ngIf="this.TICK_MARKED3==false">( )</span><span *ngIf="this.TICK_MARKED3==true">(√ )</span> on us a/c no. 50200000966000<span></span></p>
+                                    <p style="cursor: pointer;" (click)="TickMark4()"><span *ngIf="this.TICK_MARKED4==false">( )</span><span *ngIf="this.TICK_MARKED4==true">(√ )</span> Net off i.e. On beneficiary<span></span></p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1" >Amount and currency to be remitted (figures &amp; words)
+                            </th>
+                            <td scope="col" class="letter-col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;display: block;text-align: left;" >{{this.CURRENCY}} {{this.TOTAL_SUM_PIPO_SUM}} /- ({{this.PIPO_AMOUNT_WORD}} ONLY)</td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1">Details of Bank Guarantee / Standby Letter of
+                                Credit (for advance payment) -
+                                If not available as per extant RBI Master
+                                Directions, reasons for waiver of Bank Guarantee
+                                / Standby Letter of Credit.</th>
+                            <td scope="col" class="letter-col-td-th-1" style="display: block;text-align: left;border-left: 2px solid rgb(195, 195, 195) !important;" >NIL</td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1">Beneficiary name and address</th>
+                            <td scope="col" class="letter-col-td-th-1"  style="display: block;text-align: left;border-left: 2px solid rgb(195, 195, 195) !important;">{{this.data[2]?.beneBankName}} & {{this.data[2]?.beneAdrs}}</td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1" >(A) Beneficiary Bank ACCOUNT NO<br>Beneficiary Bank
+                                name, address &amp; Wire details</th>
+                            <td scope="col" class="letter-col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;display: block;text-align: left;" >
+                                <div class="grid-display">
+                                    <p>Swift Code: <span contenteditable="true">{{this.data[2]?.beneBankSwiftCode}}</span></p>
+                                    <p>ABA:<span contenteditable="true"></span></p>
+                                    <p>Routing No:<span contenteditable="true"></span></p>
+                                    <p>Sort Code:<span contenteditable="true">{{this.data[2]?.sortCode}}</span></p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1" >(B) Correspondent / Intermediary Bank name,
+                                address &amp; Wire details</th>
+                            <td scope="col" class="letter-col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;display: block;text-align: left;" >
+                                <div class="grid-display">
+                                    <p contenteditable="true">NIL<span ></span></p>
+                                    <p>Swift Code:<span contenteditable="true"></span></p>
+                                    <p>ABA:<span contenteditable="true"></span></p>
+                                    <p>Routing No:<span contenteditable="true"></span></p>
+                                    <p>Sort Code:<span contenteditable="true"></span></p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1" >Foreign bank charges</th>
+                            <td scope="col" class="letter-col-td-th-1" style="display: block;text-align: left;border-left: 2px solid rgb(195, 195, 195) !important;" >
+                                <span *ngIf="this.TICK_MARKED5==false">( )</span><span *ngIf="this.TICK_MARKED5==true">(√ )</span> <span style="cursor: pointer;" (click)="TickMark5()"> on us / </span> <span *ngIf="this.TICK_MARKED6==false">( )</span><span *ngIf="this.TICK_MARKED6==true">(√ )</span> <span style="cursor: pointer;" (click)="TickMark6()"> on beneficiary</span> 
+                            </td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1">Shipment details mandatory for Advance Import Payment
+                            </th>
+                            <td scope="col" class="letter-col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;display: block;text-align: left;" ><span contenteditable="true">Expected Date of Despatch / Download (software) – MID OF
+                                NOV 2022
+                                Name of the shipping company / airlines – (BY SEA)
+                                Port of Despatch - ANY PORT IN COLOMBIA
+                                Destination Port – CHENNAI, INDIA
+                                Proforma Invoice details (In case the invoice is older than 6 months then a declaration
+                                to be provided stating the reason for delay)</span> 
+                                <br>
+                                PROFORMA Invoice no - {{this.TOTAL_PIPO_NUMBER}} CO Dated {{this.TOTAL_PIPO_DATE}}, Amount - {{this.CURRENCY}} {{this.TOTAL_SUM_PIPO_SUM}}/-</td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1">Goods description and HS classification code</th>
+                            <td scope="col" class="letter-col-td-th-1" style="display: block;text-align: left;border-left: 2px solid rgb(195, 195, 195) !important;"  contenteditable="true">--</td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1">Import License Details (if applicable)</th>
+                            <td scope="col" class="letter-col-td-th-1" style="display: block;text-align: left;border-left: 2px solid rgb(195, 195, 195) !important;"   contenteditable="true">NIL</td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1">Country of Origin</th>
+                            <td scope="col" class="letter-col-td-th-1" style="display: block;text-align: left;border-left: 2px solid rgb(195, 195, 195) !important;"   contenteditable="true">COLOMBIA</td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1" >SPECIAL REF NO TO BE MENTIONED IN SWIFT</th>
+                            <td scope="col" class="letter-col-td-th-1" style="display: block;text-align: left;border-left: 2px solid rgb(195, 195, 195) !important;">PAYMENT AGAINST PROFORMA INVOICE NO. {{this.TOTAL_PIPO_NUMBER}} CO Dated {{this.TOTAL_PIPO_DATE}}, Amount - {{this.CURRENCY}} {{this.TOTAL_SUM_PIPO_SUM}}</td>
+                        </tr>
+                        <tr class="letter-table-tr">
+                            <th scope="col" class="letter-col-td-th-1">Rate / contract booked with treasury – if any</th>
+                            <td scope="col" class="letter-col-td-th-1" style="display: block;text-align: left;border-left: 2px solid rgb(195, 195, 195) !important;" contenteditable="true">NIL</td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <p class="p-text p-under-line-text">CUSTOMER DECLARATIONS (As applicable)</p>
+            <p class="p-text"><span class="font-weight-600">(I) BOE Declaration for Advance Remittance:</span> </p>
+            <p class="p-text">We undertake that we shall make physical
+                import within 6 months from the date of
+                remittance (Maximum Period - 3 years in case of Capital goods) and documentary evidence of import (Bill
+                of entry – Exchange
+                control copy or Courier Bill of Entry or CA certificate in case of Non-Physical import) will be
+                furnished within 15 days from the date of
+                import. In case of non-import within the above specified period, we shall arrange to repatriate the
+                funds and submit original FIRC to
+                the bank.
+                We further confirm that this advance remittance has not been processed through any other Authorized
+                Dealer against the said
+                BOE’s</p>
+            <p class="p-text font-weight-600">(II) BOE Details for Direct Remittance (Shipment reached and cleared in India):</p>
+            <div class="table-added temp mt-1">
+                <table class="table mb-0" style="border-collapse: collapse;border: 2px solid #c8c5c5;">
+                    <thead>
+                        <tr class="table-tr">
+                            <th scope="col" [style.width]="115+'px'" style="height: 65px !important;" class="col-td-th-1">Bill of Entry No. and date</th>
+                            <th scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">Bill of Entry CCY &amp; Amount</th>
+                            <th scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">Bill of Entry Utilized amount</th>
+                            <th scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">Fob Value</th>
+                            <th scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">AD Code No</th>
+                            <th scope="col" [style.width]="115+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;">Port Code</th>
+                        </tr>
+                        <div *ngIf="type=='Import-Direct-Payment'">
+                            <tr class="table-tr" *ngFor="let item of data[1];let i=index;">
+                                <td scope="col" [style.width]="115+'px'" style="height: 65px !important;" class="col-td-th-1">{{item?.boeNumber}} and {{item?.boeDate}}</td>
+                                <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.currency}} | {{item?.invoiceAmount}}</td>
+                                <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.boeDate}}</td>
+                                <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.invoiceAmount}}</td>
+                                <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.adCode}}</td>
+                                <td scope="col" [style.width]="115+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;"></td>
+                            </tr>
+                        </div>
+                        <tr class="table-tr" *ngIf="type!='Import-Direct-Payment'">
+                            <td scope="col" [style.width]="115+'px'" style="height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="115+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;"></td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <p class="p-text"><span class="font-weight-600">(III) OFAC Declaration:</span> I / We hereby declare that the above transaction does not involve,
+                and is not designed for the purpose of any
+                contravention or evasion of the provisions of the OFAC.</p>
+            <p class="p-text"><span class="font-weight-600">(IV) FATF Declaration – (If applicable):</span>
+                We are aware that the above remittance is being made to a FATF listed country and as per prevailing AML
+                guidelines, all due
+                diligence of the beneficiary has been carried out at our end. We indemnify the bank and request that the
+                remittances should be
+                carried out at our risk and responsibility. We shall not hold HDFC Bank responsible if proceeds for the
+                said transaction are held by
+                any foreign regulators or reach beneficiary with delay. If any additional information is sought by
+                foreign regulators or correspondent
+                bank or by any other external or internal authorities, the same will be provided by us to ensure
+                completion of the transaction. Any
+                loss / charges arising out of the said transaction will be borne by us.</p>
+            <p class="p-text"><span class="font-weight-600">(V) EEFC A/C Declaration:</span>
+                For EEFC/DDA/RFC account(s)is/are maintained with HDFC bank or with other banks(and/or) that the sum
+                total of the accruals in the
+                account during a calendar month would be converted into Rupees on or before the last day of the
+                succeeding calendar month after
+                adjusting for utilization of the balances for approved purposes or forward commitments.</p>
+            <p class="p-text mt-3 font-weight-600"> (VI)Special Foreign Currency a/c Declaration (SPFC) Declaration: - (If applicable
+                while undertaking remittances from INR account)</p>
+            <p class="p-text mt-3">We do not hold any SPFC account with any bank (or)
+                We hold SPFC account with ………………. bank/s, but has no balance in this/these accounts to make the
+                captioned remittance”</p>
+            <p class="p-text mt-3"><span class="font-weight-600">(VII) Part Payment:</span> We are hereby paying only part amount of Invoice due to reason
+                mentioned below -</p>
+                <p class="p-text mt-3 ml-2">We do not hold any SPFC account with any bank  (or) </p>
+                <p class="p-text mt-3 ml-2">We hold SPFC account with ………………. bank/s, but has no balance in this/these accounts to make the captioned remittance”</p>
+            <p class="p-text mt-3 font-weight-600">Details of Part Payment already done under this invoice - (If Applicable)</p>
+            <div class="table-added temp mt-1">
+                <table class="table mb-0 col-9" style="border-collapse: collapse;border: 2px solid #c8c5c5;">
+                    <thead>
+                        <tr class="table-tr">
+                            <th scope="col" [style.width]="110+'px'" style="height: 65px !important;" class="col-td-th-1">Bill Reference No</th>
+                            <th scope="col" [style.width]="110+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">CCY</th>
+                            <th scope="col" [style.width]="110+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;">Amount Remitted</th>
+                        </tr>
+                        <div *ngIf="type=='Import-Direct-Payment'">
+                            <tr class="table-tr" *ngFor="let item of data[1];let i=index;">
+                                <td scope="col" [style.width]="110+'px'" style="height: 65px !important;" class="col-td-th-1">{{item?.boeNumber}}</td>
+                                <td scope="col" [style.width]="110+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.currency}} | {{item?.invoiceAmount}}</td>
+                                <td scope="col" [style.width]="110+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;">{{item?.invoiceAmount}}</td>
+                            </tr>
+                        </div>
+                        <tr class="table-tr" *ngIf="type!='Import-Direct-Payment'">
+                            <td scope="col" [style.width]="110+'px'" style="height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="110+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="110+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;"></td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <p class="p-text mt-3 font-weight-600">(VIII) FEMA DECLARATION – CUM – UNDERTAKING:</p>
+            <p class="p-text mt-3">The goods imported by us are (Pls select any one):</p>
+            <p class="p-text mt-3" style="cursor: pointer;" (click)="TickMark7()"><span *ngIf="this.TICK_MARKED7==false">[ ] </span> <span *ngIf="this.TICK_MARKED7==true">[√ ]</span> Not covered under prohibited or restricted list and are freely importable as per
+                relevant para and Chapters of the extant Foreign
+                Trade Policy and amendments there to.</p>
+            <p class="p-text mt-3" style="cursor: pointer;" (click)="TickMark8()"><span *ngIf="this.TICK_MARKED8==false">[ ] </span> <span *ngIf="this.TICK_MARKED8==true">[√ ]</span> Restricted for import as per relevant para and Chapters of the extant Foreign
+                Trade Policy and amendments there to and original
+                exchange control copy of the license issued by D.G.F.T. is enclosed.</p>
+            <p class="p-text mt-3">We are eligible to import the abovementioned goods under the extant Foreign Trade
+                policy.</p>
+            <p class="p-text mt-3">I / We hereby declare that the above transaction does not involve, and is not
+                designed for the purpose of any contravention or
+                evasion of the provisions of the FEMA 1999 or of any rule, regulation, notification, direction or order
+                made thereunder. I/ We also
+                hereby agree and undertake to give such information/ documents as will reasonably satisfy you about this
+                transaction in terms of
+                the above declaration.</p>
+            <p class="p-text mt-3">I/ We also undertake that if I/ We refuse to comply with any such requirements or
+                make only unsatisfactory compliance therewith,
+                the bank shall refuse in writing to undertake the transaction and shall if it has reason to believe that
+                any contravention /evasion is
+                contemplated by me /us report the matter to Reserve Bank of India. *I / We further declare that the
+                undersigned has/have the
+                authority to give this declaration and undertaking on behalf of the firm/company.</p>
+            <p class="p-text mt-3"><span class="font-weight-600">(IX) I / We hereby declare that,</span><br> 
+            we are not under investigation by any investigating
+                agency.</p>
+            <p class="p-text mt-3 font-weight-600">Documents Attached:</p>
+            <p class="p-text mt-3" style="cursor: pointer;" (click)="TickMark9()"><span *ngIf="this.TICK_MARKED9==false">[ ] </span> <span *ngIf="this.TICK_MARKED9==true">[√ ]</span> Proforma Invoice (accepted by importer)/Commercial Invoice</p>
+            <p class="p-text mt-3" style="cursor: pointer;" (click)="TickMark10()"><span *ngIf="this.TICK_MARKED10==false">[ ] </span> <span *ngIf="this.TICK_MARKED10==true">[√ ]</span> Purchase order raised by us duly accepted by the Foreign Party (in case of
+                advance import payment)</p>
+            <p class="p-text mt-3" style="cursor: pointer;" (click)="TickMark11()"><span *ngIf="this.TICK_MARKED11==false">[ ] </span> <span *ngIf="this.TICK_MARKED11==true">[√ ]</span> Transport Document (Self attested copy of AWB / B/L / Courier Receipt) / Bill of
+                Lading details</p>
+            <p class="p-text mt-3" style="cursor: pointer;" (click)="TickMark12()"><span *ngIf="this.TICK_MARKED12==false">[ ] </span> <span *ngIf="this.TICK_MARKED12==true">[√ ]</span> Copy of Bill Of Entry if BOE details are not provided above/Courier BOE required
+                in original/CA certificate for software import</p>
+            <p class="p-text mt-3" style="cursor: pointer;" (click)="TickMark13()"><span *ngIf="this.TICK_MARKED13==false">[ ] </span> <span *ngIf="this.TICK_MARKED13==true">[√ ]</span> Form A2 for Software Import Transactions</p>
+            <p class="p-text mt-3" style="cursor: pointer;" (click)="TickMark14()"><span *ngIf="this.TICK_MARKED14==false">[ ] </span> <span *ngIf="this.TICK_MARKED14==true">[√ ]</span> If payment is being made after the expiry of 180 days from the date of shipment
+                detailed reason for delayed payment.</p>
+            <p class="p-text mt-3" style="cursor: pointer;" (click)="TickMark15()"><span *ngIf="this.TICK_MARKED15==false">[ ] </span> <span *ngIf="this.TICK_MARKED15==true">[√ ]</span> Original License (Exchange control copy), If applicable</p>
+            <p class="p-text mt-3" style="cursor: pointer;" (click)="TickMark16()"><span *ngIf="this.TICK_MARKED16==false">[ ] </span> <span *ngIf="this.TICK_MARKED16==true">[√ ]</span> Original Bank Guarantee (If amount of advance remittance exceeds USD 200000 or
+                Equivalent)</p>
+            <p class="p-text mt-3" style="cursor: pointer;" (click)="TickMark17()"><span *ngIf="this.TICK_MARKED17==false">[ ] </span> <span *ngIf="this.TICK_MARKED17==true">[√ ]</span> Any Other document/s. Pls. specify ____________________________________________
+            </p>
+
+            <p class="p-text mt-3">Thanks,</p>
+            <p class="p-text mt-3">Yours faithfully,</p>
+            <p class="p-text mt-3">For K K S K INTERNATIONAL,</p>
+            <br>
+            <br>
+            <br>
+            <p class="p-text mt-3">Authorised Signatory</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+<div class="ml-0 pb-2 letter-panel">
+    <div class="header-letter"></div>
+    <div class="hdf-bank">
+        <div class="body-letter">
+            <p class="p-text">To</p>
+            <p class="p-text mb-0">The Branch Manager</p>
+            <p class="p-text mb-0">HDFC Bank Ltd.</p>
+            <p class="p-text mb-0">ERODE Branch</p>
+            <p class="p-text mb-0">ERODE.</p>
+            <p class="p-text mt-1">Sub: Submission of Export documents for Regularization.</p>
+            <p class="p-text mb-0">We enclose herewith the following Export Documents:</p>
+            <p class="p-text mb-0">Bill Amount : <span class="amount">{{this.data[0][0]?.invoices[0]?.amount}}</span></p>
+            <div class="table-added mt-1">
+                <table class="table mb-0">
+                    <thead>
+                        <tr class="table-tr">
+                            <th scope="col" class="col-td-th-1">Documents</th>
+                            <th scope="col" class="col-td-th-1">Invoice</th>
+                            <th scope="col" class="col-td-th-2">Transport Doc. (B/L /AWB/ LR)</th>
+                            <th scope="col" class="col-td-th-2">Foreign Inward Remit. Cert (FIRC)</th>
+                            <th scope="col" class="col-td-th-2" colspan="3">GR / S.B. / SOFTEX FORM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <div class="table-tr" *ngFor="let item of this.data[0];let i=index">
+                            <td class="col-td-th-1">Duplicate</td>
+                            <td class="col-td-th-1">{{item?.invoices[0]?.invoiceno}}</td>
+                            <td class="col-td-th-2">{{item?.blcopydetails[0]?.airwayBlCopyNumber}}</td>
+                            <div style="flex-direction: column;" class="col-td-th-2">
+                                <p *ngFor="let IR_item of this.data[1]['SB_'+item?.sbno];let i=index">{{this.CURRENCY | uppercase}} {{IR_item?.irDataItem?.Used_Balance}}</p>
+                            </div>
+                            <td class="col-td-th-2">{{item?.sbno}}</td>
+                        </div>
+                        <tr class="table-tr">
+                            <td class="col-td-th-1"></td>
+                            <td class="col-td-th-1"></td>
+                            <td class="col-td-th-1"></td>
+                            <td class="col-td-th-2">
+                                <div>
+                                    <p>TOTAL</p>
+                                    <p>LESS : OBC</p>
+                                    <p>GRAND TOTAL</p>
+                                </div>
+                            </td>
+                            <td class="col-td-th-2">
+                                <div>
+                                    <p>{{this.CURRENCY | uppercase}} {{this.TOTAL_SUM_FIREX}}</p>
+                                    <p>{{this.CURRENCY | uppercase}} {{this.TOTAL_SUM_FIREX_COMMISION}}</p>
+                                    <p>{{this.CURRENCY | uppercase}} {{PARSE_FLOAT_AMOUNT(this.TOTAL_SUM_FIREX,this.TOTAL_SUM_FIREX_COMMISION)}}</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="yes-no-btn-txt mt-2 mb-2">
+                <div class="row gap">
+                    <p class="p-text">BRC being Submitted along with the documents </p>
+                    <div class="btn-yes-no">
+                        <p (click)="clicktrick()">[ <span style="font-size: 20px;" *ngIf="this.TICK_MARKS==true">&#10003; </span>] Yes</p>
+                        <p (click)="clicktrick()">[ <span style="font-size: 20px;" *ngIf="this.TICK_MARKS==false">&#10003; </span>] No</p>
+                    </div>
+                </div>
+            </div>
+            <p class="p-text">GR / Shipping Bill / Softex Form No.As mentioned Above  FIRC # <span class="amount">{{this.ARRAY_TO_STRING(this.FIRX_DATE_NO?.NUMBER)}}</span> Dt : <span class="amount">{{this.ARRAY_TO_STRING(this.FIRX_DATE_NO?.DATE)}}</span></p>
+            <p class="p-text">Date of Transport Doc. (AWB / BL / LR) - <span class="amount">Enclosed</span>.</p>
+            <p class="p-text">Debit all charges for processing of above-mentioned documents from account no. <span class="amount" *ngIf="this.data[2]!=undefined && this.data[2]!=null && this.data[2]!=''">{{this.data[2][0]?.accNumber}}</span> with your Erode branch.</p>
+            <p class="p-text">We are eligible to export the above mentioned goods under the current Foreign Trade policy </p>
+            <p class="p-text">in place and our Importer Exporter Code is : <span class="amount">{{this.data[0][0]?.ieccode}}</span></p>
+            <br>
+            <p class="p-text mt-3">
+                <span class="amount">INVOICE NO:</span><br>
+                I / We hereby declare that the above transaction does not involve, and is not designed
+                for the purpose of any contravention or evasion of the provisions of the FEMA 1999 or of
+                any rule, regulation, notification, direction or order made thereunder. I/ We also hereby
+                agree and undertake to give such information/ documents as will reasonably satisfy you
+                about this transaction in terms of the above declaration. I/ We also undertake that if I/ We
+                refuse to comply with any such requirements or make only unsatisfactory compliance
+                therewith, the bank shall refuse in writing to undertake the transaction and shall if it has
+                reason to believe that any contravention /evasion is contemplated by me /us report the
+                matter to Reserve Bank Of India. *I / We further declare that the undersigned has/have
+                the authority to give this declaration and undertaking on behalf of the firm / company.
+                <br>
+                <br>
+                <span class="amount">For KKSK INTERNATIONAL,</span><br>
+                <br><br><br>
+                <span class="amount">Authorized Signatory</span></p>
+        </div>
+    </div>
+</div>

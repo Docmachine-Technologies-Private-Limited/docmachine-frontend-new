@@ -5,16 +5,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{name}}</h5>
-        <div class="row" style="margin-right: 0 !important;
-          align-items: center;
-          gap: 10px;
-          justify-content: center;width: 100%;">
+        <div class="row" style="margin-right: 0 !important;align-items: center;gap: 10px;justify-content: center;width: 100%;">
          <ng-content select="custom-header-tooltips"></ng-content>
-          <button type="button" style="margin: auto;
-            display: flex;
-            padding: 0;
-            align-items: center;
-            justify-content: unset;margin-right: 0;" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" style="margin: auto;display: flex;padding: 0;align-items: center;justify-content: unset;margin-right: 0;" 
+          class="close" data-dismiss="modal" aria-label="Close">
             <img style="width: 15px;" class="close-tooltips" [attr.tooltips-close]="id" (click)="ClosePopup()"
               src="../../assets/close-circle-svgrepo-com.svg" alt="">
           </button>

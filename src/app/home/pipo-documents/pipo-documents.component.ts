@@ -86,7 +86,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   public config: DropzoneConfigInterface;
   public config1: DropzoneConfigInterface;
 
-  authToken: string;
+  authToken: any;
   headers: any;
 
   piPoForm = new FormGroup({
@@ -377,7 +377,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   }
 
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }

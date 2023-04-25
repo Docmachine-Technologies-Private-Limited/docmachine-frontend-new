@@ -152,7 +152,7 @@ export class AddMemberComponent implements OnInit, AfterViewInit {
         });
   }
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }

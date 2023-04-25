@@ -32,7 +32,10 @@ export class SidenavComponent implements OnInit {
   name: any;
   ct: boolean;
   userData: any = [];
-  TRANSACTION_DASHBOARD_LIST: any = ["Packing-Credit-Request","Export-Bill-Lodgement","Inward-Remittance-Disposal","Inward-Remittance-Disposal-Relization"];
+  TRANSACTION_DASHBOARD_LIST: any = {
+    Export: ["Packing-Credit-Request", "Export-Direct-Dispatch", "Inward-Remitance-Dispoal", "Inward-Remitance-Dispoal-Realization"],
+    Import:["Import-Direct-Payment","Advance-Remittance-flow"]
+  };
 
   constructor(
     public router: Router,
@@ -42,28 +45,18 @@ export class SidenavComponent implements OnInit {
     public userService: UserService,
     private toastr: ToastrService,
     private sharedData: SharedDataService) {
+    this.userService.getUserDetail().then((user: any) => {
+        this.userData = user['result'];
+        console.log("userData", this.userData)
+    });
   }
 
   userDataListener;
 
   async ngOnInit() {
-
-    await this.userService.getUserDetail().then((user: any) => {
-      this.userData = user['result'];
-      
-    this.documentService.getExportBillLodgment().subscribe((res: any) => {
-      for (let index = 0; index < res?.result.length; index++) {
-        const element = res?.result[index];
-        if (!this.TRANSACTION_DASHBOARD_LIST.includes(element?.TypeTransaction) && element?.fileType?.toLowerCase() == this.userData?.sideMenu?.toLowerCase()) {
-          this.TRANSACTION_DASHBOARD_LIST.push(element?.TypeTransaction)
-        }
-      }
-      console.log(this.TRANSACTION_DASHBOARD_LIST, res, 'getExportBillLodgment')
-    });
-    });
-    console.log("userData", this.userData)
+    
     this.userDataListener = this.userService.userDataListener$
-    this.userDataListener.subscribe((data: any) => {
+   await this.userDataListener.subscribe((data: any) => {
       console.log("-----------> page calleddd")
       console.log(data)
       if (data != '' && data != null && data != undefined) {
@@ -71,7 +64,7 @@ export class SidenavComponent implements OnInit {
       }
     });
 
-    this.id = await this.userService.getUserDetail();
+   this.id = await this.userService.getUserDetail();
     console.log("this.id", this.id)
     this.documentService.EXPORT_IMPORT[(this.id['result']['Subscription']) == 'both' ? this.id['result']['sideMenu'] : (this.id['result']['Subscription']).toLowerCase()] = true;
     console.log(this.documentService.EXPORT_IMPORT, 'sdfhsdgfdjshdgf')
@@ -89,7 +82,7 @@ export class SidenavComponent implements OnInit {
     if (!token) {
       this.router.navigate(["login"]);
     }
-  this.changer()
+    this.changer()
   }
 
   hideIncoice() {
@@ -158,15 +151,15 @@ export class SidenavComponent implements OnInit {
       "use strict";
       var fullHeight = function () {
         $('.js-fullheight').css('height', $(window).height() as any);
-        $(window).resize(function () { 
-        $('.js-fullheight').css('height', $(window).height() as any) });
-      }; 
+        $(window).resize(function () {
+          $('.js-fullheight').css('height', $(window).height() as any)
+        });
+      };
       fullHeight();
       $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
         $('#sidebar1').toggleClass('hide');
         $('.scroll-bar-main').toggleClass('width-changer');
-        $('.heading_common_tag').toggleClass('text-end')
       });
     })(jQuery);
   }

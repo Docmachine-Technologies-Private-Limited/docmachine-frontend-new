@@ -1,5 +1,6 @@
 import {PipoDisplayListViewItem, PipoModel} from "./pipo.model";
 import _ from 'lodash';
+
 class Invoice {
   public sno: string;
   public invoiceno: string;
@@ -52,10 +53,13 @@ export class ShippingBill {
     public doc: any;
     public buyerName: any;
     public deleteflag: any;
-
+    public blcopydetails:any;
+    public commercialdetails:any;
+    public packingdetails:any;
+    public debitnotedetails:any;
 
     constructor(data: any) {
-      console.log(data,'ShippingBill')
+      // console.log(data,'ShippingBill')
         this.userId = data.userId ? data.userId : '';
         this.sbno = data.sbno ? data.sbno : '';
         this.sbdate = data.sbdate ? data.sbdate : '';
@@ -87,6 +91,10 @@ export class ShippingBill {
         this.countryOfFinaldestination = data.countryOfFinaldestination ? data.countryOfFinaldestination : '';
         this.consigneeName = data.consigneeName ? data.consigneeName : '';
         this.exchangeRate = data.exchangeRate ? data.exchangeRate : '';
+        this.blcopydetails = data.blcopydetails ? data.blcopydetails : '';
+        this.commercialdetails = data.commercialdetails ? data.commercialdetails : '';
+        this.packingdetails = data.packingdetails ? data.packingdetails : '';
+        this.debitnotedetails = data.debitnotedetails ? data.debitnotedetails : '';
         this._id = data._id;
         this.irRef = data.irRef ? data.irRef: [];
         this.doc = data.doc ? data.doc: '';
@@ -95,7 +103,7 @@ export class ShippingBill {
     }
 
     createInvoice(data) {
-      let invoice = [];
+      let invoice:any = [];
       for (let i in data) {
         invoice.push(new Invoice(i))
       }
@@ -103,7 +111,7 @@ export class ShippingBill {
     }
 
   computeIRMerge() {
-    let finallist = [];
+    let finallist:any = [];
     let totalForex = 0;
     if (this.irRef && this.irRef.length) {
       for (let i in this.irRef) {
@@ -158,7 +166,7 @@ export class ShippingBillDisplayListViewItem {
   }
 
   computeIRMerge() {
-    let finaldata = [];
+    let finaldata:any = [];
     for (let i in this.shippingBillList) {
       let data = this.shippingBillList[i].computeIRMerge();
       for (let j in data) {

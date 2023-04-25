@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { DocumentService } from "../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { WindowInformationService } from "src/app/service/window-information.service";
+import { WindowInformationService } from "../../service/window-information.service";
 
 @Component({
   selector: "app-advance-outward-remittance",
@@ -35,7 +35,7 @@ export class AdvanceOutwardRemittanceComponent implements OnInit {
   file: any;
   arrayData: any = [];
   pipoArr: any = [];
-  bene: string;
+  bene:any;
   beneArray: any = [];
   alertToggle: any;
   amount: any;
@@ -65,9 +65,9 @@ export class AdvanceOutwardRemittanceComponent implements OnInit {
       (err) => console.log(err)
     );
 
-    this.file = this.route.snapshot.paramMap.get('file')
-    this.bene = this.route.snapshot.paramMap.get('bene')
-    this.amount = parseInt(this.route.snapshot.paramMap.get('amount'))
+    this.file = this.route?.snapshot.paramMap.get('file')
+    this.bene = this.route?.snapshot.paramMap.get('bene')
+    this.amount = parseInt(this.route?.snapshot.paramMap.get('amount') as any)
     if (this.file) {
       console.log(this.file)
       this.pipoValue = 'Select PI/PO'
@@ -130,10 +130,6 @@ export class AdvanceOutwardRemittanceComponent implements OnInit {
       let l = parseInt(d)
       this.amountArray.push(l)
     }
-
-
-
-
 
   }
 
@@ -242,7 +238,7 @@ export class AdvanceOutwardRemittanceComponent implements OnInit {
   showThisPdf(piPo) {
     this.documentService.draft = false;
     console.log(this.myRadio)
-    let a = [];
+    let a:any= [];
     a.push(piPo)
     this.pipoArr = a;
     if (this.myRadio == 'axisBank') {

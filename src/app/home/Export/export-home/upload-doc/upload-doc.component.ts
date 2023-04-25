@@ -159,7 +159,7 @@ export class UploadDocComponent implements OnInit {
       });
   }
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }
@@ -305,7 +305,7 @@ dataPdf:any=[];
     this.documentService.addInward_remittance(e.value).subscribe((res:any)=>{
       console.log(res,'addInward_remittance')
       if (res.data.length!=0){
-        this.router.navigate(['/home/export-home'])
+        this.router.navigate(['home/export-home'])
       }
     })
   }

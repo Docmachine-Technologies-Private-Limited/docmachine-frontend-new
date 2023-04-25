@@ -17,7 +17,7 @@ export class InterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     this.documentService.loading = true;
     return next.handle(req).pipe(
-      finalize(() => setTimeout(()=> {this.documentService.loading=false},1500))
+      finalize(() => setTimeout(()=> {this.documentService.loading=false},500))
     );
   }
 }

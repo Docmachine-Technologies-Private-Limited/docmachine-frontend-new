@@ -26,7 +26,7 @@ export class DocumentService {
     console.log(this.api_base);
   }
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }
@@ -341,7 +341,15 @@ export class DocumentService {
     let url = `${this.api_base}/boe/get`;
     return this.http.get(url, httpOptions);
   }
-
+  getBoedatabyPartName(benneName) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/boe/getbyPartName`;
+    return this.http.post(url,{benneName:benneName},httpOptions);
+  }
   updateMaster(user, _id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -737,6 +745,14 @@ export class DocumentService {
       `${this.api_base}/irAdvice/getInwardByPipo/${id}`,
       httpOptions
     );
+  }
+  getbyPartyName(partyName) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/irAdvice/getbyPartyName`,{partyName:partyName},httpOptions);
   }
 
   public getPDF(data): Observable<any> {

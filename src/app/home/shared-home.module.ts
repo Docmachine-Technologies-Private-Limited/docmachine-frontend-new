@@ -47,6 +47,8 @@ import { CustomHeaderTooltipsComponent } from "../custom/ng-custom-tooltips/cust
 import { CustomFooterTooltipsComponent } from "../custom/ng-custom-tooltips/custom-footer-tooltips/custom-footer-tooltips.component";
 import { CustomContentTooltipsComponent } from "../custom/ng-custom-tooltips/custom-content-tooltips/custom-content-tooltips.component";
 import { NgCustomCardModelComponent } from "../custom/ng-custom-card-model/ng-custom-card-model.component";
+import { LetterheadComponent } from "../custom/letterhead/ExportLetterHead/letterhead.component";
+import { ImportLetterheadComponent } from "../custom/letterhead/ImportLetterHead/ImportLetterhead.component";
 
 @NgModule({
   declarations: [
@@ -74,7 +76,9 @@ import { NgCustomCardModelComponent } from "../custom/ng-custom-card-model/ng-cu
     CustomHeaderTooltipsComponent,
     CustomFooterTooltipsComponent,
     CustomContentTooltipsComponent,
-    NgCustomCardModelComponent
+    NgCustomCardModelComponent,
+    LetterheadComponent,
+    ImportLetterheadComponent
   ],
   imports: [
     CommonModule,
@@ -93,7 +97,6 @@ import { NgCustomCardModelComponent } from "../custom/ng-custom-card-model/ng-cu
   entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal,SharedDataService,PipoDataService,TreeViewComponent,MergePdfService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  //   exports: [SharedProjectsModule]
   exports: [
     FilternewPipe,
     FilterdatePipe,
@@ -131,7 +134,9 @@ import { NgCustomCardModelComponent } from "../custom/ng-custom-card-model/ng-cu
     CustomHeaderTooltipsComponent,
     CustomFooterTooltipsComponent,
     CustomContentTooltipsComponent,
-    NgCustomCardModelComponent
+    NgCustomCardModelComponent,
+    LetterheadComponent,
+    ImportLetterheadComponent,
   ],
 })
 export class SharedHomeModule { }

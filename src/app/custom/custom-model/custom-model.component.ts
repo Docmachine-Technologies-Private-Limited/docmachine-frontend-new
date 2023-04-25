@@ -24,7 +24,8 @@ export class CustomModelComponent implements OnInit {
   @Output('ModelChange') ModelChange = new EventEmitter<any>();
   @Input('condition') condition: any = '';
   @Output('footerbutton') footerbutton = new EventEmitter<any>();
-  @ViewChild('PopUpOpenClose')PopUpOpenClose:ElementRef;
+  @ViewChild('PopUpOpenClose')PopUpOpenClose :ElementRef;
+  @Input('buttondisabled')buttondisabled :boolean=false;
 
   footerbuttontext: any = [];
   constructor(public element: ElementRef) { }

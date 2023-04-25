@@ -30,6 +30,10 @@
                                         <iframe class='iframe-controller' *ngIf="this.PREVIWES_URL!=''"
                                             style="flex-direction:row;" [src]="this.PREVIWES_URL" id="frame1"
                                             height="600px" width="100%"></iframe>
+                                        <div id="first">
+                                            <app-import-letterhead type="Import-Direct-Payment" *ngIf="this.OTHER_BANK_VISIBLE==true"
+                                                [data]="[this.BANK_DETAILS,this.ITEM_FILL_PDF,this.selectedBenne,this.Remittance_Amount]"></app-import-letterhead>
+                                        </div>
                                         <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="selectedItems.length!=0">
                                             <div class="content_white_background">
                                                 <h5 class="header-text">BOE or Advance Outward remittance Details
@@ -67,8 +71,8 @@
                                                 <label for="exampleInputPassword1" class="form-label">Select
                                                     beneficiary</label>
                                                 <app-ng-dropdown-custom placeHolderText="Select beneficiary"
-                                                    [items]="this.benneDetail" bindLabel="benneName" bindValue="_id"
-                                                    [multiple]="false" [ngModel]="form?.benneName"
+                                                    [items]="this.benneDetail" bindLabel="benneName"
+                                                    bindValue="benneName" [multiple]="false" [ngModel]="form?.benneName"
                                                     formControlName="benneName" (modelChanges)="form.benneName=$event"
                                                     (modelChanges)="changepipo($event)" #select_ben>
                                                 </app-ng-dropdown-custom>
@@ -98,7 +102,7 @@
                                                     </option>
                                                 </select> -->
                                                 <app-ng-dropdown-custom placeHolderText="Select Bank"
-                                                    [items]="this.bankDetail" bindLabel="bank" bindValue="accNumber"
+                                                    [items]="this.bankDetail" bindLabel="value" bindValue="id"
                                                     [multiple]="false" [ngModel]="form?.bank" formControlName="bank"
                                                     (modelChanges)="form.bank=$event"
                                                     (modelChanges)="onSelectBank($event)" #multiplepipo>
@@ -130,7 +134,7 @@
                                                         [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
                                                         [multiple]="false" [ngModel]="items?.pi_poNo"
                                                         formControlName="BOE_Number"
-                                                        (modelChanges)="items.pi_poNo=$event" (modelChanges)="DUMP_FUNCTION($event,['Single BOE','Multiple PIPO','Multiple BOE'],boedropdown);
+                                                        (modelChanges)="items.pi_poNo=$event" (modelChanges)="DUMP_FUNCTION($event,['Select BOE'],boedropdown);
                                                         this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event"
                                                         #boeselectdropdown>
                                                     </app-ng-dropdown-custom>
@@ -139,56 +143,51 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 col-12">
-                                                    <label for="Currency" class="form-label">Currency</label>
-                                                    <!-- <select class="form-select" aria-label="Default select example"
-                                                        formControlName="currency" autocomplete="off"
-                                                        [ngModel]="this.LIST_PIPO[multiplepipo.value]?.currency">
-                                                        <option value="">Select Currency</option>
-                                                        <option value="{{currency}}" *ngFor="let currency of CurrencyData
-                                                ">{{ currency }}
-                                                        </option>
-                                                    </select> -->
-                                                    <app-ng-dropdown-custom [disabled]="true" bindLabel="type"
-                                                        placeHolderText="Select Currency"
-                                                        [items]="this.documentService.getCurrencyList()"
-                                                        [multiple]="false"
-                                                        [selectedItems]="this.LIST_PIPO[this.ALL_DROPDOWN_VALUE_LIST?.DROPDOWN_BOE]?.currency"
-                                                        formControlName="currency"
-                                                        (modelChanges)="this.LIST_PIPO[this.ALL_DROPDOWN_VALUE_LIST?.DROPDOWN_BOE].currency=$event"
-                                                        #Currency>
-                                                    </app-ng-dropdown-custom>
-                                                    <div *ngIf="submitted && form?.currency.errors" class='errorText'>
-                                                        <div *ngIf="form?.currency.errors.required"> Currency is
-                                                            required
+                                                <div class="row" *ngFor="let item of this.ITEM_FILL_PDF;let i=index">
+                                                    <div class="col-md-4 col-12">
+                                                        <label for="Currency" class="form-label">Currency</label>
+                                                        <app-ng-dropdown-custom [disabled]="true" bindLabel="type"
+                                                            placeHolderText="Select Currency"
+                                                            [items]="this.documentService.getCurrencyList()"
+                                                            [multiple]="false" [selectedItems]="item?.currency"
+                                                            formControlName="currency"
+                                                            (modelChanges)="this.LIST_PIPO[this.ALL_DROPDOWN_VALUE_LIST?.DROPDOWN_BOE].currency=$event"
+                                                            #Currency>
+                                                        </app-ng-dropdown-custom>
+                                                        <div *ngIf="submitted && form?.currency.errors"
+                                                            class='errorText'>
+                                                            <div *ngIf="form?.currency.errors.required"> Currency is
+                                                                required
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-4 col-12">
-                                                    <label for="Amount" class="form-label">BOE Amount</label>
-                                                    <input type="text" disabled class="form-control"
-                                                        formControlName="amount" id="invoice_amount"
-                                                        [ngModel]="this.LIST_PIPO[this.ALL_DROPDOWN_VALUE_LIST?.DROPDOWN_BOE]?.invoiceAmount"
-                                                        placeholder="Invoice Amount" autocomplete="off">
-                                                    <div *ngIf="submitted && form.amount.errors" class='errorText'>
-                                                        <div *ngIf="form.amount.errors.required">BOE Amount is
-                                                            required</div>
+                                                    <div class="col-md-4 col-12">
+                                                        <label for="Amount" class="form-label">BOE Amount</label>
+                                                        <input type="text" disabled class="form-control"
+                                                            formControlName="amount" id="invoice_amount"
+                                                            [ngModel]="item?.invoiceAmount" placeholder="Invoice Amount"
+                                                            autocomplete="off">
+                                                        <div *ngIf="submitted && form.amount.errors" class='errorText'>
+                                                            <div *ngIf="form.amount.errors.required">BOE Amount is
+                                                                required</div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-4 col-12">
-                                                    <label for="payableAmount" class="form-label">Balance
-                                                        Amount</label>
-                                                    <input type="text" disabled class="form-control"
-                                                        formControlName="payableAmount" id="payableAmount"
-                                                        [ngModel]="this.LIST_PIPO[this.ALL_DROPDOWN_VALUE_LIST?.DROPDOWN_BOE]?.payableAmount??this.LIST_PIPO[this.ALL_DROPDOWN_VALUE_LIST?.DROPDOWN_BOE]?.invoiceAmount"
-                                                        placeholder="Payable Amount" autocomplete="off">
-                                                    <div *ngIf="submitted && form.payableAmount.errors"
-                                                        class='errorText'>
-                                                        <div *ngIf="form.payableAmount.errors.required">Balance
-                                                            Amount is required</div>
-                                                    </div>
+                                                    <div class="col-md-4 col-12">
+                                                        <label for="payableAmount" class="form-label">Balance
+                                                            Amount</label>
+                                                        <input type="text" disabled class="form-control"
+                                                            formControlName="payableAmount" id="payableAmount"
+                                                            [ngModel]="item?.invoiceAmount" placeholder="Payable Amount"
+                                                            autocomplete="off">
+                                                        <div *ngIf="submitted && form.payableAmount.errors"
+                                                            class='errorText'>
+                                                            <div *ngIf="form.payableAmount.errors.required">Balance
+                                                                Amount is required</div>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
+
                                                 <div class="col-md-10 col-12">
                                                     <label for="remittanceAmount" class="form-label">Remittance
                                                         Amount</label>
@@ -350,8 +349,8 @@
                                             <button type="button" class="btn btn-primary"
                                                 (click)="showhideSummaryPage(0)">BACK</button>
                                             <button type="button" class="btn btn-primary PopupOpen"
-                                                popup-close="PREVIEWS"
-                                                (click)="PREVIEWS_URL(PREVIEW_PAGE,'Import-Direct-Dispatch'+(this.Remittance_Amount-1))">PREVIEWS</button>
+                                                [attr.popup-close]="'PREVIEWS'"
+                                                (click)="PREVIEWS_URL(null,'Import-Direct-Dispatch'+(this.Remittance_Amount-1))">PREVIEWS</button>
                                         </div>
                                     </div>
                                 </div>
@@ -363,282 +362,96 @@
         </div>
     </div>
 </div>
-<!-- <div class="modal PREVIEW_PAGE" tabindex="-1" #PREVIEW_PAGE style="display: none;background-color: #00000030;">
-    <div class="modal-dialog" style="max-width: 100vw !important;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Preview Pdf</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                    (click)="PREVIEW_PAGE.style.display='none'"></button>
-            </div>
-            <div class="modal-body">
-                <app-pdf-viewer [downloadShow]="false" name="All Documents Merge" *ngFor="let item of this.MERGE_PDF"
-                    [src]="item" width="100%" height="500px"></app-pdf-viewer>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                    (click)="PREVIEW_PAGE.style.display='none'">Close</button>
-                <div style="display:flex;">
-                    <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
-                        <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
-                            <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
-                                            this.GetDownloadStatus?.status=='verify'"
-                                (click)="SendApproval(this.GetDownloadStatus?.status,
-                                this.Remittance_Amount!=0?'Import-Direct-Dispatch'+(this.Remittance_Amount-1) :null);PREVIEW_PAGE.style.display='none'">Send
-                                for
-                                Approval</button>
-                        </div>
-                        <div
-                            *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
-                            <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
-              this.GetDownloadStatus?.status=='verify'">Wait for Approval</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-<div class="PREVIEW_PAGE" tabindex="-1" #PREVIEW_PAGE style="display: none;background-color: #00000030;">
-    <div class="col-12">
-        <app-custom-model [customstyle]="{'max-width':'60vw !important'}" class="p-2" height="98vh" id="PREVIEWS"
-            name="Document View">
-            <div class="col-12 mt-2 mb-2" *ngIf="this.MERGE_PDF!=''">
-                <app-pdf-viewer [downloadShow]="false" name="All Documents Merge" *ngFor="let item of this.MERGE_PDF"
-                    [src]="item" width="100%" height="500px"></app-pdf-viewer>
-            </div>
-            <div class="modal-footer">
-                <div style="display:flex;" class="mt-3">
-                    <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
-                        <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
-                            <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
-                                            this.GetDownloadStatus?.status=='verify'"
-                                (click)="SendApproval(this.GetDownloadStatus?.status,
-                                this.Remittance_Amount!=0?'Import-Direct-Dispatch'+(this.Remittance_Amount-1) :null);PREVIEW_PAGE.style.display='none'">Send
-                                for
-                                Approval</button>
-                        </div>
-                        <div
-                            *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
-                            <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
-              this.GetDownloadStatus?.status=='verify'">Wait for Approval</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </app-custom-model>
-    </div>
-</div>
-
 
 <div class="PREVIEW_PAGE" tabindex="-1" #boedropdown style="display: none;background-color: #00000030;">
-    <div class="col-12" *ngIf="this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=='Single BOE'">
-        <app-custom-model [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="boedropdown"
-            name="Single BOE Selection Modal">
+    <div class="col-12" *ngIf="this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=='Select BOE'">
+        <app-custom-model [FooterButton]="true" EventButton="false"
+            [modalbodystyle]="{'max-height':'calc(100vh - 120px) !important'}"
+            [customstyle]="{'max-width':'100vw !important'}" [buttondisabled]="this.ITEM_FILL_PDF.length!=0?false:true"
+            class="p-2" height="98vh" id="boedropdown" name="BOE Selection Modal">
             <div class="p-2">
                 <div class="row p-2 modal-bg">
                     <div class="header-dropdown d-flex" style="gap: 10px;">
-                        <app-ng-dropdown-custom placeHolderText="Select Party Name"
-                            [items]="this.PIPO_LIST['PIPO_NAME_LIST']" bindLabel="value" bindValue="id"
-                            [multiple]="false" (modelChanges)="filterData($event)" #partyname>
+                        <app-ng-dropdown-custom placeHolderText="Select Party Name" [items]="this.benneDetail"
+                            bindLabel="benneName" bindValue="benneName" [multiple]="false"
+                            (modelChanges)="filterData($event)" #partyname>
                         </app-ng-dropdown-custom>
-                        <app-ng-dropdown-custom placeHolderText="Select Boe Number" [items]="this.pipoData"
-                            bindLabel="boeNumber" bindValue="_id" (modelChanges)="choosenItems($event,0);"
-                            [multiple]="false" #select_boe_list>
-                        </app-ng-dropdown-custom>
-                        <p class="seleted-text" *ngIf="partyname.selectedItems!=''"><span>Party Name : </span>
-                            {{partyname.selectedItems}}</p>
-                        <p class="seleted-text" *ngIf="select_boe_list.selectedItems!=''"><span>BOE No. : </span>
-                            {{select_boe_list.selectedItems}}</p>
                     </div>
-                    <div class="d-flex" style="height: 70vh;">
+                    <div class="d-flex" style="height: 76vh;">
                         <div class="row mt-0">
                             <table class="table">
                                 <thead>
                                     <tr class="table-tr">
                                         <th scope="col" class="col-td-th-1">#</th>
-                                        <th scope="col" class="col-td-th-2">PI_PO No.</th>
-                                        <th scope="col" class="col-td-th-3">Pipo Amount</th>
-                                        <th scope="col" class="col-td-th-2">Advance ref no.</th>
-                                        <th scope="col" class="col-td-th-2">Advance Payment</th>
-                                        <th scope="col" class="col-td-th-2">Balance PI_PO Amount</th>
-                                        <th scope="col" class="col-td-th-2">Payment Amount</th>
+                                        <th scope="col" class="col-td-th-1">#</th>
+                                        <th scope="col" class="col-td-th-2">BOE Date</th>
+                                        <th scope="col" class="col-td-th-3">BOE No.</th>
+                                        <th scope="col" class="col-td-th-2">Beneficiary Name</th>
+                                        <th scope="col" class="col-td-th-3">CURRENCY</th>
+                                        <th scope="col" class="col-td-th-3">BOE AMOUNT</th>
+                                        <th scope="col" class="col-td-th-3">Select ORM</th>
+                                        <th scope="col" class="col-td-th-3">ORM No.</th>
+                                        <th scope="col" class="col-td-th-3">ORM Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="table-tr" *ngFor="let item of this.PIPO_LIST['data'];let i=index">
-                                        <td scope="col" class="col-td-th-1"><input type="checkbox" /></td>
-                                        <td scope="col" class="col-td-th-2">{{item?.pi_poNo}}</td>
-                                        <td scope="col" class="col-td-th-3">{{item?.amount}}</td>
-                                        <td scope="col" class="col-td-th-2">
-                                            {{item?.TransactionRef[0]?.Ref_Data?.orRef?.billNo}}</td>
-                                        <td scope="col" class="col-td-th-2">
-                                            {{item?.TransactionRef[0]?.Ref_Data?.orRef?.amount}}</td>
-                                        <td scope="col" class="col-td-th-2"><input type="text" name="balance_amount"
-                                                disabled
-                                                [value]="this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount)">
-                                        </td>
-                                        <td scope="col" class="col-td-th-2"><input type="text" name="balance_amount"
-                                                (keyup)="AmountValidation($event,this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount))"
-                                                [value]="this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount)">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </app-custom-model>
-    </div>
-    <div class="col-12" *ngIf="this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=='Multiple BOE'">
-        <app-custom-model [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="boedropdown"
-            name="Multiple BOE Selection Modal">
-            <div class="p-2">
-                <div class="row p-0 modal-bg">
-                    <div class="header-dropdown d-flex" style="gap: 10px;">
-                        <app-ng-dropdown-custom placeHolderText="Select PIPO No."
-                            [items]="this.PIPO_LIST['PIPO_NAME_LIST']" bindLabel="value" bindValue="id"
-                            [multiple]="false" (modelChanges)="filterData($event)" #partyname>
-                        </app-ng-dropdown-custom>
-                        <p class="seleted-text" *ngIf="partyname.selectedItems!=''"><span>PIPO No. : </span>
-                            {{partyname.selectedItems}}</p>
-                        <p class="seleted-text" *ngIf="partyname.selectedItems!=''"><span>PIPO Amount : </span>
-                            {{this.PIPO_LIST['data'][0]?.amount}}</p>
-                            
-                        <p class="seleted-text" *ngIf="this.REAMAING_AMOUNT['PIPO_SUM']!=''"><span>PIPO Remmaing Amount : </span>
-                                {{this.REAMAING_AMOUNT['PIPO_SUM']}}</p>
-                    </div>
-                    <div class="d-flex" style="height: 70vh;
-                    padding-right: 0;
-                    gap: 10px;
-                    width: calc(100vw - 58px);">
-                         <div class="row mt-0 col-12 p-0" style="overflow: auto;">
-                            <div class='col-12 grid-template'  *ngFor="let item of this.PIPO_LIST['data'];let i=index">
-                                <div class='card' *ngFor="let boeitem of item?.boeRef;let i=index">
-                                    <h2 class='card__title' title="BOE Number">{{boeitem?.boeNumber}}<span title="BOE Amount" class='card__titleSpan'>
-                                            | {{boeitem?.invoiceAmount}}</span></h2>
-                                    <div class='card__content'>
-                                        <h3 class='card__subTitle'>Advance Details</h3>
-                                        <div class='card__features'>
-                                            <table class="table">
-                                                <thead>
-                                                    <tr class="table-tr">
-                                                        <th scope="col" class="col-td-th-1">#</th>
-                                                        <th scope="col" class="col-td-th-2">Advance ref no.</th>
-                                                        <th scope="col" class="col-td-th-2">Advance Payment</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr class="table-tr"
-                                                        *ngFor="let adviceitem of item['AdviceRef'];let j=index">
-                                                        <td scope="col" class="col-td-th-1"><input type="checkbox" [checked]="this.ADVANCE_REMMITANCE_CHECKBOX[j]" 
-                                                        (change)="SelectAdvanceRemmitance($event,j,adviceitem,boeitem)"/>
-                                                        </td>
-                                                        <td scope="col" class="col-td-th-2">{{adviceitem?.billNo}}</td>
-                                                        <td scope="col" class="col-td-th-2">{{adviceitem?.amount}}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <h5>Total Sum : {{this.REAMAING_AMOUNT['ADVANCE_SUM']}}</h5>
+                                    <div class="table-type" *ngFor="let item of this.PIPO_LIST['data'];let i=index"
+                                        [ngClass]="{'table-active':item.isExpand==true}">
+                                        <tr class="table-tr added-active" title="click here see more details">
+                                            <td title="ORM Data Showing and Hide" scope="col" class="col-td-th-1"
+                                                (click)="item.isExpand=!item.isExpand;CloseAllExpand($event,this.PIPO_LIST['data'],i)">
+                                                <span *ngIf="item.isExpand==true" class="fa fa-chevron-up"></span>
+                                                <span *ngIf="item.isExpand==false" class="fa fa-chevron-down"></span>
+                                            </td>
+                                            <td scope="col" class="col-td-th-1"><input type="checkbox"
+                                                    (change)="choosenItems($event,item?._id,i);" /></td>
+                                            <td scope="col" class="col-td-th-2">{{item?.boeDate}}</td>
+                                            <td scope="col" class="col-td-th-3">{{item?.boeNumber}}</td>
+                                            <td scope="col" class="col-td-th-2">{{item?.benneName[0]}}</td>
+                                            <td scope="col" class="col-td-th-3">{{item?.currency}}</td>
+                                            <td scope="col" class="col-td-th-3">{{item?.invoiceAmount}}</td>
+                                            <td scope="col" class="col-td-th-3">
+                                                <button class="btn btn-primary PopupOpen" popup-close="ORM_POPUP_2"
+                                                    (click)="PIPO_SELECTED_INDEX(i,item)">Select</button>
+                                            </td>
+                                            <td scope="col" class="col-td-th-3">
+                                                {{item?.AdviceRefNo}}</td>
+                                            <td scope="col" class="col-td-th-3">
+                                                {{item?.AdviceRefAmount}}</td>
+                                        </tr>
+                                        <tr class="table-tr table-tr-1"
+                                            [ngClass]="{'Table-Show':item.isExpand==true,'Table-Hide':item.isExpand==false}">
+                                            <td colspan="4" style="width: 100%;border: none;">
+                                                <div class="header">
+                                                    <h5>ORM Advice Against to this PIPO No. : {{item?.pi_poNo}}</h5>
+                                                </div>
+                                                <div class="center-panel">
+                                                    <table class="table table-style">
+                                                        <thead>
+                                                            <tr class="table-tr">
+                                                                <th class="col-td-th-2">Bill No.</th>
+                                                                <th class="col-td-th-2">Buyer</th>
+                                                                <th class="col-td-th-2">Party Name</th>
+                                                                <th class="col-td-th-2">Amount</th>
+                                                                <th class="col-td-th-2">Available Amount</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="table-tr"
+                                                                *ngFor="let Adviceitem of item?.AdviceRefData">
+                                                                <td class="col-td-th-2">{{ Adviceitem?.billNo }}</td>
+                                                                <td class="col-td-th-2">{{ Adviceitem?.buyerName }}</td>
+                                                                <td class="col-td-th-2">{{ Adviceitem?.partyName }}</td>
+                                                                <td class="col-td-th-2">{{ Adviceitem?.amount }}</td>
+                                                                <td class="col-td-th-2">{{ Adviceitem?.AvailableAmount
+                                                                    }}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     </div>
-                                </div>
-                            </div>
-                            <!-- <table class="table">
-                                <thead>
-                                    <tr class="table-tr">
-                                        <th scope="col" class="col-td-th-1">#</th>
-                                        <th scope="col" class="col-td-th-2">BOE No.</th>
-                                        <th scope="col" class="col-td-th-3">BOE Amount</th>
-                                        <th scope="col" class="col-td-th-2">Advance ref no.</th>
-                                        <th scope="col" class="col-td-th-2">Advance Payment</th>
-                                        <th scope="col" class="col-td-th-2">Balance PI_PO Amount</th>
-                                        <th scope="col" class="col-td-th-2">Payment Amount</th>
-                                        <th scope="col" class="col-td-th-3">Select ORM No.</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="table-tr" *ngFor="let item of this.PIPO_LIST['data'];let i=index">
-                                        <td scope="col" class="col-td-th-1"><input type="checkbox" /></td>
-                                        <td scope="col" class="col-td-th-2">{{item?.boeRef[0]?.boeNumber}}</td>
-                                        <td scope="col" class="col-td-th-3">{{item?.boeRef[0]?.invoiceAmount}}</td>
-                                        <td scope="col" class="col-td-th-2">
-                                            {{item?.TransactionRef[0]?.Ref_Data?.orRef?.billNo}}</td>
-                                        <td scope="col" class="col-td-th-2">
-                                            {{item?.TransactionRef[0]?.Ref_Data?.orRef?.amount}}</td>
-                                        <td scope="col" class="col-td-th-2"><input type="text" name="balance_amount"
-                                                disabled
-                                                [value]="this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount)">
-                                        </td>
-                                        <td scope="col" class="col-td-th-2"><input type="text" name="balance_amount"
-                                                (keyup)="AmountValidation($event,this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount))"
-                                                [value]="this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount)">
-                                        </td>
-                                        <td scope="col" class="col-td-th-3"><a (click)="ORM_POPUP.style.display='flex'" class="PopupOpen" popup-close="ORM_POPUP">Select ORM No.</a></td>
-                                    </tr>
-                                </tbody>
-                            </table> -->
-
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </app-custom-model>
-    </div>
-    <div class="col-12" *ngIf="this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=='Multiple PIPO'">
-        <app-custom-model [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="boedropdown"
-            name="Multiple PIPO Selection Modal">
-            <div class="p-2">
-                <div class="row p-2 modal-bg">
-                    <div class="header-dropdown d-flex" style="gap: 10px;">
-                        <app-ng-dropdown-custom placeHolderText="Select Party Name"
-                            [items]="this.PIPO_LIST['PIPO_NAME_LIST']" bindLabel="value" bindValue="id"
-                            [multiple]="false" (modelChanges)="filterData($event)" #partyname>
-                        </app-ng-dropdown-custom>
-                        <app-ng-dropdown-custom placeHolderText="Select Boe Number" [items]="this.pipoData"
-                            bindLabel="boeNumber" bindValue="_id" (modelChanges)="choosenItems($event,0);"
-                            [multiple]="false" #select_boe_list>
-                        </app-ng-dropdown-custom>
-                        <p class="seleted-text" *ngIf="partyname.selectedItems!=''"><span>Party Name : </span>
-                            {{partyname.selectedItems}}</p>
-                        <p class="seleted-text" *ngIf="select_boe_list.selectedItems!=''"><span>BOE No. : </span>
-                            {{select_boe_list.selectedItems}}</p>
-                    </div>
-                    <div class="d-flex" style="height: 70vh;">
-                        <div class="row mt-0">
-                            <table class="table">
-                                <thead>
-                                    <tr class="table-tr">
-                                        <th scope="col" class="col-td-th-1">#</th>
-                                        <th scope="col" class="col-td-th-2">PI_PO No.</th>
-                                        <th scope="col" class="col-td-th-3">Pipo Amount</th>
-                                        <th scope="col" class="col-td-th-2">Advance ref no.</th>
-                                        <th scope="col" class="col-td-th-2">Advance Payment</th>
-                                        <th scope="col" class="col-td-th-2">Balance PI_PO Amount</th>
-                                        <th scope="col" class="col-td-th-2">Payment Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="table-tr" *ngFor="let item of this.PIPO_LIST['data'];let i=index">
-                                        <td scope="col" class="col-td-th-1"><input type="checkbox" /></td>
-                                        <td scope="col" class="col-td-th-2">{{item?.pi_poNo}}</td>
-                                        <td scope="col" class="col-td-th-3">{{item?.amount}}</td>
-                                        <td scope="col" class="col-td-th-2">
-                                            {{item?.TransactionRef[0]?.Ref_Data?.orRef?.billNo}}</td>
-                                        <td scope="col" class="col-td-th-2">
-                                            {{item?.TransactionRef[0]?.Ref_Data?.orRef?.amount}}</td>
-                                        <td scope="col" class="col-td-th-2"><input type="text" name="balance_amount"
-                                                disabled
-                                                [value]="this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount)">
-                                        </td>
-                                        <td scope="col" class="col-td-th-2"><input type="text" name="balance_amount"
-                                                (keyup)="AmountValidation($event,this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount))"
-                                                [value]="this.ParseFloat(item?.amount,item?.TransactionRef[0]?.Ref_Data?.orRef?.amount)">
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -654,20 +467,6 @@
             height="50vh" id="ORM_POPUP" name="ORM Selection Modal">
             <div class="p-2">
                 <div class="row p-2 modal-bg">
-                    <!-- <div class="header-dropdown d-flex" style="gap: 10px;">
-                        <app-ng-dropdown-custom placeHolderText="Select Party Name"
-                            [items]="this.PIPO_LIST['PIPO_NAME_LIST']" bindLabel="value" bindValue="id"
-                            [multiple]="false" (modelChanges)="filterData($event)" #partyname>
-                        </app-ng-dropdown-custom>
-                        <app-ng-dropdown-custom placeHolderText="Select Boe Number" [items]="this.pipoData"
-                            bindLabel="boeNumber" bindValue="_id" (modelChanges)="choosenItems($event,0);"
-                            [multiple]="false" #select_boe_list>
-                        </app-ng-dropdown-custom>
-                        <p class="seleted-text" *ngIf="partyname.selectedItems!=''"><span>Party Name : </span>
-                            {{partyname.selectedItems}}</p>
-                        <p class="seleted-text" *ngIf="select_boe_list.selectedItems!=''"><span>BOE No. : </span>
-                            {{select_boe_list.selectedItems}}</p>
-                    </div> -->
                     <div class="d-flex" style="height: 70vh;">
                         <div class="row mt-0">
                             <table class="table">
@@ -695,4 +494,64 @@
             </div>
         </app-custom-model>
     </div>
+</div>
+
+<app-custom-model modalbodyheight="70vh" [FooterButton]="true" EventButton="false"
+    [buttondisabled]="this.ORM_SELECTION_DATA.length!=0?false:true" [customstyle]="{'max-width':'85vw !important'}"
+    class="p-2 mt-2" height="80vh" id="ORM_POPUP_2"
+    [name]="'ORM Selection Against Of : '+this.PIPO_SELECTED_DATA_INDEX?.data?.pi_poNo">
+    <div class="p-2">
+        <div class="row p-2 col-12 modal-bg">
+            <div class="d-flex col-12" style="height:80vh;">
+                <div class="row col-12 mt-0">
+                    <table class="table">
+                        <thead>
+                            <tr class="table-tr">
+                                <th scope="col" class="col-td-th-1">#</th>
+                                <th scope="col" class="col-td-th-2">Advance ref no.</th>
+                                <th scope="col" class="col-td-th-2">Advance Amount</th>
+                                <th scope="col" class="col-td-th-2">Advance Available Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-tr" *ngFor="let item of this.ORM_BY_PARTY_NAME;let i=index">
+                                <td scope="col" class="col-td-th-1"><input type="checkbox"
+                                        (change)="ORM_SELECTION($event,i,item)" /></td>
+                                <td scope="col" class="col-td-th-2">{{item?.billNo}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.amount}}</td>
+                                <td scope="col" class="col-td-th-2">
+                                    {{item?.AvailableAmount!='0'?item?.AvailableAmount:item?.amount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-custom-model>
+
+<div tabindex="-1" #PREVIEW_PAGE>
+    <app-custom-model [customstyle]="{'max-width':'60vw !important'}" class="p-2" height="98vh" id="PREVIEWS"
+        name="Document View">
+        <div class="col-12 mt-2 mb-2" *ngIf="this.PREVIEWS_URL_LIST!=''">
+            <app-pdf-viewer [downloadShow]="false" name="All Documents Merge"
+                *ngFor="let item of this.PREVIEWS_URL_LIST" [src]="item" width="100%" height="500px"></app-pdf-viewer>
+        </div>
+        <div class="modal-footer">
+            <div style="display:flex;" class="mt-3">
+                <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                    <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
+                        <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
+                                    this.GetDownloadStatus?.status=='verify'"
+                            (click)="SendApproval(this.GetDownloadStatus?.status,
+                        this.Remittance_Amount!=0?'Import-Direct-Dispatch'+(this.Remittance_Amount-1) :null);">Send for Approval</button>
+                    </div>
+                    <div *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
+                        <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
+                            this.GetDownloadStatus?.status=='verify'">Wait for Approval</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </app-custom-model>
 </div>
