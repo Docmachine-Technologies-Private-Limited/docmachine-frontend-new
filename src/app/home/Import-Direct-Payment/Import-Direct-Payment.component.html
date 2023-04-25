@@ -544,9 +544,7 @@
                         <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
                                     this.GetDownloadStatus?.status=='verify'"
                             (click)="SendApproval(this.GetDownloadStatus?.status,
-                        this.Remittance_Amount!=0?'Import-Direct-Dispatch'+(this.Remittance_Amount-1) :null);PREVIEW_PAGE.style.display='none'">Send
-                            for
-                            Approval</button>
+                        this.Remittance_Amount!=0?'Import-Direct-Dispatch'+(this.Remittance_Amount-1) :null);">Send for Approval</button>
                     </div>
                     <div *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
                         <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||

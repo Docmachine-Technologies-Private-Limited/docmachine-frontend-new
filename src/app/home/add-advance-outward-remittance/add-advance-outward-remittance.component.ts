@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
 import { UserService } from "../../service/user.service";
-import { timer } from "rxjs";
+import { async, timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
@@ -660,12 +660,19 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
               data[0] = pdfdata;
             }
             var fitertemp: any = data.filter(n => n)
-            await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
-              this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
-              console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
-              this.PREVIEWS_URL_STRING = merge?.pdfurl;
-              model.style.display = 'block';
-              console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
+            await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+              await this.userService?.UploadS3Buket({
+                fileName: this.guid() + '.pdf', buffer: merge?.pdfurl,
+                type: 'application/pdf'
+              }).subscribe((response: any) => {
+                this.PREVIEWS_URL_LIST=[];
+                console.log(response, 'response')
+                this.PREVIEWS_URL_LIST.push(response?.url);                
+                this.PREVIEWS_URL_STRING = response?.url;
+                model.style.display = 'block';
+                console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
+              })
+            
             });
           });
         });
@@ -689,6 +696,14 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         })
       }
     })
+  }
+  guid() {
+    let s4 = () => {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '_' + s4() + '_' + s4() + '_' + s4() + '_' + s4() + s4() + s4();
   }
   PromiseReturn() {
     var temp: any = [];
