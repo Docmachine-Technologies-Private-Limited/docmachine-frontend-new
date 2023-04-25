@@ -643,16 +643,12 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
           });
           kendo.drawing.drawDOM($("#first"), {
             paperSize: "A4",
-            margin: [-10,0,0,0],
+            margin: [-10, 0, 0, 0],
             scale: 0.7,
           }).then(function (group) {
-            // var PAGE_RECT = new kendo.geometry.Rect(
-            //   [0,0], [10*2.8347,5*2.8347]
-            // );
-            // kendo.drawing.fit(group, PAGE_RECT)
             return kendo.drawing.exportPDF(group, {
               paperSize: "A4",
-              margin:[-10,0,0,0],
+              margin: [-10, 0, 0, 0],
             });
           }).done(async (pdfdata) => {
             console.log('exportPDF', data, data)
@@ -661,25 +657,17 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
             }
             var fitertemp: any = data.filter(n => n)
             await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-              await this.userService?.UploadS3Buket({
-                fileName: this.guid() + '.pdf', buffer: merge?.pdfurl,
-                type: 'application/pdf'
-              }).subscribe((response: any) => {
-                this.PREVIEWS_URL_LIST=[];
-                console.log(response, 'response')
-                this.PREVIEWS_URL_LIST.push(response?.url);                
-                this.PREVIEWS_URL_STRING = response?.url;
-                model.style.display = 'block';
-                console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
-              })
-            
+              this.PREVIEWS_URL_LIST = [];
+              console.log(merge?.pdfurl, 'merge?.pdfurl')
+              this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
+              this.PREVIEWS_URL_STRING = merge?.pdfurl;
+              model.style.display = 'block';
+              console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
             });
           });
         });
       })
     }
-
-
     this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
       console.log(res, 'dsdsdsdsdsdsds');
       this.GetDownloadStatus = res[0];
@@ -751,57 +739,67 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         TypeOfPage: 'Transaction',
         FileType: this.USER_DATA?.sideMenu
       }
-      console.log(approval_data, 'approval_data')
-      if (Status == '' || Status == null || Status == 'Rejected') {
-        this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
-          var pipo_id: any = [];
-          var pipo_name: any = [];
-          for (let index = 0; index < this.selectedItems.length; index++) {
-            pipo_id.push(this.selectedItems[index]?.pipo_id)
-            pipo_name.push(this.selectedItems[index]?.pipo_no)
-          }
-          var data: any = {
-            data: {
-              formdata: this.pipoForm.value,
-              documents: temp_doc,
-              pipo_1: this.selectedItems,
-              Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() }
-            },
-            TypeTransaction: 'Advance-Remittance-flow',
-            fileType: 'Import',
-            UserDetails: approval_data?.id,
-            pipo: pipo_id,
-          }
-          this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
-            let updatedData = {
-              "TransactionRef": [
-                res1._id,
-              ]
+      this.getStatusCheckerMaker(approval_data?.id).then((res: any) => {
+        console.log(approval_data, res, 'approval_data')
+        if (res?.id != approval_data?.id) {
+          this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
+            var pipo_id: any = [];
+            var pipo_name: any = [];
+            for (let index = 0; index < this.selectedItems.length; index++) {
+              pipo_id.push(this.selectedItems[index]?.pipo_id)
+              pipo_name.push(this.selectedItems[index]?.pipo_no)
             }
-            this.userService.updateManyPipo(pipo_id, 'import', '', updatedData).subscribe((data) => {
-              console.log('king123');
-              console.log(data);
-              this.router.navigate(['/home/dashboardTask'])
-            }, (error) => {
-              console.log('error');
+            var data: any = {
+              data: {
+                formdata: this.pipoForm.value,
+                documents: temp_doc,
+                pipo_1: this.selectedItems,
+                Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() }
+              },
+              TypeTransaction: 'Advance-Remittance-flow',
+              fileType: 'Import',
+              UserDetails: approval_data?.id,
+              pipo: pipo_id,
             }
-            );
-            this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
-              console.log(res, 'dsdsdsdsdsdsds');
-              this.GetDownloadStatus = res[0];
-              if (res.length == 0) {
-                this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '2' }).subscribe((res: any) => {
-                  console.log(res, 'dsdsdsdsdsdsds');
-                  this.GetDownloadStatus = res[0];
-                })
+            this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+              let updatedData = {
+                "TransactionRef": [
+                  res1._id,
+                ]
               }
-            })
-          });
+              this.userService.updateManyPipo(pipo_id, 'import', '', updatedData).subscribe((data) => {
+                console.log('king123');
+                console.log(data);
+                this.router.navigate(['/home/dashboardTask'])
+              }, (error) => {
+                console.log('error');
+              }
+              );
+              this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
+                console.log(res, 'dsdsdsdsdsdsds');
+                this.GetDownloadStatus = res[0];
+                if (res.length == 0) {
+                  this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '2' }).subscribe((res: any) => {
+                    console.log(res, 'dsdsdsdsdsdsds');
+                    this.GetDownloadStatus = res[0];
+                  })
+                }
+              })
+            });
 
-        });
-      }
+          });
+        } else {
+          this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Send for Approval',
+            `You already send for approval <br>&<br>also check ${Status} panel`)
+        }
+      });
     }
     console.log(UniqueId, approval_data, 'uiiiiiiiiiiiiii')
+  }
+  getStatusCheckerMaker(id) {
+    return new Promise((resolve, reject) => {
+      this.documentService.getDownloadStatus({ id: id, $or: [{ "deleteflag": '-1' }, { "deleteflag": '1' }, { "deleteflag": '2' }] }).subscribe((res: any) => resolve(res[0]))
+    })
   }
 }
 

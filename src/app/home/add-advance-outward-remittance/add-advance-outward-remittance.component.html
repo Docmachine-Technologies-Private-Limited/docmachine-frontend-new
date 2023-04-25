@@ -33,9 +33,10 @@
                                         <iframe class='iframe-controller' *ngIf="this.PREVIWES_URL!=''"
                                             style="flex-direction:row;" [src]="this.PREVIWES_URL" id="frame1"
                                             height="600px" width="100%"></iframe>
-                                            <div id="first">
-                                                <app-import-letterhead *ngIf="this.OTHER_BANK_VISIBLE==true" [data]="[this.BANK_DETAILS,this.selectedItems,this.selectedBenne,this.REMIITANCE_SUM]"></app-import-letterhead>
-                                            </div>
+                                        <div id="first">
+                                            <app-import-letterhead *ngIf="this.OTHER_BANK_VISIBLE==true"
+                                                [data]="[this.BANK_DETAILS,this.selectedItems,this.selectedBenne,this.REMIITANCE_SUM]"></app-import-letterhead>
+                                        </div>
                                         <div class="new_left_sidedoc pdf_invoce_scroll" *ngIf="selectedItems.length!=0">
                                             <div class="content_white_background">
                                                 <h5 class="header-text">PI_PO or Advance Outward remittance Details
@@ -393,21 +394,8 @@
             </div>
             <div class="modal-footer">
                 <div style="display:flex;" class="mt-3">
-                    <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
-                        <div *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
-                            <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
-               this.GetDownloadStatus?.status=='verify'"
-                                (click)="SendApproval(this.GetDownloadStatus?.status,
-                sumTotalAmount!=0?'Advance-Remittance-flow'+(sumTotalAmount-1) :null);PREVIEW_PAGE.style.display='none'">Send
-                                for
-                                Approval</button>
-                        </div>
-                        <div
-                            *ngIf="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='Verify'">
-                            <button type="button" class="btn btn-primary" [disabled]="this.GetDownloadStatus?.status=='pending' ||
-              this.GetDownloadStatus?.status=='verify'">Wait for Approval</button>
-                        </div>
-                    </div>
+                    <button type="button" class="btn btn-primary" (click)="SendApproval(this.GetDownloadStatus?.status,
+                     sumTotalAmount!=0?'Advance-Remittance-flow'+(this.REMIITANCE_SUM-1) :null);">Send for Approval</button>
                 </div>
             </div>
         </app-custom-model>

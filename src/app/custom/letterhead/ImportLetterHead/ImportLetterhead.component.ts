@@ -9,6 +9,7 @@ import { UserService } from '../../../service/user.service';
 })
 export class ImportLetterheadComponent implements OnInit {
   @Input('data') data: any = [];
+  @Input('type') type: any = [];
   TOTAL_SUM_PIPO_SUM: any = 0;
   TOTAL_PIPO_NUMBER: any = ''
   TOTAL_PIPO_DATE: any = ''

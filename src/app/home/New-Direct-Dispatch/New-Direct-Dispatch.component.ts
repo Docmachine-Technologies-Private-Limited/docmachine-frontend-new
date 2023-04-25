@@ -4055,14 +4055,8 @@ export class NewDirectDispatchComponent implements OnInit {
               if ((index + 1) == this.temp[tempfilter[0]?._id].length) {
                 var fitertemp: any = await temppdflits.filter(n => n)
                 await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-                  await this.userService?.UploadS3Buket({
-                    fileName: this.guid() + '.pdf', buffer: merge?.pdfurl,
-                    type: 'application/pdf'
-                  }).subscribe((response: any) => {
-                    console.log(response, 'response')
-                    this.PREVIEWS_URL_LIST.push(response?.url);
+                  this.PREVIEWS_URL_LIST.push( merge?.pdfurl);
                     console.log(this.tp, this.temp_doc, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
-                  })
                 });
               }
             }

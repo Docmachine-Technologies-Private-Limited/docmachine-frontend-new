@@ -683,14 +683,9 @@ export class ImportDirectPaymentComponent implements OnInit {
           if ((i + 1) == this.ITEM_FILL_PDF.length) {
             var fitertemp: any = await this.ALL_DOCUMENTS.filter(n => n)
             await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-              await this.userService?.UploadS3Buket({
-                fileName: this.guid() + '.pdf', buffer: merge?.pdfurl,
-                type: 'application/pdf'
-              }).subscribe((response: any) => {
-                console.log(response, 'response')
-                this.PREVIEWS_URL_LIST.push(response?.url);
-                console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
-              })
+              this.PREVIEWS_URL_LIST=[];
+              this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
+              console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
             });
           }
         }
@@ -761,15 +756,9 @@ export class ImportDirectPaymentComponent implements OnInit {
                 if ((i + 1) == this.ITEM_FILL_PDF.length) {
                   var fitertemp: any = await this.ALL_DOCUMENTS.filter(n => n)
                   await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-                    await this.userService?.UploadS3Buket({
-                      fileName: this.guid() + '.pdf', buffer: merge?.pdfurl,
-                      type: 'application/pdf'
-                    }).subscribe((response: any) => {
-                      this.PREVIEWS_URL_LIST=[];
-                      console.log(response, 'response')
-                      this.PREVIEWS_URL_LIST.push(response?.url);
-                      console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
-                    })
+                    this.PREVIEWS_URL_LIST=[];
+                    this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
+                    console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
                   });
                 }
               }

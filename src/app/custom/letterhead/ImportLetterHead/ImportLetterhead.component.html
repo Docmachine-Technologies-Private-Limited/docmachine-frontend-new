@@ -2,7 +2,7 @@
     <div class="header-letter"></div>
     <div class="hdf-bank">
         <div class="body-letter">
-            <p class="p-text col-12 text-align mb-5" style="font-weight: bold;text-align: center;">REQUEST LETTER FOR IMPORT PAYMENT <span *ngIf="this.TICK_MARKED18==true">[ √ ]</span><span *ngIf="this.TICK_MARKED18==false">[  ]</span> <span (click)="TickMark18()" style="cursor: pointer;"> ADVANCE</span> <span *ngIf="this.TICK_MARKED19==true">[ √ ]</span><span *ngIf="this.TICK_MARKED19==false">[  ]</span> <span (click)="TickMark19()" style="cursor: pointer;"> DIRECT</span></p>
+            <p class="p-text col-12 text-align mb-2" style="font-weight: bold;text-align: center;">REQUEST LETTER FOR IMPORT PAYMENT <span *ngIf="this.TICK_MARKED18==true">[ √ ]</span><span *ngIf="this.TICK_MARKED18==false">[  ]</span> <span (click)="TickMark18()" style="cursor: pointer;"> ADVANCE</span> <span *ngIf="this.TICK_MARKED19==true">[ √ ]</span><span *ngIf="this.TICK_MARKED19==false">[  ]</span> <span (click)="TickMark19()" style="cursor: pointer;"> DIRECT</span></p>
             <p class="p-text mb-0">Ref. No.: <span contenteditable="true">XXXX-XXXX-XXXX-XXXX</span></p>
             <p class="p-text mb-0">{{this.CURRENT_DATE}}</p>
             <p class="p-text mb-0" contenteditable="true">To</p>
@@ -12,12 +12,12 @@
             <p class="p-text mb-0" contenteditable="true">Kandakottam Complex,</p>
             <p class="p-text mb-0" contenteditable="true">Opp To Bus Stand,</p>
             <p class="p-text mb-0" contenteditable="true">Erode 0– 638 003.</p>
-            <p class="p-text mt-3">We wish to make an advance payment towards import of <span contenteditable="true">WET SALTED OX HEIFFER HIDES</span>
+            <p class="p-text mt-1 mb-0">We wish to make an advance payment towards import of <span contenteditable="true">WET SALTED OX HEIFFER HIDES</span>
                 (Goods / <span style="text-decoration: line-through;">Services</span>) as part of our
                 Raw Material / <span style="text-decoration: line-through;">Capital Goods</span> requirement:</p>
-            <p class="p-text mb-0">Request you to process the Import remittance by <span *ngIf="this.TICK_MARKED1==false">[ ]</span><span *ngIf="this.TICK_MARKED1==true">[√ ]</span> <span style="cursor: pointer;" (click)="TickMark1()"> Swift </span> <span *ngIf="this.TICK_MARKED2==false">[ ]</span><span *ngIf="this.TICK_MARKED2==true">[√ ]</span> <span style="cursor: pointer;" (click)="TickMark2()"> Demand</span> Draft as per
+            <p class="p-text mb-0 mt-2">Request you to process the Import remittance by <span *ngIf="this.TICK_MARKED1==false">[ ]</span><span *ngIf="this.TICK_MARKED1==true">[√ ]</span> <span style="cursor: pointer;" (click)="TickMark1()"> Swift </span> <span *ngIf="this.TICK_MARKED2==false">[ ]</span><span *ngIf="this.TICK_MARKED2==true">[√ ]</span> <span style="cursor: pointer;" (click)="TickMark2()"> Demand</span> Draft as per
                 following request</p>
-            <div class="table-added temp mt-1">
+            <div class="table-added temp mb-0 mt-2">
                 <table class="table mb-0" style="border-collapse: collapse;border: 2px solid #c8c5c5;">
                     <thead>
                         <tr class="letter-table-tr">
@@ -159,12 +159,22 @@
                             <th scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">AD Code No</th>
                             <th scope="col" [style.width]="115+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;">Port Code</th>
                         </tr>
-                        <tr class="table-tr" *ngFor="let item of data[1];let i=index;">
-                            <td scope="col" [style.width]="115+'px'" style="height: 65px !important;" class="col-td-th-1">{{item?.boeNumber}} and {{item?.boeDate}}</td>
-                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.currency}} | {{item?.invoiceAmount}}</td>
-                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.boeDate}}</td>
-                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.invoiceAmount}}</td>
-                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.adCode}}</td>
+                        <div *ngIf="type=='Import-Direct-Payment'">
+                            <tr class="table-tr" *ngFor="let item of data[1];let i=index;">
+                                <td scope="col" [style.width]="115+'px'" style="height: 65px !important;" class="col-td-th-1">{{item?.boeNumber}} and {{item?.boeDate}}</td>
+                                <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.currency}} | {{item?.invoiceAmount}}</td>
+                                <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.boeDate}}</td>
+                                <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.invoiceAmount}}</td>
+                                <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.adCode}}</td>
+                                <td scope="col" [style.width]="115+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;"></td>
+                            </tr>
+                        </div>
+                        <tr class="table-tr" *ngIf="type!='Import-Direct-Payment'">
+                            <td scope="col" [style.width]="115+'px'" style="height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="115+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
                             <td scope="col" [style.width]="115+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;"></td>
                         </tr>
                     </thead>
@@ -209,10 +219,17 @@
                             <th scope="col" [style.width]="110+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">CCY</th>
                             <th scope="col" [style.width]="110+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;">Amount Remitted</th>
                         </tr>
-                        <tr class="table-tr" *ngFor="let item of data[1];let i=index;">
-                            <td scope="col" [style.width]="110+'px'" style="height: 65px !important;" class="col-td-th-1">{{item?.boeNumber}}</td>
-                            <td scope="col" [style.width]="110+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.currency}} | {{item?.invoiceAmount}}</td>
-                            <td scope="col" [style.width]="110+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;">{{item?.invoiceAmount}}</td>
+                        <div *ngIf="type=='Import-Direct-Payment'">
+                            <tr class="table-tr" *ngFor="let item of data[1];let i=index;">
+                                <td scope="col" [style.width]="110+'px'" style="height: 65px !important;" class="col-td-th-1">{{item?.boeNumber}}</td>
+                                <td scope="col" [style.width]="110+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1">{{item?.currency}} | {{item?.invoiceAmount}}</td>
+                                <td scope="col" [style.width]="110+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;">{{item?.invoiceAmount}}</td>
+                            </tr>
+                        </div>
+                        <tr class="table-tr" *ngIf="type!='Import-Direct-Payment'">
+                            <td scope="col" [style.width]="110+'px'" style="height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="110+'px'" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;" class="col-td-th-1"></td>
+                            <td scope="col" [style.width]="110+'px'" class="col-td-th-1" style="border-left: 2px solid rgb(195, 195, 195) !important;height: 65px !important;"></td>
                         </tr>
                     </thead>
                 </table>

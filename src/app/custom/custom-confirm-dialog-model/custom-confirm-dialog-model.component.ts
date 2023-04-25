@@ -106,7 +106,6 @@ export class CustomConfirmDialogModelComponent implements OnInit {
     callback($('.DropDownInput').html());
     window.scroll(0,0)
     console.log($('.DropDownInput').html(),'DropDownInput')
-
   }
   ngOnInit(): void {
   }
