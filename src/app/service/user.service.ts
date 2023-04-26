@@ -111,6 +111,14 @@ export class UserService implements OnInit {
       byteArray: byteArray
     });
   }
+  
+  public documentSendMail(id, byteArray) {
+    return this.http.post(`${this.api_base}/authenticate/documentSendMail`, {
+      emailId: id,
+      byteArray: byteArray
+    });
+  }
+
 
   public getAllUser() {
     return this.http.get(`${this.api_base}/authenticate/getAllUser`).toPromise();
