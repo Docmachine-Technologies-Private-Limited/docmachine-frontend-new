@@ -78,19 +78,19 @@ export class ApprovalPanelComponent implements OnInit {
       var fitertemp: any = doc.filter(n => n)
       await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
         console.log(merge, 'mergeAllPDFs')
-        this.downloadAsSingleFile('MergePdf_' + new Date().toUTCString(), merge?.pdfurl);
+        this.downloadAsSingleFile('MergePdf_' + new Date().toUTCString(), merge?.actulapdfbase64);
       });
-    }else if(type=='zip'){
+    } else if (type == 'zip') {
       var fitertemp: any = doc.filter(n => n)
       await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
         console.log(merge, 'mergeAllPDFs')
         this.downloadZip('MergePdf_' + new Date().toUTCString(), merge?.actulapdfbase64);
       });
-    }else{
+    } else {
       var fitertemp: any = doc.filter(n => n)
       await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
         console.log(merge, 'mergeAllPDFs')
-        this.sendMail2(merge?.pdf_data, tableName, emaildata);
+        this.sendMail2(merge?.pdfurl, tableName, emaildata);
       });
     }
   }
@@ -98,23 +98,59 @@ export class ApprovalPanelComponent implements OnInit {
     this.blobToSaveAs(filename, pdfDoc)
   };
 
-  blobToSaveAs(fileName: string, exportText: any) {
+  blobToSaveAs(fileName: any, arraybuffer: any) {
     try {
-      const linkSource = exportText;
       const downloadLink = document.createElement("a");
-      downloadLink.href = linkSource;
-      downloadLink.download = fileName;
-      downloadLink.click();
+      this.mergePdfs(arraybuffer).then((res: any) => {
+        downloadLink.href = res?.merge;
+        downloadLink.download = fileName;
+        downloadLink.click();
+      })
     } catch (e) {
       console.error('BlobToSaveAs error', e);
     }
   }
 
+  mergePdfs(pdfsToMerges) {
+    return new Promise(async (resolve, reject) => {
+      const mergedPdf = await PDFDocument.create();
+      const actions = pdfsToMerges.map(async pdfBuffer => {
+        const pdf = await PDFDocument.load(this.toArrayBuffer(pdfBuffer?.data));
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach((page) => {
+          mergedPdf.addPage(page);
+        });
+      });
+      await Promise.all(actions);
+      const pdfDataUri = await mergedPdf.saveAsBase64({ dataUri: true });
+      var data_pdf = await pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
+      var merge = 'data:application/pdf;base64,' + data_pdf;
+      await resolve({ merge: merge, pdfDataUri: pdfDataUri, data_pdf: data_pdf })
+    })
+  }
+
+  _arrayBufferToBase64(buffer) {
+    var binary = '';
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return Buffer.from(binary).toString('base64');
+  }
+  toArrayBuffer(buffer) {
+    const arrayBuffer = new ArrayBuffer(buffer.length);
+    const view = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < buffer.length; ++i) {
+      view[i] = buffer[i];
+    }
+    return arrayBuffer;
+  }
   sendMail2 = async (pdfDoc: any, tableName, Maildata) => {
-    if (tableName=== 'Inward-Remitance-Dispoal-Realization') {
-      this.SendMailTextWithPDF(pdfDoc?.pdfDataUri,Maildata)
+    if (tableName === 'Inward-Remitance-Dispoal-Realization') {
+      this.SendMailTextWithPDF(pdfDoc, Maildata)
     } else {
-      this.userserivce.documentSend(this.USER_DETAILS?.emailId, pdfDoc.data_pdf).subscribe((data) => {
+      this.userserivce.documentSendMail(this.USER_DETAILS?.emailId, pdfDoc).subscribe((data) => {
         console.log(data);
         this.toastr.success('Message sent your email id successfully!');
       },
@@ -124,7 +160,7 @@ export class ApprovalPanelComponent implements OnInit {
       );
     }
   };
-  SendMailTextWithPDF(Mergepdf:any,Maildata: any) {
+  SendMailTextWithPDF(Mergepdf: any, Maildata: any) {
     let val = {
       number: Maildata['Number'].toString(),
       amount: Maildata['Amount'].toString(),
@@ -132,8 +168,8 @@ export class ApprovalPanelComponent implements OnInit {
     }
     console.log(val, 'sendMail')
     this.documentService.SendMail_TextPdf({ task: val }).subscribe((res2) => {
-        this.toastr.success('Message sent your email id successfully!');
-      },
+      this.toastr.success('Message sent your email id successfully!');
+    },
       (err) => console.log("ERROR")
     );
   }
