@@ -1,0 +1,133 @@
+<div class="container-hover" id="CUSTOM_HOVER_PANEL" CommonDirective>
+    <div class="footer">
+        <div class="close-btn">
+            <button class="btn btn-primary window-close" [attr.hover-popup-open-close]="'open'"><i class="fa fa-times window-close"
+                    aria-hidden="true" [attr.hover-popup-open-close]="'open'"></i></button>
+        </div>
+        <div class="panel-hover">
+            <mat-tab-group>
+                <mat-tab [label]="data.pi_poNo" *ngFor="let data of this.pipoArrayList;let i=index">
+                    <div class="panel-child-hover">
+                        <label for="" class="label-header">{{data.pi_poNo}} | {{data.date}} | {{data.buyerName}}</label>
+                        <ul class="listDocument">
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('debitNote')">Debit
+                                Note</button>
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('creditNote')">Credit
+                                Note</button>
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('insuranceCopy')">Insurance Documents</button>
+                            <button class="btn btn-primary border-radius" (click)="openUploadWithType('lcCopy')">LC
+                                Copy</button>
+                            <button class="btn btn-primary border-radius" (click)='openUploadWithType("sb")'>Shipping
+                                Bill</button>
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('tryPartyAgreement')">Tri-Party agreement</button>
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('agreement')">Master
+                                service</button>
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('opinionReport')">Opinion Reports</button>
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('swiftCopy')">Swift
+                                Copy</button>
+                            <button class="btn btn-primary border-radius" (click)="openUploadWithType('irAdvice')">IR
+                                Advice</button>
+                            <button class="btn btn-primary border-radius" (click)="uploadCollectionBill()">Bill Under
+                                Collection</button>
+                            <button class="btn btn-primary border-radius" (click)="openUploadWithType('blCopyref')">Bill
+                                lodgement advice copy</button>
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('EBRC')">EBRC</button>
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('blCopy')">Airway/Blcopy</button>
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('billOfExchange')">BillOFExchange</button>
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('commercial')">Commercial</button>
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('destruction')">Destruction</button>
+                            <button class="btn btn-primary border-radius"
+                                (click)="openUploadWithType('packingList')">Packing List Documents</button>
+                        </ul>
+                        <mat-tab-group>
+                            <mat-tab label="DETAILS">
+                                <div class="panel-child-hover p-2">
+                                    <div class="column">
+                                        <p>As per payment terms you need create a Inward Remittance Disposal against the
+                                            Export. Create a transaction to submit swift copy to bank to process the
+                                            amount
+                                        </p>
+                                        <button class="btn btn-primary border-radius"
+                                            (click)="openUploadWithType('commercial')">Inward Remittance
+                                            Disposal</button>
+                                    </div>
+                                    <div class="grid-log-panel">
+                                        <div class="left-panel">
+                                            <div class="activity-log-panel">
+                                                <div class="text-with-circle">
+                                                    <div class="left-log-panel"></div>
+                                                    <div class="view-pdf-text">
+                                                        <p class="text-log">Upload Purchase Order</p>
+                                                        <button class="btn btn-primary border-radius"
+                                                            (click)="openDoc(data?.doc)">View</button>
+                                                    </div>
+                                                </div>
+                                                <div class="text-with-circle">
+                                                    <div class="left-log-panel"></div>
+                                                    <div class="view-pdf-text">
+                                                        <p class="text-log">Uploaded Proforma Invoice</p>
+                                                        <button class="btn btn-primary border-radius"
+                                                            (click)="openDoc(data?.doc)">View</button>
+                                                    </div>
+                                                </div>
+                                                <div class="text-with-circle">
+                                                    <div class="left-log-panel"></div>
+                                                    <div class="view-pdf-text">
+                                                        <p class="text-log">Shipping Bill Uploaded</p>
+                                                        <button class="btn btn-primary border-radius"
+                                                            (click)="openDoc(data?.sb)">View</button>
+                                                    </div>
+                                                </div>
+                                                <div class="text-with-circle">
+                                                    <div class="left-log-panel"></div>
+                                                    <div class="view-pdf-text">
+                                                        <p class="text-log">Airway / BL Copy Uploaded</p>
+                                                        <button class="btn btn-primary border-radius"
+                                                            (click)="openDoc(data?.airwayBlcopy)">View</button>
+                                                    </div>
+                                                </div>
+                                                <div class="text-with-circle">
+                                                    <div class="left-log-panel"></div>
+                                                    <div class="view-pdf-text">
+                                                        <p class="text-log">Commercial Invoice Uploaded</p>
+                                                        <button class="btn btn-primary border-radius"
+                                                            (click)="openDoc(data?.commercial)">View</button>
+                                                    </div>
+                                                </div>
+                                                <div class="text-with-circle">
+                                                    <div class="left-log-panel left-log-panel-last-child"></div>
+                                                    <div class="view-pdf-text">
+                                                        <p class="text-log">Packing List Uploaded</p>
+                                                        <button class="btn btn-primary border-radius"
+                                                            (click)="openDoc(data?.packingList)">View</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="right-panel" *ngIf="this.PDF_URL">
+                                            <app-pdf-viewer [downloadShow]="false" name="Documents" [src]="this.PDF_URL" width="100%" height="100%"></app-pdf-viewer>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-tab>
+                            <mat-tab label="DOCUMENTS"></mat-tab>
+                            <mat-tab label="TRANSACTIONS & TASKS"></mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

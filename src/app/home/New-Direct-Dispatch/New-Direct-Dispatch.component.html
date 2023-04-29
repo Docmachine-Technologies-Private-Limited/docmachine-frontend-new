@@ -4,8 +4,13 @@
       <div class="row">
         <div class="col-md-6 col-sm-6 col-xs-12">
           <div class="Dashbord_sec">
-            <h2 class="title_dash">Export Bill Lodgement <span *ngIf="this.documentService.MT102_SUBJECT!=''">/ Realization</span> <span *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes" && this.Lodgement["DirectDispatch"]["Hide"]==="no"'> / Regularization</span>
-              <span *ngIf='this.Lodgement["DirectDispatch"]["Show"]=== "yes" && this.Lodgement["AgainstAdvanceReceipt"]["Hide"]==="no"'> / Direct Dispatch</span>
+            <h2 class="title_dash">Export Bill Lodgement <span *ngIf="this.documentService.MT102_SUBJECT!=''">/
+                Realization</span> <span
+                *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes" && this.Lodgement["DirectDispatch"]["Hide"]==="no"'>
+                / Regularization</span>
+              <span
+                *ngIf='this.Lodgement["DirectDispatch"]["Show"]=== "yes" && this.Lodgement["AgainstAdvanceReceipt"]["Hide"]==="no"'>
+                / Direct Dispatch</span>
             </h2>
           </div>
         </div>
@@ -13,7 +18,8 @@
           <div class="float_right_page">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a [routerLink]="['/home/new-Bill-Under-Collection']">Export Bill Lodgement</a>
+                <li class="breadcrumb-item"><a [routerLink]="['/home/new-Bill-Under-Collection']">Export Bill
+                    Lodgement</a>
                 </li>
               </ol>
             </nav>
@@ -30,19 +36,21 @@
                 <div class="col-md-7 col-sm-12 col-12">
                   <div *ngIf='isGenerate'>
                     <div>
-                        <div id="mainId" class="bc mt-2 mb-2" *ngIf="isProceed == false && this.bankformat.length!=0 && this.bankformat[0]?.urlpdf!=''">
-                            <app-pdf-viewer [downloadShow]="false" 
-                            name="Bill Lodgement Pdf Viewer" [src]="selItems" *ngFor="let selItems of  [this.formerge]" width="100%" height="500px"></app-pdf-viewer>
-                        </div>
-                        <div id="first" #dataToExport>
-                          <app-letterhead *ngIf="this.bankformat[0]?.urlpdf==''" [data]="[this.itemArray,this.advanceArray,this.newBankArray]"></app-letterhead>
-                        </div>
+                      <div id="mainId" class="bc mt-2 mb-2"
+                        *ngIf="isProceed == false && this.bankformat.length!=0 && this.bankformat[0]?.urlpdf!=''">
+                        <app-pdf-viewer [downloadShow]="false" name="Bill Lodgement Pdf Viewer" [src]="selItems"
+                          *ngFor="let selItems of  [this.formerge]" width="100%" height="500px"></app-pdf-viewer>
+                      </div>
+                      <div id="first" #dataToExport>
+                        <app-letterhead *ngIf="this.bankformat[0]?.urlpdf==''"
+                          [data]="[this.itemArray,this.advanceArray,this.newBankArray]"></app-letterhead>
+                      </div>
                     </div>
-                </div>
+                  </div>
                   <div class="new_left_sidedoc p-2 pdf_invoce_scroll" *ngIf="this.PDF_LIST.length!=0">
                     <div *ngFor="let selItems of this.PDF_LIST">
-                           <app-pdf-viewer [downloadShow]="false"
-                          [name]="selItems?.name" [src]="selItems?.pdf" width="100%" height="500px"></app-pdf-viewer>
+                      <app-pdf-viewer [downloadShow]="false" [name]="selItems?.name" [src]="selItems?.pdf" width="100%"
+                        height="500px"></app-pdf-viewer>
                     </div>
                     <div *ngIf="isUploaded">
                       <iframe *ngIf="uploadUrl!=''" style="border:none;" [src]="uploadUrl" width="100%"> </iframe>
@@ -51,7 +59,7 @@
                 </div>
                 <div class="col-md-5 col-sm-12 col-12">
                   <div class="right_form_new">
-                     <div class="row m-0 d-flex flex-column align-items">
+                    <div class="row m-0 d-flex flex-column align-items">
                       <div class="content_white_background1" style="padding: 0;
                       margin: auto;
                       margin-left: 0;
@@ -64,21 +72,19 @@
                                 <div class="row">
                                   <div class="col-md-10 mb-3">
                                     <label for="exampleInputEmail1" class="form-label">Select bank*</label>
-                                    <app-ng-dropdown-custom
-                                    placeHolderText="Select Bank Name"
-                                    #Bank_Name
-                                    [items]="this.bankDetail" bindLabel="value"
-                                    [ngModel]="form?.bank_name" formControlName="bank_name"
-                                    (modelChanges)="form.bank_name=$event"
-                                    bindValue="id"
-                                    [multiple]="false" (modelChanges)="setradio($event)">
-                                   </app-ng-dropdown-custom>
+                                    <app-ng-dropdown-custom placeHolderText="Select Bank Name" #Bank_Name
+                                      [items]="this.bankDetail" bindLabel="value" [ngModel]="form?.bank_name"
+                                      formControlName="bank_name" (modelChanges)="form.bank_name=$event" bindValue="id"
+                                      [multiple]="false" (modelChanges)="setradio($event)">
+                                    </app-ng-dropdown-custom>
                                   </div>
-                                  <div class="col-md-8 mt-2 col-sm-8 col-7" *ngIf='this.Lodgement["DirectDispatch"]["Show"]!= "yes"'>
+                                  <div class="col-md-8 mt-2 col-sm-8 col-7"
+                                    *ngIf='this.Lodgement["DirectDispatch"]["Show"]!= "yes"'>
                                     <label for="email" class="form-label">Against advance receipt?</label>
                                   </div>
                                   <div class="col-md-4 col-sm-4 col-5">
-                                    <div class="check_box_button" *ngIf='this.Lodgement["DirectDispatch"]["Show"]!= "yes"'>
+                                    <div class="check_box_button"
+                                      *ngIf='this.Lodgement["DirectDispatch"]["Show"]!= "yes"'>
                                       <button type="button" [class]="ClassRetrun('AgainstAdvanceReceipt','Hide','btn no-button active1',
                                                                            'btn btn-primary remove-no-button','no')"
                                         (click)="Changebutton('AgainstAdvanceReceipt','Hide','Show','no')">No</button>
@@ -88,22 +94,22 @@
                                         (click)="Changebutton('AgainstAdvanceReceipt','Show','Hide','yes')">Yes</button>
                                     </div>
                                   </div>
-                                  
+
                                   <div class="col-md-10 mb-3">
                                     <label for="email" class="form-label">Select PI/PO or shipping bill</label>
-                                      <!-- <ng-select
+                                    <!-- <ng-select
                                        [items]="this.SHIPPING_BILL_LIST"
                                        bindLabel="value"
                                        [multiple]="false"
                                        placeholder="Select PI/PO or shipping bill"
                                        (change)="DUMP_FUNCTION($event?.value,'Shipping bill',content1)" #PI_PO_shipping_bill></ng-select> -->
-                                       <app-ng-dropdown-custom
-                                       class="PopupOpen" popup-close="ShippingBill"
-                                       placeHolderText="Select PI/PO or shipping bill"
-                                       [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
-                                       [multiple]="false" (modelChanges)="DUMP_FUNCTION($event,'Shipping bill',content1)" #PI_PO_shipping_bill>
-                                      </app-ng-dropdown-custom>
-                                   
+                                    <app-ng-dropdown-custom class="PopupOpen" popup-close="ShippingBill"
+                                      placeHolderText="Select PI/PO or shipping bill" [items]="this.SHIPPING_BILL_LIST"
+                                      bindLabel="value" [multiple]="false"
+                                      (modelChanges)="DUMP_FUNCTION($event,'Shipping bill',content1)"
+                                      #PI_PO_shipping_bill>
+                                    </app-ng-dropdown-custom>
+
                                     <div *ngIf='this.itemArray?.length!=0'>
                                       <div class="shpt_bill_sec">
                                         <label>SHIPPING BILL NUMBER SELECTED</label>
@@ -119,65 +125,74 @@
                                     </div>
                                   </div>
                                   <div class="space_bottom"></div>
-                                
-                                  <div style="margin: 10px 0px;" class="col-11"  *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes" || this.Lodgement["AgainstAdvanceReceipt"]["Hide"]=== "no"'>
+
+                                  <div style="margin: 10px 0px;" class="col-11"
+                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=== "yes" || this.Lodgement["AgainstAdvanceReceipt"]["Hide"]=== "no"'>
                                     <div class="content_white_background1" *ngIf="this.itemArray.length!=0">
                                       <h5 class="header-text">SB or Inward remittance Details</h5>
-                                      <mat-tab-group mat-stretch-tabs="false" (selectedTabChange)="SlideToggle($event)" mat-align-tabs="start">
-                                        <mat-tab [id]="item?._id" [label]="'SB_No_'+item?.sbno" *ngFor="let item of this.itemArray;let i=index">
+                                      <mat-tab-group mat-stretch-tabs="false" (selectedTabChange)="SlideToggle($event)"
+                                        mat-align-tabs="start">
+                                        <mat-tab [id]="item?._id" [label]="'SB_No_'+item?.sbno"
+                                          *ngFor="let item of this.itemArray;let i=index">
                                           <div class="sb-panel">
                                             <table class="table" style="height: 100%;">
-                                               <thead>
-                                                 <tr class="table-tr">
-                                                   <th  scope="col" class="col-td-th-2">SB no.</th>
-                                                   <th  scope="col" class="col-td-th-2">SB amount</th>
-                                                   <th  scope="col" class="col-td-th-2">SB Balance</th>
-                                                 </tr>
-                                               </thead>
-                                               <tbody>
-                                                 <tr class="table-tr">
-                                                   <td class="col-td-th-2">{{item?.sbno}}</td>
-                                                   <td class="col-td-th-2">{{item?.fobValue}}</td>
-                                                   <td class="col-td-th-2">{{item?.balanceAvai}}</td>
-                                                 </tr>
-                                               </tbody>
-                                             </table>
-                                           </div>
-                                           <div class="sb-panel" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"'>
+                                              <thead>
+                                                <tr class="table-tr">
+                                                  <th scope="col" class="col-td-th-2">SB no.</th>
+                                                  <th scope="col" class="col-td-th-2">SB amount</th>
+                                                  <th scope="col" class="col-td-th-2">SB Balance</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr class="table-tr">
+                                                  <td class="col-td-th-2">{{item?.sbno}}</td>
+                                                  <td class="col-td-th-2">{{item?.fobValue}}</td>
+                                                  <td class="col-td-th-2">{{item?.balanceAvai}}</td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                          <div class="sb-panel"
+                                            *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"'>
                                             <table class="table">
-                                               <tbody style="background: white;
+                                              <tbody style="background: white;
                                                margin: 10px;
                                                border-radius: 10px;
-                                               box-shadow: 0px 0px 2px 3px #d5d5d5;" *ngFor="let item1 of this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+item?.sbno];let j=index">
+                                               box-shadow: 0px 0px 2px 3px #d5d5d5;"
+                                                *ngFor="let item1 of this.FILTER_DATA.FILTER_COMMERCIAL['SB_'+item?.sbno];let j=index">
                                                 <tr class="table-tr">
                                                   <th scope="col" class="col-td-th-2">CI No.</th>
                                                   <th scope="col" class="col-td-th-2">CI Amount</th>
                                                   <th scope="col" class="col-td-th-2">Debit Note Amount</th>
                                                 </tr>
-                                                 <tr class="table-tr">
-                                                   <td class="col-td-th-2">{{item1?.commercialNumber}}</td>
-                                                   <td class="col-td-th-2">{{item1?.amount}}</td>
-                                                   <td class="col-td-th-2">{{item1?.debitNoteRef[0]?.totalDebitAmount}}</td>  
-                                                 </tr>
-                                                 <thead>
+                                                <tr class="table-tr">
+                                                  <td class="col-td-th-2">{{item1?.commercialNumber}}</td>
+                                                  <td class="col-td-th-2">{{item1?.amount}}</td>
+                                                  <td class="col-td-th-2">{{item1?.debitNoteRef[0]?.totalDebitAmount}}
+                                                  </td>
+                                                </tr>
+                                                <thead>
                                                   <tr class="table-tr">
                                                     <th scope="col" class="col-td-th-2">I/R No.</th>
                                                     <th scope="col" class="col-td-th-2">I/R Useses Amount</th>
                                                     <th scope="col" class="col-td-th-2">I/R Available Amount</th>
                                                   </tr>
-                                                  <tr class="table-tr" *ngFor="let irDataItemitem1 of item1?.IRADVICE_INFO;let j=index" >
+                                                  <tr class="table-tr"
+                                                    *ngFor="let irDataItemitem1 of item1?.IRADVICE_INFO;let j=index">
                                                     <td class="col-td-th-2">{{irDataItemitem1?.irDataItem?.billNo}}</td>
-                                                    <td class="col-td-th-2">{{irDataItemitem1?.irDataItem?.Used_Balance}}</td>
-                                                    <td class="col-td-th-2">{{irDataItemitem1?.irDataItem?.BalanceAvail}}</td>
+                                                    <td class="col-td-th-2">
+                                                      {{irDataItemitem1?.irDataItem?.Used_Balance}}</td>
+                                                    <td class="col-td-th-2">
+                                                      {{irDataItemitem1?.irDataItem?.BalanceAvail}}</td>
                                                   </tr>
                                                 </thead>
-                                               </tbody>
-                                             </table>
-                                           </div>
-                                            <!-- <button class="col-3 mr-0 mb-3 ml-2" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"' style="margin: auto;" mat-raised-button color="accent" (click)="open2(content2.style.display='block', item?.sbno);">Add IR +</button> -->
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                          <!-- <button class="col-3 mr-0 mb-3 ml-2" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"' style="margin: auto;" mat-raised-button color="accent" (click)="open2(content2.style.display='block', item?.sbno);">Add IR +</button> -->
                                         </mat-tab>
                                       </mat-tab-group>
-                                     </div>
+                                    </div>
                                     <!-- <div class="col-12">
                                       <h3 style="font-size:17px;">Advance reference Number</h3>
                                         <div class="col-12">
@@ -199,10 +214,12 @@
                                     </div> -->
                                   </div>
                                   <div class="space_bottom"></div>
-                                  <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"' class="col-md-8 col-sm-8 col-7">
+                                  <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"'
+                                    class="col-md-8 col-sm-8 col-7">
                                     <label for="email" class="form-label">Direct Dispatch</label>
                                   </div>
-                                  <div class="col-md-4 col-sm-4 col-5" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"'>
+                                  <div class="col-md-4 col-sm-4 col-5"
+                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes"'>
                                     <div class="check_box_button">
                                       <button type="button" [class]="ClassRetrun('DirectDispatch','Hide','btn no-button active1',
                                                                           'btn btn-primary remove-no-button','no')"
@@ -214,10 +231,14 @@
                                     </div>
                                   </div>
                                   <div class="space_bottom"></div>
-                                  <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"' class="col-md-8 col-sm-8 col-7">
+                                  <div
+                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"'
+                                    class="col-md-8 col-sm-8 col-7">
                                     <label for="email" class="form-label">Under LC?</label>
                                   </div>
-                                  <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"' class="col-md-4 col-sm-4 col-5">
+                                  <div
+                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"'
+                                    class="col-md-4 col-sm-4 col-5">
                                     <div class="check_box_button">
                                       <button type="button" [class]="ClassRetrun('UnderLC','Hide','btn no-button active1',
                                                                           'btn btn-primary remove-no-button','no')"
@@ -237,8 +258,8 @@
                                         </div>
                                         <div class="col-md-10 col-sm-10 col-9 pr-0">
                                           <div class="select_rol">
-                                            <ng-select [items]="this.Letter_Of_Credit"
-                                              bindLabel="letterOfCreditNumber" placeholder="Select letter of credit"
+                                            <ng-select [items]="this.Letter_Of_Credit" bindLabel="letterOfCreditNumber"
+                                              placeholder="Select letter of credit"
                                               [(ngModel)]="ThirdPartydataselection" name="commodity" #ngSelect>
                                             </ng-select>
                                           </div>
@@ -254,10 +275,14 @@
                                     </div>
                                     <div class="space_bottom"></div>
                                   </div>
-                                  <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"' class="col-md-8 col-sm-8 col-7">
+                                  <div
+                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"'
+                                    class="col-md-8 col-sm-8 col-7">
                                     <label for="email" class="form-label">With Scrutiny?</label>
                                   </div>
-                                  <div *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"' class="col-md-4 col-sm-4 col-5">
+                                  <div
+                                    *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]!= "yes" && this.Lodgement["DirectDispatch"]["Hide"]== "no"'
+                                    class="col-md-4 col-sm-4 col-5">
                                     <div class="check_box_button">
                                       <button type="button" [class]="ClassRetrun('WithScrutiny','Hide','btn no-button active1',
                                                                           'btn btn-primary remove-no-button','no')"
@@ -269,10 +294,12 @@
                                     </div>
                                   </div>
                                   <div class="space_bottom"></div>
-                                  <div class="col-md-8 col-sm-8 col-7" *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
+                                  <div class="col-md-8 col-sm-8 col-7"
+                                    *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                     <label for="email" class="form-label">With Discount?</label>
                                   </div>
-                                  <div class="col-md-4 col-sm-4 col-5" *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
+                                  <div class="col-md-4 col-sm-4 col-5"
+                                    *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                     <div class="check_box_button">
                                       <button type="button" [class]="ClassRetrun('WithDiscount','Hide','btn no-button active1',
                                                                           'btn btn-primary remove-no-button','no')"
@@ -284,10 +311,12 @@
                                     </div>
                                   </div>
                                   <div class="space_bottom"></div>
-                                  <div class="col-md-8 col-sm-8 col-7" *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
+                                  <div class="col-md-8 col-sm-8 col-7"
+                                    *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                     <label for="email" class="form-label">Is Buyer remitter different?</label>
                                   </div>
-                                  <div class="col-md-4 col-sm-4 col-5" *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
+                                  <div class="col-md-4 col-sm-4 col-5"
+                                    *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                     <div class="check_box_button">
                                       <button type="button" [class]="ClassRetrun('BuyerRemitterDifferent','Hide','btn no-button active1',
                                                                           'btn btn-primary remove-no-button','no')"
@@ -308,8 +337,8 @@
                                         <div class="col-md-10 col-sm-10 col-9 pr-0">
                                           <div class="select_rol">
                                             <ng-select [items]="this.ThirdPartydata" bindLabel="try_part_agreement"
-                                              placeholder="Select Tripartite agreement"
-                                              [(ngModel)]="ThirPartyselection" name="commodity" #ngSelect>
+                                              placeholder="Select Tripartite agreement" [(ngModel)]="ThirPartyselection"
+                                              name="commodity" #ngSelect>
                                             </ng-select>
                                           </div>
                                         </div>
@@ -325,10 +354,12 @@
                                     </div>
                                   </div>
                                   <div class="space_bottom"></div>
-                                  <div class="col-md-8 col-sm-8 col-7" *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
+                                  <div class="col-md-8 col-sm-8 col-7"
+                                    *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                     <label for="email" class="form-label">Is Invoice reduction?</label>
                                   </div>
-                                  <div class="col-md-4 col-sm-4 col-5" *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
+                                  <div class="col-md-4 col-sm-4 col-5"
+                                    *ngIf='this.Lodgement["DirectDispatch"]["Hide"]== "no"'>
                                     <div class="check_box_button">
                                       <button type="button" [class]="ClassRetrun('InvoiceReduction','Hide','btn no-button active1',
                                                                           'btn btn-primary remove-no-button','no')"
@@ -346,9 +377,8 @@
                                       Charges to {{Bank_Name.selectedItems}}*
                                       <div *ngFor='let value of newBankArray'
                                         style="display: flex; align-items: center;">
-                                        <input style="flex-direction:row;" [value]="value"
-                                        name="Charges_to_Bank" ngModel
-                                          (click)="model1.option = value" [checked]="value === model1.option"
+                                        <input style="flex-direction:row;" [value]="value" name="Charges_to_Bank"
+                                          ngModel (click)="model1.option = value" [checked]="value === model1.option"
                                           type="radio" id="options1" class="circular_input1"
                                           (click)="chargesTo(value);">
                                         <label style="flex-direction:row;" class="label1"
@@ -378,14 +408,14 @@
                                   <br>
                                 </div>
                               </div>
-                             </div>
+                            </div>
                           </div>
                           <ng-template #content3 let-modal>
                             <div class="modal-body2">
                               <div class="row no-gutter">
                                 <div class="col-md-7" style="margin: 10px;">
                                   <div class="login d-flex py-5" style="padding: 0px !important;">
-                                     <div class="container popup">
+                                    <div class="container popup">
                                       <div class="row">
 
                                         <div class="col-lg-10 col-xl-7 mrg">
@@ -480,8 +510,8 @@
                                               Agreement</h6>
                                             <input type="checkBox" checked
                                               (change)="addPdfToSelectedPdf(tryPartyAgreement , $event)">
-                                            <iframe style="flex-direction:row;" [src]="tryPartyAgreement"
-                                              height="500px" width="600px"></iframe>
+                                            <iframe style="flex-direction:row;" [src]="tryPartyAgreement" height="500px"
+                                              width="600px"></iframe>
                                           </div>
                                           <div class="docStyle" *ngIf="randomArray[0].opinionReport">
                                             <h6 class="display-4" style="margin-top: 10px;width: 6 0px;
@@ -553,12 +583,15 @@
                           </ng-template>
                         </main>
                       </div>
-                   
-                     </div>
+
+                    </div>
                     <div class="bottom_submit_section">
-                      <button type="button" class="btn btn-primary"  *ngIf="this.documentService.MT102_SUBJECT==''" [routerLink]="['/home/dashboardTask']">CANCEL</button>
-                      <button type="button" class="btn btn-secondary" (click)='generateDoc1(this.ExportBillLodgement_Form);this.ObjectLength(this.advanceArray)!=0 || Lodgement?.AgainstAdvanceReceipt?.Hide=="no"?Preview_btn.style.display="block" : ""'>PROCEED</button>
-                      <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;" (click)='PREVIEWS_URL();PREVIEW_PAGE.style.display="block"'>Preview</button>
+                      <button type="button" class="btn btn-primary" *ngIf="this.documentService.MT102_SUBJECT==''"
+                        [routerLink]="['/home/dashboardTask']">CANCEL</button>
+                      <button type="button" class="btn btn-secondary"
+                        (click)='generateDoc1(this.ExportBillLodgement_Form);this.ObjectLength(this.advanceArray)!=0 || Lodgement?.AgainstAdvanceReceipt?.Hide=="no"?Preview_btn.style.display="block" : ""'>PROCEED</button>
+                      <button type="button" class="btn btn-secondary" #Preview_btn style="display: none;"
+                        (click)='PREVIEWS_URL();PREVIEW_PAGE.style.display="block"'>Preview</button>
                     </div>
                   </div>
                 </div>
@@ -572,344 +605,357 @@
 </div>
 
 <div class="temp" #content1>
-  <app-custom-model [FooterButton]="false"
-  [condition]=" this.OK_BUTTON_CONDITION!=''?true:false"
-  [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="ShippingBill"
-  [name]="'Shipping Bill Against of : '+nameSearch4" #ShippingBill>
-  <div class="container-fluid mt-2">
-    <div class="middle_bts">
-      <div class="login py-5" style="padding: 0px !important; width:100%;">
-        <div class="container_innser" style="overflow: auto;height: calc(100vh - 170px);padding: 10px;">
-          <div class="d-flex justify-content-between mb-1 p-2">
-            <app-ng-dropdown-custom
-            placeHolderText="Select Buyer Name"
-            [items]="this.buyerName" bindLabel="value"
-            [multiple]="false" (modelChanges)="filterBuyerName($event)" #buyerNameSelection>
-           </app-ng-dropdown-custom> 
-           <app-ng-dropdown-custom *ngIf="this.Lodgement['ThirdPartyRemittance']['Show']=='yes'"
-           placeHolderText="Select Party Name"
-           [items]="this.irBuyerName" bindLabel="value"
-           [multiple]="false" style="margin: auto;margin-left: 10px; width: 280px;" #buyerNameSelection>
-          </app-ng-dropdown-custom>
-            <!-- <div class="streep-panel">
+  <app-custom-model [FooterButton]="false" [condition]=" this.OK_BUTTON_CONDITION!=''?true:false"
+    [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="ShippingBill"
+    [name]="'Shipping Bill Against of : '+nameSearch4" #ShippingBill>
+    <div class="container-fluid mt-2">
+      <div class="middle_bts">
+        <div class="login py-5" style="padding: 0px !important; width:100%;">
+          <div class="container_innser" style="overflow: auto;height: calc(100vh - 170px);padding: 10px;">
+            <div class="d-flex justify-content-between mb-1 p-2">
+              <app-ng-dropdown-custom placeHolderText="Select Buyer Name" [items]="this.buyerName" bindLabel="value"
+                [multiple]="false" (modelChanges)="filterBuyerName($event)" #buyerNameSelection>
+              </app-ng-dropdown-custom>
+              <app-ng-dropdown-custom *ngIf="this.Lodgement['ThirdPartyRemittance']['Show']=='yes'"
+                placeHolderText="Select Party Name" [items]="this.irBuyerName" bindLabel="value" [multiple]="false"
+                style="margin: auto;margin-left: 10px; width: 280px;" #buyerNameSelection>
+              </app-ng-dropdown-custom>
+              <!-- <div class="streep-panel">
                 <label><span class="round-circel-strepper"></span> <span class="text-span">blCopy doc</span></label>
                 <label><span class="round-circel-strepper"></span> <span class="text-span">blCopy doc</span></label>
                 <label><span class="round-circel-strepper"></span> <span class="text-span">blCopy doc</span></label>
             </div> -->
-            <div class="button-group mr-0">
-            <div class="d-flex" style="align-items: center;gap: 10px;">
-              <div class="temp">
-                <label for="email" class="form-label m-auto">Third Party Remittance</label>
-              </div>
-              <div class="temp">
-                <div class="check_box_button">
-                  <button type="button" [class]="ClassRetrun('ThirdPartyRemittance','Hide','btn no-button active1',
+              <div class="button-group mr-0">
+                <div class="d-flex" style="align-items: center;gap: 10px;">
+                  <div class="temp">
+                    <label for="email" class="form-label m-auto">Third Party Remittance</label>
+                  </div>
+                  <div class="temp">
+                    <div class="check_box_button">
+                      <button type="button" [class]="ClassRetrun('ThirdPartyRemittance','Hide','btn no-button active1',
                                                       'btn btn-primary remove-no-button','no')"
-                    (click)="Changebutton('ThirdPartyRemittance','Hide','Show','no')">No</button>
-                  <button type="button"
-                    [class]="ClassRetrun('ThirdPartyRemittance','Show',
+                        (click)="Changebutton('ThirdPartyRemittance','Hide','Show','no')">No</button>
+                      <button type="button" [class]="ClassRetrun('ThirdPartyRemittance','Show',
                                                       'btn yes-button active','btn yes-button','yes')"
-                    (click)="Changebutton('ThirdPartyRemittance','Show','Hide','yes')">Yes</button>
+                        (click)="Changebutton('ThirdPartyRemittance','Show','Hide','yes')">Yes</button>
+                    </div>
+                  </div>
                 </div>
+                <button type="button" class="btn btn-primary" (click)="nameSearch4 = ''">Reset</button>
+                <button type="button" class="btn btn-primary"
+                  *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"'
+                  (click)="HIDE_SHOW_POPUP('PANEL_1')">Back</button>
+                <button type="button" class="btn btn-primary"
+                  *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"'
+                  (click)="HIDE_SHOW_POPUP('PANEL_2')">Next</button>
               </div>
-             </div>
-              <button type="button" class="btn btn-primary" (click)="nameSearch4 = ''">Reset</button>
-              <button type="button" class="btn btn-primary" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"' (click)="HIDE_SHOW_POPUP('PANEL_1')">Back</button>
-              <button type="button" class="btn btn-primary" *ngIf='this.Lodgement["AgainstAdvanceReceipt"]["Show"]=="yes"'  (click)="HIDE_SHOW_POPUP('PANEL_2')">Next</button>
             </div>
+            <section class="box-shadow" *ngIf="this.HIDE_SHOW['PANEL_1']==true && nameSearch4!=''" style="overflow: auto;
+          height: calc(100vh - 210px);
+          background-color: #ffffffd1;
+          border-radius: 10px;
+          box-shadow: inset 0px 0px 7px 0px #30303082;">
+              <table class="table mb-0">
+                <thead>
+                  <tr class="table-tr">
+                    <th scope="col" class="col-td-th-1">#</th>
+                    <th scope="col" class="col-td-th-3">SB DATE</th>
+                    <th scope="col" class="col-td-th-3">SB NUMBER</th>
+                    <th scope="col" class="col-td-th-3">BUYER NAME</th>
+                    <th scope="col" class="col-td-th-3">CURRENCY</th>
+                    <th scope="col" class="col-td-th-3">SB AMOUNT</th>
+                    <th scope="col" class="col-td-th-3">AVAILABLE AMOUNT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <div *ngFor='let data of item1 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
+                    <tr class="table-tr" *ngIf="data?.balanceAvai!=0">
+                      <td class="col-td-th-1"><input type="checkbox"
+                          [checked]="this.CHECKEBOX_SELECTION?.SHIPPING_BILL[i]==true?true:false"
+                          (change)="changeCheckbox1($event,data.sbno, data); addTofilter1($event ,data._id, data,i) " />
+                      </td>
+                      <td class="col-td-th-3">
+                        {{data.sbdate}}
+                      </td>
+                      <td class="col-td-th-3">
+                        {{data.sbno}}
+                      </td>
+                      <td class="col-td-th-3">
+                        {{data.buyerName}}
+                      </td>
+                      <td class="col-td-th-3">
+                        {{data.fobCurrency}}
+                      </td>
+                      <td class="col-td-th-3">
+                        {{data.fobValue}}
+                      </td>
+                      <td class="col-td-th-3">
+                        {{data.balanceAvai}}
+                      </td>
+                    </tr>
+                  </div>
+                </tbody>
+              </table>
+            </section>
+            <section class="box-shadow" *ngIf="this.HIDE_SHOW['PANEL_2']==true" style="overflow: auto;
+          height: calc(100vh - 210px);
+          background-color: #ffffffd1;
+          border-radius: 10px;
+          box-shadow: inset 0px 0px 7px 0px #30303082;">
+              <mat-tab-group>
+                <mat-tab [label]="sbitem" *ngFor="let sbitem of this.sbArray">
+                  <table class="table mb-0">
+                    <thead>
+                      <tr class="table-tr">
+                        <th scope="col" class="col-td-th-1">#</th>
+                        <th scope="col" class="col-td-th-3">CI Date</th>
+                        <th scope="col" class="col-td-th-3">CI No.</th>
+                        <th scope="col" class="col-td-th-3">Port Code</th>
+                        <th scope="col" class="col-td-th-3">Shipping Bill No.</th>
+                        <th scope="col" class="col-td-th-3">Shipping Bill Date</th>
+                        <th scope="col" class="col-td-th-3">CI Value(USD)</th>
+                        <th scope="col" class="col-td-th-2">Select DNN</th>
+                        <th scope="col" class="col-td-th-2">Damages / Deductions(Debit Note)</th>
+                        <th scope="col" class="col-td-th-2">SB Amout to be realized</th>
+                        <th scope="col" class="col-td-th-2">FIRX Option</th>
+                        <th scope="col" class="col-td-th-2">Value to be Realised in FIRX(USD)</th>
+                        <th scope="col" class="col-td-th-2">View IRM Details...</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="table-tr"
+                        *ngFor='let data of this.FILTER_DATA?.FILTER_COMMERCIAL["SB_"+sbitem] let i = index'>
+                        <td class="col-td-th-1">
+                          <input type="checkbox"
+                            [checked]="this.CHECKEBOX_SELECTION?.SHIPPING_BILL[i]==true?true:false" />
+                        </td>
+                        <td class="col-td-th-3">
+                          {{data.commercialDate}}
+                        </td>
+                        <td class="col-td-th-3">
+                          {{data.commercialNumber}}
+                        </td>
+                        <td class="col-td-th-3">
+                          {{data?.sbRef[0]?.portCode}}
+                        </td>
+                        <td class="col-td-th-3">
+                          {{data.sbNo}}
+                        </td>
+                        <td class="col-td-th-3">
+                          {{data?.sbRef[0]?.sbdate}}
+                        </td>
+                        <td class="col-td-th-3">
+                          {{data.amount}}
+                        </td>
+                        <td class="col-td-th-2">
+                          <button type="submit" class="PopupOpen btn btn-primary" popup-close="DEBIT_NOTE"
+                            (click)="_VIEW_DEBIT_AMOUNT(i,data.debitNoteRef,sbitem)">Select DNN No.</button>
+                        </td>
+                        <td class="col-td-th-2">
+                          {{data?.debitAmount}}
+                        </td>
+                        <td class="col-td-th-2">
+                          {{data?.SB_Amout_Realized}}
+                        </td>
+                        <td class="col-td-th-2"><button type="submit" class="PopupOpen btn btn-primary"
+                            popup-close="FIRX" (click)="_SHIPPING_BILL(i,data,data?.debitAmount)">Select IRM
+                            No.</button></td>
+                        <td class="col-td-th-2">
+                          {{data?.IRADVICE_SUM}}
+                        </td>
+                        <td class="col-td-th-2"><button type="submit" class="PopupOpen btn btn-primary"
+                            popup-close="FIRX_DEATILS" (click)="_VIEW_FIRX(i,data)">More...</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </mat-tab>
+              </mat-tab-group>
+            </section>
           </div>
-          <section class="box-shadow" *ngIf="this.HIDE_SHOW['PANEL_1']==true && nameSearch4!=''" style="overflow: auto;
-          height: calc(100vh - 210px);
-          background-color: #ffffffd1;
-          border-radius: 10px;
-          box-shadow: inset 0px 0px 7px 0px #30303082;">
-            <table class="table mb-0">
-              <thead>
-                <tr class="table-tr">
-                  <th scope="col" class="col-td-th-1">#</th>
-                  <th scope="col" class="col-td-th-3">SB DATE</th>
-                  <th scope="col" class="col-td-th-3">SB NUMBER</th>
-                  <th scope="col" class="col-td-th-3">BUYER NAME</th>
-                  <th scope="col" class="col-td-th-3">CURRENCY</th>
-                  <th scope="col" class="col-td-th-3">SB AMOUNT</th>
-                  <th scope="col" class="col-td-th-3">AVAILABLE AMOUNT</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="table-tr"
-                  *ngFor='let data of item1 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
-                  <td class="col-td-th-1"><input type="checkbox" [checked]="this.CHECKEBOX_SELECTION?.SHIPPING_BILL[i]==true?true:false"
-                      (change)="changeCheckbox1($event,data.sbno, data); addTofilter1($event ,data._id, data,i) " />
-                  </td>
-                  <td class="col-td-th-3">
-                    {{data.sbdate}}
-                  </td>
-                  <td class="col-td-th-3">
-                    {{data.sbno}}
-                  </td>
-                  <td class="col-td-th-3">
-                    {{data.buyerName}}
-                  </td>
-                  <td class="col-td-th-3">
-                    {{data.fobCurrency}}
-                  </td>
-                  <td class="col-td-th-3">
-                    {{data.fobValue}}
-                  </td>
-                  <td class="col-td-th-3">
-                    {{data.balanceAvai}}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-          <section class="box-shadow" *ngIf="this.HIDE_SHOW['PANEL_2']==true" style="overflow: auto;
-          height: calc(100vh - 210px);
-          background-color: #ffffffd1;
-          border-radius: 10px;
-          box-shadow: inset 0px 0px 7px 0px #30303082;">
-          <mat-tab-group>
-            <mat-tab [label]="sbitem" *ngFor="let sbitem of this.sbArray">   
-            <table class="table mb-0">
-              <thead>
-                <tr class="table-tr">
-                  <th scope="col" class="col-td-th-1">#</th>
-                  <th scope="col" class="col-td-th-3">CI Date</th>
-                  <th scope="col" class="col-td-th-3">CI No.</th>
-                  <th scope="col" class="col-td-th-3">Port Code</th>
-                  <th scope="col" class="col-td-th-3">Shipping Bill No.</th>
-                  <th scope="col" class="col-td-th-3">Shipping Bill Date</th>
-                  <th scope="col" class="col-td-th-3">CI Value(USD)</th>
-                  <th scope="col" class="col-td-th-2">Select DNN</th>
-                  <th scope="col" class="col-td-th-2">Damages / Deductions(Debit Note)</th>
-                  <th scope="col" class="col-td-th-2">SB Amout to be realized</th>
-                  <th scope="col" class="col-td-th-2">FIRX Option</th>
-                  <th scope="col" class="col-td-th-2">Value to be Realised in FIRX(USD)</th>
-                  <th scope="col" class="col-td-th-2">View IRM Details...</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="table-tr"
-                  *ngFor='let data of this.FILTER_DATA?.FILTER_COMMERCIAL["SB_"+sbitem] let i = index'>
-                  <td class="col-td-th-1">
-                    <input type="checkbox" [checked]="this.CHECKEBOX_SELECTION?.SHIPPING_BILL[i]==true?true:false"/>
-                  </td>
-                  <td class="col-td-th-3">
-                    {{data.commercialDate}}
-                  </td>
-                  <td class="col-td-th-3">
-                    {{data.commercialNumber}}
-                  </td>
-                  <td class="col-td-th-3">
-                    {{data?.sbRef[0]?.portCode}}
-                  </td>
-                  <td class="col-td-th-3">
-                    {{data.sbNo}}
-                  </td>
-                  <td class="col-td-th-3">
-                    {{data?.sbRef[0]?.sbdate}}
-                  </td>
-                  <td class="col-td-th-3">
-                    {{data.amount}}
-                  </td>
-                  <td class="col-td-th-2">
-                    <button type="submit" class="PopupOpen btn btn-primary" popup-close="DEBIT_NOTE" 
-                    (click)="_VIEW_DEBIT_AMOUNT(i,data.debitNoteRef,sbitem)">Select DNN No.</button>
-                  </td>
-                  <td class="col-td-th-2">
-                    {{data?.debitAmount}}
-                  </td>
-                  <td class="col-td-th-2">
-                    {{data?.SB_Amout_Realized}}
-                  </td>
-                  <td class="col-td-th-2"><button type="submit" class="PopupOpen btn btn-primary" popup-close="FIRX" 
-                  (click)="_SHIPPING_BILL(i,data,data?.debitAmount)">Select IRM No.</button></td>
-                  <td class="col-td-th-2">
-                    {{data?.IRADVICE_SUM}}
-                  </td>
-                  <td class="col-td-th-2"><button type="submit" class="PopupOpen btn btn-primary" popup-close="FIRX_DEATILS" (click)="_VIEW_FIRX(i,data)">More...</button></td>
-                </tr>
-              </tbody>
-            </table> 
-            </mat-tab>
-           </mat-tab-group>
-          </section>
+        </div>
+        <div class="modal-footer p-0 mt-2">
+          <button type="button" class="footer-btn"
+            [ngClass]="{'btn-disabled':this.OK_BUTTON_CONDITION== '' && this.Lodgement['AgainstAdvanceReceipt']['Show']=='yes'}"><span
+              (click)="FIRX_CHECK(ShippingBill?.PopUpOpenClose?.nativeElement)">OK</span></button>
         </div>
       </div>
-      <div class="modal-footer p-0 mt-2">
-        <button type="button" class="footer-btn" [ngClass]="{'btn-disabled':this.OK_BUTTON_CONDITION== '' && this.Lodgement['AgainstAdvanceReceipt']['Show']=='yes'}"><span (click)="FIRX_CHECK(ShippingBill?.PopUpOpenClose?.nativeElement)">OK</span></button>
-      </div>
     </div>
-  </div>
   </app-custom-model>
 </div>
 <div class="temp" #content2>
-  <app-custom-model [FooterButton]="true" EventButton="false" [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '50px !important'}" class="p-2" height="400px" id="FIRX"
-  [name]="'FIRX Number Against of : '+nameSearch4">
-  <div class="container-fluid mt-2 mb-2">
-    <div class="middle_bts">
-      <div class="login py-5" style="padding: 0px !important; width:100%;">
-        <div class="container_innser">
-          <section class="box-shadow" style="overflow: auto;
+  <app-custom-model [FooterButton]="true" EventButton="false"
+    [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '50px !important'}"
+    class="p-2" height="400px" id="FIRX" [name]="'FIRX Number Against of : '+nameSearch4">
+    <div class="container-fluid mt-2 mb-2">
+      <div class="middle_bts">
+        <div class="login py-5" style="padding: 0px !important; width:100%;">
+          <div class="container_innser">
+            <section class="box-shadow" style="overflow: auto;
           height: calc(100vh - 210px);
           background-color: #ffffffd1;
           border-radius: 10px;
           box-shadow: inset 0px 0px 7px 0px #30303082;">
-           <div class="d-flex" style="color: white;padding: 10px;background: #1844ce;gap: 20px;">
-            <h5 style="margin: auto;margin-left: 30px;">SB No. : {{this.SELECTED_SHIPPING_BILL?.data?.sbNo}}</h5>
-            <h5 style="margin: auto;margin-right: 30px;">SB Amount : {{this.SELECTED_SHIPPING_BILL?.data?.SB_Amout_Realized}}</h5>
-            <h5 style="margin: auto;margin-right: 30px;">Total FIXR Amount : {{this.TOTAL_FIRX_AMOUNT}}</h5>
-       </div>
-            <table class="table mb-0">
-              <thead >
-                <tr class="table-tr">
-                  <th scope="col" class="col-td-th-1">#</th>
-                  <th scope="col" class="col-td-th-2">FIRX Number/ID</th>
-                  <th scope="col" class="col-td-th-2">Recieved Amount USD</th>
-                  <th scope="col" class="col-td-th-2">Available Balance</th>
-                </tr>
-              </thead>
-              <tbody *ngIf="item13.length!=0">
-                <tr class="table-tr"
-                  *ngFor='let data of item13 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
-                  <td class="col-td-th-1"><input type="checkbox" (change)="addToSbArray(data, $event,i)"/>
-                  </td>
-                  <td class="col-td-th-2">
-                    {{data.billNo}}
-                  </td>
-                  <td class="col-td-th-2">
-                    {{data.amount}}
-                  </td>
-                  <td class="col-td-th-2">
-                    {{data.BalanceAvail}}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </section>     
+              <div class="d-flex" style="color: white;padding: 10px;background: #1844ce;gap: 20px;">
+                <h5 style="margin: auto;margin-left: 30px;">SB No. : {{this.SELECTED_SHIPPING_BILL?.data?.sbNo}}</h5>
+                <h5 style="margin: auto;margin-right: 30px;">SB Amount :
+                  {{this.SELECTED_SHIPPING_BILL?.data?.SB_Amout_Realized}}</h5>
+                <h5 style="margin: auto;margin-right: 30px;">Total FIXR Amount : {{this.TOTAL_FIRX_AMOUNT}}</h5>
+              </div>
+              <table class="table mb-0">
+                <thead>
+                  <tr class="table-tr">
+                    <th scope="col" class="col-td-th-1">#</th>
+                    <th scope="col" class="col-td-th-2">FIRX Number/ID</th>
+                    <th scope="col" class="col-td-th-2">Recieved Amount USD</th>
+                    <th scope="col" class="col-td-th-2">Available Balance</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="item13.length!=0">
+                  <tr class="table-tr"
+                    *ngFor='let data of item13 | fiterbuyer:[{buyerName:nameSearch4}]  let i = index'>
+                    <td class="col-td-th-1"><input type="checkbox" (change)="addToSbArray(data, $event,i)" />
+                    </td>
+                    <td class="col-td-th-2">
+                      {{data.billNo}}
+                    </td>
+                    <td class="col-td-th-2">
+                      {{data.amount}}
+                    </td>
+                    <td class="col-td-th-2">
+                      {{data.BalanceAvail}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </app-custom-model>
 </div>
 <div class="temp" #content2>
-  <app-custom-model [FooterButton]="true" EventButton="false" [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '80px !important'}" class="p-2" height="400px" id="FIRX_DEATILS"
-  [name]="'FIRX Details Against of : '+nameSearch4">
-  <div class="container-fluid mt-2 mb-2">
-    <div class="middle_bts">
-      <div class="login py-5" style="padding: 0px !important; width:100%;">
-        <div class="container_innser">
-          <section class="box-shadow" style="overflow: auto;
+  <app-custom-model [FooterButton]="true" EventButton="false"
+    [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '80px !important'}"
+    class="p-2" height="400px" id="FIRX_DEATILS" [name]="'FIRX Details Against of : '+nameSearch4">
+    <div class="container-fluid mt-2 mb-2">
+      <div class="middle_bts">
+        <div class="login py-5" style="padding: 0px !important; width:100%;">
+          <div class="container_innser">
+            <section class="box-shadow" style="overflow: auto;
           height: calc(100vh - 210px);
           background-color: #ffffffd1;
           border-radius: 10px;
           box-shadow: inset 0px 0px 7px 0px #30303082;">
-          <div class="d-flex" style="color: white;padding: 10px;background: #1844ce;gap: 20px;">
-               <h5 style="margin: auto;margin-left: 30px;">SB No. : {{this.SELECTED_VIEW_FIRX?.data?.sbNo}}</h5>
-               <h5  style="margin: auto;margin-right: 30px;">SB Amount : {{this.SELECTED_VIEW_FIRX?.data?.amount}}</h5>
+              <div class="d-flex" style="color: white;padding: 10px;background: #1844ce;gap: 20px;">
+                <h5 style="margin: auto;margin-left: 30px;">SB No. : {{this.SELECTED_VIEW_FIRX?.data?.sbNo}}</h5>
+                <h5 style="margin: auto;margin-right: 30px;">SB Amount : {{this.SELECTED_VIEW_FIRX?.data?.amount}}</h5>
+              </div>
+              <table class="table mb-0">
+                <thead>
+                  <tr class="table-tr">
+                    <th scope="col" class="col-td-th-1">#</th>
+                    <th scope="col" class="col-td-th-2">FIRX Number/ID</th>
+                    <th scope="col" class="col-td-th-2">Recieved Amount USD</th>
+                    <th scope="col" class="col-td-th-2">Available Balance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-tr" *ngFor='let data of this.SELECTED_VIEW_FIRX?.data?.IRADVICE_INFO let i = index'>
+                    <td class="col-td-th-1">{{(i+1)}}</td>
+                    <td class="col-td-th-2">
+                      {{data?.irDataItem?.billNo}}
+                    </td>
+                    <td class="col-td-th-2">
+                      {{data?.irDataItem?.amount}}
+                    </td>
+                    <td class="col-td-th-2">
+                      {{data?.irDataItem?.BalanceAvail}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
           </div>
-            <table class="table mb-0">
-              <thead >
-                <tr class="table-tr">
-                  <th scope="col" class="col-td-th-1">#</th>
-                  <th scope="col" class="col-td-th-2">FIRX Number/ID</th>
-                  <th scope="col" class="col-td-th-2">Recieved Amount USD</th>
-                  <th scope="col" class="col-td-th-2">Available Balance</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="table-tr"
-                  *ngFor='let data of this.SELECTED_VIEW_FIRX?.data?.IRADVICE_INFO let i = index'>
-                  <td class="col-td-th-1">{{(i+1)}}</td>
-                  <td class="col-td-th-2">
-                    {{data?.irDataItem?.billNo}}
-                  </td>
-                  <td class="col-td-th-2">
-                    {{data?.irDataItem?.amount}}
-                  </td>
-                  <td class="col-td-th-2">
-                    {{data?.irDataItem?.BalanceAvail}}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </section>     
         </div>
       </div>
     </div>
-  </div>
   </app-custom-model>
 </div>
 
 <div class="temp" #content3>
-  <app-custom-model [FooterButton]="true" EventButton="false" [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '50px !important'}" class="p-2"
-  height="400px" id="DEBIT_NOTE"
-  [name]="'Debit Note Details Against of : '+nameSearch4">
-  <div class="container-fluid mt-2 mb-2">
-    <div class="middle_bts">
-      <div class="login py-5" style="padding: 0px !important; width:100%;">
-        <div class="container_innser">
-          <section class="box-shadow" style="overflow: auto;
+  <app-custom-model [FooterButton]="true" EventButton="false"
+    [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '50px !important'}"
+    class="p-2" height="400px" id="DEBIT_NOTE" [name]="'Debit Note Details Against of : '+nameSearch4">
+    <div class="container-fluid mt-2 mb-2">
+      <div class="middle_bts">
+        <div class="login py-5" style="padding: 0px !important; width:100%;">
+          <div class="container_innser">
+            <section class="box-shadow" style="overflow: auto;
           height: calc(100vh - 210px);
           background-color: #ffffffd1;
           border-radius: 10px;
           box-shadow: inset 0px 0px 7px 0px #30303082;">
-            <table class="table mb-0">
-              <thead >
-                <tr class="table-tr">
-                  <th scope="col" class="col-td-th-1">#</th>
-                  <th scope="col" class="col-td-th-2">Debit Note Number</th>
-                  <th scope="col" class="col-td-th-2">Debit Note Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="table-tr"
-                  *ngFor='let data of this.SELECTED_DEBIT_AMOUNT?.data let i = index'>
-                  <td class="col-td-th-1"><input type="checkbox" class="debitAmount" name="debitAmount" (change)="_DEBIT_AMOUNT(i,data,$event)" #debitAmount/></td>
-                  <td class="col-td-th-2">
-                    {{data?.debitNoteNumber}}
-                  </td>
-                  <td class="col-td-th-2">
-                    {{data?.totalDebitAmount}}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </section>     
+              <table class="table mb-0">
+                <thead>
+                  <tr class="table-tr">
+                    <th scope="col" class="col-td-th-1">#</th>
+                    <th scope="col" class="col-td-th-2">Debit Note Number</th>
+                    <th scope="col" class="col-td-th-2">Debit Note Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-tr" *ngFor='let data of this.SELECTED_DEBIT_AMOUNT?.data let i = index'>
+                    <td class="col-td-th-1"><input type="checkbox" class="debitAmount" name="debitAmount"
+                        (change)="_DEBIT_AMOUNT(i,data,$event)" #debitAmount /></td>
+                    <td class="col-td-th-2">
+                      {{data?.debitNoteNumber}}
+                    </td>
+                    <td class="col-td-th-2">
+                      {{data?.totalDebitAmount}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </app-custom-model>
 </div>
 <div class="modal PREVIEW_PAGE" tabindex="-1" #PREVIEW_PAGE style="display: none;background-color: #00000030;">
   <div class="modal-dialog" style="width: 100% !important;">
-      <div class="modal-content" style="height: 85vh;">
-          <div class="modal-header">
-              <h5 class="modal-title">Preview Pdf</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="PREVIEW_PAGE.style.display='none'"><span aria-hidden="true">&times;</span></button>
-          </div>
-          <div class="modal-body">
-              <div class="content_white_background" *ngIf="this.itemArray.length!=0">
-                <mat-tab-group class="custom-1" mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="PreviewSlideToggle($event,'')">
-                  <mat-tab [id]="item?.sbno" [label]="'SB_No_'+item?.sbno" *ngFor="let item of this.itemArray;let i=index">
-                    <app-pdf-viewer class="pt-3" [downloadShow]="false" *ngFor="let item of this.PREVIEWS_URL_LIST" [src]="item" width="100%" height="500px"></app-pdf-viewer>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="PREVIEW_PAGE.style.display='none'">Close</button>
-                      <div style="display:flex;">
-                         <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
-                                  <button type="button" class="btn btn-primary" (click)="SendApproval(this.GetDownloadStatus?.status,
-                              item?._id,PREVIEW_PAGE);">Send for Approval</button>
-                          </div>
-                          <mat-error *ngIf="this.GetDownloadStatus?.status=='Approved'">You have not access to download pdf!</mat-error>
-                      </div>
-                  </div>
-                  </mat-tab>
-                </mat-tab-group>    
-               </div>
-          </div>
-       
+    <div class="modal-content" style="height: 85vh;">
+      <div class="modal-header">
+        <h5 class="modal-title">Preview Pdf</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="PREVIEW_PAGE.style.display='none'"><span aria-hidden="true">&times;</span></button>
       </div>
+      <div class="modal-body">
+        <div class="content_white_background" *ngIf="this.itemArray.length!=0">
+          <mat-tab-group class="custom-1" mat-stretch-tabs="false" mat-align-tabs="start"
+            (selectedTabChange)="PreviewSlideToggle($event,'')">
+            <mat-tab [id]="item?.sbno" [label]="'SB_No_'+item?.sbno" *ngFor="let item of this.itemArray;let i=index">
+              <app-pdf-viewer class="pt-3" [downloadShow]="false" *ngFor="let item of this.PREVIEWS_URL_LIST"
+                [src]="item" width="100%" height="500px"></app-pdf-viewer>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                  (click)="PREVIEW_PAGE.style.display='none'">Close</button>
+                <div style="display:flex;">
+                  <div *ngIf="this.GetDownloadStatus?.status!='Approved'">
+                    <button type="button" class="btn btn-primary" (click)="SendApproval(this.GetDownloadStatus?.status,
+                              item?._id,PREVIEW_PAGE);">Send for Approval</button>
+                  </div>
+                  <mat-error *ngIf="this.GetDownloadStatus?.status=='Approved'">You have not access to download
+                    pdf!</mat-error>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>

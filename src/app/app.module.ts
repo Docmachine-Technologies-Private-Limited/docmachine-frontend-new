@@ -43,7 +43,6 @@ import {InterceptorService} from './service/interceptor.service';
 import { TwofactorauthComponent } from './shared/components/twofactorauth/twofactorauth.component';
 import { HomeModule } from "./home/home.module";
 import { CheckboxComponentsComponent } from "./home/checkbox-components/checkbox-components.component";
-import {CustomConfirmDialogModelComponent} from './custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component'
 import {CustomConfirmDialogModelService} from './custom/custom-confirm-dialog-model/custom-confirm-dialog-model.service'
 import { CustomdropdownservicesService } from "./custom/custom-dropdown/customdropdownservices.service";
 import { AprrovalPendingRejectTransactionsService } from './service/aprroval-pending-reject-transactions.service';
@@ -56,6 +55,7 @@ import {DateFormatService} from "./DateFormat/date-format.service"
 import { JoinPipePipe } from './join-pipe.pipe';
 import { ResetOTPComponent } from './forgot-password/reset-otp/reset-otp.component';
 import { BehaviorSubjectListService } from "./home/CommanSubjectApi/BehaviorSubjectListService/BehaviorSubjectList.service";
+
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -84,7 +84,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         PdfComponent,
         TwofactorauthComponent,
         CheckboxComponentsComponent,
-        CustomConfirmDialogModelComponent,
         AuthorizationComponent,
         JoinPipePipe,
         ResetOTPComponent,
@@ -116,6 +115,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         BsDatepickerModule.forRoot(),
         SigninModule,
         AppRoutingModule,
+        HomeModule,
         NgSelectModule,
         TranslateModule.forRoot({
             loader: {

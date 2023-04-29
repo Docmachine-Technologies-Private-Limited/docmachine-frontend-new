@@ -60,9 +60,9 @@
               status:'Rejected',
               deleteflag:'0'
             },i)">Reject</button>
-              <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary PopupOpen" popup-close="Documents_View"
+              <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary PopupOpen" [attr.popup-close]="'Documents_View'"
                 (click)="openView(item,i)">View</button>
-              <button type="submit" *ngIf="item?.Types!='downloadPDF'" class="btn btn-primary PopupOpen" popup-close="Documents_View"
+              <button type="submit" *ngIf="item?.Types!='downloadPDF'" class="btn btn-primary PopupOpen" [attr.popup-close]="'Documents_View'"
                 (click)="openView(item,i)">View</button>
             </div>
           </td>

@@ -29,10 +29,10 @@ export class ViewDocumentComponent implements OnInit {
   @ViewChild('epltable', { static: false }) epltable: ElementRef;
   @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
-  public item1 = [];
-  public item2 = [];
-  public item3 = [];
-  public item4 = [];
+  public item1:any = [];
+  public item2:any = [];
+  public item3:any = [];
+  public item4:any = [];
   public viewData: any;
   public closeResult: string;
   public user;
@@ -119,6 +119,10 @@ export class ViewDocumentComponent implements OnInit {
         this.shippingBillService.getShippingBillList_Master().then((data: any) => {
           console.log('getShippingBillList_Master', data)
           this.item1 = data;
+          this.item1.forEach(element => {
+            element['FIRX_TOTAL_AMOUNT']=this.FIRX_AMOUNT(element?.firxAmount);
+            element['SB_RENAMMING_AMOUNT']=parseFloat(element?.fobValue)-this.FIRX_AMOUNT(element?.firxAmount)
+         });
           this.FILTER_VALUE_LIST = data;
           for (let index = 0; index < data.length; index++) {
             if (this.ALL_FILTER_DATA['Buyer_Name'].includes(data[index]?.buyerName[0]) == false) {
@@ -137,6 +141,8 @@ export class ViewDocumentComponent implements OnInit {
               this.ALL_FILTER_DATA['SB_DATE'].push(data[index]?.sbdate);
             }
           }
+          
+        
         });
       } else if (this.file === 'boe') {
         this.doc = 'BOE';
@@ -169,8 +175,8 @@ export class ViewDocumentComponent implements OnInit {
   }
 
   filter(value, key) {
-    this.FILTER_VALUE_LIST = this.item1.filter((item:any) => item[key].indexOf(value) != -1);
-    if (this.FILTER_VALUE_LIST.length== 0) {
+    this.FILTER_VALUE_LIST = this.item1.filter((item: any) => item[key].indexOf(value) != -1);
+    if (this.FILTER_VALUE_LIST.length == 0) {
       this.FILTER_VALUE_LIST = this.item1;
     }
   }
@@ -389,5 +395,8 @@ export class ViewDocumentComponent implements OnInit {
   }
   transform(input: Array<any>): string {
     return input.join(',');
+  }
+  FIRX_AMOUNT(amountarray: any): any {
+    return parseFloat(amountarray?.split(',')?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)).toFixed(3);
   }
 }

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
-import $, { event } from 'jquery'
+import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import $ from 'jquery'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -33,7 +33,7 @@ export class NgDropdownCustomComponent implements OnInit,ControlValueAccessor {
 arryavalue:any=[];
 LABLE_BIND_LIST:any=[];
 FILTER_DROPDOWN:any=[];
-constructor() { }
+constructor(private elementRef: ElementRef,private renderer: Renderer2) { }
   ngOnInit(): void {
     this.id=this.randomNameGenerator();
     this.LABLE_BIND_LIST[this.id.toString()]={
@@ -124,4 +124,17 @@ constructor() { }
 randomNameGenerator() {
    return Math.floor(Math.random() * 1000000000);
 };
+
+@HostListener('document:mousedown', ['$event'])
+onGlobalClick(event): void {
+  if (!this.elementRef.nativeElement.contains(event.target)) {
+    this.renderer.removeClass(this.elementRef.nativeElement,'custom-dropdown-active');
+  }
+}
+@HostListener('document:click', ['$event'])
+onClick(event): void {
+  if (!this.elementRef.nativeElement.contains(event.target)) {
+    this.renderer.removeClass(this.elementRef.nativeElement,'custom-dropdown-active');
+  }
+}
 }

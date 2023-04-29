@@ -1,10 +1,18 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, forwardRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 declare var $: any;
+
+export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
+  provide: NG_VALUE_ACCESSOR,
+  useExisting: forwardRef(() => CustomModelComponent),
+  multi: true,
+};
 
 @Component({
   selector: 'app-custom-model',
   templateUrl: './custom-model.component.html',
-  styleUrls: ['./custom-model.component.scss']
+  styleUrls: ['./custom-model.component.scss'],
+  providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR],
 })
 export class CustomModelComponent implements OnInit {
   @Input('name') name: any;
@@ -24,11 +32,11 @@ export class CustomModelComponent implements OnInit {
   @Output('ModelChange') ModelChange = new EventEmitter<any>();
   @Input('condition') condition: any = '';
   @Output('footerbutton') footerbutton = new EventEmitter<any>();
-  @ViewChild('PopUpOpenClose')PopUpOpenClose :ElementRef;
-  @Input('buttondisabled')buttondisabled :boolean=false;
+  @ViewChild('PopUpOpenClose') PopUpOpenClose: ElementRef;
+  @Input('buttondisabled') buttondisabled: boolean = false;
 
   footerbuttontext: any = [];
-  constructor(public element: ElementRef) { }
+  constructor() { }
   ngOnInit(): void {
     this.footerbuttontext[this.id] = this.condition;
   }

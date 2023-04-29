@@ -94,10 +94,6 @@ import { BoeBillService } from '../service/homeservices/BoeBill/boe-bill.service
 import { ImportDirectPaymentComponent } from './Import-Direct-Payment/Import-Direct-Payment.component';
 import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-Credit-Request.component';
 import { TransactionDashboardComponent } from "../transaction-dashboard/transaction-dashboard.component";
-import { DocumentService } from "../service/document.service";
-import { UserService } from "../service/user.service";
-import { AuthenticateService } from "../service/authenticate.service";
-import { AuthGuard } from "../service/authguard.service";
 import { AdminPanelComponent } from './AdminPanel/admin-panel/admin-panel.component';
 import { SuperAdminPanelComponent } from './SuperAdminPanel/admin-panel/admin-panel.component';
 import {ExportHomeComponent} from "./Export/export-home/export-home.component";
@@ -153,7 +149,11 @@ import {ExportHomeComponent} from "./Export/export-home/export-home.component";
   imports: [
     SharedHomeModule,
     MatProgressBarModule,
-    MatNativeDateModule, MatButtonModule, MatDialogModule, MatInputModule, MatFormFieldModule,
+    MatNativeDateModule, 
+    MatButtonModule, 
+    MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
     MatTabsModule,
     MatDatepickerModule,
     MatTableModule,

@@ -713,13 +713,16 @@ export class NewDirectDispatchComponent implements OnInit {
             }
           });
           console.log('buyerName', this.buyerName);
-          for (let index = 0; index < data.length; index++) {
-            this.item1[index]['balanceAvai'] = data[index]?.balanceAvai != null && data[index]?.balanceAvai != undefined ? data[index]?.balanceAvai : '0';
-          }
+          this.item1.forEach(element => {
+            if (element?.firxAmount != undefined && element?.firxAmount != '') {
+              element['balanceAvai'] = parseFloat(element?.fobValue) - this.FIRX_AMOUNT(element?.firxAmount?.split(','));
+            } else {
+              element['balanceAvai'] = parseFloat(element?.fobValue);
+            }
+          });
         },
           (err) => console.log(err)
         );
-
       });
     });
 
@@ -2625,7 +2628,7 @@ export class NewDirectDispatchComponent implements OnInit {
         this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
         this.newTask[0].generateDoc1 = x;
         resolve(x)
-      } 
+      }
     })
   }
   ConvertNumberToWords(number: any) {
@@ -4055,8 +4058,8 @@ export class NewDirectDispatchComponent implements OnInit {
               if ((index + 1) == this.temp[tempfilter[0]?._id].length) {
                 var fitertemp: any = await temppdflits.filter(n => n)
                 await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-                  this.PREVIEWS_URL_LIST.push( merge?.pdfurl);
-                    console.log(this.tp, this.temp_doc, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+                  this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
+                  console.log(this.tp, this.temp_doc, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
                 });
               }
             }
@@ -4152,7 +4155,6 @@ export class NewDirectDispatchComponent implements OnInit {
               if (Status == '' || Status == null || Status == 'Rejected') {
                 this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
                   this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
-                  this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
                   this.ExportBillLodgement_Form.controls['documents'].setValue(UpdatedUrl?.reverse());
                   this.ExportBillLodgement_Form.controls['Url_Redirect'].setValue({ file: 'export', document: 'blCopyref', SbRef: UniqueId })
                   this.ExportBillLodgement_Form.controls['extradata'].setValue(this.FILTER_DATA)
@@ -4170,7 +4172,7 @@ export class NewDirectDispatchComponent implements OnInit {
                           res1._id,
                         ]
                       }
-                      if (this.documentService.MT102_SUBJECT?.file == '') {
+                      if (this.documentService.MT102_SUBJECT?.file == '' || this.documentService.MT102_SUBJECT?.file == undefined) {
                         this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
                           console.log('king123');
                           console.log(data);
@@ -4203,6 +4205,7 @@ export class NewDirectDispatchComponent implements OnInit {
                               firxRecAmo: '0'
                             }
                             if (this.ExportBillLodgement_Form.value?.Total_Reaming_Amount != 0) {
+                              let sbAmount: any = this.itemArray.filter((item: any) => item?._id.includes(UniqueId));
                               query = {
                                 firxNumber: this.tp?.firxNumber.toString(),
                                 firxDate: this.tp?.firxDate.toString(),
@@ -4210,7 +4213,7 @@ export class NewDirectDispatchComponent implements OnInit {
                                 firxAmount: this.tp?.firxAmount.toString(),
                                 firxCommision: this.tp?.firxCommision.toString(),
                                 firxRecAmo: '0',
-                                fobValue: this.ExportBillLodgement_Form.value?.Total_Reaming_Amount
+                                balanceAvai: parseFloat(sbAmount[0]?.fobValue) - this.FIRX_AMOUNT(this.tp?.firxAmount)
                               }
                             }
                             this.documentService.Update_Amount_by_Table({
@@ -4289,6 +4292,10 @@ export class NewDirectDispatchComponent implements OnInit {
         console.log('Export-Direct-Dispatch' + UniqueId, UniqueId, pipo, approval_data, 'uiiiiiiiiiiiiii')
       }
     }
+  }
+
+  FIRX_AMOUNT(amountarray: any): any {
+    return parseFloat(amountarray?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)).toFixed(3);
   }
   getStatusCheckerMaker(id) {
     return new Promise((resolve, reject) => {

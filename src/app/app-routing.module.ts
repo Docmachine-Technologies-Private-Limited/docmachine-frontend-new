@@ -73,9 +73,8 @@ const routes: Routes = [
     SignupRoutingModule,
     SigninRoutingModule,
     MatDialogModule,
-    HomeModule
   ],
-  exports: [RouterModule,HomeModule],
+  exports: [RouterModule],
 })
 export class AppRoutingModule {
   constructor(public router:Router){
