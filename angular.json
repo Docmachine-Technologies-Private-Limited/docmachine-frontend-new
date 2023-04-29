@@ -17,7 +17,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "optimization": false,
             "outputPath": "dist/dm-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -84,7 +83,7 @@
             "development": {
               "buildOptimizer": false,
               "optimization": true,
-              "vendorChunk": true,
+              "vendorChunk": false,
               "extractLicenses": false,
               "sourceMap": false,
               "namedChunks": true,
@@ -95,6 +94,7 @@
           "defaultConfiguration": "development"
         },
         "serve": {
+        
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
