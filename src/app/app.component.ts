@@ -34,7 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public sessionstorage: StorageEncryptionDecryptionService,
     public toastr: ToastrService,
     public elRef: ElementRef,
-    public socketioservice:SocketIoService,
+    public socketioservice: SocketIoService,
     public authGuard: AuthGuard) {
     this.translate.setDefaultLang('en');
     let token = this.authGuard.loadFromLocalStorage();
@@ -108,6 +108,13 @@ export class AppComponent implements OnInit, OnDestroy {
     //   console.log(res,'socket data2')
     // })
   };
+  findHighestZIndex() {
+    // return  Math.max.apply(null,
+    //   $.map($('body *'),(e: any, n: any)=> {
+    //     if ($(e).css('position') != 'static')
+    //       return parseInt($(e).css('z-index')) || 1;
+    //   }));;
+  }
   setTimeoutNew() {
     this.userActivity = setTimeout(() => {
       this.userInactive.next(undefined);

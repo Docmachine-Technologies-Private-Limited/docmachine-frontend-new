@@ -663,3 +663,9 @@ table td {
 .table-tr button {
   font-size: 11px;
 }
+
+.toast-container {
+  pointer-events: none;
+  position: fixed;
+  z-index: 99999999999999999999;
+}

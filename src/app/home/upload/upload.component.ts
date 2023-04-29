@@ -1,9 +1,7 @@
 import { BoeBill } from './../../../model/boe.model';
 import { IRAdvice } from './../../../model/irAdvice.model';
-import { ORAdvice } from './../../../model/orAdvice.model';
 
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Inject,
@@ -12,31 +10,19 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { timer } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
+import { HttpClient} from '@angular/common/http';
 import { FormArray, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import * as data1 from '../../currency.json';
 import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
-// import {ToastrService} from 'ngx-toastr';
 import {
   DropzoneDirective,
   DropzoneConfigInterface,
 } from 'ngx-dropzone-wrapper';
 import { Subscription } from 'rxjs';
-// import {DashboardService} from './dashboard-service';
-// import { TabsComponent } from './tabs.component';
-// import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import $ from 'jquery';
-import {
-  CdkDragDrop,
-  moveItemInArray,
-  transferArrayItem,
-} from '@angular/cdk/drag-drop';
 import { ShippingBill } from '../../../model/shippingBill.model';
 import {
   FormBuilder,
@@ -47,7 +33,6 @@ import {
 import { DocumentService } from '../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../service/user.service';
-import { MatSelectModule } from '@angular/material/select';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppConfig } from '../../app.config';
 import { PipoDataService } from "../../service/homeservices/pipo.service";
@@ -55,6 +40,7 @@ import { WindowInformationService } from '../../service/window-information.servi
 import { CustomConfirmDialogModelComponent } from '../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 import { DateFormatService } from '../../DateFormat/date-format.service';
 import { SocketIoService } from '../../service/SocketIo/socket-io.service';
+
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
@@ -2584,18 +2570,6 @@ export class UploadComponent implements OnInit {
           this.otherDoc = true;
         } else {
           this.other = true;
-          // this.userService.updateManyPipo(this.pipoArr, this.documentType, args[1].data).subscribe(
-          //   (data) => {
-          //     console.log('king123');
-          //     console.log(data);
-          //     this.toastr.success('PI/PO updated successfully.');
-          //     args[1].message= 'This file already uploaded';
-          //     this.onUploadSuccess(args)
-          //   },
-          //   (error) => {
-          //     console.log('error');
-          //   }
-          // );
         }
         console.log('Selected Document type', this.selectedDocumentType);
       }
@@ -2659,83 +2633,17 @@ export class UploadComponent implements OnInit {
     return form.get('paymentTerm').controls;
   }
 
-  // getProducts(form) {
-  //   return form.get('products').controls;
-  // }
-
   onAddCourse(e) {
-    // if (e.controls.bankDetails.invalid) {
-    //   //this.submitted1 = true
-    //   this.toastr.error('You can add another bank after filling first one!');
-    //   console.log("2")
-    //   //this.isDisabled = false;
-    //   return;
-    // }
     console.log('fffff');
-    // this.currencyName.push('')
-    // this.bankName.push('')
     const control = this.piPoForm.controls.paymentTerm as FormArray;
     control.push(this.initCourse());
-    //this.isDisabled = false;
   }
 
   removeAddress(i) {
-    // console.log(i)
-    // //console.log(this.control)
     let control1 = this.piPoForm.controls.paymentTerm as FormArray;
-    // console.log(control1)
-    // console.log(control1.length)
-    // console.log(this.bankName)
-    // console.log(this.currencyName)
     control1.removeAt(i);
-    // this.bankName.splice(i, 1)
-    // this.currencyName.splice(i, 1)
-    // console.log(this.bankName)
-    // console.log(this.currencyName)
-    // console.log(control1.length)
   }
-
-  // public filePreview() {
-  //   console.log("inside");
-  //   const images = this.que.selectedFiles;
-  //   // is images a true array and not empty
-  //   if (Array.isArray(images) && images.length > 0) {
-  //     images.forEach((image) => {
-  //       // cuting out the extension from filename
-  //       let extension: any = image.fileName.split(".");
-  //       extension = extension
-  //         .slice(extension.length - 1, extension.length)
-  //         .join(".");
-  //       const { accepted, size, height, width, type, dataURL, upload } =
-  //         image.file;
-  //       const mockFile = {
-  //         accepted,
-  //         size,
-  //         type,
-  //         dataURL: dataURL || image.location,
-  //         name: upload.filename,
-  //       };
-  //       const dropzoneInstance = this.directiveRef.dropzone();
-  //       console.log(dropzoneInstance);
-  //       dropzoneInstance.emit("addedfile", mockFile);
-  //       dropzoneInstance.options.maxFiles = 5;
-  //       dropzoneInstance.createThumbnailFromUrl(
-  //         mockFile,
-  //         image.file.width || "400",
-  //         image.file.height || "400",
-  //         "contain",
-  //         true,
-  //         function (thumbnail) {
-  //           dropzoneInstance.files.push(thumbnail);
-  //           dropzoneInstance.emit("thumbnail", mockFile, thumbnail);
-  //         },
-  //         "anonymous"
-  //       );
-  //       dropzoneInstance.emit("complete", mockFile);
-  //     });
-  //   }
-  // }
-
+  
   async LOAD_PIPO_LIST_BUYER(type: any) {
     await this.pipoDataService.getPipoList(type).then((data) => {
       console.log(data, 'data..................')
@@ -2789,6 +2697,8 @@ export class UploadComponent implements OnInit {
     } else {
       console.log('x');
     }
+    
+    this.BUYER_LIST=this.BUYER_LIST.filter(n => n);
     this.COMMERCIAL_LIST = [];
     this.pipoDataService.getShippingNo(LAST_VALUE?._id, this.documentType1);
     this.documentService.getCommercialByFiletype(this.documentType1, LAST_VALUE?._id).subscribe((res: any) => {
@@ -2885,17 +2795,12 @@ export class UploadComponent implements OnInit {
   onSubmitBene() {
     this.isDisabled = true;
     console.log(this.loginForm.value);
-
-    // stop here if form is invalid
     if (this.loginForm.invalid) {
       this.isDisabled = false;
       this.submitted = true;
-
       return;
     }
-
     console.log(this.loginForm.value);
-
     this.beneValue = this.loginForm.value.benneName;
     this.userService.creatBene(this.loginForm.value).subscribe(
       (data) => {
@@ -2919,7 +2824,6 @@ export class UploadComponent implements OnInit {
 
   onSubmitBuyer() {
     console.log(this.buyerForm.value);
-
     this.buyerValue = this.buyerForm.value.buyerName;
     this.userService.creatBuyer(this.buyerForm.value).subscribe(
       (data) => {
