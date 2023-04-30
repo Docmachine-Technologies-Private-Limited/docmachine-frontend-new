@@ -1917,6 +1917,12 @@ export class DocumentService {
     const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
     return this.http.post(`${this.api_base}/ExportBillLodgement/Amount_Update`, data, httpOptions);
   }
+  Update_Amount_by_TableSB(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
+    return this.http.post(`${this.api_base}/ExportBillLodgement/Amount_UpdateSB`, data, httpOptions);
+  }
   getExportBillLodgment() {
     console.log('I am in service');
     this.loadFromLocalStorage();

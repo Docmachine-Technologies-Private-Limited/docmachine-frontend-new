@@ -711,15 +711,19 @@ export class NewDirectDispatchComponent implements OnInit {
             if (buyerfilter.length == 0) {
               this.buyerName.push({ value: element.buyerName[0], id: element?._id });
             }
-          });
-          console.log('buyerName', this.buyerName);
-          this.item1.forEach(element => {
-            if (element?.firxAmount != undefined && element?.firxAmount != '') {
-              element['balanceAvai'] = parseFloat(element?.fobValue) - this.FIRX_AMOUNT(element?.firxAmount?.split(','));
+            if (element?.firxdetails != undefined && element?.firxdetails != '') {
+              let totalFirxAmount: any = 0;
+              for (let index = 0; index < element?.firxdetails.length; index++) {
+                const elementfirxdetails = element?.firxdetails[index];
+                console.log(elementfirxdetails?.firxAmount.split(','),this.FIRX_AMOUNT(elementfirxdetails?.firxAmount.split(',')),'hfhgfghfhfhfhf')
+                totalFirxAmount+= parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount.split(',')))
+              }
+              element['balanceAvai'] = parseFloat(element?.fobValue) - parseFloat(totalFirxAmount);
             } else {
               element['balanceAvai'] = parseFloat(element?.fobValue);
             }
           });
+          console.log('buyerName', this.buyerName);
         },
           (err) => console.log(err)
         );
@@ -4066,10 +4070,10 @@ export class NewDirectDispatchComponent implements OnInit {
             for (let index = 0; index < this.advanceArray['SB_' + id].length; index++) {
               const element: any = this.advanceArray['SB_' + id][index];
               this.tp['firxNumber'].push(element?.irDataItem?.billNo)
-              this.tp['firxDate'].push(element?.irDataItem?.date)
+              this.tp['firxDate'].push(element?.irDataItem?.recievedDate)
               this.tp['firxCurrency'].push(element?.irDataItem?.currency)
               this.tp['firxAmount'].push(element?.irDataItem?.amount)
-              this.tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
+              this.tp['firxCommision'].push(element?.irDataItem?.commision)
               this.tp['firxRecAmo'].push(0);
               this.tp['id'].push(element?.irDataItem?._id)
             }
@@ -4115,6 +4119,7 @@ export class NewDirectDispatchComponent implements OnInit {
         if (UniqueId != null) {
           var approval_data: any = {};
           let sbAmountSum: any = this.itemArray.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.fobValue) }, 0);
+          delete this.USER_DATA?.members_list
           if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
             approval_data = {
               id: 'IRDR' + '_' + UniqueId,
@@ -4128,9 +4133,11 @@ export class NewDirectDispatchComponent implements OnInit {
               FileType: this.USER_DATA?.sideMenu
             }
           } else {
-            const ID_APPROVAL: any = this.tp?.firxAmount != undefined && this.tp?.firxAmount != null && this.tp?.firxAmount != '' ? this.tp?.firxAmount.join(',') : sbAmountSum
+            let sbdetails: any = this.itemArray.filter((item: any) => item?._id.indexOf(UniqueId) != -1)[0];
+            let TempfilterSum = this.Advance_Amount_Sum['SB_' + sbdetails?.sbno].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+            const ID_APPROVAL: any = this.tp?.firxAmount != undefined && this.tp?.firxAmount != null && this.tp?.firxAmount != '' ? this.tp?.id.join(',') + '_' + TempfilterSum : sbAmountSum
             approval_data = {
-              id: 'Export-Direct-Dispatch' + '_' + ID_APPROVAL,
+              id: 'EDD' + '_' + ID_APPROVAL,
               tableName: 'Export-Direct-Dispatch',
               deleteflag: '-1',
               userdetails: this.USER_DATA,
@@ -4174,7 +4181,6 @@ export class NewDirectDispatchComponent implements OnInit {
                       }
                       if (this.documentService.MT102_SUBJECT?.file == '' || this.documentService.MT102_SUBJECT?.file == undefined) {
                         this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
-                          console.log('king123');
                           console.log(data);
                           for (let index = 0; index < this.ExportBillLodgement_Form.value?.Advance_reference_Number?.length; index++) {
                             const element = this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.irDataItem;
@@ -4196,32 +4202,38 @@ export class NewDirectDispatchComponent implements OnInit {
                               sbno: [this.ExportBillLodgement_Form.value?.Carry_Amount?.sb]
                             }
                           }).subscribe((r1: any) => {
+                            let sbAmount: any = this.itemArray.filter((item: any) => item?._id.includes(UniqueId));
                             var query: any = {
-                              firxNumber: this.tp?.firxNumber.toString(),
-                              firxDate: this.tp?.firxDate.toString(),
-                              firxCurrency: this.tp?.firxCurrency.toString(),
-                              firxAmount: this.tp?.firxAmount.toString(),
-                              firxCommision: this.tp?.firxCommision.toString(),
+                              firxNumber: this.tp?.firxNumber.join(','),
+                              firxDate: this.tp?.firxDate.join(','),
+                              firxCurrency: this.tp?.firxCurrency.join(','),
+                              firxAmount: this.tp?.firxAmount.join(','),
+                              firxCommision: this.tp?.firxCommision.join(','),
                               firxRecAmo: '0'
                             }
                             if (this.ExportBillLodgement_Form.value?.Total_Reaming_Amount != 0) {
-                              let sbAmount: any = this.itemArray.filter((item: any) => item?._id.includes(UniqueId));
                               query = {
-                                firxNumber: this.tp?.firxNumber.toString(),
-                                firxDate: this.tp?.firxDate.toString(),
-                                firxCurrency: this.tp?.firxCurrency.toString(),
-                                firxAmount: this.tp?.firxAmount.toString(),
-                                firxCommision: this.tp?.firxCommision.toString(),
+                                firxNumber: this.tp?.firxNumber.join(','),
+                                firxDate: this.tp?.firxDate.join(','),
+                                firxCurrency: this.tp?.firxCurrency.join(','),
+                                firxAmount: this.tp?.firxAmount.join(','),
+                                firxCommision: this.tp?.firxCommision.join(','),
                                 firxRecAmo: '0',
-                                balanceAvai: parseFloat(sbAmount[0]?.fobValue) - this.FIRX_AMOUNT(this.tp?.firxAmount)
                               }
                             }
-                            this.documentService.Update_Amount_by_Table({
+                            this.documentService.Update_Amount_by_TableSB({
                               tableName: 'masterrecord',
                               id: UniqueId,
-                              query: query
+                              query:query
                             }).subscribe((r2: any) => {
-                              console.log(r2, 'masterrecord')
+                              this.documentService.Update_Amount_by_Table({
+                                tableName: 'masterrecord',
+                                id: UniqueId,
+                                query:{balanceAvai: parseFloat(sbAmount[0]?.balanceAvai) - this.FIRX_AMOUNT(this.tp?.firxAmount) }
+                              }).subscribe((r3: any) => {
+                                console.log(r3, 'masterrecord')
+                                this.toastr.success('Successfully added Transaction of SB No. :' + this.FIRX_AMOUNT(sbAmount?.sbno))
+                              });
                               // model.style.display = 'none';
                               // this.router.navigate(['/home/dashboardTask'])
                             })

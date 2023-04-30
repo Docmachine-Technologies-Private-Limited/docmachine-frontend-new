@@ -53,7 +53,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="yes-no-btn-txt mt-2 mb-2">
+            <div class="yes-no-btn-txt mt-2 mb-1">
                 <div class="row gap">
                     <p class="p-text">BRC being Submitted along with the documents </p>
                     <div class="btn-yes-no">
@@ -62,15 +62,15 @@
                     </div>
                 </div>
             </div>
-            <p class="p-text">GR / Shipping Bill / Softex Form No.As mentioned Above  FIRC # <span class="amount">{{this.ARRAY_TO_STRING(this.FIRX_DATE_NO?.NUMBER)}}</span> Dt : <span class="amount">{{this.ARRAY_TO_STRING(this.FIRX_DATE_NO?.DATE)}}</span></p>
-            <p class="p-text">Date of Transport Doc. (AWB / BL / LR) - <span class="amount">Enclosed</span>.</p>
-            <p class="p-text">Debit all charges for processing of above-mentioned documents from account no. <span class="amount" *ngIf="this.data[2]!=undefined && this.data[2]!=null && this.data[2]!=''">{{this.data[2][0]?.accNumber}}</span> with your Erode branch.</p>
-            <p class="p-text">If the above mentioned documents are being submitted after expiry of 21 days from date of shipment, than please briefly,</p>
-            <p class="p-text">describe the reason for delay in submission of documents - Due to Shipping Bill delayed from Customs.</p>
-            <p class="p-text">We are eligible to export the above mentioned goods under the current Foreign Trade policy </p>
-            <p class="p-text">in place and our Importer Exporter Code is : <span class="amount">{{this.data[0][0]?.ieccode}}</span></p>
+            <p class="p-text mb-0">GR / Shipping Bill / Softex Form No.As mentioned Above  FIRC # <span class="amount">{{this.ARRAY_TO_STRING(this.FIRX_DATE_NO?.NUMBER)}}</span> Dt : <span class="amount">{{this.ARRAY_TO_STRING(this.FIRX_DATE_NO?.DATE)}}</span></p>
+            <p class="p-text mb-0">Date of Transport Doc. (AWB / BL / LR) - <span class="amount">Enclosed</span>.</p>
+            <p class="p-text mb-0">Debit all charges for processing of above-mentioned documents from account no. <span class="amount" *ngIf="this.data[2]!=undefined && this.data[2]!=null && this.data[2]!=''">{{this.data[2][0]?.accNumber}}</span> with your Erode branch.</p>
+            <p class="p-text mb-0">If the above mentioned documents are being submitted after expiry of 21 days from date of shipment, than please briefly,</p>
+            <p class="p-text mb-0">describe the reason for delay in submission of documents - Due to Shipping Bill delayed from Customs.</p>
+            <p class="p-text mb-0">We are eligible to export the above mentioned goods under the current Foreign Trade policy </p>
+            <p class="p-text mb-0">in place and our Importer Exporter Code is : <span class="amount">{{this.data[0][0]?.ieccode}}</span></p>
             <br>
-            <p class="p-text mt-3">
+            <p class="p-text mt-0">
                 <span class="amount">INVOICE NO:</span><br>
                 I / We hereby declare that the above transaction does not involve, and is not designed
                 for the purpose of any contravention or evasion of the provisions of the FEMA 1999 or of
@@ -83,9 +83,8 @@
                 matter to Reserve Bank Of India. *I / We further declare that the undersigned has/have
                 the authority to give this declaration and undertaking on behalf of the firm / company.
                 <br>
-                <br>
                 <span class="amount">For KKSK International LLP</span><br>
-                <br><br><br>
+                <br><br>
                 <span class="amount">Authorized Signatory</span></p>
         </div>
     </div>

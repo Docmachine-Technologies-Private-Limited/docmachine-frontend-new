@@ -29,10 +29,10 @@ export class ViewDocumentComponent implements OnInit {
   @ViewChild('epltable', { static: false }) epltable: ElementRef;
   @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
-  public item1:any = [];
-  public item2:any = [];
-  public item3:any = [];
-  public item4:any = [];
+  public item1: any = [];
+  public item2: any = [];
+  public item3: any = [];
+  public item4: any = [];
   public viewData: any;
   public closeResult: string;
   public user;
@@ -120,9 +120,42 @@ export class ViewDocumentComponent implements OnInit {
           console.log('getShippingBillList_Master', data)
           this.item1 = data;
           this.item1.forEach(element => {
-            element['FIRX_TOTAL_AMOUNT']=this.FIRX_AMOUNT(element?.firxAmount);
-            element['SB_RENAMMING_AMOUNT']=parseFloat(element?.fobValue)-this.FIRX_AMOUNT(element?.firxAmount)
-         });
+            let totalFirxAmount: any = 0;
+            let tp: any = {
+              firxNumber: [],
+              firxDate: [],
+              firxCurrency: [],
+              firxAmount: [],
+              firxCommision: [],
+              firxRecAmo: [],
+              id: [],
+            };
+            for (let index = 0; index < element?.firxdetails.length; index++) {
+              const elementfirxdetails = element?.firxdetails[index];
+              totalFirxAmount += parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount));
+              
+              elementfirxdetails?.firxNumber.split(',').forEach(firxelementno => {
+                tp?.firxNumber?.push(firxelementno)
+              });
+              elementfirxdetails?.firxDate.split(',').forEach(firxDateelement => {
+                tp?.firxDate?.push(firxDateelement)
+              });
+              elementfirxdetails?.firxCurrency.split(',').forEach(firxCurrencyelement => {
+                tp?.firxCurrency?.push(firxCurrencyelement)
+              });
+              elementfirxdetails?.firxAmount.split(',').forEach(firxAmountelement => {
+                tp?.firxAmount?.push(firxAmountelement)
+              });
+              elementfirxdetails?.firxCommision.split(',').forEach(firxCommisionelement => {
+                tp?.firxCommision?.push(firxCommisionelement)
+              });
+            }
+            element['FIRX_TOTAL_AMOUNT'] = totalFirxAmount;
+            element['SB_RENAMMING_AMOUNT'] = parseFloat(element?.fobValue) - parseFloat(totalFirxAmount);
+            element['FIRX_INFO']=tp;
+          });
+          
+          
           this.FILTER_VALUE_LIST = data;
           for (let index = 0; index < data.length; index++) {
             if (this.ALL_FILTER_DATA['Buyer_Name'].includes(data[index]?.buyerName[0]) == false) {
@@ -141,8 +174,6 @@ export class ViewDocumentComponent implements OnInit {
               this.ALL_FILTER_DATA['SB_DATE'].push(data[index]?.sbdate);
             }
           }
-          
-        
         });
       } else if (this.file === 'boe') {
         this.doc = 'BOE';
@@ -398,5 +429,8 @@ export class ViewDocumentComponent implements OnInit {
   }
   FIRX_AMOUNT(amountarray: any): any {
     return parseFloat(amountarray?.split(',')?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)).toFixed(3);
+  }
+  ARRAY_TO_STRING(array,key){
+    return array[key]?.join(',')
   }
 }
