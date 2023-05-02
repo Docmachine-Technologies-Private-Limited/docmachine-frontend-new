@@ -455,6 +455,12 @@
                     name="countryOfFinaldestination" />
                 </td>
                 <td class="full-input border2">
+                  <label for="consigneeName">Buyer NAME</label>
+                  <ng-select class="custom" *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
+                    bindLabel="value" [multiple]="false" placeholder="Select Consignee Name" ngModel name="buyerName">
+                  </ng-select>
+                </td>
+                <td class="full-input border2">
                   <label for="consigneeName">CONSIGNEE NAME</label>
                   <ng-select class="custom" *ngIf="this.ConsigneeNameList?.length!=0" [items]="this.ConsigneeNameList"
                     bindLabel="value" [multiple]="false" placeholder="Select Consignee Name" ngModel name="consigneeName">

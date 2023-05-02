@@ -1182,7 +1182,7 @@ export class UploadComponent implements OnInit {
     e.form.value.insuranceCurrency = e.form.value.insuranceCurrency?.type != undefined ? e.form.value.insuranceCurrency.type : e.form.value.insuranceCurrency;
     e.form.value.currency = e.form.value.currency?.type != undefined ? e.form.value.currency.type : e.form.value.currency;
     e.form.value.consigneeName = e.form.value.consigneeName?.value != undefined ? e.form.value.consigneeName.value : e.form.value.consigneeName;
-    e.form.value.buyerName = this.BUYER_LIST;
+    e.form.value.buyerName = e.form.value.buyerName?.value != undefined ? [e.form.value.buyerName.value] : [e.form.value.buyerName];
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1?.doc;
     console.log('buyername for BL', e.form.value.buyerName);
