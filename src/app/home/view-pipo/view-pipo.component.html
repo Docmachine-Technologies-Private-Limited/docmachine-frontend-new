@@ -13,9 +13,7 @@
                         <div class="float_right_page">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <!-- <li class="breadcrumb-item"><a routerLink="/home/view-pipo">Documents</a></li> -->
                                     <li class="breadcrumb-item"><a routerLink="/home/pipo">PI PO</a></li>
-                                    <!-- <li class="breadcrumb-item active" aria-current="page">PI PO details</li> -->
                                 </ol>
                             </nav>
                         </div>
@@ -43,49 +41,7 @@
                             <label for="" class="left-label">Total no. of shipping bill</label>
                             <label for="" class="right-label"><p *ngFor='let sbAmount of SbAmountAndCurrency; let i = index'>{{sbAmount?.fobCurrency }} {{sbAmount?.fobValue}}<span *ngIf="SbAmountAndCurrency.length-1 !== i"> ,</span></p></label>
                         </div>
-                            <!-- <table class="leftshippting_info">
-                                <tbody>
-                                    <tr>
-                                        <td><label>Total no. of shipping bill</label></td>
-                                        <td><b>{{SbData?.length}}</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label>Shipping bill number</label></td>
-                                        <td><b *ngFor='let sb of SbData ; let i = index'> {{sb?.sbno}} <span *ngIf="SbData.length-1 !== i"> ,</span> </b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label>Shipping bill date</label></td>
-                                        <td><b *ngFor='let sb of SbData; let i = index'> {{sb?.sbdate | date: 'dd/MM/yyyy'}}<span *ngIf="SbData.length-1 !== i"> ,</span> </b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label>Total Shipping bill amount</label></td>
-                                        <td><b *ngFor='let sbAmount of SbAmountAndCurrency; let i = index'> {{sbAmount?.fobCurrency }} {{sbAmount?.fobValue}} <span *ngIf="SbAmountAndCurrency.length-1 !== i"> ,</span> </b></td>
-                                    </tr>
-                                </tbody>
-                            </table> -->
                         </div>
-                        <!-- <div class="col-12">
-                            <table class="leftshippting_info">
-                                <tbody>
-                                    <tr>
-                                        <td><label>Total no. of inward remittances</label></td>
-                                        <td><b>{{inWardData?.length}}</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label>Inward remittance number</label></td>
-                                        <td><b *ngFor='let inward of inWardData; let i = index'> {{inward?.billNo}}<span *ngIf="inWardData.length-1 !== i">, </span></b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label>Inward remittance amount</label></td>
-                                        <td><b> {{inwardRemitanceAmount}}</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label>Balance amount</label></td>
-                                        <td><b>{{inwardBalanceAmount }}</b></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> -->
                     </div>
                     <div class="column col-11">
                         <div class="col-12 right_border">
@@ -105,49 +61,7 @@
                             <label for="" class="left-label">Balance amount</label>
                             <label for="" class="right-label">{{inwardBalanceAmount }}</label>
                         </div>
-                            <!-- <table class="leftshippting_info">
-                                <tbody>
-                                    <tr>
-                                        <td><label>Total no. of shipping bill</label></td>
-                                        <td><b>{{SbData?.length}}</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label>Shipping bill number</label></td>
-                                        <td><b *ngFor='let sb of SbData ; let i = index'> {{sb?.sbno}} <span *ngIf="SbData.length-1 !== i"> ,</span> </b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label>Shipping bill date</label></td>
-                                        <td><b *ngFor='let sb of SbData; let i = index'> {{sb?.sbdate | date: 'dd/MM/yyyy'}}<span *ngIf="SbData.length-1 !== i"> ,</span> </b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label>Total Shipping bill amount</label></td>
-                                        <td><b *ngFor='let sbAmount of SbAmountAndCurrency; let i = index'> {{sbAmount?.fobCurrency }} {{sbAmount?.fobValue}} <span *ngIf="SbAmountAndCurrency.length-1 !== i"> ,</span> </b></td>
-                                    </tr>
-                                </tbody>
-                            </table> -->
                         </div>
-                        <!-- <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                            <table class="leftshippting_info">
-                                <tbody>
-                                    <tr>
-                                        <td><label>Total no. of inward remittances</label></td>
-                                        <td><b>{{inWardData?.length}}</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label>Inward remittance number</label></td>
-                                        <td><b *ngFor='let inward of inWardData; let i = index'> {{inward?.billNo}}<span *ngIf="inWardData.length-1 !== i">, </span></b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label>Inward remittance amount</label></td>
-                                        <td><b> {{inwardRemitanceAmount}}</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td><label>Balance amount</label></td>
-                                        <td><b>{{inwardBalanceAmount }}</b></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> -->
                     </div>
                 </div>
             </div>

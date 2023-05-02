@@ -4,6 +4,7 @@ import { PipoDisplayListView, PipoDisplayListViewItem } from '../../../model/pip
 import { PipoDataService } from '../../service/homeservices/pipo.service';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
+import $ from 'jquery';
 
 @Component({
   selector: 'custom-hover-panel',
@@ -23,7 +24,7 @@ export class CustomHoverPanelComponent implements OnInit {
   endDate: any = '';
   item: any = [];
   PDF_URL: any = '';
-  public pipoArrayList: Array<PipoDisplayListViewItem> = [];
+  public pipoArrayList: any = [];
   public pipoDisplayListData: PipoDisplayListView;
   public pipoData?: any = [];
 
@@ -38,13 +39,10 @@ export class CustomHoverPanelComponent implements OnInit {
 
     this.documentService.getPipo().subscribe(
       (res: any) => {
-        console.log('HEre ResponseAmani####', res);
         this.item = res.data;
-        this.pipoDisplayListData = this.pipoDataService.setPipoData(res.data, 'export');
-        this.pipoDataService.pipo$.subscribe((data) => {
-          for (let value of data) {
-            this.pipoArrayList.push(value);
-          }
+        this.getPipoExport(res.data).then((pipores: any) => {
+          this.pipoArrayList = pipores;
+          console.log(this.pipoArrayList, res.data, 'dgfdgdfgdfgdfgdfgfdgdfgdfgfg')
         });
       },
       (err) => console.log(err, '**********')
@@ -103,8 +101,32 @@ export class CustomHoverPanelComponent implements OnInit {
     ])
   }
   openDoc(a: any) {
-    this.PDF_URL ='';
+    this.PDF_URL = '';
     setTimeout(() => { this.PDF_URL = a; }, 500)
     console.log(a, 'openDoc');
+  }
+
+  getPipoExport(data: any) {
+    var temp: any = [];
+    return new Promise((resolve, reject) => {
+      for (let index = 0; index < data.length; index++) {
+        if (data[index]?.file == 'export') {
+          temp.push(data[index]);
+        }
+        if ((index + 1) == data.length) {
+          resolve(data);
+        }
+      }
+    })
+  }
+  getSBSum(sbdata: any) {
+    return { SumAmount: sbdata.reduce((a, b) => parseFloat(a) + parseFloat(b?.fobValue), 0), Currency: sbdata[0]?.currency };
+  }
+  getIRMSum(irmdata: any) {
+    return { SumAmount: irmdata.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0), Currency: irmdata[0]?.currency };
+  }
+  viewDetails(data: any) {
+    console.log("pipoData", this.pipoData)
+    this.router.navigate(['home/pipo-export', data]);
   }
 }

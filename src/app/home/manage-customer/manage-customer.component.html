@@ -24,7 +24,7 @@
                     <div class="col-md-4 col-sm-4 col-12"></div>
                     <div class="col-md-8 col-sm-8 col-12">
                         <div *ngIf="file == 'export'">
-                            <button class="upload-button" (click)="open1(content1)">
+                            <button class="upload-button" (click)="open1(content1,content2)">
                                 Add Buyer +
                             </button>
 
@@ -78,8 +78,10 @@
                                         <thead>
                                             <tr class="table-tr">
                                                 <th class="col-td-th-1"></th>
-                                                <th scope="col" class="col-td-th-3"><span class="pl-3">Name</span></th>
-                                                <th scope="col" class="col-td-th-3">Address</th>
+                                                <th scope="col" class="col-td-th-3"><span class="pl-3">Buyer Name</span></th>
+                                                <th scope="col" class="col-td-th-3">Buyer Address</th>
+                                                <th scope="col" class="col-td-th-3"><span class="pl-3">Consignee Name</span></th>
+                                                <th scope="col" class="col-td-th-3">Consignee Address</th>
                                                 <th scope="col" class="col-td-th-3"><span class="pl-3">Buyer Bank</span></th>
                                                 <th scope="col" class="col-td-th-3">Buyer Bank Address</th>
                                                 <th scope="col" class="col-td-th-3"></th>
@@ -90,6 +92,8 @@
                                                 <td class="col-td-th-1"><input type="radio" /></td>
                                                 <td class="col-td-th-3">{{ data.buyerName }}</td>
                                                 <td class="col-td-th-3">{{ data.buyerAdrs }}</td>
+                                                <td class="col-td-th-3">{{ data.ConsigneeName }}</td>
+                                                <td class="col-td-th-3">{{ data.ConsigneeAddress }}</td>
                                                 <td class="col-td-th-3">{{ data.buyerbank }}</td>
                                                 <td class="col-td-th-3">{{ data.buyerbankaddress }}</td>
                                                 <td class="col-td-th-3" [routerLink]="'/home/editBuyer/' + data._id">
@@ -217,14 +221,26 @@
                                 <h6 class="display-5">Create New Buyer</h6>
                                 <form [formGroup]="buyerForm" (ngSubmit)="onSubmitBuyer()">
                                     <div class="form-group col-10 mb-3">
-                                        <label>Name</label>
+                                        <label>Buyer Name</label>
                                         <input formControlName="buyerName"
                                             placeholder="Buyer’s name" required="" class="form-control" />
                                     </div>
                                     <div class="form-group col-10 mb-3">
-                                        <label>Address</label>
+                                        <label>Buyer Address</label>
                                         <input formControlName="buyerAdrs"
                                             placeholder="Ex: street address, City. PIN" required=""
+                                            class="form-control" />
+                                    </div>
+                                    <div class="form-group col-10 mb-3">
+                                        <label>Consignee Name</label>
+                                        <input formControlName="ConsigneeName"
+                                            placeholder="Enter Consignee Name" required=""
+                                            class="form-control" />
+                                    </div>
+                                    <div class="form-group col-10 mb-3">
+                                        <label>Consignee Address</label>
+                                        <input formControlName="ConsigneeAddress"
+                                            placeholder="Ex: Consignee street address, City. PIN" required=""
                                             class="form-control" />
                                     </div>
                                     <div class="form-group col-10 mb-3">
@@ -247,6 +263,64 @@
                         </div>
                     </div>
                     <!-- End -->
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #content2 let-modal>
+    <div class="modal-body">
+        <div class="row no-gutter">
+            <div class="col-12 bg-dark" style="margin: 10px">
+                <div class="login d-flex py-5" style="padding: 0px !important">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <h6 class="display-5">Create New Buyer with Consignee</h6>
+                                <form [formGroup]="buyerForm" (ngSubmit)="onSubmitBuyerMember()">
+                                    <div class="form-group col-10 mb-3">
+                                        <label>Buyer Name</label>
+                                        <input formControlName="buyerName"
+                                            placeholder="Buyer’s name" required="" class="form-control" />
+                                    </div>
+                                    <div class="form-group col-10 mb-3">
+                                        <label>Buyer Address</label>
+                                        <input formControlName="buyerAdrs"
+                                            placeholder="Ex: street address, City. PIN" required=""
+                                            class="form-control" />
+                                    </div>
+                                    <div class="form-group col-10 mb-3">
+                                        <label>Consignee Name</label>
+                                        <input formControlName="ConsigneeName"
+                                            placeholder="Enter Consignee Name" required=""
+                                            class="form-control" />
+                                    </div>
+                                    <div class="form-group col-10 mb-3">
+                                        <label>Consignee Address</label>
+                                        <input formControlName="ConsigneeAddress"
+                                            placeholder="Ex: Consignee street address, City. PIN" required=""
+                                            class="form-control" />
+                                    </div>
+                                    <div class="form-group col-10 mb-3">
+                                        <label>BUYER BANK NAME</label>
+                                        <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST" bindLabel="value"
+                                        [multiple]="false"
+                                        placeholder="Select Bank Name"
+                                        formControlName="buyerbank"
+                                        bindValue="value"></ng-select>
+                                    </div>
+                                    <div class="form-group col-10 mb-3">
+                                        <label>BANK ADDRESS</label>
+                                        <input formControlName="buyerbankaddress"
+                                            placeholder="Ex: street address, City. PIN" required=""
+                                            class="form-control" />
+                                    </div>
+                                    <button type="submit" class="btn">Create</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

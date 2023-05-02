@@ -173,7 +173,7 @@ import {ExportHomeComponent} from "./Export/export-home/export-home.component";
           {
             path: "manage-customer",
             loadChildren: () => import('./manage-customer/manage-customer.module').then(mod => mod.ManageCustomerModule),
-            canActivate: [AdminGuard]
+            canActivate: [AdminMemberGuard]
           },
           { path: "createBene", loadChildren: () => import('./create-bene/create-bene.module').then(mod => mod.CreateBeneModule), canActivate: [MemberGuard] },
           { path: "pipo-doc", loadChildren: () => import('./pipo-documents/pipo-documents.module').then(mod => mod.PipoDocumentsModule), canActivate: [MemberGuard] },

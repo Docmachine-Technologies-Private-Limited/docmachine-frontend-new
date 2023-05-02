@@ -11,9 +11,7 @@
                     <div class="float_right_page">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-
                                 <li class="breadcrumb-item"><a routerLink="/home/pipo">PI PO</a></li>
-                                <!-- <li class="breadcrumb-item active" aria-current="page">Add new</li> -->
                             </ol>
                         </nav>
                     </div>
@@ -38,26 +36,15 @@
                                                 ">{{ buyer.buyerName }}
                                                 </option>
                                             </select>
-                                            <!-- <ng-select [items]="buyerDetail" bindLabel="buyerName"
-                                                bindValue="buyerName" placeholder="Select Buyer"
-                                                [(ngModel)]="buyer" name="buyer">
-                                            </ng-select> -->
                                         </div>
                                         <div class="col-md-6">
                                             <label for="ADbill" class="form-label">Choose commodity</label>
-                                            <!-- <select multiple="multiple" class="form-select" aria-label="Default select example" [(ngModel)]="commodityData" name="commodityy">
-                                                <option *ngFor="let data of commodity
-                                                ">{{ data.como }}
-                                                </option>
-                                            </select> -->
-
                                             <ng-select [items]="commodity" bindLabel="como" bindValue="como"
                                                 [multiple]="true" placeholder="Select Commodity"
                                                 [(ngModel)]="commodityData" name="commodity">
                                             </ng-select>
                                         </div>
                                         <div class="col-md-6">
-                                            <!-- <b>Upload documents</b> -->
                                             <label class="form-label">Select the type of document</label>
                                             <select class="form-select" aria-label="Default select example"
                                                 [(ngModel)]="documentType" name='doc_type'>
@@ -65,11 +52,6 @@
                                                 <option value="PI">Proforma Invoice</option>
                                                 <option value="PO">Purchase Order</option>
                                             </select>
-
-                                            <!-- <ng-select [items]="documentTypes" bindLabel="name"
-                                    bindValue="id" placeholder="Select Type"
-                                    [(ngModel)]="documentType" name="doc_type">
-                                </ng-select> -->
                                         </div>
                                     </div>
                                 </form>
@@ -91,7 +73,6 @@
                         </div>
                     </div>
                     <div class="progressbar" *ngIf="uploading">
-                        <!-- <p class="processheading">Invoice-001</p> -->
                         <div class="meter">
                             <span [style.width]="width + '%'"></span>
                         </div>
@@ -102,7 +83,6 @@
                                 <div class="pdf_invoce">
                                     <h2 class="payment_title">Document</h2>
                                     <div class="pdf_invoce_scroll">
-                                        <!-- <img src="assets/new-img/pdf_inn.png" alt="" /> -->
                                         <iframe style="border:none;" [src]="piPoUrl" width="100%"> </iframe>
                                     </div>
                                 </div>
@@ -127,9 +107,6 @@
                                             <div class="col-md-6 col-sm-4 col-xs-12 col-12">
                                                 <div class="mb-3 date_of_shipment">
                                                     <label for="date" class="form-label">Invoice Date</label>
-                                                    <!-- <input class="form-select form-control" type="date" id="date"
-                                                      formControlName="date" /> -->
-
                                                     <input class="form-control" matInput
                                                         [matDatepicker]="pickerDate" placeholder="Choose a date"
                                                         formControlName="date" autocomplete="off">
@@ -137,11 +114,9 @@
                                                     </mat-datepicker-toggle>
                                                     <mat-datepicker aria-setsize="14px" #pickerDate>
                                                     </mat-datepicker>
-
                                                     <div *ngIf="submitted && form.date.errors" class='errorText'>
                                                         <div *ngIf="form.date.errors.required">Invoice Date is
                                                             required</div>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -164,11 +139,6 @@
                                                 <div class="mb-3">
                                                     <label for="exampleInputPassword1"
                                                         class="form-label">Currency</label>
-
-
-                                                    <!-- <input type="text" class="form-control" id="currency"
-                                                        formControlName="currency" placeholder="Currency"> -->
-
                                                     <select class="form-select" aria-label="Default select example"
                                                         formControlName="currency" name="currency" autocomplete="off">
                                                         <option value="">Select Currency</option>
@@ -177,8 +147,6 @@
                                                     ">{{ currency }}
                                                         </option>
                                                     </select>
-
-
                                                     <div *ngIf="submitted && form.currency.errors"
                                                         class='errorText'>
                                                         <div *ngIf="form.currency.errors.required"> Currency is
@@ -188,12 +156,6 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <!-- <div class="col-md-4 col-sm-4 col-xs-12 col-12">
-                                                <div class="mb-3">
-                                                    <label for="exampleInputEmail1" class="form-label">Invoice amount</label>
-                                                    <input type="number" class="form-control" id="quantity2" class="form-control" name="quantity2" min="1" max="5" formControlName="amount">
-                                                </div>
-                                            </div> -->
                                             <div class="col-md-6 col-sm-12 col-xs-12 col-12">
                                                 <div class="mb-3">
                                                     <label for="exampleInputPassword1"
@@ -211,14 +173,7 @@
                                                 <div class="mb-3">
                                                     <label for="exampleInputEmail1"
                                                         class="form-label">Branch</label>
-                                                    <!-- <input type="text" class="form-control" id="Branch"
-                                                        aria-describedby="emailHelp" formControlName="branch"> -->
-                                                    <!-- <ng-select [items]="LocationData" bindLabel="loc"
-                                                        bindValue="loc" placeholder="Select Branch"
-                                                        formControlName="location" name="location">
-                                                    </ng-select> -->
-
-                                                    <select class="form-select" aria-label="Default select example"
+                                                 <select class="form-select" aria-label="Default select example"
                                                         formControlName="location" name="location" autocomplete="off">
                                                         <option value="">Select Branch</option>
 
@@ -237,9 +192,6 @@
                                                 <div class="mb-3 date_of_shipment">
                                                     <label for="exampleInputPassword1" class="form-label">Last date
                                                         of shipment</label>
-                                                    <!-- <input class="form-select form-control" type="date"
-                                                        placeholder="Start Date"
-                                                        formControlName="lastDayShipment" /> -->
                                                     <input class="form-control" matInput
                                                         [matDatepicker]="pickerLastDay" placeholder="Choose a date"
                                                         formControlName="lastDayShipment" autocomplete="off">
@@ -266,8 +218,6 @@
                                                 <div class="mb-3 date_of_shipment">
                                                     <label for="exampleInputPassword1" class="form-label">Due
                                                         date</label>
-                                                    <!-- <input class="form-select form-control" type="date"
-                                                        placeholder="Start Date" formControlName="dueDate" /> -->
                                                     <input class="form-control" matInput
                                                         [matDatepicker]="pickerDueDate" placeholder="Choose a date"
                                                         formControlName="dueDate" autocomplete="off">
@@ -287,8 +237,6 @@
                                                             <label for="exampleInputPassword1"
                                                                 class="form-label">Last
                                                                 date of shipment</label>
-                                                            <!-- <input class="form-select form-control" type="date"
-                                                            formControlName="date" /> -->
                                                             <span> <input class="form-control" matInput
                                                                     [matDatepicker]="pickerShipmentDate"
                                                                     placeholder="Choose a date"
@@ -306,7 +254,6 @@
                                                         <div class="mb-3">
                                                             <label for="exampleInputPassword1"
                                                                 class="form-label">Type</label>
-
                                                             <select class="form-select"
                                                                 aria-label="Default select example"
                                                                 formControlName="type" autocomplete="off">
@@ -337,12 +284,6 @@
                                                         <div class="mb-4">
                                                             <label for="exampleInputPassword1"
                                                                 class="form-label">Currency </label>
-
-
-                                                            <!-- <input class="form-select form-control"
-                                                                formControlName="description"
-                                                                placeholder="Currency" /> -->
-
                                                             <select class="form-select"
                                                                 aria-label="Default select example"
                                                                 formControlName="description" name="description" autocomplete="off">
@@ -352,8 +293,6 @@
                                                     ">{{ currency }}
                                                                 </option>
                                                             </select>
-
-
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 col-sm-4 col-xs-12 col-12">
@@ -376,7 +315,6 @@
                                     </form>
                                 </div>
                             </div>
-
                             <div class="data_submit_righg">
                                 <div class="data_submit">
                                     <button type="button" class="btn btn-secondary"

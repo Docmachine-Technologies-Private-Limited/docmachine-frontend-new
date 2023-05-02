@@ -82,8 +82,12 @@
             },
             "development": {
               "buildOptimizer": false,
-              "optimization": true,
-              "vendorChunk": false,
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },  
+              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
               "namedChunks": true,
@@ -95,6 +99,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "dm-frontend:build"
+          },
           "configurations": {
             "production": {
               "browserTarget": "dm-frontend:build:production"

@@ -8,6 +8,7 @@ import { UserService } from '../../../service/user.service';
 import { WindowInformationService } from '../../../service/window-information.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../../confirm-dialog-box/confirm-dialog-box.component';
 import { MergePdfListService } from '../../merge-pdf-list.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-pending-panel',
@@ -20,6 +21,7 @@ export class PendingPanelComponent implements OnInit {
   constructor(public wininfo: WindowInformationService, public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public mergerpdf: MergePdfService,
     public pdfmerge: MergePdfListService,
+    private toastr: ToastrService,
     public documentService: DocumentService, public dialog: MatDialog, private sanitizer: DomSanitizer, public userserivce: UserService,) { }
   ngOnInit(): void {
     this.wininfo.set_controller_of_width(270, '.content_top_common')
@@ -54,6 +56,30 @@ export class PendingPanelComponent implements OnInit {
       this.documentService.setDownloadStatus(download).subscribe((res: any) => {
         console.log(res, 'dfsdfhsdfdsjhdsfgdsfds')
         this.ngOnInit();
+      });
+    } else if (this.DATA_CREATE[index]['Types'] == 'BuyerAddition') {
+      console.log(data, 'fhgjdfhdgfgdgfdgfdgfgfgfgfg')
+      this.documentService.UpdateStatus({
+        data: {
+          _id: data['id'],
+          status: data['status'],
+          deleteflag: data['deleteflag']
+        }
+      }).subscribe((res: any) => {
+        console.log(res, 'dfsdfhsdfdsjhdsfgdsfds')
+        if (data?.deleteflag == '2') {
+          this.userserivce.creatBuyer(this.DATA_CREATE[index]?.data).subscribe(responsedata => {
+            console.log("king123")
+            console.log(responsedata)
+            this.ngOnInit();
+            this.SendMailText(this.DATA_CREATE[index]?.data)
+          },
+            error => {
+              console.log("error")
+            });
+        } else {
+          this.ngOnInit();
+        }
       });
     } else {
       const message = `Are you sure you want to delete this?`;
@@ -125,6 +151,13 @@ export class PendingPanelComponent implements OnInit {
     } else {
       this.CustomConfirmDialogModel.ConfirmDialogModel('Pdf View', 'Pdf not found!', null);
     }
-
+  }
+  SendMailText(data: any) {
+    console.log(data, 'sendMail')
+    this.documentService.SendMailNormal({data:data,subject:'New Buyer Name added : ' +data[Object.keys(data)[0]]}).subscribe((res2) => {
+      this.toastr.success('Message sent your email id successfully!');
+    },
+      (err) => console.log("ERROR")
+    );
   }
 }

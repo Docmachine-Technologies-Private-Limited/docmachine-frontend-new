@@ -11,7 +11,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { FormArray, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -365,6 +365,8 @@ export class UploadComponent implements OnInit {
   INTERVAL: any = [];
   BUYER_DETAILS: any = [];
   BUYER_ADDRESS_DETAILS: any = [];
+  ConsigneeNameList: any = [];
+
   runProgressBar(value) {
     this.INTERVAL = setInterval(() => {
       if (this.width < 100) {
@@ -395,10 +397,16 @@ export class UploadComponent implements OnInit {
       (res: any) => {
         this.buyerDetail = res.data
         this.buyerDetail.forEach(element => {
+          if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
+            this.ConsigneeNameList.push({
+              value: element?.ConsigneeName
+            })
+          }
+
           this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
           // this.BUYER_ADDRESS_DETAILS[element?._id]={value:element.buyerName,id:element?._id,Address:element?.buyerAdrs}
         });
-        console.log('Benne Detail111', this.buyerDetail, this.BUYER_DETAILS);
+        console.log('Benne Detail111', this.ConsigneeNameList,this.buyerDetail, this.BUYER_DETAILS);
       },
       (err) => console.log('Error', err)
     );
@@ -445,7 +453,7 @@ export class UploadComponent implements OnInit {
         console.log(this.location);
         console.log(this.commodity);
         for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-          this.bankDetail.push({value:data['data'][0]['bankDetails'][index]?.bank,id:data['data'][0]['bankDetails'][index]?.BankUniqueId})
+          this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId })
         }
         //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
       },
@@ -1173,6 +1181,7 @@ export class UploadComponent implements OnInit {
     e.form.value.freightCurrency = e.form.value.freightCurrency?.type != undefined ? e.form.value.freightCurrency.type : e.form.value.freightCurrency;
     e.form.value.insuranceCurrency = e.form.value.insuranceCurrency?.type != undefined ? e.form.value.insuranceCurrency.type : e.form.value.insuranceCurrency;
     e.form.value.currency = e.form.value.currency?.type != undefined ? e.form.value.currency.type : e.form.value.currency;
+    e.form.value.consigneeName = e.form.value.consigneeName?.value != undefined ? e.form.value.consigneeName.value : e.form.value.consigneeName;
     e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.pipo = this.pipoArr;
     e.form.value.doc = this.pipourl1?.doc;
@@ -1659,7 +1668,7 @@ export class UploadComponent implements OnInit {
           console.log(res, 'addBlcopyref');
           this.toastr.success(`addBlcopyref Document Added Successfully`);
           console.log('addBlcopyref Document Added Successfully');
-         
+
           var TransactionSbRef: any = this.route.snapshot.paramMap.get('SbRef');
           if (TransactionSbRef != '') {
             let updatedData = {
@@ -1745,10 +1754,10 @@ export class UploadComponent implements OnInit {
               selectedShippingBill?.sbno,
               selectedShippingBill?._id
             ).subscribe((data) => {
-                console.log('updateMasterBySbupdateMasterBySb', data);
-              },(error) => {
-                console.log('error');
-              }
+              console.log('updateMasterBySbupdateMasterBySb', data);
+            }, (error) => {
+              console.log('error');
+            }
             );
             let updatedData = {
               "airwayBlCopyRef": [
@@ -1830,10 +1839,10 @@ export class UploadComponent implements OnInit {
               selectedShippingBill?.sbno,
               selectedShippingBill?._id
             ).subscribe((data) => {
-                console.log('updateMasterBySbupdateMasterBySb', data);
-              },(error) => {
-                console.log('error');
-              }
+              console.log('updateMasterBySbupdateMasterBySb', data);
+            }, (error) => {
+              console.log('error');
+            }
             );
             let updatedData = {
               "commercialRef": [
@@ -2077,10 +2086,10 @@ export class UploadComponent implements OnInit {
               selectedShippingBill?.sbno,
               selectedShippingBill?._id
             ).subscribe((data) => {
-                console.log('updateMasterBySbupdateMasterBySb', data);
-              },(error) => {
-                console.log('error');
-              }
+              console.log('updateMasterBySbupdateMasterBySb', data);
+            }, (error) => {
+              console.log('error');
+            }
             );
             let updatedData = {
               "packingListRef": [
@@ -2440,7 +2449,7 @@ export class UploadComponent implements OnInit {
   }
   SocketioserviceMessage: any = ''
   public onUploadInit(args: any): void {
-    this.width=0
+    this.width = 0
     // this.socketioservice?.socket.on('uploadImageInwardOutward', (res) => {
     //   this.SocketioserviceMessage = res;
     //   console.log(res, 'Socket uploadImageInwardOutward')
@@ -2643,7 +2652,7 @@ export class UploadComponent implements OnInit {
     let control1 = this.piPoForm.controls.paymentTerm as FormArray;
     control1.removeAt(i);
   }
-  
+
   async LOAD_PIPO_LIST_BUYER(type: any) {
     await this.pipoDataService.getPipoList(type).then((data) => {
       console.log(data, 'data..................')
@@ -2697,8 +2706,8 @@ export class UploadComponent implements OnInit {
     } else {
       console.log('x');
     }
-    
-    this.BUYER_LIST=this.BUYER_LIST.filter(n => n);
+
+    this.BUYER_LIST = this.BUYER_LIST.filter(n => n);
     this.COMMERCIAL_LIST = [];
     this.pipoDataService.getShippingNo(LAST_VALUE?._id, this.documentType1);
     this.documentService.getCommercialByFiletype(this.documentType1, LAST_VALUE?._id).subscribe((res: any) => {

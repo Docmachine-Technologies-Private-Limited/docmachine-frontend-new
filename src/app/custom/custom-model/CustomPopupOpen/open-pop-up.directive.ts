@@ -11,17 +11,26 @@ import $ from 'jquery'
   selector: '[CommonDirective]'
 })
 export class OpenPopUpDirective {
-  constructor(private elementRef: ElementRef, public wininfo: WindowInformationService) {
+  constructor(private elementRef: ElementRef,
+  public wininfo: WindowInformationService) {
     console.log(elementRef, 'dfsdfsdfdsfdfsdf')
   }
-  @HostListener('mouseenter', ['$event']) mouseover(event: any) {
-    this.CUSTOM_HOVER_PANEL_MOUSE_ENTER(event);
-    this.NgCustomTooltipsDirectiveMouseEnter(event)
+  
+  @HostListener('document:mouseenter', ['$event']) mouseover(event: any) {
+    var CUSTOM_HOVER_PANEL_MOUSE_ENTER_ID: any = $(event.target).attr('hover-popup-open-close');
+    var NgCustomTooltipsDirectiveMouseEnter_ID: any = $(event.target).attr('tooltips-close');
+    console.log(event, 'sdfsdhjdhdgfdgdfg')
+    if (CUSTOM_HOVER_PANEL_MOUSE_ENTER_ID == 'open') {
+      this.CUSTOM_HOVER_PANEL_MOUSE_ENTER(event);
+    }
+    // if (NgCustomTooltipsDirectiveMouseEnter_ID == 'open') {
+    //   this.NgCustomTooltipsDirectiveMouseEnter(event)
+    // }
   }
 
-  @HostListener('mouseleave', ['$event']) mouseleave(event: Event) {
+  @HostListener('document:mouseleave', ['$event']) mouseleave(event: Event) {
     // this.CUSTOM_HOVER_PANEL_MOUSE_LEAVE(event);
-    this.NgCustomTooltipsDirectiveMouseLeave(event);
+    // this.NgCustomTooltipsDirectiveMouseLeave(event);
   }
   @HostListener('document:mousedown', ['$event'])
   onGlobalClick(event): void {
@@ -32,13 +41,13 @@ export class OpenPopUpDirective {
     let panel_id: any = $(event.target).attr('popup-close');
     let hoverpopupopenclose: any = $(event.target).attr('hover-popup-open-close');
     let ngtooltipspopup: any = $(event.target).attr('ng-tooltips-popup');
-    
+
     if (panel_id == $(this.elementRef.nativeElement).attr('id')) {
       this.CUSTOM_MODEL_POPEN_CLOSE(event);
     } else if (hoverpopupopenclose == 'open') {
       this.CUSTOM_HOVER_PANEL_CLICK(event);
       this.NgCustomTooltipsDirectiveMouseClick(event);
-    }else if (ngtooltipspopup == $(this.elementRef.nativeElement).attr('id')) {
+    } else if (ngtooltipspopup == $(this.elementRef.nativeElement).attr('id')) {
       this.CUSTOM_TOOLTIPS_CLICK(event);
     }
   }
@@ -70,7 +79,7 @@ export class OpenPopUpDirective {
       }
     }
   }
-  
+
   CUSTOM_TOOLTIPS_CLICK(event: any) {
     var panel_id: any = $(event.target).attr('ng-tooltips-popup');
     var ClassList: any = []
@@ -83,29 +92,29 @@ export class OpenPopUpDirective {
     if (ClassList?.includes('TOOLTIPS_OPEN_CLOSE') == true || ClassList?.includes('ng-option-label') == true) {
       if ($(this.elementRef.nativeElement).attr('id') === panel_id) {
         $('.ng-custom-tooltips#' + panel_id).css('display', 'flex');
-      }else{
-        $('.ng-custom-tooltips#' + panel_id).css('display', 'none'); 
+      } else {
+        $('.ng-custom-tooltips#' + panel_id).css('display', 'none');
       }
     }
     if (['CLOSE_CUSTOM_TOOLTIPS', 'btn btn-primary mt-3 CLOSE_CUSTOM_TOOLTIPS'].includes(event.target.className)) {
-        $('.ng-custom-tooltips#' + panel_id).css('display', 'none');
+      $('.ng-custom-tooltips#' + panel_id).css('display', 'none');
     }
   }
 
   CUSTOM_HOVER_PANEL_MOUSE_ENTER(event: any) {
-    var panel_id: any = $(event.target).attr('hover-popup-open-close');
     let windowinfo: any = this.wininfo.getControllerProperties('');
+    let top: any = parseFloat(event.target.offsetHeight + event.target.offsetTop + 310) - parseFloat('150');
+    let left: any = parseFloat(event.target.offsetWidth) - parseInt('700');
+    var panel_id: any = $(event.target).attr('hover-popup-open-close');
     if (panel_id == 'open') {
-      let top: any = parseFloat(event.target.offsetHeight + event.target.offsetTop + 310) - parseFloat('150');
-      let left: any = parseFloat(event.target.offsetWidth) - parseInt('700');
-      // $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex' })
-      // if ((windowinfo?.BODY_HEIGHT > parseFloat(event.target.offsetHeight + event.target.offsetTop + 510))) {
-      //   $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'top': top + 'px', 'left': left + 'px' })
-      // } else {
-      //   let top: any = parseFloat('310') - parseFloat(event.target.offsetTop + event.target.offsetHeight + 25);
-      //   $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'top': top + 'px', 'left': left + 'px' })
-      // }
+      $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'transform': 'scale(0.3)' })
     }
+    // if ((windowinfo?.BODY_HEIGHT > parseFloat(event.target.offsetHeight + event.target.offsetTop + 510))) {
+    //   $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'top': top + 'px', 'left': left + 'px' })
+    // } else {
+    //   let top: any = parseFloat('310') - parseFloat(event.target.offsetTop + event.target.offsetHeight + 25);
+    //   $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'top': top + 'px', 'left': left + 'px' })
+    // }
   }
 
   CUSTOM_HOVER_PANEL_CLICK(event: any) {
@@ -122,7 +131,7 @@ export class OpenPopUpDirective {
         $('#CUSTOM_HOVER_PANEL').css({ 'display': 'none' })
       } else {
         if (panel_id == 'open') {
-          $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex' })
+          $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'transform': 'scale(1)' })
         }
       }
     })

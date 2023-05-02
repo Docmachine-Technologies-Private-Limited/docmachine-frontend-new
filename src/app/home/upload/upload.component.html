@@ -455,8 +455,10 @@
                     name="countryOfFinaldestination" />
                 </td>
                 <td class="full-input border2">
-                  <label for="consigneeName">CONSIGNEE NAME</label><input [(ngModel)]="res.consigneeName"
-                    class="form-control p-3" type="text" name="consigneeName" />
+                  <label for="consigneeName">CONSIGNEE NAME</label>
+                  <ng-select class="custom" *ngIf="this.ConsigneeNameList?.length!=0" [items]="this.ConsigneeNameList"
+                    bindLabel="value" [multiple]="false" placeholder="Select Consignee Name" ngModel name="consigneeName">
+                  </ng-select>
                 </td>
                 <td class="full-input border2">
                   <label for="exchangeRate">EXCHANGE RATE</label><input [(ngModel)]="res.exchangeRate"
@@ -484,6 +486,14 @@
                     <input [(ngModel)]="res.sbdate" class="input form-control p-3" type="date" name="sbdate" />
                   </div>
                 </div>
+                <!-- <div class="col-md-6 col-12">
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Consignee Name</label>
+                    <ng-select class="custom" *ngIf="this.ConsigneeNameList?.length!=0" [items]="this.ConsigneeNameList"
+                      bindLabel="value" [multiple]="false" placeholder="Select Consignee Name" name="consigneeName">
+                    </ng-select>
+                  </div>
+                </div> -->
                 <div class="col-md-6 col-12">
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
@@ -1072,8 +1082,9 @@
               <div class="col-md-6 col-sm-6 col-xs-12 col-12">
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label">Bank Name*</label>
-                  <ng-select class="custom" *ngIf="this.bankDetail?.length!=0" [items]="this.bankDetail" bindLabel="value"
-                    [multiple]="false" placeholder="Select Bank Name" name="BankName" ngModel required>
+                  <ng-select class="custom" *ngIf="this.bankDetail?.length!=0" [items]="this.bankDetail"
+                    bindLabel="value" [multiple]="false" placeholder="Select Bank Name" name="BankName" ngModel
+                    required>
                   </ng-select>
                 </div>
                 <div class="mb-3">

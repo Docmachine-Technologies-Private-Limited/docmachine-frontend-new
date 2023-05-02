@@ -1,14 +1,17 @@
 <div class="container-hover" id="CUSTOM_HOVER_PANEL" CommonDirective>
     <div class="footer">
         <div class="close-btn">
-            <button class="btn btn-primary window-close" [attr.hover-popup-open-close]="'open'"><i class="fa fa-times window-close"
-                    aria-hidden="true" [attr.hover-popup-open-close]="'open'"></i></button>
+            <button class="btn btn-primary window-close" [attr.hover-popup-open-close]="'open'"><i
+                    class="fa fa-times window-close" aria-hidden="true"
+                    [attr.hover-popup-open-close]="'open'"></i></button>
         </div>
         <div class="panel-hover">
             <mat-tab-group>
-                <mat-tab [label]="data.pi_poNo" *ngFor="let data of this.pipoArrayList;let i=index">
+                <mat-tab [label]="pipoArrayListdata.pi_poNo"
+                    *ngFor="let pipoArrayListdata of this.pipoArrayList;let i=index">
                     <div class="panel-child-hover">
-                        <label for="" class="label-header">{{data.pi_poNo}} | {{data.date}} | {{data.buyerName}}</label>
+                        <label for="" class="label-header">{{pipoArrayListdata.pi_poNo}} | {{pipoArrayListdata.date}} |
+                            {{pipoArrayListdata.buyerName}}</label>
                         <ul class="listDocument">
                             <button class="btn btn-primary border-radius"
                                 (click)="openUploadWithType('debitNote')">Debit
@@ -52,6 +55,92 @@
                                 (click)="openUploadWithType('packingList')">Packing List Documents</button>
                         </ul>
                         <mat-tab-group>
+                            <mat-tab label="OverView">
+                                <div class="card-panel">
+                                    <h3 class="label-header">Invoice #{{pipoArrayListdata?.pi_poNo}}</h3>
+                                    <div class="rows card-grid">
+                                        <div class="column col-12">
+                                            <div class="col-12 rightborder">
+                                                <div class="d-grid">
+                                                    <label for="" class="card-label">Total no. of shipping bill :
+                                                        {{pipoArrayListdata?.sbRef?.length}}</label>
+                                                    <div class="p-3 grid-inner">
+                                                        <div class="d-grid">
+                                                            <label for="" class="card-label">Shipping Bill Number |
+                                                                Amount</label>
+                                                            <label for="" class="text-card-label">
+                                                                <p
+                                                                    *ngFor='let sbdata of pipoArrayListdata?.sbRef;let j=index'>
+                                                                    <span class="number-span">{{j+1}}.</span>
+                                                                    {{sbdata?.sbno}} | {{sbdata?.fobValue}}
+                                                                </p>
+                                                            </label>
+                                                        </div>
+                                                        <div class="d-grid">
+                                                            <label for="" class="card-label">Shipping bill date</label>
+                                                            <label for="" class="text-card-label">
+                                                                <p
+                                                                    *ngFor='let sbdata of pipoArrayListdata?.sbRef;let j=index'>
+                                                                    <span class="number-span">{{j+1}}.</span>
+                                                                    {{sbdata?.sbdate | date:'dd/MM/yyyy'}}
+                                                                </p>
+                                                            </label>
+                                                        </div>
+                                                        <div class="d-grid">
+                                                            <label for="" class="card-label">Total Shipping bill
+                                                                Amount</label>
+                                                            <label for="" class="text-card-label">
+                                                                <p>{{this.getSBSum(pipoArrayListdata?.sbRef)?.Currency}}
+                                                                    |
+                                                                    {{this.getSBSum(pipoArrayListdata?.sbRef)?.SumAmount}}
+                                                                </p>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="column col-12">
+                                            <div class="col-12 rightborder">
+                                                <div class="d-grid">
+                                                    <label for="" class="card-label">Total no. of inward remittances :
+                                                        {{pipoArrayListdata?.AdviceRef?.length}}</label>
+                                                    <div class="p-3 grid-inner">
+                                                        <div class="d-grid">
+                                                            <label for="" class="card-label">Inward Remittance Number |
+                                                                Amount</label>
+                                                            <label for="" class="text-card-label">
+                                                                <p
+                                                                    *ngFor='let inward of pipoArrayListdata?.AdviceRef;let j=index'>
+                                                                    <span class="number-span">{{j+1}}.</span>
+                                                                    {{inward?.billNo}} | {{inward?.amount}}
+                                                                </p>
+                                                            </label>
+                                                        </div>
+                                                        <div class="d-grid">
+                                                            <label for="" class="card-label">Inward Remittance
+                                                                Amount</label>
+                                                            <label for="" class="text-card-label">
+                                                                <p>{{this.getIRMSum(pipoArrayListdata?.AdviceRef)?.Currency}}
+                                                                    |
+                                                                    {{this.getIRMSum(pipoArrayListdata?.AdviceRef)?.SumAmount}}
+                                                                </p>
+                                                            </label>
+                                                        </div>
+                                                        <div class="d-grid">
+                                                            <label for="" class="card-label">Balance amount</label>
+                                                            <label for="" class="text-card-label">
+                                                                <p>{{inwardBalanceAmount}}</p>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary border-radius viewDetails" (click)="viewDetails({ id: pipoArrayListdata?.pi_poNo,page:'details', index:0,pipo_id:pipoArrayListdata._id})">View Details</button>
+                                </div>
+                            </mat-tab>
                             <mat-tab label="DETAILS">
                                 <div class="panel-child-hover p-2">
                                     <div class="column">
@@ -71,7 +160,7 @@
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Upload Purchase Order</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(data?.doc)">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.doc)">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
@@ -79,7 +168,7 @@
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Uploaded Proforma Invoice</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(data?.doc)">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.doc)">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
@@ -87,7 +176,7 @@
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Shipping Bill Uploaded</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(data?.sb)">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.sb)">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
@@ -95,7 +184,7 @@
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Airway / BL Copy Uploaded</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(data?.airwayBlcopy)">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.airwayBlcopy)">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
@@ -103,7 +192,7 @@
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Commercial Invoice Uploaded</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(data?.commercial)">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.commercial)">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
@@ -111,19 +200,45 @@
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Packing List Uploaded</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(data?.packingList)">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.packingList)">View</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="right-panel" *ngIf="this.PDF_URL">
-                                            <app-pdf-viewer [downloadShow]="false" name="Documents" [src]="this.PDF_URL" width="100%" height="100%"></app-pdf-viewer>
+                                            <app-pdf-viewer [downloadShow]="false" name="Documents" [src]="this.PDF_URL"
+                                                width="100%" height="100%"></app-pdf-viewer>
                                         </div>
                                     </div>
                                 </div>
                             </mat-tab>
-                            <mat-tab label="DOCUMENTS"></mat-tab>
-                            <mat-tab label="TRANSACTIONS & TASKS"></mat-tab>
+                            <mat-tab label="DOCUMENTS">
+                            <Custom-Slider SliderClassName="slider-pdf" >
+                                <div class="slider-pdf-panel">
+                                    <div class="slider-pdf">
+                                        <app-pdf-viewer [downloadShow]="false" name="Proforma Invoice"
+                                            [src]="pipoArrayListdata?.doc" width="100%" Newheight="590px"></app-pdf-viewer>
+                                    </div>
+                                    <div class="slider-pdf">
+                                        <app-pdf-viewer [downloadShow]="false" name="Shipping Bill"
+                                            [src]="pipoArrayListdata?.sb" width="100%" Newheight="590px"></app-pdf-viewer>
+                                    </div>
+                                    <div class="slider-pdf">
+                                        <app-pdf-viewer [downloadShow]="false" name="Airway / BL Copy"
+                                            [src]="pipoArrayListdata?.airwayBlcopy" width="100%" Newheight="590px"></app-pdf-viewer>
+                                    </div>
+                                    <div class="slider-pdf">
+                                        <app-pdf-viewer [downloadShow]="false" name="Commercial Invoice"
+                                            [src]="pipoArrayListdata?.commercial" width="100%" Newheight="590px"></app-pdf-viewer>
+                                    </div>
+                                    <div class="slider-pdf">
+                                        <app-pdf-viewer [downloadShow]="false" name="Packing List"
+                                            [src]="pipoArrayListdata?.packingList" width="100%" Newheight="590px"></app-pdf-viewer>
+                                    </div>
+                                </div>
+                            </Custom-Slider>
+                            </mat-tab>
+                            <!-- <mat-tab label="TRANSACTIONS & TASKS"></mat-tab> -->
                         </mat-tab-group>
                     </div>
                 </mat-tab>

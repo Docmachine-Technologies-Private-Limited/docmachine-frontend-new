@@ -108,35 +108,13 @@ export class AppComponent implements OnInit, OnDestroy {
     //   console.log(res,'socket data2')
     // })
   };
-  findHighestZIndex() {
-    // return  Math.max.apply(null,
-    //   $.map($('body *'),(e: any, n: any)=> {
-    //     if ($(e).css('position') != 'static')
-    //       return parseInt($(e).css('z-index')) || 1;
-    //   }));;
-  }
+
   setTimeoutNew() {
     this.userActivity = setTimeout(() => {
       this.userInactive.next(undefined);
       this.authservice.logout();
       this.router.navigate(['/login']);
     }, 7200000);
-    // let token = this.authGuard.loadFromLocalStorage();
-    // if (token != undefined && token != '' && token != null && this.authGuard.getLocalStorage('PERMISSION')!= null ) {
-    //   const currentTime = new Date(new Date().getTime())
-    //   let interval = setInterval(() => {
-    //     this.sessionstorage.set('UserActive', { expTime: this.DelayTime.getTime(), ActualTime: currentTime.getTime(), status: currentTime.getTime() > this.DelayTime.getTime() })
-    //     console.clear();
-    //     console.log(this.sessionstorage.get('UserActive'))
-    //     if (this.sessionstorage.get('UserActive')?.status) {
-    //       this.userInactive.next(undefined);
-    //       this.authservice.logout();
-    //       this.router.navigate(['/login']);
-    //       clearInterval(interval);
-    //       this.sessionstorage.remove('UserActive')
-    //     }
-    //   },1000)
-    // }
   }
   addMinutes(minutes) {
     return new Date(new Date().getTime() + minutes * 60000);
