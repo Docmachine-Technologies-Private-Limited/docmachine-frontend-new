@@ -670,6 +670,18 @@ export class NewDirectDispatchComponent implements OnInit {
       console.log('hello');
     });
     this.item1 = [];
+    this.userService.getBuyer(1).subscribe(
+      (res: any) => {
+        this.item2 = res["data"];
+        this.buyerName[0] = { value: 'Select Buyer Name', id: '' };
+        res["data"].forEach((element, i) => {
+          this.buyerName.push({ value: element.buyerName, id: element?._id });
+        })
+        console.log('buyerName', this.buyerName);
+        },
+      (err) => console.log("Error", err)
+    );
+    
     await this.pipoDataService.getPipoList('export').then(async (res: any) => {
       this.FILTER_DATA.PIPO = res?.pipolist;
       this.pipoDataService.pipolistModel$.subscribe((data: any) => {
@@ -705,12 +717,7 @@ export class NewDirectDispatchComponent implements OnInit {
             }
           }
           console.log('getMaster Data', this.item1);
-          this.buyerName[0] = { value: 'Select Buyer Name', id: '' };
           this.item1.forEach((element, i) => {
-            var buyerfilter: any = this.buyerName.filter((item: any) => item?.value?.indexOf(element.buyerName[0]) != -1)
-            if (buyerfilter.length == 0) {
-              this.buyerName.push({ value: element.buyerName[0], id: element?._id });
-            }
             if (element?.firxdetails != undefined && element?.firxdetails != '') {
               let totalFirxAmount: any = 0;
               for (let index = 0; index < element?.firxdetails.length; index++) {
@@ -723,7 +730,6 @@ export class NewDirectDispatchComponent implements OnInit {
               element['balanceAvai'] = parseFloat(element?.fobValue);
             }
           });
-          console.log('buyerName', this.buyerName);
         },
           (err) => console.log(err)
         );
