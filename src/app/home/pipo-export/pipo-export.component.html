@@ -110,7 +110,8 @@
                                 <tr class="table-tr" style="cursor: pointer;"
                                     *ngFor="let item of dataSource;let i=index"
                                     [ngClass]="truefalse(item['deleteflag']=='0')" [data]="item"
-                                    [attr.hover-popup-open-close]="'open'" (mouseenter)="this.MouseHover($event,item._id)" (mouseleave)="this.MouseLeave()">
+                                    [attr.hover-popup-open-close]="'open'"
+                                    (click)="clearTimeOutRunning()" (mouseenter)="this.MouseHover($event,item._id)" (mouseleave)="this.MouseLeave()">
                                     <td class="col-td-th-3"  [attr.hover-popup-open-close]="'open'">
                                         {{item.pi_poNo}}
                                     </td>

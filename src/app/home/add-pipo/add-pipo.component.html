@@ -29,9 +29,8 @@
                                         <div class="col-md-6">
                                             <label for="ADbill" class="form-label">Buyer's name</label>
                                             <select class="form-select" aria-label="Default select example"
-                                                [(ngModel)]="buyer" name="buy">
+                                                 ngModel name="buy">
                                                 <option value="">Select Buyer</option>
-
                                                 <option *ngFor="let buyer of buyerDetail
                                                 ">{{ buyer.buyerName }}
                                                 </option>

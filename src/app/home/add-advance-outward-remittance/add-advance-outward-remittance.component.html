@@ -177,7 +177,7 @@
                                                         Amount</label>
                                                     <input type="text" disabled class="form-control"
                                                         formControlName="payableAmount" id="payableAmount"
-                                                        [ngModel]="this.LIST_PIPO[multiplepipo.value]?.payableAmount??this.LIST_PIPO[multiplepipo.value]?.amount"
+                                                        [ngModel]="this.LIST_PIPO[multiplepipo.value]?.balanceAmount"
                                                         placeholder="Payable Amount" autocomplete="off">
                                                     <div *ngIf="submitted && form.payableAmount.errors"
                                                         class='errorText'>
@@ -192,7 +192,7 @@
                                                     <input type="text" class="form-control"
                                                         formControlName="remittanceAmount" id="remittanceAmount"
                                                         placeholder="Remittance Amount" autocomplete="off"
-                                                        (keyup)="InputKeyPress()" ngModel>
+                                                        (keyup)="InputKeyPress(i)" [ngModel]="this.REMIITANCE_AMOUNT[i]">
                                                     <div *ngIf="submitted && form.remittanceAmount.errors"
                                                         class='errorText'>
                                                         <div *ngIf="form.remittanceAmount.errors.required">

@@ -190,21 +190,26 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   }
 
   changepipo(id) {
-
     let temp = [];
+    this.pipoData = [];
     temp = this.benneDetail.filter(items => {
       return items._id == id
     });
     this.selectedBenne = temp.pop();
 
     console.log('this.selectedBenneName', this.selectedBenne);
-    this.pipoDataService.getPipoListByCustomer('import', this.selectedBenne.benneName).then((data) => {
+    this.pipoDataService.getPipoListByCustomer('import', this.selectedBenne.benneName).then((data: any) => {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
         console.log(data, 'data2222..................')
-        this.pipoData = data;
         for (let index = 0; index < data.length; index++) {
-          this.LIST_PIPO[data[index]['_id']] = data[index];
+          var AdvanceRemittanceflow: any = data[index]?.TransactionRef?.filter((item: any) => item?.TypeTransaction?.includes('Advance-Remittance-flow'));
+          var SumAdvanceRemittanceflow = AdvanceRemittanceflow.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems?.data?.formdata?.RemittanceTotalAmount), 0);
+          data[index]['balanceAmount'] = data[index]?.amount - parseFloat(SumAdvanceRemittanceflow);
+          if (data[index]?.balanceAmount != '0' && data[index]?.balanceAmount != 0) {
+            this.LIST_PIPO[data[index]['_id']] = data[index];
+            this.pipoData.push(data[index]);
+          }
         }
         console.log('importpipolist', this.pipoData, this.LIST_PIPO);
       });
@@ -262,7 +267,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       });
     }
     console.log(this.temp1, temp2, 'selectedItemsselectedItems')
-    this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
+    this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.balanceAmount), 0);
     this.showOpinionReport = 0;
     this.fillForm();
     this.OTHER_BANK_VISIBLE = false;
@@ -558,14 +563,23 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     return this.authToken;
   }
   REMIITANCE_SUM: any = 0;
-  InputKeyPress() {
+  REMIITANCE_AMOUNT:any=[];
+  
+  InputKeyPress(index: any) {
     this.OTHER_BANK_VISIBLE = false;
-    this.REMIITANCE_SUM = this.pipoForm?.controls?.pipoTerm?.value.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
     setTimeout(() => {
       this.fillForm()
       this.OTHER_BANK_VISIBLE = true;
+      this.REMIITANCE_SUM = this.pipoForm?.controls?.pipoTerm?.value.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
+      this.REMIITANCE_AMOUNT[index]= this.pipoForm?.controls?.pipoTerm?.value[index]?.remittanceAmount;
+      
+      if (this.REMIITANCE_SUM>this.selectedItems[index]?.balanceAmount) {
+        this.toastr.error('You added more than amount your pipo amount....');
+        this.REMIITANCE_SUM=this.selectedItems[index]?.balanceAmount;
+        this.REMIITANCE_AMOUNT[index]=this.selectedItems[index]?.balanceAmount
+      }
     }, 500)
-    console.log(this.pipoForm.controls.pipoTerm, 'this.pipoForm.controls.pipoTerm')
+    console.log(this.pipoForm.controls.pipoTerm, this.selectedItems, 'this.pipoForm.controls.pipoTerm')
   }
   // ----------------------------- end handle image upload ----------------------------------
 
@@ -651,18 +665,21 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
               margin: [-10, 0, 0, 0],
             });
           }).done(async (pdfdata) => {
-            console.log('exportPDF', data, data)
-            if (data[0] == undefined || data[0] == '') {
-              data[0] = pdfdata;
-            }
-            var fitertemp: any = data.filter(n => n)
-            await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-              this.PREVIEWS_URL_LIST = [];
-              console.log(merge?.pdfurl, 'merge?.pdfurl')
-              this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
-              this.PREVIEWS_URL_STRING = merge?.pdfurl;
-              model.style.display = 'block';
-              console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
+            await this.userService?.UploadS3Buket({
+              fileName: this.guid() + '.pdf', buffer: pdfdata,
+              type: 'application/pdf'
+            }).subscribe(async (pdfresponse: any) => {
+              console.log('exportPDF', data, data)
+              data.push(pdfresponse?.url)
+              var fitertemp: any = data.filter(n => n)
+              await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+                this.PREVIEWS_URL_LIST = [];
+                console.log(merge?.pdfurl, 'mergepdfresponse?.pdfurl')
+                this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
+                this.PREVIEWS_URL_STRING = merge?.pdfurl;
+                model.style.display = 'block';
+                console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
+              });
             });
           });
         });
@@ -705,7 +722,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
           }
         }
       }
-      await resolve(temp);
+      await resolve(temp.filter(n => n));
     })
   }
   GetDownloadStatus: any = [];
@@ -741,7 +758,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       }
       this.getStatusCheckerMaker(approval_data?.id).then((res: any) => {
         console.log(approval_data, res, 'approval_data')
-        if (res?.id != approval_data?.id) {
+        if (res?.id != approval_data?.id || res == undefined) {
           this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
             var pipo_id: any = [];
             var pipo_name: any = [];
@@ -769,8 +786,22 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
               }
               this.userService.updateManyPipo(pipo_id, 'import', '', updatedData).subscribe((data) => {
                 console.log('king123');
-                console.log(data);
-                this.router.navigate(['/home/dashboardTask'])
+                console.log(data, this.selectedItems);
+
+                for (let index = 0; index < this.selectedItems.length; index++) {
+                  const element = this.selectedItems[index];
+                  const sum = parseFloat(element?.balanceAmount) - parseFloat(this.pipoForm?.controls?.pipoTerm?.value[index]?.remittanceAmount);
+                  this.userService.updatePipo({ balanceAmount: sum }, element?.pipo_id).subscribe((data) => {
+                    console.log('king123');
+                    console.log(data);
+                    if ((index + 1) == this.selectedItems.length) {
+                      this.router.navigate(['/home/dashboardTask'])
+                    }
+                  }, (error) => {
+                    console.log('error');
+                  }
+                  );
+                }
               }, (error) => {
                 console.log('error');
               }

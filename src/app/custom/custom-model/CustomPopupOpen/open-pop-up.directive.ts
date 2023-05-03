@@ -12,14 +12,14 @@ import $ from 'jquery'
 })
 export class OpenPopUpDirective {
   constructor(private elementRef: ElementRef,
-  public wininfo: WindowInformationService) {
+    public wininfo: WindowInformationService) {
     console.log(elementRef, 'dfsdfsdfdsfdfsdf')
   }
-  
-  @HostListener('document:mouseenter', ['$event']) mouseover(event: any) {
+
+  @HostListener('window:mouseenter', ['$event']) mouseover(event: any) {
     var CUSTOM_HOVER_PANEL_MOUSE_ENTER_ID: any = $(event.target).attr('hover-popup-open-close');
     var NgCustomTooltipsDirectiveMouseEnter_ID: any = $(event.target).attr('tooltips-close');
-    console.log(event, 'sdfsdhjdhdgfdgdfg')
+    // console.log(event, 'sdfsdhjdhdgfdgdfg')
     if (CUSTOM_HOVER_PANEL_MOUSE_ENTER_ID == 'open') {
       this.CUSTOM_HOVER_PANEL_MOUSE_ENTER(event);
     }
@@ -28,7 +28,7 @@ export class OpenPopUpDirective {
     // }
   }
 
-  @HostListener('document:mouseleave', ['$event']) mouseleave(event: Event) {
+  @HostListener('window:mouseleave', ['$event']) mouseleave(event: Event) {
     // this.CUSTOM_HOVER_PANEL_MOUSE_LEAVE(event);
     // this.NgCustomTooltipsDirectiveMouseLeave(event);
   }
@@ -102,13 +102,14 @@ export class OpenPopUpDirective {
   }
 
   CUSTOM_HOVER_PANEL_MOUSE_ENTER(event: any) {
-    let windowinfo: any = this.wininfo.getControllerProperties('');
-    let top: any = parseFloat(event.target.offsetHeight + event.target.offsetTop + 310) - parseFloat('150');
-    let left: any = parseFloat(event.target.offsetWidth) - parseInt('700');
-    var panel_id: any = $(event.target).attr('hover-popup-open-close');
-    if (panel_id == 'open') {
-      $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'transform': 'scale(0.3)' })
-    }
+    console.log(this.elementRef)
+    // let windowinfo: any = this.wininfo.getControllerProperties('');
+    // let top: any = parseFloat(event.target.offsetHeight + event.target.offsetTop + 310) - parseFloat('150');
+    // let left: any = parseFloat(event.target.offsetWidth) - parseInt('700');
+    // var panel_id: any = $(event.target).attr('hover-popup-open-close');
+    // if (panel_id == 'open') {
+    //   $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'transform': 'scale(0.3)' })
+    // }
     // if ((windowinfo?.BODY_HEIGHT > parseFloat(event.target.offsetHeight + event.target.offsetTop + 510))) {
     //   $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'top': top + 'px', 'left': left + 'px' })
     // } else {
@@ -119,6 +120,11 @@ export class OpenPopUpDirective {
 
   CUSTOM_HOVER_PANEL_CLICK(event: any) {
     var ClassList: any = []
+    $('#CUSTOM_HOVER_PANEL').css({
+      'transform': 'scale(1)',
+      'top': '0px',
+      'left': ' 0px'
+    })
     for (let index = 0; index < event?.target?.classList.length; index++) {
       ClassList.push(event?.target?.classList[index])
     }
