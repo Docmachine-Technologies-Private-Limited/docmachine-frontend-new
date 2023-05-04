@@ -186,7 +186,7 @@ export class PipoExportComponent implements OnInit {
     $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'transform': 'scale(0.3)' })
     this.CLEAR_TIMEOUT = setTimeout(() => {
       $('#CUSTOM_HOVER_PANEL').css({ 'display': 'none', 'transform': 'scale(1)' })
-    }, 10000)
+    },1000)
     this.CUSTOM_HOVER_PANEL_MOUSE_ENTER(event)
   }
   MouseLeave() {

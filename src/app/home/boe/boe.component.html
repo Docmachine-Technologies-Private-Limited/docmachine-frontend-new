@@ -177,6 +177,7 @@
                       <th scope="col" class="col-td-th-3">DISCHARGE PORT</th>
                       <th scope="col" class="col-td-th-3">CURRENCY</th>
                       <th scope="col" class="col-td-th-3">BOE AMOUNT</th>
+                      <th scope="col" class="col-td-th-3">Balance AMOUNT</th>
                       <th scope="col" class="col-td-th-3">Action </th>
                     </tr>
                   </thead>
@@ -290,6 +291,7 @@
                             placeholder="Invoice Amount" [(ngModel)]="data.invoiceAmount">
                         </div>
                       </td>
+                      <td class="col-td-th-3"> {{ data.balanceAmount }}</td>
                       <td class="col-td-th-3">
                         <a (click)=" openBoe(content); viewCN(data)" title="View"><i class="fa fa-eye"
                             aria-hidden="true"></i></a>

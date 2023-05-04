@@ -97,6 +97,7 @@ import { TransactionDashboardComponent } from "../transaction-dashboard/transact
 import { AdminPanelComponent } from './AdminPanel/admin-panel/admin-panel.component';
 import { SuperAdminPanelComponent } from './SuperAdminPanel/admin-panel/admin-panel.component';
 import {ExportHomeComponent} from "./Export/export-home/export-home.component";
+import { BuyerCreditPanelComponent } from "./Import/BuyerCreditPanel/Buyer-Credit-Panel.component";
 
 @NgModule({
   declarations: [
@@ -144,7 +145,8 @@ import {ExportHomeComponent} from "./Export/export-home/export-home.component";
     AdminPanelComponent,
     SuperAdminPanelComponent,
     ExportHomeComponent,
-    UploadDocComponent
+    UploadDocComponent,
+    BuyerCreditPanelComponent
   ],
   imports: [
     SharedHomeModule,
@@ -567,6 +569,12 @@ import {ExportHomeComponent} from "./Export/export-home/export-home.component";
           {
             path: "Import-Direct-Payment",
             component: ImportDirectPaymentComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
+            path: "Buyer-Credit-Panel",
+            component: BuyerCreditPanelComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },

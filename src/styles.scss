@@ -213,7 +213,7 @@ html {
   width: calc(100vw - 200px) !important;
 }
 
-.width-full{
+.width-full {
   width: 100vw !important;
 }
 
@@ -668,4 +668,12 @@ table td {
   pointer-events: none;
   position: fixed;
   z-index: 99999999999999999999;
+}
+
+*,
+html,
+body {
+  font-family: 'Inconsolata', monospace;
+  font-family: 'Pathway Extreme', sans-serif;
+  font-family: 'Signika Negative', sans-serif;
 }
