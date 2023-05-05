@@ -267,7 +267,7 @@
         </div>
         <div *ngIf="documentType === 'boe' " class="form" method="POST" (click)="fileopen.click()">
           <input style="pointer-events: none;" (error)="onUploadError($event)" (init)="onUploadInit($event)"
-            (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="config2"
+            (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="ConfigforBOE"
             class="dropzone dropzone-container" id="dropzone" #fileopen />
           <i class="fas fa-file-upload"></i>
           <h5>Drag and Drop files here</h5>
