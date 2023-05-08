@@ -94,13 +94,10 @@ import { BoeBillService } from '../service/homeservices/BoeBill/boe-bill.service
 import { ImportDirectPaymentComponent } from './Import-Direct-Payment/Import-Direct-Payment.component';
 import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-Credit-Request.component';
 import { TransactionDashboardComponent } from "../transaction-dashboard/transaction-dashboard.component";
-import { DocumentService } from "../service/document.service";
-import { UserService } from "../service/user.service";
-import { AuthenticateService } from "../service/authenticate.service";
-import { AuthGuard } from "../service/authguard.service";
 import { AdminPanelComponent } from './AdminPanel/admin-panel/admin-panel.component';
 import { SuperAdminPanelComponent } from './SuperAdminPanel/admin-panel/admin-panel.component';
 import {ExportHomeComponent} from "./Export/export-home/export-home.component";
+import { BuyerCreditPanelComponent } from "./Import/BuyerCreditPanel/Buyer-Credit-Panel.component";
 
 @NgModule({
   declarations: [
@@ -148,12 +145,17 @@ import {ExportHomeComponent} from "./Export/export-home/export-home.component";
     AdminPanelComponent,
     SuperAdminPanelComponent,
     ExportHomeComponent,
-    UploadDocComponent
+    UploadDocComponent,
+    BuyerCreditPanelComponent
   ],
   imports: [
     SharedHomeModule,
     MatProgressBarModule,
-    MatNativeDateModule, MatButtonModule, MatDialogModule, MatInputModule, MatFormFieldModule,
+    MatNativeDateModule, 
+    MatButtonModule, 
+    MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
     MatTabsModule,
     MatDatepickerModule,
     MatTableModule,
@@ -173,7 +175,7 @@ import {ExportHomeComponent} from "./Export/export-home/export-home.component";
           {
             path: "manage-customer",
             loadChildren: () => import('./manage-customer/manage-customer.module').then(mod => mod.ManageCustomerModule),
-            canActivate: [AdminGuard]
+            canActivate: [AdminMemberGuard]
           },
           { path: "createBene", loadChildren: () => import('./create-bene/create-bene.module').then(mod => mod.CreateBeneModule), canActivate: [MemberGuard] },
           { path: "pipo-doc", loadChildren: () => import('./pipo-documents/pipo-documents.module').then(mod => mod.PipoDocumentsModule), canActivate: [MemberGuard] },
@@ -567,6 +569,12 @@ import {ExportHomeComponent} from "./Export/export-home/export-home.component";
           {
             path: "Import-Direct-Payment",
             component: ImportDirectPaymentComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
+            path: "Buyer-Credit-Panel",
+            component: BuyerCreditPanelComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },

@@ -57,8 +57,8 @@ export class PipoDocExportComponent implements OnInit {
   @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
   public pipoArrayList: Array<PipoDisplayListViewItem> = [];
-  public pipoDisplayListData: PipoDisplayListView;
-  public pipoData?: PipoDisplayListViewItem;
+  public pipoDisplayListData: any;
+  public pipoData?: any;
   public config: DropzoneConfigInterface;
   public config1: DropzoneConfigInterface;
   filtervisible: boolean = false;
@@ -97,15 +97,15 @@ onclick() {
   public item2;
   public item10: any;
   public item12: any;
-  public item13 = [];
-  public item21 = [];
-  public user;
-  public selectedRow;
-  public showInvoice = false;
-  public showInvoice1 = true;
-  public tableWidth;
-  public export = false;
-  public import = false;
+  public item13:any = [];
+  public item21:any = [];
+  public user:any;
+  public selectedRow:any;
+  public showInvoice:any = false;
+  public showInvoice1:any = true;
+  public tableWidth:any;
+  public export:any = false;
+  public import:any = false;
   public lastIndex;
   public showPdf = false;
   public greaterAmount = 0;
@@ -146,7 +146,7 @@ onclick() {
   endDate: any = '';
   authToken: any;
   headers: any;
-  payTerm = [];
+  payTerm:any = [];
   benneDetail: any;
   documentType: any;
   beneValue: any;
@@ -1403,7 +1403,7 @@ onclick() {
 }
 
 import { PipoDataService } from "../../service/homeservices/pipo.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../service/window-information.service';
 import { TreeViewComponent } from '../tree-view/tree-view.component';
 
 @Component({
@@ -1499,7 +1499,7 @@ import { TreeViewComponent } from '../tree-view/tree-view.component';
 export class ModalContentComponent1 implements OnInit {
   title: string;
   closeBtnName: string;
-  invoiceArray = [];
+  invoiceArray:any = [];
   list: any[] = [];
   @ViewChild('table', { static: true }) table: ElementRef;
   epltable: any;

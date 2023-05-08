@@ -1102,15 +1102,15 @@ body {
 }
 
 .data_table_new table tr th {
-    font-size: 14px;
+    font-size: 12px!important;
     padding: 3px 10px;
-    font-weight: 600;
+    color: #131313;
     font-family: 'Poppins', sans-serif;
-    color: #0A3049;
+    font-weight: 500;
 }
 
 .data_table_new table tr td {
-    font-size: 13px!important;
+    font-size: 11px!important;
     padding: 3px 10px;
     color: #777777;
     font-family: 'Poppins', sans-serif;

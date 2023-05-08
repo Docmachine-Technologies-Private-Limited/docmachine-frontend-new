@@ -17,7 +17,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "optimization": false,
             "outputPath": "dist/dm-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -83,7 +82,11 @@
             },
             "development": {
               "buildOptimizer": false,
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },  
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
@@ -96,6 +99,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "dm-frontend:build"
+          },
           "configurations": {
             "production": {
               "browserTarget": "dm-frontend:build:production"

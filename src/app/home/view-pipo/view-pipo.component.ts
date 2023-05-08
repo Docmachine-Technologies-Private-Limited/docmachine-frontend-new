@@ -15,25 +15,22 @@ export class ViewPipoComponent implements OnInit {
   inwardBalanceAmount:number=0;
   balanceAmount:number=0
   pipoData:any;
-
   SbAmountAndCurrency: any = [];
+  //hiding info box
+  filtervisible: boolean = false
+  startDate: any = '';
+  endDate: any = '';
+    
   constructor(
     private route: ActivatedRoute,
     private documentService: DocumentService,
-    private router: Router,
-
-
-  ) {
+    private router: Router) {
     this.pipoID = this.route.snapshot.paramMap.get('id');
-
-
   }
 
   ngOnInit(): void {
     this.getPIPOData(this.pipoID)
   }
-
-
 
   getSBDetails(id) {
     this.documentService.getSBDetailsByPIPO(id).subscribe((Sbres: any) => {
@@ -74,55 +71,12 @@ export class ViewPipoComponent implements OnInit {
     )
   }
 
-  //hiding info box
-  filtervisible: boolean = false
-  startDate: any = '';
-  endDate: any = '';
-
-
   openDoc(a) {
     console.log(a);
-    if (a == 'Advance Payment') {
-
-    }
-    // else if (a == 'Direct Import') {
-    //   console.log('hello')
-    //   this.router.navigate(['home/direct-import-payment', {
-    //     file: this.SbData.pi_poNo, bene: this.SbData.benneName, amount: this.SbData.amount
-    //   }]);
-    // }
-    else if (a == 'Collection Bill') {
-
-    } else if (a == 'packing Credit Request') {
-      //this.router.navigate(['home/packingCreditRequest']);
-    } else if (a == 'Letter of Credit') {
-      // if (this.SbData.lcIssuance && this.SbData.lcIssuance1) {
-      //   this.buttonToggle1 = !this.buttonToggle1
-      //   console.log('dhhh')
-
-
-    }
-
   }
-
-
-
-  viewDetails ()
-  {
+  
+  viewDetails (){
     console.log("pipoData",this.pipoData)
     this.router.navigate(['home/pipo-export',{ id: this.pipoData?.pi_poNo,page:'details', index:0,pipo_id:this.pipoData._id}]);
-    // pipoDocExport;id=PO01;page=details;index=0
-    // pipoDocExport;id=PO01;page=details;index=0
-    // this.router.navigate([
-    //   'home/pipoDocExport',
-    //   {
-    //     id: selectedRowValues.pi_poNo,
-    //     page: 'details',
-    //     index: i,
-    //   },
-    // ]);
-    // pipoDocExport;id=PO01;page=details;index=0
-  }
-
-
+  }  
 }

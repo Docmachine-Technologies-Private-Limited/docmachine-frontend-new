@@ -3906,7 +3906,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
                     this.documentService.Update_Amount_by_Table({
                       tableName: 'masterrecord',
                       id: UniqueId,
-                      query: query
+                      query: [{firxdetails:query}]
                     }).subscribe((r2: any) => {
                       console.log(r2, 'masterrecord')
                       model.style.display = 'none';

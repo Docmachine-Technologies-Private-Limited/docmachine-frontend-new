@@ -58,12 +58,9 @@
                         </span></a></li>
                     <li>
                       <a routerLinkActive="active " ariaCurrentWhenActive="page ">
-                        <span class="icon "><img src="./assets/new-img/header-user.svg " class="Tooltips" [attr.tooltips-close]="'UserToolTips'"/>
+                        <span class="icon "><img src="./assets/new-img/header-user.svg " class="TOOLTIPS_OPEN_CLOSE" [attr.ng-tooltips-popup]="'UserToolTips'"/>
                         </span>
                       </a>
-                     
-                      <!-- <div class="after_login_drop_down">
-                       </div> -->
                     </li>
                   </ul>
                 </div>
@@ -167,6 +164,10 @@
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-packing-list')">Packing List
                     Documents
+                  </h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Buyer-Credit-Panel')">Buyer Credit
                   </h6>
                 </li>
               </ul>
@@ -468,6 +469,10 @@
                 </li>
               </ul>
             </li>
+            <li class="nav-item" *ngIf="this.userData['role']=='member'  && this.documentService.EXPORT_IMPORT['export']==true">
+              <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/manage-customer/export')">Add buyer by Member</h6>
+            </li>
+            
             <li class="nav-item" *ngIf="role == 'admin' || this.userData['emailId']=='it@bharathexim.com'">
               <h6 class="nav-link p-0" style="font-size: 11px;" (click)="navigationByUrl($event,'/SuperAdminPanel')">Super Admin Panel</h6>
             </li>
@@ -535,11 +540,11 @@
     <ul class="navbar-nav ml-auto" style="padding-left: 10px !important;margin: auto;margin-left: 15px!important;">
       <li class="nav-item profile-panel" style="display: flex;">
         <span class="fa fa-user"></span>
-        <h6 class="p-0" class="close-tooltips" [attr.tooltips-close]="'UserToolTips'" (click)="navigationByUrl($event,'/user-profiles')">Profile</h6>
+        <h6 class="p-0" class="CLOSE_CUSTOM_TOOLTIPS" [attr.ng-tooltips-popup]="'UserToolTips'" (click)="navigationByUrl($event,'/user-profiles')">Profile</h6>
       </li>
       <li class="nav-item profile-panel" style="display: flex;">
         <span class="fas fa-restroom"></span>
-        <h6 class="p-0" class="close-tooltips" [attr.tooltips-close]="'UserToolTips'" (click)="navigationByUrl($event,'/account')">Account</h6>
+        <h6 class="p-0" class="CLOSE_CUSTOM_TOOLTIPS" [attr.ng-tooltips-popup]="'UserToolTips'" (click)="navigationByUrl($event,'/account')">Account</h6>
       </li>
       <li class="nav-item profile-panel" style="display: flex;">
         <span class="fa fa-cog"></span>
@@ -547,7 +552,7 @@
       </li>
       <li class="nav-item profile-panel" style="display: flex;">
         <span class="fa fa-sign-out"></span>
-        <h6 class="p-0" class="close-tooltips" [attr.tooltips-close]="'UserToolTips'" (click)="logout() ">Log Out</h6>
+        <h6 class="p-0" class="CLOSE_CUSTOM_TOOLTIPS" [attr.ng-tooltips-popup]="'UserToolTips'" (click)="logout() ">Log Out</h6>
       </li>
     </ul>
    </custom-content-tooltips>

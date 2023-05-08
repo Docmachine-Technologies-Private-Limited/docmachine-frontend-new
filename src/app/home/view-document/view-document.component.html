@@ -259,7 +259,7 @@
                                     <th scope="col" class="col-td-th-3">AD CODE</th>
                                     <th scope="col" class="col-td-th-3">AD BILL NO</th>
                                     <th scope="col" class="col-td-th-2">BUYER NAME</th>
-                                    <th scope="col" class="col-td-th-2">COMPANY NAME</th>
+                                    <th scope="col" class="col-td-th-2">Consignee NAME</th>
                                     <th scope="col" class="col-td-th-3">ORIGIN</th>
                                     <th scope="col" class="col-td-th-3">DESTINATION</th>
                                     <th scope="col" class="col-td-th-3">CURRENCY</th>
@@ -375,25 +375,25 @@
                                         </div>
                                     </td>
                                     <td class="col-td-th-2">
-                                        {{data.firxNumber}}
+                                        {{this.ARRAY_TO_STRING(data?.FIRX_INFO,'firxNumber')}}
                                     </td>
                                     <td class="col-td-th-2">
-                                        {{data.firxDate}}
+                                        {{this.ARRAY_TO_STRING(data?.FIRX_INFO,'firxDate')}}
                                     </td>
                                     <td class="col-td-th-2">
-                                        {{data.firxCurrency}}
+                                        {{this.ARRAY_TO_STRING(data?.FIRX_INFO,'firxCurrency')}}
                                     </td>
                                     <td class="col-td-th-2">
-                                        {{data.firxAmount}}
+                                        {{this.ARRAY_TO_STRING(data?.FIRX_INFO,'firxAmount')}}
                                     </td>
                                     <td class="col-td-th-2">
-                                        {{data.firxCommision}}
+                                        {{this.ARRAY_TO_STRING(data?.FIRX_INFO,'firxCommision')}}
                                     </td>
                                     <td class="col-td-th-2">
-                                        {{data.firxRecAmo}}
+                                        {{data?.FIRX_TOTAL_AMOUNT}}
                                     </td>
                                     <td class="col-td-th-2">
-                                        {{data.balanceAvai}}
+                                        {{data?.SB_RENAMMING_AMOUNT}}
                                     </td>
                                     <td class="col-td-th-2">
                                         <a title="View" (click)=" openLetterOfCredit(content); viewCN(data)"><i

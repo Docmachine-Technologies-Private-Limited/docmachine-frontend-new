@@ -101,7 +101,7 @@
   </div>
 </div>
 <div class="iframecustommodel" tabindex="-1" role="dialog" #iframecustommodel [style]="this.MODEL_TYPE_VIEW['IframeModel']==true?'display: block;' : 'display: none;'" >
-  <app-custom-model height="98vh"
+  <app-custom-model height="98vh" *ngIf="this.CustomConfirmDialogModel?.url?.length!=0"
   id="Documents_View" name="Document View" (ModelChange)="this.HIDE_ALL_MODELS('IframeModel');">
   <div class="form-group iframe-group">
     <app-pdf-viewer [downloadShow]="false" *ngFor="let url of this.CustomConfirmDialogModel.url"

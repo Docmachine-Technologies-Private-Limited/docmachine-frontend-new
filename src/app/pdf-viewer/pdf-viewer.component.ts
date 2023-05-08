@@ -29,6 +29,7 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
   @Input('src') src: any = '';
   @Input('width') width: any = '500px';
   @Input('height') height: any = '500px';
+  @Input('Newheight') Newheight: any = '';
   @Input('name') name: any = 'PDF Viewer';
   @Input('downloadShow') downloadShow: boolean = true;
   @Input('base64_src') base64_src: any = '';

@@ -129,14 +129,14 @@ export class DocumentService {
       httpOptions
     );
   }
-  
+
   addIrAdvice(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/orAdvice/add`,{data: data},httpOptions);
+    return this.http.post(`${this.api_base}/orAdvice/add`, { data: data }, httpOptions);
   }
   getBillNo(id) {
     this.loadFromLocalStorage();
@@ -348,7 +348,7 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     let url = `${this.api_base}/boe/getbyPartName`;
-    return this.http.post(url,{benneName:benneName},httpOptions);
+    return this.http.post(url, { benneName: benneName }, httpOptions);
   }
   updateMaster(user, _id) {
     this.loadFromLocalStorage();
@@ -406,7 +406,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/master/add`,{data:data},httpOptions);
+    return this.http.post(`${this.api_base}/master/add`, { data: data }, httpOptions);
   }
   updateBoe(user, _id) {
     this.loadFromLocalStorage();
@@ -651,6 +651,14 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/Approval/UpdateDownloadStatus`, data, httpOptions);
   }
+  UpdateStatus(data) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/UpdateStatus`, data, httpOptions);
+  }
+
   RejectedStatus(data) {
     this.loadFromLocalStorage();
     const httpOptions = {
@@ -752,7 +760,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/irAdvice/getbyPartyName`,{partyName:partyName},httpOptions);
+    return this.http.post(`${this.api_base}/irAdvice/getbyPartyName`, { partyName: partyName }, httpOptions);
   }
 
   public getPDF(data): Observable<any> {
@@ -1917,6 +1925,12 @@ export class DocumentService {
     const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
     return this.http.post(`${this.api_base}/ExportBillLodgement/Amount_Update`, data, httpOptions);
   }
+  Update_Amount_by_TableSB(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
+    return this.http.post(`${this.api_base}/ExportBillLodgement/Amount_UpdateSB`, data, httpOptions);
+  }
   getExportBillLodgment() {
     console.log('I am in service');
     this.loadFromLocalStorage();
@@ -2003,6 +2017,15 @@ export class DocumentService {
       httpOptions
     );
   }
+  
+  SendMailNormal(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/task/sendmailnormal`,data,httpOptions);
+  }
 
   downloadDocuments(data: any) {
     console.log("downloadDocuments", data)
@@ -2033,7 +2056,7 @@ export class DocumentService {
     return CURRENCY_LIST;
   }
   getBankNameList() {
-    var temp:any= [
+    var temp: any = [
       { BankUniqueId: '', value: "Bandhan Bank Ltd.", },
       { BankUniqueId: '', value: "CSB Bank Limited" },
       { BankUniqueId: '', value: "City Union Bank Ltd." },
@@ -2131,124 +2154,124 @@ export class DocumentService {
       { BankUniqueId: '', value: "J.P. Morgan Chase Bank N.A." },
       { BankUniqueId: '', value: "SBI Bank" }
     ]
-    temp.forEach((element,index) => {
-      element.BankUniqueId=this.initialName(element.value)+(index+1)
+    temp.forEach((element, index) => {
+      element.BankUniqueId = this.initialName(element.value) + (index + 1)
     });
     return temp;
   }
   getBankFormat() {
-   var temp:any= [
-    { BankUniqueId: '', urlpdf: '', value: "Bandhan Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "CSB Bank Limited" },
-    { BankUniqueId: '', urlpdf: '', value: "City Union Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "DCB Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Dhanlaxmi Bank Ltd." },
-    { BankUniqueId: '', urlpdf: './../../assets/billUnder.pdf', value: "Federal Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "HDFC Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "Axis Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "ICICI Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "IndusInd Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "IDFC FIRST Bank Limited" },
-    { BankUniqueId: '', urlpdf: '', value: "Jammu & Kashmir Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Karnataka Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Karur Vysya Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Kotak Mahindra Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "Nainital bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "RBL Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "South Indian Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Tamilnad Mercantile Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "YES Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "IDBI Bank Limited" },
-    { BankUniqueId: '', urlpdf: '', value: "Au Small Finance Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Capital Small Finance Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "Fincare Small Finance Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Equitas Small Finance Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "ESAF Small Finance Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Suryoday Small Finance Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Ujjivan Small Finance Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Utkarsh Small Finance Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "North East Small finance Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "Jana Small Finance Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "Shivalik Small Finance Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "Unity Small Finance Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "Airtel Payments Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "India Post Payments Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "FINO Payments Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "Paytm Payments Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "Jio Payments Bank Ltd" },
-    { BankUniqueId: '', urlpdf: '', value: "NSDL Payments Bank Limited" },
-    { BankUniqueId: '', urlpdf: '', value: "Bank of Baroda" },
-    { BankUniqueId: '', urlpdf: '', value: "Bank of India" },
-    { BankUniqueId: '', urlpdf: '', value: "Bank of Maharashtra" },
-    { BankUniqueId: '', urlpdf: '', value: "Canara Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "Central Bank of India" },
-    { BankUniqueId: '', urlpdf: '', value: "Indian Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "Indian Overseas Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "Punjab & Sind Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "Punjab National Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "State Bank of India" },
-    { BankUniqueId: '', urlpdf: '', value: "UCO Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "Union Bank of India" },
-    { BankUniqueId: '', urlpdf: '', value: "Australia and New Zealand Banking Group Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "National Australia Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "Westpac Banking Corporation" },
-    { BankUniqueId: '', urlpdf: '', value: "Bank of Bahrain & Kuwait BSC" },
-    { BankUniqueId: '', urlpdf: '', value: "AB Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Sonali Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Bank of Nova Scotia" },
-    { BankUniqueId: '', urlpdf: '', value: "Industrial & Commercial Bank of China Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "BNP Paribas" },
-    { BankUniqueId: '', urlpdf: '', value: "Credit Agricole Corporate & Investment Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "Societe Generale" },
-    { BankUniqueId: '', urlpdf: '', value: "Deutsche Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "HSBC Ltd #" },
-    { BankUniqueId: '', urlpdf: '', value: "PT Bank Maybank Indonesia TBK" },
-    { BankUniqueId: '', urlpdf: '', value: "Mizuho Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Sumitomo Mitsui Banking Corporation" },
-    { BankUniqueId: '', urlpdf: '', value: "MUFG Bank, Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Cooperatieve Rabobank U.A." },
-    { BankUniqueId: '', urlpdf: '', value: "Doha Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "Qatar National Bank SAQ" },
-    { BankUniqueId: '', urlpdf: '', value: "JSC VTB Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "Sberbank" },
-    { BankUniqueId: '', urlpdf: '', value: "DBS Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "United Overseas Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "FirstRand Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Shinhan Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "Woori Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "KEB Hana Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "Industrial Bank of Korea" },
-    { BankUniqueId: '', urlpdf: '', value: "Bank of Ceylon" },
-    { BankUniqueId: '', urlpdf: '', value: "Credit Suisse A.G" },
-    { BankUniqueId: '', urlpdf: '', value: "CTBC Bank Co., Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Krung Thai Bank Public Co. Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Abu Dhabi Commercial Bank Ltd." },
-    { BankUniqueId: '', urlpdf: '', value: "Mashreq Bank PSC" },
-    { BankUniqueId: '', urlpdf: '', value: "First Abu Dhabi Bank PJSC" },
-    { BankUniqueId: '', urlpdf: '', value: "Emirates NBD Bank PJSC" },
-    { BankUniqueId: '', urlpdf: '', value: "Barclays Bank Plc." },
-    { BankUniqueId: '', urlpdf: '', value: "Standard Chartered Bank" },
-    { BankUniqueId: '', urlpdf: '', value: "NatWest Markets plc" },
-    { BankUniqueId: '', urlpdf: '', value: "American Express Banking Corp." },
-    { BankUniqueId: '', urlpdf: '', value: "Bank of America" },
-    { BankUniqueId: '', urlpdf: '', value: "Citibank N.A." },
-    { BankUniqueId: '', urlpdf: '', value: "J.P. Morgan Chase Bank N.A." },
-    { BankUniqueId: '', urlpdf: '', value: "SBI Bank" }
-  ]
-  
-  temp.forEach((element,index) => {
-    element.BankUniqueId=this.initialName(element.value)+(index+1)
-  });
-  return temp;
+    var temp: any = [
+      { BankUniqueId: '', urlpdf: '', value: "Bandhan Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "CSB Bank Limited" },
+      { BankUniqueId: '', urlpdf: '', value: "City Union Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "DCB Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Dhanlaxmi Bank Ltd." },
+      { BankUniqueId: '', urlpdf: './../../assets/billUnder.pdf', value: "Federal Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "HDFC Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Axis Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "ICICI Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "IndusInd Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "IDFC FIRST Bank Limited" },
+      { BankUniqueId: '', urlpdf: '', value: "Jammu & Kashmir Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Karnataka Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Karur Vysya Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Kotak Mahindra Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Nainital bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "RBL Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "South Indian Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Tamilnad Mercantile Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "YES Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "IDBI Bank Limited" },
+      { BankUniqueId: '', urlpdf: '', value: "Au Small Finance Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Capital Small Finance Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Fincare Small Finance Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Equitas Small Finance Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "ESAF Small Finance Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Suryoday Small Finance Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Ujjivan Small Finance Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Utkarsh Small Finance Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "North East Small finance Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Jana Small Finance Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Shivalik Small Finance Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Unity Small Finance Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Airtel Payments Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "India Post Payments Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "FINO Payments Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Paytm Payments Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Jio Payments Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "NSDL Payments Bank Limited" },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of Baroda" },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of India" },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of Maharashtra" },
+      { BankUniqueId: '', urlpdf: '', value: "Canara Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Central Bank of India" },
+      { BankUniqueId: '', urlpdf: '', value: "Indian Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Indian Overseas Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Punjab & Sind Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Punjab National Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "State Bank of India" },
+      { BankUniqueId: '', urlpdf: '', value: "UCO Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Union Bank of India" },
+      { BankUniqueId: '', urlpdf: '', value: "Australia and New Zealand Banking Group Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "National Australia Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Westpac Banking Corporation" },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of Bahrain & Kuwait BSC" },
+      { BankUniqueId: '', urlpdf: '', value: "AB Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Sonali Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of Nova Scotia" },
+      { BankUniqueId: '', urlpdf: '', value: "Industrial & Commercial Bank of China Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "BNP Paribas" },
+      { BankUniqueId: '', urlpdf: '', value: "Credit Agricole Corporate & Investment Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Societe Generale" },
+      { BankUniqueId: '', urlpdf: '', value: "Deutsche Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "HSBC Ltd #" },
+      { BankUniqueId: '', urlpdf: '', value: "PT Bank Maybank Indonesia TBK" },
+      { BankUniqueId: '', urlpdf: '', value: "Mizuho Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Sumitomo Mitsui Banking Corporation" },
+      { BankUniqueId: '', urlpdf: '', value: "MUFG Bank, Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Cooperatieve Rabobank U.A." },
+      { BankUniqueId: '', urlpdf: '', value: "Doha Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Qatar National Bank SAQ" },
+      { BankUniqueId: '', urlpdf: '', value: "JSC VTB Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Sberbank" },
+      { BankUniqueId: '', urlpdf: '', value: "DBS Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "United Overseas Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "FirstRand Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Shinhan Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Woori Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "KEB Hana Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Industrial Bank of Korea" },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of Ceylon" },
+      { BankUniqueId: '', urlpdf: '', value: "Credit Suisse A.G" },
+      { BankUniqueId: '', urlpdf: '', value: "CTBC Bank Co., Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Krung Thai Bank Public Co. Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Abu Dhabi Commercial Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Mashreq Bank PSC" },
+      { BankUniqueId: '', urlpdf: '', value: "First Abu Dhabi Bank PJSC" },
+      { BankUniqueId: '', urlpdf: '', value: "Emirates NBD Bank PJSC" },
+      { BankUniqueId: '', urlpdf: '', value: "Barclays Bank Plc." },
+      { BankUniqueId: '', urlpdf: '', value: "Standard Chartered Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "NatWest Markets plc" },
+      { BankUniqueId: '', urlpdf: '', value: "American Express Banking Corp." },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of America" },
+      { BankUniqueId: '', urlpdf: '', value: "Citibank N.A." },
+      { BankUniqueId: '', urlpdf: '', value: "J.P. Morgan Chase Bank N.A." },
+      { BankUniqueId: '', urlpdf: '', value: "SBI Bank" }
+    ]
+
+    temp.forEach((element, index) => {
+      element.BankUniqueId = this.initialName(element.value) + (index + 1)
+    });
+    return temp;
   }
   initialName(words) {
     'use strict'
     return words
-        .replace(/\b(\w)\w+/g, '$1_')
-        .replace(/\s/g, '')
-        .replace(/\.$/, '')
-        .toUpperCase();
-}
+      .replace(/\b(\w)\w+/g, '$1_')
+      .replace(/\s/g, '')
+      .replace(/\.$/, '')
+      .toUpperCase();
+  }
 }
 
 
