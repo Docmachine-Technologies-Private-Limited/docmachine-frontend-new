@@ -153,17 +153,17 @@ export class AddPipoComponent implements OnInit {
     };
 
     this.pipoForm = this.formBuilder.group({
-        pi_poNo: new FormControl('', Validators.required),
-        currency: new FormControl("",),
-        amount: new FormControl("", Validators.required),
-        incoterm: new FormControl("", Validators.required),
-        lastDayShipment: new FormControl("", Validators.required),
-        paymentTerm: new FormArray([this.initCourse()]),
-        pcRefNo: new FormControl("",),
-        date: new FormControl("", Validators.required),
-        dueDate: new FormControl("",),
-        location: new FormControl(null, Validators.required),
-      });
+      pi_poNo: new FormControl('', Validators.required),
+      currency: new FormControl("",),
+      amount: new FormControl("", Validators.required),
+      incoterm: new FormControl("", Validators.required),
+      lastDayShipment: new FormControl("", Validators.required),
+      paymentTerm: new FormArray([this.initCourse()]),
+      pcRefNo: new FormControl("",),
+      date: new FormControl("", Validators.required),
+      dueDate: new FormControl("",),
+      location: new FormControl(null, Validators.required),
+    });
   }
 
 
@@ -244,6 +244,10 @@ export class AddPipoComponent implements OnInit {
       }
     });
 
+  }
+
+  buyerChanges(value: any) {
+    this.buyer = value;
   }
 
   public onUploadError(args: any): void {

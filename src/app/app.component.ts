@@ -28,7 +28,8 @@ export class AppComponent implements OnInit, OnDestroy {
   WithoutAuthorization: any = ['verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
   constructor(
     private translate: TranslateService,
-    private router: Router, public doc: DocumentService,
+    private router: Router,
+    public doc: DocumentService,
     private userService: UserService,
     public authservice: AuthenticateService,
     public sessionstorage: StorageEncryptionDecryptionService,
