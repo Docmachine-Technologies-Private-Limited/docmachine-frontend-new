@@ -5,7 +5,7 @@ import { AuthGuard } from './service/authguard.service';
 @Injectable()
 export class AppConfig {
     public apiUrl = '';
-
+    public DEV_STAGGING_LIVE:any=['①','②']
     constructor(@Inject(PLATFORM_ID) public platformId: Object,public authGuard: AuthGuard) {
       console.log(platformId,'pllllllllllllllllllllllllll')
         if (isPlatformBrowser(this.platformId)) {

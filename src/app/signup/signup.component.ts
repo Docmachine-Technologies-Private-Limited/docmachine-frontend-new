@@ -34,12 +34,8 @@ export class SignupComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
     });
-
-
-
   }
   get f() { return this.registerForm.controls; }
-
 
   onClick() {
     if (this.password === 'password') {

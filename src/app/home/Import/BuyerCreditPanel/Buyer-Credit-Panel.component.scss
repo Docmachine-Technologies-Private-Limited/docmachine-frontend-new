@@ -1754,6 +1754,16 @@ select:focus {
     box-shadow: 0px 0px 3px 2px #00000063;
 }
 
+.modal-bg-transparent {
+    background-color: #fffdfd;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    color: #fff;
+    box-shadow: 0px 0px 3px 2px #00000063;
+}
+
 .seleted-text {
     height: 35px;
     border-radius: 50px;
@@ -2074,4 +2084,14 @@ table .table-tr-1 {
 .Table-Show {
     opacity: 1;
     visibility: visible;
+}
+
+.modal-bg-transparent label {
+    color: black;
+}
+
+.bg-text {
+    background-color: #183b6a;
+    padding: 15px;
+    width: 100%;
 }

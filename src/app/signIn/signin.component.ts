@@ -6,6 +6,8 @@ import {ToastrService} from 'ngx-toastr';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DocumentService } from '../service/document.service';
 import { AuthGuard } from '../service/authguard.service';
+import { AppConfig } from '../app.config';
+
 @Component({
   selector: 'app-detail',
   templateUrl: './signin.component.html',
@@ -23,10 +25,12 @@ export class SigninComponent implements OnInit {
   data1: any;
   data: any;
   closeResult: string;
-
+  CODE:any=[];
+  
   constructor(private formBuilder: FormBuilder, private userService: UserService,
     public documentService: DocumentService,
     private router: Router, public authGuard: AuthGuard,
+    public appconfig: AppConfig,
     private toastr: ToastrService, private modalService: NgbModal) {
   }
 

@@ -109,6 +109,8 @@ export class BuyerCreditPanelComponent implements OnInit {
     Bank: [],
     DROPDOWN_BOE: ''
   }
+  PARTY_NAME_LIST: any = [];
+
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
@@ -159,6 +161,7 @@ export class BuyerCreditPanelComponent implements OnInit {
       benneName: new FormControl('', Validators.required),
       sumTotalAmount: new FormControl("", Validators.required),
       totalremittanceAmount: new FormControl("", Validators.required),
+      selectedremittanceAmount: new FormControl("", Validators.required),
       BOETerm: new FormArray([this.initItems()]),
     });
   }
@@ -210,25 +213,35 @@ export class BuyerCreditPanelComponent implements OnInit {
   }
   ORM_BY_PARTY_NAME: any = [];
   changepipo(value) {
-    this.selectedBenne = this.benneDetail.filter((item)=>item?.benneName?.includes(value))[0];
+    this.selectedBenne = this.benneDetail.filter((item) => item?.benneName?.includes(value))[0];
     this.documentService.getBoedatabyPartName(value).subscribe((res: any) => {
       console.log('Data fetched successfully', res);
       this.pipoData = res.data;
       for (let index = 0; index < res.data.length; index++) {
         this.LIST_PIPO[res.data[index]['_id']] = res.data[index];
       }
-      console.log('importpipolist', this.pipoData, this.LIST_PIPO);
       for (let index = 0; index < res?.data.length; index++) {
         res.data[index]['isExpand'] = false;
-        this.PIPO_LIST['data'].push(res?.data[index]);
+        if (res?.data[index]?.balanceAmount =='-1') {
+          res.data[index]['balanceAmount'] = res?.data[index]?.invoiceAmount
+        }
+        if (res?.data[index]?.balanceAmount!='0') {
+          this.PIPO_LIST['data'].push(res?.data[index]);
+        }
         this.PIPO_LIST['original_data'].push(res?.data[index])
         if (res?.data[index]?.pi_poNo != '' && !this.PIPO_LIST['PIPO_NAME_LIST'].includes(res?.data[index]?.pi_poNo)) {
           this.PIPO_LIST['PIPO_NAME_LIST'].push({ value: res?.data[index]?.pi_poNo, id: res?.data[index]?._id })
         }
       }
+      console.log('importpipolist', this.pipoData, this.LIST_PIPO);
       this.documentService.getbyPartyName(value).subscribe((res: any) => {
         console.log(res, 'getbyPartyName');
-        this.ORM_BY_PARTY_NAME = res?.data
+        this.ORM_BY_PARTY_NAME = res?.data;
+        res?.data.forEach(element => {
+          if (element?.partyName) {
+            this.PARTY_NAME_LIST.push(element?.partyName)
+          }
+        });
       });
       console.log(this.PIPO_LIST, 'sdfsdfdsfsdffsfsdfdsfsdfsdf')
     },
@@ -255,48 +268,8 @@ export class BuyerCreditPanelComponent implements OnInit {
   }
   ITEM_FILL_PDF: any = [];
   temp1: any = [];
-  MAIN_DATA: any = [];
-  choosenItems(event, id, i) {
-    let temp: any = [];
-    let temp2: any = [];
-    temp = this.PIPO_LIST['data']?.filter(items => items?._id?.includes(id));
-    temp2 = this.PIPO_LIST['data']?.filter(items => items?._id?.includes(id));
-    this.OTHER_BANK_VISIBLE = false;
-    if (event.target.checked == true) {
-      this.ITEM_FILL_PDF[i] = temp[0];
-      event.target.checked = true;
-      setTimeout(() => { this.OTHER_BANK_VISIBLE = true }, 500)
-    } else {
-      this.ITEM_FILL_PDF[i] = [];
-      event.target.checked = false;
-      setTimeout(() => { this.OTHER_BANK_VISIBLE = true }, 500)
-    }
-    this.temp1[i] = [];
-    this.selectedItems[i] = temp;
-    temp2[0] = temp2;
-    for (let index = 0; index < temp2.length; index++) {
-      this.temp1[i].push({
-        pdf: (temp2[index]['doc']),
-        name: 'BOE',
-      });
-      for (let j = 0; j < temp2[index]?.pipo?.length; j++) {
-        var item: any = temp2[index]?.pipo[j];
-        this.temp1[i].push({
-          pdf: item?.airwayBlcopy,
-          name: 'airwayBlcopy',
-        });
-        this.temp1[i].push({
-          pdf: item?.commercial,
-          name: 'commercial',
-        });
-      }
-    }
-    this.MAIN_DATA[i] = temp2[0];
-    console.log(this.temp1, temp2, this.MAIN_DATA, this.ITEM_FILL_PDF, 'selectedItemsselectedItems')
-    this.sumTotalAmount = this.ITEM_FILL_PDF.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.invoiceAmount), 0);
-    this.showOpinionReport = 0;
-    this.fillForm();
-  }
+  MAIN_DATA: any = [0];
+
   userExists(id) {
     return this.MAIN_DATA.some(function (el) {
       return el._id === id;
@@ -340,16 +313,6 @@ export class BuyerCreditPanelComponent implements OnInit {
     }
   }
 
-  RemittanceAmount(event, value) {
-    clearTimeout(this.timeout);
-    this.OTHER_BANK_VISIBLE = false;
-    this.timeout = setTimeout(() => {
-      this.Remittance_Amount = this.pipoForm?.value?.BOETerm.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
-      console.log(this.pipoForm, 'pipoFormpipoFormpipoForm')
-      this.OTHER_BANK_VISIBLE = true;
-      this.fillForm()
-    }, 500)
-  }
   async fillForm() {
     this.bankformat = ''
     this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
@@ -652,10 +615,10 @@ export class BuyerCreditPanelComponent implements OnInit {
     }
   }
   MERGE_PDF: any = [];
-  ALL_DOCUMENTS:any=[];
-  
+  ALL_DOCUMENTS: any = [];
+
   async PREVIEWS_URL(modal: any, id) {
-    this.ALL_DOCUMENTS=[];
+    this.ALL_DOCUMENTS = [];
     this.PREVIEWS_URL_LIST = [];
     this.MERGE_PDF = [];
     console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
@@ -683,7 +646,7 @@ export class BuyerCreditPanelComponent implements OnInit {
           if ((i + 1) == this.ITEM_FILL_PDF.length) {
             var fitertemp: any = await this.ALL_DOCUMENTS.filter(n => n)
             await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-              this.PREVIEWS_URL_LIST=[];
+              this.PREVIEWS_URL_LIST = [];
               this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
               console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
             });
@@ -710,12 +673,12 @@ export class BuyerCreditPanelComponent implements OnInit {
           })
         }
       })
-    }else{
+    } else {
       this.PREVIEWS_URL_LIST.push(this.ORIGINAL_PDF)
       this.ALL_DOCUMENTS.push(this.ORIGINAL_PDF)
       if (this.uploadUrl != undefined && this.uploadUrl != '' && this.uploadUrl != null) {
         this.PREVIEWS_URL_LIST.push(this.uploadUrl)
-        this.ALL_DOCUMENTS.push( this.uploadUrl)
+        this.ALL_DOCUMENTS.push(this.uploadUrl)
       }
       console.log('pipoForm', this.pipoForm)
       $(document).ready(() => {
@@ -756,7 +719,7 @@ export class BuyerCreditPanelComponent implements OnInit {
                 if ((i + 1) == this.ITEM_FILL_PDF.length) {
                   var fitertemp: any = await this.ALL_DOCUMENTS.filter(n => n)
                   await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
-                    this.PREVIEWS_URL_LIST=[];
+                    this.PREVIEWS_URL_LIST = [];
                     this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
                     console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
                   });
@@ -843,7 +806,16 @@ export class BuyerCreditPanelComponent implements OnInit {
             this.userService.updateManyPipo(pipo_id, 'import', '', updatedData).subscribe((data) => {
               console.log('king123');
               console.log(data);
-              this.router.navigate(['/home/dashboardTask'])
+              for (let index = 0; index < this.MAIN_DATA.length; index++) {
+                const element = this.MAIN_DATA[index];
+                let REAMAING_AMOUNT: any = parseFloat(element?.balanceAmount) - parseFloat(element?.Remittance_Amount)
+                this.documentService.updateBoe({ balanceAmount: REAMAING_AMOUNT, moredata: [element] }, element?._id).subscribe((updateBoeres: any) => {
+                  console.log(updateBoeres, 'updateBoeres');
+                  if ((index + 1) == this.MAIN_DATA.length) {
+                    this.router.navigate(['/home/dashboardTask'])
+                  }
+                })
+              }
             }, (error) => {
               console.log('error');
             }
@@ -870,12 +842,50 @@ export class BuyerCreditPanelComponent implements OnInit {
   }
   FILTER_PIPO_DATA: any = [];
   filterData(value: any) {
-    this.PIPO_LIST['data'] = this.PIPO_LIST['original_data'].filter((item: any) => item?._id?.indexOf(value) != -1);
+    this.PIPO_LIST['data'] = this.PIPO_LIST['original_data'].filter((item: any) => item?.partyName?.indexOf(value) != -1);
     this.FILTER_PIPO_DATA = this.PIPO_LIST['data'][0];
     console.log(value, this.PIPO_LIST['data'], 'ddsgfjsgdjfhgfds')
     // for (let index = 0; index < this.FILTER_PIPO_DATA?.boeRef.length; index++) {
     //   this.ADVANCE_REMMITANCE[this.FILTER_PIPO_DATA?.boeRef[index]?.boeNumber] = [];
     // }
+  }
+  choosenItems(event, id, i, item: any) {
+    if (event.target.checked == true) {
+      this.ITEM_FILL_PDF[i] = (item);
+      setTimeout(() => { this.OTHER_BANK_VISIBLE = true }, 500)
+    } else {
+      event.target.checked = false;
+      this.ITEM_FILL_PDF.splice(i, 1)
+      setTimeout(() => { this.OTHER_BANK_VISIBLE = true }, 500)
+    }
+    this.temp1[i] = [];
+    this.MAIN_DATA = [];
+    this.pipoForm.controls.BOETerm.controls = []
+    this.ITEM_FILL_PDF.forEach((element, index) => {
+      this.MAIN_DATA.push(element);
+      this.addItems(index, 0);
+    });
+    for (let index = 0; index < this.MAIN_DATA.length; index++) {
+      this.temp1[i].push({
+        pdf: (this.MAIN_DATA[index]['doc']),
+        name: 'BOE',
+      });
+      for (let j = 0; j < this.MAIN_DATA[index]?.pipo?.length; j++) {
+        var item: any = this.MAIN_DATA[index]?.pipo[j];
+        this.temp1[i].push({
+          pdf: item?.airwayBlcopy,
+          name: 'airwayBlcopy',
+        });
+        this.temp1[i].push({
+          pdf: item?.commercial,
+          name: 'commercial',
+        });
+      }
+    }
+    console.log(this.MAIN_DATA, item, this.ITEM_FILL_PDF, 'selectedItemsselectedItems')
+    this.sumTotalAmount = this.ITEM_FILL_PDF.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.invoiceAmount), 0);
+    this.showOpinionReport = 0;
+    this.fillForm();
   }
   AmountValidation(event: any, amount: any) {
     var targervalue: any = $(event?.target).val()
@@ -898,7 +908,6 @@ export class BuyerCreditPanelComponent implements OnInit {
       this.toastr.warning(`You have not engouh boe amount: ${boeitem?.invoiceAmount}`)
       return;
     } else {
-      // var temp_filter:any=this.ADVANCE_REMMITANCE[boeitem?.boeNumber].filter((item:any)=>item?.billNo.indexOf(value?.billNo)!=-1);
       if (this.ADVANCE_REMMITANCE_CHECKBOX[i] == undefined || this.ADVANCE_REMMITANCE_CHECKBOX[i] == '') {
         this.ADVANCE_REMMITANCE[boeitem?.boeNumber].push(value)
         this.ADVANCE_REMMITANCE_CHECKBOX[i] = true;
@@ -916,28 +925,61 @@ export class BuyerCreditPanelComponent implements OnInit {
   PIPO_SELECTED_INDEX(index: any, data: any) {
     console.log(index, data, 'PIPO_SELECTED_INDEX')
     this.PIPO_SELECTED_DATA_INDEX = { index: index, data: data }
+    this.ORM_SELECTION_DATA_LIST[index] = { ORM_NUMBER: [], Amount_Sum: [] };
+    this.ORM_SELECTION_DATA[index] = [];
+    this.TOTAL_SELECTED_REMMITANCE_AMOUNT[index] = 0;
   }
   ORM_SELECTION_DATA: any = [];
-  ORM_SELECTION_DATA_LIST: any = { ORM_NUMBER: [], Amount_Sum: [] };
+  ORM_SELECTION_DATA_LIST: any = [];
+  TOTAL_SELECTED_REMMITANCE_AMOUNT: any = []
   ORM_SELECTION(event: any, index: any, data: any) {
     if (event.target.checked) {
-      this.ORM_SELECTION_DATA.push(data)
+      this.ORM_SELECTION_DATA[this.PIPO_SELECTED_DATA_INDEX.index][index] = (data)
     } else {
-      this.ORM_SELECTION_DATA.splice(index, 1);
+      this.ORM_SELECTION_DATA[this.PIPO_SELECTED_DATA_INDEX.index].splice(index, 1);
       event.target.checked = false;
     }
-    this.ORM_SELECTION_DATA_LIST = { ORM_NUMBER: [], Amount_Sum: [] };
-    for (let index = 0; index < this.ORM_SELECTION_DATA.length; index++) {
-      const element = this.ORM_SELECTION_DATA[index];
-      this.ORM_SELECTION_DATA_LIST.ORM_NUMBER[index] = element?.billNo;
-      this.ORM_SELECTION_DATA_LIST.Amount_Sum[index] = element?.amount;
+    var totalSum: any = this.ORM_SELECTION_DATA[this.PIPO_SELECTED_DATA_INDEX.index].reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
+    if (parseFloat(this.PIPO_SELECTED_DATA_INDEX?.data?.balanceAmount) < totalSum) {
+      this.ORM_SELECTION_DATA[this.PIPO_SELECTED_DATA_INDEX.index].pop();
+      $(event.target).prop('checked', false);
+      this.toastr.warning(`You have not engouh boe amount: ${totalSum}`)
     }
+    let temp: any = [];
+    this.ORM_SELECTION_DATA[this.PIPO_SELECTED_DATA_INDEX.index].forEach(element => {
+      temp.push(element);
+    });
+    this.ORM_SELECTION_DATA_LIST[this.PIPO_SELECTED_DATA_INDEX.index] = { ORM_NUMBER: [], Amount_Sum: [] };
+    for (let j = 0; j < temp.length; j++) {
+      const element = temp[j];
+      this.ORM_SELECTION_DATA_LIST[this.PIPO_SELECTED_DATA_INDEX.index].ORM_NUMBER[j] = element?.billNo;
+      this.ORM_SELECTION_DATA_LIST[this.PIPO_SELECTED_DATA_INDEX.index].Amount_Sum[j] = element?.amount;
+    }
+    this.MAIN_DATA.forEach(element => {
+      if (element?.boeNumber == this.PIPO_SELECTED_DATA_INDEX?.data?.boeNumber) {
+        element['TOTAL_REMMITANCE_AMOUNT'] = this.ORM_SELECTION_DATA_LIST[this.PIPO_SELECTED_DATA_INDEX.index].Amount_Sum.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems), 0);
+      }
+    });
+    this.PIPO_LIST.data[this.PIPO_SELECTED_DATA_INDEX.index]['AdviceRefNo'] = this.ORM_SELECTION_DATA_LIST[this.PIPO_SELECTED_DATA_INDEX.index].ORM_NUMBER.toString();
+    this.PIPO_LIST.data[this.PIPO_SELECTED_DATA_INDEX.index]['AdviceRefAmount'] = this.ORM_SELECTION_DATA_LIST[this.PIPO_SELECTED_DATA_INDEX.index].Amount_Sum.toString();
+    this.PIPO_LIST.data[this.PIPO_SELECTED_DATA_INDEX.index]['AdviceRefData'] = temp;
+    console.log(data, index, totalSum, temp, this.PIPO_LIST.data, this.TOTAL_SELECTED_REMMITANCE_AMOUNT, 'ORM_SELECTION');
+  }
 
-    this.PIPO_LIST.data[this.PIPO_SELECTED_DATA_INDEX.index]['AdviceRefNo'] = this.ORM_SELECTION_DATA_LIST.ORM_NUMBER.toString();
-    this.PIPO_LIST.data[this.PIPO_SELECTED_DATA_INDEX.index]['AdviceRefAmount'] = this.ORM_SELECTION_DATA_LIST.Amount_Sum.toString();
-    this.PIPO_LIST.data[this.PIPO_SELECTED_DATA_INDEX.index]['AdviceRefData'] = this.ORM_SELECTION_DATA;
-    var totalSum: any = this.ORM_SELECTION_DATA.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.amount), 0);
-    console.log(data, index, totalSum, this.ORM_SELECTION_DATA, this.PIPO_LIST.data, 'ORM_SELECTION');
+  RemittanceAmount(event, index, value) {
+    clearTimeout(this.timeout);
+    this.OTHER_BANK_VISIBLE = false;
+    this.timeout = setTimeout(() => {
+      this.Remittance_Amount = this.pipoForm?.value?.BOETerm.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
+      console.log(this.pipoForm, 'pipoFormpipoFormpipoForm')
+      this.MAIN_DATA.forEach(element => {
+        if (element?.boeNumber == value) {
+          element['Remittance_Amount'] = this.pipoForm?.value?.BOETerm[index]?.remittanceAmount
+        }
+      });
+      this.OTHER_BANK_VISIBLE = true;
+      this.fillForm()
+    }, 500)
   }
   CloseAllExpand(event: any, data: any, index: any) {
     $('.table-type').removeClass('table-active')
