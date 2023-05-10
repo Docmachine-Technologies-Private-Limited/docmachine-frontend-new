@@ -3062,7 +3062,6 @@ export class NewDirectDispatchComponent implements OnInit {
   changeCheckbox1(event, a, data) {
     if (data.blCopyDoc) {
       if (data.commercialDoc) {
-        if (data.packingDoc) {
           let j = this.sbArray.indexOf(a);
           if (j == -1) {
             this.sbArray.push(a);
@@ -3078,9 +3077,6 @@ export class NewDirectDispatchComponent implements OnInit {
           this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + a] = this.FILTER_DATA?.COMMERCIAL?.filter((item: any) => item?.sbNo === a);
           this.SELECTED_FIRX_INDEX['SB_' + a] = [];
           console.log('changeCheckbox1', data, this.FILTER_DATA, this.sbArray, this.ACCORDING_LIST);
-        } else {
-          console.log("You Don't have packingDoc Document");
-        }
       } else {
         console.log("You Don't have Commercial Invoice");
       }
