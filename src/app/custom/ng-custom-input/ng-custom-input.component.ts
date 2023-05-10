@@ -14,32 +14,22 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class NgCustomInputComponent implements OnInit, ControlValueAccessor, OnChanges {
   @Input('placeHolderText') placeHolderText: any = ''
-  @Input('items') items: any = [];
+  @Input('type') type: any = [];
   @Output('ngInputChange') ngInputChanges: any = new EventEmitter<any>();
-  @Output('modelChanges') modelChanges: any = new EventEmitter<any>();
-  @Input('bindLabel') bindLabel: any = '';
-  @Input('bindValue') bindValue: any = '';
-  @Input('multiple') multiple: any = [];
+  @Output('InputChanges') modelChanges: any = new EventEmitter<any>();
   @Input('width') width: any = '';
   @Input('class') class: any = ''
-  @Input('popup-close') popup_close: any = ''
   @Input('height') height: any = [];
   @Input('value') value: any = '';
-  @Input('selectedItems') selectedItems: any = '';
   @Input('ngInput') ngInput: any = '';
-  @Output('NgModal') NgModal: any = new EventEmitter<any>();
-  @Input('GET_ARRAY_VALUES') GET_ARRAY_VALUES: boolean = false;
   @Input('id') id: any = '';
   @Input('disabled') disabled: any = false;
-  arryavalue: any = [];
-  LABLE_BIND_LIST: any = [];
-  FILTER_DROPDOWN: any = [];
 
   constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
   ngOnInit(): void {
     this.id = this.randomNameGenerator();
-    if (this.selectedItems != '') {
-      this.ngInput = this.selectedItems;
+    if (this.value != '') {
+      this.ngInput = this.value;
       this.modelChanges.emit(this.ngInput);
       this.ngInputChanges.emit(this.ngInput);
     }
@@ -49,18 +39,17 @@ export class NgCustomInputComponent implements OnInit, ControlValueAccessor, OnC
     $(inputid).val('');
     this.modelChanges.emit('');
     this.value = '';
-    this.selectedItems = '';
     this.ngInputChanges.emit('');
   }
   onChange: (_: any) => void = (_: any) => {
-    if (this.selectedItems != '') {
-      this.ngInput = this.selectedItems;
+    if (this.value != '') {
+      this.ngInput = this.value;
       this.modelChanges.emit(this.ngInput);
     }
   };
   onTouched: () => void = () => {
-    if (this.selectedItems != '') {
-      this.ngInput = this.selectedItems;
+    if (this.value != '') {
+      this.ngInput = this.value;
       this.modelChanges.emit(this.ngInput);
     }
   };

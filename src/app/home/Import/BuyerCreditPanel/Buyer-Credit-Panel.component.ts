@@ -255,7 +255,7 @@ export class BuyerCreditPanelComponent implements OnInit {
   changepipo(value) {
     this.selectedBenne = this.benneDetail.filter((item) => item?.benneName?.includes(value))[0];
     this.documentService.getBoedatabyPartName(value).subscribe((res: any) => {
-      console.log('Data fetched successfully', res, this.RequestforBCQuote);
+      console.log('Data fetched successfully', res, this.RequestforBCQuote,this.DUMP);
       this.pipoData = res.data;
       for (let index = 0; index < res.data.length; index++) {
         this.LIST_PIPO[res.data[index]['_id']] = res.data[index];

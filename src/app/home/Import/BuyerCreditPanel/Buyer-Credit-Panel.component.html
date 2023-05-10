@@ -172,8 +172,6 @@
                                                                         formControlName="amount" id="invoice_amount"
                                                                         [ngModel]="item?.invoiceAmount"
                                                                         placeholder="Invoice Amount" autocomplete="off">
-                                                                        
-                                                                        <ng-custom-input class="col-12"></ng-custom-input>
                                                                     <div *ngIf="submitted && form.amount.errors"
                                                                         class='errorText'>
                                                                         <div *ngIf="form.amount.errors.required">BOE
@@ -418,7 +416,7 @@
                                                     <app-ng-dropdown-custom placeHolderText="Select beneficiary"
                                                         [items]="this.benneDetail" bindLabel="benneName"
                                                         bindValue="benneName" [multiple]="false"
-                                                        [(ngModelDropDown)]="RequestforBCQuoteformControls.benneName.value"
+                                                        [(ngModelDropDown)]="DUMP.benneName"
                                                         (modelChanges)="changepipo($event)">
                                                     </app-ng-dropdown-custom>
                                                 </div>
@@ -438,10 +436,17 @@
                                                 <div class="row col-12 p-0">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Applicant Name</label>
-                                                        <input type="text" class="form-control"
+                                                        <!-- <input type="text" class="form-control"
                                                             formControlName="ApplicantName"
                                                             [ngModel]="this.COMPANY_DETAILS?.teamName"
-                                                            placeholder="Applicant Name">
+                                                            placeholder="Applicant Name"> -->
+                                                            <ng-custom-input 
+                                                            type="text"
+                                                            formControlName="ApplicantName"
+                                                            [value]="this.COMPANY_DETAILS?.teamName"
+                                                            [(ngInput)]="DUMP.ApplicantName"
+                                                            placeholder="Applicant Name"></ng-custom-input>
+                                                            
                                                         <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.ApplicantName.errors"
                                                             class='errorText'>
                                                             <div
@@ -452,10 +457,11 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">LC Issuing Bank</label>
-                                                        <input type="text" class="form-control"
+                                                            <ng-custom-input 
+                                                            type="text"
                                                             formControlName="LCIssuingBank"
-                                                            [(ngModel)]="RequestforBCQuoteform.LCIssuingBank"
-                                                            placeholder="LC Issuing Bank">
+                                                            [(ngInput)]="DUMP.LCIssuingBank"
+                                                            placeholder="LC Issuing Bank"></ng-custom-input>
                                                         <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCIssuingBank.errors"
                                                             class='errorText'>
                                                             <div

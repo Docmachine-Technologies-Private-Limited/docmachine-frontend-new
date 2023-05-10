@@ -163,6 +163,5 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor, 
   ngOnChanges(changes: SimpleChanges) {
     this.ngModelDropDown = changes;
     this.modelChanges.emit(this.ngModelDropDown);
-    console.log(this.ngModelDropDown);
   }
 }
