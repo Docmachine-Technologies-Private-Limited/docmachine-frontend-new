@@ -678,10 +678,10 @@ export class NewDirectDispatchComponent implements OnInit {
           this.buyerName.push({ value: element.buyerName, id: element?._id });
         })
         console.log('buyerName', this.buyerName);
-        },
+      },
       (err) => console.log("Error", err)
     );
-    
+
     await this.pipoDataService.getPipoList('export').then(async (res: any) => {
       this.FILTER_DATA.PIPO = res?.pipolist;
       this.pipoDataService.pipolistModel$.subscribe((data: any) => {
@@ -722,8 +722,8 @@ export class NewDirectDispatchComponent implements OnInit {
               let totalFirxAmount: any = 0;
               for (let index = 0; index < element?.firxdetails.length; index++) {
                 const elementfirxdetails = element?.firxdetails[index];
-                console.log(elementfirxdetails?.firxAmount.split(','),this.FIRX_AMOUNT(elementfirxdetails?.firxAmount.split(',')),'hfhgfghfhfhfhf')
-                totalFirxAmount+= parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount.split(',')))
+                console.log(elementfirxdetails?.firxAmount.split(','), this.FIRX_AMOUNT(elementfirxdetails?.firxAmount.split(',')), 'hfhgfghfhfhfhf')
+                totalFirxAmount += parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount.split(',')))
               }
               element['balanceAvai'] = parseFloat(element?.fobValue) - parseFloat(totalFirxAmount);
             } else {
@@ -3093,55 +3093,47 @@ export class NewDirectDispatchComponent implements OnInit {
     this.temp[id] = [];
     if (data.blCopyDoc) {
       if (data.commercialDoc) {
-        if (data.packingDoc) {
-          let removeArray: any = [];
-          if (event.target.checked) {
-            for (let element of this.item1) {
-              if (element._id == id) {
-                console.log(element, 'elelelele')
-                this.itemArray.push(element);
-                this.temp[id] = [{
-                  pdf: (element['doc']),
-                  name: 'Shipping Bill'
-                }, {
-                  pdf: (element['blCopyDoc']),
-                  name: 'blCopyDoc'
-                }, {
-                  pdf: (element['commercialDoc']),
-                  name: 'commercialDoc'
-                }, {
-                  pdf: (element['packingDoc']),
-                  name: 'packingDoc'
-                }, {
-                  pdf: (element['DebitNote']),
-                  name: 'debitNotedoc'
-                }, {
-                  pdf: this.documentService.MT102_SUBJECT?.file,
-                  name: 'MT103'
-                }]
-              }
-            }
-            this.CHECKEBOX_SELECTION.SHIPPING_BILL[i] = true;
-          } else {
-            $(event.target).prop('checked', false);
-            this.CHECKEBOX_SELECTION.SHIPPING_BILL[i] = false;
-            if (this.itemArray.length) {
-              this.itemArray.forEach((element: any) => {
-                if (element._id != id) {
-                  removeArray.push(element);
-                }
-              });
-              this.itemArray = removeArray;
+        let removeArray: any = [];
+        if (event.target.checked) {
+          for (let element of this.item1) {
+            if (element._id == id) {
+              console.log(element, 'elelelele')
+              this.itemArray.push(element);
+              this.temp[id] = [{
+                pdf: (element['doc']),
+                name: 'Shipping Bill'
+              }, {
+                pdf: (element['blCopyDoc']),
+                name: 'blCopyDoc'
+              }, {
+                pdf: (element['commercialDoc']),
+                name: 'commercialDoc'
+              }, {
+                pdf: (element['packingDoc']),
+                name: 'packingDoc'
+              }, {
+                pdf: (element['DebitNote']),
+                name: 'debitNotedoc'
+              }, {
+                pdf: this.documentService.MT102_SUBJECT?.file,
+                name: 'MT103'
+              }]
             }
           }
-
+          this.CHECKEBOX_SELECTION.SHIPPING_BILL[i] = true;
+        } else {
+          $(event.target).prop('checked', false);
+          this.CHECKEBOX_SELECTION.SHIPPING_BILL[i] = false;
+          if (this.itemArray.length) {
+            this.itemArray.forEach((element: any) => {
+              if (element._id != id) {
+                removeArray.push(element);
+              }
+            });
+            this.itemArray = removeArray;
+          }
           this.ExportBillLodgement_Form.controls['documents'].setValue(this.temp);
           console.log('test2', id, this.documentService.MT102_SUBJECT, this.itemArray, this.temp, this.PDF_LIST);
-        } else {
-          this.toastr.error(
-            "You Don't Have Any Packing List Documnet Linkend with this Shipping Bill"
-          );
-          $(event.target).prop('checked', false);
         }
       } else {
         this.toastr.error(
@@ -3917,12 +3909,15 @@ export class NewDirectDispatchComponent implements OnInit {
   };
   BOOLEAN: boolean = false;
   MERGE_ALL_PDF: any = [];
+  SB_NO_FILTER: any = ''
+  RESET: boolean = false;
   async SlideToggle(event: any, sbid: any) {
     var temp: any = [];
     const id = event != null ? event.tab.content.viewContainerRef.element.nativeElement.id : sbid;
     this.PDF_LIST = [];
     console.log(this.newBankArray, bankformat, id, 'this.newBankArray')
     var sbfilter = this.itemArray.filter((item: any) => item?._id == id);
+    this.SB_NO_FILTER = sbfilter[0]?.sbno;
     var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.bankValue) != -1);
     if (bankformat.length != 0 && bankformat[0]?.urlpdf != '') {
       this.fillForm(sbfilter[0], 'SB_' + sbfilter[0]?.sbno).then(async () => {
@@ -3978,6 +3973,10 @@ export class NewDirectDispatchComponent implements OnInit {
         }
       }
     }
+    this.RESET=false;
+    setTimeout(() => {
+      this.RESET = true;
+    }, 500)
   }
 
   async PreviewSlideToggle(event: any) {
@@ -4230,12 +4229,12 @@ export class NewDirectDispatchComponent implements OnInit {
                             this.documentService.Update_Amount_by_TableSB({
                               tableName: 'masterrecord',
                               id: UniqueId,
-                              query:query
+                              query: query
                             }).subscribe((r2: any) => {
                               this.documentService.Update_Amount_by_Table({
                                 tableName: 'masterrecord',
                                 id: UniqueId,
-                                query:{balanceAvai: parseFloat(sbAmount[0]?.balanceAvai) - this.FIRX_AMOUNT(this.tp?.firxAmount) }
+                                query: { balanceAvai: parseFloat(sbAmount[0]?.balanceAvai) - this.FIRX_AMOUNT(this.tp?.firxAmount) }
                               }).subscribe((r3: any) => {
                                 console.log(r3, 'masterrecord')
                                 this.toastr.success('Successfully added Transaction of SB No. :' + this.FIRX_AMOUNT(sbAmount?.sbno))

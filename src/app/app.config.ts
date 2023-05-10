@@ -20,8 +20,8 @@ export class AppConfig {
     }
 
     public getConstantsAtServer() {
-         this.apiUrl = `https://stagingbackend.bharathexim.com/`;
-        //this.apiUrl = `https://dockerapi.bharathexim.com/v1`;
+        //  this.apiUrl = `https://stagingbackend.bharathexim.com/v1`;
+        this.apiUrl = `https://dockerapi.bharathexim.com/v1`;
         // this.apiUrl = `https://devappapi.bharathexim.com/v1`;
         // this.apiUrl = `http://localhost:8081/v1`;
     }

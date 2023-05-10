@@ -56,7 +56,6 @@ import { JoinPipePipe } from './join-pipe.pipe';
 import { ResetOTPComponent } from './forgot-password/reset-otp/reset-otp.component';
 import { BehaviorSubjectListService } from "./home/CommanSubjectApi/BehaviorSubjectListService/BehaviorSubjectList.service";
 
-
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
   url: "https://httpbin.org/post",

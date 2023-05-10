@@ -9,7 +9,7 @@
             <p class="p-text mb-0">ERODE.</p>
             <p class="p-text mt-1">Sub: Submission of Export documents for Regularization.</p>
             <p class="p-text mb-0">We enclose herewith the following Export Documents:</p>
-            <p class="p-text mb-0">Bill Amount : <span class="amount">{{this.TOTAL_SUM_FIREX}}</span></p>
+            <p class="p-text mb-0">Bill Amount : <span class="amount">{{this.TOTAL_PIPO_AMOUNT}}</span></p>
             <div class="table-added mt-1">
                 <table class="table mb-0">
                     <thead>
@@ -22,7 +22,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <div class="table-tr" *ngFor="let item of this.data[0];let i=index">
+                        <div class="table-tr" *ngFor="let item of this.FILETR_AMOUNT;let i=index">
                             <td class="col-td-th-1">Duplicate</td>
                             <td class="col-td-th-1">{{item?.invoices[0]?.invoiceno}}</td>
                             <td class="col-td-th-2">{{item?.blcopydetails[0]?.airwayBlCopyNumber}}</td>
@@ -68,7 +68,7 @@
             <p class="p-text mb-0">If the above mentioned documents are being submitted after expiry of 21 days from date of shipment, than please briefly,</p>
             <p class="p-text mb-0">describe the reason for delay in submission of documents - Due to Shipping Bill delayed from Customs.</p>
             <p class="p-text mb-0">We are eligible to export the above mentioned goods under the current Foreign Trade policy </p>
-            <p class="p-text mb-0">in place and our Importer Exporter Code is : <span class="amount">{{this.data[0][0]?.ieccode}}</span></p>
+            <p class="p-text mb-0">in place and our Importer Exporter Code is : <span class="amount">{{this.FILETR_AMOUNT[0]?.ieccode}}</span></p>
             <br>
             <p class="p-text mt-0">
                 <span class="amount">INVOICE NO:</span><br>

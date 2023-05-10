@@ -12,6 +12,7 @@ import $ from 'jquery'
 })
 export class OpenPopUpDirective {
   constructor(private elementRef: ElementRef,
+    private renderer: Renderer2,
     public wininfo: WindowInformationService) {
     console.log(elementRef, 'dfsdfsdfdsfdfsdf')
   }
@@ -49,6 +50,10 @@ export class OpenPopUpDirective {
       this.NgCustomTooltipsDirectiveMouseClick(event);
     } else if (ngtooltipspopup == $(this.elementRef.nativeElement).attr('id')) {
       this.CUSTOM_TOOLTIPS_CLICK(event);
+    }
+    
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.renderer.removeClass(this.elementRef.nativeElement,'custom-dropdown-active');
     }
   }
 
