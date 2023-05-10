@@ -48,6 +48,7 @@ import { LetterheadComponent } from "../custom/letterhead/ExportLetterHead/lette
 import { ImportLetterheadComponent } from "../custom/letterhead/ImportLetterHead/ImportLetterhead.component";
 import { CustomHoverPanelComponent } from '../custom/custom-hover-panel/custom-hover-panel.component';
 import {CustomConfirmDialogModelComponent} from '../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component'
+import { NgCustomInputComponent } from "../custom/ng-custom-input/ng-custom-input.component";
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import {CustomConfirmDialogModelComponent} from '../custom/custom-confirm-dialog
     LetterheadComponent,
     ImportLetterheadComponent,
     CustomHoverPanelComponent,
-    CustomConfirmDialogModelComponent
+    CustomConfirmDialogModelComponent,
+    NgCustomInputComponent
   ],
   imports: [
     CommonModule,
@@ -135,7 +137,8 @@ import {CustomConfirmDialogModelComponent} from '../custom/custom-confirm-dialog
     LetterheadComponent,
     ImportLetterheadComponent,
     CustomHoverPanelComponent,
-    CustomConfirmDialogModelComponent
+    CustomConfirmDialogModelComponent,
+    NgCustomInputComponent
   ],
 })
 export class SharedHomeModule { }

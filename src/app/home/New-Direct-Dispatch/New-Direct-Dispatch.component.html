@@ -42,8 +42,8 @@
                           *ngFor="let selItems of  [this.formerge]" width="100%" height="500px"></app-pdf-viewer>
                       </div>
                       <div id="first" #dataToExport>
-                        <app-letterhead *ngIf="this.bankformat[0]?.urlpdf==''"
-                          [data]="[this.itemArray,this.advanceArray,this.newBankArray]"></app-letterhead>
+                        <app-letterhead *ngIf="this.bankformat[0]?.urlpdf=='' && this.RESET==true"
+                          [data]="[this.itemArray,this.advanceArray,this.newBankArray]" [SB_NO]="this.SB_NO_FILTER"></app-letterhead>
                       </div>
                     </div>
                   </div>

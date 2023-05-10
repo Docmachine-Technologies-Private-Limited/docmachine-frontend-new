@@ -94,7 +94,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         console.log('king', this.item);
         for (let value of this.item) {
           if (value['file'] == 'export') {
-            console.log('avvvvvvvvvv', value);
             this.item1.push(value);
             if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
               this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
@@ -126,14 +125,15 @@ export class InwardRemittanceAdviceComponent implements OnInit {
           let amount = element.amount
           let commision = parseFloat(element.commision)
           let exchangeRate = parseFloat(element.exchangeRate)
-          this.item1[i].recUSD = (amount - commision).toFixed(2);
+          let pipoamount:any=parseFloat(element?.pipo[0]?.amount)
+          this.item1[i].recUSD = (pipoamount- commision).toFixed(2);
           let cv = (
             parseFloat(this.item1[i].recUSD) * exchangeRate
           ).toFixed(2);
           this.item1[i].convertedAmount = cv != "NaN" ? cv: null;
         });
         this.FILTER_VALUE_LIST= this.item1;
-        console.log('sjsjs', this.item1);
+        console.log('exchangeRate', this.item1);
       },
       (err) => console.log(err)
     );

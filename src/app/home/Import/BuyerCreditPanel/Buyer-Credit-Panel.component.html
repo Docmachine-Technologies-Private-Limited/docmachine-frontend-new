@@ -406,103 +406,317 @@
                         </mat-tab>
                         <mat-tab label="Request for BC Quote">
                             <div class="col-12 p-2">
-                                <div class="row p-0 pb-2 col-12 modal-bg-transparent">
-                                    <h5 class="bg-text">From Client (Request Quote) - Select BOE</h5>
-                                    <div class="d-flex col-12 p-0">
-                                        <div class="row col-12 mt-0 p-0">
-                                            <div class="row col-12 p-0">
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Applicant Name</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Applicant Name">
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">LC Issuing Bank</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="LC Issuing Bank">
-                                                </div>
-                                            </div>
-                                            <div class="row col-12 p-0">
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Supplier Name</label>
-                                                    <input type="text" class="form-control" placeholder="Supplier Name">
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Supplier Bank Name & SWIFT Code</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Supplier Bank Name & SWIFT Code">
+                                <form [formGroup]="RequestforBCQuote"
+                                    (ngSubmit)="RequestforBCQuoteSubmit(RequestforBCQuote)">
+                                    <div class="row p-0 pb-2 col-12 modal-bg-transparent">
+                                        <div class="d-flex col-12 bg-text">
+                                            <h5 class="bg-text-h5">From Client (Request Quote) - Select BOE</h5>
+                                            <div style="width: 250px;margin-right: 20px !important;">
+                                                <div style="width: 250px;margin-right: 20px !important;">
+                                                    <app-ng-dropdown-custom placeHolderText="Select beneficiary"
+                                                        [items]="this.benneDetail" bindLabel="benneName"
+                                                        bindValue="benneName" [multiple]="false"
+                                                        [(ngModelDropDown)]="DUMP.benneName"
+                                                        (modelChanges)="changepipo($event)">
+                                                    </app-ng-dropdown-custom>
                                                 </div>
                                             </div>
-                                            <div class="row col-12 p-0">
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Currency</label>
-                                                    <input type="text" class="form-control" placeholder="Currency">
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">LC No/BOE No</label>
-                                                    <input type="text" class="form-control" placeholder="LC No/BOE No">
-                                                </div>
+                                            <div style="width: 250px;margin-right: 20px !important;">
+                                                <app-ng-dropdown-custom class="PopupOpen" popup-close="boedropdown"
+                                                    placeHolderText="Select PI/PO or Bill of Entry"
+                                                    [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
+                                                    [multiple]="false" (modelChanges)="DUMP_FUNCTION($event,['Select BOE'],boedropdown);
+                                                this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event" #boeselectdropdown>
+                                                </app-ng-dropdown-custom>
                                             </div>
-                                            <div class="row col-12 p-0">
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">LC/BOE Amount</label>
-                                                    <input type="text" class="form-control" placeholder="LC/BOE Amount">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                        <div class="d-flex col-12 p-0 pt-3">
+                                            <div class="row col-12 mt-0 p-0">
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Applicant Name</label>
+                                                        <!-- <input type="text" class="form-control"
+                                                            formControlName="ApplicantName"
+                                                            [ngModel]="this.COMPANY_DETAILS?.teamName"
+                                                            placeholder="Applicant Name"> -->
+                                                            <ng-custom-input 
+                                                            type="text"
+                                                            formControlName="ApplicantName"
+                                                            [value]="this.COMPANY_DETAILS?.teamName"
+                                                            [(ngInput)]="DUMP.ApplicantName"
+                                                            placeholder="Applicant Name"></ng-custom-input>
+                                                            
+                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.ApplicantName.errors"
+                                                            class='errorText'>
+                                                            <div
+                                                                *ngIf="RequestforBCQuoteformControls.ApplicantName.errors.required">
+                                                                required
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">LC Issuing Bank</label>
+                                                            <ng-custom-input 
+                                                            type="text"
+                                                            formControlName="LCIssuingBank"
+                                                            [(ngInput)]="DUMP.LCIssuingBank"
+                                                            placeholder="LC Issuing Bank"></ng-custom-input>
+                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCIssuingBank.errors"
+                                                            class='errorText'>
+                                                            <div
+                                                                *ngIf="RequestforBCQuoteformControls.LCIssuingBank.errors.required">
+                                                                required
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Tenor</label>
-                                                    <input type="text" class="form-control" placeholder="Tenor">
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Supplier Name</label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="SupplierName"
+                                                            [ngModel]="this.selectedBenne?.benneName"
+                                                            placeholder="Supplier Name">
+                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.SupplierName.errors"
+                                                            class='errorText'>
+                                                            <div
+                                                                *ngIf="RequestforBCQuoteformControls.SupplierName.errors.required">
+                                                                required
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Supplier Bank Name & SWIFT Code</label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="SupplierBankNameSWIFTCode"
+                                                            [ngModel]="this.selectedBenne?.BeneBankName_BeneBankSwiftCode"
+                                                            placeholder="Supplier Bank Name & SWIFT Code">
+                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.SupplierBankNameSWIFTCode.errors"
+                                                            class='errorText'>
+                                                            <div
+                                                                *ngIf="RequestforBCQuoteformControls.SupplierBankNameSWIFTCode.errors.required">
+                                                                required
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row col-12 p-0">
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Commodity</label>
-                                                    <input type="text" class="form-control" placeholder="Commodity">
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Currency</label>
+                                                        <app-ng-dropdown-custom bindLabel="type"
+                                                            placeHolderText="Select Currency"
+                                                            [items]="this.documentService.getCurrencyList()"
+                                                            [multiple]="false"
+                                                            [selectedItems]="this.BOE_DETAILS?.CURRENCY"
+                                                            formControlName="Currency"
+                                                            [(ngModelDropDown)]="RequestforBCQuoteformControls.Currency.value">
+                                                        </app-ng-dropdown-custom>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">LC No/BOE No</label>
+                                                        <input type="text" class="form-control" ngModel
+                                                            [ngModel]="this.BOE_DETAILS?.BOE_NUMBER"
+                                                            formControlName="LCNoBOENo" placeholder="LC No/BOE No">
+                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCNoBOENo.errors"
+                                                            class='errorText'>
+                                                            <div
+                                                                *ngIf="RequestforBCQuoteformControls.LCNoBOENo.errors.required">
+                                                                required
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Latest date of Shipment</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Latest date of Shipment">
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">LC/BOE Amount</label>
+                                                        <input type="text" class="form-control" ngModel
+                                                            [ngModel]="this.BOE_DETAILS?.BOE_AMOUNT"
+                                                            formControlName="LCBOEAmount" placeholder="LC/BOE Amount">
+                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCBOEAmount.errors"
+                                                            class='errorText'>
+                                                            <div
+                                                                *ngIf="RequestforBCQuoteformControls.LCBOEAmount.errors.required">
+                                                                required
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Tenor</label>
+                                                        <input type="text" class="form-control" formControlName="Tenor"
+                                                            [(ngModel)]="RequestforBCQuoteform.Tenor"
+                                                            placeholder="Tenor">
+                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.Tenor.errors"
+                                                            class='errorText'>
+                                                            <div
+                                                                *ngIf="RequestforBCQuoteformControls.Tenor.errors.required">
+                                                                required
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row col-12 p-0">
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Origin Of Goods</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Origin Of Goods">
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Commodity</label>
+                                                        <app-ng-dropdown-custom formControlName="Commodity"
+                                                            placeHolderText="Select Commodity"
+                                                            [(ngModelDropDown)]="RequestforBCQuoteformControls.Commodity.value"
+                                                            [items]="this.COMPANY_DETAILS?.commodity" bindLabel="como"
+                                                            bindValue="como" [multiple]="false">
+                                                        </app-ng-dropdown-custom>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Latest date of Shipment</label>
+                                                        <input type="date" class="form-control"
+                                                            formControlName="LatestdateofShipment"
+                                                            [(ngModel)]="RequestforBCQuoteform.LatestdateofShipment"
+                                                            placeholder="Latest date of Shipment">
+                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LatestdateofShipment.errors"
+                                                            class='errorText'>
+                                                            <div
+                                                                *ngIf="RequestforBCQuoteformControls.LatestdateofShipment.errors.required">
+                                                                required
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Port of Loading</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Port of Loading">
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Origin Of Goods</label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="OriginOfGoods"
+                                                            [ngModel]="this.BOE_DETAILS?.ORIGIN"
+                                                            placeholder="Origin Of Goods">
+                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.OriginOfGoods.errors"
+                                                            class='errorText'>
+                                                            <div
+                                                                *ngIf="RequestforBCQuoteformControls.OriginOfGoods.errors.required">
+                                                                required
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Port of Loading</label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="PortofLoading"
+                                                            [(ngModel)]="RequestforBCQuoteform.PortofLoading"
+                                                            placeholder="Port of Loading">
+                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.PortofLoading.errors"
+                                                            class='errorText'>
+                                                            <div
+                                                                *ngIf="RequestforBCQuoteformControls.PortofLoading.errors.required">
+                                                                required
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row col-12 p-0">
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Pot of Discharge</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Pot of Discharge">
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Port of Discharge</label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="PortofDischarge"
+                                                            [ngModel]="this.BOE_DETAILS?.DISCHARGE_PORT"
+                                                            placeholder="Port of Discharge">
+                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.PortofDischarge.errors"
+                                                            class='errorText'>
+                                                            <div
+                                                                *ngIf="RequestforBCQuoteformControls.PortofDischarge.errors.required">
+                                                                required
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Number of Shipment</label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="NumberofShipment"
+                                                            [(ngModel)]="RequestforBCQuoteform.NumberofShipment"
+                                                            placeholder="Number of Shipment">
+                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.NumberofShipment.errors"
+                                                            class='errorText'>
+                                                            <div
+                                                                *ngIf="RequestforBCQuoteformControls.NumberofShipment.errors.required">
+                                                                required
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Number of Shipment</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Number of Shipment">
-                                                </div>
-                                            </div>
-                                            <div class="row col-12 p-0">
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Confirmation Charges borne by</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Confirmation Charges borne by">
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="inputEmail4">Discounting Charges borne by</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Discounting Charges borne by">
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Confirmation Charges borne by</label>
+                                                        <app-ng-dropdown-custom
+                                                            formControlName="ConfirmationChargesborne"
+                                                            placeHolderText="Select Confirmation Charges borne by"
+                                                            [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
+                                                            [(ngModelDropDown)]="RequestforBCQuoteformControls.ConfirmationChargesborne.value"
+                                                            bindLabel="value" bindValue="value" [multiple]="false"
+                                                            #ConfirmationChargesborne>
+                                                        </app-ng-dropdown-custom>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Discounting Charges borne by</label>
+                                                        <app-ng-dropdown-custom
+                                                            formControlName="DiscountingChargesborne"
+                                                            placeHolderText="Select Discounting Charges borne by"
+                                                            [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
+                                                            [(ngModelDropDown)]="RequestforBCQuoteformControls.DiscountingChargesborne.value"
+                                                            bindLabel="value" bindValue="value" [multiple]="false"
+                                                            #DiscountingChargesborne>
+                                                        </app-ng-dropdown-custom>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Summary Request for BC Quote">
+                            <div class="col-12 p-2">
+                                <div class="row p-0 pb-2 col-12 modal-bg-transparent">
+                                    <div class="d-flex col-12 bg-text">
+                                        <h5 class="bg-text-h5">BC Quote Summary</h5>
+                                        <div style="width: 250px;margin-right: 20px !important;">
+                                            <div style="width: 250px;margin-right: 20px !important;">
+                                                <app-ng-dropdown-custom placeHolderText="Select beneficiary"
+                                                    [items]="this.benneDetail" bindLabel="benneName"
+                                                    bindValue="benneName" [multiple]="false"
+                                                    [(ngModelDropDown)]="RequestforBCQuoteform.benneName"
+                                                    (modelChanges)="changepipo($event)">
+                                                </app-ng-dropdown-custom>
+                                            </div>
+                                        </div>
+                                        <div style="width: 250px;margin-right: 20px !important;">
+                                            <app-ng-dropdown-custom class="PopupOpen" popup-close="boedropdown"
+                                                placeHolderText="Select PI/PO or Bill of Entry"
+                                                [items]="this.SHIPPING_BILL_LIST" bindLabel="value" [multiple]="false"
+                                                (modelChanges)="DUMP_FUNCTION($event,['Select BOE'],boedropdown);
+                                            this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event" #boeselectdropdown>
+                                            </app-ng-dropdown-custom>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-0">
+                                        <table class="table">
+                                            <thead>
+                                                <tr class="table-tr">
+                                                    <th scope="col" class="col-td-th-1">#</th>
+                                                    <th scope="col" class="col-td-th-2">Supplier Name</th>
+                                                    <th scope="col" class="col-td-th-3">LC No/BOE No</th>
+                                                    <th scope="col" class="col-td-th-2">LC/BOE Amount</th>
+                                                    <th scope="col" class="col-td-th-3">Currency</th>
+                                                    <th scope="col" class="col-td-th-3">Tenor</th>
+                                                    <th scope="col" class="col-td-th-3">Lending Bank Name and Swift code
+                                                    </th>
+                                                    <th scope="col" class="col-td-th-3">Term SOFR</th>
+                                                    <th scope="col" class="col-td-th-3">ROI (Spread)</th>
+                                                    <th scope="col" class="col-td-th-3">Arrangement Fee</th>
+                                                    <th scope="col" class="col-td-th-3">Accept/Reject</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </mat-tab>
@@ -689,86 +903,229 @@
     <div class="p-2">
         <div class="row p-0 pb-2 col-12 modal-bg-transparent">
             <h5 class="bg-text">From Client (Request Quote) - Select BOE</h5>
-            <div class="d-flex col-12 p-0">
+            <div class="d-flex col-12 p-0 pt-3" id="FromClientRequest">
                 <div class="row col-12 mt-0 p-0">
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Applicant Name</label>
-                            <input type="text" class="form-control" placeholder="Applicant Name">
+                            <input type="text" class="form-control"
+                                formControlName="ApplicantName"
+                                [ngModel]="this.COMPANY_DETAILS?.teamName"
+                                placeholder="Applicant Name">
+                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.ApplicantName.errors"
+                                class='errorText'>
+                                <div
+                                    *ngIf="RequestforBCQuoteformControls.ApplicantName.errors.required">
+                                    required
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">LC Issuing Bank</label>
-                            <input type="text" class="form-control" placeholder="LC Issuing Bank">
+                            <input type="text" class="form-control"
+                                formControlName="LCIssuingBank"
+                                [(ngModel)]="RequestforBCQuoteform.LCIssuingBank"
+                                placeholder="LC Issuing Bank">
+                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCIssuingBank.errors"
+                                class='errorText'>
+                                <div
+                                    *ngIf="RequestforBCQuoteformControls.LCIssuingBank.errors.required">
+                                    required
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Supplier Name</label>
-                            <input type="text" class="form-control" placeholder="Supplier Name">
+                            <input type="text" class="form-control"
+                                formControlName="SupplierName"
+                                [ngModel]="this.selectedBenne?.benneName"
+                                placeholder="Supplier Name">
+                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.SupplierName.errors"
+                                class='errorText'>
+                                <div
+                                    *ngIf="RequestforBCQuoteformControls.SupplierName.errors.required">
+                                    required
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Supplier Bank Name & SWIFT Code</label>
-                            <input type="text" class="form-control" placeholder="Supplier Bank Name & SWIFT Code">
+                            <input type="text" class="form-control"
+                                formControlName="SupplierBankNameSWIFTCode"
+                                [ngModel]="this.selectedBenne?.BeneBankName_BeneBankSwiftCode"
+                                placeholder="Supplier Bank Name & SWIFT Code">
+                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.SupplierBankNameSWIFTCode.errors"
+                                class='errorText'>
+                                <div
+                                    *ngIf="RequestforBCQuoteformControls.SupplierBankNameSWIFTCode.errors.required">
+                                    required
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Currency</label>
-                            <input type="text" class="form-control" placeholder="Currency">
+                            <app-ng-dropdown-custom bindLabel="type"
+                                placeHolderText="Select Currency"
+                                [items]="this.documentService.getCurrencyList()"
+                                [multiple]="false"
+                                [selectedItems]="this.BOE_DETAILS?.CURRENCY"
+                                formControlName="Currency"
+                                [(ngModelDropDown)]="RequestforBCQuoteformControls.Currency.value">
+                            </app-ng-dropdown-custom>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">LC No/BOE No</label>
-                            <input type="text" class="form-control" placeholder="LC No/BOE No">
+                            <input type="text" class="form-control" ngModel
+                                [ngModel]="this.BOE_DETAILS?.BOE_NUMBER"
+                                formControlName="LCNoBOENo" placeholder="LC No/BOE No">
+                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCNoBOENo.errors"
+                                class='errorText'>
+                                <div
+                                    *ngIf="RequestforBCQuoteformControls.LCNoBOENo.errors.required">
+                                    required
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">LC/BOE Amount</label>
-                            <input type="text" class="form-control" placeholder="LC/BOE Amount">
+                            <input type="text" class="form-control" ngModel
+                                [ngModel]="this.BOE_DETAILS?.BOE_AMOUNT"
+                                formControlName="LCBOEAmount" placeholder="LC/BOE Amount">
+                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCBOEAmount.errors"
+                                class='errorText'>
+                                <div
+                                    *ngIf="RequestforBCQuoteformControls.LCBOEAmount.errors.required">
+                                    required
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Tenor</label>
-                            <input type="text" class="form-control" placeholder="Tenor">
+                            <input type="text" class="form-control" formControlName="Tenor"
+                                [(ngModel)]="RequestforBCQuoteform.Tenor"
+                                placeholder="Tenor">
+                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.Tenor.errors"
+                                class='errorText'>
+                                <div
+                                    *ngIf="RequestforBCQuoteformControls.Tenor.errors.required">
+                                    required
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Commodity</label>
-                            <input type="text" class="form-control" placeholder="Commodity">
+                            <app-ng-dropdown-custom formControlName="Commodity"
+                                placeHolderText="Select Commodity"
+                                [(ngModelDropDown)]="RequestforBCQuoteformControls.Commodity.value"
+                                [items]="this.COMPANY_DETAILS?.commodity" bindLabel="como"
+                                bindValue="como" [multiple]="false">
+                            </app-ng-dropdown-custom>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Latest date of Shipment</label>
-                            <input type="text" class="form-control" placeholder="Latest date of Shipment">
+                            <input type="date" class="form-control"
+                                formControlName="LatestdateofShipment"
+                                [(ngModel)]="RequestforBCQuoteform.LatestdateofShipment"
+                                placeholder="Latest date of Shipment">
+                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LatestdateofShipment.errors"
+                                class='errorText'>
+                                <div
+                                    *ngIf="RequestforBCQuoteformControls.LatestdateofShipment.errors.required">
+                                    required
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Origin Of Goods</label>
-                            <input type="text" class="form-control" placeholder="Origin Of Goods">
+                            <input type="text" class="form-control"
+                                formControlName="OriginOfGoods"
+                                [ngModel]="this.BOE_DETAILS?.ORIGIN"
+                                placeholder="Origin Of Goods">
+                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.OriginOfGoods.errors"
+                                class='errorText'>
+                                <div
+                                    *ngIf="RequestforBCQuoteformControls.OriginOfGoods.errors.required">
+                                    required
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Port of Loading</label>
-                            <input type="text" class="form-control" placeholder="Port of Loading">
+                            <input type="text" class="form-control"
+                                formControlName="PortofLoading"
+                                [(ngModel)]="RequestforBCQuoteform.PortofLoading"
+                                placeholder="Port of Loading">
+                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.PortofLoading.errors"
+                                class='errorText'>
+                                <div
+                                    *ngIf="RequestforBCQuoteformControls.PortofLoading.errors.required">
+                                    required
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
-                            <label for="inputEmail4">Pot of Discharge</label>
-                            <input type="text" class="form-control" placeholder="Pot of Discharge">
+                            <label for="inputEmail4">Port of Discharge</label>
+                            <input type="text" class="form-control"
+                                formControlName="PortofDischarge"
+                                [ngModel]="this.BOE_DETAILS?.DISCHARGE_PORT"
+                                placeholder="Port of Discharge">
+                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.PortofDischarge.errors"
+                                class='errorText'>
+                                <div
+                                    *ngIf="RequestforBCQuoteformControls.PortofDischarge.errors.required">
+                                    required
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Number of Shipment</label>
-                            <input type="text" class="form-control" placeholder="Number of Shipment">
+                            <input type="text" class="form-control"
+                                formControlName="NumberofShipment"
+                                [(ngModel)]="RequestforBCQuoteform.NumberofShipment"
+                                placeholder="Number of Shipment">
+                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.NumberofShipment.errors"
+                                class='errorText'>
+                                <div
+                                    *ngIf="RequestforBCQuoteformControls.NumberofShipment.errors.required">
+                                    required
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Confirmation Charges borne by</label>
-                            <input type="text" class="form-control" placeholder="Confirmation Charges borne by">
+                            <app-ng-dropdown-custom
+                                formControlName="ConfirmationChargesborne"
+                                placeHolderText="Select Confirmation Charges borne by"
+                                [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
+                                [(ngModelDropDown)]="RequestforBCQuoteformControls.ConfirmationChargesborne.value"
+                                bindLabel="value" bindValue="value" [multiple]="false"
+                                #ConfirmationChargesborne>
+                            </app-ng-dropdown-custom>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Discounting Charges borne by</label>
-                            <input type="text" class="form-control" placeholder="Discounting Charges borne by">
+                            <app-ng-dropdown-custom
+                                formControlName="DiscountingChargesborne"
+                                placeHolderText="Select Discounting Charges borne by"
+                                [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
+                                [(ngModelDropDown)]="RequestforBCQuoteformControls.DiscountingChargesborne.value"
+                                bindLabel="value" bindValue="value" [multiple]="false"
+                                #DiscountingChargesborne>
+                            </app-ng-dropdown-custom>
                         </div>
                     </div>
                 </div>

@@ -1,11 +1,10 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
+import { Component, OnInit, ViewChild, } from '@angular/core';
 import { UserService } from "../../../service/user.service";
 import { timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
-import $, { data, event } from 'jquery'
-declare var Flickity: any;
+import $ from 'jquery'
 declare var kendo: any;
 
 import {
@@ -16,7 +15,7 @@ import {
   FormArray,
   FormBuilder,
   FormControl,
-  FormGroup, Validators
+  FormGroup, NgForm, Validators
 } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
@@ -25,10 +24,9 @@ import { AppConfig } from "../../../app.config";
 import { DocumentService } from "../../../service/document.service";
 import { PipoDataService } from "../../../service/homeservices/pipo.service";
 import { WindowInformationService } from '../../../service/window-information.service';
-import { degrees, PDFDocument, PDFPage, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, rgb } from 'pdf-lib';
 import { AprrovalPendingRejectTransactionsService } from '../../../service/aprroval-pending-reject-transactions.service';
 import { MergePdfService } from '../../../service/MergePdf/merge-pdf.service';
-import { forEach } from 'jszip';
 import { MergePdfListService } from '../../merge-pdf-list.service';
 
 @Component({
@@ -46,7 +44,7 @@ export class BuyerCreditPanelComponent implements OnInit {
   benneName: string;
   selectedBankName: any = [];
   selectedBenneId: string;
-  selectedBenneName: string;
+  selectedBenneName: any;
   uploading: boolean = false;
   authToken: any;
 
@@ -78,6 +76,8 @@ export class BuyerCreditPanelComponent implements OnInit {
   public config: DropzoneConfigInterface;
 
   pipoForm: any = FormGroup;
+  RequestforBCQuote: any = FormGroup;
+
   submitted = false;
   selectedItems: any = [];
   selectedBenne: any = [];
@@ -110,17 +110,35 @@ export class BuyerCreditPanelComponent implements OnInit {
     DROPDOWN_BOE: ''
   }
   PARTY_NAME_LIST: any = [];
+  COMPANY_DETAILS: any = [];
 
+  DUMP: any = {
+    benneName: "",
+    ApplicantName: "",
+    LCIssuingBank: "",
+    SupplierName: "",
+    SupplierBankNameSWIFTCode: "",
+    Currency: "",
+    LCNoBOENo: "",
+    LCBOEAmount: "",
+    Commodity: "",
+    LatestdateofShipment: "",
+    OriginOfGoods: "",
+    PortofLoading: "",
+    PortofDischarge: "",
+    NumberofShipment: "",
+    ConfirmationChargesborne: "",
+    DiscountingChargesborne: "",
+  }
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
     public appconfig: AppConfig,
     private formBuilder: FormBuilder,
-    private documentService: DocumentService,
+    public documentService: DocumentService,
     public pipoDataService: PipoDataService,
     public router: Router,
-    private route: ActivatedRoute,
     public wininfo: WindowInformationService,
     public mergerpdf: MergePdfService,
     public pdfmerge: MergePdfListService,
@@ -129,7 +147,6 @@ export class BuyerCreditPanelComponent implements OnInit {
     this.loadFromLocalStorage();
     this.api_base = appconfig.apiUrl;
     this.getDropdownData()
-
   }
 
   async ngOnInit() {
@@ -140,6 +157,10 @@ export class BuyerCreditPanelComponent implements OnInit {
     };
     await this.userService.getUserDetail().then((res: any) => {
       this.USER_DATA = res['result'];
+      this.userService.getTeambyId(res?.result?.companyId).subscribe((COMPANY_DETAILS_RES: any) => {
+        this.COMPANY_DETAILS = COMPANY_DETAILS_RES?.data[0];
+        console.log(COMPANY_DETAILS_RES, 'COMPANY_DETAILS_RES')
+      })
     });
     this.config = {
       url: `${this.api_base}/member/uploadImage`,
@@ -163,6 +184,25 @@ export class BuyerCreditPanelComponent implements OnInit {
       totalremittanceAmount: new FormControl("", Validators.required),
       selectedremittanceAmount: new FormControl("", Validators.required),
       BOETerm: new FormArray([this.initItems()]),
+    });
+    this.RequestforBCQuote = this.formBuilder.group({
+      benneName: new FormControl('', Validators.required),
+      ApplicantName: new FormControl('', Validators.required),
+      LCIssuingBank: new FormControl('', Validators.required),
+      SupplierName: new FormControl("", Validators.required),
+      SupplierBankNameSWIFTCode: new FormControl("", Validators.required),
+      Currency: new FormControl("", Validators.required),
+      LCNoBOENo: new FormControl('', Validators.required),
+      LCBOEAmount: new FormControl('', Validators.required),
+      Commodity: new FormControl("", Validators.required),
+      LatestdateofShipment: new FormControl("", Validators.required),
+      OriginOfGoods: new FormControl("", Validators.required),
+      PortofLoading: new FormControl('', Validators.required),
+      PortofDischarge: new FormControl('', Validators.required),
+      NumberofShipment: new FormControl("", Validators.required),
+      ConfirmationChargesborne: new FormControl("", Validators.required),
+      DiscountingChargesborne: new FormControl("", Validators.required),
+      Tenor: new FormControl("", Validators.required),
     });
   }
 
@@ -215,17 +255,17 @@ export class BuyerCreditPanelComponent implements OnInit {
   changepipo(value) {
     this.selectedBenne = this.benneDetail.filter((item) => item?.benneName?.includes(value))[0];
     this.documentService.getBoedatabyPartName(value).subscribe((res: any) => {
-      console.log('Data fetched successfully', res);
+      console.log('Data fetched successfully', res, this.RequestforBCQuote,this.DUMP);
       this.pipoData = res.data;
       for (let index = 0; index < res.data.length; index++) {
         this.LIST_PIPO[res.data[index]['_id']] = res.data[index];
       }
       for (let index = 0; index < res?.data.length; index++) {
         res.data[index]['isExpand'] = false;
-        if (res?.data[index]?.balanceAmount =='-1') {
+        if (res?.data[index]?.balanceAmount == '-1') {
           res.data[index]['balanceAmount'] = res?.data[index]?.invoiceAmount
         }
-        if (res?.data[index]?.balanceAmount!='0') {
+        if (res?.data[index]?.balanceAmount != '0') {
           this.PIPO_LIST['data'].push(res?.data[index]);
         }
         this.PIPO_LIST['original_data'].push(res?.data[index])
@@ -247,6 +287,7 @@ export class BuyerCreditPanelComponent implements OnInit {
     },
       (err) => console.log(err)
     );
+    this.selectedBenne['BeneBankName_BeneBankSwiftCode'] = this.selectedBenne?.beneBankName + ' & ' + this.selectedBenne?.beneBankSwiftCode
     console.log('this.selectedBenneName', this.selectedBenne);
   }
   DATA: any = [];
@@ -488,6 +529,12 @@ export class BuyerCreditPanelComponent implements OnInit {
     return this.pipoForm.controls;
   }
 
+  get RequestforBCQuoteform() {
+    return this.RequestforBCQuote.value;
+  }
+  get RequestforBCQuoteformControls() {
+    return this.RequestforBCQuote.controls;
+  }
   getData(data, id): any {
     return data[id];
   }
@@ -728,6 +775,27 @@ export class BuyerCreditPanelComponent implements OnInit {
             }
           })
         });
+        kendo.drawing.drawDOM($("#FromClientRequest"), {
+          paperSize: "A4",
+          margin: "0cm",
+          scale: 0.7,
+          forcePageBreak: ".page-break"
+        }).then(function (group) {
+          return kendo.drawing.exportPDF(group, {
+            paperSize: "A4",
+            margin: "0cm",
+            scale: 0.7,
+            forcePageBreak: ".page-break"
+          });
+        }).done(async (data) => {
+          console.log(data, 'FromClientRequest')
+          await this.userService?.UploadS3Buket({
+            fileName: this.guid() + '.pdf', buffer: data,
+            type: 'application/pdf'
+          }).subscribe(async (pdfresponse: any) => {
+            console.log(pdfresponse, 'response FromClientRequest')
+          });
+        });
       });
       await this.mergerpdf.mergePdf(this.ALL_DOCUMENTS).then((merge: any) => {
         this.MERGE_PDF.push(merge)
@@ -749,6 +817,7 @@ export class BuyerCreditPanelComponent implements OnInit {
         }
       })
     }
+
   }
   guid() {
     let s4 = () => {
@@ -849,6 +918,8 @@ export class BuyerCreditPanelComponent implements OnInit {
     //   this.ADVANCE_REMMITANCE[this.FILTER_PIPO_DATA?.boeRef[index]?.boeNumber] = [];
     // }
   }
+  BOE_DETAILS: any = [];
+
   choosenItems(event, id, i, item: any) {
     if (event.target.checked == true) {
       this.ITEM_FILL_PDF[i] = (item);
@@ -881,6 +952,27 @@ export class BuyerCreditPanelComponent implements OnInit {
           name: 'commercial',
         });
       }
+    }
+    this.BOE_DETAILS = [];
+    var tempboenumber: any = [];
+    var tempboeamount: any = [];
+    var tempboecurrency: any = [];
+    var tempboeorigin: any = [];
+    var tempboedischargePort: any = [];
+
+    this.MAIN_DATA.forEach(element => {
+      tempboenumber.push(element?.boeNumber)
+      tempboeamount.push(element?.balanceAmount)
+      tempboecurrency.push(element?.currency)
+      tempboeorigin.push(element?.origin)
+      tempboedischargePort.push(element?.dischargePort)
+    });
+    this.BOE_DETAILS = {
+      BOE_NUMBER: tempboenumber.join(','),
+      BOE_AMOUNT: tempboeamount.join(','),
+      CURRENCY: tempboecurrency.join(','),
+      ORIGIN: tempboeorigin.join(','),
+      DISCHARGE_PORT: tempboedischargePort.join(',')
     }
     console.log(this.MAIN_DATA, item, this.ITEM_FILL_PDF, 'selectedItemsselectedItems')
     this.sumTotalAmount = this.ITEM_FILL_PDF.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.invoiceAmount), 0);
@@ -922,6 +1014,7 @@ export class BuyerCreditPanelComponent implements OnInit {
     }
   }
   PIPO_SELECTED_DATA_INDEX: any = [];
+
   PIPO_SELECTED_INDEX(index: any, data: any) {
     console.log(index, data, 'PIPO_SELECTED_INDEX')
     this.PIPO_SELECTED_DATA_INDEX = { index: index, data: data }
@@ -985,6 +1078,31 @@ export class BuyerCreditPanelComponent implements OnInit {
     $('.table-type').removeClass('table-active')
     $('.table-tr-1').removeClass('Table-Show')
     $('.table-tr-1').addClass('Table-Hide')
+  }
+
+  RequestforBCQuoteSubmitbtn: boolean = false;
+  RequestforBCQuoteSubmit(value: any) {
+    this.FORM_CHECK_VALUE(value?.value).then((res: any) => {
+      console.log(value, res, 'RequestforBCQuote')
+      if (res == true) {
+        this.toastr.error('Please check some input filed is empty...');
+        this.RequestforBCQuoteSubmitbtn = true;
+        return;
+      }
+      this.RequestforBCQuoteSubmitbtn = false;
+    })
+
+  }
+  async FORM_CHECK_VALUE(value: any) {
+    let tempbol: boolean = false;
+    for (const key in value) {
+      console.log(value)
+      if (value[key] == '' || value[key] == null || value[key] == undefined) {
+        tempbol = true;
+        break;
+      }
+    }
+    return await tempbol;
   }
 }
 
