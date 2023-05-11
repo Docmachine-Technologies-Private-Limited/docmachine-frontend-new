@@ -144,7 +144,7 @@
                   [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME" bindLabel="pi_po_buyerName"
                   [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
                   [(ngModel)]="this.PIPO_LIST" bindValue="testFunctionID"
-                  (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                  (change)="clickPipo(CommercialNumber?.selectedItems,documentType)" #CommercialNumber>
                 </ng-select>
                 <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0"
                   [items]="[]" bindLabel="pi_po_buyerName"
@@ -168,7 +168,7 @@
                   *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length==0"
                   [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME" bindLabel="pi_po_buyerName"
                   [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
-                  bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+                  bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems,documentType)" #CommercialNumber>
                 </ng-select>
 
                 <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0"
@@ -228,7 +228,7 @@
           <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
             [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME" bindLabel="pi_po_buyerName"
             [(ngModel)]="this.PIPO_LIST" [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true"
-            placeholder="Select PI/PO" bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems)"
+            placeholder="Select PI/PO" bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems,documentType)"
             #CommercialNumber>
           </ng-select>
         </div>
@@ -240,7 +240,7 @@
               [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME" bindLabel="pi_po_buyerName"
               [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
               [(ngModel)]="this.PIPO_LIST" bindValue="testFunctionID"
-              (change)="clickPipo(CommercialNumber?.selectedItems)" #CommercialNumber>
+              (change)="clickPipo(CommercialNumber?.selectedItems,documentType)" #CommercialNumber>
             </ng-select>
           </div>
           <div class="column col-5">
@@ -1016,7 +1016,16 @@
               </div>
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">PARTY NAME</label>
-                <input class="form-control p-3" name="partyName" [(ngModel)]="PDF_READER_DATA.partyName">
+                <!-- <input class="form-control p-3" name="partyName" [(ngModel)]="PDF_READER_DATA.partyName"> -->
+                <ng-select class="custom" *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
+                bindLabel="value" bindValue="value" [multiple]="false" placeholder="Select Party Name" name="partyName" ngModel></ng-select>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">CURRENCY*</label>
+                <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                  bindLabel="type" [multiple]="false" ngModel placeholder="Select Currency"
+                  name="currency" required>
+                </ng-select>
               </div>
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">TT AMOUNT</label>
@@ -1074,6 +1083,15 @@
                   </option>
                 </select>
               </div>
+              <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Payment Type*</label>
+                  <ng-select class="custom" [items]="[{value:'Advance Import Payment'},{value:'Direct Import Payment'},{value:'Service Payment'}]"
+                    bindLabel="value" [multiple]="false" placeholder="Select Payment Type"
+                    name="PaymentType" ngModel required>
+                  </ng-select>
+                </div>
+              </div>
               <button type="submit" class="btn btn-primary">Submit</button>
             </div>
           </div>
@@ -1102,7 +1120,15 @@
               <div class="col-md-6 col-sm-6 col-xs-12 col-12">
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">PARTY NAME</label>
-                  <input ngModel class="form-control p-3" name="partyName" [(ngModel)]="this.PDF_READER_DATA.partyName">
+                  <ng-select class="custom" *ngIf="this.benneDetail?.length!=0" [items]="this.benneDetail"
+                  bindLabel="benneName" bindValue="benneName" [multiple]="false" placeholder="Select Party Name" name="partyName" ngModel></ng-select>
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">CURRENCY*</label>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                    bindLabel="type" [multiple]="false" ngModel placeholder="Select Currency"
+                    name="currency" required>
+                  </ng-select>
                 </div>
               </div>
               <div class="col-md-6 col-sm-6 col-xs-12 col-12">
@@ -1184,6 +1210,15 @@
                       {{ ori }}
                     </option>
                   </select>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Payment Type*</label>
+                  <ng-select class="custom" [items]="[{value:'Advance Import Payment'},{value:'Direct Import Payment'},{value:'Service Payment'}]"
+                    bindLabel="value" [multiple]="false" placeholder="Select Payment Type"
+                    name="PaymentType" ngModel required>
+                  </ng-select>
                 </div>
               </div>
               <div class="col-md-6 col-sm-6 col-xs-12 col-12">
@@ -1658,6 +1693,43 @@
           (ngSubmit)="onSubmitPackingList(values)">
           <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
           <div class="field">
+            <div class="row">
+              <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Select Advance no.</label>
+                  <app-ng-dropdown-custom
+                  class="PopupOpen"
+                  popup-close="UPLOAD_ORM_POPUP"
+                  bindLabel="value"
+                  placeHolderText="Select Advance no."
+                  [items]="[{value:'Advance no.'}]"
+                  [multiple]="false">
+              </app-ng-dropdown-custom>
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Advance No</label>
+                  <!-- <ng-custom-input type="text" name="AdvanceNo"
+                  [value]="this.ORM_SELECTION_DATA?.billNo"
+                  placeHolderText="Advance No."></ng-custom-input> -->
+                  <input class="form-control p-3" type="text" name="AdvanceNo" [ngModel]="this.ORM_SELECTION_DATA?.billNo">
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Advance Currency</label>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                  bindLabel="type" [multiple]="false" placeholder="Select Advance Currency"
+                  name="AdvanceCurrency" ngModel>
+                </ng-select>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Advance AMOUNT</label>
+                  <input ngModel class="form-control p-3" name="AdvanceAmount" [ngModel]="this.ORM_SELECTION_DATA?.amount">
+                </div>
+              </div>
+            </div>
             <div class="form12 p-3">
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Packing List Number*</label>
@@ -1669,8 +1741,6 @@
               </div>
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Currency</label>
-                <!-- <input ngModel class="form-control p-3" type="text"
-                  name="currency"> -->
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
                   bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
                   name="currency" ngModel>
@@ -1682,8 +1752,8 @@
                   <div>
                     <select class="form-control p-3" aria-label="Default select example" class="form-control p-3"
                       name="sbNo" ngModel placeholder="Location">
-                      <option value="">Select SB Number</option>
-                      <option *ngFor="let sb of this.SHIPPING_BILL_LIST; let i=index" [value]="sb._id">
+                      <option value="">Select BOE Number</option>
+                      <option *ngFor="let sb of this.pipoDataService.SHIPPING_BILL_LIST; let i=index" [value]="sb._id">
                         {{ sb.sbno }}
                       </option>
                     </select>
@@ -1915,11 +1985,8 @@
           <div class="modal-body">
             <div class="container-fluid">
               <div class="row no-gutter">
-
-                <!-- The content half -->
                 <div class="col-md-7 bg-dark">
                   <div class="login d-flex py-5" style="padding: 0px !important;">
-                    <!-- Demo content-->
                     <div class="container">
                       <div class="row p-3">
                         <div class="col-lg-10 col-xl-7 mrg">
@@ -1962,7 +2029,6 @@
                                 placeholder="Ex: street address, City. PIN" required=""
                                 class="form-control p-4 rounded-pill email">
                             </div>
-
                             <div class="form-group mb-3">
                               <label class="plable">Intermediary Bank details (if applicable) SWIFT code**</label>
                               <input formControlName="interBankSwiftCode"
@@ -1974,45 +2040,29 @@
                               <input formControlName="interBankName" id="inputEmail" type="text"
                                 placeholder="Ex: Western union" required="" class="form-control p-4 rounded-pill">
                             </div>
-
                             <div class="form-group mb-3">
                               <label class="plable">Sort Code</label>
                               <input formControlName="sortCode" placeholder="Ex: ESEIEC." required=""
                                 class="form-control p-4 rounded-pill">
                             </div>
-
                             <button type="submit" class="btn11" (click)="modal.dismiss('Cross click')">Create</button>
                           </form>
 
                         </div>
                       </div>
                     </div>
-                    <!-- End -->
-
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
-
         </ng-template>
         <ng-template #content1 let-modal>
-
           <div class="modal-body">
             <div class="container-fluid">
               <div class="row no-gutter">
-                <!-- The image half -->
-                <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
-
-
-                <!-- The content half -->
                 <div class="col-md-7 bg-dark">
                   <div class="login d-flex py-5" style="padding: 0px !important;">
-                    <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                  <span aria-hidden="true">&times;</span>
-                </button> -->
-                    <!-- Demo content-->
                     <div class="container">
                       <div class="row p-3">
                         <div class="col-lg-10 col-xl-7 mrg">
@@ -2030,22 +2080,49 @@
                             </div>
                             <button type="submit" class="btn11">Create</button>
                           </form>
-
                         </div>
                       </div>
                     </div>
-                    <!-- End -->
-
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
-
         </ng-template>
-
       </main>
     </div>
   </div>
 </div>
+
+<app-custom-model modalbodyheight="70vh" [FooterButton]="true" EventButton="false"
+    [customstyle]="{'max-width':'85vw !important'}"
+    class="p-2 mt-2" height="80vh" id="UPLOAD_ORM_POPUP"
+    [name]="'ORM Selection'" >
+    <div class="p-2">
+        <div class="row p-2 col-12 modal-bg">
+            <div class="d-flex col-12" style="height:80vh;">
+                <div class="row col-12 mt-0">
+                    <table class="table">
+                        <thead>
+                            <tr class="table-tr">
+                                <th scope="col" class="col-td-th-1">#</th>
+                                <th scope="col" class="col-td-th-2">Advance ref no.</th>
+                                <th scope="col" class="col-td-th-2">Advance Amount</th>
+                                <th scope="col" class="col-td-th-2">Advance Available Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-tr" *ngFor="let item of this.ORM_BY_PARTY_NAME;let i=index">
+                                <td scope="col" class="col-td-th-1"><input type="checkbox" id="orm_checkbox" (change)="ORM_SELECTION($event,i,item)" /></td>
+                                <td scope="col" class="col-td-th-2">{{item?.billNo}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.amount}}</td>
+                                <td scope="col" class="col-td-th-2">
+                                    {{item?.AvailableAmount!='0'?item?.AvailableAmount:item?.amount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-custom-model>

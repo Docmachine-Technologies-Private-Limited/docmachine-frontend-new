@@ -129,7 +129,8 @@
                                                 <th scope="col" class="col-td-th-3">SB Number</th>
                                                 <th scope="col" class="col-td-th-2">Party Name</th>
                                                 <th scope="col" class="col-td-th-2">Bank Name</th>
-                                                <th scope="col" class="col-td-th-3">TT Amount USD</th>
+                                                <th scope="col" class="col-td-th-3">Currency</th>
+                                                <th scope="col" class="col-td-th-3">TT Amount</th>
                                                 <th scope="col" class="col-td-th-3">From</th>
                                                 <th scope="col" class="col-td-th-3">Branch</th>
                                                 <th scope="col" class="col-td-th-3">Description</th>
@@ -139,7 +140,8 @@
                                                 <th scope="col" class="col-td-th-3">Conversion Date</th>
                                                 <th scope="col" class="col-td-th-3">Conversion Rate</th>
                                                 <th scope="col" class="col-td-th-3">Converted Amount</th>
-                                                <th scope="col" class="col-td-th-3">FIRX Number/ID</th>
+                                                <th scope="col" class="col-td-th-3">FIRX Number</th>
+                                                <th scope="col" class="col-td-th-3">Payment Type</th>
                                                 <th scope="col" class="col-td-th-3">Available Balance</th>
                                                 <th scope="col" class="col-td-th-3">Action</th>
 
@@ -200,7 +202,9 @@
                                                         {{data.BankName?.value}}
                                                     </div>
                                                 </td>
-                                                
+                                                <td class="col-td-th-3">
+                                                    {{data.currency}}
+                                                </td>
                                                 <td class="col-td-th-3">
                                                     <div *ngIf="!optionsVisibility[i]">
                                                         {{data.amount}}
@@ -320,6 +324,9 @@
                                                     <div *ngIf="optionsVisibility[i]">
                                                         <input class="tblInput form-control" name="firxNumber" type="text" placeholder="FIRX Number/ID" [(ngModel)]="data.billNo">
                                                     </div>
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    {{data.PaymentType}}
                                                 </td>
                                                 <td class="col-td-th-3">
                                                     {{data.BalanceAvail}}

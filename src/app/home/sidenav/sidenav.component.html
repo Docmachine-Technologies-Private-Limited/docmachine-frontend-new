@@ -162,14 +162,10 @@
                   </h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-packing-list')">Packing List
-                    Documents
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/import-packing-list')">Packing List Invoice
                   </h6>
                 </li>
-                <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Buyer-Credit-Panel')">Buyer Credit
-                  </h6>
-                </li>
+             
               </ul>
             </li>
             <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
@@ -185,14 +181,14 @@
                     Outward
                     Remittance(Old)</h6>
                 </li> -->
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/direct-import-payment')">Direct Import
                     Payment(Old)
                   </h6>
-                </li>
+                </li> -->
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Import-Direct-Payment')">Direct Import
-                    Payment(New)
+                    Payment
                   </h6>
                 </li>
                 <li class="nav-item">
@@ -210,8 +206,12 @@
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/lc-isurance')">LC-Issuance</h6>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/buyer-credit')">Buyer Credit</h6>
+                </li> -->
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Buyer-Credit-Panel')">Buyer Credit
+                  </h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0"
@@ -387,7 +387,7 @@
                 </li>
               </ul>
             </li>
-            <li *ngIf="this.userData['role']=='member'">
+            <li *ngIf="this.userData['role']=='member'  && this.documentService.EXPORT_IMPORT['export']==true">
               <a href="#EDPMS" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">EDPMS</a>
               <ul class="collapse list-unstyled" id="EDPMS">
                 <li class="nav-item">
@@ -395,6 +395,20 @@
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/edpms-recon-table')">EDPMS Recon Table</h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Excel-Downloader')">Report</h6>
+                </li>
+              </ul>
+            </li>
+            <li *ngIf="this.userData['role']=='member'  && this.documentService.EXPORT_IMPORT['import']==true">
+              <a href="#IDPMS" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">IDPMS</a>
+              <ul class="collapse list-unstyled" id="IDPMS">
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/edpms-recon')">IDPMS Recon</h6>
+                </li>
+                <li class="nav-item">
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/edpms-recon-table')">IDPMS Recon Table</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Excel-Downloader')">Report</h6>

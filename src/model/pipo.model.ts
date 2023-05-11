@@ -179,7 +179,7 @@ export class PipoDisplayListViewItem {
     this.initValues(data);
   }
   initValues(data: any)  {
-    console.log(data,'dafdsfkjdsfndskjfdfdsfdsfdsfd')
+    // console.log(data,'dafdsfkjdsfndskjfdfdsfdsfdsfd')
     this._id = data?._id ? data?._id : '';
     this.pi_poNo = data?.pi_poNo ? data?.pi_poNo : '';
     this.date = data?.date ? data?.date : '';

@@ -81,7 +81,6 @@ export class BuyerCreditPanelComponent implements OnInit {
   submitted = false;
   selectedItems: any = [];
   selectedBenne: any = [];
-  LIST_PIPO: any = [];
   sumTotalAmount = 0;
   showOpinionReport = 0;
   showSummaryPage = 0;
@@ -107,7 +106,7 @@ export class BuyerCreditPanelComponent implements OnInit {
     BOE_PIPO: [],
     Beneficiary: [],
     Bank: [],
-    DROPDOWN_BOE: ''
+    DROPDOWN_BOE: []
   }
   PARTY_NAME_LIST: any = [];
   COMPANY_DETAILS: any = [];
@@ -257,9 +256,6 @@ export class BuyerCreditPanelComponent implements OnInit {
     this.documentService.getBoedatabyPartName(value).subscribe((res: any) => {
       console.log('Data fetched successfully', res, this.RequestforBCQuote,this.DUMP);
       this.pipoData = res.data;
-      for (let index = 0; index < res.data.length; index++) {
-        this.LIST_PIPO[res.data[index]['_id']] = res.data[index];
-      }
       for (let index = 0; index < res?.data.length; index++) {
         res.data[index]['isExpand'] = false;
         if (res?.data[index]?.balanceAmount == '-1') {
@@ -273,7 +269,7 @@ export class BuyerCreditPanelComponent implements OnInit {
           this.PIPO_LIST['PIPO_NAME_LIST'].push({ value: res?.data[index]?.pi_poNo, id: res?.data[index]?._id })
         }
       }
-      console.log('importpipolist', this.pipoData, this.LIST_PIPO);
+      console.log('importpipolist', this.pipoData);
       this.documentService.getbyPartyName(value).subscribe((res: any) => {
         console.log(res, 'getbyPartyName');
         this.ORM_BY_PARTY_NAME = res?.data;

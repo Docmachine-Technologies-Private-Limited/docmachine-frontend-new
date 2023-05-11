@@ -5,8 +5,8 @@ import { AuthGuard } from './service/authguard.service';
 @Injectable()
 export class AppConfig {
     public apiUrl = '';
-    // public DEV_STAGGING_LIVE:any=['①']
-    public DEV_STAGGING_LIVE:any=['②']
+    public DEV_STAGGING_LIVE:any=['①']
+    // public DEV_STAGGING_LIVE:any=['②']
     constructor(@Inject(PLATFORM_ID) public platformId: Object,public authGuard: AuthGuard) {
       console.log(platformId,'pllllllllllllllllllllllllll')
         if (isPlatformBrowser(this.platformId)) {
@@ -18,8 +18,8 @@ export class AppConfig {
     }
 
     public getConstantsAtServer() {
-         this.apiUrl = `https://stagingbackend.bharathexim.com/v1`;
-        // this.apiUrl = `https://dockerapi.bharathexim.com/v1`;
+        //  this.apiUrl = `https://stagingbackend.bharathexim.com/v1`;
+        this.apiUrl = `https://dockerapi.bharathexim.com/v1`;
         // this.apiUrl = `https://devappapi.bharathexim.com/v1`;
         // this.apiUrl = `http://localhost:8081/v1`;
     }
