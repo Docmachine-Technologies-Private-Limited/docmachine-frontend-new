@@ -102,6 +102,7 @@ export class ForwardContractAddComponent implements OnInit {
         this.documentService.ForwardContractadd(value).subscribe((ForwardContract: any) => {
           console.log(ForwardContract, 'ForwardContract')
           this.toastr.success('ForwardContract added successfully....')
+          window.location.reload();
           this.router.navigate(['home/Forward-Contract-Summary']);
         })
       }
@@ -125,6 +126,7 @@ export class ForwardContractAddComponent implements OnInit {
         this.documentService.ForwardContract_update({ id: this.data?.index, data: value }).subscribe((ForwardContract: any) => {
           console.log(ForwardContract, 'ForwardContract')
           this.toastr.success('ForwardContract updated successfully....')
+          window.location.reload();
           this.router.navigate(['home/Forward-Contract-Summary']);
         })
       }
