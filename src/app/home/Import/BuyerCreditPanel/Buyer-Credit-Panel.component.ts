@@ -867,7 +867,7 @@ export class BuyerCreditPanelComponent implements OnInit {
               console.log(data);
               for (let index = 0; index < this.MAIN_DATA.length; index++) {
                 const element = this.MAIN_DATA[index];
-                let REAMAING_AMOUNT: any = parseFloat(element?.balanceAmount) - parseFloat(element?.Remittance_Amount)
+                let REAMAING_AMOUNT: any = parseFloat(element?.balanceAmount) - parseFloat(this.pipoForm?.controls?.BOETerm?.value[index]?.remittanceAmount);
                 this.documentService.updateBoe({ balanceAmount: REAMAING_AMOUNT, moredata: [element] }, element?._id).subscribe((updateBoeres: any) => {
                   console.log(updateBoeres, 'updateBoeres');
                   if ((index + 1) == this.MAIN_DATA.length) {
@@ -1066,6 +1066,7 @@ export class BuyerCreditPanelComponent implements OnInit {
         }
       });
       this.OTHER_BANK_VISIBLE = true;
+      this.InputKeyPress(index);
       this.fillForm()
     }, 500)
   }
@@ -1074,7 +1075,21 @@ export class BuyerCreditPanelComponent implements OnInit {
     $('.table-tr-1').removeClass('Table-Show')
     $('.table-tr-1').addClass('Table-Hide')
   }
-
+  REMIITANCE_SUM:any='0'
+  REMIITANCE_AMOUNT:any=[];
+  
+  InputKeyPress(index: any) {
+      this.REMIITANCE_SUM = this.pipoForm?.controls?.BOETerm?.value.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
+      this.REMIITANCE_AMOUNT[index]= this.pipoForm?.controls?.BOETerm?.value[index]?.remittanceAmount;
+      this.timeout = setTimeout(() => {
+      if (this.REMIITANCE_SUM>this.MAIN_DATA[index]?.balanceAmount) {
+        this.toastr.error('You added more than amount your boe amount....');
+        this.REMIITANCE_SUM=this.MAIN_DATA[index]?.balanceAmount;
+        this.REMIITANCE_AMOUNT[index]=this.MAIN_DATA[index]?.balanceAmount
+      }
+    },500)
+    console.log(this.pipoForm.controls.BOETerm,this.MAIN_DATA, 'this.pipoForm.controls.pipoTerm')
+  }
   RequestforBCQuoteSubmitbtn: boolean = false;
   RequestforBCQuoteSubmit(value: any) {
     console.log(value, $("#FromClientRequest"), 'RequestforBCQuote')

@@ -35,7 +35,7 @@
                                                 <div id="first">
                                                     <app-import-letterhead type="Import-Direct-Payment"
                                                         *ngIf="this.OTHER_BANK_VISIBLE==true"
-                                                        [data]="[this.BANK_DETAILS,this.ITEM_FILL_PDF,this.selectedBenne,this.Remittance_Amount]"></app-import-letterhead>
+                                                        [data]="[this.BANK_DETAILS,this.MAIN_DATA,this.selectedBenne,this.Remittance_Amount]"></app-import-letterhead>
                                                 </div>
                                                 <div class="new_left_sidedoc pdf_invoce_scroll"
                                                     *ngIf="selectedItems.length!=0">
@@ -193,8 +193,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-                                                            <div class="col-md-10 col-12">
+                                                            <!-- <div class="col-md-10 col-12">
                                                                 <label for="selectedremittanceAmount"
                                                                     class="form-label">SELECTED Remittance
                                                                     Amount</label>
@@ -209,17 +208,17 @@
                                                                     <div *ngIf="form.remittanceAmount.errors.required">
                                                                         Remittance Amount is required</div>
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
                                                             <div class="col-md-10 col-12">
                                                                 <label for="remittanceAmount"
-                                                                    class="form-label">Remittance
+                                                                    class="form-label">Buyer Credit
                                                                     Amount</label>
                                                                 <input type="text" class="form-control"
                                                                     formControlName="remittanceAmount"
                                                                     id="remittanceAmount"
-                                                                    placeholder="Remittance Amount" ngModel
+                                                                    placeholder="Remittance Amount"
                                                                     autocomplete="off"
-                                                                    maxlength="this.sumTotalAmount.length"
+                                                                    [ngModel]="this.REMIITANCE_AMOUNT[i]"
                                                                     (keyup)="RemittanceAmount($event,i,item?.boeNumber);">
                                                                 <div *ngIf="submitted && form.remittanceAmount.errors"
                                                                     class='errorText'>
@@ -259,7 +258,7 @@
                                                         <input type="text" ngModel
                                                             formControlName="totalremittanceAmount" class="form-control"
                                                             id="totalremittanceAmount"
-                                                            [ngModel]="this.Remittance_Amount"
+                                                            [ngModel]="this.REMIITANCE_SUM"
                                                             placeholder="Remittance amount" readonly>
                                                     </div>
                                                 </div>
