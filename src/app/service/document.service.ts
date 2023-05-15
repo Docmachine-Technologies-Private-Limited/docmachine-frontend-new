@@ -2054,6 +2054,33 @@ export class DocumentService {
     return this.http.post(`${this.api_base}/buyer_beneficiary_credit/update`,data,httpOptions);
   }
   
+  ForwardContractadd(data:any){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ForwardContract/add`,{data:data},httpOptions);
+  }
+  
+  ForwardContractget(){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/ForwardContract/get`,httpOptions);
+  }
+  
+  ForwardContract_update(data){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ForwardContract/update`,data,httpOptions);
+  }
+  
   SendMailNormalTextdcouments(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

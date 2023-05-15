@@ -416,10 +416,10 @@
               </ul>
             </li>
             <li *ngIf="this.userData['role']=='member'  && this.documentService.EXPORT_IMPORT['import']==true ||  this.documentService.EXPORT_IMPORT['export']==true">
-              <a href="#Treasury" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Treasury Module</a>
+              <a href="#Treasury" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Treasury</a>
               <ul class="collapse list-unstyled" id="Treasury">
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/edpms-recon')">Forward Contract</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Forward-Contract-Summary')">Forward Contract</h6>
                 </li>
               </ul>
             </li>

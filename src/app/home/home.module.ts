@@ -98,6 +98,8 @@ import { AdminPanelComponent } from './AdminPanel/admin-panel/admin-panel.compon
 import { SuperAdminPanelComponent } from './SuperAdminPanel/admin-panel/admin-panel.component';
 import {ExportHomeComponent} from "./Export/export-home/export-home.component";
 import { BuyerCreditPanelComponent } from "./Import/BuyerCreditPanel/Buyer-Credit-Panel.component";
+import { ForwardContractAddComponent } from './Import/Treasury/ForwardContract/forward-contract-add/forward-contract-add.component';
+import { ForwardContractSummaryComponent } from './Import/Treasury/ForwardContract/forward-contract-summary/forward-contract-summary.component';
 
 @NgModule({
   declarations: [
@@ -146,7 +148,9 @@ import { BuyerCreditPanelComponent } from "./Import/BuyerCreditPanel/Buyer-Credi
     SuperAdminPanelComponent,
     ExportHomeComponent,
     UploadDocComponent,
-    BuyerCreditPanelComponent
+    BuyerCreditPanelComponent,
+    ForwardContractAddComponent,
+    ForwardContractSummaryComponent
   ],
   imports: [
     SharedHomeModule,
@@ -604,6 +608,18 @@ import { BuyerCreditPanelComponent } from "./Import/BuyerCreditPanel/Buyer-Credi
           }, {
             path: "Transaction-Dashboard/:id",
             component: TransactionDashboardComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
+            path: "Forward-Contract-Summary",
+            component: ForwardContractSummaryComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
+            path: "Forward-Contract-Add",
+            component: ForwardContractAddComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },

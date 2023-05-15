@@ -42,7 +42,6 @@ export class OpenPopUpDirective {
     let panel_id: any = $(event.target).attr('popup-close');
     let hoverpopupopenclose: any = $(event.target).attr('hover-popup-open-close');
     let ngtooltipspopup: any = $(event.target).attr('ng-tooltips-popup');
-
     if (panel_id == $(this.elementRef.nativeElement).attr('id')) {
       this.CUSTOM_MODEL_POPEN_CLOSE(event);
     } else if (hoverpopupopenclose == 'open') {
@@ -76,12 +75,20 @@ export class OpenPopUpDirective {
         }, 100)
       }
     }
-    if (['close-popup', 'btn btn-primary mt-3 PopupClose'].includes(event.target.className)) {
+    if (['close-popup', 'btn btn-primary mt-3 PopupClose','PopupClose'].includes(event.target.className)) {
       if ($(this.elementRef.nativeElement).attr('id') === panel_id) {
         $(children[0]).css({ 'transform': 'translateY(-200%)', 'transition-duration': '.5s' });
         setTimeout(() => {
           $('.dropdown-controller#' + panel_id).css('display', 'none');
         }, 300)
+      }
+      if (ClassList?.includes('close-popup') == true || ClassList?.includes('PopupClose') == true) {
+        if ($(this.elementRef.nativeElement).attr('id') === panel_id) {
+          $(children[0]).css({ 'transform': 'translateY(-200%)', 'transition-duration': '.5s' });
+          setTimeout(() => {
+            $('.dropdown-controller#' + panel_id).css('display', 'none');
+          }, 300)
+        }
       }
     }
   }
