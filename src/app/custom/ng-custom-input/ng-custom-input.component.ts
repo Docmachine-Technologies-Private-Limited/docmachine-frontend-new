@@ -39,6 +39,7 @@ export class NgCustomInputComponent implements OnInit, ControlValueAccessor,Vali
   constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
   ngOnInit(): void {
     this.id = this.randomNameGenerator();
+    console.log(this.ngInput,'ngInput')
     if (this.value != '') {
       this.ngInput = this.value;
       this.modelChanges.emit(this.ngInput);
@@ -51,6 +52,15 @@ export class NgCustomInputComponent implements OnInit, ControlValueAccessor,Vali
     this.modelChanges.emit('');
     this.value = '';
     this.ngInputChanges.emit('');
+  }
+  set ngInputValue(value:any){
+    if (value != '') {
+      this.ngInput = value;
+      this.modelChanges.emit(this.ngInput);
+      this.ngInputChanges.emit(this.ngInput);
+      this.onChange;
+      this.onTouched();
+    }
   }
   onChange: (_: any) => void = (_: any) => {
     console.log(_,this.value,'sdsjfgdjfhdgfjdfgdjfgsdjfdsgf')
@@ -104,7 +114,11 @@ export class NgCustomInputComponent implements OnInit, ControlValueAccessor,Vali
     this.modelChanges.emit(this.ngInput);
     this.ngInputChanges.emit(this.ngInput);
   }
-  
+  datechanges(changes:any){
+    this.ngInput = changes;
+    this.modelChanges.emit(this.ngInput);
+    this.ngInputChanges.emit(this.ngInput);
+  }
   // Validator Interface
   public validate(c: FormControl) {
     return c.errors;

@@ -2027,6 +2027,50 @@ export class DocumentService {
     return this.http.post(`${this.api_base}/task/sendmailnormal`,data,httpOptions);
   }
 
+  buyer_beneficiary_creditadd(data:any){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/buyer_beneficiary_credit/add`,{data:data},httpOptions);
+  }
+  
+  buyer_beneficiary_creditget(){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/buyer_beneficiary_credit/get`,httpOptions);
+  }
+  
+  buyer_beneficiary_credit_update(data){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/buyer_beneficiary_credit/update`,data,httpOptions);
+  }
+  
+  SendMailNormalTextdcouments(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/task/sendmailnormal`,data,httpOptions);
+  }
+  
+  SendMaildocuments(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/task/documentsmail`,data,httpOptions);
+  }
   downloadDocuments(data: any) {
     console.log("downloadDocuments", data)
     const httpOptions: any = {

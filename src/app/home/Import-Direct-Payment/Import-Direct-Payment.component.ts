@@ -222,6 +222,7 @@ export class ImportDirectPaymentComponent implements OnInit {
       }
       for (let index = 0; index < res?.data.length; index++) {
         res.data[index]['isExpand'] = false;
+        res.data[index]['CI_EXPAND'] = false;
         if (res?.data[index]?.balanceAmount =='-1') {
           res.data[index]['balanceAmount'] = res?.data[index]?.invoiceAmount
         }

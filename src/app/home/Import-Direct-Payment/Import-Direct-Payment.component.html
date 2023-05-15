@@ -369,7 +369,7 @@
     </div>
 </div>
 
-<div class="PREVIEW_PAGE" tabindex="-1" #boedropdown style="display: none;background-color: #00000030;">
+<!-- <div class="PREVIEW_PAGE" tabindex="-1" #boedropdown style="display: none;background-color: #00000030;">
     <div class="col-12" *ngIf="this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=='Select BOE'">
         <app-custom-model [FooterButton]="true" EventButton="false"
             [modalbodystyle]="{'max-height':'calc(100vh - 120px) !important'}"
@@ -463,6 +463,153 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </app-custom-model>
+    </div>
+</div> -->
+<div class="PREVIEW_PAGE" tabindex="-1" #boedropdown style="display: none;background-color: #00000030;">
+    <div class="col-12" *ngIf="this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=='Select BOE'">
+        <app-custom-model [FooterButton]="true" EventButton="false"
+            [modalbodystyle]="{'max-height':'calc(100vh - 120px) !important'}"
+            [customstyle]="{'max-width':'100vw !important'}" [buttondisabled]="this.ITEM_FILL_PDF.length!=0?false:true"
+            class="p-2" height="98vh" id="boedropdown" name="BOE Selection Modal">
+            <div class="p-2">
+                <div class="row p-2 modal-bg">
+                    <div class="header-dropdown d-flex" style="gap: 10px;">
+                        <app-ng-dropdown-custom placeHolderText="Select Party Name" [items]="this.ORM_BY_PARTY_NAME"
+                            bindLabel="partyName" bindValue="partyName" [multiple]="false"
+                            (modelChanges)="filterData($event)" #partyname>
+                        </app-ng-dropdown-custom>
+                    </div>
+                    <div class="d-flex" style="height: 76vh;">
+                        <table class="table">
+                            <thead>
+                                <tr class="table-tr">
+                                    <th scope="col" class="col-td-th-1">#</th>
+                                    <th scope="col" class="col-td-th-1">#</th>
+                                    <th scope="col" class="col-td-th-2">BOE Date</th>
+                                    <th scope="col" class="col-td-th-3">BOE No.</th>
+                                    <th scope="col" class="col-td-th-2">Beneficiary Name</th>
+                                    <th scope="col" class="col-td-th-3">CURRENCY</th>
+                                    <th scope="col" class="col-td-th-3">BOE AMOUNT</th>
+                                    <th scope="col" class="col-td-th-3">BOE Balance Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <div class="table-type" *ngFor="let item of this.PIPO_LIST['data'];let i=index"
+                                    [ngClass]="{'table-active':item.isExpand==true}">
+                                    <tr class="table-tr added-active" title="click here see more details">
+                                        <td title="ORM Data Showing and Hide" scope="col" class="col-td-th-1"
+                                            (click)="item.isExpand=!item.isExpand;CloseAllExpand($event,this.PIPO_LIST['data'],i)">
+                                            <span *ngIf="item.isExpand==true" class="fa fa-chevron-up"></span>
+                                            <span *ngIf="item.isExpand==false" class="fa fa-chevron-down"></span>
+                                        </td>
+                                        <td scope="col" class="col-td-th-1">
+                                            <input type="checkbox" (change)="choosenItems($event,item?._id,i,item);" />
+                                        </td>
+                                        <td scope="col" class="col-td-th-2">
+                                            {{item?.boeDate}}</td>
+                                        <td scope="col" class="col-td-th-3">
+                                            {{item?.boeNumber}}</td>
+                                        <td scope="col" class="col-td-th-2">
+                                            {{item?.benneName[0]}}</td>
+                                        <td scope="col" class="col-td-th-3">{{item?.currency}}
+                                        </td>
+                                        <td scope="col" class="col-td-th-3">{{item?.invoiceAmount}}
+                                        </td>
+                                        <td scope="col" class="col-td-th-3">{{item?.balanceAmount}}
+                                        </td>
+                                    </tr>
+                                    <tr class="table-tr table-tr-1 tr-box-shadow"
+                                        [ngClass]="{'Table-Show':item.isExpand==true,'Table-Hide':item.isExpand==false}">
+                                        <td colspan="4" style="width: 100%;border: none;">
+                                            <div class="header">
+                                                <h5>CI Against to this BOE No. : {{item?.boeNumber}}
+                                                </h5>
+                                            </div>
+                                            <div class="center-panel">
+                                                <table class="table table-style">
+                                                    <thead>
+                                                        <tr class="table-tr">
+                                                            <th scope="col" class="col-td-th-1">#</th>
+                                                            <th scope="col" class="col-td-th-2">CI Date</th>
+                                                            <th scope="col" class="col-td-th-3">CI No.</th>
+                                                            <th scope="col" class="col-td-th-2">Beneficiary Name</th>
+                                                            <th scope="col" class="col-td-th-3">CURRENCY</th>
+                                                            <th scope="col" class="col-td-th-3">CI AMOUNT</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr class="table-tr added-active"
+                                                            title="click here see more details">
+                                                            <td title="ORM Data Showing and Hide" scope="col"
+                                                                class="col-td-th-1"
+                                                                (click)="item.CI_EXPAND=!item.CI_EXPAND;">
+                                                                <span *ngIf="item.CI_EXPAND==true"
+                                                                    class="fa fa-chevron-up"></span>
+                                                                <span *ngIf="item.CI_EXPAND==false"
+                                                                    class="fa fa-chevron-down"></span>
+                                                            </td>
+                                                            <td scope="col" class="col-td-th-2">
+                                                                {{item?.CI_DETAILS?.commercialDate}}</td>
+                                                            <td scope="col" class="col-td-th-3">
+                                                                {{item?.CI_DETAILS?.commercialNumber}}</td>
+                                                            <td scope="col" class="col-td-th-2">
+                                                                {{item?.CI_DETAILS?.buyerName[0]}}</td>
+                                                            <td scope="col" class="col-td-th-3">
+                                                                {{item?.CI_DETAILS?.currency}}
+                                                            </td>
+                                                            <td scope="col" class="col-td-th-3">
+                                                                {{item?.CI_DETAILS?.amount}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="table-tr table-tr-2 tr-box-shadow"
+                                                            [ngClass]="{'Table-Show':item.CI_EXPAND==true,'Table-Hide':item.CI_EXPAND==false}">
+                                                            <td colspan="4" style="width: 100%;border: none;">
+                                                                <div class="header">
+                                                                    <h5>ORM Advice Against to this CI No. :
+                                                                        {{item?.CI_DETAILS?.commercialNumber}}
+                                                                    </h5>
+                                                                </div>
+                                                                <div class="center-panel">
+                                                                    <table class="table table-style">
+                                                                        <thead>
+                                                                            <tr class="table-tr">
+                                                                                <th class="col-td-th-2">Bill No.</th>
+                                                                                <th class="col-td-th-2">Beneficiary Name
+                                                                                </th>
+                                                                                <th class="col-td-th-2">Currency</th>
+                                                                                <th class="col-td-th-2">Amount</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr class="table-tr">
+                                                                                <td class="col-td-th-2">{{
+                                                                                    item?.CI_DETAILS?.AdvanceNo }}</td>
+                                                                                <td class="col-td-th-2">{{
+                                                                                    item?.CI_DETAILS?.buyerName}}</td>
+                                                                                <td class="col-td-th-2">{{
+                                                                                    item?.CI_DETAILS?.AdvanceCurrency}}
+                                                                                </td>
+                                                                                <td class="col-td-th-2">{{
+                                                                                    item?.CI_DETAILS?.AdvanceAmount }}
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

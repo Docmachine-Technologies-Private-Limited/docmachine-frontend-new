@@ -1899,7 +1899,14 @@ export class UploadComponent implements OnInit {
     e.form.value.commercialDoc = this.pipourl1;
     console.log('pipoDoc', this.pipourl1);
     e.form.value.buyerName = this.BUYER_LIST;
-
+    
+    let selectedBOE = this.SHIPPING_BILL_LIST.filter((item: any) => item?._id === e?.form?.value?.sbNo)[0];
+    if (this.documentType1=='import') {
+      e.form.value.AdvanceCurrency = e.form.value?.AdvanceCurrency?.type;
+      e.form.value.BoeNo = selectedBOE?.sbno;
+      e.form.value.BoeRef = [selectedBOE?._id];
+      e.form.value.ORM_Ref = [this.ORM_SELECTION_DATA?._id];
+    }
     console.log(e.form.value);
     this.documentService.getInvoice_No({
       commercialNumber: e.form.value.commercialNumber
@@ -2060,18 +2067,18 @@ export class UploadComponent implements OnInit {
 
   // Packing List Submit Button
   onSubmitPackingList(e) {
-    let selectedShippingBill = this.SHIPPING_BILL_LIST.filter((item: any) => item?._id === e?.form?.value?.sbNo)[0];
+    let selectedBOE = this.SHIPPING_BILL_LIST.filter((item: any) => item?._id === e?.form?.value?.sbNo)[0];
     console.log('this is console of blcopy', e.form.value);
     e.form.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
     e.form.value.file = this.documentType1;
     e.form.value.packingDoc = this.pipourl1;
     console.log('pipodoc', this.pipourl1);
-    e.form.value.file = this.documentType1;
     e.form.value.buyerName = this.BUYER_LIST;
     e.form.value.currency = e.form.value?.currency?.type;
-    e.form.value.sbNo = selectedShippingBill?.sbno;
-    e.form.value.sbRef = [selectedShippingBill?._id];
+    e.form.value.sbNo = selectedBOE?.sbno;
+    e.form.value.sbRef = [selectedBOE?._id];
+    
     console.log(e.form.value);
     this.documentService.getInvoice_No({
       packingListNumber: e.form.value.packingListNumber
@@ -2089,8 +2096,8 @@ export class UploadComponent implements OnInit {
             }
             this.documentService.updateMasterBySb(
               updatedDataSB,
-              selectedShippingBill?.sbno,
-              selectedShippingBill?._id
+              selectedBOE?.sbno,
+              selectedBOE?._id
             ).subscribe((data) => {
               console.log('updateMasterBySbupdateMasterBySb', data);
             }, (error) => {
@@ -2112,8 +2119,8 @@ export class UploadComponent implements OnInit {
                   this.documentService
                     .updateMasterBySb(
                       e.form.value,
-                      selectedShippingBill?.sbno,
-                      selectedShippingBill?._id
+                      selectedBOE?.sbno,
+                      selectedBOE?._id
                     ).subscribe(
                       (data) => {
                         console.log('king123');
@@ -2160,10 +2167,6 @@ export class UploadComponent implements OnInit {
       e.form.value.file = this.documentType1;
       e.form.value.buyerName = this.BUYER_LIST;
       e.form.value.currency = e.form.value?.currency?.type;
-      e.form.value.AdvanceCurrency = e.form.value?.AdvanceCurrency?.type;
-      e.form.value.BoeNo = selectedBOE?.sbno;
-      e.form.value.BoeRef = [selectedBOE?._id];
-      e.form.value.ORM_Ref = [this.ORM_SELECTION_DATA?._id];
       console.log(e.form.value);
       this.documentService.getInvoice_No({
         packingListNumber: e.form.value.packingListNumber
@@ -2827,7 +2830,7 @@ export class UploadComponent implements OnInit {
           });
         }
       }
-      if (type == 'import-packingList') {
+      if (type == 'import-commercial') {
         this.documentService.getbyPartyName(LAST_VALUE?.id[1]).subscribe((res: any) => {
           console.log(res, 'getbyPartyName');
           this.ORM_BY_PARTY_NAME = res?.data;

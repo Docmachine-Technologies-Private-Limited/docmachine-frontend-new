@@ -1573,19 +1573,51 @@
           (ngSubmit)="onSubmitCommercialImport(values)">
           <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
           <div class="field">
+            <div class="row">
+              <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Select Advance no.</label>
+                  <app-ng-dropdown-custom
+                  class="PopupOpen"
+                  popup-close="UPLOAD_ORM_POPUP"
+                  bindLabel="value"
+                  placeHolderText="Select Advance no."
+                  [items]="[{value:'Advance no.'}]"
+                  [multiple]="false">
+              </app-ng-dropdown-custom>
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Advance No</label>
+                  <input class="form-control p-3" type="text" name="AdvanceNo" [ngModel]="this.ORM_SELECTION_DATA?.billNo">
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Advance Currency</label>
+                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                  bindLabel="type" [multiple]="false" placeholder="Select Advance Currency"
+                  name="AdvanceCurrency" ngModel>
+                </ng-select>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-12 col-12">
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Advance AMOUNT</label>
+                  <input ngModel class="form-control p-3" name="AdvanceAmount" [ngModel]="this.ORM_SELECTION_DATA?.amount">
+                </div>
+              </div>
+            </div>
             <div class="form12 p-3">
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Commercial Invoice Number*</label>
                 <input ngModel class="form-control p-3" type="text" name="commercialNumber">
               </div>
-
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Currency*</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
                   bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select Currency"
                   name="currency" ngModel></ng-select>
               </div>
-
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Amount*</label>
                 <input ngModel class="form-control p-3" type="text" name="amount">
@@ -1693,43 +1725,6 @@
           (ngSubmit)="onSubmitPackingList(values)">
           <iframe [src]="piPoUrl" width="100%" height="700px"> </iframe>
           <div class="field">
-            <div class="row">
-              <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Select Advance no.</label>
-                  <app-ng-dropdown-custom
-                  class="PopupOpen"
-                  popup-close="UPLOAD_ORM_POPUP"
-                  bindLabel="value"
-                  placeHolderText="Select Advance no."
-                  [items]="[{value:'Advance no.'}]"
-                  [multiple]="false">
-              </app-ng-dropdown-custom>
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Advance No</label>
-                  <!-- <ng-custom-input type="text" name="AdvanceNo"
-                  [value]="this.ORM_SELECTION_DATA?.billNo"
-                  placeHolderText="Advance No."></ng-custom-input> -->
-                  <input class="form-control p-3" type="text" name="AdvanceNo" [ngModel]="this.ORM_SELECTION_DATA?.billNo">
-                </div>
-              </div>
-              <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label">Advance Currency</label>
-                  <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" placeholder="Select Advance Currency"
-                  name="AdvanceCurrency" ngModel>
-                </ng-select>
-                </div>
-              </div>
-              <div class="col-md-6 col-sm-6 col-xs-12 col-12">
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label">Advance AMOUNT</label>
-                  <input ngModel class="form-control p-3" name="AdvanceAmount" [ngModel]="this.ORM_SELECTION_DATA?.amount">
-                </div>
-              </div>
-            </div>
             <div class="form12 p-3">
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Packing List Number*</label>
