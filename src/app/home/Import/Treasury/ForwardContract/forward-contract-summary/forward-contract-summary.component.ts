@@ -18,7 +18,7 @@ export class ForwardContractSummaryComponent implements OnInit {
   authToken: any;
   headers: any
   @ViewChild('epltable', { static: false }) epltable: ElementRef;
-  
+
   constructor(public documentService: DocumentService,
     private toastr: ToastrService,
     public appconfig: AppConfig) {
@@ -39,7 +39,6 @@ export class ForwardContractSummaryComponent implements OnInit {
       addRemoveLinks: true,
       headers: this.headers,
       timeout: 200000,
-      // autoProcessQueue: false,
       dictDefaultMessage: 'Drag a document here',
       acceptedFiles:
         'image/*,application/pdf,.psd,.txt,.doc,.docx,.ppt,.pptx, .pps, .ppsx',
@@ -51,7 +50,7 @@ export class ForwardContractSummaryComponent implements OnInit {
   EDIT_DATA: any = { index: '', data: '' }
   ForwardContract_DATA: any = []
   getForwardContract() {
-    this.ForwardContract_DATA=[];
+    this.ForwardContract_DATA = [];
     this.documentService.ForwardContractget().subscribe((res: any) => {
       this.ForwardContract_DATA = res?.data;
       console.log(res, 'ForwardContract')
@@ -70,7 +69,7 @@ export class ForwardContractSummaryComponent implements OnInit {
     this.uploading = false;
     console.log('onUploadError:', args, args[1].message);
   }
-  
+
   PDF_URL_UPLOAD: any = ''
   public onUploadSuccess(args: any): void {
     console.log('ARGS', args);
@@ -86,26 +85,26 @@ export class ForwardContractSummaryComponent implements OnInit {
     this.EDIT_DATA['index'] = index;
     this.EDIT_DATA['data'] = data;
   }
-  PDF_VIEW_URL:any=''
+  PDF_VIEW_URL: any = ''
   VIEW_DOCUMENTS(index: any, data: any) {
     this.EDIT_DATA['index'] = index;
     this.EDIT_DATA['data'] = data;
-    this.PDF_VIEW_URL=''
-    setTimeout(()=>{this.PDF_VIEW_URL=data?.document},100)
-    console.log(this.EDIT_DATA,'sdfsdfsdfsdfsd')
+    this.PDF_VIEW_URL = ''
+    setTimeout(() => { this.PDF_VIEW_URL = data?.document }, 100)
+    console.log(this.EDIT_DATA, 'sdfsdfsdfsdfsd')
   }
-  UploadDocuments(){
-    this.documentService.ForwardContract_update({ id:this.EDIT_DATA?.index, data:{document:this.PDF_URL_UPLOAD} }).subscribe((ForwardContract: any) => {
+  UploadDocuments() {
+    this.documentService.ForwardContract_update({ id: this.EDIT_DATA?.index, data: { document: this.PDF_URL_UPLOAD } }).subscribe((ForwardContract: any) => {
       console.log(ForwardContract, 'ForwardContract')
       this.toastr.success('ForwardContract updated documents successfully....')
       this.getForwardContract()
     })
   }
-  exportToExcel(){
+  exportToExcel() {
     const ws: xlsx.WorkSheet =
-    xlsx.utils.table_to_sheet(this.epltable.nativeElement);
+      xlsx.utils.table_to_sheet(this.epltable.nativeElement);
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
-    xlsx.writeFile(wb,'ForwardContract.xlsx');
+    xlsx.writeFile(wb, 'ForwardContract.xlsx');
   }
 }

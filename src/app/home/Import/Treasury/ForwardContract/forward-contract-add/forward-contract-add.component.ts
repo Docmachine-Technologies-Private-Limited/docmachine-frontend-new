@@ -43,6 +43,7 @@ export class ForwardContractAddComponent implements OnInit {
     Currency: '',
     BookingAmount: '',
     UtilizedAmount: '',
+    CancellationDate:'',
     CancellationAmount: '',
     AvailableAmount: '',
     FromDate: '',
@@ -55,9 +56,7 @@ export class ForwardContractAddComponent implements OnInit {
     Underlying: '',
   }
   constructor(private toastr: ToastrService,
-    private sanitizer: DomSanitizer,
     public appconfig: AppConfig,
-    private formBuilder: FormBuilder,
     public documentService: DocumentService,
     public pipoDataService: PipoDataService,
     public router: Router,
@@ -78,6 +77,7 @@ export class ForwardContractAddComponent implements OnInit {
         Currency: '',
         BookingAmount: '',
         UtilizedAmount: '',
+        CancellationDate:'',
         CancellationAmount: '',
         AvailableAmount: '',
         FromDate: '',
@@ -114,6 +114,15 @@ export class ForwardContractAddComponent implements OnInit {
     delete value?.userId
     delete value?.__v
     delete value?._id
+    delete value?.date1days
+    delete value?.date3days
+    delete value?.date7days
+    delete value?.dateduesdays
+    delete value?.userDetails
+    delete value?.MailSend1days
+    delete value?.MailSend3days
+    delete value?.MailSend7days
+    delete value?.MailSendduesdays
     
     console.log(value, 'sdfgsjgdjfd')
 
