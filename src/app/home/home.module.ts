@@ -96,10 +96,11 @@ import { PackingCreditRequestComponent } from './Packing-Credit-Request/Packing-
 import { TransactionDashboardComponent } from "../transaction-dashboard/transaction-dashboard.component";
 import { AdminPanelComponent } from './AdminPanel/admin-panel/admin-panel.component';
 import { SuperAdminPanelComponent } from './SuperAdminPanel/admin-panel/admin-panel.component';
-import {ExportHomeComponent} from "./Export/export-home/export-home.component";
+import { ExportHomeComponent } from "./Export/export-home/export-home.component";
 import { BuyerCreditPanelComponent } from "./Import/BuyerCreditPanel/Buyer-Credit-Panel.component";
 import { ForwardContractAddComponent } from './Import/Treasury/ForwardContract/forward-contract-add/forward-contract-add.component';
 import { ForwardContractSummaryComponent } from './Import/Treasury/ForwardContract/forward-contract-summary/forward-contract-summary.component';
+import { RoleBasedSingUpComponent } from "../RoleBased/role-based-sing-up/role-based-sing-up.component";
 
 @NgModule({
   declarations: [
@@ -150,13 +151,14 @@ import { ForwardContractSummaryComponent } from './Import/Treasury/ForwardContra
     UploadDocComponent,
     BuyerCreditPanelComponent,
     ForwardContractAddComponent,
-    ForwardContractSummaryComponent
+    ForwardContractSummaryComponent,
+    RoleBasedSingUpComponent
   ],
   imports: [
     SharedHomeModule,
     MatProgressBarModule,
-    MatNativeDateModule, 
-    MatButtonModule, 
+    MatNativeDateModule,
+    MatButtonModule,
     MatDialogModule,
     MatInputModule,
     MatFormFieldModule,
@@ -223,7 +225,7 @@ import { ForwardContractSummaryComponent } from './Import/Treasury/ForwardContra
           { path: "edpms-recon", loadChildren: () => import('./edpms-recon/edpms-recon.module').then(mod => mod.EdpmsReconModule), canActivate: [MemberGuard] },
           { path: "bill-lodgement", loadChildren: () => import('./Export/bill-lodgement/bill-lodgement.module').then(mod => mod.BillLodgementModule), canActivate: [MemberGuard] },
           { path: "packing-credit-request", loadChildren: () => import('./Export/packing-credit/packing-credit.module').then(mod => mod.PackingCreditModule), canActivate: [MemberGuard] },
-          { path: "export-home",component:ExportHomeComponent, canActivate: [MemberGuard] },
+          { path: "export-home", component: ExportHomeComponent, canActivate: [MemberGuard] },
           { path: "completed-task", loadChildren: () => import('./completed-task/completed-task.module').then(mod => mod.CompletedTaskModule), canActivate: [MemberGuard] },
           { path: "tasks", loadChildren: () => import('./all-task/all-task.module').then(mod => mod.AllTaskModule), canActivate: [MemberGuard] },
           { path: "letter-of-credit", loadChildren: () => import('./yesBank/letter-of-credit/letter-of-credit.module').then(mod => mod.LetterOfCreditModule), canActivate: [MemberGuard] },
@@ -623,8 +625,9 @@ import { ForwardContractSummaryComponent } from './Import/Treasury/ForwardContra
             pathMatch: "full",
             canActivate: [MemberGuard]
           },
-          { path: "SuperAdminPanel", pathMatch: "full",component:SuperAdminPanelComponent, canActivate: [SuperGuard] },
-          { path: "AdminPanel", pathMatch: "full",component:AdminPanelComponent, canActivate: [AdminGuard] },
+          { path: "SuperAdminPanel", pathMatch: "full", component: SuperAdminPanelComponent, canActivate: [SuperGuard] },
+          { path: "AdminPanel", pathMatch: "full", component: AdminPanelComponent, canActivate: [AdminGuard] },
+          { path: "RoleBase", component: RoleBasedSingUpComponent, pathMatch: "full", canActivate: [SuperGuard] },
         ],
       },
     ]),

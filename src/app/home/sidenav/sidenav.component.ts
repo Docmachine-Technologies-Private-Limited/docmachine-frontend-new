@@ -137,6 +137,10 @@ export class SidenavComponent implements OnInit {
     this.router.navigate(['/home/' + url]);
     this.HIDE_ALL_SUB_MENU();
   }
+  navigationByUrlMain(event: any, url: string): void {
+    this.router.navigate([url]);
+    this.HIDE_ALL_SUB_MENU();
+  }
   navigationByUrlParam(event: any, url: string, param: any): void {
     this.router.navigate(['home/' + url, param]);
   }

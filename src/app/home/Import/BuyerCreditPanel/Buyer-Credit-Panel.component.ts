@@ -1180,6 +1180,11 @@ export class BuyerCreditPanelComponent implements OnInit {
       this.SLECTED_BC_QUOTE.push(element)
     });
   }
+  PDF_VIEW_URL: any = ''
+  VIEW_DOCUMENTS(index: any, data: any) {
+    this.PDF_VIEW_URL = ''
+    setTimeout(() => { this.PDF_VIEW_URL = data?.document }, 100)
+  }
   // AcceptReject(id: any, data: any) {
   //   this.AprrovalPendingRejectService.CustomConfirmDialogModel.YesNoDialogModel(`Are you sure you want to ${data?.AcceptReject} this item?`, '', (resmodel) => {
   //     if (resmodel?.value == 'Yes') {

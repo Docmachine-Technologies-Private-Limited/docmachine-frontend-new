@@ -210,14 +210,13 @@
                                                                 </div>
                                                             </div> -->
                                                             <div class="col-md-10 col-12">
-                                                                <label for="remittanceAmount"
-                                                                    class="form-label">Buyer Credit
+                                                                <label for="remittanceAmount" class="form-label">Buyer
+                                                                    Credit
                                                                     Amount</label>
                                                                 <input type="text" class="form-control"
                                                                     formControlName="remittanceAmount"
                                                                     id="remittanceAmount"
-                                                                    placeholder="Remittance Amount"
-                                                                    autocomplete="off"
+                                                                    placeholder="Remittance Amount" autocomplete="off"
                                                                     [ngModel]="this.REMIITANCE_AMOUNT[i]"
                                                                     (keyup)="RemittanceAmount($event,i,item?.boeNumber);">
                                                                 <div *ngIf="submitted && form.remittanceAmount.errors"
@@ -257,8 +256,7 @@
                                                             amount</label>
                                                         <input type="text" ngModel
                                                             formControlName="totalremittanceAmount" class="form-control"
-                                                            id="totalremittanceAmount"
-                                                            [ngModel]="this.REMIITANCE_SUM"
+                                                            id="totalremittanceAmount" [ngModel]="this.REMIITANCE_SUM"
                                                             placeholder="Remittance amount" readonly>
                                                     </div>
                                                 </div>
@@ -330,8 +328,8 @@
                                                         <div class="col-md-6 col-12">
                                                             <label for="exampleInputEmail1"
                                                                 class="form-label">Tenor*</label>
-                                                            <input class="form-control" [value]="item?.Tenor" type="text"
-                                                                disabled>
+                                                            <input class="form-control" [value]="item?.Tenor"
+                                                                type="text" disabled>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -627,6 +625,7 @@
                                                     <th scope="col" class="col-td-th-3">ROI (Spread)</th>
                                                     <th scope="col" class="col-td-th-3">Arrangement Fee</th>
                                                     <th scope="col" class="col-td-th-3">Accept/Reject</th>
+                                                    <th scope="col" class="col-td-th-3">View</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -638,11 +637,10 @@
                                                     <td scope="col" class="col-td-th-2">{{item?.LCBOEAmount}}</td>
                                                     <td scope="col" class="col-td-th-3">{{item?.Currency}}</td>
                                                     <td scope="col" class="col-td-th-3">{{item?.Tenor}}</td>
-                                                    <td scope="col" class="col-td-th-3">
-                                                        {{item?.SupplierBankNameSWIFTCode}}</td>
-                                                    <td scope="col" class="col-td-th-3">-</td>
-                                                    <td scope="col" class="col-td-th-3">-</td>
-                                                    <td scope="col" class="col-td-th-3">-</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.LendingBankNameandSwiftcode}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.TermSOFR}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.ROISpread}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.ArrangementFee}}</td>
                                                     <td scope="col" class="col-td-th-3">
                                                         <div class="d-flex" style="gap: 10px;"
                                                             *ngIf="item?.AcceptReject!='Reject' && item?.AcceptReject!='Accept'">
@@ -657,6 +655,10 @@
                                                                 [ngClass]="{'btn-danger':item?.AcceptReject=='Reject','btn-success':item?.AcceptReject=='Accept'}">{{item?.AcceptReject}}</span>
                                                         </div>
                                                     </td>
+                                                    <th scope="col" class="col-td-th-3">
+                                                        <button class="upload-button btn btn-primary PopupOpen"
+                                                            [attr.popup-close]="'VIEW_DOCUMENTS'" (click)="VIEW_DOCUMENTS(item?._id,item)">View</button>
+                                                    </th>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1063,5 +1065,15 @@
                 </div>
             </div>
         </div>
+    </div>
+</app-custom-model>
+
+<app-custom-model modalbodyheight="80vh"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="90vh"
+    id="VIEW_DOCUMENTS" name="Forward Contract View Documents">
+    <div class="col-12 pb-2" *ngIf="this.PDF_VIEW_URL!=''">
+        <app-pdf-viewer [downloadShow]="false" *ngIf="this.PDF_VIEW_URL!=''" name="Documents" [src]="this.PDF_VIEW_URL" width="100%"
+            height="500px"></app-pdf-viewer>
     </div>
 </app-custom-model>
