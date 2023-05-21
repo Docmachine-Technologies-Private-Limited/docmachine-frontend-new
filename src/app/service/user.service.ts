@@ -68,6 +68,21 @@ export class UserService implements OnInit {
       httpOptions
     );
   }
+  
+  Rolelogin(data: any) {
+    let authToken: any = this.loadFromLocalStorage();
+    console.log(authToken, data);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer " + btoa(data.emailId + ":" + data.password),
+      }),
+    };
+    console.log('httpOptions');
+    console.log(httpOptions);
+    return this.http.post(`${this.api_base}/authenticate/SingIn`, null, httpOptions);
+  }
 
   public getUserbyEmail(loginData) {
     const httpOptions = {
@@ -733,6 +748,7 @@ export class UserService implements OnInit {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
+    // return this.http.post(`${this.api_base}/authenticate/signup`, { user: data});
     return this.http.post(`${this.api_base}/RoleBaseSingInSingUp/SingUp`, data, httpOptions);
   }
   public RoleBaseSingUpupdateEmail(data, email) {
