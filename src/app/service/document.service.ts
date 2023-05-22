@@ -2054,6 +2054,33 @@ export class DocumentService {
     return this.http.post(`${this.api_base}/buyer_beneficiary_credit/update`,data,httpOptions);
   }
   
+  CA_Certificate_add(data:any){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/CA_Certificate/add`,{data:data},httpOptions);
+  }
+  
+  CA_Certificate_get(){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/CA_Certificate/get`,httpOptions);
+  }
+  
+  CA_Certificate_update(data){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/CA_Certificate/update`,data,httpOptions);
+  }
+  
   ForwardContractadd(data:any){
     this.loadFromLocalStorage();
     console.log(this.authToken);

@@ -101,6 +101,7 @@ import { BuyerCreditPanelComponent } from "./Import/BuyerCreditPanel/Buyer-Credi
 import { ForwardContractAddComponent } from './Import/Treasury/ForwardContract/forward-contract-add/forward-contract-add.component';
 import { ForwardContractSummaryComponent } from './Import/Treasury/ForwardContract/forward-contract-summary/forward-contract-summary.component';
 import { RoleBasedSingUpComponent } from "../RoleBased/role-based-sing-up/role-based-sing-up.component";
+import { AddAdvanceOutwardRemittanceA2Component } from "./Import/add-advance-outward-remittance-a2/add-advance-outward-remittance-a2.component";
 
 @NgModule({
   declarations: [
@@ -138,6 +139,7 @@ import { RoleBasedSingUpComponent } from "../RoleBased/role-based-sing-up/role-b
     RemittanceSummaryComponent,
     AddRemittanceComponent,
     AddAdvanceOutwardRemittanceComponent,
+    AddAdvanceOutwardRemittanceA2Component,
     EditCompanyComponent,
     NewBillUnderCollectionComponent,
     NewDirectDispatchComponent,
@@ -569,6 +571,12 @@ import { RoleBasedSingUpComponent } from "../RoleBased/role-based-sing-up/role-b
           {
             path: "add-advance-outward-remittance",
             component: AddAdvanceOutwardRemittanceComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          {
+            path: "add-advance-outward-remittance-a2",
+            component: AddAdvanceOutwardRemittanceA2Component,
             pathMatch: "full",
             canActivate: [MemberGuard]
           },

@@ -507,13 +507,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.uploading = true;
     this.isUploaded = true;
     this.uploadUrl_Original = args[1].data;
-    this.userService.mergePdf(args[1].data).subscribe((res: any) => {
-      res.arrayBuffer().then((data: any) => {
-        this.uploadUrl = data;
-      });
-    });
-
+    this.uploadUrl = args[1].data;
     console.log("this.uploadUrl", this.uploadUrl);
+    this.width=100;
   }
 
   submit(e) {
