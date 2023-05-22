@@ -733,6 +733,12 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       } else {
         temp_doc[0] = this.PREVIWES_URL?.changingThisBreaksApplicationSecurity;
       }
+      var pipo_id: any = [];
+      var pipo_name: any = [];
+      for (let index = 0; index < this.selectedItems.length; index++) {
+        pipo_id.push(this.selectedItems[index]?.pipo_id)
+        pipo_name.push(this.selectedItems[index]?.pipo_no)
+      }
       temp_doc[1] = this.uploadUrl_Original;
       for (let i = 0; i < this.selectedItems.length; i++) {
         for (let index = 0; index < this.temp1[i].length; index++) {
@@ -742,7 +748,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         }
       }
       var approval_data: any = {
-        id: UniqueId,
+        id: UniqueId+'_'+this.randomId(10),
         tableName: 'Advance-Remittance-flow',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
@@ -828,6 +834,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       this.documentService.getDownloadStatus({ id: id, $or: [{ "deleteflag": '-1' }, { "deleteflag": '1' }, { "deleteflag": '2' }] }).subscribe((res: any) => resolve(res[0]))
     })
   }
+  randomId(length = 6) {
+    return Math.random().toString(36).substring(2, length+2);
+  };
 }
 
 // PROFORMA INVOICE
