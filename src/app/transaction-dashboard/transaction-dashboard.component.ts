@@ -7,7 +7,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PipoDataService } from '../service/homeservices/pipo.service';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
-import { AppConfig } from '../app.config';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MergePdfService } from '../service/MergePdf/merge-pdf.service';
 declare var $: any;
@@ -35,13 +34,12 @@ export class TransactionDashboardComponent implements OnInit {
   constructor(private actRoute: ActivatedRoute,
     private documentService: DocumentService,
     private userService: UserService,
-    public appconfig: AppConfig,
     public router: Router,
     public sanitizer: DomSanitizer,
     public pipoDataService: PipoDataService,
     public mergerpdf: MergePdfService,
     public wininfo: WindowInformationService) {
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
   }
 
   UploadUrl: any = '';

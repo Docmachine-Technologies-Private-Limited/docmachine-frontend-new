@@ -1,5 +1,4 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
-
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
@@ -14,12 +13,9 @@ import {
 } from "ngx-dropzone-wrapper";
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { ToastrModule } from 'ngx-toastr';
-// NG Translate
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-
 import { SignupModule } from "./signup/signup.module";
 import { SigninModule } from "./signIn/signin.module";
 import { AppComponent } from "./app.component";
@@ -32,10 +28,8 @@ import { RouterModule } from "@angular/router";
 import { NewUserComponent } from './new-user/new-user.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { NotVerifiedComponent } from './not-verified/not-verified.component';
-import { AppConfig } from '../app/app.config';
 import { MembersigninComponent } from './membersignin/membersignin.component';
 import { PdfComponent } from './pdf/pdf.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { WindowInformationService } from './service/window-information.service'
@@ -90,7 +84,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     RoleVerifyEmailComponent,
   ],
   providers: [
-    { provide: AppConfig },
     WindowInformationService,
     CustomConfirmDialogModelService,
     CustomdropdownservicesService,

@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { AppConfig } from '../../app/app.config';
+import { AppConfig } from '../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from "@angular/router";
 import { BehaviorSubjectListService } from "../home/CommanSubjectApi/BehaviorSubjectListService/BehaviorSubjectList.service";
@@ -15,10 +15,9 @@ export class UserService implements OnInit {
   USER_RESULT: any = [];
   public loginData = new BehaviorSubject({});
   public userDataListener$ = this.loginData.asObservable();
-  constructor(private http: HttpClient, public appconfig: AppConfig, public router: Router, public SubjectListService: BehaviorSubjectListService) {
-    this.api_base = appconfig.apiUrl;
+  constructor(private http: HttpClient, public router: Router, public SubjectListService: BehaviorSubjectListService) {
+    this.api_base = AppConfig.BASE_URL;
     console.log(this.api_base)
-
   }
   ngOnInit(): void {
     // this.SubjectListService.callAllCommonApi();

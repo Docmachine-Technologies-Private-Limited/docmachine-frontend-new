@@ -1,10 +1,7 @@
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '.././../../service/user.service';
-import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AppConfig } from '../../../app.config';
 import { WindowInformationService } from '../../../service/window-information.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -35,7 +32,7 @@ export class SuperAdminPanelComponent implements OnInit {
   SUBCRIPTION_DATA: any = [];
   SUBCRIPTION_CHANGES: any = FormGroup
   constructor(public route?: ActivatedRoute, public formBuilder?: FormBuilder,
-    public userService?: UserService, public appconfig?: AppConfig,
+    public userService?: UserService,
     public sanitizer?: DomSanitizer, public toastr?: ToastrService,
     public elRef?: ElementRef,
     public router?: Router,

@@ -4,7 +4,6 @@ import { UserService } from './../../service/user.service';
 import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AppConfig } from '../../app.config';
 import { WindowInformationService } from '../../service/window-information.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -59,12 +58,12 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   }
   constructor(@Inject(PLATFORM_ID) public platformId,
     public route?: ActivatedRoute, public formBuilder?: FormBuilder,
-    public userService?: UserService, public appconfig?: AppConfig,
+    public userService?: UserService,
     public sanitizer?: DomSanitizer, public toastr?: ToastrService,
     public elRef?: ElementRef,
     public wininfo?: WindowInformationService) {
     this.loadFromLocalStorage()
-    this.api_base = appconfig?.apiUrl;
+    this.api_base = userService?.api_base;
     console.log(this.api_base)
     console.log(this.authToken)
     this.headers = {

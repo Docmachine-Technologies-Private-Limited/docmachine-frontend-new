@@ -27,13 +27,12 @@ import {
 
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AppConfig } from '../../app.config';
 import * as xlsx from 'xlsx';
 import {PipoDataService} from "../../service/homeservices/pipo.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../service/window-information.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 
 @Component({
   selector: 'app-pipo-documents',
@@ -50,24 +49,24 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
 
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
   public type: string = 'directive';
-  public item1 = [];
-  public item = [];
-  public item2;
-  public item3 = [];
-  public item4 = [];
-  public item5 = [];
-  mergedBOE = [];
+  public item1:any = [];
+  public item:any = [];
+  public item2:any;
+  public item3:any = [];
+  public item4:any = [];
+  public item5:any = [];
+  mergedBOE:any = [];
 
-  public user;
-  public selectedRow;
-  public showInvoice = false;
-  public tableWidth;
-  public export = false;
-  public import = false;
-  public lastIndex;
-  public showPdf = false;
-  public greaterAmount = 0;
-  public selectedDoc = '';
+  public user:any;
+  public selectedRow:any;
+  public showInvoice:any = false;
+  public tableWidth:any;
+  public export:any = false;
+  public import:any = false;
+  public lastIndex:any;
+  public showPdf:any = false;
+  public greaterAmount:any = 0;
+  public selectedDoc:any = '';
   public allTransactions: any = [];
   public optionsVisibility: any = [];
   public Ax1: boolean;
@@ -159,13 +158,12 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private toastr: ToastrService,
     private modalService: NgbModal,
-    public appconfig: AppConfig,
     private pipoDataService: PipoDataService,
     public wininfo: WindowInformationService,
     public dialog: MatDialog,
     public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
   ) {
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     console.log(this.api_base);
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -275,7 +273,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   }
 
   mergeBoe() {
-    let filterboedata = [];
+    let filterboedata:any = [];
     if (this.item4 && this.item4.length) {
       for (let pipo of this.item1) {
         for (let boedata of this.item4) {

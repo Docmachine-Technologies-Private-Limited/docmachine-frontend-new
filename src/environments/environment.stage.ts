@@ -1,6 +1,6 @@
 export const AppConfig = {
   production: false,
-  environment: 'Prod',
+  environment: 'Staging',
   BASE_URL: 'https://dockerapi.bharathexim.com/v1',
   SOCKET_ENDPONT: 'https://dockerapi.bharathexim.com'
 };

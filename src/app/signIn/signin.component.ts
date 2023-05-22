@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DocumentService } from '../service/document.service';
 import { AuthGuard } from '../service/authguard.service';
-import { AppConfig } from '../app.config';
+import { AppConfig } from '../../environments/environment'; 
 
 @Component({
   selector: 'app-detail',
@@ -27,11 +27,11 @@ export class SigninComponent implements OnInit {
   closeResult: string;
   CODE: any = [];
   rolebaseddata: any = ['Buyer Credit Aggregator', 'Insurance', 'CA', 'Auditor']
-
+  API_URL:any=AppConfig?.environment;
+  
   constructor(private formBuilder: FormBuilder, private userService: UserService,
     public documentService: DocumentService,
     private router: Router, public authGuard: AuthGuard,
-    public appconfig: AppConfig,
     private toastr: ToastrService, private modalService: NgbModal) {
   }
 

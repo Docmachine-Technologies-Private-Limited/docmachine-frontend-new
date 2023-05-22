@@ -20,7 +20,6 @@ import {
 
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
-import { AppConfig } from "../../app.config";
 import { DocumentService } from "../../service/document.service";
 import { PipoDataService } from "../../service/homeservices/pipo.service";
 import { WindowInformationService } from '../../service/window-information.service';
@@ -95,7 +94,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     private userService: UserService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
-    public appconfig: AppConfig,
     private formBuilder: FormBuilder,
     private documentService: DocumentService,
     public pipoDataService: PipoDataService,
@@ -107,7 +105,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
   ) {
     this.loadFromLocalStorage();
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
   }
 
   async ngOnInit() {

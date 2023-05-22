@@ -1,26 +1,9 @@
 import { Component, Input, OnInit, Output, ViewChild, } from '@angular/core';
-import { UserService } from "../../../../../service/user.service";
-import { timer } from "rxjs";
-import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
-import { ActivatedRoute } from '@angular/router';
 import $ from 'jquery'
 declare var kendo: any;
 
-import {
-  DropzoneDirective,
-  DropzoneConfigInterface,
-} from "ngx-dropzone-wrapper";
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup, NgForm, Validators
-} from '@angular/forms';
-
 import { ToastrService } from 'ngx-toastr';
-import { DomSanitizer } from "@angular/platform-browser";
-import { AppConfig } from "../../../../../app.config";
 import { DocumentService } from "../../../../../service/document.service";
 import { PipoDataService } from "../../../../../service/homeservices/pipo.service";
 import { WindowInformationService } from '../../../../../service/window-information.service';
@@ -56,7 +39,6 @@ export class ForwardContractAddComponent implements OnInit {
     Underlying: '',
   }
   constructor(private toastr: ToastrService,
-    public appconfig: AppConfig,
     public documentService: DocumentService,
     public pipoDataService: PipoDataService,
     public router: Router,

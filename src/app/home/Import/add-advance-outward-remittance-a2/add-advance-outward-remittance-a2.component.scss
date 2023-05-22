@@ -1920,3 +1920,13 @@ table .table-tr-1 {
 .AcceptReject .col-td-th-1 {
     width: 50px;
 }
+
+.modal-bg-transparent {
+    background-color: #fffdfd;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    color: #fff;
+    box-shadow: 0 0 3px 2px #00000063;
+}

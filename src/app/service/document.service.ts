@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpContext, HttpHeaders, HttpParams } from '@angular/common/http';
 import { observable, Observable, of, Subject } from 'rxjs';
-import { AppConfig } from '../../app/app.config';
+// import { AppConfig } from '../../app/app.config';
 import * as data1 from './../currency.json';
 import { Router } from '@angular/router';
+import { AppConfig } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentService {
@@ -21,8 +22,8 @@ export class DocumentService {
   OUTWARD_REMITTANCE_ADVICE_SHEET: any = [];
   MT102_SUBJECT: any = []
 
-  constructor(public http: HttpClient, public appconfig: AppConfig, private router: Router,) {
-    this.api_base = appconfig.apiUrl;
+  constructor(public http: HttpClient, private router: Router,) {
+    this.api_base = AppConfig?.BASE_URL;
     console.log(this.api_base);
   }
   public loadFromLocalStorage() {

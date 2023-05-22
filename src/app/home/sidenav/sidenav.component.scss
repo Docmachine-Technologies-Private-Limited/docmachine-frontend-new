@@ -100,29 +100,25 @@ footer {
 .side-icon {
   padding-left: 15px;
 }
-.side-icon img{
-width: 15px;
-filter: brightness(41);
+
+.side-icon img {
+  width: 15px;
+  filter: brightness(41);
 }
+
 header {
   box-shadow: 1px 1px 5px 0px rgb(227 230 238);
 }
 
 .manager {
-  height: 35px;
-  width: 35px;
+  height: 25px;
+  width: 25px;
   float: left;
+  border: 2px solid #426fde;
   border-radius: 50%;
-  align-items: unset !important;
+  padding: 1px;
 }
 
-// .sidebar-content:hover {
-//     font-family: "Proxima Nova Condensed", sans-serif;
-//     font-weight: 700;
-//     font-size: 16px;
-//     background-color: #49a2d7 !important;
-//     color: #fff;
-// }
 input {
   border: 1px solid #e3e6ee;
   border-radius: 3px;
@@ -189,8 +185,8 @@ select:focus {
 
 #sidebar {
   z-index: 1000;
-  min-width: 200px!important;
-  max-width: 200px!important;
+  min-width: 200px !important;
+  max-width: 200px !important;
 }
 
 .list_margin {
@@ -362,9 +358,6 @@ body {
 
 .left_user_pic {
   float: left;
-  width: 40px;
-  height: 40px;
-  border-radius: 60px;
   overflow: hidden;
 }
 
@@ -376,20 +369,21 @@ body {
 
 .left_user_info h5 {
   display: inline-block;
-  margin: 0px !important;
-  font-size: 15px !important;
-  color: #0A3049;
+  margin: 0 !important;
+  font-size: 12px !important;
+  color: black;
   width: 100%;
-  padding: 0px;
+  padding: 0;
   vertical-align: top;
 }
 
 .left_user_info h6 {
   display: inline-block;
-  margin: 0px !important;
-  font-size: 13px !important;
-  color: #C2C2C2;
+  margin: 0 !important;
+  font-size: 11px !important;
+  color: #c2c2c2;
   vertical-align: top;
+  line-height: 0;
 }
 
 .left_user_info label {
@@ -470,7 +464,7 @@ body {
 .import_export_sec .import_export_button {
   display: inline-block;
   float: right;
-  border: 1px solid #22343f!important;
+  border: 1px solid #22343f !important;
   border-radius: 50px;
   opacity: 1;
   padding: 6px 13px;
@@ -481,7 +475,7 @@ body {
   display: inline-block;
   background: none;
   border: none;
-  color: #22343f!important;
+  color: #22343f !important;
   font-size: 18px;
   padding: 0;
   margin: 0 8px 0 0;
@@ -489,7 +483,7 @@ body {
 
 .import_export_sec .import_export_button .btn-secondary {
   display: inline-block;
-  background: #22343f!important;
+  background: #22343f !important;
   padding: 6px 21px;
   border-radius: 50px;
   border: none;
@@ -831,7 +825,7 @@ body {
 .import_export_button {
   display: inline-block;
   float: right;
-  border: 1px solid #22343f!important;
+  border: 1px solid #22343f !important;
   border-radius: 50px;
   opacity: 1;
   padding: 5px 5px;
@@ -862,7 +856,7 @@ body {
 }
 
 .type_active {
-  background: #22343f!important;
+  background: #22343f !important;
   padding: 3px 30px;
   border-radius: 50px !important;
   border: none !important;
@@ -873,7 +867,7 @@ body {
 .type_inactive {
   background: none !important;
   border: none !important;
-  color: #22343f!important;
+  color: #22343f !important;
   font-size: 18px !important;
   margin: 0 !important;
   padding: 4px 23px !important;
@@ -896,7 +890,7 @@ body {
   font-size: 18px;
   transition: width .3s ease-in-out;
   background: white;
-  display: block!important;
+  display: block !important;
 }
 
 .border-2px {
@@ -995,21 +989,40 @@ body {
 .hide {
   display: none;
 }
-.scroll-bar{
+
+.scroll-bar {
   height: calc(100vh - 140px);
   overflow: auto;
 }
 
-.profile-panel h6{
-  margin: auto;
+.profile-panel h6 {
+  margin: 0;
   margin-left: 10px;
+  display: flex;
+  padding: 0 !important;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  line-height: 2;
 }
-.profile-panel span{
-  margin-left: 10px;
+
+.profile-panel span {
+  margin-left: 0;
+  font-size: 12px;
+  width: 13px;
 }
+
 .profile-panel {
   cursor: pointer;
-  justify-content: center;
+  grid-template-columns: 15px auto;
   align-items: center;
-  margin-bottom: 10px;
+  margin: auto auto auto 0px;
+  width: 100%;
+  margin-bottom: 5px;
+  padding-left: 13px;
+}
+
+.profile-panel:last-child {
+  border-top: 1px solid #cec9c9;
+  padding-top: 5px;
 }

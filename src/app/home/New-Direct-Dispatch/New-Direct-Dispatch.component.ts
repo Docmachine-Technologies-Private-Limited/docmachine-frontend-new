@@ -11,8 +11,6 @@ import importedSaveAs from 'file-saver';
 import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
 import * as XLSX from 'xlsx';
-import { jsPDF } from 'jspdf'
-
 declare var kendo: any;
 
 import {
@@ -31,7 +29,6 @@ import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { DocumentService } from "../../service/document.service";
 import { PipoDataService } from "../../service/homeservices/pipo.service";
-import { AppConfig } from '../../app.config';
 import { WindowInformationService } from '../../service/window-information.service';
 import { ShippingbillDataService } from '../../service/homeservices/shippingbill.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -364,7 +361,6 @@ export class NewDirectDispatchComponent implements OnInit {
     private userService: UserService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
-    public appconfig: AppConfig,
     private formBuilder: FormBuilder,
     public documentService: DocumentService,
     public pipoDataService: PipoDataService,
@@ -378,7 +374,7 @@ export class NewDirectDispatchComponent implements OnInit {
     public sessionstorage: StorageEncryptionDecryptionService,
     public wininfo: WindowInformationService,
     public behaviorsubjectlist: BehaviorSubjectListService) {
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     this.getDropdownData();
   }
 

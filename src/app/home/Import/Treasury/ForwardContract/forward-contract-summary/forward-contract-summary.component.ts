@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DocumentService } from '../../../../../service/document.service';
-import { AppConfig } from '../../../../../app.config';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { ToastrService } from 'ngx-toastr';
 import * as xlsx from 'xlsx';
@@ -20,9 +19,8 @@ export class ForwardContractSummaryComponent implements OnInit {
   @ViewChild('epltable', { static: false }) epltable: ElementRef;
 
   constructor(public documentService: DocumentService,
-    private toastr: ToastrService,
-    public appconfig: AppConfig) {
-    this.api_base = appconfig.apiUrl;
+    private toastr: ToastrService) {
+    this.api_base = documentService.api_base;
     this.loadFromLocalStorage();
   }
 

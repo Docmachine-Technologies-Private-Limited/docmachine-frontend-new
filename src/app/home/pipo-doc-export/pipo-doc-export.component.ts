@@ -28,7 +28,6 @@ import {
 
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AppConfig } from '../../app.config';
 import * as XLSX from 'xlsx';
 import * as xlsx from 'xlsx';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -202,7 +201,6 @@ onclick() {
     private userService: UserService,
     private toastr: ToastrService,
     private modalService: NgbModal,
-    public appconfig: AppConfig,
     private changeDetectorRef: ChangeDetectorRef,
     private modalService1: BsModalService,
     public wininfo: WindowInformationService,
@@ -211,7 +209,7 @@ onclick() {
     public treeview:TreeViewComponent
 
   ) {
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     this.loadFromLocalStorage();
     console.log(this.authToken);
     this.headers = {

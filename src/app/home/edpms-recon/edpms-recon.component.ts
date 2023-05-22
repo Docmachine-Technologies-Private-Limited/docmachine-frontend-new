@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/service/user.service';
+import { UserService } from '../../service/user.service';
 import { timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
-import { AppConfig } from 'src/app/app.config';
-import { DocumentService } from 'src/app/service/document.service';
+import { DocumentService } from '../../service/document.service';
 import { Router } from '@angular/router';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../service/window-information.service';
 
 @Component({
   selector: 'app-edpms-recon',
@@ -18,7 +17,7 @@ export class EdpmsReconComponent implements OnInit {
   public uploading = false;
   public uploaded = false;
   config3: DropzoneConfigInterface;
-  authToken: string;
+  authToken:any;
   headers: any;
   documentType = '';
   public benneDetail: any = [];
@@ -32,7 +31,7 @@ export class EdpmsReconComponent implements OnInit {
   masterIR;
   masterPIPO;
   masterExcelData;
-  bankAccounts = [];
+  bankAccounts:any = [];
   bankSelection = "";
   disableUpload = true;
   applicant;
@@ -41,12 +40,11 @@ export class EdpmsReconComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    public appconfig: AppConfig,
     public documentService: DocumentService,
     public router: Router,
     public wininfo: WindowInformationService
   ) {
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     this.loadFromLocalStorage();
     this.headers = {
       Authorization: this.authToken,
@@ -84,7 +82,7 @@ export class EdpmsReconComponent implements OnInit {
     this.userService.getTeam()
       .subscribe((res: any) => {
         this.masterTeam = res?.data[0]?.bankDetails;
-        this.masterTeam.forEach( acc => this.bankAccounts.push(acc?.bank));
+        this.masterTeam.forEach( (acc:any) => this.bankAccounts.push(acc?.bank));
         console.log('banks:', this.bankAccounts);
       }, err => {
         console.log(err);
@@ -161,7 +159,7 @@ export class EdpmsReconComponent implements OnInit {
 
 
   preparePayload() {
-    let payload = [];
+    let payload:any = [];
     this.masterExcelData.forEach( (item:any) => {
       const tempObject = {
         userId: this.applicant,
@@ -216,7 +214,7 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   getAction(status) {
-    let actionStatus = [];
+    let actionStatus:any = [];
     if(!(status === 'Available')) {
       actionStatus.push('Upload Documents')
     } else {

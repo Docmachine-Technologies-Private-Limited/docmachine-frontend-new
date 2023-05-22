@@ -34,7 +34,6 @@ import { DocumentService } from '../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../service/user.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AppConfig } from '../../app.config';
 import { PipoDataService } from "../../service/homeservices/pipo.service";
 import { WindowInformationService } from '../../service/window-information.service';
 import { CustomConfirmDialogModelComponent } from '../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
@@ -227,7 +226,6 @@ export class UploadComponent implements OnInit {
     public toastr: ToastrService,
     public modalService: NgbModal,
     public route: ActivatedRoute,
-    public appconfig: AppConfig,
     public sharedData: SharedDataService,
     public pipoDataService: PipoDataService,
     public wininfo: WindowInformationService,
@@ -242,7 +240,7 @@ export class UploadComponent implements OnInit {
     this.sharedData.currentReturnUrl.subscribe(
       (message) => (this.retururl = message)
     );
-    this.api_base = appconfig.apiUrl;
+    this.api_base = documentService.api_base;
     console.log(this.api_base);
     this.loadFromLocalStorage();
     console.log(this.authToken);
