@@ -2073,6 +2073,16 @@ export class DocumentService {
     return this.http.get(`${this.api_base}/CA_Certificate/get`,httpOptions);
   }
   
+  CA_Certificate_RequestType_get(data:any){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/CA_Certificate/getRequestType`,{type:data},httpOptions);
+  }
+  
+  
   CA_Certificate_update(data){
     this.loadFromLocalStorage();
     console.log(this.authToken);

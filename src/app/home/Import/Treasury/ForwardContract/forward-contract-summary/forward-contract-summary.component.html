@@ -188,6 +188,9 @@
                             <th scope="col" class="col-td-th-3">Status</th>
                             <th scope="col" class="col-td-th-3">Underlying</th>
                             <th scope="col" class="col-td-th-3">Upload Documents</th>
+                            <th scope="col" class="col-td-th-3">Edit Cancellation</th>
+                            <th scope="col" class="col-td-th-3">Edit Utilized</th>
+                            <th scope="col" class="col-td-th-3">Upload Documents</th>
                             <th scope="col" class="col-td-th-3">Edit</th>
                             <th scope="col" class="col-td-th-3">View</th>
                         </tr>
@@ -212,6 +215,14 @@
                             <th scope="col" class="col-td-th-3">{{item?.ImportExport}}</th>
                             <th scope="col" class="col-td-th-3">{{item?.Status}}</th>
                             <th scope="col" class="col-td-th-3">{{item?.Underlying}}</th>
+                            <th scope="col" class="col-td-th-3">
+                                <button class="upload-button btn btn-primary PopupOpen"
+                                    [attr.popup-close]="'ForwardContractCancellation'" (click)="upload(item?._id,item)">Cancellation</button>
+                            </th>
+                            <th scope="col" class="col-td-th-3">
+                                <button class="upload-button btn btn-primary PopupOpen"
+                                    [attr.popup-close]="'UPLOAD_DOCUMENTS'" (click)="upload(item?._id,item)">Utilized</button>
+                            </th>
                             <th scope="col" class="col-td-th-3">
                                 <button class="upload-button btn btn-primary PopupOpen"
                                     [attr.popup-close]="'UPLOAD_DOCUMENTS'" (click)="upload(item?._id,item)">Upload</button>
@@ -281,5 +292,49 @@
     <div class="col-12 pb-2" *ngIf="this.PDF_VIEW_URL!=''">
         <app-pdf-viewer [downloadShow]="false" *ngIf="this.PDF_VIEW_URL!=''" name="Documents" [src]="this.PDF_VIEW_URL" width="100%"
             height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>
+
+<app-custom-model modalbodyheight="80vh"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="90vh"
+    id="ForwardContractCancellation" name="Forward Contract Cancellation Update">
+    <div class="ml-0 p-3 col-12">
+        <div class="container-fluid m-auto p-0">
+            <!-- <h5 class="header-text">Forward Contract</h5> -->
+            <div class="content_white_background" style="height: auto;">
+                <main id="content" class="table-padding" role="main" style="border-radius: 10px;">
+                    <div class="new_document_list1">
+                        <div class="d-flex col-12 p-0 pt-3" id="FromClientRequest" style="flex-direction: column;">
+                            <div class="row col-12 mt-0 p-0">
+                                <div class="row col-12 p-0">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Cancellation Date</label>
+                                        <ng-custom-input type="date" [(ngInput)]="this.CancellationFORM_DATA.CancellationDate"
+                                            placeHolderText="Cancellation amount"></ng-custom-input>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Cancellation Amount</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.CancellationFORM_DATA.CancellationAmount"
+                                            placeHolderText="Cancellation amount"></ng-custom-input>
+                                    </div>
+                                </div>
+                                <div class="row col-12 p-0">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Cancellation rate</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.CancellationFORM_DATA.CancellationRate"
+                                            placeHolderText="Cancellation rate"></ng-custom-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-12 mt-0 p-0 pl-2 pb-2">
+                                <button class="btn btn-primary close-popup"
+                                    (click)="Cancellation_FORM_DATA_Update_Form(this.CancellationFORM_DATA)">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
     </div>
 </app-custom-model>

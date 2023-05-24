@@ -6,7 +6,10 @@ import { Router } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
 import $ from 'jquery'
 import A2_JOSN from '../../../../assets/JSON/A2.json';
-
+import {
+  MAT_CHECKBOX_DEFAULT_OPTIONS,
+  MatCheckboxDefaultOptions
+} from '@angular/material/checkbox';
 declare var kendo: any;
 
 import {
@@ -34,6 +37,7 @@ import { MergePdfListService } from '../../merge-pdf-list.service';
   selector: 'add-advance-outward-remittance-a2',
   templateUrl: './add-advance-outward-remittance-a2.component.html',
   styleUrls: ['./add-advance-outward-remittance-a2.component.scss'],
+  providers: [{ provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { clickAction: 'noop' } }]
 })
 export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   LocationData: any = []
@@ -128,7 +132,19 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     TransactionRef: []
   };
   BOE_DETAILS: any = [];
-  
+  PURPOSE_CODE_FILTER_DATA: any = [];
+  PURPOSE_CODE_LIST_DATA: any = [];
+
+  toppings: any = this.formBuilder.group({
+    FormA2CumApplication: new FormControl({ value: false, disabled: true }),
+    "_CA": new FormControl({ value: false, disabled: true }),
+    "_CB": new FormControl({ value: false, disabled: true }),
+    Invoice_Debit_Note: new FormControl({ value: false, disabled: true }),
+    EXTRA_DOC_1: new FormControl({ value: false, disabled: true }),
+    EXTRA_DOC_2: new FormControl({ value: false, disabled: true }),
+    EXTRA_DOC_3: new FormControl({ value: false, disabled: true }),
+  });
+
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
@@ -148,7 +164,6 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   }
 
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270, '.content_top_common')
     this.headers = {
       Authorization: this.authToken,
       timeout: `${200000}`
@@ -161,7 +176,21 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
         }
       }
     });
-    console.log(this.A2_JSON_DATA, 'A2_JOSN')
+    this.PURPOSE_CODE_LIST_DATA = [];
+    var temp_purcode: any = [];
+    this.A2_JSON_DATA.forEach(element => {
+      if (!temp_purcode.includes(element?.RBI_Purpose_Code[0])) {
+        temp_purcode.push(element?.RBI_Purpose_Code[0])
+      }
+      for (const key in element) {
+        element['isExpand'] = false;
+      }
+    });
+    temp_purcode.forEach(element => {
+      this.PURPOSE_CODE_LIST_DATA.push({ value: element })
+    });
+    this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA;
+    console.log(this.A2_JSON_DATA, this.PURPOSE_CODE_FILTER_DATA, this.PURPOSE_CODE_LIST_DATA, 'A2_JOSN')
 
     await this.userService.getUserDetail().then((res: any) => {
       this.USER_DATA = res['result'];
@@ -189,7 +218,6 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       previewTemplate:
         '<div  class="dz-preview dz-file-preview" style="text-align: right; margin-right:3px;">\n <div class="dz-image" style="text-align: right; margin-right:3px;"> <img data-dz-thumbnail /></div>\n <div class="dz-details">\n    <div class="dz-size"><span data-dz-size></span></div>\n    <div class="dz-filename"><span data-dz-name></span></div>\n  </div>\n  <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>\n  <div class="dz-error-message"><span data-dz-errormessage></span></div>\n  <div class="dz-success-mark">\n    <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">\n      <title>Check</title>\n      <defs></defs>\n      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">\n        <path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>\n      </g>\n    </svg>\n  </div>\n  <div class="dz-error-mark">\n    <i style="color: red; text-align: center;font-size: 30px;" class="fa fa-exclamation-circle"></i>\n  </div>\n</div>',
     };
-    this.get_CA()
 
     // buyerName commodity doc
     this.getDropdownData()
@@ -247,15 +275,13 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   changepipo(id) {
     let temp = [];
     this.pipoData = [];
-    temp = this.benneDetail.filter(items => {
-      return items._id == id
-    });
+    temp = this.benneDetail.filter(items => items?.benneName.includes(id));
     this.selectedBenne = temp.pop();
-
+    this.CA_CERTIFICATE_FORM['SupplierName'] = id
     console.log('this.selectedBenneName', this.selectedBenne);
-    this.pipoDataService.getPipoListByCustomer('import', this.selectedBenne.benneName).then((data: any) => {
+    this.pipoDataService.getPipoListByCustomer('import', this.selectedBenne?.benneName).then((data: any) => {
       console.log(data, 'data..................')
-      this.pipoDataService.pipolistModel$.subscribe((data:any) => {
+      this.pipoDataService.pipolistModel$.subscribe((data: any) => {
         console.log(data, 'data2222..................')
         for (let index = 0; index < data.length; index++) {
           var AdvanceRemittanceflow: any = data[index]?.TransactionRef?.filter((item: any) => item?.TypeTransaction?.includes('Advance-Remittance-flow'));
@@ -271,20 +297,20 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
           data: [],
           original_data: []
         };
-        for (let index = 0; index < data?.data.length; index++) {
-          data.data[index]['isExpand'] = false;
-          data.data[index]['CI_EXPAND'] = false;
-          if (data?.data[index]?.balanceAmount == '-1') {
-            data.data[index]['balanceAmount'] = data?.data[index]?.invoiceAmount
-          }
-          if (data?.data[index]?.balanceAmount != '0') {
-            this.PIPO_LIST['data'].push(data?.data[index]);
-          }
-          this.PIPO_LIST['original_data'].push(data?.data[index])
-          if (data?.data[index]?.pi_poNo != '' && !this.PIPO_LIST['PIPO_NAME_LIST'].includes(data?.data[index]?.pi_poNo)) {
-            this.PIPO_LIST['PIPO_NAME_LIST'].push({ value: data?.data[index]?.pi_poNo, id: data?.data[index]?._id })
-          }
-        }
+        // for (let index = 0; index < data?.data.length; index++) {
+        //   data.data[index]['isExpand'] = false;
+        //   data.data[index]['CI_EXPAND'] = false;
+        //   if (data?.data[index]?.balanceAmount == '-1') {
+        //     data.data[index]['balanceAmount'] = data?.data[index]?.invoiceAmount
+        //   }
+        //   if (data?.data[index]?.balanceAmount != '0') {
+        //     this.PIPO_LIST['data'].push(data?.data[index]);
+        //   }
+        //   this.PIPO_LIST['original_data'].push(data?.data[index])
+        //   if (data?.data[index]?.pi_poNo != '' && !this.PIPO_LIST['PIPO_NAME_LIST'].includes(data?.data[index]?.pi_poNo)) {
+        //     this.PIPO_LIST['PIPO_NAME_LIST'].push({ value: data?.data[index]?.pi_poNo, id: data?.data[index]?._id })
+        //   }
+        // }
         console.log('importpipolist', this.pipoData, this.LIST_PIPO);
       });
     });;
@@ -347,6 +373,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     var tempboecurrency: any = [];
     var tempboeorigin: any = [];
     var tempboedischargePort: any = [];
+    this.EXTRA_DOCUMENTS['INVOICE_DOCUMENTS'] = []
+    this.EXTRA_DOCUMENTS['DEBIT_NOTES_DOCUMENTS'] = [];
 
     temp2.forEach(element => {
       tempboenumber.push(element?.boeNumber)
@@ -354,6 +382,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       tempboecurrency.push(element?.currency)
       tempboeorigin.push(element?.origin)
       tempboedischargePort.push(element?.dischargePort)
+      this.EXTRA_DOCUMENTS['INVOICE_DOCUMENTS'].push(element?.doc);
+      this.EXTRA_DOCUMENTS['DEBIT_NOTES_DOCUMENTS'].push(element?.debitNoteRef[element?.debitNoteRef?.length - 1]?.doc)
     });
     this.BOE_DETAILS = {
       BOE_NUMBER: tempboenumber.join(','),
@@ -367,12 +397,19 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     this.CA_CERTIFICATE_FORM['OriginOfGoods'] = this.BOE_DETAILS?.ORIGIN
     this.CA_CERTIFICATE_FORM['Currency'] = this.BOE_DETAILS?.CURRENCY
     this.CA_CERTIFICATE_FORM['PortofDischarge'] = this.BOE_DETAILS?.DISCHARGE_PORT
-    
-    console.log(this.temp1, temp2, 'selectedItemsselectedItems')
+
+    console.log(this.temp1, temp2, this.EXTRA_DOCUMENTS, 'selectedItemsselectedItems')
     this.sumTotalAmount = this.selectedItems.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.balanceAmount), 0);
     this.showOpinionReport = 0;
     this.fillForm();
     this.OTHER_BANK_VISIBLE = false;
+
+    if (temp2.length != 0) {
+      this.toppings.controls.Invoice_Debit_Note.setValue(true);
+    } else {
+      this.toppings.controls.Invoice_Debit_Note.setValue(false);
+    }
+
     setTimeout(() => { this.OTHER_BANK_VISIBLE = true; }, 150)
   }
 
@@ -389,10 +426,6 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
 
   }
 
-  showhideSummaryPage(value) {
-    console.log('this.pipoForm.controls;', this.pipoForm.controls);
-    this.showSummaryPage = value;
-  }
   BANK_DETAILS: any = [];
   OTHER_BANK_VISIBLE: boolean = false
   onSelectBank(value) {
@@ -407,6 +440,11 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.fillForm();
     } else {
       this.OTHER_BANK_VISIBLE = true;
+    }
+    if (value) {
+      this.toppings.controls.FormA2CumApplication.setValue(true);
+    } else {
+      this.toppings.controls.FormA2CumApplication.setValue(false);
     }
   }
   OUR_SHA_BEN: any = '';
@@ -559,7 +597,6 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       });
   }
 
-
   _arrayBufferToBase64(buffer) {
     var binary = '';
     var bytes = new Uint8Array(buffer);
@@ -578,20 +615,14 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     return data[id];
   }
   onSubmit(e): void {
-
     this.submitted = true;
-
     console.log("this.pipoForm.invalid", this.pipoForm.invalid)
     console.log("this.pipoForm.invalid", this.pipoForm)
     console.log('this.pipoForm.value', this.pipoForm.value);
     if (this.pipoForm.invalid) {
       return;
     }
-    else {
-
-    }
-  }  //  ------------------------- handle image upload------------------------------------------
-
+  }
 
   public onUploadError(args: any): void {
     this.uploading = false;
@@ -622,9 +653,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     this.uploading = true;
     console.log(e[0].size);
     this.size = this.formatBytes(e[0].size);
-    //document.getElementById("uploadError").style.display = "none";
     this.runProgressBar(e[0].size);
-
   }
 
 
@@ -683,13 +712,10 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     }, 500)
     console.log(this.pipoForm.controls.pipoTerm, this.selectedItems, 'this.pipoForm.controls.pipoTerm')
   }
-  // ----------------------------- end handle image upload ----------------------------------
-
 
   getItems(form) {
     return form.get('pipoTerm').controls;
   }
-
 
   addItems(index, id) {
     const control = this.pipoForm.controls.pipoTerm as FormArray;
@@ -773,6 +799,15 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
             }).subscribe(async (pdfresponse: any) => {
               console.log('exportPDF', data, data)
               data.push(pdfresponse?.url)
+              this.EXTRA_DOCUMENTS['CA_DOCUMENTS'].forEach(element => {
+                data.push(element)
+              });
+              this.EXTRA_DOCUMENTS['CB_DOCUMENTS'].forEach(element => {
+                data.push(element)
+              });
+              this.EXTRA_DOCUMENTS['DEBIT_NOTES_DOCUMENTS'].forEach(element => {
+                data.push(element)
+              });
               var fitertemp: any = data.filter(n => n)
               await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
                 this.PREVIEWS_URL_LIST = [];
@@ -847,6 +882,15 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
           }
         }
       }
+      this.EXTRA_DOCUMENTS['CA_DOCUMENTS'].forEach(element => {
+        temp_doc.push(element)
+      });
+      this.EXTRA_DOCUMENTS['CB_DOCUMENTS'].forEach(element => {
+        temp_doc.push(element)
+      });
+      this.EXTRA_DOCUMENTS['DEBIT_NOTES_DOCUMENTS'].forEach(element => {
+        temp_doc.push(element)
+      });
       var approval_data: any = {
         id: UniqueId,
         tableName: 'Advance-Remittance-flow',
@@ -873,7 +917,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
                 formdata: this.pipoForm.value,
                 documents: temp_doc,
                 pipo_1: this.selectedItems,
-                Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() }
+                Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
+                extra_data: this.EXTRA_DOCUMENTS
               },
               TypeTransaction: 'Advance-Remittance-flow',
               fileType: 'Import',
@@ -939,61 +984,97 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     return split_text;
   }
   RequestforBCQuoteSubmitbtn: boolean = false;
-  RequestforBCQuoteSubmit(value: any) {
+  RequestforCASubmit(value: any) {
     console.log(value, $("#FromClientRequest"), 'RequestforBCQuote')
     this.FORM_CHECK_VALUE(value).then(async (res: any) => {
       console.log(value, res, 'RequestforBCQuote')
-      // if (res == true) {
-      //   this.toastr.error('Please check some input filed is empty...');
-      //   return;
-      // } else {
-      //   this.ALL_DOCUMENTS = [];
-      //   var pipo_id: any = [];
-      //   var pipo_name: any = [];
-      //   for (let i = 0; i < this.ITEM_FILL_PDF.length; i++) {
-      //     this.ALL_DOCUMENTS.push(this.ITEM_FILL_PDF[i]?.doc)
-      //     pipo_id.push(this.ITEM_FILL_PDF[i]?.pipo[0]?._id)
-      //     pipo_name.push(this.ITEM_FILL_PDF[i]?.pipo[0]?.pi_poNo)
-
-      //     if (this.ITEM_FILL_PDF[i]?.pipo) {
-      //       this.ITEM_FILL_PDF[i]?.pipo?.forEach(element => {
-      //         this.ALL_DOCUMENTS.push(element?.doc)
-      //         this.ALL_DOCUMENTS.push(element?.commercial)
-      //         this.ALL_DOCUMENTS.push(element?.airwayBlcopy);
-      //       });
-      //     }
-      //   }
-      //   value['documents'] = this.ALL_DOCUMENTS;
-      //   value['pipo'] = pipo_id;
-      //   value['extradata'] = this.MAIN_DATA
-
-      //   var filterdoc = this.ALL_DOCUMENTS.filter(n => n)
-      //   this.documentService.buyer_beneficiary_creditadd(value).subscribe((buyer_beneficiary_creditaddres: any) => {
-      //     console.log(buyer_beneficiary_creditaddres, 'buyer_beneficiary_creditaddres')
-      //     this.toastr.success('buyer_beneficiary_credit added successfully....')
-      //     this.documentService.SendMaildocuments({ subject: 'Buyer credit details added...', documentsList: filterdoc,data: value}).subscribe((docres: any) => {
-      //       this.toastr.success('Mail Sended Successfully....')
-      //       this.router.navigate(['/home/dashboardTask'])
-      //     })
-      //     this.getbuyer_beneficiary_credit();
-      //   })
-      // }
+      if (res == true) {
+        this.toastr.error('Please check some input filed is empty...');
+        return;
+      } else {
+        var temp_doc: any = [];
+        if (this.PREVIWES_URL?.changingThisBreaksApplicationSecurity == null) {
+          temp_doc[0] = this.PREVIEWS_URL_STRING;
+        } else {
+          temp_doc[0] = this.PREVIWES_URL?.changingThisBreaksApplicationSecurity;
+        }
+        temp_doc[1] = this.uploadUrl_Original;
+        for (let i = 0; i < this.selectedItems.length; i++) {
+          for (let index = 0; index < this.temp1[i].length; index++) {
+            if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != undefined) {
+              temp_doc.push(this.temp1[i][index]?.pdf)
+            }
+          }
+        }
+        var pipo_id: any = [];
+        var pipo_name: any = [];
+        for (let index = 0; index < this.selectedItems.length; index++) {
+          pipo_id.push(this.selectedItems[index]?.pipo_id)
+          pipo_name.push(this.selectedItems[index]?.pipo_no)
+        }
+        value['documents'] = temp_doc;
+        value['pipo'] = pipo_id;
+        value['extradata'] = this.pipoForm.value
+        var filterdoc = temp_doc.filter(n => n)
+        value['RequestType'] = this.REQUEST_TYPE
+        this.documentService.CA_Certificate_add(value).subscribe((buyer_beneficiary_creditaddres: any) => {
+          console.log(buyer_beneficiary_creditaddres, 'buyer_beneficiary_creditaddres')
+          this.toastr.success('buyer_beneficiary_credit added successfully....')
+          this.documentService.SendMaildocuments({ subject: 'Buyer credit details added...', documentsList: filterdoc, data: value }).subscribe((docres: any) => {
+            this.toastr.success('Mail Sended Successfully....')
+            this.router.navigate(['/home/dashboardTask'])
+          })
+          this.get_by_REQUEST_TYPE_CA(this.REQUEST_TYPE);
+        })
+      }
     })
   }
   async FORM_CHECK_VALUE(value: any) {
     let tempbol: boolean = false;
     for (const key in value) {
       console.log(value)
-      if (value[key] == '' || value[key] == null || value[key] == undefined) {
+      if (value[key] == '' || value[key] == null || value[key] == undefined || value[key] == false) {
         tempbol = true;
         break;
       }
     }
     return await tempbol;
   }
+  
+  showhideSummaryPage(value) {
+    var temp: any = {
+      FormA2CumApplication: this.toppings?.value?.FormA2CumApplication,
+      "_CA": this.toppings?.value?._CA,
+      "_CB": this.toppings?.value?._CB,
+      Invoice_Debit_Note: this.toppings?.value?.Invoice_Debit_Note,
+    }
+    console.log('this.pipoForm.controls;',temp,this.toppings, this.pipoForm.controls);
+    
+    this.FORM_CHECK_VALUE_2(temp).then(async (res: any) => {
+      console.log(temp, res, 'RequestforBCQuote')
+      if (res == false) {
+        this.showSummaryPage = value;
+      }else{
+        this.toastr.error('Please select all nessacary documents...');
+      }
+    });  
+  }
+  
+  async FORM_CHECK_VALUE_2(value: any) {
+    console.log(value)
+    let tempbol: boolean = false;
+    for (const key in value) {
+      if (value[key] == false) {
+        tempbol = true;
+        break;
+      }
+    }
+    return await tempbol;
+  }
+  
   CA_CERTIFICATE_DATA: any = []
-  get_CA() {
-    this.documentService.CA_Certificate_get().subscribe((res: any) => {
+  get_by_REQUEST_TYPE_CA(REQUEST_TYPE: any) {
+    this.documentService.CA_Certificate_RequestType_get(REQUEST_TYPE).subscribe((res: any) => {
       this.CA_CERTIFICATE_DATA = res?.data;
       console.log(res, this.CA_CERTIFICATE_DATA, 'get_CA')
     })
@@ -1012,6 +1093,107 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     } else {
       popupshow.style.display = 'none'
     }
+  }
+  REQUEST_TYPE: any = ''
+
+  onTabChanged(event: any) {
+    const id = event.tab.content.viewContainerRef.element.nativeElement.id;
+    this.REQUEST_TYPE = id;
+    if (id != '') {
+      this.get_by_REQUEST_TYPE_CA(this.REQUEST_TYPE);
+    }
+    console.log(event, id, this.REQUEST_TYPE, 'sdfsdfdsfdfdsfsdfd')
+  }
+  CA_CB_POPUP(event: any) {
+    const id = event;
+    if (id != '') {
+      this.get_by_REQUEST_TYPE_CA(id);
+    }
+    console.log(event, id, 'sdfsdfdsfdfdsfsdfd')
+  }
+  CA_SELECTION_DATA: any = [];
+  CA_SELECTION_INDEX: any = [];
+  CA_DUMP_SLEECTION: any = [];
+  EXTRA_DOCUMENTS: any = {
+    CA_DOCUMENTS: [],
+    CB_DOCUMENTS: [],
+    INVOICE_DOCUMENTS: [],
+    DEBIT_NOTES_DOCUMENTS: [],
+    PURPOSE_CODE_DATA: []
+  };
+  CA_SELECTION(event: any, index: any) {
+    console.log(event, 'CA_SELECTION')
+    if (event?.target?.checked) {
+      this.CA_DUMP_SLEECTION[index] = this.CA_CERTIFICATE_DATA[index];
+      this.CA_SELECTION_INDEX[index] = true;
+    } else {
+      this.CA_DUMP_SLEECTION[index] = '';
+      this.CA_SELECTION_INDEX[index] = false;
+    }
+    this.CA_SELECTION_DATA = [];
+    this.EXTRA_DOCUMENTS['CA_DOCUMENTS'] = [];
+    this.CA_DUMP_SLEECTION.forEach(element => {
+      this.CA_SELECTION_DATA.push(element)
+      this.EXTRA_DOCUMENTS['CA_DOCUMENTS'].push(element?.document);
+    });
+    if (this.CA_SELECTION_DATA.length != 0) {
+      this.toppings.controls._CA.setValue(true);
+    } else {
+      this.toppings.controls._CA.setValue(false);
+    }
+  }
+
+  CB_SELECTION_DATA: any = [];
+  CB_SELECTION_INDEX: any = [];
+  CB_DUMP_SLEECTION: any = [];
+
+  CB_SELECTION(event: any, index: any) {
+    console.log(event, 'CB_SELECTION')
+    if (event?.target?.checked) {
+      this.CB_DUMP_SLEECTION[index] = this.CA_CERTIFICATE_DATA[index];
+      this.CB_SELECTION_INDEX[index] = true;
+    } else {
+      this.CB_DUMP_SLEECTION[index] = ''
+      this.CB_SELECTION_INDEX[index] = false;
+    }
+    this.CB_SELECTION_DATA = [];
+    this.EXTRA_DOCUMENTS['CB_DOCUMENTS'] = [];
+    this.CB_DUMP_SLEECTION.forEach(element => {
+      this.EXTRA_DOCUMENTS['CB_DOCUMENTS'].push(element?.document);
+      this.CB_SELECTION_DATA.push(element)
+    });
+    if (this.CB_SELECTION_DATA.length != 0) {
+      this.toppings.controls._CB.setValue(true);
+    } else {
+      this.toppings.controls._CB.setValue(false);
+    }
+  }
+
+  filterData(data: any) {
+    this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA.filter((item: any) => item?.RBI_Purpose_Code.includes(data));
+    console.log(data, this.PURPOSE_CODE_FILTER_DATA, 'asdhasdkasdsads')
+    if (this.PURPOSE_CODE_FILTER_DATA.length == 0 || data == '') {
+      this.PURPOSE_CODE_FILTER_DATA = this.A2_JSON_DATA;
+    }
+  }
+  SELECTED_PURPOSE_CODE_DATA: any = [];
+  SELECTED_PURPOSE_CODE_INDEX: any = [];
+  SELECTED_PURPOSE_CODE_DUMP_SLEECTION: any = [];
+  SELECT_PURPOSE_CODE(event: any, index: any) {
+    console.log(event, 'SELECT_PURPOSE_CODE')
+    if (event?.target?.checked) {
+      this.SELECTED_PURPOSE_CODE_DUMP_SLEECTION[index] = this.PURPOSE_CODE_FILTER_DATA[index];
+      this.SELECTED_PURPOSE_CODE_INDEX[index] = true;
+    } else {
+      this.SELECTED_PURPOSE_CODE_DUMP_SLEECTION[index] = ''
+      this.SELECTED_PURPOSE_CODE_INDEX[index] = false;
+    }
+    this.SELECTED_PURPOSE_CODE_DATA = [];
+    this.EXTRA_DOCUMENTS['PURPOSE_CODE_DATA'] = [];
+    this.SELECTED_PURPOSE_CODE_DUMP_SLEECTION.forEach(element => {
+      this.EXTRA_DOCUMENTS['PURPOSE_CODE_DATA'].push(element);
+      this.SELECTED_PURPOSE_CODE_DATA.push(element)
+    });
   }
 }
 

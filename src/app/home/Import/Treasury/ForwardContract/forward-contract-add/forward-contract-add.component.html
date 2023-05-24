@@ -47,7 +47,7 @@
                                         placeHolderText="Utilized amount"></ng-custom-input>
                                 </div>
                             </div>
-                            <div class="row col-12 p-0">
+                            <!-- <div class="row col-12 p-0">
                                 <div class="form-group col-md-6">
                                     <label for="inputEmail4">Cancellation Date</label>
                                     <ng-custom-input type="date" [(ngInput)]="this.FORM_DATA.CancellationDate"
@@ -58,18 +58,18 @@
                                     <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.CancellationAmount"
                                         placeHolderText="Cancellation amount"></ng-custom-input>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="row col-12 p-0">
                                 <div class="form-group col-md-6">
                                     <label for="inputEmail4">Available Amount</label>
                                     <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.AvailableAmount"
                                         placeHolderText="Available Amount"></ng-custom-input>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <!-- <div class="form-group col-md-6">
                                     <label for="inputEmail4">Cancellation rate</label>
                                     <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.CancellationRate"
                                         placeHolderText="Cancellation rate"></ng-custom-input>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="row col-12 p-0">
                                 <div class="form-group col-md-6">
@@ -101,14 +101,14 @@
                                     <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.ImportExport"
                                         placeHolderText="Import/Export"></ng-custom-input>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <!-- <div class="form-group col-md-6">
                                     <label for="inputEmail4">Status</label>
                                     <app-ng-dropdown-custom bindLabel="value" placeHolderText="Status"
                                         [(ngModelDropDown)]="this.FORM_DATA.Status"
                                         [items]="[{value:'Pending'},{value:'Utilized'},{value:'Partially Utilized'},{value:'Cancelled'}]"
                                         [multiple]="false">
                                     </app-ng-dropdown-custom>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="row col-12 p-0">
                                 <div class="form-group col-md-6">
@@ -119,8 +119,8 @@
                             </div>
                         </div>
                         <div class="row col-12 mt-0 p-0 pl-2 pb-2">
-                            <button class="btn btn-primary close-popup" *ngIf="data!=''"
-                                (click)="UpdateForm(this.FORM_DATA)">Update</button>
+                            <!-- <button class="btn btn-primary close-popup" *ngIf="data!=''"
+                                (click)="UpdateForm(this.FORM_DATA)">Update</button> -->
                             <button class="btn btn-primary close-popup" *ngIf="data==''"
                                 (click)="SubmitForm(this.FORM_DATA)">Submit</button>
                         </div>

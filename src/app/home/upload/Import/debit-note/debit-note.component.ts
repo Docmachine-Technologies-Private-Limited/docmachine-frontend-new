@@ -400,8 +400,19 @@ export class DebitNoteComponent implements OnInit {
     this.documentService.addDebit(e.form.value).subscribe((res: any) => {
       console.log(res,'addDebit')
       this.toastr.success(`Credit Note Document Added Successfully`);
+      this.pipoArr.forEach(element => {
+        this.userService.updatePipo(element?._id,{'debitNote':e.form.value.doc}).subscribe((data) => {
+            console.log('credit Note document', this.pipourl1);
+            console.log(data);
+          },
+          (error) => {
+            console.log('error');
+          }
+        );
+      });
+     
       let updatedData = {
-        "blcopyRefs": [
+        "debitNoteRef": [
           res.data._id,
         ],
       }

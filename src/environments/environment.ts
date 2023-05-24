@@ -1,5 +1,5 @@
 export const AppConfig = {
   production: false,
   environment: 'LOCAL',
-  BASE_URL: 'http://localhost:8081/v1',
+  BASE_URL: 'http://localhost:80/v1',
 };

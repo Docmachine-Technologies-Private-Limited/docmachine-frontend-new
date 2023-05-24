@@ -12,7 +12,7 @@
         <div class="content_white_background" style="height: auto;">
             <main id="content" class="table-padding" role="main">
                 <div class="new_document_list1">
-                    <mat-tab-group>
+                    <mat-tab-group (selectedTabChange)="onTabChanged($event);">
                         <mat-tab label="Advance Outward Remittance (A2) Transaction">
                             <div class="new_document_list_add_data">
                                 <form [formGroup]="pipoForm">
@@ -69,9 +69,8 @@
                                                         <app-ng-dropdown-custom placeHolderText="Select Bank Name"
                                                             [items]="this.benneDetail" bindLabel="benneName"
                                                             [ngModel]="form?.benneName" formControlName="benneName"
-                                                            (modelChanges)="form.benneName=$event" bindValue="_id"
-                                                            [multiple]="false" (modelChanges)="changepipo($event)"
-                                                            #select_ben>
+                                                            (modelChanges)="form.benneName=$event" [multiple]="false"
+                                                            (modelChanges)="changepipo($event)" #select_ben>
                                                         </app-ng-dropdown-custom>
                                                         <div *ngIf="submitted && form.benneName.errors"
                                                             class='errorText'>
@@ -252,11 +251,54 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-6 col-sm-6 col-12">
-                                                        <label for="TotalPIamount" class="form-label">Select A2
-                                                            Data</label>
-                                                        <button type="button" class="btn btn-primary PopupOpen"
-                                                            [attr.popup-close]="'A2_DATA'">A2 Data</button>
+                                                    <div class="col-md-6 col-sm-6 col-12"
+                                                        style="display: block;flex-direction: column;">
+                                                        <div class="col" style="display: flex;flex-direction: column;">
+                                                            <label for="TotalPIamount" class="form-label">Select Purpose
+                                                                Code</label>
+                                                            <button type="button" class="btn btn-primary PopupOpen"
+                                                                [attr.popup-close]="'A2_DATA'">Purpose Code</button>
+                                                        </div>
+                                                        <div class="col mt-6">
+                                                            <section class="pt-2" [formGroup]="toppings">
+                                                                <h6 style="color: black;">Document CheckList : </h6>
+                                                                <p class="mb-0"><mat-checkbox
+                                                                        formControlName="FormA2CumApplication">Form A2
+                                                                        Cum Application</mat-checkbox></p>
+                                                                <p class="mb-0"><mat-checkbox formControlName="_CA">15
+                                                                        CA</mat-checkbox></p>
+                                                                <p class="mb-0"><mat-checkbox formControlName="_CB">15
+                                                                        CB</mat-checkbox></p>
+                                                                <p class="mb-0"><mat-checkbox
+                                                                        formControlName="Invoice_Debit_Note">Invoice/Debit
+                                                                        Note</mat-checkbox></p>
+                                                                <p class="mb-0"  *ngIf="sumTotalAmount != 0 && sumTotalAmount > 25000"><mat-checkbox
+                                                                        formControlName="EXTRA_DOC_1">EXTRA DOC 1</mat-checkbox></p>
+                                                                <p class="mb-0"  *ngIf="sumTotalAmount != 0 && sumTotalAmount > 25000"><mat-checkbox
+                                                                        formControlName="EXTRA_DOC_2">EXTRA DOC 2</mat-checkbox></p>
+                                                                <p class="mb-0"  *ngIf="sumTotalAmount != 0 && sumTotalAmount > 25000"><mat-checkbox
+                                                                        formControlName="EXTRA_DOC_3">EXTRA DOC 3</mat-checkbox></p>
+                                                            </section>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6 col-12"
+                                                        style="display: flex;flex-direction:row;">
+                                                        <div class="row mt-0"
+                                                            style="display: flex;flex-direction: column;">
+                                                            <label for="TotalPIamount" class="form-label">Select 15
+                                                                CA</label>
+                                                            <button type="button" class="btn btn-primary PopupOpen"
+                                                                [attr.popup-close]="'CA_DATA'"
+                                                                (click)="CA_CB_POPUP('CA')">15 CA</button>
+                                                        </div>
+                                                        <div class="row mt-0"
+                                                            style="display: flex;flex-direction: column;">
+                                                            <label for="TotalPIamount" class="form-label">Select 15
+                                                                CB</label>
+                                                            <button type="button" class="btn btn-primary PopupOpen"
+                                                                [attr.popup-close]="'CB_DATA'"
+                                                                (click)="CA_CB_POPUP('CB')">15 CB</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="row" *ngIf="sumTotalAmount != 0 && sumTotalAmount > 200000">
@@ -388,12 +430,12 @@
                                 </form>
                             </div>
                         </mat-tab>
-                        <mat-tab label="CA | CB Request">
+                        <mat-tab id="CA" label="Generate 15 CA">
                             <div class="col-12 p-2">
                                 <div class="row p-0 pb-2 col-12 modal-bg-transparent">
                                     <form>
                                         <div class="d-flex col-12 bg-text">
-                                            <h5 class="bg-text-h5">From Client CA | CB Request - Select BOE</h5>
+                                            <h5 class="bg-text-h5">From Client Generate 15 CA - Select BOE</h5>
                                             <div style="width: 250px;margin-right: 20px !important;">
                                                 <div style="width: 250px;margin-right: 20px !important;">
                                                     <app-ng-dropdown-custom placeHolderText="Select beneficiary"
@@ -413,26 +455,29 @@
                                                 </app-ng-dropdown-custom>
                                             </div>
                                             <button type="submit" class="btn btn-primary"
-                                                (click)="RequestforBCQuoteSubmit(this.CA_CERTIFICATE_FORM)">Submit</button>
+                                                (click)="RequestforCASubmit(this.CA_CERTIFICATE_FORM)">Submit</button>
                                         </div>
                                         <div class="d-flex col-12 p-0 pt-3" id="FromClientRequest">
                                             <div class="row col-12 mt-0 p-0">
                                                 <div class="row col-12 p-0">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Applicant Name</label>
-                                                        <ng-custom-input type="text" [(ngInput)]="this.CA_CERTIFICATE_FORM.ApplicantName"
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.ApplicantName"
                                                             placeHolderText="Applicant Name"></ng-custom-input>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">LC Issuing Bank</label>
-                                                        <ng-custom-input type="text" [(ngInput)]="this.CA_CERTIFICATE_FORM.LCIssuingBank"
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.LCIssuingBank"
                                                             placeHolderText="LC Issuing Bank"></ng-custom-input>
                                                     </div>
                                                 </div>
                                                 <div class="row col-12 p-0">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Supplier Name</label>
-                                                        <ng-custom-input type="text" [(ngInput)]="this.CA_CERTIFICATE_FORM.SupplierName"
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.SupplierName"
                                                             placeHolderText="Supplier Name"></ng-custom-input>
                                                     </div>
                                                     <div class="form-group col-md-6">
@@ -455,19 +500,22 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">LC No/BOE No</label>
-                                                        <ng-custom-input type="text" [(ngInput)]="this.CA_CERTIFICATE_FORM.LCNoBOENo"
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.LCNoBOENo"
                                                             placeHolderText="LC No./BOE No."></ng-custom-input>
                                                     </div>
                                                 </div>
                                                 <div class="row col-12 p-0">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">LC/BOE Amount</label>
-                                                        <ng-custom-input type="text" [(ngInput)]="this.CA_CERTIFICATE_FORM.LCBOEAmount"
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.LCBOEAmount"
                                                             placeHolderText="LC/BOE Amount"></ng-custom-input>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Tenor</label>
-                                                        <ng-custom-input type="text" [(ngInput)]="this.CA_CERTIFICATE_FORM.Tenor"
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.Tenor"
                                                             placeHolderText="Tenor"></ng-custom-input>
                                                     </div>
                                                 </div>
@@ -491,24 +539,28 @@
                                                 <div class="row col-12 p-0">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Origin Of Goods</label>
-                                                        <ng-custom-input type="text" [(ngInput)]="this.CA_CERTIFICATE_FORM.OriginOfGoods"
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.OriginOfGoods"
                                                             placeHolderText="Origin Of Goods"></ng-custom-input>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Port of Loading</label>
-                                                        <ng-custom-input type="text" [(ngInput)]="this.CA_CERTIFICATE_FORM.PortofLoading"
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.PortofLoading"
                                                             placeHolderText="Port of Loading"></ng-custom-input>
                                                     </div>
                                                 </div>
                                                 <div class="row col-12 p-0">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Port of Discharge</label>
-                                                        <ng-custom-input type="text" [(ngInput)]="this.CA_CERTIFICATE_FORM.PortofDischarge"
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.PortofDischarge"
                                                             placeHolderText="Port of Discharge"></ng-custom-input>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Number of Shipment</label>
-                                                        <ng-custom-input type="text" [(ngInput)]="this.CA_CERTIFICATE_FORM.NumberofShipment"
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.NumberofShipment"
                                                             placeHolderText="Number of Shipment"></ng-custom-input>
                                                     </div>
                                                 </div>
@@ -543,11 +595,176 @@
                                 </div>
                             </div>
                         </mat-tab>
-                        <mat-tab label="CA | CB Request Summary">
+                        <mat-tab id="CB" label="Request for 15 CB">
+                            <div class="col-12 p-2">
+                                <div class="row p-0 pb-2 col-12 modal-bg-transparent">
+                                    <form>
+                                        <div class="d-flex col-12 bg-text">
+                                            <h5 class="bg-text-h5">From Client Request for 15 CB - Select BOE</h5>
+                                            <div style="width: 250px;margin-right: 20px !important;">
+                                                <div style="width: 250px;margin-right: 20px !important;">
+                                                    <app-ng-dropdown-custom placeHolderText="Select beneficiary"
+                                                        [items]="this.benneDetail" bindLabel="benneName"
+                                                        bindValue="benneName" [multiple]="false"
+                                                        [(ngModelDropDown)]="this.CA_CERTIFICATE_FORM.benneName"
+                                                        (modelChanges)="changepipo($event)">
+                                                    </app-ng-dropdown-custom>
+                                                </div>
+                                            </div>
+                                            <div style="width: 250px;margin-right: 20px !important;">
+                                                <app-ng-dropdown-custom class="PopupOpen" popup-close="boedropdown"
+                                                    placeHolderText="Select PI/PO or Bill of Entry"
+                                                    [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
+                                                    [multiple]="false" (modelChanges)="DUMP_FUNCTION($event,['Select BOE'],boedropdown);
+                                            this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event" #boeselectdropdown>
+                                                </app-ng-dropdown-custom>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary"
+                                                (click)="RequestforCASubmit(this.CA_CERTIFICATE_FORM)">Submit</button>
+                                        </div>
+                                        <div class="d-flex col-12 p-0 pt-3" id="FromClientRequest">
+                                            <div class="row col-12 mt-0 p-0">
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Applicant Name</label>
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.ApplicantName"
+                                                            placeHolderText="Applicant Name"></ng-custom-input>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">LC Issuing Bank</label>
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.LCIssuingBank"
+                                                            placeHolderText="LC Issuing Bank"></ng-custom-input>
+                                                    </div>
+                                                </div>
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Supplier Name</label>
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.SupplierName"
+                                                            placeHolderText="Supplier Name"></ng-custom-input>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Supplier Bank Name & SWIFT Code</label>
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.SupplierBankNameSWIFTCode"
+                                                            placeHolderText="Supplier Bank Name & SWIFT Code"></ng-custom-input>
+                                                    </div>
+                                                </div>
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Currency</label>
+                                                        <app-ng-dropdown-custom bindLabel="type"
+                                                            placeHolderText="Select Currency"
+                                                            [items]="this.documentService.getCurrencyList()"
+                                                            [multiple]="false"
+                                                            [selectedItems]="this.BOE_DETAILS?.CURRENCY"
+                                                            [(ngModelDropDown)]="this.CA_CERTIFICATE_FORM.Currency">
+                                                        </app-ng-dropdown-custom>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">LC No/BOE No</label>
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.LCNoBOENo"
+                                                            placeHolderText="LC No./BOE No."></ng-custom-input>
+                                                    </div>
+                                                </div>
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">LC/BOE Amount</label>
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.LCBOEAmount"
+                                                            placeHolderText="LC/BOE Amount"></ng-custom-input>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Tenor</label>
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.Tenor"
+                                                            placeHolderText="Tenor"></ng-custom-input>
+                                                    </div>
+                                                </div>
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Commodity</label>
+                                                        <app-ng-dropdown-custom formControlName="Commodity"
+                                                            placeHolderText="Select Commodity"
+                                                            [(ngModelDropDown)]="this.CA_CERTIFICATE_FORM.Commodity"
+                                                            [items]="this.COMPANY_DETAILS?.commodity" bindLabel="como"
+                                                            bindValue="como" [multiple]="false">
+                                                        </app-ng-dropdown-custom>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Latest date of Shipment</label>
+                                                        <ng-custom-input type="date"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.LatestdateofShipment"
+                                                            placeHolderText="Latest date of Shipment"></ng-custom-input>
+                                                    </div>
+                                                </div>
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Origin Of Goods</label>
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.OriginOfGoods"
+                                                            placeHolderText="Origin Of Goods"></ng-custom-input>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Port of Loading</label>
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.PortofLoading"
+                                                            placeHolderText="Port of Loading"></ng-custom-input>
+                                                    </div>
+                                                </div>
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Port of Discharge</label>
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.PortofDischarge"
+                                                            placeHolderText="Port of Discharge"></ng-custom-input>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Number of Shipment</label>
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="this.CA_CERTIFICATE_FORM.NumberofShipment"
+                                                            placeHolderText="Number of Shipment"></ng-custom-input>
+                                                    </div>
+                                                </div>
+                                                <div class="row col-12 p-0">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Confirmation Charges borne by</label>
+                                                        <app-ng-dropdown-custom
+                                                            formControlName="ConfirmationChargesborne"
+                                                            placeHolderText="Select Confirmation Charges borne by"
+                                                            [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
+                                                            [(ngModelDropDown)]="this.CA_CERTIFICATE_FORM.ConfirmationChargesborne"
+                                                            bindLabel="value" bindValue="value" [multiple]="false"
+                                                            #ConfirmationChargesborne>
+                                                        </app-ng-dropdown-custom>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="inputEmail4">Discounting Charges borne by</label>
+                                                        <app-ng-dropdown-custom
+                                                            formControlName="DiscountingChargesborne"
+                                                            placeHolderText="Select Discounting Charges borne by"
+                                                            [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
+                                                            [(ngModelDropDown)]="this.CA_CERTIFICATE_FORM.DiscountingChargesborne"
+                                                            bindLabel="value" bindValue="value" [multiple]="false"
+                                                            #DiscountingChargesborne>
+                                                        </app-ng-dropdown-custom>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <mat-tab id="CA" label="15 CA Generate Summary">
                             <div class="col-12 p-2">
                                 <div class="row p-0 pb-2 col-12 modal-bg-transparent">
                                     <div class="d-flex col-12 bg-text">
-                                        <h5 class="bg-text-h5">BC Quote Summary</h5>
+                                        <h5 class="bg-text-h5">15 CA Generate Summary</h5>
                                     </div>
                                     <div class="row mt-0 p-2">
                                         <table class="table AcceptReject">
@@ -564,7 +781,7 @@
                                                     <th scope="col" class="col-td-th-3">Term SOFR</th>
                                                     <th scope="col" class="col-td-th-3">ROI (Spread)</th>
                                                     <th scope="col" class="col-td-th-3">Arrangement Fee</th>
-                                                    <th scope="col" class="col-td-th-3">Status</th>
+                                                    <!-- <th scope="col" class="col-td-th-3">Status</th> -->
                                                     <th scope="col" class="col-td-th-3">View</th>
                                                 </tr>
                                             </thead>
@@ -577,27 +794,96 @@
                                                     <td scope="col" class="col-td-th-2">{{item?.LCBOEAmount}}</td>
                                                     <td scope="col" class="col-td-th-3">{{item?.Currency}}</td>
                                                     <td scope="col" class="col-td-th-3">{{item?.Tenor}}</td>
-                                                    <td scope="col" class="col-td-th-3">{{item?.LendingBankNameandSwiftcode}}</td>
+                                                    <td scope="col" class="col-td-th-3">
+                                                        {{item?.LendingBankNameandSwiftcode}}</td>
                                                     <td scope="col" class="col-td-th-3">{{item?.TermSOFR}}</td>
                                                     <td scope="col" class="col-td-th-3">{{item?.ROISpread}}</td>
                                                     <td scope="col" class="col-td-th-3">{{item?.ArrangementFee}}</td>
-                                                    <td scope="col" class="col-td-th-3">
+                                                    <!-- <td scope="col" class="col-td-th-3">
                                                         <div class="d-flex" style="gap: 10px;"
                                                             *ngIf="item?.AcceptReject!='Reject' && item?.AcceptReject!='Accept'">
                                                             <button class="btn btn-primary"
                                                                 (click)="AcceptReject(item?._id,{AcceptReject:'Accept'})">Updated</button>
                                                             <button class="btn btn-danger"
-                                                                (click)="AcceptReject(item?._id,{AcceptReject:'Reject'})">Not Updated</button>
+                                                                (click)="AcceptReject(item?._id,{AcceptReject:'Reject'})">Not
+                                                                Updated</button>
                                                         </div>
                                                         <div class="d-flex" style="gap: 10px;"
                                                             *ngIf="item?.AcceptReject=='Reject' || item?.AcceptReject=='Accept'">
                                                             <span style="pointer-events:none;" class="btn"
                                                                 [ngClass]="{'btn-danger':item?.AcceptReject=='NotUpdated','btn-success':item?.AcceptReject=='Updated'}">{{item?.AcceptReject}}</span>
                                                         </div>
-                                                    </td>
+                                                    </td> -->
                                                     <th scope="col" class="col-td-th-3">
                                                         <button class="upload-button btn btn-primary PopupOpen"
-                                                            [attr.popup-close]="'VIEW_DOCUMENTS'" (click)="VIEW_DOCUMENTS(item?._id,item)">View</button>
+                                                            [attr.popup-close]="'VIEW_DOCUMENTS'"
+                                                            (click)="VIEW_DOCUMENTS(item?._id,item)">View</button>
+                                                    </th>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <mat-tab id="CB" label="15 CB Request Summary">
+                            <div class="col-12 p-2">
+                                <div class="row p-0 pb-2 col-12 modal-bg-transparent">
+                                    <div class="d-flex col-12 bg-text">
+                                        <h5 class="bg-text-h5">15 CB Request</h5>
+                                    </div>
+                                    <div class="row mt-0 p-2">
+                                        <table class="table AcceptReject">
+                                            <thead>
+                                                <tr class="table-tr pr-3">
+                                                    <th scope="col" class="col-td-th-1">#</th>
+                                                    <th scope="col" class="col-td-th-2">Supplier Name</th>
+                                                    <th scope="col" class="col-td-th-3">LC No/BOE No</th>
+                                                    <th scope="col" class="col-td-th-2">LC/BOE Amount</th>
+                                                    <th scope="col" class="col-td-th-3">Currency</th>
+                                                    <th scope="col" class="col-td-th-3">Tenor</th>
+                                                    <th scope="col" class="col-td-th-3">Lending Bank Name and Swift code
+                                                    </th>
+                                                    <th scope="col" class="col-td-th-3">Term SOFR</th>
+                                                    <th scope="col" class="col-td-th-3">ROI (Spread)</th>
+                                                    <th scope="col" class="col-td-th-3">Arrangement Fee</th>
+                                                    <!-- <th scope="col" class="col-td-th-3">Status</th> -->
+                                                    <th scope="col" class="col-td-th-3">View</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="table-tr tr-box-shadow mt-2 pr-3"
+                                                    *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
+                                                    <td scope="col" class="col-td-th-1">{{(i+1)}}</td>
+                                                    <td scope="col" class="col-td-th-2">{{item?.SupplierName}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.LCNoBOENo}}</td>
+                                                    <td scope="col" class="col-td-th-2">{{item?.LCBOEAmount}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.Currency}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.Tenor}}</td>
+                                                    <td scope="col" class="col-td-th-3">
+                                                        {{item?.LendingBankNameandSwiftcode}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.TermSOFR}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.ROISpread}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.ArrangementFee}}</td>
+                                                    <!-- <td scope="col" class="col-td-th-3">
+                                                        <div class="d-flex" style="gap: 10px;"
+                                                            *ngIf="item?.AcceptReject!='Reject' && item?.AcceptReject!='Accept'">
+                                                            <button class="btn btn-primary"
+                                                                (click)="AcceptReject(item?._id,{AcceptReject:'Accept'})">Updated</button>
+                                                            <button class="btn btn-danger"
+                                                                (click)="AcceptReject(item?._id,{AcceptReject:'Reject'})">Not
+                                                                Updated</button>
+                                                        </div>
+                                                        <div class="d-flex" style="gap: 10px;"
+                                                            *ngIf="item?.AcceptReject=='Reject' || item?.AcceptReject=='Accept'">
+                                                            <span style="pointer-events:none;" class="btn"
+                                                                [ngClass]="{'btn-danger':item?.AcceptReject=='NotUpdated','btn-success':item?.AcceptReject=='Updated'}">{{item?.AcceptReject}}</span>
+                                                        </div>
+                                                    </td> -->
+                                                    <th scope="col" class="col-td-th-3">
+                                                        <button class="upload-button btn btn-primary PopupOpen"
+                                                            [attr.popup-close]="'VIEW_DOCUMENTS'"
+                                                            (click)="VIEW_DOCUMENTS(item?._id,item)">View</button>
                                                     </th>
                                                 </tr>
                                             </tbody>
@@ -632,74 +918,103 @@
     </div>
 </div>
 
-<app-custom-model [customstyle]="{'max-width':'60vw !important'}" class="p-2" height="98vh" id="A2_DATA"
-    name="A2 Selection">
+<app-custom-model [customstyle]="{'max-width':'99vw !important'}" class="p-2" height="98vh" id="A2_DATA"
+    name="Purpose Code Selection">
     <div class="p-2">
         <div class="row p-2 col-12">
-            <div class="d-flex col-12" style="height:80vh;">
+            <div class="d-flex col-12" style="height:80vh;flex-direction: column;gap: 20px;">
+                <div class="header-dropdown d-flex" style="gap: 10px;">
+                    <app-ng-dropdown-custom style="width: 300px;margin-left: 20px;" placeHolderText="Search Purpose Code" [items]="this.PURPOSE_CODE_LIST_DATA"
+                        bindLabel="value" bindValue="value"
+                        (modelChanges)="filterData($event)">
+                    </app-ng-dropdown-custom>
+                </div>
                 <div class="row col-12 mt-0">
                     <table class="table">
                         <thead>
-                            <tr class="table-tr">
+                            <tr class="table-tr table-border">
+                                <th scope="col" class="col-td-th-1">#</th>
                                 <th scope="col" class="col-td-th-1">#</th>
                                 <th scope="col" class="col-td-th-1">SL No.</th>
-                                <th scope="col" class="col-td-th-2">Purpose</th>
-                                <th scope="col" class="col-td-th-2">RBI Purpose Code</th>
-                                <th scope="col" class="col-td-th-2">RBI Limit</th>
-                                <th scope="col" class="col-td-th-2 td-th-width">List of prescribed documents
-                                    <div class="d-grid" style="gap: 20px;">
-                                        <p class="text-p">Value<=25000 equv</p>
-                                                <p class="text-p">Value=>25000 equv</p>
-                                    </div>
-                                </th>
-                                <th scope="col" class="col-td-th-2">Remarks Guidance Additional Information</th>
-                                <th scope="col" class="col-td-th-2">Referencees</th>
+                                <th scope="col" class="col-td-th-2" style="width: 500px;">Purpose</th>
+                                <th scope="col" class="col-td-th-2" style="width: 150px;">RBI Purpose Code</th>
+                                <!-- <th scope="col" class="col-td-th-2" style="width: 250px;">RBI Limit</th>
+                                <th scope="col" class="col-td-th-2" style="width: 500px;">Remarks Guidance Additional Information</th>
+                                <th scope="col" class="col-td-th-2" style="width: 500px;">Referencees</th> -->
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="table-tr" *ngFor="let item of this.A2_JSON_DATA;let i=index">
-                                <td scope="col" class="col-td-th-1">
-                                    <input type="checkbox" name="form-control">
-                                </td>
-                                <td scope="col" class="col-td-th-1">{{item?.SL_No}}</td>
-                                <td scope="col" class="col-td-th-2">
-                                    <div class="col p-0" *ngFor="let item2 of item?.Purpose;let i=index">
-                                        <p class="text-p" [innerHTML]="item2"></p>
-                                    </div>
-                                <td scope="col" class="col-td-th-2">
-                                    <div class="col p-0" *ngFor="let item2 of item?.RBI_Purpose_Code;let i=index">
-                                        <p class="text-p" [innerHTML]="item2"></p>
-                                    </div>
-                                </td>
-                                <td scope="col" class="col-td-th-2">
-                                    <div class="col p-0" *ngFor="let item2 of item?.RBI_Limit;let i=index">
-                                        <p class="text-p" [innerHTML]="item2"></p>
-                                    </div>
-                                </td>
-                                <td scope="col" class="col-td-th-2 td-th-width">
-                                    <div class="d-grid" style="gap: 20px;">
-                                        <div class="col p-0"
-                                            *ngFor="let item2 of item?.Value_less_25000_equv;let i=index">
-                                            <p class="text-p" [innerHTML]="item2"></p>
+                            <div class="table-type" *ngFor="let item of  this.PURPOSE_CODE_FILTER_DATA;let i=index"
+                                [ngClass]="{'table-active':item.isExpand==true}">
+                                <tr class="table-tr added-active" title="click here see more details">
+                                    <td title="ORM Data Showing and Hide" scope="col" class="col-td-th-1"
+                                        (click)="item.isExpand=!item.isExpand;">
+                                        <span *ngIf="item.isExpand==true" class="fa fa-chevron-up"></span>
+                                        <span *ngIf="item.isExpand==false" class="fa fa-chevron-down"></span>
+                                    </td>
+                                    <td scope="col" class="col-td-th-1">
+                                        <input type="checkbox" (change)="choosenItems($event,item?._id,i,item);" />
+                                    </td>
+                                    <td scope="col" class="col-td-th-1">{{item?.SL_No}}</td>
+                                    <td scope="col" class="col-td-th-2" style="width: 500px;">
+                                        <p class="text-p" *ngFor="let item2 of item?.Purpose;let i=index"
+                                            [innerHTML]="item2"></p>
+                                    </td>
+                                    <td scope="col" class="col-td-th-2" style="width: 150px;">
+                                        <p class="text-p" *ngFor="let item2 of item?.RBI_Purpose_Code;let i=index"
+                                            [innerHTML]="item2"></p>
+                                    </td>
+                                    <!-- <td scope="col" class="col-td-th-2" style="width: 250px;">
+                                    <p class="text-p" *ngFor="let item2 of item?.RBI_Limit;let i=index" [innerHTML]="item2"></p></td>
+                                <td scope="col" class="col-td-th-2" style="width: 500px;"><p class="text-p"  *ngFor="let item2 of item?.Remarks_Guidance_Additional_Information;let i=index" [innerHTML]="item2"></p></td>
+                                <td scope="col" class="col-td-th-2" style="width: 500px;"><p class="text-p"  *ngFor="let item2 of item?.Referencees;let i=index" [innerHTML]="item2"></p></td> -->
+                                </tr>
+                                <tr class="table-tr table-tr-1 tr-box-shadow"
+                                    [ngClass]="{'Table-Show':item.isExpand==true,'Table-Hide':item.isExpand==false}">
+                                    <td colspan="4" style="width: 100%;border: none;">
+                                        <div class="header">
+                                            <h5>List of prescribed documents</h5>
                                         </div>
-                                        <div class="col p-0"
-                                            *ngFor="let item2 of item?.Value_greater_25000_equv;let i=index">
-                                            <p class="text-p" [innerHTML]="item2"></p>
+                                        <div class="center-panel">
+                                            <table class="table table-style">
+                                                <thead>
+                                                    <tr class="table-tr table-border">
+                                                        <th scope="col"
+                                                            *ngIf="sumTotalAmount < 25000"
+                                                            class="col-td-th-2 td-th-width" style="width: 500px;">
+                                                            <p class="text-p">Value<=25000 equv</p>
+                                                        </th>
+                                                        <th scope="col"
+                                                            *ngIf="sumTotalAmount!= 0 && sumTotalAmount > 25000"
+                                                            class="col-td-th-2 td-th-width" style="width: 500px;">
+                                                            <p class="text-p">Value=>25000 equv</p>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="table-tr added-active"
+                                                        title="click here see more details">
+                                                        <td title="ORM Data Showing and Hide"
+                                                            *ngIf="sumTotalAmount < 25000"
+                                                            scope="col" class="col-td-th-2" style="width: 500px;">
+                                                            <p class="text-p"
+                                                                *ngFor="let item2 of item?.Value_less_25000_equv;let i=index"
+                                                                [innerHTML]="item2"></p>
+                                                        </td>
+                                                        <td scope="col" class="col-td-th-2"
+                                                            *ngIf="sumTotalAmount!= 0 && sumTotalAmount > 25000"
+                                                            style="width: 500px;">
+                                                            <p class="text-p"
+                                                                *ngFor="let item2 of item?.Value_greater_25000_equv;let i=index"
+                                                                [innerHTML]="item2"></p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    </div>
-                                </td>
-                                <td scope="col" class="col-td-th-2">
-                                    <div class="col p-0"
-                                        *ngFor="let item2 of item?.Remarks_Guidance_Additional_Information;let i=index">
-                                        <p class="text-p" [innerHTML]="item2"></p>
-                                    </div>
-                                </td>
-                                <td scope="col" class="col-td-th-2">
-                                    <div class="col p-0" *ngFor="let item2 of item?.Referencees;let i=index">
-                                        <p class="text-p" [innerHTML]="item2"></p>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            </div>
                         </tbody>
                     </table>
                 </div>
@@ -741,12 +1056,12 @@
                                     [ngClass]="{'table-active':item.isExpand==true}">
                                     <tr class="table-tr added-active" title="click here see more details">
                                         <td title="ORM Data Showing and Hide" scope="col" class="col-td-th-1"
-                                            (click)="item.isExpand=!item.isExpand;CloseAllExpand($event,this.PIPO_LIST['data'],i)">
+                                            (click)="item.isExpand=!item.isExpand;">
                                             <span *ngIf="item.isExpand==true" class="fa fa-chevron-up"></span>
                                             <span *ngIf="item.isExpand==false" class="fa fa-chevron-down"></span>
                                         </td>
                                         <td scope="col" class="col-td-th-1">
-                                            <input type="checkbox" (change)="choosenItems($event,item?._id,i,item);" />
+                                            <input type="checkbox" (change)="SELECT_PURPOSE_CODE($event,i);" />
                                         </td>
                                         <td scope="col" class="col-td-th-2">
                                             {{item?.boeDate}}</td>
@@ -855,3 +1170,104 @@
         </app-custom-model>
     </div>
 </div>
+
+<app-custom-model [modalbodystyle]="{'max-height':'calc(100vh - 120px) !important'}"
+    [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="CA_DATA" name="CA SELECTION">
+    <div class="p-2">
+        <div class="row p-2 modal-bg">
+            <div class="d-flex" style="height: 76vh;">
+                <div class="row mt-0 p-2">
+                    <table class="table AcceptReject">
+                        <thead>
+                            <tr class="table-tr pr-3">
+                                <th scope="col" class="col-td-th-1">#</th>
+                                <th scope="col" class="col-td-th-1">#</th>
+                                <th scope="col" class="col-td-th-2">Supplier Name</th>
+                                <th scope="col" class="col-td-th-3">LC No/BOE No</th>
+                                <th scope="col" class="col-td-th-2">LC/BOE Amount</th>
+                                <th scope="col" class="col-td-th-3">Currency</th>
+                                <th scope="col" class="col-td-th-3">Tenor</th>
+                                <th scope="col" class="col-td-th-3">Lending Bank Name and Swift code
+                                </th>
+                                <th scope="col" class="col-td-th-3">Term SOFR</th>
+                                <th scope="col" class="col-td-th-3">ROI (Spread)</th>
+                                <th scope="col" class="col-td-th-3">Arrangement Fee</th>
+                                <th scope="col" class="col-td-th-3">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-tr tr-box-shadow mt-2 pr-3"
+                                *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
+                                <td scope="col" class="col-td-th-1">{{(i+1)}}</td>
+                                <td scope="col" class="col-td-th-1">
+                                    <p class="mb-0"><input type="checkbox" [checked]="this.CA_SELECTION_INDEX[i]"
+                                            (click)="CA_SELECTION($event,i)" /></p>
+                                </td>
+                                <td scope="col" class="col-td-th-2">{{item?.SupplierName}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.LCNoBOENo}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.LCBOEAmount}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.Currency}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.Tenor}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.LendingBankNameandSwiftcode}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.TermSOFR}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.ROISpread}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.ArrangementFee}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-custom-model>
+
+
+<app-custom-model [modalbodystyle]="{'max-height':'calc(100vh - 120px) !important'}"
+    [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="CB_DATA" name="CB SELECTION">
+    <div class="p-2">
+        <div class="row p-2 modal-bg">
+            <div class="d-flex" style="height: 76vh;">
+                <div class="row mt-0 p-2">
+                    <table class="table AcceptReject">
+                        <thead>
+                            <tr class="table-tr pr-3">
+                                <th scope="col" class="col-td-th-1">#</th>
+                                <th scope="col" class="col-td-th-1">#</th>
+                                <th scope="col" class="col-td-th-2">Supplier Name</th>
+                                <th scope="col" class="col-td-th-3">LC No/BOE No</th>
+                                <th scope="col" class="col-td-th-2">LC/BOE Amount</th>
+                                <th scope="col" class="col-td-th-3">Currency</th>
+                                <th scope="col" class="col-td-th-3">Tenor</th>
+                                <th scope="col" class="col-td-th-3">Lending Bank Name and Swift code
+                                </th>
+                                <th scope="col" class="col-td-th-3">Term SOFR</th>
+                                <th scope="col" class="col-td-th-3">ROI (Spread)</th>
+                                <th scope="col" class="col-td-th-3">Arrangement Fee</th>
+                                <th scope="col" class="col-td-th-3">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-tr tr-box-shadow mt-2 pr-3"
+                                *ngFor="let item of this.CA_CERTIFICATE_DATA;let i=index">
+                                <td scope="col" class="col-td-th-1">{{(i+1)}}</td>
+                                <td scope="col" class="col-td-th-1">
+                                    <p class="mb-0"><input type="checkbox" [checked]="this.CB_SELECTION_INDEX[i]"
+                                            (click)="CB_SELECTION($event,i)" /></p>
+                                </td>
+                                <td scope="col" class="col-td-th-2">{{item?.SupplierName}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.LCNoBOENo}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.LCBOEAmount}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.Currency}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.Tenor}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.LendingBankNameandSwiftcode}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.TermSOFR}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.ROISpread}}</td>
+                                <td scope="col" class="col-td-th-3">{{item?.ArrangementFee}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-custom-model>

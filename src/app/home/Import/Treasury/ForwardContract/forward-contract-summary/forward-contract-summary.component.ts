@@ -16,6 +16,11 @@ export class ForwardContractSummaryComponent implements OnInit {
   api_base: any;
   authToken: any;
   headers: any
+  CancellationFORM_DATA: any = {
+    CancellationDate:'',
+    CancellationAmount: '',
+    CancellationRate: '',
+  }
   @ViewChild('epltable', { static: false }) epltable: ElementRef;
 
   constructor(public documentService: DocumentService,
@@ -105,4 +110,5 @@ export class ForwardContractSummaryComponent implements OnInit {
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'ForwardContract.xlsx');
   }
+  Cancellation_FORM_DATA_Update_Form(value: any) {}
 }

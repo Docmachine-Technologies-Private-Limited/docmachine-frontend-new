@@ -59,16 +59,12 @@ export class ForwardContractAddComponent implements OnInit {
         Currency: '',
         BookingAmount: '',
         UtilizedAmount: '',
-        CancellationDate:'',
-        CancellationAmount: '',
         AvailableAmount: '',
         FromDate: '',
         ToDate: '',
         NetRate: '',
-        CancellationRate: '',
         BookedUnderFacility: '',
         ImportExport: '',
-        Status: '',
         Underlying: '',
       }
     }
