@@ -11,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class PowerAdminComponent implements OnInit {
   item2: any;
-  val: Object;
+  val:any;
   value: any = [];
   file: any;
   approved: boolean;

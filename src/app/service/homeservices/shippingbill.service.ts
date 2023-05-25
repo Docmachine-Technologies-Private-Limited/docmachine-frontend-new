@@ -24,9 +24,19 @@ export class ShippingbillDataService {
       this.documentService.getMaster(1).subscribe(
         (res: any) => {
           console.log(res,'getShippingBillList')
-          let temppipo = new ShippingBillDisplayListViewItem(res.data);
+          let temppipo:any = new ShippingBillDisplayListViewItem(res.data);
           this.shippingBillSubsciber.next(temppipo.shippingBillList);
           resolve(temppipo);
+        },
+        (err) => reject(err)
+      );
+    });
+  }
+  getShippingBillList_Master = () => {
+    return new Promise((resolve, reject) => {
+      this.documentService.getMaster(1).subscribe(
+        (res: any) => {
+          resolve(res?.data);
         },
         (err) => reject(err)
       );

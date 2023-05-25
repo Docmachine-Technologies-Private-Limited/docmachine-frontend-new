@@ -4,8 +4,7 @@ import { UserService } from './../../service/user.service';
 import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AppConfig } from 'src/app/app.config';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../service/window-information.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
 @Component({
@@ -23,49 +22,48 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
   memeberForm?: FormGroup;
   id: any;
   item: Object;
-  item1: any=[];
+  item1: any = [];
   authToken: any;
   headers: any;
-  img: any;
+  img: any = '';
   toggle = false;
   submitted = false;
 
   public config: DropzoneConfigInterface;
   api_base: any;
 
-  FORM_BUILDER: any={
+  FORM_BUILDER: any = {
     email: "",
-    imageUrl: "",
-    name:""
+    name: ""
   }
-  EDIT_FORM_BUILDER: any={
-    name:'',
-    UnderSubscriptionCheckBox:'',
-    imageUrl:'',
-    UnderSubscription:'',
-    Role_Type:'',
-    RoleCheckbox:''
+  EDIT_FORM_BUILDER: any = {
+    name: ''
   }
-  SELECTED_EDIT_DATA:any=[];
-  SELECTED_INDEX=0;
+  SELECTED_EDIT_DATA: any = [];
+  SELECTED_INDEX = 0;
 
-  userData:any=[];
-  ROLE_TYPES:any='';
-  MEMBER_DATA:any=[];
+  userData: any = [];
+  ROLE_TYPES: any = '';
+  MEMBER_DATA: any = [];
 
-  ROLE_LIST={
-    '1':'Without maker/checker',
-    '2':'Maker and Approver',
-    '3':'Maker checker and Approver'
+  ROLE_LIST = {
+    '1': 'Without maker/checker',
+    '2': 'Maker and Approver',
+    '3': 'Maker checker and Approver'
+  }
+  LIST_ROLE = {
+    'Without maker/checker': 1,
+    'Maker and Approver': 2,
+    'Maker checker and Approver': 3
   }
   constructor(@Inject(PLATFORM_ID) public platformId,
-  private route?: ActivatedRoute, private formBuilder?: FormBuilder,
-  private userService?: UserService, public appconfig?: AppConfig,
-  private sanitizer?: DomSanitizer, private toastr?: ToastrService,
-  private elRef?:ElementRef,
-  public wininfo?: WindowInformationService) {
+    public route?: ActivatedRoute, public formBuilder?: FormBuilder,
+    public userService?: UserService,
+    public sanitizer?: DomSanitizer, public toastr?: ToastrService,
+    public elRef?: ElementRef,
+    public wininfo?: WindowInformationService) {
     this.loadFromLocalStorage()
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService?.api_base;
     console.log(this.api_base)
     console.log(this.authToken)
     this.headers = {
@@ -91,22 +89,20 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     }
   }
 
- async ngOnInit() {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
+  async ngOnInit() {
+    this.wininfo?.set_controller_of_width(270, '.content-wrap')
     this.toggle = false;
-    this.id = this.route.snapshot.queryParams['id'];
+    this.id = this.route?.snapshot.queryParams['id'];
     console.log(this.id)
-    this.userData = await this.userService.getUserDetail();
+    this.userData = await this.userService?.getUserDetail();
     // this.userData = this.userData.result
-    console.log("userData",this.userData)
-    this.memeberForm = this.formBuilder.group({
+    console.log("userData", this.userData)
+    this.memeberForm = this.formBuilder?.group({
       name: ['', [Validators.required]],
-      email: ['', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-      UnderSubscription:['Select Subscription', [Validators.required]],
-      UnderSubscriptionCheckBox:[false, [Validators.requiredTrue]],
+      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]]
     });
 
-    this.userService.getMemeber(this.id)
+    this.userService?.getMemeber(this.id)
       .subscribe(
         data => {
           console.log("king123")
@@ -119,9 +115,9 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
         });
   }
 
-URL_CREATE(url){
-  return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-}
+  URL_CREATE(url) {
+    return this.sanitizer?.bypassSecurityTrustResourceUrl(url);
+  }
   public onUploadInit(args: any): void {
     console.log('onUploadInit:', args);
   }
@@ -134,171 +130,242 @@ URL_CREATE(url){
     //this.uploading = false;
     console.log(args)
     console.log(args[1].data)
-    this.img = args[1].data
     this.toggle = true;
   }
-  OpenPopup(formmodel:any){
-    if (this.userData['result']['Login_Limit']>this.item1.length) {
-      formmodel.style.display='block'
+  OpenPopup(formmodel: any) {
+    if (this.userData['result']['Login_Limit'] > this.item1.length) {
+      this.img = '';
+      formmodel.style.display = 'block'
     } else {
-      formmodel.style.display='none';
-      this.toastr.error('Yours add member limit exceeded...');
+      formmodel.style.display = 'none';
+      this.toastr?.error('Yours add member limit exceeded...');
     }
   }
-  EditData(temp:any,data:any){
-    this.SELECTED_INDEX=1;
-    this.SELECTED_EDIT_DATA=this.item1[data['index']];
-    console.log(this.SELECTED_EDIT_DATA,'sdhfjsdfsdfsdf');
-    this.userService.getUserDetailById(this.SELECTED_EDIT_DATA['email']).then((data) => {
-      this.MEMBER_DATA=data;
-      this.EDIT_FORM_BUILDER={
-        name:data['fullName'],
-        UnderSubscriptionCheckBox:data['RoleCheckbox'],
-        imageUrl:this.SELECTED_EDIT_DATA['imageUrl'],
-        UnderSubscription:data['Subscription'],
-        Role_Type:data['Role_Type'],
-        RoleCheckbox:data['RoleCheckbox']
+  CONSOLE(value: any) {
+    const file:any = value[0];
+    console.log(file,'sdfjsdggfdsjfsdf')
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      console.log(reader.result);
+      this.userService?.UploadS3Buket({fileName:file?.name,buffer:reader.result,type:file?.type}).subscribe((response:any)=>{
+        console.log(response,'response')
+        this.img = response?.url;
+      })
+    };
+    console.log(value, 'console')
+  }
+  
+  EditData(temp: any, data: any) {
+    this.SELECTED_INDEX = 1;
+    console.log(this.SELECTED_EDIT_DATA, 'sdhfjsdfsdfsdf');
+    this.MEMBER_DATA = []
+    this.userService?.getEamilByIdUserMemberDetails(this.item1[data['index']]['email']).then((data: any) => {
+      this.MEMBER_DATA = data?.UserDetails != null ? data?.UserDetails : data?.MemberDetails;
+      this.SELECTED_EDIT_DATA = data?.MemberDetails
+      this.img = data?.MemberDetails?.imageUrl
+      this.EDIT_FORM_BUILDER = {
+        name: data?.MemberDetails?.name
       }
-      console.log(data,'getUserDetailByIdgetUserDetailById');
+      console.log(data, 'getUserDetailByIdgetUserDetailById');
     })
   }
-  onSubmit(formmodel:any) {
+  cleardata() {
+    this.FORM_BUILDER = []
+  }
+  onSubmit(formmodel: any) {
     this.submitted = true;
-    this.FORM_BUILDER['imageUrl'] = this.img;
-    this.FORM_BUILDER['UnderSubscriptionCheckBox']=this.ROLE_TYPES;
-    this.FORM_BUILDER['Subscription']=this.FORM_BUILDER['UnderSubscription'];
     console.log(this.FORM_BUILDER)
-    this.findEmptyObject(this.FORM_BUILDER,[undefined,null,'','Select Subscription']).then((value:any)=>{
-      if (value==true) {
-        console.log(this.FORM_BUILDER,'this.memeberForm')
-        this.userService.addMemeber(this.id, this.FORM_BUILDER)
-          .subscribe(
-            data => {
-              console.log("king123")
-              console.log(data)
-              if (data['data']!=undefined && data['data']!=null) {
-                formmodel.style.display='none'
-                this.toastr.success('Added Successfully data...');
-                this.ngOnInit()
-              }else{
-                this.toastr.error(data['message']);
-              }
-            },
-            error => {
-              console.log("error")
-            });
-      }else{
+    this.findEmptyObject(this.FORM_BUILDER, [undefined, null, '', 'Select Subscription']).then((value: any) => {
+      if (value == true) {
+        this.FORM_BUILDER['UnderSubscriptionCheckBox'] = this.ROLE_TYPES != '' ? this.ROLE_TYPES : 'NA'
+        this.FORM_BUILDER['Subscription'] = this.FORM_BUILDER['UnderSubscription'];
+        this.FORM_BUILDER['imageUrl'] = this.img;
+        console.log(this.FORM_BUILDER, 'this.memeberForm')
+        this.userService?.getEamilByIdUserMember(this.FORM_BUILDER['email']).then((emailvalidation: any) => {
+          console.log(emailvalidation, 'sdshdfjdsfhsdgfsdhfgjsd')
+          if (emailvalidation.length == 0) {
+            this.userService?.addMemeber(this.id, this.FORM_BUILDER)
+              .subscribe(
+                data => {
+                  console.log("king123")
+                  console.log(data)
+                  if (data['data'] != undefined && data['data'] != null) {
+                    formmodel.style.display = 'none'
+                    this.toastr?.success('Added Successfully data...');
+                    this.resetform();
+                    this.FORM_BUILDER = {};
+                    this.FORM_BUILDER = {
+                      email: "",
+                      name: ""
+                    }
+                    this.userService?.getMemeber(this.id).subscribe(data => {
+                        console.log("king123")
+                        console.log(data)
+                        this.item1 = data['data']
+                        console.log(this.item1['length'])
+                      },
+                      error => {
+                        console.log("error")
+                      });
+                  } else {
+                    this.toastr?.error(data['message']);
+                  }
+                },
+                error => {
+                  console.log("error")
+                  this.resetform();
+                });
+          } else {
+            this.toastr?.error('This email id already exit please used different email id.');
+          }
+        },
+          error => {
+            console.log("error")
+            this.resetform();
+          });
+
+      } else {
         for (const key in value) {
-          this.toastr.error(value[key]);
+          this.toastr?.error(value[key]);
         }
       }
     });
   }
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }
 
   get f(): { [key: string]: AbstractControl } {
-    return this.memeberForm.controls;
+    return this.memeberForm?.controls as any;
   }
   ngAfterViewInit() {
   }
-  FORM_BUILDER_INSERT_VALUE(key:any,value: string) {
-    this.FORM_BUILDER[key]=value;
+  FORM_BUILDER_INSERT_VALUE(key: any, value: string) {
+    this.FORM_BUILDER[key] = value;
   }
-  EDIT_FORM_BUILDER_INSERT_VALUE(key:any,value: string) {
-    this.EDIT_FORM_BUILDER[key]=value;
+  EDIT_FORM_BUILDER_INSERT_VALUE(key: any, value: string) {
+    this.EDIT_FORM_BUILDER[key] = value;
   }
-  findEmptyObject(object: any,errorlist: any) {
-    var temp:any={};
+  findEmptyObject(object: any, errorlist: any) {
+    var temp: any = {};
     return new Promise((resolve, reject) => {
-      var objectkeys=Object.keys(object);
-      if (objectkeys.length==0) {
+      var objectkeys = Object.keys(object);
+      if (objectkeys.length == 0) {
         resolve([])
         return;
       }
       for (let index = 0; index < objectkeys.length; index++) {
-        if (errorlist.includes(object[objectkeys[index]]) || object[objectkeys[index]]=='') {
-          temp[objectkeys[index]]=objectkeys[index]+' Please check input value is empty!';
+        if (errorlist.includes(object[objectkeys[index]]) || object[objectkeys[index]] == '') {
+          temp[objectkeys[index]] = objectkeys[index] + ' Please check input value is empty!';
         }
-      if (objectkeys.length==(index+1)) {
-        if (Object.keys(temp).length!=0) {
-          resolve(temp);
-        }else{
-          resolve(true);
+        if (objectkeys.length == (index + 1)) {
+          if (Object.keys(temp).length != 0) {
+            resolve(temp);
+          } else {
+            resolve(true);
+          }
         }
       }
-    }
     });
   }
-
-  deleteuser(data:any){
-    this.userService.deleteUser_Role(data['email']).subscribe((res: any)=>{
-      if (res['status']==true) {
+  resetform() {
+    $('.edit_form_new_sec').find('input:text, input:password, input:file, select, textarea').each(function () {
+      $(this).val('');
+    });
+    $('.edit_form_new_sec').find('input:radio,input:checkbox').each(function () {
+      $(this).removeAttr('checked');
+      $(this).removeAttr('selected');
+      $(this).prop('checked', false); // Unchecks it
+    });
+  }
+  deleteuser(data: any) {
+    this.userService?.deleteUser_Role(data['email']).subscribe((res: any) => {
+      if (res['status'] == true) {
         this.ngOnInit()
       }
-      console.log(res,'dfsdfdsfsgdsfhdsgfd');
+      console.log(res, 'dfsdfdsfsgdsfhdsgfd');
     })
   }
-  onEditSubmit(formmodel:any){
+  onEditSubmit(formmodel: any) {
     this.submitted = true;
-    this.EDIT_FORM_BUILDER['imageUrl'] = this.img!=undefined? this.img:this.SELECTED_EDIT_DATA['imageUrl'];
-    this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox']=this.ROLE_TYPES!=''?this.ROLE_TYPES:this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox'];
-    this.EDIT_FORM_BUILDER['Role_Type']=this.ROLE_TYPES!=''?this.ROLE_TYPES:this.EDIT_FORM_BUILDER['Role_Type'];
     console.log(this.EDIT_FORM_BUILDER)
-    this.findEmptyObject(this.EDIT_FORM_BUILDER,[undefined,null,'','Select Subscription']).then((value:any)=>{
-      if (value==true) {
-        console.log(this.EDIT_FORM_BUILDER,'this.memeberForm')
-        this.userService.UpdateUserMemeber(this.SELECTED_EDIT_DATA['email'],this.EDIT_FORM_BUILDER)
+    this.findEmptyObject(this.EDIT_FORM_BUILDER, [undefined, null, '', 'Select Subscription']).then((value: any) => {
+      if (value == true) {
+        this.EDIT_FORM_BUILDER['UnderSubscription'] = this.EDIT_FORM_BUILDER['UnderSubscription'] != undefined ? this.EDIT_FORM_BUILDER['UnderSubscription'] : this.SELECTED_EDIT_DATA['Subscription'];
+        this.EDIT_FORM_BUILDER['imageUrl'] = this.img != undefined ? this.img : this.SELECTED_EDIT_DATA['imageUrl'];
+        this.EDIT_FORM_BUILDER['Role_Type'] = this.ROLE_TYPES != '' ? this.ROLE_TYPES : this.userData?.result['Role_Type'];
+        this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox'] = this.ROLE_TYPES != '' ? this.ROLE_TYPES : this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox'];
+        console.log(this.EDIT_FORM_BUILDER, 'this.memeberForm')
+        this.userService?.UpdateUserMemeber(this.SELECTED_EDIT_DATA['email'], this.EDIT_FORM_BUILDER)
           .subscribe(
             data => {
-              console.log(data,'UpdateMemeber')
-              if (data['data']!=undefined && data['data']!=null) {
-                formmodel.style.display='none'
-                this.toastr.success('Successfully Update data...');
+              console.log(data, 'UpdateMemeber')
+              if (data['data'] != undefined && data['data'] != null) {
+                formmodel.style.display = 'none'
+                this.toastr?.success('Successfully Update data...');
                 this.ngOnInit()
-                this.SELECTED_EDIT_DATA=[];
-                this.SELECTED_INDEX=0;
-              }else{
-                this.toastr.error(data['message']);
-                this.SELECTED_EDIT_DATA=[];
-                this.SELECTED_INDEX=0;
+                this.SELECTED_EDIT_DATA = [];
+                this.SELECTED_INDEX = 0;
+                this.EDIT_FORM_BUILDER = {
+                  name: '',
+                }
+                this.userService?.getMemeber(this.id).subscribe(data => {
+                  console.log("king123")
+                  console.log(data)
+                  this.item1 = data['data']
+                  console.log(this.item1['length'])
+                },
+                  error => {
+                    console.log("error")
+                  });
+              } else {
+                this.toastr?.error(data['message']);
+                this.SELECTED_EDIT_DATA = [];
+                this.SELECTED_INDEX = 0;
+                this.EDIT_FORM_BUILDER = {
+                  name: ''
+                }
               }
+              this.resetform();
             },
             error => {
               console.log("error")
-              this.SELECTED_EDIT_DATA=[];
-              this.SELECTED_INDEX=0;
+              this.SELECTED_EDIT_DATA = [];
+              this.SELECTED_INDEX = 0;
+              this.EDIT_FORM_BUILDER = {
+                name: ''
+              }
             });
-      }else{
+      } else {
         for (const key in value) {
-          this.toastr.error(value[key]);
+          this.toastr?.error(value[key]);
         }
       }
     });
   }
-  ObjectLength(data:any){
+  ObjectLength(data: any) {
     return Object.keys(data).length;
   }
-  onChange(event,email:string, isChecked: boolean) {
-      $('.form-check-input').prop("checked",false);
-      if (isChecked) {
-        $(event.target).prop("checked", true);
-      }
-    if(isChecked) {
-      this.ROLE_TYPES=email;
+  onChange(event, email: string, isChecked: boolean) {
+    $('.form-check-input').prop("checked", false);
+    if (isChecked) {
+      $(event.target).prop("checked", true);
+    }
+    if (isChecked) {
+      this.ROLE_TYPES = email;
     } else {
-      this.ROLE_TYPES='';
+      this.ROLE_TYPES = '';
 
     }
   }
-  JSON_TO_ARRAY(object:any){
-    var temp:any=[];
+  JSON_TO_ARRAY(object: any) {
+    var temp: any = [];
     for (const key in object) {
-      if (object[key]!='' && object[key]!=undefined) {
-          temp.push(object[key]);
+      if (object[key] != '' && object[key] != undefined) {
+        temp.push(object[key]);
       }
     }
     return temp;

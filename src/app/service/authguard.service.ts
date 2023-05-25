@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 export class AuthGuard {
   public token: any;
   public role: any;
-    authToken: string;
+    authToken: any;
 
   constructor(public router: Router) { }
 
@@ -20,8 +20,7 @@ export class AuthGuard {
   }
 
   isLoggedIn(): boolean {
-    this.token = localStorage.getItem('token');
-    // this.role = localStorage.getItem('userRole');
+    this.token = sessionStorage.getItem('token');
     if (this.token === null) {
       return false;
     } else {
@@ -30,14 +29,14 @@ export class AuthGuard {
   }
 
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }
   public setLocalStorage(key: string, value:any){
-    localStorage.setItem(key,value);
+    sessionStorage.setItem(key,value);
   }
   public getLocalStorage(key: string):any{
-    return localStorage.getItem(key);
+    return sessionStorage.getItem(key);
   }
 }

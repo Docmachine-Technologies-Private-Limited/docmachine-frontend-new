@@ -799,11 +799,12 @@ body {
 .content_white_background {
     display: inline-block;
     width: 100%;
-    padding: 16px;
+    padding: 0;
     background: #fff;
     border-radius: 10px;
     margin: 0 0 0px 0;
     box-shadow: 0px 2px 10px 0px rgb(58 53 65 / 10%);
+    height: calc(100vh - 120px);
 }
 
 .new_data_table_summ {
@@ -1096,19 +1097,20 @@ body {
 .data_table_new {
     display: inline-block;
     width: 100%;
-    margin-top: 20px;
+    overflow: auto;
+    height: calc(100vh - 190px);
 }
 
 .data_table_new table tr th {
-    font-size: 14px;
+    font-size: 12px!important;
     padding: 3px 10px;
-    font-weight: 600;
+    color: #131313;
     font-family: 'Poppins', sans-serif;
-    color: #0A3049;
+    font-weight: 500;
 }
 
 .data_table_new table tr td {
-    font-size: 13px!important;
+    font-size: 11px!important;
     padding: 3px 10px;
     color: #777777;
     font-family: 'Poppins', sans-serif;

@@ -6,11 +6,11 @@ import { DomSanitizer } from "@angular/platform-browser";
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../service/window-information.service';
 import {UserService} from './../../service/user.service';
 import * as data1 from '../../currency.json';
 import { MatDialog } from '@angular/material/dialog';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
 @Component({
@@ -27,7 +27,7 @@ export class BOEComponent implements OnInit {
   public item: any;
   public closeResult: string;
   public lastIndex;
-  public item1 = [];
+  public item1:any = [];
   public tableWidth;
   public greaterAmount = 0;
   public allTransactions: any = [];
@@ -108,6 +108,11 @@ export class BOEComponent implements OnInit {
               }
             }
           }
+          this.item1.forEach(element => {
+             if (element?.balanceAmount=='-1') {
+              element['balanceAmount'] = element?.invoiceAmount
+             }
+          });
           this.FILTER_VALUE_LIST= this.item1;
           console.log(res,'yuyuyuyuyuyuyuuy')
         },
@@ -230,6 +235,12 @@ export class BOEComponent implements OnInit {
       if (dialogResult) {
         this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
       }
+    });
+  }
+  
+  getPipoNumbers(data) {
+    return data.pipo.map((x) => {
+      return x.pi_poNo;
     });
   }
 

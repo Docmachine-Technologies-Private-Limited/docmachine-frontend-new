@@ -53,6 +53,7 @@ export class ImportAirwayBlcopyComponent implements OnInit {
   }
 
  async ngOnInit() {
+  this.FILTER_VALUE_LIST= [];
   this.wininfo.set_controller_of_width(270,'.content-wrap')
   this.USER_DATA = await this.userService.getUserDetail();
   console.log("this.USER_DATA", this.USER_DATA)

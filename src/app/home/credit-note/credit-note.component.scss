@@ -924,7 +924,7 @@ table tbody {
     background-color: #49A2D7;
     color: white;
     border: 1px solid rgba(0, 0, 0, 0.4);
-    font-size: 14px;
+    font-size: 11px;
     cursor: pointer;
     border-radius: 2px;
 }
@@ -969,7 +969,30 @@ table {
     color: green;
     font-size: 16px;
 }
-.none{
+
+.none {
     pointer-events: none;
     opacity: .7;
-  }
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #0a0a09;
+    height: 100%;
+}
+
+.table thead,
+.table tbody {
+    width: 100%;
+    margin: auto;
+    margin-top: 0;
+    margin-left: 0;
+    text-align: center;
+    display: inline-table;
+}
+
+.analytics .support .table th,
+.analytics .support .table td {
+    padding: 3px !important;
+}

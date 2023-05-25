@@ -7,20 +7,15 @@ import * as xlsx from 'xlsx';
 import * as data1 from '../../currency.json';
 
 import {
-  AfterViewInit,
-  ChangeDetectorRef,
   ElementRef,
-  Inject,
-  Input,
-  PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
 import { ShippingbillDataService } from "../../service/homeservices/shippingbill.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
-import { UserService } from 'src/app/service/user.service';
+import { WindowInformationService } from '../../service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
+import { UserService } from '../../service/user.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -34,10 +29,10 @@ export class ViewDocumentComponent implements OnInit {
   @ViewChild('epltable', { static: false }) epltable: ElementRef;
   @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
-  public item1 = [];
-  public item2 = [];
-  public item3 = [];
-  public item4 = [];
+  public item1: any = [];
+  public item2: any = [];
+  public item3: any = [];
+  public item4: any = [];
   public viewData: any;
   public closeResult: string;
   public user;
@@ -121,29 +116,64 @@ export class ViewDocumentComponent implements OnInit {
         this.pipo = false;
         this.boe = false;
         this.sb = true;
-        this.shippingBillService.getShippingBillList().then((res: any) => {
-          this.shippingBillService.shippingbills$.subscribe((data: any) => {
-            console.log('getShippingBillList', data)
-            this.item1 = data;
-            this.FILTER_VALUE_LIST = data;
-            for (let index = 0; index < data.length; index++) {
-              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(data[index]?.buyerName[0]) == false) {
-                this.ALL_FILTER_DATA['Buyer_Name'].push(data[index]?.buyerName[0]);
-              }
-              if (this.ALL_FILTER_DATA['Company_Name'].includes(data[index]?.consigneeName) == false) {
-                this.ALL_FILTER_DATA['Company_Name'].push(data[index]?.consigneeName);
-              }
-              if (this.ALL_FILTER_DATA['Origin'].includes(data[index]?.exporterLocationCode) == false) {
-                this.ALL_FILTER_DATA['Origin'].push(data[index]?.exporterLocationCode);
-              }
-              if (this.ALL_FILTER_DATA['Destination'].includes(data[index]?.countryOfFinaldestination) == false) {
-                this.ALL_FILTER_DATA['Destination'].push(data[index]?.countryOfFinaldestination);
-              }
-              if (this.ALL_FILTER_DATA['SB_DATE'].includes(data[index]?.sbdate) == false) {
-                this.ALL_FILTER_DATA['SB_DATE'].push(data[index]?.sbdate);
-              }
+        this.shippingBillService.getShippingBillList_Master().then((data: any) => {
+          console.log('getShippingBillList_Master', data)
+          this.item1 = data;
+          this.item1.forEach(element => {
+            let totalFirxAmount: any = 0;
+            let tp: any = {
+              firxNumber: [],
+              firxDate: [],
+              firxCurrency: [],
+              firxAmount: [],
+              firxCommision: [],
+              firxRecAmo: [],
+              id: [],
+            };
+            for (let index = 0; index < element?.firxdetails.length; index++) {
+              const elementfirxdetails = element?.firxdetails[index];
+              totalFirxAmount += parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount));
+              
+              elementfirxdetails?.firxNumber.split(',').forEach(firxelementno => {
+                tp?.firxNumber?.push(firxelementno)
+              });
+              elementfirxdetails?.firxDate.split(',').forEach(firxDateelement => {
+                tp?.firxDate?.push(firxDateelement)
+              });
+              elementfirxdetails?.firxCurrency.split(',').forEach(firxCurrencyelement => {
+                tp?.firxCurrency?.push(firxCurrencyelement)
+              });
+              elementfirxdetails?.firxAmount.split(',').forEach(firxAmountelement => {
+                tp?.firxAmount?.push(firxAmountelement)
+              });
+              elementfirxdetails?.firxCommision.split(',').forEach(firxCommisionelement => {
+                tp?.firxCommision?.push(firxCommisionelement)
+              });
             }
+            element['FIRX_TOTAL_AMOUNT'] = totalFirxAmount;
+            element['SB_RENAMMING_AMOUNT'] = parseFloat(element?.fobValue) - parseFloat(totalFirxAmount);
+            element['FIRX_INFO']=tp;
           });
+          
+          
+          this.FILTER_VALUE_LIST = data;
+          for (let index = 0; index < data.length; index++) {
+            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(data[index]?.buyerName[0]) == false) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push(data[index]?.buyerName[0]);
+            }
+            if (this.ALL_FILTER_DATA['Company_Name'].includes(data[index]?.consigneeName) == false) {
+              this.ALL_FILTER_DATA['Company_Name'].push(data[index]?.consigneeName);
+            }
+            if (this.ALL_FILTER_DATA['Origin'].includes(data[index]?.exporterLocationCode) == false) {
+              this.ALL_FILTER_DATA['Origin'].push(data[index]?.exporterLocationCode);
+            }
+            if (this.ALL_FILTER_DATA['Destination'].includes(data[index]?.countryOfFinaldestination) == false) {
+              this.ALL_FILTER_DATA['Destination'].push(data[index]?.countryOfFinaldestination);
+            }
+            if (this.ALL_FILTER_DATA['SB_DATE'].includes(data[index]?.sbdate) == false) {
+              this.ALL_FILTER_DATA['SB_DATE'].push(data[index]?.sbdate);
+            }
+          }
         });
       } else if (this.file === 'boe') {
         this.doc = 'BOE';
@@ -176,8 +206,8 @@ export class ViewDocumentComponent implements OnInit {
   }
 
   filter(value, key) {
-    this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
-    if (this.FILTER_VALUE_LIST.length== 0) {
+    this.FILTER_VALUE_LIST = this.item1.filter((item: any) => item[key].indexOf(value) != -1);
+    if (this.FILTER_VALUE_LIST.length == 0) {
       this.FILTER_VALUE_LIST = this.item1;
     }
   }
@@ -396,5 +426,11 @@ export class ViewDocumentComponent implements OnInit {
   }
   transform(input: Array<any>): string {
     return input.join(',');
+  }
+  FIRX_AMOUNT(amountarray: any): any {
+    return parseFloat(amountarray?.split(',')?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)).toFixed(3);
+  }
+  ARRAY_TO_STRING(array,key){
+    return array[key]?.join(',')
   }
 }

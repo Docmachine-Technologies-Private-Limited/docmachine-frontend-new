@@ -1,28 +1,33 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpContext, HttpHeaders, HttpParams} from '@angular/common/http';
-import { observable, Observable, of } from 'rxjs';
-import { AppConfig } from '../../app/app.config';
+import { HttpClient, HttpContext, HttpHeaders, HttpParams } from '@angular/common/http';
+import { observable, Observable, of, Subject } from 'rxjs';
+// import { AppConfig } from '../../app/app.config';
+import * as data1 from './../currency.json';
+import { Router } from '@angular/router';
+import { AppConfig } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentService {
-  authToken: string;
+  authToken: any;
   public headers;
   api_base: string;
-  loading:boolean = false;
-  EXPORT_IMPORT:any={
-    export:false,
-    import:false,
-    callback:()=>{}
+  loading: boolean = false;
+  EXPORT_IMPORT: any = {
+    export: false,
+    import: false,
+    callback: () => { }
   };
-  PDF_DOCUMENTS_DATA:any=[];
-  pipolist:any=[];
-  OUTWARD_REMITTANCE_ADVICE_SHEET: any=[];
-  constructor(public http: HttpClient, public appconfig: AppConfig) {
-    this.api_base = appconfig.apiUrl;
+  PDF_DOCUMENTS_DATA: any = [];
+  pipolist: any = [];
+  OUTWARD_REMITTANCE_ADVICE_SHEET: any = [];
+  MT102_SUBJECT: any = []
+
+  constructor(public http: HttpClient, private router: Router,) {
+    this.api_base = AppConfig?.BASE_URL;
     console.log(this.api_base);
   }
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }
@@ -35,28 +40,28 @@ export class DocumentService {
 
   // Inward inwardRemittance Advice
 
-  setSessionData(key:any,data:any){
-    sessionStorage.setItem(key,JSON.stringify(data));
+  setSessionData(key: any, data: any) {
+    sessionStorage.setItem(key, JSON.stringify(data));
   }
-  getSessionData(key:string){
-    var temp:any=sessionStorage.getItem(key);
-    return temp!=undefined && temp!='undefined' && temp!=null? JSON.parse(temp):null;
+  getSessionData(key: string) {
+    var temp: any = sessionStorage.getItem(key);
+    return temp != undefined && temp != 'undefined' && temp != null ? JSON.parse(temp) : null;
   }
-  getIrAdvice(user){
+  getIrAdvice(user) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
-      headers: new HttpHeaders({Authorization : this.authToken}),
+      headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     let url = `${this.api_base}/irAdvice/get`;
     return this.http.get(url, httpOptions);
   }
 
-  getOrAdvice(user){
+  getOrAdvice(user) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
-      headers: new HttpHeaders({Authorization : this.authToken}),
+      headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     let url = `${this.api_base}/orAdvice/get`;
     return this.http.get(url, httpOptions);
@@ -125,6 +130,15 @@ export class DocumentService {
       httpOptions
     );
   }
+
+  addIrAdvice(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/orAdvice/add`, { data: data }, httpOptions);
+  }
   getBillNo(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -132,15 +146,16 @@ export class DocumentService {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
     return this.http.post(
-      `${this.api_base}/orAdvice/getByIdBillNo`,{_id:id},httpOptions);
+      `${this.api_base}/orAdvice/getByIdBillNo`, { _id: id }, httpOptions);
   }
-  getInvoice_No(query,table_name:any) {
+  getInvoice_No(query, table_name: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/orAdvice/getInvoice_No`,{query:query,tableName:table_name },httpOptions);
+    console.log(query, 'getInvoice_No')
+    return this.http.post(`${this.api_base}/orAdvice/getInvoice_No`, { query: query, tableName: table_name }, httpOptions);
   }
 
 
@@ -206,7 +221,7 @@ export class DocumentService {
     );
   }
 
-  getIrAdviceByBillNo( billNo) {
+  getIrAdviceByBillNo(billNo) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -221,7 +236,7 @@ export class DocumentService {
     );
   }
 
-  getOrAdviceByBillNo( billNo) {
+  getOrAdviceByBillNo(billNo) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -271,7 +286,7 @@ export class DocumentService {
     return this.http.get(url, httpOptions);
   }
 
-  getMasterWithPipo(user){
+  getMasterWithPipo(user) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -327,7 +342,15 @@ export class DocumentService {
     let url = `${this.api_base}/boe/get`;
     return this.http.get(url, httpOptions);
   }
-
+  getBoedatabyPartName(benneName) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/boe/getbyPartName`;
+    return this.http.post(url, { benneName: benneName }, httpOptions);
+  }
   updateMaster(user, _id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -378,7 +401,14 @@ export class DocumentService {
     );
   }
 
-
+  addMasterBySb(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/master/add`, { data: data }, httpOptions);
+  }
   updateBoe(user, _id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -395,12 +425,12 @@ export class DocumentService {
     );
   }
 
-  CHECK_ALL_INVOICES(data:any){
+  CHECK_ALL_INVOICES(data: any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/invoice/get`,data,httpOptions);
+    return this.http.post(`${this.api_base}/invoice/get`, data, httpOptions);
   }
 
   updateBoeByBoe(user, _id) {
@@ -424,7 +454,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/boe/post`,{data:data},httpOptions);
+    return this.http.post(`${this.api_base}/boe/post`, { data: data }, httpOptions);
   }
   getBoeByBoe(boeNumber) {
     this.loadFromLocalStorage();
@@ -507,19 +537,19 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/Inward_remittance/post`,{ Inward_remittance:Inward_remittance },httpOptions);
+    return this.http.post(`${this.api_base}/Inward_remittance/post`, { Inward_remittance: Inward_remittance }, httpOptions);
   }
 
   getPipo() {
     this.loadFromLocalStorage();
     console.log(this.authToken);
-    const httpOptions = {headers: new HttpHeaders({ Authorization: this.authToken })};
+    const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
     return this.http.get(`${this.api_base}/pipo/get`, httpOptions);
   }
   getInward_remittance() {
     this.loadFromLocalStorage();
     console.log(this.authToken);
-    const httpOptions = {headers: new HttpHeaders({ Authorization: this.authToken })};
+    const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
     return this.http.get(`${this.api_base}/Inward_remittance/get`, httpOptions);
   }
 
@@ -533,7 +563,7 @@ export class DocumentService {
     return this.http.get(`${this.api_base}/pipo/getPipoByType?filetype=${type}`, httpOptions);
   }
 
-  getPipoByCustomer(type,buyer) {
+  getPipoByCustomer(type, buyer) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -543,7 +573,7 @@ export class DocumentService {
     return this.http.get(`${this.api_base}/pipo/getPipoByCustomer?filetype=${type}&buyer=${buyer}`, httpOptions);
   }
 
-  getPipos(page,limit,commodity,location,buyer,type) {
+  getPipos(page, limit, commodity, location, buyer, type) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -552,78 +582,93 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/pipo/getPipos?page=${page}&limit=${limit}&commodity=${commodity}&location=${location}&buyer=${buyer}&type=${type}`, httpOptions);
   }
-  deletflagPiPo(data:any) {
+  deletflagPiPo(data: any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/pipo/deleteflag`,data ,httpOptions);
+    return this.http.post(`${this.api_base}/pipo/deleteflag`, data, httpOptions);
   }
-  adddeletflag(data:any) {
+  adddeletflag(data: any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/Approval/add`,{data:data},httpOptions);
+    return this.http.post(`${this.api_base}/Approval/add`, { data: data }, httpOptions);
   }
-  getPendingStatus(id:any) {
+  getPendingStatus(id: any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/Approval/getPendingStatus`,{FileType:id},httpOptions);
+    return this.http.post(`${this.api_base}/Approval/getPendingStatus`, { FileType: id }, httpOptions);
   }
-  getVerifyStatus(id:any) {
+  getVerifyStatus(id: any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/Approval/getVerifyStatus`,{FileType:id},httpOptions);
+    return this.http.post(`${this.api_base}/Approval/getVerifyStatus`, { FileType: id }, httpOptions);
   }
-  getApprovedStatus(id:any) {
+  getApprovedStatus(id: any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/Approval/getApprovedStatus`,{FileType:id},httpOptions);
+    return this.http.post(`${this.api_base}/Approval/getApprovedStatus`, { FileType: id }, httpOptions);
   }
-  getRejectStatus(id:any) {
+  getApprovedData(id: any) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/Approval/getRejectStatus`,{FileType:id},httpOptions);
+    return this.http.post(`${this.api_base}/Approval/get`, { id: id }, httpOptions);
+  }
+  getRejectStatus(id: any) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/getRejectStatus`, { FileType: id }, httpOptions);
   }
   DeleteStatus(data) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/Approval/delete`,{data:data},httpOptions);
+    return this.http.post(`${this.api_base}/Approval/delete`, { data: data }, httpOptions);
   }
   getDownloadStatus(data) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/Approval/getDownloadStatus`,data,httpOptions);
+    return this.http.post(`${this.api_base}/Approval/getDownloadStatus`, data, httpOptions);
   }
   setDownloadStatus(data) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/Approval/UpdateDownloadStatus`,data,httpOptions);
+    return this.http.post(`${this.api_base}/Approval/UpdateDownloadStatus`, data, httpOptions);
   }
+  UpdateStatus(data) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/UpdateStatus`, data, httpOptions);
+  }
+
   RejectedStatus(data) {
     this.loadFromLocalStorage();
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/Approval/reject`,{data:data},httpOptions);
+    return this.http.post(`${this.api_base}/Approval/reject`, { data: data }, httpOptions);
   }
 
-  updatePipobyId(id,data) {
+  updatePipobyId(id, data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -631,7 +676,7 @@ export class DocumentService {
     };
 
     return this.http.patch(
-      `${this.api_base}/pipo/updatePipo/${id}`,data , httpOptions);
+      `${this.api_base}/pipo/updatePipo/${id}`, data, httpOptions);
 
   }
 
@@ -677,13 +722,13 @@ export class DocumentService {
       httpOptions
     );
   }
-  deleteById(data:any) {
+  deleteById(data: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/Approval/delete_by_id/`,data,httpOptions);
+    return this.http.post(`${this.api_base}/Approval/delete_by_id/`, data, httpOptions);
   }
 
   getSBDetailsByPIPO(id) {
@@ -709,6 +754,14 @@ export class DocumentService {
       `${this.api_base}/irAdvice/getInwardByPipo/${id}`,
       httpOptions
     );
+  }
+  getbyPartyName(partyName) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/irAdvice/getbyPartyName`, { partyName: partyName }, httpOptions);
   }
 
   public getPDF(data): Observable<any> {
@@ -859,13 +912,13 @@ export class DocumentService {
     return this.http.get(`${this.api_base}/blcopy/get`, httpOptions);
   }
   getBlcopyrefPromies() {
-    return new Promise((resolve,reject)=>{
+    return new Promise((resolve, reject) => {
       this.loadFromLocalStorage();
       console.log(this.authToken);
       const httpOptions = {
         headers: new HttpHeaders({ Authorization: this.authToken }),
       };
-      this.http.get(`${this.api_base}/blcopy/get`, httpOptions).subscribe((res)=>{resolve(res['data'])});
+      this.http.get(`${this.api_base}/blcopy/get`, httpOptions).subscribe((res) => { resolve(res['data']) });
     });
   }
   getBlcopyrefByblValue(id) {
@@ -898,6 +951,15 @@ export class DocumentService {
       },
       httpOptions
     );
+  }
+  updateBlcopyrefSB(data, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/blcopy/updateSB`, { data: data, id: id }, httpOptions);
   }
 
   //get airway blcopy and advice copy api
@@ -983,7 +1045,7 @@ export class DocumentService {
     return this.http.get(`${this.api_base}/commercial/get`, httpOptions);
   }
 
-  getCommercialByFiletype(filetype,pipo_id) {
+  getCommercialByFiletype(filetype, pipo_id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -1051,13 +1113,13 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/billOfExchange/get`, httpOptions);
   }
-  getBillExchangefile(type:string) {
+  getBillExchangefile(type: string) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/billOfExchange/filetype`, {file:type},httpOptions);
+    return this.http.post(`${this.api_base}/billOfExchange/filetype`, { file: type }, httpOptions);
   }
 
   getBillExchangeByBillExchangeValue(id) {
@@ -1093,139 +1155,139 @@ export class DocumentService {
     );
   }
 
-    // Get Destruction Api
+  // Get Destruction Api
 
-    addDestruction(pipo) {
-      this.loadFromLocalStorage();
-      console.log(this.authToken);
-      const httpOptions = {
-        headers: new HttpHeaders({ Authorization: this.authToken }),
-      };
+  addDestruction(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
 
-      return this.http.post(
-        `${this.api_base}/destruction/post`,
-        { destruction: pipo },
-        httpOptions
-      );
-    }
+    return this.http.post(
+      `${this.api_base}/destruction/post`,
+      { destruction: pipo },
+      httpOptions
+    );
+  }
 
-    getDestruction() {
-      this.loadFromLocalStorage();
-      console.log(this.authToken);
-      const httpOptions = {
-        headers: new HttpHeaders({ Authorization: this.authToken }),
-      };
+  getDestruction() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
 
-      return this.http.get(`${this.api_base}/destruction/get`, httpOptions);
-    }
-    getDestructionfile(type:string) {
-      this.loadFromLocalStorage();
-      console.log(this.authToken);
-      const httpOptions = {
-        headers: new HttpHeaders({ Authorization: this.authToken }),
-      };
-      return this.http.post(`${this.api_base}/destruction/filetype`, {file:type},httpOptions);
-    }
+    return this.http.get(`${this.api_base}/destruction/get`, httpOptions);
+  }
+  getDestructionfile(type: string) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/destruction/filetype`, { file: type }, httpOptions);
+  }
 
-    getDestructionByDestructionValue(id) {
-      this.loadFromLocalStorage();
-      console.log(this.authToken);
-      const httpOptions = {
-        headers: new HttpHeaders({ Authorization: this.authToken }),
-      };
-      return this.http.post(
-        `${this.api_base}/destruction/getSingleDestruction`,
-        {
-          id: id,
-        },
-        httpOptions
-      );
-    }
+  getDestructionByDestructionValue(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/destruction/getSingleDestruction`,
+      {
+        id: id,
+      },
+      httpOptions
+    );
+  }
 
-    updateDestruction(pipo, id) {
-      this.loadFromLocalStorage();
-      console.log(this.authToken);
-      console.log(pipo)
-      console.log(id)
-      const httpOptions = {
-        headers: new HttpHeaders({ Authorization: this.authToken }),
-      };
-      return this.http.post(
-        `${this.api_base}/destruction/update`,
-        {
-          pipo: pipo,
-          id: id
-        },
-        httpOptions
-      );
-    }
+  updateDestruction(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/destruction/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
 
 
-       // Get Other Document Api
+  // Get Other Document Api
 
-       addPackingList(pipo) {
-        this.loadFromLocalStorage();
-        console.log(this.authToken);
-        const httpOptions = {
-          headers: new HttpHeaders({ Authorization: this.authToken }),
-        };
+  addPackingList(pipo) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
 
-        return this.http.post(
-          `${this.api_base}/packingList/post`,
-          { packingList: pipo },
-          httpOptions
-        );
-      }
+    return this.http.post(
+      `${this.api_base}/packingList/post`,
+      { packingList: pipo },
+      httpOptions
+    );
+  }
 
-      getPackingList() {
-        this.loadFromLocalStorage();
-        console.log(this.authToken);
-        const httpOptions = {
-          headers: new HttpHeaders({ Authorization: this.authToken }),
-        };
+  getPackingList() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
 
-        return this.http.get(`${this.api_base}/packingList/get`, httpOptions);
-      }
-      getPackingListfile(type:string) {
-        this.loadFromLocalStorage();
-        console.log(this.authToken);
-        const httpOptions = {
-          headers: new HttpHeaders({ Authorization: this.authToken }),
-        };
-        return this.http.post(`${this.api_base}/packingList/filetype`, {file:type},httpOptions);
-      }
-      getPackingListByPackingListValue(id) {
-        this.loadFromLocalStorage();
-        console.log(this.authToken);
-        const httpOptions = {
-          headers: new HttpHeaders({ Authorization: this.authToken }),
-        };
-        return this.http.post(
-          `${this.api_base}/packingList/getSinglepackingList`,
-          {
-            id: id,
-          },
-          httpOptions
-        );
-      }
+    return this.http.get(`${this.api_base}/packingList/get`, httpOptions);
+  }
+  getPackingListfile(type: string) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/packingList/filetype`, { file: type }, httpOptions);
+  }
+  getPackingListByPackingListValue(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/packingList/getSinglepackingList`,
+      {
+        id: id,
+      },
+      httpOptions
+    );
+  }
 
-      updatePackingList(pipo, id) {
-        this.loadFromLocalStorage();
-        console.log(this.authToken);
-        console.log(pipo)
-        console.log(id)
-        const httpOptions = {
-          headers: new HttpHeaders({ Authorization: this.authToken }),
-        };
-        return this.http.post(
-          `${this.api_base}/packingList/update`,
-          {
-            pipo: pipo,
-            id: id
-          },
-          httpOptions
-        );
-      }
+  updatePackingList(pipo, id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    console.log(pipo)
+    console.log(id)
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/packingList/update`,
+      {
+        pipo: pipo,
+        id: id
+      },
+      httpOptions
+    );
+  }
 
   // get Swift Api
   addSwift(pipo) {
@@ -1455,9 +1517,9 @@ export class DocumentService {
     );
   }
 
-   // Get LetterLC Api
+  // Get LetterLC Api
 
-   addLetterLC(pipo) {
+  addLetterLC(pipo) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -1480,13 +1542,13 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/letterLC/get`, httpOptions);
   }
-  getLetterLCfile(type:string) {
+  getLetterLCfile(type: string) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/letterLC/filetype`, {file:type},httpOptions);
+    return this.http.post(`${this.api_base}/letterLC/filetype`, { file: type }, httpOptions);
   }
   getLetterLCByLetterLCValue(id) {
     this.loadFromLocalStorage();
@@ -1521,9 +1583,9 @@ export class DocumentService {
     );
   }
 
-   // Get Master Service Api
+  // Get Master Service Api
 
-   addMasterService(pipo) {
+  addMasterService(pipo) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -1546,13 +1608,13 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/masterService/get`, httpOptions);
   }
-  getMasterServiceFile(type:string) {
+  getMasterServiceFile(type: string) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/masterService/filetype`, {file:type},httpOptions);
+    return this.http.post(`${this.api_base}/masterService/filetype`, { file: type }, httpOptions);
   }
   getMasterSerByMasterSerValue(id) {
     this.loadFromLocalStorage();
@@ -1588,9 +1650,9 @@ export class DocumentService {
   }
 
 
-   // Get Opinion Report Api
+  // Get Opinion Report Api
 
-   addOpinionReport(pipo) {
+  addOpinionReport(pipo) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -1613,13 +1675,13 @@ export class DocumentService {
 
     return this.http.get(`${this.api_base}/opinionReport/get`, httpOptions);
   }
-  getOpinionReportfile(type:string) {
+  getOpinionReportfile(type: string) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/opinionReport/filetype`, {file:type},httpOptions);
+    return this.http.post(`${this.api_base}/opinionReport/filetype`, { file: type }, httpOptions);
   }
 
   getOpinionByOpinionValue(id) {
@@ -1654,9 +1716,6 @@ export class DocumentService {
       httpOptions
     );
   }
-
-
-
 
   addTask(data) {
     console.log('I am in service');
@@ -1844,6 +1903,53 @@ export class DocumentService {
     return this.http.get(`${this.api_base}/exportTask/get`, httpOptions);
   }
 
+  addExportBillLodgment(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ExportBillLodgement/add`, { data: data }, httpOptions);
+  }
+  UpdateTransaction(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ExportBillLodgement/update`, data, httpOptions);
+  }
+
+  Update_Amount_by_Table(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
+    return this.http.post(`${this.api_base}/ExportBillLodgement/Amount_Update`, data, httpOptions);
+  }
+  Update_Amount_by_TableSB(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
+    return this.http.post(`${this.api_base}/ExportBillLodgement/Amount_UpdateSB`, data, httpOptions);
+  }
+  getExportBillLodgment() {
+    console.log('I am in service');
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/ExportBillLodgement/get`, httpOptions);
+  }
+  getByIdExportBillLodgment(id: any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ExportBillLodgement/getById`, { id: id }, httpOptions);
+  }
+
   getOneExportTask(data) {
     console.log('I am in service calling transacytions');
     this.loadFromLocalStorage();
@@ -1887,7 +1993,7 @@ export class DocumentService {
       httpOptions
     );
   }
-  exportEmail(data){
+  exportEmail(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
@@ -1900,28 +2006,380 @@ export class DocumentService {
       httpOptions
     );
   }
+  SendMail_TextPdf(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/task/textpdf`,
+      data,
+      httpOptions
+    );
+  }
+  
+  SendMailNormal(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/task/sendmailnormal`,data,httpOptions);
+  }
 
-  downloadDocuments(data:any) {
-    console.log("downloadDocuments",data)
-    const httpOptions:any  = {
+  buyer_beneficiary_creditadd(data:any){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/buyer_beneficiary_credit/add`,{data:data},httpOptions);
+  }
+  
+  buyer_beneficiary_creditget(){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/buyer_beneficiary_credit/get`,httpOptions);
+  }
+  
+  buyer_beneficiary_credit_update(data){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/buyer_beneficiary_credit/update`,data,httpOptions);
+  }
+  
+  CA_Certificate_add(data:any){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/CA_Certificate/add`,{data:data},httpOptions);
+  }
+  
+  CA_Certificate_get(){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/CA_Certificate/get`,httpOptions);
+  }
+  
+  CA_Certificate_RequestType_get(data:any){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/CA_Certificate/getRequestType`,{type:data},httpOptions);
+  }
+  
+  
+  CA_Certificate_update(data){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/CA_Certificate/update`,data,httpOptions);
+  }
+  
+  ForwardContractadd(data:any){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ForwardContract/add`,{data:data},httpOptions);
+  }
+  
+  ForwardContractget(){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/ForwardContract/get`,httpOptions);
+  }
+  
+  ForwardContract_update(data){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ForwardContract/update`,data,httpOptions);
+  }
+  
+  SendMailNormalTextdcouments(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/task/sendmailnormal`,data,httpOptions);
+  }
+  
+  SendMaildocuments(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/task/documentsmail`,data,httpOptions);
+  }
+  downloadDocuments(data: any) {
+    console.log("downloadDocuments", data)
+    const httpOptions: any = {
       headers: data['headers'],
       responseType: 'blob'
     };
     return this.http.get(data['url'], httpOptions);
   }
 
-  updateUserById(id,data)
-  {
+  updateUserById(id, data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
 
-    return this.http.patch(`${this.api_base}/user/updateUserById/${id}`, data,httpOptions );
+    return this.http.patch(`${this.api_base}/user/updateUserById/${id}`, data, httpOptions);
   }
-  getCurrency(){
-    return this.http.get("../../currency.json")
+
+  getCurrencyList() {
+    var CURRENCY_LIST: any = [];
+    for (let index = 0; index < data1['default']?.length; index++) {
+      CURRENCY_LIST.push({
+        type: data1['default'][index]['value']
+      })
+    }
+    return CURRENCY_LIST;
+  }
+  getBankNameList() {
+    var temp: any = [
+      { BankUniqueId: '', value: "Bandhan Bank Ltd.", },
+      { BankUniqueId: '', value: "CSB Bank Limited" },
+      { BankUniqueId: '', value: "City Union Bank Ltd." },
+      { BankUniqueId: '', value: "DCB Bank Ltd." },
+      { BankUniqueId: '', value: "Dhanlaxmi Bank Ltd." },
+      { BankUniqueId: '', value: "Federal Bank Ltd." },
+      { BankUniqueId: '', value: "HDFC Bank Ltd" },
+      { BankUniqueId: '', value: "Axis Bank Ltd" },
+      { BankUniqueId: '', value: "ICICI Bank Ltd." },
+      { BankUniqueId: '', value: "IndusInd Bank Ltd" },
+      { BankUniqueId: '', value: "IDFC FIRST Bank Limited" },
+      { BankUniqueId: '', value: "Jammu & Kashmir Bank Ltd." },
+      { BankUniqueId: '', value: "Karnataka Bank Ltd." },
+      { BankUniqueId: '', value: "Karur Vysya Bank Ltd." },
+      { BankUniqueId: '', value: "Kotak Mahindra Bank Ltd" },
+      { BankUniqueId: '', value: "Nainital bank Ltd." },
+      { BankUniqueId: '', value: "RBL Bank Ltd." },
+      { BankUniqueId: '', value: "South Indian Bank Ltd." },
+      { BankUniqueId: '', value: "Tamilnad Mercantile Bank Ltd." },
+      { BankUniqueId: '', value: "YES Bank Ltd." },
+      { BankUniqueId: '', value: "IDBI Bank Limited" },
+      { BankUniqueId: '', value: "Au Small Finance Bank Ltd." },
+      { BankUniqueId: '', value: "Capital Small Finance Bank Ltd" },
+      { BankUniqueId: '', value: "Fincare Small Finance Bank Ltd." },
+      { BankUniqueId: '', value: "Equitas Small Finance Bank Ltd" },
+      { BankUniqueId: '', value: "ESAF Small Finance Bank Ltd." },
+      { BankUniqueId: '', value: "Suryoday Small Finance Bank Ltd." },
+      { BankUniqueId: '', value: "Ujjivan Small Finance Bank Ltd." },
+      { BankUniqueId: '', value: "Utkarsh Small Finance Bank Ltd." },
+      { BankUniqueId: '', value: "North East Small finance Bank Ltd" },
+      { BankUniqueId: '', value: "Jana Small Finance Bank Ltd" },
+      { BankUniqueId: '', value: "Shivalik Small Finance Bank Ltd" },
+      { BankUniqueId: '', value: "Unity Small Finance Bank Ltd" },
+      { BankUniqueId: '', value: "Airtel Payments Bank Ltd" },
+      { BankUniqueId: '', value: "India Post Payments Bank Ltd" },
+      { BankUniqueId: '', value: "FINO Payments Bank Ltd" },
+      { BankUniqueId: '', value: "Paytm Payments Bank Ltd" },
+      { BankUniqueId: '', value: "Jio Payments Bank Ltd" },
+      { BankUniqueId: '', value: "NSDL Payments Bank Limited" },
+      { BankUniqueId: '', value: "Bank of Baroda" },
+      { BankUniqueId: '', value: "Bank of India" },
+      { BankUniqueId: '', value: "Bank of Maharashtra" },
+      { BankUniqueId: '', value: "Canara Bank" },
+      { BankUniqueId: '', value: "Central Bank of India" },
+      { BankUniqueId: '', value: "Indian Bank" },
+      { BankUniqueId: '', value: "Indian Overseas Bank" },
+      { BankUniqueId: '', value: "Punjab & Sind Bank" },
+      { BankUniqueId: '', value: "Punjab National Bank" },
+      { BankUniqueId: '', value: "State Bank of India" },
+      { BankUniqueId: '', value: "UCO Bank" },
+      { BankUniqueId: '', value: "Union Bank of India" },
+      { BankUniqueId: '', value: "Australia and New Zealand Banking Group Ltd." },
+      { BankUniqueId: '', value: "National Australia Bank" },
+      { BankUniqueId: '', value: "Westpac Banking Corporation" },
+      { BankUniqueId: '', value: "Bank of Bahrain & Kuwait BSC" },
+      { BankUniqueId: '', value: "AB Bank Ltd." },
+      { BankUniqueId: '', value: "Sonali Bank Ltd.{BankUniqueId:'',  value:" },
+      { BankUniqueId: '', value: "Bank of Nova Scotia" },
+      { BankUniqueId: '', value: "Industrial & Commercial Bank of China Ltd." },
+      { BankUniqueId: '', value: "BNP Paribas" },
+      { BankUniqueId: '', value: "Credit Agricole Corporate & Investment Bank" },
+      { BankUniqueId: '', value: "Societe Generale" },
+      { BankUniqueId: '', value: "Deutsche Bank" },
+      { BankUniqueId: '', value: "HSBC Ltd #" },
+      { BankUniqueId: '', value: "PT Bank Maybank Indonesia TBK" },
+      { BankUniqueId: '', value: "Mizuho Bank Ltd." },
+      { BankUniqueId: '', value: "Sumitomo Mitsui Banking Corporation" },
+      { BankUniqueId: '', value: "MUFG Bank, Ltd." },
+      { BankUniqueId: '', value: "Cooperatieve Rabobank U.A." },
+      { BankUniqueId: '', value: "Doha Bank" },
+      { BankUniqueId: '', value: "Qatar National Bank SAQ" },
+      { BankUniqueId: '', value: "JSC VTB Bank" },
+      { BankUniqueId: '', value: "Sberbank" },
+      { BankUniqueId: '', value: "DBS Bank Ltd." },
+      { BankUniqueId: '', value: "United Overseas Bank Ltd." },
+      { BankUniqueId: '', value: "FirstRand Bank Ltd." },
+      { BankUniqueId: '', value: "Shinhan Bank" },
+      { BankUniqueId: '', value: "Woori Bank" },
+      { BankUniqueId: '', value: "KEB Hana Bank" },
+      { BankUniqueId: '', value: "Industrial Bank of Korea" },
+      { BankUniqueId: '', value: "Bank of Ceylon" },
+      { BankUniqueId: '', value: "Credit Suisse A.G" },
+      { BankUniqueId: '', value: "CTBC Bank Co., Ltd." },
+      { BankUniqueId: '', value: "Krung Thai Bank Public Co. Ltd." },
+      { BankUniqueId: '', value: "Abu Dhabi Commercial Bank Ltd." },
+      { BankUniqueId: '', value: "Mashreq Bank PSC" },
+      { BankUniqueId: '', value: "First Abu Dhabi Bank PJSC" },
+      { BankUniqueId: '', value: "Emirates NBD Bank PJSC" },
+      { BankUniqueId: '', value: "Barclays Bank Plc." },
+      { BankUniqueId: '', value: "Standard Chartered Bank" },
+      { BankUniqueId: '', value: "NatWest Markets plc" },
+      { BankUniqueId: '', value: "American Express Banking Corp." },
+      { BankUniqueId: '', value: "Bank of America" },
+      { BankUniqueId: '', value: "Citibank N.A." },
+      { BankUniqueId: '', value: "J.P. Morgan Chase Bank N.A." },
+      { BankUniqueId: '', value: "SBI Bank" }
+    ]
+    temp.forEach((element, index) => {
+      element.BankUniqueId = this.initialName(element.value) + (index + 1)
+    });
+    return temp;
+  }
+  getBankFormat() {
+    var temp: any = [
+      { BankUniqueId: '', urlpdf: '', value: "Bandhan Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "CSB Bank Limited" },
+      { BankUniqueId: '', urlpdf: '', value: "City Union Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "DCB Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Dhanlaxmi Bank Ltd." },
+      { BankUniqueId: '', urlpdf: './../../assets/billUnder.pdf', value: "Federal Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "HDFC Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Axis Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "ICICI Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "IndusInd Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "IDFC FIRST Bank Limited" },
+      { BankUniqueId: '', urlpdf: '', value: "Jammu & Kashmir Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Karnataka Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Karur Vysya Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Kotak Mahindra Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Nainital bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "RBL Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "South Indian Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Tamilnad Mercantile Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "YES Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "IDBI Bank Limited" },
+      { BankUniqueId: '', urlpdf: '', value: "Au Small Finance Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Capital Small Finance Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Fincare Small Finance Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Equitas Small Finance Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "ESAF Small Finance Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Suryoday Small Finance Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Ujjivan Small Finance Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Utkarsh Small Finance Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "North East Small finance Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Jana Small Finance Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Shivalik Small Finance Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Unity Small Finance Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Airtel Payments Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "India Post Payments Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "FINO Payments Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Paytm Payments Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "Jio Payments Bank Ltd" },
+      { BankUniqueId: '', urlpdf: '', value: "NSDL Payments Bank Limited" },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of Baroda" },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of India" },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of Maharashtra" },
+      { BankUniqueId: '', urlpdf: '', value: "Canara Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Central Bank of India" },
+      { BankUniqueId: '', urlpdf: '', value: "Indian Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Indian Overseas Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Punjab & Sind Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Punjab National Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "State Bank of India" },
+      { BankUniqueId: '', urlpdf: '', value: "UCO Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Union Bank of India" },
+      { BankUniqueId: '', urlpdf: '', value: "Australia and New Zealand Banking Group Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "National Australia Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Westpac Banking Corporation" },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of Bahrain & Kuwait BSC" },
+      { BankUniqueId: '', urlpdf: '', value: "AB Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Sonali Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of Nova Scotia" },
+      { BankUniqueId: '', urlpdf: '', value: "Industrial & Commercial Bank of China Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "BNP Paribas" },
+      { BankUniqueId: '', urlpdf: '', value: "Credit Agricole Corporate & Investment Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Societe Generale" },
+      { BankUniqueId: '', urlpdf: '', value: "Deutsche Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "HSBC Ltd #" },
+      { BankUniqueId: '', urlpdf: '', value: "PT Bank Maybank Indonesia TBK" },
+      { BankUniqueId: '', urlpdf: '', value: "Mizuho Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Sumitomo Mitsui Banking Corporation" },
+      { BankUniqueId: '', urlpdf: '', value: "MUFG Bank, Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Cooperatieve Rabobank U.A." },
+      { BankUniqueId: '', urlpdf: '', value: "Doha Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Qatar National Bank SAQ" },
+      { BankUniqueId: '', urlpdf: '', value: "JSC VTB Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Sberbank" },
+      { BankUniqueId: '', urlpdf: '', value: "DBS Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "United Overseas Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "FirstRand Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Shinhan Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Woori Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "KEB Hana Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "Industrial Bank of Korea" },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of Ceylon" },
+      { BankUniqueId: '', urlpdf: '', value: "Credit Suisse A.G" },
+      { BankUniqueId: '', urlpdf: '', value: "CTBC Bank Co., Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Krung Thai Bank Public Co. Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Abu Dhabi Commercial Bank Ltd." },
+      { BankUniqueId: '', urlpdf: '', value: "Mashreq Bank PSC" },
+      { BankUniqueId: '', urlpdf: '', value: "First Abu Dhabi Bank PJSC" },
+      { BankUniqueId: '', urlpdf: '', value: "Emirates NBD Bank PJSC" },
+      { BankUniqueId: '', urlpdf: '', value: "Barclays Bank Plc." },
+      { BankUniqueId: '', urlpdf: '', value: "Standard Chartered Bank" },
+      { BankUniqueId: '', urlpdf: '', value: "NatWest Markets plc" },
+      { BankUniqueId: '', urlpdf: '', value: "American Express Banking Corp." },
+      { BankUniqueId: '', urlpdf: '', value: "Bank of America" },
+      { BankUniqueId: '', urlpdf: '', value: "Citibank N.A." },
+      { BankUniqueId: '', urlpdf: '', value: "J.P. Morgan Chase Bank N.A." },
+      { BankUniqueId: '', urlpdf: '', value: "SBI Bank" }
+    ]
+
+    temp.forEach((element, index) => {
+      element.BankUniqueId = this.initialName(element.value) + (index + 1)
+    });
+    return temp;
+  }
+  initialName(words) {
+    'use strict'
+    return words
+      .replace(/\b(\w)\w+/g, '$1_')
+      .replace(/\s/g, '')
+      .replace(/\.$/, '')
+      .toUpperCase();
   }
 }
 

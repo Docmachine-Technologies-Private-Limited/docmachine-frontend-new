@@ -22,9 +22,8 @@ import {
 import { ShippingBill } from "../../../model/shippingBill.model";
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
-import { AppConfig } from "src/app/app.config";
 import { DocumentService } from "../../service/document.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../service/window-information.service';
 
 @Component({
   selector: 'app-add-pipo',
@@ -38,14 +37,8 @@ export class AddPipoComponent implements OnInit {
   commodity: any = []
   buyer: string;
   uploading: boolean = false;
-  authToken: string;
-
-
-  CurrencyData:any = ['INR','USD', 'EUR', 'GBP', 'CHF','AUD','CAD','AED','SGD','SAR','JPY']
-
-
-
-
+  authToken: any;
+  CurrencyData: any = ['INR', 'USD', 'EUR', 'GBP', 'CHF', 'AUD', 'CAD', 'AED', 'SGD', 'SAR', 'JPY']
 
   public type: string = "directive";
   public res;
@@ -59,13 +52,12 @@ export class AddPipoComponent implements OnInit {
   public message = "";
   public documentType: string = '';
   public documentType1 = "";
-  public piPoUrl:any='';
+  public piPoUrl: any = '';
   public selectedDocumentType;
   width: any = 0;
   public benneDetail: any = [];
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
-  // ----------------------------------
   pipourl1: any;
   tryPartyAgreement: boolean = false;
   creditNote: boolean = false;
@@ -109,7 +101,7 @@ export class AddPipoComponent implements OnInit {
   public config2: DropzoneConfigInterface;
   public config3: DropzoneConfigInterface;
 
-  pipoForm:any= FormGroup;
+  pipoForm: any = FormGroup;
   submitted = false;
 
 
@@ -123,7 +115,6 @@ export class AddPipoComponent implements OnInit {
     private userService: UserService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
-    public appconfig: AppConfig,
     private formBuilder: FormBuilder,
     private documentService: DocumentService,
     public router: Router,
@@ -131,14 +122,14 @@ export class AddPipoComponent implements OnInit {
     public wininfo: WindowInformationService
   ) {
     this.loadFromLocalStorage();
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     this.getDropdownData()
 
   }
 
   ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content_top_common')
-    this.file= this.route.snapshot.paramMap.get('doc_type');
+    this.wininfo.set_controller_of_width(270, '.content_top_common')
+    this.file = this.route.snapshot.paramMap.get('doc_type');
     this.headers = {
       Authorization: this.authToken,
       timeout: `${200000}`
@@ -159,23 +150,18 @@ export class AddPipoComponent implements OnInit {
         '<div  class="dz-preview dz-file-preview" style="text-align: right; margin-right:3px;">\n <div class="dz-image" style="text-align: right; margin-right:3px;"> <img data-dz-thumbnail /></div>\n <div class="dz-details">\n    <div class="dz-size"><span data-dz-size></span></div>\n    <div class="dz-filename"><span data-dz-name></span></div>\n  </div>\n  <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>\n  <div class="dz-error-message"><span data-dz-errormessage></span></div>\n  <div class="dz-success-mark">\n    <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">\n      <title>Check</title>\n      <defs></defs>\n      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">\n        <path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>\n      </g>\n    </svg>\n  </div>\n  <div class="dz-error-mark">\n    <i style="color: red; text-align: center;font-size: 30px;" class="fa fa-exclamation-circle"></i>\n  </div>\n</div>',
     };
 
-
-    // buyerName commodity doc
-
-    this.pipoForm = this.formBuilder.group(
-      {
-        pi_poNo: new FormControl('', Validators.required),
-        currency: new FormControl("",),
-        amount: new FormControl("", Validators.required),
-        incoterm: new FormControl("", Validators.required),
-        lastDayShipment: new FormControl("", Validators.required),
-        paymentTerm: new FormArray([this.initCourse()]),
-        pcRefNo: new FormControl("",),
-        date: new FormControl("", Validators.required),
-        dueDate: new FormControl("",),
-        location: new FormControl(null, Validators.required),
-      }
-    );
+    this.pipoForm = this.formBuilder.group({
+      pi_poNo: new FormControl('', Validators.required),
+      currency: new FormControl("",),
+      amount: new FormControl("", Validators.required),
+      incoterm: new FormControl("", Validators.required),
+      lastDayShipment: new FormControl("", Validators.required),
+      paymentTerm: new FormArray([this.initCourse()]),
+      pcRefNo: new FormControl("",),
+      date: new FormControl("", Validators.required),
+      dueDate: new FormControl("",),
+      location: new FormControl(null, Validators.required),
+    });
   }
 
 
@@ -193,51 +179,40 @@ export class AddPipoComponent implements OnInit {
   endDate: any = '';
 
   getDropdownData() {
-
     this.userService.getTeam()
       .subscribe(
         data => {
           this.commodity = data['data'][0]['commodity']
           this.LocationData = data['data'][0]['location']
-
         },
         error => {
           console.log("error")
         });
-    this.userService.getBuyer(1).subscribe(
-      (res: any) => {
-        this.buyerDetail = res.data
-      },
+    this.userService.getBuyer(1).subscribe((res: any) => {
+      this.buyerDetail = res.data
+    },
       (err) => console.log("Error", err)
     );
   }
-
 
   get form() {
     return this.pipoForm.controls;
   }
 
   PipoSubmit(): void {
-
     this.submitted = true;
-
-    console.log("this.pipoForm.invalid",this.pipoForm.invalid)
-    console.log("this.pipoForm.invalid",this.pipoForm)
-
+    console.log("this.pipoForm.invalid", this.pipoForm.invalid)
+    console.log("this.pipoForm.invalid", this.pipoForm)
     if (this.pipoForm.invalid) {
       return;
     }
 
     if (this.file) {
-      if (this.file == 'import') {
-        // this.pipoForm.value.benneName = this.beneValue
-      }
-      else if (this.file == 'export') {
+      if (this.file == 'export') {
         this.pipoForm.value.buyerName = this.buyer
         this.pipoForm.value.commodity = this.commodityData
       }
       this.pipoForm.value.file = this.file
-
     }
     else {
       this.pipoForm.value.file = this.documentType1
@@ -250,14 +225,27 @@ export class AddPipoComponent implements OnInit {
       this.pipoForm.value.doc1 = this.pipourl1
     }
     this.pipoForm.value.document = this.documentType
+    this.documentService.getInvoice_No({
+      pi_poNo: this.pipoForm.value.pi_poNo
+    }, 'pi_po').subscribe((resp: any) => {
+      console.log('creditNoteNumber Invoice_No', resp)
+      if (resp.data.length == 0) {
+        this.documentService.addPipo(this.pipoForm.value).subscribe(
+          (res) => {
+            this.toastr.success('PI/PO added successfully.');
+            this.router.navigateByUrl("/home/pipo");
+          },
+          (err) => console.log("Error adding pipo")
+        );
+      } else {
+        this.toastr.error(`Please check this sb no. : ${this.pipoForm.value.pi_poNo} already exit...`);
+      }
+    });
 
-    this.documentService.addPipo(this.pipoForm.value).subscribe(
-      (res) => {
-        this.toastr.success('PI/PO added successfully.');
-        this.router.navigateByUrl("/home/pipo");
-      },
-      (err) => console.log("Error adding pipo")
-    );
+  }
+
+  buyerChanges(value: any) {
+    this.buyer = value;
   }
 
   public onUploadError(args: any): void {
@@ -415,12 +403,11 @@ export class AddPipoComponent implements OnInit {
       this.uploading = true;
       console.log(e[0].size);
       this.size = this.formatBytes(e[0].size);
-      //document.getElementById("uploadError").style.display = "none";
-
       this.runProgressBar(e[0].size);
     } else {
       console.log("Document type not given");
-      document.getElementById("uploadError").style.display = "block";
+      let displayuploaderror: any = document.getElementById("uploadError") as any;
+      displayuploaderror.style.display = "block"
     }
   }
 
@@ -454,33 +441,13 @@ export class AddPipoComponent implements OnInit {
       .subscribe(() => {
         this.width = this.width + 1;
       });
-
-    this.userService.getBene(1).subscribe(
-      (res: any) => {
-        (this.benneDetail = res.data),
-          console.log("Benne Detail22222", this.benneDetail);
-      },
-      (err) => console.log("Error", err)
-    );
-
-    this.userService.getBuyer(1).subscribe(
-      (res: any) => {
-        (this.buyerDetail = res.data),
-          console.log("Benne Detail111", this.buyerDetail);
-      },
-      (err) => console.log("Error", err)
-    );
   }
 
   public loadFromLocalStorage() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     this.authToken = token;
     return this.authToken;
   }
-
-  // ----------------------------- end handle image upload ----------------------------------
-
-
 
   getCourses(form) {
     return form.get('paymentTerm').controls;
@@ -500,6 +467,3 @@ export class AddPipoComponent implements OnInit {
   }
 
 }
-
-// PROFORMA INVOICE
-

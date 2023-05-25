@@ -100,7 +100,7 @@ export class InwardRemmitanceComponent implements OnInit {
         this.jsondata.push(data)
       }
       else {
-        let purpose = []
+        let purpose:any = []
         for (let value of data.purpose) {
           if (value.code.toLowerCase().includes(e.toLowerCase())
             || value.description.toLowerCase().includes(e.toLowerCase())) {

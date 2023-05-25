@@ -1,17 +1,17 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, } from '@angular/core';
 import { UserService } from "../../service/user.service";
-import { timer } from "rxjs";
+import { async, timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { ActivatedRoute } from '@angular/router';
 import * as data from './../../inward.json';
 import $ from 'jquery'
-import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import { saveAs as importedSaveAs } from 'file-saver';
+import { PDFDocument } from 'pdf-lib';
+import importedSaveAs from 'file-saver';
 import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { HttpHeaders } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import * as XLSX from 'xlsx';
+declare var kendo: any;
 
 import {
   DropzoneDirective,
@@ -23,24 +23,35 @@ import {
   FormControl,
   FormGroup, Validators
 } from '@angular/forms';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { DocumentService } from "../../service/document.service";
 import { PipoDataService } from "../../service/homeservices/pipo.service";
-import { AppConfig } from '../../app.config';
 import { WindowInformationService } from '../../service/window-information.service';
-import { ShippingbillDataService } from 'src/app/service/homeservices/shippingbill.service';
+import { ShippingbillDataService } from '../../service/homeservices/shippingbill.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MergePdfListService } from '../merge-pdf-list.service';
+import { MergePdfService } from '../../service/MergePdf/merge-pdf.service';
+import { StorageEncryptionDecryptionService } from '../../Storage/storage-encryption-decryption.service';
+import { BehaviorSubjectListService } from '../CommanSubjectApi/BehaviorSubjectListService/BehaviorSubjectList.service';
 
 @Component({
   selector: 'app-Direct-Dispatch',
   templateUrl: './New-Direct-Dispatch.component.html',
   styleUrls: ['./New-Direct-Dispatch.component.scss'],
-
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false },
+    },
+  ],
 })
 export class NewDirectDispatchComponent implements OnInit {
+  @ViewChild('dataToExport', { static: false }) public dataToExport: ElementRef;
   LocationData: any = []
   bankDetail: any = []
   commodity: any = []
@@ -113,8 +124,8 @@ export class NewDirectDispatchComponent implements OnInit {
   @ViewChild('table1') table: ElementRef;
   @ViewChild('billLodge', { static: false }) billLodge: ElementRef;
   closeResult: string;
-  public item1:any=[];
-  public itemArray = [];
+  public item1: any = [];
+  public itemArray: any = [];
   public item2;
   public user;
   public selectedRow;
@@ -140,8 +151,8 @@ export class NewDirectDispatchComponent implements OnInit {
   public allTransactions: any = [];
   public optionsVisibility: any = [];
   public generateIndex;
-  public itemArray1 = [];
-  public irBuyerName = [];
+  public itemArray1: any = [];
+  public irBuyerName: any = [];
   lodgement1: any;
   lodgement2: any;
   Ax1: boolean;
@@ -213,9 +224,9 @@ export class NewDirectDispatchComponent implements OnInit {
   dataImport: any;
   dataImport2: any;
   sbPurposeDone1: any = [];
-  item4 = [];
+  item4: any = [];
   item12: any;
-  item13:any = [];
+  item13: any = [];
   bankRef: any;
   newTask: any = [];
   Task: any = [];
@@ -233,7 +244,7 @@ export class NewDirectDispatchComponent implements OnInit {
   LcNumber: any = '';
   isDoneAll: boolean;
   bankArray: any = [];
-  bankToggle:string='';
+  bankToggle: string = '';
   bankValue: any;
   allBank: any = [];
   newBankArray: any = [];
@@ -291,13 +302,13 @@ export class NewDirectDispatchComponent implements OnInit {
   nameSearch2: string = '';
   nameSearch3: string = '';
   nameSearch4: string = '';
-  item6: any=[];
-  item7: any=[];
-  item: any=[];
-  item8: any=[];
-  item9: any=[];
-  item10: any=[];
-  item11: any=[];
+  item6: any = [];
+  item7: any = [];
+  item: any = [];
+  item8: any = [];
+  item9: any = [];
+  item10: any = [];
+  item11: any = [];
   public buyerDetail: any = [];
   startDate: any = '';
   endDate: any = '';
@@ -308,10 +319,10 @@ export class NewDirectDispatchComponent implements OnInit {
   ebrc: any;
   blcopyref: any;
   irAdvice: any;
-  selectedPdfs = [];
-  advanceArray = [];
+  selectedPdfs: any = [];
+  advanceArray: any = [];
   currentSbForAdvance: any;
-  buyerName = [];
+  buyerName: any = [];
   id: any;
   private genDoc: any;
   airwayBlCopy: any;
@@ -327,41 +338,73 @@ export class NewDirectDispatchComponent implements OnInit {
   selectedPdfs2: any[];
   generateChecked: boolean = true;
   forexSbDetail: any;
-  SHIPPING_BILL:any='';
-  SHIPPING_BILL_LIST:any=[{
-    value:'Shipping bill'
+  SHIPPING_BILL: any = '';
+  SHIPPING_BILL_LIST: any = [{
+    value: 'Shipping bill'
   }];
   ThirdPartydata: any = [];
   Letter_Of_Credit: any = [];
-  changevalue:any='';
-  SHIPPING_BILL_DATA:any=[];
+  changevalue: any = '';
+  SHIPPING_BILL_DATA: any = [];
   PREVIEWS_URL_LIST: any = [];
   GetDownloadStatus: any = [];
   USER_DATA: any = [];
   Approval_URL: any = [];
-
+  PIPO_LIST: any = [];
+  FILTER_DATA: any = {
+    COMMERCIAL: [],
+    FILTER_COMMERCIAL: [],
+    PIPO: []
+  };
+  public ExportBillLodgement_Form: FormGroup;
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
-    public appconfig: AppConfig,
     private formBuilder: FormBuilder,
-    private documentService: DocumentService,
+    public documentService: DocumentService,
     public pipoDataService: PipoDataService,
     public router: Router,
     private route: ActivatedRoute,
     public shippingBillService: ShippingbillDataService,
     private modalService: NgbModal,
+    public mergerpdf: MergePdfService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
-    public wininfo: WindowInformationService) {
-    this.api_base = appconfig.apiUrl;
+    public pdfmerge: MergePdfListService,
+    public sessionstorage: StorageEncryptionDecryptionService,
+    public wininfo: WindowInformationService,
+    public behaviorsubjectlist: BehaviorSubjectListService) {
+    this.api_base = userService.api_base;
     this.getDropdownData();
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.wininfo.set_controller_of_width(230, '.content_top_common')
     this.file = this.route.snapshot.paramMap.get('doc_type');
-    this.userService.getUserDetail().then((status) => {
+    this.ExportBillLodgement_Form = this.formBuilder.group({
+      bank_name: ['', [Validators.required]],
+      Shipping_bill_list: [[], [Validators.required]],
+      Advance_reference_Number: [[], [Validators.required]],
+      Under_LC: ['', [Validators.required]],
+      With_Scrutiny: ['', [Validators.required]],
+      With_Discount: ['', [Validators.required]],
+      Is_Buyer_remitter_different: ['', [Validators.required]],
+      Is_Invoice_reduction: ['', [Validators.required]],
+      Charges_to_Bank: ['', [Validators.required]],
+      Total_SB_Amount: ['', [Validators.required]],
+      Total_FIRX_Amount: ['', [Validators.required]],
+      Total_Reaming_Amount: ['', [Validators.required]],
+      documents: [[], [Validators.required]],
+      deleteflag: ['0', [Validators.required]],
+      SbRef: ['', [Validators.required]],
+      Carry_Amount: [[], [Validators.required]],
+      Url_Redirect: [{}, [Validators.required]],
+      extradata: [[], [Validators.required]]
+    });
+    //  await this.userService.SubjectListService.getUserDetail().then((value:any)=>{
+    //     console.log(value,'behaviorsubjectlist')
+    //   })
+    this.userService.getUserDetail().then((status: any) => {
       this.USER_DATA = status['result'];
       console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
     });
@@ -386,45 +429,30 @@ export class NewDirectDispatchComponent implements OnInit {
     };
     this.getBill_Lodgments();
   }
-  BOOLEAN:boolean = false;
-  SlideToggle(event,id){
-    console.log(event?.target?.parentElement,'SlideToggle')
-    $(event?.target?.parentElement).parent(".accordion-item").find(".accordion-contant").slideToggle();
-    console.log($(".accordion-contant").css('display'),'$(".accordion-contant")')
-    if ($(".accordion-contant").is(':hidden')==false) {
-      this.PDF_LIST=[];
-      for (let index = 0; index < this.temp[id].length; index++) {
-        this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
-          console.log('downloadEachFile', res);
-          res.arrayBuffer().then((data: any) => {
-            this.PDF_LIST.push({
-              pdf:data,
-              name:this.temp[id][index]['name']
-            })
-            console.log('downloadEachFile',data);
-          });
-        });
-      }
-    }else{
-       this.PDF_LIST=[];
-    }
 
-    console.log('test2', this.itemArray, this.PDF_LIST);
-  }
   getDropdownData() {
     this.userService.getTeam()
       .subscribe(
         data => {
           this.commodity = data['data'][0]['commodity']
           this.LocationData = data['data'][0]['location']
-          this.bankDetail = data['data'][0]['bankDetails']
-        },error => {
+          var temp: any = []
+          for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
+            this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId })
+          }
+          // var unique: any = temp.filter((value, index, array) => array?.value.indexOf(value) === index);
+          // for (let index = 0; index < unique.length; index++) {
+          //   this.bankDetail.push({
+          //     bank: unique[index]
+          //   })
+          // }
+        }, error => {
           console.log("error")
         });
 
     this.userService.getBene(1).subscribe((res: any) => {
-        this.benneDetail = res.data
-      },(err) => console.log("Error", err));
+      this.benneDetail = res.data
+    }, (err) => console.log("Error", err));
   }
 
   changepipo(value) {
@@ -564,8 +592,8 @@ export class NewDirectDispatchComponent implements OnInit {
     control.removeAt(i);
   }
 
-getBill_Lodgments() {
-  this.redirectid = this.route.snapshot.paramMap.get('pipo');
+  async getBill_Lodgments() {
+    this.redirectid = this.route.snapshot.paramMap.get('pipo');
     this.redirectindex = this.route.snapshot.paramMap.get('index');
     this.redirectpage = this.route.snapshot.paramMap.get('page');
     console.log('pipoId', this.redirectid);
@@ -579,6 +607,13 @@ getBill_Lodgments() {
     this.documentService.getPipo().subscribe(
       (res: any) => {
         console.log('Data fetched successfully', res);
+        for (let index = 0; index < res?.data.length; index++) {
+          if (res?.data[index]?.file == '') {
+
+          }
+          this.PIPO_LIST.push(res?.data[index])
+
+        }
         (this.item = res.data), console.log('pipo', this.item);
       },
       (err) => console.log(err)
@@ -607,7 +642,7 @@ getBill_Lodgments() {
         this.mergeIr();
         this.mergeIr2();
         this.item9.forEach((element, i) => {
-          this.irBuyerName[i] = element.partyName;
+          this.irBuyerName.push({ value: element.partyName, id: element._id });
         });
         this.irBuyerName = this.irBuyerName.filter(
           (value, index) => this.irBuyerName.indexOf(value) === index
@@ -630,24 +665,70 @@ getBill_Lodgments() {
       this.showInvoice = false;
       console.log('hello');
     });
+    this.item1 = [];
+    this.userService.getBuyer(1).subscribe(
+      (res: any) => {
+        this.item2 = res["data"];
+        this.buyerName[0] = { value: 'Select Buyer Name', id: '' };
+        res["data"].forEach((element, i) => {
+          this.buyerName.push({ value: element.buyerName, id: element?._id });
+        })
+        console.log('buyerName', this.buyerName);
+      },
+      (err) => console.log("Error", err)
+    );
+
+    await this.pipoDataService.getPipoList('export').then(async (res: any) => {
+      this.FILTER_DATA.PIPO = res?.pipolist;
+      this.pipoDataService.pipolistModel$.subscribe((data: any) => {
+        console.log(data, 'data2222..................')
+        data?.forEach(element => {
+          element?.commercialRef?.forEach(commercialelement => {
+            var temp: any = commercialelement;
+            temp['debitNoteRef'] = element?.debitNoteRef;
+            temp['TryPartyAgreement'] = element?.tryPartyAgreementRef;
+            temp['SB_Amout_Realized'] = this.ParseFloat(commercialelement.amount, element?.debitNoteRef[0]?.totalDebitAmount)
+            temp['IRADVICE_INFO'] = [];
+            temp['IRADVICE_SUM'] = 0;
+            temp['debitAmount'] = 0;
+            this.FILTER_DATA.COMMERCIAL.push(temp)
+          });
+        });
+      });
+
+      console.log(this.FILTER_DATA, res, 'getPipoList')
+    })
+    console.log(this.sessionstorage.get('MT102'))
+    this.documentService.MT102_SUBJECT = this.sessionstorage.get('MT102') != '' ? JSON.parse(this.sessionstorage.get('MT102')) : '';
+    console.log(this.documentService.MT102_SUBJECT, 'MT102_SUBJECT')
     this.shippingBillService.getShippingBillList().then((res: any) => {
       this.shippingBillService.shippingbills$.subscribe((data: any) => {
-        console.log('getShippingBillList',data)
+        console.log('getShippingBillList', data)
         this.documentService.getMaster(1).subscribe((res: any) => {
           console.log(res);
-          this.item1 = res?.data;
+          for (let index = 0; index < res?.data.length; index++) {
+            const element = res?.data[index];
+            if (element?.file == 'export') {
+              this.item1.push(element);
+            }
+          }
           console.log('getMaster Data', this.item1);
           this.item1.forEach((element, i) => {
-            this.buyerName[i] = element.buyerName;
+            if (element?.firxdetails != undefined && element?.firxdetails != '') {
+              let totalFirxAmount: any = 0;
+              for (let index = 0; index < element?.firxdetails.length; index++) {
+                const elementfirxdetails = element?.firxdetails[index];
+                console.log(elementfirxdetails?.firxAmount.split(','), this.FIRX_AMOUNT(elementfirxdetails?.firxAmount.split(',')), 'hfhgfghfhfhfhf')
+                totalFirxAmount += parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount.split(',')))
+              }
+              element['balanceAvai'] = parseFloat(element?.fobValue) - parseFloat(totalFirxAmount);
+            } else {
+              element['balanceAvai'] = parseFloat(element?.fobValue);
+            }
           });
-          for (let index = 0; index < data.length; index++) {
-            this.item1[index]['balanceAvai'] = data[index]?.balanceAvai!=null && data[index]?.balanceAvai!=undefined ?data[index]?.balanceAvai:'0';
-          }
-          console.log('buyerName', this.buyerName);
         },
-        (err) => console.log(err)
-      );
-
+          (err) => console.log(err)
+        );
       });
     });
 
@@ -656,7 +737,7 @@ getBill_Lodgments() {
         console.log('HEre Response Third', res);
         this.item12 = res.data;
         console.log('Try Party', this.item12);
-        var temp:any=[];
+        var temp: any = [];
         for (let value of this.item12) {
           if (value['file'] == 'export') {
             temp.push(value?.triPartyAgreementNumber);
@@ -666,9 +747,9 @@ getBill_Lodgments() {
         }
         for (let index = 0; index < temp.length; index++) {
           if (!this.ThirdPartydata.includes(temp[index])) {
-              this.ThirdPartydata.push({
-                try_part_agreement:temp[index]
-              });
+            this.ThirdPartydata.push({
+              try_part_agreement: temp[index]
+            });
           }
         }
       },
@@ -745,14 +826,14 @@ getBill_Lodgments() {
         this.bank = this.allBank.filter(function (item, index, inputArray) {
           return inputArray.indexOf(item) == index;
         });
-        console.log(this.bank,'bank.....................');
+        console.log(this.bank, 'bank.....................');
       },
       (error) => {
         console.log('error');
       }
     );
-    this.Letter_Of_Credit=[];
-    this.documentService.getLetterLC().subscribe(
+    this.Letter_Of_Credit = [];
+    this.documentService.getLetterLCfile("export").subscribe(
       (res: any) => {
         console.log('Res', res);
         for (let value of res.data) {
@@ -779,7 +860,7 @@ getBill_Lodgments() {
       if (this.documentService.task.task[0].sbUrls) {
         console.log('this is sb');
         let k = 0;
-        let gene = [];
+        let gene: any = [];
 
         for (let value of this.documentService.task.task[0].sbUrls) {
           let r = value.changingThisBreaksApplicationSecurity;
@@ -791,7 +872,7 @@ getBill_Lodgments() {
       }
       if (this.documentService.task.task[0].tryUrls) {
         let h = 0;
-        let gene = [];
+        let gene: any = [];
         for (let value of this.documentService.task.task[0].tryUrls) {
           gene.push(
             this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -806,7 +887,7 @@ getBill_Lodgments() {
       }
       if (this.documentService.task.task[0].lcUrls) {
         let h = 0;
-        let gene = [];
+        let gene: any = [];
         for (let value of this.documentService.task.task[0].lcUrls) {
           gene.push(
             this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -822,2691 +903,2501 @@ getBill_Lodgments() {
       // this.Question5 = ''
       console.log('line no.505 question5 data', this.Question5);
     }
-}
-searchData1(a) {
-  console.log('hello', a);
-  console.log(a.length);
-  if (a.length > 0) {
-    let arr = [];
-    for (let value of this.item1) {
-      console.log('value of buyername****', value);
-      console.log('value of buyername', value.buyerName);
-      if (value.buyerName.includes(a) || value.sbno.includes(a)) {
-        console.log('shaile***************', value.buyerName);
-        arr.push(value);
-      }
-    }
-    this.itemArray = arr;
-    this.filterToggle = true;
-    // console.log("shaile***************", this.itemArray)
-  } else {
-    this.filterToggle = false;
-    console.log('else');
   }
-
-  // console.log("shailendra buyerName", a.buyerName)
-}
-
-fireEvent() {
-  const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
-    this.table.nativeElement
-  );
-  const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  console.log(wb);
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  console.log(wb);
-  /* save to file */
-  XLSX.writeFile(wb, 'SheetJS.xlsx');
-}
-
-changeCheckbox1(a, data) {
-  // let value = a + " - " +
-  if (data.blCopyDoc) {
-    if (data.commercialDoc) {
-      if (data.packingDoc) {
-        let j = this.sbArray.indexOf(a);
-        if (j == -1) {
-          this.sbArray.push(a);
-          this.ACCORDING_LIST['SB_'+a]=[]
-        } else {
-          this.sbArray.splice(j, 1);
-          this.ACCORDING_LIST['SB_'+a]=[]
+  searchData1(a) {
+    console.log('hello', a);
+    console.log(a.length);
+    if (a.length > 0) {
+      let arr: any = [];
+      for (let value of this.item1) {
+        console.log('value of buyername****', value);
+        console.log('value of buyername', value.buyerName);
+        if (value.buyerName.includes(a) || value.sbno.includes(a)) {
+          console.log('shaile***************', value.buyerName);
+          arr.push(value);
         }
-        console.log('Shailendra//////////--', this.sbArray);
-      } else {
-        console.log("You Don't have packingDoc Document");
       }
+      this.itemArray = arr;
+      this.filterToggle = true;
+      // console.log("shaile***************", this.itemArray)
     } else {
-      console.log("You Don't have Commercial Invoice");
+      this.filterToggle = false;
+      console.log('else');
     }
-  } else {
-    console.log("You Don't have BLCopy Document");
-  }
-  // randomArray = []
-  // for(value of this.pipoArray){
-  //   for(value1 of ){
-  //     if(value.pi_poNo == value1){
-  //       randomArray.push(value)
-  //     }
-  //   }
-  // }
-  // console.log("ALL Data",)
-}
 
-hello() {
-  // for (let value of this.sbArray) {
-  //   this.onAddCourse(value)
-  // }
-  for (var i = 1; i < this.sbArray.length; i++) {
-    //binary += String.fromCharCode(bytes[i]);
-    this.onAddCourse(i);
-  }
-  console.log();
-  console.log('ssjskskssk');
-}
-
-changeCheckbox2(value) {
-  let j = this.tryArray.indexOf(value);
-  if (j == -1) {
-    this.tryArray.push(value);
-  } else {
-    this.tryArray.splice(j, 1);
+    // console.log("shailendra buyerName", a.buyerName)
   }
 
-  console.log(this.tryArray);
-}
-
-changeCheckbox3(value) {
-  let j = this.lcArray.indexOf(value);
-  if (j == -1) {
-    this.lcArray.push(value);
-  } else {
-    this.lcArray.splice(j, 1);
+  fireEvent() {
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
+      this.table.nativeElement
+    );
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    console.log(wb);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    console.log(wb);
+    /* save to file */
+    XLSX.writeFile(wb, 'SheetJS.xlsx');
   }
 
-  console.log(this.lcArray);
-}
-
-initCourse() {
-  return this.formBuilder.group({
-    value: new FormArray([this.initCourse1()], Validators.required),
-  });
-}
-
-initCourse1() {
-  return this.formBuilder.group({
-    valueInternal: ['', Validators.required],
-    sb: ['', Validators.required],
-  });
-}
-
-getCourses(form) {
-  return form.get('advance').controls;
-}
-
-getForexInfo(sbno: number) {
-  return this.shippingMap.get(sbno);
-}
-
-onAddCourse(e) {
-  // if (e.controls.bankDetails.invalid) {
-  //   //this.submitted1 = true
-  //   this.toastr.error('You can add another bank after filling first one!');
-  //   console.log("2")
-  //   //this.isDisabled = false;
-  //   return;
-  // }
-  console.log('fffff');
-  // this.currencyName.push('')
-  // this.bankName.push('')
-  const control = this.advanceForm.controls.advance as FormArray;
-  control.push(this.initCourse());
-  //this.isDisabled = false;
-}
-
-onAddCourse1(e) {
-  // if (e.controls.bankDetails.invalid) {
-  //   //this.submitted1 = true
-  //   this.toastr.error('You can add another bank after filling first one!');
-  //   console.log("2")
-  //   //this.isDisabled = false;
-  //   return;
-  // }
-  console.log('fffff');
-  console.log(e);
-  // this.currencyName.push('')
-  // this.bankName.push('') .controls.contacts
-  console.log(
-    this.advanceForm.controls.advance['controls'][e].controls.value
-  );
-  // console.log(this.advanceForm.controls.advance[e].controls.value)
-  // console.log(this.advanceForm.controls.advance[e])
-  const control = this.advanceForm.controls.advance['controls'][e].controls
-    .value as FormArray;
-  control.push(this.initCourse1());
-  //this.isDisabled = false;
-}
-
-removeAddress(i) {
-  // console.log(i)
-  // //console.log(this.control)
-  let control1 = this.advanceForm.controls.advance as FormArray;
-  // console.log(control1)
-  // console.log(control1.length)
-  // console.log(this.bankName)
-  // console.log(this.currencyName)
-  control1.removeAt(i);
-  // this.bankName.splice(i, 1)
-  // this.currencyName.splice(i, 1)
-  // console.log(this.bankName)
-  // console.log(this.currencyName)
-  // console.log(control1.length)
-}
-
-onSubmit() {
-  console.log('Testing *******************', this.advanceForm.value);
-}
-
-async generateDoc1() {
-  //console.log(code, j)
- if (this.advanceArray.length!=0) {
-  this.generate = true;
-  this.isGenerate = true;
-
-  let generateDoc2: any = [];
-  let pipoValue;
-  let value;
-  let buyerValue;
-  let newVal = {};
-  for (let item of this.itemArray) {
-    for (let sb of this.sbArray) {
-      if (item.sbno === sb) {
-        pipoValue = item;
-        value = item.pipo;
-        buyerValue = item.buyerName;
-        this.dateArray.push(item.sbdate);
-        this.sbDataArray.push(item);
-        console.log('value', value);
-        // console.log("Line no. 715", item)
-        // newVal['sbno'] = item.sbno;
-        // newVal['doc'] = item.doc
-        // console.log("line no. 718", newVal)
-        generateDoc2.push(
-          this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
-        );
-      }
+  changeCheckbox3(value) {
+    let j = this.lcArray.indexOf(value);
+    if (j == -1) {
+      this.lcArray.push(value);
+    } else {
+      this.lcArray.splice(j, 1);
     }
+
+    console.log(this.lcArray);
   }
 
-  console.log(pipoValue, 'pipovalue*****************************');
-  for (value of this.item) {
-    for (let value1 of pipoValue.pipo) {
-      if (value.pi_poNo == value1.pi_poNo) {
-        this.randomArray.push(value);
-      }
-    }
-  }
-  console.log('random Array', this.randomArray);
-  console.log('random Array', this.randomArray[0].creditNote);
-
-  this.sb = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['sb']
-  );
-
-  this.creditNote = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['creditNote']
-  );
-  console.log('////*********************Credit Note', this.creditNote);
-
-  this.debitNote = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['debitNote']
-  );
-  console.log('////*********************debit Note', this.debitNote);
-
-  this.advanceOutward = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['advanceOutward']
-  );
-  console.log('////*********************advanceOutward', this.advanceOutward);
-
-  this.ebrc = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['EBRC']
-  );
-  console.log('////*********************Ebrc', this.ebrc);
-
-  this.blcopyref = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['blcopyref']
-  );
-
-  this.irAdvice = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['irAdvice']
-  );
-
-  this.lcCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['lcCopy']
-  );
-  console.log('****************Lc Copy', this.lcCopy);
-
-  this.swiftCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['swiftCopy']
-  );
-
-  this.tryPartyAgreement = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['tryPartyAgreement']
-  );
-
-  this.opinionReport = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['opinionReport']
-  );
-
-  this.airwayBlCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['airwayBlcopy']
-  );
-
-  this.billOfExchange = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['billOfExchange']
-  );
-
-  this.commercial = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['commercial']
-  );
-
-  this.destruction = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['destruction']
-  );
-
-  this.packingList = this.sanitizer.bypassSecurityTrustResourceUrl(
-    this.randomArray[0]['packingList']
-  );
-
-  console.log('Random Array', this.randomArray);
-  console.log(
-    'Airway Docs****************--------------------------------',
-    this.airwayBlCopy
-  );
-
-  console.log('ALL Data');
-
-  let mainArr = [];
-
-  let invoicearray = [];
-  // this.Question5 = 'no';
-  console.log('line no.796 question5 data', this.Question5);
-  this.sbDataArray.forEach((value, index) => {
-    for (let a of value.pipo) {
-      this.arrayPipo.push(a);
-    }
-  });
-  if (this.Question6 == 'yes') {
-    let adArr = [];
-    console.log('Shipping Map For', this.shippingMap);
-    this.shippingMap.forEach((value) => {
-      console.log('Shipping Map For loop', value);
-      adArr = adArr.concat(value);
+  initCourse() {
+    return this.formBuilder.group({
+      value: new FormArray([this.initCourse1()], Validators.required),
     });
+  }
 
-    // let adArr = [];
-    // for (let x of this.advanceForm.value.advance) {
-    //   for (let z of x.value) {
-    //     adArr.push(z);
-    //   }
-    // }
-    console.log('advArr', adArr);
+  initCourse1() {
+    return this.formBuilder.group({
+      valueInternal: ['', Validators.required],
+      sb: ['', Validators.required],
+    });
+  }
 
-    console.log('sbDataArray', this.sbDataArray);
 
-    forkJoin(
-      this.sbDataArray.map((value) => {
-        let piponumbers = [];
-        for(let i in value.pipo) {
-          piponumbers.push(value.pipo[i].pi_poNo);
-        }
-        return this.userService.getManyPipo(piponumbers);
-      })
-    ).subscribe((resp: any[]) => {
-      console.log('Fork join resp', resp);
-      resp.forEach((data, i) => {
-        for (let item of data['data']) {
-          console.log(item);
-          const newVal = { ...this.sbDataArray[i] };
-          newVal['pipoValue'] = item;
-          mainArr.push(newVal);
-          console.log('fggfgfgf', mainArr);
-        }
-      });
-
-      // Invoice Reductionn logic
-      console.log('sjjssjjsjsjsjsjsjsjsjsjsjssjsjjsjsjsjsjsjs');
-
-      console.log(this.advanceForm.value);
-
-      mainArr.forEach((value1, index) => {
-        console.log('shshsh');
-        console.log(this.advanceForm.value.advance);
-        for (let a of adArr) {
-          if (a.sb == value1.sbno) {
-            const newVal = { ...value1 };
-            newVal['advance'] = a.valueInternal;
-            newVal['irAdviceId'] = a.irDataItem._id;
-            invoicearray.push(newVal);
+  async generateDoc1(form: any) {
+    console.log(form, 'generateDoc1generateDoc1');
+    if (this.Lodgement['AgainstAdvanceReceipt']?.Hide == 'no') {
+      this.generate = true;
+      this.isGenerate = true;
+      let generateDoc2: any = [];
+      let pipoValue: any = [];
+      let value: any = [];
+      let buyerValue: any = [];
+      for (let item of this.itemArray) {
+        for (let sb of this.sbArray) {
+          if (item?.sbno === sb) {
+            pipoValue = item;
+            value = item?.pipo;
+            buyerValue = item?.buyerName;
+            this.dateArray.push(item?.sbdate);
+            this.sbDataArray.push(item);
+            console.log('value', value);
+            generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(item.doc));
           }
         }
-        console.log('aajsjss');
-      });
-      let amountArr = [];
-      for (let item of invoicearray) {
-        amountArr.push(item.pipoValue.amount);
       }
-      console.log(amountArr);
-      this.amArr = amountArr;
-      console.log(
-        '111111111111111111111111111111111111111111111111111111111111111'
+
+      console.log(pipoValue, 'pipovalue*****************************');
+      for (value of this.item) {
+        for (let value1 of pipoValue?.pipo) {
+          if (value?.pi_poNo == value1?.pi_poNo) {
+            this.randomArray.push(value);
+          }
+        }
+      }
+      console.log('random Array', this.randomArray);
+      console.log('random Array', this.randomArray[0]?.creditNote);
+
+      this.sb = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.sb
       );
-      console.log('t', invoicearray);
-      this.invoiceArr = invoicearray;
 
-      console.log('hello line 884', this.invoiceArr);
+      this.creditNote = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.creditNote
+      );
+      console.log('////*********************Credit Note', this.creditNote);
 
-      // this.Question5 = 'yes';
-      console.log('line no.866 question5 data', this.Question5);
+      this.debitNote = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.debitNote
+      );
+      console.log('////*********************debit Note', this.debitNote);
 
-      // Logic Ends
+      this.advanceOutward = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.advanceOutward
+      );
+      console.log('////*********************advanceOutward', this.advanceOutward);
+
+      this.ebrc = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.EBRC
+      );
+      console.log('////*********************Ebrc', this.ebrc);
+
+      this.blcopyref = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.blcopyref
+      );
+
+      this.irAdvice = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.irAdvice
+      );
+
+      this.lcCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.lcCopy
+      );
+      console.log('****************Lc Copy', this.lcCopy);
+
+      this.swiftCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.swiftCopy
+      );
+
+      this.tryPartyAgreement = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.tryPartyAgreement
+      );
+
+      this.opinionReport = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.opinionReport
+      );
+
+      this.airwayBlCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.airwayBlcopy
+      );
+
+      this.billOfExchange = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.billOfExchange
+      );
+
+      this.commercial = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.commercial
+      );
+
+      this.destruction = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.destruction
+      );
+
+      this.packingList = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.randomArray[0]?.packingList
+      );
+
+      console.log('Random Array', this.randomArray);
+      console.log('Airway Docs****************--------------------------------', this.airwayBlCopy);
+
+      let mainArr: any = [];
+      let invoicearray: any = [];
+      console.log('line no.796 question5 data', this.Question5);
+      this.sbDataArray.forEach((value, index) => {
+        for (let a of value.pipo) {
+          this.arrayPipo.push(a);
+        }
+      });
+      if (this.Question6 == 'yes') {
+        let adArr: any = [];
+        console.log('Shipping Map For', this.shippingMap);
+        this.shippingMap.forEach((value) => {
+          console.log('Shipping Map For loop', value);
+          adArr = adArr.concat(value);
+        });
+        console.log('advArr', adArr);
+        console.log('sbDataArray', this.sbDataArray);
+
+        forkJoin(
+          this.sbDataArray.map((value) => {
+            let piponumbers: any = [];
+            for (let i in value.pipo) {
+              piponumbers.push(value.pipo[i].pi_poNo);
+            }
+            return this.userService.getManyPipo(piponumbers);
+          })
+        ).subscribe((resp: any[]) => {
+          console.log('Fork join resp', resp);
+          resp.forEach((data, i) => {
+            for (let item of data['data']) {
+              console.log(item);
+              const newVal: any = { ...this.sbDataArray[i] };
+              newVal['pipoValue'] = item;
+              mainArr.push(newVal);
+              console.log('fggfgfgf', mainArr);
+            }
+          });
+          console.log(this.advanceForm.value);
+
+          mainArr.forEach((value1, index) => {
+            console.log('shshsh');
+            console.log(this.advanceForm.value.advance);
+            for (let a of adArr) {
+              if (a.sb == value1.sbno) {
+                const newVal: any = { ...value1 };
+                newVal['advance'] = a.valueInternal;
+                newVal['irAdviceId'] = a.irDataItem._id;
+                invoicearray.push(newVal);
+              }
+            }
+            console.log('aajsjss');
+          });
+          let amountArr: any = [];
+          for (let item of invoicearray) {
+            amountArr.push(item.pipoValue.amount);
+          }
+          console.log(amountArr);
+          this.amArr = amountArr;
+          console.log('t', invoicearray);
+          this.invoiceArr = invoicearray;
+
+          console.log('hello line 884', this.invoiceArr);
+          console.log('line no.866 question5 data', this.Question5);
+        });
+      }
+
+      console.log('Rajuuuuu', pipoValue);
+      //this.arrayPipo = value
+      this.mainDoc1 = generateDoc2;
+      console.log(this.mainDoc1);
+      console.log('950', generateDoc2);
+      let generateDoc3: any = [];
+      if (this.Question2 == 'yes') {
+        for (let item of this.item4) {
+          for (let sb of this.tryArray) {
+            if (item.triPartyAgreementNumber === sb) {
+              generateDoc3.push(
+                this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+              );
+            }
+          }
+        }
+      }
+
+      let generateDoc4: any = [];
+      if (this.Question7 == 'yes') {
+        for (let item of this.item8) {
+          for (let sb of this.lcArray) {
+            if (item.letterOfCreditNumber === sb) {
+              generateDoc4.push(
+                this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+              );
+            }
+          }
+        }
+      }
+      console.log(buyerValue);
+      const data: any = await this.userService.getBuyerByName(buyerValue);
+      console.log('shshhss', data.data);
+      this.buyerAds = data.data.buyerAdrs;
+
+      this.completewords4 = this.buyerAds.split(' ');
+      this.devideContent4 = this.completewords4.length;
+
+      for (let i = 0; i < this.completewords4.length; i++) {
+        if (i < 6) {
+          this.buyerAdd2.push(this.completewords4[i]);
+        } else if (i > 5 && i <= 11) {
+          this.buyerAdd3.push(this.completewords4[i]);
+        } else if (i > 11) {
+          this.buyerAdd4.push(this.completewords4[i]);
+        }
+      }
+
+      this.buyerAds1 = this.buyerAdd2.join(' ');
+      this.buyerAds2 = this.buyerAdd3.join(' ');
+      this.buyerAds3 = this.buyerAdd4.join(' ');
+
+      console.log('Shailendra Buyer Address*************', this.buyerAds1);
+      console.log('Shailendra Buyer Address*************', this.buyerAds2);
+
+      console.log('89999999999999999999999999999', this.buyerAds);
+      this.mainDoc3 = generateDoc3;
+      this.mainDoc4 = generateDoc4;
+      this.newTask[0] = {
+        sbNumbers: this.sbArray,
+        sbUrls: this.mainDoc1,
+        triPartyAgreementNumber: this.tryArray,
+        tryUrls: this.mainDoc3,
+        purposeCode: '',
+        isLc: this.lc,
+        letterOfCreditNumber: this.lcArray,
+        lcUrls: this.mainDoc4,
+        withScrutiny: this.scrutiny,
+        withDiscount: this.withDiscount,
+        bankRef: '',
+        advanceRef: this.advanceRef,
+        ir: this.Question5,
+      };
+      for (let value of this.dateArray) {
+        this.getProper(value);
+      }
+      this.myArr.sort(function (a, b) {
+        a = a.split('-').reverse().join('');
+        b = b.split('-').reverse().join('');
+        return a > b ? 1 : a < b ? -1 : 0;
+      });
+      console.log('Datesss', this.myArr);
+      console.log(this.myArr[0]);
+      console.log(this.myArr[this.myArr.length - 1]);
+
+      console.log(this.generate1);
+      console.log(this.c);
+      this.fillForm(pipoValue, 'SB_' + this.itemArray[0]?.sbno);
+      this.newTask[0] = {
+        sbNumbers: this.sbArray,
+        sbUrls: this.mainDoc1,
+        triPartyAgreementNumber: this.tryArray,
+        tryUrls: this.mainDoc3,
+        purposeCode: '',
+        isLc: this.lc,
+        letterOfCreditNumber: this.lcArray,
+        lcUrls: this.mainDoc4,
+        withScrutiny: this.scrutiny,
+        withDiscount: this.withDiscount,
+        bankRef: '',
+        advanceRef: this.advanceRef,
+        ir: this.Question5,
+      };
+    } else {
+      if (Object.keys(this.advanceArray).length != 0) {
+        this.generate = true;
+        this.isGenerate = true;
+        let generateDoc2: any = [];
+        let pipoValue: any = [];
+        let value: any = [];
+        let buyerValue: any = [];
+        for (let item of this.itemArray) {
+          for (let sb of this.sbArray) {
+            if (item.sbno === sb) {
+              pipoValue = item;
+              value = item?.pipo;
+              buyerValue = item?.buyerName;
+              this.dateArray.push(item?.sbdate);
+              this.sbDataArray.push(item);
+              console.log('value', value);
+              generateDoc2.push(this.sanitizer.bypassSecurityTrustResourceUrl(item.doc));
+            }
+          }
+        }
+
+        console.log(pipoValue, 'pipovalue*****************************');
+        for (value of this.item) {
+          for (let value1 of pipoValue?.pipo) {
+            if (value?.pi_poNo == value1?.pi_poNo) {
+              this.randomArray.push(value);
+            }
+          }
+        }
+        console.log('random Array', this.randomArray);
+        console.log('random Array', this.randomArray[0]?.creditNote);
+
+        this.sb = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.sb
+        );
+
+        this.creditNote = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.creditNote
+        );
+        console.log('////*********************Credit Note', this.creditNote);
+
+        this.debitNote = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.debitNote
+        );
+        console.log('////*********************debit Note', this.debitNote);
+
+        this.advanceOutward = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.advanceOutward
+        );
+        console.log('////*********************advanceOutward', this.advanceOutward);
+
+        this.ebrc = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.EBRC
+        );
+        console.log('////*********************Ebrc', this.ebrc);
+
+        this.blcopyref = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.blcopyref
+        );
+
+        this.irAdvice = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.irAdvice
+        );
+
+        this.lcCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.lcCopy
+        );
+        console.log('****************Lc Copy', this.lcCopy);
+
+        this.swiftCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.swiftCopy
+        );
+
+        this.tryPartyAgreement = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.tryPartyAgreement
+        );
+
+        this.opinionReport = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.opinionReport
+        );
+
+        this.airwayBlCopy = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.airwayBlcopy
+        );
+
+        this.billOfExchange = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.billOfExchange
+        );
+
+        this.commercial = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.commercial
+        );
+
+        this.destruction = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.destruction
+        );
+
+        this.packingList = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.randomArray[0]?.packingList
+        );
+
+        console.log('Random Array', this.randomArray);
+        console.log('Airway Docs****************--------------------------------', this.airwayBlCopy);
+
+        let mainArr: any = [];
+        let invoicearray: any = [];
+        console.log('line no.796 question5 data', this.Question5);
+        this.sbDataArray.forEach((value, index) => {
+          for (let a of value.pipo) {
+            this.arrayPipo.push(a);
+          }
+        });
+        if (this.Question6 == 'yes') {
+          let adArr: any = [];
+          console.log('Shipping Map For', this.shippingMap);
+          this.shippingMap.forEach((value) => {
+            console.log('Shipping Map For loop', value);
+            adArr = adArr.concat(value);
+          });
+          console.log('advArr', adArr);
+          console.log('sbDataArray', this.sbDataArray);
+
+          forkJoin(
+            this.sbDataArray.map((value) => {
+              let piponumbers: any = [];
+              for (let i in value.pipo) {
+                piponumbers.push(value.pipo[i].pi_poNo);
+              }
+              return this.userService.getManyPipo(piponumbers);
+            })
+          ).subscribe((resp: any[]) => {
+            console.log('Fork join resp', resp);
+            resp.forEach((data, i) => {
+              for (let item of data['data']) {
+                console.log(item);
+                const newVal: any = { ...this.sbDataArray[i] };
+                newVal['pipoValue'] = item;
+                mainArr.push(newVal);
+                console.log('fggfgfgf', mainArr);
+              }
+            });
+            console.log(this.advanceForm.value);
+
+            mainArr.forEach((value1, index) => {
+              console.log('shshsh');
+              console.log(this.advanceForm.value.advance);
+              for (let a of adArr) {
+                if (a.sb == value1.sbno) {
+                  const newVal = { ...value1 };
+                  newVal['advance'] = a.valueInternal;
+                  newVal['irAdviceId'] = a.irDataItem._id;
+                  invoicearray.push(newVal);
+                }
+              }
+              console.log('aajsjss');
+            });
+            let amountArr: any = [];
+            for (let item of invoicearray) {
+              amountArr.push(item.pipoValue.amount);
+            }
+            console.log(amountArr);
+            this.amArr = amountArr;
+            console.log('t', invoicearray);
+            this.invoiceArr = invoicearray;
+
+            console.log('hello line 884', this.invoiceArr);
+            console.log('line no.866 question5 data', this.Question5);
+          });
+        }
+
+        console.log('Rajuuuuu', pipoValue);
+        //this.arrayPipo = value
+        this.mainDoc1 = generateDoc2;
+        console.log(this.mainDoc1);
+        console.log('950', generateDoc2);
+        let generateDoc3: any = [];
+        if (this.Question2 == 'yes') {
+          for (let item of this.item4) {
+            for (let sb of this.tryArray) {
+              if (item.triPartyAgreementNumber === sb) {
+                generateDoc3.push(
+                  this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+                );
+              }
+            }
+          }
+        }
+
+        let generateDoc4: any = [];
+        if (this.Question7 == 'yes') {
+          for (let item of this.item8) {
+            for (let sb of this.lcArray) {
+              if (item.letterOfCreditNumber === sb) {
+                generateDoc4.push(
+                  this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
+                );
+              }
+            }
+          }
+        }
+        console.log(buyerValue);
+        const data: any = await this.userService.getBuyerByName(buyerValue);
+        console.log('shshhss', data.data);
+        this.buyerAds = data.data.buyerAdrs;
+
+        this.completewords4 = this.buyerAds.split(' ');
+        this.devideContent4 = this.completewords4.length;
+
+        for (let i = 0; i < this.completewords4.length; i++) {
+          if (i < 6) {
+            this.buyerAdd2.push(this.completewords4[i]);
+          } else if (i > 5 && i <= 11) {
+            this.buyerAdd3.push(this.completewords4[i]);
+          } else if (i > 11) {
+            this.buyerAdd4.push(this.completewords4[i]);
+          }
+        }
+
+        this.buyerAds1 = this.buyerAdd2.join(' ');
+        this.buyerAds2 = this.buyerAdd3.join(' ');
+        this.buyerAds3 = this.buyerAdd4.join(' ');
+
+        console.log('Shailendra Buyer Address*************', this.buyerAds1);
+        console.log('Shailendra Buyer Address*************', this.buyerAds2);
+
+        console.log('89999999999999999999999999999', this.buyerAds);
+        this.mainDoc3 = generateDoc3;
+        this.mainDoc4 = generateDoc4;
+        this.newTask[0] = {
+          sbNumbers: this.sbArray,
+          sbUrls: this.mainDoc1,
+          triPartyAgreementNumber: this.tryArray,
+          tryUrls: this.mainDoc3,
+          purposeCode: '',
+          isLc: this.lc,
+          letterOfCreditNumber: this.lcArray,
+          lcUrls: this.mainDoc4,
+          withScrutiny: this.scrutiny,
+          withDiscount: this.withDiscount,
+          bankRef: '',
+          advanceRef: this.advanceRef,
+          ir: this.Question5,
+        };
+        for (let value of this.dateArray) {
+          this.getProper(value);
+        }
+        this.myArr.sort(function (a, b) {
+          a = a.split('-').reverse().join('');
+          b = b.split('-').reverse().join('');
+          return a > b ? 1 : a < b ? -1 : 0;
+
+          // return a.localeCompare(b);         // <-- alternative
+        });
+        console.log('Datesss', this.myArr);
+        console.log(this.myArr[0]);
+        console.log(this.myArr[this.myArr.length - 1]);
+
+        console.log(this.generate1);
+        console.log(this.c);
+        this.fillForm(pipoValue, 'SB_' + this.itemArray[0]?.sbno);
+        this.newTask[0] = {
+          sbNumbers: this.sbArray,
+          sbUrls: this.mainDoc1,
+          triPartyAgreementNumber: this.tryArray,
+          tryUrls: this.mainDoc3,
+          purposeCode: '',
+          isLc: this.lc,
+          letterOfCreditNumber: this.lcArray,
+          lcUrls: this.mainDoc4,
+          withScrutiny: this.scrutiny,
+          withDiscount: this.withDiscount,
+          bankRef: '',
+          advanceRef: this.advanceRef,
+          ir: this.Question5,
+        };
+      } else {
+        this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',
+          `Please select a firx amount ${this.itemArray.length == 0 ? '& also select Sb no.' : ''}...`)
+      }
+    }
+  }
+
+  getProper(a) {
+    const myArray = a.split('-');
+    myArray.forEach((value, index) => {
+      if (index == 0) {
+        this.str = value + '.';
+      } else if (index == 1) {
+        if (value.toUpperCase() == 'JAN') {
+          this.str = this.str + '01.';
+        } else if (value.toUpperCase() == 'FEB') {
+          this.str = this.str + '02.';
+        } else if (value.toUpperCase() == 'MAR') {
+          this.str = this.str + '03.';
+        } else if (value.toUpperCase() == 'APR') {
+          this.str = this.str + '04.';
+        } else if (value.toUpperCase() == 'MAY') {
+          this.str = this.str + '05.';
+        } else if (value.toUpperCase() == 'JUN') {
+          this.str = this.str + '06.';
+        } else if (value.toUpperCase() == 'JUL') {
+          this.str = this.str + '07.';
+        } else if (value.toUpperCase() == 'AUG') {
+          this.str = this.str + '08.';
+        } else if (value.toUpperCase() == 'SEP') {
+          this.str = this.str + '09.';
+        } else if (value.toUpperCase() == 'OCT') {
+          this.str = this.str + '10.';
+        } else if (value.toUpperCase() == 'NOV') {
+          this.str = this.str + '11.';
+        } else if (value.toUpperCase() == 'DEC') {
+          this.str = this.str + '12.';
+        }
+      } else if (index == 2) {
+        this.str = this.str + '20' + value;
+      }
     });
-
-    // this.sbDataArray.forEach((value, index) => {
-    //   this.userService.getManyPipo(value.pipo).subscribe(
-    //     (data) => {
-    //       console.log('king123');
-    //       console.log(data);
-    //       for (let item of data['data']) {
-    //         console.log(item);
-    //         const newVal = { ...value };
-    //         newVal['pipoValue'] = item;
-    //         mainArr.push(newVal);
-    //         console.log('fggfgfgf', mainArr);
-    //       }
-
-    //       //this.getBeneDetaile()
-    //       //this.router.navigate(['/login'], { queryParams: { registered: true }});
-    //     },
-    //     (error) => {
-    //       console.log('error');
-    //     }
-    //   );
-    // });
-    // setTimeout(() => {
-    //   console.log('sjjssjjsjsjsjsjsjsjsjsjsjssjsjjsjsjsjsjsjs');
-    //   console.log("mainArr");
-    //   console.log(this.advanceForm.value);
-
-    //   mainArr.forEach((value1, index) => {
-    //     console.log('shshsh');
-    //     console.log(this.advanceForm.value.advance);
-    //     for (let a of adArr) {
-    //       if (a.sb == value1.sbno) {
-    //         const newVal = {...value1};
-    //         newVal['advance'] = a.valueInternal;
-    //         invoicearray.push(newVal);
-    //       }
-    //     }
-    //     console.log('aajsjss');
-    //   });
-    //   let amountArr = [];
-    //   for (let item of invoicearray) {
-    //     amountArr.push(item.pipoValue.amount);
-    //   }
-    //   console.log(amountArr);
-    //   this.amArr = amountArr;
-    //   console.log(
-    //     '111111111111111111111111111111111111111111111111111111111111111'
-    //   );
-    //   console.log('t', invoicearray);
-    //   this.invoiceArr = invoicearray;
-
-    //   this.Question5 = 'yes';
-    // }, 8000);
+    this.myArr.push(this.str);
+    this.str = '';
+    console.log(this.str);
   }
+  bankformat: any = ''
+  async fillForm(a, sbno: any) {
+    return new Promise(async (resolve, reject) => {
+      this.bankformat = ''
+      this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.bankValue) != -1);
+      console.log(this.newBankArray, this.bankformat, 'this.newBankArray')
+      if (this.bankformat.length != 0 && this.bankformat[0]?.urlpdf != '') {
+        this.buyer1 = a.buyerName;
+        this.completewords3 = this.buyer1;;
+        this.devideContent3 = this.completewords3.length;
+        for (let i = 0; i < this.completewords3.length; i++) {
+          if (i < 6) {
+            this.buyer2.push(this.completewords3[i]);
+          } else if (i > 5 && i <= 11) {
+            this.buyer3.push(this.completewords3[i]);
+          }
+        }
 
-  console.log('Rajuuuuu', pipoValue);
-  //this.arrayPipo = value
-  this.mainDoc1 = generateDoc2;
-  console.log(this.mainDoc1);
-  console.log('950', generateDoc2);
-  let generateDoc3: any = [];
-  if (this.Question2 == 'yes') {
-    for (let item of this.item4) {
-      for (let sb of this.tryArray) {
-        if (item.triPartyAgreementNumber === sb) {
-          generateDoc3.push(
-            this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
-          );
+        this.buyName1 = this.buyer2.join(' ');
+        this.buyName2 = this.buyer3.join(' ');
+
+        console.log('Shailendra *************', this.buyName1);
+        console.log('Shailendra *************', this.buyName2);
+
+        const formUrl = this.bankformat[0]?.urlpdf;
+
+        const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
+
+        const pdfDoc = await PDFDocument.load(formPdfBytes);
+
+        const form = pdfDoc.getForm();
+        const pages = pdfDoc.getPages();
+        const firstpage = pages[0];
+
+        const text1 = form.createTextField('favorite0');
+        text1.setText('');
+        text1.addToPage(firstpage, {
+          x: 156,
+          y: 752,
+          width: 250,
+          height: 12,
+          borderWidth: 0,
+          //backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text2 = form.createTextField('favorite1');
+        text2.setText('');
+        text2.addToPage(firstpage, {
+          x: 482,
+          y: 752,
+          width: 20,
+          height: 13,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const textf3 = form.createTextField('favorite2');
+        textf3.setText('');
+        textf3.addToPage(firstpage, {
+          x: 510,
+          y: 752,
+          width: 20,
+          height: 13,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text4 = form.createTextField('favorite3');
+        text4.setText('');
+        text4.addToPage(firstpage, {
+          x: 539,
+          y: 752,
+          width: 15,
+          height: 13,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text5 = form.createTextField('favorite4');
+        text5.setText('');
+        text5.addToPage(firstpage, {
+          x: 570,
+          y: 752,
+          width: 12,
+          height: 13,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        //exporter
+
+        const text6 = form.createTextField('favorite5');
+        text6.setText(this.team1);
+        text6.addToPage(firstpage, {
+          x: 18,
+          y: 684,
+          width: 295,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text7 = form.createTextField('favorite6');
+        // if(this.team2.length > 0){
+        text7.setText(this.team2);
+        text7.addToPage(firstpage, {
+          x: 18,
+          y: 665,
+          width: 295,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+        // }
+        // else{
+        //   text7.setText(this.item5.adress)
+        //   text7.addToPage(firstpage, {
+
+        //     x: 18,
+        //     y: 665,
+        //     width: 295,
+        //     height: 14,
+        //     borderWidth: 0,
+        //     // backgroundColor: rgb(255, 255, 255)
+        //   })
+        // }
+
+        const text8 = form.createTextField('favorite7');
+        // if(this.team2.length > 0 && this.team3.length == 0){
+        text8.setText(this.address1);
+        text8.addToPage(firstpage, {
+          x: 18,
+          y: 646,
+          width: 295,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+        // }
+        // else{
+        //   text8.setText(this.team3)
+        //   text8.addToPage(firstpage, {
+        //     x: 18,
+        //     y: 646,
+        //     width: 295,
+        //     height: 14,
+        //     borderWidth: 0,
+        //     // backgroundColor: rgb(255, 255, 255)
+
+        //   })
+        // }
+
+        const text9 = form.createTextField('favorite8');
+        //  if(this.team2.length > 0 && this.team3.length > 0){
+        text9.setText(this.address2);
+        text9.addToPage(firstpage, {
+          x: 18,
+          y: 628,
+          width: 295,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+        // }
+
+        const text10 = form.createTextField('favorite9');
+        text10.setText(this.address3);
+        text10.addToPage(firstpage, {
+          x: 18,
+          y: 612,
+          width: 295,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text11 = form.createTextField('favorite10');
+        text11.setText('');
+        text11.addToPage(firstpage, {
+          x: 18,
+          y: 594,
+          width: 295,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        //buyer
+
+        const text12 = form.createTextField('favorite11');
+        text12.setText(this.buyName1);
+        text12.addToPage(firstpage, {
+          x: 320,
+          y: 684,
+          width: 255,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text13 = form.createTextField('favorite12');
+        text13.setText(this.buyName2);
+        text13.addToPage(firstpage, {
+          x: 320,
+          y: 665,
+          width: 255,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text14 = form.createTextField('favorite13');
+        text14.setText(this.buyerAds1);
+        text14.addToPage(firstpage, {
+          x: 320,
+          y: 646,
+          width: 255,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text15 = form.createTextField('favorite14');
+        text15.setText(this.buyerAds2);
+        text15.addToPage(firstpage, {
+          x: 320,
+          y: 628,
+          width: 255,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text16 = form.createTextField('favorite15');
+        text16.setText(this.buyerAds3);
+        text16.addToPage(firstpage, {
+          x: 320,
+          y: 612,
+          width: 255,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text17 = form.createTextField('favorite16');
+        text17.setText('');
+        text17.addToPage(firstpage, {
+          x: 320,
+          y: 594,
+          width: 255,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        //checkbox
+
+        const checkbox1 = form.createCheckBox('check1');
+        checkbox1.addToPage(firstpage, {
+          x: 150,
+          y: 575,
+          width: 8,
+          height: 8,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const checkbox2 = form.createCheckBox('check2');
+        checkbox2.addToPage(firstpage, {
+          x: 369,
+          y: 575,
+          width: 8,
+          height: 8,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const checkbox3 = form.createCheckBox('check3');
+        checkbox3.addToPage(firstpage, {
+          x: 570,
+          y: 575,
+          width: 8,
+          height: 8,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        //draw bank details
+
+        const text18 = form.createTextField('favorite17');
+        text18.setText('');
+        text18.addToPage(firstpage, {
+          x: 219,
+          y: 553,
+          width: 360,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text19 = form.createTextField('favorite18');
+        text19.setText('');
+        text19.addToPage(firstpage, {
+          x: 219,
+          y: 538,
+          width: 360,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text20 = form.createTextField('favorite19');
+        text20.setText('');
+        text20.addToPage(firstpage, {
+          x: 219,
+          y: 521,
+          width: 360,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text21 = form.createTextField('favorite20');
+        text21.setText('');
+        text21.addToPage(firstpage, {
+          x: 219,
+          y: 506,
+          width: 360,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text22 = form.createTextField('favorite21');
+        text22.setText('');
+        text22.addToPage(firstpage, {
+          x: 219,
+          y: 491,
+          width: 360,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text23 = form.createTextField('favorite22');
+        text23.setText('');
+        text23.addToPage(firstpage, {
+          x: 219,
+          y: 478,
+          width: 360,
+          height: 10,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        //checkbox
+
+        const checkbox4 = form.createCheckBox('check4');
+        checkbox4.addToPage(firstpage, {
+          x: 245,
+          y: 456,
+          width: 5,
+          height: 5,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const checkbox5 = form.createCheckBox('check5');
+        checkbox5.addToPage(firstpage, {
+          x: 453,
+          y: 463,
+          width: 5,
+          height: 5,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        //text
+
+        const text24 = form.createTextField('favorite23');
+        text24.setText('');
+        text24.addToPage(firstpage, {
+          x: 219,
+          y: 412,
+          width: 360,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text25 = form.createTextField('favorite24');
+        text25.setText('');
+        text25.addToPage(firstpage, {
+          x: 219,
+          y: 390,
+          width: 360,
+          height: 16,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        //checkbox
+
+        const checkbox6 = form.createCheckBox('check6');
+        checkbox6.addToPage(firstpage, {
+          x: 389,
+          y: 375,
+          width: 8,
+          height: 8,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const checkbox7 = form.createCheckBox('check7');
+        checkbox7.addToPage(firstpage, {
+          x: 550,
+          y: 375,
+          width: 8,
+          height: 8,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        // firx
+        var tp: any = {
+          firxNumber: [],
+          firxDate: [],
+          firxCurrency: [],
+          firxAmount: [],
+          firxCommision: [],
+          firxRecAmo: []
+        };
+        for (let index = 0; index < this.advanceArray[sbno]?.length; index++) {
+          const element: any = this.advanceArray[sbno][index];
+          tp['firxNumber'].push(element?.irDataItem?.billNo)
+          tp['firxDate'].push(element?.irDataItem?.date)
+          tp['firxCurrency'].push(element?.irDataItem?.currency)
+          tp['firxAmount'].push(element?.irDataItem?.amount)
+          tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
+          tp['firxRecAmo'].push(0)
+        }
+        const text26 = form.createTextField('favorite25');
+        text26.setText(tp?.firxNumber.toString());
+        text26.addToPage(firstpage, {
+          x: 128,
+          y: 348,
+          width: 187,
+          height: 20,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text27 = form.createTextField('favorite26');
+        text27.setText(tp?.firxCurrency.toString());
+        text27.addToPage(firstpage, {
+          x: 128,
+          y: 324,
+          width: 187,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text28 = form.createTextField('favorite27');
+        text28.setText(tp?.firxDate.toString());
+        text28.addToPage(firstpage, {
+          x: 421,
+          y: 348,
+          width: 160,
+          height: 20,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const SumfirxAmount: any = tp?.firxAmount.reduce((partialSum, a) => partialSum + a, 0);
+        const text29 = form.createTextField('favorite28');
+        text29.setText(SumfirxAmount.toString());
+        text29.addToPage(firstpage, {
+          x: 421,
+          y: 324,
+          width: 160,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        //bill details
+        // firx
+        var tp_bill: any = {
+          SbNumber: [],
+          SbDate: [],
+          SbCurrency: [],
+          SbAmount: []
+        };
+        var filterSB: any = this.itemArray.filter((item: any) => 'SB_' + item.sbno == sbno)
+        for (let index = 0; index < filterSB?.length; index++) {
+          const element = filterSB[index];
+          tp_bill['SbNumber'].push(element?.sbno)
+          tp_bill['SbDate'].push(element?.sbdate)
+          tp_bill['SbCurrency'].push(element?.fobCurrency)
+          tp_bill['SbAmount'].push(element?.fobValue)
+        }
+        const text30 = form.createTextField('favorite29');
+        text30.setText(tp_bill?.SbCurrency.toString());
+        text30.addToPage(firstpage, {
+          x: 128,
+          y: 287,
+          width: 140,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text31 = form.createTextField('favorite30');
+        text31.setText(tp_bill?.SbAmount.toString());
+        text31.addToPage(firstpage, {
+          x: 128,
+          y: 266,
+          width: 140,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text32 = form.createTextField('favorite31');
+        text32.setText(this.ConvertNumberToWords(tp_bill?.SbAmount.toString()));
+        text32.addToPage(firstpage, {
+          x: 388,
+          y: 287,
+          width: 188,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text33 = form.createTextField('favorite32');
+        text33.setText('');
+        text33.addToPage(firstpage, {
+          x: 388,
+          y: 266,
+          width: 188,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        //checkbox
+
+        const checkbox8 = form.createCheckBox('check8');
+        checkbox8.addToPage(firstpage, {
+          x: 141,
+          y: 251,
+          width: 5,
+          height: 5,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const checkbox9 = form.createCheckBox('check9');
+        checkbox9.addToPage(firstpage, {
+          x: 288,
+          y: 251,
+          width: 5,
+          height: 5,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text01 = form.createTextField('favorite01');
+        text01.setText('');
+        text01.addToPage(firstpage, {
+          x: 393,
+          y: 253,
+          width: 30,
+          height: 10,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text02 = form.createTextField('favorite02');
+        text02.setText('');
+        text02.addToPage(firstpage, {
+          x: 453,
+          y: 242,
+          width: 60,
+          height: 10,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        // description of goods
+
+        const text34 = form.createTextField('favorite33');
+        text34.setText('');
+        text34.addToPage(firstpage, {
+          x: 128,
+          y: 211,
+          width: 250,
+          height: 20,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text35 = form.createTextField('favorite34');
+        text35.setText('');
+        text35.addToPage(firstpage, {
+          x: 128,
+          y: 190,
+          width: 140,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text36 = form.createTextField('favorite35');
+        text36.setText('');
+        text36.addToPage(firstpage, {
+          x: 448,
+          y: 211,
+          width: 132,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text37 = form.createTextField('favorite36');
+        text37.setText('');
+        text37.addToPage(firstpage, {
+          x: 388,
+          y: 190,
+          width: 188,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text38 = form.createTextField('favorite37');
+        text38.setText('');
+        text38.addToPage(firstpage, {
+          x: 275,
+          y: 170,
+          width: 300,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text39 = form.createTextField('favorite38');
+        text39.setText(tp_bill?.SbNumber.toString());
+        text39.addToPage(firstpage, {
+          x: 275,
+          y: 146,
+          width: 300,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text40 = form.createTextField('favorite39');
+        text40.setText('');
+        text40.addToPage(firstpage, {
+          x: 128,
+          y: 126,
+          width: 140,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text41 = form.createTextField('favorite40');
+        text41.setText(
+          `${this.myArr[0]}  to  ${this.myArr[this.myArr.length - 1]}`
+        );
+        // console.log(this.myArr[0])
+        // console.log(this.myArr[this.myArr.length - 1])
+        text41.addToPage(firstpage, {
+          x: 388,
+          y: 126,
+          width: 188,
+          height: 18,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        // const texta41 = form.createTextField('favorite404')
+        // texta41.setText(`${this.myArr.length}`)
+        // // console.log(this.myArr[0])
+        // // console.log(this.myArr[this.myArr.length - 1])
+        // texta41.addToPage(firstpage, {
+        //   x: 266,
+        //   y: 106,
+        //   width: 188,
+        //   height: 18,
+        //   borderWidth: 0,
+        //   // backgroundColor: rgb(255, 255, 255)
+        // })
+
+        //table1
+        const text421 = form.createTextField('favorite411');
+        text421.setText(`${this.myArr.length}`);
+        text421.addToPage(firstpage, {
+          x: 228,
+          y: 108,
+          width: 10,
+          height: 16,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text42 = form.createTextField('favorite41');
+        text42.setText('');
+        text42.addToPage(firstpage, {
+          x: 97,
+          y: 62,
+          width: 45,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text43 = form.createTextField('favorite42');
+        text43.setText('');
+        text43.addToPage(firstpage, {
+          x: 148,
+          y: 62,
+          width: 50,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text44 = form.createTextField('favorite43');
+        text44.setText('');
+        text44.addToPage(firstpage, {
+          x: 206,
+          y: 62,
+          width: 65,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text45 = form.createTextField('favorite44');
+        text45.setText('');
+        text45.addToPage(firstpage, {
+          x: 276,
+          y: 62,
+          width: 41,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text46 = form.createTextField('favorite45');
+        text46.setText('');
+        text46.addToPage(firstpage, {
+          x: 320,
+          y: 62,
+          width: 45,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text47 = form.createTextField('favorite46');
+        text47.setText('');
+        text47.addToPage(firstpage, {
+          x: 370,
+          y: 62,
+          width: 33,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text48 = form.createTextField('favorite47');
+        text48.setText('');
+        text48.addToPage(firstpage, {
+          x: 408,
+          y: 62,
+          width: 80,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text49 = form.createTextField('favorite48');
+        text49.setText('');
+        text49.addToPage(firstpage, {
+          x: 492,
+          y: 62,
+          width: 50,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text50 = form.createTextField('favorite49');
+        text50.setText('');
+        text50.addToPage(firstpage, {
+          x: 547,
+          y: 62,
+          width: 33,
+          height: 14,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text51 = form.createTextField('favorite50');
+        text51.setText('');
+        text51.addToPage(firstpage, {
+          x: 97,
+          y: 51,
+          width: 45,
+          height: 9,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text52 = form.createTextField('favorite51');
+        text52.setText('');
+        text52.addToPage(firstpage, {
+          x: 148,
+          y: 51,
+          width: 50,
+          height: 9,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text53 = form.createTextField('favorite52');
+        text53.setText('');
+        text53.addToPage(firstpage, {
+          x: 206,
+          y: 51,
+          width: 65,
+          height: 9,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text54 = form.createTextField('favorite53');
+        text54.setText('');
+        text54.addToPage(firstpage, {
+          x: 276,
+          y: 51,
+          width: 41,
+          height: 9,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text55 = form.createTextField('favorite54');
+        text55.setText('');
+        text55.addToPage(firstpage, {
+          x: 320,
+          y: 51,
+          width: 45,
+          height: 9,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text56 = form.createTextField('favorite55');
+        text56.setText('');
+        text56.addToPage(firstpage, {
+          x: 370,
+          y: 51,
+          width: 33,
+          height: 9,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text57 = form.createTextField('favorite56');
+        text57.setText('');
+        text57.addToPage(firstpage, {
+          x: 408,
+          y: 51,
+          width: 80,
+          height: 9,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text58 = form.createTextField('favorite57');
+        text58.setText('');
+        text58.addToPage(firstpage, {
+          x: 492,
+          y: 51,
+          width: 50,
+          height: 9,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text59 = form.createTextField('favorite58');
+        text59.setText('');
+        text59.addToPage(firstpage, {
+          x: 547,
+          y: 51,
+          width: 33,
+          height: 9,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        //table2
+
+        const text60 = form.createTextField('favorite59');
+        text60.setText(this.charge[0]);
+        text60.addToPage(firstpage, {
+          x: 135,
+          y: 10,
+          width: 30,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text61 = form.createTextField('favorite60');
+        text61.setText(this.charge[1]);
+        text61.addToPage(firstpage, {
+          x: 167,
+          y: 10,
+          width: 30,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text62 = form.createTextField('favorite61');
+        text62.setText(this.charge[2]);
+        text62.addToPage(firstpage, {
+          x: 201,
+          y: 10,
+          width: 30,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text63 = form.createTextField('favorite62');
+        text63.setText(this.charge[3]);
+        text63.addToPage(firstpage, {
+          x: 235,
+          y: 10,
+          width: 30,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text64 = form.createTextField('favorite63');
+        text64.setText(this.charge[4]);
+        text64.addToPage(firstpage, {
+          x: 266,
+          y: 10,
+          width: 30,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text65 = form.createTextField('favorite64');
+        text65.setText(this.charge[5]);
+        text65.addToPage(firstpage, {
+          x: 300,
+          y: 10,
+          width: 30,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text66 = form.createTextField('favorite65');
+        text66.setText(this.charge[6]);
+        text66.addToPage(firstpage, {
+          x: 331,
+          y: 10,
+          width: 30,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text67 = form.createTextField('favorite66');
+        text67.setText(this.charge[7]);
+        text67.addToPage(firstpage, {
+          x: 363,
+          y: 10,
+          width: 30,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text68 = form.createTextField('favorite67');
+        text68.setText(this.charge[8]);
+        text68.addToPage(firstpage, {
+          x: 397,
+          y: 10,
+          width: 34,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text69 = form.createTextField('favorite68');
+        text69.setText(this.charge[9]);
+        text69.addToPage(firstpage, {
+          x: 434,
+          y: 10,
+          width: 30,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text70 = form.createTextField('favorite69');
+        text70.setText(this.charge[10]);
+        text70.addToPage(firstpage, {
+          x: 469,
+          y: 10,
+          width: 27,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text71 = form.createTextField('favorite70');
+        text71.setText(this.charge[11]);
+        text71.addToPage(firstpage, {
+          x: 501,
+          y: 10,
+          width: 28,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text72 = form.createTextField('favorite71');
+        text72.setText(this.charge[12]);
+        text72.addToPage(firstpage, {
+          x: 534,
+          y: 10,
+          width: 28,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const text73 = form.createTextField('favorite72');
+        text73.setText(this.charge[13]);
+        text73.addToPage(firstpage, {
+          x: 565,
+          y: 10,
+          width: 15,
+          height: 25,
+          borderWidth: 0,
+          // backgroundColor: rgb(255, 255, 255)
+        });
+
+        const pdfBytes = await pdfDoc.save();
+        console.log(pdfBytes, 'pdf');
+        console.log(pdfBytes, 'pdf');
+        var base64String = this._arrayBufferToBase64(pdfBytes);
+        const x = 'data:application/pdf;base64,' + base64String;
+        this.formerge = x;
+        this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
+        this.newTask[0].generateDoc1 = x;
+        resolve(x)
+      }
+    })
+  }
+  ConvertNumberToWords(number: any) {
+    var words = new Array();
+    words[0] = '';
+    words[1] = 'One';
+    words[2] = 'Two';
+    words[3] = 'Three';
+    words[4] = 'Four';
+    words[5] = 'Five';
+    words[6] = 'Six';
+    words[7] = 'Seven';
+    words[8] = 'Eight';
+    words[9] = 'Nine';
+    words[10] = 'Ten';
+    words[11] = 'Eleven';
+    words[12] = 'Twelve';
+    words[13] = 'Thirteen';
+    words[14] = 'Fourteen';
+    words[15] = 'Fifteen';
+    words[16] = 'Sixteen';
+    words[17] = 'Seventeen';
+    words[18] = 'Eighteen';
+    words[19] = 'Nineteen';
+    words[20] = 'Twenty';
+    words[30] = 'Thirty';
+    words[40] = 'Forty';
+    words[50] = 'Fifty';
+    words[60] = 'Sixty';
+    words[70] = 'Seventy';
+    words[80] = 'Eighty';
+    words[90] = 'Ninety';
+    number = number.toString();
+    var atemp = number.split(".");
+    var number = atemp[0].split(",").join("");
+    var n_length = number.length;
+    var words_string = "";
+    if (n_length <= 9) {
+      var n_array: any = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
+      var received_n_array = new Array();
+      for (var i = 0; i < n_length; i++) {
+        received_n_array[i] = number.substr(i, 1);
+      }
+      for (var i = 9 - n_length, j = 0; i < 9; i++, j++) {
+        n_array[i] = received_n_array[j];
+      }
+      for (var i = 0, j = 1; i < 9; i++, j++) {
+        if (i == 0 || i == 2 || i == 4 || i == 7) {
+          if (n_array[i] == 1) {
+            n_array[j] = 10 + parseInt(n_array[j]);
+            n_array[i] = 0;
+          }
         }
       }
-    }
-  }
-
-  let generateDoc4: any = [];
-  if (this.Question7 == 'yes') {
-    for (let item of this.item8) {
-      for (let sb of this.lcArray) {
-        if (item.letterOfCreditNumber === sb) {
-          generateDoc4.push(
-            this.sanitizer.bypassSecurityTrustResourceUrl(item.doc)
-          );
+      var value: any = "";
+      for (var i = 0; i < 9; i++) {
+        if (i == 0 || i == 2 || i == 4 || i == 7) {
+          value = n_array[i] * 10;
+        } else {
+          value = n_array[i];
+        }
+        if (value != 0) {
+          words_string += words[value] + " ";
+        }
+        if ((i == 1 && value != 0) || (i == 0 && value != 0 && n_array[i + 1] == 0)) {
+          words_string += "Crores ";
+        }
+        if ((i == 3 && value != 0) || (i == 2 && value != 0 && n_array[i + 1] == 0)) {
+          words_string += "Lakhs ";
+        }
+        if ((i == 5 && value != 0) || (i == 4 && value != 0 && n_array[i + 1] == 0)) {
+          words_string += "Thousand ";
+        }
+        if (i == 6 && value != 0 && (n_array[i + 1] != 0 && n_array[i + 2] != 0)) {
+          words_string += "Hundred and ";
+        } else if (i == 6 && value != 0) {
+          words_string += "Hundred ";
         }
       }
+      words_string = words_string.split("  ").join(" ");
     }
+    return words_string;
   }
-  console.log(buyerValue);
-  const data: any = await this.userService.getBuyerByName(buyerValue);
-  console.log('shshhss', data.data);
-  this.buyerAds = data.data.buyerAdrs;
-
-  this.completewords4 = this.buyerAds.split(' ');
-  this.devideContent4 = this.completewords4.length;
-
-  for (let i = 0; i < this.completewords4.length; i++) {
-    if (i < 6) {
-      this.buyerAdd2.push(this.completewords4[i]);
-    } else if (i > 5 && i <= 11) {
-      this.buyerAdd3.push(this.completewords4[i]);
-    } else if (i > 11) {
-      this.buyerAdd4.push(this.completewords4[i]);
+  _arrayBufferToBase64(buffer) {
+    var binary = '';
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
     }
+    return window.btoa(binary);
   }
 
-  this.buyerAds1 = this.buyerAdd2.join(' ');
-  this.buyerAds2 = this.buyerAdd3.join(' ');
-  this.buyerAds3 = this.buyerAdd4.join(' ');
-
-  console.log('Shailendra Buyer Address*************', this.buyerAds1);
-  console.log('Shailendra Buyer Address*************', this.buyerAds2);
-
-  console.log('89999999999999999999999999999', this.buyerAds);
-  this.mainDoc3 = generateDoc3;
-  this.mainDoc4 = generateDoc4;
-  this.newTask[0] = {
-    sbNumbers: this.sbArray,
-    sbUrls: this.mainDoc1,
-    triPartyAgreementNumber: this.tryArray,
-    tryUrls: this.mainDoc3,
-    purposeCode: '',
-    isLc: this.lc,
-    letterOfCreditNumber: this.lcArray,
-    lcUrls: this.mainDoc4,
-    withScrutiny: this.scrutiny,
-    withDiscount: this.withDiscount,
-    bankRef: '',
-    advanceRef: this.advanceRef,
-    ir: this.Question5,
-  };
-
-  //let date = ['31-JAN-21', '29-AUG-21', '01-FEB-20'];
-  // const myArray = date[0].split('-');
-  // console.log(myArray);
-  // let str = '';
-  for (let value of this.dateArray) {
-    this.getProper(value);
-  }
-  this.myArr.sort(function (a, b) {
-    a = a.split('-').reverse().join('');
-    b = b.split('-').reverse().join('');
-    return a > b ? 1 : a < b ? -1 : 0;
-
-    // return a.localeCompare(b);         // <-- alternative
-  });
-  console.log('Datesss', this.myArr);
-  console.log(this.myArr[0]);
-  console.log(this.myArr[this.myArr.length - 1]);
-
-  console.log(this.generate1);
-  console.log(this.c);
-  this.fillForm(pipoValue);
-  this.newTask[0] = {
-    sbNumbers: this.sbArray,
-    sbUrls: this.mainDoc1,
-    triPartyAgreementNumber: this.tryArray,
-    tryUrls: this.mainDoc3,
-    purposeCode: '',
-    isLc: this.lc,
-    letterOfCreditNumber: this.lcArray,
-    lcUrls: this.mainDoc4,
-    withScrutiny: this.scrutiny,
-    withDiscount: this.withDiscount,
-    bankRef: '',
-    advanceRef: this.advanceRef,
-    ir: this.Question5,
-  };
- }else{
-  this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',
-  `Please select a firx amount ${this.itemArray.length==0?'& also select Sb no.':''}...`)
- }
-}
-
-getProper(a) {
-  const myArray = a.split('-');
-  myArray.forEach((value, index) => {
-    if (index == 0) {
-      this.str = value + '.';
-    } else if (index == 1) {
-      if (value.toUpperCase() == 'JAN') {
-        this.str = this.str + '01.';
-      } else if (value.toUpperCase() == 'FEB') {
-        this.str = this.str + '02.';
-      } else if (value.toUpperCase() == 'MAR') {
-        this.str = this.str + '03.';
-      } else if (value.toUpperCase() == 'APR') {
-        this.str = this.str + '04.';
-      } else if (value.toUpperCase() == 'MAY') {
-        this.str = this.str + '05.';
-      } else if (value.toUpperCase() == 'JUN') {
-        this.str = this.str + '06.';
-      } else if (value.toUpperCase() == 'JUL') {
-        this.str = this.str + '07.';
-      } else if (value.toUpperCase() == 'AUG') {
-        this.str = this.str + '08.';
-      } else if (value.toUpperCase() == 'SEP') {
-        this.str = this.str + '09.';
-      } else if (value.toUpperCase() == 'OCT') {
-        this.str = this.str + '10.';
-      } else if (value.toUpperCase() == 'NOV') {
-        this.str = this.str + '11.';
-      } else if (value.toUpperCase() == 'DEC') {
-        this.str = this.str + '12.';
-      }
-    } else if (index == 2) {
-      this.str = this.str + '20' + value;
-    }
-  });
-  this.myArr.push(this.str);
-  this.str = '';
-  console.log(this.str);
-}
-
-searchData(a, i) {
-  console.log(i);
-  console.log(a);
-  var reg = /^\d+$/;
-  let x = reg.test(a);
-  console.log(x);
-  if (x) {
-    this.amArr[i] = this.amArr[i] - a;
-    this.invoiceArr[i].pipoValue['damage'] = a;
-
-    this.invoiceArr[i].pipoValue['realized'] = this.amArr[i];
-  }
-  console.log('this is invice array', this.invoiceArr);
-
-  console.log(a);
-  console.log(this.amArr);
-}
-
-toEdit(index) {
-  console.log(
-    'this is damage value',
-    this.invoiceArr[index].pipoValue['damage']
-  );
-  this.optionsVisibility[index] = true;
-  this.toastr.warning('table Is In Edit Mode');
-}
-
-toSave(index) {
-  this.optionsVisibility[index] = false;
-  this.toastr.success('table updated successfully.');
-}
-
-updaterisevalue(i) {
-  this.invoiceArr[i].pipoValue.realized =
-    this.invoiceArr[i].pipoValue.amount - this.invoiceArr[i].pipoValue.damage;
-  console.log('this is rised', this.invoiceArr[i].pipoValue.realized);
-}
-
-async fillForm(a) {
-  console.log('Shailendra *************', a.buyerName);
-
-  this.buyer1 = a.buyerName;
-  this.completewords3 = this.buyer1;;
-  this.devideContent3 = this.completewords3.length;
-
-  for (let i = 0; i < this.completewords3.length; i++) {
-    if (i < 6) {
-      this.buyer2.push(this.completewords3[i]);
-    } else if (i > 5 && i <= 11) {
-      this.buyer3.push(this.completewords3[i]);
-    }
-  }
-
-  this.buyName1 = this.buyer2.join(' ');
-  this.buyName2 = this.buyer3.join(' ');
-
-  console.log('Shailendra *************', this.buyName1);
-  console.log('Shailendra *************', this.buyName2);
-
-  const formUrl = './../../assets/billUnder.pdf';
-
-  const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
-
-  const pdfDoc = await PDFDocument.load(formPdfBytes);
-
-  const form = pdfDoc.getForm();
-  const pages = pdfDoc.getPages();
-  const firstpage = pages[0];
-
-  const text1 = form.createTextField('favorite0');
-  text1.setText('');
-  text1.addToPage(firstpage, {
-    x: 156,
-    y: 752,
-    width: 250,
-    height: 12,
-    borderWidth: 0,
-    //backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text2 = form.createTextField('favorite1');
-  text2.setText('');
-  text2.addToPage(firstpage, {
-    x: 482,
-    y: 752,
-    width: 20,
-    height: 13,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const textf3 = form.createTextField('favorite2');
-  textf3.setText('');
-  textf3.addToPage(firstpage, {
-    x: 510,
-    y: 752,
-    width: 20,
-    height: 13,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text4 = form.createTextField('favorite3');
-  text4.setText('');
-  text4.addToPage(firstpage, {
-    x: 539,
-    y: 752,
-    width: 15,
-    height: 13,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text5 = form.createTextField('favorite4');
-  text5.setText('');
-  text5.addToPage(firstpage, {
-    x: 570,
-    y: 752,
-    width: 12,
-    height: 13,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  //exporter
-
-  const text6 = form.createTextField('favorite5');
-  text6.setText(this.team1);
-  text6.addToPage(firstpage, {
-    x: 18,
-    y: 684,
-    width: 295,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text7 = form.createTextField('favorite6');
-  // if(this.team2.length > 0){
-  text7.setText(this.team2);
-  text7.addToPage(firstpage, {
-    x: 18,
-    y: 665,
-    width: 295,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-  // }
-  // else{
-  //   text7.setText(this.item5.adress)
-  //   text7.addToPage(firstpage, {
-
-  //     x: 18,
-  //     y: 665,
-  //     width: 295,
-  //     height: 14,
-  //     borderWidth: 0,
-  //     // backgroundColor: rgb(255, 255, 255)
-  //   })
-  // }
-
-  const text8 = form.createTextField('favorite7');
-  // if(this.team2.length > 0 && this.team3.length == 0){
-  text8.setText(this.address1);
-  text8.addToPage(firstpage, {
-    x: 18,
-    y: 646,
-    width: 295,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-  // }
-  // else{
-  //   text8.setText(this.team3)
-  //   text8.addToPage(firstpage, {
-  //     x: 18,
-  //     y: 646,
-  //     width: 295,
-  //     height: 14,
-  //     borderWidth: 0,
-  //     // backgroundColor: rgb(255, 255, 255)
-
-  //   })
-  // }
-
-  const text9 = form.createTextField('favorite8');
-  //  if(this.team2.length > 0 && this.team3.length > 0){
-  text9.setText(this.address2);
-  text9.addToPage(firstpage, {
-    x: 18,
-    y: 628,
-    width: 295,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-  // }
-
-  const text10 = form.createTextField('favorite9');
-  text10.setText(this.address3);
-  text10.addToPage(firstpage, {
-    x: 18,
-    y: 612,
-    width: 295,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text11 = form.createTextField('favorite10');
-  text11.setText('');
-  text11.addToPage(firstpage, {
-    x: 18,
-    y: 594,
-    width: 295,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  //buyer
-
-  const text12 = form.createTextField('favorite11');
-  text12.setText(this.buyName1);
-  text12.addToPage(firstpage, {
-    x: 320,
-    y: 684,
-    width: 255,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text13 = form.createTextField('favorite12');
-  text13.setText(this.buyName2);
-  text13.addToPage(firstpage, {
-    x: 320,
-    y: 665,
-    width: 255,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text14 = form.createTextField('favorite13');
-  text14.setText(this.buyerAds1);
-  text14.addToPage(firstpage, {
-    x: 320,
-    y: 646,
-    width: 255,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text15 = form.createTextField('favorite14');
-  text15.setText(this.buyerAds2);
-  text15.addToPage(firstpage, {
-    x: 320,
-    y: 628,
-    width: 255,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text16 = form.createTextField('favorite15');
-  text16.setText(this.buyerAds3);
-  text16.addToPage(firstpage, {
-    x: 320,
-    y: 612,
-    width: 255,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text17 = form.createTextField('favorite16');
-  text17.setText('');
-  text17.addToPage(firstpage, {
-    x: 320,
-    y: 594,
-    width: 255,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  //checkbox
-
-  const checkbox1 = form.createCheckBox('check1');
-  checkbox1.addToPage(firstpage, {
-    x: 150,
-    y: 575,
-    width: 8,
-    height: 8,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const checkbox2 = form.createCheckBox('check2');
-  checkbox2.addToPage(firstpage, {
-    x: 369,
-    y: 575,
-    width: 8,
-    height: 8,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const checkbox3 = form.createCheckBox('check3');
-  checkbox3.addToPage(firstpage, {
-    x: 570,
-    y: 575,
-    width: 8,
-    height: 8,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  //draw bank details
-
-  const text18 = form.createTextField('favorite17');
-  text18.setText('');
-  text18.addToPage(firstpage, {
-    x: 219,
-    y: 553,
-    width: 360,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text19 = form.createTextField('favorite18');
-  text19.setText('');
-  text19.addToPage(firstpage, {
-    x: 219,
-    y: 538,
-    width: 360,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text20 = form.createTextField('favorite19');
-  text20.setText('');
-  text20.addToPage(firstpage, {
-    x: 219,
-    y: 521,
-    width: 360,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text21 = form.createTextField('favorite20');
-  text21.setText('');
-  text21.addToPage(firstpage, {
-    x: 219,
-    y: 506,
-    width: 360,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text22 = form.createTextField('favorite21');
-  text22.setText('');
-  text22.addToPage(firstpage, {
-    x: 219,
-    y: 491,
-    width: 360,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text23 = form.createTextField('favorite22');
-  text23.setText('');
-  text23.addToPage(firstpage, {
-    x: 219,
-    y: 478,
-    width: 360,
-    height: 10,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  //checkbox
-
-  const checkbox4 = form.createCheckBox('check4');
-  checkbox4.addToPage(firstpage, {
-    x: 245,
-    y: 456,
-    width: 5,
-    height: 5,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const checkbox5 = form.createCheckBox('check5');
-  checkbox5.addToPage(firstpage, {
-    x: 453,
-    y: 463,
-    width: 5,
-    height: 5,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  //text
-
-  const text24 = form.createTextField('favorite23');
-  text24.setText('');
-  text24.addToPage(firstpage, {
-    x: 219,
-    y: 412,
-    width: 360,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text25 = form.createTextField('favorite24');
-  text25.setText('');
-  text25.addToPage(firstpage, {
-    x: 219,
-    y: 390,
-    width: 360,
-    height: 16,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  //checkbox
-
-  const checkbox6 = form.createCheckBox('check6');
-  checkbox6.addToPage(firstpage, {
-    x: 389,
-    y: 375,
-    width: 8,
-    height: 8,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const checkbox7 = form.createCheckBox('check7');
-  checkbox7.addToPage(firstpage, {
-    x: 550,
-    y: 375,
-    width: 8,
-    height: 8,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  // firx
-
-  const text26 = form.createTextField('favorite25');
-  text26.setText('');
-  text26.addToPage(firstpage, {
-    x: 128,
-    y: 348,
-    width: 187,
-    height: 20,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text27 = form.createTextField('favorite26');
-  text27.setText('');
-  text27.addToPage(firstpage, {
-    x: 128,
-    y: 324,
-    width: 187,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text28 = form.createTextField('favorite27');
-  text28.setText('');
-  text28.addToPage(firstpage, {
-    x: 421,
-    y: 348,
-    width: 160,
-    height: 20,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text29 = form.createTextField('favorite28');
-  text29.setText('');
-  text29.addToPage(firstpage, {
-    x: 421,
-    y: 324,
-    width: 160,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  //bill details
-
-  const text30 = form.createTextField('favorite29');
-  text30.setText('');
-  text30.addToPage(firstpage, {
-    x: 128,
-    y: 287,
-    width: 140,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text31 = form.createTextField('favorite30');
-  text31.setText('');
-  text31.addToPage(firstpage, {
-    x: 128,
-    y: 266,
-    width: 140,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text32 = form.createTextField('favorite31');
-  text32.setText('');
-  text32.addToPage(firstpage, {
-    x: 388,
-    y: 287,
-    width: 188,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text33 = form.createTextField('favorite32');
-  text33.setText('');
-  text33.addToPage(firstpage, {
-    x: 388,
-    y: 266,
-    width: 188,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  //checkbox
-
-  const checkbox8 = form.createCheckBox('check8');
-  checkbox8.addToPage(firstpage, {
-    x: 141,
-    y: 251,
-    width: 5,
-    height: 5,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const checkbox9 = form.createCheckBox('check9');
-  checkbox9.addToPage(firstpage, {
-    x: 288,
-    y: 251,
-    width: 5,
-    height: 5,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text01 = form.createTextField('favorite01');
-  text01.setText('');
-  text01.addToPage(firstpage, {
-    x: 393,
-    y: 253,
-    width: 30,
-    height: 10,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text02 = form.createTextField('favorite02');
-  text02.setText('');
-  text02.addToPage(firstpage, {
-    x: 453,
-    y: 242,
-    width: 60,
-    height: 10,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  // description of goods
-
-  const text34 = form.createTextField('favorite33');
-  text34.setText('');
-  text34.addToPage(firstpage, {
-    x: 128,
-    y: 211,
-    width: 250,
-    height: 20,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text35 = form.createTextField('favorite34');
-  text35.setText('');
-  text35.addToPage(firstpage, {
-    x: 128,
-    y: 190,
-    width: 140,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text36 = form.createTextField('favorite35');
-  text36.setText('');
-  text36.addToPage(firstpage, {
-    x: 448,
-    y: 211,
-    width: 132,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text37 = form.createTextField('favorite36');
-  text37.setText('');
-  text37.addToPage(firstpage, {
-    x: 388,
-    y: 190,
-    width: 188,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text38 = form.createTextField('favorite37');
-  text38.setText('');
-  text38.addToPage(firstpage, {
-    x: 275,
-    y: 170,
-    width: 300,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text39 = form.createTextField('favorite38');
-  text39.setText('');
-  text39.addToPage(firstpage, {
-    x: 275,
-    y: 146,
-    width: 300,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text40 = form.createTextField('favorite39');
-  text40.setText('');
-  text40.addToPage(firstpage, {
-    x: 128,
-    y: 126,
-    width: 140,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text41 = form.createTextField('favorite40');
-  text41.setText(
-    `${this.myArr[0]}  to  ${this.myArr[this.myArr.length - 1]}`
-  );
-  // console.log(this.myArr[0])
-  // console.log(this.myArr[this.myArr.length - 1])
-  text41.addToPage(firstpage, {
-    x: 388,
-    y: 126,
-    width: 188,
-    height: 18,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  // const texta41 = form.createTextField('favorite404')
-  // texta41.setText(`${this.myArr.length}`)
-  // // console.log(this.myArr[0])
-  // // console.log(this.myArr[this.myArr.length - 1])
-  // texta41.addToPage(firstpage, {
-  //   x: 266,
-  //   y: 106,
-  //   width: 188,
-  //   height: 18,
-  //   borderWidth: 0,
-  //   // backgroundColor: rgb(255, 255, 255)
-  // })
-
-  //table1
-  const text421 = form.createTextField('favorite411');
-  text421.setText(`${this.myArr.length}`);
-  text421.addToPage(firstpage, {
-    x: 228,
-    y: 108,
-    width: 10,
-    height: 16,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text42 = form.createTextField('favorite41');
-  text42.setText('');
-  text42.addToPage(firstpage, {
-    x: 97,
-    y: 62,
-    width: 45,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text43 = form.createTextField('favorite42');
-  text43.setText('');
-  text43.addToPage(firstpage, {
-    x: 148,
-    y: 62,
-    width: 50,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text44 = form.createTextField('favorite43');
-  text44.setText('');
-  text44.addToPage(firstpage, {
-    x: 206,
-    y: 62,
-    width: 65,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text45 = form.createTextField('favorite44');
-  text45.setText('');
-  text45.addToPage(firstpage, {
-    x: 276,
-    y: 62,
-    width: 41,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text46 = form.createTextField('favorite45');
-  text46.setText('');
-  text46.addToPage(firstpage, {
-    x: 320,
-    y: 62,
-    width: 45,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text47 = form.createTextField('favorite46');
-  text47.setText('');
-  text47.addToPage(firstpage, {
-    x: 370,
-    y: 62,
-    width: 33,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text48 = form.createTextField('favorite47');
-  text48.setText('');
-  text48.addToPage(firstpage, {
-    x: 408,
-    y: 62,
-    width: 80,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text49 = form.createTextField('favorite48');
-  text49.setText('');
-  text49.addToPage(firstpage, {
-    x: 492,
-    y: 62,
-    width: 50,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text50 = form.createTextField('favorite49');
-  text50.setText('');
-  text50.addToPage(firstpage, {
-    x: 547,
-    y: 62,
-    width: 33,
-    height: 14,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text51 = form.createTextField('favorite50');
-  text51.setText('');
-  text51.addToPage(firstpage, {
-    x: 97,
-    y: 51,
-    width: 45,
-    height: 9,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text52 = form.createTextField('favorite51');
-  text52.setText('');
-  text52.addToPage(firstpage, {
-    x: 148,
-    y: 51,
-    width: 50,
-    height: 9,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text53 = form.createTextField('favorite52');
-  text53.setText('');
-  text53.addToPage(firstpage, {
-    x: 206,
-    y: 51,
-    width: 65,
-    height: 9,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text54 = form.createTextField('favorite53');
-  text54.setText('');
-  text54.addToPage(firstpage, {
-    x: 276,
-    y: 51,
-    width: 41,
-    height: 9,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text55 = form.createTextField('favorite54');
-  text55.setText('');
-  text55.addToPage(firstpage, {
-    x: 320,
-    y: 51,
-    width: 45,
-    height: 9,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text56 = form.createTextField('favorite55');
-  text56.setText('');
-  text56.addToPage(firstpage, {
-    x: 370,
-    y: 51,
-    width: 33,
-    height: 9,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text57 = form.createTextField('favorite56');
-  text57.setText('');
-  text57.addToPage(firstpage, {
-    x: 408,
-    y: 51,
-    width: 80,
-    height: 9,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text58 = form.createTextField('favorite57');
-  text58.setText('');
-  text58.addToPage(firstpage, {
-    x: 492,
-    y: 51,
-    width: 50,
-    height: 9,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text59 = form.createTextField('favorite58');
-  text59.setText('');
-  text59.addToPage(firstpage, {
-    x: 547,
-    y: 51,
-    width: 33,
-    height: 9,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  //table2
-
-  const text60 = form.createTextField('favorite59');
-  text60.setText(this.charge[0]);
-  text60.addToPage(firstpage, {
-    x: 135,
-    y: 10,
-    width: 30,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text61 = form.createTextField('favorite60');
-  text61.setText(this.charge[1]);
-  text61.addToPage(firstpage, {
-    x: 167,
-    y: 10,
-    width: 30,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text62 = form.createTextField('favorite61');
-  text62.setText(this.charge[2]);
-  text62.addToPage(firstpage, {
-    x: 201,
-    y: 10,
-    width: 30,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text63 = form.createTextField('favorite62');
-  text63.setText(this.charge[3]);
-  text63.addToPage(firstpage, {
-    x: 235,
-    y: 10,
-    width: 30,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text64 = form.createTextField('favorite63');
-  text64.setText(this.charge[4]);
-  text64.addToPage(firstpage, {
-    x: 266,
-    y: 10,
-    width: 30,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text65 = form.createTextField('favorite64');
-  text65.setText(this.charge[5]);
-  text65.addToPage(firstpage, {
-    x: 300,
-    y: 10,
-    width: 30,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text66 = form.createTextField('favorite65');
-  text66.setText(this.charge[6]);
-  text66.addToPage(firstpage, {
-    x: 331,
-    y: 10,
-    width: 30,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text67 = form.createTextField('favorite66');
-  text67.setText(this.charge[7]);
-  text67.addToPage(firstpage, {
-    x: 363,
-    y: 10,
-    width: 30,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text68 = form.createTextField('favorite67');
-  text68.setText(this.charge[8]);
-  text68.addToPage(firstpage, {
-    x: 397,
-    y: 10,
-    width: 34,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text69 = form.createTextField('favorite68');
-  text69.setText(this.charge[9]);
-  text69.addToPage(firstpage, {
-    x: 434,
-    y: 10,
-    width: 30,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text70 = form.createTextField('favorite69');
-  text70.setText(this.charge[10]);
-  text70.addToPage(firstpage, {
-    x: 469,
-    y: 10,
-    width: 27,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text71 = form.createTextField('favorite70');
-  text71.setText(this.charge[11]);
-  text71.addToPage(firstpage, {
-    x: 501,
-    y: 10,
-    width: 28,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text72 = form.createTextField('favorite71');
-  text72.setText(this.charge[12]);
-  text72.addToPage(firstpage, {
-    x: 534,
-    y: 10,
-    width: 28,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const text73 = form.createTextField('favorite72');
-  text73.setText(this.charge[13]);
-  text73.addToPage(firstpage, {
-    x: 565,
-    y: 10,
-    width: 15,
-    height: 25,
-    borderWidth: 0,
-    // backgroundColor: rgb(255, 255, 255)
-  });
-
-  const pdfBytes = await pdfDoc.save();
-  console.log(pdfBytes, 'pdf');
-  console.log(pdfBytes, 'pdf');
-  var base64String = this._arrayBufferToBase64(pdfBytes);
-
-  console.log(base64String);
-  const x = 'data:application/pdf;base64,' + base64String;
-  this.formerge = x;
-  this.value = this.sanitizer.bypassSecurityTrustResourceUrl(x);
-  this.newTask[0].generateDoc1 = x;
-}
-
-_arrayBufferToBase64(buffer) {
-  var binary = '';
-  var bytes = new Uint8Array(buffer);
-  var len = bytes.byteLength;
-  for (var i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return window.btoa(binary);
-}
-
-onBack() {
-  this.isGenerate = false;
-  this.sbArray = [];
-  this.tryArray = [];
-  this.lcArray = [];
-}
-
-doneDox(genDoc) {
-  this.doneToDox();
-  console.log('genDoc', genDoc);
-  console.log(this.newTask);
-  console.log(this.invoiceArr);
-  if (this.documentService.draft) {
-    this.documentService
-      .updateExportTask(
-        {
+  doneDox(genDoc: any) {
+    this.doneToDox();
+    console.log('genDoc', genDoc);
+    console.log(this.newTask);
+    console.log(this.invoiceArr);
+    if (this.documentService.draft) {
+      this.documentService
+        .updateExportTask(
+          {
+            task: this.newTask,
+            completed: 'yes',
+            fileType: 'BL',
+          },
+          this.documentService.task._id
+        )
+        .subscribe(
+          (data) => {
+            console.log('king123');
+            console.log(data);
+            this.documentService.draft = false;
+            this.documentService.task.id = '';
+            this.isDoneAll = true;
+            this.userService
+              .updateManyPipo(this.arrayPipo, 'billUnder', genDoc)
+              .subscribe(
+                (data) => {
+                  console.log('king123');
+                  console.log(data);
+                  if (this.Question5 == 'yes') {
+                    this.userService
+                      .updateManyPipo(
+                        this.arrayPipo,
+                        'invoiceReduction',
+                        this.invoiceArr
+                      )
+                      .subscribe(
+                        (data1) => {
+                          console.log('king123');
+                          console.log(data1);
+                          this.toastr.success(
+                            'Task saved as completed successfully!'
+                          );
+                          if (this.redirectid) {
+                            // this.router.navigate([
+                            //   'home/pipo-export',
+                            //   {
+                            //     id: this.redirectid,
+                            //     page: this.redirectpage,
+                            //     index: this.redirectindex,
+                            //   },
+                            // ]);
+                          } else {
+                            window.location.reload();
+                          }
+                          //this.router.navigate(["/home/advance-outward-remittance"]);
+                        },
+                        (error) => {
+                          // this.toastr.error('Invalid inputs, please check!');
+                          console.log('error');
+                        }
+                      );
+                  } else {
+                    this.toastr.success(
+                      'Task saved as completed successfully!'
+                    );
+                    // this.router.navigate(["/home/dashboardTask"]);
+                  }
+
+                  // this.toastr.success('Task saved as completed successfully!');
+                  // this.router.navigate(["/home/dashboardTask"]);
+                  //this.router.navigate(["/home/advance-outward-remittance"]);
+                },
+                (error) => {
+                  // this.toastr.error('Invalid inputs, please check!');
+                  console.log('error');
+                }
+              );
+            //this.router.navigate(["/home/dashboardTask"]);
+            //this.router.navigate(['/login'], { queryParams: { registered: true }});
+          },
+          (error) => {
+            console.log('error');
+          }
+        );
+    } else {
+      this.documentService
+        .addExportTask({
           task: this.newTask,
           completed: 'yes',
           fileType: 'BL',
-        },
-        this.documentService.task._id
-      )
-      .subscribe(
-        (data) => {
-          console.log('king123');
-          console.log(data);
-          this.documentService.draft = false;
-          this.documentService.task.id = '';
-          this.isDoneAll = true;
-          this.userService
-            .updateManyPipo(this.arrayPipo, 'billUnder', genDoc)
-            .subscribe(
-              (data) => {
-                console.log('king123');
-                console.log(data);
-                if (this.Question5 == 'yes') {
-                  this.userService
-                    .updateManyPipo(
-                      this.arrayPipo,
-                      'invoiceReduction',
-                      this.invoiceArr
-                    )
-                    .subscribe(
-                      (data1) => {
-                        console.log('king123');
-                        console.log(data1);
-                        this.toastr.success(
-                          'Task saved as completed successfully!'
-                        );
-                        if (this.redirectid) {
-                          // this.router.navigate([
-                          //   'home/pipo-export',
-                          //   {
-                          //     id: this.redirectid,
-                          //     page: this.redirectpage,
-                          //     index: this.redirectindex,
-                          //   },
-                          // ]);
-                        } else {
-                          window.location.reload();
+        })
+        .subscribe(
+          (res) => {
+            this.isDoneAll = true;
+            //this.toastr.success('Task saved successfully!');
+            console.log('Transaction Saved');
+            this.userService
+              .updateManyPipo(this.arrayPipo, 'billUnder', genDoc)
+              .subscribe(
+                (data) => {
+                  console.log('king123');
+                  console.log(data);
+                  if (this.Question5 == 'yes') {
+                    this.userService
+                      .updateManyPipo(
+                        this.arrayPipo,
+                        'invoiceReduction',
+                        this.invoiceArr
+                      )
+                      .subscribe(
+                        (data1) => {
+                          console.log('king123');
+                          console.log(data1);
+                          this.toastr.success(
+                            'Task saved as completed successfully!'
+                          );
+                          if (this.redirectid) {
+                            // this.router.navigate([
+                            //   'home/pipo-export',
+                            //   {
+                            //     id: this.redirectid,
+                            //     page: this.redirectpage,
+                            //     index: this.redirectindex,
+                            //   },
+                            // ]);
+                          } else {
+                            // window.location.reload();
+                          }
+                          //this.router.navigate(["/home/advance-outward-remittance"]);
+                        },
+                        (error) => {
+                          // this.toastr.error('Invalid inputs, please check!');
+                          console.log('error');
                         }
-                        //this.router.navigate(["/home/advance-outward-remittance"]);
-                      },
-                      (error) => {
-                        // this.toastr.error('Invalid inputs, please check!');
-                        console.log('error');
-                      }
-                    );
-                } else {
-                  this.toastr.success(
-                    'Task saved as completed successfully!'
-                  );
-                  // this.router.navigate(["/home/dashboardTask"]);
-                }
-
-                // this.toastr.success('Task saved as completed successfully!');
-                // this.router.navigate(["/home/dashboardTask"]);
-                //this.router.navigate(["/home/advance-outward-remittance"]);
-              },
-              (error) => {
-                // this.toastr.error('Invalid inputs, please check!');
-                console.log('error');
-              }
-            );
-          //this.router.navigate(["/home/dashboardTask"]);
-          //this.router.navigate(['/login'], { queryParams: { registered: true }});
-        },
-        (error) => {
-          console.log('error');
-        }
-      );
-  } else {
-    this.documentService
-      .addExportTask({
-        task: this.newTask,
-        completed: 'yes',
-        fileType: 'BL',
-      })
-      .subscribe(
-        (res) => {
-          this.isDoneAll = true;
-          //this.toastr.success('Task saved successfully!');
-          console.log('Transaction Saved');
-          this.userService
-            .updateManyPipo(this.arrayPipo, 'billUnder', genDoc)
-            .subscribe(
-              (data) => {
-                console.log('king123');
-                console.log(data);
-                if (this.Question5 == 'yes') {
-                  this.userService
-                    .updateManyPipo(
-                      this.arrayPipo,
-                      'invoiceReduction',
-                      this.invoiceArr
-                    )
-                    .subscribe(
-                      (data1) => {
-                        console.log('king123');
-                        console.log(data1);
-                        this.toastr.success(
-                          'Task saved as completed successfully!'
-                        );
-                        if (this.redirectid) {
-                          // this.router.navigate([
-                          //   'home/pipo-export',
-                          //   {
-                          //     id: this.redirectid,
-                          //     page: this.redirectpage,
-                          //     index: this.redirectindex,
-                          //   },
-                          // ]);
-                        } else {
-                          // window.location.reload();
-                        }
-                        //this.router.navigate(["/home/advance-outward-remittance"]);
-                      },
-                      (error) => {
-                        // this.toastr.error('Invalid inputs, please check!');
-                        console.log('error');
-                      }
-                    );
-                } else {
-                  this.toastr.success(
-                    'Task saved as completed successfully!'
-                  );
-                  // this.router.navigate(["/home/dashboardTask"]);
-                }
-                //this.router.navigate(["/home/advance-outward-remittance"]);
-              },
-              (error) => {
-                // this.toastr.error('Invalid inputs, please check!');
-                console.log('error');
-              }
-            );
-          //this.router.navigate(["/home/dashboardTask"]);
-        },
-        (err) => {
-          this.toastr.error('Error!');
-          console.log('Error saving the transaction');
-        }
-      );
-  }
-}
-
-exportAsPDF1() {
-  if (this.Question7 == 'yes') {
-    this.lc = 'lc';
-  } else if (this.Question7 == 'no') {
-    this.lc = 'nonLc';
-  }
-
-  this.scrutiny = this.Question8;
-  this.withDiscount = this.Question9;
-
-  const height =
-    Math.round($('#mainId').outerHeight() * 0.0104166667 * 10) / 10;
-  console.log($('#mainId').html());
-  this.documentService
-    .getPDF({
-      data: $('#mainId').html(),
-      filename: 'Final Report',
-      format: {
-        paperWidth: 7,
-        paperHeight: height + 5,
-        marginTop: 0,
-        marginBottom: 0,
-        marginLeft: 0,
-        marginRight: 0,
-      },
-      template:
-        './app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs',
-    })
-    .subscribe((data) => {
-      if (data && data.success) {
-        console.log(data);
-        this.data4 = data;
-        this.data5 = data.file.replace(
-          'application/octet-stream',
-          'application/pdf'
-        );
-        console.log(this.data5);
-        this.data6 = this.sanitizer.bypassSecurityTrustResourceUrl(
-          this.data5
-        );
-        console.log(this.data6);
-        this.data8 = this.data6;
-        //this.newTask.url1 = this.data5;
-        this.done = true;
-        const height =
-          Math.round($('#mainId').outerHeight() * 0.0104166667 * 10) / 10;
-        console.log($('#mainId').html());
-        this.documentService
-          .getPDF({
-            data: $('#mainId2').html(),
-            filename: 'Final Report',
-            format: {
-              paperWidth: 7,
-              paperHeight: 15,
-              marginTop: 0,
-              marginBottom: 0,
-              marginLeft: 0,
-              marginRight: 0,
-            },
-            template:
-              './app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs',
-          })
-          .subscribe((data) => {
-            if (data && data.success) {
-              console.log(data);
-              this.data4 = data;
-              this.data5 = data.file.replace(
-                'application/octet-stream',
-                'application/pdf'
-              );
-              console.log(this.data5);
-              this.data6 = this.sanitizer.bypassSecurityTrustResourceUrl(
-                this.data5
-              );
-              this.billOfCredit = this.data6;
-
-              if (this.Question5 == 'yes') {
-                const height1 =
-                  Math.round(
-                    $('#mainId1').outerHeight() * 0.0104166667 * 10
-                  ) / 10;
-                console.log($('#mainId1').html());
-                this.documentService
-                  .getPDF({
-                    data: $('#mainId1').html(),
-                    filename: 'Final Report',
-                    format: {
-                      paperWidth: 7,
-                      paperHeight: height1 + 5,
-                      marginTop: 0,
-                      marginBottom: 0,
-                      marginLeft: 0,
-                      marginRight: 0,
-                    },
-                    template:
-                      './app/modules/pdfGenerationModule/pdfTemplate/finalreport.ejs',
-                  })
-                  .subscribe((data) => {
-                    if (data && data.success) {
-                      console.log(data);
-                      this.data4 = data;
-                      this.data5 = data.file.replace(
-                        'application/octet-stream',
-                        'application/pdf'
                       );
-                      console.log(this.data5);
-                      this.data6 =
-                        this.sanitizer.bypassSecurityTrustResourceUrl(
-                          this.data5
-                        );
+                  } else {
+                    this.toastr.success(
+                      'Task saved as completed successfully!'
+                    );
+                    // this.router.navigate(["/home/dashboardTask"]);
+                  }
+                  //this.router.navigate(["/home/advance-outward-remittance"]);
+                },
+                (error) => {
+                  // this.toastr.error('Invalid inputs, please check!');
+                  console.log('error');
+                }
+              );
+            //this.router.navigate(["/home/dashboardTask"]);
+          },
+          (err) => {
+            this.toastr.error('Error!');
+            console.log('Error saving the transaction');
+          }
+        );
+    }
+  }
 
-                      console.log(this.data6);
-                      this.dataImport = this.data6;
-                      this.dataImport2 = this.data6;
-                      //this.newTask.url1 = this.data5;
-                      this.done = true;
-                      this.newTask[0] = {
-                        sbNumbers: this.sbArray,
-                        sbUrls: this.mainDoc1,
-                        triPartyAgreementNumber: this.tryArray,
-                        tryUrls: this.mainDoc3,
-                        purposeCode: '',
-                        isLc: this.lc,
-                        letterOfCreditNumber: this.lcArray,
-                        lcUrls: this.mainDoc4,
-                        withScrutiny: this.scrutiny,
-                        withDiscount: this.withDiscount,
-                        bankRef: '',
-                        advanceRef: this.advanceRef,
-                        generateDoc1: this.data8,
-                        generateDoc2: this.billOfCredit,
-                        generateDoc3: this.dataImport,
-                        generateDoc4: this.dataImport2,
-                        ir: this.Question5,
-                      };
-                      //this.downloadPDF(data);
-                    }
-                  });
+  change(e) {
+    console.log(e.target.value);
+    this.advanceRef = e.target.value;
+  }
 
-                this.isProceed = true;
-              } else {
-                this.isProceed = true;
-                this.newTask[0] = {
-                  sbNumbers: this.sbArray,
-                  sbUrls: this.mainDoc1,
-                  triPartyAgreementNumber: this.tryArray,
-                  tryUrls: this.mainDoc3,
-                  purposeCode: '',
-                  isLc: this.lc,
-                  letterOfCreditNumber: this.lcArray,
-                  lcUrls: this.mainDoc4,
-                  withScrutiny: this.scrutiny,
-                  withDiscount: this.withDiscount,
-                  advanceRef: this.advanceRef,
-                  generateDoc1: this.data8,
-                  generateDoc2: this.billOfCredit,
-                  bankRef: '',
-                  ir: this.Question5,
-                };
-              }
-            }
-          });
+  change1(e) {
+    console.log(e.target.value);
+    this.LcNumber = e.target.value;
+  }
 
-        //this.zToggle[i] = true;
-
-        // let allTrue = true;
-        // for (let value of this.zToggle) {
-        //   allTrue = allTrue && value;
-        // }
-        // if (allTrue) {
-        //   this.isDone = true;
-        // }
-
-        //this.downloadPDF(data);
+  setradio(a) {
+    console.log(a, 'setradio');
+    this.bankToggle = a;
+    this.bankValue = a;
+    this.newBankArray = [];
+    console.log(this.bankArray, 'this.bankArray')
+    this.bankArray.forEach((value, index) => {
+      if (value?.BankUniqueId?.includes(a) == true) {
+        this.newBankArray.push(value)
       }
     });
-}
-
-change(e) {
-  console.log(e.target.value);
-  this.advanceRef = e.target.value;
-}
-
-change1(e) {
-  console.log(e.target.value);
-  this.LcNumber = e.target.value;
-}
-
-downloadPDF() {
-  console.log(JSON.stringify(this.creditNote));
-  let headers = new HttpHeaders();
-  headers = headers.set('Accept', 'application/pdf');
-  let data = {
-    headers: headers,
-    url: this.creditNote['changingThisBreaksApplicationSecurity'],
-  };
-
-  this.documentService.downloadDocuments(data).subscribe((d) => {
-    console.log('sub', d);
-    importedSaveAs(new Blob([d], { type: 'application/pdf' }), 'CreditNote');
-  });
-
-  // console.log(this.mainDoc1.changingThisBreaksApplicationSecurity)
-  // console.log("hello",this.creditNote.changingThisBreaksApplicationSecurity)
-  // window.location.href = this.creditNote
-  // let pdfName= this.creditNote.changingThisBreaksApplicationSecurity.substring(this.creditNote.changingThisBreaksApplicationSecurity.lastIndexOf('/')+1);
-  // console.log(pdfName)
-  // const link = document.createElement('a');
-  // // link.id = "dwnldLnk";
-  // document.body.appendChild(link);
-  // // const dlnk: any = document.getElementById("dwnldLnk");
-  // // dlnk.href =
-  // // dlnk.download = this.creditNote.changingThisBreaksApplicationSecurity;
-  // // dlnk.click();
-  // link.setAttribute('target', '_blank');
-  // link.setAttribute('href', this.creditNote.changingThisBreaksApplicationSecurity);
-  // link.setAttribute('download', pdfName);
-  // link.download = pdfName;
-
-  // link.click();
-  // link.remove();
-
-  // this.durl = this.data3.replace('application/pdf', 'application/octet-stream')
-  //   console.log("DATA")
-  //   const link: any = document.createElement("a");
-  //   link.id = "dwnldLnk";
-  //   link.style = "display:none;";
-  //   document.body.appendChild(link);
-  //   const dlnk: any = document.getElementById("dwnldLnk");
-  //   dlnk.href = this.durl;
-  //   console.log(dlnk)
-  //   console.log(dlnk.href)
-  //   dlnk.download = "finalReport.pdf";
-  //   dlnk.click();
-
-  //     let link = document.createElement('a');
-  // link.setAttribute('type', 'hidden');
-  // link.href = 'abc.net/files/test.ino';
-  // link.download = 'https://storage.googleapis.com/doc-machine-bucket1/BOE-2.pdf';
-  // document.body.appendChild(link);
-  // link.click();
-  // link.remove();
-
-  // const link = document.createElement('a');
-  //     link.setAttribute('target', '_blank');
-  //     link.setAttribute('href', 'https://storage.googleapis.com/doc-machine-bucket1/BOE-2.pdf');
-  //     link.setAttribute('download', `products.pdf`);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     link.remove();
-}
-
-setradio(a) {
-  console.log(a,'setradio');
-  this.bankToggle = a;
-  this.bankValue = a;
-  this.newBankArray = [];
-  this.bankArray.forEach((value, index) => {
-    console.log('shshsh');
-    if (value.bank.indexOf(a)!=-1) {
-      this.newBankArray.push(value);
-    }
-  });
-}
-
-creditTo(a) {
-  var n = a.accNumber;
-  this.credit = n.split('');
-  console.log(this.credit);
-}
-
-chargesTo(a) {
-  var n = a.accNumber;
-  this.charge = n.split('');
-  console.log(this.charge);
-}
-
-private getDismissReason(reason: any): string {
-
-  if (reason === ModalDismissReasons.ESC) {
-    return 'by pressing ESC';
-  } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-    return 'by clicking on a backdrop';
-  } else {
-    return `with: ${reason}`;
   }
-}
 
-open(content) {
-  this.modalService
-    .open(content, { ariaLabelledBy: 'modal-basic-title' })
-    .result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
-}
+  creditTo(a) {
+    var n = a.accNumber;
+    this.credit = n.split('');
+    console.log(this.credit);
+  }
 
-open1(content1) {
-  this.modalService
-    .open(content1, { ariaLabelledBy: 'modal-basic-title' })
-    .result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
-}
-
-refSbNo: number;
-
-open2(content2, sbno) {
-  this.currentSbForAdvance = sbno;
-  this.refSbNo = sbno;
-  // this.modalService
-  //   .open(content2, { ariaLabelledBy: 'modal-basic-title' })
-  //   .result.then(
-  //     (result) => {
-  //       this.closeResult = `Closed with: ${result}`;
-  //     },
-  //     (reason) => {
-  //       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //     }
-  //   );
-}
-
-showPreview() {
-  console.log('All Details', this.invoiceArr);
-  // {_id:ObjectId('626a527df13ff52fd4871243')}
-  this.bgColor = true;
-  this.newDone = true;
-}
-
-hidePreview() {
-  this.bgColor = false;
-  this.newDone = false;
-}
-
-removepipo(i) {
-  this.itemArray1.splice(i, 1);
-}
-
-removeshipping(i) {
-  this.itemArray.splice(i, 1);
-  console.log('this is remove');
-}
-
-addTofilter(event, id) {
-  let removeArray = [];
-  this.pipo = true;
-  this.ship = false;
-  this.itemArray1 = [];
-  if (event.target.checked) {
-    for (let element of this.item) {
-      if (element._id == id) {
-        this.itemArray.push(element);
+  chargesTo(a) {
+    var n = a.accNumber;
+    this.charge = n.split('');
+    if (this.Lodgement['AgainstAdvanceReceipt']?.Hide == 'no') {
+      this.generateDoc1(this.ExportBillLodgement_Form);
+      this.SlideToggle(null, this.itemArray[0]?._id)
+    } else {
+      if (Object.keys(this.advanceArray).length != 0) {
+        this.generateDoc1(this.ExportBillLodgement_Form)
+        this.SlideToggle(null, this.itemArray[0]?._id)
+      } else {
+        this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',
+          `Please select a firx amount ${this.itemArray.length == 0 ? '& also select Sb no.' : ''}...`)
       }
     }
-  } else {
-    if (this.itemArray.length) {
-      this.itemArray.forEach((element) => {
-        if (element._id != id) {
-          removeArray.push(element);
+
+  }
+
+  private getDismissReason(reason: any): string {
+
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  open(content) {
+    this.modalService
+      .open(content, { ariaLabelledBy: 'modal-basic-title' })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         }
-      });
-      this.itemArray = removeArray;
+      );
+  }
+
+  open1(content1) {
+    this.modalService
+      .open(content1, { ariaLabelledBy: 'modal-basic-title' })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+  }
+
+  shippingMap: Map<number, any[]> = new Map<number, any[]>();
+  SHIPPING_MAP: any = [];
+  Advance_Amount_Sum: any = [];
+  PROCEED_BTN_DISABLED: boolean = false;
+  filterSum: any = [];
+  balanceAvai: any = '';
+  SELECTED_FIRX_INDEX: any = [];
+  refSbNo: number;
+  PDF_LIST: any = [];
+  ACCORDING_LIST: any = [];
+  temp: any = [];
+  CHECKEBOX_SELECTION: any = { SHIPPING_BILL: [], INWARD_REMMITANCE: [] };
+  OK_BUTTON_CONDITION: any = '';
+  async addToSbArray(irDataItem: any, e, i) {
+    let index: any = this.item13.findIndex(x => x.billNo === irDataItem?.billNo);
+    this.balanceAvai = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]?.SB_Amout_Realized
+    if (this.item13[index]['isEnabled'] == false || !this.item13[index]?.sbno?.includes(this.SELECTED_SHIPPING_BILL?.data?.sbNo)) {
+      if (parseFloat(this.balanceAvai) > parseFloat(this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'])) {
+        if (e.target.checked) {
+          console.log('Checked');
+          let advance = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo]?.some(
+            (item: any) => item.valueInternal === irDataItem.billNo
+          );
+          if (!advance) {
+            console.log('Adding');
+            irDataItem.Used_Balance = irDataItem?.BalanceAvail;
+            let details: any = {
+              valueInternal: irDataItem.billNo,
+              irDataItem: irDataItem,
+              sb: this.currentSbForAdvance,
+            };
+            this.item13[index]['isEnabled'] = true;
+            this.OK_BUTTON_CONDITION = true;
+            this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details)
+            this.filterSum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+            if (this.filterSum > this.balanceAvai) {
+              this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].pop();
+              var sum = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+              let temp: any = details;
+              var last_amount: any = this.TO_FIXED(parseFloat(this.balanceAvai) - parseFloat(sum), 2);
+              temp.irDataItem.BalanceAvail = this.TO_FIXED(parseFloat(details?.irDataItem?.BalanceAvail) - parseFloat(last_amount), 2);
+              this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(temp)
+              this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(temp.irDataItem)
+              this.filterSum = this.TO_FIXED(sum + last_amount, 2);
+              irDataItem.Used_Balance = last_amount;
+              this.ExportBillLodgement_Form.controls['Carry_Amount'].setValue(temp);
+              console.log(details.irDataItem.BalanceAvail, sum, this.filterSum, last_amount, 'asdfasfadfsa')
+            } else {
+              this.PROCEED_BTN_DISABLED = true;
+              this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].push(details);
+              this.ACCORDING_LIST['SB_' + this.currentSbForAdvance].push(irDataItem)
+            }
+            this.ExportBillLodgement_Form.controls['Total_SB_Amount'].setValue(this.TO_FIXED(this.balanceAvai, 2));
+            this.ExportBillLodgement_Form.controls['Total_FIRX_Amount'].setValue(this.TO_FIXED(this.filterSum, 2));
+            this.ExportBillLodgement_Form.controls['Total_Reaming_Amount'].setValue(this.TO_FIXED(this.balanceAvai - this.filterSum, 2));
+          }
+        } else {
+          console.log('removing, uncheked');
+          this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item: any) => item.valueInternal !== irDataItem.billNo);
+          this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo] = this.Advance_Amount_Sum['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo].filter((item) => item.valueInternal !== irDataItem.billNo);
+          this.SELECTED_FIRX_INDEX['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][i] = false;
+          this.item13[i]['isEnabled'] = false;
+          this.OK_BUTTON_CONDITION = '';
+        }
+        this.SHIPPING_MAP[this.currentSbForAdvance] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo];
+        this.shippingMap.set(this.refSbNo, JSON.parse(JSON.stringify(this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo])));
+        this.ExportBillLodgement_Form.controls['Advance_reference_Number'].setValue(this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo]);
+        this.ExportBillLodgement_Form.controls['Shipping_bill_list'].setValue(this.itemArray);
+
+      } else {
+        e.target.checked = false;
+        this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount', "You've exceeded the maximum transaction amount set by your Sb amount..")
+      }
+    } else {
+      e.target.checked = true;
+      this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Error', "You already selected this firx no. </br>Please select other firx no.")
+    }
+    this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'] = this.advanceArray['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo];
+    var IRADVICE_SUM: any = this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_INFO'].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.Used_Balance) }, 0);
+    this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + this.SELECTED_SHIPPING_BILL?.data?.sbNo][this.SELECTED_SHIPPING_BILL?.index]['IRADVICE_SUM'] = parseFloat(IRADVICE_SUM).toFixed(3);
+
+    console.log(this.advanceArray, this.balanceAvai, this.filterSum, this.Advance_Amount_Sum, this.shippingMap, this.ACCORDING_LIST,
+      this.FILTER_DATA.FILTER_COMMERCIAL, this.SELECTED_FIRX_INDEX, this.item13, 'Deva Hello0*************************');
+  }
+
+  changeCheckbox1(event, a, data) {
+    if (data.blCopyDoc) {
+      if (data.commercialDoc) {
+          let j = this.sbArray.indexOf(a);
+          if (j == -1) {
+            this.sbArray.push(a);
+          } else {
+            this.sbArray.splice(j, 1);
+            $(event.target).prop('checked', false)
+          }
+          this.currentSbForAdvance = a;
+          this.ACCORDING_LIST['SB_' + a] = [];
+          this.advanceArray['SB_' + a] = [];
+          this.Advance_Amount_Sum['SB_' + a] = []
+          this.refSbNo = a;
+          this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + a] = this.FILTER_DATA?.COMMERCIAL?.filter((item: any) => item?.sbNo === a);
+          this.SELECTED_FIRX_INDEX['SB_' + a] = [];
+          console.log('changeCheckbox1', data, this.FILTER_DATA, this.sbArray, this.ACCORDING_LIST);
+      } else {
+        console.log("You Don't have Commercial Invoice");
+      }
+    } else {
+      console.log("You Don't have BLCopy Document");
     }
   }
-  console.log('test', this.itemArray);
-}
-PDF_LIST:any=[];
-ACCORDING_LIST:any=[];
-temp:any=[];
 
-addTofilter1(event, id, data) {
-  // this.itemArray = [];
-  this.temp[id]=[];
-  if (data.blCopyDoc) {
-    if (data.commercialDoc) {
-      if (data.packingDoc) {
-        let removeArray = [];
-        this.ship = true;
-        this.pipo = false;
+  addTofilter1(event, id, data, i) {
+    this.temp[id] = [];
+    if (data.blCopyDoc) {
+      if (data.commercialDoc) {
+        let removeArray: any = [];
         if (event.target.checked) {
           for (let element of this.item1) {
             if (element._id == id) {
+              console.log(element, 'elelelele')
               this.itemArray.push(element);
+              this.temp[id] = [{
+                pdf: (element['doc']),
+                name: 'Shipping Bill'
+              }, {
+                pdf: (element['blCopyDoc']),
+                name: 'blCopyDoc'
+              }, {
+                pdf: (element['commercialDoc']),
+                name: 'commercialDoc'
+              }, {
+                pdf: (element['packingDoc']),
+                name: 'packingDoc'
+              }, {
+                pdf: (element['DebitNote']),
+                name: 'debitNotedoc'
+              }, {
+                pdf: this.documentService.MT102_SUBJECT?.file,
+                name: 'MT103'
+              }]
             }
           }
+          this.CHECKEBOX_SELECTION.SHIPPING_BILL[i] = true;
         } else {
+          $(event.target).prop('checked', false);
+          this.CHECKEBOX_SELECTION.SHIPPING_BILL[i] = false;
           if (this.itemArray.length) {
-            this.itemArray.forEach((element) => {
+            this.itemArray.forEach((element: any) => {
               if (element._id != id) {
                 removeArray.push(element);
               }
             });
             this.itemArray = removeArray;
           }
+          this.ExportBillLodgement_Form.controls['documents'].setValue(this.temp);
+          console.log('test2', id, this.documentService.MT102_SUBJECT, this.itemArray, this.temp, this.PDF_LIST);
         }
-        for (let index = 0; index < this.itemArray.length; index++) {
-          this.temp[id].push({
-            pdf:(this.itemArray[index]['doc']),
-            name:'Shipping Bill'
-          })
-        }
-        for (let index = 0; index < this.itemArray.length; index++) {
-          this.temp[id].push({
-            pdf:(this.itemArray[index]['blCopyDoc']),
-            name:'blCopyDoc'
-          })
-        }
-        for (let index = 0; index < this.itemArray.length; index++) {
-          this.temp[id].push({
-            pdf:(this.itemArray[index]['commercialDoc']),
-            name:'commercialDoc'
-          })
-        }
-        for (let index = 0; index < this.itemArray.length; index++) {
-          this.temp[id].push({
-            pdf:(this.itemArray[index]['packingDoc']),
-            name:'packingDoc'
-          })
-        }
-       console.log('test2', this.itemArray, this.PDF_LIST);
       } else {
         this.toastr.error(
-          "You Don't Have Any Packing List Documnet Linkend with this Shipping Bill"
+          "You Don't Have Any Commercial Invoice Linkend with this Shipping Bill"
         );
+        $(event.target).prop('checked', false);
       }
     } else {
       this.toastr.error(
-        "You Don't Have Any Commercial Invoice Linkend with this Shipping Bill"
+        "You Don't Have Any AirWay / BLCopy Documnet Linkend with this Shipping Bill"
+      );
+      $(event.target).prop('checked', false);
+    }
+  }
+
+  clearData() {
+    this.advanceArray = [];
+    console.log('Shippoinhg', this.shippingMap);
+  }
+
+  goBack() {
+    this.isGenerate = false;
+    window.location.reload();
+  }
+  TO_FIXED(amount: any, fixed_position: any) {
+    return !isNaN(amount) ? parseFloat(amount).toFixed(fixed_position) : 0;
+  }
+  exportToExcel() {
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
+      this.billLodge.nativeElement
+    );
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    if (this.Question5 == 'yes') {
+      XLSX.writeFile(wb, 'Invoice Reduction.XLSX');
+    } else if (this.Question5 == 'no') {
+      XLSX.writeFile(wb, 'Shipping Details.XLSX');
+    }
+  }
+
+
+  currentDownloadPdf: any = [];
+  openToPdf(content3, pipo) {
+    this.generateChecked = true;
+    this.currentDownloadPdf = pipo;
+    this.selectedPdfs = [];
+    this.selectedPdfs2 = [];
+
+    console.log('selectedPdfs in line no 2958', this.selectedPdfs);
+    console.log('selectedPdfs in line no 2959', this.selectedPdfs2);
+
+    if (this.currentDownloadPdf.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(
+        this.currentDownloadPdf.changingThisBreaksApplicationSecurity
       );
     }
-  } else {
-    this.toastr.error(
-      "You Don't Have Any AirWay / BLCopy Documnet Linkend with this Shipping Bill"
-    );
-  }
-}
-
-shippingMap: Map<number, any[]> = new Map<number, any[]>();
-Advance_Amount_Sum:any=[];
-PROCEED_BTN_DISABLED:boolean=false;
-filterSum:any=[];
-balanceAvai:any='';
-addToSbArray(irDataItem: any, e) {
-  if (e.target.checked) {
-    console.log('Checked');
-    let advance = this.advanceArray.some(
-      (item) => item.valueInternal === irDataItem.billNo
-    );
-    if (!advance) {
-      console.log('Adding');
-      let details = {
-        valueInternal: irDataItem.billNo,
-        irDataItem: irDataItem,
-        sb: this.currentSbForAdvance,
-      };
-      this.Advance_Amount_Sum.push(details)
-      this.balanceAvai=parseFloat(this.itemArray.filter((item) => item?.sbno?.indexOf(this.currentSbForAdvance) != -1)[0]?.balanceAvai)
-      this.filterSum=this.Advance_Amount_Sum.reduce( function(a, b){return a + b?.irDataItem?.amount}, 0);
-      if (this.filterSum>this.balanceAvai) {
-        e.target.checked=false;
-        this.PROCEED_BTN_DISABLED=false;
-        this.Advance_Amount_Sum.pop();
-        this.filterSum=this.Advance_Amount_Sum.reduce( function(a, b){return a + b?.irDataItem?.amount}, 0);
-        this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX Amount',"You've exceeded the maximum transaction amount set by your Sb amount..")
-        return;
-      }else{
-        this.PROCEED_BTN_DISABLED=true;
-        this.advanceArray.push(details);
-        this.ACCORDING_LIST['SB_'+this.currentSbForAdvance].push(irDataItem)
-      }
+    if (this.creditNote.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(
+        this.creditNote.changingThisBreaksApplicationSecurity
+      );
     }
-  } else {
-    console.log('removing, uncheked');
-    this.advanceArray = this.advanceArray.filter((item) => item.valueInternal !== irDataItem.billNo);
-    this.Advance_Amount_Sum = this.Advance_Amount_Sum.filter((item) => item.valueInternal !== irDataItem.billNo);
-  }
-
-  this.shippingMap.set(this.refSbNo,JSON.parse(JSON.stringify(this.advanceArray)));
-  console.log(this.advanceArray,this.balanceAvai,this.filterSum,this.Advance_Amount_Sum,this.ACCORDING_LIST,'Deva Hello0*************************');
-}
-
-clearData() {
-  this.advanceArray = [];
-  console.log('Shippoinhg', this.shippingMap);
-}
-
-goBack() {
-  this.isGenerate = false;
-
-  window.location.reload();
-}
-
-exportToExcel() {
-  const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
-    this.billLodge.nativeElement
-  );
-  const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  if (this.Question5 == 'yes') {
-    XLSX.writeFile(wb, 'Invoice Reduction.XLSX');
-  } else if (this.Question5 == 'no') {
-    XLSX.writeFile(wb, 'Shipping Details.XLSX');
-  }
-}
-
-public currentDownloadPdf;
-openToPdf(content3, pipo) {
-  this.generateChecked = true;
-  this.currentDownloadPdf = pipo;
-  this.selectedPdfs = [];
-  this.selectedPdfs2 = [];
-
-  console.log('selectedPdfs in line no 2958', this.selectedPdfs);
-  console.log('selectedPdfs in line no 2959', this.selectedPdfs2);
-
-  if (this.currentDownloadPdf.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.currentDownloadPdf.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.creditNote.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.creditNote.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.debitNote.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.debitNote.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.ebrc.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(this.ebrc.changingThisBreaksApplicationSecurity);
-  }
-  if (this.blcopyref.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.blcopyref.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.irAdvice.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.irAdvice.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.swiftCopy.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.swiftCopy.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.tryPartyAgreement.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.tryPartyAgreement.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.airwayBlCopy.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.airwayBlCopy.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.billOfExchange.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.billOfExchange.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.destruction.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.destruction.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.commercial.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.commercial.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.packingList.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(
-      this.packingList.changingThisBreaksApplicationSecurity
-    );
-  }
-  if (this.lcCopy.changingThisBreaksApplicationSecurity) {
-    this.selectedPdfs.push(this.lcCopy.changingThisBreaksApplicationSecurity);
-  }
-
-  console.log('selectedPDFs', this.selectedPdfs);
-
-  this.modalService
-    .open(content3, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
-    .result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
-}
-
-addPdfToSelectedPdf(value, e) {
-  if (e.target.checked) {
-    if (this.selectedPdfs.includes(value.changingThisBreaksApplicationSecurity) === false) {
-      this.selectedPdfs.push(value.changingThisBreaksApplicationSecurity);
+    if (this.debitNote.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(
+        this.debitNote.changingThisBreaksApplicationSecurity
+      );
     }
-  } else if (!e.target.checked) {
-    this.selectedPdfs = this.selectedPdfs.filter((item) => item !== value.changingThisBreaksApplicationSecurity);
+    if (this.ebrc.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(this.ebrc.changingThisBreaksApplicationSecurity);
+    }
+    if (this.blcopyref.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(
+        this.blcopyref.changingThisBreaksApplicationSecurity
+      );
+    }
+    if (this.irAdvice.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(
+        this.irAdvice.changingThisBreaksApplicationSecurity
+      );
+    }
+    if (this.swiftCopy.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(
+        this.swiftCopy.changingThisBreaksApplicationSecurity
+      );
+    }
+    if (this.tryPartyAgreement.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(
+        this.tryPartyAgreement.changingThisBreaksApplicationSecurity
+      );
+    }
+    if (this.airwayBlCopy.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(
+        this.airwayBlCopy.changingThisBreaksApplicationSecurity
+      );
+    }
+    if (this.billOfExchange.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(
+        this.billOfExchange.changingThisBreaksApplicationSecurity
+      );
+    }
+    if (this.destruction.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(
+        this.destruction.changingThisBreaksApplicationSecurity
+      );
+    }
+    if (this.commercial.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(
+        this.commercial.changingThisBreaksApplicationSecurity
+      );
+    }
+    if (this.packingList.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(
+        this.packingList.changingThisBreaksApplicationSecurity
+      );
+    }
+    if (this.lcCopy.changingThisBreaksApplicationSecurity) {
+      this.selectedPdfs.push(this.lcCopy.changingThisBreaksApplicationSecurity);
+    }
+
+    console.log('selectedPDFs', this.selectedPdfs);
+
+    this.modalService
+      .open(content3, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
   }
-  console.log(this.selectedPdfs);
-}
 
-addPdfToSelectedPdf2(value, e) {
-  if (e.target.checked) {
-    this.generateChecked = true;
-  } else {
-    this.generateChecked = false;
+  addPdfToSelectedPdf(value: any, e: any) {
+    if (e.target.checked) {
+      if (this.selectedPdfs.includes(value.changingThisBreaksApplicationSecurity) === false) {
+        this.selectedPdfs.push(value.changingThisBreaksApplicationSecurity);
+      }
+    } else if (!e.target.checked) {
+      this.selectedPdfs = this.selectedPdfs.filter((item) => item !== value.changingThisBreaksApplicationSecurity);
+    }
+    console.log(this.selectedPdfs);
   }
-}
 
-downloadAsSingleFile = async (pdfDoc: any) => {
-  const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-  var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-  //const byteCharacters = atob(data_pdf);
-  if (this.generateChecked == true) {
-    var merge = 'data:application/pdf;base64,' + data_pdf; //this.value
+  addPdfToSelectedPdf2(value, e) {
+    if (e.target.checked) {
+      this.generateChecked = true;
+    } else {
+      this.generateChecked = false;
+    }
+  }
 
-    const mergedPdf = await PDFDocument.create();
-    const pdfA = await PDFDocument.load(this.formerge);
-    const pdfB = await PDFDocument.load(merge);
-    const copiedPagesA = await mergedPdf.copyPages(
-      pdfA,
-      pdfA.getPageIndices()
-    );
-    copiedPagesA.forEach((page) => mergedPdf.addPage(page));
+  downloadAsSingleFile = async (pdfDoc: any) => {
+    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
+    //const byteCharacters = atob(data_pdf);
+    if (this.generateChecked == true) {
+      var merge = 'data:application/pdf;base64,' + data_pdf; //this.value
 
-    const copiedPagesB = await mergedPdf.copyPages(
-      pdfB,
-      pdfB.getPageIndices()
-    );
-    copiedPagesB.forEach((page) => mergedPdf.addPage(page));
-    const mergedPdfFile = await mergedPdf.save();
-    var base64String = this._arrayBufferToBase64(mergedPdfFile);
-    console.log('merge doc', base64String);
-    var genDoc = 'data:application/pdf;base64,' + base64String;
-    const byteCharacters = atob(base64String);
+      const mergedPdf = await PDFDocument.create();
+      const pdfA = await PDFDocument.load(this.formerge);
+      const pdfB = await PDFDocument.load(merge);
+      const copiedPagesA = await mergedPdf.copyPages(
+        pdfA,
+        pdfA.getPageIndices()
+      );
+      copiedPagesA.forEach((page) => mergedPdf.addPage(page));
+
+      const copiedPagesB = await mergedPdf.copyPages(
+        pdfB,
+        pdfB.getPageIndices()
+      );
+      copiedPagesB.forEach((page) => mergedPdf.addPage(page));
+      const mergedPdfFile = await mergedPdf.save();
+      var base64String = this._arrayBufferToBase64(mergedPdfFile);
+      console.log('merge doc', base64String);
+      var genDoc: any = 'data:application/pdf;base64,' + base64String;
+      const byteCharacters = atob(base64String);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+        // console.log("bytenumbers", byteNumbers[i])
+      }
+
+      this.doneDox(genDoc);
+      const byteArray = new Uint8Array(byteNumbers);
+      importedSaveAs(
+        new Blob([byteArray], { type: 'application/pdf' }),
+        'BankAttachment'
+      );
+    } else {
+      const byteCharacters1 = atob(data_pdf);
+      const byteNumbers1 = new Array(byteCharacters1.length);
+      for (let i = 0; i < byteCharacters1.length; i++) {
+        byteNumbers1[i] = byteCharacters1.charCodeAt(i);
+        // console.log("bytenumbers", byteNumbers[i])
+      }
+
+      this.doneDox(genDoc);
+      const byteArray1 = new Uint8Array(byteNumbers1);
+      importedSaveAs(
+        new Blob([byteArray1], { type: 'application/pdf' }),
+        'BankAttachment'
+      );
+    }
+  };
+
+  sendMail = async (pdfDoc: any) => {
+    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+    console.log('5417****', pdfDataUri);
+    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
+    const byteCharacters = atob(data_pdf);
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
-      // console.log("bytenumbers", byteNumbers[i])
     }
+    const byteArray = new Uint8Array(byteNumbers)
+    console.log('**user id', this.id);
+    console.log('99999999999999999999999', data_pdf);
 
-    this.doneDox(genDoc);
-    const byteArray = new Uint8Array(byteNumbers);
-    importedSaveAs(
-      new Blob([byteArray], { type: 'application/pdf' }),
-      'BankAttachment'
-    );
-  } else {
-    const byteCharacters1 = atob(data_pdf);
-    const byteNumbers1 = new Array(byteCharacters1.length);
-    for (let i = 0; i < byteCharacters1.length; i++) {
-      byteNumbers1[i] = byteCharacters1.charCodeAt(i);
-      // console.log("bytenumbers", byteNumbers[i])
-    }
+    if (this.generateChecked == true) {
+      var merge = 'data:application/pdf;base64,' + data_pdf; //this.value
 
-    this.doneDox(genDoc);
-    const byteArray1 = new Uint8Array(byteNumbers1);
-    importedSaveAs(
-      new Blob([byteArray1], { type: 'application/pdf' }),
-      'BankAttachment'
-    );
-  }
-};
-
-sendMail = async (pdfDoc: any) => {
-  const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-  console.log('5417****', pdfDataUri);
-  var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-  const byteCharacters = atob(data_pdf);
-  const byteNumbers = new Array(byteCharacters.length);
-  for (let i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.charCodeAt(i);
-  }
-  const byteArray = new Uint8Array(byteNumbers)
-  console.log('**user id', this.id);
-  console.log('99999999999999999999999', data_pdf);
-
-  if (this.generateChecked == true) {
-    var merge = 'data:application/pdf;base64,' + data_pdf; //this.value
-
-    const mergedPdf = await PDFDocument.create();
-    console.log('xx');
-    const pdfA = await PDFDocument.load(this.formerge);
-    console.log('a');
-    const pdfB = await PDFDocument.load(merge);
-    console.log('b');
-    const copiedPagesA = await mergedPdf.copyPages(
-      pdfA,
-      pdfA.getPageIndices()
-    );
-    copiedPagesA.forEach((page) => mergedPdf.addPage(page));
-
-    const copiedPagesB = await mergedPdf.copyPages(
-      pdfB,
-      pdfB.getPageIndices()
-    );
-    copiedPagesB.forEach((page) => mergedPdf.addPage(page));
-    const mergedPdfFile = await mergedPdf.save();
-    var base64String = this._arrayBufferToBase64(mergedPdfFile);
-    var genDoc = 'data:application/pdf;base64,' + base64String;
-    this.doneDox(genDoc);
-
-    this.userService.documentSend(this.id, base64String).subscribe(
-      (data) => {
-        console.log('king123');
-        console.log(data);
-      },
-      (error) => {
-        console.log('error');
-      }
-    );
-  } else {
-    this.userService.documentSend(this.id, data_pdf).subscribe(
-      (data) => {
-        console.log('king123');
-        console.log(data);
-      },
-      (error) => {console.log('error');}
-    );
-  }
-};
-
-mergeAllPDFs = async (type: String) => {
-  let urls = this.selectedPdfs;
-  const numDocs = urls.length;
-  const pdfDoc = await PDFDocument.create();
-  var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
-    if (currentpage < docLength) {
-      console.log('Inside Page', currentpage, 'total pages', docLength);
-      const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [currentpage]);
-      pdfDoc.addPage(donorPage);
-      await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
-    }
-  };
-  var appendEachFile = async (bytes) => {
-    const donorPdfDoc = await PDFDocument.load(bytes);
-    const docLength = donorPdfDoc.getPageCount();
-    console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
-    await appendEachPage(donorPdfDoc, 0, docLength);
-  };
-  var appendAllFiles = async (pdflist, currentfile) => {
-    if (currentfile < numDocs) {
-      await appendEachFile(pdflist[currentfile]);
-      console.log('Inside file', currentfile);
-      await appendAllFiles(pdflist, currentfile + 1);
-    } else {
-      if (type == 'download') {
-        this.downloadAsSingleFile(pdfDoc);
-      } else {
-        this.sendMail(pdfDoc);
-      }
-    }
-  };
-
-  // download single file;
-  let downloadEachFile = (filename) => {
-    return new Promise((resolve, reject) => {
-      this.userService.mergePdf(filename).subscribe(
-        (res: any) => {
-          console.log('res', res);
-          resolve(res.arrayBuffer());
-        },
-        (err) => reject('Failed to fetch the pdf')
+      const mergedPdf = await PDFDocument.create();
+      console.log('xx');
+      const pdfA = await PDFDocument.load(this.formerge);
+      console.log('a');
+      const pdfB = await PDFDocument.load(merge);
+      console.log('b');
+      const copiedPagesA = await mergedPdf.copyPages(
+        pdfA,
+        pdfA.getPageIndices()
       );
-    });
-  };
-  // download all the pdfs
-  let downloadAllFiles = () => {
-    var promises = [];
-    for (var i = 0; i < numDocs; i++) {
-      let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
-      promises.push(downloadEachFile(filename));
+      copiedPagesA.forEach((page) => mergedPdf.addPage(page));
+
+      const copiedPagesB = await mergedPdf.copyPages(
+        pdfB,
+        pdfB.getPageIndices()
+      );
+      copiedPagesB.forEach((page) => mergedPdf.addPage(page));
+      const mergedPdfFile = await mergedPdf.save();
+      var base64String = this._arrayBufferToBase64(mergedPdfFile);
+      var genDoc = 'data:application/pdf;base64,' + base64String;
+      this.doneDox(genDoc);
+
+      this.userService.documentSend(this.id, base64String).subscribe(
+        (data) => {
+          console.log('king123');
+          console.log(data);
+        },
+        (error) => {
+          console.log('error');
+        }
+      );
+    } else {
+      this.userService.documentSend(this.id, data_pdf).subscribe(
+        (data) => {
+          console.log('king123');
+          console.log(data);
+        },
+        (error) => { console.log('error'); }
+      );
     }
-    Promise.all(promises).then(
-      (pdfList) => {
-        appendAllFiles(pdfList, 0);
-        console.log('pdfList2', pdfList);
-      },
-      (error) => {
-        // write code to send error to user
-        // res.send({"error": "failed to fetch the document try again later/ contact administrator"})''
-      }
-    );
   };
-  downloadAllFiles();
-};
 
-downloadFile2 = (blob, fileName) => {
-  const link = document.createElement('a');
-  // create a blobURI pointing to our Blob
-  link.href = URL.createObjectURL(blob);
-  link.download = fileName;
-  // some browser needs the anchor to be in the doc
-  document.body.append(link);
-  link.click();
-  link.remove();
-  // in case the Blob uses a lot of memory
-  setTimeout(() => URL.revokeObjectURL(link.href), 7000);
-};
-
-// downloadFile(new Blob(['random data']), "myfile.txt");
-
-downloadAll = async (type: String) => {
-  var proceedtoDownloadPdf = async (download, sbno) => {
-    console.log('line 3377', download);
-    let urls = download;
+  mergeAllPDFs = async (type: String) => {
+    let urls: any = this.selectedPdfs;
     const numDocs = urls.length;
     const pdfDoc = await PDFDocument.create();
-
     var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
-      console.log('line 3383', currentpage);
       if (currentpage < docLength) {
         console.log('Inside Page', currentpage, 'total pages', docLength);
-        const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [
-          currentpage,
-        ]);
+        const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [currentpage]);
         pdfDoc.addPage(donorPage);
         await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
       }
@@ -3524,8 +3415,9 @@ downloadAll = async (type: String) => {
         await appendAllFiles(pdflist, currentfile + 1);
       } else {
         if (type == 'download') {
-          console.log(pdfDoc);
-          await this.BulkDOwnload(pdfDoc, sbno);
+          this.downloadAsSingleFile(pdfDoc);
+        } else {
+          this.sendMail(pdfDoc);
         }
       }
     };
@@ -3544,9 +3436,9 @@ downloadAll = async (type: String) => {
     };
     // download all the pdfs
     let downloadAllFiles = () => {
-      var promises = [];
+      var promises: any = [];
       for (var i = 0; i < numDocs; i++) {
-        let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
+        let filename: any = urls[i].substring(urls[i].lastIndexOf('/') + 1);
         promises.push(downloadEachFile(filename));
       }
       Promise.all(promises).then(
@@ -3563,398 +3455,932 @@ downloadAll = async (type: String) => {
     downloadAllFiles();
   };
 
-  var bulkDownloadSingle = async (mainDoc1, index) => {
-    if (mainDoc1[index]) {
-      let sb = mainDoc1[index];
-      var downloadALL = [];
-      downloadALL.push(sb.changingThisBreaksApplicationSecurity);
-      if (this.creditNote.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(
-          this.creditNote.changingThisBreaksApplicationSecurity
-        );
-      }
-      if (this.debitNote.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(
-          this.debitNote.changingThisBreaksApplicationSecurity
-        );
-      }
-      if (this.ebrc.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(this.ebrc.changingThisBreaksApplicationSecurity);
-      }
-      if (this.blcopyref.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(
-          this.blcopyref.changingThisBreaksApplicationSecurity
-        );
-      }
-      if (this.irAdvice.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(this.irAdvice.changingThisBreaksApplicationSecurity);
-      }
-      if (this.swiftCopy.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(
-          this.swiftCopy.changingThisBreaksApplicationSecurity
-        );
-      }
-      if (this.tryPartyAgreement.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(
-          this.tryPartyAgreement.changingThisBreaksApplicationSecurity
-        );
-      }
-      if (this.airwayBlCopy.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(
-          this.airwayBlCopy.changingThisBreaksApplicationSecurity
-        );
-      }
-      if (this.billOfExchange.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(
-          this.billOfExchange.changingThisBreaksApplicationSecurity
-        );
-      }
-      if (this.destruction.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(
-          this.destruction.changingThisBreaksApplicationSecurity
-        );
-      }
-      if (this.commercial.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(
-          this.commercial.changingThisBreaksApplicationSecurity
-        );
-      }
-      if (this.packingList.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(
-          this.packingList.changingThisBreaksApplicationSecurity
-        );
-      }
-      if (this.lcCopy.changingThisBreaksApplicationSecurity) {
-        downloadALL.push(this.lcCopy.changingThisBreaksApplicationSecurity);
-      }
-
-      for (let lc of this.mainDoc4) {
-        downloadALL.push(lc.changingThisBreaksApplicationSecurity);
-      }
-
-      for (let tri of this.mainDoc3) {
-        downloadALL.push(tri.changingThisBreaksApplicationSecurity);
-      }
-      console.log('line 3448', downloadALL);
-
-      await proceedtoDownloadPdf(downloadALL, this.sbArray[index]);
-      await bulkDownloadSingle(mainDoc1, index + 1);
-    }
+  downloadFile2 = (blob, fileName) => {
+    const link = document.createElement('a');
+    // create a blobURI pointing to our Blob
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    // some browser needs the anchor to be in the doc
+    document.body.append(link);
+    link.click();
+    link.remove();
+    // in case the Blob uses a lot of memory
+    setTimeout(() => URL.revokeObjectURL(link.href), 7000);
   };
 
-  await bulkDownloadSingle(this.mainDoc1, 0);
-};
+  // downloadFile(new Blob(['random data']), "myfile.txt");
 
-BulkDOwnload = async (pdfDoc: any, sbno: string) => {
-  const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-  var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
-  var merge = 'data:application/pdf;base64,' + data_pdf; //this.value
+  downloadAll = async (type: String) => {
+    var proceedtoDownloadPdf = async (download, sbno) => {
+      console.log('line 3377', download);
+      let urls = download;
+      const numDocs = urls.length;
+      const pdfDoc = await PDFDocument.create();
 
-  const mergedPdf = await PDFDocument.create();
-  const pdfA = await PDFDocument.load(this.formerge);
-  const pdfB = await PDFDocument.load(merge);
-  const copiedPagesA = await mergedPdf.copyPages(pdfA, pdfA.getPageIndices());
-  copiedPagesA.forEach((page) => mergedPdf.addPage(page));
-
-  const copiedPagesB = await mergedPdf.copyPages(pdfB, pdfB.getPageIndices());
-  copiedPagesB.forEach((page) => mergedPdf.addPage(page));
-  const mergedPdfFile = await mergedPdf.save();
-  var base64String = this._arrayBufferToBase64(mergedPdfFile);
-  console.log('mergeDoc', base64String);
-  var genDoc = 'data:application/pdf;base64,' + base64String;
-  const byteCharacters = atob(base64String);
-  const byteNumbers = new Array(byteCharacters.length);
-  for (let i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.charCodeAt(i);
-    // console.log("bytenumbers", byteNumbers[i])
-  }
-  this.doneDox(genDoc);
-  let filenameforDoc = sbno && sbno.length ? sbno : 'BankAttachment';
-  const byteArray = new Uint8Array(byteNumbers);
-  importedSaveAs(
-    new Blob([byteArray], { type: 'application/pdf' }),
-    filenameforDoc
-  );
-};
-
-public mergeIr() {
-  let filterSBdata = [];
-  let completedsb = [];
-  let sbindex = 0;
-  for (let sbNum of this.item1) {
-    let totalForex = 0;
-    // item1 have pipo details
-    let currentpipo = this.item1[sbindex];
-    console.log('Line no. 3658', currentpipo);
-    console.log('Line no. 3659', sbNum);
-    for (let irData of this.item9) {
-      console.log('line 3661', irData);
-      for (let i = 0; i <= irData.sbNo.length; i++) {
-        console.log('a');
-        if (sbNum.sbno == irData.sbNo[i]) {
-          let irAmount = parseFloat(irData.amount);
-          totalForex = totalForex + irAmount;
-          console.log('145', totalForex);
-        } else {
-          filterSBdata.push(this.item1);
+      var appendEachPage = async (donorPdfDoc, currentpage, docLength) => {
+        console.log('line 3383', currentpage);
+        if (currentpage < docLength) {
+          console.log('Inside Page', currentpage, 'total pages', docLength);
+          const [donorPage] = await pdfDoc.copyPages(donorPdfDoc, [
+            currentpage,
+          ]);
+          pdfDoc.addPage(donorPage);
+          await appendEachPage(donorPdfDoc, currentpage + 1, docLength);
         }
+      };
+      var appendEachFile = async (bytes) => {
+        const donorPdfDoc = await PDFDocument.load(bytes);
+        const docLength = donorPdfDoc.getPageCount();
+        console.log('donorPdfDoc', donorPdfDoc, 'docLength', docLength);
+        await appendEachPage(donorPdfDoc, 0, docLength);
+      };
+      var appendAllFiles = async (pdflist, currentfile) => {
+        if (currentfile < numDocs) {
+          await appendEachFile(pdflist[currentfile]);
+          console.log('Inside file', currentfile);
+          await appendAllFiles(pdflist, currentfile + 1);
+        } else {
+          if (type == 'download') {
+            console.log(pdfDoc);
+            await this.BulkDOwnload(pdfDoc, sbno);
+          }
+        }
+      };
+
+      // download single file;
+      let downloadEachFile = (filename) => {
+        return new Promise((resolve, reject) => {
+          this.userService.mergePdf(filename).subscribe(
+            (res: any) => {
+              console.log('res', res);
+              resolve(res.arrayBuffer());
+            },
+            (err) => reject('Failed to fetch the pdf')
+          );
+        });
+      };
+      // download all the pdfs
+      let downloadAllFiles = () => {
+        var promises: any = [];
+        for (var i = 0; i < numDocs; i++) {
+          let filename = urls[i].substring(urls[i].lastIndexOf('/') + 1);
+          promises.push(downloadEachFile(filename));
+        }
+        Promise.all(promises).then(
+          (pdfList) => {
+            appendAllFiles(pdfList, 0);
+            console.log('pdfList2', pdfList);
+          },
+          (error) => {
+            // write code to send error to user
+            // res.send({"error": "failed to fetch the document try again later/ contact administrator"})''
+          }
+        );
+      };
+      downloadAllFiles();
+    };
+
+    var bulkDownloadSingle = async (mainDoc1, index) => {
+      if (mainDoc1[index]) {
+        let sb: any = mainDoc1[index];
+        var downloadALL: any = [];
+        downloadALL.push(sb.changingThisBreaksApplicationSecurity);
+        if (this.creditNote.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(
+            this.creditNote.changingThisBreaksApplicationSecurity
+          );
+        }
+        if (this.debitNote.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(
+            this.debitNote.changingThisBreaksApplicationSecurity
+          );
+        }
+        if (this.ebrc.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(this.ebrc.changingThisBreaksApplicationSecurity);
+        }
+        if (this.blcopyref.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(
+            this.blcopyref.changingThisBreaksApplicationSecurity
+          );
+        }
+        if (this.irAdvice.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(this.irAdvice.changingThisBreaksApplicationSecurity);
+        }
+        if (this.swiftCopy.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(
+            this.swiftCopy.changingThisBreaksApplicationSecurity
+          );
+        }
+        if (this.tryPartyAgreement.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(
+            this.tryPartyAgreement.changingThisBreaksApplicationSecurity
+          );
+        }
+        if (this.airwayBlCopy.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(
+            this.airwayBlCopy.changingThisBreaksApplicationSecurity
+          );
+        }
+        if (this.billOfExchange.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(
+            this.billOfExchange.changingThisBreaksApplicationSecurity
+          );
+        }
+        if (this.destruction.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(
+            this.destruction.changingThisBreaksApplicationSecurity
+          );
+        }
+        if (this.commercial.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(
+            this.commercial.changingThisBreaksApplicationSecurity
+          );
+        }
+        if (this.packingList.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(
+            this.packingList.changingThisBreaksApplicationSecurity
+          );
+        }
+        if (this.lcCopy.changingThisBreaksApplicationSecurity) {
+          downloadALL.push(this.lcCopy.changingThisBreaksApplicationSecurity);
+        }
+
+        for (let lc of this.mainDoc4) {
+          downloadALL.push(lc.changingThisBreaksApplicationSecurity);
+        }
+
+        for (let tri of this.mainDoc3) {
+          downloadALL.push(tri.changingThisBreaksApplicationSecurity);
+        }
+        console.log('line 3448', downloadALL);
+
+        await proceedtoDownloadPdf(downloadALL, this.sbArray[index]);
+        await bulkDownloadSingle(mainDoc1, index + 1);
       }
+    };
+
+    await bulkDownloadSingle(this.mainDoc1, 0);
+  };
+
+  BulkDOwnload = async (pdfDoc: any, sbno: string) => {
+    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+    var data_pdf = pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
+    var merge = 'data:application/pdf;base64,' + data_pdf; //this.value
+
+    const mergedPdf = await PDFDocument.create();
+    const pdfA = await PDFDocument.load(this.formerge);
+    const pdfB = await PDFDocument.load(merge);
+    const copiedPagesA = await mergedPdf.copyPages(pdfA, pdfA.getPageIndices());
+    copiedPagesA.forEach((page) => mergedPdf.addPage(page));
+
+    const copiedPagesB = await mergedPdf.copyPages(pdfB, pdfB.getPageIndices());
+    copiedPagesB.forEach((page) => mergedPdf.addPage(page));
+    const mergedPdfFile = await mergedPdf.save();
+    var base64String = this._arrayBufferToBase64(mergedPdfFile);
+    console.log('mergeDoc', base64String);
+    var genDoc = 'data:application/pdf;base64,' + base64String;
+    const byteCharacters = atob(base64String);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+      // console.log("bytenumbers", byteNumbers[i])
     }
+    this.doneDox(genDoc);
+    let filenameforDoc = sbno && sbno.length ? sbno : 'BankAttachment';
+    const byteArray = new Uint8Array(byteNumbers);
+    importedSaveAs(
+      new Blob([byteArray], { type: 'application/pdf' }),
+      filenameforDoc
+    );
+  };
 
-    const newVal = { ...sbNum };
-    let sbAmount = newVal.fobValue;
-
-    newVal['balanceAvai'] = (sbAmount - totalForex).toFixed(2);
-    console.log('hello sj', newVal);
-
-    filterSBdata.push(newVal);
-
-    if (completedsb.indexOf(sbindex) == -1) {
-      completedsb.push(sbindex);
-    }
-    sbindex = sbindex + 1;
-  }
-  for (let i = completedsb.length - 1; i >= 0; i--) {
-    this.item1.splice(completedsb[i], 1);
-  }
-  for (let sb of filterSBdata) {
-    console.log('data of pipo', sb);
-    if (sb.balanceAvai > 0) {
-      this.item1.push(sb);
-    }
-  }
-}
-
-public mergeIr2() {
-  let filterIrdata = [];
-  if (this.item1 && this.item1.length) {
-    for (let irData of this.item9) {
-      // item9 have forex details
-      console.log('Line no. 3700', irData);
-      // if(irData.sbNo.length){
-      for (let sbNum of this.item1) {
-        console.log('line 3701', sbNum);
+  public mergeIr() {
+    let filterSBdata: any = [];
+    let completedsb: any = [];
+    let sbindex = 0;
+    for (let sbNum of this.item1) {
+      let totalForex = 0;
+      // item1 have pipo details
+      let currentpipo = this.item1[sbindex];
+      console.log('Line no. 3658', currentpipo);
+      console.log('Line no. 3659', sbNum);
+      for (let irData of this.item9) {
+        console.log('line 3661', irData);
         for (let i = 0; i <= irData.sbNo.length; i++) {
           console.log('a');
           if (sbNum.sbno == irData.sbNo[i]) {
-            const newVal = { ...irData }
-            console.log('Line no. 3706', newVal);
-              let sbBalance =sbNum.fobValue;
+            let irAmount = parseFloat(irData.amount);
+            totalForex = totalForex + irAmount;
+            console.log('145', totalForex);
+          } else {
+            filterSBdata.push(this.item1);
+          }
+        }
+      }
+
+      const newVal = { ...sbNum };
+      let sbAmount = newVal.fobValue;
+
+      newVal['balanceAvai'] = (sbAmount - totalForex).toFixed(2);
+      console.log('hello sj', newVal);
+
+      filterSBdata.push(newVal);
+
+      if (completedsb.indexOf(sbindex) == -1) {
+        completedsb.push(sbindex);
+      }
+      sbindex = sbindex + 1;
+    }
+    for (let i = completedsb.length - 1; i >= 0; i--) {
+      this.item1.splice(completedsb[i], 1);
+    }
+    for (let sb of filterSBdata) {
+      console.log('data of pipo', sb);
+      if (sb.balanceAvai > 0) {
+        this.item1.push(sb);
+      }
+    }
+  }
+
+  TOTAL_FIRX_AMOUNT: any = 0;
+  public mergeIr2() {
+    let filterIrdata: any = [];
+    if (this.item1 && this.item1.length) {
+      for (let irData of this.item9) {
+        // item9 have forex details
+        console.log('Line no. 3700', irData);
+        // if(irData.sbNo.length){
+        for (let sbNum of this.item1) {
+          console.log('line 3701', sbNum);
+          for (let i = 0; i <= irData.sbNo.length; i++) {
+            console.log('a');
+            if (sbNum.sbno == irData.sbNo[i]) {
+              const newVal = { ...irData }
+              console.log('Line no. 3706', newVal);
+              let sbBalance = sbNum.fobValue;
               let irAmount = parseFloat(irData.amount);
               let availableBalance = irAmount - sbBalance;
-
               if (availableBalance <= 0) {
                 newVal['BalanceAvail'] = 0;
               } else {
                 newVal['BalanceAvail'] = availableBalance.toFixed(2);
               }
 
-              if(newVal.BalanceAvail > 0){
+              if (newVal.BalanceAvail > 0) {
                 console.log("BalanceAvailable", newVal.BalanceAvail)
-              filterIrdata.push(newVal);
-            }
+                filterIrdata.push(newVal);
+              }
               console.log('Line no. 3723', filterIrdata);
             }
+          }
         }
       }
-  }
-  for (let irData of this.item9) {
-    if(irData.sbNo.length == 0){
-      const newVal = { ...irData };
-        let availableBal = irData.amount;
-        newVal['BalanceAvail'] = availableBal;
-        filterIrdata.push(newVal);
-        console.log('235', filterIrdata);
-    }
-  }
-  } else {
-    for(let ir of this.item9){
-      const newVal = { ...ir };
-      let availableBal = ir.amount;
-        newVal['BalanceAvail'] = availableBal;
-        filterIrdata.push(newVal);
-    }
-  }
-  this.item13 = filterIrdata
-  console.log("filterForex", filterIrdata,this.item13)
-
-}
-
-doneToDox() {
-  console.log('All Details', this.invoiceArr);
-
-  let iradvice = {};
-  function checkIfSbExist(list, checker) {
-    for (let i in list) {
-      if (list[i] == checker) {
-        return true;
+      for (let irData of this.item9) {
+        if (irData.sbNo.length == 0) {
+          const newVal = { ...irData };
+          let availableBal = irData.amount;
+          newVal['BalanceAvail'] = availableBal;
+          filterIrdata.push(newVal);
+          console.log('235', filterIrdata);
+        }
       }
-    }
-    return false;
-  }
-
-  for (let i in this.invoiceArr) {
-    console.log('2758', this.invoiceArr[i].advance);
-    if (iradvice[this.invoiceArr[i].advance] == undefined) {
-      iradvice[this.invoiceArr[i].advance] = {
-        sbNo: [this.invoiceArr[i]._id],
-        billNo: this.invoiceArr[i].irAdviceId,
-      };
     } else {
-      if (
-        !checkIfSbExist(
-          iradvice[this.invoiceArr[i].advance].sbNo,
-          this.invoiceArr[i]._id
-        )
-      ) {
-        iradvice[this.invoiceArr[i].advance].sbNo.push(
-          this.invoiceArr[i]._id
-        );
+      for (let ir of this.item9) {
+        const newVal = { ...ir };
+        let availableBal = ir.amount;
+        newVal['BalanceAvail'] = availableBal;
+        filterIrdata.push(newVal);
       }
     }
-  }
-
-  console.log('My details', iradvice);
-
-  if (this.Question6 == 'yes') {
-    for (let ir in iradvice) {
-      this.documentService
-        .updateByIr(iradvice[ir], iradvice[ir].billNo)
-        .subscribe((data) => {
-          console.log('my ir', ir);
-          console.log('IrAdvice and sb connected successfully');
-          console.log('2759', iradvice);
-          console.log('line no. 2760', data);
-        });
-    }
-  }
-}
-ShowPopup(callback:any){
-
-}
-Lodgement:any={
-  'AgainstAdvanceReceipt':{
-    Show:'',
-    Hide:''
-  },
-  'UnderLC':{
-    Show:'',
-    Hide:''
-  },
-  'BuyerRemitterDifferent':{
-    Show:'',
-    Hide:''
-  },
-  'InvoiceReduction':{
-    Show:'',
-    Hide:''
-  },
-  'WithDiscount':{
-    Show:'',
-    Hide:''
-  },
-  'WithScrutiny':{
-    Show:'',
-    Hide:''
-  }
-}
-ClassRetrun(mainkey,key,class1,class2,condition){
-  if (this.Lodgement[mainkey][key]===condition) {
-    return class1;
-  }
-  else{
-    return class2;
-  }
-}
-Changebutton(mainkey,Showkey,hidekey,value){
-  this.Lodgement[mainkey][Showkey]=value
-  this.Lodgement[mainkey][hidekey]='';
-  console.log(this.Lodgement,'Lodgement')
-}
-DUMP_FUNCTION(condition1,condition2,popupshow){
-  console.log(condition1,'DUMP_FUNCTION')
-   if (condition1===condition2) {
-    popupshow.style.display='flex'
-   } else {
-    popupshow.style.display='none'
-   }
-}
-OBJECT_LENGTH(data:any){
-  return data!=undefined?data.length:0;
-}
-PREVIEWS_URL(id) {
-  this.PREVIEWS_URL_LIST=[];
-  this.PREVIEWS_URL_LIST[0] = this.formerge;
-  for (let i = 0; i < this.itemArray.length; i++) {
-    var element=this.itemArray[i]?._id;
-  for (let index = 0; index < this.temp[element].length; index++) {
-    this.userService.mergePdf(this.temp[element][index]?.pdf).subscribe((res: any) => {
-      console.log('downloadEachFile', res);
-      res.arrayBuffer().then((data: any) => {
-        this.PREVIEWS_URL_LIST.push(data)
-        console.log('downloadEachFile',data);
-      });
+    this.item13 = filterIrdata;
+    this.item13?.forEach(element => {
+      element['isEnabled'] = false;
     });
+    console.log("filterForex", filterIrdata, this.item13)
   }
- }
-  this.documentService.getDownloadStatus({ id: id, deleteflag: '-1' }).subscribe((res: any) => {
-    console.log(res, 'dsdsdsdsdsdsds');
-    this.GetDownloadStatus = res[0];
-    if (res.length == 0) {
-      this.documentService.getDownloadStatus({ id: id, deleteflag: '1' }).subscribe((res: any) => {
-        console.log(res, 'dsdsdsdsdsdsds');
-        this.GetDownloadStatus = res[0];
-        if (res.length == 0) {
-          this.documentService.getDownloadStatus({ id: id, deleteflag: '2' }).subscribe((res: any) => {
-            console.log(res, 'dsdsdsdsdsdsds');
-            this.GetDownloadStatus = res[0];
-          })
+
+  doneToDox() {
+    console.log('All Details', this.invoiceArr);
+
+    let iradvice = {};
+    function checkIfSbExist(list, checker) {
+      for (let i in list) {
+        if (list[i] == checker) {
+          return true;
         }
-      })
+      }
+      return false;
     }
-  })
-}
-SendApproval(Status: string, UniqueId: any) {
-  if(UniqueId!=null){
-    var temp_doc: any = [];
-    temp_doc[0] = this.value?.changingThisBreaksApplicationSecurity;
-    for (let i = 0; i < this.itemArray.length; i++) {
-      var element=this.itemArray[i]?._id;
-      for (let index = 0; index < this.temp[element].length; index++) {
-        if (this.temp[element][index]?.pdf != '' && this.temp[element][index]?.pdf != undefined) {
-          temp_doc.push(this.temp[element][index]?.pdf)
+
+    for (let i in this.invoiceArr) {
+      console.log('2758', this.invoiceArr[i].advance);
+      if (iradvice[this.invoiceArr[i].advance] == undefined) {
+        iradvice[this.invoiceArr[i].advance] = {
+          sbNo: [this.invoiceArr[i]._id],
+          billNo: this.invoiceArr[i].irAdviceId,
+        };
+      } else {
+        if (
+          !checkIfSbExist(
+            iradvice[this.invoiceArr[i].advance].sbNo,
+            this.invoiceArr[i]._id
+          )
+        ) {
+          iradvice[this.invoiceArr[i].advance].sbNo.push(
+            this.invoiceArr[i]._id
+          );
         }
       }
     }
-    var approval_data: any = {
-      id: UniqueId,
-      tableName: 'Export Bill Lodgement',
-      deleteflag: '-1',
-      userdetails: this.USER_DATA,
-      status: 'pending',
-      documents: temp_doc,
-      Types: 'downloadPDF',
-      TypeOfPage: 'Transaction',
-      FileType: this.USER_DATA?.sideMenu
+
+    console.log('My details', iradvice);
+
+    if (this.Question6 == 'yes') {
+      for (let ir in iradvice) {
+        this.documentService
+          .updateByIr(iradvice[ir], iradvice[ir].billNo)
+          .subscribe((data) => {
+            console.log('my ir', ir);
+            console.log('IrAdvice and sb connected successfully');
+            console.log('2759', iradvice);
+            console.log('line no. 2760', data);
+          });
+      }
     }
-    console.log(approval_data, 'approval_data')
-    if (Status == '' || Status == null || Status == 'Rejected') {
-      this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
-        this.ngOnInit();
-        this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '-1' }).subscribe((res: any) => {
-          console.log(res, 'dsdsdsdsdsdsds');
-          this.GetDownloadStatus = res[0];
-          if (res.length == 0) {
-            this.documentService.getDownloadStatus({ id: UniqueId, deleteflag: '2' }).subscribe((res: any) => {
-              console.log(res, 'dsdsdsdsdsdsds');
-              this.GetDownloadStatus = res[0];
+  }
+  ShowPopup(callback: any) {
+
+  }
+  Lodgement: any = {
+    'AgainstAdvanceReceipt': {
+      Show: '',
+      Hide: ''
+    },
+    'UnderLC': {
+      Show: '',
+      Hide: ''
+    },
+    'BuyerRemitterDifferent': {
+      Show: '',
+      Hide: ''
+    },
+    'InvoiceReduction': {
+      Show: '',
+      Hide: ''
+    },
+    'WithDiscount': {
+      Show: '',
+      Hide: ''
+    },
+    'WithScrutiny': {
+      Show: '',
+      Hide: ''
+    },
+    'DirectDispatch': {
+      Show: '',
+      Hide: ''
+    },
+    'ThirdPartyRemittance': {
+      Show: '',
+      Hide: ''
+    }
+  }
+  ClassRetrun(mainkey, key, class1, class2, condition) {
+    if (this.Lodgement[mainkey][key] === condition) {
+      return class1;
+    }
+    else {
+      return class2;
+    }
+  }
+  Text_Changer(text: any) {
+    return text;
+  }
+  Changebutton(mainkey, Showkey, hidekey, value) {
+    this.Lodgement[mainkey][Showkey] = value
+    this.Lodgement[mainkey][hidekey] = '';
+    console.log(this.Lodgement, 'Lodgement')
+  }
+  DUMP_FUNCTION(condition1, condition2, popupshow) {
+    console.log(condition1, 'DUMP_FUNCTION')
+    if (condition1 === condition2) {
+      popupshow.style.display = 'flex'
+    } else {
+      popupshow.style.display = 'none'
+    }
+  }
+  OBJECT_LENGTH(data: any) {
+    return data != undefined ? data.length : 0;
+  }
+  async PREVIEWS_URL() {
+    this.PreviewSlideToggle(this.itemArray[0]?.sbno)
+    // for (let i = 0; i < this.itemArray.length; i++) {
+    //   var element = this.itemArray[i]?._id;
+    //   tep[this.itemArray[i]?.sbno] = []
+    //   tep[this.itemArray[i]?.sbno][0]=this.formerge;
+    //   for (let index = 0; index < this.temp[element].length; index++) {
+    //     tep[this.itemArray[i]?.sbno].push(this.temp[element][index]?.pdf)
+    //   }
+    // }
+    // for (let i = 0; i < this.itemArray.length; i++) {
+    //   this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno] = []
+    //   await this.mergerpdf.mergePdf(tep[this.itemArray[i]?.sbno]).then((merge: any) => {
+    //     this.PREVIEWS_URL_LIST[this.itemArray[i]?.sbno].push(merge)
+    //   })
+    // }
+  }
+  temp_doc: any = [];
+  tp: any = {
+    firxNumber: [],
+    firxDate: [],
+    firxCurrency: [],
+    firxAmount: [],
+    firxCommision: [],
+    firxRecAmo: [],
+    id: [],
+  };
+  BOOLEAN: boolean = false;
+  MERGE_ALL_PDF: any = [];
+  SB_NO_FILTER: any = ''
+  RESET: boolean = false;
+  async SlideToggle(event: any, sbid: any) {
+    var temp: any = [];
+    const id = event != null ? event.tab.content.viewContainerRef.element.nativeElement.id : sbid;
+    this.PDF_LIST = [];
+    console.log(this.newBankArray, bankformat, id, 'this.newBankArray')
+    var sbfilter = this.itemArray.filter((item: any) => item?._id == id);
+    this.SB_NO_FILTER = sbfilter[0]?.sbno;
+    var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.bankValue) != -1);
+    if (bankformat.length != 0 && bankformat[0]?.urlpdf != '') {
+      this.fillForm(sbfilter[0], 'SB_' + sbfilter[0]?.sbno).then(async () => {
+        for (let index = 0; index < this.temp[id].length; index++) {
+          if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
+            temp.push(this.temp[id][index]?.pdf)
+            this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
+              console.log('downloadEachFile', res);
+              res.arrayBuffer().then((data: any) => {
+
+                var base64String = this._arrayBufferToBase64(data);
+                const x = 'data:application/pdf;base64,' + base64String;
+                this.PDF_LIST.push({
+                  pdf: x,
+                  name: this.temp[id][index]['name']
+                })
+                console.log('downloadEachFile', data);
+              });
+            });
+          }
+          if ((index + 1) == this.temp[id].length) {
+            var fitertemp: any = temp.filter(n => n)
+            await this.pdfmerge._multiple_merge_pdf(fitertemp).then((data: any) => {
+              console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
+              this.MERGE_ALL_PDF[0] = data.toString();
             })
           }
-        })
+        }
+      });
+    } else {
+      for (let index = 0; index < this.temp[id].length; index++) {
+        if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
+          temp.push(this.temp[id][index]?.pdf)
+          this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
+            console.log('downloadEachFile', res);
+            res.arrayBuffer().then((data: any) => {
+              var base64String = this._arrayBufferToBase64(data);
+              const x = 'data:application/pdf;base64,' + base64String;
+              this.PDF_LIST.push({
+                pdf: x,
+                name: this.temp[id][index]['name']
+              })
+              console.log('downloadEachFile', data);
+            });
+          });
+        }
+        if ((index + 1) == this.temp[id].length) {
+          var fitertemp: any = temp.filter(n => n)
+          await this.pdfmerge.mergeAllPDF(fitertemp).then((data: any) => {
+            console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
+            this.MERGE_ALL_PDF[0] = data.toString();
+          })
+        }
+      }
+    }
+    this.RESET=false;
+    setTimeout(() => {
+      this.RESET = true;
+    }, 500)
+  }
+
+  async PreviewSlideToggle(event: any) {
+    const id: any = event?.tab?.content?.viewContainerRef?.element?.nativeElement?.id != undefined ? event.tab.content.viewContainerRef.element.nativeElement.id : event;
+    var tempfilter: any = this.itemArray.filter((item: any) => item?.sbno == id);
+    var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.bankValue) != -1);
+
+    if (bankformat.length != 0 && bankformat[0]?.urlpdf != '') {
+      await this.fillForm(tempfilter[0], 'SB_' + id).then(async (fillpdf: any) => {
+        this.PDF_LIST = [];
+        this.PREVIEWS_URL_LIST = [];
+        var tep: any = [];
+
+        var temppdflits: any = [];
+        tep[tempfilter[0]?._id] = []
+        tep[tempfilter[0]?._id][0] = fillpdf;
+        temppdflits[0] = fillpdf;
+        for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+          tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
+          if (this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+            temppdflits.push(this.temp[tempfilter[0]?._id][index]?.pdf)
+          }
+          if ((index + 1) == this.temp[tempfilter[0]?._id].length) {
+            var fitertemp: any = temppdflits.filter(n => n)
+            await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
+              this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
+              console.log(this.tp, this.temp_doc, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+            });
+          }
+        }
+        for (let index = 0; index < this.advanceArray['SB_' + id].length; index++) {
+          const element: any = this.advanceArray['SB_' + id][index];
+          this.tp['firxNumber'].push(element?.irDataItem?.billNo)
+          this.tp['firxDate'].push(element?.irDataItem?.date)
+          this.tp['firxCurrency'].push(element?.irDataItem?.currency)
+          this.tp['firxAmount'].push(element?.irDataItem?.amount)
+          this.tp['firxCommision'].push(element?.irDataItem?.convertedAmount)
+          this.tp['firxRecAmo'].push(0);
+          this.tp['id'].push(element?.irDataItem?._id)
+        }
+        this.temp_doc = [];
+        this.temp_doc[0] = { pdf: this.value?.changingThisBreaksApplicationSecurity, name: bankformat[0]?.value };
+        for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+          if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+            this.temp_doc.push({ pdf: this.temp[tempfilter[0]?._id][index]?.pdf, name: this.temp[tempfilter[0]?._id][index]?.name })
+          }
+        }
+      });
+    } else {
+      this.PDF_LIST = [];
+      this.PREVIEWS_URL_LIST = [];
+      var tep: any = [];
+      var temppdflits: any = [];
+      tep[tempfilter[0]?._id] = []
+      $(document).ready(() => {
+        kendo.pdf.defineFont({
+          "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
+          "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
+          "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+          "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+          "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
+        });
+        kendo.drawing.drawDOM($("#first"), {
+          paperSize: "A4",
+          margin: "0cm",
+          scale: 0.7,
+          forcePageBreak: ".page-break"
+        }).then(function (group) {
+          return kendo.drawing.exportPDF(group, {
+            paperSize: "A4",
+            margin: "0cm",
+            scale: 0.7,
+            forcePageBreak: ".page-break"
+          });
+        }).done(async (data) => {
+          console.log('exportPDF', data, tep)
+          await this.userService?.UploadS3Buket({
+            fileName: this.guid() + '.pdf', buffer: data,
+            type: 'application/pdf'
+          }).subscribe(async (pdfresponse: any) => {
+            console.log(pdfresponse, 'response')
+            await temppdflits.push(pdfresponse?.url);
+            for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+              tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
+              if (this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+                temppdflits.push(this.temp[tempfilter[0]?._id][index]?.pdf)
+              }
+              if ((index + 1) == this.temp[tempfilter[0]?._id].length) {
+                var fitertemp: any = await temppdflits.filter(n => n)
+                await this.pdfmerge._multiple_merge_pdf(fitertemp).then(async (merge: any) => {
+                  this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
+                  console.log(this.tp, this.temp_doc, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
+                });
+              }
+            }
+            for (let index = 0; index < this.advanceArray['SB_' + id].length; index++) {
+              const element: any = this.advanceArray['SB_' + id][index];
+              this.tp['firxNumber'].push(element?.irDataItem?.billNo)
+              this.tp['firxDate'].push(element?.irDataItem?.recievedDate)
+              this.tp['firxCurrency'].push(element?.irDataItem?.currency)
+              this.tp['firxAmount'].push(element?.irDataItem?.amount)
+              this.tp['firxCommision'].push(element?.irDataItem?.commision)
+              this.tp['firxRecAmo'].push(0);
+              this.tp['id'].push(element?.irDataItem?._id)
+            }
+            this.temp_doc = [];
+            this.temp_doc[0] = { pdf: this.value?.changingThisBreaksApplicationSecurity, name: bankformat[0]?.value };
+            this.temp_doc[1] = { pdf: data, name: bankformat[0]?.value };
+            for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
+              if (this.temp[tempfilter[0]?._id][index]?.pdf != '' && this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
+                this.temp_doc.push({ pdf: this.temp[tempfilter[0]?._id][index]?.pdf, name: this.temp[tempfilter[0]?._id][index]?.name })
+              }
+            }
+          })
+
+        });
       });
     }
   }
-  console.log(UniqueId, approval_data, 'uiiiiiiiiiiiiii')
-}
+  guid() {
+    let s4 = () => {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '_' + s4() + '_' + s4() + '_' + s4() + '_' + s4() + s4() + s4();
+  }
+  async SendApproval(Status: string, UniqueId: any, event: any) {
+    var UpdatedUrl: any = []
+    for (let index = 0; index < this.temp_doc.length; index++) {
+      if (this.temp_doc[index]?.pdf != '' && this.temp_doc[index]?.pdf != undefined) {
+        if (this.temp_doc[index]?.pdf.indexOf('data:application/pdf;base64,') != -1) {
+          await this.userService?.UploadS3Buket({
+            fileName: this.temp_doc[index]?.name + '.pdf', buffer: this.temp_doc[index]?.pdf,
+            type: 'application/pdf'
+          }).subscribe((response: any) => {
+            console.log(response, 'response')
+            UpdatedUrl.push(response?.url)
+          })
+        } else {
+          UpdatedUrl.push(this.temp_doc[index]?.pdf)
+        }
+      }
+      if ((index + 1) == this.temp_doc.length) {
+        if (UniqueId != null) {
+          var approval_data: any = {};
+          let sbAmountSum: any = this.itemArray.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.fobValue) }, 0);
+          delete this.USER_DATA?.members_list
+          if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
+            approval_data = {
+              id: 'IRDR' + '_' + UniqueId,
+              tableName: 'Inward-Remitance-Dispoal-Realization',
+              deleteflag: '-1',
+              userdetails: this.USER_DATA,
+              status: 'pending',
+              documents: UpdatedUrl?.reverse(),
+              Types: 'downloadPDF',
+              TypeOfPage: 'Transaction',
+              FileType: this.USER_DATA?.sideMenu
+            }
+          } else {
+            let sbdetails: any = this.itemArray.filter((item: any) => item?._id.indexOf(UniqueId) != -1)[0];
+            let TempfilterSum = this.Advance_Amount_Sum['SB_' + sbdetails?.sbno].reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.irDataItem?.BalanceAvail) }, 0);
+            const ID_APPROVAL: any = this.tp?.firxAmount != undefined && this.tp?.firxAmount != null && this.tp?.firxAmount != '' ? this.tp?.id.join(',') + '_' + TempfilterSum : sbAmountSum
+            approval_data = {
+              id: 'EDD' + '_' + ID_APPROVAL,
+              tableName: 'Export-Direct-Dispatch',
+              deleteflag: '-1',
+              userdetails: this.USER_DATA,
+              status: 'pending',
+              documents: UpdatedUrl?.reverse(),
+              Types: 'downloadPDF',
+              TypeOfPage: 'Transaction',
+              FileType: this.USER_DATA?.sideMenu
+            }
+          }
+
+          var pipo: any = this.itemArray.filter((item: any) => item?._id.indexOf(UniqueId) != -1)[0]?.pipo;
+          var pipo_id: any = [];
+          var pipo_name: any = [];
+          pipo.forEach(element => {
+            pipo_id.push(element?._id)
+            pipo_name.push(element?.pi_poNo)
+          });
+          this.getStatusCheckerMaker(approval_data?.id).then((res: any) => {
+            console.log(approval_data, res, 'approval_data')
+            if (res?.id != approval_data?.id) {
+              if (Status == '' || Status == null || Status == 'Rejected') {
+                this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
+                  this.ExportBillLodgement_Form.controls['SbRef'].setValue(UniqueId);
+                  this.ExportBillLodgement_Form.controls['documents'].setValue(UpdatedUrl?.reverse());
+                  this.ExportBillLodgement_Form.controls['Url_Redirect'].setValue({ file: 'export', document: 'blCopyref', SbRef: UniqueId })
+                  this.ExportBillLodgement_Form.controls['extradata'].setValue(this.FILTER_DATA)
+                  if (this.Lodgement['AgainstAdvanceReceipt']?.Hide != 'no') {
+                    var data: any = {
+                      data: this.ExportBillLodgement_Form.value,
+                      TypeTransaction: 'Export-Direct-Dispatch',
+                      fileType: 'Export',
+                      UserDetails: approval_data?.id,
+                      pipo: pipo_id
+                    }
+                    this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                      let updatedData = {
+                        "TransactionRef": [
+                          res1._id,
+                        ]
+                      }
+                      if (this.documentService.MT102_SUBJECT?.file == '' || this.documentService.MT102_SUBJECT?.file == undefined) {
+                        this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
+                          console.log(data);
+                          for (let index = 0; index < this.ExportBillLodgement_Form.value?.Advance_reference_Number?.length; index++) {
+                            const element = this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.irDataItem;
+                            this.documentService.Update_Amount_by_Table({
+                              tableName: 'iradvices',
+                              id: element._id,
+                              query: {
+                                sbno: [this.ExportBillLodgement_Form.value?.Advance_reference_Number[index]?.sb]
+                              }
+                            }).subscribe((list: any) => {
+
+                            })
+                          }
+                          this.documentService.Update_Amount_by_Table({
+                            tableName: 'iradvices',
+                            id: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?._id,
+                            query: {
+                              BalanceAvail: this.ExportBillLodgement_Form.value?.Carry_Amount.irDataItem?.BalanceAvail,
+                              sbno: [this.ExportBillLodgement_Form.value?.Carry_Amount?.sb]
+                            }
+                          }).subscribe((r1: any) => {
+                            let sbAmount: any = this.itemArray.filter((item: any) => item?._id.includes(UniqueId));
+                            var query: any = {
+                              firxNumber: this.tp?.firxNumber.join(','),
+                              firxDate: this.tp?.firxDate.join(','),
+                              firxCurrency: this.tp?.firxCurrency.join(','),
+                              firxAmount: this.tp?.firxAmount.join(','),
+                              firxCommision: this.tp?.firxCommision.join(','),
+                              firxRecAmo: '0'
+                            }
+                            if (this.ExportBillLodgement_Form.value?.Total_Reaming_Amount != 0) {
+                              query = {
+                                firxNumber: this.tp?.firxNumber.join(','),
+                                firxDate: this.tp?.firxDate.join(','),
+                                firxCurrency: this.tp?.firxCurrency.join(','),
+                                firxAmount: this.tp?.firxAmount.join(','),
+                                firxCommision: this.tp?.firxCommision.join(','),
+                                firxRecAmo: '0',
+                              }
+                            }
+                            this.documentService.Update_Amount_by_TableSB({
+                              tableName: 'masterrecord',
+                              id: UniqueId,
+                              query: query
+                            }).subscribe((r2: any) => {
+                              this.documentService.Update_Amount_by_Table({
+                                tableName: 'masterrecord',
+                                id: UniqueId,
+                                query: { balanceAvai: parseFloat(sbAmount[0]?.balanceAvai) - this.FIRX_AMOUNT(this.tp?.firxAmount) }
+                              }).subscribe((r3: any) => {
+                                console.log(r3, 'masterrecord')
+                                this.toastr.success('Successfully added Transaction of SB No. :' + this.FIRX_AMOUNT(sbAmount?.sbno))
+                              });
+                              // model.style.display = 'none';
+                              // this.router.navigate(['/home/dashboardTask'])
+                            })
+                          });
+                        }, (error) => {
+                          console.log('error');
+                        }
+                        );
+                      }
+
+                      console.log('addExportBillLodgment', res1);
+                    })
+                  } else {
+                    if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
+                      var changevalue: any = this.documentService.MT102_SUBJECT;
+                      changevalue['pipo'] = pipo_id;
+                      changevalue['SbRef'] = this.itemArray;
+                      changevalue['Url_Redirect'] = { file: 'export', document: 'blCopyref', SbRef: UniqueId, pipo: pipo_name.toString() };
+                      var data: any = {
+                        data: changevalue,
+                        TypeTransaction: 'Inward-Remitance-Dispoal-Realization',
+                        fileType: 'Export',
+                        UserDetails: approval_data?.id,
+                        pipo: pipo_id
+                      }
+                      this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                        this.router.navigate(['/home/dashboardTask']);
+                        this.sessionstorage.remove('MT102')
+                        console.log('addExportBillLodgment', res1);
+                      })
+                    } else {
+                      if (this.Lodgement['AgainstAdvanceReceipt']?.Hide == 'no') {
+                        var data: any = {
+                          data: this.ExportBillLodgement_Form.value,
+                          TypeTransaction: 'Export-Direct-Dispatch',
+                          fileType: 'Export',
+                          UserDetails: approval_data?.id,
+                          pipo: pipo_id
+                        }
+                        this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
+                          let updatedData = {
+                            "TransactionRef": [
+                              res1._id,
+                            ]
+                          }
+                          this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
+                            console.log('king123');
+                            console.log(data);
+                            this.router.navigate(['/home/dashboardTask']);
+                          }, (error) => {
+                            console.log('error');
+                          }
+                          );
+                          console.log('addExportBillLodgment', res1);
+                        })
+                      }
+                    }
+                  }
+                });
+              }
+            } else {
+              this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('Send for Approval',
+                `You already send for approval <br>&<br>also check ${res?.status} panel`)
+            }
+          });
+        }
+
+        console.log('Export-Direct-Dispatch' + UniqueId, UniqueId, pipo, approval_data, 'uiiiiiiiiiiiiii')
+      }
+    }
+  }
+
+  FIRX_AMOUNT(amountarray: any): any {
+    return parseFloat(amountarray?.reduce((a, b) => parseFloat(a) + parseFloat(b), 0)).toFixed(3);
+  }
+  getStatusCheckerMaker(id) {
+    return new Promise((resolve, reject) => {
+      this.documentService.getDownloadStatus({ id: id, $or: [{ "deleteflag": '-1' }, { "deleteflag": '1' }, { "deleteflag": '2' }] }).subscribe((res: any) => resolve(res[0]))
+    })
+  }
+  HIDE_SHOW: any = {
+    PANEL_1: true,
+    PANEL_2: false
+  };
+  HIDE_SHOW_POPUP(key) {
+    if (this.sbArray.length == 0) {
+      this.toastr.warning('Please select at least one shipping bill...');
+      return;
+    } else {
+      for (const key in this.HIDE_SHOW) {
+        this.HIDE_SHOW[key] = false;
+      }
+
+      this.HIDE_SHOW[key] = true;
+    }
+  }
+  filterBuyerName($event) {
+    if ($event != 'Select Buyer Name') {
+      this.nameSearch4 = $event;
+      var temp_filter: any = this.item13.filter((item: any) => item?.buyerName.includes($event));
+      this.TOTAL_FIRX_AMOUNT = parseFloat(temp_filter.reduce((a, b) => parseFloat(a) + parseFloat(b?.BalanceAvail), 0)).toFixed(3);
+    } else {
+      this.nameSearch4 = ''
+    }
+    this.CHECKEBOX_SELECTION.SHIPPING_BILL = []
+  }
+  ParseFloat(num1, num2) {
+    var val: any = parseFloat(num2) != undefined ? parseFloat(num1) - parseFloat(num2) : 0
+    return !isNaN(val) ? parseFloat(val).toFixed(2) : num1;
+  }
+  SELECTED_SHIPPING_BILL: any = [];
+  _SHIPPING_BILL(i, data: any, amount: any, model: any) {
+    if (this.percentCalculation(data?.amount, 25) > parseFloat(amount)) {
+      console.log(data, '_SHIPPING_BILL')
+      this.SELECTED_SHIPPING_BILL = { index: i, data: data };
+    } else {
+      model.style.display = 'none'
+      this.toastr.error('Max permissible discount amount exceeded,Please select write off module.')
+    }
+  }
+  percentCalculation(a, b) {
+    var c: any = (parseFloat(a) * parseFloat(b)) / 100;
+    return parseFloat(c);
+  }
+  SELECTED_VIEW_FIRX: any = [];
+  _VIEW_FIRX(i, data: any) {
+    console.log(data, '_VIEW_FIRX')
+    this.SELECTED_VIEW_FIRX = { index: i, data: data };
+  }
+  SELECTED_DEBIT_AMOUNT: any = [];
+  _VIEW_DEBIT_AMOUNT(i, data: any, SbItem: any) {
+    this.SELECTED_DEBIT_AMOUNT = { index: i, data: data, SbItem: SbItem };
+    console.log(data, SbItem, '_VIEW_DEBIT_AMOUNT')
+  }
+  _DEBIT_AMOUNT(i, data: any, event: any) {
+    $('.debitAmount').prop('checked', false);
+    $(event.target).prop('checked', true);
+    this.FILTER_DATA.FILTER_COMMERCIAL["SB_" + this.SELECTED_DEBIT_AMOUNT?.SbItem][this.SELECTED_DEBIT_AMOUNT?.index]['debitAmount'] = data?.totalDebitAmount;
+    console.log(data, this.FILTER_DATA?.FILTER_COMMERCIAL["SB_" + this.SELECTED_DEBIT_AMOUNT?.SbItem], event, '_DEBIT_AMOUNT')
+  }
+  FIRX_CHECK(value: any) {
+    console.log(value, 'FIRX_CHECK')
+    if (this.OK_BUTTON_CONDITION == '' && this.Lodgement['AgainstAdvanceReceipt']['Show'] == 'yes') {
+      this.AprrovalPendingRejectService.CustomConfirmDialogModel.Notification_DialogModel('FIRX No. not Selected', `Please select firx no.`)
+    } else {
+      value.style.display = 'none';
+    }
+  }
+  ObjectLength(data) {
+    return Object.keys(data)?.length;
+  }
 }
 

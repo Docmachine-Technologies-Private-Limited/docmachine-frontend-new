@@ -1,0 +1,497 @@
+[
+    {
+        "SL_No": 1,
+        "Purpose": "Remittance towards getting \nTechnical Know How",
+        "RBI_Purpose_Code": "S0019",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1)Form A2 Cum Application\n2) 15 CA\/CB\n3) Self certified underlying docurnent evidencing bonafides of the transaction (Invoice\/Debit Note)",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA\/CB\n3)Self certified underlying docurnent evidencing bonafides of\nthe transaction (Invoice \/Debit Note)\n4) If amount is more than USD1 lac or equivalent and from\ninvoice its not apparent if know how have been received or not\nthen custormer declaration is required that know-how have\nbeen received. For remittance amount more than USD 1\nmillion, such declaration is required from CA\n5)Valuation Certificate from CAregarding value of the\nTechnical Know how fees.",
+        "Remarks_Guidance_Additional_Information": "Lump-sum payments on account of Technical know how are always in advance.",
+        "Referencees": ""
+    },
+    {
+        "SL_No": 2,
+        "Purpose": "Remittarnce of margin money\nand brokerage for Commodity\nHedging",
+        "RBI_Purpose_Code": "S0020",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1)Form A2 cum Application\n2)15 CA\/CB\n3Invoice raised by broker\/ financial institution\n4) AD approval for commodity hedging\n5) Underlying import\/export\/domestic order copy having quantitytallying with the remittance invoice. \n6) if remittance is done from SEZ a\/c then a declaration from remitter that the contract have been entered on standalone basis",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CACB\n3)Invoice raised by broker\/ financialinstitution\n4) AD approval for commodityhedging\n5) Underlying import export\/domestic order copy having\nquantity tallying with the remittance invoice\n6) If remittance is done from SEZ a\/c then a declaration from\nremitter that the contract have been entered on standalone\nbasis.",
+        "Remarks_Guidance_Additional_Information": "If remittance is from SEZ account then the underlying bill should also be lodged and processed from SEZ account and not from DTA account.",
+        "Referencees": "1)APDIR 68 dated 17.01.2012"
+    },
+    {
+        "SL_No": 3,
+        "Purpose": "Remittances within India",
+        "RBI_Purpose_Code": "S0092",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Application\n2)lf remittance is for invoice substitution\/Transfer LC\ntransaction then underlying export bill.\n3) No extra documents ifremittance is from EEFC a\/c  EEFC a\/c with other AD\n4) Ifremittance is rerouting of export proceeds to other AD, then MT910 of the export bill reference number\/WID number of export\/IRM realisation is required to be submitted. Compliance officer to ensure that no PCFC is outstanding in our bank before re-routing any export bill\/export advance to other.\n5) If remittance is towards utilisation of forward contract with other bank self-declaration from customer should be obtained in this regard\n",
+        "Value_greater_25000_equv": ")Application\n2) If remittance is for invoice substitution\/Transfer LC\ntransaction then underlying export bill.\n3) No extra documents ifremittance is from EEFC a\/c to EEFC\na\/c with other AD\n4) Ifremittance is rerouting of export geceeds to other AD,\nthen MT910 of the export bill reference number\/ WID number\nof export\/1RM realisation is required to be submitted.\nCompliance officer to ensure that no PCFC is outstanding in\nour bank before re-routing any export bill\/ export advance to\nother bank.\n5) If remittance is towards utilisation of forward contract with\nOther bank,self-declaration from customer should be obtained\nin this regard",
+        "Remarks_Guidance_Additional_Information": "1)Application\n2) If remittance is for invoice substitution\/ Transfer LC transaction then underlying export bill.\n3) No extra documents if remittance is from EEFC a\/c to EEFC a\/c with other AD\n4) If remittance is rerouting of export proceeds to other AD, then MT910 of the export bill reference number\/ WID number of export\/IRM realisation is required to be submitted. Compliance officer to ensure that no PCFC is outstanding in our bank before re-\nrouting any export bill\/ export advance to other bank.\n5) If remittance is towards utilisation of forward contract with other bank, self-declaration from customer should be obtained in this regard",
+        "Referencees": "Form A2 is not required as S0092 is cover page total and not\nmentioned in list of purpose code attached in Form A2."
+    },
+    {
+        "SL_No": 4,
+        "Purpose": "Remittance of Net Remittable surplus of foreign\nshipping companies or their agents in India",
+        "RBI_Purpose_Code": "S0201",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/CB\n3) Certified copy of the Voyage account.\/Disbursement\naccount\n4)SPM2 or CA\/CFO certificate endorsing collection\/disbursementamount",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/CB\n3) Copy of agency agreement (one time till expiry date) or\napplicable declaration as mentioned in branch checklist point no. 4. \n4) Certified copy of the Voyage account \/ Disbursement account.\n5) SPM 2 or CA\/CFO certificate endorsing collection\/ disbursement\namount",
+        "Remarks_Guidance_Additional_Information": "Approval from Ministry of Surface Transport\n(Director of General of Shipping) is required for remittance of container A.D.\ndetention charges exceeding the rate prescribed by Director General of Shipping.",
+        "Referencees": "Paragraph 7 v. of Annexure I to A.D.(M.A.Series) Circular No.11 dated\n16\/05\/2000.\n"
+    },
+    {
+        "SL_No": 5,
+        "Purpose": "Remittance by Multimodal\nTransport Operators (MTOs) to\ntheir Overseas Agents",
+        "RBI_Purpose_Code": "S0202",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) Copy of Registration Certificate issued by the Director General of Shipping (One time till expiry date)\n3) Invoice \/ Demand Letter from Overseas agent",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) Copy of Registration Certificate issued by the Director General\nof Shipping (One time till expiry date)\n3) Invoice \/ Demand Letter from Overseas agent\n4) Agency agreement (one time till expiry) or applicable declaration\nas mentioned in branch checklist point no. 4.\n5) CA\/CFO certificate for calculation of payable\n6) Non negotiable copy of Multimodal Transport Document as\napproved by DGS",
+        "Referencees": "1. Paragraph 7 v. of Annexure I to\nA.D.(M.A.Series) Circular No. 11 dated\n16\/05\/2000."
+    },
+    {
+        "SL_No": 6,
+        "Purpose": "Remittance towards cash to\nmaster by Ship managing\/ Crew\nManaging agencies in India of\nForeign Shipping",
+        "RBI_Purpose_Code": "S0202",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) Invoice\/ demand note.\n3) Agreement between the ship managing\/ crew managing agent and their principal should also be called for so as to and t\ncheck if account is maintained only during validity period account\nof the agreement. In absence of agreement, applicable In absence of declaration as per branch checklist point no. 4 can be check\nobtained.",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) Invoice\/ demand note.\n3) Agreement between the ship managing\/ crew managing agent designa\nand their principal should also be called for so as to check if permiss\naccount is maintained only during validity period of the agreement. 30.04.2\ndate.In absence of agreement, applicable declaration as per branch\nchecklist point no. 4 can be obtained.",
+        "Remarks_Guidance_Additional_Information": "TFC Compliance Officer to ensure that the remittance is against inward remittance received and is from specially designated account which is opened under general\npermission as per APDIR 48 dated 30.04.2007 post 30.04.2007 and with prior approval from RBI before this date.",
+        "Referencees": "AP DIR Series Circular No.48 Dated 30th April 2007"
+    },
+    {
+        "SL_No": 7,
+        "Purpose": "Operating exenses of shipping company (Indian)eg supply of stores\/bunkers\/crew payments",
+        "RBI_Purpose_Code": "S0202",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) Invoice\/ demand note.\n3)Bunker delivery note(In case of bunker supply)\n\/Fuel delivery challan",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) Invoice\/ demand note.\n3)Bunker delivery note(In case of bunker supply)\n\/Fuel delivery challan",
+        "Remarks_Guidance_Additional_Information": "If beneficiary account is designatedFCY account opened in the name of remitter shipping company abroad then\ndetailed scrutiny is not warranted"
+    },
+    {
+        "SL_No": 8,
+        "Purpose": "Remittance of freight premaid on\nInward consolidation of cargo\nby Air or by seas",
+        "RBI_Purpose_Code": "S0209(AIR)\ns0203(Sea)\n",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA\/CB\n3) Self certified underlying document evidencing bonafides \n4) Declaration on the letter head of the remitting company declaring (a) the list of BL\/AWB nos, date, port of loading &amp; branc\nport of discharge (b) Undertaking to provide the copies of BL\/AWB whenever there is a demand from  CA\/ regulator\/auditor\/bank and (c) Indemnifying the bank for any wrong declaration\/statement",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA\/CB\n3) Self certified underlying document evidencing bonafides of the\ntransaction (Invoice \/ Debit Note)\n4) Agreement\/ contract or applicable declaration as mentioned in\nbranch checklist point no 4.\n5) Copies of prepaid transport document (AWB \/ B\/L)\n6) CA\/CFO Certificate for amount more than USD 1 Lac or\nequivalent of invoices or underlying (Excp. PSUs\/Govt. Institutions)\ncontaining calculation of remittable amount [BBI Format]",
+        "Remarks_Guidance_Additional_Information": "If the freight is collected in a special FCY Account opened 1. Paras\nfor this purpose and then the payment should be made by A.D.(M\ndebit to this account in line with the approval given by RBI 16\/05\/2\nfor opening of the account. If freight is collected in INR then Treasur\nthe remittance should be by debit to the INR Account."
+    },
+    {
+        "SL_No": 9,
+        "Purpose": "Remittance of break-Bulk agents\nremuneration on consolidation\nof outwards sea\/air cargo",
+        "RBI_Purpose_Code": "S0204(Sea)\nS0210(Air)",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA\/CB\n3) Self certified underlying document evidencing bonafides \nof the transaction (invoice \/Debit Note)\n",
+        "Value_greater_25000_equv": ") Form A2 cum Application\n2) 15 CA\/CB\n3) Self certified underlying document evidencing bonafides of the\ntransaction (Invoice\/ Debit Note)\n4) Copies of prepaid transport document (AWB \/ B\/L)\n5) Agreement\/ contract or applicable declaration as mentioned in\nbranch checklist point no 4\n6) CA\/CFO Certificate for amount more than USD 1 Lac or\nequivalent of invoices or underlying (Excp. PSUs\/Govt. Institutions)\ncontaining calculation of remittable amount [BBI Format]",
+        "Remarks_Guidance_Additional_Information": "If the freight is collected in a special FCY Account opened Para for this purpose and then the payment should be made by Circo\ndebit to this account in line with the approval given by RBI 1 .for opening of the account. If freight is collected in INR then\nthe remittance should be by debit to the INR Account."
+    },
+    {
+        "SL_No": 10,
+        "Purpose": "Payments of freight in foreign\ncurrency by Indian exporters\/Importers Airline\n\/Shipping companies to their Agents in India",
+        "RBI_Purpose_Code": "S0203(Import by Sea)\nS0204(Exort by Sea)\nS0209(Import By Air)\nS0210(Export by Air)",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA\/CB\n3)Self certified underlying document evidencing bonafides 3) Self\nof the transaction (Invoice \/ Debit Note)\n4) Approval from Ministry of Surface Transport (Chartering Wing ) is required if remittance of freight of vessel chartered by PSU or Govt. Department.",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA\/CB\n3) Self certified underlying document evidencing bonafides of the Bank\ntransaction (Invoice\/ Debit Note)\n4) Copy of Airway Bill\/ Bill of Lading\n5) Approval from Ministry of Surface Transport (Chartering Wing ) is of re\nrequired if remittance of freight of vessel chartered by PSU or\nGovt. Department.\n6) Charter party agreement if freight on B\/L is payable as per\ncharter party",
+        "Remarks_Guidance_Additional_Information": "1) For advance freight payment below USD 100000 only invoice is required to be submitted, above USD 1 Lac D&amp;B\nBanker's report\/Experian and FBG are required.\n2)Freight payment to Local agents\/local shipping company agent in FCY, only allowed if remittance from EEFC account\nof remitter.",
+        "Referencees": "1.Paragrah 31. and v. of schedule to notification\nno.FEMA\/10\/2000-RB dated 3rd May2000"
+    },
+    {
+        "SL_No": 11,
+        "Purpose": "Remittance towards security deposit on acquisiton of aircraft\nby airlien companoes on operating \nlease",
+        "RBI_Purpose_Code": "S0211",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) Invoice\/ demand note.\n3) 15 CA\/CB\n4) Signed copy of Lease agreement\n5) Certified true copy of the approval by Ministry of Civil Aviation\/Director General of Civil Aviation,Government of India for importing the aircraft\/helicopter on operating lease.\n6) In case of an airline company in the Public\nSector or a Department \/ Undertaking of the\nGovernment of India \/ State Government\/s, AD'S may permit remittance of amount exceeding USD 100,000 (US Dollar one hundred thousand only) per aircraft towards security deposit (for payment of lease rentals) with lessor, specific waiver of bank\nguarantee from the Ministry of Finance,\nGovernment of India.",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) Invoice\/ demand note.\n3) 15 CA\/CB\n4) Signed copy of Lease agreement\n5) Certified true copy of the approval by Ministry of Civil\nAviation\/Director General of Civil Aviation, Government\nIndia for importing the aircraft\/helicopter on operating\nlease.\n6) Ingase of an airline company in the Public Sector or a\nDepartment \/ Undertaking of the Government of India \/\nState Government\/s, ADs may permit remittance of\namount exceeding USD 100,000 (US Dollar one hundred\nthousand only) per aircraft towards security deposit (for\npayment of lease rentals) with lessor, specific\nwaiver of\nbank guarantee from the Ministry of Finance,\nGovernment\nof India.",
+        "Remarks_Guidance_Additional_Information": "Financial lease transaction i.e. the lease\ntransaction containing option to purchase the asset\nat the end of the lease period requires prior\napproval from the Reserve Bank of India.",
+        "Referencees": "A.P.DIR series circular no.13\ndated 27Sept2005"
+    },
+    {
+        "SL_No": 12,
+        "Purpose": "Remittance of operational Leasing\/Rental of vessel with cre for shipping companies\nor Airline companies",
+        "RBI_Purpose_Code": "S0211(Airline Companies\nS0205(Shipping Companies)",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/CB\n3) Invoice \/ Debit note.\n4) Lease \/ rent agreement or applicable declaration\nstating description of services rendered by the\nbeneficiary\n5) Approval for DG Civil Aviation in case of Aircraft hirel ship\nDG shipping approval in case of vessel (ship) hire.",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA \/ CB\n3) Invoice \/ Debit note.\n4) Lease \/ rent agreement or applicable declaration stating\ndescription of services rendered by the beneficiary.\n5) Approval for DG Civil Aviation in case of Aircraft hire\/ DG\nshipping approval in case of vessel (ship) hire.",
+        "Remarks_Guidance_Additional_Information": "It should be verified and ensured that after lease period,equipment\/ vessel does not change the ownership from March\nlessor to lessee. Otherwise it will be treated as \"financial leasing and ECB regulations may apply for a financial lease transaction or it may be treated as import on deferred terms.",
+        "Referencees": "A.P.DIR Circular No.24 dated 1st March 2002 \nand APDIR 27September2005"
+    },
+    {
+        "SL_No": 13,
+        "Purpose": "Remittance of Surplus Passage\/\nFreight(Foreign Airline Companies)",
+        "RBI_Purpose_Code": "S0207",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA \/ CB\n) Self certified underlying document \n(Agency agreement \/Invoice\/Debit Note\/Demand Notice etc )\n4) DGCA approval\n5) SPM1 or CAICFO Certificate endorsing\/ verifying surplus amount.",
+        "Value_greater_25000_equv": ") Form A2 cum application\n2) 15 CA \/ CB\n3) Self certified underlying document (Agency agreement\n\/Invoice\/Debit Note\/Demand Notice etc)\n4) DGCA approval\n5) SPM1 or CA\/CFO Certificate endorsing\/ verifying surplus\namount.\n6) Certified copy of collection and disbursement statement.",
+        "Remarks_Guidance_Additional_Information": "DGCA approval is called for in both Online and Offline Carrier i.e those airlines not operating in India but are issuing tickets \/ airway bills in India",
+        "Referencees": "Paragraph 7v.Annexure I to AD(M.A Series)Circular Dated 16\/05\/2000\n"
+    },
+    {
+        "SL_No": 14,
+        "Purpose": "Remittances of Demurrage\n(In respect of export\/Import)",
+        "RBI_Purpose_Code": "s0214(Shipping)\ns02215(Airlines)",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA \/ CB\n3) Self certified underlying document (Invoice\/Debit\nNote\/Demand Notice etc)\n4) Work sheet for demurrage calculation (if not\nmentioned on invoice)\n5) Copy of Bill of Lading\n6) Lay time statement \/ statements of facts or Survey report",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA \/ CB\n3) Self certified underlying document (Invoice\/Debit\nNote\/Demand Notice etc)\n4) Work sheet for demurrage calculation (if not\nmentioned on invoice)\n5) Copy of Bill of Lading\n6) Lay time statement \/ statements of facts or Survey report\n7) Charter Party Agreement (in cases where there is a specific\nreference of Charter Party Agreement in the sale \/ purchase\ncontract)",
+        "Remarks_Guidance_Additional_Information": "If the remittance is made by Central \/ Stats Govt. or PSU or 1. Par Autonomous bodies and the terms are different from FOB A.D. (r\n\/ FAS imports then NOC from Ministry of Surface Transport 16\/05\/2000 needs to be insisted upon.",
+        "Referencees": "1.Paragragh 7v.of annexureI to\nA.D.(M.A.Series)Circular No.11\ndated 16\/05\/2000"
+    },
+    {
+        "SL_No": 15,
+        "Purpose": "Remittance towards General Average by Exporter",
+        "RBI_Purpose_Code": "S0214 ",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2)15 CA \/ CB\n3) Invoice\/ debit note\n3) Invoice\n4) Letter signed by Master of vessel declaring General 4) Letter\nAverage and mentioning the name of \"Average Adjuster\".\n5) Demand of amount from Average Adjuster\n6) Declaration from customer confirming (a) the reason 6) Decla\nfor not claiming the insurance.... (b) Status of export claiming\namount if realised\/un-realised... (c) the goods will be realised\/\nreimported and reimport documents to be submitted reimport\nwithin 3 month....",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2)15 CA \/ CB\n3) Invoice\/ debit note\n4) Letter signed by Master of vessel declaring General Average decl\nand mentioning the name of 'Average Adjuster\"\n5) Demand of amount from Average Adjuster.\n6) Declaration from customer confirming (a) the reason for not\nclaiming the insurance.... (b) Status of export amount if\nRBI realised\/un-realised... (c) the goods will be reimported and\nreimport documents to be submitted within 3 month....",
+        "Remarks_Guidance_Additional_Information": "1) Definition of General Average :- The\nexporter ships the goods via sea to supplier. If voyage gets damaged due to\nfire or explosion or any other reason then ship owner may declare General Average and Average Adjuster demands\ncost to release goods of those exporters whose materials are safe.\n2) Realisation\/ Write off of export bills to be strictly as per RBI guidelines....",
+        "Referencees":""
+    },
+    {
+        "SL_No": 16,
+        "Purpose": "Remittance of Gold Premium",
+        "RBI_Purpose_Code": "S0214",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA\/CB\n3) Self certified underlying document evidencing bonafides of the\ntransaction (Invoice \/ Demand letter \/One-time order copy \/Agreement\/Contract)\n4) Undertaking by the customer that gold premium cost is not included in BOE\n5) Transport document i.e. AWB.",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA\/CB\n3) Self certified underlying document evidencing bonafides of the\ntransaction (Invoice \/ Demand letter \/One-time order copy \/Agreement\/Contract) \n4) Undertaking by the customer that gold premium cost is not\nincluded in BOE\n5) Transport document i.e. AWB.",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees":""
+    },
+    {
+        "SL_No": 17,
+        "Purpose": "Remittance of Detention",
+        "RBI_Purpose_Code": "S0217",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3) Detention Statement by Shipping Company\n4) Customer declaration stating the figures in the Detention Statement and the rates are not exceeding the rate prescribed by Director General of Shipping (Annual begining of the year)",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3) Detention Statement by Shipping Company\n4) CA's certificate certifying the figures in the Detention Statement and the rates are not exceeding the rate prescribed by Director General of Shipping (Annual begining of the year)",
+        "Remarks_Guidance_Additional_Information": "Ministry of Surface Transport (Director General of\nShipping) approval is required for Remittance of container\ndetention charges exceeding the rate prescribed by\nDirector General of Shipping",
+        "Referencees":""
+    },
+    {
+        "SL_No": 18,
+        "Purpose": "Remittance of feeder payments\/\nslot hire charges on vessels",
+        "RBI_Purpose_Code": "S0217",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3)Self certified underlying documents evidencing\nbonafides of the transaction(invoice\/demand Note)\n4)SPM 4 or statement of the feeder payments,certified by CA\/Cfo",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3)Self certified underlying documents evidencing\nbonafides of the transaction(invoice\/demand Note)\n4)SPM 4 or statement of the feeder payments,certified by CA\/Cfo",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees":""
+    },
+    {
+        "SL_No": 19,
+        "Purpose": "Remittance towards handling charges by customers who are in business of shipping\nlines\/freight forwarders",
+        "RBI_Purpose_Code": "S0217",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3)Self certified underlying documents evidencing bonafides of the transaction(invoice\/demand Note)",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3)Self certified underlying documents evidencing bonafides of the transaction(invoice\/demand Note)\n4)Copy of transport\/despatch document\n5)Agency agreement(one time basis)or applicable\ndeclaration as mention\n6)If amount exceed USD1Lakh, C.A certificate is required to the \neffect that amount of remittance applied for has been\nchecked with reference to invoices received from ovetrseas company and invoices raised by the indian Company and applicabl rates and the amount applied for has been found correct",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "1.Paragraph 6 of annexure 1 toA.D.\n(M.A.Series)Circular No.11 dated 16\/05\/2000"
+    },
+    {
+        "SL_No": 20,
+        "Purpose": "Remittance to foreign courier\ncompanies by Infdian courier Company",
+        "RBI_Purpose_Code": "S0222\/S0223\/S0224",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3)Self certified underlying documents evidencing bonafides of the transaction(invoice\/demand Note)",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3)Self certified underlying documents evidencing bonafides of the transaction(invoice\/demand Note)\n4)Copy of transport\/despatch document\n5)Agency agreement(one time basis)or applicable\ndeclaration as mention\n6)If amount exceed USD1Lakh, C.A certificate is required to the \neffect that amount of remittance applied for has been\nchecked with reference to invoices received from ovetrseas company and invoices raised by the indian Company and applicabl rates and the amount applied for has been found correct",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "1.Paragraph 6 of annexure 1 toA.D.\n(M.A.Series)Circular No.11 dated 16\/05\/2000"
+    },
+    {
+        "SL_No": 21,
+        "Purpose": "Remittance towards expenses of Projects by a corporate having awarded a project in foreign \ncountry",
+        "RBI_Purpose_Code": "S0501",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2. cum application\n2) Invoice \/ debit note\n3) In case of project exports, copy of the approval (endorsed for remittances made) given by AD\/working group for this expenses\n4) A declaration from the applicant that the total amount remitted till now along with this request is not exceeding the amount permitted by the working group\/AD.\n5) Agreement\/contract or applicable declaration as mentioned in branch checklist point no.4\n6) Branch to maintain a table of remittances made against each cost wise breakup and furnish with each transaction.\n7) If payment is directly going to goods\/ services supplier, then 15CA\/CB are required to be submitted.",
+        "Value_greater_25000_equv": "1) Form A2. cum application\n2) Invoice \/ debit note\n3) In case of project exports, copy of the approval (endorsed for\nremittances made) given by AD\/working group for this expenses\n4) A declaration from the applicant that the total amount\nremitted till now along with this request is not exceeding the\namount permitted by the working group\/AD.\n5) Agreement contract or applicable declaration as mentioned in\nbranch checklist point no 4\n6) Branch to maintain a table of remittances made against each\ncost wise breakup and furnish with each transaction.\n7) If payment is directly going to goods\/ services supplier, then\n15CA\/CB are required to be submitted.",
+        "Remarks_Guidance_Additional_Information": "Prior to 22.07.2014, for project cost above USD 100 million, 1. AP working group (consist of Exim Bank, RBI and ECGC) used co give approval but vide APDIR 11 dated 22.07.2014, RBI has allowed AD to consider awarding post award approval without any monetary limit.",
+        "Referencees": "1. APDIR 32 dated 28.10.2003.\n2. APDIR 11 dated 22.07.2014."
+    },
+    {
+        "SL_No": 22,
+        "Purpose": "Remittance towards reinsurance\npremium by insurance company",
+        "RBI_Purpose_Code": "S0603",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA \/ CB.\n3) Self certified underlying document (Invoice \/ debit note\n4) Undertaking\/declaration on the letter head of Insurance company declaring that (a) The Remittance is per the agreement with the Reinsurance Partner &amp; IRDA (b) re\nguidelines and (b) reinsurance business is within the overall reinsurance business approved by their board in (inclu\nconsultation with IRDA (included in the form A2 cum application)",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA \/ CB.\n3) Self certified underlying document (Invoice\/debit note)\n4) Undertaking\/declaration on the letter head of Insurance\ncompany declaring that (a) The Remittance is as per the\nagreement with the Reinsurance Partner &amp; IRDA guidelines and\n(b) reinsurance business is within the overall reinsurance\nbusiness approved by their board in consultation with IRDA\n(included in the form A2 cum application)",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "RBI AP(DIR)Circular No.18 dated\nSeptember 12,2002"
+    },
+    {
+        "SL_No": 23,
+        "Purpose": "Remittance towards reinsurance\npremium by insurance broker",
+        "RBI_Purpose_Code": "S0603",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2)15 CA\/CE.\n3) Certified copy of demand\nletter\/invoice Agreement\/Contract\n4) Any documentary proof evidencing arrangement between insurance company and reinsurance company evidencing our party role as broker\n5) Supporting documents to substantiate that the applicant\/broker is registered with IRDA\n6) When Insured and Insurance Companies are located in India and reinsurance company is located outside then below mentioned documents are required :-\na) Proof that Axis Bank is designated AD by Insurance Comppay\nb) Detailed statement of premia settled by the\ninsurance company.\nc) Certificate from insurance company that their reinsurance business is within the overall reinsurance business approved by their board in consultation with IRDA\nd) A Certificate from the CA of the local broker certifying that statement prepared by him is on the basis of certificates and statements obtained from the insurance company\n7) When Insured and Insurance company are located outside India and reinsurance company is located in India then remittance can be made from EEFC account\nagainst the proof of inward remittance of reinsurance premium \na) outward ren:ittance can be permitted against proof of inward remittance.\nb) An invoice rased by our party on remitter and duly accepted by them needs to be submitted.\nc) The outward remittance should not exceed the rupee equivalent of the inward  remittance.",
+        "Value_greater_25000_equv": "1) Form A2 oum application\n2) 15 CA\/CB.\n3) Cartified copy of demand letter invoice Agreement\/Contract\n4) Any documentary proof evidencing arrangement between\ninsurance company and reinsurance company evidencing our\nparty role as braker\n5) Supporting documents to substantiate that the\napplicant\/broker is registered with IRDA\n6) When Insured and Insurance Companies are located in India\nand reinsurance company is located outside then below\nmentioned documents are required :-\na) Proof that Axis Bank is designated AD by Insurance Compnay.\nb) Detailed statement of premia settled by the insurance\ncompany .\nc) Certificate from insurance company that their reinsurance\nbusiness is within the overall reinsurance business approved by\ntheir board in consultation with IRDA\nd) A Certificate from the CA of the local broker certifying that\nstatement prepared by him is on the basis of certificates and\nstatements obtained from the insurance company.\n7) When Insured and Insurance company are located outside\nIndia and reinsurance company is located in India then\nremittance can be made from EEFC account against the proof of\ninward remittance of reinsurance premium.\n18] When Insured, Insurance company and reinsurance company\nall are located outside India then\nla) outward remittance can be permitted against proof of\ninward remittance,\nb) An invoice raised by our party on remitter and duly accepted\nby them needs to be subcatted,\nc) The outward remittance should not exceed the rupee\nequivalent of the inward\nremittence.",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "RBI AP(DIR Series)Circular No.18 dated September 12,2002"
+    },
+    {
+        "SL_No": 24,
+        "Purpose": "Remittance of insurance premium towards general insurance policies taken by the  customer",
+        "RBI_Purpose_Code": "S0603",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/CB\n3) Invoice \/ Demand Notice\n4)Copy of policy document",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/CB\n3) Invoice \/ Demand Notice\n4)Copy of policy document",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "A.P DIR 8dated 13.01.2001\nA.PDIR 18 dated 12.09.2002\nPara A.6 OF Master Direction-Insurance"
+    },
+    {
+        "SL_No": 25,
+        "Purpose": "Claim on Insurance on export\/Import\/merchant Trade by\nInsurance Companies",
+        "RBI_Purpose_Code": "s0607",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3) Invoice\/ debit note\n4) Statement of claim duly certified by an official authorised by Insurance company registered with IRDA for this purpose.\n5) Insurance policy\n6) Survey report or other customary proof of loss\n7) Bill of lading \/ Airway Bill",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3) Invoice\/ debit note\n4) Statement of claim duly certified by an official authorised by Insurance company registered with IRDA for this purpose.\n5) Insurance policy\n6) Survey report or other customary proof of loss\n7) Bill of lading \/ Airway Bill",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "A.P DIR 8dated 13.01.2001\nA.PDIR 18 dated 12.09.2002\nPara A.6 OF Master Direction-Insurance"
+    },
+    {
+        "SL_No": 26,
+        "Purpose": "Brokerage Fee by Mutual Fund\/Insurance\nCompanies In india",
+        "RBI_Purpose_Code": "s0702",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Note)",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Note)\n4)Agreement\/Contract or applicable declaration as mentioned",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": ""
+    },
+    {
+        "SL_No": 27,
+        "Purpose": "Maintainance\/Annual serivice\nCharges for Imported Machinery\n\/Software Etc",
+        "RBI_Purpose_Code": "S0804",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Note)",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3) Self certified underlying document evidencing bonafides\nof the transaction (Invoice \/ Debit Note)\n4) Agreement contract or applicable declaration as\nmentioned in branch checklist point no 4\n5) Documentary evidence to ensure that the machinery\/\nequipment \/ software has been actually imported into\nIndia.(Bill of entry etc).\n6) Customer declaration to the effect that the machinery \/\nsoftware not covered under any warranty \/ guarantee\nperiod.",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "1.Pragraph 6 of Annexure 1 to\nA.D(M.A Series)Circular No.11\ndated 16\/05\/2000"
+    },
+    {
+        "SL_No": 28,
+        "Purpose": "Remittance of Subcription Fee\n(remitter own use)",
+        "RBI_Purpose_Code": "S0806",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Demand letter)",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Demand letter)",
+        "Remarks_Guidance_Additional_Information": "1) Remittance of magazine subscription by recognized agents require agreement copy, invoice price list, CA\ncertificate on the working provided by the remitter and undertaking stating that all the remittances are being routed\nthrough one Authorized Dealer only.\n2) Remittance for purchase of banned or prescribed books\/ magazines is not permitted.",
+        "Referencees": "Refer schedule I,II,III of RBI\nMaster Direction on Misc Remittances"
+    },
+    {
+        "SL_No": 29,
+        "Purpose": "Remittance of Subcription Fee\n",
+        "RBI_Purpose_Code": "S0806",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Demand letter)",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Demand letter)",
+        "Remarks_Guidance_Additional_Information": "Remittance for membership of \nProtection&amp;Indemnity club requires approval from Ministry of Finance(insurance division)",
+        "Referencees": "Refer schedule I,II,III of RBI\nMaster Direction on Misc Remittances"
+    },
+    {
+        "SL_No": 30,
+        "Purpose": "Telecommunication Services\nincluding electronic mail services\nand voice mail services",
+        "RBI_Purpose_Code": "S0808\/0802",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Note)\n4)Copy of the approval from Govt Of India Ministry of communications for setting up of ICC",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Note)\n4)Copy of the approval from Govt Of India Ministry of communications for setting up of ICC\n5)Agreement \/contract or applicable declarations as mentioned",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "1.Paragraph 6 of annexure 1 toA.D.\n(M.A.Series)Circular No.11 dated 16\/05\/2000"
+    },
+    {
+        "SL_No": 31,
+        "Purpose": "Transponder Fees",
+        "RBI_Purpose_Code": "S0808\/0809",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Note)\n4)Ministry of Information &amp;Broadcasting approval letter.Ministry letter to contain details of charges permitted to be paid as lease rentals\n",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Note)\n4)Ministry of Information &amp;Broadcasting approval letter.Ministry letter to contain details of charges permitted to be paid as lease rentals\n",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "1.FEMA GOI-Notification G.S.R.(381.E)\nSchedule II item6\n2.Master Direction on Misc remittances Schedule\nII,Item 6"
+    },
+    {
+        "SL_No": 32,
+        "Purpose": "Electronic Data Base Costs\/\nComputer connect\/time charges\/hit charges",
+        "RBI_Purpose_Code": "S0809\/0808",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "1.Paragraph 6 of annexure 1 toA.D.\n(M.A.Series)Circular No.11 dated 16\/05\/2000"
+    },
+    {
+        "SL_No": 33,
+        "Purpose": "Franchise Services",
+        "RBI_Purpose_Code": "s0901",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4)Franchise agreement or applicable declaration as mentioned\n5)CA cerificate in respect of amount payable and details\nof calculations shoudl be obtained",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "1) A.P (DIR Series) Circular No.76 Dt. February\n24, 2004.\n2) A.P (DIR Series) Circular No. 14 Dt.\nNovember 28, 2006 (to review this and its\napplicability here)"
+    },
+    {
+        "SL_No": 34,
+        "Purpose": "Registration charges for Patents \/\nTrade Marks\/\nFees for certification",
+        "RBI_Purpose_Code": "S0902",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4) Agreement having license fee or royalty mentioned in it 12) Lice\nor or applicable declaration as mentioned in branch\nchecklist point no 4.\n5) CA Certificate in respect of amount of royalty payable and\ndetails of calculation should be obtained.\n6) Valuation Certificate from CA\/CFO regarding the value of\nLicense Fee.",
+        "Remarks_Guidance_Additional_Information": "1) License fee is paid upfront to use a name or item 1. Paragraph 6 of Annexure\nand Royalty is a percentage of the money made by selling the item.\n\n\n2) License Fee is always in advance.",
+        "Referencees": "1. Paragraph 6 of Annexure\n1A.D. (M.A.Series) Circular No.11 dated\n16\/05\/2000\n2. A P (DIR Series) Circular No 34 (Nov 14,2003)\n3. A P (DIR Series) Circular No.5 (July 21,\n2003)\n4. A.P (DIR Series Circular No 76 (dated 24\nFebruary 2004)"
+    },
+    {
+        "SL_No": 35,
+        "Purpose": "Remittance of Royalties\/License\nFees",
+        "RBI_Purpose_Code": "S0902",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4) Agreement having license fee or royalty mentioned in it 12) Lice\nor or applicable declaration as mentioned in branch\nchecklist point no 4.\n5) CA Certificate in respect of amount of royalty payable and\ndetails of calculation should be obtained.\n6) Valuation Certificate from CA\/CFO regarding the value of\nLicense Fee.",
+        "Remarks_Guidance_Additional_Information": "1) License fee is paid upfront to use a name or item 1. Paragraph 6 of Annexure\nand Royalty is a percentage of the money made by selling the item.\n\n\n2) License Fee is always in advance.",
+        "Referencees": "1. Paragraph 6 of Annexure\n1A.D. (M.A.Series) Circular No.11 dated\n16\/05\/2000\n2. A P (DIR Series) Circular No 34 (Nov 14,2003)\n3. A P (DIR Series) Circular No.5 (July 21,\n2003)\n4. A.P (DIR Series Circular No 76 (dated 24\nFebruary 2004)"
+    },
+    {
+        "SL_No": 36,
+        "Purpose": "Agency Commission on Exports:\nRemitted by Exporter\/Commission Agent\/Indenting Agent",
+        "RBI_Purpose_Code": "S1002",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB.\n3) Self certified underlying document evidencing bonafides of the transaction (Invoice \/ Debit Note)\n4) Copy of EDF\/PP\/SOFTEX form\n5) Valid agreement \/ written understanding\nbetween exporter\/Commission\/Indenting Agent and\/or beneficiary of payment of agency\ncommission only if agency commission is not\ndeclared in EDF\/PP\/SOFTEX Forms) and customer letter stating reason for not declaring the commission on EDF\n6) If multiple GR\/SDF\/PP\/SOFTEX\nforms are there then an excel containing\ndetails of this commission amount certified by customer along with declaration from the branch that all SB copies are in branch\nrecords and NO OFAC country involved and total of commission on SB copies tally with the remittance amount, can be submitted.\n7) In case export bill handled by a different AD\nBank, NOC from that AD",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB.\n3) Self certified underlying document evidencing bonafides\nof the transaction (Invoice \/ Debit Note)\n4) Copy of EDF\/PP\/SOFTEX form\n5) Valid agreement \/ written understanding between\nexporter\/Commission\/Indenting Agent and\/or beneficiary\nof payment of agency commission only if agency\ncommission is not declared in EDF\/PP\/SOFTEX Forms) and\ncustomer letter stating reason for not declaring the\ncommission on EDF.\n6) If multiple GR\/SDF\/PP\/SOFTEX forms are there then an 도\nexcel containing details of this commission amount\nn certified by customer along with declaration from the\non branch that all SB copies are in branch records and NO OFAC\ncountry involved and total of commission on SB copies tally\nwith the remittance amount, can be submitted.\n7) In case export bill handled by a different AD Bank, NOC\nfrom that AD",
+        "Remarks_Guidance_Additional_Information": "1) Agency comm remittance can not be made in advance i.e. before export shipment has\nhappened...\n2) For remittance of agency commission by Indian exporter in respect of their exports covered counter trade arrangeemnt, para C.26 of Export Master Direction to be referred. Blf commission is not declared on SB and commission payment is exceeding 12.5 pct of goods FOB value (altowed limit by customs), customer has to give explanation along with declaration of surrender of incentives",
+        "Referencees": "References\n1. Para D.1 of A.P.(Dir Series) Circular No.12\ndated 09.09.2000.\n2.Para D.1 of AP DIR Series Circular No. 12\ndated 9th September 2000\n3. Master Circular No.14\/2014-15 on Exports\nof Goods and Services dated July 1st July,\n2014, para C.26"
+    },
+    {
+        "SL_No": 37,
+        "Purpose": "Agency Commission on Imports:\nRemitted by Importer\/Commission Agent\/Indenting Agent",
+        "RBI_Purpose_Code": "S1002",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4)Copy of BL\/AWB",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4)Agreement\/contract or applicable declaration as mentioned\n5)Copy of BL\/AWB",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "Para D.1 of A.P(Dir Series)\nCircular No.12 dated 09.09.2000"
+    },
+    {
+        "SL_No": 38,
+        "Purpose": "Remittance towards Warehouser charges",
+        "RBI_Purpose_Code": "S1002",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4)AD approval fpor hiring warehouse abroad",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4)AD approval fpor hiring warehouse abroad",
+        "Remarks_Guidance_Additional_Information": "1.The remittance towards rent of warehouse\nshould be made withing validity of AD approval\n2.All transaction should be routed thgrough only designatied branch of the AD Bank.Hence TFC Compliance officer to ensure that the remittance is made from the branch who has issued AD approval for warehouse hiring to exporter",
+        "Referencees": "Master Direction on export of goods and \nservices,Para B.13"
+    },
+    {
+        "SL_No": 39,
+        "Purpose": "Remittance towards payment of repairing cost incurred abroad on export done",
+        "RBI_Purpose_Code": "S1002",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4)EDF Copy",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4)EDF Copy",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": ""
+    },
+    {
+        "SL_No": 40,
+        "Purpose": "Remittance fpr charter party hir\ncharges in respect of foreign ship (also known as vessel)or foreign\naircraft on voyage charter basis without crew",
+        "RBI_Purpose_Code": "S1003(Airline Co)\nS1022(Shipping Co)",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA \/ CB\n3) Invoice from aircraft owner or ship owner or its agent.\n4) Charter party agreement or agreement for hire of aircraft.\n5) Approval for DG Civil Aviation in case of Aircraft hire\/ DG shipping approval in case of vessel (ship) hire\n6) In case of Remittance of freight of vessel\nchartered by a PSU. Approval from the government (Chartering Wing of Ministry of Surface Transport).",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA \/ CB\nengag\n3) Invoice from aircraft owner or ship owner or its agent.\n3) Charter party agreement or agreement for hire of aircraft.\n5) Approval for DG Civil Aviation in case of Aircraft hire! DG\nshipping approval in case of vessel (ship) hire.\n6) In case of Remittance of freight of vessel chartered by a\nOSU, Approval from the government Chartering Wing of\nMinistry of Surface Transport),",
+        "Remarks_Guidance_Additional_Information": "Compliance Officer to ensure that the vessel was engaged within the\" laycan\" time indicated in the approvals from DGS \/ TRANSCHART",
+        "Referencees": "GSR381€ dated 03May 2000 Schedule ii on current account transaction"
+    },
+    {
+        "SL_No": 41,
+        "Purpose": "Remittance of legal fee relating to court fee",
+        "RBI_Purpose_Code": "S1004",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4)Letter of appointment\/Task Order\/Work Order",
+        "Remarks_Guidance_Additional_Information": "If document as mentioned in point no.4\nis not furnished then detailed write up about the litigation\/arbitration,covering parties\/involved,reason of litigation\ndispute should be called for so that it could be ensured that the litigation\nis for permitted underlying transaction",
+        "Referencees": "1.Paragraph 6 of annexure 1 toA.D.\n(M.A.Series)Circular No.11 dated 16\/05\/2000"
+    },
+    {
+        "SL_No": 42,
+        "Purpose": "Remittance of consultancy service\/\nBusiness management Services\/\nFeasibility study of projects abroad\nor in India",
+        "RBI_Purpose_Code": "S1006",
+        "RBI_Limit": "USD1,000,000 per project \nUSD10,000,000 per project for\ninfrastructure",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3) Self certified underlying document evidencing bonafides of the transaction (Invoice \/ Debit Note)\n4) For feasibility study of projects abroad or in India i) Declaration to the effect that the remittance is no\nexceeding USD 100,000.00 per project.\nii) Declaration\/undertaking from the Indian\ncompany\/Firm (intending to set up N\/ WOS abroad).stating that they have not approached any other AD for this purpose and that all the remittances towards equity \/ loan towards the JV WOS will be remitted through Axis Bank and remittance will not be capitalised\n",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA\/CB\n3) Self certified underlying document evidencing bonafides of the transaction (Invoice \/ Debit Note)\n4) Underlying agreement contract or applicable declaration as mentioned in branch checklist point no 4\n5) For feasibility study of projects abroad or in India\nDeclaration to the effect that the remittance is not exceeding USD 100,000.00 per project\nii) Declaration\/undertaking from the Indian company\/Firm (intending to set up JV\/WOS abroad), stating that they have not\napproached any other AD for this purpose and that all the remittances towards equity \/ loan towards the IV\/WOS will be\nremitted through Axis Bank and remittance will not be capitalised\n6) If rights of any or both parties of agreement are assigned to third party then Assignment agreement is also required\n(specifically in case of Hotel payments).\n7) If remittance amount is more than USD 1 Lac then declaration from customer (if agreement furnished)\/CA certificate (if\nagreement not furnished) that services have been rendered and there is no element of advance.",
+        "Remarks_Guidance_Additional_Information": "1) Customer declaration as per point no 6 is not required if\nremittance is done from EEFC a\/c..\n2) Note :- Looking at the project for which consultancy is offered i.e. branch office\/ subsidiary, the remittance purpose\ncode and documentation will change........\n3) If amount is more than Usd 1 lac or equivalent and payment being done in advance then a FBG and opinion\nreports (D&amp;B\/ Experian\/Banker's report) are required as per treasury circular TREASURY\/1B\/04\/2012-13 dated\n07.05.2012. Waiver (if eligible) can be given upto Usd 5 lac by S&amp;P for cos other than public sector co. or dept.\/ undertaking\nof GOI\/ State Govt.",
+        "Referencees": "1. .Master Circular No.6\/2012-13\ndated July 1, 2014 Schedule III, Item 15.\n2. Internal circular TREASURY\/1B\/04\/2012-13\ndated 07.05.2012.\n3. AP\n(DIR Series) Circular No. 33 dated 13th\nNovember 2000\n4. AP (DIR\nSeries) Circular No. 46 dated 30th April 2007"
+    },
+    {
+        "SL_No": 43,
+        "Purpose": "Entry fee for international advertising festival\/\ntrade fair",
+        "RBI_Purpose_Code": "S1007",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3)Self certified underlying documents evidencing bonafides of the transaction(invoice\/demand letter)",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3)Self certified underlying documents evidencing bonafides of the transaction(invoice\/demand letter)",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": "1.Paragraph 6 of annexure 1 toA.D.\n(M.A.Series)Circular No.11 dated 16\/05\/2000"
+    },
+    {
+        "SL_No": 44,
+        "Purpose": "Advertisement in print media",
+        "RBI_Purpose_Code": "S1007",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3)Self certified underlying documents evidencing bonafides of the transaction(invoice\/demand letter)\n4)Undertaking from the custoimer stating that the remittance represents charges incurred by the corporate towards the telecast\/advt already been published in foreign countries and not in India alone and the amount due to overseas party for the telecast\/advt",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3)Self certified underlying documents evidencing bonafides of the transaction(invoice\/demand letter)\n4)Undertaking from the custoimer stating that the remittance represents charges incurred by the corporate towards the telecast\/advt already been published in foreign countries and not in India alone and the amount due to overseas party for the telecast\/advt(mandatory for USD1,00,000 equiv above)",
+        "Remarks_Guidance_Additional_Information": "Advt in foreign print media for the purpose other than promotion of tourism,\nforeign investments and international bidding(exceeding USD10,000)by a \nState Govt and its public Sector undertakings need approval letter from Ministry of Finance(Dept of Economic Affairs)GOI New Delhi",
+        "Referencees": "Schedule II of Master Direction on Misc Remittances"
+    },
+    {
+        "SL_No": 45,
+        "Purpose": "Marketing Servicing",
+        "RBI_Purpose_Code": "S1007",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n",
+        "Value_greater_25000_equv": ") Form A2 cum Application\n2) 15 CA\/CB\n3) Self certified underlying document evidencing bonafides of the\ntransaction (Invoice \/ Debit Note)\n4) Agreement\/contract or applicable declaration as mentioned in\nbranch checklist point no 4.\n5) If amount is more than USD 1 lac or equivalent and from invoice\nits not apparent if services have been rendered or not, then\ncustomer declaration is required that services have been rendered\nand there is no element of advance. If remittance amount is more\nthan USD 1 million, then such declaration is required from CA.",
+        "Remarks_Guidance_Additional_Information": "f amount is more than Usd 1 lac or equivalent and 1. Par\npayment being done in advance then a FBG and opinion A.D.(N\nreports (D&amp;B\/ Experian\/ Banker's report) are required as 16\/05\nper treasury circular TREASURY\/IB\/04\/2012-13 dated\n07.05.2012. Waiver (if eligible) can be given upto Usd 5 lac\nby S&amp;P for companies other than public sector co. or\ndept.\/ undertaking of Gol\/State Govt.",
+        "Referencees": "1. Paragraph 6 of Annexure 1 to\nA.D.(M.A.Series) Circular No. 11 dated\n16\/05\/2000."
+    },
+    {
+        "SL_No": 46,
+        "Purpose": "Research and Development Expenses",
+        "RBI_Purpose_Code": "S1008",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA \/ CB\n3)Self certified underlying documents evidencing bonafides of the transaction(invoice\/demand letter)\n4)agreement\/contract or applicable declaration as mentioned",
+        "Remarks_Guidance_Additional_Information": "",
+        "Referencees": ""
+    },
+    {
+        "SL_No": 47,
+        "Purpose": "Architectural Services",
+        "RBI_Purpose_Code": "S1009",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4)Customer Declaration required that no physical\ndesigns,drawings etc.,are coming in India",
+        "Value_greater_25000_equv": "1)Form A2 cum Application\n2)15 CA\/CB\n3)Self certified underlying document evidencing bonafides of\nhe transaction (Invoice \/ Debit Note)\n4) Agreement\/contract or applicable declaration as mentione\nbranch checklist point no 4\n5) Customer declaration required that no physical designs,\nrawings, etc are coming in India.\n6) If amount is more than USD 1 lac or equivalent and from\ninvoice its not apparent if services have been rendered or not,\nhen customer declaration is required that services have been\nendered and there is no element of advance. If remittance\namount is more than USD 1 million, then such declaration is\nrequired from CA",
+        "Remarks_Guidance_Additional_Information": "If the amount is more than USD1Lakh or equivalent and the payment being is in advance\nthen FBG and opinion reports are required as per circular.Waiver (if eligible)can be given upto USD5Lakh.&gt;5Lakhs RBI approval",
+        "Referencees": ""
+    },
+    {
+        "SL_No": 48,
+        "Purpose": "Opening of Branch office\/Representative\nOffice Abroad",
+        "RBI_Purpose_Code": "S1011",
+        "RBI_Limit": "1. To meet initial expenses: 15\npercent of the average annual\nsales \/income or turnover during last\ntwo accounting years of the\nIndian entity.\n2. Recurring expenses percent\nsuch average annual sales\/income or\nTurnover",
+        "Value_less_25000_equv": ") Form A2 cum application\n2) Copy of approval issued by AD to client for opening the\nbranch\/ representative office.\n3) CA certificate certifying that the amount of\ne remittances, including current remittance, during the\nfinancial year to all Branch\/Representative Offices is well\nwithin the overall ceiling approved by authorised dealer",
+        "Value_greater_25000_equv": "1) Form A2 cum application\nIfr\n2) Copy of approval issued by AD to client for opening the branch\/ def\nrepresentative office.\n3) CA certificate certifying that the amount of remittances,\nincluding current remittance, during the financial year to all\nBranch\/Representative Offices is well within the overall ceiling\napproved by authorised dealer",
+        "Remarks_Guidance_Additional_Information": "If remittance is made from EEFC account then\ncertificate as defined in point no.3 is not required",
+        "Referencees": "1.. Paragraph 6 of Annexure 1 to A.D.(M.A.Series) Circular No. 11 dated\n16\/05\/2000.\n2.Notification No. FEMA 154 \/2007 RB\ndated June 07, 2007\n3. A.P (DIR Series) Circular No 18 dated\nDecember 4, 2006\n4. Notification No 47 \/ 2001 RB dated 50\nDecember, 2001\n5. Para B. 7 of Export Master Circular"
+    },
+    {
+        "SL_No": 49,
+        "Purpose": "Retainership of representative posted abroad",
+        "RBI_Purpose_Code": "S1011",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum Application\n2) 15 CA\/CB\n3) Self certified underlying document evidencing bonafide of the transaction (Invoice\/ debit note\/ Agreement\/Employment contract)\n4) CA certificate giving details of annual sales\/ turnover of last two FY also stating that the total remittances made by the Indian entity, to all branch offices\/ representative offices \/ representative posted aborad in an accounting year is not exceeding 10 per cent of such average annual sales\/income or turnover during the last two financial years",
+        "Value_greater_25000_equv": "1) Form A2 cum Application\n2) 15 CA\/CB\n3) Self certified underlying document evidencing bonafides of the\ntransaction (Invoice\/ debit note\/ Agreement\/ Employment contract)\n4) CA certificate giving details of annual sales\/ turnover for last two\nFY also stating that the total remittances made by the Indian entity,\nto all branch offices\/ representative offices \/ representative posted\naborad in an accounting year is not exceeding 10 per cent of such\naverage annual sales\/income or turnover during the last two\nfinancial years",
+        "Referencees": "ParaB.7 of Master Direction on Export\nof Goods and services"
+    },
+    {
+        "SL_No": 50,
+        "Purpose": "Engineering Services",
+        "RBI_Purpose_Code": "S1014",
+        "RBI_Limit": "",
+        "Value_less_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4)In case of Invoice\/Agreement states engineering\nconsultancy then USD1Mio Declaration required",
+        "Value_greater_25000_equv": "1) Form A2 cum application\n2) 15 CA\/ CB\n3)Self Certified underlying document evidencing bonafides of the transaction\n(Invoice\/Debit Notes)\n4)Agreement\/Contract or applicable declaration as mentioned in branch checklist point no.4\n5)If amount is more than USd1Lakh or equivalent and from invoice its not apparent if services have been rendered or not,then customer declaration required that services have been rendered and ther is no element of advance.If remittance amount is more than than USD1Mio then such declaration required from CA\n6))In case of Invoice\/Agreement states engineering\nconsultancy then USD1Mio Declaration required",
+        "Remarks_Guidance_Additional_Information": "If the amount is more than USD1Lakh or equivalent and the payment being is in advance\nthen FBG and opinion reports are required as per circular.Waiver (if eligible)can be given upto USD5Lakh for companies other than public sector co or dept\/GOI",
+        "Referencees": ""
+    }
+]

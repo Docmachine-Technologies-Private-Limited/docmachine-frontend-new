@@ -1,7 +1,3 @@
-// import { BoeBill } from '../.././../../../model/boe.model';
-// import { IRAdvice } from '../.././../../../model/irAdvice.model';
-// import { ORAdvice } from '../../../../../model/orAdvice.model';
-
 import {
   AfterViewInit,
   Component,
@@ -14,7 +10,6 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { FormArray, NgForm } from '@angular/forms';
@@ -22,17 +17,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import * as data1 from '../../../../currency.json';
 import { SharedDataService } from '../../../shared-Data-Servies/shared-data.service';
-// import {ToastrService} from 'ngx-toastr';
 import {
   DropzoneDirective,
   DropzoneConfigInterface,
 } from 'ngx-dropzone-wrapper';
 import { Subscription } from 'rxjs';
-// import {DashboardService} from './dashboard-service';
-// import { TabsComponent } from './tabs.component';
-// import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import $ from 'jquery';
-// import { ShippingBill } from '../../../../../model/shippingBill.model';
 import {
   FormBuilder,
   FormGroup,
@@ -42,12 +32,9 @@ import {
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../../../service/user.service';
-// import { MatSelectModule } from '@angular/material/select';
-// import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AppConfig } from '../../../../app.config';
 import { PipoDataService } from "../../../../service/homeservices/pipo.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { CustomConfirmDialogModelComponent } from 'src/app/custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { WindowInformationService } from '../../../../service/window-information.service';
+import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
 
 
 @Component({
@@ -109,7 +96,7 @@ export class CreateNoteComponent implements OnInit {
   shippingForm: FormGroup;
   // loginForm: FormGroup;
   public submitted = false;
-  authToken: string;
+  authToken:any;
   headers: any;
   closeResult: string;
   APPEND_HTML: any = [];
@@ -220,13 +207,11 @@ export class CreateNoteComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private userService: UserService,
     private toastr: ToastrService,
-    public appconfig: AppConfig,
     private sharedData: SharedDataService,
     public pipoDataService: PipoDataService,
     public wininfo: WindowInformationService,
     public CustomDropDown: CustomConfirmDialogModelComponent
   ) {
-    this.documentService.getCurrency().subscribe((res: any) => { console.log(res, 'getCurrency') })
     this.userData = this.userService.userData?.result
     if (this.userData) {
       this.documentType1 = this.userData?.sideMenu
@@ -234,7 +219,7 @@ export class CreateNoteComponent implements OnInit {
     this.sharedData.currentReturnUrl.subscribe(
       (message) => (this.retururl = message)
     );
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     console.log(this.api_base);
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -290,7 +275,7 @@ export class CreateNoteComponent implements OnInit {
     );
   }
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }
@@ -409,26 +394,36 @@ export class CreateNoteComponent implements OnInit {
     e.form.value.currency = e.form.value?.currency?.type;
     e.form.value.file = 'import';
     console.log(e.form.value);
-    this.documentService.addCredit(e.form.value).subscribe((res: any) => {
-      this.toastr.success(`Credit Note Document Added Successfully`);
-      let updatedData = {
-        "creditNoteRef": [
-          res.data._id,
-        ],
-      }
-      this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData)
-        .subscribe(
-          (data) => {
-            console.log(' credit Note document', this.pipourl1);
-            console.log(data);
-            this.router.navigate(['home/importCredit']);
-          },
-          (error) => {
-            console.log('error');
-          }
-        );
-    },
-      (err) => console.log('Error adding pipo'));
+    this.documentService.getInvoice_No({
+      creditNoteNumber:e.form.value.creditNoteNumber
+    },'creditnotes').subscribe((resp:any)=>{
+      console.log('creditNoteNumber Invoice_No',resp)
+    if (resp.data.length==0) {
+      this.documentService.addCredit(e.form.value).subscribe((res: any) => {
+        this.toastr.success(`Credit Note Document Added Successfully`);
+        let updatedData = {
+          "creditNoteRef": [
+            res.data._id,
+          ],
+        }
+        this.userService.updateManyPipo(this.pipoArr, 'import', this.pipourl1, updatedData)
+          .subscribe(
+            (data) => {
+              console.log(' credit Note document', this.pipourl1);
+              console.log(data);
+              this.router.navigate(['home/importCredit']);
+            },
+            (error) => {
+              console.log('error');
+            }
+          );
+      },
+        (err) => console.log('Error adding pipo'));
+	
+	}else {
+    this.toastr.error(`Please check this sb no. : ${e.form.value.creditNoteNumber} already exit...`);
+  }});
+    
   }
   CommercialNumber: any = [];
   storeCommercialNumber(id: any, commercialnumber) {

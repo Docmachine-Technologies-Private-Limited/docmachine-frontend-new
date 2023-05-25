@@ -34,12 +34,8 @@ export class SignupComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
     });
-
-
-
   }
   get f() { return this.registerForm.controls; }
-
 
   onClick() {
     if (this.password === 'password') {
@@ -74,9 +70,9 @@ export class SignupComponent implements OnInit {
       this.registerForm.value.role = 'manager'
       this.registerForm.value.verified = 'no'
       console.log(this.registerForm.value)
-      this.userService.register(this.registerForm.value)
-        .subscribe(
-          data => {
+      this.userService?.getEamilByIdUserMember(this.registerForm.value?.email).then((emailvalidation:any) => {
+      if (emailvalidation.length==0) {
+        this.userService.register(this.registerForm.value).subscribe(data => {
             this.toastr.success('Registered Successfully!');
             this.userService.login({
               email: this.registerForm.value.email,
@@ -106,6 +102,11 @@ export class SignupComponent implements OnInit {
 
             console.log("error")
           });
+      } else {
+        this.isDisabled = false;
+        this.toastr?.error('This email id already exit please used different email id.');
+      }
+      });
     }
     else{
       this.toastr.error("You Need To Agree For Terms And Condition");

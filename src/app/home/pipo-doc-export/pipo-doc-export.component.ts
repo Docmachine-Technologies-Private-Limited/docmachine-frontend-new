@@ -28,7 +28,6 @@ import {
 
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AppConfig } from '../../app.config';
 import * as XLSX from 'xlsx';
 import * as xlsx from 'xlsx';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -48,7 +47,7 @@ import { PipoDisplayListViewItem, PipoDisplayListView } from '../../../model/pip
     './pipo-doc-export.component.scss',
   ],
 })
-export class PipoDocExportComponent implements OnInit, AfterViewInit {
+export class PipoDocExportComponent implements OnInit {
 
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
@@ -57,8 +56,8 @@ export class PipoDocExportComponent implements OnInit, AfterViewInit {
   @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
   public pipoArrayList: Array<PipoDisplayListViewItem> = [];
-  public pipoDisplayListData: PipoDisplayListView;
-  public pipoData?: PipoDisplayListViewItem;
+  public pipoDisplayListData: any;
+  public pipoData?: any;
   public config: DropzoneConfigInterface;
   public config1: DropzoneConfigInterface;
   filtervisible: boolean = false;
@@ -97,15 +96,15 @@ onclick() {
   public item2;
   public item10: any;
   public item12: any;
-  public item13 = [];
-  public item21 = [];
-  public user;
-  public selectedRow;
-  public showInvoice = false;
-  public showInvoice1 = true;
-  public tableWidth;
-  public export = false;
-  public import = false;
+  public item13:any = [];
+  public item21:any = [];
+  public user:any;
+  public selectedRow:any;
+  public showInvoice:any = false;
+  public showInvoice1:any = true;
+  public tableWidth:any;
+  public export:any = false;
+  public import:any = false;
   public lastIndex;
   public showPdf = false;
   public greaterAmount = 0;
@@ -144,9 +143,9 @@ onclick() {
   nameSearch2: string = '';
   startDate: any = '';
   endDate: any = '';
-  authToken: string;
+  authToken: any;
   headers: any;
-  payTerm = [];
+  payTerm:any = [];
   benneDetail: any;
   documentType: any;
   beneValue: any;
@@ -202,15 +201,15 @@ onclick() {
     private userService: UserService,
     private toastr: ToastrService,
     private modalService: NgbModal,
-    public appconfig: AppConfig,
     private changeDetectorRef: ChangeDetectorRef,
     private modalService1: BsModalService,
     public wininfo: WindowInformationService,
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
+    public treeview:TreeViewComponent
 
   ) {
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     this.loadFromLocalStorage();
     console.log(this.authToken);
     this.headers = {
@@ -411,7 +410,7 @@ onclick() {
   }
 
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }
@@ -1367,17 +1366,43 @@ onclick() {
       return `with: ${reason}`;
     }
   }
-
-  ngAfterViewInit() {
-    // window["sidebarInit"]();
-    // if (isPlatformBrowser(this.platformId)) {
-    //   this.filePreview();
-    // }
+  TREE_VIEW:boolean=false;
+  SB_Details:any=[];
+  TreeView(data:any, i:any){
+    this.TREE_VIEW=true;
+  var data_format:any={
+    FIRX_NUMBER:data?.firxNumber.split(','),
+    FIRX_DATE:data?.firxNumber.split(','),
+    FIRX_CURRENCY:data?.firxNumber.split(','),
+    FIRX_AMOUNT:data?.firxNumber.split(','),
+    FIRX_COMMISION:data?.firxNumber.split(','),
+    FIRX_RECIEVED_AMOUNT:data?.firxNumber.split(','),
+    AVAILABLE_BALANCE:data?.firxNumber.split(',')
+  }
+  this.SB_Details={
+    SB_NO:[data?.sbno],
+    SB_DATE:[data?.sbdate],	
+    REGION:[data?.region],
+    FOB_VALUE_INR:[data?.fobvalue],
+    PORT_CODE:[data?.portCode],
+    TT_DATE:[data?.ttDate],
+    TT_USD:[data?.ttUSD],
+    Received_Date:[data?.recDate],
+    Received_USD:[data?.recUSD],
+    Commission_Bank_Charges:[data?.commission],
+    Conversion_Date:[data?.conversionDate],
+    Conversion_Rate:[data?.conversionRate],
+    Converted_Amount:[data?.convertedAmount],
+    FIRX_DETAILS:data_format
+  }
+  console.log(data,this.SB_Details,'TreeView');
+  this.treeview.TreeViewComponent_Open();
   }
 }
 
 import { PipoDataService } from "../../service/homeservices/pipo.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../service/window-information.service';
+import { TreeViewComponent } from '../tree-view/tree-view.component';
 
 @Component({
   selector: 'modal-content',
@@ -1472,7 +1497,7 @@ import { WindowInformationService } from 'src/app/service/window-information.ser
 export class ModalContentComponent1 implements OnInit {
   title: string;
   closeBtnName: string;
-  invoiceArray = [];
+  invoiceArray:any = [];
   list: any[] = [];
   @ViewChild('table', { static: true }) table: ElementRef;
   epltable: any;

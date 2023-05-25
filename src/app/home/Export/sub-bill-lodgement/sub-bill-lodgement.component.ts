@@ -9,7 +9,8 @@ import $ from 'jquery';
 import { DocumentService } from '../../../service/document.service';
 import { UserService } from '../../../service/user.service';
 import { ShippingbillDataService } from '../../../service/homeservices/shippingbill.service';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../../service/window-information.service';
+import { PipoDataService } from '../../../service/homeservices/pipo.service';
 
 @Component({
   selector: 'app-sub-bill-lodgement',
@@ -25,7 +26,7 @@ export class SubBillLodgementComponent implements OnInit {
   @ViewChild('piposummery', { static: false }) piposummery: ElementRef;
 
   displayedColumns: string[] = ['SB no', 'Lodgement no', 'Party Name'];
-  dataSource: any[];
+  dataSource: any=[];
   benneDetailArray: any;
   locationArray: any;
   commodityArray: any;
@@ -50,22 +51,30 @@ export class SubBillLodgementComponent implements OnInit {
   constructor(public documentService: DocumentService,
     private userService: UserService, public shippingBillService: ShippingbillDataService,
     public dialog: MatDialog,
+    public pipoDataService: PipoDataService,
      public wininfo: WindowInformationService) {
-    this.getDropDownItems()
+    // this.getDropDownItems()
   }
   ngOnInit() {
-    this.wininfo.set_controller_of_width(250,'.content_top_common')
-    this.documentService.getBlcopyrefPromies().then((res: any)=>{console.log(res,'getBlcopyrefPromies')})
-    this.shippingBillService.getShippingBillList().then((res: any) => {
-      this.shippingBillService.shippingbills$.subscribe((data: any) => {
-       console.log(data,'ressdsdsdsdv sdfsfsdfsdfd')
-       for (let index = 0; index < data.length; index++) {
-        this.TEMP['SB_NO'][index]=data[index]['sbno'];
-       }
-       console.log(this.TEMP,'ALL');
-       this.getPipoData()
-      });
-    });
+    this.wininfo.set_controller_of_width(250,'.content_top_common');
+    console.log("-->", this.page, this.limit)
+    // this.pipoDataService.getPipoList('export').then((data) => {
+    //   console.log(data, 'data..................')
+    //   this.pipoDataService.pipolistModel$.subscribe((data) => {
+    //     data.forEach(element => {
+    //       if (element?.file=='export') {
+    //         element?.blcopyRefs?.forEach(blcopyRefsElement => {
+    //           this.dataSource.push({blcopyRefs:blcopyRefsElement,pipo:element})
+    //         });
+    //       }
+    //     });
+    //     console.log(data,this.dataSource,'data2222..................');
+    //   });
+    // });
+    this.documentService.getBlcopyrefPromies().then(async (res: any) => {
+      this.dataSource = res
+      console.log(this.TEMP,res,this.ALL_DATA_FORMAT,'ALL_DATA_FORMAT')
+    })
   }
   onclick() {
     this.filtervisible = !this.filtervisible
@@ -74,34 +83,15 @@ export class SubBillLodgementComponent implements OnInit {
   getPipoData() {
     console.log("-->", this.page, this.limit)
     this.documentService.getBlcopyrefPromies().then(async (res: any) => {
-      this.dataSource = res
-      console.log("res", this.dataSource)
-      var counter=0;
-      for (let index = 0; index < this.dataSource.length; index++) {
-        if (this.dataSource[index]['buyerName']!='' &&
-            this.dataSource[index]['buyerName']!=undefined
-            && this.dataSource[index]['buyerName']!=null) {
-            this.TEMP['Party_Name'][index]=this.dataSource[index]['buyerName'];
-            this.TEMP['Lodgement_No'][index]=this.dataSource[index]['blcopyrefNumber'];
-        }
-        if ((index+1)==this.dataSource.length) {
-          for (let index = 0; index < this.TEMP['Party_Name'].length; index++) {
-            if (this.TEMP['SB_NO'][index]!='' && this.TEMP['SB_NO'][index]!=undefined) {
-              this.ALL_DATA_FORMAT[counter]={
-                SB_NO:this.TEMP['SB_NO'][counter],
-                Party_Name:this.TEMP['Party_Name'][counter],
-                Lodgement_No:this.TEMP['Lodgement_No'][counter]
-              }
-              counter++;
-            }
-          }
-        }
-       }
-       console.log(this.TEMP,this.ALL_DATA_FORMAT,'ALL_DATA_FORMAT')
-      this.paginator.length = res.totalDocs
+      // this.dataSource = res
+      // console.log("res", this.dataSource)
+      console.log(this.TEMP,res,this.ALL_DATA_FORMAT,'ALL_DATA_FORMAT')
     })
   }
 
+calculateAmount(amount1,amount2){
+ return !isNaN(parseFloat(amount1))?parseFloat(amount1)-parseFloat(amount2):0;
+}
 
   handlePage(pagination: any) {
     console.log("==>", pagination)
@@ -148,7 +138,6 @@ export class SubBillLodgementComponent implements OnInit {
     xlsx.writeFile(wb, 'Pipo-Summary.xlsx');
   }
 
-
   filter() {
     this.getPipoData()
     this.filtervisible = !this.filtervisible
@@ -160,22 +149,15 @@ export class SubBillLodgementComponent implements OnInit {
     this.buyer = ''
     this.getPipoData()
     this.filtervisible = !this.filtervisible
-
   }
 
-
   handleDelete(id) {
-
-
     const message = `Are you sure you want to delete this?`;
-
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
-
     const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
       maxWidth: "400px",
       data: dialogData
     });
-
     dialogRef.afterClosed().subscribe(dialogResult => {
       // this.result = dialogResult;
       console.log("---->", dialogResult)

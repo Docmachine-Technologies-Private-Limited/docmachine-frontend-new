@@ -1,11 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { DashBoardService } from 'src/app/service/dashboard.service';
-import { DocumentService } from 'src/app/service/document.service';
-import { UserService } from 'src/app/service/user.service';
+import { DashBoardService } from '../../service/dashboard.service';
+import { DocumentService } from '../../service/document.service';
+import { UserService } from '../../service/user.service';
 import * as xlsx from 'xlsx';
 import $ from 'jquery';
-import { ShippingbillDataService } from 'src/app/service/homeservices/shippingbill.service';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { ShippingbillDataService } from '../../service/homeservices/shippingbill.service';
+import { WindowInformationService } from '../../service/window-information.service';
 
 @Component({
   selector: 'app-excel-downloader-comp',
@@ -33,7 +33,7 @@ export class ExcelDownloaderCompComponent implements OnInit {
   DATA_CREATE:any=[];
 
   public item: any;
-  public item1 = [];
+  public item1:any = [];
   item4: any;
   recievedAmount;
   amount;
@@ -235,7 +235,7 @@ export class ExcelDownloaderCompComponent implements OnInit {
     );
   }
   merging() {
-    let filterForexData = [];
+    let filterForexData:any = [];
     if (this.item5 && this.item5.length) {
       for (let irData of this.item1) {
         for (let shippingdata of this.item5) {

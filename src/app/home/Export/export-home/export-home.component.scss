@@ -871,6 +871,7 @@ span input {
     border-radius: 10px;
     margin: 0;
     box-shadow: 0 2px 10px #3a35411a;
+    height: auto;
 }
 
 .form-control.search_box_new {
@@ -1036,14 +1037,6 @@ span input {
     background-color: #0000003b;
     display: none;
     z-index: 99999;
-}
-
-.modal {
-    position: relative;
-    z-index: 1050;
-    overflow: hidden;
-    outline: 0;
-    max-height: 600px;
 }
 
 .modal .modal-dialog {

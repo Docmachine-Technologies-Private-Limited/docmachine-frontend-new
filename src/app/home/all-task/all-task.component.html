@@ -17,10 +17,10 @@
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
-                                            <th scope="col"><span class="pl-3">DATE</span></th>
-                                            <th scope="col">PI/PO No.</th>
-                                            <th scope="col">Purpose Code</th>
-                                            <th scope="col">Bank Name</th>
+                                            <th scope="col" class="col-td-th-3"><span class="pl-3">DATE</span></th>
+                                            <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">Purpose Code</th>
+                                            <th scope="col" class="col-td-th-3">Bank Name</th>
                                             <th scope="col" *ngIf="pending || completed">Upload</th>
                                         </tr>
                                     </thead>
@@ -32,12 +32,12 @@
                                             </th>
                                             <th class="pl-4 fw-normal">{{ data.transactionDate}}
                                             </th>
-                                            <td class="sb-no">{{ data.pi_poNo }}</td>
+                                            <td class="col-td-th-3">{{ data.pi_poNo }}</td>
                                             <td (click)="viewTask(data)">
                                                 {{ data.file }}
                                             </td>
-                                            <td>{{ data.bank }}</td>
-                                            <td>
+                                            <td class="col-td-th-3">{{ data.bank }}</td>
+                                            <td class="col-td-th-3">
                                                 hshhs
                                             </td>
                                         </tr>
@@ -47,12 +47,12 @@
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
                                             <th class="pl-4 fw-normal">{{ data.transactionDate}}</th>
-                                            <td class="sb-no">{{ data.pi_poNo }}</td>
-                                            <td>
+                                            <td class="col-td-th-3">{{ data.pi_poNo }}</td>
+                                            <td class="col-td-th-3">
                                                 {{ data.file }}
                                             </td>
-                                            <td>{{ data.bank }}</td>
-                                            <td>Done</td>
+                                            <td class="col-td-th-3">{{ data.bank }}</td>
+                                            <td class="col-td-th-3">Done</td>
                                         </tr>
 
                                     </tbody>
@@ -63,40 +63,40 @@
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
-                                            <th scope="col"><span class="pl-3">DATE</span></th>
-                                            <th scope="col">Number of task</th>
-                                            <th scope="col">File Type</th>
-                                            <th scope="col">Bank Name</th>
-                                            <th scope="col">Completed</th>
+                                            <th scope="col" class="col-td-th-3"><span class="pl-3">DATE</span></th>
+                                            <th scope="col" class="col-td-th-3">Number of task</th>
+                                            <th scope="col" class="col-td-th-3">File Type</th>
+                                            <th scope="col" class="col-td-th-3">Bank Name</th>
+                                            <th scope="col" class="col-td-th-3">Completed</th>
                                         </tr>
                                     </thead>
                                     <tbody *ngFor="let data of item2; let i = index" class="text-dark">
 
-                                        <tr class="table-row" *ngIf='data.completed == "yes" && completed' (click)='viewExportTask(data)'>
+                                        <tr class="table-tr" *ngIf='data.completed == "yes" && completed' (click)='viewExportTask(data)'>
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
                                             <th class="pl-4 fw-normal">{{data.date}}</th>
-                                            <td class="sb-no">{{data.task.length }}</td>
-                                            <td>
+                                            <td class="col-td-th-3">{{data.task.length }}</td>
+                                            <td class="col-td-th-3">
                                                 {{data.fileType}}
                                             </td>
-                                            <td>Yes Bank</td>
-                                            <td>
+                                            <td class="col-td-th-3">Yes Bank</td>
+                                            <td class="col-td-th-3">
                                                 {{data.completed}}
                                             </td>
                                         </tr>
-                                        <tr class="table-row" *ngIf='data.completed == "no" && pending' (click)='viewExportPendingTask(data)'>
+                                        <tr class="table-tr" *ngIf='data.completed == "no" && pending' (click)='viewExportPendingTask(data)'>
                                             <th class="rect">
                                                 <img src="./assets/Rectangle-13.png" />
                                             </th>
                                             <th class="pl-4 fw-normal">{{data.date}}</th>
-                                            <td class="sb-no">{{data.task.length }}</td>
-                                            <td>
+                                            <td class="col-td-th-3">{{data.task.length }}</td>
+                                            <td class="col-td-th-3">
                                                 {{data.fileType}}
                                             </td>
-                                            <td>Yes Bank</td>
-                                            <td>
+                                            <td class="col-td-th-3">Yes Bank</td>
+                                            <td class="col-td-th-3">
                                                 {{data.completed}}
                                             </td>
                                         </tr>

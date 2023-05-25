@@ -5,7 +5,6 @@ import { UserService } from './../service/user.service';
 import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AppConfig } from '../../app/app.config';
 
 @Component({
   selector: 'app-add-member',
@@ -31,9 +30,9 @@ export class AddMemberComponent implements OnInit, AfterViewInit {
   public config: DropzoneConfigInterface;
   api_base: string;
 
-  constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder, private userService: UserService, public appconfig: AppConfig) {
+  constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder, private userService: UserService) {
     this.loadFromLocalStorage()
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     console.log(this.api_base)
     console.log(this.authToken)
     this.headers = {
@@ -152,7 +151,7 @@ export class AddMemberComponent implements OnInit, AfterViewInit {
         });
   }
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }

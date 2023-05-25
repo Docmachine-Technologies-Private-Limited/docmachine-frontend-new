@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms'
 import {ToastrService} from 'ngx-toastr';
-import { UserService } from 'src/app/service/user.service';
-import { AuthGuard } from 'src/app/service/authguard.service';
+import { UserService } from '../../../service/user.service';
+import { AuthGuard } from '../../../service/authguard.service';
 
 @Component({
   selector: 'app-twofactorauth',
@@ -38,7 +38,7 @@ export class TwofactorauthComponent implements OnInit {
         this.tfa = data['result']
       }
     })
-    this.userService.getUserDetail().then((data) => {
+    this.userService.getUserDetail().then((data:any) => {
       console.log(data,'dsjfhsdfjdsfdfdsf');
       this.USER_LOGIN_DATA = data['result'];
     })

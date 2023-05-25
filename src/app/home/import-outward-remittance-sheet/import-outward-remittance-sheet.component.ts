@@ -6,15 +6,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { DocumentService } from 'src/app/service/document.service';
-import { UserService } from 'src/app/service/user.service';
+import { DocumentService } from '../../service/document.service';
+import { UserService } from '../../service/user.service';
 import { Router } from '@angular/router';
 import { SharedDataService } from '../shared-Data-Servies/shared-data.service';
 import * as xlsx from 'xlsx';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { WindowInformationService } from '../../service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../currency.json';
@@ -31,7 +31,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
   // public optionsVisibility : boolean = false;
   test;
   public item: any;
-  public item1 = [];
+  public item1:any = [];
   item4: any;
   location;
   commodity;
@@ -237,7 +237,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
   }
 
   merging() {
-    let filterForexData = [];
+    let filterForexData:any = [];
     if (this.item5 && this.item5.length) {
       for (let irData of this.item1) {
         console.log('irdata', irData);

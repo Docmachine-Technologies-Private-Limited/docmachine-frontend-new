@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DocumentService } from 'src/app/service/document.service';
-import { UserService } from 'src/app/service/user.service';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { DocumentService } from '../../service/document.service';
+import { UserService } from '../../service/user.service';
+import { WindowInformationService } from '../../service/window-information.service';
 
 @Component({
   selector: 'app-edpms-recon-table',
@@ -12,7 +12,7 @@ import { WindowInformationService } from 'src/app/service/window-information.ser
 export class EdpmsReconTableComponent implements OnInit {
 
   masterTeam;
-  bankAccounts = [];
+  bankAccounts:any = [];
   bankSelection = "";
   edpmsData;
   constructor(private userService: UserService, private documentService: DocumentService,
@@ -24,7 +24,7 @@ export class EdpmsReconTableComponent implements OnInit {
     this.userService.getTeam()
       .subscribe((res: any) => {
         this.masterTeam = res?.data[0]?.bankDetails;
-        this.masterTeam.forEach( acc => this.bankAccounts.push(acc?.bank));
+        this.masterTeam.forEach( (acc:any) => this.bankAccounts.push(acc?.bank));
         console.log('banks:', this.bankAccounts);
       }, err => {
         console.log(err);

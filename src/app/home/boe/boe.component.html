@@ -30,7 +30,7 @@
               <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                   class="ex_icon"></span>Export</button>
               <div class="filter_posit">
-                <button (click)="filter_Popup.style.display='block'" type="button" class="btn btn-secondary"><span
+                <button (click)="filter_Popup.style.display='block'" type="button" class="btn btn-secondary filter-popup"><span
                     class="fi_icon"></span>Filter</button>
                 <div class="bg-white filter_main_sec  mt-2" #filter_Popup appFilterToggle>
                   <form class="select_filter_options">
@@ -161,35 +161,31 @@
           <div class="" *ngIf="!showInvoice" id="container">
             <section class="middle_datatable">
               <div class="widget-body p-0 support table-wrapper">
-                <table class="table table-striped mb-0">
-                  <thead style="width: 100%;background: white;position: sticky;top: 0;">
-                    <tr class="text-muted table-heading"
-                      style="color:black !important; border-bottom: 1px solid #f2f4f8;">
-                      <th class="rect">
-                        <img src="./assets/Rectangle-13.png" />
-                      </th>
-                      <th scope="col"><span class="pl-3">DATE</span></th>
-                      <th scope="col">BOE NUMBER</th>
-                      <th scope="col">AD CODE</th>
-                      <th scope="col">AD BILL NO</th>
-                      <th scope="col">Beneficiary Name</th>
-                      <th scope="col">IEC CODE</th>
-                      <th scope="col">IEC NAME</th>
-                      <th scope="col">ORIGIN</th>
-                      <th scope="col">DISCHARGE PORT</th>
-                      <th scope="col">CURRENCY</th>
-                      <th scope="col">SB AMOUNT</th>
-                      <th scope="col">Action </th>
+               <table class="table table-hover">
+                  <thead>
+                    <tr class="table-tr">
+                      <th scope="col" class="col-td-th-3"><span class="pl-3">DATE</span></th>
+                      <th scope="col" class="col-td-th-3">PIPO NUMBER</th>
+                      <th scope="col" class="col-td-th-3">CI NUMBER</th>
+                      <th scope="col" class="col-td-th-3">BOE NUMBER</th>
+                      <th scope="col" class="col-td-th-3">AD CODE</th>
+                      <th scope="col" class="col-td-th-3">AD BILL NO</th>
+                      <th scope="col" class="col-td-th-3">Beneficiary Name</th>
+                      <th scope="col" class="col-td-th-3">IEC CODE</th>
+                      <th scope="col" class="col-td-th-3">IEC NAME</th>
+                      <th scope="col" class="col-td-th-3">ORIGIN</th>
+                      <th scope="col" class="col-td-th-3">DISCHARGE PORT</th>
+                      <th scope="col" class="col-td-th-3">CURRENCY</th>
+                      <th scope="col" class="col-td-th-3">BOE AMOUNT</th>
+                      <th scope="col" class="col-td-th-3">Balance AMOUNT</th>
+                      <th scope="col" class="col-td-th-3">Action </th>
                     </tr>
                   </thead>
-                  <tbody class="text-dark">
-                    <tr class="table-row" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
+                  <tbody>
+                    <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
                       [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-                        <th class="rect">
-                        <img src="./assets/Rectangle-13.png" />
-                      </th>
-                      <th class="pl-4 fw-normal">
+                      <td class="col-td-th-3">
                         <div *ngIf="!optionsVisibility[i]">
                           {{ data.boeDate }}
                         </div>
@@ -197,8 +193,10 @@
                           <input class="tblInput form-control" name="boeDate" type="text" placeholder="BOE Date"
                             [(ngModel)]="data.boeDate">
                         </div>
-                      </th>
-                      <td class="sb-no">
+                      </td>
+                      <td class="col-td-th-3">{{ getPipoNumbers(data) }}</td>
+                      <td class="col-td-th-3"> {{ data.commercialNumber }}</td>
+                      <td class="col-td-th-3">
                         <div *ngIf="!optionsVisibility[i]" (click)="
                                                 getInvoices(data, i) && getTransactions(data)">
                           {{ data.boeNumber }}
@@ -208,7 +206,7 @@
                             [(ngModel)]="data.boeNumber">
                         </div>
                       </td>
-                      <td>
+                      <td class="col-td-th-3">
                         <div *ngIf="!optionsVisibility[i]">
                           {{ data.adCode }}
                         </div>
@@ -217,7 +215,7 @@
                             [(ngModel)]="data.adCode">
                         </div>
                       </td>
-                      <td>
+                      <td class="col-td-th-3">
                         <div *ngIf="!optionsVisibility[i]">
                           {{ data.adBillNo }}
                         </div>
@@ -227,7 +225,7 @@
                         </div>
 
                       </td>
-                      <td>
+                      <td class="col-td-th-3">
                         <div *ngIf="!optionsVisibility[i]">
                           {{data.benneName}}
                         </div>
@@ -237,7 +235,7 @@
                         </div>
 
                       </td>
-                      <td>
+                      <td class="col-td-th-3">
                         <div *ngIf="!optionsVisibility[i]">
                           {{data.iecCode}}
                         </div>
@@ -247,7 +245,7 @@
                         </div>
 
                       </td>
-                      <td>
+                      <td class="col-td-th-3">
                         <div *ngIf="!optionsVisibility[i]">
                           {{data.iecName}}
                         </div>
@@ -256,7 +254,7 @@
                             [(ngModel)]="data.iecName">
                         </div>
                       </td>
-                      <td>
+                      <td class="col-td-th-3">
                         <div *ngIf="!optionsVisibility[i]">
                           {{data.origin }}
                         </div>
@@ -266,7 +264,7 @@
                         </div>
 
                       </td>
-                      <td>
+                      <td class="col-td-th-3">
                         <div *ngIf="!optionsVisibility[i]">
                           {{data.dischargePort}}
                         </div>
@@ -275,7 +273,7 @@
                             placeholder="Destination" [(ngModel)]="data.dischargePort">
                         </div>
                       </td>
-                      <td>
+                      <td class="col-td-th-3">
                         <div *ngIf="!optionsVisibility[i]">
                           {{data.currency}}
                         </div>
@@ -284,7 +282,7 @@
                             [(ngModel)]="data.currency">
                         </div>
                       </td>
-                      <td>
+                      <td class="col-td-th-3">
                         <div *ngIf="!optionsVisibility[i]">
                           {{data.invoiceAmount}}
                         </div>
@@ -293,8 +291,8 @@
                             placeholder="Invoice Amount" [(ngModel)]="data.invoiceAmount">
                         </div>
                       </td>
-
-                      <td class="view_edit_button">
+                      <td class="col-td-th-3"> {{ data.balanceAmount }}</td>
+                      <td class="col-td-th-3">
                         <a (click)=" openBoe(content); viewCN(data)" title="View"><i class="fa fa-eye"
                             aria-hidden="true"></i></a>
                         <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]"
@@ -950,12 +948,12 @@
                                                                           let obj of selectedRow.invoices;
                                                                           let i = index
                                                                         ">
-                              <!-- <td><img src="./assets/Rectangle-13.png" /></td> -->
-                              <td>{{ i + 1 }}</td>
-                              <td>{{ obj.invoiceno }}</td>
-                              <td>{{ obj.amount }}</td>
-                              <td>{{ obj.currency }}</td>
-                              <!-- <td><img src="./assets/Rectangle-13.png" /></td> -->
+                              <!-- <td class="col-td-th-3"><img src="./assets/Rectangle-13.png" /></td> -->
+                              <td class="col-td-th-3">{{ i + 1 }}</td>
+                              <td class="col-td-th-3">{{ obj.invoiceno }}</td>
+                              <td class="col-td-th-3">{{ obj.amount }}</td>
+                              <td class="col-td-th-3">{{ obj.currency }}</td>
+                              <!-- <td class="col-td-th-3"><img src="./assets/Rectangle-13.png" /></td> -->
                             </tr>
                           </table>
 

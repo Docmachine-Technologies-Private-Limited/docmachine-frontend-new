@@ -1,5 +1,5 @@
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
-import {DocumentService} from 'src/app/service/document.service';
+import {DocumentService} from '../../service/document.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
@@ -7,8 +7,8 @@ import {UserService} from './../../service/user.service';
 import * as xlsx from 'xlsx';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import {ActivatedRoute, Data, NavigationStart, Router} from '@angular/router';
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { WindowInformationService } from '../../service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 import * as data1 from '../../currency.json';
@@ -22,7 +22,7 @@ import * as data1 from '../../currency.json';
 export class ImportsCreditNoteComponent implements OnInit {
   @ViewChild('creditnotes', {static: false}) creditnotes: ElementRef;
   public item: any;
-  public item1 = [];
+  public item1:any = [];
   public viewData: any;
   public closeResult: string;
   public optionsVisibility: any = [];
@@ -55,6 +55,7 @@ export class ImportsCreditNoteComponent implements OnInit {
 
 
   async ngOnInit() {
+    this.FILTER_VALUE_LIST=[];
     this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)

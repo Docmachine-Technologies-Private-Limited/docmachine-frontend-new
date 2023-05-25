@@ -1669,9 +1669,12 @@ body {
 }
 
 .file_add_new input{
-  opacity: 0;
-  height: 100%;
-  width: 100%;
+    opacity: 0;
+    height: 77%;
+    width: 92%;
+    position: absolute;
+    top: 40px;
+    cursor: pointer;
 }
 
 .file_add_new p {
@@ -1728,4 +1731,8 @@ input:focus,
 textarea:focus,
 select:focus {
   outline: none;
+}
+.k-widget {
+    font-family: "DejaVu Sans", "Arial", sans-serif;
+    font-size: .9em;
 }

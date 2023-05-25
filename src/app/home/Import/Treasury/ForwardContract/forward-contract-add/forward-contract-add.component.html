@@ -1,0 +1,132 @@
+<div class="ml-0 p-3 col-12">
+    <div class="container-fluid m-auto p-0">
+        <!-- <h5 class="header-text">Forward Contract</h5> -->
+        <div class="content_white_background" style="height: auto;">
+            <main id="content" class="table-padding" role="main" style="border-radius: 10px;">
+                <div class="new_document_list1">
+                    <div class="d-flex col-12 p-0 pt-3" id="FromClientRequest" style="flex-direction: column;">
+                        <div class="row col-12 mt-0 p-0">
+                            <div class="row col-12 p-0">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Booking Date</label>
+                                    <ng-custom-input type="date" [(ngInput)]="this.FORM_DATA.BookingDate"
+                                        placeHolderText="Booking Date"></ng-custom-input>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Forward Ref No</label>
+                                    <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.ForwardRefNo"
+                                        placeHolderText="Forward Ref No"></ng-custom-input>
+                                </div>
+                            </div>
+                            <div class="row col-12 p-0">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Buy/Sell</label>
+                                    <app-ng-dropdown-custom bindLabel="value" placeHolderText="Buy/Sell"
+                                        (modelChanges)="ChangesBuySell($event)"
+                                        [(ngModelDropDown)]="this.FORM_DATA.BuySell"
+                                        [items]="[{value:'Buy'},{value:'Sell'}]" [multiple]="false">
+                                    </app-ng-dropdown-custom>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Currency</label>
+                                    <app-ng-dropdown-custom bindLabel="type" placeHolderText="Select Currency"
+                                        [(ngModelDropDown)]="this.FORM_DATA.Currency"
+                                        [items]="this.documentService.getCurrencyList()" [multiple]="false">
+                                    </app-ng-dropdown-custom>
+                                </div>
+                            </div>
+                            <div class="row col-12 p-0">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Booking Amount</label>
+                                    <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.BookingAmount"
+                                        placeHolderText="Booking Amount"></ng-custom-input>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Utilized amount</label>
+                                    <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.UtilizedAmount"
+                                        placeHolderText="Utilized amount"></ng-custom-input>
+                                </div>
+                            </div>
+                            <!-- <div class="row col-12 p-0">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Cancellation Date</label>
+                                    <ng-custom-input type="date" [(ngInput)]="this.FORM_DATA.CancellationDate"
+                                        placeHolderText="Cancellation amount"></ng-custom-input>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Cancellation Amount</label>
+                                    <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.CancellationAmount"
+                                        placeHolderText="Cancellation amount"></ng-custom-input>
+                                </div>
+                            </div> -->
+                            <div class="row col-12 p-0">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Available Amount</label>
+                                    <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.AvailableAmount"
+                                        placeHolderText="Available Amount"></ng-custom-input>
+                                </div>
+                                <!-- <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Cancellation rate</label>
+                                    <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.CancellationRate"
+                                        placeHolderText="Cancellation rate"></ng-custom-input>
+                                </div> -->
+                            </div>
+                            <div class="row col-12 p-0">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">From Date</label>
+                                    <ng-custom-input type="date" [(ngInput)]="this.FORM_DATA.FromDate"
+                                        placeHolderText="From Date"></ng-custom-input>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">To Date</label>
+                                    <ng-custom-input type="date" [(ngInput)]="this.FORM_DATA.ToDate"
+                                        placeHolderText="To Date"></ng-custom-input>
+                                </div>
+                            </div>
+                            <div class="row col-12 p-0">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Net Rate</label>
+                                    <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.NetRate"
+                                        placeHolderText="Net Rate"></ng-custom-input>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Booked under Facility</label>
+                                    <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.BookedUnderFacility"
+                                        placeHolderText="Booked under Facility"></ng-custom-input>
+                                </div>
+                            </div>
+                            <div class="row col-12 p-0">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Import/Export</label>
+                                    <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.ImportExport"
+                                        placeHolderText="Import/Export"></ng-custom-input>
+                                </div>
+                                <!-- <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Status</label>
+                                    <app-ng-dropdown-custom bindLabel="value" placeHolderText="Status"
+                                        [(ngModelDropDown)]="this.FORM_DATA.Status"
+                                        [items]="[{value:'Pending'},{value:'Utilized'},{value:'Partially Utilized'},{value:'Cancelled'}]"
+                                        [multiple]="false">
+                                    </app-ng-dropdown-custom>
+                                </div> -->
+                            </div>
+                            <div class="row col-12 p-0">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Underlying</label>
+                                    <ng-custom-input type="text" [(ngInput)]="this.FORM_DATA.Underlying"
+                                        placeHolderText="Underlying"></ng-custom-input>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-12 mt-0 p-0 pl-2 pb-2">
+                            <!-- <button class="btn btn-primary close-popup" *ngIf="data!=''"
+                                (click)="UpdateForm(this.FORM_DATA)">Update</button> -->
+                            <button class="btn btn-primary close-popup" *ngIf="data==''"
+                                (click)="SubmitForm(this.FORM_DATA)">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>

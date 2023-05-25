@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
 import * as data from '../bank.json';
 import * as data1 from './../currency.json';
-import { AppConfig } from '../app.config';
+import { DocumentService } from '../service/document.service';
 @Component({
   selector: 'app-create-team1',
   templateUrl: './create-team1.component.html',
@@ -18,8 +18,7 @@ import { AppConfig } from '../app.config';
 export class CreateTeam1Component implements OnInit, AfterViewInit {
 
   @Input() que: any;
-
-
+  BANK_NAME_LIST:any=[];
   @Input() entities: any;
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
   public type: string = 'directive';
@@ -41,8 +40,8 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   isDisabled: boolean = false;
   jsondata: any;
   dataJson: any;
-  bankName = [];
-  currencyName = [];
+  bankName:any = [];
+  currencyName:any = [];
   toggle: boolean;
   dataJson1: any;
   jsondata1: any;
@@ -54,11 +53,26 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   api_base: any;
   dynamicVariable = false;
   modo1: any=['choose Account type'];
-
+  Account_Type:any=[{
+    type:'OD-over draft'
+  },{
+    type:'CC-cash credit'
+  },{
+    type:'CA-Current account'
+  },{
+    type:'EEFC - Exchange earner Foreign currency'
+  },{
+    type:'PCFC- packing credit Foreign currency'
+  },{
+    type:'EBRD- Bill discounting accoun'
+  }];
+  CURRENCY_LIST:any=[];
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
-    private userService: UserService, private router: Router, private toastr: ToastrService, public appconfig: AppConfig) {
+    private userService: UserService, private router: Router, 
+    public docservice:DocumentService,
+    private toastr: ToastrService) {
     this.loadFromLocalStorage()
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     console.log(this.api_base)
     console.log(this.authToken)
     this.headers = {
@@ -89,6 +103,11 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     this.dataJson = data['default']
     this.jsondata1 = data1['default'];
     this.dataJson1 = data1['default']
+    for (let index = 0; index < data1['default']?.length; index++) {
+      this.CURRENCY_LIST.push({
+        type: data1['default'][index]['value']
+      })
+    }
     this.loginForm = this.formBuilder.group({
       teamName: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9 _]+$"), (Validators.minLength(3))]],
       iec: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9 _]{10}$"), Validators.maxLength(10)]],
@@ -101,7 +120,8 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
       commodity: new FormArray([this.initComo()]),
       bankDetails: new FormArray([this.initCourse()], Validators.required)
     });
-
+    this.BANK_NAME_LIST=this.docservice.getBankNameList();
+    console.log(this.BANK_NAME_LIST,'BANK_NAME_LIST')
   }
 
   initLocation() {
@@ -121,8 +141,9 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
       bank: ['', Validators.required],
       bicAddress: ['', [Validators.required, Validators.pattern("^[A-Za-z]{6}[A-Za-z0-9]{5}$"), Validators.maxLength(11)]],
       accNumber: ['', [Validators.required, Validators.pattern("^[0-9]{3,34}")]],
-      // accType: ['', Validators.required],
+      accType: ['', Validators.required],
       currency: ['', Validators.required],
+      BankUniqueId: '',
     });
   }
 
@@ -214,7 +235,12 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
     // console.log(this.currencyName)
     // console.log(control1.length)
   }
-
+  CurrencySelect(value:any,i:any){
+    let control1 = this.loginForm.controls.bankDetails as FormArray;
+    // control1[i].currency.setValue(value)
+    console.log(control1,'this.loginForm.controls.bankDetails')
+  
+  }
   removeAddressLoc(i) {
     console.log(i)
     //console.log(this.control)
@@ -301,7 +327,6 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-
     console.log(this.loginForm.value.bankDetails)
     console.log(this.loginForm.value)
     console.log("1")
@@ -314,26 +339,17 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
       this.isDisabled = false;
       return;
     }
-
-    // uncomment bellow code to work of upload files
-    // if (this.file.length < 3) {
-    //   this.toastr.error('Invalid inputs, please upload all the file!');
-    //   console.log("2")
-    //   this.isDisabled = false;
-    //   return;
-    // }
     console.log("3")
     this.loginForm.value.file = this.file
     console.log(this.loginForm.value)
 
-    let array1=[]
-    this.loginForm.value.bankDetails.forEach((value, index) => {
-      const newVal = { ...value };
-      newVal['accType']=this.modo1[index]
-      array1.push(newVal)
-
-  });
-  this.loginForm.value.bankDetails=array1
+    let array1:any=[]
+      this.loginForm.value.bankDetails.forEach((value, index) => {
+        const newVal = { ...value };
+        newVal['BankUniqueId']=this.bankName[index]?.BankUniqueId
+        array1.push(newVal)
+    });
+    this.loginForm.value.bankDetails=array1
     this.userService.creatTeam(this.loginForm.value)
       .subscribe(
         data => {
@@ -381,16 +397,16 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   }
 
   public loadFromLocalStorage() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     this.authToken = token;
     return this.authToken;
   }
 
   bankClick(e, i) {
-    this.bankName[i] = e
-    console.log(this.bankName)
+    this.bankName[i] = e;
+    console.log(this.bankName,e,this.loginForm.value.bankDetails,'this.loginForm.value.bankDetails.')
     this.toggle = false;
-
+    
   }
 
   currencyClick(e, i) {

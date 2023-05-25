@@ -22,9 +22,8 @@ import {
 import { ShippingBill } from "../../../model/shippingBill.model";
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
-import { AppConfig } from "src/app/app.config";
 import { DocumentService } from "../../service/document.service";
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../service/window-information.service';
 
 @Component({
   selector: 'app-edit-pipo',
@@ -39,7 +38,7 @@ export class EditPipoComponent implements OnInit {
   commodity: any = []
   buyer: string;
   uploading: boolean = false;
-  authToken: string;
+  authToken:any;
   CurrencyData:any = ['INR','USD', 'EUR', 'GBP', 'CHF','AUD','CAD','AED','SGD','SAR','JPY']
 
   public type: string = "directive";
@@ -119,7 +118,6 @@ export class EditPipoComponent implements OnInit {
     private userService: UserService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
-    public appconfig: AppConfig,
     private formBuilder: FormBuilder,
     private documentService: DocumentService,
     public router: Router,
@@ -129,14 +127,10 @@ export class EditPipoComponent implements OnInit {
     this.file = this.route.snapshot.paramMap.get('doc_type');
     this.pipoID = this.route.snapshot.paramMap.get('id');
     this.loadFromLocalStorage();
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     this.getDropdownData()
     this.getPIPOData(this.pipoID)
-
   }
-
-
-
 
   ngOnInit(): void {
     this.wininfo.set_controller_of_width(270,'.content_top_common')
@@ -466,7 +460,8 @@ export class EditPipoComponent implements OnInit {
       this.runProgressBar(e[0].size);
     } else {
       console.log("Document type not given");
-      document.getElementById("uploadError").style.display = "block";
+     let display:any= document.getElementById("uploadError");
+     display.style.display = "block"
     }
   }
 
@@ -519,7 +514,7 @@ export class EditPipoComponent implements OnInit {
   }
 
   public loadFromLocalStorage() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     this.authToken = token;
     return this.authToken;
   }

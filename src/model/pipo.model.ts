@@ -37,6 +37,8 @@ export class PipoModel {
   public ebrcRef: any;
   public swiftRef: any;
   public blcopyRefs: any;
+  balanceAmount:any
+  public TransactionRef: any;
 
   constructor(data: any) {
     this._id = data?._id ? data?._id : '';
@@ -75,6 +77,8 @@ export class PipoModel {
     this.ebrcRef = data?.ebrcRef? data?.ebrcRef: [];
     this.swiftRef = data?.swiftRef? data?.swiftRef: [];
     this.blcopyRefs = data?.blcopyRefs? data?.blcopyRefs: [];
+    this.balanceAmount=data?.balanceAmount?data?.balanceAmount:undefined
+    this.TransactionRef=data?.TransactionRef? data?.TransactionRef: [];
   }
 }
 export class PipoDisplayListViewItem {
@@ -168,10 +172,14 @@ export class PipoDisplayListViewItem {
   public ebrcRef: any;
   public swiftRef: any;
   public blcopyRefs: any;
+  public TransactionRef: any;
+  balanceAmount:any
+  AdviceRef:any=[];
   constructor(data: any) {
     this.initValues(data);
   }
   initValues(data: any)  {
+    // console.log(data,'dafdsfkjdsfndskjfdfdsfdsfdsfd')
     this._id = data?._id ? data?._id : '';
     this.pi_poNo = data?.pi_poNo ? data?.pi_poNo : '';
     this.date = data?.date ? data?.date : '';
@@ -266,9 +274,12 @@ export class PipoDisplayListViewItem {
     this.ebrcRef = data?.ebrcRef? data?.ebrcRef: [];
     this.swiftRef = data?.swiftRef? data?.swiftRef: [];
     this.blcopyRefs = data?.blcopyRefs? data?.blcopyRefs: [];
+    this.TransactionRef=data?.TransactionRef? data?.TransactionRef: [];
+    this.AdviceRef=data?.AdviceRef? data?.AdviceRef: [];
+    this.balanceAmount=data?.balanceAmount?data?.balanceAmount:undefined
   }
   computeForexSBPipoMerge() {
-    let finallist = [];
+    let finallist:any = [];
     function copyValues(source:any, dest:any, keys:any) {
       if (dest!=null) {
         for (let i in keys) {
@@ -278,8 +289,8 @@ export class PipoDisplayListViewItem {
       return source;
     }
     function createSbIrinfo(pipoInfo, sbdata) {
-      console.log(pipoInfo,sbdata,'sbdata')
-      let sbirmerged = [];
+      // console.log(pipoInfo,sbdata,'sbdata')
+      let sbirmerged:any = [];
       if (sbdata?.irRef?.length === 0) {
         sbirmerged.push(pipoInfo);
       }
@@ -357,7 +368,7 @@ export class PipoDisplayListView {
   }
 
   computeForexSBPipoMerge() {
-    let finaldata = [];
+    let finaldata:any = [];
     for (let i in this.pipolist) {
       let data = this.pipolist[i].computeForexSBPipoMerge();
       for (let j in data) {

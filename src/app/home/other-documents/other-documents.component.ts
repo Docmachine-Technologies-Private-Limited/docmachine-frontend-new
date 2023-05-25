@@ -3,14 +3,14 @@ import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
 import {Router} from '@angular/router';
 import * as data1 from '../../currency.json';
-import {DocumentService} from 'src/app/service/document.service';
+import {DocumentService} from '../../service/document.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
 import {UserService} from './../../service/user.service';
-import { WindowInformationService } from 'src/app/service/window-information.service';
+import { WindowInformationService } from '../../service/window-information.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
 

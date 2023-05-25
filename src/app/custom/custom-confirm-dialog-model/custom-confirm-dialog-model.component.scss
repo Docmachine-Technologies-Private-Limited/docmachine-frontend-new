@@ -1,6 +1,5 @@
 .YesNoDialogModel-group {
-  display: grid;
-  grid-template-rows: 30px 90%;
+  display: flex;
   gap: 30px;
   justify-content: center;
   align-items: center;
@@ -12,6 +11,7 @@
   border-radius: 10px;
   margin: auto;
   padding-top: 10px;
+  color: black;
 }
 
 .YesNoDialogModel {
@@ -49,11 +49,8 @@
 }
 .iframe-group{
   overflow: auto;
-  max-height: 75vh;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 20px;
+  width: 100%;
+  padding: 10px;
 }
 .DropDownInputConfirmDialog{
   z-index: 99999999;
