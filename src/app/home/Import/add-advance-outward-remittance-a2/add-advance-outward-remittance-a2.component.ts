@@ -893,7 +893,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       });
       var approval_data: any = {
         id: UniqueId,
-        tableName: 'Advance-Remittance-flow',
+        tableName: 'Advance-Remittance-A2',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
         status: 'pending',
@@ -920,7 +920,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
                 Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() },
                 extra_data: this.EXTRA_DOCUMENTS
               },
-              TypeTransaction: 'Advance-Remittance-flow',
+              TypeTransaction: 'Advance-Remittance-A2',
               fileType: 'Import',
               UserDetails: approval_data?.id,
               pipo: pipo_id,
