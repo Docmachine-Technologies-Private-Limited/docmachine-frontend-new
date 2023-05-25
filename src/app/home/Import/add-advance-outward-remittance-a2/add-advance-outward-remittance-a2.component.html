@@ -258,6 +258,7 @@
                                                                 Code</label>
                                                             <button type="button" class="btn btn-primary PopupOpen"
                                                                 [attr.popup-close]="'A2_DATA'">Purpose Code</button>
+                                                            <p class="btn btn-primary mt-3" *ngFor="let item of this.SELECTED_PURPOSE_CODE_DATA;let i=index">{{(i+1)}}. {{item?.RBI_Purpose_Code}}</p>
                                                         </div>
                                                         <div class="col mt-6">
                                                             <section class="pt-2" [formGroup]="toppings">
@@ -953,7 +954,7 @@
                                         <span *ngIf="item.isExpand==false" class="fa fa-chevron-down"></span>
                                     </td>
                                     <td scope="col" class="col-td-th-1">
-                                        <input type="checkbox" (change)="choosenItems($event,item?._id,i,item);" />
+                                        <input type="checkbox" (change)="SELECT_PURPOSE_CODE($event,i);" />
                                     </td>
                                     <td scope="col" class="col-td-th-1">{{item?.SL_No}}</td>
                                     <td scope="col" class="col-td-th-2" style="width: 500px;">

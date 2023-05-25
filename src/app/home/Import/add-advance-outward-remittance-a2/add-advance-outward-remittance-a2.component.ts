@@ -892,7 +892,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
         temp_doc.push(element)
       });
       var approval_data: any = {
-        id: UniqueId,
+        id: UniqueId+'_'+this.randomId(10),
         tableName: 'Advance-Remittance-A2',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
@@ -1195,5 +1195,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.SELECTED_PURPOSE_CODE_DATA.push(element)
     });
   }
+  randomId(length = 6) {
+    return Math.random().toString(36).substring(2, length+2);
+  };
 }
 

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build  --max_old_space_size=40000",
+    "build": "ng build  --max_old_space_size=50000",
     "prod": "ng build --verbose && gzipper compress ./dist",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
