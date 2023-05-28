@@ -81,19 +81,31 @@
             },
             "local": {
               "buildOptimizer": false,
-              "optimization": false,
-              "vendorChunk": true,
-              "extractLicenses": false,
-              "sourceMap": false,
-              "namedChunks": true
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
               },
-            "dev": {
-              "buildOptimizer": false,
-              "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
               "namedChunks": true,
+              "outputHashing": "none",
+              "statsJson": false
+            },
+            "dev": {
+              "buildOptimizer": false,
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": false,
+              "namedChunks": true,
+              "outputHashing": "none",
+              "statsJson": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -103,11 +115,17 @@
             },
             "stage": {
               "buildOptimizer": false,
-              "optimization": false,
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
               "namedChunks": true,
+              "outputHashing": "none",
+              "statsJson": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -117,11 +135,17 @@
             },
             "live": {
               "buildOptimizer": false,
-              "optimization": false,
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
               "namedChunks": true,
+              "outputHashing": "none",
+              "statsJson": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -131,11 +155,17 @@
             },
             "testing": {
               "buildOptimizer": false,
-              "optimization": false,
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
               "namedChunks": true,
+              "outputHashing": "none",
+              "statsJson": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
