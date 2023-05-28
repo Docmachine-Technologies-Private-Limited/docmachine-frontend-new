@@ -10,7 +10,6 @@ import { DocumentService } from './service/document.service';
 import { UserService } from './service/user.service';
 import * as jwt_decode from 'jwt-decode';
 import { StorageEncryptionDecryptionService } from './Storage/storage-encryption-decryption.service';
-import $ from 'jquery'
 import { ToastrService } from 'ngx-toastr';
 import { SocketIoService } from './service/SocketIo/socket-io.service';
 
