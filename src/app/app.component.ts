@@ -24,9 +24,6 @@ export class AppComponent implements OnInit, OnDestroy {
   userInactive: Subject<any> = new Subject();
   DelayTime: any = '';
 
-
-
-
   WithoutAuthorization: any = ['RoleVerifyEmail','verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
   constructor(
     private translate: TranslateService,
