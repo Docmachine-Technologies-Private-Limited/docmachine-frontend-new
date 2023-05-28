@@ -84,20 +84,16 @@
               "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true,
-              "outputHashing": "none",
-              "statsJson": false
+              "sourceMap": false,
+              "namedChunks": true
               },
             "dev": {
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
+              "sourceMap": false,
               "namedChunks": true,
-              "outputHashing": "none",
-              "statsJson": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -110,10 +106,8 @@
               "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
+              "sourceMap": false,
               "namedChunks": true,
-              "outputHashing": "none",
-              "statsJson": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -126,10 +120,8 @@
               "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
+              "sourceMap": false,
               "namedChunks": true,
-              "outputHashing": "none",
-              "statsJson": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -142,10 +134,8 @@
               "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
+              "sourceMap": false,
               "namedChunks": true,
-              "outputHashing": "none",
-              "statsJson": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
