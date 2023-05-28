@@ -1,1 +1,44 @@
+name: Angular GitHub CI
+on:
+  push:
+    branches:
+      - live
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+                persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+                fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+                github_token: ${{ secrets.DEPLOY_TOKEN }}   
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install Dependencies
+        run: |
+          npm install --legacy-peer-deps
+          npm i @angular/cli --legacy-peer-deps
+      - name: Build
+        run: |
+           npm run live --
+      - name: deploy
+        run: |
+             git config --global user.email ${{secrets.GIT_EMAIL_DEPLOY}}
+             git config --global user.name ${{secrets.GIT_USER_DEPLOY}}
+             mkdir checkout              
+             git remote remove origin
+             git remote add origin https://${{secrets.DEPLOY_TOKEN}}${{secrets.LIVE_DEPLOY_REPO}}
+             cd checkout
+             git clone https://${{secrets.DEPLOY_TOKEN}}${{secrets.LIVE_DEPLOY_REPO}}
+             ls
+             cp -r ../dist/dm-frontend/* LiveBuild/
+             cd LiveBuild
+             git add .
+             git commit -m "$(date)"
+             git push origin main
 
