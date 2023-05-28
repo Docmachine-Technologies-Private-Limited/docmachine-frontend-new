@@ -55,7 +55,6 @@
               "src/assets/LoginPage/vendor/bootstrap/js/bootstrap.min.js",
               "src/assets/LoginPage/vendor/select2/select2.min.js",
               "src/assets/LoginPage/vendor/tilt/tilt.jquery.min.js"
-
             ]
           },
           "configurations": {
@@ -86,7 +85,7 @@
                 "scripts": true,
                 "styles": true,
                 "fonts": true
-              },  
+              },
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
@@ -100,7 +99,7 @@
                 "scripts": true,
                 "styles": true,
                 "fonts": true
-              },  
+              },
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
@@ -120,7 +119,7 @@
                 "scripts": true,
                 "styles": true,
                 "fonts": true
-              },  
+              },
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
@@ -140,7 +139,7 @@
                 "scripts": true,
                 "styles": true,
                 "fonts": true
-              },  
+              },
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
@@ -160,7 +159,7 @@
                 "scripts": true,
                 "styles": true,
                 "fonts": true
-              },  
+              },
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
