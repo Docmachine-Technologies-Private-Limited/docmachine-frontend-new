@@ -32,9 +32,9 @@ jobs:
              git config --global user.name ${{secrets.GIT_USER_DEPLOY}}
              mkdir checkout              
              git remote remove origin
-             git remote add origin https://${{secrets.DEPLOY_TOKEN}}${{secrets.STAGE_DEPLOY_REPO}}
+             git remote add origin https://${{secrets.DEPLOY_TOKEN}}${{secrets.DEV_DEPLOY_REPO}}
              cd checkout
-             git clone https://${{secrets.DEPLOY_TOKEN}}${{secrets.STAGE_DEPLOY_REPO}}
+             git clone https://${{secrets.DEPLOY_TOKEN}}${{secrets.DEV_DEPLOY_REPO}}
              rm -r DevBuild/*
              cp -r ../dist/dm-frontend/* DevBuild/
              cd DevBuild
