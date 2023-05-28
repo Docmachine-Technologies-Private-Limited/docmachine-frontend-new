@@ -55,7 +55,6 @@
               "src/assets/LoginPage/vendor/bootstrap/js/bootstrap.min.js",
               "src/assets/LoginPage/vendor/select2/select2.min.js",
               "src/assets/LoginPage/vendor/tilt/tilt.jquery.min.js"
-
             ]
           },
           "configurations": {
@@ -82,28 +81,20 @@
             },
             "local": {
               "buildOptimizer": false,
-              "optimization": {
-                "scripts": true,
-                "styles": true,
-                "fonts": true
-              },  
+              "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": false,
+              "sourceMap": true,
               "namedChunks": true,
               "outputHashing": "none",
               "statsJson": false
-            },
+              },
             "dev": {
               "buildOptimizer": false,
-              "optimization": {
-                "scripts": true,
-                "styles": true,
-                "fonts": true
-              },  
+              "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": false,
+              "sourceMap": true,
               "namedChunks": true,
               "outputHashing": "none",
               "statsJson": false,
@@ -116,14 +107,10 @@
             },
             "stage": {
               "buildOptimizer": false,
-              "optimization": {
-                "scripts": true,
-                "styles": true,
-                "fonts": true
-              },  
+              "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": false,
+              "sourceMap": true,
               "namedChunks": true,
               "outputHashing": "none",
               "statsJson": false,
@@ -136,14 +123,10 @@
             },
             "live": {
               "buildOptimizer": false,
-              "optimization": {
-                "scripts": true,
-                "styles": true,
-                "fonts": true
-              },  
+              "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": false,
+              "sourceMap": true,
               "namedChunks": true,
               "outputHashing": "none",
               "statsJson": false,
@@ -156,14 +139,10 @@
             },
             "testing": {
               "buildOptimizer": false,
-              "optimization": {
-                "scripts": true,
-                "styles": true,
-                "fonts": true
-              },  
+              "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": false,
+              "sourceMap": true,
               "namedChunks": true,
               "outputHashing": "none",
               "statsJson": false,
