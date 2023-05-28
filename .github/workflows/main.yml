@@ -16,5 +16,6 @@ jobs:
     - name: install, build and test
       run: |
         npm install
-        ng build --configuration=dev
+        npm install -i @angular/cli
+        #ng build --configuration=dev
         ls
