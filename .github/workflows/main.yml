@@ -28,7 +28,6 @@ jobs:
            npm run dev --
       - name: deploy
         run: |
-             ls
              git config --global user.email ${{secrets.GIT_EMAIL_DEPLOY}}
              git config --global user.name ${{secrets.GIT_USER_DEPLOY}}
              mkdir checkout              
@@ -36,7 +35,9 @@ jobs:
              git remote add origin https://${{secrets.DEPLOY_TOKEN}}${{secrets.DEV_DEPLOY_REPO}}
              cd checkout
              git clone https://${{secrets.DEPLOY_TOKEN}}${{secrets.DEV_DEPLOY_REPO}}
+             ls
              rm -r role_deploy/*
+             ls
              cp -r ../dist/dm-frontend/* role_deploy/
              cd role_deploy
              git add .
