@@ -2,7 +2,7 @@ name: Angular GitHub CI
 on:
   push:
     branches:
-      - development
+      - main
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -37,9 +37,9 @@ jobs:
         run: |
           npm install --legacy-peer-deps
           npm i @angular/cli --legacy-peer-deps
-      - name: DEV Build
+      - name: Stage Build
         run: |
-           npm run dev --
+           npm run stage --
       - name: deploy
         run: |
              git config --global user.email ${{secrets.GIT_EMAIL_DEPLOY}}
@@ -47,12 +47,12 @@ jobs:
              git config --global credential.helper cache
              mkdir checkout              
              git remote remove origin
-             git remote add origin https://${{secrets.DEPLOY_TOKEN}}${{secrets.DEV_DEPLOY_REPO}}
+             git remote add origin https://${{secrets.DEPLOY_TOKEN}}${{secrets.STAGE_DEPLOY_REPO}}
              cd checkout
-             git clone https://${{secrets.DEPLOY_TOKEN}}${{secrets.DEV_DEPLOY_REPO}}
-             rm -r DevBuild/*
-             cp -r ../dist/dm-frontend/* DevBuild/
-             cd DevBuild
+             git clone https://${{secrets.DEPLOY_TOKEN}}${{secrets.STAGE_DEPLOY_REPO}}
+             rm -r StageBuild/*
+             cp -r ../dist/dm-frontend/* StageBuild/
+             cd StageBuild
              git add .
              git commit -m "$(date)"
              git push origin main
