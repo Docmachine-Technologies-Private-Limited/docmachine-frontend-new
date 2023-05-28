@@ -96,14 +96,10 @@
             },
             "dev": {
               "buildOptimizer": false,
-              "optimization": {
-                "scripts": true,
-                "styles": true,
-                "fonts": true
-              },  
+              "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": false,
+              "sourceMap": true,
               "namedChunks": true,
               "outputHashing": "none",
               "statsJson": false,
