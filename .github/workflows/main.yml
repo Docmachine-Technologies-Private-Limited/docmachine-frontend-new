@@ -2,7 +2,7 @@ name: Angular GitHub CI
 on:
   push:
     branches:
-      - main
+      - development
 jobs:
   ci:
     runs-on: ubuntu-latest
