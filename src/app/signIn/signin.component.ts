@@ -89,7 +89,7 @@ export class SigninComponent implements OnInit {
               role: res?.docs?.role
             }))
             // window.open("http://localhost:42001/login/"+res?.docs?.token, "_self")
-             window.open("https://rolebase.bharathexim.com/login/"+res?.docs?.token, "_self")
+             window.open("https://role.bharathexim.com/login/"+res?.docs?.token, "_self")
           }
         });
       } else {

@@ -2,7 +2,7 @@
   "name": "dm",
   "version": "1.1.1",
   "scripts": {
-   "ng": "ng",
+    "ng": "ng",
     "build": "ng build  --max_old_space_size=50000",
     "prod": "ng build --configuration=prod",
     "stage": "ng build --configuration=stage",
