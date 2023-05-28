@@ -25,7 +25,7 @@ jobs:
           npm i @angular/cli --legacy-peer-deps
       - name: Build
         run: |
-          npm run prod_build --
+          ng build --configuration=dev
       - name: deploy
         run: |
              git config --global user.email ${{secrets.GIT_EMAIL_DEPLOY}}
