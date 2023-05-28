@@ -3,9 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
     "build": "ng build  --max_old_space_size=50000",
-    "prod": "ng build --verbose && gzipper compress ./dist",
+    "prod": "ng build --configuration=prod",
+    "stage": "ng build --configuration=stage",
+    "dev": "ng build --configuration=dev",
+    "testing": "ng build --configuration=testing",
+    "live": "ng build --configuration=live",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
