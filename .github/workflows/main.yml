@@ -36,10 +36,10 @@ jobs:
              cd checkout
              git clone https://${{secrets.DEPLOY_TOKEN}}${{secrets.DEV_DEPLOY_REPO}}
              ls
-             rm -r role_deploy/*
+             rm -r DevBuild/*
              ls
-             cp -r ../dist/dm-frontend/* role_deploy/
-             cd role_deploy
+             cp -r ../dist/dm-frontend/* DevBuild/
+             cd DevBuild
              git add .
              git commit -m "$(date)"
              git push origin main
