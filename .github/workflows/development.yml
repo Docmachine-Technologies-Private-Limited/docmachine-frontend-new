@@ -12,24 +12,39 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-                persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
-                fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
-                github_token: ${{ secrets.DEPLOY_TOKEN }}   
+             persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+             fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+             github_token: ${{ secrets.DEPLOY_TOKEN }}   
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Cache node modules
+        id: cache-nodemodules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # caching node_modules
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
       - name: Install Dependencies
+        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: |
           npm install --legacy-peer-deps
           npm i @angular/cli --legacy-peer-deps
-      - name: Build
+      - name: DEV Build
         run: |
            npm run dev --
       - name: deploy
         run: |
              git config --global user.email ${{secrets.GIT_EMAIL_DEPLOY}}
              git config --global user.name ${{secrets.GIT_USER_DEPLOY}}
+             git config --global credential.helper cache
              mkdir checkout              
              git remote remove origin
              git remote add origin https://${{secrets.DEPLOY_TOKEN}}${{secrets.DEV_DEPLOY_REPO}}
