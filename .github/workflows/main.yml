@@ -36,8 +36,6 @@ jobs:
              cd checkout
              git clone https://${{secrets.DEPLOY_TOKEN}}${{secrets.DEV_DEPLOY_REPO}}
              ls
-             rm -r DevBuild/*
-             ls
              cp -r ../dist/dm-frontend/* DevBuild/
              cd DevBuild
              git add .
