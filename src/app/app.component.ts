@@ -37,7 +37,6 @@ export class AppComponent implements OnInit, OnDestroy {
     public socketioservice: SocketIoService,
     public authGuard: AuthGuard) {
     this.translate.setDefaultLang('en');
-    let token = this.authGuard.loadFromLocalStorage();
 
     this.setTimeoutNew();
     router.events.subscribe((event: Event) => {
