@@ -80,7 +80,7 @@
               ],
               "outputHashing": "all"
             },
-            "development": {
+            "local": {
               "buildOptimizer": false,
               "optimization": {
                 "scripts": true,
@@ -93,9 +93,89 @@
               "namedChunks": true,
               "outputHashing": "none",
               "statsJson": false
+            },
+            "dev": {
+              "buildOptimizer": false,
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },  
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": false,
+              "namedChunks": true,
+              "outputHashing": "none",
+              "statsJson": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
+            },
+            "stage": {
+              "buildOptimizer": false,
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },  
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": false,
+              "namedChunks": true,
+              "outputHashing": "none",
+              "statsJson": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.stage.ts"
+                }
+              ]
+            },
+            "live": {
+              "buildOptimizer": false,
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },  
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": false,
+              "namedChunks": true,
+              "outputHashing": "none",
+              "statsJson": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.live.ts"
+                }
+              ]
+            },
+            "testing": {
+              "buildOptimizer": false,
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },  
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": false,
+              "namedChunks": true,
+              "outputHashing": "none",
+              "statsJson": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.testing.ts"
+                }
+              ]
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "local"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -106,11 +186,20 @@
             "production": {
               "browserTarget": "dm-frontend:build:production"
             },
-            "development": {
-              "browserTarget": "dm-frontend:build:development"
+            "local": {
+              "browserTarget": "dm-frontend:build:local"
+            },
+            "dev": {
+              "browserTarget": "dm-frontend:build:dev"
+            },
+            "stage": {
+              "browserTarget": "dm-frontend:build:stage"
+            },
+            "testing": {
+              "browserTarget": "dm-frontend:build:testing"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "local"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpContext, HttpHeaders, HttpParams } from '@angular/common/http';
 import { observable, Observable, of, Subject } from 'rxjs';
-import { AppConfig } from '../../app/app.config';
+// import { AppConfig } from '../../app/app.config';
 import * as data1 from './../currency.json';
 import { Router } from '@angular/router';
+import { AppConfig } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentService {
@@ -21,8 +22,8 @@ export class DocumentService {
   OUTWARD_REMITTANCE_ADVICE_SHEET: any = [];
   MT102_SUBJECT: any = []
 
-  constructor(public http: HttpClient, public appconfig: AppConfig, private router: Router,) {
-    this.api_base = appconfig.apiUrl;
+  constructor(public http: HttpClient, private router: Router,) {
+    this.api_base = AppConfig?.BASE_URL;
     console.log(this.api_base);
   }
   public loadFromLocalStorage() {
@@ -2027,6 +2028,114 @@ export class DocumentService {
     return this.http.post(`${this.api_base}/task/sendmailnormal`,data,httpOptions);
   }
 
+  buyer_beneficiary_creditadd(data:any){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/buyer_beneficiary_credit/add`,{data:data},httpOptions);
+  }
+  
+  buyer_beneficiary_creditget(){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/buyer_beneficiary_credit/get`,httpOptions);
+  }
+  
+  buyer_beneficiary_credit_update(data){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/buyer_beneficiary_credit/update`,data,httpOptions);
+  }
+  
+  CA_Certificate_add(data:any){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/CA_Certificate/add`,{data:data},httpOptions);
+  }
+  
+  CA_Certificate_get(){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/CA_Certificate/get`,httpOptions);
+  }
+  
+  CA_Certificate_RequestType_get(data:any){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/CA_Certificate/getRequestType`,{type:data},httpOptions);
+  }
+  
+  
+  CA_Certificate_update(data){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/CA_Certificate/update`,data,httpOptions);
+  }
+  
+  ForwardContractadd(data:any){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ForwardContract/add`,{data:data},httpOptions);
+  }
+  
+  ForwardContractget(){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/ForwardContract/get`,httpOptions);
+  }
+  
+  ForwardContract_update(data){
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/ForwardContract/update`,data,httpOptions);
+  }
+  
+  SendMailNormalTextdcouments(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/task/sendmailnormal`,data,httpOptions);
+  }
+  
+  SendMaildocuments(data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/task/documentsmail`,data,httpOptions);
+  }
   downloadDocuments(data: any) {
     console.log("downloadDocuments", data)
     const httpOptions: any = {

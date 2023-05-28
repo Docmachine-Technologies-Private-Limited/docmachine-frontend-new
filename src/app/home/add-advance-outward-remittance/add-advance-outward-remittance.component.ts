@@ -20,7 +20,6 @@ import {
 
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
-import { AppConfig } from "../../app.config";
 import { DocumentService } from "../../service/document.service";
 import { PipoDataService } from "../../service/homeservices/pipo.service";
 import { WindowInformationService } from '../../service/window-information.service';
@@ -95,7 +94,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     private userService: UserService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
-    public appconfig: AppConfig,
     private formBuilder: FormBuilder,
     private documentService: DocumentService,
     public pipoDataService: PipoDataService,
@@ -107,7 +105,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
   ) {
     this.loadFromLocalStorage();
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
   }
 
   async ngOnInit() {
@@ -507,13 +505,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.uploading = true;
     this.isUploaded = true;
     this.uploadUrl_Original = args[1].data;
-    this.userService.mergePdf(args[1].data).subscribe((res: any) => {
-      res.arrayBuffer().then((data: any) => {
-        this.uploadUrl = data;
-      });
-    });
-
+    this.uploadUrl = args[1].data;
     console.log("this.uploadUrl", this.uploadUrl);
+    this.width=100;
   }
 
   submit(e) {
@@ -737,6 +731,12 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       } else {
         temp_doc[0] = this.PREVIWES_URL?.changingThisBreaksApplicationSecurity;
       }
+      var pipo_id: any = [];
+      var pipo_name: any = [];
+      for (let index = 0; index < this.selectedItems.length; index++) {
+        pipo_id.push(this.selectedItems[index]?.pipo_id)
+        pipo_name.push(this.selectedItems[index]?.pipo_no)
+      }
       temp_doc[1] = this.uploadUrl_Original;
       for (let i = 0; i < this.selectedItems.length; i++) {
         for (let index = 0; index < this.temp1[i].length; index++) {
@@ -746,7 +746,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         }
       }
       var approval_data: any = {
-        id: UniqueId,
+        id: UniqueId+'_'+this.randomId(10),
         tableName: 'Advance-Remittance-flow',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
@@ -832,6 +832,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       this.documentService.getDownloadStatus({ id: id, $or: [{ "deleteflag": '-1' }, { "deleteflag": '1' }, { "deleteflag": '2' }] }).subscribe((res: any) => resolve(res[0]))
     })
   }
+  randomId(length = 6) {
+    return Math.random().toString(36).substring(2, length+2);
+  };
 }
 
 // PROFORMA INVOICE

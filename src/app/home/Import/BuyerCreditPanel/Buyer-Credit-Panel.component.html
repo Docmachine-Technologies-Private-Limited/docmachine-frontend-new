@@ -35,7 +35,7 @@
                                                 <div id="first">
                                                     <app-import-letterhead type="Import-Direct-Payment"
                                                         *ngIf="this.OTHER_BANK_VISIBLE==true"
-                                                        [data]="[this.BANK_DETAILS,this.ITEM_FILL_PDF,this.selectedBenne,this.Remittance_Amount]"></app-import-letterhead>
+                                                        [data]="[this.BANK_DETAILS,this.MAIN_DATA,this.selectedBenne,this.Remittance_Amount]"></app-import-letterhead>
                                                 </div>
                                                 <div class="new_left_sidedoc pdf_invoce_scroll"
                                                     *ngIf="selectedItems.length!=0">
@@ -81,6 +81,7 @@
                                                             [items]="this.benneDetail" bindLabel="benneName"
                                                             bindValue="benneName" [multiple]="false"
                                                             [ngModel]="form?.benneName" formControlName="benneName"
+                                                            [(ngModelDropDown)]="DUMP.benneName"
                                                             (modelChanges)="form.benneName=$event"
                                                             (modelChanges)="changepipo($event)" #select_ben>
                                                         </app-ng-dropdown-custom>
@@ -125,13 +126,13 @@
                                                         <div class="col-md-12 col-12">
                                                             <label for="exampleInputEmail1" class="form-label">Select
                                                                 BOE</label>
-                                                            <app-ng-dropdown-custom class="PopupOpen"
+                                                            <app-ng-dropdown-custom class="PopupOpen" label="Select BOE"
                                                                 popup-close="boedropdown"
                                                                 placeHolderText="Select PI/PO or Bill of Entry"
                                                                 [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
                                                                 [multiple]="false" formControlName="BOE_Number"
-                                                                (modelChanges)="DUMP_FUNCTION($event,['Select BOE'],boedropdown);
-                                                            this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event"
+                                                                [(ngModelDropDown)]="this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO"
+                                                                (modelChanges)="DUMP_FUNCTION($event,['Select BOE'],boedropdown);"
                                                                 #boeselectdropdown>
                                                             </app-ng-dropdown-custom>
                                                             <div *ngIf="submitted && form.pi_poNo.errors"
@@ -153,9 +154,7 @@
                                                                         [items]="this.documentService.getCurrencyList()"
                                                                         [multiple]="false"
                                                                         [selectedItems]="item?.currency"
-                                                                        formControlName="currency"
-                                                                        (modelChanges)="this.LIST_PIPO[this.ALL_DROPDOWN_VALUE_LIST?.DROPDOWN_BOE].currency=$event"
-                                                                        #Currency>
+                                                                        formControlName="currency" #Currency>
                                                                     </app-ng-dropdown-custom>
                                                                     <div *ngIf="submitted && form?.currency.errors"
                                                                         class='errorText'>
@@ -194,8 +193,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-                                                            <div class="col-md-10 col-12">
+                                                            <!-- <div class="col-md-10 col-12">
                                                                 <label for="selectedremittanceAmount"
                                                                     class="form-label">SELECTED Remittance
                                                                     Amount</label>
@@ -210,17 +208,16 @@
                                                                     <div *ngIf="form.remittanceAmount.errors.required">
                                                                         Remittance Amount is required</div>
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
                                                             <div class="col-md-10 col-12">
-                                                                <label for="remittanceAmount"
-                                                                    class="form-label">Remittance
+                                                                <label for="remittanceAmount" class="form-label">Buyer
+                                                                    Credit
                                                                     Amount</label>
                                                                 <input type="text" class="form-control"
                                                                     formControlName="remittanceAmount"
                                                                     id="remittanceAmount"
-                                                                    placeholder="Remittance Amount" ngModel
-                                                                    autocomplete="off"
-                                                                    maxlength="this.sumTotalAmount.length"
+                                                                    placeholder="Remittance Amount" autocomplete="off"
+                                                                    [ngModel]="this.REMIITANCE_AMOUNT[i]"
                                                                     (keyup)="RemittanceAmount($event,i,item?.boeNumber);">
                                                                 <div *ngIf="submitted && form.remittanceAmount.errors"
                                                                     class='errorText'>
@@ -259,8 +256,7 @@
                                                             amount</label>
                                                         <input type="text" ngModel
                                                             formControlName="totalremittanceAmount" class="form-control"
-                                                            id="totalremittanceAmount"
-                                                            [ngModel]="this.Remittance_Amount"
+                                                            id="totalremittanceAmount" [ngModel]="this.REMIITANCE_SUM"
                                                             placeholder="Remittance amount" readonly>
                                                     </div>
                                                 </div>
@@ -311,13 +307,43 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-12">
-                                                    <label for="exampleInputEmail1" class="form-label">Select Request
-                                                        for BC
+                                                    <label for="exampleInputEmail1" class="form-label">Select BC
                                                         Quote*</label>
-                                                    <button type="button" [attr.popup-close]="'Request_for_BC_Quote'"
-                                                        class="btn btn-primary PopupOpen">Request for BC Quote.</button>
+                                                    <button type="button" [attr.popup-close]="'BUYER_CREDIT_POPUP'"
+                                                        class="btn btn-primary PopupOpen">Select BC Quote.</button>
                                                     <div *ngIf="submitted && form?.bank.errors" class='errorText'>
                                                         <div *ngIf="form?.bank.errors.required">Select bank is required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12"
+                                                    *ngFor="let item of this.SLECTED_BC_QUOTE;let i=index">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12">
+                                                            <label for="exampleInputEmail1" class="form-label">Supplier
+                                                                Name*</label>
+                                                            <input class="form-control" type="text" name="SupplierName"
+                                                                [value]="item?.SupplierName" disabled>
+                                                        </div>
+                                                        <div class="col-md-6 col-12">
+                                                            <label for="exampleInputEmail1"
+                                                                class="form-label">Tenor*</label>
+                                                            <input class="form-control" [value]="item?.Tenor"
+                                                                type="text" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12">
+                                                            <label for="exampleInputEmail1" class="form-label">LC No/BOE
+                                                                No.*</label>
+                                                            <input class="form-control" type="text"
+                                                                [value]="item?.LCNoBOENo" disabled>
+                                                        </div>
+                                                        <div class="col-md-6 col-12">
+                                                            <label for="exampleInputEmail1" class="form-label">LC/BOE
+                                                                Amount*</label>
+                                                            <input class="form-control" type="text"
+                                                                [value]="item?.LCBOEAmount" disabled>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -348,13 +374,13 @@
                                                         <tr>
                                                             <td><b>Beneficiary name</b></td>
                                                             <td>
-                                                                <p>{{selectedBenne.benneName}}</p>
+                                                                <p>{{selectedBenne?.benneName}}</p>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td><b>Beneficiary account</b></td>
                                                             <td>
-                                                                <p>{{selectedBenne.beneAccNo}}</p>
+                                                                <p>{{selectedBenne?.beneAccNo}}</p>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -404,11 +430,10 @@
                                 </form>
                             </div>
                         </mat-tab>
-                        <mat-tab label="Request for BC Quote">
+                        <mat-tab label="BC Quote Request">
                             <div class="col-12 p-2">
-                                <form [formGroup]="RequestforBCQuote"
-                                    (ngSubmit)="RequestforBCQuoteSubmit(RequestforBCQuote)">
-                                    <div class="row p-0 pb-2 col-12 modal-bg-transparent">
+                                <div class="row p-0 pb-2 col-12 modal-bg-transparent">
+                                    <form [formGroup]="RequestforBCQuote">
                                         <div class="d-flex col-12 bg-text">
                                             <h5 class="bg-text-h5">From Client (Request Quote) - Select BOE</h5>
                                             <div style="width: 250px;margin-right: 20px !important;">
@@ -426,79 +451,37 @@
                                                     placeHolderText="Select PI/PO or Bill of Entry"
                                                     [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
                                                     [multiple]="false" (modelChanges)="DUMP_FUNCTION($event,['Select BOE'],boedropdown);
-                                                this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event" #boeselectdropdown>
+                                            this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event" #boeselectdropdown>
                                                 </app-ng-dropdown-custom>
                                             </div>
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="submit" class="btn btn-primary"
+                                                (click)="RequestforBCQuoteSubmit(DUMP)">Submit</button>
                                         </div>
-                                        <div class="d-flex col-12 p-0 pt-3">
+                                        <div class="d-flex col-12 p-0 pt-3" id="FromClientRequest">
                                             <div class="row col-12 mt-0 p-0">
                                                 <div class="row col-12 p-0">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Applicant Name</label>
-                                                        <!-- <input type="text" class="form-control"
-                                                            formControlName="ApplicantName"
-                                                            [ngModel]="this.COMPANY_DETAILS?.teamName"
-                                                            placeholder="Applicant Name"> -->
-                                                            <ng-custom-input 
-                                                            type="text"
-                                                            formControlName="ApplicantName"
-                                                            [value]="this.COMPANY_DETAILS?.teamName"
-                                                            [(ngInput)]="DUMP.ApplicantName"
-                                                            placeholder="Applicant Name"></ng-custom-input>
-                                                            
-                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.ApplicantName.errors"
-                                                            class='errorText'>
-                                                            <div
-                                                                *ngIf="RequestforBCQuoteformControls.ApplicantName.errors.required">
-                                                                required
-                                                            </div>
-                                                        </div>
+                                                        <ng-custom-input type="text" [(ngInput)]="DUMP.ApplicantName"
+                                                            placeHolderText="Applicant Name"></ng-custom-input>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">LC Issuing Bank</label>
-                                                            <ng-custom-input 
-                                                            type="text"
-                                                            formControlName="LCIssuingBank"
-                                                            [(ngInput)]="DUMP.LCIssuingBank"
-                                                            placeholder="LC Issuing Bank"></ng-custom-input>
-                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCIssuingBank.errors"
-                                                            class='errorText'>
-                                                            <div
-                                                                *ngIf="RequestforBCQuoteformControls.LCIssuingBank.errors.required">
-                                                                required
-                                                            </div>
-                                                        </div>
+                                                        <ng-custom-input type="text" [(ngInput)]="DUMP.LCIssuingBank"
+                                                            placeHolderText="LC Issuing Bank"></ng-custom-input>
                                                     </div>
                                                 </div>
                                                 <div class="row col-12 p-0">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Supplier Name</label>
-                                                        <input type="text" class="form-control"
-                                                            formControlName="SupplierName"
-                                                            [ngModel]="this.selectedBenne?.benneName"
-                                                            placeholder="Supplier Name">
-                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.SupplierName.errors"
-                                                            class='errorText'>
-                                                            <div
-                                                                *ngIf="RequestforBCQuoteformControls.SupplierName.errors.required">
-                                                                required
-                                                            </div>
-                                                        </div>
+                                                        <ng-custom-input type="text" [(ngInput)]="DUMP.SupplierName"
+                                                            placeHolderText="Supplier Name"></ng-custom-input>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Supplier Bank Name & SWIFT Code</label>
-                                                        <input type="text" class="form-control"
-                                                            formControlName="SupplierBankNameSWIFTCode"
-                                                            [ngModel]="this.selectedBenne?.BeneBankName_BeneBankSwiftCode"
-                                                            placeholder="Supplier Bank Name & SWIFT Code">
-                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.SupplierBankNameSWIFTCode.errors"
-                                                            class='errorText'>
-                                                            <div
-                                                                *ngIf="RequestforBCQuoteformControls.SupplierBankNameSWIFTCode.errors.required">
-                                                                required
-                                                            </div>
-                                                        </div>
+                                                        <ng-custom-input type="text"
+                                                            [(ngInput)]="DUMP.SupplierBankNameSWIFTCode"
+                                                            placeHolderText="Supplier Bank Name & SWIFT Code"></ng-custom-input>
                                                     </div>
                                                 </div>
                                                 <div class="row col-12 p-0">
@@ -509,50 +492,25 @@
                                                             [items]="this.documentService.getCurrencyList()"
                                                             [multiple]="false"
                                                             [selectedItems]="this.BOE_DETAILS?.CURRENCY"
-                                                            formControlName="Currency"
-                                                            [(ngModelDropDown)]="RequestforBCQuoteformControls.Currency.value">
+                                                            [(ngModelDropDown)]="DUMP.Currency">
                                                         </app-ng-dropdown-custom>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">LC No/BOE No</label>
-                                                        <input type="text" class="form-control" ngModel
-                                                            [ngModel]="this.BOE_DETAILS?.BOE_NUMBER"
-                                                            formControlName="LCNoBOENo" placeholder="LC No/BOE No">
-                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCNoBOENo.errors"
-                                                            class='errorText'>
-                                                            <div
-                                                                *ngIf="RequestforBCQuoteformControls.LCNoBOENo.errors.required">
-                                                                required
-                                                            </div>
-                                                        </div>
+                                                        <ng-custom-input type="text" [(ngInput)]="DUMP.LCNoBOENo"
+                                                            placeHolderText="LC No./BOE No."></ng-custom-input>
                                                     </div>
                                                 </div>
                                                 <div class="row col-12 p-0">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">LC/BOE Amount</label>
-                                                        <input type="text" class="form-control" ngModel
-                                                            [ngModel]="this.BOE_DETAILS?.BOE_AMOUNT"
-                                                            formControlName="LCBOEAmount" placeholder="LC/BOE Amount">
-                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCBOEAmount.errors"
-                                                            class='errorText'>
-                                                            <div
-                                                                *ngIf="RequestforBCQuoteformControls.LCBOEAmount.errors.required">
-                                                                required
-                                                            </div>
-                                                        </div>
+                                                        <ng-custom-input type="text" [(ngInput)]="DUMP.LCBOEAmount"
+                                                            placeHolderText="LC/BOE Amount"></ng-custom-input>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Tenor</label>
-                                                        <input type="text" class="form-control" formControlName="Tenor"
-                                                            [(ngModel)]="RequestforBCQuoteform.Tenor"
-                                                            placeholder="Tenor">
-                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.Tenor.errors"
-                                                            class='errorText'>
-                                                            <div
-                                                                *ngIf="RequestforBCQuoteformControls.Tenor.errors.required">
-                                                                required
-                                                            </div>
-                                                        </div>
+                                                        <ng-custom-input type="text" [(ngInput)]="DUMP.Tenor"
+                                                            placeHolderText="Tenor"></ng-custom-input>
                                                     </div>
                                                 </div>
                                                 <div class="row col-12 p-0">
@@ -560,84 +518,40 @@
                                                         <label for="inputEmail4">Commodity</label>
                                                         <app-ng-dropdown-custom formControlName="Commodity"
                                                             placeHolderText="Select Commodity"
-                                                            [(ngModelDropDown)]="RequestforBCQuoteformControls.Commodity.value"
+                                                            [(ngModelDropDown)]="DUMP.Commodity"
                                                             [items]="this.COMPANY_DETAILS?.commodity" bindLabel="como"
                                                             bindValue="como" [multiple]="false">
                                                         </app-ng-dropdown-custom>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Latest date of Shipment</label>
-                                                        <input type="date" class="form-control"
-                                                            formControlName="LatestdateofShipment"
-                                                            [(ngModel)]="RequestforBCQuoteform.LatestdateofShipment"
-                                                            placeholder="Latest date of Shipment">
-                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LatestdateofShipment.errors"
-                                                            class='errorText'>
-                                                            <div
-                                                                *ngIf="RequestforBCQuoteformControls.LatestdateofShipment.errors.required">
-                                                                required
-                                                            </div>
-                                                        </div>
+                                                        <ng-custom-input type="date"
+                                                            [(ngInput)]="DUMP.LatestdateofShipment"
+                                                            placeHolderText="Latest date of Shipment"></ng-custom-input>
                                                     </div>
                                                 </div>
                                                 <div class="row col-12 p-0">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Origin Of Goods</label>
-                                                        <input type="text" class="form-control"
-                                                            formControlName="OriginOfGoods"
-                                                            [ngModel]="this.BOE_DETAILS?.ORIGIN"
-                                                            placeholder="Origin Of Goods">
-                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.OriginOfGoods.errors"
-                                                            class='errorText'>
-                                                            <div
-                                                                *ngIf="RequestforBCQuoteformControls.OriginOfGoods.errors.required">
-                                                                required
-                                                            </div>
-                                                        </div>
+                                                        <ng-custom-input type="text" [(ngInput)]="DUMP.OriginOfGoods"
+                                                            placeHolderText="Origin Of Goods"></ng-custom-input>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Port of Loading</label>
-                                                        <input type="text" class="form-control"
-                                                            formControlName="PortofLoading"
-                                                            [(ngModel)]="RequestforBCQuoteform.PortofLoading"
-                                                            placeholder="Port of Loading">
-                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.PortofLoading.errors"
-                                                            class='errorText'>
-                                                            <div
-                                                                *ngIf="RequestforBCQuoteformControls.PortofLoading.errors.required">
-                                                                required
-                                                            </div>
-                                                        </div>
+                                                        <ng-custom-input type="text" [(ngInput)]="DUMP.PortofLoading"
+                                                            placeHolderText="Port of Loading"></ng-custom-input>
                                                     </div>
                                                 </div>
                                                 <div class="row col-12 p-0">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Port of Discharge</label>
-                                                        <input type="text" class="form-control"
-                                                            formControlName="PortofDischarge"
-                                                            [ngModel]="this.BOE_DETAILS?.DISCHARGE_PORT"
-                                                            placeholder="Port of Discharge">
-                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.PortofDischarge.errors"
-                                                            class='errorText'>
-                                                            <div
-                                                                *ngIf="RequestforBCQuoteformControls.PortofDischarge.errors.required">
-                                                                required
-                                                            </div>
-                                                        </div>
+                                                        <ng-custom-input type="text" [(ngInput)]="DUMP.PortofDischarge"
+                                                            placeHolderText="Port of Discharge"></ng-custom-input>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Number of Shipment</label>
-                                                        <input type="text" class="form-control"
-                                                            formControlName="NumberofShipment"
-                                                            [(ngModel)]="RequestforBCQuoteform.NumberofShipment"
-                                                            placeholder="Number of Shipment">
-                                                        <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.NumberofShipment.errors"
-                                                            class='errorText'>
-                                                            <div
-                                                                *ngIf="RequestforBCQuoteformControls.NumberofShipment.errors.required">
-                                                                required
-                                                            </div>
-                                                        </div>
+                                                        <ng-custom-input type="text" [(ngInput)]="DUMP.NumberofShipment"
+                                                            placeHolderText="Number of Shipment"></ng-custom-input>
                                                     </div>
                                                 </div>
                                                 <div class="row col-12 p-0">
@@ -647,7 +561,7 @@
                                                             formControlName="ConfirmationChargesborne"
                                                             placeHolderText="Select Confirmation Charges borne by"
                                                             [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
-                                                            [(ngModelDropDown)]="RequestforBCQuoteformControls.ConfirmationChargesborne.value"
+                                                            [(ngModelDropDown)]="DUMP.ConfirmationChargesborne"
                                                             bindLabel="value" bindValue="value" [multiple]="false"
                                                             #ConfirmationChargesborne>
                                                         </app-ng-dropdown-custom>
@@ -658,7 +572,7 @@
                                                             formControlName="DiscountingChargesborne"
                                                             placeHolderText="Select Discounting Charges borne by"
                                                             [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
-                                                            [(ngModelDropDown)]="RequestforBCQuoteformControls.DiscountingChargesborne.value"
+                                                            [(ngModelDropDown)]="DUMP.DiscountingChargesborne"
                                                             bindLabel="value" bindValue="value" [multiple]="false"
                                                             #DiscountingChargesborne>
                                                         </app-ng-dropdown-custom>
@@ -666,16 +580,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+
+                                </div>
                             </div>
                         </mat-tab>
-                        <mat-tab label="Summary Request for BC Quote">
+                        <mat-tab label="BC Quote Summary">
                             <div class="col-12 p-2">
                                 <div class="row p-0 pb-2 col-12 modal-bg-transparent">
                                     <div class="d-flex col-12 bg-text">
                                         <h5 class="bg-text-h5">BC Quote Summary</h5>
-                                        <div style="width: 250px;margin-right: 20px !important;">
+                                        <!-- <div style="width: 250px;margin-right: 20px !important;">
                                             <div style="width: 250px;margin-right: 20px !important;">
                                                 <app-ng-dropdown-custom placeHolderText="Select beneficiary"
                                                     [items]="this.benneDetail" bindLabel="benneName"
@@ -692,12 +607,12 @@
                                                 (modelChanges)="DUMP_FUNCTION($event,['Select BOE'],boedropdown);
                                             this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event" #boeselectdropdown>
                                             </app-ng-dropdown-custom>
-                                        </div>
+                                        </div> -->
                                     </div>
-                                    <div class="row mt-0">
-                                        <table class="table">
+                                    <div class="row mt-0 p-2">
+                                        <table class="table AcceptReject">
                                             <thead>
-                                                <tr class="table-tr">
+                                                <tr class="table-tr pr-3">
                                                     <th scope="col" class="col-td-th-1">#</th>
                                                     <th scope="col" class="col-td-th-2">Supplier Name</th>
                                                     <th scope="col" class="col-td-th-3">LC No/BOE No</th>
@@ -710,10 +625,41 @@
                                                     <th scope="col" class="col-td-th-3">ROI (Spread)</th>
                                                     <th scope="col" class="col-td-th-3">Arrangement Fee</th>
                                                     <th scope="col" class="col-td-th-3">Accept/Reject</th>
+                                                    <th scope="col" class="col-td-th-3">View</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-
+                                                <tr class="table-tr tr-box-shadow mt-2 pr-3"
+                                                    *ngFor="let item of this.BUYER_BENEFICIARY_CREDIT_DATA;let i=index">
+                                                    <td scope="col" class="col-td-th-1">{{(i+1)}}</td>
+                                                    <td scope="col" class="col-td-th-2">{{item?.SupplierName}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.LCNoBOENo}}</td>
+                                                    <td scope="col" class="col-td-th-2">{{item?.LCBOEAmount}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.Currency}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.Tenor}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.LendingBankNameandSwiftcode}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.TermSOFR}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.ROISpread}}</td>
+                                                    <td scope="col" class="col-td-th-3">{{item?.ArrangementFee}}</td>
+                                                    <td scope="col" class="col-td-th-3">
+                                                        <div class="d-flex" style="gap: 10px;"
+                                                            *ngIf="item?.AcceptReject!='Reject' && item?.AcceptReject!='Accept'">
+                                                            <button class="btn btn-primary"
+                                                                (click)="AcceptReject(item?._id,{AcceptReject:'Accept'})">Accept</button>
+                                                            <button class="btn btn-danger"
+                                                                (click)="AcceptReject(item?._id,{AcceptReject:'Reject'})">Reject</button>
+                                                        </div>
+                                                        <div class="d-flex" style="gap: 10px;"
+                                                            *ngIf="item?.AcceptReject=='Reject' || item?.AcceptReject=='Accept'">
+                                                            <span style="pointer-events:none;" class="btn"
+                                                                [ngClass]="{'btn-danger':item?.AcceptReject=='Reject','btn-success':item?.AcceptReject=='Accept'}">{{item?.AcceptReject}}</span>
+                                                        </div>
+                                                    </td>
+                                                    <th scope="col" class="col-td-th-3">
+                                                        <button class="upload-button btn btn-primary PopupOpen"
+                                                            [attr.popup-close]="'VIEW_DOCUMENTS'" (click)="VIEW_DOCUMENTS(item?._id,item)">View</button>
+                                                    </th>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -742,85 +688,132 @@
                         </app-ng-dropdown-custom>
                     </div>
                     <div class="d-flex" style="height: 76vh;">
-                        <div class="row mt-0">
-                            <table class="table">
-                                <thead>
-                                    <tr class="table-tr">
-                                        <th scope="col" class="col-td-th-1">#</th>
-                                        <th scope="col" class="col-td-th-1">#</th>
-                                        <th scope="col" class="col-td-th-2">BOE Date</th>
-                                        <th scope="col" class="col-td-th-3">BOE No.</th>
-                                        <th scope="col" class="col-td-th-2">Beneficiary Name</th>
-                                        <th scope="col" class="col-td-th-3">CURRENCY</th>
-                                        <th scope="col" class="col-td-th-3">BOE AMOUNT</th>
-                                        <th scope="col" class="col-td-th-3">BOE Available AMOUNT</th>
-                                        <th scope="col" class="col-td-th-3">Select ORM</th>
-                                        <th scope="col" class="col-td-th-3">ORM No.</th>
-                                        <th scope="col" class="col-td-th-3">ORM Amount</th>
+                        <table class="table">
+                            <thead>
+                                <tr class="table-tr">
+                                    <th scope="col" class="col-td-th-1">#</th>
+                                    <th scope="col" class="col-td-th-1">#</th>
+                                    <th scope="col" class="col-td-th-2">BOE Date</th>
+                                    <th scope="col" class="col-td-th-3">BOE No.</th>
+                                    <th scope="col" class="col-td-th-2">Beneficiary Name</th>
+                                    <th scope="col" class="col-td-th-3">CURRENCY</th>
+                                    <th scope="col" class="col-td-th-3">BOE AMOUNT</th>
+                                    <th scope="col" class="col-td-th-3">BOE Balance Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <div class="table-type" *ngFor="let item of this.PIPO_LIST['data'];let i=index"
+                                    [ngClass]="{'table-active':item.isExpand==true}">
+                                    <tr class="table-tr added-active" title="click here see more details">
+                                        <td title="ORM Data Showing and Hide" scope="col" class="col-td-th-1"
+                                            (click)="item.isExpand=!item.isExpand;CloseAllExpand($event,this.PIPO_LIST['data'],i)">
+                                            <span *ngIf="item.isExpand==true" class="fa fa-chevron-up"></span>
+                                            <span *ngIf="item.isExpand==false" class="fa fa-chevron-down"></span>
+                                        </td>
+                                        <td scope="col" class="col-td-th-1">
+                                            <input type="checkbox" (change)="choosenItems($event,item?._id,i,item);" />
+                                        </td>
+                                        <td scope="col" class="col-td-th-2">
+                                            {{item?.boeDate}}</td>
+                                        <td scope="col" class="col-td-th-3">
+                                            {{item?.boeNumber}}</td>
+                                        <td scope="col" class="col-td-th-2">
+                                            {{item?.benneName[0]}}</td>
+                                        <td scope="col" class="col-td-th-3">{{item?.currency}}
+                                        </td>
+                                        <td scope="col" class="col-td-th-3">{{item?.invoiceAmount}}
+                                        </td>
+                                        <td scope="col" class="col-td-th-3">{{item?.balanceAmount}}
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <div class="table-type" *ngFor="let item of this.PIPO_LIST['data'];let i=index"
-                                        [ngClass]="{'table-active':item.isExpand==true}">
-                                        <tr class="table-tr added-active" title="click here see more details">
-                                            <td title="ORM Data Showing and Hide" scope="col" class="col-td-th-1"
-                                                (click)="item.isExpand=!item.isExpand;CloseAllExpand($event,this.PIPO_LIST['data'],i)">
-                                                <span *ngIf="item.isExpand==true" class="fa fa-chevron-up"></span>
-                                                <span *ngIf="item.isExpand==false" class="fa fa-chevron-down"></span>
-                                            </td>
-                                            <td scope="col" class="col-td-th-1"><input type="checkbox"
-                                                    (change)="choosenItems($event,item?._id,i,item);" /></td>
-                                            <td scope="col" class="col-td-th-2">{{item?.boeDate}}</td>
-                                            <td scope="col" class="col-td-th-3">{{item?.boeNumber}}</td>
-                                            <td scope="col" class="col-td-th-2">{{item?.benneName[0]}}</td>
-                                            <td scope="col" class="col-td-th-3">{{item?.currency}}</td>
-                                            <td scope="col" class="col-td-th-3">{{item?.invoiceAmount}}</td>
-                                            <td scope="col" class="col-td-th-3">{{item?.balanceAmount}}</td>
-                                            <td scope="col" class="col-td-th-3">
-                                                <button class="btn btn-primary PopupOpen" popup-close="ORM_POPUP_2"
-                                                    (click)="PIPO_SELECTED_INDEX(i,item)">Select</button>
-                                            </td>
-                                            <td scope="col" class="col-td-th-3">
-                                                {{item?.AdviceRefNo}}</td>
-                                            <td scope="col" class="col-td-th-3">
-                                                {{item?.AdviceRefAmount}}</td>
-                                        </tr>
-                                        <tr class="table-tr table-tr-1"
-                                            [ngClass]="{'Table-Show':item.isExpand==true,'Table-Hide':item.isExpand==false}">
-                                            <td colspan="4" style="width: 100%;border: none;">
-                                                <div class="header">
-                                                    <h5>ORM Advice Against to this BOE No. : {{item?.boeNumber}}</h5>
-                                                </div>
-                                                <div class="center-panel">
-                                                    <table class="table table-style">
-                                                        <thead>
-                                                            <tr class="table-tr">
-                                                                <th class="col-td-th-2">Bill No.</th>
-                                                                <th class="col-td-th-2">Buyer</th>
-                                                                <th class="col-td-th-2">Party Name</th>
-                                                                <th class="col-td-th-2">Amount</th>
-                                                                <th class="col-td-th-2">Available Amount</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr class="table-tr"
-                                                                *ngFor="let Adviceitem of item?.AdviceRefData">
-                                                                <td class="col-td-th-2">{{ Adviceitem?.billNo }}</td>
-                                                                <td class="col-td-th-2">{{ Adviceitem?.buyerName }}</td>
-                                                                <td class="col-td-th-2">{{ Adviceitem?.partyName }}</td>
-                                                                <td class="col-td-th-2">{{ Adviceitem?.amount }}</td>
-                                                                <td class="col-td-th-2">{{ Adviceitem?.AvailableAmount
-                                                                    }}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </div>
-                                </tbody>
-                            </table>
-                        </div>
+                                    <tr class="table-tr table-tr-1 tr-box-shadow"
+                                        [ngClass]="{'Table-Show':item.isExpand==true,'Table-Hide':item.isExpand==false}">
+                                        <td colspan="4" style="width: 100%;border: none;">
+                                            <div class="header">
+                                                <h5>CI Against to this BOE No. : {{item?.boeNumber}}
+                                                </h5>
+                                            </div>
+                                            <div class="center-panel">
+                                                <table class="table table-style">
+                                                    <thead>
+                                                        <tr class="table-tr">
+                                                            <th scope="col" class="col-td-th-1">#</th>
+                                                            <th scope="col" class="col-td-th-2">CI Date</th>
+                                                            <th scope="col" class="col-td-th-3">CI No.</th>
+                                                            <th scope="col" class="col-td-th-2">Beneficiary Name</th>
+                                                            <th scope="col" class="col-td-th-3">CURRENCY</th>
+                                                            <th scope="col" class="col-td-th-3">CI AMOUNT</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr class="table-tr added-active"
+                                                            title="click here see more details">
+                                                            <td title="ORM Data Showing and Hide" scope="col"
+                                                                class="col-td-th-1"
+                                                                (click)="item.CI_EXPAND=!item.CI_EXPAND;">
+                                                                <span *ngIf="item.CI_EXPAND==true"
+                                                                    class="fa fa-chevron-up"></span>
+                                                                <span *ngIf="item.CI_EXPAND==false"
+                                                                    class="fa fa-chevron-down"></span>
+                                                            </td>
+                                                            <td scope="col" class="col-td-th-2">
+                                                                {{item?.CI_DETAILS?.commercialDate}}</td>
+                                                            <td scope="col" class="col-td-th-3">
+                                                                {{item?.CI_DETAILS?.commercialNumber}}</td>
+                                                            <td scope="col" class="col-td-th-2">
+                                                                {{item?.CI_DETAILS?.buyerName[0]}}</td>
+                                                            <td scope="col" class="col-td-th-3">
+                                                                {{item?.CI_DETAILS?.currency}}
+                                                            </td>
+                                                            <td scope="col" class="col-td-th-3">
+                                                                {{item?.CI_DETAILS?.amount}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="table-tr table-tr-2 tr-box-shadow"
+                                                            [ngClass]="{'Table-Show':item.CI_EXPAND==true,'Table-Hide':item.CI_EXPAND==false}">
+                                                            <td colspan="4" style="width: 100%;border: none;">
+                                                                <div class="header">
+                                                                    <h5>ORM Advice Against to this CI No. :
+                                                                        {{item?.CI_DETAILS?.commercialNumber}}
+                                                                    </h5>
+                                                                </div>
+                                                                <div class="center-panel">
+                                                                    <table class="table table-style">
+                                                                        <thead>
+                                                                            <tr class="table-tr">
+                                                                                <th class="col-td-th-2">Bill No.</th>
+                                                                                <th class="col-td-th-2">Beneficiary Name
+                                                                                </th>
+                                                                                <th class="col-td-th-2">Currency</th>
+                                                                                <th class="col-td-th-2">Amount</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr class="table-tr">
+                                                                                <td class="col-td-th-2">{{
+                                                                                    item?.CI_DETAILS?.AdvanceNo }}</td>
+                                                                                <td class="col-td-th-2">{{
+                                                                                    item?.CI_DETAILS?.buyerName}}</td>
+                                                                                <td class="col-td-th-2">{{
+                                                                                    item?.CI_DETAILS?.AdvanceCurrency}}
+                                                                                </td>
+                                                                                <td class="col-td-th-2">{{
+                                                                                    item?.CI_DETAILS?.AdvanceAmount }}
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -908,223 +901,108 @@
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Applicant Name</label>
-                            <input type="text" class="form-control"
-                                formControlName="ApplicantName"
-                                [ngModel]="this.COMPANY_DETAILS?.teamName"
-                                placeholder="Applicant Name">
-                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.ApplicantName.errors"
-                                class='errorText'>
-                                <div
-                                    *ngIf="RequestforBCQuoteformControls.ApplicantName.errors.required">
-                                    required
-                                </div>
-                            </div>
+                            <ng-custom-input type="text" [(ngInput)]="DUMP.ApplicantName"
+                                placeHolderText="Applicant Name"></ng-custom-input>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">LC Issuing Bank</label>
-                            <input type="text" class="form-control"
-                                formControlName="LCIssuingBank"
-                                [(ngModel)]="RequestforBCQuoteform.LCIssuingBank"
-                                placeholder="LC Issuing Bank">
-                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCIssuingBank.errors"
-                                class='errorText'>
-                                <div
-                                    *ngIf="RequestforBCQuoteformControls.LCIssuingBank.errors.required">
-                                    required
-                                </div>
-                            </div>
+                            <ng-custom-input type="text" [(ngInput)]="DUMP.LCIssuingBank"
+                                placeHolderText="LC Issuing Bank"></ng-custom-input>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Supplier Name</label>
-                            <input type="text" class="form-control"
-                                formControlName="SupplierName"
-                                [ngModel]="this.selectedBenne?.benneName"
-                                placeholder="Supplier Name">
-                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.SupplierName.errors"
-                                class='errorText'>
-                                <div
-                                    *ngIf="RequestforBCQuoteformControls.SupplierName.errors.required">
-                                    required
-                                </div>
-                            </div>
+                            <ng-custom-input type="text" [(ngInput)]="DUMP.SupplierName"
+                                placeHolderText="Supplier Name"></ng-custom-input>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Supplier Bank Name & SWIFT Code</label>
-                            <input type="text" class="form-control"
-                                formControlName="SupplierBankNameSWIFTCode"
-                                [ngModel]="this.selectedBenne?.BeneBankName_BeneBankSwiftCode"
-                                placeholder="Supplier Bank Name & SWIFT Code">
-                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.SupplierBankNameSWIFTCode.errors"
-                                class='errorText'>
-                                <div
-                                    *ngIf="RequestforBCQuoteformControls.SupplierBankNameSWIFTCode.errors.required">
-                                    required
-                                </div>
-                            </div>
+                            <ng-custom-input type="text" [(ngInput)]="DUMP.SupplierBankNameSWIFTCode"
+                                placeHolderText="Supplier Bank Name & SWIFT Code"></ng-custom-input>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Currency</label>
-                            <app-ng-dropdown-custom bindLabel="type"
-                                placeHolderText="Select Currency"
-                                [items]="this.documentService.getCurrencyList()"
-                                [multiple]="false"
-                                [selectedItems]="this.BOE_DETAILS?.CURRENCY"
-                                formControlName="Currency"
-                                [(ngModelDropDown)]="RequestforBCQuoteformControls.Currency.value">
+                            <app-ng-dropdown-custom bindLabel="type" placeHolderText="Select Currency"
+                                [items]="this.documentService.getCurrencyList()" [multiple]="false"
+                                [selectedItems]="this.BOE_DETAILS?.CURRENCY" [(ngModelDropDown)]="DUMP.Currency">
                             </app-ng-dropdown-custom>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">LC No/BOE No</label>
-                            <input type="text" class="form-control" ngModel
-                                [ngModel]="this.BOE_DETAILS?.BOE_NUMBER"
-                                formControlName="LCNoBOENo" placeholder="LC No/BOE No">
-                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCNoBOENo.errors"
-                                class='errorText'>
-                                <div
-                                    *ngIf="RequestforBCQuoteformControls.LCNoBOENo.errors.required">
-                                    required
-                                </div>
-                            </div>
+                            <ng-custom-input type="text" [(ngInput)]="DUMP.LCNoBOENo"
+                                placeHolderText="LC No./BOE No."></ng-custom-input>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">LC/BOE Amount</label>
-                            <input type="text" class="form-control" ngModel
-                                [ngModel]="this.BOE_DETAILS?.BOE_AMOUNT"
-                                formControlName="LCBOEAmount" placeholder="LC/BOE Amount">
-                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LCBOEAmount.errors"
-                                class='errorText'>
-                                <div
-                                    *ngIf="RequestforBCQuoteformControls.LCBOEAmount.errors.required">
-                                    required
-                                </div>
-                            </div>
+                            <ng-custom-input type="text" [(ngInput)]="DUMP.LCBOEAmount"
+                                placeHolderText="LC/BOE Amount"></ng-custom-input>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Tenor</label>
-                            <input type="text" class="form-control" formControlName="Tenor"
-                                [(ngModel)]="RequestforBCQuoteform.Tenor"
-                                placeholder="Tenor">
-                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.Tenor.errors"
-                                class='errorText'>
-                                <div
-                                    *ngIf="RequestforBCQuoteformControls.Tenor.errors.required">
-                                    required
-                                </div>
-                            </div>
+                            <ng-custom-input type="text" [(ngInput)]="DUMP.Tenor"
+                                placeHolderText="Tenor"></ng-custom-input>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Commodity</label>
-                            <app-ng-dropdown-custom formControlName="Commodity"
-                                placeHolderText="Select Commodity"
-                                [(ngModelDropDown)]="RequestforBCQuoteformControls.Commodity.value"
-                                [items]="this.COMPANY_DETAILS?.commodity" bindLabel="como"
-                                bindValue="como" [multiple]="false">
+                            <app-ng-dropdown-custom formControlName="Commodity" placeHolderText="Select Commodity"
+                                [(ngModelDropDown)]="DUMP.Commodity" [items]="this.COMPANY_DETAILS?.commodity"
+                                bindLabel="como" bindValue="como" [multiple]="false">
                             </app-ng-dropdown-custom>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Latest date of Shipment</label>
-                            <input type="date" class="form-control"
-                                formControlName="LatestdateofShipment"
-                                [(ngModel)]="RequestforBCQuoteform.LatestdateofShipment"
-                                placeholder="Latest date of Shipment">
-                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.LatestdateofShipment.errors"
-                                class='errorText'>
-                                <div
-                                    *ngIf="RequestforBCQuoteformControls.LatestdateofShipment.errors.required">
-                                    required
-                                </div>
-                            </div>
+                            <ng-custom-input type="date" [(ngInput)]="DUMP.LatestdateofShipment"
+                                placeHolderText="Latest date of Shipment"></ng-custom-input>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Origin Of Goods</label>
-                            <input type="text" class="form-control"
-                                formControlName="OriginOfGoods"
-                                [ngModel]="this.BOE_DETAILS?.ORIGIN"
-                                placeholder="Origin Of Goods">
-                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.OriginOfGoods.errors"
-                                class='errorText'>
-                                <div
-                                    *ngIf="RequestforBCQuoteformControls.OriginOfGoods.errors.required">
-                                    required
-                                </div>
-                            </div>
+                            <ng-custom-input type="text" [(ngInput)]="DUMP.OriginOfGoods"
+                                placeHolderText="Origin Of Goods"></ng-custom-input>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Port of Loading</label>
-                            <input type="text" class="form-control"
-                                formControlName="PortofLoading"
-                                [(ngModel)]="RequestforBCQuoteform.PortofLoading"
-                                placeholder="Port of Loading">
-                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.PortofLoading.errors"
-                                class='errorText'>
-                                <div
-                                    *ngIf="RequestforBCQuoteformControls.PortofLoading.errors.required">
-                                    required
-                                </div>
-                            </div>
+                            <ng-custom-input type="text" [(ngInput)]="DUMP.PortofLoading"
+                                placeHolderText="Port of Loading"></ng-custom-input>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Port of Discharge</label>
-                            <input type="text" class="form-control"
-                                formControlName="PortofDischarge"
-                                [ngModel]="this.BOE_DETAILS?.DISCHARGE_PORT"
-                                placeholder="Port of Discharge">
-                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.PortofDischarge.errors"
-                                class='errorText'>
-                                <div
-                                    *ngIf="RequestforBCQuoteformControls.PortofDischarge.errors.required">
-                                    required
-                                </div>
-                            </div>
+                            <ng-custom-input type="text" [(ngInput)]="DUMP.PortofDischarge"
+                                placeHolderText="Port of Discharge"></ng-custom-input>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Number of Shipment</label>
-                            <input type="text" class="form-control"
-                                formControlName="NumberofShipment"
-                                [(ngModel)]="RequestforBCQuoteform.NumberofShipment"
-                                placeholder="Number of Shipment">
-                            <div *ngIf="RequestforBCQuoteSubmitbtn && RequestforBCQuoteformControls.NumberofShipment.errors"
-                                class='errorText'>
-                                <div
-                                    *ngIf="RequestforBCQuoteformControls.NumberofShipment.errors.required">
-                                    required
-                                </div>
-                            </div>
+                            <ng-custom-input type="text" [(ngInput)]="DUMP.NumberofShipment"
+                                placeHolderText="Number of Shipment"></ng-custom-input>
                         </div>
                     </div>
                     <div class="row col-12 p-0">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Confirmation Charges borne by</label>
-                            <app-ng-dropdown-custom
-                                formControlName="ConfirmationChargesborne"
+                            <app-ng-dropdown-custom formControlName="ConfirmationChargesborne"
                                 placeHolderText="Select Confirmation Charges borne by"
                                 [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
-                                [(ngModelDropDown)]="RequestforBCQuoteformControls.ConfirmationChargesborne.value"
-                                bindLabel="value" bindValue="value" [multiple]="false"
-                                #ConfirmationChargesborne>
+                                [(ngModelDropDown)]="DUMP.ConfirmationChargesborne" bindLabel="value" bindValue="value"
+                                [multiple]="false" #ConfirmationChargesborne>
                             </app-ng-dropdown-custom>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Discounting Charges borne by</label>
-                            <app-ng-dropdown-custom
-                                formControlName="DiscountingChargesborne"
+                            <app-ng-dropdown-custom formControlName="DiscountingChargesborne"
                                 placeHolderText="Select Discounting Charges borne by"
                                 [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
-                                [(ngModelDropDown)]="RequestforBCQuoteformControls.DiscountingChargesborne.value"
-                                bindLabel="value" bindValue="value" [multiple]="false"
-                                #DiscountingChargesborne>
+                                [(ngModelDropDown)]="DUMP.DiscountingChargesborne" bindLabel="value" bindValue="value"
+                                [multiple]="false" #DiscountingChargesborne>
                             </app-ng-dropdown-custom>
                         </div>
                     </div>
@@ -1145,10 +1023,58 @@
             <div style="display:flex;" class="mt-3">
                 <div>
                     <button type="button" class="btn btn-primary" (click)="SendApproval(this.GetDownloadStatus?.status,
-        this.Remittance_Amount!=0?'Import-Direct-Dispatch'+(this.Remittance_Amount-1) :null);">Send for
+                    this.Remittance_Amount!=0?'Import-Direct-Dispatch'+(this.Remittance_Amount-1) :null);">Send for
                         Approval</button>
                 </div>
             </div>
         </div>
     </app-custom-model>
 </div>
+
+<app-custom-model modalbodyheight="70vh" [FooterButton]="true" EventButton="false"
+    [buttondisabled]="this.SLECTED_BC_QUOTE.length!=0?false:true" [customstyle]="{'max-width':'85vw !important'}"
+    class="p-2 mt-2" height="80vh" id="BUYER_CREDIT_POPUP" name='Selection Buyer Credit'>
+    <div class="p-2">
+        <div class="row p-2 col-12">
+            <div class="d-flex col-12" style="height:80vh;">
+                <div class="row col-12 mt-0">
+                    <table class="table">
+                        <thead>
+                            <tr class="table-tr">
+                                <th scope="col" class="col-td-th-1">#</th>
+                                <th scope="col" class="col-td-th-2">Supplier Name</th>
+                                <th scope="col" class="col-td-th-2">LC No/BOE No.</th>
+                                <th scope="col" class="col-td-th-2">LC/BOE Amount</th>
+                                <th scope="col" class="col-td-th-2">Currency</th>
+                                <th scope="col" class="col-td-th-2">Tenor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-tr"
+                                *ngFor="let item of this.BUYER_BENEFICIARY_CREDIT_ACCEPT_DATA;let i=index">
+                                <td scope="col" class="col-td-th-1">
+                                    <input type="checkbox" (change)="BC_QUOTE_SLECTED($event,i,item)" />
+                                </td>
+                                <td scope="col" class="col-td-th-2">{{item?.SupplierName}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.LCNoBOENo}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.LCBOEAmount}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.Currency}}</td>
+                                <td scope="col" class="col-td-th-2">{{item?.Tenor}} days</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-custom-model>
+
+<app-custom-model modalbodyheight="80vh"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="90vh"
+    id="VIEW_DOCUMENTS" name="Forward Contract View Documents">
+    <div class="col-12 pb-2" *ngIf="this.PDF_VIEW_URL!=''">
+        <app-pdf-viewer [downloadShow]="false" *ngIf="this.PDF_VIEW_URL!=''" name="Documents" [src]="this.PDF_VIEW_URL" width="100%"
+            height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>

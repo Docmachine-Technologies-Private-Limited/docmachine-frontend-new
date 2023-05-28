@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { DocumentService } from '../../../service/document.service';
 import { BehaviorSubject, Subject, async } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AppConfig } from '../../../app.config';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +16,9 @@ export class BehaviorSubjectListService {
   httpOptions:any = {};
   api_base: string;
 
-  constructor(public servicesObj: DocumentService,private http: HttpClient, public appconfig: AppConfig) {
+  constructor(public servicesObj: DocumentService,private http: HttpClient) {
     this.loadFromLocalStorage();
-    this.api_base = appconfig.apiUrl;
+    this.api_base = servicesObj.api_base;
     this.httpOptions = {headers: new HttpHeaders({ Authorization: this.authToken })};
     this.callAllCommonApi();
   }

@@ -8,7 +8,6 @@ import { isPlatformBrowser } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import * as data from '../../bank.json';
 import * as data1 from '../../currency.json';
-import { AppConfig } from '../../app.config';
 import { WindowInformationService } from '../../service/window-information.service';
 import $ from 'jquery'
 import { DomSanitizer } from '@angular/platform-browser';
@@ -121,12 +120,11 @@ export class EditCompanyComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private toastr: ToastrService,
-    public appconfig: AppConfig,
     private sanitizer: DomSanitizer,
     public docservice: DocumentService,
     public wininfo: WindowInformationService) {
     this.loadFromLocalStorage()
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     console.log(this.api_base)
     console.log(this.authToken)
     this.headers = {

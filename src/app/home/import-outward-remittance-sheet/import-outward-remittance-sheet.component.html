@@ -131,17 +131,19 @@
                                             <th scope="col" class="col-td-th-3">PI/PO No.</th>
                                             <th scope="col" class="col-td-th-3">BOE Number</th>
                                             <th scope="col" class="col-td-th-3">Party Name</th>
-                                            <th scope="col" class="col-td-th-3">TT Amount USD</th>
-                                            <th scope="col" class="col-td-th-3">From</th>
+                                            <th scope="col" class="col-td-th-3">Currency</th>
+                                            <th scope="col" class="col-td-th-3">TT Amount</th>
+                                            <!-- <th scope="col" class="col-td-th-3">From</th> -->
                                             <th scope="col" class="col-td-th-3">Branch</th>
                                             <th scope="col" class="col-td-th-3">Description</th>
-                                            <th scope="col" class="col-td-th-3">Received Date</th>
+                                            <th scope="col" class="col-td-th-3">Payment Date</th>
                                             <th scope="col" class="col-td-th-3">Commission/Bank Charges</th>
-                                            <th scope="col" class="col-td-th-3">Received Amount USD</th>
-                                            <th scope="col" class="col-td-th-3">Conversion Date</th>
+                                            <th scope="col" class="col-td-th-3">Payment Amount</th>
+                                            <!-- <th scope="col" class="col-td-th-3">Conversion Date</th> -->
                                             <th scope="col" class="col-td-th-3">Conversion Rate</th>
                                             <th scope="col" class="col-td-th-3">Converted Amount</th>
-                                            <th scope="col" class="col-td-th-3">FIRX Number/ID</th>
+                                            <th scope="col" class="col-td-th-3">Ref No.</th>
+                                            <th scope="col" class="col-td-th-3">Payment Type</th>
                                             <th scope="col" class="col-td-th-3">Available Balance</th>
                                             <th scope="col" class="col-td-th-3">Action</th>
 
@@ -197,6 +199,9 @@
                                                 </div>
                                             </td>
                                             <td class="col-td-th-3">
+                                                {{data.currency}}
+                                            </td>
+                                            <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.amount}}
                                                 </div>
@@ -205,13 +210,12 @@
                                                     <input class="tblInput form-control" name="from" type="text" placeholder="Amount" [(ngModel)]="data.amount">
                                                 </div>
                                             </td>
-                                            <td class="col-td-th-3">
+                                            <!-- <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.origin}}
                                                 </div>
 
                                                 <div *ngIf="optionsVisibility[i]">
-                                                    <!-- <input class="tblInput form-control" name="branch" type="text" placeholder="From" [(ngModel)]="data.origin"> -->
                                                     <select [(ngModel)]="data.origin" placeholder="Origin" class="tblInput form-control" name="origin" style="border: 1px solid #C6CBD4;
                                                     color: black;
                                                     padding: 4px;
@@ -220,7 +224,7 @@
                                                         <option *ngFor="let ori of origin">{{ori}}</option>
                                                     </select>
                                                 </div>
-                                            </td>
+                                            </td> -->
                                             <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.location}}
@@ -280,7 +284,7 @@
                                                     <input class="tblInput form-control" name="recievedAmount" type="text" placeholder="Recieved Amount" [(ngModel)]="data.convertedAmount - data.commision">
                                                 </div> -->
                                             </td>
-                                            <td class="col-td-th-3">
+                                            <!-- <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.conversionDate}}
                                                 </div>
@@ -288,7 +292,7 @@
                                                 <div *ngIf="optionsVisibility[i]">
                                                     <input class="tblInput form-control" name="conversionDate" type="text" placeholder="Conversion Rate" [(ngModel)]="data.conversionDate">
                                                 </div>
-                                            </td>
+                                            </td> -->
                                             <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.exchangeRate}}
@@ -315,6 +319,9 @@
                                                 <div *ngIf="optionsVisibility[i]">
                                                     <input class="tblInput form-control" name="firxNumber" type="text" placeholder="FIRX Number/ID" [(ngModel)]="data.billNo">
                                                 </div>
+                                            </td>
+                                            <td class="col-td-th-3">
+                                                {{data.PaymentType}}
                                             </td>
                                             <td class="col-td-th-3">
                                                 {{data.BalanceAvail}}

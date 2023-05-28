@@ -1,7 +1,3 @@
-// import { BoeBill } from '../.././../../../model/boe.model';
-// import { IRAdvice } from '../.././../../../model/irAdvice.model';
-// import { ORAdvice } from '../../../../../model/orAdvice.model';
-
 import {
   AfterViewInit,
   Component,
@@ -14,25 +10,18 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { timer } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { FormArray, NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import * as data1 from '../../../../currency.json';
 import { SharedDataService } from '../../../shared-Data-Servies/shared-data.service';
-// import {ToastrService} from 'ngx-toastr';
 import {
   DropzoneDirective,
   DropzoneConfigInterface,
 } from 'ngx-dropzone-wrapper';
 import { Subscription } from 'rxjs';
-// import {DashboardService} from './dashboard-service';
-// import { TabsComponent } from './tabs.component';
-// import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import $ from 'jquery';
-// import { ShippingBill } from '../../../../../model/shippingBill.model';
 import {
   FormBuilder,
   FormGroup,
@@ -42,12 +31,10 @@ import {
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../../../service/user.service';
-// import { MatSelectModule } from '@angular/material/select';
-// import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AppConfig } from '../../../../app.config';
 import { PipoDataService } from "../../../../service/homeservices/pipo.service";
 import { WindowInformationService } from '../../../../service/window-information.service';
 import { CustomConfirmDialogModelComponent } from '../../../../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -221,7 +208,6 @@ export class ExportDebitNoteComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private userService: UserService,
     private toastr: ToastrService,
-    public appconfig: AppConfig,
     private sharedData: SharedDataService,
     public pipoDataService: PipoDataService,
     public wininfo: WindowInformationService,
@@ -234,7 +220,7 @@ export class ExportDebitNoteComponent implements OnInit {
     this.sharedData.currentReturnUrl.subscribe(
       (message) => (this.retururl = message)
     );
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     console.log(this.api_base);
     this.loadFromLocalStorage();
     console.log(this.authToken);

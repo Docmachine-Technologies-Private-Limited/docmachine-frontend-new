@@ -9,7 +9,6 @@ import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms'
 import * as data from '../bank.json';
 import * as data1 from './../currency.json';
-import { AppConfig } from '../app.config';
 import { DocumentService } from '../service/document.service';
 @Component({
   selector: 'app-create-team1',
@@ -71,9 +70,9 @@ export class CreateTeam1Component implements OnInit, AfterViewInit {
   constructor(@Inject(PLATFORM_ID) public platformId, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private userService: UserService, private router: Router, 
     public docservice:DocumentService,
-    private toastr: ToastrService, public appconfig: AppConfig) {
+    private toastr: ToastrService) {
     this.loadFromLocalStorage()
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     console.log(this.api_base)
     console.log(this.authToken)
     this.headers = {

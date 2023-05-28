@@ -18,14 +18,10 @@ import {
   FormGroup, Validators
 } from '@angular/forms';
 
-import { ToastrService } from 'ngx-toastr';
-import { DomSanitizer } from "@angular/platform-browser";
 import { DocumentService } from "../../service/document.service";
 import { PipoDataService } from "../../service/homeservices/pipo.service";
-import { AppConfig } from '../../app.config';
 import { WindowInformationService } from '../../service/window-information.service';
 import { ShippingbillDataService } from '../../service/homeservices/shippingbill.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MergePdfListService } from '../merge-pdf-list.service';
 
@@ -246,7 +242,6 @@ export class PackingCreditRequestComponent implements OnInit {
   public Transaction_form: FormGroup;
   constructor(
     private userService: UserService,
-    public appconfig: AppConfig,
     private formBuilder: FormBuilder,
     private documentService: DocumentService,
     public pipoDataService: PipoDataService,
@@ -256,7 +251,7 @@ export class PackingCreditRequestComponent implements OnInit {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public pdfmerge: MergePdfListService,
     public wininfo: WindowInformationService) {
-    this.api_base = appconfig.apiUrl;
+    this.api_base = documentService.api_base;
     this.getDropdownData();
   }
 

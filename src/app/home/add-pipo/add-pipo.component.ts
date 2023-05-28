@@ -22,7 +22,6 @@ import {
 import { ShippingBill } from "../../../model/shippingBill.model";
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
-import { AppConfig } from "../../app.config";
 import { DocumentService } from "../../service/document.service";
 import { WindowInformationService } from '../../service/window-information.service';
 
@@ -116,7 +115,6 @@ export class AddPipoComponent implements OnInit {
     private userService: UserService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
-    public appconfig: AppConfig,
     private formBuilder: FormBuilder,
     private documentService: DocumentService,
     public router: Router,
@@ -124,7 +122,7 @@ export class AddPipoComponent implements OnInit {
     public wininfo: WindowInformationService
   ) {
     this.loadFromLocalStorage();
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     this.getDropdownData()
 
   }

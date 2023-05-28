@@ -12,7 +12,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     useExisting: forwardRef(() => NgDropdownCustomComponent)
   }]
 })
-export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor, OnChanges {
+export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
   @Input('placeHolderText') placeHolderText: any = ''
   @Input('items') items: any = [];
   @Output('ngModelDropDownChange') ngModelDropDownChanges: any = new EventEmitter<any>();
@@ -159,9 +159,5 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor, 
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.renderer.removeClass(this.elementRef.nativeElement, 'custom-dropdown-active');
     }
-  }
-  ngOnChanges(changes: SimpleChanges) {
-    this.ngModelDropDown = changes;
-    this.modelChanges.emit(this.ngModelDropDown);
   }
 }

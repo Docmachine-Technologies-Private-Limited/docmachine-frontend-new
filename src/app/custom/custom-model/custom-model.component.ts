@@ -32,8 +32,10 @@ export class CustomModelComponent implements OnInit {
   @Output('ModelChange') ModelChange = new EventEmitter<any>();
   @Input('condition') condition: any = '';
   @Output('footerbutton') footerbutton = new EventEmitter<any>();
+  @Output('headerbutton') headerbutton = new EventEmitter<any>();
   @ViewChild('PopUpOpenClose') PopUpOpenClose: ElementRef;
   @Input('buttondisabled') buttondisabled: boolean = false;
+  @Input('HeaderEventButton') HeaderEventButton: any = '';
 
   footerbuttontext: any = [];
   constructor() { }
@@ -53,6 +55,14 @@ export class CustomModelComponent implements OnInit {
       PopUpOpenClose.style.display = "none";
     } else {
       this.footerbutton.emit(false);
+    }
+  }
+   HEADERBUTTON(PopUpOpenClose: any) {
+    if (this.condition == true) {
+      this.headerbutton.emit(this.condition);
+      PopUpOpenClose.style.display = "none";
+    } else {
+      this.headerbutton.emit(false);
     }
   }
 }

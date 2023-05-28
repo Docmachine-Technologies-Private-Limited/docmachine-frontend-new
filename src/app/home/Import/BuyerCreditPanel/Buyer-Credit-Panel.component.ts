@@ -20,7 +20,6 @@ import {
 
 import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
-import { AppConfig } from "../../../app.config";
 import { DocumentService } from "../../../service/document.service";
 import { PipoDataService } from "../../../service/homeservices/pipo.service";
 import { WindowInformationService } from '../../../service/window-information.service';
@@ -81,7 +80,6 @@ export class BuyerCreditPanelComponent implements OnInit {
   submitted = false;
   selectedItems: any = [];
   selectedBenne: any = [];
-  LIST_PIPO: any = [];
   sumTotalAmount = 0;
   showOpinionReport = 0;
   showSummaryPage = 0;
@@ -107,7 +105,7 @@ export class BuyerCreditPanelComponent implements OnInit {
     BOE_PIPO: [],
     Beneficiary: [],
     Bank: [],
-    DROPDOWN_BOE: ''
+    DROPDOWN_BOE: []
   }
   PARTY_NAME_LIST: any = [];
   COMPANY_DETAILS: any = [];
@@ -130,11 +128,12 @@ export class BuyerCreditPanelComponent implements OnInit {
     ConfirmationChargesborne: "",
     DiscountingChargesborne: "",
   }
+  BUYER_BENEFICIARY_CREDIT_ACCEPT_DATA: any = [];
+
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
-    public appconfig: AppConfig,
     private formBuilder: FormBuilder,
     public documentService: DocumentService,
     public pipoDataService: PipoDataService,
@@ -145,8 +144,28 @@ export class BuyerCreditPanelComponent implements OnInit {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
   ) {
     this.loadFromLocalStorage();
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     this.getDropdownData()
+
+    this.RequestforBCQuote = new FormGroup({
+      benneName: new FormControl('', Validators.required),
+      ApplicantName: new FormControl('', Validators.required),
+      LCIssuingBank: new FormControl('', Validators.required),
+      SupplierName: new FormControl("", Validators.required),
+      SupplierBankNameSWIFTCode: new FormControl("", Validators.required),
+      Currency: new FormControl("", Validators.required),
+      LCNoBOENo: new FormControl('', Validators.required),
+      LCBOEAmount: new FormControl('', Validators.required),
+      Commodity: new FormControl("", Validators.required),
+      LatestdateofShipment: new FormControl("", Validators.required),
+      OriginOfGoods: new FormControl("", Validators.required),
+      PortofLoading: new FormControl('', Validators.required),
+      PortofDischarge: new FormControl('', Validators.required),
+      NumberofShipment: new FormControl("", Validators.required),
+      ConfirmationChargesborne: new FormControl("", Validators.required),
+      DiscountingChargesborne: new FormControl("", Validators.required),
+      Tenor: new FormControl("", Validators.required),
+    });
   }
 
   async ngOnInit() {
@@ -155,10 +174,12 @@ export class BuyerCreditPanelComponent implements OnInit {
       Authorization: this.authToken,
       timeout: `${200000}`
     };
+    this.getbuyer_beneficiary_credit();
     await this.userService.getUserDetail().then((res: any) => {
       this.USER_DATA = res['result'];
       this.userService.getTeambyId(res?.result?.companyId).subscribe((COMPANY_DETAILS_RES: any) => {
         this.COMPANY_DETAILS = COMPANY_DETAILS_RES?.data[0];
+        this.DUMP['ApplicantName'] = this.COMPANY_DETAILS?.teamName
         console.log(COMPANY_DETAILS_RES, 'COMPANY_DETAILS_RES')
       })
     });
@@ -185,25 +206,7 @@ export class BuyerCreditPanelComponent implements OnInit {
       selectedremittanceAmount: new FormControl("", Validators.required),
       BOETerm: new FormArray([this.initItems()]),
     });
-    this.RequestforBCQuote = this.formBuilder.group({
-      benneName: new FormControl('', Validators.required),
-      ApplicantName: new FormControl('', Validators.required),
-      LCIssuingBank: new FormControl('', Validators.required),
-      SupplierName: new FormControl("", Validators.required),
-      SupplierBankNameSWIFTCode: new FormControl("", Validators.required),
-      Currency: new FormControl("", Validators.required),
-      LCNoBOENo: new FormControl('', Validators.required),
-      LCBOEAmount: new FormControl('', Validators.required),
-      Commodity: new FormControl("", Validators.required),
-      LatestdateofShipment: new FormControl("", Validators.required),
-      OriginOfGoods: new FormControl("", Validators.required),
-      PortofLoading: new FormControl('', Validators.required),
-      PortofDischarge: new FormControl('', Validators.required),
-      NumberofShipment: new FormControl("", Validators.required),
-      ConfirmationChargesborne: new FormControl("", Validators.required),
-      DiscountingChargesborne: new FormControl("", Validators.required),
-      Tenor: new FormControl("", Validators.required),
-    });
+
   }
 
   initItems() {
@@ -255,13 +258,16 @@ export class BuyerCreditPanelComponent implements OnInit {
   changepipo(value) {
     this.selectedBenne = this.benneDetail.filter((item) => item?.benneName?.includes(value))[0];
     this.documentService.getBoedatabyPartName(value).subscribe((res: any) => {
-      console.log('Data fetched successfully', res, this.RequestforBCQuote,this.DUMP);
+      this.PIPO_LIST = {
+        PIPO_NAME_LIST: [],
+        data: [],
+        original_data: []
+      };
+      console.log('Data fetched successfully', res, this.RequestforBCQuote, this.DUMP);
       this.pipoData = res.data;
-      for (let index = 0; index < res.data.length; index++) {
-        this.LIST_PIPO[res.data[index]['_id']] = res.data[index];
-      }
       for (let index = 0; index < res?.data.length; index++) {
         res.data[index]['isExpand'] = false;
+        res.data[index]['CI_EXPAND'] = false;
         if (res?.data[index]?.balanceAmount == '-1') {
           res.data[index]['balanceAmount'] = res?.data[index]?.invoiceAmount
         }
@@ -273,7 +279,7 @@ export class BuyerCreditPanelComponent implements OnInit {
           this.PIPO_LIST['PIPO_NAME_LIST'].push({ value: res?.data[index]?.pi_poNo, id: res?.data[index]?._id })
         }
       }
-      console.log('importpipolist', this.pipoData, this.LIST_PIPO);
+      console.log('importpipolist', this.pipoData);
       this.documentService.getbyPartyName(value).subscribe((res: any) => {
         console.log(res, 'getbyPartyName');
         this.ORM_BY_PARTY_NAME = res?.data;
@@ -287,7 +293,9 @@ export class BuyerCreditPanelComponent implements OnInit {
     },
       (err) => console.log(err)
     );
-    this.selectedBenne['BeneBankName_BeneBankSwiftCode'] = this.selectedBenne?.beneBankName + ' & ' + this.selectedBenne?.beneBankSwiftCode
+    this.selectedBenne['BeneBankName_BeneBankSwiftCode'] = this.selectedBenne?.beneBankName + ' & ' + this.selectedBenne?.beneBankSwiftCode;
+    this.DUMP['SupplierName'] = this.selectedBenne?.benneName
+    this.DUMP['SupplierBankNameSWIFTCode'] = this.selectedBenne?.BeneBankName_BeneBankSwiftCode
     console.log('this.selectedBenneName', this.selectedBenne);
   }
   DATA: any = [];
@@ -775,27 +783,6 @@ export class BuyerCreditPanelComponent implements OnInit {
             }
           })
         });
-        kendo.drawing.drawDOM($("#FromClientRequest"), {
-          paperSize: "A4",
-          margin: "0cm",
-          scale: 0.7,
-          forcePageBreak: ".page-break"
-        }).then(function (group) {
-          return kendo.drawing.exportPDF(group, {
-            paperSize: "A4",
-            margin: "0cm",
-            scale: 0.7,
-            forcePageBreak: ".page-break"
-          });
-        }).done(async (data) => {
-          console.log(data, 'FromClientRequest')
-          await this.userService?.UploadS3Buket({
-            fileName: this.guid() + '.pdf', buffer: data,
-            type: 'application/pdf'
-          }).subscribe(async (pdfresponse: any) => {
-            console.log(pdfresponse, 'response FromClientRequest')
-          });
-        });
       });
       await this.mergerpdf.mergePdf(this.ALL_DOCUMENTS).then((merge: any) => {
         this.MERGE_PDF.push(merge)
@@ -835,7 +822,7 @@ export class BuyerCreditPanelComponent implements OnInit {
     if (UniqueId != null) {
       var approval_data: any = {
         id: UniqueId,
-        tableName: 'Import-Direct-Payment',
+        tableName: 'Buyer-Credit',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
         status: 'pending',
@@ -853,6 +840,7 @@ export class BuyerCreditPanelComponent implements OnInit {
             pipo_id.push(this.ITEM_FILL_PDF[index]?.pipo[0]?._id)
             pipo_name.push(this.ITEM_FILL_PDF[index]?.pipo[0]?.pi_poNo)
           }
+          this.pipoForm.value.buercredit=this.DUMP;
           var data: any = {
             data: {
               formdata: this.pipoForm.value,
@@ -860,13 +848,13 @@ export class BuyerCreditPanelComponent implements OnInit {
               pipo_1: [this.ITEM_FILL_PDF, this.selectedItems],
               Url_Redirect: { file: 'import', document: 'orAdvice', pipo: pipo_name.toString() }
             },
-            TypeTransaction: 'Import-Direct-Payment',
+            TypeTransaction: 'Buyer-Credit',
             fileType: 'Import',
             UserDetails: approval_data?.id,
             pipo: pipo_id,
           }
           this.documentService.addExportBillLodgment(data).subscribe((res1: any) => {
-            console.log('Import-Direct-Payment', res1);
+            console.log('Buyer-Credit', res1);
             let updatedData = {
               "TransactionRef": [
                 res1._id,
@@ -877,7 +865,7 @@ export class BuyerCreditPanelComponent implements OnInit {
               console.log(data);
               for (let index = 0; index < this.MAIN_DATA.length; index++) {
                 const element = this.MAIN_DATA[index];
-                let REAMAING_AMOUNT: any = parseFloat(element?.balanceAmount) - parseFloat(element?.Remittance_Amount)
+                let REAMAING_AMOUNT: any = parseFloat(element?.balanceAmount) - parseFloat(this.pipoForm?.controls?.BOETerm?.value[index]?.remittanceAmount);
                 this.documentService.updateBoe({ balanceAmount: REAMAING_AMOUNT, moredata: [element] }, element?._id).subscribe((updateBoeres: any) => {
                   console.log(updateBoeres, 'updateBoeres');
                   if ((index + 1) == this.MAIN_DATA.length) {
@@ -974,6 +962,11 @@ export class BuyerCreditPanelComponent implements OnInit {
       ORIGIN: tempboeorigin.join(','),
       DISCHARGE_PORT: tempboedischargePort.join(',')
     }
+    this.DUMP['LCNoBOENo'] = this.BOE_DETAILS?.BOE_NUMBER
+    this.DUMP['LCBOEAmount'] = this.BOE_DETAILS?.BOE_AMOUNT
+    this.DUMP['OriginOfGoods'] = this.BOE_DETAILS?.ORIGIN
+    this.DUMP['Currency'] = this.BOE_DETAILS?.CURRENCY
+    this.DUMP['PortofDischarge'] = this.BOE_DETAILS?.DISCHARGE_PORT
     console.log(this.MAIN_DATA, item, this.ITEM_FILL_PDF, 'selectedItemsselectedItems')
     this.sumTotalAmount = this.ITEM_FILL_PDF.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.invoiceAmount), 0);
     this.showOpinionReport = 0;
@@ -1071,6 +1064,7 @@ export class BuyerCreditPanelComponent implements OnInit {
         }
       });
       this.OTHER_BANK_VISIBLE = true;
+      this.InputKeyPress(index);
       this.fillForm()
     }, 500)
   }
@@ -1079,19 +1073,75 @@ export class BuyerCreditPanelComponent implements OnInit {
     $('.table-tr-1').removeClass('Table-Show')
     $('.table-tr-1').addClass('Table-Hide')
   }
-
+  REMIITANCE_SUM:any='0'
+  REMIITANCE_AMOUNT:any=[];
+  
+  InputKeyPress(index: any) {
+      this.REMIITANCE_SUM = this.pipoForm?.controls?.BOETerm?.value.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
+      this.REMIITANCE_AMOUNT[index]= this.pipoForm?.controls?.BOETerm?.value[index]?.remittanceAmount;
+      this.timeout = setTimeout(() => {
+      if (this.REMIITANCE_SUM>this.MAIN_DATA[index]?.balanceAmount) {
+        this.toastr.error('You added more than amount your boe amount....');
+        this.REMIITANCE_SUM=this.MAIN_DATA[index]?.balanceAmount;
+        this.REMIITANCE_AMOUNT[index]=this.MAIN_DATA[index]?.balanceAmount
+      }
+    },500)
+    console.log(this.pipoForm.controls.BOETerm,this.MAIN_DATA, 'this.pipoForm.controls.pipoTerm')
+  }
   RequestforBCQuoteSubmitbtn: boolean = false;
   RequestforBCQuoteSubmit(value: any) {
-    this.FORM_CHECK_VALUE(value?.value).then((res: any) => {
+    console.log(value, $("#FromClientRequest"), 'RequestforBCQuote')
+    this.FORM_CHECK_VALUE(value).then(async (res: any) => {
       console.log(value, res, 'RequestforBCQuote')
       if (res == true) {
         this.toastr.error('Please check some input filed is empty...');
-        this.RequestforBCQuoteSubmitbtn = true;
         return;
-      }
-      this.RequestforBCQuoteSubmitbtn = false;
-    })
+      } else {
+        this.ALL_DOCUMENTS = [];
+        var pipo_id: any = [];
+        var pipo_name: any = [];
+        for (let i = 0; i < this.ITEM_FILL_PDF.length; i++) {
+          this.ALL_DOCUMENTS.push(this.ITEM_FILL_PDF[i]?.doc)
+          pipo_id.push(this.ITEM_FILL_PDF[i]?.pipo[0]?._id)
+          pipo_name.push(this.ITEM_FILL_PDF[i]?.pipo[0]?.pi_poNo)
 
+          if (this.ITEM_FILL_PDF[i]?.pipo) {
+            this.ITEM_FILL_PDF[i]?.pipo?.forEach(element => {
+              this.ALL_DOCUMENTS.push(element?.doc)
+              this.ALL_DOCUMENTS.push(element?.commercial)
+              this.ALL_DOCUMENTS.push(element?.airwayBlcopy);
+            });
+          }
+        }
+        value['documents'] = this.ALL_DOCUMENTS;
+        value['pipo'] = pipo_id;
+        value['extradata'] = this.MAIN_DATA
+
+        var filterdoc = this.ALL_DOCUMENTS.filter(n => n)
+        this.documentService.buyer_beneficiary_creditadd(value).subscribe((buyer_beneficiary_creditaddres: any) => {
+          console.log(buyer_beneficiary_creditaddres, 'buyer_beneficiary_creditaddres')
+          this.toastr.success('buyer_beneficiary_credit added successfully....')
+          this.documentService.SendMaildocuments({ subject: 'Buyer credit details added...', documentsList: filterdoc,data: value}).subscribe((docres: any) => {
+            this.toastr.success('Mail Sended Successfully....')
+            this.router.navigate(['/home/dashboardTask'])
+          })
+          this.getbuyer_beneficiary_credit();
+        })
+      }
+    })
+  }
+  BUYER_BENEFICIARY_CREDIT_DATA: any = []
+  getbuyer_beneficiary_credit() {
+    this.documentService.buyer_beneficiary_creditget().subscribe((res: any) => {
+      this.BUYER_BENEFICIARY_CREDIT_DATA = res?.data;
+      this.BUYER_BENEFICIARY_CREDIT_ACCEPT_DATA = [];
+      res?.data.forEach(element => {
+        if (element?.AcceptReject == 'Accept') {
+          this.BUYER_BENEFICIARY_CREDIT_ACCEPT_DATA.push(element)
+        }
+      });
+      console.log(res, this.BUYER_BENEFICIARY_CREDIT_ACCEPT_DATA, 'buyer_beneficiary_creditaddres')
+    })
   }
   async FORM_CHECK_VALUE(value: any) {
     let tempbol: boolean = false;
@@ -1104,5 +1154,44 @@ export class BuyerCreditPanelComponent implements OnInit {
     }
     return await tempbol;
   }
+  AcceptReject(id: any, data: any) {
+    this.AprrovalPendingRejectService.CustomConfirmDialogModel.YesNoDialogModel(`Are you sure you want to ${data?.AcceptReject} this item?`, '', (resmodel) => {
+      if (resmodel?.value == 'Yes') {
+        this.documentService.buyer_beneficiary_credit_update({ id: id, data: data }).subscribe((res: any) => {
+          this.toastr.success('Successfully updated....');
+          this.getbuyer_beneficiary_credit()
+        })
+      }
+    })
+  }
+  SLECTED_BC_QUOTE_TEMP:any=[];
+  SLECTED_BC_QUOTE:any=[];
+  BC_QUOTE_SLECTED(event:any,index:any,data:any){
+    if (event.target.checked) {
+      this.SLECTED_BC_QUOTE_TEMP[index] = (data)
+    } else {
+      this.SLECTED_BC_QUOTE_TEMP.splice(index, 1);
+      event.target.checked = false;
+    }
+    this.SLECTED_BC_QUOTE=[];
+    this.SLECTED_BC_QUOTE_TEMP.forEach(element => {
+      this.SLECTED_BC_QUOTE.push(element)
+    });
+  }
+  PDF_VIEW_URL: any = ''
+  VIEW_DOCUMENTS(index: any, data: any) {
+    this.PDF_VIEW_URL = ''
+    setTimeout(() => { this.PDF_VIEW_URL = data?.document }, 100)
+  }
+  // AcceptReject(id: any, data: any) {
+  //   this.AprrovalPendingRejectService.CustomConfirmDialogModel.YesNoDialogModel(`Are you sure you want to ${data?.AcceptReject} this item?`, '', (resmodel) => {
+  //     if (resmodel?.value == 'Yes') {
+  //       this.documentService.buyer_beneficiary_credit_update({ id: id, data: data }).subscribe((res: any) => {
+  //         this.toastr.success('Successfully updated....');
+  //         this.getbuyer_beneficiary_credit()
+  //       })
+  //     }
+  //   })
+  // }
 }
 

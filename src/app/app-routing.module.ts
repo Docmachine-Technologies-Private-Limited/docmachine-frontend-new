@@ -1,4 +1,3 @@
-import { HomeModule } from "./home/home.module";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule, Router} from "@angular/router";
 import { PageNotFoundComponent } from "./shared/components";
@@ -9,7 +8,6 @@ import { ForgotPasswordComponent } from "./forgot-password/forgot-password.compo
 import { CreateTeamComponent } from "./create-team/create-team.component";
 import { AddMemberComponent } from "./add-member/add-member.component";
 import {MatDialogModule} from '@angular/material/dialog';
-
 
 import { CreateTeam1Component } from "./create-team1/create-team1.component";
 import { UpdatePasswordComponent } from "./update-password/update-password.component";
@@ -22,6 +20,8 @@ import { TwofactorauthComponent } from "./shared/components/twofactorauth/twofac
 import { AuthorizationComponent } from "./Authorization/authorization/authorization.component";
 import { AdminGuard } from "./service/RolePermission/Admin/admin.guard";
 import { ResetOTPComponent } from "./forgot-password/reset-otp/reset-otp.component";
+import { RoleVerifyEmailComponent } from "./RoleVerifyEmail/role-verify-email/role-verify-email.component";
+
 const routes: Routes = [
   {
     path: "",
@@ -56,7 +56,11 @@ const routes: Routes = [
     component: VerifyEmailComponent,
     pathMatch: "full",
   },
-  //{ path: 'createTeam',component: CreateTeamComponent, pathMatch: 'full'},
+  {
+    path: "RoleVerifyEmail/:id",
+    component: RoleVerifyEmailComponent,
+    pathMatch: "full",
+  },
   { path: "authorization",component: AuthorizationComponent},
   { path: "createTeam", component: CreateTeam1Component,canActivate:[AdminGuard] },
   { path: "addMember", component: AddMemberComponent, pathMatch: "full",canActivate:[AdminGuard] },

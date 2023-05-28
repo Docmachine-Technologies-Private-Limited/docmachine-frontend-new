@@ -61,11 +61,31 @@
     justify-content: end;
 }
 
+
 .modal-content {
-    box-shadow: -5px 10px 10px #969696eb !important;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 210px;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 10px;
+    box-shadow: 0 0 8px 3px #0003;
+    outline: 0;
+    height: 165px;
+    color: #000;
 }
 
 .modal-header {
-    height: 60px;
-    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 7px;
+    border-bottom: 1px solid #d6dee5;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    height: 40px;
+    margin-bottom: 5px;
 }

@@ -27,7 +27,6 @@ import { ToastrService } from 'ngx-toastr';
 import { DomSanitizer } from "@angular/platform-browser";
 import { DocumentService } from "../../service/document.service";
 import { PipoDataService } from "../../service/homeservices/pipo.service";
-import { AppConfig } from '../../app.config';
 import { WindowInformationService } from '../../service/window-information.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
@@ -345,7 +344,6 @@ export class ImportNewDirectDispatchComponent implements OnInit {
     private userService: UserService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
-    public appconfig: AppConfig,
     private formBuilder: FormBuilder,
     private documentService: DocumentService,
     public pipoDataService: PipoDataService,
@@ -356,7 +354,7 @@ export class ImportNewDirectDispatchComponent implements OnInit {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public pdfmerge: MergePdfListService,
     public wininfo: WindowInformationService) {
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     this.getDropdownData();
   }
 

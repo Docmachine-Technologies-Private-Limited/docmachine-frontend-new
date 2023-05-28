@@ -13,7 +13,6 @@ import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timer } from 'rxjs';
 import { count, takeWhile } from 'rxjs/operators';
-import { FormArray, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import * as data1 from '../../../../currency.json';
@@ -31,9 +30,7 @@ import {
 import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../../../service/user.service';
-import { MatSelectModule } from '@angular/material/select';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AppConfig } from '../../../../app.config';
 import {PipoDataService} from "../../../../service/homeservices/pipo.service";
 import $ from 'jquery';
 import { WindowInformationService } from '../../../../service/window-information.service';
@@ -99,7 +96,6 @@ export class UploadDocComponent implements OnInit {
     private toastr: ToastrService,
     private modalService: NgbModal,
     private route: ActivatedRoute,
-    public appconfig: AppConfig,
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
     public wininfo: WindowInformationService) {
@@ -107,7 +103,7 @@ export class UploadDocComponent implements OnInit {
     this.sharedData.currentReturnUrl.subscribe(
       (message) => (this.retururl = message)
     );
-    this.api_base = appconfig.apiUrl;
+    this.api_base = userService.api_base;
     console.log(this.api_base);
     this.loadFromLocalStorage();
     console.log(this.authToken);
