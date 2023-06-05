@@ -114,7 +114,7 @@ export class UploadDocComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       console.log('asdkhsajvdsug');
       this.config = {
-        url: `${this.api_base}/documents/inward/uploadFile `,
+        url: `${this.api_base}/documents/inward-disposal/uploadFile`,
         method: `POST`,
         maxFiles: 5,
         maxFilesize: 5,
@@ -257,32 +257,7 @@ dataPdf:any=[];
       );
       var data:any=args[1]['data'][0];
       console.log(data,'data')
-
-      this.dataPdf={
-        AccountDetails:data['Account Details'],
-        Amount:data['Amount'],
-        BankOperationCode:data['Bank Operation Code'],
-        BeneficiaryCustomer:data['Beneficiary Customer'],
-        BeneficiaryCustomerAddress:data['Beneficiary Customer Address'],
-        BeneficiaryCustomerName:data['Beneficiary Customer Name'],
-        CurrencyInstructedAmount:data['Currency/Instructed Amount'],
-        CurrencyCode:this.replaceText(data['CurrencyCode'],'32A'),
-        DetailsofCharges:data['Details of Charges'],
-        Orderinglnstitution:data['Ordering lnstitution'],
-        Receiver:data['Receiver'],
-        ReceiversCorrespondent:data["Receiver's Correspondent"],
-        RemittanceInformation:data["Remittance Information 70 ADVANCE IMPORT PYM INV"],
-        RemitterCustomerCode:data["Remitter Customer Code"],
-        RemitterCustomerDetails:data['Remitter Customer Details'],
-        RemittersCustomerName:data['Remitter Customer Name'],
-        SenderCorrespondent:data["Sender's Correspondent"],
-        SendersReference:data["Sender's Reference"],
-        SenderCode:data['Sender Code'],
-        SenderInformation:data['Sender Information'],
-        Uniquedigitldentifier:data["Unique 16 digit ldentifier"],
-        ValueDate32A31:data["Value Date 32A 31"],
-        lntermediary:data['lntermediary']
-        };
+      this.dataPdf=data;
       this.documentService.setSessionData('InwardSheet',this.dataPdf[0]);
       console.log(this.dataPdf,'this.dataPdf');
      console.log('-------------------->Selected Document type', this.publicUrl);
