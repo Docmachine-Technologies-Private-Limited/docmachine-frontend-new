@@ -71,117 +71,118 @@ export class SigninComponent implements OnInit {
   }
 
   onSubmit() {
-    this.userService.getUserbyEmail({ emailId: this.loginForm?.value?.email }).subscribe((resany: any) => {
-      console.log(resany, 'sdfksdfhsdkfjshskdfsdfsdfds')
-      if (this.rolebaseddata.includes(resany?.result?.role)) {
-        let tempdata: any = {
-          emailId: this.loginForm?.value?.email,
-          password: this.loginForm?.value?.password
-        }
-        this.userService.Rolelogin(tempdata).subscribe((res: any) => {
-          console.log(res, 'hfhffgffg')
-          if (res?.docs?.token != null && res?.docs?.token != undefined) {
-            console.log(res, 'token')
-            this.toastr.success('Sucessfully Login...');
-            this.userService.addToken(res?.docs?.token);
-            this.authGuard.setLocalStorage('PERMISSION', JSON.stringify({
-              emailId: res?.docs?.emailId,
-              role: res?.docs?.role
-            }))
-            // window.open("http://localhost:42001/login/"+res?.docs?.token, "_self")
-             window.open("https://role.bharathexim.com/login/"+res?.docs?.token, "_self")
+    if (!this.value) {
+      this.submitted = true
+      this.isDisabled = true;
+      if (this.loginForm.invalid) {
+        this.toastr.error('Invalid inputs, please check again!');
+        this.isDisabled = false;
+        return;
+      }
+      this.userService.login(this.loginForm.value).subscribe(data => {
+        this.userService.addLoginData(data);
+        this.data = data;
+        console.log(this.data, 'oppppppppppppppppppppppppppppppp');
+        if (data['result']) {
+          this.userService.addToken(data['result'].token);
+          if (data['result']['dataURL']) {
+            this.router.navigate(['/2FA']);
+          } else {
+            this.otp = true;
+            this.userService.getUser().subscribe(data1 => {
+              console.log(data1), 'sdfsdhdsgfjdsfhgsdfjsfgdsjfd';
+              this.data1 = data1
+            },
+              error1 => {
+                this.loginError();
+              });
           }
-        });
-      } else {
-        if (!this.value) {
-          this.submitted = true
-          this.isDisabled = true;
-          if (this.loginForm.invalid) {
-            this.toastr.error('Invalid inputs, please check again!');
-            this.isDisabled = false;
-            return;
-          }
-          this.userService.login(this.loginForm.value).subscribe(data => {
-            this.userService.addLoginData(data);
-            this.data = data;
-            console.log(this.data, 'oppppppppppppppppppppppppppppppp');
-            if (data['result']) {
-              this.userService.addToken(data['result'].token);
-              if (data['result']['dataURL']) {
-                this.router.navigate(['/2FA']);
-              } else {
-                this.otp = true;
-                this.userService.getUser().subscribe(data1 => {
-                  console.log(data1), 'sdfsdhdsgfjdsfhgsdfjsfgdsjfd';
-                  this.data1 = data1
-                },
-                  error1 => {
-                    this.loginError();
-                  });
-              }
-            } else {
-              this.loginError();
-            }
-          },
-            error => {
-              this.loginError();
-            });
         } else {
-          this.userService.loginVerfiy(this.value).subscribe(data => {
-            this.userService.loginlogout(true).subscribe((res: any) => console.log(res, 'loginlogout'))
-            if (this.data1['data'][0].emailId == 'docmachinetec@gmail.com' || this.data1['data'][0].emailId == 'tramsdocmachine@gmail.com' || this.data1['data'][0].emailId == 'fintech.innovations2021@gmail.com') {
-              this.router.navigate(['/home/powerAdmin/pending'])
-              this.authGuard.setLocalStorage('LOGIN_OTP', true);
-              this.authGuard.setLocalStorage('PERMISSION', JSON.stringify({
-                emailId: this.data1['data'][0].emailId,
-                role: this.data['result']['role']
-              }))
-            } else {
-              if (this.data1['data'][0]['emailIdVerified']) {
-                if (this.data1['data'][0]['verified'] == 'yes') {
-                  if (data['status'] == 200) {
-                    this.authGuard.setLocalStorage('LOGIN_OTP', true);
-                    this.authGuard.setLocalStorage('PERMISSION', JSON.stringify({
-                      emailId: this.data1['data'][0].emailId,
-                      role: this.data['result']['role']
-                    }))
-                    this.toastr.success(data['message']);
-                    if (this.data['result']['role'] == 'ca') {
-                      this.userService.role = this.data['result']['role'];
-                      this.router.navigate(['/home/caDocuments/all'])
+          this.loginError();
+        }
+      },
+        error => {
+          this.loginError();
+        });
+    } else {
+      this.userService.loginVerfiy(this.value).subscribe(data => {
+        this.userService.loginlogout(true).subscribe((res: any) => console.log(res, 'loginlogout'))
+        if (this.data1['data'][0].emailId == 'docmachinetec@gmail.com' || this.data1['data'][0].emailId == 'tramsdocmachine@gmail.com' || this.data1['data'][0].emailId == 'fintech.innovations2021@gmail.com') {
+          this.router.navigate(['/home/powerAdmin/pending'])
+          this.authGuard.setLocalStorage('LOGIN_OTP', true);
+          this.authGuard.setLocalStorage('PERMISSION', JSON.stringify({
+            emailId: this.data1['data'][0].emailId,
+            role: this.data['result']['role']
+          }))
+        } else {
+          if (this.data1['data'][0]['emailIdVerified']) {
+            if (this.data1['data'][0]['verified'] == 'yes') {
+              if (data['status'] == 200) {
+                this.authGuard.setLocalStorage('LOGIN_OTP', true);
+                this.authGuard.setLocalStorage('PERMISSION', JSON.stringify({
+                  emailId: this.data1['data'][0].emailId,
+                  role: this.data['result']['role']
+                }))
+                this.toastr.success(data['message']);
+                if (this.data['result']['role'] == 'ca') {
+                  this.userService.role = this.data['result']['role'];
+                  this.router.navigate(['/home/caDocuments/all'])
+                } else {
+                  this.userService.role = this.data['result']['role'];
+                  if (this.data1['data'][0]?.role == 'manager') {
+                    this.router.navigate(['/home'])
+                  } else {
+                    if (this.data1['data'][0].companyId) {
+                      this.router.navigate(['/home/dashboardTask'])
                     } else {
-                      this.userService.role = this.data['result']['role'];
-                      if (this.data1['data'][0]?.role == 'manager') {
-                        this.router.navigate(['/home'])
+                      if (this.data1['data'][0]?.role != 'member') {
+                        this.router.navigate(['createTeam']);
                       } else {
-                        if (this.data1['data'][0].companyId) {
-                          this.router.navigate(['/home/dashboardTask'])
-                        } else {
-                          if (this.data1['data'][0]?.role != 'member') {
-                            this.router.navigate(['createTeam']);
-                          } else {
-                            this.router.navigate(['/home/dashboardTask'])
-                          }
-                        }
+                        this.router.navigate(['/home/dashboardTask'])
                       }
                     }
-                  } else {
-                    this.toastr.error(data['message']);
                   }
-                } else {
-                  this.router.navigate(['newUser'])
                 }
               } else {
-                this.router.navigate(['notVerified'])
+                this.toastr.error(data['message']);
               }
+            } else {
+              this.router.navigate(['newUser'])
             }
-          },
-            error => {
-              this.loginError();
-            });
+          } else {
+            this.router.navigate(['notVerified'])
+          }
         }
-      }
-    })
+      },
+        error => {
+          this.loginError();
+        });
+    }
+    // this.userService.getUserbyEmail({ emailId: this.loginForm?.value?.email }).subscribe((resany: any) => {
+    //   console.log(resany, 'sdfksdfhsdkfjshskdfsdfsdfds')
+    //   if (this.rolebaseddata.includes(resany?.result?.role)) {
+    //     let tempdata: any = {
+    //       emailId: this.loginForm?.value?.email,
+    //       password: this.loginForm?.value?.password
+    //     }
+    //     this.userService.Rolelogin(tempdata).subscribe((res: any) => {
+    //       console.log(res, 'hfhffgffg')
+    //       if (res?.docs?.token != null && res?.docs?.token != undefined) {
+    //         console.log(res, 'token')
+    //         this.toastr.success('Sucessfully Login...');
+    //         this.userService.addToken(res?.docs?.token);
+    //         this.authGuard.setLocalStorage('PERMISSION', JSON.stringify({
+    //           emailId: res?.docs?.emailId,
+    //           role: res?.docs?.role
+    //         }))
+    //         // window.open("http://localhost:42001/login/"+res?.docs?.token, "_self")
+    //          window.open(AppConfig?.ROLE_URL+'/login/'+res?.docs?.token, "_self")
+    //       }
+    //     });
+    //   } else {
+       
+    //   }
+    // })
   }
 
   inputFun(a: any) {
