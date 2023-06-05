@@ -33,7 +33,7 @@
                         <tr class="table-tr" *ngFor="let item of this.filterdata?.UserDetails;let i=index">
                             <!-- <td class="col-td-th-1"><input type="checkbox" class="form-control" name="" id=""></td> -->
                             <td class="td-th-w-1" *ngIf="item?.imageUrl!=undefined"><img [src]="item?.imageUrl" class="img-icon">{{item?.fullName}} | {{item?.emailId}}</td>
-                            <td class="td-th-w-1" *ngIf="item?.imageUrl==undefined"><span class="img-text">{{this.initialName(item?.fullName)}}</span>{{item?.fullName}} | {{item?.emailId}}</td>
+                            <td class="td-th-w-1" *ngIf="item?.imageUrl==undefined"><span class="img-text">{{item?.fullName!=''?this.initialName(item?.fullName):''}}</span>{{item?.fullName}} | {{item?.emailId}}</td>
                             <td class="col-td-th-3">
                                 <span class="active-status" *ngIf="item?.isLoggin==true">Active</span>
                                 <span class="InActive" *ngIf="item?.isLoggin==false">InActive</span>
@@ -78,7 +78,7 @@
                     <tbody>
                         <tr class="table-tr" *ngFor="let item of this.ORIGNAL_DATA?.MemberDetails;let i=index">
                             <td class="td-th-w-1" *ngIf="item?.imageUrl!=undefined"><img [src]="item?.imageUrl" class="img-icon">{{item?.name}} | {{item?.email}}</td>
-                            <td class="td-th-w-1" *ngIf="item?.imageUrl==undefined"><span class="img-text">{{this.initialName(item?.name)}}</span>{{item?.name}} | {{item?.email}}</td>
+                            <td class="td-th-w-1" *ngIf="item?.imageUrl==undefined"><span class="img-text">{{item?.fullName!=''?this.initialName(item?.name):''}}</span>{{item?.name}} | {{item?.email}}</td>
                             <td class="col-td-th-3">
                                 <span class="InActive" *ngIf="item?.isLoggin==undefined">Not found..</span>
                                 <span class="active-status" *ngIf="item?.isLoggin==true">Active</span>
@@ -129,7 +129,7 @@
                                     <tr class="table-tr" *ngFor="let item of value;let i=index">
                                         <td class="col-td-th-1">{{item?.date}}</td>
                                         <td class="td-th-w-1" *ngIf="item?.imageUrl!=undefined"><img [src]="item?.imageUrl" class="img-icon">{{item?.fullName}} | {{item?.emailId}}</td>
-                                        <td class="td-th-w-1" *ngIf="item?.imageUrl==undefined"><span class="img-text">{{this.initialName(item?.fullName)}}</span>{{item?.fullName}} | {{item?.emailId}}</td>
+                                        <td class="td-th-w-1" *ngIf="item?.imageUrl==undefined"><span class="img-text">{{item?.fullName!=''?this.initialName(item?.fullName):''}}</span>{{item?.fullName}} | {{item?.emailId}}</td>
                                         <td class="col-td-th-3">{{item?.role}}</td>
                                         <td class="col-td-th-3">{{item?.companyName}}</td>
                                         <td class="col-td-th-3">
@@ -181,7 +181,7 @@
                                     <tr class="table-tr" *ngFor="let item of value;let i=index">
                                         <td class="col-td-th-1">{{item?.date}}</td>
                                         <td class="td-th-w-1" *ngIf="item?.imageUrl!=undefined"><img [src]="item?.imageUrl" class="img-icon">{{item?.fullName}} | {{item?.emailId}}</td>
-                                        <td class="td-th-w-1" *ngIf="item?.imageUrl==undefined"><span class="img-text">{{this.initialName(item?.fullName)}}</span>{{item?.fullName}} | {{item?.emailId}}</td>
+                                        <td class="td-th-w-1" *ngIf="item?.imageUrl==undefined"><span class="img-text">{{item?.fullName!=''?this.initialName(item?.fullName):''}}</span>{{item?.fullName}} | {{item?.emailId}}</td>
                                         <td class="col-td-th-3">{{item?.role}}</td>
                                         <td class="col-td-th-3">{{item?.companyName}}</td>
                                         <td class="col-td-th-3">
@@ -218,7 +218,7 @@
                                     </div>
                                     <div class="profile-image" *ngIf="item?.imageUrl==undefined" 
                                     [title]="item?.isLoggin==true?'User Active':'User Not Active'">
-                                        <span  class="img-text">{{this.initialName(item?.fullName)}}</span>
+                                        <span  class="img-text">{{item?.fullName!=''?this.initialName(item?.fullName):''}}</span>
                                     </div>
                                 </div>
                                 <div class="card-info">
@@ -287,7 +287,7 @@
                         </div>
                         <div class="profile-image" *ngIf="this.filterdata.UserDetails[this.index_Selected]?.imageUrl==undefined" 
                         [title]="this.filterdata.UserDetails[this.index_Selected]?.isLoggin==true?'User Active':'User Not Active'">
-                            <span  class="img-text">{{this.initialName(this.filterdata.UserDetails[this.index_Selected]?.fullName)}}</span>
+                            <span  class="img-text">{{this.filterdata.UserDetails[this.index_Selected]?.fullName!=''?this.initialName(this.filterdata.UserDetails[this.index_Selected]?.fullName):''}}</span>
                         </div>
                     </div>
                     <div class="card-info">

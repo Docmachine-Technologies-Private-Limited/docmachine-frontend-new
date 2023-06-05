@@ -178,7 +178,7 @@ export class SuperAdminPanelComponent implements OnInit {
   }
   initialName(words) {
     'use strict'
-    return (words.charAt(0) + words.charAt(1)).toUpperCase();
+    return words?.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'');
   }
 
   public SubtractDates(startDate: Date, endDate: Date): any {
