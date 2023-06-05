@@ -123,23 +123,20 @@ export class SigninComponent implements OnInit {
                   emailId: this.data1['data'][0].emailId,
                   role: this.data['result']['role']
                 }))
+                console.log(this.data1,'sgfjdfgdjfdg')
                 this.toastr.success(data['message']);
                 if (this.data['result']['role'] == 'ca') {
                   this.userService.role = this.data['result']['role'];
                   this.router.navigate(['/home/caDocuments/all'])
                 } else {
                   this.userService.role = this.data['result']['role'];
-                  if (this.data1['data'][0]?.role == 'manager') {
-                    this.router.navigate(['/home'])
+                  if (this.data1['data'][0].companyId!=undefined && this.data1['data'][0].companyId!=null && this.data1['data'][0].companyId!='') {
+                    this.router.navigate(['/home/dashboardTask'])
                   } else {
-                    if (this.data1['data'][0].companyId) {
-                      this.router.navigate(['/home/dashboardTask'])
+                    if (this.data1['data'][0]?.role== 'manager') {
+                      this.router.navigate(['createTeam']);
                     } else {
-                      if (this.data1['data'][0]?.role != 'member') {
-                        this.router.navigate(['createTeam']);
-                      } else {
-                        this.router.navigate(['/home/dashboardTask'])
-                      }
+                      this.router.navigate(['/home/dashboardTask'])
                     }
                   }
                 }
