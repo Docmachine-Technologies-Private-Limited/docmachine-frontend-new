@@ -211,8 +211,8 @@ export class ImportDirectPaymentComponent implements OnInit {
   }
   ORM_BY_PARTY_NAME: any = [];
   changepipo(value) {
-    this.selectedBenne = this.benneDetail.filter((item) => item?.benneName?.includes(value))[0];
-    this.documentService.getBoedatabyPartName(value).subscribe((res: any) => {
+    this.selectedBenne = this.benneDetail.filter((item) => item?.benneName?.includes(value?.benneName))[0];
+    this.documentService.getBoedatabyPartName(value?.benneName).subscribe((res: any) => {
       console.log('Data fetched successfully', res);
       this.pipoData = res.data;
       for (let index = 0; index < res.data.length; index++) {
@@ -233,7 +233,7 @@ export class ImportDirectPaymentComponent implements OnInit {
         }
       }
       console.log('importpipolist', this.pipoData, this.LIST_PIPO);
-      this.documentService.getbyPartyName(value).subscribe((res: any) => {
+      this.documentService.getbyPartyName(value?.benneName).subscribe((res: any) => {
         console.log(res, 'getbyPartyName');
         this.ORM_BY_PARTY_NAME = res?.data;
         res?.data.forEach(element => {
@@ -298,8 +298,8 @@ export class ImportDirectPaymentComponent implements OnInit {
   bankformat: any = ''
 
   onSelectBank(value) {
-    this.selectedBankName = value;
-    this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value))[0]?.org;
+    this.selectedBankName = value?.id;
+    this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value?.id))[0]?.org;
     console.log(this.BANK_DETAILS, 'this.BANK_DETAILS')
     this.bankformat = ''
     this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);

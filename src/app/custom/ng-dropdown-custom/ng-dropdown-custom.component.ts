@@ -17,7 +17,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
   @Input('items') items: any = [];
   @Output('ngModelDropDownChange') ngModelDropDownChanges: any = new EventEmitter<any>();
   @Output('modelChanges') modelChanges: any = new EventEmitter<any>();
-  @Input('bindLabel') bindLabel: any = '';
+  @Input('bindLabel') bindLabel: any = 'demo';
   @Input('bindValue') bindValue: any = '';
   @Input('multiple') multiple: any = [];
   @Input('width') width: any = '';
@@ -26,7 +26,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
   @Input('height') height: any = [];
   @Input('value') value: any = '';
   @Input('selectedItems') selectedItems: any = '';
-  @Input('ngModelDropDown') ngModelDropDown: any = '';
+  @Input('ngModelDropDown') ngModelDropDown: any = [];
   @Output('NgModal') NgModal: any = new EventEmitter<any>();
   @Input('GET_ARRAY_VALUES') GET_ARRAY_VALUES: boolean = false;
   @Input('id') id: any = '';
@@ -43,6 +43,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
       bindValue: this.bindValue,
       GET_ARRAY_VALUES: this.GET_ARRAY_VALUES
     }
+    this.ngModelDropDown[this.bindLabel]=''
     if (this.selectedItems != '') {
       this.ngModelDropDown = this.selectedItems;
       this.modelChanges.emit(this.ngModelDropDown);
@@ -57,8 +58,8 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
   dropdownHide($event, val, inputid) {
     var uq_id: any = $($event.target).parent().parent().attr('id')
     $('.custom-dropdown').removeClass('custom-dropdown-active');
+    console.log(val,'adhfkjdfhsdfkjdfdsfd')
     if (this.LABLE_BIND_LIST[uq_id]?.bindValue != '') {
-      $(inputid).val(val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
       this.NgModal.emit(this.LABLE_BIND_LIST[uq_id]?.bindValue != '' ? val[this.LABLE_BIND_LIST[uq_id]?.bindValue] : val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
       this.selectedItems = val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
       this.arryavalue = val;
@@ -69,12 +70,11 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
         this.ngModelDropDownChanges.emit(this.ngModelDropDown);
       } else {
         this.value = this.LABLE_BIND_LIST[uq_id]?.bindValue != '' ? val[this.LABLE_BIND_LIST[uq_id]?.bindValue] : val;
-        this.ngModelDropDown = this.LABLE_BIND_LIST[uq_id]?.bindValue != '' ? val[this.LABLE_BIND_LIST[uq_id]?.bindValue] : val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]
+        this.ngModelDropDown = val
         this.modelChanges.emit(this.ngModelDropDown);
         this.ngModelDropDownChanges.emit(this.ngModelDropDown);
       }
     } else if (this.LABLE_BIND_LIST[uq_id]?.bindValue == '') {
-      $(inputid).val(val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
       this.NgModal.emit(val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]);
       this.selectedItems = val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
       this.arryavalue = val;
@@ -84,8 +84,8 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
         this.modelChanges.emit(this.ngModelDropDown);
         this.ngModelDropDownChanges.emit(this.ngModelDropDown);
       } else {
-        this.value = val[this.LABLE_BIND_LIST[uq_id]?.bindLabel];
-        this.ngModelDropDown = val[this.LABLE_BIND_LIST[uq_id]?.bindLabel]
+        this.value = val;
+        this.ngModelDropDown = val
         this.modelChanges.emit(this.ngModelDropDown);
         this.ngModelDropDownChanges.emit(this.ngModelDropDown);
       }

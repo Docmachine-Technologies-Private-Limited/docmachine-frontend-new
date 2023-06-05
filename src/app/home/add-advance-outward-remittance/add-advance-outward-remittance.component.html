@@ -76,7 +76,7 @@
                                                 <app-ng-dropdown-custom placeHolderText="Select Bank Name"
                                                     [items]="this.benneDetail" bindLabel="benneName"
                                                     [ngModel]="form?.benneName" formControlName="benneName"
-                                                    (modelChanges)="form.benneName=$event" bindValue="_id"
+                                                    (modelChanges)="form.benneName=$event?.benneName" bindValue="_id"
                                                     [multiple]="false" (modelChanges)="changepipo($event)" #select_ben>
                                                 </app-ng-dropdown-custom>
                                                 <!-- <select class="form-select" aria-label="Default select example"
@@ -98,8 +98,8 @@
                                                 <label for="exampleInputEmail1" class="form-label">Select
                                                     bank*</label>
                                                 <app-ng-dropdown-custom placeHolderText="Select Bank Name" #Bank_Name
-                                                    [items]="this.bankDetail" bindLabel="value" [ngModel]="form?.bank"
-                                                    formControlName="bank" (modelChanges)="form.bank=$event"
+                                                    [items]="this.bankDetail" bindLabel="value"
+                                                    formControlName="bank" (modelChanges)="form.bank=$event?.value"
                                                     bindValue="id" [multiple]="false"
                                                     (modelChanges)="onSelectBank($event)">
                                                 </app-ng-dropdown-custom>

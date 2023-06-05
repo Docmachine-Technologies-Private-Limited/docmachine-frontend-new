@@ -22,15 +22,15 @@
                                 <div class="form-group col-md-6">
                                     <label for="inputEmail4">Buy/Sell</label>
                                     <app-ng-dropdown-custom bindLabel="value" placeHolderText="Buy/Sell"
-                                        (modelChanges)="ChangesBuySell($event)"
-                                        [(ngModelDropDown)]="this.FORM_DATA.BuySell"
+                                        (modelChanges)="ChangesBuySell($event?.value);"
+                                        (modelChanges)="this.FORM_DATA.BuySell=$event.value"
                                         [items]="[{value:'Buy'},{value:'Sell'}]" [multiple]="false">
                                     </app-ng-dropdown-custom>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="inputEmail4">Currency</label>
                                     <app-ng-dropdown-custom bindLabel="type" placeHolderText="Select Currency"
-                                        [(ngModelDropDown)]="this.FORM_DATA.Currency"
+                                        (modelChanges)="this.FORM_DATA.Currency=$event.type"
                                         [items]="this.documentService.getCurrencyList()" [multiple]="false">
                                     </app-ng-dropdown-custom>
                                 </div>

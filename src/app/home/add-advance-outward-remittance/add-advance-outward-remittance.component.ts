@@ -191,11 +191,11 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     let temp = [];
     this.pipoData = [];
     temp = this.benneDetail.filter(items => {
-      return items._id == id
+      return items._id == id?._id
     });
     this.selectedBenne = temp.pop();
 
-    console.log('this.selectedBenneName', this.selectedBenne);
+    console.log('this.selectedBenneName', id,this.selectedBenne);
     this.pipoDataService.getPipoListByCustomer('import', this.selectedBenne.benneName).then((data: any) => {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
@@ -292,9 +292,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   BANK_DETAILS: any = [];
   OTHER_BANK_VISIBLE: boolean = false
   onSelectBank(value) {
-    this.selectedBankName = value;
-    this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value))[0]?.org;
-    console.log(this.BANK_DETAILS, 'this.BANK_DETAILS')
+    this.selectedBankName = value?.id;
+    this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value?.id))[0]?.org;
+    console.log(this.BANK_DETAILS,value, 'this.BANK_DETAILS')
     this.bankformat = ''
     this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
     console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')

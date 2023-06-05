@@ -2898,12 +2898,12 @@ export class NewDirectDispatchComponent implements OnInit {
 
   setradio(a) {
     console.log(a, 'setradio');
-    this.bankToggle = a;
-    this.bankValue = a;
+    this.bankToggle = a?.id;
+    this.bankValue = a?.id;
     this.newBankArray = [];
     console.log(this.bankArray, 'this.bankArray')
     this.bankArray.forEach((value, index) => {
-      if (value?.BankUniqueId?.includes(a) == true) {
+      if (value?.BankUniqueId?.includes(a?.id) == true) {
         this.newBankArray.push(value)
       }
     });

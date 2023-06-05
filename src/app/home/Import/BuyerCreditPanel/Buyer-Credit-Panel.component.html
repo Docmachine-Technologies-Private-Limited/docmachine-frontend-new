@@ -81,8 +81,7 @@
                                                             [items]="this.benneDetail" bindLabel="benneName"
                                                             bindValue="benneName" [multiple]="false"
                                                             [ngModel]="form?.benneName" formControlName="benneName"
-                                                            [(ngModelDropDown)]="DUMP.benneName"
-                                                            (modelChanges)="form.benneName=$event"
+                                                            (modelChanges)="form.benneName=$event?.benneName;DUMP.benneName=$event?.benneName"
                                                             (modelChanges)="changepipo($event)" #select_ben>
                                                         </app-ng-dropdown-custom>
                                                         <div *ngIf="submitted && form?.benneName.errors"
@@ -99,7 +98,7 @@
                                                         <app-ng-dropdown-custom placeHolderText="Select Bank"
                                                             [items]="this.bankDetail" bindLabel="value" bindValue="id"
                                                             [multiple]="false" [ngModel]="form?.bank"
-                                                            formControlName="bank" (modelChanges)="form.bank=$event"
+                                                            formControlName="bank" (modelChanges)="form.bank=$event?.value"
                                                             (modelChanges)="onSelectBank($event)" #multiplepipo>
                                                         </app-ng-dropdown-custom>
                                                         <div *ngIf="submitted && form?.bank.errors" class='errorText'>
@@ -131,8 +130,8 @@
                                                                 placeHolderText="Select PI/PO or Bill of Entry"
                                                                 [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
                                                                 [multiple]="false" formControlName="BOE_Number"
-                                                                [(ngModelDropDown)]="this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO"
-                                                                (modelChanges)="DUMP_FUNCTION($event,['Select BOE'],boedropdown);"
+                                                                (modelChanges)="this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event?.value"
+                                                                (modelChanges)="DUMP_FUNCTION($event?.value,['Select BOE'],boedropdown);"
                                                                 #boeselectdropdown>
                                                             </app-ng-dropdown-custom>
                                                             <div *ngIf="submitted && form.pi_poNo.errors"
@@ -441,7 +440,7 @@
                                                     <app-ng-dropdown-custom placeHolderText="Select beneficiary"
                                                         [items]="this.benneDetail" bindLabel="benneName"
                                                         bindValue="benneName" [multiple]="false"
-                                                        [(ngModelDropDown)]="DUMP.benneName"
+                                                        (modelChanges)="DUMP.benneName=$event.benneName"
                                                         (modelChanges)="changepipo($event)">
                                                     </app-ng-dropdown-custom>
                                                 </div>
@@ -450,8 +449,8 @@
                                                 <app-ng-dropdown-custom class="PopupOpen" popup-close="boedropdown"
                                                     placeHolderText="Select PI/PO or Bill of Entry"
                                                     [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
-                                                    [multiple]="false" (modelChanges)="DUMP_FUNCTION($event,['Select BOE'],boedropdown);
-                                            this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event" #boeselectdropdown>
+                                                    [multiple]="false" (modelChanges)="DUMP_FUNCTION($event?.value,['Select BOE'],boedropdown);
+                                            this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event.value" #boeselectdropdown>
                                                 </app-ng-dropdown-custom>
                                             </div>
                                             <button type="submit" class="btn btn-primary"
@@ -492,7 +491,7 @@
                                                             [items]="this.documentService.getCurrencyList()"
                                                             [multiple]="false"
                                                             [selectedItems]="this.BOE_DETAILS?.CURRENCY"
-                                                            [(ngModelDropDown)]="DUMP.Currency">
+                                                            (modelChanges)="DUMP.Currency=$event?.type">
                                                         </app-ng-dropdown-custom>
                                                     </div>
                                                     <div class="form-group col-md-6">
@@ -518,7 +517,7 @@
                                                         <label for="inputEmail4">Commodity</label>
                                                         <app-ng-dropdown-custom formControlName="Commodity"
                                                             placeHolderText="Select Commodity"
-                                                            [(ngModelDropDown)]="DUMP.Commodity"
+                                                            (modelChanges)="DUMP.Commodity=$event?.como"
                                                             [items]="this.COMPANY_DETAILS?.commodity" bindLabel="como"
                                                             bindValue="como" [multiple]="false">
                                                         </app-ng-dropdown-custom>
@@ -561,7 +560,7 @@
                                                             formControlName="ConfirmationChargesborne"
                                                             placeHolderText="Select Confirmation Charges borne by"
                                                             [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
-                                                            [(ngModelDropDown)]="DUMP.ConfirmationChargesborne"
+                                                            (modelChanges)="DUMP.ConfirmationChargesborne=$event.value"
                                                             bindLabel="value" bindValue="value" [multiple]="false"
                                                             #ConfirmationChargesborne>
                                                         </app-ng-dropdown-custom>
@@ -572,7 +571,7 @@
                                                             formControlName="DiscountingChargesborne"
                                                             placeHolderText="Select Discounting Charges borne by"
                                                             [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
-                                                            [(ngModelDropDown)]="DUMP.DiscountingChargesborne"
+                                                            (modelChanges)="DUMP.DiscountingChargesborne=$event.value"
                                                             bindLabel="value" bindValue="value" [multiple]="false"
                                                             #DiscountingChargesborne>
                                                         </app-ng-dropdown-custom>
@@ -684,7 +683,7 @@
                     <div class="header-dropdown d-flex" style="gap: 10px;">
                         <app-ng-dropdown-custom placeHolderText="Select Party Name" [items]="this.ORM_BY_PARTY_NAME"
                             bindLabel="partyName" bindValue="partyName" [multiple]="false"
-                            (modelChanges)="filterData($event)" #partyname>
+                            (modelChanges)="filterData($event?.partyName)" #partyname>
                         </app-ng-dropdown-custom>
                     </div>
                     <div class="d-flex" style="height: 76vh;">

@@ -2159,7 +2159,8 @@ export class DocumentService {
     var CURRENCY_LIST: any = [];
     for (let index = 0; index < data1['default']?.length; index++) {
       CURRENCY_LIST.push({
-        type: data1['default'][index]['value']
+        type: data1['default'][index]['value'],
+        type1: data1['default'][index]['value'],
       })
     }
     return CURRENCY_LIST;
