@@ -630,9 +630,9 @@ export class ImportDirectPaymentComponent implements OnInit {
       if (this.uploadUrl != undefined && this.uploadUrl != '' && this.uploadUrl != null) {
         this.PREVIEWS_URL_LIST[1] = {
           name: 'Oponin',
-          pdf: this.uploadUrl
+          pdf: this.uploadUrl_Original
         };
-        this.ALL_DOCUMENTS.push(this.uploadUrl);
+        this.ALL_DOCUMENTS.push(this.uploadUrl_Original);
       }
       console.log('pipoForm', this.pipoForm)
       for (let i = 0; i < this.ITEM_FILL_PDF.length; i++) {
@@ -676,8 +676,8 @@ export class ImportDirectPaymentComponent implements OnInit {
       this.PREVIEWS_URL_LIST.push(this.ORIGINAL_PDF)
       this.ALL_DOCUMENTS.push(this.ORIGINAL_PDF)
       if (this.uploadUrl != undefined && this.uploadUrl != '' && this.uploadUrl != null) {
-        this.PREVIEWS_URL_LIST.push(this.uploadUrl)
-        this.ALL_DOCUMENTS.push(this.uploadUrl)
+        this.PREVIEWS_URL_LIST.push(this.uploadUrl_Original)
+        this.ALL_DOCUMENTS.push(this.uploadUrl_Original)
       }
       console.log('pipoForm', this.pipoForm)
       $(document).ready(() => {
