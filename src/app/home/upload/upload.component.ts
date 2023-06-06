@@ -1349,6 +1349,8 @@ export class UploadComponent implements OnInit {
     e.form.value.discountCurrency = e.form.value?.discountCurrency?.type;
     e.form.value.freightCurrency = e.form.value?.freightCurrency?.type;
     e.form.value.insuranceCurrency = e.form.value?.insuranceCurrency?.type;
+    e.form.value.miscellaneousCurrency = e.form.value?.miscellaneousCurrency?.type;
+    
     e.form.value.commercialNumber = this.SELECTED_COMMERCIAL_NUMBER;
     console.log('Benne Name', e.form.value);
     e.form.value.CI_DETAILS = this.COMMERCIAL_DATA;
