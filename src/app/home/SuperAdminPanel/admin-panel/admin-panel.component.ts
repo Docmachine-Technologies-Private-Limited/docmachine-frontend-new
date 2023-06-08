@@ -44,7 +44,10 @@ export class SuperAdminPanelComponent implements OnInit {
     this.SUBCRIPTION_CHANGES = this.formBuilder?.group({
       Login_Limit: ['', Validators.required],
       Role_Type: ['', Validators.required],
-      Subscription: ['', Validators.required]
+      Subscription: ['', Validators.required],
+      DMS:['', Validators.required],
+      Teasury:['', Validators.required],
+      Transaction:['', Validators.required],
     });
   }
 
@@ -342,19 +345,29 @@ export class SuperAdminPanelComponent implements OnInit {
     this.SUBCRIPTION_CHANGES = this.formBuilder?.group({
       Login_Limit: [data?.Login_Limit, Validators.required],
       Role_Type: [data?.Role_Type, Validators.required],
-      Subscription: [data?.Subscription, Validators.required]
+      Subscription: [data?.Subscription, Validators.required],
+      DMS:[data?.DMS, Validators.required],
+      Teasury:[data?.Teasury, Validators.required],
+      Transaction:[data?.Transaction, Validators.required],
     });
   }
   SUBCRIPTION_Submit(form_value: any, displayHidden: any) {
     console.log(form_value, displayHidden, 'SUBCRIPTION_Submit')
     if (this.SUBCRIPTION_ID != '' && this.SUBCRIPTION_ID != undefined && this.SUBCRIPTION_ID != null) {
       this.docserivce?.updateUserById(this.SUBCRIPTION_ID, form_value?.value).subscribe((res: any) => {
-        console.log(res, 'SUBCRIPTION_Submit');
-        this.toastr?.success('Updated Succesfully...');
-        this.ngOnInit()
-        this.SUBCRIPTION_ID = '';
-        displayHidden.PopUpOpenClose.nativeElement.style.display = 'none';
-      })
+        console.log(res,'SUBCRIPTION_Submit');
+        this.docserivce?.updateUserByCompanyId(this.SELECTED_SUBCRIPTION_DATA?.companyId,{
+         DMS:form_value?.value?.DMS,
+         Teasury:form_value?.value?.Teasury,
+         Transaction:form_value?.value?.Transaction,
+        }).subscribe((res: any) => {
+         console.log(res,'SUBCRIPTION_Submit');
+           this.toastr?.success('Updated Succesfully...');
+           this.ngOnInit()
+           this.SUBCRIPTION_ID='';
+           displayHidden.PopUpOpenClose.nativeElement.style.display='none';
+       });
+     })
     } else {
       this.toastr?.error('Id not found...');
     }

@@ -2151,10 +2151,18 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-
     return this.http.patch(`${this.api_base}/user/updateUserById/${id}`, data, httpOptions);
   }
-
+  
+  updateUserByCompanyId(id, data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.patch(`${this.api_base}/user/updateUserByCompanyId/${id}`, data, httpOptions);
+  }
+  
   getCurrencyList() {
     var CURRENCY_LIST: any = [];
     for (let index = 0; index < data1['default']?.length; index++) {

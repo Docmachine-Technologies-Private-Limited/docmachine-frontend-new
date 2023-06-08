@@ -1,11 +1,11 @@
 <div style="padding-right: 0 !important; overflow: hidden" class="container-fluid">
   <div style="display: flex; width: 100%" class="no-gutter">
     <div class="bg-dark-1 mainClass">
-      <div  *ngIf="!tfa.secret" style="margin-top: 50px;">
-            <div *ngIf="!!tfa.tempSecret" class="two-factor">
+      <div  *ngIf="!tfa?.secret" style="margin-top: 50px;">
+            <div *ngIf="!!tfa?.tempSecret" class="two-factor">
                 <p style="text-align: center;">Scan the QR code and enter the secret key Using Google Authenticator
                     Application</p>
-                <img [src]="tfa.dataURL" alt="" class="img-thumbnail" style="display:block;margin:auto">
+                <img [src]="tfa?.dataURL" alt="" class="img-thumbnail" style="display:block;margin:auto">
                 <p style="text-align: center;" class="pt-2">Auth Type - Time Based - OTP</p>
 
                 <div class="form-group"
@@ -28,6 +28,24 @@
                               <option value="2">Maker and Approver</option>
                               <option value="3">Maker checker and Approver</option>
                             </select>
+                          </div>
+                          <div class="row flex-label" style="width: 430px;
+                          height: 110px;
+                          margin-left: 210px !important;
+                          margin-bottom: 20px !important;">
+                            <label for="message-text" class="col-form-label">Documents List :</label>
+                             <div class="col" style="display: flex;align-items: flex-start;">
+                                <input style="width: 20px;height: 20px;" type="checkbox" (change)="this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER['DMS']=$event.target.checked" #DMS>
+                                <label for="message-text" class="col-form-label pt-0">DMS(Documents Management System)</label>
+                             </div>
+                             <div class="col" style="display: flex;align-items: flex-start;">
+                                <input style="width: 20px;height: 20px;" type="checkbox" (change)="this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER['Teasury']=$event.target.checked" #Teasury>
+                                <label for="message-text" class="col-form-label pt-0">Teasury</label>
+                             </div>
+                             <div class="col" style="display: flex;align-items: flex-start;">
+                                <input style="width: 20px;height: 20px;" type="checkbox" (change)="this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER['Transaction']=$event.target.checked" #Transaction>
+                                <label for="message-text" class="col-form-label pt-0">Transaction</label>
+                             </div>
                           </div>
                         <div class="row" style="width: 300px;">
                           <label for="message-text" class="col-form-label">Maximum No. of User :</label>

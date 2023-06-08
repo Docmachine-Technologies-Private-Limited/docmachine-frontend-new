@@ -104,7 +104,7 @@
         </a>
         <div class="scroll-bar">
           <ul class="list-unstyled components mb-5 p-3">
-            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true && this.userData['DMS']==true">
               <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Documents</a>
               <ul class="collapse list-unstyled" id="homeSubmenu">
                 <li class="nav-item">
@@ -168,7 +168,7 @@
              
               </ul>
             </li>
-            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true && this.userData['Transaction']==true">
               <a href="#Transactions" data-toggle="collapse" aria-expanded="false"
                 class="dropdown-toggle">Transactions</a>
               <ul class="collapse list-unstyled" id="Transactions">
@@ -245,7 +245,7 @@
                 </li>
               </ul>
             </li>
-            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true">
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true && this.userData['Transaction']==true">
               <a href="#ImportTransactionDashBoard" data-toggle="collapse" aria-expanded="false"
                 class="dropdown-toggle">Transaction Summary</a>
               <ul class="collapse list-unstyled" id="ImportTransactionDashBoard">
@@ -256,7 +256,7 @@
                 </li>
               </ul>
             </li>
-            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true && this.userData['DMS']==true">
               <a href="#ExportDocuments" data-toggle="collapse" aria-expanded="false"
                 class="dropdown-toggle">Documents</a>
               <ul class="collapse list-unstyled" id="ExportDocuments">
@@ -321,7 +321,7 @@
                 </li>
               </ul>
             </li>
-            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true  && this.userData['Transaction']==true">
               <a href="#ExportTransactions" data-toggle="collapse" aria-expanded="false"
                 class="dropdown-toggle">Transactions</a>
               <ul class="collapse list-unstyled" id="ExportTransactions">
@@ -365,7 +365,7 @@
                 </li>
               </ul>
             </li>
-            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true">
+            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['export']==true  && this.userData['Transaction']==true">
               <a href="#TransactionDashBoard" data-toggle="collapse" aria-expanded="false"
                 class="dropdown-toggle">Transaction Summary</a>
               <ul class="collapse list-unstyled" id="TransactionDashBoard">
@@ -419,7 +419,7 @@
                 </li>
               </ul>
             </li>
-            <li *ngIf="this.userData['role']=='member' && this.documentService.EXPORT_IMPORT['import']==true ||  this.documentService.EXPORT_IMPORT['export']==true">
+            <li *ngIf="this.userData['role']=='member' && this.userData['Teasury']==true && (this.documentService.EXPORT_IMPORT['import']==true || this.documentService.EXPORT_IMPORT['export']==true)">
               <a href="#Treasury" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Treasury</a>
               <ul class="collapse list-unstyled" id="Treasury">
                 <li class="nav-item">
@@ -428,7 +428,7 @@
               </ul>
             </li>
             
-            <li *ngIf="this.userData['role']=='member'">
+            <li *ngIf="this.userData['role']=='member' && this.userData['Transaction']==true">
               <a href="#ApprovalPanel" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Status
                 Panel</a>
               <ul class="collapse list-unstyled" id="ApprovalPanel">
