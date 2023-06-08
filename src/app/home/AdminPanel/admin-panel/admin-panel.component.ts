@@ -370,7 +370,14 @@ export class AdminPanelComponent implements OnInit {
     } else {
       this.toastr?.error('Id not found...');
     }
-   
+  }
+  
+  Transaction_Checked(event:any){
+    if (event?.target?.checked) {
+      this.SUBCRIPTION_CHANGES.controls.DMS.setValue(true)
+    }else{
+      this.SUBCRIPTION_CHANGES.controls.DMS.setValue(false)
+    }
   }
 }
 

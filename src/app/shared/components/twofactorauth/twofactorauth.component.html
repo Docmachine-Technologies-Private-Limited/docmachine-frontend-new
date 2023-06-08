@@ -29,13 +29,12 @@
                               <option value="3">Maker checker and Approver</option>
                             </select>
                           </div>
-                          <div class="row flex-label" style="width: 430px;
-                          height: 110px;
-                          margin-left: 210px !important;
+                          <div class="row flex-label" style="height: 110px;
+                          margin-top: 10px !important;
                           margin-bottom: 20px !important;">
                             <label for="message-text" class="col-form-label">Documents List :</label>
-                             <div class="col" style="display: flex;align-items: flex-start;">
-                                <input style="width: 20px;height: 20px;" type="checkbox" (change)="this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER['DMS']=$event.target.checked" #DMS>
+                             <div class="col" style="display: flex;align-items: flex-start;max-width: 530px;width: 530px;">
+                                <input style="width: 20px;height: 20px;" type="checkbox" [checked]="this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER['DMS']" (change)="this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER['DMS']=$event.target.checked" #DMS>
                                 <label for="message-text" class="col-form-label pt-0">DMS(Documents Management System)</label>
                              </div>
                              <div class="col" style="display: flex;align-items: flex-start;">
@@ -43,7 +42,7 @@
                                 <label for="message-text" class="col-form-label pt-0">Teasury</label>
                              </div>
                              <div class="col" style="display: flex;align-items: flex-start;">
-                                <input style="width: 20px;height: 20px;" type="checkbox" (change)="this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER['Transaction']=$event.target.checked" #Transaction>
+                                <input style="width: 20px;height: 20px;" type="checkbox" (change)="this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER['Transaction']=$event.target.checked;this.EXTRA_INPUT_FORM_VALUE_LIST_MANGER['DMS']=$event.target.checked" #Transaction>
                                 <label for="message-text" class="col-form-label pt-0">Transaction</label>
                              </div>
                           </div>
