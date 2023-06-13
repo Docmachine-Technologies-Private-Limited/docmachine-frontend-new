@@ -25,8 +25,6 @@
                 <span *ngFor="let data of item2 | slice: 0:3; let i = index" style="float: right; margin-right: 3%"><img
                         class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px"
                         width="30px" /></span>
-                <!-------style="padding-left: 1%" class="pc1"-->
-
             </div>
             <div style="margin-right: 8%">
                 <img src="../../../assets/cross.png" (click)="hide()" style="width: 20px; height: 20px;
@@ -38,7 +36,14 @@
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-12"></div>
                 <div class="col-md-8 col-sm-8 col-12">
-                    <div class="filter_right_new padding_new_top">
+                    <div class="filter_right_new padding_new_top" style="display: flex;gap: 20px;">
+                        <app-ng-dropdown-custom placeHolderText="Search sb no." class="PopupOpen"
+                            popup-close="SHIPPING_BILL_ALL_RELATED_DOCUMENTS" width="300px" [items]="this.item1"
+                            bindLabel="sbno" (modelChanges)="SbSearch($event?.sbno)"
+                            (keyEvent)="SbSearch($event)"
+                            [multiple]="false"
+                            #buyerNameSelection>
+                        </app-ng-dropdown-custom>
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                                 class="ex_icon"></span>Export</button>
                         <div class="filter_posit">
@@ -135,50 +140,10 @@
 
         <div class="analytics" #epltable>
             <div *ngIf="!showInvoice" style="width: 100%" class="analytics-side">
-                <!-- <div style="width: 100%;" class="row">
-                    <div class="" *ngIf="!showInvoice" id="container">
-                        <div class="new_data_tableUI">
-                            <div class="mat-elevation-z8">
-                                <table mat-table [dataSource]="dataSource">
-
-                                    <ng-container matColumnDef="position">
-                                        <th mat-header-cell *matHeaderCellDef> No. </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-                                    </ng-container>
-
-\                                    <ng-container matColumnDef="name">
-                                        <th mat-header-cell *matHeaderCellDef> Name </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="weight">
-                                        <th mat-header-cell *matHeaderCellDef> Weight </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="symbol">
-                                        <th mat-header-cell *matHeaderCellDef> Symbol </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-                                    </ng-container>
-
-                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                                </table>
-
-                                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-                                    aria-label="Select page of periodic elements">
-                                </mat-paginator>
-                            </div>
-
-                        </div>
-                       
-                    </div>
-                </div> -->
                 <section class="middle_datatable">
                     <div style="margin:auto;" class="widget-body p-0 support table-wrapper">
                         <table *ngIf='pipo' style="width: 100%" class="table table-striped mb-0">
-                            <thead
-                                style="width: 100%;height: 54px; background: white;position: sticky;top: 0; ">
+                            <thead style="width: 100%;height: 54px; background: white;position: sticky;top: 0; ">
                                 <tr>
                                     <th class="rect">
                                         <img src="./assets/Rectangle-13.png" />
@@ -209,7 +174,7 @@
                                     </td>
                                     <td class="col-td-th-3">{{data.benneName}}</td>
                                 </tr>
-    
+
                             </tbody>
                         </table>
                         <table *ngIf='boe' style="width: 100%" class="table table-striped mb-0">
@@ -248,7 +213,7 @@
                                     </td>
                                     <td class="col-td-th-3">{{data.benneName}}</td>
                                 </tr>
-    
+
                             </tbody>
                         </table>
                         <table *ngIf='sb' class="table mb-0">
@@ -330,9 +295,8 @@
                                             {{data.consigneeName}}
                                         </div>
                                         <div *ngIf="optionsVisibility[i]">
-                                            <input class="tblInput form-control" name="consigneeName"
-                                                type="text" placeholder="Consignee Name"
-                                                [(ngModel)]="data.consigneeName">
+                                            <input class="tblInput form-control" name="consigneeName" type="text"
+                                                placeholder="Consignee Name" [(ngModel)]="data.consigneeName">
                                         </div>
                                     </td>
                                     <td class="col-td-th-3">
@@ -340,9 +304,8 @@
                                             {{data.exporterLocationCode}}
                                         </div>
                                         <div *ngIf="optionsVisibility[i]">
-                                            <input class="tblInput form-control" name="exporterLocationCode"
-                                                type="text" placeholder="ORIGIN"
-                                                [(ngModel)]="data.exporterLocationCode">
+                                            <input class="tblInput form-control" name="exporterLocationCode" type="text"
+                                                placeholder="ORIGIN" [(ngModel)]="data.exporterLocationCode">
                                         </div>
                                     </td>
                                     <td class="col-td-th-3">
@@ -350,9 +313,8 @@
                                             {{data.countryOfFinaldestination}}
                                         </div>
                                         <div *ngIf="optionsVisibility[i]">
-                                            <input class="tblInput form-control"
-                                                name="countryOfFinaldestination" type="text"
-                                                placeholder="DESTINATION"
+                                            <input class="tblInput form-control" name="countryOfFinaldestination"
+                                                type="text" placeholder="DESTINATION"
                                                 [(ngModel)]="data.countryOfFinaldestination">
                                         </div>
                                     </td>
@@ -411,13 +373,13 @@
                                         </button>
                                     </td>
                                 </tr>
-    
+
                             </tbody>
                         </table>
                     </div>
                 </section>
             </div>
-          
+
             <div *ngIf="showInvoice" class="p-8 bc">
                 <div class="side_document_list">
                     <!---class="col-12 mb-lg ph-38"-->
@@ -1154,19 +1116,14 @@
     </main>
 </div>
 <ng-template #content let-modal>
-
     <div class="modal-body">
         <div class="row no-gutter">
-             <!-- The content half -->
             <div class="col-md-7" style="margin: 10px;">
                 <div class="login d-flex py-5" style="padding: 0px !important;">
-
-                    <!-- Demo content-->
                     <div class="container popup">
                         <div class="row">
                             <div class="col-lg-10 col-xl-7 mrg">
                                 <h6 class="display-6">Shipping Bill</h6>
-
                                 <iframe [src]="viewData" width="315%" height="500px"></iframe>
                                 <button type="submit" style="margin-left: 250px;" class="submitBTN"
                                     (click)="modal.dismiss('Cross click')">OK</button>
@@ -1174,12 +1131,27 @@
                             </div>
                         </div>
                     </div>
-                    <!-- End -->
-
                 </div>
             </div>
-
         </div>
     </div>
-
 </ng-template>
+
+<app-custom-model *ngIf="this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.length!=0"
+    [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
+    id="SHIPPING_BILL_ALL_RELATED_DOCUMENTS" [name]="'Shipping bill Details : '+this.SHIPPING_BILL">
+    <div class="d-flex" style="width: 120px;flex-direction: row;margin-left: 40px;margin-top: 10px;">
+        <div class="col-12 d-flex p-2" *ngFor="let selItems of this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS;let i=index">
+            <input type="checkbox" [name]="selItems?.name" (change)="tickdoc($event,i)">
+            <label for="">{{selItems?.name}}</label>
+        </div>
+        <button type="submit" class="btn btn-primary"
+        (click)="download(this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS,'zip')">Download Zips</button>
+        <button type="submit" class="btn btn-primary" style="margin-left: 20px;"
+        (click)="download(this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS,'merge')">Merge Pdf</button>
+    </div>
+    <div class="col-12 p-2" *ngFor="let selItems of this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS">
+        <app-pdf-viewer [downloadShow]="false" [name]="selItems?.name" [src]="selItems?.doc"
+         width="100%" height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>

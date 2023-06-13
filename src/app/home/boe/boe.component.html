@@ -26,7 +26,13 @@
         <div class="row">
           <div class="col-md-4 col-sm-4 col-12"></div>
           <div class="col-md-8 col-sm-8 col-12">
-            <div class="filter_right_new padding_new_top">
+            <div class="filter_right_new padding_new_top"  style="display: flex;gap: 20px;">
+              <app-ng-dropdown-custom placeHolderText="Search boe no." class="PopupOpen"
+              popup-close="SHIPPING_BILL_ALL_RELATED_DOCUMENTS" width="300px" [items]="this.item1"
+              bindLabel="boeNumber" (modelChanges)="SbSearch($event?.boeNumber)"
+              (keyEvent)="SbSearch($event)"
+              [multiple]="false"
+              #buyerNameSelection></app-ng-dropdown-custom>
               <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                   class="ex_icon"></span>Export</button>
               <div class="filter_posit">
@@ -993,23 +999,14 @@
 </div>
 
 <ng-template #content let-modal>
-
   <div class="modal-body">
     <div class="row no-gutter">
-      <!-- The image half -->
-      <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
-
-
-      <!-- The content half -->
       <div class="col-md-7" style="margin: 10px;">
         <div class="login d-flex py-5" style="padding: 0px !important;">
-
-          <!-- Demo content-->
           <div class="container popup">
             <div class="row">
               <div class="col-lg-10 col-xl-7 mrg">
                 <h6 class="display-6">Boe</h6>
-
                 <iframe [src]="viewData" width="315%" height="500px"></iframe>
                 <button type="submit" style="margin-left: 250px;" class="submitBTN"
                   (click)="modal.dismiss('Cross click')">OK</button>
@@ -1017,12 +1014,27 @@
               </div>
             </div>
           </div>
-          <!-- End -->
-
         </div>
       </div>
-
     </div>
   </div>
-
 </ng-template>
+
+<app-custom-model *ngIf="this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.length!=0"
+    [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
+    id="SHIPPING_BILL_ALL_RELATED_DOCUMENTS" [name]="'BOE Details : '+this.SHIPPING_BILL">
+    <div class="d-flex" style="width: 120px;flex-direction: row;margin-left: 40px;margin-top: 10px;">
+        <div class="col-12 d-flex p-2" *ngFor="let selItems of this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS;let i=index">
+            <input type="checkbox" [name]="selItems?.name" (change)="tickdoc($event,i)">
+            <label for="">{{selItems?.name}}</label>
+        </div>
+        <button type="submit" class="btn btn-primary"
+        (click)="download(this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS,'zip')">Download Zips</button>
+        <button type="submit" class="btn btn-primary" style="margin-left: 20px;"
+        (click)="download(this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS,'merge')">Merge Pdf</button>
+    </div>
+    <div class="col-12 p-2" *ngFor="let selItems of this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS">
+        <app-pdf-viewer [downloadShow]="false" [name]="selItems?.name" [src]="selItems?.doc"
+         width="100%" height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>

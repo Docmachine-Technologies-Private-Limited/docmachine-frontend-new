@@ -28,6 +28,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
   @Input('selectedItems') selectedItems: any = '';
   @Input('ngModelDropDown') ngModelDropDown: any = [];
   @Output('NgModal') NgModal: any = new EventEmitter<any>();
+  @Output('keyEvent') keyEvent: any = new EventEmitter<any>();
   @Input('GET_ARRAY_VALUES') GET_ARRAY_VALUES: boolean = false;
   @Input('id') id: any = '';
   @Input('disabled') disabled: any = false;
@@ -94,6 +95,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
   filterdropdown($event: any, val: any) {
     var uq_id: any = $($event.target).parent().attr('id')
     this.FILTER_DROPDOWN = this.items.filter((item: any) => item[this.LABLE_BIND_LIST[uq_id]?.bindLabel]?.toLowerCase()?.indexOf(val.toLowerCase()) != -1);
+    this.keyEvent.emit(val);
     if (this.FILTER_DROPDOWN.length == 0) {
       this.FILTER_DROPDOWN = this.items;
     }
