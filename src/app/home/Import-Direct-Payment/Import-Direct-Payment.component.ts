@@ -64,7 +64,6 @@ export class ImportDirectPaymentComponent implements OnInit {
 
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
-  // ----------------------------------
 
   opinionReport: boolean = false;
   document: any;
@@ -783,6 +782,9 @@ export class ImportDirectPaymentComponent implements OnInit {
             pipo_id.push(this.ITEM_FILL_PDF[index]?.pipo[0]?._id)
             pipo_name.push(this.ITEM_FILL_PDF[index]?.pipo[0]?.pi_poNo)
           }
+          this.pipoForm.value.bank = this.pipoForm.controls?.bank
+          this.pipoForm.value.benneName = this.pipoForm.controls?.benneName
+          
           var data: any = {
             data: {
               formdata: this.pipoForm.value,

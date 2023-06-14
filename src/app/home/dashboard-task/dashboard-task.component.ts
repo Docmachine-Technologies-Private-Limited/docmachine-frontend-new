@@ -1,11 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
 import ApexCharts from 'apexcharts';
-
 import {
-  ApexNonAxisChartSeries,
-  ApexResponsive,
-  ApexChart,
   ChartComponent
 } from "ng-apexcharts";
 
@@ -15,21 +10,16 @@ import { ProgressBarMode } from '@angular/material/progress-bar';
 import { UserService } from "../../service/user.service";
 import { WindowInformationService } from '../../service/window-information.service';
 
-
 @Component({
   selector: 'app-dashboard-task',
   templateUrl: './dashboard-task.component.html',
   styleUrls: ['../../../sass/application.scss', './dashboard-task.component.scss']
 })
 
-
-
 export class DashboardTaskComponent implements OnInit {
-
   progressBarMode: ProgressBarMode = 'determinate';
   progressBarvalue = 0;
   bufferValue = 75;
-
   ospType: any = 'Day';
   ospData: any = ['Day', 'Week', 'Month', 'Financial Quarter', 'Year',];
   item: any;
@@ -42,84 +32,66 @@ export class DashboardTaskComponent implements OnInit {
   progress: 100
   pipoCurrencyImportData: any = [];
   pipoCurrencyExportData: any = [];
-
   pipoBuyerImportData: any = [];
   pipoBuyerExportData: any = [];
-
   inwardCurrencyImportData: any = [];
   inwardCurrencyExportData: any = [];
-
   inwardBuyerImportData: any = [];
   inwardBuyerExportData: any = [];
-
   SBCurrrenycyImportData: any = [];
   SBCurrencyExportData: any = [];
-
-
   SBbuyerImportData: any = [];
   SBbuyerExportData: any = [];
-
   inwardRemitanceImportData: any = [];
   inwardRemitanceExportData: any = [];
   inwardRemitanceAmount: any = 0;
   inwardRemitanceTotalCount: any = 0;
   inwardRemitancePendingCount: any = 0;
-
   shipmentPending: any[]
   shipmentPendingImport: any = [];
   shipmentPendingExport: any = [];
-
-
   shipmentSubmit: any[]
   shipmentSubmitImport: any = [];
   shipmentSubmitExport: any = [];
-
-
   EDPMSData: any = [];
-
-
-
   orderPendingShipment: any
   orderPendingShipmentImport: any = [];
   orderPendingShipmentExport: any = [];
-
   isImport: boolean = false;
   public pipoChartOptions;
-
   public inwardChartOptions;
+  public OutwardChartOptions;
   public shippingBillChartOptions;
   public PendingrealisationChartOptions;
   public orderPendingForShipmentChartOptions;
   public packingCreditAvailedChartOptions;
   public totalBillLodgedChartOptions;
   public edpmsChartOptions;
-
-
+  public BOEChartOptions: any = []
   sbChartNoData: Boolean = true;
   inwardChartNoData: Boolean = true;
-
   sbChart;
+  BOEChart: any
   pipoChart;
   inwardChart;
+  OutwardChart;
   orderShipmentChart;
   PendingrealisationChart;
   EDPMSChart;
   packingCreditAvailedChart;
   totalBillLodgedChart;
   userData: any;
-
+  BOE_DATA: any = [];
+  BOE_PENDING_DATA: any = [];
+  BOE_SUBMISSION_DATA: any = [];
   @ViewChild("chart") chart: ChartComponent;
 
   constructor(public documentService: DocumentService, public dashboardService: DashBoardService,
     public userService: UserService, public wininfo: WindowInformationService) {
-    // this.ChartMethod()
-
   }
 
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270, '.content_top_common')
     this.userData = await this.userService.getUserDetail();
-    // this.userData = this.userData.result
     console.log("userData", this.userData, this.documentService.EXPORT_IMPORT)
     this.item1 = []
 
@@ -154,11 +126,15 @@ export class DashboardTaskComponent implements OnInit {
 
   getDashboardData = () => {
     return new Promise(async (resolve, reject) => {
-     await this.dashboardService.getDashboardData().subscribe(
+      await this.dashboardService.getDashboardData().subscribe(
         (res: any) => {
+
           // Import data..
           this.pipoCurrencyImportData = res?.pipo?.import?.currencyWise;
           this.pipoBuyerImportData = res?.pipo?.import?.buyerWise;
+          this.BOE_DATA = res?.BOE_DEATILS;
+          this.BOE_PENDING_DATA = res?.Pending_BOE_Submission;
+          this.BOE_SUBMISSION_DATA= res?.BOE_Submission;
           console.log("pipoBuyerImportData", res, this.pipoBuyerImportData)
           this.pipoCurrencyImportData = this.pipoCurrencyImportData.filter(data => {
             if (data._id !== null && data._id !== '') {
@@ -179,11 +155,13 @@ export class DashboardTaskComponent implements OnInit {
               return data
             }
           });
+
           this.inwardBuyerImportData = this.inwardBuyerImportData?.filter(data => {
             if (data._id) {
               return data
             }
           });
+
           this.SBCurrrenycyImportData = res?.ShippingBill?.currencyWise;
           this.SBbuyerImportData = res?.ShippingBill?.import?.buyerWise;
           this.SBbuyerImportData = this.SBbuyerImportData?.filter(data => {
@@ -203,6 +181,7 @@ export class DashboardTaskComponent implements OnInit {
               return data
             }
           })
+
           this.pipoBuyerExportData = this.pipoBuyerExportData?.filter(data => {
             if (data._id !== null && data._id !== '') {
               return data
@@ -216,11 +195,13 @@ export class DashboardTaskComponent implements OnInit {
               return data
             }
           })
+
           this.inwardBuyerExportData = this.inwardBuyerExportData?.filter(data => {
             if (data._id) {
               return data
             }
           })
+
           this.SBCurrencyExportData = res?.ShippingBill?.currencyWise;
           this.SBbuyerExportData = res?.ShippingBill?.export?.buyerWise;
 
@@ -238,17 +219,40 @@ export class DashboardTaskComponent implements OnInit {
             let conut = data?.blcopyrefNumber?.filter(x => !x)?.length
             return { ...data, awaitSubmit: conut }
           })
-          this.ChartMethod()
           if (this.documentService.EXPORT_IMPORT['import'] == true) {
-            this.handleImportData();
+            this.isImport = true;
+            setTimeout(() => {
+              this.ChartMethod()
+              setTimeout(() => {
+                this.handleImportData();
+              }, 200)
+            }, 200)
           } else {
-            this.handleExportData()
+            this.isImport = false;
+            setTimeout(() => {
+              this.ChartMethod()
+              setTimeout(() => {
+                this.handleExportData()
+              }, 200)
+            }, 200)
           }
           this.documentService.EXPORT_IMPORT['callback'] = () => {
             if (this.documentService.EXPORT_IMPORT['import'] == true) {
-              this.handleImportData();
+              this.isImport = true;
+              setTimeout(() => {
+                this.ChartMethod()
+                setTimeout(() => {
+                  this.handleImportData();
+                }, 200)
+              }, 200)
             } else {
-              this.handleExportData()
+              this.isImport = false;
+              setTimeout(() => {
+                this.ChartMethod()
+                setTimeout(() => {
+                  this.handleExportData()
+                }, 200)
+              }, 200)
             }
           }
           console.log("this.documentService.EXPORT_IMPORT", this.documentService.EXPORT_IMPORT)
@@ -271,7 +275,6 @@ export class DashboardTaskComponent implements OnInit {
   }
 
   ChartMethod() {
-    // pipi chart
     this.pipoChartOptions = {
       chart: {
         width: '100%',
@@ -311,7 +314,6 @@ export class DashboardTaskComponent implements OnInit {
         show: true,
         position: 'bottom',
         horizontalAlign: 'center',
-        // width: 30,
         height: 50,
       }
     }
@@ -356,7 +358,6 @@ export class DashboardTaskComponent implements OnInit {
           let tooltipData = w?.config?.chartData[seriesIndex]
           let toolTipText = ''
           for (let i = 0; i < tooltipData?.convertData?.length; i++) {
-            // toolTipText += `${tooltipData?.convertData[i].currency} :${tooltipData?.convertData[i].amount} <br> `
             toolTipText += `${tooltipData?.convertData[i].currency} :${w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
 
           }
@@ -368,7 +369,60 @@ export class DashboardTaskComponent implements OnInit {
         show: true,
         position: 'bottom',
         horizontalAlign: 'center',
-        // width: 30,
+        height: 50,
+      }
+    }
+
+    this.OutwardChartOptions = {
+      chart: {
+        width: '100%',
+        type: "donut"
+      },
+      yaxis: {
+        labels: {
+          style: {
+            fontSize: '8px',
+            maxWidth: 30,
+          },
+        }
+      },
+      noData: {
+        text: "No Data",
+        align: 'center',
+        verticalAlign: 'middle',
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+          color: '#999',
+          fontSize: '14px',
+          fontFamily: undefined
+        }
+      },
+      labels: [],
+      colors: ["#FF962C", "#E6DF2A", "#39539E", "#DCA1DC", '#24f0ce', '#e6542c', '#ed5396', '#a524bf', '#a524bf'],
+      dataLabels: {
+        enabled: false
+      },
+      chartData: [],
+      currencyFormat: this.currencyFormate,
+
+      series: [],
+      tooltip: {
+        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+          let tooltipData = w?.config?.chartData[seriesIndex]
+          let toolTipText = ''
+          for (let i = 0; i < tooltipData?.convertData?.length; i++) {
+            toolTipText += `${tooltipData?.convertData[i].currency} :${w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
+
+          }
+          return "<div>" + toolTipText + "</div>";
+        }
+      },
+
+      legend: {
+        show: true,
+        position: 'bottom',
+        horizontalAlign: 'center',
         height: 50,
       }
     }
@@ -400,12 +454,11 @@ export class DashboardTaskComponent implements OnInit {
       series: [],
       tooltip: {
         custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+          console.log(w, 'sdfhsdfkjdfsdfsdfd')
           let tooltipData = w?.config?.chartData[seriesIndex]
           let toolTipText = ''
           for (let i = 0; i < tooltipData?.convertData?.length; i++) {
-            // toolTipText += `${tooltipData?.convertData[i].currency} :${tooltipData?.convertData[i].amount}  <br>`
             toolTipText += `${tooltipData?.convertData[i].currency} :${w?.config?.currencyFormat(tooltipData?.convertData[i].amount, tooltipData?.convertData[i].currency)}  <br>`
-
           }
           return "<div>" + toolTipText + "</div>";
         }
@@ -414,11 +467,50 @@ export class DashboardTaskComponent implements OnInit {
         show: true,
         position: 'bottom',
         horizontalAlign: 'center',
-        // width: 30,
         height: 50,
       }
     }
 
+    this.BOEChartOptions = {
+      chart: {
+        width: '100%',
+        type: "donut"
+      },
+      noData: {
+        text: "No Data",
+        align: 'center',
+        verticalAlign: 'middle',
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+          color: '#999',
+          fontSize: '14px',
+          fontFamily: undefined
+        }
+      },
+      labels: [],
+      colors: ["#A973B8", "#DDC273", "#E07C97", "#DCA1DC", '#deed0e', '#1aeb2b', '#e35c36', '#4870db', '#24f0ce'],
+      dataLabels: {
+        enabled: false
+      },
+      chartData: [],
+      currencyFormat: this.currencyFormate,
+      series: [],
+      tooltip: {
+        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+          let tooltipData = w?.config?.chartData
+          let toolTipText = ''
+          toolTipText = `${tooltipData[seriesIndex].currency} :${w?.config?.currencyFormat(tooltipData[seriesIndex].amount, tooltipData[seriesIndex].currency)}  <br>`
+          return "<div>" + toolTipText + "</div>";
+        }
+      },
+      legend: {
+        show: true,
+        position: 'bottom',
+        horizontalAlign: 'center',
+        height: 50,
+      }
+    }
 
     this.PendingrealisationChartOptions = {
       series: [
@@ -492,7 +584,6 @@ export class DashboardTaskComponent implements OnInit {
 
     this.orderPendingForShipmentChartOptions = {
       series: [],
-
       chart: {
         type: 'bar',
         height: 220,
@@ -532,7 +623,6 @@ export class DashboardTaskComponent implements OnInit {
         type: "bar",
         events: {
           click: function (chart, w, e) {
-            // console.log(chart, w, e)
           }
         }
       },
@@ -563,7 +653,6 @@ export class DashboardTaskComponent implements OnInit {
       },
       xaxis: {
         categories: [
-
           "B1",
           "B2",
           "B3",
@@ -602,7 +691,6 @@ export class DashboardTaskComponent implements OnInit {
         type: "bar",
         events: {
           click: function (chart, w, e) {
-            // console.log(chart, w, e)
           }
         }
       },
@@ -633,14 +721,12 @@ export class DashboardTaskComponent implements OnInit {
       },
       xaxis: {
         categories: [
-
           "B1",
           "B2",
           "B3",
           "B4",
           "B5",
           "B6",
-
         ],
         labels: {
           style: {
@@ -662,16 +748,12 @@ export class DashboardTaskComponent implements OnInit {
 
     this.edpmsChartOptions = {
       series: [],
-      // series: [44, 55, 13, 43, 22],
       chart: {
         width: 270,
         type: "donut"
       },
-      // labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
       labels: [],
-
       colors: ["#51AEE5", "#4CC78A", "#E07C97", "#DCA1DC"],
-
       responsive: [
         {
           breakpoint: 480,
@@ -679,7 +761,6 @@ export class DashboardTaskComponent implements OnInit {
             chart: {
               width: 200
             },
-
             dataLabels: {
               enabled: false
             },
@@ -691,15 +772,29 @@ export class DashboardTaskComponent implements OnInit {
       ]
     };
 
-    this.pipoChart = new ApexCharts(document.querySelector('#pipiChart'), this.pipoChartOptions);
-    this.pipoChart.render();
+    if (document.querySelector('#pipiChart') != null && document.querySelector('#pipiChart') != undefined) {
+      this.pipoChart = new ApexCharts(document.querySelector('#pipiChart'), this.pipoChartOptions);
+      this.pipoChart.render();
+    }
+    if (document.querySelector('#SBChart') != null && document.querySelector('#SBChart') != undefined) {
+      this.sbChart = new ApexCharts(document.querySelector('#SBChart'), this.shippingBillChartOptions);
+      this.sbChart.render();
+    }
+    if (document.querySelector('#BOEChart') != null && document.querySelector('#BOEChart') != undefined) {
+      console.log(document.querySelector('#BOEChart'), 'document.querySelector')
+      this.BOEChart = new ApexCharts(document.querySelector('#BOEChart'), this.BOEChartOptions);
+      this.BOEChart.render();
+    }
 
-    this.sbChart = new ApexCharts(document.querySelector('#SBChart'), this.shippingBillChartOptions);
-    this.sbChart.render();
+    if (document.querySelector('#OutwardChart') != null && document.querySelector('#OutwardChart') != undefined) {
+      this.OutwardChart = new ApexCharts(document.querySelector('#OutwardChart'), this.OutwardChartOptions);
+      this.OutwardChart.render();
+    }
 
-    this.inwardChart = new ApexCharts(document.querySelector('#inwardChart'), this.inwardChartOptions);
-    this.inwardChart.render();
-
+    if (document.querySelector('#inwardChart') != null && document.querySelector('#inwardChart') != undefined) {
+      this.inwardChart = new ApexCharts(document.querySelector('#inwardChart'), this.inwardChartOptions);
+      this.inwardChart.render();
+    }
     this.EDPMSChart = new ApexCharts(document.querySelector('#EdpmsChart'), this.edpmsChartOptions);
     this.EDPMSChart.render();
 
@@ -714,84 +809,51 @@ export class DashboardTaskComponent implements OnInit {
 
     this.totalBillLodgedChart = new ApexCharts(document.querySelector('#TotalBillLodgedChart'), this.totalBillLodgedChartOptions);
     this.totalBillLodgedChart.render();
-    // this.edpmsChart.series = [this.EDPMSData.pendingData, this.EDPMSData.uploadData]
-    // this.edpmsChart.labels = ['Pending', "Upload"]
   }
 
-
-
   handleImportData = () => {
-    this.isImport = true
     this.pipoChart.updateOptions({
-      series: [44, 55, 41, 17],
-      labels: ['Buyer 1', 'Buyer 2', 'Buyer 3', 'Buyer 4'],
-      // chartData: this.pipoBuyerImportData
+      series: this.pipoBuyerImportData?.map(data => data.totalItems),
+      labels: this.pipoBuyerImportData?.map(data => data._id),
+      chartData: this.pipoBuyerImportData
     });
 
-    this.sbChart.updateOptions({
-      series: [44, 55, 41, 17],
-      labels: ['Buyer 1', 'Buyer 2', 'Buyer 3', 'Buyer 4'],
+    this.BOEChart.updateOptions({
+      series: this.BOE_DATA?.data?.map(data => data?.InvoiceAmountSum),
+      labels: this.BOE_DATA?.data?.map(data => data?._id),
+      chartData: this.BOE_DATA?.convertData
     });
 
-    this.inwardChart?.updateOptions({
-      series: [60, 15, 25, 51],
-      labels: ['Buyer 1', 'Buyer 2', 'Buyer 3', 'Buyer 4'],
+    this.OutwardChart?.updateOptions({
+      series: this.inwardBuyerImportData?.map(data => data.totalItems),
+      labels: this.inwardBuyerImportData?.map(data => data._id),
+      chartData: this.inwardBuyerImportData
     });
 
     this.EDPMSChart.updateOptions({
-      series: [15, 80],
+      series: [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
       labels: ["Pending", "Upload"],
     });
-
-    // this.shipmentPending = this.shipmentPendingImport
 
     let sampleDataforSPI = [
       { _id: 'BOE for Tata consultancy', toTalcount: 5, toTalAmount: 1000 },
       { _id: 'Pending from D8amatiks', toTalcount: 9, toTalAmount: 500 },
       { _id: 'BOE from SLBT', toTalcount: 3, toTalAmount: 6000 }
     ]
-    this.shipmentPending = sampleDataforSPI
+    this.shipmentPending = this.shipmentPendingImport
     let sampleDataforSS = [
       { _id: 'BOE for Tata consultancy', toTalcount: 5, awaitSubmit: 2 },
       { _id: 'Pending from D8amatiks', toTalcount: 9, awaitSubmit: 6 },
       { _id: 'BOE from SLBT', toTalcount: 3, awaitSubmit: 1 }
     ]
-    // this.shipmentSubmit = this.shipmentSubmitImport
     this.shipmentSubmit = sampleDataforSS
-
-
-    // if (this.inwardRemitanceImportData?.totalCount > 0) {
-    //   let proBarValue = this.calculatePercentage(this.inwardRemitanceImportData?.importInwardData[0]?.pendingCount, this.inwardRemitanceImportData?.totalCount)
-    //   if (proBarValue) {
-    //     this.progressBarvalue = proBarValue
-    //     this.inwardRemitanceAmount = this.inwardRemitanceImportData?.importInwardData[0]?.toTalAmount
-
-    //     this.inwardRemitanceTotalCount = this.inwardRemitanceImportData?.totalCount
-    //     this.inwardRemitancePendingCount = this.inwardRemitanceImportData?.importInwardData[0]?.pendingCount
-
-    //   } else {
-    //     this.progressBarvalue = 0
-    //     this.inwardRemitanceAmount = 0
-    //     this.inwardRemitanceTotalCount = 0
-    //     this.inwardRemitancePendingCount = 0
-    //   }
-    // } else {
-    //   this.progressBarvalue = 0
-    //   this.inwardRemitanceAmount = 0
-    //   this.inwardRemitanceTotalCount = 0
-    //   this.inwardRemitancePendingCount = 0
-    // }
-
     this.progressBarvalue = 80
     this.inwardRemitanceAmount = 15000
     this.inwardRemitanceTotalCount = 65000
     this.inwardRemitancePendingCount = 10
   }
 
-
-
   handleExportData = () => {
-    this.isImport = false
     this.pipoChart.updateOptions({
       series: this.pipoBuyerExportData?.map(data => data.totalItems),
       labels: this.pipoBuyerExportData?.map(data => data._id),
@@ -813,10 +875,8 @@ export class DashboardTaskComponent implements OnInit {
     this.EDPMSChart.updateOptions({
       series: [this.EDPMSData.pendingData, this.EDPMSData.uploadData],
       labels: ["Pending", "Upload"],
-      // chartData: this.inwardBuyerImportData
     });
     console.log(this.EDPMSData.pendingData, this.EDPMSData.uploadData, 'asdsadsadsadadasdasdsadsadsadsad')
-
 
     this.shipmentPending = this.shipmentPendingExport
     this.shipmentSubmit = this.shipmentSubmitExport
@@ -841,24 +901,15 @@ export class DashboardTaskComponent implements OnInit {
       this.inwardRemitanceTotalCount = 0
       this.inwardRemitancePendingCount = 0
     }
-
   }
-
-
-  handleOrderShipmentImport() {
-
-  }
-
 
   handleOrderShipmentExport() {
-    // series:
     let chartData = [this.orderPendingShipmentExport.pendingCount, this.orderPendingShipmentExport.fullCount]
     console.log("chartData", chartData)
     this.orderShipmentChart.updateOptions({
       series: [{
         data: chartData,
       }],
-
     });
   }
 
@@ -874,7 +925,6 @@ export class DashboardTaskComponent implements OnInit {
         console.log("king123");
         console.log(data);
         this.ngOnInit()
-        //this.router.navigate(['/login'], { queryParams: { registered: true }});
       },
       (error) => {
         console.log("error");

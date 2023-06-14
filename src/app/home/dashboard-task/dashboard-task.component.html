@@ -11,7 +11,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="import_export_sec padding0">
+                <div class="import_export_sec padding0 pt-2">
                     <div class="row">
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <div class="Total_pipo">
@@ -20,52 +20,76 @@
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-4 col-xs-12">
-                            <div class="Total_pipo">
-                                <h5> {{ isImport ===  false  ? 'Total shipping bill' : 'Total Bill of Entry'}}</h5>
+                            <div class="Total_pipo" *ngIf="isImport ===  false">
+                                <h5>Total shipping bill</h5>
                                 <div id="SBChart" class="chart"></div>
+                            </div>
+                            <div class="Total_pipo" *ngIf="isImport === true">
+                                <h5>Total Bill of Entry</h5>
+                                <div id="BOEChart" class="chart"></div>
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-4 col-xs-12">
-                            <div class="Total_pipo">
-                                <h5> {{ isImport ===  false  ? 'Total inward remittances' : 'Outward remittances'}} </h5>
+                            <div class="Total_pipo" *ngIf="isImport ===  false">
+                                <h5>Total inward remittances</h5>
                                 <div id="inwardChart" class="chart"></div>
+                            </div>
+                            <div class="Total_pipo" *ngIf="isImport ===  true">
+                                <h5>Outward remittances</h5>
+                                <div id="OutwardChart" class="chart"></div>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="submission_sec">
-                                <h3 *ngIf="isImport === true">Advance Payment pending for BOE submission</h3>
-                                <h3 *ngIf="isImport ===  false " >shipment pending for submission</h3>
-                                <h5 *ngIf="isImport ===  false "> >21 Days from shipping bill date</h5>
+                            <div class="submission_sec" *ngIf="isImport ===  false ">
+                                <h3>shipment pending for submission</h3>
+                                <h5 *ngIf="isImport === false "> >21 Days from shipping bill date</h5>
                                 <div class="submission_sec_table_scroll">
                                     <table class="table">
                                         <thead>
                                             <tr>
                                                 <th scope="col">Party Name</th>
                                                 <th scope="col">No. of documents</th>
-                                                <th scope="col" class="right_price_list"
-                                                    style="text-align:right;    padding-right: 9px;">Amount</th>
+                                                <th scope="col">Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let row of shipmentPending; let i = index">
                                                 <td>{{row._id}}</td>
                                                 <td>{{row.toTalcount}}</td>
-                                                <td class="INR right_price_list"
-                                                    style="text-align:right;    padding-right: 9px;">{{row.toTalAmount |
-                                                    number : '1.2-2'}}</td>
+                                                <td class="INR">{{row.toTalAmount | number : '1.2-2'}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <span class="nodata_table">{{shipmentPending?.length === 0 ? 'No Data' :''}}</span>
-
+                            </div>
+                            <div class="submission_sec" *ngIf="isImport === true">
+                                <h3>Advance Payment pending for BOE submission</h3>
+                                <div class="submission_sec_table_scroll">
+                                    <table class="table">
+                                        <thead >
+                                            <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-2">Party Name</th>
+                                                <th scope="col" class="col-td-th-2">No. of documents</th>
+                                                <th scope="col" class="col-td-th-2">Currency | Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-tr" *ngFor="let row of this.BOE_PENDING_DATA; let i = index">
+                                                <td scope="col" class="col-td-th-2">{{row._id[0]}}</td>
+                                                <td scope="col" class="col-td-th-2">{{row.count}}</td>
+                                                <td scope="col" class="col-td-th-2">{{row._id[1]}} | {{row.InvoiceAmountSum | number : '1.2-2'}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <span class="nodata_table">{{this.BOE_PENDING_DATA?.length === 0 ? 'No Data' :''}}</span>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="submission_sec">
-                                <h3 *ngIf="isImport ===  true ">Total BOE submitted to Bank</h3>
-                                <h3 *ngIf="isImport ===  false ">shipment submitted to bank</h3>
-                                <h5 *ngIf="isImport ===  false ">Reference number awaited</h5>
+                            <div class="submission_sec" *ngIf="isImport ===  false ">
+                                <h3>shipment submitted to bank</h3>
+                                <h5>Reference number awaited</h5>
                                 <div class="submission_sec_table_scroll">
                                     <table class="table">
                                         <thead>
@@ -73,7 +97,7 @@
                                                 <th>Party Name</th>
                                                 <th>Doc generated</th>
                                                 <th class="right_price_list"
-                                                    style="text-align:right;    padding-right: 9px;">Ref no. awaited
+                                                    style="text-align:right;padding-right: 9px;">Ref no. awaited
                                                 </th>
                                             </tr>
                                         </thead>
@@ -91,10 +115,32 @@
                                 </div>
                                 <span class="nodata_table">{{shipmentSubmit?.length === 0 ? 'No Data' :''}}</span>
                             </div>
+                            <div class="submission_sec" *ngIf="isImport === true ">
+                                <h3>Total BOE submitted to Bank</h3>
+                                <div class="submission_sec_table_scroll">
+                                    <table class="table">
+                                        <thead>
+                                            <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-2">Party Name</th>
+                                                <th scope="col" class="col-td-th-2">Doc generated</th>
+                                                <th scope="col" class="col-td-th-2">Ref no. awaited
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-tr" *ngFor="let row of this.BOE_SUBMISSION_DATA; let i = index">
+                                                <td scope="col" class="col-td-th-2">{{row._id[0]}}</td>
+                                                <td scope="col" class="col-td-th-2">{{row.count}}</td>
+                                                <td scope="col" class="col-td-th-2">{{row.count}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <span class="nodata_table">{{this.BOE_SUBMISSION_DATA?.length === 0 ? 'No Data' :''}}</span>
+                            </div>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_sec remittances">
-
                                 <p *ngIf="isImport ===  false ">Total inward remittances <br /> pending for document submission </p>
                                 <p *ngIf="isImport ===  true ">BOE Pending for Bank Submission </p>
                                 <div class="radio_sec">
@@ -110,7 +156,6 @@
                                                 {{progressBarvalue}}%
                                             </div>
                                         </section>
-
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +176,6 @@
                             <div class="submission_sec map_height Pending_realisation">
                                 <b class="bold_titles_common">
                                     {{ isImport ===  false  ? 'Pending realisation ' : 'BOE Pending for Payment'}}
-
                                 </b>
                                 <ul>
                                     <li class="Full_icon">Full</li>

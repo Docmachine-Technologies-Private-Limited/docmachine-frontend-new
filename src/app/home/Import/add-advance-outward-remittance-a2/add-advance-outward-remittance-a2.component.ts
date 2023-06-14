@@ -875,6 +875,9 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.EXTRA_DOCUMENTS['DEBIT_NOTES_DOCUMENTS'].forEach(element => {
         temp_doc.push(element)
       });
+      this.pipoForm.value.bank = this.pipoForm.controls?.bank
+      this.pipoForm.value.benneName = this.pipoForm.controls?.benneName
+      
       var approval_data: any = {
         id: UniqueId+'_'+this.randomId(10),
         tableName: 'Advance-Remittance-A2',
