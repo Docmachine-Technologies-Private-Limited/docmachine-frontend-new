@@ -27,7 +27,8 @@ export class CustomHoverPanelComponent implements OnInit {
   public pipoArrayList: any = [];
   public pipoDisplayListData: PipoDisplayListView;
   public pipoData?: any = [];
-
+  public selectedIndexPIPO:any=0;
+  
   constructor(private documentService: DocumentService,
     private pipoDataService: PipoDataService,
     private sanitizer: DomSanitizer,
@@ -40,6 +41,13 @@ export class CustomHoverPanelComponent implements OnInit {
     this.documentService.getPipo().subscribe(
       (res: any) => {
         this.item = res.data;
+        for (let index = 0; index < this.item.length; index++) {
+          const element = this.item[index];
+          if (element?._id==this.pipoID) {
+            this.selectedIndexPIPO=index;
+          }
+        }
+        console.log(this.selectedIndexPIPO,'sdfdfdsfdsfdf')
         this.getPipoExport(res.data).then((pipores: any) => {
           this.pipoArrayList = pipores;
           console.log(this.pipoArrayList, res.data, 'dgfdgdfgdfgdfgdfgfdgdfgdfgfg')

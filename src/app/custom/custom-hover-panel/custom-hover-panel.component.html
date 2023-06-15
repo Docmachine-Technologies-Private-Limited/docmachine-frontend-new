@@ -6,8 +6,8 @@
                     [attr.hover-popup-open-close]="'open'"></i></button>
         </div>
         <div class="panel-hover">
-            <mat-tab-group>
-                <mat-tab [label]="pipoArrayListdata.pi_poNo"
+            <mat-tab-group [selectedIndex]="selectedIndexPIPO">
+                <mat-tab [label]="pipoArrayListdata.pi_poNo" [id]="pipoArrayListdata?._id"
                     *ngFor="let pipoArrayListdata of this.pipoArrayList;let i=index">
                     <div class="panel-child-hover">
                         <label for="" class="label-header">{{pipoArrayListdata.pi_poNo}} | {{pipoArrayListdata.date}} |
@@ -156,51 +156,51 @@
                                         <div class="left-panel">
                                             <div class="activity-log-panel">
                                                 <div class="text-with-circle">
-                                                    <div class="left-log-panel"></div>
+                                                    <div class="left-log-panel" [ngClass]="{'found':pipoArrayListdata?.doc!=undefined,'not-found':pipoArrayListdata?.doc==undefined}"></div>
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Upload Purchase Order</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(pipoArrayListdata?.doc)">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.doc)" [disabled]="pipoArrayListdata?.doc==undefined?true:false">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
-                                                    <div class="left-log-panel"></div>
+                                                    <div class="left-log-panel" [ngClass]="{'found':pipoArrayListdata?.doc!=undefined,'not-found':pipoArrayListdata?.doc==undefined}"></div>
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Uploaded Proforma Invoice</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(pipoArrayListdata?.doc)">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.doc)" [disabled]="pipoArrayListdata?.doc==undefined?true:false">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
-                                                    <div class="left-log-panel"></div>
+                                                    <div class="left-log-panel" [ngClass]="{'found':pipoArrayListdata?.sb!=undefined,'not-found':pipoArrayListdata?.sb==undefined}"></div>
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Shipping Bill Uploaded</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(pipoArrayListdata?.sb)">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.sb)" [disabled]="pipoArrayListdata?.sb==undefined?true:false">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
-                                                    <div class="left-log-panel"></div>
+                                                    <div class="left-log-panel" [ngClass]="{'found':pipoArrayListdata?.airwayBlcopy!=undefined,'not-found':pipoArrayListdata?.airwayBlcopy==undefined}"></div>
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Airway / BL Copy Uploaded</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(pipoArrayListdata?.airwayBlcopy)">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.airwayBlcopy)" [disabled]="pipoArrayListdata?.airwayBlcopy==undefined?true:false">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
-                                                    <div class="left-log-panel"></div>
+                                                    <div class="left-log-panel" [ngClass]="{'found':pipoArrayListdata?.commercial!=undefined,'not-found':pipoArrayListdata?.commercial==undefined}"></div>
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Commercial Invoice Uploaded</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(pipoArrayListdata?.commercial)">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.commercial)" [disabled]="pipoArrayListdata?.commercial==undefined?true:false">View</button>
                                                     </div>
                                                 </div>
                                                 <div class="text-with-circle">
-                                                    <div class="left-log-panel left-log-panel-last-child"></div>
+                                                    <div class="left-log-panel left-log-panel-last-child" [ngClass]="{'found':pipoArrayListdata?.packingList!=undefined,'not-found':pipoArrayListdata?.packingList==undefined}"></div>
                                                     <div class="view-pdf-text">
                                                         <p class="text-log">Packing List Uploaded</p>
                                                         <button class="btn btn-primary border-radius"
-                                                            (click)="openDoc(pipoArrayListdata?.packingList)">View</button>
+                                                            (click)="openDoc(pipoArrayListdata?.packingList)" [disabled]="pipoArrayListdata?.packingList==undefined?true:false">View</button>
                                                     </div>
                                                 </div>
                                             </div>
