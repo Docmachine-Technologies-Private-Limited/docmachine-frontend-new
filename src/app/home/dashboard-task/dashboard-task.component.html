@@ -162,7 +162,8 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="submission_sec edpms">
-                                <label>Total EDPMS entries</label>
+                                <label *ngIf="isImport ===  false">Total EDPMS entries</label>
+                                <label *ngIf="isImport ===  true">Total IDPMS entries</label>
                                 <div class="row">
                                     <div class="col-md-4 col-sm-4 col-xs-12">
                                         <div class="submission_sec_img">
