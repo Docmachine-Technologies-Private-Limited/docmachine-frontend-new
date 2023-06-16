@@ -243,7 +243,10 @@ export class PendingPanelComponent implements OnInit {
           })
           await this.ngOnInit();
         });
-      }
+      },
+      "":()=>{
+        this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit();this.toastr.success('Successfully Rejected data...')});
+      },
     }
   }
 }
