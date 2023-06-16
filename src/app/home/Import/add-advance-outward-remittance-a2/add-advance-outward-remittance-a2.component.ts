@@ -287,9 +287,6 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.pipoDataService.pipolistModel$.subscribe((data: any) => {
         console.log(data, 'data2222..................')
         for (let index = 0; index < data.length; index++) {
-          var AdvanceRemittanceflow: any = data[index]?.TransactionRef?.filter((item: any) => item?.TypeTransaction?.includes('Advance-Remittance-flow'));
-          var SumAdvanceRemittanceflow = AdvanceRemittanceflow.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems?.data?.formdata?.RemittanceTotalAmount), 0);
-          data[index]['balanceAmount'] = data[index]?.amount - parseFloat(SumAdvanceRemittanceflow);
           if (data[index]?.balanceAmount != '0' && data[index]?.balanceAmount != 0) {
             this.LIST_PIPO[data[index]['_id']] = data[index];
             this.pipoData.push(data[index]);
@@ -929,7 +926,19 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
                     console.log('king123');
                     console.log(data);
                     if ((index + 1) == this.selectedItems.length) {
-                      this.router.navigate(['/home/dashboardTask'])
+                      var updateapproval_data: any = {
+                        RejectData: {
+                          tableName: 'pi_po',
+                          id: approval_data?.id,
+                          TransactionId: res1._id,
+                          data:this.pipoForm.value,
+                          pipo_id:pipo_id,
+                          pipo_name:pipo_name
+                        }
+                      }
+                      this.documentService.UpdateApproval(approval_data?.id,updateapproval_data).subscribe((res1: any) => {
+                        this.router.navigate(['/home/dashboardTask'])
+                      });
                     }
                   }, (error) => {
                     console.log('error');

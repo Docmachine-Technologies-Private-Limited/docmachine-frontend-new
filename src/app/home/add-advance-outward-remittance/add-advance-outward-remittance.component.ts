@@ -189,7 +189,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
   changepipo(id) {
     let temp = [];
-    this.pipoData = [];
     temp = this.benneDetail.filter(items => {
       return items._id == id?._id
     });
@@ -200,10 +199,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
         console.log(data, 'data2222..................')
+        this.pipoData = [];
         for (let index = 0; index < data.length; index++) {
-          var AdvanceRemittanceflow: any = data[index]?.TransactionRef?.filter((item: any) => item?.TypeTransaction?.includes('Advance-Remittance-flow'));
-          var SumAdvanceRemittanceflow = AdvanceRemittanceflow.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems?.data?.formdata?.RemittanceTotalAmount), 0);
-          data[index]['balanceAmount'] = data[index]?.amount - parseFloat(SumAdvanceRemittanceflow);
           if (data[index]?.balanceAmount != '0' && data[index]?.balanceAmount != 0) {
             this.LIST_PIPO[data[index]['_id']] = data[index];
             this.pipoData.push(data[index]);
@@ -548,7 +545,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       .subscribe(() => {
         this.width = this.width + 1;
       });
-
   }
 
   public loadFromLocalStorage() {
@@ -556,6 +552,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.authToken = token;
     return this.authToken;
   }
+  
   REMIITANCE_SUM: any = 0;
   REMIITANCE_AMOUNT: any = [];
 
@@ -575,13 +572,10 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     }, 500)
     console.log(this.pipoForm.controls.pipoTerm, this.selectedItems, 'this.pipoForm.controls.pipoTerm')
   }
-  // ----------------------------- end handle image upload ----------------------------------
-
 
   getItems(form) {
     return form.get('pipoTerm').controls;
   }
-
 
   addItems(index, id) {
     const control = this.pipoForm.controls.pipoTerm as FormArray;
@@ -598,8 +592,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     let control = this.pipoForm.controls.pipoTerm as FormArray;
     control.removeAt(i);
   }
+  
   PDF_LIST: any = [];
-
   SlideToggle(event, i) {
     $(".accordion-item").find(".accordion-contant").css('display', 'none')
     $(event?.target?.parentElement).parent(".accordion-item").find(".accordion-contant").slideToggle();
@@ -622,6 +616,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       }
     }
   }
+  
   PREVIEWS_URL_STRING: any = '';
   async PREVIEWS_URL(model, id) {
     this.PREVIEWS_URL_LIST = [];
@@ -797,7 +792,19 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
                     console.log('king123');
                     console.log(data);
                     if ((index + 1) == this.selectedItems.length) {
-                      this.router.navigate(['/home/dashboardTask'])
+                      var updateapproval_data: any = {
+                        RejectData: {
+                          tableName: 'pi_po',
+                          id:approval_data?.id,
+                          TransactionId: res1._id,
+                          data:this.pipoForm.value,
+                          pipo_id:pipo_id,
+                          pipo_name:pipo_name
+                        }
+                      }
+                      this.documentService.UpdateApproval(approval_data?.id,updateapproval_data).subscribe((res1: any) => {
+                        this.router.navigate(['/home/dashboardTask'])
+                      });
                     }
                   }, (error) => {
                     console.log('error');

@@ -821,7 +821,7 @@ export class BuyerCreditPanelComponent implements OnInit {
   SendApproval(Status: string, UniqueId: any) {
     if (UniqueId != null) {
       var approval_data: any = {
-        id: UniqueId,
+        id: UniqueId+'_'+this.randomId(10),
         tableName: 'Buyer-Credit',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
@@ -872,7 +872,19 @@ export class BuyerCreditPanelComponent implements OnInit {
                 this.documentService.updateBoe({ balanceAmount: REAMAING_AMOUNT, moredata: [element] }, element?._id).subscribe((updateBoeres: any) => {
                   console.log(updateBoeres, 'updateBoeres');
                   if ((index + 1) == this.MAIN_DATA.length) {
-                    this.router.navigate(['/home/dashboardTask'])
+                    var updateapproval_data: any = {
+                      RejectData: {
+                        tableName: 'boerecords',
+                        id:approval_data?.id,
+                        TransactionId: res1._id,
+                        data:this.pipoForm.value,
+                        pipo_id:pipo_id,
+                        pipo_name:pipo_name
+                      }
+                    }
+                    this.documentService.UpdateApproval(approval_data?.id,updateapproval_data).subscribe((res1: any) => {
+                      this.router.navigate(['/home/dashboardTask'])
+                    });
                   }
                 })
               }
@@ -1196,5 +1208,8 @@ export class BuyerCreditPanelComponent implements OnInit {
   //     }
   //   })
   // }
+  randomId(length = 6) {
+    return Math.random().toString(36).substring(2, length + 2);
+  };
 }
 

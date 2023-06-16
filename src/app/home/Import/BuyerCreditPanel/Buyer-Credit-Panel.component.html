@@ -144,7 +144,25 @@
                                                         <div *ngFor="let item of this.MAIN_DATA;let i=index"
                                                             [formGroupName]="i">
                                                             <div class="row">
-                                                                <div class="col-md-4 col-12">
+                                                                <div class="col-md-6 col-12">
+                                                                    <label for="BOE_Number" class="form-label">BOE No.</label>
+                                                                    <input type="text" disabled class="form-control"
+                                                                        [value]="item?.boeNumber"
+                                                                        placeholder="BOE Number" autocomplete="off">
+                                                                </div>
+                                                                <div class="col-md-6 col-12" style="display: none;">
+                                                                    <label for="BOE_Number" class="form-label">BOE No.</label>
+                                                                    <input type="text" disabled class="form-control"
+                                                                        formControlName="BOE_Number" id="BOE_Number"
+                                                                        [ngModel]="item?._id"
+                                                                        placeholder="BOE Number" autocomplete="off">
+                                                                    <div *ngIf="submitted && form.BOE_Number.errors"
+                                                                        class='errorText'>
+                                                                        <div *ngIf="form.BOE_Number.errors.required">BOE BOE_Number is
+                                                                            required</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6 col-12">
                                                                     <label for="Currency"
                                                                         class="form-label">Currency</label>
                                                                     <app-ng-dropdown-custom [disabled]="true"
@@ -163,72 +181,55 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-4 col-12">
-                                                                    <label for="Amount" class="form-label">BOE
-                                                                        Amount</label>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-6 col-12">
+                                                                    <label for="Amount" class="form-label">BOE Amount</label>
                                                                     <input type="text" disabled class="form-control"
                                                                         formControlName="amount" id="invoice_amount"
                                                                         [ngModel]="item?.invoiceAmount"
                                                                         placeholder="Invoice Amount" autocomplete="off">
                                                                     <div *ngIf="submitted && form.amount.errors"
                                                                         class='errorText'>
-                                                                        <div *ngIf="form.amount.errors.required">BOE
-                                                                            Amount is
+                                                                        <div *ngIf="form.amount.errors.required">BOE Amount is
                                                                             required</div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-4 col-12">
-                                                                    <label for="balanceAmount"
-                                                                        class="form-label">Balance
+                                                                <div class="col-md-6 col-12">
+                                                                    <label for="balanceAmount" class="form-label">Balance
                                                                         Amount</label>
-                                                                    <input type="text" disabled class="form-control"
-                                                                        id="balanceAmount" [value]="item?.balanceAmount"
+                                                                    <input type="text" disabled class="form-control" id="balanceAmount"
+                                                                        [value]="item?.balanceAmount"
                                                                         placeholder="Payable Amount" autocomplete="off">
                                                                     <div *ngIf="submitted && form.payableAmount.errors"
                                                                         class='errorText'>
-                                                                        <div *ngIf="form.payableAmount.errors.required">
-                                                                            Balance
+                                                                        <div *ngIf="form.payableAmount.errors.required">Balance
                                                                             Amount is required</div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!-- <div class="col-md-10 col-12">
-                                                                <label for="selectedremittanceAmount"
-                                                                    class="form-label">SELECTED Remittance
-                                                                    Amount</label>
-                                                                <input type="text" class="form-control"
-                                                                    formControlName="selectedremittanceAmount"
-                                                                    id="selectedremittanceAmount"
-                                                                    placeholder="Remittance Amount"
-                                                                    [value]="item?.TOTAL_REMMITANCE_AMOUNT" ngModel
-                                                                    autocomplete="off" disabled>
-                                                                <div *ngIf="submitted && form.remittanceAmount.errors"
-                                                                    class='errorText'>
-                                                                    <div *ngIf="form.remittanceAmount.errors.required">
-                                                                        Remittance Amount is required</div>
+                                                            <div class="row">
+                                                                <div class="col-md-8 col-12">
+                                                                    <label for="remittanceAmount" class="form-label">Remittance
+                                                                        Amount</label>
+                                                                    <input type="text" class="form-control"
+                                                                        formControlName="remittanceAmount" id="remittanceAmount"
+                                                                        placeholder="Remittance Amount" ngModel autocomplete="off"
+                                                                        maxlength="this.sumTotalAmount.length"
+                                                                        [ngModel]="item?.Remittance_Amount"
+                                                                        (keyup)="RemittanceAmount($event,i,item?.boeNumber);">
+                                                                    <div *ngIf="submitted && form.remittanceAmount.errors"
+                                                                        class='errorText'>
+                                                                        <div *ngIf="form.remittanceAmount.errors.required">
+                                                                            Remittance Amount is required</div>
+                                                                    </div>
                                                                 </div>
-                                                            </div> -->
-                                                            <div class="col-md-10 col-12">
-                                                                <label for="remittanceAmount" class="form-label">Buyer
-                                                                    Credit
-                                                                    Amount</label>
-                                                                <input type="text" class="form-control"
-                                                                    formControlName="remittanceAmount"
-                                                                    id="remittanceAmount"
-                                                                    placeholder="Remittance Amount" autocomplete="off"
-                                                                    [ngModel]="this.REMIITANCE_AMOUNT[i]"
-                                                                    (keyup)="RemittanceAmount($event,i,item?.boeNumber);">
-                                                                <div *ngIf="submitted && form.remittanceAmount.errors"
-                                                                    class='errorText'>
-                                                                    <div *ngIf="form.remittanceAmount.errors.required">
-                                                                        Remittance Amount is required</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-2 col-12 padding0">
-                                                                <div class="removeamouts_new">
-                                                                    <button style="width:100%" type="button"
-                                                                        class="btn btn-primary"
-                                                                        (click)="removeItems(i)">-</button>
+                                                                <div class="col-md-2 col-12 padding0">
+                                                                    <div class="removeamouts_new">
+                                                                        <button style="width:100%" type="button"
+                                                                            class="btn btn-primary"
+                                                                            (click)="removeItems(i)">-</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -388,10 +389,10 @@
                                                         <tr>
                                                             <td><b>Total no. of BOE</b></td>
                                                             <td>
-                                                                <p>{{selectedItems.length}}</p>
+                                                                <p>{{this.MAIN_DATA.length}}</p>
                                                             </td>
                                                         </tr>
-                                                        <tr *ngFor="let items of selectedItems">
+                                                        <tr *ngFor="let items of this.MAIN_DATA">
                                                             <td><b>{{items.pipo_no}} </b></td>
                                                             <td>
                                                                 <p> ( Amount: {{items.amount}}, Date: {{items.date}},

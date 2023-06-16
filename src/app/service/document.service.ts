@@ -596,6 +596,7 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/Approval/add`, { data: data }, httpOptions);
   }
+  
   getPendingStatus(id: any) {
     this.loadFromLocalStorage();
     const httpOptions = {
@@ -603,6 +604,31 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/Approval/getPendingStatus`, { FileType: id }, httpOptions);
   }
+  
+  UpdateApproval(id: any,data:any) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/UpdateApproval`, { id: id,data:data }, httpOptions);
+  }
+  
+  getDataAnyTable(tableName: any,id:any) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/getDataAnyTable`, { tableName: tableName,id:id}, httpOptions);
+  }
+  
+  UpdateAnyTable(tableName: any,id:any,data:any) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/UpdateAnyTable`, { tableName: tableName,id:id,data:data}, httpOptions);
+  }
+  
   getVerifyStatus(id: any) {
     this.loadFromLocalStorage();
     const httpOptions = {
@@ -1911,6 +1937,7 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/ExportBillLodgement/add`, { data: data }, httpOptions);
   }
+  
   UpdateTransaction(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
