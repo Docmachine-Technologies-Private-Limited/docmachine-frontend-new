@@ -2787,7 +2787,7 @@ export class UploadComponent implements OnInit {
   clickPipo(PI_PO_LIST, type: any) {
     var last_length = PI_PO_LIST.length - 1;
     var LAST_VALUE: any = PI_PO_LIST[last_length]?.value;
-    console.log(PI_PO_LIST[last_length]?.value, 'clickPipoclickPipoclickPipo')
+    console.log(PI_PO_LIST[last_length]?.value, PI_PO_LIST,'clickPipoclickPipoclickPipo')
     console.log('PI_PO_LISTPI_PO_LISTPI_PO_LIST', PI_PO_LIST);
     this.pipoSelect = true;
     console.log('line 2361', this.pipoSelect);
@@ -2844,7 +2844,7 @@ export class UploadComponent implements OnInit {
 
   }
   FILTER_VALUE(array: any, value: any) {
-    return array.filter((item: any) => item?._id == value);
+    return array?.filter((item: any) => item?._id == value);
   }
   commerciallistselected: any = [];
   changedCommercial(pipo: any) {

@@ -142,13 +142,12 @@
                 <ng-select class="custom"
                   *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length==0"
                   [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME" bindLabel="pi_po_buyerName"
-                  [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
-                  [(ngModel)]="this.PIPO_LIST" bindValue="testFunctionID"
-                  (change)="clickPipo(CommercialNumber?.selectedItems,documentType)" #CommercialNumber>
+                  [selectableGroup]="true" placeholder="Select PI/PO"
+                  [(ngModel)]="this.PIPO_LIST" (change)="clickPipo(CommercialNumber?.selectedItems,documentType)" #CommercialNumber>
                 </ng-select>
                 <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0"
                   [items]="[]" bindLabel="pi_po_buyerName"
-                  [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION" [multiple]="true"
+                  [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION"
                   #CommercialNumber disabled>
                 </ng-select>
                 <div *ngIf="documentType!='' && this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length==0"
@@ -167,13 +166,13 @@
                 <ng-select class="custom"
                   *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length==0"
                   [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME" bindLabel="pi_po_buyerName"
-                  [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
-                  bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems,documentType)" #CommercialNumber>
+                  [selectableGroup]="true" placeholder="Select PI/PO"
+                  (change)="clickPipo(CommercialNumber?.selectedItems,documentType)" #CommercialNumber>
                 </ng-select>
 
                 <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0"
                   [items]="[]" bindLabel="pi_po_buyerName"
-                  [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION" [multiple]="true"
+                  [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION"
                   #CommercialNumber disabled>
                 </ng-select>
 
@@ -191,7 +190,7 @@
                   <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Shipping
                     Bill*</label>
                   <ng-select class="custom" *ngIf="this.SHIPPING_LIST?.length!=0" [items]="[]" bindLabel="sbno"
-                    [(ngModel)]="this.SHIPPING_LIST" [multiple]="true" placeholder="Select Shipping Bill" disabled>
+                    [(ngModel)]="this.SHIPPING_LIST" placeholder="Select Shipping Bill" disabled>
                   </ng-select>
                 </div>
               </div>
@@ -202,9 +201,8 @@
           <div style="display: flex;flex-direction: column;" class="col-5">
             <label style="font-size: 20px; color: #303030;">Beneficiary Name*</label>
             <ng-select class="custom" *ngIf="this.benneDetail?.length!=0" [items]="this.benneDetail"
-              bindLabel="benneName" [multiple]="false" groupBy="selectedAllGroup" [selectableGroup]="true"
-              placeholder="Select PI/PO" bindValue="testFunctionID"
-              (change)="clickBene(bene?.selectedValues[0]?.benneName)" #bene>
+              bindLabel="benneName" [multiple]="false"  [selectableGroup]="true"
+              placeholder="Select PI/PO"               (change)="clickBene(bene?.selectedValues[0]?.benneName)" #bene>
             </ng-select>
           </div>
 
@@ -227,8 +225,8 @@
             PI/PO*</label>
           <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0"
             [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME" bindLabel="pi_po_buyerName"
-            [(ngModel)]="this.PIPO_LIST" [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true"
-            placeholder="Select PI/PO" bindValue="testFunctionID" (change)="clickPipo(CommercialNumber?.selectedItems,documentType)"
+            [(ngModel)]="this.PIPO_LIST" [selectableGroup]="true"
+            placeholder="Select PI/PO" (change)="clickPipo(CommercialNumber?.selectedItems,documentType)"
             #CommercialNumber>
           </ng-select>
         </div>
@@ -238,9 +236,8 @@
               PI/PO*</label>
             <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0"
               [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME" bindLabel="pi_po_buyerName"
-              [multiple]="true" groupBy="selectedAllGroup" [selectableGroup]="true" placeholder="Select PI/PO"
-              [(ngModel)]="this.PIPO_LIST" bindValue="testFunctionID"
-              (change)="clickPipo(CommercialNumber?.selectedItems,documentType)" #CommercialNumber>
+              [selectableGroup]="true" placeholder="Select PI/PO"
+              [(ngModel)]="this.PIPO_LIST"               (change)="clickPipo(CommercialNumber?.selectedItems,documentType)" #CommercialNumber>
             </ng-select>
           </div>
           <div class="column col-5">
@@ -377,7 +374,7 @@
                 <td class="full-input border1">
                   <label for="fobCurrency">FOB CURRENCY</label>
                   <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                     name="fobCurrency" [(ngModel)]="res.fobCurrency">
                   </ng-select>
                 </td>
@@ -398,7 +395,7 @@
                 <td class="full-input border2">
                   <label for="freightCurrency">FREIGHT CURRENCY</label>
                   <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                     name="freightCurrency" [(ngModel)]="res.freightCurrency">
                   </ng-select>
                 </td>
@@ -411,7 +408,7 @@
                 <td class="full-input border2">
                   <label for="insuranceCurrency">INSURANCE CURRENCY</label>
                   <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                     name="insuranceCurrency" [(ngModel)]="res.insuranceCurrency">
                   </ng-select>
                 </td>
@@ -528,7 +525,7 @@
                     <td class="full-input border3">
                       <label for="mawbno">CURRENCY</label>
                       <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                        bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                        bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                         name="currency" [(ngModel)]="obj.currency">
                       </ng-select>
                     </td>
@@ -554,7 +551,7 @@
                     <td class="full-input border3">
                       <label for="mawbno">CURRENCY</label>
                       <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                        bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                        bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                         name="currency" (change)="INVOICE_LIST['currency']=$event.value">
                       </ng-select>
                     </td>
@@ -693,7 +690,7 @@
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">CURRENCY*</label>
                       <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                        bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                        bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                         name="currency" [(ngModel)]="res.currency" required>
                       </ng-select>
                       <div
@@ -747,7 +744,7 @@
                     [items]="this.CURRENCY_LIST"
                     bindLabel="type"
                     [multiple]="false"
-                    groupBy="selectedAllGroup"
+                    
                     placeholder="Select PI/PO"
                     name="currency"
                     [(ngModel)]="res.currency">
@@ -791,7 +788,7 @@
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">FREIGHT CURRENCY*</label>
                       <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                        bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                        bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                         name="freightCurrency" [(ngModel)]="res.freightCurrency" required>
                       </ng-select>
                       <div
@@ -847,7 +844,7 @@
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">INSURANCE CURRENCY*</label>
                       <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                        bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                        bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                         name="insuranceCurrency" [(ngModel)]="res.insuranceCurrency" required>
                       </ng-select>
                       <div
@@ -893,7 +890,7 @@
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">DISCOUNT CURRENCY*</label>
                     <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                      bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                      bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                       name="discountCurrency" [(ngModel)]="res.discountCurrency" required>
                     </ng-select>
                     <div
@@ -934,7 +931,7 @@
                     <div class="mb-0">
                       <label for="exampleInputEmail1" class="form-label">MISCELLANEOUS CURRENCY*</label>
                       <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                        bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                        bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                         name="miscellaneousCurrency" [(ngModel)]="res.miscellaneousCurrency" required>
                       </ng-select>
                       <div
@@ -980,7 +977,7 @@
                   <div class="mb-0">
                     <label for="exampleInputEmail1" class="form-label">COMMISSION CURRENCY*</label>
                     <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                      bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                      bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                       name="commissionCurrency" [(ngModel)]="res.commissionCurrency" required>
                     </ng-select>
                     <div
@@ -1252,7 +1249,7 @@
                 <div class="mb-3 flex-basis-1">
                   <label for="exampleInputPassword1" class="form-label">Currency</label>
                   <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                    bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                    bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                     formControlName="currency" ngModel></ng-select>
                 </div>
               </div>
@@ -1322,7 +1319,7 @@
                     <div class="mb-3 flex-basis-1">
                       <label for="exampleInputPassword1" class="form-label">Currency</label>
                       <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                        bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                        bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                         formControlName="currency" ngModel></ng-select>
                     </div>
                     <div class="mb-3 flex-basis-1">
@@ -1364,7 +1361,7 @@
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Currency</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                  bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                   name="currency" ngModel></ng-select>
               </div>
               <div class="party-details" name="partydeatils">
@@ -1560,7 +1557,7 @@
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Currency*</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select Currency"
+                  bindLabel="type" [multiple]="false"  placeholder="Select Currency"
                   name="currency" ngModel></ng-select>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -1615,7 +1612,7 @@
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Currency*</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select Currency"
+                  bindLabel="type" [multiple]="false"  placeholder="Select Currency"
                   name="currency" ngModel></ng-select>
               </div>
               <div class="mb-3">
@@ -1698,7 +1695,7 @@
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Currency</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                  bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                   name="currency" ngModel>
                 </ng-select>
               </div>
@@ -1737,7 +1734,7 @@
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Currency</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                  bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                   name="currency" ngModel>
                 </ng-select>
               </div>
@@ -1792,7 +1789,7 @@
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Currency</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                  bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                   name="currency" ngModel>
                 </ng-select>
               </div>
@@ -1818,7 +1815,7 @@
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Currency</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                  bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                   name="currency" ngModel>
                 </ng-select>
               </div>
@@ -1844,7 +1841,7 @@
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Currency</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                  bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                   name="currency" ngModel></ng-select>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -1867,7 +1864,7 @@
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Currency</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                  bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                   name="currency" ngModel></ng-select>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -1893,7 +1890,7 @@
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Currency</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                  bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                   name="currency" ngModel></ng-select>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -1918,7 +1915,7 @@
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Currency</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                  bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                   name="currency" ngModel></ng-select>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -1944,7 +1941,7 @@
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Currency</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                  bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                   name="currency" ngModel></ng-select>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -1967,7 +1964,7 @@
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Currency</label>
                 <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                  bindLabel="type" [multiple]="false" groupBy="selectedAllGroup" placeholder="Select PI/PO"
+                  bindLabel="type" [multiple]="false"  placeholder="Select PI/PO"
                   name="currency" ngModel></ng-select>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>

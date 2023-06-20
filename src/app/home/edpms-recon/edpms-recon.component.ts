@@ -57,7 +57,6 @@ export class EdpmsReconComponent implements OnInit {
       addRemoveLinks: true,
       headers: this.headers,
       timeout: 820000,
-      // autoProcessQueue: false,
       dictDefaultMessage: "Drag a document here",
       acceptedFiles:
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
@@ -78,7 +77,6 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
     this.userService.getTeam()
       .subscribe((res: any) => {
         this.masterTeam = res?.data[0]?.bankDetails;
@@ -136,11 +134,9 @@ export class EdpmsReconComponent implements OnInit {
 
 
   fileInputClick = (event) => {
-    // Open file dialog
     if (this.disableUpload) {
       return true;
     }
-    // Do not open file dialog
     else {
       event.preventDefault();
       event.stopPropagation();
