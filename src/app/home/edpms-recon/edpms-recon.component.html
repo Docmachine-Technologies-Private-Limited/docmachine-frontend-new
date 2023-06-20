@@ -2,42 +2,93 @@
     <main id="content" class="content table-padding" role="main">
         <div class="header-panel-upload">
             <h3 class="heading">New EDPMS Data</h3>
-            <label style="flex-direction:row; font-size: 20px; margin-top: 10px ;;color: #303030;">Select Bank*</label>
-            <select style="display: flex; align-items: center;" [(ngModel)]="bankSelection" (ngModelChange)="chooseBank()">
-                <option value="" disabled hidden>Select Bank</option>
-                <option *ngFor="let acc of bankAccounts" [value]="acc" style="min-width:100%;">{{acc}}</option>
-            </select>
-        </div>
-          <!-- Upload  -->
-        <div class="upload-panel">
-            <form id="file-upload-form" class="uploader" method="POST" (click)="uploadfile?.click();">
-                <input id="file-upload" type="file" name="fileUpload" [attr.disabled]="disableUpload ? '' : null"
-                    (error)="onUploadError($event)" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-                    (sending)="submit($event)" [dropzone]="config3" id="dropzone" (click)="fileInputClick($event)"
-                    #uploadfile />
-                <label for="file-upload" id="file-drag">
-                    <div id="start">
-                        <i class="fa fa-download" aria-hidden="true"></i>
-                        <div>Select a file or drag here</div>
-                        <div id="notimage" class="hidden">Please select an image</div>
-                        <span id="file-upload-btn" class="btn btn-primary">Select a file</span>
-                    </div>
-                    <div id="response" class="hidden">
-                        <div id="messages"></div>
-                        <progress class="progress" id="file-progress" value="0">
-                            <span>0</span>%
-                        </progress>
-                    </div>
-                </label>
-            </form>
-            <div class="progressbar" *ngIf="uploading">
-                <p class="processheading">EDPMS Upload Progress</p>
-                <div class="meter">
-                    <span [style.width]="width + '%'"></span>
-                </div>
+            <div class="right-panel col-6" style="margin: auto;margin-right: 0;">
+                <select class="form-control" [(ngModel)]="bankSelection" (ngModelChange)="chooseBank()">
+                    <option value="" disabled hidden>Select Bank</option>
+                    <option *ngFor="let acc of bankAccounts" [value]="acc" style="min-width:100%;">{{acc}}</option>
+                </select>
+                <form id="file-upload-form" class="uploader" method="POST" (click)="uploadfile?.click();">
+                    <input id="file-upload" type="file" name="fileUpload" [attr.disabled]="disableUpload ? '' : null"
+                        (error)="onUploadError($event)" (init)="onUploadInit($event)"
+                        (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="config3"
+                        id="dropzone" (click)="fileInputClick($event)" #uploadfile />
+                    <button class="btn btn-primary">Upload .xls</button>
+                </form>
+                <button *ngIf="uploaded" class="btn btn-primary" (click)="compareEDPMS()">Compare</button>
             </div>
-            <div style="text-align:center; margin-top: 20px" *ngIf="uploaded">
-                <button (click)="compareEDPMS()">Compare</button>
+        </div>
+        <div class="upload-panel">
+            <custom-status-progress-bar (event)="dumpfun($event)" [data]="this.pipoArrayListdata"></custom-status-progress-bar>
+            <div class="analytics" *ngIf="this.edpmsData.length!=0">
+                <div class="analytics-side" #debitnotes>
+                    <div class="row">
+                        <div style="width: 100%; height:523px" class="col-12 mb-lg padding">
+                            <section class="widget pb-0 box-shadow">
+                                <div class="widget-body p-0 support table-wrapper">
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                            <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-3">Shipping Bill No.</th>
+                                                <th scope="col" class="col-td-th-3">Shipping Bill Date</th>
+                                                <th scope="col" class="col-td-th-3">AD Code</th>
+                                                <th scope="col" class="col-td-th-3">Port Code</th>
+                                                <th scope="col" class="col-td-th-3">EDPMS STATUS</th>
+                                                <th scope="col" class="col-td-th-3">AD Ref No.</th>
+                                                <th scope="col" class="col-td-th-3">SB Amount</th>
+                                                <th scope="col" class="col-td-th-3">SB Balance amount</th>
+                                                <th scope="col" class="col-td-th-3">System Status</th>
+                                                <th scope="col" class="col-td-th-3">Doc Available</th>
+                                                <!-- <th scope="col" class="col-td-th-3">Action</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-tr" *ngFor="let row of edpmsData; let i = index" (click)="clicktable(row?.sbdata)">
+                                                <th class="col-td-th-3">
+                                                    {{row?.sbNo}}
+                                                </th>
+                                                <td class="col-td-th-3">
+                                                    {{row?.sbDate | date: 'dd/MM/yyyy'}}
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    {{row?.adCode}}
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    {{row?.portCode}}
+                                                </td>
+
+                                                <td class="col-td-th-3">
+                                                    {{row?.edpmsStatus}}
+                                                </td>
+
+                                                <td class="col-td-th-3">
+                                                    {{row?.adRefNo}}
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    {{row?.sbAmount}}
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    {{row?.sbBalanceAmount}}
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    {{row?.systemStatus}}
+                                                </td>
+                                                <td class="col-td-th-3">
+                                                    {{row?.docAvailable}}
+                                                </td>
+                                                <!-- <td class="col-td-th-3">
+                                                    <div *ngFor="let act of row?.action"
+                                                        [class.active]="act === 'Create Documents' || act === 'Upload Documents'"
+                                                        (click)="actionEvent(act, row?.sbNo)">{{act}}</div>
+                                                </td> -->
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

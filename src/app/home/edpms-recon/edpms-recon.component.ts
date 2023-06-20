@@ -17,7 +17,7 @@ export class EdpmsReconComponent implements OnInit {
   public uploading = false;
   public uploaded = false;
   config3: DropzoneConfigInterface;
-  authToken:any;
+  authToken: any;
   headers: any;
   documentType = '';
   public benneDetail: any = [];
@@ -31,12 +31,14 @@ export class EdpmsReconComponent implements OnInit {
   masterIR;
   masterPIPO;
   masterExcelData;
-  bankAccounts:any = [];
+  bankAccounts: any = [];
   bankSelection = "";
   disableUpload = true;
   applicant;
   blMaster;
   tasksMaster;
+  edpmsData: any = [];
+  pipoArrayListdata: any = []
 
   constructor(
     private userService: UserService,
@@ -80,14 +82,14 @@ export class EdpmsReconComponent implements OnInit {
     this.userService.getTeam()
       .subscribe((res: any) => {
         this.masterTeam = res?.data[0]?.bankDetails;
-        this.masterTeam.forEach( (acc:any) => this.bankAccounts.push(acc?.bank));
+        this.masterTeam.forEach((acc: any) => this.bankAccounts.push(acc?.bank));
         console.log('banks:', this.bankAccounts);
       }, err => {
         console.log(err);
-       });
+      });
 
     this.getUserID();
-    this.documentService.getBlcopyref().subscribe( (res: any) => {
+    this.documentService.getBlcopyref().subscribe((res: any) => {
       this.blMaster = res?.data;
     }, err => {
       console.log(err)
@@ -107,14 +109,14 @@ export class EdpmsReconComponent implements OnInit {
         console.log('getMaster:', res);
       }, (err: any) => {
         console.log(err);
-       });
+      });
     this.documentService.getPipo().subscribe(
       (res: any) => {
         this.masterPIPO = res?.data;
         console.log('getPipo:', res);
       }, err => {
         console.log(err);
-       });
+      });
     this.documentService.getIrAdvice('').subscribe(
       (res: any) => {
         this.masterIR = res?.data;
@@ -125,7 +127,7 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   chooseBank() {
-    if(this.bankSelection && this.bankSelection !== "") {
+    if (this.bankSelection && this.bankSelection !== "") {
       this.disableUpload = false;
     } else {
       this.disableUpload = true;
@@ -145,9 +147,10 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   saveData() {
-    this.documentService.createEDPMS(this.preparePayload()).subscribe( (res: any) => {
+    this.documentService.createEDPMS(this.preparePayload()).subscribe((res: any) => {
       console.log('create edpms res: ', res);
-      this.router.navigateByUrl('/home/edpms-recon-table');
+      this.edpmsData = res?.data;
+      // this.router.navigateByUrl('/home/edpms-recon-table');
     }, err => {
       console.log('create EDPMS error: ', err)
     })
@@ -155,8 +158,8 @@ export class EdpmsReconComponent implements OnInit {
 
 
   preparePayload() {
-    let payload:any = [];
-    this.masterExcelData.forEach( (item:any) => {
+    let payload: any = [];
+    this.masterExcelData.forEach((item: any) => {
       const tempObject = {
         userId: this.applicant,
         bank: this.bankSelection,
@@ -184,9 +187,9 @@ export class EdpmsReconComponent implements OnInit {
       return 'DOC NOT AVAILABLE IN SYSTEM'
     } else if (this.getSBbalanceAmount(pipo, sbAmount) > 0) {
       return 'PARTIALLY REALISED'
-    } else if(this.checkIfBLDone(pipo)) {
+    } else if (this.checkIfBLDone(pipo)) {
       return 'SUBMITTED & BANK REF NO. RECEIVED'
-    } else if(this.checkifDownloaded(sbNo)) {
+    } else if (this.checkifDownloaded(sbNo)) {
       return 'SUBMITTED BUT BANK REF NOT RECEIVED'
     } else {
       return 'NOT SUBMITTED TO BANK'
@@ -194,7 +197,7 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   checkifDownloaded(sbNo) {
-    if(this.tasksMaster?.some((task: any) => task?.task?.some((t: any) => t?.sbNumbers?.contains(sbNo)))) {
+    if (this.tasksMaster?.some((task: any) => task?.task?.some((t: any) => t?.sbNumbers?.contains(sbNo)))) {
       return true
     } else {
       return false
@@ -202,7 +205,10 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   checkIfBLDone(pipo) {
-    if(this.blMaster.some((bl: any) => bl?.pipo?.contains(pipo))) {
+    if (pipo==undefined ) {
+      return false;
+    }
+    if ( this.blMaster?.some((bl: any) => bl?.pipo?.contains(pipo))) {
       return true
     } else {
       return false
@@ -210,8 +216,8 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   getAction(status) {
-    let actionStatus:any = [];
-    if(!(status === 'Available')) {
+    let actionStatus: any = [];
+    if (!(status === 'Available')) {
       actionStatus.push('Upload Documents')
     } else {
       actionStatus.push('Create Documents', 'Netoff/Setoff', 'ETX/Writeoff')
@@ -221,8 +227,8 @@ export class EdpmsReconComponent implements OnInit {
 
   getSBbalanceAmount(pipo, total) {
     let paidAmount = 0;
-    this.masterIR.forEach( (ir: any) => {
-      if(pipo === ir?.pipo[0]) {
+    this.masterIR.forEach((ir: any) => {
+      if (pipo === ir?.pipo[0]) {
         paidAmount = paidAmount + parseInt(ir?.amount, 10)
       }
     });
@@ -255,6 +261,7 @@ export class EdpmsReconComponent implements OnInit {
     this.uploaded = true;
     console.log("onUploadSuccess ARGS", args);
     this.masterExcelData = args[1].data;
+    this.compareEDPMS()
     console.log("onUploadSuccess DATA", this.masterExcelData);
   }
 
@@ -264,22 +271,22 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   gatherSBdata() {
-    this.masterExcelData.forEach(( data, i ) => {
+    this.masterExcelData.forEach((data, i) => {
       var index = -1;
-      for (let j =0; j< this.masterSB.length; j++) {
-        if (this.masterSB[j] && this.masterSB[j].sbno && this.masterSB[j].sbno ==  data['Shipping Bill No']) {
+      for (let j = 0; j < this.masterSB.length; j++) {
+        if (this.masterSB[j] && this.masterSB[j].sbno && this.masterSB[j].sbno == data['Shipping Bill No']) {
           index = j;
           break;
         }
       }
-      // const index = this.masterSB.findIndex( sb => sb?.sbno === data['Shipping Bill No']);
       console.log("index:", index);
-      if(index !== -1) {
+      if (index !== -1) {
         this.masterExcelData[i]['systemStatus'] = 'Available';
         this.masterExcelData[i]['sbAmount'] = this.masterSB[index]?.fobValue;
         this.masterExcelData[i]['sbCurrency'] = this.masterSB[index]?.fobCurrency;
         this.masterExcelData[i]['adBillNo'] = this.masterSB[index]?.adBillNo;
         this.masterExcelData[i]['pipo'] = this.masterSB[index]?.pipo[0];
+        this.masterExcelData[i]['sbdata'] = this.masterSB[index];
       } else {
         this.masterExcelData[i]['systemStatus'] = 'NOT_AVAILABLE';
       }
@@ -288,11 +295,10 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   public submit(args: any) {
-      this.uploading = true;
-      console.log('submit: ', args);
-      this.size = this.formatBytes(args[0].size);
-      //document.getElementById("uploadError").style.display = "none";
-      this.runProgressBar(args[0].size);
+    this.uploading = true;
+    console.log('submit: ', args);
+    this.size = this.formatBytes(args[0].size);
+    this.runProgressBar(args[0].size);
   }
 
   public formatBytes(bytes) {
@@ -331,12 +337,48 @@ export class EdpmsReconComponent implements OnInit {
     );
   }
 
-
   isWidthWithinLimit() {
     if (this.width === 100) {
       return false;
     } else {
       return true;
+    }
+  }
+  dumpfun(data: any) {
+    console.log(data, 'sdfgsdfdsjfj hello dump........')
+  }
+
+  clicktable(data: any) {
+    this.pipoArrayListdata=[];
+    
+    if (data?.pipo?.doc) {
+      this.pipoArrayListdata.push({ status: true, text: 'Pipo doc', buttontext: 'View' })
+    } else {
+      this.pipoArrayListdata.push({ status: false, text: 'Pipo doc', buttontext: 'Upload' })
+    }
+
+    if (data?.doc) {
+      this.pipoArrayListdata.push({ status: true, text: 'Sb doc', buttontext: 'View' })
+    } else {
+      this.pipoArrayListdata.push({ status: false, text: 'Sb doc', buttontext: 'Upload' })
+    }
+
+    if (data?.blCopyDoc) {
+      this.pipoArrayListdata.push({ status: true, text: 'blCopy doc', buttontext: 'View' })
+    } else {
+      this.pipoArrayListdata.push({ status: false, text: 'blCopy doc', buttontext: 'Upload' })
+    }
+
+    if (data?.commercialDoc) {
+      this.pipoArrayListdata.push({ status: true, text: 'commercial doc', buttontext: 'View' })
+    } else {
+      this.pipoArrayListdata.push({ status: false, text: 'commercial doc', buttontext: 'Upload' })
+    }
+    
+    if (data?.packingDoc) {
+      this.pipoArrayListdata.push({ status: true, text: 'packing doc', buttontext: 'View' })
+    } else {
+      this.pipoArrayListdata.push({ status: false, text: 'packing doc', buttontext: 'Upload' })
     }
   }
 }

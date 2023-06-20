@@ -1,0 +1,16 @@
+<div class="documents-panel-status" [style.width]="width" [style.height]="height" [style]="Style">
+    <div class="text-with-circle" *ngFor="let item of CustomStatusProgressBardata;let i=index">
+        <div class="view-pdf-text">
+            <p class="text-log">{{item?.text}}</p>
+        </div>
+        <div class="left-log-panel" *ngIf="CustomStatusProgressBardata.length!=(i+1)"
+            [ngClass]="{'found':item?.status==true,'not-found':item?.status==false}">
+        </div>
+        <div class="left-log-panel left-log-panel-last-child" *ngIf="CustomStatusProgressBardata.length==(i+1)"
+        [ngClass]="{'found':item?.status==true,'not-found':item?.status==false}">
+    </div>
+        <div class="view-pdf-text button-view">
+            <button class="btn btn-primary border-radius" (click)="clickbutton(item)">{{item?.buttontext}}</button>
+        </div>
+    </div>
+</div>

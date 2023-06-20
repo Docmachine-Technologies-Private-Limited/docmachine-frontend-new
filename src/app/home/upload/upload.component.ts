@@ -2788,14 +2788,10 @@ export class UploadComponent implements OnInit {
     var last_length = PI_PO_LIST.length - 1;
     var LAST_VALUE: any = PI_PO_LIST[last_length]?.value;
     console.log(PI_PO_LIST[last_length]?.value, PI_PO_LIST,'clickPipoclickPipoclickPipo')
-    console.log('PI_PO_LISTPI_PO_LISTPI_PO_LIST', PI_PO_LIST);
     this.pipoSelect = true;
-    console.log('line 2361', this.pipoSelect);
-
     if (this.BUYER_LIST.includes(LAST_VALUE?.id[1]) == false) {
       this.BUYER_LIST.push(LAST_VALUE?.id[1])
     }
-    this.mainBene = this.FILTER_VALUE(this.pipolist, LAST_VALUE?._id)[0]?.buyerName;
     let x = LAST_VALUE?.id[1];
     let j = this.arrayData.indexOf(LAST_VALUE?.id[1]);
     if (j == -1) {
@@ -2805,7 +2801,7 @@ export class UploadComponent implements OnInit {
       console.log('x');
     }
 
-    this.BUYER_LIST = this.BUYER_LIST.filter(n => n);
+    this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
     this.COMMERCIAL_LIST = [];
     this.pipoDataService.getShippingNo(LAST_VALUE?._id, this.documentType1);
     this.documentService.getCommercialByFiletype(this.documentType1, LAST_VALUE?._id).subscribe((res: any) => {
@@ -2836,12 +2832,11 @@ export class UploadComponent implements OnInit {
           this.ORM_BY_PARTY_NAME = res?.data;
         });
       }
-
-
     }
-    console.log(this.arrayData, this.mainBene, this.SHIPPINGBILL_LIST, this.COMMERCIAL_LIST, 'mainBenemainBene');
+    this.pipoArr=this.pipoArr.filter(n => n);
+    this.arrayData=this.arrayData.filter(n => n);
+    console.log(this.arrayData, this.SHIPPINGBILL_LIST, this.COMMERCIAL_LIST, 'mainBenemainBene');
     console.log('Array List', this.pipoArr);
-
   }
   FILTER_VALUE(array: any, value: any) {
     return array?.filter((item: any) => item?._id == value);
