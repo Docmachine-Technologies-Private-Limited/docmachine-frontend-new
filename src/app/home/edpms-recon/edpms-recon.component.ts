@@ -150,6 +150,7 @@ export class EdpmsReconComponent implements OnInit {
     this.documentService.createEDPMS(this.preparePayload()).subscribe((res: any) => {
       console.log('create edpms res: ', res);
       this.edpmsData = res?.data;
+      this.SBdata();
       // this.router.navigateByUrl('/home/edpms-recon-table');
     }, err => {
       console.log('create EDPMS error: ', err)
@@ -159,6 +160,7 @@ export class EdpmsReconComponent implements OnInit {
 
   preparePayload() {
     let payload: any = [];
+    console.log('create edpms res: ', this.masterExcelData);
     this.masterExcelData.forEach((item: any) => {
       const tempObject = {
         userId: this.applicant,
@@ -176,6 +178,7 @@ export class EdpmsReconComponent implements OnInit {
         systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['Shipping Bill No']),
         docAvailable: item['systemStatus'] === 'Available' ? true : false,
         action: this.getAction(item['systemStatus']),
+        sbdata: item['sbdata']
       };
       payload.push(tempObject);
     });
@@ -205,10 +208,10 @@ export class EdpmsReconComponent implements OnInit {
   }
 
   checkIfBLDone(pipo) {
-    if (pipo==undefined ) {
+    if (pipo == undefined) {
       return false;
     }
-    if ( this.blMaster?.some((bl: any) => bl?.pipo?.contains(pipo))) {
+    if (this.blMaster?.some((bl: any) => bl?.pipo?.contains(pipo))) {
       return true
     } else {
       return false
@@ -294,6 +297,25 @@ export class EdpmsReconComponent implements OnInit {
     console.log('this.masterExcelData', this.masterExcelData);
   }
 
+  SBdata() {
+    this.edpmsData.forEach((data, i) => {
+      var index = -1;
+      for (let j = 0; j < this.masterSB.length; j++) {
+        if (this.masterSB[j] && this.masterSB[j].sbno && this.masterSB[j].sbno == data['sbNo']) {
+          index = j;
+          break;
+        }
+      }
+      console.log("index:", index);
+      if (index !== -1) {
+        this.edpmsData[i]['sbdata'] = this.masterSB[index];
+      } else {
+        this.edpmsData[i]['sbdata'] = [];
+      }
+    });
+    console.log('this.edpmsData', this.edpmsData);
+  }
+
   public submit(args: any) {
     this.uploading = true;
     console.log('submit: ', args);
@@ -344,41 +366,58 @@ export class EdpmsReconComponent implements OnInit {
       return true;
     }
   }
+  SELECT_DOCUMENTS_VIEWS: any = '';
+  SELECT_DOCUMENTS_UPLOAD: any = '';
+  clearTime: any = ''
   dumpfun(data: any) {
+    clearTimeout(this.clearTime);
+    if (data?.buttontext == 'View') {
+      this.SELECT_DOCUMENTS_UPLOAD = '';
+      this.SELECT_DOCUMENTS_VIEWS = '';
+      this.clearTime = setTimeout(() => {
+        this.SELECT_DOCUMENTS_VIEWS = data;
+      }, 200)
+    } else if (data?.buttontext == 'Upload') {
+      this.SELECT_DOCUMENTS_VIEWS = '';
+      this.SELECT_DOCUMENTS_UPLOAD = '';
+      this.clearTime = setTimeout(() => {
+        this.SELECT_DOCUMENTS_UPLOAD = data;
+      }, 200);
+    }
     console.log(data, 'sdfgsdfdsjfj hello dump........')
   }
 
   clicktable(data: any) {
-    this.pipoArrayListdata=[];
-    
+    this.pipoArrayListdata = [];
+    console.log(data, 'sdfsdfdf')
     if (data?.pipo?.doc) {
-      this.pipoArrayListdata.push({ status: true, text: 'Pipo doc', buttontext: 'View' })
+      this.pipoArrayListdata.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'Pipo doc', buttontext: 'Upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/add-pipo/export', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.doc) {
-      this.pipoArrayListdata.push({ status: true, text: 'Sb doc', buttontext: 'View' })
+      this.pipoArrayListdata.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'Sb doc', buttontext: 'Upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=sb', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
-      this.pipoArrayListdata.push({ status: true, text: 'blCopy doc', buttontext: 'View' })
+      this.pipoArrayListdata.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'blCopy doc', buttontext: 'Upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=blCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
 
     if (data?.commercialDoc) {
-      this.pipoArrayListdata.push({ status: true, text: 'commercial doc', buttontext: 'View' })
+      this.pipoArrayListdata.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'commercial doc', buttontext: 'Upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=commercial', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
-    
+
     if (data?.packingDoc) {
-      this.pipoArrayListdata.push({ status: true, text: 'packing doc', buttontext: 'View' })
+      this.pipoArrayListdata.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata.push({ status: false, text: 'packing doc', buttontext: 'Upload' })
+      this.pipoArrayListdata.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=packingList', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
 }

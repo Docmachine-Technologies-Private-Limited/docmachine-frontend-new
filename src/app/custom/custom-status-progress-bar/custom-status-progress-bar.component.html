@@ -10,7 +10,7 @@
         [ngClass]="{'found':item?.status==true,'not-found':item?.status==false}">
     </div>
         <div class="view-pdf-text button-view">
-            <button class="btn btn-primary border-radius" (click)="clickbutton(item)">{{item?.buttontext}}</button>
+            <button class="btn btn-primary border-radius PopupOpen" [attr.popup-close]="item?.popup_close" (click)="clickbutton(item)">{{item?.buttontext}}</button>
         </div>
     </div>
 </div>

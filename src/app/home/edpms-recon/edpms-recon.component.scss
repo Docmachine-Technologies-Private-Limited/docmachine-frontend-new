@@ -4,7 +4,6 @@ html,
 body,
 * {
     box-sizing: border-box;
-    font-size: 16px;
 }
 
 html,
@@ -187,7 +186,7 @@ p {
 
 #content {
     display: grid;
-    grid-template-rows: 6% 90%;
+    grid-template-rows: 60px calc(100% - 60px);
     grid-template-columns: repeat(1, 1fr);
     height: 91vh;
     border-radius: 5px;
@@ -213,10 +212,10 @@ p {
     gap: 20px;
     align-items: center;
     justify-content: center;
+    width: 350px;
 }
 
 .upload-panel {
-    margin-top: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -232,14 +231,15 @@ p {
     width: 100%;
     margin: auto;
     margin-left: 0;
+    height: 100%;
 }
 
-.analytics tr td,
-.analytics tr td {
+.edpms-table thead tr th,
+.edpms-table tbody tr td {
     font-size: 13px;
 }
 
-.p-button{
+.p-button {
     background: #005792;
     width: 110px;
     padding: 5px;
@@ -249,4 +249,12 @@ p {
     color: white;
     cursor: pointer;
     border: 2px solid #005792;
+}
+
+.tableclick:hover {
+    background-color: beige;
+}
+
+.tableclick.active-table {
+    background-color: beige;
 }

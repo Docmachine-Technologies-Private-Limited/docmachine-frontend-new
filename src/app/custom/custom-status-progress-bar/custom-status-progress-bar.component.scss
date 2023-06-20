@@ -4,10 +4,12 @@
     align-items: center;
     justify-content: center;
     overflow: auto;
+    padding: 10px;
 }
 
 .documents-panel-status .left-log-panel {
     display: block;
+    transition: all 1s ease-in-out;
 }
 
 .documents-panel-status .left-log-panel::after {

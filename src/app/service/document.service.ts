@@ -21,7 +21,8 @@ export class DocumentService {
   pipolist: any = [];
   OUTWARD_REMITTANCE_ADVICE_SHEET: any = [];
   MT102_SUBJECT: any = []
-
+  AppConfig:any=AppConfig
+  
   constructor(public http: HttpClient, private router: Router,) {
     this.api_base = AppConfig?.BASE_URL;
     console.log(this.api_base);
