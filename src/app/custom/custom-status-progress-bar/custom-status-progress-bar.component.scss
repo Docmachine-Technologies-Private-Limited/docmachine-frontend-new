@@ -12,13 +12,22 @@
     transition: all 1s ease-in-out;
 }
 
-.documents-panel-status .left-log-panel::after {
+.documents-panel-status .left-log-panel.not-found::after {
     content: "";
-    width: 135px;
+    width: 80px;
     display: block;
-    border-bottom: 2px solid #13a6dc;
-    margin-top: -13px;
-    margin-left: 25px;
+    border-bottom: 2px solid #ff0303;
+    margin-top: -8px;
+    margin-left: 15px;
+}
+
+.documents-panel-status .left-log-panel.found::after {
+    content: "";
+    width: 80px;
+    display: block;
+    border-bottom: 2px solid green;
+    margin-top: -8px;
+    margin-left: 15px;
 }
 
 
@@ -30,13 +39,14 @@
     margin-left: 0;
     margin-top: 0;
     color: #fff;
-    background: #49A2D7;
+    background: green;
     border-radius: 50px;
-    height: 25px;
-    width: 25px;
-    font-weight: bold;
+    height: 15px;
+    width: 15px;
+    font-weight: 400;
     font-family: fantasy;
-    font-size: larger;
+    box-shadow: 0 0 7px 3px #1244af;
+    padding-top: 2px;
 }
 
 .documents-panel-status .left-log-panel.not-found::before{
@@ -49,19 +59,20 @@
     color: #fff;
     background: #ff0303;
     border-radius: 50px;
-    height: 25px;
-    width: 25px;
-    font-weight: 700;
+    height: 15px;
+    width: 15px;
+    font-weight: 400;
     font-family: fantasy;
-    font-size: larger;
-    box-shadow: 0px 0px 7px 3px #1244af;
-    padding-top: 3px;
+    box-shadow: 0 0 7px 3px #1244af;
+    padding-top: 2px;
 }
 
 .documents-panel-status .left-log-panel-last-child::after {
-    content: '';
-    border-bottom: 0px solid transparent;
+    content: '' !important;
+    border-bottom: 0px solid transparent !important;
+    width: 60px !important;
 }
+
 
 .documents-panel-status .text-with-circle {
     display: flex;
@@ -72,9 +83,10 @@
 }
 
 .documents-panel-status .text-log{
-    font-size: 15px;
+    font-size: 12px;
     margin: auto;
     margin-left: 0 !important;
+    color: black;
 }
 
 .documents-panel-status .button-view{
@@ -89,6 +101,7 @@
     border: navajowhite;
     text-decoration-line: underline;
     margin-left: -15px;
+    font-size: 12px;
 }
 
 .documents-panel-status .view-pdf-text{

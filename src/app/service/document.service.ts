@@ -32,6 +32,7 @@ export class DocumentService {
     this.authToken = token;
     return this.authToken;
   }
+  
   showInvoice = false;
   draft;
   task;
@@ -40,7 +41,6 @@ export class DocumentService {
   item1: any;
 
   // Inward inwardRemittance Advice
-
   setSessionData(key: any, data: any) {
     sessionStorage.setItem(key, JSON.stringify(data));
   }

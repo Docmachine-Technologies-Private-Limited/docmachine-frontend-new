@@ -36,8 +36,7 @@ p {
     display: block;
     clear: both;
     margin: 0 auto;
-    width: 100%;
-    max-width: 600px;
+    width: 100px;
 }
 
 .uploader label {
@@ -186,7 +185,7 @@ p {
 
 #content {
     display: grid;
-    grid-template-rows: 60px calc(100% - 60px);
+    grid-template-rows: 40px calc(100% - 40px);
     grid-template-columns: repeat(1, 1fr);
     height: 91vh;
     border-radius: 5px;
@@ -212,7 +211,6 @@ p {
     gap: 20px;
     align-items: center;
     justify-content: center;
-    width: 350px;
 }
 
 .upload-panel {
@@ -220,7 +218,6 @@ p {
     flex-direction: column;
     gap: 10px;
     align-items: center;
-    overflow: auto;
 }
 
 .heading {
@@ -283,4 +280,26 @@ p {
 
 ::ng-deep .mat-tab-group {
     width: 100%;
+}
+
+::ng-deep .mat-tab-body-content {
+    min-height: 200px;
+    height: calc(100% - 4px)!important;
+    overflow: auto!important;
+    padding-top: 10px;
+}
+
+::ng-deep .mat-tab-body-wrapper {
+    height: 100%;
+}
+
+::ng-deep .mat-tab-group {
+    height: 100%;
+}
+
+.table-panel {
+    width: 100%;
+    margin: auto auto auto 0;
+    height: calc(100% - 95px);
+    overflow: auto;
 }

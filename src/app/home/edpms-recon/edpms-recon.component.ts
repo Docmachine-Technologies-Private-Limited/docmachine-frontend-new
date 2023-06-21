@@ -39,6 +39,10 @@ export class EdpmsReconComponent implements OnInit {
   tasksMaster;
   edpmsData: any = [];
   pipoArrayListdata: any = []
+  pipoArrayListdata2: any = []
+  GET_EDMPS: any = [];
+  FILTER_EDPMS_DATA:any=[];
+  SB_NO_LIST: any = [];
 
   constructor(
     private userService: UserService,
@@ -107,6 +111,20 @@ export class EdpmsReconComponent implements OnInit {
       (res: any) => {
         this.masterSB = res?.data;
         console.log('getMaster:', res);
+        this.documentService.getEDPMS().subscribe((res: any) => {
+          this.GET_EDMPS = this.addSBdata(res?.data);
+          var temp:any=[];
+          this.GET_EDMPS.forEach(element => {
+            if (this.SB_NO_LIST.includes(element?.sbNo) == false) {
+              temp.push(element?.sbNo)
+            }
+          });
+          temp.forEach(element => {
+            this.SB_NO_LIST.push({value:element})
+          });
+          this.FILTER_EDPMS_DATA=this.GET_EDMPS;
+          console.log(res, this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
+        })
       }, (err: any) => {
         console.log(err);
       });
@@ -301,7 +319,7 @@ export class EdpmsReconComponent implements OnInit {
     this.edpmsData.forEach((data, i) => {
       var index = -1;
       for (let j = 0; j < this.masterSB.length; j++) {
-        if (this.masterSB[j] && this.masterSB[j].sbno && this.masterSB[j].sbno == data['sbNo']) {
+        if (this.masterSB[j] && this.masterSB[j]?.sbno && this.masterSB[j]?.sbno == data?.sbNo) {
           index = j;
           break;
         }
@@ -314,6 +332,26 @@ export class EdpmsReconComponent implements OnInit {
       }
     });
     console.log('this.edpmsData', this.edpmsData);
+  }
+
+  addSBdata(edpmsdata: any) {
+    edpmsdata.forEach((data, i) => {
+      var index = -1;
+      for (let j = 0; j < this.masterSB.length; j++) {
+        if (this.masterSB[j] && this.masterSB[j]?.sbno && this.masterSB[j]?.sbno == data?.sbNo) {
+          index = j;
+          break;
+        }
+      }
+      console.log("index:", index);
+      if (index !== -1) {
+        edpmsdata[i]['sbdata'] = this.masterSB[index];
+      } else {
+        edpmsdata[i]['sbdata'] = [];
+      }
+    });
+    console.log('this.edpmsData', edpmsdata);
+    return edpmsdata;
   }
 
   public submit(args: any) {
@@ -390,8 +428,8 @@ export class EdpmsReconComponent implements OnInit {
   clicktable(data: any) {
     this.pipoArrayListdata = [];
     console.log(data, 'sdfsdfdf')
-    if (data?.pipo?.doc) {
-      this.pipoArrayListdata.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo?.doc, popup_close: 'pdf_view' })
+    if (data?.pipo) {
+      this.pipoArrayListdata.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
       this.pipoArrayListdata.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/add-pipo/export', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
@@ -419,5 +457,45 @@ export class EdpmsReconComponent implements OnInit {
     } else {
       this.pipoArrayListdata.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=packingList', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
+  }
+  
+  clicktable2(data: any) {
+    this.pipoArrayListdata2 = [];
+    console.log(data, 'sdfsdfdf')
+    if (data?.pipo) {
+      this.pipoArrayListdata2.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
+    } else {
+      this.pipoArrayListdata2.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/add-pipo/export', buttontext: 'Upload', popup_close: 'pdf_upload' })
+    }
+
+    if (data?.doc) {
+      this.pipoArrayListdata2.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
+    } else {
+      this.pipoArrayListdata2.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=sb', popup_close: 'pdf_upload' })
+    }
+
+    if (data?.blCopyDoc) {
+      this.pipoArrayListdata2.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
+    } else {
+      this.pipoArrayListdata2.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=blCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+    }
+
+    if (data?.commercialDoc) {
+      this.pipoArrayListdata2.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
+    } else {
+      this.pipoArrayListdata2.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=commercial', buttontext: 'Upload', popup_close: 'pdf_upload' })
+    }
+
+    if (data?.packingDoc) {
+      this.pipoArrayListdata2.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
+    } else {
+      this.pipoArrayListdata2.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=packingList', buttontext: 'Upload', popup_close: 'pdf_upload' })
+    }
+  }
+  EDMPS_Search(value:any){
+     this.FILTER_EDPMS_DATA=this.GET_EDMPS.filter((item:any)=>item?.sbNo?.includes(value));
+     if (this.FILTER_EDPMS_DATA.length==0) {
+      this.FILTER_EDPMS_DATA=this.GET_EDMPS;
+     }
   }
 }

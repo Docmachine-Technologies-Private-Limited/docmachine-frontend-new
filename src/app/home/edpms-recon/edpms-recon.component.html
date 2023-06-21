@@ -2,35 +2,37 @@
     <main id="content" class="content table-padding" role="main">
         <div class="header-panel-upload">
             <h3 class="heading">New EDPMS Data</h3>
-            <div class="right-panel" style="margin: auto;margin-right: 0;">
-                <select class="form-control" [(ngModel)]="bankSelection" (ngModelChange)="chooseBank()">
-                    <option value="" disabled hidden>Select Bank</option>
-                    <option *ngFor="let acc of bankAccounts" [value]="acc" style="min-width:100%;">{{acc}}</option>
-                </select>
-                <form id="file-upload-form" class="uploader" method="POST" (click)="uploadfile?.click();">
-                    <input id="file-upload" type="file" name="fileUpload" [attr.disabled]="disableUpload ? '' : null"
-                        (error)="onUploadError($event)" (init)="onUploadInit($event)"
-                        (success)="onUploadSuccess($event)" (sending)="submit($event)" [dropzone]="config3"
-                        id="dropzone" (click)="fileInputClick($event)" #uploadfile />
-                    <button class="btn btn-primary m-0">Upload .xls</button>
-                </form>
-                <!-- <button *ngIf="uploaded" class="btn btn-primary" (click)="compareEDPMS()">Compare</button> -->
-            </div>
         </div>
         <div class="upload-panel">
             <mat-tab-group>
                 <mat-tab label="Upload">
-                    <custom-status-progress-bar (event)="dumpfun($event)"
-                        [data]="this.pipoArrayListdata"></custom-status-progress-bar>
-                    <div class="analytics" *ngIf="this.edpmsData.length!=0">
+                    <div class="right-panel" style="margin: auto;margin-right: 10px;margin-left: 10px;">
+                        <custom-status-progress-bar (event)="dumpfun($event)"
+                            [data]="this.pipoArrayListdata"></custom-status-progress-bar>
+                        <select class="form-control" [(ngModel)]="bankSelection" (ngModelChange)="chooseBank()">
+                            <option value="" disabled hidden>Select Bank</option>
+                            <option *ngFor="let acc of bankAccounts" [value]="acc" style="min-width:100%;">{{acc}}
+                            </option>
+                        </select>
+                        <form id="file-upload-form" class="uploader" method="POST" (click)="uploadfile?.click();">
+                            <input id="file-upload" type="file" name="fileUpload"
+                                [attr.disabled]="disableUpload ? '' : null" (error)="onUploadError($event)"
+                                (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
+                                (sending)="submit($event)" [dropzone]="config3" id="dropzone"
+                                (click)="fileInputClick($event)" #uploadfile />
+                            <button class="btn btn-primary m-0">Upload .xls</button>
+                        </form>
+                    </div>
+                    <div class="table-panel" *ngIf="this.edpmsData.length!=0">
                         <div class="col-12 p-0" #debitnotes>
                             <div class="row">
                                 <div style="width:100%;height:690px" class="col-12 padding">
-                                    <section class="widget pb-0 box-shadow">
-                                        <div class="widget-body p-0 support table-wrapper">
+                                    <section class="pb-0 box-shadow">
+                                        <div class="p-0 table-wrapper">
                                             <table class="table edpms-table mb-0">
                                                 <thead>
                                                     <tr class="table-tr">
+                                                        <th scope="col" class="col-td-th-3">#</th>
                                                         <th scope="col" class="col-td-th-3">Shipping Bill No.</th>
                                                         <th scope="col" class="col-td-th-3">Shipping Bill Date</th>
                                                         <th scope="col" class="col-td-th-3">AD Code</th>
@@ -48,6 +50,9 @@
                                                     <tr class="table-tr tableclick"
                                                         *ngFor="let row of edpmsData; let i = index"
                                                         (click)="clicktable(row?.sbdata)">
+                                                        <th class="col-td-th-3">
+                                                            {{(i+1)}}
+                                                        </th>
                                                         <th class="col-td-th-3">
                                                             {{row?.sbNo}}
                                                         </th>
@@ -97,17 +102,39 @@
                     </div>
                 </mat-tab>
                 <mat-tab label="Compare">
-                    <custom-status-progress-bar (event)="dumpfun($event)"
-                        [data]="this.pipoArrayListdata"></custom-status-progress-bar>
-                    <div class="analytics" *ngIf="this.edpmsData.length!=0">
+                    <div class="right-panel" style="margin: auto;margin-right: 10px;margin-left: 10px;">
+                        <custom-status-progress-bar (event)="dumpfun($event)"
+                            [data]="this.pipoArrayListdata2"></custom-status-progress-bar>
+                        <app-ng-dropdown-custom placeHolderText="Search sb no." 
+                        width="200px" [items]="this.SB_NO_LIST"
+                        (modelChanges)="EDMPS_Search($event?.value)"
+                            (keyEvent)="EDMPS_Search($event)"
+                        bindLabel="value" [multiple]="false" #buyerNameSelection>
+                        </app-ng-dropdown-custom>
+                        <!-- <select class="form-control" [(ngModel)]="bankSelection" (ngModelChange)="chooseBank()">
+                            <option value="" disabled hidden>Select Bank</option>
+                            <option *ngFor="let acc of bankAccounts" [value]="acc" style="min-width:100%;">{{acc}}
+                            </option>
+                        </select> -->
+                        <!-- <form id="file-upload-form" class="uploader" method="POST" (click)="uploadfile?.click();">
+                            <input id="file-upload" type="file" name="fileUpload"
+                                [attr.disabled]="disableUpload ? '' : null" (error)="onUploadError($event)"
+                                (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
+                                (sending)="submit($event)" [dropzone]="config3" id="dropzone"
+                                (click)="fileInputClick($event)" #uploadfile />
+                            <button class="btn btn-primary m-0">Upload .xls</button>
+                        </form> -->
+                    </div>
+                    <div class="table-panel" *ngIf="this.FILTER_EDPMS_DATA.length!=0">
                         <div class="col-12 p-0" #debitnotes>
                             <div class="row">
                                 <div style="width:100%;height:690px" class="col-12 padding">
-                                    <section class="widget pb-0 box-shadow">
-                                        <div class="widget-body p-0 support table-wrapper">
+                                    <section class="pb-0 box-shadow">
+                                        <div class="p-0 table-wrapper">
                                             <table class="table edpms-table mb-0">
                                                 <thead>
                                                     <tr class="table-tr">
+                                                        <th scope="col" class="col-td-th-3">#</th>
                                                         <th scope="col" class="col-td-th-3">Shipping Bill No.</th>
                                                         <th scope="col" class="col-td-th-3">Shipping Bill Date</th>
                                                         <th scope="col" class="col-td-th-3">AD Code</th>
@@ -123,8 +150,11 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr class="table-tr tableclick"
-                                                        *ngFor="let row of edpmsData; let i = index"
-                                                        (click)="clicktable(row?.sbdata)">
+                                                        *ngFor="let row of this.FILTER_EDPMS_DATA; let i = index"
+                                                        (click)="clicktable2(row?.sbdata)">
+                                                        <th class="col-td-th-3">
+                                                            {{(i+1)}}
+                                                        </th>
                                                         <th class="col-td-th-3">
                                                             {{row?.sbNo}}
                                                         </th>
@@ -158,10 +188,10 @@
                                                             {{row?.docAvailable}}
                                                         </td>
                                                         <!-- <td class="col-td-th-3">
-                                                        <div *ngFor="let act of row?.action"
-                                                            [class.active]="act === 'Create Documents' || act === 'Upload Documents'"
-                                                            (click)="actionEvent(act, row?.sbNo)">{{act}}</div>
-                                                    </td> -->
+                                                            <div *ngFor="let act of row?.action"
+                                                                [class.active]="act === 'Create Documents' || act === 'Upload Documents'"
+                                                                (click)="actionEvent(act, row?.sbNo)">{{act}}</div>
+                                                        </td> -->
                                                     </tr>
 
                                                 </tbody>
