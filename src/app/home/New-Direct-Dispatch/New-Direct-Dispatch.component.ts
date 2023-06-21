@@ -2898,12 +2898,12 @@ export class NewDirectDispatchComponent implements OnInit {
 
   setradio(a) {
     console.log(a, 'setradio');
-    this.bankToggle = a;
-    this.bankValue = a;
+    this.bankToggle = a?.id;
+    this.bankValue = a?.id;
     this.newBankArray = [];
     console.log(this.bankArray, 'this.bankArray')
     this.bankArray.forEach((value, index) => {
-      if (value?.BankUniqueId?.includes(a) == true) {
+      if (value?.BankUniqueId?.includes(a?.id) == true) {
         this.newBankArray.push(value)
       }
     });
@@ -3058,21 +3058,21 @@ export class NewDirectDispatchComponent implements OnInit {
   changeCheckbox1(event, a, data) {
     if (data.blCopyDoc) {
       if (data.commercialDoc) {
-          let j = this.sbArray.indexOf(a);
-          if (j == -1) {
-            this.sbArray.push(a);
-          } else {
-            this.sbArray.splice(j, 1);
-            $(event.target).prop('checked', false)
-          }
-          this.currentSbForAdvance = a;
-          this.ACCORDING_LIST['SB_' + a] = [];
-          this.advanceArray['SB_' + a] = [];
-          this.Advance_Amount_Sum['SB_' + a] = []
-          this.refSbNo = a;
-          this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + a] = this.FILTER_DATA?.COMMERCIAL?.filter((item: any) => item?.sbNo === a);
-          this.SELECTED_FIRX_INDEX['SB_' + a] = [];
-          console.log('changeCheckbox1', data, this.FILTER_DATA, this.sbArray, this.ACCORDING_LIST);
+        let j = this.sbArray.indexOf(a);
+        if (j == -1) {
+          this.sbArray.push(a);
+        } else {
+          this.sbArray.splice(j, 1);
+          $(event.target).prop('checked', false)
+        }
+        this.currentSbForAdvance = a;
+        this.ACCORDING_LIST['SB_' + a] = [];
+        this.advanceArray['SB_' + a] = [];
+        this.Advance_Amount_Sum['SB_' + a] = []
+        this.refSbNo = a;
+        this.FILTER_DATA.FILTER_COMMERCIAL['SB_' + a] = this.FILTER_DATA?.COMMERCIAL?.filter((item: any) => item?.sbNo === a);
+        this.SELECTED_FIRX_INDEX['SB_' + a] = [];
+        console.log('changeCheckbox1', data, this.FILTER_DATA, this.sbArray, this.ACCORDING_LIST);
       } else {
         console.log("You Don't have Commercial Invoice");
       }
@@ -3965,7 +3965,7 @@ export class NewDirectDispatchComponent implements OnInit {
         }
       }
     }
-    this.RESET=false;
+    this.RESET = false;
     setTimeout(() => {
       this.RESET = true;
     }, 500)
@@ -4229,7 +4229,21 @@ export class NewDirectDispatchComponent implements OnInit {
                                 query: { balanceAvai: parseFloat(sbAmount[0]?.balanceAvai) - this.FIRX_AMOUNT(this.tp?.firxAmount) }
                               }).subscribe((r3: any) => {
                                 console.log(r3, 'masterrecord')
-                                this.toastr.success('Successfully added Transaction of SB No. :' + this.FIRX_AMOUNT(sbAmount?.sbno))
+                                this.toastr.success('Successfully added Transaction of SB No. :' + sbAmount[0]?.sbno);
+                                var updateapproval_data: any = {
+                                  RejectData: {
+                                    tableName: 'masterrecord',
+                                    id: approval_data?.id,
+                                    TransactionId: res1._id,
+                                    data: {
+                                      SbRef: UniqueId,
+                                      Total_FIRX_Amount: this.ExportBillLodgement_Form.value?.Total_FIRX_Amount
+                                    },
+                                    pipo_id: pipo_id,
+                                    pipo_name: pipo_name
+                                  }
+                                }
+                                this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => { this.router.navigate(['/home/dashboardTask']) });
                               });
                               // model.style.display = 'none';
                               // this.router.navigate(['/home/dashboardTask'])
@@ -4279,7 +4293,22 @@ export class NewDirectDispatchComponent implements OnInit {
                           this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
                             console.log('king123');
                             console.log(data);
-                            this.router.navigate(['/home/dashboardTask']);
+                            var updateapproval_data: any = {
+                              RejectData: {
+                                tableName: 'masterrecord',
+                                id: approval_data?.id,
+                                TransactionId: res1._id,
+                                data: {
+                                  SbRef: UniqueId,
+                                  Total_FIRX_Amount: this.ExportBillLodgement_Form.value?.Total_FIRX_Amount
+                                },
+                                pipo_id: pipo_id,
+                                pipo_name: pipo_name
+                              }
+                            }
+                            this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
+                              this.router.navigate(['/home/dashboardTask'])
+                            });
                           }, (error) => {
                             console.log('error');
                           }

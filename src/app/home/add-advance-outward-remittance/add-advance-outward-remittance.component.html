@@ -25,7 +25,6 @@
             <main id="content" class="table-padding" role="main">
                 <div class="new_document_list1">
                     <div class="new_document_list_add_data">
-
                         <form [formGroup]="pipoForm">
                             <div class="row">
                                 <div class="col-md-7 col-sm-12 col-12">
@@ -73,10 +72,10 @@
                                             <div class="col-md-6 col-12">
                                                 <label for="exampleInputPassword1" class="form-label">Select
                                                     beneficiary</label>
-                                                <app-ng-dropdown-custom placeHolderText="Select Bank Name"
+                                                <app-ng-dropdown-custom placeHolderText="Select Beneficiary Name"
                                                     [items]="this.benneDetail" bindLabel="benneName"
                                                     [ngModel]="form?.benneName" formControlName="benneName"
-                                                    (modelChanges)="form.benneName=$event" bindValue="_id"
+                                                    (modelChanges)="form.benneName=$event?.benneName" bindValue="_id"
                                                     [multiple]="false" (modelChanges)="changepipo($event)" #select_ben>
                                                 </app-ng-dropdown-custom>
                                                 <!-- <select class="form-select" aria-label="Default select example"
@@ -98,8 +97,8 @@
                                                 <label for="exampleInputEmail1" class="form-label">Select
                                                     bank*</label>
                                                 <app-ng-dropdown-custom placeHolderText="Select Bank Name" #Bank_Name
-                                                    [items]="this.bankDetail" bindLabel="value" [ngModel]="form?.bank"
-                                                    formControlName="bank" (modelChanges)="form.bank=$event"
+                                                    [items]="this.bankDetail" bindLabel="value"
+                                                    formControlName="bank" (modelChanges)="form.bank=$event?.value"
                                                     bindValue="id" [multiple]="false"
                                                     (modelChanges)="onSelectBank($event)">
                                                 </app-ng-dropdown-custom>

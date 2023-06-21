@@ -95,7 +95,6 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
     this.id = this.route?.snapshot.queryParams['id'];
     console.log(this.id)
     this.userData = await this.userService?.getUserDetail();
-    // this.userData = this.userData.result
     console.log("userData", this.userData)
     this.memeberForm = this.formBuilder?.group({
       name: ['', [Validators.required]],
@@ -181,6 +180,11 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
         this.FORM_BUILDER['UnderSubscriptionCheckBox'] = this.ROLE_TYPES != '' ? this.ROLE_TYPES : 'NA'
         this.FORM_BUILDER['Subscription'] = this.FORM_BUILDER['UnderSubscription'];
         this.FORM_BUILDER['imageUrl'] = this.img;
+        
+        this.FORM_BUILDER['DMS'] = this.userData['result']['DMS'];
+        this.FORM_BUILDER['Teasury'] = this.userData['result']['Teasury'];
+        this.FORM_BUILDER['Transaction'] = this.userData['result']['Transaction'];
+        
         console.log(this.FORM_BUILDER, 'this.memeberForm')
         this.userService?.getEamilByIdUserMember(this.FORM_BUILDER['email']).then((emailvalidation: any) => {
           console.log(emailvalidation, 'sdshdfjdsfhsdgfsdhfgjsd')
@@ -298,6 +302,11 @@ export class ManageUserComponent implements OnInit, AfterViewInit {
         this.EDIT_FORM_BUILDER['imageUrl'] = this.img != undefined ? this.img : this.SELECTED_EDIT_DATA['imageUrl'];
         this.EDIT_FORM_BUILDER['Role_Type'] = this.ROLE_TYPES != '' ? this.ROLE_TYPES : this.userData?.result['Role_Type'];
         this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox'] = this.ROLE_TYPES != '' ? this.ROLE_TYPES : this.EDIT_FORM_BUILDER['UnderSubscriptionCheckBox'];
+        
+        this.EDIT_FORM_BUILDER['DMS'] = this.userData['result']['DMS'];
+        this.EDIT_FORM_BUILDER['Teasury'] = this.userData['result']['Teasury'];
+        this.EDIT_FORM_BUILDER['Transaction'] = this.userData['result']['Transaction'];
+        
         console.log(this.EDIT_FORM_BUILDER, 'this.memeberForm')
         this.userService?.UpdateUserMemeber(this.SELECTED_EDIT_DATA['email'], this.EDIT_FORM_BUILDER)
           .subscribe(

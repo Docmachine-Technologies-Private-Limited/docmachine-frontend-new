@@ -1,7 +1,7 @@
 <div class="pdf-viewer-wrap" [style.width]="width" [style.height]="Newheight">
   <div class="pdf-viewer-controls-wrap">
     <h2>{{name}}</h2>
-    <div class="pdf-viewer-controls">
+    <div class="pdf-viewer-controls" *ngIf="allbtnhide">
       <div class="pdfv-control">
         <button (click)="zoomOut(this.SRC_UPDATE)">-</button>  <button (click)="zoomIn(this.SRC_UPDATE)">+</button>
       </div>

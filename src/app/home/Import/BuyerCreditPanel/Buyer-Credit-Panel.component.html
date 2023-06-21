@@ -81,8 +81,7 @@
                                                             [items]="this.benneDetail" bindLabel="benneName"
                                                             bindValue="benneName" [multiple]="false"
                                                             [ngModel]="form?.benneName" formControlName="benneName"
-                                                            [(ngModelDropDown)]="DUMP.benneName"
-                                                            (modelChanges)="form.benneName=$event"
+                                                            (modelChanges)="form.benneName=$event?.benneName;DUMP.benneName=$event?.benneName"
                                                             (modelChanges)="changepipo($event)" #select_ben>
                                                         </app-ng-dropdown-custom>
                                                         <div *ngIf="submitted && form?.benneName.errors"
@@ -99,7 +98,7 @@
                                                         <app-ng-dropdown-custom placeHolderText="Select Bank"
                                                             [items]="this.bankDetail" bindLabel="value" bindValue="id"
                                                             [multiple]="false" [ngModel]="form?.bank"
-                                                            formControlName="bank" (modelChanges)="form.bank=$event"
+                                                            formControlName="bank" (modelChanges)="form.bank=$event?.value"
                                                             (modelChanges)="onSelectBank($event)" #multiplepipo>
                                                         </app-ng-dropdown-custom>
                                                         <div *ngIf="submitted && form?.bank.errors" class='errorText'>
@@ -131,8 +130,8 @@
                                                                 placeHolderText="Select PI/PO or Bill of Entry"
                                                                 [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
                                                                 [multiple]="false" formControlName="BOE_Number"
-                                                                [(ngModelDropDown)]="this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO"
-                                                                (modelChanges)="DUMP_FUNCTION($event,['Select BOE'],boedropdown);"
+                                                                (modelChanges)="this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event?.value"
+                                                                (modelChanges)="DUMP_FUNCTION($event?.value,['Select BOE'],boedropdown);"
                                                                 #boeselectdropdown>
                                                             </app-ng-dropdown-custom>
                                                             <div *ngIf="submitted && form.pi_poNo.errors"
@@ -145,7 +144,25 @@
                                                         <div *ngFor="let item of this.MAIN_DATA;let i=index"
                                                             [formGroupName]="i">
                                                             <div class="row">
-                                                                <div class="col-md-4 col-12">
+                                                                <div class="col-md-6 col-12">
+                                                                    <label for="BOE_Number" class="form-label">BOE No.</label>
+                                                                    <input type="text" disabled class="form-control"
+                                                                        [value]="item?.boeNumber"
+                                                                        placeholder="BOE Number" autocomplete="off">
+                                                                </div>
+                                                                <div class="col-md-6 col-12" style="display: none;">
+                                                                    <label for="BOE_Number" class="form-label">BOE No.</label>
+                                                                    <input type="text" disabled class="form-control"
+                                                                        formControlName="BOE_Number" id="BOE_Number"
+                                                                        [ngModel]="item?._id"
+                                                                        placeholder="BOE Number" autocomplete="off">
+                                                                    <div *ngIf="submitted && form.BOE_Number.errors"
+                                                                        class='errorText'>
+                                                                        <div *ngIf="form.BOE_Number.errors.required">BOE BOE_Number is
+                                                                            required</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6 col-12">
                                                                     <label for="Currency"
                                                                         class="form-label">Currency</label>
                                                                     <app-ng-dropdown-custom [disabled]="true"
@@ -164,72 +181,55 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-4 col-12">
-                                                                    <label for="Amount" class="form-label">BOE
-                                                                        Amount</label>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-6 col-12">
+                                                                    <label for="Amount" class="form-label">BOE Amount</label>
                                                                     <input type="text" disabled class="form-control"
                                                                         formControlName="amount" id="invoice_amount"
                                                                         [ngModel]="item?.invoiceAmount"
                                                                         placeholder="Invoice Amount" autocomplete="off">
                                                                     <div *ngIf="submitted && form.amount.errors"
                                                                         class='errorText'>
-                                                                        <div *ngIf="form.amount.errors.required">BOE
-                                                                            Amount is
+                                                                        <div *ngIf="form.amount.errors.required">BOE Amount is
                                                                             required</div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-4 col-12">
-                                                                    <label for="balanceAmount"
-                                                                        class="form-label">Balance
+                                                                <div class="col-md-6 col-12">
+                                                                    <label for="balanceAmount" class="form-label">Balance
                                                                         Amount</label>
-                                                                    <input type="text" disabled class="form-control"
-                                                                        id="balanceAmount" [value]="item?.balanceAmount"
+                                                                    <input type="text" disabled class="form-control" id="balanceAmount"
+                                                                        [value]="item?.balanceAmount"
                                                                         placeholder="Payable Amount" autocomplete="off">
                                                                     <div *ngIf="submitted && form.payableAmount.errors"
                                                                         class='errorText'>
-                                                                        <div *ngIf="form.payableAmount.errors.required">
-                                                                            Balance
+                                                                        <div *ngIf="form.payableAmount.errors.required">Balance
                                                                             Amount is required</div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!-- <div class="col-md-10 col-12">
-                                                                <label for="selectedremittanceAmount"
-                                                                    class="form-label">SELECTED Remittance
-                                                                    Amount</label>
-                                                                <input type="text" class="form-control"
-                                                                    formControlName="selectedremittanceAmount"
-                                                                    id="selectedremittanceAmount"
-                                                                    placeholder="Remittance Amount"
-                                                                    [value]="item?.TOTAL_REMMITANCE_AMOUNT" ngModel
-                                                                    autocomplete="off" disabled>
-                                                                <div *ngIf="submitted && form.remittanceAmount.errors"
-                                                                    class='errorText'>
-                                                                    <div *ngIf="form.remittanceAmount.errors.required">
-                                                                        Remittance Amount is required</div>
+                                                            <div class="row">
+                                                                <div class="col-md-8 col-12">
+                                                                    <label for="remittanceAmount" class="form-label">Remittance
+                                                                        Amount</label>
+                                                                    <input type="text" class="form-control"
+                                                                        formControlName="remittanceAmount" id="remittanceAmount"
+                                                                        placeholder="Remittance Amount" ngModel autocomplete="off"
+                                                                        maxlength="this.sumTotalAmount.length"
+                                                                        [ngModel]="item?.Remittance_Amount"
+                                                                        (keyup)="RemittanceAmount($event,i,item?.boeNumber);">
+                                                                    <div *ngIf="submitted && form.remittanceAmount.errors"
+                                                                        class='errorText'>
+                                                                        <div *ngIf="form.remittanceAmount.errors.required">
+                                                                            Remittance Amount is required</div>
+                                                                    </div>
                                                                 </div>
-                                                            </div> -->
-                                                            <div class="col-md-10 col-12">
-                                                                <label for="remittanceAmount" class="form-label">Buyer
-                                                                    Credit
-                                                                    Amount</label>
-                                                                <input type="text" class="form-control"
-                                                                    formControlName="remittanceAmount"
-                                                                    id="remittanceAmount"
-                                                                    placeholder="Remittance Amount" autocomplete="off"
-                                                                    [ngModel]="this.REMIITANCE_AMOUNT[i]"
-                                                                    (keyup)="RemittanceAmount($event,i,item?.boeNumber);">
-                                                                <div *ngIf="submitted && form.remittanceAmount.errors"
-                                                                    class='errorText'>
-                                                                    <div *ngIf="form.remittanceAmount.errors.required">
-                                                                        Remittance Amount is required</div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-2 col-12 padding0">
-                                                                <div class="removeamouts_new">
-                                                                    <button style="width:100%" type="button"
-                                                                        class="btn btn-primary"
-                                                                        (click)="removeItems(i)">-</button>
+                                                                <div class="col-md-2 col-12 padding0">
+                                                                    <div class="removeamouts_new">
+                                                                        <button style="width:100%" type="button"
+                                                                            class="btn btn-primary"
+                                                                            (click)="removeItems(i)">-</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -389,10 +389,10 @@
                                                         <tr>
                                                             <td><b>Total no. of BOE</b></td>
                                                             <td>
-                                                                <p>{{selectedItems.length}}</p>
+                                                                <p>{{this.MAIN_DATA.length}}</p>
                                                             </td>
                                                         </tr>
-                                                        <tr *ngFor="let items of selectedItems">
+                                                        <tr *ngFor="let items of this.MAIN_DATA">
                                                             <td><b>{{items.pipo_no}} </b></td>
                                                             <td>
                                                                 <p> ( Amount: {{items.amount}}, Date: {{items.date}},
@@ -441,7 +441,7 @@
                                                     <app-ng-dropdown-custom placeHolderText="Select beneficiary"
                                                         [items]="this.benneDetail" bindLabel="benneName"
                                                         bindValue="benneName" [multiple]="false"
-                                                        [(ngModelDropDown)]="DUMP.benneName"
+                                                        (modelChanges)="DUMP.benneName=$event.benneName"
                                                         (modelChanges)="changepipo($event)">
                                                     </app-ng-dropdown-custom>
                                                 </div>
@@ -450,8 +450,8 @@
                                                 <app-ng-dropdown-custom class="PopupOpen" popup-close="boedropdown"
                                                     placeHolderText="Select PI/PO or Bill of Entry"
                                                     [items]="this.SHIPPING_BILL_LIST" bindLabel="value"
-                                                    [multiple]="false" (modelChanges)="DUMP_FUNCTION($event,['Select BOE'],boedropdown);
-                                            this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event" #boeselectdropdown>
+                                                    [multiple]="false" (modelChanges)="DUMP_FUNCTION($event?.value,['Select BOE'],boedropdown);
+                                            this.ALL_DROPDOWN_VALUE_LIST.BOE_PIPO=$event.value" #boeselectdropdown>
                                                 </app-ng-dropdown-custom>
                                             </div>
                                             <button type="submit" class="btn btn-primary"
@@ -492,7 +492,7 @@
                                                             [items]="this.documentService.getCurrencyList()"
                                                             [multiple]="false"
                                                             [selectedItems]="this.BOE_DETAILS?.CURRENCY"
-                                                            [(ngModelDropDown)]="DUMP.Currency">
+                                                            (modelChanges)="DUMP.Currency=$event?.type">
                                                         </app-ng-dropdown-custom>
                                                     </div>
                                                     <div class="form-group col-md-6">
@@ -518,7 +518,7 @@
                                                         <label for="inputEmail4">Commodity</label>
                                                         <app-ng-dropdown-custom formControlName="Commodity"
                                                             placeHolderText="Select Commodity"
-                                                            [(ngModelDropDown)]="DUMP.Commodity"
+                                                            (modelChanges)="DUMP.Commodity=$event?.como"
                                                             [items]="this.COMPANY_DETAILS?.commodity" bindLabel="como"
                                                             bindValue="como" [multiple]="false">
                                                         </app-ng-dropdown-custom>
@@ -561,7 +561,7 @@
                                                             formControlName="ConfirmationChargesborne"
                                                             placeHolderText="Select Confirmation Charges borne by"
                                                             [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
-                                                            [(ngModelDropDown)]="DUMP.ConfirmationChargesborne"
+                                                            (modelChanges)="DUMP.ConfirmationChargesborne=$event.value"
                                                             bindLabel="value" bindValue="value" [multiple]="false"
                                                             #ConfirmationChargesborne>
                                                         </app-ng-dropdown-custom>
@@ -572,7 +572,7 @@
                                                             formControlName="DiscountingChargesborne"
                                                             placeHolderText="Select Discounting Charges borne by"
                                                             [items]="[{value:'Beneficiary'},{value:'Applicant'}]"
-                                                            [(ngModelDropDown)]="DUMP.DiscountingChargesborne"
+                                                            (modelChanges)="DUMP.DiscountingChargesborne=$event.value"
                                                             bindLabel="value" bindValue="value" [multiple]="false"
                                                             #DiscountingChargesborne>
                                                         </app-ng-dropdown-custom>
@@ -684,7 +684,7 @@
                     <div class="header-dropdown d-flex" style="gap: 10px;">
                         <app-ng-dropdown-custom placeHolderText="Select Party Name" [items]="this.ORM_BY_PARTY_NAME"
                             bindLabel="partyName" bindValue="partyName" [multiple]="false"
-                            (modelChanges)="filterData($event)" #partyname>
+                            (modelChanges)="filterData($event?.partyName)" #partyname>
                         </app-ng-dropdown-custom>
                     </div>
                     <div class="d-flex" style="height: 76vh;">

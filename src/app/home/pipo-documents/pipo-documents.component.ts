@@ -277,7 +277,6 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     if (this.item4 && this.item4.length) {
       for (let pipo of this.item1) {
         for (let boedata of this.item4) {
-          console.log('line 254', boedata);
           for (let i = 0; i <= boedata.pipo.length; i++) {
             if (pipo._id == boedata.pipo[i]) {
               const newVal = { ...pipo };
@@ -288,9 +287,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
               newVal['invoiceAmount'] = boedata.invoiceAmount;
               newVal['dischargePort'] = boedata.dischargePort;
               newVal['freightAmount'] = boedata.freightAmount;
-              console.log('Line no 271', newVal);
               filterboedata.push(newVal);
-              console.log('Line no. 273', filterboedata);
             }
           }
         }
@@ -308,7 +305,6 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
         filterboedata.push(newVal);
       }
     }
-
     this.item3 = filterboedata;
     console.log('aaa',this.item3);
   }
@@ -337,12 +333,8 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   getDropDownItems() {
     this.userService.getTeam().subscribe(
       (data) => {
-
-
         this.locationArray = data['data'][0]['location'];
         this.commodityArray = data['data'][0]['commodity'];
-        console.log("--------->locationArray", this.locationArray)
-        console.log("--------->commodityArray", this.commodityArray)
       },
       (error) => {
         console.log('error');
@@ -352,25 +344,20 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     this.userService.getBuyer(1).subscribe(
       (res: any) => {
         this.benneDetailArray = res.data
-        console.log("--------->benneDetailArray", this.benneDetailArray)
-
       },
       (err) => console.log('Error', err)
     );
   }
 
   lcFun(a) {
-    console.log('s');
     this.lcNumber = a;
   }
 
   amountFun(a) {
-    console.log('l');
     this.lcAmount = a;
   }
 
   currencyFun(a) {
-    console.log('r');
     this.lcCurrency = a;
   }
 
@@ -429,7 +416,6 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   }
 
   initCourse() {
-    console.log('hdhdhdh');
     return this.formBuilder.group({
       date: ['', Validators.required],
       description: ['', [Validators.required, Validators.maxLength(11)]],
@@ -443,7 +429,6 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   }
 
   clickBene(value) {
-    console.log('hhddh');
     this.beneValue = value;
   }
 

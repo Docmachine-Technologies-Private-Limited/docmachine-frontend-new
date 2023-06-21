@@ -1,0 +1,97 @@
+
+.documents-panel-status{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    padding: 10px;
+}
+
+.documents-panel-status .left-log-panel {
+    display: block;
+    transition: all 1s ease-in-out;
+}
+
+.documents-panel-status .left-log-panel::after {
+    content: "";
+    width: 135px;
+    display: block;
+    border-bottom: 2px solid #13a6dc;
+    margin-top: -13px;
+    margin-left: 25px;
+}
+
+
+.documents-panel-status .left-log-panel.found::before {
+    content: "\2713";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0;
+    margin-top: 0;
+    color: #fff;
+    background: #49A2D7;
+    border-radius: 50px;
+    height: 25px;
+    width: 25px;
+    font-weight: bold;
+    font-family: fantasy;
+    font-size: larger;
+}
+
+.documents-panel-status .left-log-panel.not-found::before{
+    content: "\d7";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0;
+    margin-top: 0;
+    color: #fff;
+    background: #ff0303;
+    border-radius: 50px;
+    height: 25px;
+    width: 25px;
+    font-weight: 700;
+    font-family: fantasy;
+    font-size: larger;
+    box-shadow: 0px 0px 7px 3px #1244af;
+    padding-top: 3px;
+}
+
+.documents-panel-status .left-log-panel-last-child::after {
+    content: '';
+    border-bottom: 0px solid transparent;
+}
+
+.documents-panel-status .text-with-circle {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 7px;
+}
+
+.documents-panel-status .text-log{
+    font-size: 15px;
+    margin: auto;
+    margin-left: 0 !important;
+}
+
+.documents-panel-status .button-view{
+    margin: auto;
+    margin-left: 0;
+    margin-top: 10px
+}
+
+.documents-panel-status .button-view button{
+    background: transparent;
+    color: black;
+    border: navajowhite;
+    text-decoration-line: underline;
+    margin-left: -15px;
+}
+
+.documents-panel-status .view-pdf-text{
+    margin: auto;
+    margin-left: 0;
+}

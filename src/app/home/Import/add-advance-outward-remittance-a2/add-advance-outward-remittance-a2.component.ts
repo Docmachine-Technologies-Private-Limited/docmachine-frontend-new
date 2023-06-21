@@ -134,6 +134,7 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   BOE_DETAILS: any = [];
   PURPOSE_CODE_FILTER_DATA: any = [];
   PURPOSE_CODE_LIST_DATA: any = [];
+  CURRENCY_LIST:any=[];
 
   toppings: any = this.formBuilder.group({
     FormA2CumApplication: new FormControl({ value: false, disabled: true }),
@@ -168,6 +169,8 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       Authorization: this.authToken,
       timeout: `${200000}`
     };
+    this.CURRENCY_LIST=this.documentService.getCurrencyList();
+    console.log(this.CURRENCY_LIST,'CURRENCY_LIST')
     this.A2_JSON_DATA = A2_JOSN;
     this.A2_JSON_DATA.forEach(element => {
       for (const key in element) {
@@ -275,42 +278,20 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   changepipo(id) {
     let temp = [];
     this.pipoData = [];
-    temp = this.benneDetail.filter(items => items?.benneName.includes(id));
+    temp = this.benneDetail.filter(items => items?._id.includes(id?._id));
     this.selectedBenne = temp.pop();
-    this.CA_CERTIFICATE_FORM['SupplierName'] = id
+    this.CA_CERTIFICATE_FORM['SupplierName'] = id?.benneName
     console.log('this.selectedBenneName', this.selectedBenne);
     this.pipoDataService.getPipoListByCustomer('import', this.selectedBenne?.benneName).then((data: any) => {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data: any) => {
         console.log(data, 'data2222..................')
         for (let index = 0; index < data.length; index++) {
-          var AdvanceRemittanceflow: any = data[index]?.TransactionRef?.filter((item: any) => item?.TypeTransaction?.includes('Advance-Remittance-flow'));
-          var SumAdvanceRemittanceflow = AdvanceRemittanceflow.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems?.data?.formdata?.RemittanceTotalAmount), 0);
-          data[index]['balanceAmount'] = data[index]?.amount - parseFloat(SumAdvanceRemittanceflow);
           if (data[index]?.balanceAmount != '0' && data[index]?.balanceAmount != 0) {
             this.LIST_PIPO[data[index]['_id']] = data[index];
             this.pipoData.push(data[index]);
           }
         }
-        this.PIPO_LIST = {
-          PIPO_NAME_LIST: [],
-          data: [],
-          original_data: []
-        };
-        // for (let index = 0; index < data?.data.length; index++) {
-        //   data.data[index]['isExpand'] = false;
-        //   data.data[index]['CI_EXPAND'] = false;
-        //   if (data?.data[index]?.balanceAmount == '-1') {
-        //     data.data[index]['balanceAmount'] = data?.data[index]?.invoiceAmount
-        //   }
-        //   if (data?.data[index]?.balanceAmount != '0') {
-        //     this.PIPO_LIST['data'].push(data?.data[index]);
-        //   }
-        //   this.PIPO_LIST['original_data'].push(data?.data[index])
-        //   if (data?.data[index]?.pi_poNo != '' && !this.PIPO_LIST['PIPO_NAME_LIST'].includes(data?.data[index]?.pi_poNo)) {
-        //     this.PIPO_LIST['PIPO_NAME_LIST'].push({ value: data?.data[index]?.pi_poNo, id: data?.data[index]?._id })
-        //   }
-        // }
         console.log('importpipolist', this.pipoData, this.LIST_PIPO);
       });
     });;
@@ -429,9 +410,9 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
   BANK_DETAILS: any = [];
   OTHER_BANK_VISIBLE: boolean = false
   onSelectBank(value) {
-    this.selectedBankName = value;
-    this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value))[0]?.org;
-    console.log(this.BANK_DETAILS, 'this.BANK_DETAILS')
+    this.selectedBankName = value?.id;
+    this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value?.id))[0]?.org;
+    console.log(this.BANK_DETAILS,value, 'this.BANK_DETAILS')
     this.bankformat = ''
     this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
     console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
@@ -891,6 +872,9 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.EXTRA_DOCUMENTS['DEBIT_NOTES_DOCUMENTS'].forEach(element => {
         temp_doc.push(element)
       });
+      this.pipoForm.value.bank = this.pipoForm.controls?.bank
+      this.pipoForm.value.benneName = this.pipoForm.controls?.benneName
+      
       var approval_data: any = {
         id: UniqueId+'_'+this.randomId(10),
         tableName: 'Advance-Remittance-A2',
@@ -942,7 +926,19 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
                     console.log('king123');
                     console.log(data);
                     if ((index + 1) == this.selectedItems.length) {
-                      this.router.navigate(['/home/dashboardTask'])
+                      var updateapproval_data: any = {
+                        RejectData: {
+                          tableName: 'pi_po',
+                          id: approval_data?.id,
+                          TransactionId: res1._id,
+                          data:this.pipoForm.value,
+                          pipo_id:pipo_id,
+                          pipo_name:pipo_name
+                        }
+                      }
+                      this.documentService.UpdateApproval(approval_data?.id,updateapproval_data).subscribe((res1: any) => {
+                        this.router.navigate(['/home/dashboardTask'])
+                      });
                     }
                   }, (error) => {
                     console.log('error');

@@ -13,6 +13,9 @@ import { StorageEncryptionDecryptionService } from './Storage/storage-encryption
 import { ToastrService } from 'ngx-toastr';
 import { SocketIoService } from './service/SocketIo/socket-io.service';
 
+import { Observable, Observer, fromEvent, merge } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,8 +26,8 @@ export class AppComponent implements OnInit, OnDestroy {
   userActivity;
   userInactive: Subject<any> = new Subject();
   DelayTime: any = '';
-
-  WithoutAuthorization: any = ['RoleVerifyEmail','verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
+  isOnline: boolean = true;
+  WithoutAuthorization: any = ['RoleVerifyEmail', 'verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
   constructor(
     private translate: TranslateService,
     private router: Router,
@@ -37,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public socketioservice: SocketIoService,
     public authGuard: AuthGuard) {
     this.translate.setDefaultLang('en');
-
+    this.createOnline$().subscribe(isOnline =>this.isOnline=isOnline);
     this.setTimeoutNew();
     router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
@@ -142,5 +145,18 @@ export class AppComponent implements OnInit, OnDestroy {
     const date = new Date(0);
     date.setUTCSeconds(decodedToken.exp);
     return date;
+  }
+
+  createOnline$() {
+    return merge<any>(
+      fromEvent(window, 'offline').pipe(map(() => false)),
+      fromEvent(window, 'online').pipe(map(() => true)),
+      new Observable((sub: Observer<boolean>) => {
+        sub.next(navigator.onLine);
+        sub.complete();
+      }));
+  }
+  reload(){
+    window.location.reload()
   }
 }

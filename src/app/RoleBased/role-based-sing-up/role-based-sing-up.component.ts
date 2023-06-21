@@ -24,8 +24,10 @@ export class RoleBasedSingUpComponent implements OnInit {
     this.userForm.value.role=this.RoleType
     this.userService.RoleBaseSingUp(this.userForm.value).subscribe((res: any) => {
       console.log(res, 'hfhffgffg')
-      this.toastr.success('Successfully create role base account...')
+      this.toastr.success('Successfully create role base account...');
+      this.toastr.success('Also check registrated email id..')
     },(err)=>{
+       this.toastr.error(err?.error?.text);
        console.log(err,'sdfsdhfsdklfhdsfksdfsdfds')
     })
     console.log(this.userForm.value, 'sdsgjdfgsdfdf')
@@ -33,6 +35,6 @@ export class RoleBasedSingUpComponent implements OnInit {
   
   RoleType:any=''
   ChangesRoleType(role:any){
-    this.RoleType=role;
+    this.RoleType=role?.value;
   }
 }

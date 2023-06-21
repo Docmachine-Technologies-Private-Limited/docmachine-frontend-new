@@ -74,7 +74,7 @@
                                     <label for="exampleInputEmail1" class="form-label">Select bank*</label>
                                     <app-ng-dropdown-custom placeHolderText="Select Bank Name" #Bank_Name
                                       [items]="this.bankDetail" bindLabel="value" [ngModel]="form?.bank_name"
-                                      formControlName="bank_name" (modelChanges)="form.bank_name=$event" bindValue="id"
+                                      formControlName="bank_name" (modelChanges)="form.bank_name=$event?.value" bindValue="id"
                                       [multiple]="false" (modelChanges)="setradio($event)">
                                     </app-ng-dropdown-custom>
                                   </div>
@@ -106,7 +106,7 @@
                                     <app-ng-dropdown-custom class="PopupOpen" popup-close="ShippingBill"
                                       placeHolderText="Select PI/PO or shipping bill" [items]="this.SHIPPING_BILL_LIST"
                                       bindLabel="value" [multiple]="false"
-                                      (modelChanges)="DUMP_FUNCTION($event,'Shipping bill',content1)"
+                                      (modelChanges)="DUMP_FUNCTION($event?.value,'Shipping bill',content1)"
                                       #PI_PO_shipping_bill>
                                     </app-ng-dropdown-custom>
 
@@ -614,7 +614,7 @@
           <div class="container_innser" style="overflow: auto;height: calc(100vh - 170px);padding: 10px;">
             <div class="d-flex justify-content-between mb-1 p-2">
               <app-ng-dropdown-custom placeHolderText="Select Buyer Name" [items]="this.buyerName" bindLabel="value"
-                [multiple]="false" (modelChanges)="filterBuyerName($event)" #buyerNameSelection>
+                [multiple]="false" (modelChanges)="filterBuyerName($event?.value)" #buyerNameSelection>
               </app-ng-dropdown-custom>
               <app-ng-dropdown-custom *ngIf="this.Lodgement['ThirdPartyRemittance']['Show']=='yes'"
                 placeHolderText="Select Party Name" [items]="this.irBuyerName" bindLabel="value" [multiple]="false"

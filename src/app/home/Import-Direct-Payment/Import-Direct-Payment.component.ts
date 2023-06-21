@@ -64,7 +64,6 @@ export class ImportDirectPaymentComponent implements OnInit {
 
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
-  // ----------------------------------
 
   opinionReport: boolean = false;
   document: any;
@@ -211,8 +210,8 @@ export class ImportDirectPaymentComponent implements OnInit {
   }
   ORM_BY_PARTY_NAME: any = [];
   changepipo(value) {
-    this.selectedBenne = this.benneDetail.filter((item) => item?.benneName?.includes(value))[0];
-    this.documentService.getBoedatabyPartName(value).subscribe((res: any) => {
+    this.selectedBenne = this.benneDetail.filter((item) => item?.benneName?.includes(value?.benneName))[0];
+    this.documentService.getBoedatabyPartName(value?.benneName).subscribe((res: any) => {
       console.log('Data fetched successfully', res);
       this.pipoData = res.data;
       for (let index = 0; index < res.data.length; index++) {
@@ -233,7 +232,7 @@ export class ImportDirectPaymentComponent implements OnInit {
         }
       }
       console.log('importpipolist', this.pipoData, this.LIST_PIPO);
-      this.documentService.getbyPartyName(value).subscribe((res: any) => {
+      this.documentService.getbyPartyName(value?.benneName).subscribe((res: any) => {
         console.log(res, 'getbyPartyName');
         this.ORM_BY_PARTY_NAME = res?.data;
         res?.data.forEach(element => {
@@ -298,8 +297,8 @@ export class ImportDirectPaymentComponent implements OnInit {
   bankformat: any = ''
 
   onSelectBank(value) {
-    this.selectedBankName = value;
-    this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value))[0]?.org;
+    this.selectedBankName = value?.id;
+    this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value?.id))[0]?.org;
     console.log(this.BANK_DETAILS, 'this.BANK_DETAILS')
     this.bankformat = ''
     this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
@@ -630,9 +629,9 @@ export class ImportDirectPaymentComponent implements OnInit {
       if (this.uploadUrl != undefined && this.uploadUrl != '' && this.uploadUrl != null) {
         this.PREVIEWS_URL_LIST[1] = {
           name: 'Oponin',
-          pdf: this.uploadUrl
+          pdf: this.uploadUrl_Original
         };
-        this.ALL_DOCUMENTS.push(this.uploadUrl);
+        this.ALL_DOCUMENTS.push(this.uploadUrl_Original);
       }
       console.log('pipoForm', this.pipoForm)
       for (let i = 0; i < this.ITEM_FILL_PDF.length; i++) {
@@ -676,8 +675,8 @@ export class ImportDirectPaymentComponent implements OnInit {
       this.PREVIEWS_URL_LIST.push(this.ORIGINAL_PDF)
       this.ALL_DOCUMENTS.push(this.ORIGINAL_PDF)
       if (this.uploadUrl != undefined && this.uploadUrl != '' && this.uploadUrl != null) {
-        this.PREVIEWS_URL_LIST.push(this.uploadUrl)
-        this.ALL_DOCUMENTS.push(this.uploadUrl)
+        this.PREVIEWS_URL_LIST.push(this.uploadUrl_Original)
+        this.ALL_DOCUMENTS.push(this.uploadUrl_Original)
       }
       console.log('pipoForm', this.pipoForm)
       $(document).ready(() => {
@@ -764,7 +763,7 @@ export class ImportDirectPaymentComponent implements OnInit {
   SendApproval(Status: string, UniqueId: any) {
     if (UniqueId != null) {
       var approval_data: any = {
-        id: UniqueId,
+        id: UniqueId+'_'+this.randomId(10),
         tableName: 'Import-Direct-Payment',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
@@ -783,6 +782,9 @@ export class ImportDirectPaymentComponent implements OnInit {
             pipo_id.push(this.ITEM_FILL_PDF[index]?.pipo[0]?._id)
             pipo_name.push(this.ITEM_FILL_PDF[index]?.pipo[0]?.pi_poNo)
           }
+          this.pipoForm.value.bank = this.pipoForm.controls?.bank
+          this.pipoForm.value.benneName = this.pipoForm.controls?.benneName
+          
           var data: any = {
             data: {
               formdata: this.pipoForm.value,
@@ -811,7 +813,19 @@ export class ImportDirectPaymentComponent implements OnInit {
                 this.documentService.updateBoe({ balanceAmount: REAMAING_AMOUNT, moredata: [element] }, element?._id).subscribe((updateBoeres: any) => {
                   console.log(updateBoeres, 'updateBoeres');
                   if ((index + 1) == this.MAIN_DATA.length) {
-                    this.router.navigate(['/home/dashboardTask'])
+                   var updateapproval_data: any = {
+                      RejectData: {
+                        tableName: 'boerecords',
+                        id:approval_data?.id,
+                        TransactionId: res1._id,
+                        data:this.pipoForm.value,
+                        pipo_id:pipo_id,
+                        pipo_name:pipo_name
+                      }
+                    }
+                    this.documentService.UpdateApproval(approval_data?.id,updateapproval_data).subscribe((res1: any) => {
+                      this.router.navigate(['/home/dashboardTask'])
+                    });
                   }
                 })
               }
@@ -971,13 +985,14 @@ export class ImportDirectPaymentComponent implements OnInit {
     this.timeout = setTimeout(() => {
       this.Remittance_Amount = this.pipoForm?.value?.BOETerm.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
       console.log(this.pipoForm, 'pipoFormpipoFormpipoForm')
-      this.MAIN_DATA.forEach(element => {
-        if (element?.boeNumber == value) {
-          element['Remittance_Amount'] = this.pipoForm?.value?.BOETerm[index]?.remittanceAmount
-        }
-      });
       this.OTHER_BANK_VISIBLE = true;
       this.fillForm()
+      if (this.Remittance_Amount > this.MAIN_DATA[index]?.balanceAmount) {
+        this.MAIN_DATA[index]['Remittance_Amount'] = this.MAIN_DATA[index]?.balanceAmount;
+        this.toastr.error('You added more than amount your boe amount....');
+      }else{
+        this.MAIN_DATA[index]['Remittance_Amount'] = this.pipoForm?.value?.BOETerm[index]?.remittanceAmount
+      }
     }, 500)
   }
   CloseAllExpand(event: any, data: any, index: any) {
@@ -985,5 +1000,8 @@ export class ImportDirectPaymentComponent implements OnInit {
     $('.table-tr-1').removeClass('Table-Show')
     $('.table-tr-1').addClass('Table-Hide')
   }
+  randomId(length = 6) {
+    return Math.random().toString(36).substring(2, length + 2);
+  };
 }
 

@@ -88,8 +88,7 @@ export class SigninComponent implements OnInit {
               emailId: res?.docs?.emailId,
               role: res?.docs?.role
             }))
-            // window.open("http://localhost:42001/login/"+res?.docs?.token, "_self")
-             window.open("https://role.bharathexim.com/login/"+res?.docs?.token, "_self")
+             window.open(AppConfig?.ROLE_URL+"/login/"+res?.docs?.token, "_self")
           }
         });
       } else {
@@ -151,17 +150,13 @@ export class SigninComponent implements OnInit {
                       this.router.navigate(['/home/caDocuments/all'])
                     } else {
                       this.userService.role = this.data['result']['role'];
-                      if (this.data1['data'][0]?.role == 'manager') {
-                        this.router.navigate(['/home'])
+                      if (this.data1['data'][0].companyId!=undefined && this.data1['data'][0].companyId!=null && this.data1['data'][0].companyId!='') {
+                        this.router.navigate(['/home/dashboardTask'])
                       } else {
-                        if (this.data1['data'][0].companyId) {
-                          this.router.navigate(['/home/dashboardTask'])
+                        if (this.data1['data'][0]?.role== 'manager') {
+                          this.router.navigate(['createTeam']);
                         } else {
-                          if (this.data1['data'][0]?.role != 'member') {
-                            this.router.navigate(['createTeam']);
-                          } else {
-                            this.router.navigate(['/home/dashboardTask'])
-                          }
+                          this.router.navigate(['/home/dashboardTask'])
                         }
                       }
                     }

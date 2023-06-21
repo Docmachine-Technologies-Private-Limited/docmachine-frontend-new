@@ -189,21 +189,18 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
 
   changepipo(id) {
     let temp = [];
-    this.pipoData = [];
     temp = this.benneDetail.filter(items => {
-      return items._id == id
+      return items._id == id?._id
     });
     this.selectedBenne = temp.pop();
 
-    console.log('this.selectedBenneName', this.selectedBenne);
+    console.log('this.selectedBenneName', id, this.selectedBenne);
     this.pipoDataService.getPipoListByCustomer('import', this.selectedBenne.benneName).then((data: any) => {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
         console.log(data, 'data2222..................')
+        this.pipoData = [];
         for (let index = 0; index < data.length; index++) {
-          var AdvanceRemittanceflow: any = data[index]?.TransactionRef?.filter((item: any) => item?.TypeTransaction?.includes('Advance-Remittance-flow'));
-          var SumAdvanceRemittanceflow = AdvanceRemittanceflow.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems?.data?.formdata?.RemittanceTotalAmount), 0);
-          data[index]['balanceAmount'] = data[index]?.amount - parseFloat(SumAdvanceRemittanceflow);
           if (data[index]?.balanceAmount != '0' && data[index]?.balanceAmount != 0) {
             this.LIST_PIPO[data[index]['_id']] = data[index];
             this.pipoData.push(data[index]);
@@ -292,9 +289,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
   BANK_DETAILS: any = [];
   OTHER_BANK_VISIBLE: boolean = false
   onSelectBank(value) {
-    this.selectedBankName = value;
-    this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value))[0]?.org;
-    console.log(this.BANK_DETAILS, 'this.BANK_DETAILS')
+    this.selectedBankName = value?.id;
+    this.BANK_DETAILS = this.bankDetail.filter((item) => item?.id.includes(value?.id))[0]?.org;
+    console.log(this.BANK_DETAILS, value, 'this.BANK_DETAILS')
     this.bankformat = ''
     this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
     console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
@@ -507,7 +504,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.uploadUrl_Original = args[1].data;
     this.uploadUrl = args[1].data;
     console.log("this.uploadUrl", this.uploadUrl);
-    this.width=100;
+    this.width = 100;
   }
 
   submit(e) {
@@ -548,7 +545,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       .subscribe(() => {
         this.width = this.width + 1;
       });
-
   }
 
   public loadFromLocalStorage() {
@@ -556,32 +552,30 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.authToken = token;
     return this.authToken;
   }
-  REMIITANCE_SUM: any = 0;
-  REMIITANCE_AMOUNT:any=[];
   
+  REMIITANCE_SUM: any = 0;
+  REMIITANCE_AMOUNT: any = [];
+
   InputKeyPress(index: any) {
     this.OTHER_BANK_VISIBLE = false;
     setTimeout(() => {
       this.fillForm()
       this.OTHER_BANK_VISIBLE = true;
       this.REMIITANCE_SUM = this.pipoForm?.controls?.pipoTerm?.value.reduce((pv, selitems) => parseFloat(pv) + parseFloat(selitems.remittanceAmount), 0);
-      this.REMIITANCE_AMOUNT[index]= this.pipoForm?.controls?.pipoTerm?.value[index]?.remittanceAmount;
-      
-      if (this.REMIITANCE_SUM>this.selectedItems[index]?.balanceAmount) {
+      this.REMIITANCE_AMOUNT[index] = this.pipoForm?.controls?.pipoTerm?.value[index]?.remittanceAmount;
+
+      if (this.REMIITANCE_SUM > this.selectedItems[index]?.balanceAmount) {
         this.toastr.error('You added more than amount your pipo amount....');
-        this.REMIITANCE_SUM=this.selectedItems[index]?.balanceAmount;
-        this.REMIITANCE_AMOUNT[index]=this.selectedItems[index]?.balanceAmount
+        this.REMIITANCE_SUM = this.selectedItems[index]?.balanceAmount;
+        this.REMIITANCE_AMOUNT[index] = this.selectedItems[index]?.balanceAmount
       }
     }, 500)
     console.log(this.pipoForm.controls.pipoTerm, this.selectedItems, 'this.pipoForm.controls.pipoTerm')
   }
-  // ----------------------------- end handle image upload ----------------------------------
-
 
   getItems(form) {
     return form.get('pipoTerm').controls;
   }
-
 
   addItems(index, id) {
     const control = this.pipoForm.controls.pipoTerm as FormArray;
@@ -598,8 +592,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     let control = this.pipoForm.controls.pipoTerm as FormArray;
     control.removeAt(i);
   }
+  
   PDF_LIST: any = [];
-
   SlideToggle(event, i) {
     $(".accordion-item").find(".accordion-contant").css('display', 'none')
     $(event?.target?.parentElement).parent(".accordion-item").find(".accordion-contant").slideToggle();
@@ -622,6 +616,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       }
     }
   }
+  
   PREVIEWS_URL_STRING: any = '';
   async PREVIEWS_URL(model, id) {
     this.PREVIEWS_URL_LIST = [];
@@ -745,8 +740,10 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
           }
         }
       }
+      this.pipoForm.value.bank = this.pipoForm.controls?.bank
+      this.pipoForm.value.benneName = this.pipoForm.controls?.benneName
       var approval_data: any = {
-        id: UniqueId+'_'+this.randomId(10),
+        id: UniqueId + '_' + this.randomId(10),
         tableName: 'Advance-Remittance-flow',
         deleteflag: '-1',
         userdetails: this.USER_DATA,
@@ -795,7 +792,19 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
                     console.log('king123');
                     console.log(data);
                     if ((index + 1) == this.selectedItems.length) {
-                      this.router.navigate(['/home/dashboardTask'])
+                      var updateapproval_data: any = {
+                        RejectData: {
+                          tableName: 'pi_po',
+                          id:approval_data?.id,
+                          TransactionId: res1._id,
+                          data:this.pipoForm.value,
+                          pipo_id:pipo_id,
+                          pipo_name:pipo_name
+                        }
+                      }
+                      this.documentService.UpdateApproval(approval_data?.id,updateapproval_data).subscribe((res1: any) => {
+                        this.router.navigate(['/home/dashboardTask'])
+                      });
                     }
                   }, (error) => {
                     console.log('error');
@@ -825,7 +834,8 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
         }
       });
     }
-    console.log(UniqueId, approval_data, 'uiiiiiiiiiiiiii')
+
+    console.log(UniqueId, approval_data, this.pipoForm, 'uiiiiiiiiiiiiii')
   }
   getStatusCheckerMaker(id) {
     return new Promise((resolve, reject) => {
@@ -833,9 +843,6 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     })
   }
   randomId(length = 6) {
-    return Math.random().toString(36).substring(2, length+2);
+    return Math.random().toString(36).substring(2, length + 2);
   };
 }
-
-// PROFORMA INVOICE
-

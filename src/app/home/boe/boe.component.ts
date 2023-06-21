@@ -12,6 +12,10 @@ import * as data1 from '../../currency.json';
 import { MatDialog } from '@angular/material/dialog';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
+import JSZip from 'jszip/dist/jszip';
+import * as FileSaver from 'file-saver';
+import { MergePdfListService } from '../merge-pdf-list.service';
+import { PDFDocument } from 'pdf-lib';
 
 @Component({
   selector: 'app-boe',
@@ -58,6 +62,7 @@ export class BOEComponent implements OnInit {
     private sharedData : SharedDataService,
     private userService: UserService,
     public wininfo: WindowInformationService,
+    public pdfmerge: MergePdfListService,
     public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
 
@@ -269,5 +274,104 @@ export class BOEComponent implements OnInit {
       });
     }
   }
+  SHIPPING_BILL_ALL_RELATED_DOCUMENTS: any = [];
+  SHIPPING_BILL: any = [];
+  SbSearch(value: any) {
+    this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS = [];
+    var doclist: any = this.item1.filter((item: any) => item?.boeNumber==value);
+    this.FILTER_VALUE_LIST=doclist;
+    if (doclist.length==0) {
+      this.resetFilter();
+    }
+    this.SHIPPING_BILL = value;
+    doclist.forEach(element => {
+      this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.doc, name: 'BOE', status: false })
+      // this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.blCopyDoc, name: 'Bl Copy', status: false })
+      this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.CI_DETAILS?.commercialDoc, name: 'Commercial', status: false })
+    });
+  }
+  tickdoc(event: any, index: any) {
+    if (event?.target.checked) {
+      this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS[index]['status'] = true
+    } else {
+      this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS[index]['status'] = false
+    }
+    console.log(this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS, 'this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS')
+  }
 
+  async download(doclist: any,type:any) {
+    var temp: any = [];
+    var temp_name: any = [];
+    await doclist.forEach(async (element) => {
+      if (element?.doc != undefined && element?.status == true) {
+        await temp.push(element?.doc)
+        await temp_name.push(element?.name)
+      }
+    });
+    if (temp.length != 0) {
+      var fitertemp: any = temp.filter(n => n)
+      await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
+        console.log(merge, 'mergeAllPDFs')
+        if (type=='merge') {
+          this.downloadAsSingleFile('MergePdf_' + new Date().toUTCString(), merge?.actulapdfbase64);
+        }else if (type=='zip') {
+          this.downloadZip('All_Documents_' + new Date().toUTCString(), merge?.actulapdfbase64, temp_name);
+        }
+      });
+    } else {
+      this.toastr.error('Please select documents checkbox...')
+    }
+  }
+
+  downloadZip(name_zip, pdfByteArrays: any, namelist: any) {
+    var zip: any = new JSZip();
+    var pdf = zip.folder("pdfs") as any;
+    pdfByteArrays.forEach((value, i) => {
+      pdf.file(namelist[i] + '.pdf', value?.data, { base64: true });
+    });
+    zip.generateAsync({ type: "blob" }).then(function (content) {
+      FileSaver.saveAs(content, name_zip + ".zip");
+    });
+  }
+  downloadAsSingleFile = async (filename, pdfDoc: any) => {
+    this.blobToSaveAs(filename, pdfDoc)
+  };
+
+  blobToSaveAs(fileName: any, arraybuffer: any) {
+    try {
+      const downloadLink = document.createElement("a");
+      this.mergePdfs(arraybuffer).then((res: any) => {
+        downloadLink.href = res?.merge;
+        downloadLink.download = fileName;
+        downloadLink.click();
+      })
+    } catch (e) {
+      console.error('BlobToSaveAs error', e);
+    }
+  }
+  mergePdfs(pdfsToMerges) {
+    return new Promise(async (resolve, reject) => {
+      const mergedPdf = await PDFDocument.create();
+      const actions = pdfsToMerges.map(async pdfBuffer => {
+        const pdf = await PDFDocument.load(this.toArrayBuffer(pdfBuffer?.data));
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach((page) => {
+          mergedPdf.addPage(page);
+        });
+      });
+      await Promise.all(actions);
+      const pdfDataUri = await mergedPdf.saveAsBase64({ dataUri: true });
+      var data_pdf = await pdfDataUri.substring(pdfDataUri.indexOf(',') + 1);
+      var merge = 'data:application/pdf;base64,' + data_pdf;
+      await resolve({ merge: merge, pdfDataUri: pdfDataUri, data_pdf: data_pdf })
+    })
+  }
+  toArrayBuffer(buffer) {
+    const arrayBuffer = new ArrayBuffer(buffer.length);
+    const view = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < buffer.length; ++i) {
+      view[i] = buffer[i];
+    }
+    return arrayBuffer;
+  }
 }

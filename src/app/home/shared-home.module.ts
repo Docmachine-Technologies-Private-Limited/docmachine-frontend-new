@@ -49,6 +49,7 @@ import { ImportLetterheadComponent } from "../custom/letterhead/ImportLetterHead
 import { CustomHoverPanelComponent } from '../custom/custom-hover-panel/custom-hover-panel.component';
 import {CustomConfirmDialogModelComponent} from '../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component'
 import { NgCustomInputComponent } from "../custom/ng-custom-input/ng-custom-input.component";
+import { CustomStatusProgressBarComponent } from "../custom/custom-status-progress-bar/custom-status-progress-bar.component";
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { NgCustomInputComponent } from "../custom/ng-custom-input/ng-custom-inpu
     ImportLetterheadComponent,
     CustomHoverPanelComponent,
     CustomConfirmDialogModelComponent,
-    NgCustomInputComponent
+    NgCustomInputComponent,
+    CustomStatusProgressBarComponent
   ],
   imports: [
     CommonModule,
@@ -138,7 +140,8 @@ import { NgCustomInputComponent } from "../custom/ng-custom-input/ng-custom-inpu
     ImportLetterheadComponent,
     CustomHoverPanelComponent,
     CustomConfirmDialogModelComponent,
-    NgCustomInputComponent
+    NgCustomInputComponent,
+    CustomStatusProgressBarComponent
   ],
 })
 export class SharedHomeModule { }

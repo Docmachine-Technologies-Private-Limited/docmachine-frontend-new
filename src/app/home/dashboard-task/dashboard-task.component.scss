@@ -975,8 +975,7 @@ body {
 .submission_sec_table_scroll {
     display: inline-block;
     width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: auto;
     min-height: 50px;
     max-height: 229px;
 }

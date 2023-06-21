@@ -1,5 +1,7 @@
 export const AppConfig = {
   production: false,
   environment: 'LOCAL',
-  BASE_URL: 'http://localhost:80/v1',
+  BASE_URL: 'http://localhost:8080/v1',
+  ROLE_URL:'http://localhost:4201',
+  FRONT_END_URL:'http://localhost:4200/'
 };

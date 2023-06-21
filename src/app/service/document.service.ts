@@ -21,7 +21,8 @@ export class DocumentService {
   pipolist: any = [];
   OUTWARD_REMITTANCE_ADVICE_SHEET: any = [];
   MT102_SUBJECT: any = []
-
+  AppConfig:any=AppConfig
+  
   constructor(public http: HttpClient, private router: Router,) {
     this.api_base = AppConfig?.BASE_URL;
     console.log(this.api_base);
@@ -596,6 +597,7 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/Approval/add`, { data: data }, httpOptions);
   }
+  
   getPendingStatus(id: any) {
     this.loadFromLocalStorage();
     const httpOptions = {
@@ -603,6 +605,31 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/Approval/getPendingStatus`, { FileType: id }, httpOptions);
   }
+  
+  UpdateApproval(id: any,data:any) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/UpdateApproval`, { id: id,data:data }, httpOptions);
+  }
+  
+  getDataAnyTable(tableName: any,id:any) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/getDataAnyTable`, { tableName: tableName,id:id}, httpOptions);
+  }
+  
+  UpdateAnyTable(tableName: any,id:any,data:any) {
+    this.loadFromLocalStorage();
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/Approval/UpdateAnyTable`, { tableName: tableName,id:id,data:data}, httpOptions);
+  }
+  
   getVerifyStatus(id: any) {
     this.loadFromLocalStorage();
     const httpOptions = {
@@ -1911,6 +1938,7 @@ export class DocumentService {
     };
     return this.http.post(`${this.api_base}/ExportBillLodgement/add`, { data: data }, httpOptions);
   }
+  
   UpdateTransaction(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -2151,15 +2179,24 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-
     return this.http.patch(`${this.api_base}/user/updateUserById/${id}`, data, httpOptions);
   }
-
+  
+  updateUserByCompanyId(id, data) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.patch(`${this.api_base}/user/updateUserByCompanyId/${id}`, data, httpOptions);
+  }
+  
   getCurrencyList() {
     var CURRENCY_LIST: any = [];
     for (let index = 0; index < data1['default']?.length; index++) {
       CURRENCY_LIST.push({
-        type: data1['default'][index]['value']
+        type: data1['default'][index]['value'],
+        type1: data1['default'][index]['value'],
       })
     }
     return CURRENCY_LIST;

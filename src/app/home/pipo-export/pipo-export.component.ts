@@ -182,35 +182,5 @@ export class PipoExportComponent implements OnInit {
   MouseHover(event: any, id) {
     this.HOVER_DATA = '';
     this.HOVER_DATA = id;
-    clearTimeout(this.CLEAR_TIMEOUT);
-    $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'transform': 'scale(0.3)' })
-    this.CLEAR_TIMEOUT = setTimeout(() => {
-      $('#CUSTOM_HOVER_PANEL').css({ 'display': 'none', 'transform': 'scale(1)' })
-    },1000)
-    this.CUSTOM_HOVER_PANEL_MOUSE_ENTER(event)
-  }
-  MouseLeave() {
-    // $('#CUSTOM_HOVER_PANEL').css({ 'display': 'none', 'transform': 'scale(1)' })
-  }
-  CUSTOM_HOVER_PANEL_MOUSE_ENTER(event: any) {
-    console.log(event, 'djfghdfjkgfdhgkdfgfdhgfdgkdfhgfd')
-    let windowinfo: any = this.wininfo.getControllerProperties('');
-    let elem: any = document.getElementById("CUSTOM_HOVER_PANEL");
-    let rect: any = elem.getBoundingClientRect();
-    console.log(rect, 'sdgsjdhkjsdkdsfshdfds')
-    // $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'transform': 'scale(0.3)' })
-    let top: any = (parseFloat(event.target.offsetTop)) - parseInt(rect?.height + (event.target.offsetHeight + 10));
-    let left: any = (parseFloat(event.target.offsetWidth) / 2) - parseInt(rect?.width + 100);
-
-    $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'top': top + 'px', 'left': left + 'px' })
-    // if ((windowinfo?.BODY_HEIGHT > parseFloat(event.target.offsetHeight + event.target.offsetTop + 10))) {
-    //   $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'top': top + 'px', 'left': left + 'px' })
-    // } else {
-    //   let top: any = parseFloat('310') - parseFloat(event.target.offsetTop + event.target.offsetHeight + 25);
-    //   $('#CUSTOM_HOVER_PANEL').css({ 'display': 'flex', 'top': top + 'px', 'left': left + 'px' })
-    // }
-  }
-  clearTimeOutRunning() {
-    clearTimeout(this.CLEAR_TIMEOUT);
   }
 }

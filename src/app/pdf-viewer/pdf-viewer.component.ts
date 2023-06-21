@@ -34,7 +34,8 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
   @Input('downloadShow') downloadShow: boolean = true;
   @Input('base64_src') base64_src: any = '';
   @Input('htmlload') htmlload: boolean = false;
-
+  @Input('allbtnhide') allbtnhide: boolean = true;
+  
   renderText = true;
   originalSize = false;
   fitToPage = false;
