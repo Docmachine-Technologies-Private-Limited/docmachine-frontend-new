@@ -258,3 +258,29 @@ p {
 .tableclick.active-table {
     background-color: beige;
 }
+
+::ng-deep .mat-horizontal-content-container {
+    padding: 10px !important;
+}
+
+::ng-deep .mat-button,
+::ng-deep .mat-icon-button,
+::ng-deep .mat-stroked-button,
+::ng-deep .mat-flat-button {
+    background: #014677;
+}
+
+::ng-deep .mat-step-header {
+    box-shadow: 0px 0px 2px 2px #a6a6a6 !important;
+    border-radius: 50px !important;
+    height: 35px !important;
+    color: white !important;
+}
+
+::ng-deep .mat-stepper-horizontal-line {
+    margin: 0 0px !important;
+}
+
+::ng-deep .mat-tab-group {
+    width: 100%;
+}
