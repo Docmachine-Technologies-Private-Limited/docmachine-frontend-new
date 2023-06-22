@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { StorageEncryptionDecryptionService } from '../Storage/storage-encryption-decryption.service';
 
 @Injectable({ providedIn: 'root'})
 export class AuthGuard {
@@ -7,7 +8,7 @@ export class AuthGuard {
   public role: any;
     authToken: any;
 
-  constructor(public router: Router) { }
+  constructor(public router: Router, public sessionstorage: StorageEncryptionDecryptionService) { }
 
   canActivate() {
     if (this.isLoggedIn()) {
@@ -37,6 +38,6 @@ export class AuthGuard {
     sessionStorage.setItem(key,value);
   }
   public getLocalStorage(key: string):any{
-    return sessionStorage.getItem(key);
+    return this.sessionstorage.get(key)!=undefined && this.sessionstorage.get(key)!=""?this.sessionstorage.get(key):null;
   }
 }

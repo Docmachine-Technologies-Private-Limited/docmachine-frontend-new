@@ -114,11 +114,10 @@
                                         <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
                                             [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-                                            <td class="col-td-th-3">{{ data.date }}</td>
-                                            <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
+                                            <td class="col-td-th-3" [innerHTML]="data?.date"></td>
+                                            <td class="col-td-th-3" [innerHTML]="getPipoNumbers(data)"></td>
                                             <td class="col-td-th-3">
-                                                <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.creditNoteNumber}}
+                                                <div *ngIf="!optionsVisibility[i]">{{data?.creditNoteNumber}}
                                                 </div>
                                                 <div *ngIf="optionsVisibility[i]">
                                                     <input class="tblInput form-control" name="creditNoteNumber"
@@ -127,9 +126,7 @@
                                                 </div>
                                             </td>
                                             <td class="col-td-th-3">
-                                                <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.creditNoteAmount}}
-                                                </div>
+                                                <div *ngIf="!optionsVisibility[i]" [innerHTML]="data.creditNoteAmount"></div>
                                                 <div *ngIf="optionsVisibility[i]">
                                                     <input class="tblInput form-control" name="creditNoteAmount"
                                                         type="text" placeholder="Credit Note Amount"
@@ -137,15 +134,13 @@
                                                 </div>
                                             </td>
                                             <td class="col-td-th-3">
-                                                <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.currency}}
-                                                </div>
+                                                <div *ngIf="!optionsVisibility[i]" [innerHTML]="data.currency"></div>
                                                 <div *ngIf="optionsVisibility[i]">
                                                     <input class="tblInput form-control" name="currency" type="text"
                                                         placeholder="Currency" [(ngModel)]="data.currency">
                                                 </div>
                                             </td>
-                                            <td class="col-td-th-3">{{data.buyerName}}</td>
+                                            <td class="col-td-th-3" [innerHTML]="data.buyerName"></td>
                                             <td class="col-td-th-3">
                                                 <a title="view" (click)=" openCreditNote(content); viewCN(data)"><i
                                                         class="fa fa-eye" aria-hidden="true"></i></a>

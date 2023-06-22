@@ -14,7 +14,7 @@ export class MemberGuard implements CanActivate {
     public router:Router){
   }
  canActivate(route: ActivatedRouteSnapshot,state: RouterStateSnapshot) {
-      this.role=this.authGuard.getLocalStorage('PERMISSION')!=null?JSON.parse(this.authGuard.getLocalStorage('PERMISSION')):[];
+      this.role=this.authGuard.getLocalStorage('PERMISSION')!=null && this.authGuard.getLocalStorage('PERMISSION')!=""?JSON.parse(this.authGuard.getLocalStorage('PERMISSION')):[];
       return this.role['role']=='member'?true:this.FALSE();
   }
   FALSE() {

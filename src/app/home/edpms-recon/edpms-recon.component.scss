@@ -205,12 +205,17 @@ p {
 }
 
 .right-panel {
-    margin: auto;
-    margin-right: 0;
-    display: flex;
+    display: grid;
+    grid-template-columns: calc(100% - 410px) 190px 170px;
     gap: 20px;
     align-items: center;
     justify-content: center;
+    background: #fefefe;
+    border-radius: 10px;
+    box-shadow: 0 0 2px 2px #c6c2c2;
+    width: 98%;
+    position: relative;
+    margin: auto 0 auto 1%;
 }
 
 .upload-panel {
@@ -284,8 +289,8 @@ p {
 
 ::ng-deep .mat-tab-body-content {
     min-height: 200px;
-    height: calc(100% - 4px)!important;
-    overflow: auto!important;
+    height: calc(100% - 4px) !important;
+    overflow: auto !important;
     padding-top: 10px;
 }
 
@@ -300,6 +305,32 @@ p {
 .table-panel {
     width: 100%;
     margin: auto auto auto 0;
-    height: calc(100% - 95px);
+    height: calc(100% - 105px);
     overflow: auto;
+}
+
+.pagination ::ng-deep .mat-paginator-navigation-previous {
+    display: none !important;
+}
+
+.pagination ::ng-deep .mat-paginator-navigation-next {
+    display: none !important;
+}
+
+.pagination ::ng-deep .mat-paginator-range-actions {
+    display: none !important;
+}
+
+.pagination {
+    width: 190px;
+}
+
+.button-list button {
+    height: 25px;
+    margin: auto;
+    font-size: 10px;
+}
+
+::ng-deep .mat-tab-body-wrapper {
+    height: 100% !important;
 }

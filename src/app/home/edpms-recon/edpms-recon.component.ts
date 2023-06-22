@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../service/user.service';
-import { timer } from "rxjs";
+import { forkJoin, timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { DocumentService } from '../../service/document.service';
@@ -10,7 +10,7 @@ import { WindowInformationService } from '../../service/window-information.servi
 @Component({
   selector: 'app-edpms-recon',
   templateUrl: './edpms-recon.component.html',
-  styleUrls: ['./edpms-recon.component.scss']
+  styleUrls: ['./edpms-recon.component.scss'],
 })
 export class EdpmsReconComponent implements OnInit {
 
@@ -26,23 +26,30 @@ export class EdpmsReconComponent implements OnInit {
   public size;
   width: any = 0;
 
-  masterTeam;
-  masterSB;
-  masterIR;
-  masterPIPO;
-  masterExcelData;
+  masterTeam: any = [];
+  masterSB: any = [];
+  masterIR: any = [];
+  masterPIPO: any = [];
+  masterExcelData: any = [];
   bankAccounts: any = [];
   bankSelection = "";
   disableUpload = true;
-  applicant;
-  blMaster;
-  tasksMaster;
+  applicant: any = [];
+  blMaster: any = [];
+  tasksMaster: any = [];
   edpmsData: any = [];
   pipoArrayListdata: any = []
-  pipoArrayListdata2: any = []
+  pipoArrayListdata2: any = [];
+  pipoArrayListdata3: any = [];
   GET_EDMPS: any = [];
-  FILTER_EDPMS_DATA:any=[];
+  GET_EDMPS_CLEARED: any = [];
+  FILTER_EDPMS_DATA: any = [];
+  FILTER_EDPMS_CLEARED_DATA: any = [];
   SB_NO_LIST: any = [];
+  SB_NO_LIST2: any = [];
+  LIMIT: number = 10;
+  pageSizeOptionsList: any = [];
+  pageSizeOptionsList2: any = [];
 
   constructor(
     private userService: UserService,
@@ -82,66 +89,34 @@ export class EdpmsReconComponent implements OnInit {
     this.applicant = data.result?.companyId;
   }
 
-  ngOnInit(): void {
-    this.userService.getTeam()
-      .subscribe((res: any) => {
-        this.masterTeam = res?.data[0]?.bankDetails;
-        this.masterTeam.forEach((acc: any) => this.bankAccounts.push(acc?.bank));
-        console.log('banks:', this.bankAccounts);
-      }, err => {
-        console.log(err);
-      });
-
+  async ngOnInit() {
+    this.documentService.Inner_loading = true;
     this.getUserID();
-    this.documentService.getBlcopyref().subscribe((res: any) => {
-      this.blMaster = res?.data;
-    }, err => {
-      console.log(err)
+    await this.userService.getTeam().subscribe((res: any) => {
+      this.masterTeam = res?.data[0]?.bankDetails;
+      this.masterTeam.forEach((acc: any) => this.bankAccounts.push(acc?.bank));
     })
-
-    this.documentService.getAllExport("hhh").subscribe(
-      (res: any) => {
-        this.tasksMaster = res?.data;
-        console.log('tasksMaster:', this.tasksMaster);
-      },
-      (err) => console.log(err)
-    );
-
-    this.documentService.getMaster(1).subscribe(
-      (res: any) => {
-        this.masterSB = res?.data;
-        console.log('getMaster:', res);
-        this.documentService.getEDPMS().subscribe((res: any) => {
-          this.GET_EDMPS = this.addSBdata(res?.data);
-          var temp:any=[];
-          this.GET_EDMPS.forEach(element => {
-            if (this.SB_NO_LIST.includes(element?.sbNo) == false) {
-              temp.push(element?.sbNo)
-            }
-          });
-          temp.forEach(element => {
-            this.SB_NO_LIST.push({value:element})
-          });
-          this.FILTER_EDPMS_DATA=this.GET_EDMPS;
-          console.log(res, this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
-        })
-      }, (err: any) => {
-        console.log(err);
+    await this.documentService.getclearedEDPMS(this.LIMIT).subscribe((cleareddata: any) => {
+      this.GET_EDMPS_CLEARED = this.addSBdata(cleareddata?.data);
+      this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
+      this.SB_NO_LIST2 = [];
+      var temp: any = [];
+      this.GET_EDMPS_CLEARED.forEach(element => {
+        if (this.SB_NO_LIST2.includes(element?.sbNo) == false) {
+          temp.push(element?.sbNo)
+        }
       });
-    this.documentService.getPipo().subscribe(
-      (res: any) => {
-        this.masterPIPO = res?.data;
-        console.log('getPipo:', res);
-      }, err => {
-        console.log(err);
+      temp.forEach(element => {
+        this.SB_NO_LIST2.push({ value: element })
       });
-    this.documentService.getIrAdvice('').subscribe(
-      (res: any) => {
-        this.masterIR = res?.data;
-        console.log('getIrAdvice:', res);
-      }, err => {
-        console.log(err);
-      });
+      this.pageSizeOptionsList2 = [];
+      let lenforloop: number = parseInt(cleareddata?.TotalLength) / 10;
+      for (let index = 0; index < lenforloop; index++) {
+        this.pageSizeOptionsList2.push(10 * (index + 1))
+      }
+      console.log(cleareddata, 'getclearedEDPMS')
+    })
+    await this.documentService.Hide_InnerLoader();
   }
 
   chooseBank() {
@@ -168,6 +143,11 @@ export class EdpmsReconComponent implements OnInit {
     this.documentService.createEDPMS(this.preparePayload()).subscribe((res: any) => {
       console.log('create edpms res: ', res);
       this.edpmsData = res?.data;
+      this.pageSizeOptionsList = [];
+      let lenforloop: number = parseInt(res?.TotalLength) / 10;
+      for (let index = 0; index < lenforloop; index++) {
+        this.pageSizeOptionsList.push(10 * (index + 1))
+      }
       this.SBdata();
       // this.router.navigateByUrl('/home/edpms-recon-table');
     }, err => {
@@ -277,22 +257,23 @@ export class EdpmsReconComponent implements OnInit {
     console.log("onUploadInit:", args);
   }
 
-  public onUploadSuccess(args: any) {
+  async onUploadSuccess(args: any) {
     this.uploading = false;
     this.uploaded = true;
     console.log("onUploadSuccess ARGS", args);
     this.masterExcelData = args[1].data;
-    this.compareEDPMS()
+    await this.getData();
+    await this.compareEDPMS()
     console.log("onUploadSuccess DATA", this.masterExcelData);
   }
 
-  compareEDPMS() {
-    this.gatherSBdata();
-    this.saveData();
+  async compareEDPMS() {
+    await this.gatherSBdata();
+    await this.saveData();
   }
 
-  gatherSBdata() {
-    this.masterExcelData.forEach((data, i) => {
+  async gatherSBdata() {
+    await this.masterExcelData.forEach((data, i) => {
       var index = -1;
       for (let j = 0; j < this.masterSB.length; j++) {
         if (this.masterSB[j] && this.masterSB[j].sbno && this.masterSB[j].sbno == data['Shipping Bill No']) {
@@ -315,8 +296,8 @@ export class EdpmsReconComponent implements OnInit {
     console.log('this.masterExcelData', this.masterExcelData);
   }
 
-  SBdata() {
-    this.edpmsData.forEach((data, i) => {
+  async SBdata() {
+    await this.edpmsData.forEach((data, i) => {
       var index = -1;
       for (let j = 0; j < this.masterSB.length; j++) {
         if (this.masterSB[j] && this.masterSB[j]?.sbno && this.masterSB[j]?.sbno == data?.sbNo) {
@@ -404,9 +385,11 @@ export class EdpmsReconComponent implements OnInit {
       return true;
     }
   }
+
   SELECT_DOCUMENTS_VIEWS: any = '';
   SELECT_DOCUMENTS_UPLOAD: any = '';
   clearTime: any = ''
+
   dumpfun(data: any) {
     clearTimeout(this.clearTime);
     if (data?.buttontext == 'View') {
@@ -458,10 +441,17 @@ export class EdpmsReconComponent implements OnInit {
       this.pipoArrayListdata.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=packingList', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
-  
+
+  SUBMIT_BUTTON: boolean = true;
+
   clicktable2(data: any) {
     this.pipoArrayListdata2 = [];
     console.log(data, 'sdfsdfdf')
+    if (data?.pipo!=undefined && data?.doc!=undefined && data?.blCopyDoc!=undefined && data?.commercialDoc!=undefined && data?.packingDoc!=undefined) {
+      this.SUBMIT_BUTTON = false
+    } else {
+      this.SUBMIT_BUTTON = true;
+    }
     if (data?.pipo) {
       this.pipoArrayListdata2.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
     } else {
@@ -492,10 +482,155 @@ export class EdpmsReconComponent implements OnInit {
       this.pipoArrayListdata2.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=packingList', buttontext: 'Upload', popup_close: 'pdf_upload' })
     }
   }
-  EDMPS_Search(value:any){
-     this.FILTER_EDPMS_DATA=this.GET_EDMPS.filter((item:any)=>item?.sbNo?.includes(value));
-     if (this.FILTER_EDPMS_DATA.length==0) {
-      this.FILTER_EDPMS_DATA=this.GET_EDMPS;
-     }
+
+  clicktable3(data: any) {
+    this.pipoArrayListdata3 = [];
+    console.log(data, 'sdfsdfdf')
+    if (data?.pipo) {
+      this.pipoArrayListdata3.push({ status: true, text: 'Pipo doc', buttontext: 'View', doc: data?.pipo[0]?.doc, popup_close: 'pdf_view' })
+    } else {
+      this.pipoArrayListdata3.push({ status: false, text: 'Pipo doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/add-pipo/export', buttontext: 'Upload', popup_close: 'pdf_upload' })
+    }
+
+    if (data?.doc) {
+      this.pipoArrayListdata3.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
+    } else {
+      this.pipoArrayListdata3.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=sb', popup_close: 'pdf_upload' })
+    }
+
+    if (data?.blCopyDoc) {
+      this.pipoArrayListdata3.push({ status: true, text: 'blCopy doc', buttontext: 'View', doc: data?.blCopyDoc, popup_close: 'pdf_view' })
+    } else {
+      this.pipoArrayListdata3.push({ status: false, text: 'blCopy doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=blCopy', buttontext: 'Upload', popup_close: 'pdf_upload' })
+    }
+
+    if (data?.commercialDoc) {
+      this.pipoArrayListdata3.push({ status: true, text: 'commercial doc', buttontext: 'View', doc: data?.commercialDoc, popup_close: 'pdf_view' })
+    } else {
+      this.pipoArrayListdata3.push({ status: false, text: 'commercial doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=commercial', buttontext: 'Upload', popup_close: 'pdf_upload' })
+    }
+
+    if (data?.packingDoc) {
+      this.pipoArrayListdata3.push({ status: true, text: 'packing doc', buttontext: 'View', doc: data?.packingDoc, popup_close: 'pdf_view' })
+    } else {
+      this.pipoArrayListdata3.push({ status: false, text: 'packing doc', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=export;document=packingList', buttontext: 'Upload', popup_close: 'pdf_upload' })
+    }
+  }
+
+  EDMPS_Search(value: any) {
+    this.FILTER_EDPMS_DATA = this.GET_EDMPS.filter((item: any) => item?.sbNo?.includes(value));
+    if (this.FILTER_EDPMS_DATA.length == 0) {
+      this.FILTER_EDPMS_DATA = this.GET_EDMPS;
+    }
+  }
+
+  EDMPS_Search2(value: any) {
+    this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED.filter((item: any) => item?.sbNo?.includes(value));
+    if (this.FILTER_EDPMS_CLEARED_DATA.length == 0) {
+      this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
+    }
+  }
+
+  onTabChanged(event) {
+    console.log(event, 'afasfaasfasfsa')
+    if (event?.tab?.textLabel == 'Previous Data') {
+      this.getData()
+    }
+  }
+
+  async getData() {
+    this.documentService.Inner_loading = true;
+    await this.documentService.getBlcopyref().subscribe((res: any) => {
+      this.blMaster = res?.data;
+    }, err => {
+      console.log(err)
+    })
+
+    await this.documentService.getAllExport("hhh").subscribe((res: any) => {
+      this.tasksMaster = res?.data;
+      console.log('tasksMaster:', this.tasksMaster);
+    },
+      (err) => console.log(err)
+    );
+
+    await this.documentService.getMaster(1).subscribe((res: any) => {
+      this.masterSB = res?.data;
+      console.log('getMaster:', res);
+      this.documentService.getEDPMSbyLimit(this.LIMIT).subscribe((res: any) => {
+        this.SB_NO_LIST = [];
+        this.GET_EDMPS = this.addSBdata(res?.data);
+        var temp: any = [];
+        this.GET_EDMPS.forEach(element => {
+          if (this.SB_NO_LIST.includes(element?.sbNo) == false) {
+            temp.push(element?.sbNo)
+          }
+        });
+        temp.forEach(element => {
+          this.SB_NO_LIST.push({ value: element })
+        });
+        this.FILTER_EDPMS_DATA = this.GET_EDMPS;
+        console.log(this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
+
+        this.pageSizeOptionsList = [];
+        let lenforloop: number = parseInt(res?.TotalLength) / 10;
+        for (let index = 0; index < lenforloop; index++) {
+          this.pageSizeOptionsList.push(10 * (index + 1))
+        }
+        console.log(res, this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
+      })
+    }, (err: any) => {
+      console.log(err);
+    });
+
+    await this.documentService.getPipo().subscribe((res: any) => {
+      this.masterPIPO = res?.data;
+      console.log('getPipo:', res);
+    }, err => {
+      console.log(err);
+    });
+
+    await this.documentService.getIrAdvice('').subscribe((res: any) => {
+      this.masterIR = res?.data;
+      console.log('getIrAdvice:', res);
+    }, err => {
+      console.log(err);
+    });
+    await this.documentService.Hide_InnerLoader();
+  }
+
+  async PAGINATION_EVENT(event: any) {
+    await this.documentService.getEDPMSbyLimit(event?.pageSize).subscribe((res: any) => {
+      console.log(event, res, 'PAGINATION_EVENT')
+      this.SB_NO_LIST = [];
+      this.GET_EDMPS = this.addSBdata(res?.data);
+      var temp: any = [];
+      this.GET_EDMPS.forEach(element => {
+        if (this.SB_NO_LIST.includes(element?.sbNo) == false) {
+          temp.push(element?.sbNo)
+        }
+      });
+      temp.forEach(element => {
+        this.SB_NO_LIST.push({ value: element })
+      });
+      this.FILTER_EDPMS_DATA = this.GET_EDMPS;
+      console.log(this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
+    })
+  }
+  async PAGINATION_EVENT2(event: any) {
+    this.documentService.getclearedEDPMS(event?.pageSize).subscribe((cleareddata: any) => {
+      this.GET_EDMPS_CLEARED = this.addSBdata(cleareddata?.data);
+      this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
+      this.SB_NO_LIST2 = [];
+      var temp: any = [];
+      this.GET_EDMPS_CLEARED.forEach(element => {
+        if (this.SB_NO_LIST2.includes(element?.sbNo) == false) {
+          temp.push(element?.sbNo)
+        }
+      });
+      temp.forEach(element => {
+        this.SB_NO_LIST2.push({ value: element })
+      });
+      console.log(cleareddata, 'getclearedEDPMS')
+    })
   }
 }

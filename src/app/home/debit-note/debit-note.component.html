@@ -112,42 +112,13 @@
                                         <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
                                             [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-                                            <td class="col-td-th-3">{{ data.date }}</td>
-                                            <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
-                                            <td class="col-td-th-3"> {{ data?.commercialNumber }} </td>
-                                            <td class="col-td-th-3">
-                                                <div >
-                                                    {{data.debitNoteNumber}}
-                                                </div>
-                                                <!-- <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="debitNoteNumber"
-                                                        type="text" placeholder="Debit Note Number"
-                                                        [(ngModel)]="data.debitNoteNumber">
-                                                </div> -->
-                                            </td>
-                                            <td class="col-td-th-3">
-                                                <div >
-                                                    {{data.totalDebitAmount}}
-                                                </div>
-
-                                                <!-- <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="totalDebitAmount"
-                                                        type="text" placeholder="Total Debit Amount"
-                                                        [(ngModel)]="data.totalDebitAmount">
-                                                </div> -->
-                                            </td>
-                                            <td class="col-td-th-3">
-                                                <div >
-                                                    {{data.currency}}
-                                                </div>
-<!-- 
-                                                <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="currency" type="text"
-                                                        placeholder="Currency" [(ngModel)]="data.currency">
-                                                </div> -->
-                                            </td>
-
-                                            <td class="col-td-th-3">{{data.buyerName}}</td>
+                                            <td class="col-td-th-3" [innerHTML]="data.date"></td>
+                                            <td class="col-td-th-3" [innerHTML]="getPipoNumbers(data)"></td>
+                                            <td class="col-td-th-3" [innerHTML]="data.commercialNumber"></td>
+                                            <td class="col-td-th-3" [innerHTML]="data.debitNoteNumber"></td>
+                                            <td class="col-td-th-3" [innerHTML]="data.totalDebitAmount"></td>
+                                            <td class="col-td-th-3" [innerHTML]="data.currency"></td>
+                                            <td class="col-td-th-3" [innerHTML]="data.buyerName"></td>
                                             <td class="col-td-th-3">
                                                 <a (click)=" openDebitNote(content); viewDN(data)" title="View"><i
                                                         class="fa fa-eye" aria-hidden="true"></i></a>
@@ -214,7 +185,7 @@
                     <div class="form-group mb-0 d-flex flex-column">
                         <label for="exampleInputEmail1">D N Amount</label>
                         <input class="tblInput form-control" name="totalDebitAmount"
-                        type="text" placeholder="Total Debit Amount"
+                        type="number" placeholder="Total Debit Amount"
                         [(ngModel)]="this.EDIT_DATE.totalDebitAmount">
                     </div>
                     <div class="form-group mb-0 d-flex flex-column">

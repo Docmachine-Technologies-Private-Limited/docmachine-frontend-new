@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpResponse } from "@angular/common/http";
+import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpResponse, HttpErrorResponse } from "@angular/common/http";
 import { catchError, finalize, map, Observable, throwError } from "rxjs";
 import { DocumentService } from "./document.service";
 import { Router } from "@angular/router";
@@ -27,7 +27,14 @@ export class InterceptorService implements HttpInterceptor {
     //   }
     // });
     return next.handle(req).pipe(
-      finalize(() => setTimeout(()=> {this.documentService.loading=false},500))
+      finalize(() => setTimeout(()=> {this.documentService.loading=false},500)),
+      catchError((err: any) => {
+        if (err instanceof HttpErrorResponse) {
+          this.documentService.loading = false;
+          console.log(err,'Unauthorized');
+        }
+      return new Observable<HttpEvent<any>>();
+    })
     );
   }
 }

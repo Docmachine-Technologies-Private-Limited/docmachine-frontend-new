@@ -4,9 +4,9 @@
             <h3 class="heading">New EDPMS Data</h3>
         </div>
         <div class="upload-panel">
-            <mat-tab-group>
+            <mat-tab-group (selectedTabChange)="onTabChanged($event);">
                 <mat-tab label="Upload">
-                    <div class="right-panel" style="margin: auto;margin-right: 10px;margin-left: 10px;">
+                    <div class="right-panel p-2">
                         <custom-status-progress-bar (event)="dumpfun($event)"
                             [data]="this.pipoArrayListdata"></custom-status-progress-bar>
                         <select class="form-control" [(ngModel)]="bankSelection" (ngModelChange)="chooseBank()">
@@ -22,8 +22,9 @@
                                 (click)="fileInputClick($event)" #uploadfile />
                             <button class="btn btn-primary m-0">Upload .xls</button>
                         </form>
+
                     </div>
-                    <div class="table-panel" *ngIf="this.edpmsData.length!=0">
+                    <div class="table-panel">
                         <div class="col-12 p-0" #debitnotes>
                             <div class="row">
                                 <div style="width:100%;height:690px" class="col-12 padding">
@@ -83,7 +84,7 @@
                                                             {{row?.systemStatus}}
                                                         </td>
                                                         <td class="col-td-th-3">
-                                                            {{row?.docAvailable}}
+                                                            {{row?.docAvailable==true?'Yes':'No'}}
                                                         </td>
                                                         <!-- <td class="col-td-th-3">
                                                         <div *ngFor="let act of row?.action"
@@ -101,29 +102,26 @@
                         </div>
                     </div>
                 </mat-tab>
-                <mat-tab label="Compare">
-                    <div class="right-panel" style="margin: auto;margin-right: 10px;margin-left: 10px;">
-                        <custom-status-progress-bar (event)="dumpfun($event)"
+                <mat-tab label="Previous Data">
+                    <div *ngIf="this.FILTER_EDPMS_DATA.length!=0" class="right-panel p-2">
+                        <div class="button-list" style="display: flex;gap: 5px;">
+                            <custom-status-progress-bar (event)="dumpfun($event)"
                             [data]="this.pipoArrayListdata2"></custom-status-progress-bar>
-                        <app-ng-dropdown-custom placeHolderText="Search sb no." 
-                        width="200px" [items]="this.SB_NO_LIST"
-                        (modelChanges)="EDMPS_Search($event?.value)"
-                            (keyEvent)="EDMPS_Search($event)"
-                        bindLabel="value" [multiple]="false" #buyerNameSelection>
+                            <button type="submit" [disabled]="this.SUBMIT_BUTTON" class="btn btn-primary">Netoff/Setoff</button>
+                            <button type="submit" [disabled]="this.SUBMIT_BUTTON" class="btn btn-primary">ETX</button>
+                            <button type="submit" [disabled]="this.SUBMIT_BUTTON" class="btn btn-primary">Writeoff</button>
+                            <button type="submit" [disabled]="this.SUBMIT_BUTTON" routerLink="/home/direct-dispatch" class="btn btn-primary">Submit D2B</button>
+                        </div>
+                        <app-ng-dropdown-custom style="margin-left:30px" placeHolderText="Search sb no." width="170px" [items]="this.SB_NO_LIST"
+                            (modelChanges)="EDMPS_Search($event?.value)" (keyEvent)="EDMPS_Search($event)"
+                            bindLabel="value" [multiple]="false" #buyerNameSelection>
                         </app-ng-dropdown-custom>
-                        <!-- <select class="form-control" [(ngModel)]="bankSelection" (ngModelChange)="chooseBank()">
-                            <option value="" disabled hidden>Select Bank</option>
-                            <option *ngFor="let acc of bankAccounts" [value]="acc" style="min-width:100%;">{{acc}}
-                            </option>
-                        </select> -->
-                        <!-- <form id="file-upload-form" class="uploader" method="POST" (click)="uploadfile?.click();">
-                            <input id="file-upload" type="file" name="fileUpload"
-                                [attr.disabled]="disableUpload ? '' : null" (error)="onUploadError($event)"
-                                (init)="onUploadInit($event)" (success)="onUploadSuccess($event)"
-                                (sending)="submit($event)" [dropzone]="config3" id="dropzone"
-                                (click)="fileInputClick($event)" #uploadfile />
-                            <button class="btn btn-primary m-0">Upload .xls</button>
-                        </form> -->
+                        <div class="pagination" *ngIf="this.FILTER_EDPMS_DATA.length!=0">
+                            <mat-paginator [length]="this.FILTER_EDPMS_DATA.length" [pageSize]="10"
+                                [pageSizeOptions]="this.pageSizeOptionsList" (page)="this.PAGINATION_EVENT($event)"
+                                aria-label="Select page">
+                            </mat-paginator>
+                        </div>
                     </div>
                     <div class="table-panel" *ngIf="this.FILTER_EDPMS_DATA.length!=0">
                         <div class="col-12 p-0" #debitnotes>
@@ -185,7 +183,7 @@
                                                             {{row?.systemStatus}}
                                                         </td>
                                                         <td class="col-td-th-3">
-                                                            {{row?.docAvailable}}
+                                                            {{row?.docAvailable==true?'Yes':'No'}}
                                                         </td>
                                                         <!-- <td class="col-td-th-3">
                                                             <div *ngFor="let act of row?.action"
@@ -193,7 +191,90 @@
                                                                 (click)="actionEvent(act, row?.sbNo)">{{act}}</div>
                                                         </td> -->
                                                     </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Entry Cleared">
+                    <div *ngIf="this.FILTER_EDPMS_CLEARED_DATA.length!=0" class="right-panel p-2">
+                        <div class="button-list" style="display: flex;gap: 5px;">
+                            <custom-status-progress-bar (event)="dumpfun($event)"
+                            [data]="this.pipoArrayListdata3"></custom-status-progress-bar>
+                        </div>
+                        <app-ng-dropdown-custom placeHolderText="Search sb no." width="170px" [items]="this.SB_NO_LIST2"
+                            (modelChanges)="EDMPS_Search2($event?.value)" (keyEvent)="EDMPS_Search2($event)"
+                            bindLabel="value" [multiple]="false" #buyerNameSelection>
+                        </app-ng-dropdown-custom>
+                        <div class="pagination" *ngIf="this.FILTER_EDPMS_CLEARED_DATA.length!=0">
+                            <mat-paginator [length]="this.FILTER_EDPMS_CLEARED_DATA.length" [pageSize]="10"
+                                [pageSizeOptions]="this.pageSizeOptionsList2" (page)="this.PAGINATION_EVENT2($event)"
+                                aria-label="Select page">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                    <div class="table-panel" *ngIf="this.FILTER_EDPMS_CLEARED_DATA.length!=0">
+                        <div class="col-12 p-0" #debitnotes>
+                            <div class="row">
+                                <div style="width:100%;height:690px" class="col-12 padding">
+                                    <section class="pb-0 box-shadow">
+                                        <div class="p-0 table-wrapper">
+                                            <table class="table edpms-table mb-0">
+                                                <thead>
+                                                    <tr class="table-tr">
+                                                        <th scope="col" class="col-td-th-3">#</th>
+                                                        <th scope="col" class="col-td-th-3">Shipping Bill No.</th>
+                                                        <th scope="col" class="col-td-th-3">Shipping Bill Date</th>
+                                                        <th scope="col" class="col-td-th-3">AD Code</th>
+                                                        <th scope="col" class="col-td-th-3">Port Code</th>
+                                                        <th scope="col" class="col-td-th-3">EDPMS STATUS</th>
+                                                        <th scope="col" class="col-td-th-3">AD Ref No.</th>
+                                                        <th scope="col" class="col-td-th-3">SB Amount</th>
+                                                        <th scope="col" class="col-td-th-3">SB Balance amount</th>
+                                                        <th scope="col" class="col-td-th-3">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="table-tr tableclick"
+                                                        *ngFor="let row of this.FILTER_EDPMS_CLEARED_DATA; let i = index"
+                                                        (click)="clicktable3(row?.sbdata)">
+                                                        <th class="col-td-th-3">
+                                                            {{(i+1)}}
+                                                        </th>
+                                                        <th class="col-td-th-3">
+                                                            {{row?.sbNo}}
+                                                        </th>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.sbDate | date: 'dd/MM/yyyy'}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.adCode}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.portCode}}
+                                                        </td>
 
+                                                        <td class="col-td-th-3">
+                                                            {{row?.edpmsStatus}}
+                                                        </td>
+
+                                                        <td class="col-td-th-3">
+                                                            {{row?.adRefNo}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.sbAmount}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.sbBalanceAmount}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.cleared}}
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>

@@ -50,6 +50,7 @@ import { CustomHoverPanelComponent } from '../custom/custom-hover-panel/custom-h
 import {CustomConfirmDialogModelComponent} from '../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component'
 import { NgCustomInputComponent } from "../custom/ng-custom-input/ng-custom-input.component";
 import { CustomStatusProgressBarComponent } from "../custom/custom-status-progress-bar/custom-status-progress-bar.component";
+import { MatPaginatorModule } from '@angular/material/paginator'
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { CustomStatusProgressBarComponent } from "../custom/custom-status-progre
     MatCheckboxModule,
     MatRadioModule,
     ModalModule.forRoot(),
+    MatPaginatorModule
   ],
   entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService],
@@ -141,7 +143,8 @@ import { CustomStatusProgressBarComponent } from "../custom/custom-status-progre
     CustomHoverPanelComponent,
     CustomConfirmDialogModelComponent,
     NgCustomInputComponent,
-    CustomStatusProgressBarComponent
+    CustomStatusProgressBarComponent,
+    MatPaginatorModule
   ],
 })
 export class SharedHomeModule { }

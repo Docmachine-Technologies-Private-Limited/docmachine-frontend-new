@@ -5,11 +5,15 @@ import SecureLS from 'secure-ls';
   providedIn: 'root'
 })
 export class StorageEncryptionDecryptionService {
-  private _ls = new SecureLS({ encodingType: 'aes' });
+  private _ls = new SecureLS({
+    encodingType: 'aes',
+    isCompression: false,
+    encryptionSecret: 'secret'
+  });
   constructor() {
   }
 
-  set(key:any, value: any, expired: number = 0) {
+  set(key: any, value: any, expired: number = 0) {
     this._ls.set(key, value);
   }
 
@@ -17,8 +21,8 @@ export class StorageEncryptionDecryptionService {
     this._ls.remove(key);
   }
 
-  get(key: string) {
-    return this._ls.get(key);
+  get(key: string): any {
+    return this._ls.get(key,false);
   }
 
   clear() {

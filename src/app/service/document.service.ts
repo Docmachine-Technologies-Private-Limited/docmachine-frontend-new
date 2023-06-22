@@ -22,7 +22,8 @@ export class DocumentService {
   OUTWARD_REMITTANCE_ADVICE_SHEET: any = [];
   MT102_SUBJECT: any = []
   AppConfig:any=AppConfig
-  
+  Inner_loading:boolean=false;
+    
   constructor(public http: HttpClient, private router: Router,) {
     this.api_base = AppConfig?.BASE_URL;
     console.log(this.api_base);
@@ -274,9 +275,27 @@ export class DocumentService {
     let url = `${this.api_base}/edpms/getEDPMS`;
     return this.http.get(url, httpOptions);
   }
-
-
-
+  
+  getEDPMSbyLimit(limit:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/edpms/getEDPMSbylimit`;
+    return this.http.post(url,{limit:limit},httpOptions);
+  }
+  
+  getclearedEDPMS(limit:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/edpms/getcleared`;
+    return this.http.post(url,{limit:limit},httpOptions);
+  }
+  
   getMaster(user) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -2417,6 +2436,11 @@ export class DocumentService {
       .replace(/\s/g, '')
       .replace(/\.$/, '')
       .toUpperCase();
+  }
+  Hide_InnerLoader(){
+    setTimeout(() => {
+      this.Inner_loading = false;
+    }, 300);
   }
 }
 

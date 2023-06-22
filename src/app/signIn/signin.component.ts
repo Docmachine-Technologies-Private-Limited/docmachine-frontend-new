@@ -6,7 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DocumentService } from '../service/document.service';
 import { AuthGuard } from '../service/authguard.service';
-import { AppConfig } from '../../environments/environment'; 
+import { AppConfig } from '../../environments/environment';
+import { StorageEncryptionDecryptionService } from '../Storage/storage-encryption-decryption.service';
 
 @Component({
   selector: 'app-detail',
@@ -27,11 +28,12 @@ export class SigninComponent implements OnInit {
   closeResult: string;
   CODE: any = [];
   rolebaseddata: any = ['Buyer Credit Aggregator', 'Insurance', 'CA', 'Auditor']
-  API_URL:any=AppConfig?.environment;
-  
+  API_URL: any = AppConfig?.environment;
+
   constructor(private formBuilder: FormBuilder, private userService: UserService,
     public documentService: DocumentService,
     private router: Router, public authGuard: AuthGuard,
+    public sessionstorage: StorageEncryptionDecryptionService,
     private toastr: ToastrService, private modalService: NgbModal) {
   }
 
@@ -84,11 +86,11 @@ export class SigninComponent implements OnInit {
             console.log(res, 'token')
             this.toastr.success('Sucessfully Login...');
             this.userService.addToken(res?.docs?.token);
-            this.authGuard.setLocalStorage('PERMISSION', JSON.stringify({
+            this.sessionstorage.set('PERMISSION', JSON.stringify({
               emailId: res?.docs?.emailId,
               role: res?.docs?.role
             }))
-             window.open(AppConfig?.ROLE_URL+"/login/"+res?.docs?.token, "_self")
+            window.open(AppConfig?.ROLE_URL + "/login/" + res?.docs?.token, "_self")
           }
         });
       } else {
@@ -131,7 +133,7 @@ export class SigninComponent implements OnInit {
             if (this.data1['data'][0].emailId == 'docmachinetec@gmail.com' || this.data1['data'][0].emailId == 'tramsdocmachine@gmail.com' || this.data1['data'][0].emailId == 'fintech.innovations2021@gmail.com') {
               this.router.navigate(['/home/powerAdmin/pending'])
               this.authGuard.setLocalStorage('LOGIN_OTP', true);
-              this.authGuard.setLocalStorage('PERMISSION', JSON.stringify({
+              this.sessionstorage.set('PERMISSION', JSON.stringify({
                 emailId: this.data1['data'][0].emailId,
                 role: this.data['result']['role']
               }))
@@ -140,7 +142,7 @@ export class SigninComponent implements OnInit {
                 if (this.data1['data'][0]['verified'] == 'yes') {
                   if (data['status'] == 200) {
                     this.authGuard.setLocalStorage('LOGIN_OTP', true);
-                    this.authGuard.setLocalStorage('PERMISSION', JSON.stringify({
+                    this.sessionstorage.set('PERMISSION', JSON.stringify({
                       emailId: this.data1['data'][0].emailId,
                       role: this.data['result']['role']
                     }))
@@ -150,10 +152,10 @@ export class SigninComponent implements OnInit {
                       this.router.navigate(['/home/caDocuments/all'])
                     } else {
                       this.userService.role = this.data['result']['role'];
-                      if (this.data1['data'][0].companyId!=undefined && this.data1['data'][0].companyId!=null && this.data1['data'][0].companyId!='') {
+                      if (this.data1['data'][0].companyId != undefined && this.data1['data'][0].companyId != null && this.data1['data'][0].companyId != '') {
                         this.router.navigate(['/home/dashboardTask'])
                       } else {
-                        if (this.data1['data'][0]?.role== 'manager') {
+                        if (this.data1['data'][0]?.role == 'manager') {
                           this.router.navigate(['createTeam']);
                         } else {
                           this.router.navigate(['/home/dashboardTask'])

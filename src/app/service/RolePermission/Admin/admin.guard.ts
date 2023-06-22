@@ -16,7 +16,7 @@ export class AdminGuard implements CanActivate {
  async canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot) {
-      this.role=this.authGuard.getLocalStorage('PERMISSION')!=null?JSON.parse(this.authGuard.getLocalStorage('PERMISSION')):[];
+      this.role=this.authGuard.getLocalStorage('PERMISSION')!=null && this.authGuard.getLocalStorage('PERMISSION')!=""?JSON.parse(this.authGuard.getLocalStorage('PERMISSION')):[];
       return this.role['role']=='manager'?true:this.FALSE();
   }
   FALSE() {
