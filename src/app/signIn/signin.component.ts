@@ -67,8 +67,8 @@ export class SigninComponent implements OnInit {
     }
   }
 
-  loginError() {
-    this.toastr.error('Login unsuccessful!, Please check the details');
+  loginError(message: any) {
+    this.toastr.error(message);
     this.isDisabled = false;
   }
 
@@ -115,18 +115,16 @@ export class SigninComponent implements OnInit {
                 this.userService.getUser().subscribe(data1 => {
                   console.log(data1), 'sdfsdhdsgfjdsfhgsdfjsfgdsjfd';
                   this.data1 = data1
-                },
-                  error1 => {
-                    this.loginError();
-                  });
+                }, error1 => {
+                  this.loginError('Login unsuccessful!, Please check the details');
+                });
               }
             } else {
-              this.loginError();
+              this.loginError(this.data?.message);
             }
-          },
-            error => {
-              this.loginError();
-            });
+          }, error => {
+            this.loginError('Login unsuccessful!, Please check the details');
+          });
         } else {
           this.userService.loginVerfiy(this.value).subscribe(data => {
             this.userService.loginlogout(true).subscribe((res: any) => console.log(res, 'loginlogout'))
@@ -174,7 +172,7 @@ export class SigninComponent implements OnInit {
             }
           },
             error => {
-              this.loginError();
+              this.loginError('Login unsuccessful!, Please check the details');
             });
         }
       }
