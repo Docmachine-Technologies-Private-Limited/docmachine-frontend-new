@@ -30,6 +30,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/appspec.yml",
               {
                 "glob": "**/*",
                 "input": "node_modules/ngx-extended-pdf-viewer/assets/",
