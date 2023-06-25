@@ -59,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
               let token = this.authGuard.loadFromLocalStorage();
               if (this.sessionstorage.get('PERMISSION') != null && this.sessionstorage.get('PERMISSION') != "") {
                 var session: any = JSON.parse(this.sessionstorage.get('PERMISSION'));
-                if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId)) {
+                if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId || this.userData?.LoginToken != token)) {
                   this.authservice.logout();
                   this.router.navigate(['/login']);
                 }
@@ -87,11 +87,16 @@ export class AppComponent implements OnInit, OnDestroy {
       let token = this.authGuard.loadFromLocalStorage();
       if (this.sessionstorage.get('PERMISSION') != null && this.sessionstorage.get('PERMISSION') != "") {
         var session: any = JSON.parse(this.sessionstorage.get('PERMISSION'));
-        if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId)) {
+        if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId || this.userData?.LoginToken != token)) {
           this.authservice.logout();
           this.router.navigate(['/login']);
         }
       } else {
+        this.authservice.logout();
+        this.router.navigate(['/login']);
+      }
+    }).catch((error: any) => {
+      if (error.status == 401) {
         this.authservice.logout();
         this.router.navigate(['/login']);
       }
@@ -103,12 +108,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.socketioservice.connectionOn();
+    this.userService.getUser_Profile().subscribe((res:any)=>{},(err:any)=>{
+      console.log(err,'asdjasdlksadsdasds')    
+    })
     this.userService.getUserDetail().then((user: any) => {
       this.userData = user?.result
       let token = this.authGuard.loadFromLocalStorage();
       if (this.sessionstorage.get('PERMISSION') != null && this.sessionstorage.get('PERMISSION') != "") {
         var session: any = JSON.parse(this.sessionstorage.get('PERMISSION'));
-        if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId)) {
+        if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId || this.userData?.LoginToken != token)) {
           this.authservice.logout();
           this.router.navigate(['/login']);
         }
@@ -117,7 +125,12 @@ export class AppComponent implements OnInit, OnDestroy {
         this.router.navigate(['/login']);
       }
       // this.socketioservice?.socket.emit('received', JSON.stringify(this.userData));
-    });
+    }).catch((error: any) => {
+      if (error.status == 401) {
+        this.authservice.logout();
+        this.router.navigate(['/login']);
+      }
+    });;
     // this.socketioservice?.socket.on('data1', (res) => {
     //   console.log(res,'socket data1')
     // })

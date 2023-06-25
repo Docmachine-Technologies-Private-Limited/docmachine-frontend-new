@@ -23,20 +23,17 @@ export class ForgotPasswordComponent implements OnInit {
   }
   onSubmit() {
     console.log(this.resetForm.value)
-    this.userService.forgotpsw(this.resetForm.value)
-      .subscribe(
-        data => {
-          console.log("king123")
-          console.log(data)
-          this.message = data['message']
-          this.no = false;
-          // 
-        },
-        error => {
-          this.no = true;
-          this.message = null;
-          console.log("error")
-        });
+    this.userService.forgotpsw(this.resetForm.value).subscribe(data => {
+      console.log("king123")
+      console.log(data)
+      this.message = data['message']
+      this.no = false;
+    },
+      error => {
+        this.no = true;
+        this.message = null;
+        console.log("error")
+      });
   }
 
 }

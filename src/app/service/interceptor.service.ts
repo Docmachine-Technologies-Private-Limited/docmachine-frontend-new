@@ -27,14 +27,6 @@ export class InterceptorService implements HttpInterceptor {
     //   }
     // });
     return next.handle(req).pipe(
-      finalize(() => setTimeout(()=> {this.documentService.loading=false},500)),
-      catchError((err: any) => {
-        if (err instanceof HttpErrorResponse) {
-          this.documentService.loading = false;
-          console.log(err,'Unauthorized');
-        }
-      return new Observable<HttpEvent<any>>();
-    })
-    );
+      finalize(() => setTimeout(() => { this.documentService.loading = false }, 500)));
   }
 }
