@@ -380,13 +380,15 @@ export class AddPipoComponent implements OnInit {
         console.log(this.res);
       }
       this.pubUrl = args[1].publicUrl
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        args[1].publicUrl
-      );
       this.pipourl1 = args[1].data;
-      this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        args[1].data
-      );
+      this.publicUrl = '';
+      this.piPoUrl = '';
+      
+      setTimeout(() => {
+        this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
+        this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].data);
+      }, 200);
+      
       console.log(this.publicUrl);
       console.log("this.piPoUr this.piPoUr this.piPoUr", this.piPoUrl);
       console.log(this.res);
@@ -406,8 +408,6 @@ export class AddPipoComponent implements OnInit {
       this.runProgressBar(e[0].size);
     } else {
       console.log("Document type not given");
-      let displayuploaderror: any = document.getElementById("uploadError") as any;
-      displayuploaderror.style.display = "block"
     }
   }
 

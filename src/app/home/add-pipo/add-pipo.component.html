@@ -82,7 +82,7 @@
                                 <div class="pdf_invoce">
                                     <h2 class="payment_title">Document</h2>
                                     <div class="pdf_invoce_scroll">
-                                        <iframe style="border:none;" [src]="piPoUrl" width="100%"> </iframe>
+                                        <app-pdf-viewer class="pt-3" *ngIf="piPoUrl!=''" [downloadShow]="false" [src]="piPoUrl" width="550px" Newheight="600px"></app-pdf-viewer>
                                     </div>
                                 </div>
                             </div>
