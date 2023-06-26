@@ -454,13 +454,13 @@ export class ExportCreditNoteComponent implements OnInit {
     console.log('ARGS', args);
     console.log('DATA', args[1].data);
     this.pubUrl = args[1].publicUrl;
-    this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      args[1].publicUrl
-    );
+    this.publicUrl = '';
+    this.piPoUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
+      this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].data);
+    }, 200);
     this.pipourl1 = args[1].data;
-    this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-      args[1].data
-    );
     console.log('PIPO URL', this.piPoUrl);
     console.log(this.publicUrl);
     console.log(this.piPoUrl);

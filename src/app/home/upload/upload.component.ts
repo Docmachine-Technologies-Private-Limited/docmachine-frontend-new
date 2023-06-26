@@ -2574,12 +2574,13 @@ export class UploadComponent implements OnInit {
       this.override = false;
       console.log(this.res);
       this.pubUrl = args[1].publicUrl;
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        args[1].publicUrl
-      );
       this.pipourl1 = args[1].data;
       this.piPoUrl='';
+      this.publicUrl='';
       setTimeout(() => {
+        this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+          args[1].publicUrl
+        );
         this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
           args[1].data
         );
