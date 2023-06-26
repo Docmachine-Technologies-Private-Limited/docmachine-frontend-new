@@ -135,10 +135,10 @@ export class CreditNoteComponent implements OnInit {
   }
 
   viewCN(a) {
-
-    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-      a['doc']
-    );
+    this.viewData=''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+    }, 200);
   }
 
   toSave(data, index) {

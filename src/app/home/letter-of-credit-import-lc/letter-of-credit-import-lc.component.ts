@@ -123,13 +123,12 @@ export class LetterOfCreditImportLCComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-
-  viewLC(a) {
-
-    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-      a['doc']
-    );
-  }
+  viewpdf(a) {
+    this.viewData=''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+    }, 200);
+}
 
   letterOfCredit() {
     console.log('upload');

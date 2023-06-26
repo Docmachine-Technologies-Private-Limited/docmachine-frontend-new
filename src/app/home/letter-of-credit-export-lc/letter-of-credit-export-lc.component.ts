@@ -65,23 +65,23 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     this.documentService.getLetterLCfile("export").subscribe(
       (res: any) => {
         this.item = res?.data;
-        this.FILTER_VALUE_LIST= this.item;
+        this.FILTER_VALUE_LIST = this.item;
         console.log(res, 'getLetterLCfile');
         for (let value of res.data) {
-            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
-              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
+            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+          }
+          value?.buyerName.forEach(element => {
+            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
+              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
             }
-            value?.buyerName.forEach(element => {
-              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
-                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-              }
-            });
-            if ( this.ALL_FILTER_DATA['L_C_No'].includes(value?.letterOfCreditNumber)==false) {
-              this.ALL_FILTER_DATA['L_C_No'].push(value?.letterOfCreditNumber);
-            }
-            if ( this.ALL_FILTER_DATA['DATE'].includes(value?.date)==false) {
-              this.ALL_FILTER_DATA['DATE'].push(value?.date);
-            }
+          });
+          if (this.ALL_FILTER_DATA['L_C_No'].includes(value?.letterOfCreditNumber) == false) {
+            this.ALL_FILTER_DATA['L_C_No'].push(value?.letterOfCreditNumber);
+          }
+          if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
+            this.ALL_FILTER_DATA['DATE'].push(value?.date);
+          }
         }
       },
       (err) => console.log(err)
@@ -126,11 +126,11 @@ export class LetterOfCreditExportLCComponent implements OnInit {
     }
   }
 
-  viewLC(a) {
-
-    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-      a['doc']
-    );
+  viewpdf(a) {
+    this.viewData = ''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+    }, 200);
   }
 
   letterOfCredit() {
@@ -199,8 +199,7 @@ export class LetterOfCreditExportLCComponent implements OnInit {
       });
     }
   }
-
-
+  
   exportToExcel() {
     const ws: xlsx.WorkSheet = xlsx.utils.table_to_sheet(this.epltable.nativeElement);
     const wb: xlsx.WorkBook = xlsx.utils.book_new();

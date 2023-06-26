@@ -24,8 +24,6 @@ import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
-
-
 @Component({
   selector: 'app-debit-note',
   templateUrl: './debit-note.component.html',
@@ -136,10 +134,10 @@ export class DebitNoteComponent implements OnInit {
   }
 
   viewDN(a) {
-
-    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-      a['doc']
-    );
+    this.viewData=''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+    }, 200);	
   }
 
 

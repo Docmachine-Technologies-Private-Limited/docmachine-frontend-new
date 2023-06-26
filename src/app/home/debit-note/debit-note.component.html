@@ -120,11 +120,8 @@
                                             <td class="col-td-th-3" [innerHTML]="data.currency"></td>
                                             <td class="col-td-th-3" [innerHTML]="data.buyerName"></td>
                                             <td class="col-td-th-3">
-                                                <a (click)=" openDebitNote(content); viewDN(data)" title="View"><i
-                                                        class="fa fa-eye" aria-hidden="true"></i></a>
-                                                <!-- <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]"
-                                                    (click)="toSave(data, i)"><i class="fa fa-floppy-o"
-                                                        aria-hidden="true"></i></button> -->
+                                                <a title="view" class="PopupOpen" popup-close="VIEW_DOCUMENTS" (click)="viewDN(data)"><i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS"
+                                                    aria-hidden="true"></i></a>
                                                 <button title="Edit" class="savBtn bgnone" 
                                                     (click)="toEdit(i);edittable.style.display='flex'"><i
                                                         class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
@@ -203,3 +200,11 @@
         </div>
     </div>
 </div>
+
+<app-custom-model [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
+    id="VIEW_DOCUMENTS" name="Debit Note">
+    <div class="p-2">
+        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Debit Note" [src]="viewData" width="100%"
+        height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>

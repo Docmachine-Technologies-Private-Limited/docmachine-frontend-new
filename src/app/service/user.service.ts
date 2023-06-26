@@ -637,6 +637,7 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/member/UPDATE_USER_MEMBER`, { email: id, member: member }, httpOptions);
   }
+  
   public UploadS3Buket(data: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -645,6 +646,16 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/documents/uploadFiletoS3Bucket`, data, httpOptions);
   }
+  
+  public getReadS3File(data: any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/documents/getReadS3File`, data, httpOptions);
+  }
+  
   public getMemeber(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);

@@ -35,7 +35,7 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
   @Input('base64_src') base64_src: any = '';
   @Input('htmlload') htmlload: boolean = false;
   @Input('allbtnhide') allbtnhide: boolean = true;
-  
+
   renderText = true;
   originalSize = false;
   fitToPage = false;
@@ -62,18 +62,36 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
   SRC_UPDATE: any = '';
   ngOnInit() {
     if (this.base64_src != '') {
-      this.userService.mergePdf(this.base64_src).subscribe(
-        (res: any) => {
-          console.log('res', res);
-          res.arrayBuffer().then((data: any) => {
-            this.BASE_64_URL = data;
-          })
-        }, (err) => console.log('Failed to fetch the pdf'));
+      this.userService.mergePdf(this.base64_src).subscribe((res: any) => {
+        console.log('res', res);
+        res.arrayBuffer().then((data: any) => {
+          this.BASE_64_URL = data;
+        })
+      }, (err) => console.log('Failed to fetch the pdf'));
     }
-    this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
-    this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
     console.log(this.URL_IFRAME, 'sdsfdfsdfdsfsdfdsfdsfsdfdsfdfsd');
-    this.Sppinloader = false
+    let url_replace: any = ''
+    if (this.src?.changingThisBreaksApplicationSecurity != undefined) {
+      url_replace = this.src?.changingThisBreaksApplicationSecurity?.replace(this.documentService.AppConfig?.S3_BUCKET_URL, '')
+    } else {
+      url_replace = this.src?.replace(this.documentService.AppConfig?.S3_BUCKET_URL, '')
+    }
+    this.userService.getReadS3File({ fileName: url_replace }).subscribe((res: any) => {
+      this.src = 'data:application/pdf;base64,' + this._arrayBufferToBase64(res?.pdf?.data)
+      this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+      this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
+      console.log(this.URL_IFRAME, 'sdsfdfsdfdsfsdfdsfdsfsdfdsfdfsd');
+      this.Sppinloader = false
+    });
+  }
+  _arrayBufferToBase64(buffer) {
+    var binary = '';
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
   }
   zoomIn(url: any) {
     this.zoom += 100;
@@ -195,10 +213,10 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
     this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
     this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
     console.log(this.URL_IFRAME, 'sdsfdfsdfdsfsdfdsfdsfsdfdsfdfsd');
-    this.onChange(()=>{
+    this.onChange(() => {
       this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
       this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
-      console.log(this.URL_IFRAME,'sdsfdfsdfdsfsdfdsfdsfsdfdsfdfsd');
+      console.log(this.URL_IFRAME, 'sdsfdfsdfdsfsdfdsfdsfsdfdsfdfsd');
     });
   }
   /**

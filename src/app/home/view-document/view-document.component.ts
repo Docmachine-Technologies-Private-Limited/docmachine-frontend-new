@@ -37,7 +37,7 @@ export class ViewDocumentComponent implements OnInit {
   public item2: any = [];
   public item3: any = [];
   public item4: any = [];
-  public viewData: any;
+  public viewData: any='';
   public closeResult: string;
   public user;
   public selectedRow;
@@ -360,10 +360,10 @@ export class ViewDocumentComponent implements OnInit {
   }
 
   viewCN(a) {
-
-    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-      a['doc']
-    );
+    this.viewData=''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+    }, 200);
   }
 
   toSave(data, index) {

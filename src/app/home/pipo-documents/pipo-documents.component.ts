@@ -28,7 +28,7 @@ import {
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as xlsx from 'xlsx';
-import {PipoDataService} from "../../service/homeservices/pipo.service";
+import { PipoDataService } from "../../service/homeservices/pipo.service";
 import { WindowInformationService } from '../../service/window-information.service';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -42,31 +42,31 @@ import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval
     './pipo-documents.component.scss',
   ],
 })
-export class PipoDocumentsComponent implements OnInit, AfterViewInit {
+export class PipoDocumentsComponent implements OnInit {
   @ViewChild('piposummery', { static: false }) piposummery: ElementRef;
   @ViewChild(DropzoneDirective, { static: true })
   directiveRef?: DropzoneDirective;
 
   @ViewChild('inputName', { static: true }) public inputRef: ElementRef;
   public type: string = 'directive';
-  public item1:any = [];
-  public item:any = [];
-  public item2:any;
-  public item3:any = [];
-  public item4:any = [];
-  public item5:any = [];
-  mergedBOE:any = [];
+  public item1: any = [];
+  public item: any = [];
+  public item2: any;
+  public item3: any = [];
+  public item4: any = [];
+  public item5: any = [];
+  mergedBOE: any = [];
 
-  public user:any;
-  public selectedRow:any;
-  public showInvoice:any = false;
-  public tableWidth:any;
-  public export:any = false;
-  public import:any = false;
-  public lastIndex:any;
-  public showPdf:any = false;
-  public greaterAmount:any = 0;
-  public selectedDoc:any = '';
+  public user: any;
+  public selectedRow: any;
+  public showInvoice: any = false;
+  public tableWidth: any;
+  public export: any = false;
+  public import: any = false;
+  public lastIndex: any;
+  public showPdf: any = false;
+  public greaterAmount: any = 0;
+  public selectedDoc: any = '';
   public allTransactions: any = [];
   public optionsVisibility: any = [];
   public Ax1: boolean;
@@ -132,8 +132,8 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   public lcCurrency: any;
   public buttonToggle1: any;
   public api_base: any;
-  USER_DATA:any=[];
-  PENDING_DATA:any=[];
+  USER_DATA: any = [];
+  PENDING_DATA: any = [];
   filtervisible: boolean = false
   startDate: any = '';
   endDate: any = '';
@@ -161,7 +161,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     private pipoDataService: PipoDataService,
     public wininfo: WindowInformationService,
     public dialog: MatDialog,
-    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
   ) {
     this.api_base = userService.api_base;
     console.log(this.api_base);
@@ -194,7 +194,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
+    this.wininfo.set_controller_of_width(270, '.content-wrap')
     this.id = this.route.snapshot.params['id'];
     this.pipo_id = this.route.snapshot.params['pipo_id'];
     console.log(this.id, this.pipo_id);
@@ -204,8 +204,8 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     this.item3 = [];
     this.item4 = [];
     this.item5 = [];
-    this.userService.getUserDetail().then((user:any) => {
-      this.USER_DATA =user;
+    this.userService.getUserDetail().then((user: any) => {
+      this.USER_DATA = user;
       console.log("this.USER_DATA", this.USER_DATA)
     });
     this.documentService.getBoe(1).subscribe(
@@ -273,7 +273,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   }
 
   mergeBoe() {
-    let filterboedata:any = [];
+    let filterboedata: any = [];
     if (this.item4 && this.item4.length) {
       for (let pipo of this.item1) {
         for (let boedata of this.item4) {
@@ -293,11 +293,11 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
         }
       }
       for (let pipo of this.item1) {
-        if(!pipo.boe){
-          let newVal = {...pipo}
+        if (!pipo.boe) {
+          let newVal = { ...pipo }
           filterboedata.push(newVal)
         }
-        }
+      }
     } else {
       console.log("Your are on Else part")
       for (let pipo of this.item1) {
@@ -306,7 +306,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
       }
     }
     this.item3 = filterboedata;
-    console.log('aaa',this.item3);
+    console.log('aaa', this.item3);
   }
   onclick() {
     this.filtervisible = !this.filtervisible
@@ -325,7 +325,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   }
   getPipoData() {
     console.log("-->", this.page, this.limit)
-    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer1 , 'export').subscribe((res: any) => {
+    this.documentService.getPipos(this.page, this.limit, this.commodity, this.location, this.buyer1, 'export').subscribe((res: any) => {
       this.item3 = res.docs
       console.log("res", this.item3)
     })
@@ -550,7 +550,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
       ]);
     }
     else if (a == 'Bill of Entry') {
-      this.router.navigate(['home/upload', { file: 'import', document: 'boe', pipo: this.pipoData.pi_poNo,pipo_id: this.pipoData._id, bene: this.pipoData.benneName }]);
+      this.router.navigate(['home/upload', { file: 'import', document: 'boe', pipo: this.pipoData.pi_poNo, pipo_id: this.pipoData._id, bene: this.pipoData.benneName }]);
     }
 
   }
@@ -694,16 +694,10 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   openSubLetter(a) {
     if (a == 'yes') {
       console.log(a);
-      // this.router.navigate(['home/bill-under-collection', {
-      //   file: "nonlcUsance", pipo: this.pipoData.pi_poNo,pipo_id: this.pipoData._id, bene: this.pipoData.benneName, amount: this.pipoData.amount
-      // }]);
       this.uploadIsurance = !this.uploadIsurance;
       this.letterToggle = !this.letterToggle;
     } else if (a == 'no') {
       console.log(a);
-      // this.router.navigate(['home/bill-under-collection', {
-      //   file: "nonlcSight", pipo: this.pipoData.pi_poNo,pipo_id: this.pipoData._id, bene: this.pipoData.benneName, amount: this.pipoData.amount
-      // }]);
       this.router.navigate([
         'home/lc-isurance',
         {
@@ -717,11 +711,6 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // getTrasactions() {
-  //   const data: any = this.documentService.getTask();
-  //   this.allTransactions = data.task;
-  // }
-
   onAddCourse(a) {
     console.log(a);
     if (a === 1) {
@@ -734,15 +723,6 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
       this.i++;
     } else {
       console.log(a);
-
-      // if (a.controls.bankDetails.invalid) {
-      //   this.submitted1 = true
-      //   this.toastr.error('You can add another bank after filling first one!');
-      //   console.log("2")
-      //   this.isDisabled = false;
-      //   return;
-      // }
-
       const control = this.piPoForm.get('paymentTerm') as FormArray;
       control.push(this.initCourse());
       this.payTerm.push([]);
@@ -753,49 +733,16 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   }
 
   removeAddress(i) {
-    // console.log(i)
-    // //console.log(this.control)
     let control1 = this.piPoForm.controls.paymentTerm as FormArray;
-    // console.log(control1)
-    // console.log(control1.length)
-    // console.log(this.bankName)
-    // console.log(this.currencyName)
     control1.removeAt(i);
     this.payTerm.splice(i, 1);
     this.z = this.z - 1;
-    // this.bankName.splice(i, 1)
-    // this.currencyName.splice(i, 1)
-    // console.log(this.bankName)
-    // console.log(this.currencyName)
-    // console.log(control1.length)
   }
-
-  // viewTask(data) {
-  //   console.log(data)
-  //   if (!data.completed) {
-  //     this.documentService.task = data
-  //     this.documentService.draft = true;
-  //     //data.pipoDetail["_id"] = data._id;
-  //     this.documentService.pdfData = data.pipoDetail;
-  //     if (parseInt(this.selectedRow.amount) < 200000) {
-  //       this.documentService.pdfData = this.selectedRow;
-  //       this.router.navigateByUrl(`/home/inwardRemittance/${data.pi_poNo}`);
-  //     } else {
-  //       console.log(this.selectedDoc);
-  //       this.router.navigateByUrl(`/home/fbg-wavier/${data.pi_poNo}`);
-
-  //     }
-
-  //   } else {
-  //     this.router.navigateByUrl(`/home/completed-task/${data._id}`);
-  //   }
-
-  // }
 
   onSubmitPipo() {
     console.log(this.id);
     console.log(this.piPoForm.value);
-    var temp:any = {
+    var temp: any = {
       ...this.piPoForm.value
     }
     temp.doc = this.pipourl1;
@@ -810,12 +757,8 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
         this.toastr.success('PI/PO updated successfully.');
         this.toggle = false;
         this.toggle2 = false;
-        // this.toastr.success('Company details updated successfully.');
-        // this.router.navigate(['/home/dashboardNew']);
       },
       (error) => {
-        // this.toastr.error('Invalid inputs, please check!');
-        // console.log("error")
       }
     );
   }
@@ -839,7 +782,7 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
   onSubmitPipo1() {
     console.log(this.id);
     console.log(this.piPoForm.value);
-    var temp:any = {
+    var temp: any = {
       ...this.piPoForm.value
     }
     temp.doc1 = this.pipourl1;
@@ -977,22 +920,25 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
 
   openPipoNote(content) {
     this.modalService
-      .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+      .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
       .result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
   }
-  viewCN(a) {
 
-    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-      a['doc']
-    );
+
+  viewpdf(a) {
+    this.viewData = ''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+    }, 200);
   }
+
   private getDismissReason(reason: any): string {
 
     if (reason === ModalDismissReasons.ESC) {
@@ -1004,13 +950,6 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
-    // window["sidebarInit"]();
-    // if (isPlatformBrowser(this.platformId)) {
-    //   this.filePreview();
-    // }
-  }
-
   toSave(data, index) {
     this.optionsVisibility[index] = false;
     console.log('555555555555550', data);
@@ -1018,14 +957,8 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
       (data) => {
         console.log('king123');
         this.toastr.success('PI/PO updated successfully.'); // this.docTog = false
-        // this.toggle = false
-        // this.toggle2 = false
-        // this.uploadIsurance = false
-        // this.toastr.success('Company details updated successfully.');
-        // this.router.navigate(['/home/dashboardNew']);
       },
       (error) => {
-        // this.toastr.error('Invalid inputs, please check!');
         console.log('error');
       }
     );
@@ -1045,40 +978,40 @@ export class PipoDocumentsComponent implements OnInit, AfterViewInit {
     xlsx.writeFile(wb, 'Import -pipo.xlsx');
   }
 
-  handleDelete(id,index:any) {
-    console.log(id,index,'dfsfhsfgsdfgdss');
+  handleDelete(id, index: any) {
+    console.log(id, index, 'dfsfhsfgsdfgdss');
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
-    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, { maxWidth: "400px", data: dialogData });
     dialogRef.afterClosed().subscribe(dialogResult => {
       console.log("---->", dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], id, index)
       }
     });
   }
 
-  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
-    if (RoleCheckbox==''){
-      this.documentService.deleteById({id:id,tableName:'pi_po'}).subscribe((res) => {
+  deleteByRoleType(RoleCheckbox: string, id: any, index: any) {
+    if (RoleCheckbox == '') {
+      this.documentService.deleteById({ id: id, tableName: 'pi_po' }).subscribe((res) => {
         console.log(res)
         if (res) {
           this.ngOnInit()
         }
-    }, (err) => console.log(err))
-    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
-      var approval_data:any={
-        id:id,
-        tableName:'pi_po',
-        deleteflag:'-1',
-        userdetails:this.USER_DATA['result'],
-        status:'pending',
-        dummydata:this.item1[index],
-        Types:'deletion',
-        TypeOfPage:'summary',
-        FileType:this.USER_DATA?.result?.sideMenu
+      }, (err) => console.log(err))
+    } else if (RoleCheckbox == 'Maker' || RoleCheckbox == 'Checker' || RoleCheckbox == 'Approver') {
+      var approval_data: any = {
+        id: id,
+        tableName: 'pi_po',
+        deleteflag: '-1',
+        userdetails: this.USER_DATA['result'],
+        status: 'pending',
+        dummydata: this.item1[index],
+        Types: 'deletion',
+        TypeOfPage: 'summary',
+        FileType: this.USER_DATA?.result?.sideMenu
       }
-      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox, id, index, approval_data, () => {
         this.ngOnInit();
       });
     }

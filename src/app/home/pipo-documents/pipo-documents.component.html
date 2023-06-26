@@ -267,7 +267,8 @@
                                             </div>
                                         </td>
                                         <td class="col-td-th-3">
-                                            <a (click)=" openPipoNote(content); viewCN(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a title="view" class="PopupOpen" popup-close="VIEW_DOCUMENTS" (click)="viewpdf(data)"><i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS"
+                                                aria-hidden="true"></i></a>
                                             <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                             <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)">
                                               <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
@@ -1524,36 +1525,10 @@
 
     </main>
 </div>
-<ng-template #content let-modal>
-
-    <div class="modal-body">
-            <div class="row no-gutter">
-                <!-- The image half -->
-                <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
-
-
-                <!-- The content half -->
-                <div class="col-md-7" style="margin: 10px;">
-                    <div class="login d-flex py-5" style="padding: 0px !important;">
-                        <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                  <span aria-hidden="true">&times;</span>
-                </button> -->
-                        <!-- Demo content-->
-                        <div class="container popup">
-                            <div class="row">
-                                <div class="col-lg-10 col-xl-7 mrg">
-                                    <h6 class="display-6">PIPO Documents</h6>
-
-                                    <iframe [src]='viewData' width="315%" height="500px"> </iframe>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End -->
-
-                    </div>
-                </div>
-
-            </div>
-            </div>
-
-</ng-template>
+<app-custom-model [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
+    id="VIEW_DOCUMENTS" name="Shipping Bill">
+    <div class="p-2">
+        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Shipping Bill" [src]="viewData" width="100%"
+        height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>

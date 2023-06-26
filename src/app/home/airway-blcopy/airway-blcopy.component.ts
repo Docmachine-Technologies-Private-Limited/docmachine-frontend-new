@@ -1,13 +1,13 @@
-import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
-import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { SharedDataService } from "../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
-import {Router} from '@angular/router';
-import {DocumentService} from '../../service/document.service';
-import {DomSanitizer} from '@angular/platform-browser';
-import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ToastrService} from 'ngx-toastr';
+import { Router } from '@angular/router';
+import { DocumentService } from '../../service/document.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import * as data1 from '../../currency.json';
-import {UserService} from './../../service/user.service';
+import { UserService } from './../../service/user.service';
 import { WindowInformationService } from '../../service/window-information.service';
 import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,14 +20,14 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog
 })
 export class AirwayBLCopyComponent implements OnInit {
 
-  @ViewChild('airwayBlCopy', {static: false}) airwayBlCopy: ElementRef;
-  public item:any = [];
+  @ViewChild('airwayBlCopy', { static: false }) airwayBlCopy: ElementRef;
+  public item: any = [];
   public viewData: any;
   public closeResult: string;
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
-  USER_DATA:any=[];
+  USER_DATA: any = [];
   filtervisible: boolean = false;
   FILTER_VALUE_LIST: any = [];
   ALL_FILTER_DATA: any = {
@@ -46,70 +46,69 @@ export class AirwayBLCopyComponent implements OnInit {
     private userService: UserService,
     private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
-    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
   ) {
   }
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
+    this.wininfo.set_controller_of_width(270, '.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
     for (let index = 0; index < data1['default']?.length; index++) {
       this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
     }
-    this.item=[];
-      this.documentService.getAirwayBlcopy().subscribe(
-        (res: any) => {
-          for (let value of res.data) {
-            if (value['file'] == 'export') {
-              this.item.push(value);
-              if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
-                this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+    this.item = [];
+    this.documentService.getAirwayBlcopy().subscribe(
+      (res: any) => {
+        for (let value of res.data) {
+          if (value['file'] == 'export') {
+            this.item.push(value);
+            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
+              this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
+            }
+            value?.buyerName.forEach(element => {
+              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
+                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
               }
-              value?.buyerName.forEach(element => {
-                if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
-                  this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-                }
-              });
-              if ( this.ALL_FILTER_DATA['BL_Airway_No'].includes(value?.airwayBlCopyNumber)==false) {
-                this.ALL_FILTER_DATA['BL_Airway_No'].push(value?.airwayBlCopyNumber);
-              }
-              if ( this.ALL_FILTER_DATA['DATE'].includes(value?.airwayBlCopydate)==false) {
-                this.ALL_FILTER_DATA['DATE'].push(value?.airwayBlCopydate);
-              }
+            });
+            if (this.ALL_FILTER_DATA['BL_Airway_No'].includes(value?.airwayBlCopyNumber) == false) {
+              this.ALL_FILTER_DATA['BL_Airway_No'].push(value?.airwayBlCopyNumber);
+            }
+            if (this.ALL_FILTER_DATA['DATE'].includes(value?.airwayBlCopydate) == false) {
+              this.ALL_FILTER_DATA['DATE'].push(value?.airwayBlCopydate);
             }
           }
-          this.FILTER_VALUE_LIST= this.item;
-          console.log(res,'yuyuyuyuyuyuyuuy')
-        },
-        (err) => console.log(err)
-      );
-
-    }
-    filter(value, key) {
-      this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
-      if (this.FILTER_VALUE_LIST.length== 0) {
+        }
         this.FILTER_VALUE_LIST = this.item;
-      }
-    }
-    resetFilter() {
+        console.log(res, 'yuyuyuyuyuyuyuuy')
+      },
+      (err) => console.log(err)
+    );
+
+  }
+  filter(value, key) {
+    this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+    if (this.FILTER_VALUE_LIST.length == 0) {
       this.FILTER_VALUE_LIST = this.item;
     }
+  }
+  resetFilter() {
+    this.FILTER_VALUE_LIST = this.item;
+  }
   openLetterOfCredit(content) {
     this.modalService
-      .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+      .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
       .result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
   }
 
   private getDismissReason(reason: any): string {
-
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -125,11 +124,11 @@ export class AirwayBLCopyComponent implements OnInit {
     });
   }
 
-  viewCN(a) {
-
-    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-  a['blCopyDoc']
-    );
+  viewpdf(a) {
+    this.viewData = ''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['blCopyDoc']);
+    }, 200);
   }
 
   toSave(data, index) {
@@ -139,20 +138,16 @@ export class AirwayBLCopyComponent implements OnInit {
       (data) => {
         console.log('king123');
         this.toastr.success('Airway / BlCopy updated successfully.');
-
       },
       (error) => {
-        // this.toastr.error('Invalid inputs, please check!');
         console.log('error');
       }
     );
-
-
   }
 
   newCredit() {
     this.sharedData.changeretunurl('home/airway-bl-copy')
-    this.router.navigate(['home/upload', {file: 'export', document: 'blCopy'}]);
+    this.router.navigate(['home/upload', { file: 'export', document: 'blCopy' }]);
   }
 
   exportToExcel() {
@@ -167,45 +162,43 @@ export class AirwayBLCopyComponent implements OnInit {
     this.optionsVisibility[index] = true;
     this.toastr.warning('Airway / Blcopy Is In Edit Mode');
   }
-  handleDelete(id,index:any) {
-    console.log(id,index,'dfsfhsfgsdfgdss');
+  handleDelete(id, index: any) {
+    console.log(id, index, 'dfsfhsfgsdfgdss');
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
-    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, { maxWidth: "400px", data: dialogData });
     dialogRef.afterClosed().subscribe(dialogResult => {
       console.log("---->", dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], id, index)
       }
     });
   }
 
-  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
-    if (RoleCheckbox==''){
-      this.documentService.deleteById({id:id,tableName:'airwayblcopies'}).subscribe((res) => {
+  deleteByRoleType(RoleCheckbox: string, id: any, index: any) {
+    if (RoleCheckbox == '') {
+      this.documentService.deleteById({ id: id, tableName: 'airwayblcopies' }).subscribe((res) => {
         console.log(res)
         if (res) {
           this.ngOnInit()
         }
-    }, (err) => console.log(err))
-    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
-      var approval_data:any={
-        id:id,
-        tableName:'airwayblcopies',
-        deleteflag:'-1',
-        userdetails:this.USER_DATA['result'],
-        status:'pending',
-        dummydata:this.item[index],
-        Types:'deletion',
-        TypeOfPage:'summary',
-        FileType:this.USER_DATA?.result?.sideMenu
+      }, (err) => console.log(err))
+    } else if (RoleCheckbox == 'Maker' || RoleCheckbox == 'Checker' || RoleCheckbox == 'Approver') {
+      var approval_data: any = {
+        id: id,
+        tableName: 'airwayblcopies',
+        deleteflag: '-1',
+        userdetails: this.USER_DATA['result'],
+        status: 'pending',
+        dummydata: this.item[index],
+        Types: 'deletion',
+        TypeOfPage: 'summary',
+        FileType: this.USER_DATA?.result?.sideMenu
       }
-      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox, id, index, approval_data, () => {
         this.ngOnInit();
       });
     }
   }
-
-
 
 }

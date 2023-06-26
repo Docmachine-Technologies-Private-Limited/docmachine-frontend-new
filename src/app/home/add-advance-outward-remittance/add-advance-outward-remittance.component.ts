@@ -552,7 +552,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.authToken = token;
     return this.authToken;
   }
-  
+
   REMIITANCE_SUM: any = 0;
   REMIITANCE_AMOUNT: any = [];
 
@@ -592,7 +592,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     let control = this.pipoForm.controls.pipoTerm as FormArray;
     control.removeAt(i);
   }
-  
+
   PDF_LIST: any = [];
   SlideToggle(event, i) {
     $(".accordion-item").find(".accordion-contant").css('display', 'none')
@@ -616,20 +616,24 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       }
     }
   }
-  
+
   PREVIEWS_URL_STRING: any = '';
   async PREVIEWS_URL(model, id) {
     this.PREVIEWS_URL_LIST = [];
     this.bankformat = ''
     this.bankformat = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.selectedBankName) != -1);
     console.log(this.BANK_DETAILS, this.bankformat, 'this.newBankArray')
+    this.PREVIEWS_URL_STRING = '';
     if (this.bankformat.length != 0 && this.bankformat[0]?.urlpdf != '') {
       this.PromiseReturn().then(async (data: any) => {
         var fitertemp: any = data.filter(n => n)
         await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
           this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
           console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
-          this.PREVIEWS_URL_STRING = merge?.pdfurl;
+          this.PREVIEWS_URL_STRING = '';
+          setTimeout(() => {
+            this.PREVIEWS_URL_STRING = merge?.pdfurl;
+          }, 200);
           model.style.display = 'block';
           console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
         });
@@ -665,7 +669,10 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
                 this.PREVIEWS_URL_LIST = [];
                 console.log(merge?.pdfurl, 'mergepdfresponse?.pdfurl')
                 this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
-                this.PREVIEWS_URL_STRING = merge?.pdfurl;
+                this.PREVIEWS_URL_STRING = '';
+                setTimeout(() => {
+                  this.PREVIEWS_URL_STRING = merge?.pdfurl;
+                }, 200);
                 model.style.display = 'block';
                 console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
               });
@@ -795,14 +802,14 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
                       var updateapproval_data: any = {
                         RejectData: {
                           tableName: 'pi_po',
-                          id:approval_data?.id,
+                          id: approval_data?.id,
                           TransactionId: res1._id,
-                          data:this.pipoForm.value,
-                          pipo_id:pipo_id,
-                          pipo_name:pipo_name
+                          data: this.pipoForm.value,
+                          pipo_id: pipo_id,
+                          pipo_name: pipo_name
                         }
                       }
-                      this.documentService.UpdateApproval(approval_data?.id,updateapproval_data).subscribe((res1: any) => {
+                      this.documentService.UpdateApproval(approval_data?.id, updateapproval_data).subscribe((res1: any) => {
                         this.router.navigate(['/home/dashboardTask'])
                       });
                     }

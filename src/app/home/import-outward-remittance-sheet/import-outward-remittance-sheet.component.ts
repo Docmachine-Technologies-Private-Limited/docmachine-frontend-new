@@ -31,7 +31,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
   // public optionsVisibility : boolean = false;
   test;
   public item: any;
-  public item1:any = [];
+  public item1: any = [];
   item4: any;
   location;
   commodity;
@@ -50,12 +50,12 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
   public closeResult: string;
   public viewData: any;
   filtervisible: boolean = false;
-  USER_DATA:any=[];
+  USER_DATA: any = [];
   FILTER_VALUE_LIST: any = [];
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Party_Name: [],
-    SB_Number	: [],
+    SB_Number: [],
     From: [],
     Branch: [],
     Description: [],
@@ -72,13 +72,13 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
     private modalService: NgbModal,
     private sanitizer: DomSanitizer,
     public wininfo: WindowInformationService,
-    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
 
-  ) {}
+  ) { }
 
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
+    this.wininfo.set_controller_of_width(270, '.content-wrap')
 
     for (let index = 0; index < data1['default']?.length; index++) {
       this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
@@ -91,28 +91,28 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
           if (value['file'] == 'import') {
             console.log('avvvvvvvvvv', value);
             this.item1.push(value);
-            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
               this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
             }
-            if ( this.ALL_FILTER_DATA['Party_Name'].includes(value?.partyName)==false) {
+            if (this.ALL_FILTER_DATA['Party_Name'].includes(value?.partyName) == false) {
               this.ALL_FILTER_DATA['Party_Name'].push(value?.partyName);
             }
-            if ( this.ALL_FILTER_DATA['SB_Number'].includes(value?.sbNo)==false) {
+            if (this.ALL_FILTER_DATA['SB_Number'].includes(value?.sbNo) == false) {
               this.ALL_FILTER_DATA['SB_Number'].push(value?.sbNo);
             }
-            if ( this.ALL_FILTER_DATA['From'].includes(value?.origin)==false) {
+            if (this.ALL_FILTER_DATA['From'].includes(value?.origin) == false) {
               this.ALL_FILTER_DATA['From'].push(value?.origin);
             }
-            if ( this.ALL_FILTER_DATA['Branch'].includes(value?.location)==false) {
+            if (this.ALL_FILTER_DATA['Branch'].includes(value?.location) == false) {
               this.ALL_FILTER_DATA['Branch'].push(value?.location);
             }
-            if ( this.ALL_FILTER_DATA['Description'].includes(value?.commodity)==false) {
+            if (this.ALL_FILTER_DATA['Description'].includes(value?.commodity) == false) {
               this.ALL_FILTER_DATA['Description'].push(value?.commodity);
             }
-            if ( this.ALL_FILTER_DATA['FIRX_Number_ID'].includes(value?.billNo)==false) {
+            if (this.ALL_FILTER_DATA['FIRX_Number_ID'].includes(value?.billNo) == false) {
               this.ALL_FILTER_DATA['FIRX_Number_ID'].push(value?.billNo);
             }
-            if ( this.ALL_FILTER_DATA['DATE'].includes(value?.date)==false) {
+            if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
               this.ALL_FILTER_DATA['DATE'].push(value?.date);
             }
           }
@@ -125,9 +125,9 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
           let cv = (
             parseFloat(this.item1[i].recUSD) * exchangeRate
           ).toFixed(2);
-          this.item1[i].convertedAmount = cv != "NaN" ? cv: null;
+          this.item1[i].convertedAmount = cv != "NaN" ? cv : null;
         });
-        this.FILTER_VALUE_LIST= this.item1;
+        this.FILTER_VALUE_LIST = this.item1;
         console.log('sjsjs', this.item1);
       },
       (err) => console.log(err)
@@ -197,7 +197,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
   }
   filter(value, key) {
     this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
-    if (this.FILTER_VALUE_LIST.length== 0) {
+    if (this.FILTER_VALUE_LIST.length == 0) {
       this.FILTER_VALUE_LIST = this.item1;
     }
   }
@@ -237,7 +237,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
   }
 
   merging() {
-    let filterForexData:any = [];
+    let filterForexData: any = [];
     if (this.item5 && this.item5.length) {
       for (let irData of this.item1) {
         console.log('irdata', irData);
@@ -263,8 +263,8 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         }
       }
       for (let irData of this.item1) {
-        console.log("229",irData.sbNo.length)
-        if(irData.sbNo.length == 0){
+        console.log("229", irData.sbNo.length)
+        if (irData.sbNo.length == 0) {
           const newVal = { ...irData };
           let availableBal = irData.amount
           newVal['BalanceAvail'] = availableBal;
@@ -282,9 +282,9 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         console.log('245', filterForexData);
       }
     }
-    this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET=filterForexData;
+    this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET = filterForexData;
     this.item6 = filterForexData
-    console.log("Full data", this.item6,this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET)
+    console.log("Full data", this.item6, this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET)
   }
 
   openIradvice(content) {
@@ -311,44 +311,47 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
     }
   }
 
-  viewIr(a) {
-    ;
-    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+  viewpdf(a) {
+    this.viewData = ''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+    }, 200);
   }
-  handleDelete(id,index:any) {
-    console.log(id,index,'dfsfhsfgsdfgdss');
+
+  handleDelete(id, index: any) {
+    console.log(id, index, 'dfsfhsfgsdfgdss');
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
-    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, { maxWidth: "400px", data: dialogData });
     dialogRef.afterClosed().subscribe(dialogResult => {
       console.log("---->", dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], id, index)
       }
     });
   }
 
-  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
-    if (RoleCheckbox==''){
-      this.documentService.deleteById({id:id,tableName:'iradvices'}).subscribe((res) => {
+  deleteByRoleType(RoleCheckbox: string, id: any, index: any) {
+    if (RoleCheckbox == '') {
+      this.documentService.deleteById({ id: id, tableName: 'iradvices' }).subscribe((res) => {
         console.log(res)
         if (res) {
           this.ngOnInit()
         }
-    }, (err) => console.log(err))
-    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
-      var approval_data:any={
-        id:id,
-        tableName:'iradvices',
-        deleteflag:'-1',
-        userdetails:this.USER_DATA['result'],
-        status:'pending',
-        dummydata:this.item6[index],
-        Types:'deletion',
-        TypeOfPage:'summary',
-        FileType:this.USER_DATA?.result?.sideMenu
+      }, (err) => console.log(err))
+    } else if (RoleCheckbox == 'Maker' || RoleCheckbox == 'Checker' || RoleCheckbox == 'Approver') {
+      var approval_data: any = {
+        id: id,
+        tableName: 'iradvices',
+        deleteflag: '-1',
+        userdetails: this.USER_DATA['result'],
+        status: 'pending',
+        dummydata: this.item6[index],
+        Types: 'deletion',
+        TypeOfPage: 'summary',
+        FileType: this.USER_DATA?.result?.sideMenu
       }
-      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox, id, index, approval_data, () => {
         this.ngOnInit();
       });
     }

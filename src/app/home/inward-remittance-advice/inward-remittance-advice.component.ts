@@ -30,7 +30,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   // public optionsVisibility : boolean = false;
   test;
   public item: any;
-  public item1:any = [];
+  public item1: any = [];
   item4: any;
   location;
   commodity;
@@ -49,13 +49,13 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   public closeResult: string;
   public viewData: any;
   filtervisible: boolean = false;
-  USER_DATA:any=[];
-  PENDING_DATA:any=[];
+  USER_DATA: any = [];
+  PENDING_DATA: any = [];
   FILTER_VALUE_LIST: any = [];
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
     Party_Name: [],
-    SB_Number	: [],
+    SB_Number: [],
     From: [],
     Branch: [],
     Description: [],
@@ -73,21 +73,21 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     private sanitizer: DomSanitizer,
     public wininfo: WindowInformationService,
     public dialog: MatDialog,
-    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService
-  ) {}
+    public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService
+  ) { }
 
- async ngOnInit() {
-    this.wininfo.set_controller_of_width(270,'.content-wrap');
+  async ngOnInit() {
+    this.wininfo.set_controller_of_width(270, '.content-wrap');
     this.USER_DATA = await this.userService.getUserDetail();
     console.log("this.USER_DATA", this.USER_DATA)
     for (let index = 0; index < data1['default']?.length; index++) {
       this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
     }
-    this.documentService.getRejectStatus(this.USER_DATA?.result?.sideMenu).subscribe((res: any)=>{
+    this.documentService.getRejectStatus(this.USER_DATA?.result?.sideMenu).subscribe((res: any) => {
       this.PENDING_DATA = res;
       console.log("this.PENDING_DATA", res)
     })
-    this.item1=[];
+    this.item1 = [];
     this.documentService.getIrAdvice(1).subscribe(
       (res: any) => {
         console.log(res), (this.item = res.data);
@@ -95,28 +95,28 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         for (let value of this.item) {
           if (value['file'] == 'export') {
             this.item1.push(value);
-            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+            if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
               this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
             }
-            if ( this.ALL_FILTER_DATA['Party_Name'].includes(value?.partyName)==false) {
+            if (this.ALL_FILTER_DATA['Party_Name'].includes(value?.partyName) == false) {
               this.ALL_FILTER_DATA['Party_Name'].push(value?.partyName);
             }
-            if ( this.ALL_FILTER_DATA['SB_Number'].includes(value?.sbNo)==false) {
+            if (this.ALL_FILTER_DATA['SB_Number'].includes(value?.sbNo) == false) {
               this.ALL_FILTER_DATA['SB_Number'].push(value?.sbNo);
             }
-            if ( this.ALL_FILTER_DATA['From'].includes(value?.origin)==false) {
+            if (this.ALL_FILTER_DATA['From'].includes(value?.origin) == false) {
               this.ALL_FILTER_DATA['From'].push(value?.origin);
             }
-            if ( this.ALL_FILTER_DATA['Branch'].includes(value?.location)==false) {
+            if (this.ALL_FILTER_DATA['Branch'].includes(value?.location) == false) {
               this.ALL_FILTER_DATA['Branch'].push(value?.location);
             }
-            if ( this.ALL_FILTER_DATA['Description'].includes(value?.commodity)==false) {
+            if (this.ALL_FILTER_DATA['Description'].includes(value?.commodity) == false) {
               this.ALL_FILTER_DATA['Description'].push(value?.commodity);
             }
-            if ( this.ALL_FILTER_DATA['FIRX_Number_ID'].includes(value?.billNo)==false) {
+            if (this.ALL_FILTER_DATA['FIRX_Number_ID'].includes(value?.billNo) == false) {
               this.ALL_FILTER_DATA['FIRX_Number_ID'].push(value?.billNo);
             }
-            if ( this.ALL_FILTER_DATA['DATE'].includes(value?.date)==false) {
+            if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
               this.ALL_FILTER_DATA['DATE'].push(value?.date);
             }
           }
@@ -125,14 +125,14 @@ export class InwardRemittanceAdviceComponent implements OnInit {
           let amount = element.amount
           let commision = parseFloat(element.commision)
           let exchangeRate = parseFloat(element.exchangeRate)
-          let pipoamount:any=parseFloat(element?.pipo[0]?.amount)
-          this.item1[i].recUSD = (pipoamount- commision).toFixed(2);
+          let pipoamount: any = parseFloat(element?.pipo[0]?.amount)
+          this.item1[i].recUSD = (pipoamount - commision).toFixed(2);
           let cv = (
             parseFloat(this.item1[i].recUSD) * exchangeRate
           ).toFixed(2);
-          this.item1[i].convertedAmount = cv != "NaN" ? cv: null;
+          this.item1[i].convertedAmount = cv != "NaN" ? cv : null;
         });
-        this.FILTER_VALUE_LIST= this.item1;
+        this.FILTER_VALUE_LIST = this.item1;
         console.log('exchangeRate', this.item1);
       },
       (err) => console.log(err)
@@ -152,7 +152,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         this.commodity = this.commodity.filter(
           (value, index) => this.commodity.indexOf(value) === index
         );
-        //this.router.navigate(['/addMember'], { queryParams: { id: data['data']._id } })
       },
       (error) => {
         console.log('error');
@@ -162,8 +161,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     this.documentService.getMaster(1).subscribe(
       (res: any) => {
         console.log('Master Data File', res);
-        // this.origin = res['data'][0]['countryOfFinaldestination']
-        // console.log("jainshailendra",this.origin);
         this.item5 = res.data;
         this.merging();
         this.item5.forEach((element, i) => {
@@ -174,11 +171,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         );
 
         console.log('Master Country', this.origin);
-
-        // this.origin.forEach((element, i)=>{
-        //   this.origin[i].ori = element[i]
-        // })
-        // console.log("Master Country2", this.origin)
       },
       (err) => console.log(err)
     );
@@ -205,7 +197,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         this.toastr.success('Forex Advice Row Is Updated Successfully.');
       },
       (error) => {
-        // this.toastr.error('Invalid inputs, please check!');
         console.log('error');
       }
     );
@@ -213,7 +204,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
 
   filter(value, key) {
     this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
-    if (this.FILTER_VALUE_LIST.length== 0) {
+    if (this.FILTER_VALUE_LIST.length == 0) {
       this.FILTER_VALUE_LIST = this.item1;
     }
   }
@@ -244,23 +235,21 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   }
 
   merging() {
-    let filterForexData:any = [];
+    let filterForexData: any = [];
     if (this.item5 && this.item5.length) {
       for (let irData of this.item1) {
         console.log('irdata', irData);
-        var temp:any=[];
+        var temp: any = [];
         for (let shippingdata of this.item5) {
           console.log('shipping', shippingdata);
-          temp['deleteflag']=shippingdata['deleteflag']
-          // filterForexData.push(temp);
+          temp['deleteflag'] = shippingdata['deleteflag']
           for (let i = 0; i <= irData.sbNo.length; i++) {
             console.log('index of shipping Bill', irData.sbNo[i]);
             if (irData.sbNo[i] == shippingdata.sbno) {
-              const newVal:any = { ...irData };
+              const newVal: any = { ...irData };
               console.log('Line no. 211', newVal);
               let sbBalance = shippingdata.fobValue;
               let irAmount = irData.amount
-              // .replace(/,/g, ''));
               let availableBalance = irAmount - sbBalance;
 
               if (availableBalance <= 0) {
@@ -276,11 +265,10 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         }
       }
       for (let irData of this.item1) {
-        console.log("229",irData.sbNo.length)
-        if(irData.sbNo.length == 0){
+        console.log("229", irData.sbNo.length)
+        if (irData.sbNo.length == 0) {
           const newVal = { ...irData };
           let availableBal = irData.amount
-            // .replace(/,/g, ''));
           newVal['BalanceAvail'] = availableBal;
           filterForexData.push(newVal);
           console.log('235', filterForexData);
@@ -291,7 +279,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       for (let ir of this.item1) {
         const newVal = { ...ir };
         let availableBal = ir.amount
-          // .replace(/,/g, ''));
         newVal['BalanceAvail'] = availableBal;
         filterForexData.push(newVal);
         console.log('245', filterForexData);
@@ -325,11 +312,13 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     }
   }
 
-  viewIr(a) {
-    ;
-    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+  viewpdf(a) {
+    this.viewData = ''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+    }, 200);
   }
-  handleDelete(id,index:any) {
+  handleDelete(id, index: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
     const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
@@ -340,32 +329,32 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     dialogRef.afterClosed().subscribe(dialogResult => {
       console.log("---->", dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], id, index)
       }
     });
   }
 
-  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
-    if (RoleCheckbox==''){
-        this.documentService.deleteById({id:id,tableName:'iradvices'}).subscribe((res) => {
-            console.log(res)
-            if (res) {
-              this.ngOnInit()
-            }
-        }, (err) => console.log(err))
-    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
-      var approval_data:any={
-        id:id,
-        tableName:'iradvices',
-        deleteflag:'-1',
-        userdetails:this.USER_DATA['result'],
-        status:'pending',
-        dummydata:this.item1[index],
-        Types:'deletion',
-        TypeOfPage:'summary',
-        FileType:this.USER_DATA?.result?.sideMenu
+  deleteByRoleType(RoleCheckbox: string, id: any, index: any) {
+    if (RoleCheckbox == '') {
+      this.documentService.deleteById({ id: id, tableName: 'iradvices' }).subscribe((res) => {
+        console.log(res)
+        if (res) {
+          this.ngOnInit()
+        }
+      }, (err) => console.log(err))
+    } else if (RoleCheckbox == 'Maker' || RoleCheckbox == 'Checker' || RoleCheckbox == 'Approver') {
+      var approval_data: any = {
+        id: id,
+        tableName: 'iradvices',
+        deleteflag: '-1',
+        userdetails: this.USER_DATA['result'],
+        status: 'pending',
+        dummydata: this.item1[index],
+        Types: 'deletion',
+        TypeOfPage: 'summary',
+        FileType: this.USER_DATA?.result?.sideMenu
       }
-      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox, id, index, approval_data, () => {
         this.ngOnInit();
       });
     }

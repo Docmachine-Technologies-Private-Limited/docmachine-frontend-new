@@ -71,7 +71,7 @@ export class UploadComponent implements OnInit {
   public message: any = '';
   public documentType: any = '';
   public documentType1: any = '';
-  public piPoUrl;
+  public piPoUrl:any='';
   public selectedDocumentType;
   public benneDetail: any = [];
   public buyerDetail: any = [];
@@ -2578,15 +2578,19 @@ export class UploadComponent implements OnInit {
         args[1].publicUrl
       );
       this.pipourl1 = args[1].data;
-      this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        args[1].data
-      );
-      if (args[1].data.doc) {
-        console.log('DOC URL', args[1].doc);
+      this.piPoUrl='';
+      setTimeout(() => {
         this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-          args[1].data.doc
+          args[1].data
         );
-      }
+        if (args[1].data.doc) {
+          console.log('DOC URL', args[1].doc);
+          this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+            args[1].data.doc
+          );
+        }
+      }, 200);
+     
       console.log('PIPO URL', this.piPoUrl);
       console.log(this.publicUrl);
       console.log(this.piPoUrl);

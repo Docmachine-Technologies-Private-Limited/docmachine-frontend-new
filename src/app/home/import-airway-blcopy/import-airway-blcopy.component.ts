@@ -2,14 +2,14 @@ import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import * as xlsx from 'xlsx';
 import {Router} from '@angular/router';
-import {DocumentService} from 'src/app/service/document.service';
+import {DocumentService} from '../../service/document.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
 import * as data1 from '../../currency.json';
 import {UserService} from './../../service/user.service';
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { WindowInformationService } from '../../service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
 
@@ -22,7 +22,7 @@ export class ImportAirwayBlcopyComponent implements OnInit {
 
 
   @ViewChild('importairwayBlCopy', {static: false}) importairwayBlCopy: ElementRef;
-  public item = [];
+  public item:any = [];
   public viewData: any;
   public closeResult: string;
   public optionsVisibility: any = [];
@@ -90,7 +90,7 @@ export class ImportAirwayBlcopyComponent implements OnInit {
 
   }
   filter(value, key) {
-    this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+    this.FILTER_VALUE_LIST = this.item.filter((item:any) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length== 0) {
       this.FILTER_VALUE_LIST = this.item;
     }
@@ -127,13 +127,12 @@ export class ImportAirwayBlcopyComponent implements OnInit {
       return x.pi_poNo;
     });
   }
-
-  viewCN(a) {
-
-    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-  a['blCopyDoc']
-    );
-  }
+  viewpdf(a) {
+    this.viewData=''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['blCopyDoc']);
+    }, 200);
+}
 
   toSave(data, index) {
     this.optionsVisibility[index] = false;

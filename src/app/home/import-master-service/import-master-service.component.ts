@@ -1,5 +1,5 @@
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
-import {DocumentService} from 'src/app/service/document.service';
+import {DocumentService} from '../../service/document.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrService} from 'ngx-toastr';
@@ -8,11 +8,11 @@ import * as xlsx from 'xlsx';
 import {Router} from '@angular/router';
 import {SharedDataService} from "../shared-Data-Servies/shared-data.service";
 import {FormsModule} from '@angular/forms';
-import { WindowInformationService } from 'src/app/service/window-information.service';
-import { AprrovalPendingRejectTransactionsService } from 'src/app/service/aprroval-pending-reject-transactions.service';
+import { WindowInformationService } from '../../service/window-information.service';
+import { AprrovalPendingRejectTransactionsService } from '../../service/aprroval-pending-reject-transactions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog-box/confirm-dialog-box.component';
-import { PipoDataService } from 'src/app/service/homeservices/pipo.service';
+import { PipoDataService } from '../../service/homeservices/pipo.service';
 import * as data1 from '../../currency.json';
 
 @Component({
@@ -123,13 +123,13 @@ export class ImportMasterServiceComponent implements OnInit {
   getPipoNumbers(data) {
     return data?.pipo[0]?.pi_poNo;
   }
-
-  viewLC(a) {
-
-    this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(
-      a['doc']
-    );
-  }
+  
+  viewpdf(a) {
+    this.viewData=''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+    }, 200);
+}
 
   toSave(data, index) {
     this.optionsVisibility[index] = false;
@@ -141,16 +141,12 @@ export class ImportMasterServiceComponent implements OnInit {
 
       },
       (error) => {
-        // this.toastr.error('Invalid inputs, please check!');
         console.log('error');
       }
     );
-
-
   }
 
   masterSer() {
-    // this.sharedData.changeretunurl('home/master-services')
     this.router.navigate(['home/upload', {file: 'import', document: 'import-agreement'}]);
   }
 

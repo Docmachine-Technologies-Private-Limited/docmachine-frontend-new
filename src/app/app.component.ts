@@ -124,20 +124,12 @@ export class AppComponent implements OnInit, OnDestroy {
         this.authservice.logout();
         this.router.navigate(['/login']);
       }
-      // this.socketioservice?.socket.emit('received', JSON.stringify(this.userData));
     }).catch((error: any) => {
       if (error.status == 401) {
         this.authservice.logout();
         this.router.navigate(['/login']);
       }
-    });;
-    // this.socketioservice?.socket.on('data1', (res) => {
-    //   console.log(res,'socket data1')
-    // })
-
-    // this.socketioservice?.socket.on('data2', (res) => {
-    //   console.log(res,'socket data2')
-    // })
+    });
   };
 
   setTimeoutNew() {

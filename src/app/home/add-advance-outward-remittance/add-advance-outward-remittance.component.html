@@ -387,8 +387,8 @@
     <div class="col-12">
         <app-custom-model [customstyle]="{'max-width':'60vw !important'}" class="p-2" height="98vh" id="PREVIEWS"
             name="Document View">
-            <div class="col-12 mt-2 mb-2" *ngIf="this.PREVIEWS_URL_STRING!=''">
-                <app-pdf-viewer [downloadShow]="false" [src]="this.PREVIEWS_URL_STRING" name="Documents" width="100%"
+            <div class="col-12 mt-2 mb-2" >
+                <app-pdf-viewer *ngIf="this.PREVIEWS_URL_STRING!=''" [downloadShow]="false" [src]="this.PREVIEWS_URL_STRING" name="Documents" width="100%"
                     height="100%"></app-pdf-viewer>
             </div>
             <div class="modal-footer">

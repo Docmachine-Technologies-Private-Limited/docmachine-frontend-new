@@ -71,19 +71,13 @@
 
         <div class="analytics">
             <div style="width: 100%" class="analytics_top" #destruction>
-                <!-- *ngIf="!showInvoice" -->
                 <div style="width: 100%" class="row">
                     <div class="" id="container">
-                        <!-- *ngIf="!showInvoice" -->
                         <section class="middle_datatable">
                             <div class="widget-body p-0 support table-wrapper">
                                <table class="table table-hover">
-                                    <!-- *ngIf='pipo' -->
                                     <thead>
                                         <tr class="table-tr">
-                                            <!-- <th class="rect">
-                  <img src="./assets/Rectangle-13.png" />
-              </th> -->
                                             <th scope="col" class="col-td-th-3"><span class="pl-3" style="margin-left: 9px;">DATE</span></th>
                                             <th scope="col" class="col-td-th-3">PI/PO No.</th>
                                             <th scope="col" class="col-td-th-3">Destruction Certificate No.</th>
@@ -94,46 +88,20 @@
                                     <tbody>
                                         <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index" [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-
-                                            <!-- (click)="
-                getInvoices(data, i) && getTransactions(data.pi_poNo) -->
-                                            <!-- <th class="rect">
-                  <img src="./assets/Rectangle-13.png" />
-              </th> -->
                                             <td class="col-td-th-3">{{ data.destructionDate }}</td>
-
                                             <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
-
                                             <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.destructionNumber}}
                                                 </div>
-
                                                 <div *ngIf="optionsVisibility[i]">
                                                     <input class="tblInput form-control" name="destructionNumber" type="text" placeholder="Destruction Number" [(ngModel)]="data.destructionNumber">
                                                 </div>
                                             </td>
-                                            <!-- <td class="col-td-th-3">
-                    <div *ngIf="!optionsVisibility[i]">
-                        {{data.creditNoteAmount}}
-                    </div>
-
-                    <div *ngIf="optionsVisibility[i]">
-                        <input class="tblInput form-control" name="creditNoteAmount" type="text" placeholder="Credit Note Amount" [(ngModel)]="data.creditNoteAmount">
-                    </div>
-                </td> -->
-                                            <!-- <td class="col-td-th-3">
-                    <div *ngIf="!optionsVisibility[i]">
-                        {{data.currency}}
-                    </div>
-
-                    <div *ngIf="optionsVisibility[i]">
-                        <input class="tblInput form-control" name="currency" type="text" placeholder="Currency" [(ngModel)]="data.currency">
-                    </div>
-                </td> -->
-                                            <td class="col-td-th-3">{{data.buyerName}}</td>
+                                          <td class="col-td-th-3">{{data.buyerName}}</td>
                                             <td class="col-td-th-3">
-                                                <a (click)=" openDestruction(content); viewCN(data)" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                <a title="view" class="PopupOpen" popup-close="VIEW_DOCUMENTS" (click)="viewpdf(data)"><i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS"
+                                                    aria-hidden="true"></i></a>
                                                 <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]" (click)="toSave(data, i)"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                                                 <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]" (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
                           aria-hidden="true"></i></button>
@@ -142,7 +110,6 @@
                         </button>
                                             </td>
                                         </tr>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -151,37 +118,13 @@
                 </div>
             </div>
         </div>
-
-        <ng-template #content let-modal>
-
-            <div class="modal-body">
-                <div class="row no-gutter">
-                    <!-- The image half -->
-                    <!-- <div class="col-md-6 d-none d-md-flex bg-image"></div> -->
-                    <!-- The content half -->
-                    <div class="col-md-7" style="margin: 10px;">
-                        <div class="login d-flex py-5" style="padding: 0px !important;">
-
-                            <!-- Demo content-->
-                            <div class="container popup">
-                                <div class="row">
-                                    <div class="col-lg-10 col-xl-7 mrg">
-                                        <h6 class="display-6">Destruction Certificate</h6>
-
-                                        <iframe [src]="viewData" width="315%" height="500px"></iframe>
-                                        <button type="submit" style="margin-left: 250px;" class="submitBTN" (click)="modal.dismiss('Cross click')">OK
-                                       </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End -->
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </ng-template>
     </main>
 </div>
+
+<app-custom-model [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
+    id="VIEW_DOCUMENTS" name="Shipping Bill">
+    <div class="p-2">
+        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Shipping Bill" [src]="viewData" width="100%"
+        height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>
