@@ -73,16 +73,28 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
     let url_replace: any = ''
     if (this.src?.changingThisBreaksApplicationSecurity != undefined) {
       url_replace = this.src?.changingThisBreaksApplicationSecurity?.replace(this.documentService.AppConfig?.S3_BUCKET_URL, '')
-    } else {
-      url_replace = this.src?.replace(this.documentService.AppConfig?.S3_BUCKET_URL, '')
-    }
-    this.userService.getReadS3File({ fileName: url_replace }).subscribe((res: any) => {
-      this.src = 'data:application/pdf;base64,' + this._arrayBufferToBase64(res?.pdf?.data)
+      this.userService.getReadS3File({ fileName: url_replace }).subscribe((res: any) => {
+        this.src = 'data:application/pdf;base64,' + this._arrayBufferToBase64(res?.pdf?.data)
+        this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+        this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
+        console.log(this.URL_IFRAME, 'sdsfdfsdfdsfsdfdsfdsfsdfdsfdfsd');
+        this.Sppinloader = false
+      });
+    } else if (this.src.indexOf('data:application/pdf;base64,') != -1) {
       this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
       this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
       console.log(this.URL_IFRAME, 'sdsfdfsdfdsfsdfdsfdsfsdfdsfdfsd');
       this.Sppinloader = false
-    });
+    } else {
+      url_replace = this.src?.replace(this.documentService.AppConfig?.S3_BUCKET_URL, '')
+      this.userService.getReadS3File({ fileName: url_replace }).subscribe((res: any) => {
+        this.src = 'data:application/pdf;base64,' + this._arrayBufferToBase64(res?.pdf?.data)
+        this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+        this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
+        console.log(this.URL_IFRAME, 'sdsfdfsdfdsfsdfdsfdsfsdfdsfdfsd');
+        this.Sppinloader = false
+      });
+    }
   }
   _arrayBufferToBase64(buffer) {
     var binary = '';

@@ -407,10 +407,14 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       const mergedPdfFileload = await mergedPdfload.save();
       var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
       const x1 = 'data:application/pdf;base64,' + base64String1;
-      console.log("line no. 1735", this.remittanceUrl)
-      this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
-      console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
-      this.ORIGINAL_PDF = pdfBytes;
+      console.log("line no. 1735", this.remittanceUrl);
+      
+      this.PREVIWES_URL = ''
+      setTimeout(() => {
+        this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
+        console.log(this.PREVIWES_URL, 'this.PREVIWES_URL')
+        this.ORIGINAL_PDF = pdfBytes;
+      }, 200);
     }
   }
   OUR_SHA_BEN_FUNC(data: any) {
@@ -601,17 +605,19 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       this.PDF_LIST[i] = [];
       for (let index = 0; index < this.temp1[i].length; index++) {
         if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != undefined) {
-          this.userService.mergePdf(this.temp1[i][index]?.pdf).subscribe((res: any) => {
-            res.arrayBuffer().then((data: any) => {
-              var base64String = this._arrayBufferToBase64(data);
-              const x = 'data:application/pdf;base64,' + base64String;
-              this.PDF_LIST[i].push({
-                pdf: x,
-                name: this.temp1[i][index]['name']
-              })
-              console.log('downloadEachFile', data, this.PDF_LIST);
-            });
-          });
+          console.log(this.temp1[i][index]?.pdf, 'dgdfgfgdfgfdgfdgfgf')
+          this.PDF_LIST[i].push({
+            pdf: this.temp1[i][index]?.pdf,
+            name: this.temp1[i][index]['name']
+          })
+          // this.userService.mergePdf(this.temp1[i][index]?.pdf).subscribe((res: any) => {
+          //   res.arrayBuffer().then((data: any) => {
+          //     var base64String = this._arrayBufferToBase64(data);
+          //     const x = 'data:application/pdf;base64,' + base64String;
+
+          //     console.log('downloadEachFile', data, this.PDF_LIST);
+          //   });
+          // });
         }
       }
     }

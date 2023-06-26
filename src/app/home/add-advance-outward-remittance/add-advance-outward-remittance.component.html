@@ -29,9 +29,14 @@
                             <div class="row">
                                 <div class="col-md-7 col-sm-12 col-12">
                                     <div class="new_left_sidedoc pdf_invoce_scroll">
-                                        <iframe class='iframe-controller' *ngIf="this.PREVIWES_URL!=''"
+                                        <!-- <iframe class='iframe-controller' *ngIf="this.PREVIWES_URL!=''"
                                             style="flex-direction:row;" [src]="this.PREVIWES_URL" id="frame1"
-                                            height="600px" width="100%"></iframe>
+                                            height="600px" width="100%"></iframe> -->
+                                            
+                                            <app-pdf-viewer *ngIf="this.PREVIWES_URL!=''" [downloadShow]="false"
+                                            name="Bank Pdf" [src]="this.PREVIWES_URL" width="100%"
+                                            height="500px"></app-pdf-viewer>
+                                            
                                         <div id="first">
                                             <app-import-letterhead *ngIf="this.OTHER_BANK_VISIBLE==true"
                                                 [data]="[this.BANK_DETAILS,this.selectedItems,this.selectedBenne,this.REMIITANCE_SUM]"></app-import-letterhead>
@@ -60,8 +65,8 @@
                                                 <app-pdf-viewer *ngIf="uploadUrl!=''" [downloadShow]="false"
                                                     [name]="selItems?.name" [src]="uploadUrl" width="100%"
                                                     height="500px"></app-pdf-viewer>
-                                                <iframe *ngIf="uploadUrl!=''" style="border:none;" [src]="uploadUrl"
-                                                    width="100%"> </iframe>
+                                                <!-- <iframe *ngIf="uploadUrl!=''" style="border:none;" [src]="uploadUrl"
+                                                    width="100%"> </iframe> -->
                                             </div>
                                         </div>
                                     </div>

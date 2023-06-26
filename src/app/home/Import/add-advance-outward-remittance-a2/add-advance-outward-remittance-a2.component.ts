@@ -722,17 +722,21 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
       this.PDF_LIST[i] = [];
       for (let index = 0; index < this.temp1[i].length; index++) {
         if (this.temp1[i][index]?.pdf != '' && this.temp1[i][index]?.pdf != undefined) {
-          this.userService.mergePdf(this.temp1[i][index]?.pdf).subscribe((res: any) => {
-            res.arrayBuffer().then((data: any) => {
-              var base64String = this._arrayBufferToBase64(data);
-              const x = 'data:application/pdf;base64,' + base64String;
-              this.PDF_LIST[i].push({
-                pdf: x,
-                name: this.temp1[i][index]['name']
-              })
-              console.log('downloadEachFile', data, this.PDF_LIST);
-            });
-          });
+          this.PDF_LIST[i].push({
+            pdf: this.temp1[i][index]?.pdf,
+            name: this.temp1[i][index]['name']
+          })
+          // this.userService.mergePdf(this.temp1[i][index]?.pdf).subscribe((res: any) => {
+          //   res.arrayBuffer().then((data: any) => {
+          //     var base64String = this._arrayBufferToBase64(data);
+          //     const x = 'data:application/pdf;base64,' + base64String;
+          //     this.PDF_LIST[i].push({
+          //       pdf: x,
+          //       name: this.temp1[i][index]['name']
+          //     })
+          //     console.log('downloadEachFile', data, this.PDF_LIST);
+          //   });
+          // });
         }
       }
     }
@@ -749,7 +753,10 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
         await this.pdfmerge._multiple_merge_pdf(fitertemp).then((merge: any) => {
           this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
           console.log(merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PreviewSlideToggle')
-          this.PREVIEWS_URL_STRING = merge?.pdfurl;
+          this.PREVIEWS_URL_STRING = '';
+          setTimeout(() => {
+            this.PREVIEWS_URL_STRING = merge?.pdfurl;
+          }, 200);
           model.style.display = 'block';
           console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
         });
@@ -794,7 +801,10 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
                 this.PREVIEWS_URL_LIST = [];
                 console.log(merge?.pdfurl, 'mergepdfresponse?.pdfurl')
                 this.PREVIEWS_URL_LIST.push(merge?.pdfurl);
-                this.PREVIEWS_URL_STRING = merge?.pdfurl;
+                this.PREVIEWS_URL_STRING = '';
+                setTimeout(() => {
+                  this.PREVIEWS_URL_STRING = merge?.pdfurl;
+                }, 200);
                 model.style.display = 'block';
                 console.log(this.pipoForm, merge?.pdfurl, this.PREVIEWS_URL_LIST, 'PREVIEWS_URL')
               });

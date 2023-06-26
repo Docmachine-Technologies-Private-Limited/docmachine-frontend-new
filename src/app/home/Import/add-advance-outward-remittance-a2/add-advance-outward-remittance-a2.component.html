@@ -19,9 +19,9 @@
                                     <div class="row">
                                         <div class="col-md-7 col-sm-12 col-12">
                                             <div class="new_left_sidedoc pdf_invoce_scroll">
-                                                <iframe class='iframe-controller' *ngIf="this.PREVIWES_URL!=''"
-                                                    style="flex-direction:row;" [src]="this.PREVIWES_URL" id="frame1"
-                                                    height="600px" width="100%"></iframe>
+                                                <app-pdf-viewer *ngIf="this.PREVIWES_URL!=''" [downloadShow]="false"
+                                                    name="Bank Pdf" [src]="this.PREVIWES_URL" width="100%"
+                                                    height="500px"></app-pdf-viewer>
                                                 <div id="first">
                                                     <app-import-letterhead *ngIf="this.OTHER_BANK_VISIBLE==true"
                                                         [data]="[this.BANK_DETAILS,this.selectedItems,this.selectedBenne,this.REMIITANCE_SUM]"></app-import-letterhead>
@@ -54,8 +54,6 @@
                                                         <app-pdf-viewer *ngIf="uploadUrl!=''" [downloadShow]="false"
                                                             [name]="selItems?.name" [src]="uploadUrl" width="100%"
                                                             height="500px"></app-pdf-viewer>
-                                                        <iframe *ngIf="uploadUrl!=''" style="border:none;"
-                                                            [src]="uploadUrl" width="100%"> </iframe>
                                                     </div>
                                                 </div>
                                             </div>
@@ -69,8 +67,9 @@
                                                         <app-ng-dropdown-custom placeHolderText="Select Bank Name"
                                                             [items]="this.benneDetail" bindLabel="benneName"
                                                             [ngModel]="form?.benneName" formControlName="benneName"
-                                                            (modelChanges)="form.benneName=$event?.benneName" [multiple]="false"
-                                                            (modelChanges)="changepipo($event)" #select_ben>
+                                                            (modelChanges)="form.benneName=$event?.benneName"
+                                                            [multiple]="false" (modelChanges)="changepipo($event)"
+                                                            #select_ben>
                                                         </app-ng-dropdown-custom>
                                                         <div *ngIf="submitted && form.benneName.errors"
                                                             class='errorText'>
@@ -258,7 +257,9 @@
                                                                 Code</label>
                                                             <button type="button" class="btn btn-primary PopupOpen"
                                                                 [attr.popup-close]="'A2_DATA'">Purpose Code</button>
-                                                            <p class="btn btn-primary mt-3" *ngFor="let item of this.SELECTED_PURPOSE_CODE_DATA;let i=index">{{(i+1)}}. {{item?.RBI_Purpose_Code}}</p>
+                                                            <p class="btn btn-primary mt-3"
+                                                                *ngFor="let item of this.SELECTED_PURPOSE_CODE_DATA;let i=index">
+                                                                {{(i+1)}}. {{item?.RBI_Purpose_Code}}</p>
                                                         </div>
                                                         <div class="col mt-6">
                                                             <section class="pt-2" [formGroup]="toppings">
@@ -273,12 +274,18 @@
                                                                 <p class="mb-0"><mat-checkbox
                                                                         formControlName="Invoice_Debit_Note">Invoice/Debit
                                                                         Note</mat-checkbox></p>
-                                                                <p class="mb-0"  *ngIf="sumTotalAmount != 0 && sumTotalAmount > 25000"><mat-checkbox
-                                                                        formControlName="EXTRA_DOC_1">EXTRA DOC 1</mat-checkbox></p>
-                                                                <p class="mb-0"  *ngIf="sumTotalAmount != 0 && sumTotalAmount > 25000"><mat-checkbox
-                                                                        formControlName="EXTRA_DOC_2">EXTRA DOC 2</mat-checkbox></p>
-                                                                <p class="mb-0"  *ngIf="sumTotalAmount != 0 && sumTotalAmount > 25000"><mat-checkbox
-                                                                        formControlName="EXTRA_DOC_3">EXTRA DOC 3</mat-checkbox></p>
+                                                                <p class="mb-0"
+                                                                    *ngIf="sumTotalAmount != 0 && sumTotalAmount > 25000">
+                                                                    <mat-checkbox formControlName="EXTRA_DOC_1">EXTRA
+                                                                        DOC 1</mat-checkbox></p>
+                                                                <p class="mb-0"
+                                                                    *ngIf="sumTotalAmount != 0 && sumTotalAmount > 25000">
+                                                                    <mat-checkbox formControlName="EXTRA_DOC_2">EXTRA
+                                                                        DOC 2</mat-checkbox></p>
+                                                                <p class="mb-0"
+                                                                    *ngIf="sumTotalAmount != 0 && sumTotalAmount > 25000">
+                                                                    <mat-checkbox formControlName="EXTRA_DOC_3">EXTRA
+                                                                        DOC 3</mat-checkbox></p>
                                                             </section>
                                                         </div>
                                                     </div>
@@ -458,7 +465,7 @@
                                             <button type="submit" class="btn btn-primary"
                                                 (click)="RequestforCASubmit(this.CA_CERTIFICATE_FORM)">Submit</button>
                                             <button type="submit" class="btn btn-primary PopupOpen"
-                                            [attr.popup-close]="'CA_FORM'">Submit</button>
+                                                [attr.popup-close]="'CA_FORM'">Submit</button>
                                         </div>
                                         <div class="d-flex col-12 p-0 pt-3" id="FromClientRequest">
                                             <div class="row col-12 mt-0 p-0">
@@ -493,11 +500,9 @@
                                                 <div class="row col-12 p-0">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputEmail4">Currency</label>
-                                                        <app-ng-dropdown-custom 
-                                                            bindLabel="type1"
+                                                        <app-ng-dropdown-custom bindLabel="type1"
                                                             placeHolderText="Select Currency"
-                                                            [items]="this.CURRENCY_LIST"
-                                                            [multiple]="false"
+                                                            [items]="this.CURRENCY_LIST" [multiple]="false"
                                                             [selectedItems]="this.BOE_DETAILS?.CURRENCY"
                                                             (modelChanges)="this.CA_CERTIFICATE_FORM.Currency=$event.type">
                                                         </app-ng-dropdown-custom>
@@ -661,8 +666,7 @@
                                                         <label for="inputEmail4">Currency</label>
                                                         <app-ng-dropdown-custom bindLabel="type"
                                                             placeHolderText="Select Currency"
-                                                            [items]="this.CURRENCY_LIST"
-                                                            [multiple]="false"
+                                                            [items]="this.CURRENCY_LIST" [multiple]="false"
                                                             [selectedItems]="this.BOE_DETAILS?.CURRENCY"
                                                             (modelChanges)="this.CA_CERTIFICATE_FORM.Currency=$event.type">
                                                         </app-ng-dropdown-custom>
@@ -694,7 +698,8 @@
                                                         <app-ng-dropdown-custom formControlName="Commodity"
                                                             placeHolderText="Select Commodity"
                                                             (modelChanges)="this.CA_CERTIFICATE_FORM.Commodity=$event.como"
-                                                            [items]="this.COMPANY_DETAILS?.commodity" bindLabel="como" [multiple]="false">
+                                                            [items]="this.COMPANY_DETAILS?.commodity" bindLabel="como"
+                                                            [multiple]="false">
                                                         </app-ng-dropdown-custom>
                                                     </div>
                                                     <div class="form-group col-md-6">
@@ -913,7 +918,8 @@
             <div class="modal-footer">
                 <div style="display:flex;" class="mt-3">
                     <button type="button" class="btn btn-primary" (click)="SendApproval(this.GetDownloadStatus?.status,
-                     sumTotalAmount!=0?'Advance-Remittance-flow-A2'+(this.REMIITANCE_SUM-1) :null);">Send for Approval</button>
+                     sumTotalAmount!=0?'Advance-Remittance-flow-A2'+(this.REMIITANCE_SUM-1) :null);">Send for
+                        Approval</button>
                 </div>
             </div>
         </app-custom-model>
@@ -926,8 +932,8 @@
         <div class="row p-2 col-12">
             <div class="d-flex col-12" style="height:80vh;flex-direction: column;gap: 20px;">
                 <div class="header-dropdown d-flex" style="gap: 10px;">
-                    <app-ng-dropdown-custom style="width: 300px;margin-left: 20px;" placeHolderText="Search Purpose Code" [items]="this.PURPOSE_CODE_LIST_DATA"
-                        bindLabel="value"
+                    <app-ng-dropdown-custom style="width: 300px;margin-left: 20px;"
+                        placeHolderText="Search Purpose Code" [items]="this.PURPOSE_CODE_LIST_DATA" bindLabel="value"
                         (modelChanges)="filterData($event?.value)">
                     </app-ng-dropdown-custom>
                 </div>
@@ -981,8 +987,7 @@
                                             <table class="table table-style">
                                                 <thead>
                                                     <tr class="table-tr table-border">
-                                                        <th scope="col"
-                                                            *ngIf="sumTotalAmount < 25000"
+                                                        <th scope="col" *ngIf="sumTotalAmount < 25000"
                                                             class="col-td-th-2 td-th-width" style="width: 500px;">
                                                             <p class="text-p">Value<=25000 equv</p>
                                                         </th>
@@ -997,8 +1002,8 @@
                                                     <tr class="table-tr added-active"
                                                         title="click here see more details">
                                                         <td title="ORM Data Showing and Hide"
-                                                            *ngIf="sumTotalAmount < 25000"
-                                                            scope="col" class="col-td-th-2" style="width: 500px;">
+                                                            *ngIf="sumTotalAmount < 25000" scope="col"
+                                                            class="col-td-th-2" style="width: 500px;">
                                                             <p class="text-p"
                                                                 *ngFor="let item2 of item?.Value_less_25000_equv;let i=index"
                                                                 [innerHTML]="item2"></p>
@@ -1035,8 +1040,8 @@
                 <div class="row p-2 modal-bg">
                     <div class="header-dropdown d-flex" style="gap: 10px;">
                         <app-ng-dropdown-custom placeHolderText="Select Party Name" [items]="this.ORM_BY_PARTY_NAME"
-                            bindLabel="partyName" [multiple]="false"
-                            (modelChanges)="filterData($event?.partyName)" #partyname>
+                            bindLabel="partyName" [multiple]="false" (modelChanges)="filterData($event?.partyName)"
+                            #partyname>
                         </app-ng-dropdown-custom>
                     </div>
                     <div class="d-flex" style="height: 76vh;">
@@ -1278,7 +1283,8 @@
     [customstyle]="{'max-width':'100vw !important'}" class="p-2" height="98vh" id="CA_FORM" name="CA Form Filling">
     <div class="p-2">
         <div class="p-2 modal-bg">
-           <app-pdf-viewer [allbtnhide]="false" width="100%" src="https://eportal.incometax.gov.in/iec/foservices/#/login"></app-pdf-viewer>
+            <app-pdf-viewer [allbtnhide]="false" width="100%"
+                src="https://eportal.incometax.gov.in/iec/foservices/#/login"></app-pdf-viewer>
         </div>
     </div>
 </app-custom-model>
