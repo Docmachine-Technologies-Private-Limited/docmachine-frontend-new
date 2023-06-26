@@ -2007,8 +2007,16 @@ body {
   padding: 5px;
 }
 
-.btn-disabled{
+.btn-disabled {
   opacity: .5;
   pointer-events: none;
   cursor: not-allowed;
+}
+
+.Preview-Page::ng-deep .mat-tab-group {
+  height: 100%;
+}
+
+.Preview-Page::ng-deep .mat-tab-body-wrapper {
+  height: 100%;
 }

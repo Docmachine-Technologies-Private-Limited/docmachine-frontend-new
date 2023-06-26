@@ -3907,28 +3907,28 @@ export class NewDirectDispatchComponent implements OnInit {
     var temp: any = [];
     const id = event != null ? event.tab.content.viewContainerRef.element.nativeElement.id : sbid;
     this.PDF_LIST = [];
-    console.log(this.newBankArray, bankformat, id, 'this.newBankArray')
     var sbfilter = this.itemArray.filter((item: any) => item?._id == id);
     this.SB_NO_FILTER = sbfilter[0]?.sbno;
     var bankformat: any = this.documentService?.getBankFormat()?.filter((item: any) => item.BankUniqueId.indexOf(this.bankValue) != -1);
+    console.log(this.newBankArray, bankformat, id, 'this.newBankArray')
     if (bankformat.length != 0 && bankformat[0]?.urlpdf != '') {
       this.fillForm(sbfilter[0], 'SB_' + sbfilter[0]?.sbno).then(async () => {
         for (let index = 0; index < this.temp[id].length; index++) {
           if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
             temp.push(this.temp[id][index]?.pdf)
-            this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
-              console.log('downloadEachFile', res);
-              res.arrayBuffer().then((data: any) => {
-
-                var base64String = this._arrayBufferToBase64(data);
-                const x = 'data:application/pdf;base64,' + base64String;
-                this.PDF_LIST.push({
-                  pdf: x,
-                  name: this.temp[id][index]['name']
-                })
-                console.log('downloadEachFile', data);
-              });
-            });
+            this.PDF_LIST.push({
+              pdf: this.temp[id][index]?.pdf,
+              name: this.temp[id][index]['name']
+            })
+            // this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
+            //   console.log('downloadEachFile', res);
+            //   res.arrayBuffer().then((data: any) => {
+            //     var base64String = this._arrayBufferToBase64(data);
+            //     const x = 'data:application/pdf;base64,' + base64String;
+               
+            //     console.log('downloadEachFile', data);
+            //   });
+            // });
           }
           if ((index + 1) == this.temp[id].length) {
             var fitertemp: any = temp.filter(n => n)
@@ -3943,18 +3943,22 @@ export class NewDirectDispatchComponent implements OnInit {
       for (let index = 0; index < this.temp[id].length; index++) {
         if (this.temp[id][index]?.pdf != undefined && this.temp[id][index]?.pdf != null) {
           temp.push(this.temp[id][index]?.pdf)
-          this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
-            console.log('downloadEachFile', res);
-            res.arrayBuffer().then((data: any) => {
-              var base64String = this._arrayBufferToBase64(data);
-              const x = 'data:application/pdf;base64,' + base64String;
-              this.PDF_LIST.push({
-                pdf: x,
-                name: this.temp[id][index]['name']
-              })
-              console.log('downloadEachFile', data);
-            });
-          });
+          this.PDF_LIST.push({
+            pdf: this.temp[id][index]?.pdf,
+            name: this.temp[id][index]['name']
+          })
+          // this.userService.mergePdf(this.temp[id][index]?.pdf).subscribe((res: any) => {
+          //   console.log('downloadEachFile', res);
+          //   res.arrayBuffer().then((data: any) => {
+          //     var base64String = this._arrayBufferToBase64(data);
+          //     const x = 'data:application/pdf;base64,' + base64String;
+          //     this.PDF_LIST.push({
+          //       pdf: x,
+          //       name: this.temp[id][index]['name']
+          //     })
+          //     console.log('downloadEachFile', data);
+          //   });
+          // });
         }
         if ((index + 1) == this.temp[id].length) {
           var fitertemp: any = temp.filter(n => n)
@@ -3965,10 +3969,6 @@ export class NewDirectDispatchComponent implements OnInit {
         }
       }
     }
-    this.RESET = false;
-    setTimeout(() => {
-      this.RESET = true;
-    }, 500)
   }
 
   async PreviewSlideToggle(event: any) {
@@ -3978,14 +3978,13 @@ export class NewDirectDispatchComponent implements OnInit {
 
     if (bankformat.length != 0 && bankformat[0]?.urlpdf != '') {
       await this.fillForm(tempfilter[0], 'SB_' + id).then(async (fillpdf: any) => {
-        this.PDF_LIST = [];
         this.PREVIEWS_URL_LIST = [];
         var tep: any = [];
-
         var temppdflits: any = [];
         tep[tempfilter[0]?._id] = []
         tep[tempfilter[0]?._id][0] = fillpdf;
         temppdflits[0] = fillpdf;
+        
         for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
           tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
           if (this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
@@ -4018,11 +4017,11 @@ export class NewDirectDispatchComponent implements OnInit {
         }
       });
     } else {
-      this.PDF_LIST = [];
       this.PREVIEWS_URL_LIST = [];
       var tep: any = [];
       var temppdflits: any = [];
       tep[tempfilter[0]?._id] = []
+      
       $(document).ready(() => {
         kendo.pdf.defineFont({
           "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",

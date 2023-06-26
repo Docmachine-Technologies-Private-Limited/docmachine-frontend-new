@@ -138,12 +138,20 @@ export class ManageCustomerComponent implements OnInit {
         });
   }
 
-  open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  open(content1,content2) {
+    if (this.USER_DATA['role']!='member') {
+      this.modalService.open(content1, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    } else {
+      this.modalService.open(content2, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    }
   }
 
   open1(content1, content2) {
@@ -208,6 +216,26 @@ export class ManageCustomerComponent implements OnInit {
     //       console.log("error")
     //     });
   }
+  
+  onSubmitBeneficiaryMember() {
+    let approval_data = {
+      id: 'BeneficiaryMember' + '_' + this.guid(),
+      tableName: '',
+      deleteflag: '-1',
+      userdetails: this.USER_DATA,
+      status: 'pending',
+      data: this.buyerForm.value,
+      Types: 'BeneficiaryAddition',
+      TypeOfPage: 'BeneficiaryAddition',
+      FileType: this.USER_DATA?.sideMenu
+    }
+    this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
+      this.toastr.success('Successfully added Beneficiary in Approval Pending queu...');
+          this.router.navigate(['/home/dashboardTask']);
+          this.modalService.dismissAll();
+    });
+  }
+  
   guid() {
     let s4 = () => {
       return Math.floor((1 + Math.random()) * 0x10000)

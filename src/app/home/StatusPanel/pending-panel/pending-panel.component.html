@@ -39,7 +39,8 @@
               Tableid: item['id'],
               tableName:item['tableName'],
               status:'Rejected',
-              deleteflag:'0'
+              deleteflag:'0',
+              Types:item['Types']
             },i)">Reject</button>
               <button type="submit" class="btn btn-primary PopupOpen" popup-close="Documents_View"
                 (click)="openView(item,i)">View</button>
@@ -58,7 +59,8 @@
               Tableid: item['id'],
               tableName:item['tableName'],
               status:'Rejected',
-              deleteflag:'0'
+              deleteflag:'0',
+              Types:item['Types']
             },i)">Reject</button>
               <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary PopupOpen" [attr.popup-close]="'Documents_View'"
                 (click)="openView(item,i)">View</button>

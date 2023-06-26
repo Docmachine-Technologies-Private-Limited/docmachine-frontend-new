@@ -330,14 +330,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
     this.purposeFun(this.default_value)
     this.documentService.getInward_remittance().subscribe((res: any) => {
       this.Inward_Remittance_MT103 = res?.data;
-      this.userService.mergePdf(this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file).subscribe((res: any) => {
-        res.arrayBuffer().then((data: any) => {
-          var base64String = this._arrayBufferToBase64(data)
-          const x = 'data:application/pdf;base64,' + base64String;
-          this.MT103_URL = x;
-          console.log('mergePdf_downloadEachFile', data);
-        });
-      });
+      this.MT103_URL = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?.file;
       console.log(res, 'getInward_remittance')
     })
 
@@ -3587,14 +3580,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
       this.ARRAY_BUFFER_PDF[0] = this.MT103_URL;
     }
     for (let index = 0; index < this.STORE_URL.length; index++) {
-      this.userService.mergePdf(this.STORE_URL[index]).subscribe((res: any) => {
-        res.arrayBuffer().then((data: any) => {
-          var base64String = this._arrayBufferToBase64(data)
-          const x = 'data:application/pdf;base64,' + base64String;
-          this.ARRAY_BUFFER_PDF.push(x);
-          console.log('mergePdf_downloadEachFile', data);
-        });
-      });
+      this.ARRAY_BUFFER_PDF.push(this.STORE_URL[index]);
     }
     this.documentService.getDownloadStatus({ id: this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1]?._id, deleteflag: '-1' }).subscribe((res: any) => {
       console.log(res, 'dsdsdsdsdsdsds');

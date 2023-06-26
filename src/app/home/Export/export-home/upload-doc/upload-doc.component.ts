@@ -31,14 +31,14 @@ import { DocumentService } from '../../../../service/document.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../../../service/user.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {PipoDataService} from "../../../../service/homeservices/pipo.service";
+import { PipoDataService } from "../../../../service/homeservices/pipo.service";
 import $ from 'jquery';
 import { WindowInformationService } from '../../../../service/window-information.service';
 
 @Component({
   selector: 'app-upload-doc',
   templateUrl: './upload-doc.component.html',
-  styleUrls: ['./upload-doc.component.scss','../../../upload/upload.component.scss']
+  styleUrls: ['./upload-doc.component.scss', '../../../upload/upload.component.scss']
 })
 export class UploadDocComponent implements OnInit {
 
@@ -49,10 +49,10 @@ export class UploadDocComponent implements OnInit {
   shippingForm: FormGroup;
   // loginForm: FormGroup;
   public submitted = false;
-  authToken:any;
+  authToken: any;
   headers: any;
   closeResult: string;
-  MT103_Form:any=[];
+  MT103_Form: any = [];
 
   document: any;
   file: any;
@@ -77,12 +77,12 @@ export class UploadDocComponent implements OnInit {
   redirectpage: any;
   buyerDetail34: any;
   retururl;
-  bank:any=[];
+  bank: any = [];
   CURRENCY_LIST: any = [];
-  uploading:boolean=false;
-  iframeVisible:boolean=false;
-  publicUrl:any ='';
-  formSubmitted:boolean=false;
+  uploading: boolean = false;
+  iframeVisible: boolean = false;
+  publicUrl: any = '';
+  formSubmitted: boolean = false;
 
   constructor(
     @Inject(PLATFORM_ID) public platformId,
@@ -99,7 +99,7 @@ export class UploadDocComponent implements OnInit {
     private sharedData: SharedDataService,
     private pipoDataService: PipoDataService,
     public wininfo: WindowInformationService) {
-    this.iframeVisible=false;
+    this.iframeVisible = false;
     this.sharedData.currentReturnUrl.subscribe(
       (message) => (this.retururl = message)
     );
@@ -130,15 +130,15 @@ export class UploadDocComponent implements OnInit {
       };
     }
     this.MT103_Form = new FormGroup({
-      BankName:new FormControl('', Validators.required),
-      Inward_reference_number:new FormControl('', Validators.required),
-      amount:new FormControl('', Validators.required),
-      currency:new FormControl('', Validators.required),
-      Remitter_Name:new FormControl('', Validators.required),
-      Bill_lodgment_Number:new FormControl('', Validators.required),
-      Inward_amount_for_disposal:new FormControl('', Validators.required),
-      Credit_Account_Number:new FormControl('', Validators.required),
-      Charges_Account_Number:new FormControl('', Validators.required)
+      BankName: new FormControl('', Validators.required),
+      Inward_reference_number: new FormControl('', Validators.required),
+      amount: new FormControl('', Validators.required),
+      currency: new FormControl('', Validators.required),
+      Remitter_Name: new FormControl('', Validators.required),
+      Bill_lodgment_Number: new FormControl('', Validators.required),
+      Inward_amount_for_disposal: new FormControl('', Validators.required),
+      Credit_Account_Number: new FormControl('', Validators.required),
+      Charges_Account_Number: new FormControl('', Validators.required)
     });
   }
 
@@ -146,8 +146,8 @@ export class UploadDocComponent implements OnInit {
   width: any = 0;
 
   runProgressBar(value) {
-    console.log(this.config,'directiveRef');
-    console.log(value /1000);
+    console.log(this.config, 'directiveRef');
+    console.log(value / 1000);
     timer(0, value / 1000)
       .pipe(takeWhile(() => this.isWidthWithinLimit()))
       .subscribe(() => {
@@ -167,68 +167,68 @@ export class UploadDocComponent implements OnInit {
       return true;
     }
   }
-  BANK_DETAILS:any=[];
-  BANK:any=[];
-  UNIQUE_BANK:any=[];
-  
- async ngOnInit() {
-    this.wininfo.set_controller_of_width(230,'.content_top_common')
+  BANK_DETAILS: any = [];
+  BANK: any = [];
+  UNIQUE_BANK: any = [];
+
+  async ngOnInit() {
+    this.wininfo.set_controller_of_width(230, '.content_top_common')
     for (let index = 0; index < data1['default']?.length; index++) {
       this.CURRENCY_LIST.push({
         type: data1['default'][index]['value']
       })
     }
     this.userService.getTeam()
-    .subscribe(
-      data => {
-        this.BANK=data['data'][0]?.bankDetails;
-        var temp:any=[];
-        for (let index = 0; index < this.BANK.length; index++) {
-          temp.push(this.BANK[index]?.bank)
-        }
-        this.UNIQUE_BANK=[]
-        var unique:any =temp.filter((value, index, array) => array.indexOf(value) === index);
-          for (let index = 0; index < unique.length; index++) {
-           this.UNIQUE_BANK.push({
-              bank:unique[index]
-           })
+      .subscribe(
+        data => {
+          this.BANK = data['data'][0]?.bankDetails;
+          var temp: any = [];
+          for (let index = 0; index < this.BANK.length; index++) {
+            temp.push(this.BANK[index]?.bank)
           }
-        for (let index = 0; index < data['data'][0]?.bankDetails.length; index++) {
-          this.BANK_DETAILS.push({
-            value:data['data'][0]?.bankDetails[index]['accNumber']+' | '+data['data'][0]?.bankDetails[index]['currency'],
-            accNumber:data['data'][0]?.bankDetails[index]['accNumber'],
-            currency:data['data'][0]?.bankDetails[index]['currency'],
-            Bank_Name:data['data'][0]?.bankDetails[index]['bank']
-          });
-        }
-        console.log(this.BANK_DETAILS,this.UNIQUE_BANK,'getTeam')
-      },
-      error => {
-        console.log("error")
-      });
+          this.UNIQUE_BANK = []
+          var unique: any = temp.filter((value, index, array) => array.indexOf(value) === index);
+          for (let index = 0; index < unique.length; index++) {
+            this.UNIQUE_BANK.push({
+              bank: unique[index]
+            })
+          }
+          for (let index = 0; index < data['data'][0]?.bankDetails.length; index++) {
+            this.BANK_DETAILS.push({
+              value: data['data'][0]?.bankDetails[index]['accNumber'] + ' | ' + data['data'][0]?.bankDetails[index]['currency'],
+              accNumber: data['data'][0]?.bankDetails[index]['accNumber'],
+              currency: data['data'][0]?.bankDetails[index]['currency'],
+              Bank_Name: data['data'][0]?.bankDetails[index]['bank']
+            });
+          }
+          console.log(this.BANK_DETAILS, this.UNIQUE_BANK, 'getTeam')
+        },
+        error => {
+          console.log("error")
+        });
   }
-  removeDuplicates(arrayIn:any) {
-    var arrayOut:any = [];
-    for (var a=0; a < arrayIn.length; a++) {
-        if (arrayOut[arrayOut.length-1] != arrayIn[a]) {
-            arrayOut.push(arrayIn[a]);
-        }
+  removeDuplicates(arrayIn: any) {
+    var arrayOut: any = [];
+    for (var a = 0; a < arrayIn.length; a++) {
+      if (arrayOut[arrayOut.length - 1] != arrayIn[a]) {
+        arrayOut.push(arrayIn[a]);
+      }
     }
     return arrayOut;
-}
-  filterBankName(bankname:any){
-  console.log(bankname,this.BANK,'filterBankName')
-  this.BANK_DETAILS=[];
-  var temp:any=this.BANK.filter((item:any)=>item?.bank.includes(bankname))
+  }
+  filterBankName(bankname: any) {
+    console.log(bankname, this.BANK, 'filterBankName')
+    this.BANK_DETAILS = [];
+    var temp: any = this.BANK.filter((item: any) => item?.bank.includes(bankname))
     for (let index = 0; index < temp.length; index++) {
       this.BANK_DETAILS.push({
-        value:temp[index]['accNumber']+' | '+temp[index]['currency'],
-        accNumber:temp[index]['accNumber'],
-        currency:temp[index]['currency'],
-        Bank_Name:temp[index]['bank']
+        value: temp[index]['accNumber'] + ' | ' + temp[index]['currency'],
+        accNumber: temp[index]['accNumber'],
+        currency: temp[index]['currency'],
+        Bank_Name: temp[index]['bank']
       });
     }
-    console.log(this.BANK_DETAILS,'getTeam')
+    console.log(this.BANK_DETAILS, 'getTeam')
   }
 
   public onUploadInit(args: any): void {
@@ -239,69 +239,70 @@ export class UploadDocComponent implements OnInit {
     console.log('onUploadError:', args, args[1].message);
   }
 
-  public onChangeIssues(data:any,event:any): void {
-    console.log(data,'onChangeIssues')
+  public onChangeIssues(data: any, event: any): void {
+    console.log(data, 'onChangeIssues')
   }
   submit(e) {
     this.uploading = true;
-    console.log(e[0].size,'ajbkab')
+    console.log(e[0].size, 'ajbkab')
     this.runProgressBar(e[0].size);
   }
-dataPdf:any=[];
- async onUploadSuccess(args: any) {
-  console.log('onUploadSuccess:', args);
-      this.uploading = false;
-      this.iframeVisible=true;
-      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        args[1].publicUrl
-      );
-      var data:any=args[1]['data'][0];
-      console.log(data,'data')
-      this.dataPdf=data;
-      this.documentService.setSessionData('InwardSheet',this.dataPdf[0]);
-      console.log(this.dataPdf,'this.dataPdf');
-     console.log('-------------------->Selected Document type', this.publicUrl);
+  dataPdf: any = [];
+  async onUploadSuccess(args: any) {
+    console.log('onUploadSuccess:', args);
+    this.uploading = false;
+    this.iframeVisible = true;
+    this.publicUrl = '';
+    setTimeout(() => {
+      this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
+    }, 200);
+    var data: any = args[1]['data'][0];
+    console.log(data, 'data')
+    this.dataPdf = data;
+    this.documentService.setSessionData('InwardSheet', this.dataPdf[0]);
+    console.log(this.dataPdf, 'this.dataPdf');
+    console.log('-------------------->Selected Document type', this.publicUrl);
   }
-  onUpload(e){
-    e.value.BankName=e.value?.BankName?.bank!=undefined?e.value?.BankName?.bank:e.value?.BankName
-    e.value.Charges_Account_Number=e.value?.Charges_Account_Number?.accNumber!=undefined?e.value?.Charges_Account_Number?.accNumber:e.value?.Charges_Account_Number
-    e.value.Credit_Account_Number=e.value?.Credit_Account_Number?.accNumber!=undefined?e.value?.Credit_Account_Number?.accNumber:e.value?.Credit_Account_Number
-    e.value.currency =e.value?.currency?.type!=undefined?e.value?.currency?.type:e.value?.currency;
-    console.log(e,'onUpload')
-    this.formSubmitted=true;
-    if (e.status=='INVALID') {
+  onUpload(e) {
+    e.value.BankName = e.value?.BankName?.bank != undefined ? e.value?.BankName?.bank : e.value?.BankName
+    e.value.Charges_Account_Number = e.value?.Charges_Account_Number?.accNumber != undefined ? e.value?.Charges_Account_Number?.accNumber : e.value?.Charges_Account_Number
+    e.value.Credit_Account_Number = e.value?.Credit_Account_Number?.accNumber != undefined ? e.value?.Credit_Account_Number?.accNumber : e.value?.Credit_Account_Number
+    e.value.currency = e.value?.currency?.type != undefined ? e.value?.currency?.type : e.value?.currency;
+    console.log(e, 'onUpload')
+    this.formSubmitted = true;
+    if (e.status == 'INVALID') {
       return;
     }
-    e.value.file=this.publicUrl?.changingThisBreaksApplicationSecurity;
-    this.documentService.addInward_remittance(e.value).subscribe((res:any)=>{
-      console.log(res,'addInward_remittance')
-      if (res.data.length!=0){
+    e.value.file = this.publicUrl?.changingThisBreaksApplicationSecurity;
+    this.documentService.addInward_remittance(e.value).subscribe((res: any) => {
+      console.log(res, 'addInward_remittance')
+      if (res.data.length != 0) {
         this.router.navigate(['home/export-home'])
       }
     })
   }
-  replaceText(text:any,repl_text:any){
-    return text!=undefined?(text.replace(repl_text,'')).trim():''
+  replaceText(text: any, repl_text: any) {
+    return text != undefined ? (text.replace(repl_text, '')).trim() : ''
   }
-  removeallSpace(spacetext:any){
-    return spacetext.replace(/\s/g,'');
+  removeallSpace(spacetext: any) {
+    return spacetext.replace(/\s/g, '');
   }
-  removeallSpace2(spacetext:any,data:any){
-  if (data[spacetext]!=undefined && data[spacetext]!=null) {
-    return data[spacetext].replace(/\s/g,'');
-  }else{
-    return '';
+  removeallSpace2(spacetext: any, data: any) {
+    if (data[spacetext] != undefined && data[spacetext] != null) {
+      return data[spacetext].replace(/\s/g, '');
+    } else {
+      return '';
+    }
   }
-  }
-  validation(e:any,validationData:any){
-    var temp:any=[];
+  validation(e: any, validationData: any) {
+    var temp: any = [];
     for (const key in e) {
       if (validationData.includes(e.value)) {
-          temp.push(`Plese`)
+        temp.push(`Plese`)
       }
     }
   }
-  ObjectLength(object:any){
+  ObjectLength(object: any) {
     return Object.keys(object);
   }
 }

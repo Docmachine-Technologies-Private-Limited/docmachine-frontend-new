@@ -82,6 +82,31 @@ export class PendingPanelComponent implements OnInit {
           this.toastr.success('Successfully Accpeted data...')
         }
       });
+    } else if (this.DATA_CREATE[index]['Types'] == 'BeneficiaryAddition') {
+      console.log(data, 'fhgjdfhdgfgdgfdgfdgfgfgfgfg')
+      this.documentService.UpdateStatus({
+        data: {
+          _id: data['id'],
+          status: data['status'],
+          deleteflag: data['deleteflag']
+        }
+      }).subscribe((res: any) => {
+        console.log(res, 'dfsdfhsdfdsjhdsfgdsfds')
+        if (data?.deleteflag == '2') {
+          this.userserivce.creatBuyer(this.DATA_CREATE[index]?.data).subscribe(responsedata => {
+            console.log("king123")
+            console.log(responsedata)
+            this.ngOnInit();
+            this.SendMailText(this.DATA_CREATE[index]?.data);
+            this.toastr.success('Successfully Accpeted data...')
+          }, error => {
+            console.log("error")
+          });
+        } else {
+          this.ngOnInit();
+          this.toastr.success('Successfully Accpeted data...')
+        }
+      });
     } else {
       const message = `Are you sure you want to delete this?`;
       const dialogData = new ConfirmDialogModel("Confirm Action", message);

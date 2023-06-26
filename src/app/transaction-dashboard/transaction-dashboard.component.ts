@@ -9,6 +9,7 @@ import { PipoDataService } from '../service/homeservices/pipo.service';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MergePdfService } from '../service/MergePdf/merge-pdf.service';
+import { MergePdfListService } from '../home/merge-pdf-list.service';
 declare var $: any;
 
 @Component({
@@ -38,6 +39,7 @@ export class TransactionDashboardComponent implements OnInit {
     public sanitizer: DomSanitizer,
     public pipoDataService: PipoDataService,
     public mergerpdf: MergePdfService,
+    public pdfmerge: MergePdfListService,
     public wininfo: WindowInformationService) {
     this.api_base = userService.api_base;
   }
@@ -73,69 +75,69 @@ export class TransactionDashboardComponent implements OnInit {
         this.TRANSACTION_NAME = params.get('id');
 
         this.documentService.getExportBillLodgment().subscribe((res: any) => {
-          var filterType:any=[];
-          if (this.TRANSACTION_NAME=='Inward-Remitance-Dispoal') {
-            filterType=[this.TRANSACTION_NAME,'Export-Direct-Dispatch'];
-          } if (this.TRANSACTION_NAME=='Export-Direct-Dispatch'){
-            filterType=['Export-Direct-Dispatch','Inward-Remitance-Dispoal'];
-          } if (this.TRANSACTION_NAME=='Advance-Remittance-flow') {
-            filterType=[this.TRANSACTION_NAME,'Import-Direct-Payment'];
-          } if (this.TRANSACTION_NAME=='Import-Direct-Payment'){
-            filterType=['Import-Direct-Payment','Advance-Remittance-flow'];
-          }if (this.TRANSACTION_NAME=='Inward-Remitance-Dispoal-Realization'){
-            filterType=['Inward-Remitance-Dispoal-Realization'];
-          }if (this.TRANSACTION_NAME=='Packing-Credit-Request'){
-            filterType=['Packing-Credit-Request'];
+          var filterType: any = [];
+          if (this.TRANSACTION_NAME == 'Inward-Remitance-Dispoal') {
+            filterType = [this.TRANSACTION_NAME, 'Export-Direct-Dispatch'];
+          } if (this.TRANSACTION_NAME == 'Export-Direct-Dispatch') {
+            filterType = ['Export-Direct-Dispatch', 'Inward-Remitance-Dispoal'];
+          } if (this.TRANSACTION_NAME == 'Advance-Remittance-flow') {
+            filterType = [this.TRANSACTION_NAME, 'Import-Direct-Payment'];
+          } if (this.TRANSACTION_NAME == 'Import-Direct-Payment') {
+            filterType = ['Import-Direct-Payment', 'Advance-Remittance-flow'];
+          } if (this.TRANSACTION_NAME == 'Inward-Remitance-Dispoal-Realization') {
+            filterType = ['Inward-Remitance-Dispoal-Realization'];
+          } if (this.TRANSACTION_NAME == 'Packing-Credit-Request') {
+            filterType = ['Packing-Credit-Request'];
           }
-          this.mergeTransaction(res,data?.result?.sideMenu,filterType).then((mergeTransactionres:any)=>{
-            var merge:any=mergeTransactionres;
-            if (this.TRANSACTION_NAME == 'Inward-Remitance-Dispoal') {         
+          this.mergeTransaction(res, data?.result?.sideMenu, filterType).then((mergeTransactionres: any) => {
+            var merge: any = mergeTransactionres;
+            if (this.TRANSACTION_NAME == 'Inward-Remitance-Dispoal') {
               for (let index = 0; index < merge['Inward-Remitance-Dispoal'].length; index++) {
-                  if (compareArrays(merge['Inward-Remitance-Dispoal'][index].pipo[0]?._id,merge['Export-Direct-Dispatch'][index]?.pipo[0]?._id)) {
-                    merge['Inward-Remitance-Dispoal'][index].Ref_Data['blCopyRef']=merge['Export-Direct-Dispatch'][index];
-                  }
+                if (compareArrays(merge['Inward-Remitance-Dispoal'][index].pipo[0]?._id, merge['Export-Direct-Dispatch'][index]?.pipo[0]?._id)) {
+                  merge['Inward-Remitance-Dispoal'][index].Ref_Data['blCopyRef'] = merge['Export-Direct-Dispatch'][index];
+                }
               }
             } else if (this.TRANSACTION_NAME == 'Export-Direct-Dispatch') {
               for (let index = 0; index < merge['Export-Direct-Dispatch'].length; index++) {
-                if (compareArrays(merge['Export-Direct-Dispatch'][index]?.pipo[0]?._id,merge['Inward-Remitance-Dispoal'][index]?.pipo[0]?._id) && merge['Export-Direct-Dispatch'][index]?.Ref_Data!=undefined) {
-                    merge['Export-Direct-Dispatch'][index].Ref_Data['irRef']=merge['Inward-Remitance-Dispoal'][index];
+                if (compareArrays(merge['Export-Direct-Dispatch'][index]?.pipo[0]?._id, merge['Inward-Remitance-Dispoal'][index]?.pipo[0]?._id) && merge['Export-Direct-Dispatch'][index]?.Ref_Data != undefined) {
+                  merge['Export-Direct-Dispatch'][index].Ref_Data['irRef'] = merge['Inward-Remitance-Dispoal'][index];
                 }
               }
-            }else if (this.TRANSACTION_NAME == 'Advance-Remittance-flow') {         
+            } else if (this.TRANSACTION_NAME == 'Advance-Remittance-flow') {
               for (let index = 0; index < merge['Advance-Remittance-flow'].length; index++) {
-                  if (compareArrays(merge['Advance-Remittance-flow'][index].pipo[0]?._id,merge['Import-Direct-Payment'][index]?.pipo[0]?._id)) {
-                    merge['Advance-Remittance-flow'][index]['data']['ImportDirectPayment']=merge['Import-Direct-Payment'][index]?.data?.pipo_1[0][0];
-                  }
+                if (compareArrays(merge['Advance-Remittance-flow'][index].pipo[0]?._id, merge['Import-Direct-Payment'][index]?.pipo[0]?._id)) {
+                  merge['Advance-Remittance-flow'][index]['data']['ImportDirectPayment'] = merge['Import-Direct-Payment'][index]?.data?.pipo_1[0][0];
+                }
               }
             } else if (this.TRANSACTION_NAME == 'Import-Direct-Payment') {
               for (let index = 0; index < merge['Import-Direct-Payment'].length; index++) {
-                if (compareArrays(merge['Import-Direct-Payment'][index].pipo[0]?._id,merge['Advance-Remittance-flow'][index].pipo[0]?._id) && merge['Advance-Remittance-flow'][index]?.Ref_Data!=undefined) {
-                    merge['Import-Direct-Payment'][index]['Ref_Data']=merge['Advance-Remittance-flow'][index]?.Ref_Data;
+                if (compareArrays(merge['Import-Direct-Payment'][index].pipo[0]?._id, merge['Advance-Remittance-flow'][index].pipo[0]?._id) && merge['Advance-Remittance-flow'][index]?.Ref_Data != undefined) {
+                  merge['Import-Direct-Payment'][index]['Ref_Data'] = merge['Advance-Remittance-flow'][index]?.Ref_Data;
                 }
               }
             }
-              console.log(mergeTransactionres,merge,'mergeTransactionres')
-              var temp: any = []
-              for (let index = 0; index < merge[this.TRANSACTION_NAME].length; index++) {
-                var element =  merge[this.TRANSACTION_NAME][index];
-                temp.push({
-                  'Sr.no.': (index + 1),
-                  'Unique': 'Unique' + element?._id,
-                  'Transaction Type': element?.TypeTransaction,
-                  'fileType': element?.fileType,
-                  'MoreDetails': element?.data,
-                  pipo:element?.pipo,
-                  Ref_Data: element?.Ref_Data,
-                  _id: element?._id
-                })
-              }
-              for (let index = 0; index < merge[this.TRANSACTION_NAME].length; index++) {
-                this.documentService.getApprovedData(element?.UserDetails).subscribe((res1: any) => {
-                  temp[index] = Object.assign({ 'UserDetails': element?.UserDetails != undefined ? res1[0] : '' }, temp[index])
-                })
-              }
-              this.dataSource = temp;
-              console.log(res, this.displayedColumns, this.dataSource, 'TRANSACTION_DASHBOARD_DATA')
+            console.log(mergeTransactionres, merge, 'mergeTransactionres')
+            var temp: any = []
+            for (let index = 0; index < merge[this.TRANSACTION_NAME].length; index++) {
+              var element = merge[this.TRANSACTION_NAME][index];
+              temp.push({
+                'Sr.no.': (index + 1),
+                'Unique': 'Unique' + element?._id,
+                'Transaction Type': element?.TypeTransaction,
+                'fileType': element?.fileType,
+                'MoreDetails': element?.data,
+                pipo: element?.pipo,
+                Ref_Data: element?.Ref_Data,
+                _id: element?._id
+              })
+            }
+            for (let index = 0; index < merge[this.TRANSACTION_NAME].length; index++) {
+              this.documentService.getApprovedData(element?.UserDetails).subscribe((res1: any) => {
+                temp[index] = Object.assign({ 'UserDetails': element?.UserDetails != undefined ? res1[0] : '' }, temp[index])
+              })
+            }
+            this.dataSource = temp;
+            console.log(res, this.displayedColumns, this.dataSource, 'TRANSACTION_DASHBOARD_DATA')
           })
         });
         this.userService.getBene(1).subscribe((res: any) => {
@@ -145,17 +147,17 @@ export class TransactionDashboardComponent implements OnInit {
       });
     });
     const compareArrays = (a, b) => {
-      return a!=undefined?JSON.stringify(a) === JSON.stringify(b):null;
+      return a != undefined ? JSON.stringify(a) === JSON.stringify(b) : null;
     };
   }
   mergeTransaction(res: any, fileType, filterType: any) {
     var MERGE_TRANSACTION: any = [];
     filterType.forEach(element => {
-      MERGE_TRANSACTION[element]=[];
+      MERGE_TRANSACTION[element] = [];
     });
     return new Promise((resolve, reject) => {
       for (let index = 0; index < filterType.length; index++) {
-        MERGE_TRANSACTION[filterType[index]]=(res?.result?.filter((item: any) => item?.TypeTransaction.toLowerCase() == filterType[index]?.toLowerCase()
+        MERGE_TRANSACTION[filterType[index]] = (res?.result?.filter((item: any) => item?.TypeTransaction.toLowerCase() == filterType[index]?.toLowerCase()
           && item?.fileType?.toLowerCase() == fileType.toLowerCase()));
         if ((index + 1) == filterType.length) {
           resolve(MERGE_TRANSACTION);
@@ -168,11 +170,7 @@ export class TransactionDashboardComponent implements OnInit {
   async userview(data: any) {
     this.pdflist = [];
     for (let j = 0; j < data?.documents?.length; j++) {
-      await this.userService.mergePdf(data?.documents[j]).subscribe((res: any) => {
-        res.arrayBuffer().then((data: any) => {
-          this.pdflist.push(data);
-        });
-      });
+      this.pdflist.push(data?.documents[j]);
     }
     this.USER_DATA_VIEW = data;
     console.log(data, 'sdfdfdfdsfdf')
@@ -204,8 +202,9 @@ export class TransactionDashboardComponent implements OnInit {
         this.LOADER_ON_OFF = false;
       }
       try {
-        await this.mergerpdf.mergePdf(data?.MoreDetails?.documents).then((merge: any) => {
-          this.pdflist.push(merge)
+        await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
+          console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
+          this.pdflist.push(data?.pdfurl)
           this.LOADER_ON_OFF = false;
         })
       } catch (error) {
@@ -224,8 +223,9 @@ export class TransactionDashboardComponent implements OnInit {
         this.LOADER_ON_OFF = false;
       }
       try {
-        await this.mergerpdf.mergePdf(data?.MoreDetails?.documents).then((merge: any) => {
-          this.pdflist.push(merge)
+          await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
+          console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
+          this.pdflist.push(data?.pdfurl)
           this.LOADER_ON_OFF = false;
         })
       } catch (error) {
@@ -245,8 +245,9 @@ export class TransactionDashboardComponent implements OnInit {
         this.LOADER_ON_OFF = false;
       }
       try {
-        await this.mergerpdf.mergePdf(data?.MoreDetails?.documents).then((merge: any) => {
-          this.pdflist.push(merge)
+          await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
+          console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
+          this.pdflist.push(data?.pdfurl)
           this.LOADER_ON_OFF = false;
         })
       } catch (error) {
@@ -271,8 +272,9 @@ export class TransactionDashboardComponent implements OnInit {
         this.LOADER_ON_OFF = false;
       }
       try {
-        await this.mergerpdf.mergePdf(data?.MoreDetails?.documents).then((merge: any) => {
-          this.pdflist.push(merge)
+          await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
+          console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
+          this.pdflist.push(data?.pdfurl)
           this.LOADER_ON_OFF = false;
         })
       } catch (error) {
@@ -297,8 +299,9 @@ export class TransactionDashboardComponent implements OnInit {
         this.LOADER_ON_OFF = false;
       }
       try {
-        await this.mergerpdf.mergePdf(data?.MoreDetails?.documents).then((merge: any) => {
-          this.pdflist.push(merge)
+          await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
+          console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
+          this.pdflist.push(data?.pdfurl)
           this.LOADER_ON_OFF = false;
         })
       } catch (error) {
@@ -371,13 +374,13 @@ export class TransactionDashboardComponent implements OnInit {
     this.Newtemp['Transaction_id'] = id;
     if (this.TRANSACTION_NAME == 'Export-Direct-Dispatch') {
       var pipolist: any = [];
-      for (let index = 0; index <param?.MoreDetails?.Shipping_bill_list?.length; index++) {
+      for (let index = 0; index < param?.MoreDetails?.Shipping_bill_list?.length; index++) {
         const element = param?.MoreDetails?.Shipping_bill_list[index];
         element?.pipo.forEach(item => {
           pipolist.push(item?.pi_poNo)
         });
       }
-       this.Newtemp['pipo'] =pipolist.toString();
+      this.Newtemp['pipo'] = pipolist.toString();
     }
     this.router.navigate(['home/' + url, this.Newtemp]);
   }

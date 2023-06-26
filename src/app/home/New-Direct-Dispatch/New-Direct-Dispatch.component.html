@@ -42,8 +42,9 @@
                           *ngFor="let selItems of  [this.formerge]" width="100%" height="500px"></app-pdf-viewer>
                       </div>
                       <div id="first" #dataToExport>
-                        <app-letterhead *ngIf="this.bankformat[0]?.urlpdf=='' && this.RESET==true"
-                          [data]="[this.itemArray,this.advanceArray,this.newBankArray]" [SB_NO]="this.SB_NO_FILTER"></app-letterhead>
+                        <app-letterhead *ngIf="this.bankformat[0]?.urlpdf==''"
+                          [data]="[this.itemArray,this.advanceArray,this.newBankArray]"
+                          [SB_NO]="this.SB_NO_FILTER"></app-letterhead>
                       </div>
                     </div>
                   </div>
@@ -74,8 +75,8 @@
                                     <label for="exampleInputEmail1" class="form-label">Select bank*</label>
                                     <app-ng-dropdown-custom placeHolderText="Select Bank Name" #Bank_Name
                                       [items]="this.bankDetail" bindLabel="value" [ngModel]="form?.bank_name"
-                                      formControlName="bank_name" (modelChanges)="form.bank_name=$event?.value" bindValue="id"
-                                      [multiple]="false" (modelChanges)="setradio($event)">
+                                      formControlName="bank_name" (modelChanges)="form.bank_name=$event?.value"
+                                      bindValue="id" [multiple]="false" (modelChanges)="setradio($event)">
                                     </app-ng-dropdown-custom>
                                   </div>
                                   <div class="col-md-8 mt-2 col-sm-8 col-7"
@@ -933,7 +934,7 @@
           (click)="PREVIEW_PAGE.style.display='none'"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        <div class="content_white_background" *ngIf="this.itemArray.length!=0">
+        <div class="content_white_background Preview-Page" *ngIf="this.itemArray.length!=0">
           <mat-tab-group class="custom-1" mat-stretch-tabs="false" mat-align-tabs="start"
             (selectedTabChange)="PreviewSlideToggle($event,'')">
             <mat-tab [id]="item?.sbno" [label]="'SB_No_'+item?.sbno" *ngFor="let item of this.itemArray;let i=index">
