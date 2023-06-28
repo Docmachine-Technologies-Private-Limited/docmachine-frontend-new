@@ -177,7 +177,11 @@ jobs:
                  git remote add origin https://${{secrets.DEPLOY_TOKEN}}@github.com/iTBharathexim/bharathexim.com.git
                  cd checkout
                  git clone https://${{secrets.DEPLOY_TOKEN}}@github.com/iTBharathexim/bharathexim.com.git
-                 rm -r bharathexim.com/*
+                 rm -f *.js
+                 rm -f *.css
+                 rm -f *website.index
+                 rm -r assets/*
+                 find . -name "assets" -delete
                  cp -r ../dist/dm-frontend/* bharathexim.com/
                  cd bharathexim.com
                  git add .
