@@ -169,13 +169,12 @@ jobs:
                  git push origin main
           - name: deploy in bharathexim.com
             run: |
+                 rm -r checkout/*
                  git config --global user.email ${{secrets.GIT_EMAIL_DEPLOY}}
                  git config --global user.name ${{secrets.GIT_USER_DEPLOY}}
                  git config --global credential.helper cache
-                 mkdir checkout              
                  git remote remove origin
                  git remote add origin https://${{secrets.DEPLOY_TOKEN}}@github.com/iTBharathexim/bharathexim.com.git
-                 cd checkout
                  git clone https://${{secrets.DEPLOY_TOKEN}}@github.com/iTBharathexim/bharathexim.com.git
                  rm -f *.js
                  rm -f *.css
