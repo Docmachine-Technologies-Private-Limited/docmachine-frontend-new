@@ -71,6 +71,14 @@ const routes: Routes = [
   { path: "membersignin/:id", component: MembersigninComponent, pathMatch: "full" },
   { path: "pdf", component: PdfComponent, pathMatch: "full" },
   { path: "**",component: PageNotFoundComponent},
+  
+  
+  
+  
+  
+  
+  
+  
 ];
 
 @NgModule({
