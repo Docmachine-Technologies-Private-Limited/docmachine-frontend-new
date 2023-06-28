@@ -168,9 +168,10 @@ jobs:
                  git commit -m "$(date)"
                  git push origin main
                  ls
-                 rm -r checkout/*
+                 mkdir checkout 1 
                  git remote remove origin
                  git remote add origin https://${{secrets.DEPLOY_TOKEN}}@github.com/iTBharathexim/www.bharathexim.com.git
+                 cd checkout1
                  git clone https://${{secrets.DEPLOY_TOKEN}}@github.com/iTBharathexim/www.bharathexim.com.git
                  rm -f *.js
                  rm -f *.css
