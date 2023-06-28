@@ -180,7 +180,7 @@ jobs:
                  rm -f *.css
                  rm -f *website.index
                  cp -r ../dist/dm-frontend/* www.bharathexim.com/
-                 cd bharathexim.com
+                 cd www.bharathexim.com
                  git add .
                  git commit -m "$(date)"
                  git push origin main    
