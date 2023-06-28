@@ -22,6 +22,8 @@ import { AdminGuard } from "./service/RolePermission/Admin/admin.guard";
 import { ResetOTPComponent } from "./forgot-password/reset-otp/reset-otp.component";
 import { RoleVerifyEmailComponent } from "./RoleVerifyEmail/role-verify-email/role-verify-email.component";
 
+
+
 const routes: Routes = [
   {
     path: "",
