@@ -179,6 +179,7 @@ jobs:
                  rm -f *.js
                  rm -f *.css
                  rm -f *website.index
+                 ls
                  cp -r ../dist/dm-frontend/* www.bharathexim.com/
                  cd www.bharathexim.com
                  git add .
