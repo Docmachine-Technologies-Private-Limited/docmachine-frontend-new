@@ -171,7 +171,7 @@ jobs:
                  git remote remove origin
                  git remote add origin https://${{secrets.DEPLOY_TOKEN}}${{secrets.LIVE_DEPLOY_REPO}}
                  cd checkout
-                 git clone https://${{secrets.DEPLOY_TOKEN}}${{@github.com/iTBharathexim/bharathexim.com.git}}
+                 git clone https://${{secrets.DEPLOY_TOKEN}}@github.com/iTBharathexim/bharathexim.com.git
                  rm -r bharathexim.com/*
                  cp -r ../dist/dm-frontend/* bharathexim.com/
                  cd bharathexim.com
