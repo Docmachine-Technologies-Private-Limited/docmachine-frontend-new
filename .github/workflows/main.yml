@@ -180,8 +180,7 @@ jobs:
                  rm -f *.js
                  rm -f *.css
                  rm -f *website.index
-                 rm -r assets/*
-                 find . -name "assets" -delete
+                 rm -r assets
                  cp -r ../dist/dm-frontend/* bharathexim.com/
                  cd bharathexim.com
                  git add .
