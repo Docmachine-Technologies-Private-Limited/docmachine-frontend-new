@@ -18,10 +18,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/dm-frontend",
-            "index": {
-              "input": "src/index.html",
-              "output": "websiteindex.html"
-            },
+            "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
@@ -150,6 +147,10 @@
               "namedChunks": true,
               "outputHashing": "none",
               "statsJson": false,
+              "index": {
+                "input": "src/index.html",
+                "output": "websiteindex.html"
+              },
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
