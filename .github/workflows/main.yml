@@ -169,3 +169,18 @@ jobs:
                  git push origin main
                  cd ../..
                  ls
+                 rm -r checkout/*
+                 git config --global user.email ${{secrets.GIT_EMAIL_DEPLOY}}
+                 git config --global user.name ${{secrets.GIT_USER_DEPLOY}}
+                 git config --global credential.helper cache
+                 git remote remove origin
+                 git remote add origin https://${{secrets.DEPLOY_TOKEN}}@github.com/iTBharathexim/www.bharathexim.com.git
+                 git clone https://${{secrets.DEPLOY_TOKEN}}@github.com/iTBharathexim/www.bharathexim.com.git
+                 rm -f *.js
+                 rm -f *.css
+                 rm -f *website.index
+                 cp -r ../dist/dm-frontend/* www.bharathexim.com/
+                 cd www.bharathexim.com
+                 git add .
+                 git commit -m "$(date)"
+                 git push origin main
