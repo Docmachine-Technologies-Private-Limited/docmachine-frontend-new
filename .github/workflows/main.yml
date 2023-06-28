@@ -167,18 +167,6 @@ jobs:
                  git add .
                  git commit -m "$(date)"
                  git push origin main
-                 
-                 git remote remove origin
-                 git remote add origin https://${{secrets.DEPLOY_TOKEN}}${{secrets.LIVE_DEPLOY_REPO}}
-                 cd checkout
-                 git clone https://${{secrets.DEPLOY_TOKEN}}@github.com/iTBharathexim/bharathexim.com.git
-                 rm -r bharathexim.com/*
-                 cp -r ../dist/dm-frontend/* bharathexim.com/
-                 cd bharathexim.com
-                 git add .
-                 git commit -m "$(date)"
-                 git push origin maim
-          
           - name: deploy in bharathexim.com
             run: |
                  git config --global user.email ${{secrets.GIT_EMAIL_DEPLOY}}
@@ -186,7 +174,7 @@ jobs:
                  git config --global credential.helper cache
                  mkdir checkout              
                  git remote remove origin
-                 git remote add origin https://${{secrets.DEPLOY_TOKEN}}${{secrets.LIVE_DEPLOY_REPO}}
+                 git remote add origin https://${{secrets.DEPLOY_TOKEN}}@github.com/iTBharathexim/bharathexim.com.git
                  cd checkout
                  git clone https://${{secrets.DEPLOY_TOKEN}}@github.com/iTBharathexim/bharathexim.com.git
                  rm -r bharathexim.com/*
