@@ -47,7 +47,8 @@
               "src/assets/LoginPage/vendor/css-hamburgers/hamburgers.min.css",
               "src/assets/LoginPage/vendor/select2/select2.min.css",
               "src/assets/LoginPage/css/util.css",
-              "src/assets/LoginPage/css/main.css"
+              "src/assets/LoginPage/css/main.css",
+              "./node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
               "src/assets/kendo-html-pdf/kendo.all.min.js",
