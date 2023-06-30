@@ -946,7 +946,7 @@ table {
 }
 
 .analytics .analytics-side {
-    padding-left: 0px!important;
+    padding-left: 0px !important;
 }
 
 .middle_datatable table tr th {
@@ -961,7 +961,7 @@ table {
 }
 
 .middle_datatable table tr td {
-    font-size: 11px!important;
+    font-size: 11px !important;
     color: #777;
     font-family: Poppins, sans-serif;
     font-weight: 500;
@@ -970,7 +970,7 @@ table {
 .heading_common_tag {
     display: inline-block;
     width: 100%;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 600;
     color: #333;
     padding: 13px 0 12px 0;
@@ -982,7 +982,7 @@ table {
 }
 
 .content {
-    min-height: inherit!important;
+    min-height: inherit !important;
 }
 
 .view_edit_button a i {
@@ -997,7 +997,37 @@ table {
     font-size: 16px;
 }
 
-.none{
-  pointer-events: none;
-  opacity: .7;
+.none {
+    pointer-events: none;
+    opacity: .7;
+}
+
+
+.import_export_sec {
+    margin: auto;
+    margin-left: 0;
+}
+
+.filter_section_top {
+    display: grid;
+    width: 99%;
+    background-color: #f6f6f6;
+    margin: 10px auto;
+    border-radius: 10px;
+    box-shadow: 0 0 2px 2px #dbdbdb;
+    padding-right: 20px;
+}
+
+.middle_datatable .support {
+    height: calc(100vh - 159px);
+}
+
+.table-padding {
+    background-color: transparent !important;
+    box-shadow: none;
+}
+
+.content-wrap.scroll-bar-main {
+    overflow: hidden;
+    padding: 0;
 }

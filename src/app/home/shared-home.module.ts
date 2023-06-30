@@ -51,6 +51,10 @@ import {CustomConfirmDialogModelComponent} from '../custom/custom-confirm-dialog
 import { NgCustomInputComponent } from "../custom/ng-custom-input/ng-custom-input.component";
 import { CustomStatusProgressBarComponent } from "../custom/custom-status-progress-bar/custom-status-progress-bar.component";
 import { MatPaginatorModule } from '@angular/material/paginator'
+import { CustomExpansionPanelComponent } from "../custom/custom-expansion-panel/custom-expansion-panel.component";
+import { CustomTableExpansionPanelComponent } from "../custom/custom-expansion-panel/custom-table-expansion-panel/custom-table-expansion-panel.component";
+import { SchedulerModule } from "@progress/kendo-angular-scheduler";
+import {CustomKendoSchedulerComponent} from "../custom-kendo-scheduler/custom-kendo-scheduler.component"
 
 @NgModule({
   declarations: [
@@ -82,7 +86,10 @@ import { MatPaginatorModule } from '@angular/material/paginator'
     CustomHoverPanelComponent,
     CustomConfirmDialogModelComponent,
     NgCustomInputComponent,
-    CustomStatusProgressBarComponent
+    CustomStatusProgressBarComponent,
+    CustomExpansionPanelComponent,
+    CustomTableExpansionPanelComponent,
+    CustomKendoSchedulerComponent
   ],
   imports: [
     CommonModule,
@@ -97,7 +104,8 @@ import { MatPaginatorModule } from '@angular/material/paginator'
     MatCheckboxModule,
     MatRadioModule,
     ModalModule.forRoot(),
-    MatPaginatorModule
+    MatPaginatorModule,
+    SchedulerModule
   ],
   entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService],
@@ -144,7 +152,11 @@ import { MatPaginatorModule } from '@angular/material/paginator'
     CustomConfirmDialogModelComponent,
     NgCustomInputComponent,
     CustomStatusProgressBarComponent,
-    MatPaginatorModule
+    MatPaginatorModule,
+    CustomExpansionPanelComponent,
+    CustomTableExpansionPanelComponent,
+    SchedulerModule,
+    CustomKendoSchedulerComponent
   ],
 })
 export class SharedHomeModule { }

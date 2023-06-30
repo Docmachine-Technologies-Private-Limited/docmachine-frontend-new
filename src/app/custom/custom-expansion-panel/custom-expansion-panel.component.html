@@ -1,0 +1,79 @@
+<div class="d-flex custom-expansion-panel">
+    <table class="table">
+        <thead>
+            <tr class="table-tr">
+                <th scope="col" class="col-td-th-0">#</th>
+                <th scope="col" class="col-td-th-1" [ngClass]="this.TableHeaderClass[i]"
+                    *ngFor="let item of header;let i=index">{{item}}</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="items.length!=0">
+            <div class="overflow-expansion-panel">
+                <custom-table-expansion-panel>
+                    <div class="table-type" *ngFor="let item of items;let i=index"
+                        [ngClass]="{'table-active':item.isExpand==true}">
+                        <tr class="table-tr added-active custom-expansion-panel-tr" title="click arrow icon see more details...">
+                            <td title="Data Show and Hide" scope="col" class="col-td-th-0"
+                                (click)="CollapseAll(items,'isExpand',i);item.isExpand=!item.isExpand;">
+                                <span *ngIf="item.isExpand==true" class="fa fa-chevron-up"></span>
+                                <span *ngIf="item.isExpand==false" class="fa fa-chevron-down"></span>
+                            </td>
+                            <td scope="col" class="col-td-th-1" (click)="eventId!='' && i==eventId?TrClick(item,i):''" [ngClass]="this.TableHeaderClass[i]"
+                                *ngFor="let objectitem of this.Keys;let i=index">
+                                {{item[objectitem]}}</td>
+                            <td scope="col" class="col-td-th-1"
+                                *ngIf="item.disabled==false && item.RoleType!='Approver'">
+                                <a title="View" (click)="View(item,i)" class="PopupOpen"
+                                    popup-close="PDF_VIEW">
+                                    <i class="fa fa-eye PopupOpen" popup-close="PDF_VIEW"
+                                        aria-hidden="true"></i>
+                                </a>
+                                <a title="Edit" popup-close="EditSummaryPage" (click)="Edit(item,i)"
+                                    class="savBtn bgnone PopupOpen">
+                                    <i class="fa fa-pencil-square-o PopupOpen" popup-close="EditSummaryPage" aria-hidden="true"></i>
+                                </a>
+                                <a title="Delete" (click)="Delete(item,i)" class="savBtn bgnone"><i
+                                        class="fa fa-trash-o" aria-hidden="true"></i> </a>
+                            </td>
+                            <td scope="col" class="col-td-th-1"
+                                *ngIf="item.disabled==true && item.RoleType!='Approver'">
+                                <p class="error-p">Check Status Panel...</p>
+                            </td>
+                            <td scope="col" class="col-td-th-1" *ngIf="item.RoleType=='Approver'">
+                                <p class="error-p">Access Denied...</p>
+                            </td>
+                        </tr>
+                        <tr class="table-tr table-tr-1 tr-box-shadow"
+                            [ngClass]="{'Table-Show':item.isExpand==true,'Table-Hide':item.isExpand==false}">
+                            <div class="expansion-panel-inner">
+                                <div class="header">
+                                    <h5>{{ExpansionTitle}}</h5>
+                                </div>
+                                <div class="center-panel">
+                                    <table class="table table-style">
+                                        <thead>
+                                            <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-0">#</th>
+                                                <th scope="col" class="col-td-th-1"
+                                                    *ngFor="let Expansionheaderitem of Expansionheader;let i=index">
+                                                    {{Expansionheaderitem}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-tr" *ngIf="Expansionitems.length!=0">
+                                                <td scope="col" class="col-td-th-0">{{(i+1)}}</td>
+                                                <td scope="col" class="col-td-th-1"
+                                                    *ngFor="let Expansionitemsobjectitem of this.ExpansionKeys;let i=index">
+                                                    {{Expansionitems[i][Expansionitemsobjectitem]}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </tr>
+                    </div>
+                </custom-table-expansion-panel>
+            </div>
+        </tbody>
+    </table>
+</div>
