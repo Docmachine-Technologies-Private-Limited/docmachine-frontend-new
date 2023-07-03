@@ -71,7 +71,7 @@ export class CustomJPXSchedulerComponent implements AfterViewInit {
         width: 100 + '%',
         height: 600,
         source: this.dataAdapter,
-        view: "weekView",
+        view: "monthView",
         showLegend: true,
         appointmentDataFields: {
             from: "start",

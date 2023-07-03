@@ -146,7 +146,8 @@
                   [(ngModel)]="this.PIPO_LIST" (change)="clickPipo(CommercialNumber?.selectedItems,documentType)" #CommercialNumber>
                 </ng-select>
                 <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0"
-                  [items]="[]" bindLabel="pi_po_buyerName"
+                  [items]="[]" [multiple]="true"
+                  bindLabel="pi_po_buyerName"
                   [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION"
                   #CommercialNumber disabled>
                 </ng-select>
@@ -172,6 +173,7 @@
 
                 <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0"
                   [items]="[]" bindLabel="pi_po_buyerName"
+                  [multiple]="true"
                   [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION"
                   #CommercialNumber disabled>
                 </ng-select>
@@ -190,7 +192,7 @@
                   <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Shipping
                     Bill*</label>
                   <ng-select class="custom" *ngIf="this.SHIPPING_LIST?.length!=0" [items]="[]" bindLabel="sbno"
-                    [(ngModel)]="this.SHIPPING_LIST" placeholder="Select Shipping Bill" disabled>
+                    [(ngModel)]="this.SHIPPING_LIST" [multiple]="true" placeholder="Select Shipping Bill" disabled>
                   </ng-select>
                 </div>
               </div>
@@ -202,7 +204,7 @@
             <label style="font-size: 20px; color: #303030;">Beneficiary Name*</label>
             <ng-select class="custom" *ngIf="this.benneDetail?.length!=0" [items]="this.benneDetail"
               bindLabel="benneName" [multiple]="false"  [selectableGroup]="true"
-              placeholder="Select PI/PO"               (change)="clickBene(bene?.selectedValues[0]?.benneName)" #bene>
+              placeholder="Select PI/PO" (change)="clickBene(bene?.selectedValues[0]?.benneName)" #bene>
             </ng-select>
           </div>
 

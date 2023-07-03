@@ -4295,6 +4295,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
           updatedata['documents'] = UpdatedUrl;
           updatedata['extradata'] = P102_DATA;
+          updatedata['Url_Redirect']=({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
           console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
           if (Status == '' || Status == null || Status == 'Rejected') {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
@@ -4369,7 +4370,9 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
           }
           var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
           updatedata['documents'] = UpdatedUrl;
+          updatedata['Url_Redirect']=({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
           console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, 'approval_data')
+
           if (Status == '' || Status == null || Status == 'Rejected') {
             this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {
               var data: any = {
@@ -4441,6 +4444,7 @@ export class ExportHomeComponent implements OnInit, OnDestroy {
         var updatedata: any = this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length - 1];
         updatedata['documents'] = temp_doc;
         updatedata['extradata'] = P102_DATA;
+        updatedata['Url_Redirect']=({ file: 'export', document: 'blCopyref', SbRef: UniqueId });
         console.log(approval_data, this.mainDoc, this.selectPIPO, this.item3, updatedata, P102_DATA, 'approval_data')
         if (Status == '' || Status == null || Status == 'Rejected') {
           this.AprrovalPendingRejectService.DownloadByRole_Transaction_Type(this.USER_DATA['RoleCheckbox'], approval_data, () => {

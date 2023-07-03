@@ -93,12 +93,14 @@ export class TransactionDashboardComponent implements OnInit {
             var merge: any = mergeTransactionres;
             if (this.TRANSACTION_NAME == 'Inward-Remitance-Dispoal') {
               for (let index = 0; index < merge['Inward-Remitance-Dispoal'].length; index++) {
+                merge['Inward-Remitance-Dispoal'][index]['Ref_Data'] = []
                 if (compareArrays(merge['Inward-Remitance-Dispoal'][index].pipo[0]?._id, merge['Export-Direct-Dispatch'][index]?.pipo[0]?._id)) {
                   merge['Inward-Remitance-Dispoal'][index].Ref_Data['blCopyRef'] = merge['Export-Direct-Dispatch'][index];
                 }
               }
             } else if (this.TRANSACTION_NAME == 'Export-Direct-Dispatch') {
               for (let index = 0; index < merge['Export-Direct-Dispatch'].length; index++) {
+                merge['Export-Direct-Dispatch'][index]['Ref_Data'] = []
                 if (compareArrays(merge['Export-Direct-Dispatch'][index]?.pipo[0]?._id, merge['Inward-Remitance-Dispoal'][index]?.pipo[0]?._id) && merge['Export-Direct-Dispatch'][index]?.Ref_Data != undefined) {
                   merge['Export-Direct-Dispatch'][index].Ref_Data['irRef'] = merge['Inward-Remitance-Dispoal'][index];
                 }
@@ -111,6 +113,7 @@ export class TransactionDashboardComponent implements OnInit {
               }
             } else if (this.TRANSACTION_NAME == 'Import-Direct-Payment') {
               for (let index = 0; index < merge['Import-Direct-Payment'].length; index++) {
+                merge['Import-Direct-Payment'][index]['Ref_Data'] = []
                 if (compareArrays(merge['Import-Direct-Payment'][index].pipo[0]?._id, merge['Advance-Remittance-flow'][index].pipo[0]?._id) && merge['Advance-Remittance-flow'][index]?.Ref_Data != undefined) {
                   merge['Import-Direct-Payment'][index]['Ref_Data'] = merge['Advance-Remittance-flow'][index]?.Ref_Data;
                 }
@@ -223,7 +226,7 @@ export class TransactionDashboardComponent implements OnInit {
         this.LOADER_ON_OFF = false;
       }
       try {
-          await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
+        await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
           console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
           this.pdflist.push(data?.pdfurl)
           this.LOADER_ON_OFF = false;
@@ -245,7 +248,7 @@ export class TransactionDashboardComponent implements OnInit {
         this.LOADER_ON_OFF = false;
       }
       try {
-          await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
+        await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
           console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
           this.pdflist.push(data?.pdfurl)
           this.LOADER_ON_OFF = false;
@@ -272,7 +275,7 @@ export class TransactionDashboardComponent implements OnInit {
         this.LOADER_ON_OFF = false;
       }
       try {
-          await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
+        await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
           console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
           this.pdflist.push(data?.pdfurl)
           this.LOADER_ON_OFF = false;
@@ -299,7 +302,7 @@ export class TransactionDashboardComponent implements OnInit {
         this.LOADER_ON_OFF = false;
       }
       try {
-          await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
+        await this.pdfmerge._multiple_merge_pdf(data?.MoreDetails?.documents).then((data: any) => {
           console.log('mergeAllPDFmergeAllPDFmergeAllPDF', temp, data);
           this.pdflist.push(data?.pdfurl)
           this.LOADER_ON_OFF = false;
@@ -383,6 +386,14 @@ export class TransactionDashboardComponent implements OnInit {
       this.Newtemp['pipo'] = pipolist.toString();
     }
     this.router.navigate(['home/' + url, this.Newtemp]);
+  }
+  
+  getPipoListString(pipo:any){
+    var pipolist: any = [];
+    pipo.forEach(item => {
+      pipolist.push(item?.pi_poNo)
+    });
+    return pipolist.toString();
   }
 
 }
