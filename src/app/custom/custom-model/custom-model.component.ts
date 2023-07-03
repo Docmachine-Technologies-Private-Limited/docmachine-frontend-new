@@ -44,7 +44,7 @@ export class CustomModelComponent implements OnInit {
   }
 
   get displayHidden() {
-    return $('.upload-modal').css('display','none')
+    return $('upload-modal')
   }
   ClosePopup() {
     this.ModelChange.emit('null');

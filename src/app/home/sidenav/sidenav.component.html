@@ -409,10 +409,10 @@
               <a href="#IDPMS" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">IDPMS</a>
               <ul class="collapse list-unstyled" id="IDPMS">
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/edpms-recon')">IDPMS Recon</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/idpms-recon')">IDPMS Recon</h6>
                 </li>
                 <li class="nav-item">
-                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/edpms-recon-table')">IDPMS Recon Table</h6>
+                  <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/idpms-recon-table')">IDPMS Recon Table</h6>
                 </li>
                 <li class="nav-item">
                   <h6 class="nav-link p-0" (click)="navigationByUrl($event,'/Excel-Downloader')">Report</h6>
@@ -574,6 +574,10 @@
       <li class="nav-item profile-panel" style="display:grid;">
         <span class="fa fa-user"></span>
         <h6 class="p-0" class="CLOSE_CUSTOM_TOOLTIPS" [attr.ng-tooltips-popup]="'UserToolTips'" (click)="navigationByUrl($event,'/user-profiles')">Profile</h6>
+      </li>
+      <li class="nav-item profile-panel" style="display:grid;">
+        <span class="fa fa-calendar"></span>
+        <h6 class="p-0" class="CLOSE_CUSTOM_TOOLTIPS" [attr.ng-tooltips-popup]="'UserToolTips'" (click)="navigationByUrl($event,'/Sheduler-Calender')">Sheduler-Calender</h6>
       </li>
       <li class="nav-item profile-panel" style="display:grid;">
         <span class="fas fa-restroom"></span>

@@ -122,7 +122,7 @@ export class ViewDocumentComponent implements OnInit {
       "col-td-th-2",
       "col-td-th-1"
     ],
-    eventId:2
+    eventId: 2
   }
   SHIPPING_BILL_EDIT_FORM_DATA: any = {
     sbdate: '',
@@ -326,21 +326,26 @@ export class ViewDocumentComponent implements OnInit {
     );
   }
 
-  getInvoicesNew(data:any) {
-    this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[data?.index]['doc']);
-    return (
-      (this.selectedRow = this.FILTER_VALUE_LIST[data?.index]),
-      (this.showInvoice = true),
-      (this.tableWidth = '30%'),
-      (this.greaterAmount = parseInt(this.selectedRow.amount))
-    );
+  getInvoicesNew(data: any) {
+    if (data != null) {
+      this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[data?.index]['doc']);
+      return (
+        (this.selectedRow = this.FILTER_VALUE_LIST[data?.index]),
+        (this.showInvoice = true),
+        (this.tableWidth = '30%'),
+        (this.greaterAmount = parseInt(this.selectedRow.amount))
+      );
+    }
+    return null;
   }
 
-  getTransactionsNew(data:any) {
-    this.documentService.getTask({ pi_poNo: this.FILTER_VALUE_LIST[data?.index]['pipo'][0]?.pi_poNo, file: 'advance' }).subscribe((res: any) => {
-      this.allTransactions = res.task;
-      console.log('ALL TRANSACTIONS', this.allTransactions);
-    },(err) => console.log(err));
+  getTransactionsNew(data: any) {
+    if (data != null) {
+      this.documentService.getTask({ pi_poNo: this.FILTER_VALUE_LIST[data?.index]['pipo'][0]?.pi_poNo, file: 'advance' }).subscribe((res: any) => {
+        this.allTransactions = res.task;
+        console.log('ALL TRANSACTIONS', this.allTransactions);
+      }, (err) => console.log(err));
+    }
   }
 
   onExport() {
@@ -442,6 +447,7 @@ export class ViewDocumentComponent implements OnInit {
         console.log('king123');
         console.log(data);
         this.toastr.success('Shipping Bill row is updated');
+        this.SELECTED_SHIPPING_VALUE = '';
       },
       (error) => {
         console.log('error');

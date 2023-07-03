@@ -102,6 +102,7 @@ import { ForwardContractAddComponent } from './Import/Treasury/ForwardContract/f
 import { ForwardContractSummaryComponent } from './Import/Treasury/ForwardContract/forward-contract-summary/forward-contract-summary.component';
 import { RoleBasedSingUpComponent } from "../RoleBased/role-based-sing-up/role-based-sing-up.component";
 import { AddAdvanceOutwardRemittanceA2Component } from "./Import/add-advance-outward-remittance-a2/add-advance-outward-remittance-a2.component";
+import { CustomJPXSchedulerComponent } from "../custom-jpxscheduler/custom-jpxscheduler.component";
 
 @NgModule({
   declarations: [
@@ -225,6 +226,8 @@ import { AddAdvanceOutwardRemittanceA2Component } from "./Import/add-advance-out
           { path: "view-document", loadChildren: () => import('./view-document/view-document.module').then(mod => mod.ViewDocumentModule), canActivate: [MemberGuard] },
           { path: "edpms-recon-table", loadChildren: () => import('./edpms-recon-table/edpms-recon-table.module').then(mod => mod.EdpmsReconTableModule), canActivate: [MemberGuard] },
           { path: "edpms-recon", loadChildren: () => import('./edpms-recon/edpms-recon.module').then(mod => mod.EdpmsReconModule), canActivate: [MemberGuard] },
+          { path: "idpms-recon-table", loadChildren: () => import('./idpms-recon-table/idpms-recon-table.module').then(mod => mod.IdpmsReconTableModule), canActivate: [MemberGuard] },
+          { path: "idpms-recon", loadChildren: () => import('./idpms-recon/idpms-recon.module').then(mod => mod.IdpmsReconModule), canActivate: [MemberGuard] },
           { path: "bill-lodgement", loadChildren: () => import('./Export/bill-lodgement/bill-lodgement.module').then(mod => mod.BillLodgementModule), canActivate: [MemberGuard] },
           { path: "packing-credit-request", loadChildren: () => import('./Export/packing-credit/packing-credit.module').then(mod => mod.PackingCreditModule), canActivate: [MemberGuard] },
           { path: "export-home", component: ExportHomeComponent, canActivate: [MemberGuard] },
@@ -632,6 +635,12 @@ import { AddAdvanceOutwardRemittanceA2Component } from "./Import/add-advance-out
             component: ForwardContractAddComponent,
             pathMatch: "full",
             canActivate: [MemberGuard]
+          },
+          {
+            path: "Sheduler-Calender",
+            component: CustomJPXSchedulerComponent,
+            pathMatch: "full",
+            canActivate: [AdminMemberGuard]
           },
           { path: "SuperAdminPanel", pathMatch: "full", component: SuperAdminPanelComponent, canActivate: [SuperGuard] },
           { path: "AdminPanel", pathMatch: "full", component: AdminPanelComponent, canActivate: [AdminGuard] },

@@ -21,13 +21,12 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "importHelpers": true,
-    "target": "ES2022",
+    "target": "es2020",
     "module": "es2020",
     "lib": [
       "es2020",
       "dom"
-    ],
-    "useDefineForClassFields": false
+    ]
   },
   "files": [
     "src/polyfills.ts"
@@ -37,7 +36,6 @@
   ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": false,
     "strictInputAccessModifiers": false,
     "strictInputTypes": false,
     "strictTemplates": false,
@@ -45,6 +43,8 @@
     "esModuleInterop": true,
     "strictDomEventTypes": false,
     "noPropertyAccessFromIndexSignature": false,
-    "fullTemplateTypeCheck": false
+    "compilationMode": "full",
+    "fullTemplateTypeCheck": false, 
+    "strictInjectionParameters": false,
   }
 }

@@ -53,8 +53,8 @@ import { CustomStatusProgressBarComponent } from "../custom/custom-status-progre
 import { MatPaginatorModule } from '@angular/material/paginator'
 import { CustomExpansionPanelComponent } from "../custom/custom-expansion-panel/custom-expansion-panel.component";
 import { CustomTableExpansionPanelComponent } from "../custom/custom-expansion-panel/custom-table-expansion-panel/custom-table-expansion-panel.component";
-import { SchedulerModule } from "@progress/kendo-angular-scheduler";
-import {CustomKendoSchedulerComponent} from "../custom-kendo-scheduler/custom-kendo-scheduler.component"
+import { CustomJPXSchedulerComponent } from "../custom-jpxscheduler/custom-jpxscheduler.component";
+import { jqxSchedulerModule } from 'jqwidgets-ng/jqxscheduler';
 
 @NgModule({
   declarations: [
@@ -89,7 +89,7 @@ import {CustomKendoSchedulerComponent} from "../custom-kendo-scheduler/custom-ke
     CustomStatusProgressBarComponent,
     CustomExpansionPanelComponent,
     CustomTableExpansionPanelComponent,
-    CustomKendoSchedulerComponent
+    CustomJPXSchedulerComponent
   ],
   imports: [
     CommonModule,
@@ -105,7 +105,7 @@ import {CustomKendoSchedulerComponent} from "../custom-kendo-scheduler/custom-ke
     MatRadioModule,
     ModalModule.forRoot(),
     MatPaginatorModule,
-    SchedulerModule
+    jqxSchedulerModule
   ],
   entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService],
@@ -155,8 +155,8 @@ import {CustomKendoSchedulerComponent} from "../custom-kendo-scheduler/custom-ke
     MatPaginatorModule,
     CustomExpansionPanelComponent,
     CustomTableExpansionPanelComponent,
-    SchedulerModule,
-    CustomKendoSchedulerComponent
+    CustomJPXSchedulerComponent,
+    jqxSchedulerModule
   ],
 })
 export class SharedHomeModule { }
