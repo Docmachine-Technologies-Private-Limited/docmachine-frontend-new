@@ -2,7 +2,7 @@
     <table class="table">
         <thead>
             <tr class="table-tr">
-                <th scope="col" class="col-td-th-0">#</th>
+                <th scope="col" class="col-td-th-0" *ngIf="this.Expansion==true">#</th>
                 <th scope="col" class="col-td-th-1" [ngClass]="this.TableHeaderClass[i]"
                     *ngFor="let item of header;let i=index">{{item}}</th>
             </tr>
@@ -14,6 +14,7 @@
                         [ngClass]="{'table-active':item.isExpand==true}">
                         <tr class="table-tr added-active custom-expansion-panel-tr" title="click arrow icon see more details...">
                             <td title="Data Show and Hide" scope="col" class="col-td-th-0"
+                                *ngIf="this.Expansion==true"
                                 (click)="CollapseAll(items,'isExpand',i);item.isExpand=!item.isExpand;">
                                 <span *ngIf="item.isExpand==true" class="fa fa-chevron-up"></span>
                                 <span *ngIf="item.isExpand==false" class="fa fa-chevron-down"></span>
@@ -43,7 +44,7 @@
                                 <p class="error-p">Access Denied...</p>
                             </td>
                         </tr>
-                        <tr class="table-tr table-tr-1 tr-box-shadow"
+                        <tr class="table-tr table-tr-1 tr-box-shadow" *ngIf="this.Expansion==true"
                             [ngClass]="{'Table-Show':item.isExpand==true,'Table-Hide':item.isExpand==false}">
                             <div class="expansion-panel-inner">
                                 <div class="header">
@@ -60,11 +61,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="table-tr" *ngIf="Expansionitems.length!=0">
+                                            <tr class="table-tr" *ngIf="ExpansionKeys.length!=0">
                                                 <td scope="col" class="col-td-th-0">{{(i+1)}}</td>
                                                 <td scope="col" class="col-td-th-1"
                                                     *ngFor="let Expansionitemsobjectitem of this.ExpansionKeys;let i=index">
-                                                    {{Expansionitems[i][Expansionitemsobjectitem]}}</td>
+                                                    {{item?.Expansion_Items[Expansionitemsobjectitem]}}</td>
                                             </tr>
                                         </tbody>
                                     </table>

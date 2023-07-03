@@ -23,6 +23,7 @@ import { ConfirmDialogBoxComponent, ConfirmDialogModel } from '../confirm-dialog
 import { MatDialog } from '@angular/material/dialog';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MergePdfListService } from '../merge-pdf-list.service';
+import { async } from 'rxjs';
 
 @Component({
   selector: 'app-view-document',
@@ -641,39 +642,40 @@ export class ViewDocumentComponent implements OnInit {
 
   ShippingBillTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
-    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
-
-    data?.forEach(element => {
-      this.FILTER_VALUE_LIST_NEW['items'].push({
-        PipoNo: this.getPipoNumber(element['pipo']),
-        sbdate: element['sbdate'],
-        sbno: element['sbno'],
-        buyerName: element['buyerName'],
-        fobCurrency: element['fobCurrency'],
-        fobValue: element['fobValue'],
-        SB_RENAMMING_AMOUNT: element['SB_RENAMMING_AMOUNT'],
-        isExpand: false,
-        disabled: element['deleteflag'] != '-1' ? false : true,
-        RoleType: this.USER_DATA?.result?.RoleCheckbox
-      })
-      this.FILTER_VALUE_LIST_NEW['Expansion_Items'].push({
-        adCode: element['adCode'],
-        adBillNo: element['adBillNo'],
-        consigneeName: element['consigneeName'],
-        exporterLocationCode: element['exporterLocationCode'],
-        countryOfFinaldestination: element['countryOfFinaldestination'],
-        firxNumber: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxNumber'),
-        firxDate: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxDate'),
-        firxCurrency: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxCurrency'),
-        firxAmount: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxAmount'),
-        firxCommision: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxCommision'),
-        FIRX_TOTAL_AMOUNT: element['FIRX_TOTAL_AMOUNT']
-      })
+    this.removeEmpty(data).then(async (newdata: any) => {
+      await newdata?.forEach(async (element) => {
+        await this.FILTER_VALUE_LIST_NEW['items'].push({
+          PipoNo: this.getPipoNumber(element['pipo']),
+          sbdate: element['sbdate'],
+          sbno: element['sbno'],
+          buyerName: element['buyerName'],
+          fobCurrency: element['fobCurrency'],
+          fobValue: element['fobValue'],
+          SB_RENAMMING_AMOUNT: element['SB_RENAMMING_AMOUNT'],
+          isExpand: false,
+          disabled: element['deleteflag'] != '-1' ? false : true,
+          RoleType: this.USER_DATA?.result?.RoleCheckbox,
+          Expansion_Items:{
+            adCode: element['adCode'],
+            adBillNo: element['adBillNo'],
+            consigneeName: element['consigneeName'],
+            exporterLocationCode: element['exporterLocationCode'],
+            countryOfFinaldestination: element['countryOfFinaldestination'],
+            firxNumber: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxNumber'),
+            firxDate: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxDate'),
+            firxCurrency: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxCurrency'),
+            firxAmount: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxAmount'),
+            firxCommision: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxCommision'),
+            FIRX_TOTAL_AMOUNT: element['FIRX_TOTAL_AMOUNT']
+          }
+        })
+      });
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
+      this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'])
     });
-    this.FILTER_VALUE_LIST_NEW['Objectkeys'] = Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-    this.FILTER_VALUE_LIST_NEW['Objectkeys'] = this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-    this.FILTER_VALUE_LIST_NEW['Objectkeys'] = this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
-    this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = Object.keys(this.FILTER_VALUE_LIST_NEW['Expansion_Items'][0])
   }
   getPipoNumber(pipo: any) {
     let temp: any = [];
@@ -681,6 +683,21 @@ export class ViewDocumentComponent implements OnInit {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
+  }
+
+  async removeEmpty(data: any) {
+    await data.forEach(element => {
+      for (const key in element) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+          element[key] = 'NF'
+        }
+      }
+    });
+    return await new Promise(async (resolve, reject) => { await resolve(data) });
+  }
+  SB_NO:any=''
+  getSbNo(data:any){
+   this.SB_NO=data?.item?.sbno
   }
 }
 

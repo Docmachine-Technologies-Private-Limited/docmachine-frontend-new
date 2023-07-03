@@ -215,15 +215,17 @@
                             </tbody>
                         </table>
                         <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header"
+                            [ExpansionShowHide]="true"
                             [items]="this.FILTER_VALUE_LIST_NEW?.items"
                             [Expansionheader]="this.FILTER_VALUE_LIST_NEW?.Expansion_header"
                             [Expansionitems]="this.FILTER_VALUE_LIST_NEW?.Expansion_Items"
                             [ExpansionKeys]="this.FILTER_VALUE_LIST_NEW?.ExpansionKeys"
                             [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
-                            ExpansionTitle="Shipping of Against : " [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys"
+                            [ExpansionTitle]="'Shipping of Against : '+this.SB_NO" [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys"
                             (ViewChanges)="viewCN($event)" (EditChanges)="toEdit($event)"
                             (event)="getInvoicesNew($event) && getTransactionsNew($event)"
                             [eventId]="this.FILTER_VALUE_LIST_NEW?.eventId"
+                            (ArrowEvent)="getSbNo($event)"
                             (DeleteChanges)="handleDelete($event)">
                         </custom-expansion-panel>
                         <!-- <table *ngIf='sb' class="table mb-0">

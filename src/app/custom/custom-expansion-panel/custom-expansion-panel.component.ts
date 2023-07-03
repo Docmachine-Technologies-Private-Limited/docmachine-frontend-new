@@ -17,11 +17,13 @@ export class CustomExpansionPanelComponent implements OnInit {
   @Input('Expansionheader') Expansionheader: any = [];
   @Input('ExpansionTitle') ExpansionTitle: any = '';
   @Input('ExpansionKeys') ExpansionKeys: any = [];
+  @Input('ExpansionShowHide') Expansion: boolean = true;
 
   @Output('ViewChanges') ViewChanges: any = new EventEmitter();
   @Output('EditChanges') EditChanges: any = new EventEmitter();
   @Output('DeleteChanges') DeleteChanges: any = new EventEmitter();
   @Output('event') event: any = new EventEmitter();
+  @Output('ArrowEvent') ArrowEvent: any = new EventEmitter();
   
   constructor(public exp_service: CustomExpansionPanelService) { }
 
@@ -30,6 +32,7 @@ export class CustomExpansionPanelComponent implements OnInit {
 
   CollapseAll(data: any, key: any, i: any) {
     console.log(this.items, 'sdfdsfdsfdsf')
+    this.ArrowEvent.emit({ item: data[i], index: i })
     data.forEach((element, index) => {
       if (index != i) {
         element[key] = false;
