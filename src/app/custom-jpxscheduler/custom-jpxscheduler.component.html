@@ -1,1 +1,13 @@
-<jqxScheduler #schedulerReference [auto-create]="false"></jqxScheduler>
+<jqxScheduler class="custom-jqxScheduler" (onAppointmentClick)="onCellClick($event,Appointment_1)"
+    [editDialogCreate]="editDialogCreate" #schedulerReference [auto-create]="false"></jqxScheduler>
+
+
+<app-custom-model [FooterButton]="true" EventButton="false"
+    [customstyle]="{'margin':'auto !important','max-width': '800px !important','margin-top': '80px !important'}"
+    class="p-2" height="400px" id="BOE_DATA" [name]="'BOE Data Showing'" #Appointment_1>
+    <!-- <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
+        [items]="this.FILTER_VALUE_LIST_NEW?.items" [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
+        [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewCN($event)" (EditChanges)="toEdit($event)"
+        (DeleteChanges)="handleDelete($event)">
+    </custom-expansion-panel> -->
+</app-custom-model>

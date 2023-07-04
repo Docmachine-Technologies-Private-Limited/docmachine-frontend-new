@@ -4225,7 +4225,7 @@ export class NewDirectDispatchComponent implements OnInit {
                               this.documentService.Update_Amount_by_Table({
                                 tableName: 'masterrecord',
                                 id: UniqueId,
-                                query: { balanceAvai: parseFloat(sbAmount[0]?.balanceAvai) - this.FIRX_AMOUNT(this.tp?.firxAmount) }
+                                query: { balanceAvai: parseFloat(sbAmount[0]?.balanceAvai) - parseFloat(this.FIRX_AMOUNT(this.tp?.firxAmount)+this.FIRX_AMOUNT(this.tp?.firxCommision)) }
                               }).subscribe((r3: any) => {
                                 console.log(r3, 'masterrecord')
                                 this.toastr.success('Successfully added Transaction of SB No. :' + sbAmount[0]?.sbno);

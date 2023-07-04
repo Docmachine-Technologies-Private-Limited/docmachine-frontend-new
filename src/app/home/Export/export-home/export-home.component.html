@@ -1164,7 +1164,7 @@
                               *ngIf="this.GetDownloadStatus?.status==null || this.GetDownloadStatus?.status=='Rejected'">
                               <button *ngIf='newDone' class="button1" style="margin-right: 10px; width:200px"
                                 [disabled]="this.GetDownloadStatus?.status=='pending' || this.GetDownloadStatus?.status=='verify'"
-                                (click)="SendApproval(this.GetDownloadStatus?.status,'Inward_Remitance_Dispoal'+'_'+this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,this.selectedPdfs)">Send
+                                (click)="SendApproval(this.GetDownloadStatus?.status,this.Inward_Remittance_MT103[this.Inward_Remittance_MT103.length-1]?._id,this.selectedPdfs)">Send
                                 for Approval</button>
                             </div>
                             <div

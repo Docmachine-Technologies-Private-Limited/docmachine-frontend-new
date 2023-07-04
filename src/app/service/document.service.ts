@@ -305,7 +305,37 @@ export class DocumentService {
     let url = `${this.api_base}/master/get`;
     return this.http.get(url, httpOptions);
   }
-
+  
+  getMasterScheduler() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/master/getScheduler`;
+    return this.http.get(url, httpOptions);
+  }
+  
+  getTransactionScheduler() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/Transaction/getByIdTransactionType`;
+    return this.http.get(url, httpOptions);
+  }
+  
+  getBOEScheduler() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/boe/getByIdScheduler`;
+    return this.http.get(url, httpOptions);
+  }
+  
   getMasterWithPipo(user) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -315,43 +345,6 @@ export class DocumentService {
     let url = `${this.api_base}/master/mergePISb`;
     return this.http.get(url, httpOptions);
   }
-  // getMaster1(): Observable<any[]> {
-  //   let arrayMain = [];
-  //   this.getMaster(1).subscribe(
-  //     (res: any) => {
-  //      let data:[] = res.data;
-  //       console.log('hello the');
-  //       // data.sort((a:any,b:any)=> a.);
-  //       for (let value1 of data) {
-  //         for (let value2 of this.item2) {
-  //           for (let a of value2.pipo) {
-  //             if (a == value1.pi_poNo) {
-  //               const newVal = { ...value1 };
-  //               newVal['sbno'] = value2.sbno;
-  //               newVal['sbdate'] = value2.sbdate;
-  //               newVal['portCode'] = value2.portCode;
-  //               newVal['region'] = value2.countryOfFinaldestination;
-  //               newVal['fobValue'] = value2.fobValue;
-
-  //               // console.log("Hello Ranjit", a);
-  //               // value1.sbno = value2.sbno
-  //               // value1.sbdate = value2.sbdate
-  //               arrayMain.push(newVal);
-  //               // console.log("hello Sj", value2);
-  //             }
-  //           }
-  //         }
-  //       }
-  //       console.log('Hello There', arrayMain);
-  //       if (arrayMain.length > 0) {
-  //         this.item1 = arrayMain;
-  //       }
-
-  //     },
-  //     (err) => console.log(err)
-  //   );
-  //   return of(arrayMain);
-  // }
 
   getBoe(user) {
     this.loadFromLocalStorage();
@@ -386,22 +379,6 @@ export class DocumentService {
       httpOptions
     );
   }
-
-  // updateMasterBySb(user, sbno) {
-  //   this.loadFromLocalStorage();
-  //   console.log(this.authToken);
-  //   const httpOptions = {
-  //     headers: new HttpHeaders({ Authorization: this.authToken }),
-  //   };
-  //   return this.http.post(
-  //     `${this.api_base}/master/updateBySb`,
-  //     {
-  //       sbno: sbno,
-  //       master: user,
-  //     },
-  //     httpOptions
-  //   );
-  // }
 
   updateMasterBySb(user, sbno, _id) {
     this.loadFromLocalStorage();
@@ -1955,7 +1932,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/ExportBillLodgement/add`, { data: data }, httpOptions);
+    return this.http.post(`${this.api_base}/Transaction/add`, { data: data }, httpOptions);
   }
   
   UpdateTransaction(data) {
@@ -1964,20 +1941,20 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/ExportBillLodgement/update`, data, httpOptions);
+    return this.http.post(`${this.api_base}/Transaction/update`, data, httpOptions);
   }
 
   Update_Amount_by_Table(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
-    return this.http.post(`${this.api_base}/ExportBillLodgement/Amount_Update`, data, httpOptions);
+    return this.http.post(`${this.api_base}/Transaction/Amount_Update`, data, httpOptions);
   }
   Update_Amount_by_TableSB(data) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
     const httpOptions = { headers: new HttpHeaders({ Authorization: this.authToken }) };
-    return this.http.post(`${this.api_base}/ExportBillLodgement/Amount_UpdateSB`, data, httpOptions);
+    return this.http.post(`${this.api_base}/Transaction/Amount_UpdateSB`, data, httpOptions);
   }
   getExportBillLodgment() {
     console.log('I am in service');
@@ -1986,7 +1963,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.get(`${this.api_base}/ExportBillLodgement/get`, httpOptions);
+    return this.http.get(`${this.api_base}/Transaction/get`, httpOptions);
   }
   getByIdExportBillLodgment(id: any) {
     this.loadFromLocalStorage();
@@ -1994,7 +1971,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-    return this.http.post(`${this.api_base}/ExportBillLodgement/getById`, { id: id }, httpOptions);
+    return this.http.post(`${this.api_base}/Transaction/getById`, { id: id }, httpOptions);
   }
 
   getOneExportTask(data) {

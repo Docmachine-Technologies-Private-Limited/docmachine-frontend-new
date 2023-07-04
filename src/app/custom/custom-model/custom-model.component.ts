@@ -38,7 +38,9 @@ export class CustomModelComponent implements OnInit {
   @Input('HeaderEventButton') HeaderEventButton: any = '';
 
   footerbuttontext: any = [];
+  
   constructor() { }
+  
   ngOnInit(): void {
     this.footerbuttontext[this.id] = this.condition;
   }
@@ -46,9 +48,16 @@ export class CustomModelComponent implements OnInit {
   get displayHidden() {
     return $('.upload-modal#'+this.id).css('display','none');
   }
+  
+  get displayShow() {
+    return $('.upload-modal#'+this.id).css('display','flex');
+  }
+  
   ClosePopup() {
+    this.displayHidden
     this.ModelChange.emit('null');
   }
+  
   OKBUTTON(PopUpOpenClose: any) {
     if (this.condition == true) {
       this.footerbutton.emit(this.condition);
@@ -57,7 +66,8 @@ export class CustomModelComponent implements OnInit {
       this.footerbutton.emit(false);
     }
   }
-   HEADERBUTTON(PopUpOpenClose: any) {
+  
+  HEADERBUTTON(PopUpOpenClose: any) {
     if (this.condition == true) {
       this.headerbutton.emit(this.condition);
       PopUpOpenClose.style.display = "none";
