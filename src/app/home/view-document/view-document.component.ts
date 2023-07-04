@@ -207,7 +207,6 @@ export class ViewDocumentComponent implements OnInit {
               });
             }
             element['FIRX_TOTAL_AMOUNT'] = totalFirxAmount;
-            element['SB_RENAMMING_AMOUNT'] = parseFloat(element?.fobValue) - parseFloat(totalFirxAmount);
             element['FIRX_INFO'] = tp;
           });
 
@@ -651,11 +650,11 @@ export class ViewDocumentComponent implements OnInit {
           buyerName: element['buyerName'],
           fobCurrency: element['fobCurrency'],
           fobValue: element['fobValue'],
-          SB_RENAMMING_AMOUNT: element['SB_RENAMMING_AMOUNT'],
+          balanceAvai: element['balanceAvai'] != '-1' ? element['balanceAvai'] : element['fobValue'],
           isExpand: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
           RoleType: this.USER_DATA?.result?.RoleCheckbox,
-          Expansion_Items:{
+          Expansion_Items: {
             adCode: element['adCode'],
             adBillNo: element['adBillNo'],
             consigneeName: element['consigneeName'],
@@ -695,9 +694,9 @@ export class ViewDocumentComponent implements OnInit {
     });
     return await new Promise(async (resolve, reject) => { await resolve(data) });
   }
-  SB_NO:any=''
-  getSbNo(data:any){
-   this.SB_NO=data?.item?.sbno
+  SB_NO: any = ''
+  getSbNo(data: any) {
+    this.SB_NO = data?.item?.sbno
   }
 }
 
@@ -717,7 +716,7 @@ class ShippingBillFormat {
         buyerName: element['buyerName'],
         fobCurrency: element['fobCurrency'],
         fobValue: element['fobValue'],
-        SB_RENAMMING_AMOUNT: element['SB_RENAMMING_AMOUNT'],
+        balanceAvai: element['balanceAvai'] != '-1' ? element['balanceAvai'] : element['fobValue'],
         exporterLocationCode: element['exporterLocationCode'],
         countryOfFinaldestination: element['countryOfFinaldestination'],
         firxNumber: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxNumber'),

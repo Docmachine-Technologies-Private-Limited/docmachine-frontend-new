@@ -721,7 +721,7 @@ export class NewDirectDispatchComponent implements OnInit {
                 console.log(elementfirxdetails?.firxAmount.split(','), this.FIRX_AMOUNT(elementfirxdetails?.firxAmount.split(',')), 'hfhgfghfhfhfhf')
                 totalFirxAmount += parseFloat(this.FIRX_AMOUNT(elementfirxdetails?.firxAmount.split(',')))
               }
-              element['balanceAvai'] = parseFloat(element?.fobValue) - parseFloat(totalFirxAmount);
+              element['balanceAvai'] = element['balanceAvai'] != '-1' ? element['balanceAvai'] : element?.fobValue
             } else {
               element['balanceAvai'] = parseFloat(element?.fobValue);
             }
@@ -3925,7 +3925,7 @@ export class NewDirectDispatchComponent implements OnInit {
             //   res.arrayBuffer().then((data: any) => {
             //     var base64String = this._arrayBufferToBase64(data);
             //     const x = 'data:application/pdf;base64,' + base64String;
-               
+
             //     console.log('downloadEachFile', data);
             //   });
             // });
@@ -3984,7 +3984,7 @@ export class NewDirectDispatchComponent implements OnInit {
         tep[tempfilter[0]?._id] = []
         tep[tempfilter[0]?._id][0] = fillpdf;
         temppdflits[0] = fillpdf;
-        
+
         for (let index = 0; index < this.temp[tempfilter[0]?._id].length; index++) {
           tep[tempfilter[0]?._id].push(this.temp[tempfilter[0]?._id][index]?.pdf);
           if (this.temp[tempfilter[0]?._id][index]?.pdf != undefined) {
@@ -4021,7 +4021,7 @@ export class NewDirectDispatchComponent implements OnInit {
       var tep: any = [];
       var temppdflits: any = [];
       tep[tempfilter[0]?._id] = []
-      
+
       $(document).ready(() => {
         kendo.pdf.defineFont({
           "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
@@ -4223,10 +4223,12 @@ export class NewDirectDispatchComponent implements OnInit {
                               id: UniqueId,
                               query: query
                             }).subscribe((r2: any) => {
+                              let sumfixAmount: any = parseInt(this.FIRX_AMOUNT(this.tp?.firxAmount)) + parseInt(this.FIRX_AMOUNT(this.tp?.firxCommision))
+                              console.log(this.FIRX_AMOUNT(this.tp?.firxAmount), this.FIRX_AMOUNT(this.tp?.firxCommision), sumfixAmount, 'chgctydcbvcbvc')
                               this.documentService.Update_Amount_by_Table({
                                 tableName: 'masterrecord',
                                 id: UniqueId,
-                                query: { balanceAvai: parseFloat(sbAmount[0]?.balanceAvai) - parseFloat(this.FIRX_AMOUNT(this.tp?.firxAmount)+this.FIRX_AMOUNT(this.tp?.firxCommision)) }
+                                query: { balanceAvai: parseFloat(sbAmount[0]?.balanceAvai) - sumfixAmount }
                               }).subscribe((r3: any) => {
                                 console.log(r3, 'masterrecord')
                                 this.toastr.success('Successfully added Transaction of SB No. :' + sbAmount[0]?.sbno);
