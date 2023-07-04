@@ -4116,6 +4116,7 @@ export class NewDirectDispatchComponent implements OnInit {
           var approval_data: any = {};
           let sbAmountSum: any = this.itemArray.reduce(function (a, b) { return parseFloat(a) + parseFloat(b?.fobValue) }, 0);
           delete this.USER_DATA?.members_list
+          delete this.USER_DATA?.LoginToken
           if (this.documentService.MT102_SUBJECT != '' && this.documentService.MT102_SUBJECT != null) {
             approval_data = {
               id: 'IRDR' + '_' + UniqueId,
@@ -4325,7 +4326,6 @@ export class NewDirectDispatchComponent implements OnInit {
             }
           });
         }
-
         console.log('Export-Direct-Dispatch' + UniqueId, UniqueId, pipo, approval_data, 'uiiiiiiiiiiiiii')
       }
     }
