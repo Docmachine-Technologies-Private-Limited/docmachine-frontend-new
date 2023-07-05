@@ -49,7 +49,7 @@
               "src/assets/LoginPage/css/util.css",
               "src/assets/LoginPage/css/main.css",
               "./node_modules/jqwidgets-ng/jqwidgets/styles/jqx.base.css",
-              "./node_modules/jqwidgets-ng/jqwidgets/styles/jqx.material.css"
+              "./node_modules/jqwidgets-ng/jqwidgets/styles/jqx.energyblue.css"
             ],
             "scripts": [
               "src/assets/kendo-html-pdf/kendo.all.min.js",

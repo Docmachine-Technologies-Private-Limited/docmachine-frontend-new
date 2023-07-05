@@ -4239,7 +4239,7 @@ export class NewDirectDispatchComponent implements OnInit {
                                     TransactionId: res1._id,
                                     data: {
                                       SbRef: UniqueId,
-                                      Total_FIRX_Amount: this.ExportBillLodgement_Form.value?.Total_FIRX_Amount
+                                      Total_FIRX_Amount: sumfixAmount
                                     },
                                     pipo_id: pipo_id,
                                     pipo_name: pipo_name
@@ -4295,6 +4295,7 @@ export class NewDirectDispatchComponent implements OnInit {
                           this.userService.updateManyPipo(pipo_id, 'export', '', updatedData).subscribe((data) => {
                             console.log('king123');
                             console.log(data);
+                            let sumfixAmount: any = parseInt(this.FIRX_AMOUNT(this.tp?.firxAmount)) + parseInt(this.FIRX_AMOUNT(this.tp?.firxCommision))
                             var updateapproval_data: any = {
                               RejectData: {
                                 tableName: 'masterrecord',
@@ -4302,7 +4303,7 @@ export class NewDirectDispatchComponent implements OnInit {
                                 TransactionId: res1._id,
                                 data: {
                                   SbRef: UniqueId,
-                                  Total_FIRX_Amount: this.ExportBillLodgement_Form.value?.Total_FIRX_Amount
+                                  Total_FIRX_Amount: sumfixAmount
                                 },
                                 pipo_id: pipo_id,
                                 pipo_name: pipo_name

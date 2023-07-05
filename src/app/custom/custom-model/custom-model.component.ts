@@ -50,7 +50,7 @@ export class CustomModelComponent implements OnInit {
   }
   
   get displayShow() {
-    return $('.upload-modal#'+this.id).css('display','flex');
+    return $('.PopupOpen#'+this.id).click()
   }
   
   ClosePopup() {

@@ -18,7 +18,8 @@ export class CustomExpansionPanelComponent implements OnInit {
   @Input('ExpansionTitle') ExpansionTitle: any = '';
   @Input('ExpansionKeys') ExpansionKeys: any = [];
   @Input('ExpansionShowHide') Expansion: boolean = true;
-
+  @Input('ActionRequired') ActionRequired: boolean = true;
+  
   @Output('ViewChanges') ViewChanges: any = new EventEmitter();
   @Output('EditChanges') EditChanges: any = new EventEmitter();
   @Output('DeleteChanges') DeleteChanges: any = new EventEmitter();

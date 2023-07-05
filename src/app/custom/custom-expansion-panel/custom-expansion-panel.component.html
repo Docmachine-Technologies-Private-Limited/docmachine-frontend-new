@@ -23,7 +23,7 @@
                                 *ngFor="let objectitem of this.Keys;let i=index">
                                 {{item[objectitem]}}</td>
                             <td scope="col" class="col-td-th-1"
-                                *ngIf="item.disabled==false && item.RoleType!='Approver'">
+                                *ngIf="item.disabled==false && item.RoleType!='Approver' && this.ActionRequired==true">
                                 <a title="View" (click)="View(item,i)" class="PopupOpen"
                                     popup-close="PDF_VIEW">
                                     <i class="fa fa-eye PopupOpen" popup-close="PDF_VIEW"

@@ -566,8 +566,7 @@ export class DocumentService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: this.authToken }),
     };
-
-    return this.http.get(`${this.api_base}/pipo/getPipoByCustomer?filetype=${type}&buyer=${buyer}`, httpOptions);
+    return this.http.post(`${this.api_base}/pipo/getPipoByCustomer`,{filetype:type,buyer:buyer},httpOptions);
   }
 
   getPipos(page, limit, commodity, location, buyer, type) {

@@ -285,6 +285,9 @@ export class AddAdvanceOutwardRemittanceA2Component implements OnInit {
     this.pipoDataService.getPipoListByCustomer('import', this.selectedBenne?.benneName).then((data: any) => {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data: any) => {
+        data.forEach(element => {
+          element['balanceAmount'] = element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['amount']
+        });
         console.log(data, 'data2222..................')
         for (let index = 0; index < data.length; index++) {
           if (data[index]?.balanceAmount != '0' && data[index]?.balanceAmount != 0) {

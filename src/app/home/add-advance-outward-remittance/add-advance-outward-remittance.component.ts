@@ -198,6 +198,9 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
     this.pipoDataService.getPipoListByCustomer('import', this.selectedBenne.benneName).then((data: any) => {
       console.log(data, 'data..................')
       this.pipoDataService.pipolistModel$.subscribe((data) => {
+        data.forEach(element => {
+          element['balanceAmount'] = element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['amount']
+        });
         console.log(data, 'data2222..................')
         this.pipoData = [];
         for (let index = 0; index < data.length; index++) {
@@ -408,7 +411,7 @@ export class AddAdvanceOutwardRemittanceComponent implements OnInit {
       var base64String1 = this._arrayBufferToBase64(mergedPdfFileload)
       const x1 = 'data:application/pdf;base64,' + base64String1;
       console.log("line no. 1735", this.remittanceUrl);
-      
+
       this.PREVIWES_URL = ''
       setTimeout(() => {
         this.PREVIWES_URL = this.sanitizer.bypassSecurityTrustResourceUrl(x1);
