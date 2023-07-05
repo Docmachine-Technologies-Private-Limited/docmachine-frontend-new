@@ -175,7 +175,7 @@ export class DebitNoteComponent implements OnInit {
   }
   getPipoNumber(pipo: any) {
     let temp: any = [];
-    pipo.forEach(element => {
+   (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
@@ -357,7 +357,7 @@ class DeditNoteFormat {
   }
   getPipoNumber(pipo: any) {
     let temp: any = [];
-    pipo.forEach(element => {
+   (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')

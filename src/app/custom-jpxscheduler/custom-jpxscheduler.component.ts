@@ -134,6 +134,7 @@ export class CustomJPXSchedulerComponent implements AfterViewInit, OnInit {
 
     generateAppointments(data: any): any {
         let appointments = new Array();
+        let diffDaysList: any = [];
         data[0].forEach(element => {
             if (element?.balanceAvai == '-1' || element?.balanceAvai != 0) {
                 element?.weeklist?.forEach(weeklist_element => {
@@ -143,15 +144,47 @@ export class CustomJPXSchedulerComponent implements AfterViewInit, OnInit {
                         start: new Date(weeklist_element?.date), end: new Date(weeklist_element?.date),
                         status: 'Pending'
                     };
+                    appointments.push(appointment);
+
                     const date1: any = new Date(weeklist_element?.date);
                     const date2: any = new Date();
                     const diffTime = Math.abs(date2 - date1);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    console.log(diffDays, this.getDateList(weeklist_element?.date,diffDays));
-                    appointments.push(appointment);
+                    diffDaysList.push({
+                        date: weeklist_element?.date,
+                        diff: diffDays,
+                        SB_NO: element?.sbno,
+                        data: element
+                    })
                 });
             }
         });
+        diffDaysList.forEach(element => {
+            let overduelist: any = this.getDateList(element?.date, element?.diff)
+            var temp_date: any = [];
+            overduelist.forEach(element => {
+                const event: any = new Date(element);
+                temp_date[event.toLocaleDateString().replaceAll('/', '_')] = [];
+            });
+            overduelist.forEach(element => {
+                const event: any = new Date(element);
+                temp_date[event.toLocaleDateString().replaceAll('/', '_')].push({
+                    text: 'SHIPPING-BILL OverDue',
+                    date: element
+                })
+                let overdueappointment = {
+                    id: element?.SB_NO, description: `Sb no. due date is past due from todays date!`, location: "",
+                    subject: `SHIPPING-BILL OverDue`, calendar: "",
+                    start: new Date(element), end: new Date(element),
+                    status: 'Pending'
+                };
+                appointments.push(overdueappointment);
+            });
+            console.log(temp_date,diffDaysList, 'diffDaysList');
+
+        });
+
+        console.log(diffDaysList, 'diffDaysList');
         data[1].forEach(element => {
             if (element?.Ref_Data == '' || element?.Ref_Data == undefined) {
                 element?.weeklist?.forEach(weeklist_element => {
@@ -392,7 +425,7 @@ export class CustomJPXSchedulerComponent implements AfterViewInit, OnInit {
     ARRAY_TO_STRING(array, key) {
         return array[key]?.join(',')
     }
-    getDateList(date:any,loopsize: any) {
+    getDateList(date: any, loopsize: any) {
         let templist: any = [];
         for (let index = 0; index < loopsize; index++) {
             const event = new Date(date);

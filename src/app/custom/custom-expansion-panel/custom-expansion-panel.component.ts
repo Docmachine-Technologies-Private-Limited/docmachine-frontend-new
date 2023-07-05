@@ -24,6 +24,7 @@ export class CustomExpansionPanelComponent implements OnInit {
   @Output('EditChanges') EditChanges: any = new EventEmitter();
   @Output('DeleteChanges') DeleteChanges: any = new EventEmitter();
   @Output('event') event: any = new EventEmitter();
+  @Output('TrEvent') TrEvent: any = new EventEmitter();
   @Output('ArrowEvent') ArrowEvent: any = new EventEmitter();
   
   constructor(public exp_service: CustomExpansionPanelService) { }
@@ -58,5 +59,8 @@ export class CustomExpansionPanelComponent implements OnInit {
   
   TrClick(data: any, index: any) {
     this.event.emit({ item: data, index: index });
+  }
+  TrClickEvent(data: any, index: any){
+    this.TrEvent.emit({ item: data, index: index });
   }
 }

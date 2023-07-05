@@ -70,34 +70,38 @@ export class PDFVIEWERComponent implements OnInit, AfterViewInit {
       }, (err) => console.log('Failed to fetch the pdf'));
     }
     console.log(this.src, 'sdsfdfsdfdsfsdfdsfdsfsdfdsfdfsd');
-    if (this.src?.changingThisBreaksApplicationSecurity != undefined) {
-      let url_replace: any = this.src?.changingThisBreaksApplicationSecurity?.replace(this.documentService.AppConfig?.S3_BUCKET_URL, '')
-      this.userService.getReadS3File({ fileName: url_replace }).subscribe((res: any) => {
-        this.src = 'data:application/pdf;base64,' + this._arrayBufferToBase64(res?.pdf?.data)
+    if (this.src != undefined) {
+      if (this.src?.changingThisBreaksApplicationSecurity != undefined) {
+        let url_replace: any = this.src?.changingThisBreaksApplicationSecurity?.replace(this.documentService.AppConfig?.S3_BUCKET_URL, '')
+        this.userService.getReadS3File({ fileName: url_replace }).subscribe((res: any) => {
+          this.src = 'data:application/pdf;base64,' + this._arrayBufferToBase64(res?.pdf?.data)
+          this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+          this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
+          console.log(this.URL_IFRAME, 'changingThisBreaksApplicationSecurity with');
+          this.Sppinloader = false
+        });
+      } else if (this.src.indexOf('data:application/pdf;base64,') != -1) {
         this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
         this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
-        console.log(this.URL_IFRAME, 'changingThisBreaksApplicationSecurity with');
+        console.log(this.URL_IFRAME, 'data:application found');
         this.Sppinloader = false
-      });
-    } else if (this.src.indexOf('data:application/pdf;base64,') != -1) {
-      this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
-      this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
-      console.log(this.URL_IFRAME, 'data:application found');
-      this.Sppinloader = false
-    } else if (this.src == 'home/direct-dispatch') {
-      this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
-      this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
-      console.log(this.URL_IFRAME, 'home/direct-dispatch');
-      this.Sppinloader = false
+      } else if (this.src == 'home/direct-dispatch') {
+        this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+        this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
+        console.log(this.URL_IFRAME, 'home/direct-dispatch');
+        this.Sppinloader = false
+      } else {
+        let url_replace: any = this.src?.replace(this.documentService.AppConfig?.S3_BUCKET_URL, '')
+        this.userService.getReadS3File({ fileName: url_replace }).subscribe((res: any) => {
+          this.src = 'data:application/pdf;base64,' + this._arrayBufferToBase64(res?.pdf?.data)
+          this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
+          this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
+          console.log(this.URL_IFRAME, 'changingThisBreaksApplicationSecurity without');
+          this.Sppinloader = false
+        });
+      }
     } else {
-      let url_replace: any = this.src?.replace(this.documentService.AppConfig?.S3_BUCKET_URL, '')
-      this.userService.getReadS3File({ fileName: url_replace }).subscribe((res: any) => {
-        this.src = 'data:application/pdf;base64,' + this._arrayBufferToBase64(res?.pdf?.data)
-        this.SRC_UPDATE = this.src + '#toolbar=0&&embedded=true'
-        this.URL_IFRAME = this.bypassAndSanitize(this.SRC_UPDATE);
-        console.log(this.URL_IFRAME, 'changingThisBreaksApplicationSecurity without');
-        this.Sppinloader = false
-      });
+      console.log('pdf not found...');
     }
   }
   _arrayBufferToBase64(buffer) {

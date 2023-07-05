@@ -37,6 +37,36 @@ export class AirwayBLCopyComponent implements OnInit {
     Currency: [],
     DATE: []
   };
+  FILTER_VALUE_LIST_NEW: any = {
+    header: [
+      "Pipo No.",
+      "DATE",
+      "SB No.",
+      "BL/Airway No.",
+      "Buyer Name",
+      "Action"],
+    items: [],
+    Expansion_header: [],
+    Expansion_Items: [],
+    Objectkeys: [],
+    ExpansionKeys: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1"
+    ],
+    eventId: ''
+  }
+  EDIT_FORM_DATA: any = {
+    airwayBlCopydate: '',
+    sbNo: '',
+    airwayBlCopyNumber: '',
+    buyerName: '',
+  }
+  
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -80,21 +110,65 @@ export class AirwayBLCopyComponent implements OnInit {
           }
         }
         this.FILTER_VALUE_LIST = this.item;
+        this.AirwayBlCopyTable(this.item)
         console.log(res, 'yuyuyuyuyuyuyuuy')
       },
       (err) => console.log(err)
     );
-
   }
+  
+  AirwayBlCopyTable(data: any) {
+    this.FILTER_VALUE_LIST_NEW['items'] = [];
+    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
+    this.removeEmpty(data).then(async (newdata: any) => {
+      await newdata?.forEach(async (element) => {
+        await this.FILTER_VALUE_LIST_NEW['items'].push({
+          PipoNo: this.getPipoNumber(element['pipo']),
+          airwayBlCopydate: element['airwayBlCopydate'],
+          sbNo: element['sbNo'],
+          airwayBlCopyNumber: element['airwayBlCopyNumber'],
+            buyerName: element['buyerName'],
+          isExpand: false,
+          disabled: element['deleteflag'] != '-1' ? false : true,
+          RoleType: this.USER_DATA?.result?.RoleCheckbox
+        })
+      });
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+    });
+  }
+
+  async removeEmpty(data: any) {
+    await data.forEach(element => {
+      for (const key in element) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+          element[key] = 'NF'
+        }
+      }
+    });
+    return await new Promise(async (resolve, reject) => { await resolve(data) });
+  }
+
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+   (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+  
   filter(value, key) {
     this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length == 0) {
       this.FILTER_VALUE_LIST = this.item;
     }
   }
+  
   resetFilter() {
     this.FILTER_VALUE_LIST = this.item;
   }
+  
   openLetterOfCredit(content) {
     this.modalService
       .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
@@ -127,7 +201,7 @@ export class AirwayBLCopyComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['blCopyDoc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['blCopyDoc']);
     }, 200);
   }
 
@@ -144,37 +218,53 @@ export class AirwayBLCopyComponent implements OnInit {
       }
     );
   }
+  
+  toSaveNew(data, id, EditSummaryPagePanel: any) {
+    console.log(data);
+    this.documentService.updateAirwayBlcopy(data, id).subscribe((data) => {
+      console.log(data);
+      this.toastr.success('Airway / BlCopy Is Updated Successfully.');
+      this.ngOnInit();
+      EditSummaryPagePanel?.displayHidden
+    }, (error) => {
+      console.log('error');
+    });
+  }
+  
+  SELECTED_VALUE: any = '';
+  toEdit(data: any) {
+    this.SELECTED_VALUE = '';
+    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.EDIT_FORM_DATA = {
+      airwayBlCopydate: this.SELECTED_VALUE['airwayBlCopydate'],
+      sbNo: this.SELECTED_VALUE['sbNo'],
+      airwayBlCopyNumber: this.SELECTED_VALUE['airwayBlCopyNumber'],
+      currency: this.SELECTED_VALUE['currency'],
+      buyerName: this.SELECTED_VALUE['buyerName'],
+    }
+    this.toastr.warning('Airway / BlCopy Is In Edit Mode');
+  }
+  
+  handleDelete(data: any) {
+    const message = `Are you sure you want to delete this?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
+      if (dialogResult) {
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
+      }
+    });
+  }
 
   newCredit() {
     this.sharedData.changeretunurl('home/airway-bl-copy')
     this.router.navigate(['home/upload', { file: 'export', document: 'blCopy' }]);
   }
-
-  exportToExcel() {
-    const ws: xlsx.WorkSheet =
-      xlsx.utils.table_to_sheet(this.airwayBlCopy.nativeElement);
-    const wb: xlsx.WorkBook = xlsx.utils.book_new();
-    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
-    xlsx.writeFile(wb, 'airwayBlCopy.xlsx');
-  }
-
-  toEdit(index) {
-    this.optionsVisibility[index] = true;
-    this.toastr.warning('Airway / Blcopy Is In Edit Mode');
-  }
-  handleDelete(id, index: any) {
-    console.log(id, index, 'dfsfhsfgsdfgdss');
-    const message = `Are you sure you want to delete this?`;
-    const dialogData = new ConfirmDialogModel("Confirm Action", message);
-    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, { maxWidth: "400px", data: dialogData });
-    dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", dialogResult)
-      if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], id, index)
-      }
-    });
-  }
-
+  
   deleteByRoleType(RoleCheckbox: string, id: any, index: any) {
     if (RoleCheckbox == '') {
       this.documentService.deleteById({ id: id, tableName: 'airwayblcopies' }).subscribe((res) => {
@@ -199,6 +289,54 @@ export class AirwayBLCopyComponent implements OnInit {
         this.ngOnInit();
       });
     }
+  }
+
+  exportToExcel() {
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new AirwayBlCopyFormat(this.FILTER_VALUE_LIST).get());
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, 'airwayBlCopy.xlsx');
+  }
+}
+
+
+class AirwayBlCopyFormat {
+  data: any = [];
+  constructor(data: any) {
+    this.data = data;
+  }
+
+  get() {
+    var temp: any = [];
+    this.data?.forEach(element => {
+      temp.push({
+        PipoNo: this.getPipoNumber(element['pipo']),
+        airwayBlCopydate: element['airwayBlCopydate'],
+        sbNo: element['sbNo'],
+        airwayBlCopyNumber: element['airwayBlCopyNumber'],
+        buyerName: this.getBuyerName(element['buyerName']),
+      })
+    });
+    return temp;
+  }
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+   (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+  
+  getBuyerName(buyerName: any) {
+    let temp: any = [];
+    buyerName.forEach(element => {
+      temp.push(element);
+    });
+    return temp.join(',')
+  }
+
+  ARRAY_TO_STRING(array, key) {
+    return array[key]?.join(',')
   }
 
 }

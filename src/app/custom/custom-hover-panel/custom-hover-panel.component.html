@@ -215,23 +215,23 @@
                             <mat-tab label="DOCUMENTS">
                             <Custom-Slider SliderClassName="slider-pdf" >
                                 <div class="slider-pdf-panel">
-                                    <div class="slider-pdf">
+                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.doc!=''">
                                         <app-pdf-viewer [downloadShow]="false" name="Proforma Invoice"
                                             [src]="pipoArrayListdata?.doc" width="100%" Newheight="590px"></app-pdf-viewer>
                                     </div>
-                                    <div class="slider-pdf">
+                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.sb!=''">
                                         <app-pdf-viewer [downloadShow]="false" name="Shipping Bill"
                                             [src]="pipoArrayListdata?.sb" width="100%" Newheight="590px"></app-pdf-viewer>
                                     </div>
-                                    <div class="slider-pdf">
+                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.airwayBlcopy!=''">
                                         <app-pdf-viewer [downloadShow]="false" name="Airway / BL Copy"
                                             [src]="pipoArrayListdata?.airwayBlcopy" width="100%" Newheight="590px"></app-pdf-viewer>
                                     </div>
-                                    <div class="slider-pdf">
+                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.commercial!=''">
                                         <app-pdf-viewer [downloadShow]="false" name="Commercial Invoice"
                                             [src]="pipoArrayListdata?.commercial" width="100%" Newheight="590px"></app-pdf-viewer>
                                     </div>
-                                    <div class="slider-pdf">
+                                    <div class="slider-pdf" *ngIf="pipoArrayListdata?.packingList!=''">
                                         <app-pdf-viewer [downloadShow]="false" name="Packing List"
                                             [src]="pipoArrayListdata?.packingList" width="100%" Newheight="590px"></app-pdf-viewer>
                                     </div>
@@ -246,3 +246,5 @@
         </div>
     </div>
 </div>
+
+<button style="display: none;visibility: hidden;" type="button" class="custom-Hover-Panel-btn" [attr.hover-popup-open-close]="'open'"></button>

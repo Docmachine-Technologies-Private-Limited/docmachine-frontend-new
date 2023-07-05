@@ -58,7 +58,8 @@
 .custom-expansion-panel .table tbody tr {
     font-weight: 400;
     background-color: #fff;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border-radius: 5px;
     box-shadow: 0 0 2px 2px #e2dddd;
     min-height: 70px;
@@ -120,17 +121,58 @@
 }
 
 .custom-expansion-panel .table-type .custom-expansion-panel-tr:hover {
-    background-color: #24292e !important;
+    background-color: #242c39 !important;
     transition: 0.3s background-color cubic-bezier(0.86, 0, 0.07, 1);
 }
 
 .custom-expansion-panel .table-type .custom-expansion-panel-tr:hover td {
     color: white;
 }
+
 .custom-expansion-panel .table-type .custom-expansion-panel-tr:hover .error-p {
     color: white;
 }
 
 .custom-expansion-panel .table-tr {
     border-bottom: 0;
+}
+
+.custom-expansion-panel .table tbody {
+    height: calc(100vh - 200px);
+    overflow: auto;
+}
+
+.custom-expansion-panel .table {
+    width: 99% !important;
+    max-width: 100%;
+    background-color: white;
+    margin: auto !important;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 3px #e1e0e0;
+}
+
+.custom-expansion-panel .table thead {
+    background: #242c39;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: #fff !important;
+    min-height: 40px;
+    margin: auto;
+    flex-direction: row;
+    align-items: center;
+}
+
+.custom-expansion-panel .table thead tr th {
+    color: #fff !important;
+}
+
+.custom-expansion-panel .table .thead-not-length {
+    background: #242c39;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    color: #fff !important;
+    min-height: 40px;
+    margin: auto;
+    flex-direction: row;
+    align-items: center;
 }

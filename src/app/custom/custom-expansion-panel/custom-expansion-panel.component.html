@@ -1,6 +1,6 @@
 <div class="d-flex custom-expansion-panel">
     <table class="table">
-        <thead>
+        <thead [ngClass]="{'thead-not-length':items.length==0}">
             <tr class="table-tr">
                 <th scope="col" class="col-td-th-0" *ngIf="this.Expansion==true">#</th>
                 <th scope="col" class="col-td-th-1" [ngClass]="this.TableHeaderClass[i]"
@@ -12,7 +12,7 @@
                 <custom-table-expansion-panel>
                     <div class="table-type" *ngFor="let item of items;let i=index"
                         [ngClass]="{'table-active':item.isExpand==true}">
-                        <tr class="table-tr added-active custom-expansion-panel-tr" title="click arrow icon see more details...">
+                        <tr class="table-tr added-active custom-expansion-panel-tr" title="click arrow icon see more details..." (click)="TrClickEvent(item,i)">
                             <td title="Data Show and Hide" scope="col" class="col-td-th-0"
                                 *ngIf="this.Expansion==true"
                                 (click)="CollapseAll(items,'isExpand',i);item.isExpand=!item.isExpand;">

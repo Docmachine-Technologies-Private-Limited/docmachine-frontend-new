@@ -37,7 +37,41 @@ export class OtherDocumentsComponent implements OnInit {
     Currency: [],
     DATE: []
   };
-
+  FILTER_VALUE_LIST_NEW: any = {
+    header: [
+      "Pipo No.",
+      "DATE",
+      "SB No.",
+      "Packing List No.",
+      "Currency",
+      "Packing List Amount",
+      "Buyer Name",
+      "Action"],
+    items: [],
+    Expansion_header: [],
+    Expansion_Items: [],
+    Objectkeys: [],
+    ExpansionKeys: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1"
+    ],
+    eventId: ''
+  }
+  EDIT_FORM_DATA: any = {
+    packingListDate: '',
+    sbNo: '',
+    packingListNumber: '',
+    currency: '',
+    packingListAmount: '',
+    buyerName: '',
+  }
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -80,11 +114,56 @@ export class OtherDocumentsComponent implements OnInit {
             this.ALL_FILTER_DATA['DATE'].push(value?.packingListDate);
           }
         }
+        this.PackingListTable(this.item)
         console.log(res, 'getPackingListfile');
       },
       (err) => console.log(err)
     );
   }
+
+  PackingListTable(data: any) {
+    this.FILTER_VALUE_LIST_NEW['items'] = [];
+    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
+    this.removeEmpty(data).then(async (newdata: any) => {
+      await newdata?.forEach(async (element) => {
+        await this.FILTER_VALUE_LIST_NEW['items'].push({
+          PipoNo: this.getPipoNumber(element['pipo']),
+          packingListDate: element['packingListDate'],
+          sbNo: element['sbNo'],
+          packingListNumber: element['packingListNumber'],
+          currency: element['currency'],
+          packingListAmount: element['packingListAmount'],
+          buyerName: element['buyerName'],
+          isExpand: false,
+          disabled: element['deleteflag'] != '-1' ? false : true,
+          RoleType: this.USER_DATA?.result?.RoleCheckbox
+        })
+      });
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+    });
+  }
+
+  async removeEmpty(data: any) {
+    await data.forEach(element => {
+      for (const key in element) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+          element[key] = 'NF'
+        }
+      }
+    });
+    return await new Promise(async (resolve, reject) => { await resolve(data) });
+  }
+
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+   (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+
   filter(value, key) {
     this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length == 0) {
@@ -127,7 +206,7 @@ export class OtherDocumentsComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['packingDoc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['packingDoc']);
     }, 200);
   }
 
@@ -138,41 +217,54 @@ export class OtherDocumentsComponent implements OnInit {
       (data) => {
         console.log('king123');
         this.toastr.success('Packing List updated successfully.');
-
-      },
-      (error) => {
-        // this.toastr.error('Invalid inputs, please check!');
+      }, (error) => {
         console.log('error');
       }
     );
   }
 
   newComme() {
-    //this.sharedData.changeretunurl('home/otherDoc')
     this.router.navigate(['home/upload', { file: 'export', document: 'packingList' }]);
   }
 
-  exportToExcel() {
-    const ws: xlsx.WorkSheet =
-      xlsx.utils.table_to_sheet(this.otherDoc.nativeElement);
-    const wb: xlsx.WorkBook = xlsx.utils.book_new();
-    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
-    xlsx.writeFile(wb, 'packingList.xlsx');
+  toSaveNew(data, id, EditSummaryPagePanel: any) {
+    console.log(data);
+    this.documentService.updatePackingList(data, id).subscribe((data) => {
+      console.log(data);
+      this.toastr.success('Packing List Row Is Updated Successfully.');
+      this.ngOnInit();
+      EditSummaryPagePanel?.displayHidden
+    }, (error) => {
+      console.log('error');
+    });
   }
 
-  toEdit(index) {
-    this.optionsVisibility[index] = true;
-    this.toastr.warning('Packing List Is In Edit Mode');
+  SELECTED_VALUE: any = '';
+  toEdit(data: any) {
+    this.SELECTED_VALUE = '';
+    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.EDIT_FORM_DATA = {
+      packingListDate: this.SELECTED_VALUE['packingListDate'],
+      sbNo: this.SELECTED_VALUE['sbNo'],
+      packingListNumber: this.SELECTED_VALUE['packingListNumber'],
+      currency: this.SELECTED_VALUE['currency'],
+      packingListAmount: this.SELECTED_VALUE['packingListAmount'],
+      buyerName: this.SELECTED_VALUE['buyerName'],
+    }
+    this.toastr.warning('Packing List Row Is In Edit Mode');
   }
-  handleDelete(id, index: any) {
-    console.log(id, index, 'dfsfhsfgsdfgdss');
+
+  handleDelete(data: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
-    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, { maxWidth: "400px", data: dialogData });
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", dialogResult)
+      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], id, index)
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
       }
     });
   }
@@ -203,4 +295,52 @@ export class OtherDocumentsComponent implements OnInit {
     }
   }
 
+  exportToExcel() {
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new PackingListFormat(this.FILTER_VALUE_LIST).get());
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, 'packingList.xlsx');
+  }
+}
+
+class PackingListFormat {
+  data: any = [];
+  constructor(data: any) {
+    this.data = data;
+  }
+
+  get() {
+    var temp: any = [];
+    this.data?.forEach(element => {
+      temp.push({
+        PipoNo: this.getPipoNumber(element['pipo']),
+        packingListDate: element['packingListDate'],
+        sbNo: element['sbNo'],
+        packingListNumber: element['packingListNumber'],
+        currency: element['currency'],
+        packingListAmount: element['packingListAmount'],
+        buyerName: this.getBuyerName(element['buyerName']),
+      })
+    });
+    return temp;
+  }
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+   (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+
+  getBuyerName(buyerName: any) {
+    let temp: any = [];
+    buyerName.forEach(element => {
+      temp.push(element);
+    });
+    return temp.join(',')
+  }
+
+  ARRAY_TO_STRING(array, key) {
+    return array[key]?.join(',')
+  }
 }

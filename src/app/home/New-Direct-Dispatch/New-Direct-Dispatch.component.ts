@@ -4149,7 +4149,7 @@ export class NewDirectDispatchComponent implements OnInit {
           var pipo: any = this.itemArray.filter((item: any) => item?._id.indexOf(UniqueId) != -1)[0]?.pipo;
           var pipo_id: any = [];
           var pipo_name: any = [];
-          pipo.forEach(element => {
+         (pipo != 'NF' ? pipo : []).forEach(element => {
             pipo_id.push(element?._id)
             pipo_name.push(element?.pi_poNo)
           });

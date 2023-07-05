@@ -21,9 +21,9 @@ export class OpenPopUpDirective {
     var CUSTOM_HOVER_PANEL_MOUSE_ENTER_ID: any = $(event.target).attr('hover-popup-open-close');
     var NgCustomTooltipsDirectiveMouseEnter_ID: any = $(event.target).attr('tooltips-close');
     // console.log(event, 'sdfsdhjdhdgfdgdfg')
-    if (CUSTOM_HOVER_PANEL_MOUSE_ENTER_ID == 'open') {
-      this.CUSTOM_HOVER_PANEL_MOUSE_ENTER(event);
-    }
+    // if (CUSTOM_HOVER_PANEL_MOUSE_ENTER_ID == 'open') {
+    //   this.CUSTOM_HOVER_PANEL_MOUSE_ENTER(event);
+    // }
     // if (NgCustomTooltipsDirectiveMouseEnter_ID == 'open') {
     //   this.NgCustomTooltipsDirectiveMouseEnter(event)
     // }

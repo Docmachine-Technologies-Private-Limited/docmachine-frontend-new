@@ -133,8 +133,18 @@ export class CustomHoverPanelComponent implements OnInit {
   getIRMSum(irmdata: any) {
     return { SumAmount: irmdata.reduce((a, b) => parseFloat(a) + parseFloat(b?.amount), 0), Currency: irmdata[0]?.currency };
   }
+  
   viewDetails(data: any) {
     console.log("pipoData", this.pipoData)
     this.router.navigate(['home/pipo-export', data]);
   }
+  
+  get displayHidden() {
+    return $('#CUSTOM_HOVER_PANEL').css('display','none');
+  }
+  
+  get displayShow() {
+    return $('.custom-Hover-Panel-btn').click()
+  }
+  
 }

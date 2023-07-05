@@ -38,8 +38,8 @@ export class EditPipoComponent implements OnInit {
   commodity: any = []
   buyer: string;
   uploading: boolean = false;
-  authToken:any;
-  CurrencyData:any = ['INR','USD', 'EUR', 'GBP', 'CHF','AUD','CAD','AED','SGD','SAR','JPY']
+  authToken: any;
+  CurrencyData: any = ['INR', 'USD', 'EUR', 'GBP', 'CHF', 'AUD', 'CAD', 'AED', 'SGD', 'SAR', 'JPY']
 
   public type: string = "directive";
   public res;
@@ -133,7 +133,6 @@ export class EditPipoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content_top_common')
     this.headers = {
       Authorization: this.authToken,
       timeout: `${200000}`
@@ -188,19 +187,14 @@ export class EditPipoComponent implements OnInit {
   endDate: any = '';
 
   getPIPOData(id) {
-    this.documentService.getPipoByid(id).subscribe((res:any) => {
+    this.documentService.getPipoByid(id).subscribe((res: any) => {
       console.log("---------------->", res)
-      this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        res?.doc1 ? res.doc1 : res.doc
-      );
+      this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res?.doc1 ? res.doc1 : res.doc);
       this.commodityData = res?.commodity
       this.buyer = res?.buyerName
       this.documentType = res?.document
       this.pipoForm.patchValue(res)
-
-    }
-    )
-
+    })
   }
 
   getDropdownData() {
@@ -229,12 +223,9 @@ export class EditPipoComponent implements OnInit {
   }
 
   PipoSubmit(): void {
-
     this.submitted = true;
-
     console.log("this.pipoForm.invalid", this.pipoForm.invalid)
     console.log("this.pipoForm.invalid", this.pipoForm)
-
     if (this.pipoForm.invalid) {
       return;
     }
@@ -248,7 +239,6 @@ export class EditPipoComponent implements OnInit {
         this.pipoForm.value.commodity = this.commodityData
       }
       this.pipoForm.value.file = this.file
-
     }
     else {
       this.pipoForm.value.file = this.documentType1
@@ -261,43 +251,14 @@ export class EditPipoComponent implements OnInit {
       this.pipoForm.value.doc1 = this.pipourl1
     }
 
-    // if (this.documentType1 == 'import') {
-    //   // this.pipoForm.value.benneName = this.beneValue
-    // }
-    // else if (this.documentType1 == 'export') {
-    //   this.pipoForm.value.buyerName = this.buyer
-    //   this.pipoForm.value.commodity = this.commodityData
-    // }
-
-
     this.pipoForm.value.document = this.documentType
-
-    this.documentService.updatePipobyId(this.pipoID,this.pipoForm.value).subscribe(
+    this.documentService.updatePipobyId(this.pipoID, this.pipoForm.value).subscribe(
       (res) => {
         this.router.navigateByUrl("/home/pipo");
-        // if (this.documentType1 == 'import' && this.documentType == 'PI'){
-        // this.router.navigateByUrl("/home/pipoDoc");}
-        // else if( this.documentType1 == 'import' && this.documentType == 'PO'){
-        //   this.router.navigateByUrl("/home/pipoDoc");
-        // }
-        // else if (this.documentType1 == 'export' && this.documentType == 'PI') {
-        //   this.router.navigateByUrl("/home/pipoDocExport");
-        // }
-        // else if (this.documentType1 == 'export' && this.documentType == 'PO') {
-        //   this.router.navigateByUrl("/home/pipoDocExport");
-        // }
-        // else{
-        //   this.router.navigateByUrl("/home/dashboardNew");
-        // }
       },
       (err) => console.log("Error adding pipo")
     );
   }
-
-
-
-
-  //  ------------------------- handle image upload------------------------------------------
 
 
   public onUploadError(args: any): void {
@@ -354,7 +315,6 @@ export class EditPipoComponent implements OnInit {
         console.log("sjsjsjsj", this.res);
       }
       else {
-        // this.res = new BoeBill(args[1].data);
         if (this.documentType === 'PI' || this.documentType === 'PO') {
           console.log("here comeee")
           this.pIpO = true;
@@ -413,18 +373,10 @@ export class EditPipoComponent implements OnInit {
           this.userService.updateManyPipo(this.pipoArr, this.documentType, args[1].data)
             .subscribe(
               data => {
-                //this.pipoData[`${this.pipoDoc}`] = args[1].data
                 console.log("king123")
                 console.log(data)
                 this.toastr.success('PI/PO updated successfully.');
-                // this.docTog = false
-                // this.toggle = false
-                // this.toggle2 = false
-                // this.toastr.success('Company details updated successfully.');
-                // this.router.navigate(['/home/dashboardNew']);
-              },
-              error => {
-                // this.toastr.error('Invalid inputs, please check!');
+              }, error => {
                 console.log("error")
               });
         }
@@ -436,9 +388,7 @@ export class EditPipoComponent implements OnInit {
         args[1].publicUrl
       );
       this.pipourl1 = args[1].data;
-      this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        args[1].data
-      );
+      this.piPoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].data);
       console.log(this.publicUrl);
       console.log("this.piPoUr this.piPoUr this.piPoUr", this.piPoUrl);
       console.log(this.res);
@@ -455,16 +405,11 @@ export class EditPipoComponent implements OnInit {
       this.uploading = true;
       console.log(e[0].size);
       this.size = this.formatBytes(e[0].size);
-      //document.getElementById("uploadError").style.display = "none";
-
       this.runProgressBar(e[0].size);
     } else {
       console.log("Document type not given");
-     let display:any= document.getElementById("uploadError");
-     display.style.display = "block"
     }
   }
-
 
   public formatBytes(bytes) {
     if (bytes < 1024) {
@@ -478,7 +423,6 @@ export class EditPipoComponent implements OnInit {
     }
   }
 
-
   isWidthWithinLimit() {
     if (this.width === 100) {
       return false;
@@ -486,7 +430,6 @@ export class EditPipoComponent implements OnInit {
       return true;
     }
   }
-
 
   runProgressBar(value) {
     console.log(value / 1500);
@@ -519,12 +462,6 @@ export class EditPipoComponent implements OnInit {
     return this.authToken;
   }
 
-
-
-  // ----------------------------- end handle image upload ----------------------------------
-
-
-
   getCourses(form) {
     return form.get('paymentTerm').controls;
   }
@@ -535,12 +472,8 @@ export class EditPipoComponent implements OnInit {
   }
 
   removeAddress(i) {
-
     let control = this.pipoForm.controls.paymentTerm as FormArray;
-
     control.removeAt(i);
-
   }
-
 
 }
