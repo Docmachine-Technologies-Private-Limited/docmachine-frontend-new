@@ -1,13 +1,13 @@
 <div class="d-flex custom-expansion-panel">
-    <table class="table">
-        <thead [ngClass]="{'thead-not-length':items.length==0}">
+    <table class="table custom-expansion-table">
+        <thead class="custom-expansion-thead" [ngClass]="{'thead-not-length':items.length==0}">
             <tr class="table-tr">
                 <th scope="col" class="col-td-th-0" *ngIf="this.Expansion==true">#</th>
                 <th scope="col" class="col-td-th-1" [ngClass]="this.TableHeaderClass[i]"
                     *ngFor="let item of header;let i=index">{{item}}</th>
             </tr>
         </thead>
-        <tbody *ngIf="items.length!=0">
+        <tbody class="custom-expansion-tbody" *ngIf="items.length!=0">
             <div class="overflow-expansion-panel">
                 <custom-table-expansion-panel>
                     <div class="table-type" *ngFor="let item of items;let i=index"
