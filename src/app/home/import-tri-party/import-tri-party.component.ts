@@ -20,7 +20,7 @@ import * as _ from 'lodash';
   styleUrls: ['./import-tri-party.component.scss']
 })
 export class ImportTriPartyComponent implements OnInit {
-  
+
   @ViewChild('epltable', { static: false }) epltable: ElementRef;
   public item: any = [];
   public item1 = [];
@@ -122,7 +122,7 @@ export class ImportTriPartyComponent implements OnInit {
       (err) => console.log(err)
     );
   }
-  
+
   TriPartyAgreementTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
@@ -140,9 +140,11 @@ export class ImportTriPartyComponent implements OnInit {
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      }
     });
   }
 
@@ -159,12 +161,12 @@ export class ImportTriPartyComponent implements OnInit {
 
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
   }
-  
+
   filter(value, key) {
     this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length == 0) {
@@ -221,7 +223,7 @@ export class ImportTriPartyComponent implements OnInit {
       (data) => {
         console.log('king123');
         this.toastr.success('Tri-Party Agreement Row Is Updated Successfully.');
-      },(error) => {
+      }, (error) => {
         console.log('error');
       }
     );
@@ -238,11 +240,9 @@ export class ImportTriPartyComponent implements OnInit {
       console.log('error');
     });
   }
-  
-  triParty() {
-    this.sharedData.changeretunurl('home/try-party')
-    this.router.navigate(['home/upload', { file: 'export', document: 'tryPartyAgreement' }]);
 
+  triParty() {
+    this.router.navigate(['home/upload', { file: 'import', document: 'tryPartyAgreement' }]);
   }
 
   SELECTED_VALUE: any = '';
@@ -258,7 +258,7 @@ export class ImportTriPartyComponent implements OnInit {
     }
     this.toastr.warning('Tri-Party Agreement Row Is In Edit Mode');
   }
-  
+
   handleDelete(data: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
@@ -299,7 +299,7 @@ export class ImportTriPartyComponent implements OnInit {
       });
     }
   }
-  
+
   exportToExcel() {
     const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new TriPartyAgreementFormat(this.FILTER_VALUE_LIST).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
@@ -330,12 +330,12 @@ class TriPartyAgreementFormat {
   }
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
   }
-  
+
   getBuyerName(buyerName: any) {
     let temp: any = [];
     buyerName.forEach(element => {

@@ -113,7 +113,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
     billNo: "",
     BalanceAvail: "",
   }
-  
+
   constructor(
     private toastr: ToastrService,
     private userService: UserService,
@@ -138,7 +138,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       (res: any) => {
         console.log(res), (this.item = res.data);
         console.log('king', this.item);
-        this.item1=[];
+        this.item1 = [];
         for (let value of this.item) {
           if (value['file'] == 'import') {
             console.log('avvvvvvvvvv', value);
@@ -182,40 +182,40 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         this.FILTER_VALUE_LIST = this.item1;
         this.ForexAdviceTable(this.item1);
         console.log('sjsjs', this.item1);
-      },(err) => console.log(err)
+      }, (err) => console.log(err)
     );
     this.userService.getTeam().subscribe((data) => {
-        console.log('llllllllllllllllllllllllllllllll');
-        console.log(data['data'][0]);
-        this.location = data['data'][0]['location'];
-        this.commodity = data['data'][0]['commodity'];
-        console.log(this.location);
-        console.log('jsadffhsjshd', this.commodity);
-        console.log('team data', data);
-        this.location = this.location.filter((value, index) => this.location.indexOf(value) === index);
-        this.commodity = this.commodity.filter(
-          (value, index) => this.commodity.indexOf(value) === index
-        );
-      },(error) => {
-        console.log('error');
-      }
+      console.log('llllllllllllllllllllllllllllllll');
+      console.log(data['data'][0]);
+      this.location = data['data'][0]['location'];
+      this.commodity = data['data'][0]['commodity'];
+      console.log(this.location);
+      console.log('jsadffhsjshd', this.commodity);
+      console.log('team data', data);
+      this.location = this.location.filter((value, index) => this.location.indexOf(value) === index);
+      this.commodity = this.commodity.filter(
+        (value, index) => this.commodity.indexOf(value) === index
+      );
+    }, (error) => {
+      console.log('error');
+    }
     );
 
     this.documentService.getMaster(1).subscribe((res: any) => {
-        console.log('Master Data File', res);
-        this.item5 = res.data;
-        // this.merging();
-        this.item5.forEach((element, i) => {
-          this.origin[i] = element.countryOfFinaldestination;
-        });
-        this.origin = this.origin.filter((value, index) => this.origin.indexOf(value) === index);
-        console.log('Master Country', this.origin);
-      },(err) => console.log(err)
+      console.log('Master Data File', res);
+      this.item5 = res.data;
+      // this.merging();
+      this.item5.forEach((element, i) => {
+        this.origin[i] = element.countryOfFinaldestination;
+      });
+      this.origin = this.origin.filter((value, index) => this.origin.indexOf(value) === index);
+      console.log('Master Country', this.origin);
+    }, (err) => console.log(err)
     );
 
     this.documentService.getPipo().subscribe((res: any) => {
-        console.log('Data fetched successfully', res), (this.item3 = res.data);
-      },(err) => console.log(err)
+      console.log('Data fetched successfully', res), (this.item3 = res.data);
+    }, (err) => console.log(err)
     );
     this.USER_DATA = await this.userService.getUserDetail();
   }
@@ -225,7 +225,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       return x.pi_poNo;
     });
   }
-  
+
   toSave(data, index) {
     this.optionsVisibility[index] = false;
     console.log('Shailendra', data);
@@ -239,14 +239,14 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       }
     );
   }
-  
+
   filter(value, key) {
     this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length == 0) {
       this.FILTER_VALUE_LIST = this.item1;
     }
   }
-  
+
   ForexAdviceTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
@@ -278,11 +278,13 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
-      this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
+        this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
+      }
     });
   }
 
@@ -304,11 +306,11 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
     });
     return temp.join(',')
   }
-  
+
   resetFilter() {
     this.FILTER_VALUE_LIST = this.item1;
   }
- 
+
   newIrAdvice() {
     console.log('upload');
     this.sharedData.changeretunurl('home/inward-remittance-advice');
@@ -326,7 +328,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       { file: 'import', document: 'orAdvice' },
     ]);
   }
-  
+
   // merging() {
   //   let filterForexData: any = [];
   //   if (this.item5 && this.item5.length) {
@@ -477,7 +479,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       });
     }
   }
-  
+
   exportToExcel() {
     const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new ForexAdviceFormat(this.FILTER_VALUE_LIST).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();

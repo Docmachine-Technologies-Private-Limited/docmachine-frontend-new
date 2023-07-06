@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { DocumentService } from "../../service/document.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
-import { WindowInformationService } from "src/app/service/window-information.service";
+import { WindowInformationService } from "../../service/window-information.service";
 
 @Component({
   selector: 'app-lc-isurance',
@@ -41,10 +41,10 @@ export class LcIsuranceComponent implements OnInit {
   });
   url: any;
   file: any;
-  bene: string;
-  amount: number;
-  pipo: string;
-  pipoValue: string;
+  bene:any;
+  amount:any;
+  pipo:any;
+  pipoValue: any;
   arrayData: any = [];
   beneArray: any = [];
   pipoArr: any = [];
@@ -70,7 +70,7 @@ export class LcIsuranceComponent implements OnInit {
     });
     this.file = this.route.snapshot.paramMap.get('file')
     this.bene = this.route.snapshot.paramMap.get('bene')
-    this.amount = parseInt(this.route.snapshot.paramMap.get('amount'))
+    this.amount = parseInt(this.route.snapshot.paramMap.get('amount') as any)
     this.pipo = this.route.snapshot.paramMap.get('pipo')
 
 
@@ -257,7 +257,7 @@ export class LcIsuranceComponent implements OnInit {
 
     console.log("hello")
     this.documentService.draft = false;
-    let a = [];
+    let a:any= [];
     a.push(piPo)
     this.pipoArr = a;
     if (this.file == "inland") {

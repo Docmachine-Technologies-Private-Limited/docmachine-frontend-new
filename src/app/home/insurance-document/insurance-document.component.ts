@@ -126,9 +126,9 @@ export class InsuranceDocumentComponent implements OnInit {
         }
         this.InsuranceNoTable(this.item1)
         console.log(res, 'yuyuyuyuyuyuyuuy')
-      },(err) => console.log(err));
+      }, (err) => console.log(err));
   }
-  
+
   InsuranceNoTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
@@ -146,9 +146,11 @@ export class InsuranceDocumentComponent implements OnInit {
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      }
     });
   }
 
@@ -165,7 +167,7 @@ export class InsuranceDocumentComponent implements OnInit {
 
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
@@ -219,7 +221,7 @@ export class InsuranceDocumentComponent implements OnInit {
       this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
     }, 200);
   }
-  
+
   toSave(data, index) {
     this.optionsVisibility[index] = false;
     console.log(data);
@@ -247,7 +249,7 @@ export class InsuranceDocumentComponent implements OnInit {
       console.log('error');
     });
   }
-  
+
   newInsurance() {
     console.log('upload');
     this.sharedData.changeretunurl('home/insurance-document')
@@ -267,7 +269,7 @@ export class InsuranceDocumentComponent implements OnInit {
     }
     this.toastr.warning('Insurance Document Row Is In Edit Mode');
   }
-  
+
   handleDelete(data: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
@@ -341,12 +343,12 @@ class InsurancesFormat {
   }
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
   }
-  
+
   getBuyerName(buyerName: any) {
     let temp: any = [];
     buyerName.forEach(element => {

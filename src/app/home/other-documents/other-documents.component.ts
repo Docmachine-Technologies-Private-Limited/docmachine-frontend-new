@@ -139,9 +139,11 @@ export class OtherDocumentsComponent implements OnInit {
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      }
     });
   }
 
@@ -158,7 +160,7 @@ export class OtherDocumentsComponent implements OnInit {
 
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
@@ -326,7 +328,7 @@ class PackingListFormat {
   }
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')

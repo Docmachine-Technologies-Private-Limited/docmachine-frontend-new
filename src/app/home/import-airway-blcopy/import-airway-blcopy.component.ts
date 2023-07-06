@@ -129,9 +129,11 @@ export class ImportAirwayBlcopyComponent implements OnInit {
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      }
     });
   }
 
@@ -256,8 +258,7 @@ export class ImportAirwayBlcopyComponent implements OnInit {
   }
 
   newCredit() {
-    this.sharedData.changeretunurl('home/airway-bl-copy')
-    this.router.navigate(['home/upload', { file: 'export', document: 'blCopy' }]);
+    this.router.navigate(['/home/upload', {file: 'import', document: 'import-blCopy'}]);
   }
 
   deleteByRoleType(RoleCheckbox: string, id: any, index: any) {

@@ -75,7 +75,7 @@ export class DestructionComponent implements OnInit {
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
   ) { }
-  
+
   async ngOnInit() {
     this.wininfo.set_controller_of_width(270, '.content-wrap');
     this.USER_DATA = await this.userService.getUserDetail();
@@ -107,7 +107,7 @@ export class DestructionComponent implements OnInit {
       (err) => console.log(err)
     );
   }
-  
+
   DestructionTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
@@ -123,9 +123,11 @@ export class DestructionComponent implements OnInit {
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      }
     });
   }
 
@@ -142,7 +144,7 @@ export class DestructionComponent implements OnInit {
 
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
@@ -160,7 +162,7 @@ export class DestructionComponent implements OnInit {
       );
   }
   filter(value, key) {
-    this.FILTER_VALUE_LIST = this.item.filter((item:any) => item[key].indexOf(value) != -1);
+    this.FILTER_VALUE_LIST = this.item.filter((item: any) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length == 0) {
       this.FILTER_VALUE_LIST = this.item;
     }
@@ -178,11 +180,11 @@ export class DestructionComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-  
+
   getPipoNumbers(data) {
     return data.pipo.map((x) => { return x.pi_poNo; });
   }
-  
+
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
@@ -205,7 +207,7 @@ export class DestructionComponent implements OnInit {
       }
     );
   }
-  
+
   toSaveNew(data, id, EditSummaryPagePanel: any) {
     console.log(data);
     this.documentService.updateDestruction(data, id).subscribe((data) => {
@@ -217,7 +219,7 @@ export class DestructionComponent implements OnInit {
       console.log('error');
     });
   }
-  
+
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
     this.SELECTED_VALUE = '';
@@ -229,7 +231,7 @@ export class DestructionComponent implements OnInit {
     }
     this.toastr.warning('Destruction Certificate Row Is In Edit Mode');
   }
-  
+
   handleDelete(data: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
@@ -304,12 +306,12 @@ class DestructionFormat {
   }
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
   }
-  
+
   getBuyerName(buyerName: any) {
     let temp: any = [];
     buyerName.forEach(element => {

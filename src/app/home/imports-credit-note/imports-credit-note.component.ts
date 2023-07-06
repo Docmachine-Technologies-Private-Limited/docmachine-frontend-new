@@ -140,9 +140,11 @@ export class ImportsCreditNoteComponent implements OnInit {
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      }
     });
   }
 
@@ -164,7 +166,7 @@ export class ImportsCreditNoteComponent implements OnInit {
 
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
@@ -204,14 +206,14 @@ export class ImportsCreditNoteComponent implements OnInit {
     this.optionsVisibility[index] = false;
     console.log(data);
     this.documentService.updateCredit(data, data._id).subscribe((data) => {
-        console.log('king123');
-        this.toastr.success('PI/PO updated successfully.');
-      },(error) => {
-        console.log('error');
-      }
+      console.log('king123');
+      this.toastr.success('PI/PO updated successfully.');
+    }, (error) => {
+      console.log('error');
+    }
     );
   }
-  
+
   toSaveNew(data, id, EditSummaryPagePanel: any) {
     console.log(data);
     this.documentService.updateCredit(data, id).subscribe((data) => {
@@ -225,8 +227,7 @@ export class ImportsCreditNoteComponent implements OnInit {
   }
 
   newCredit() {
-    this.sharedData.changeretunurl('home/credit-note')
-    this.router.navigate(['home/upload', { file: 'export', document: 'creditNote' }]);
+    this.router.navigate(['home/upload', {file: 'import', document: 'creditNote'}]);
   }
 
   filter(value, key) {
@@ -327,12 +328,12 @@ class CreditNoteFormat {
   }
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
   }
-  
+
   getBuyerName(buyerName: any) {
     let temp: any = [];
     buyerName.forEach(element => {

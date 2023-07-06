@@ -95,27 +95,27 @@ export class LetterOfCreditImportLCComponent implements OnInit {
     }
     this.item = [];
     this.documentService.getLetterLCfile("import").subscribe((res: any) => {
-        this.item = res?.data;
-        this.FILTER_VALUE_LIST = this.item;
-        console.log(res, 'getLetterLCfile');
-        for (let value of res.data) {
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
-            this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
-          }
-          value?.buyerName.forEach(element => {
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(element);
-            }
-          });
-          if (this.ALL_FILTER_DATA['L_C_No'].includes(value?.letterOfCreditNumber) == false) {
-            this.ALL_FILTER_DATA['L_C_No'].push(value?.letterOfCreditNumber);
-          }
-          if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
-            this.ALL_FILTER_DATA['DATE'].push(value?.date);
-          }
+      this.item = res?.data;
+      this.FILTER_VALUE_LIST = this.item;
+      console.log(res, 'getLetterLCfile');
+      for (let value of res.data) {
+        if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
+          this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
         }
-        this.LetterLCTable(this.item)
-      },
+        value?.buyerName.forEach(element => {
+          if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
+            this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+          }
+        });
+        if (this.ALL_FILTER_DATA['L_C_No'].includes(value?.letterOfCreditNumber) == false) {
+          this.ALL_FILTER_DATA['L_C_No'].push(value?.letterOfCreditNumber);
+        }
+        if (this.ALL_FILTER_DATA['DATE'].includes(value?.date) == false) {
+          this.ALL_FILTER_DATA['DATE'].push(value?.date);
+        }
+      }
+      this.LetterLCTable(this.item)
+    },
       (err) => console.log(err)
     );
   }
@@ -136,9 +136,11 @@ export class LetterOfCreditImportLCComponent implements OnInit {
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      }
     });
   }
 
@@ -155,12 +157,12 @@ export class LetterOfCreditImportLCComponent implements OnInit {
 
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
   }
-  
+
   filter(value, key) {
     this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length == 0) {
@@ -208,9 +210,7 @@ export class LetterOfCreditImportLCComponent implements OnInit {
   }
 
   letterOfCredit() {
-    console.log('upload');
-    //this.sharedData.changeretunurl('home/letterofcredit-lc')
-    this.router.navigate(['home/upload', { file: 'export', document: 'lcCopy' }]);
+    this.router.navigate(['home/upload', { file: 'import', document: 'import-lcCopy' }]);
   }
 
   toSave(data, index) {
@@ -228,7 +228,7 @@ export class LetterOfCreditImportLCComponent implements OnInit {
       }
     );
   }
-  
+
   toSaveNew(data, id, EditSummaryPagePanel: any) {
     console.log(data);
     this.documentService.updateLetterLC(data, id).subscribe((data) => {
@@ -240,7 +240,7 @@ export class LetterOfCreditImportLCComponent implements OnInit {
       console.log('error');
     });
   }
-  
+
   SELECTED_VALUE: any = '';
   toEdit(data: any) {
     this.SELECTED_VALUE = '';
@@ -254,7 +254,7 @@ export class LetterOfCreditImportLCComponent implements OnInit {
     }
     this.toastr.warning('LetterLC Row Is In Edit Mode');
   }
-  
+
   handleDelete(data: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
@@ -295,7 +295,7 @@ export class LetterOfCreditImportLCComponent implements OnInit {
       });
     }
   }
-  
+
   exportToExcel() {
     const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new LetterOfCreditFormat(this.FILTER_VALUE_LIST).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
@@ -326,12 +326,12 @@ class LetterOfCreditFormat {
   }
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
   }
-  
+
   getBuyerName(buyerName: any) {
     let temp: any = [];
     buyerName.forEach(element => {

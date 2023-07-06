@@ -118,7 +118,7 @@ export class ImportOpinionReportsComponent implements OnInit {
       (err) => console.log(err)
     );
   }
-  
+
   OpinionReportTable(data: any) {
     this.FILTER_VALUE_LIST_NEW['items'] = [];
     this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
@@ -136,9 +136,11 @@ export class ImportOpinionReportsComponent implements OnInit {
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      }
     });
   }
 
@@ -155,12 +157,12 @@ export class ImportOpinionReportsComponent implements OnInit {
 
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
   }
-  
+
   filter(value, key) {
     this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length == 0) {
@@ -209,9 +211,7 @@ export class ImportOpinionReportsComponent implements OnInit {
   }
 
   newOpinion() {
-    console.log('upload');
-    this.sharedData.changeretunurl('home/opinion-report')
-    this.router.navigate(['home/upload', { file: 'export', document: 'opinionReport' }]);
+    this.router.navigate(['home/upload', {file: 'import', document: 'import-opinionReport'}]);
   }
 
   toSave(data, index) {
@@ -227,7 +227,7 @@ export class ImportOpinionReportsComponent implements OnInit {
       }
     );
   }
-  
+
   toSaveNew(data, id, EditSummaryPagePanel: any) {
     console.log(data);
     this.documentService.updateOpinionReport(data, id).subscribe((data) => {
@@ -253,7 +253,7 @@ export class ImportOpinionReportsComponent implements OnInit {
     }
     this.toastr.warning('Opinion Report Row Is In Edit Mode');
   }
-  
+
   handleDelete(data: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
@@ -326,12 +326,12 @@ class OpinionReportFormat {
   }
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')
   }
-  
+
   getBuyerName(buyerName: any) {
     let temp: any = [];
     buyerName.forEach(element => {
@@ -345,22 +345,3 @@ class OpinionReportFormat {
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
