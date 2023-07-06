@@ -30,7 +30,7 @@
 
 .custom-expansion-panel .header h5 {
     margin: auto;
-    color: black;
+    color: white;
 }
 
 .custom-expansion-panel .center-panel {
@@ -175,4 +175,21 @@
     margin: auto;
     flex-direction: row;
     align-items: center;
+}
+
+.custom-expansion-panel .table .added-active {
+    background-color: #0c2742 !important;
+    color: white;
+    border-radius: unset !important;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+}
+
+.custom-expansion-panel .table .table-active .Table-Show {
+    background-color: #0c2742!important;
+    margin-top: -7px;
+    box-shadow: none;
+    border-radius: unset;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
 }

@@ -654,7 +654,7 @@ export class ViewDocumentComponent implements OnInit {
           isExpand: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
           RoleType: this.USER_DATA?.result?.RoleCheckbox,
-          Expansion_Items: {
+          Expansion_Items: [{
             adCode: element['adCode'],
             adBillNo: element['adBillNo'],
             consigneeName: element['consigneeName'],
@@ -666,19 +666,19 @@ export class ViewDocumentComponent implements OnInit {
             firxAmount: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxAmount'),
             firxCommision: this.ARRAY_TO_STRING(element?.FIRX_INFO, 'firxCommision'),
             FIRX_TOTAL_AMOUNT: element['FIRX_TOTAL_AMOUNT']
-          }
+          }]
         })
       });
       this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
       this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
       this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
       this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
-      this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'])
+      this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
     });
   }
   getPipoNumber(pipo: any) {
     let temp: any = [];
-   (pipo != 'NF' ? pipo : []).forEach(element => {
+    (pipo != 'NF' ? pipo : []).forEach(element => {
       temp.push(element?.pi_poNo);
     });
     return temp.join(',')

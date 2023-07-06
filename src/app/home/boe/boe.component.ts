@@ -51,6 +51,56 @@ export class BOEComponent implements OnInit {
     Currency: [],
     DATE: []
   };
+  FILTER_VALUE_LIST_NEW: any = {
+    header: [
+      "Pipo No.",
+      "DATE",
+      "CI NUMBER",
+      "BOE NUMBER",
+      "Beneficiary Name",
+      "CURRENCY",
+      "BOE AMOUNT",
+      "AVAILABLE BALANCE",
+      "Action"],
+    items: [],
+    Expansion_header: [
+      "AD CODE",
+      "AD BILL NO",
+      "IEC CODE",
+      "IEC NAME",
+      "ORIGIN",
+      "DISCHARGE PORT"
+    ],
+    Expansion_Items: [],
+    Objectkeys: [],
+    ExpansionKeys: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-1"
+    ],
+    eventId: 2
+  }
+  SHIPPING_BILL_EDIT_FORM_DATA: any = {
+    boeDate: "",
+    commercialNumber: "",
+    boeNumber: "",
+    benneName: "",
+    currency: "",
+    invoiceAmount: "",
+    balanceAmount: "",
+    adCode: "",
+    adBillNo: "",
+    iecCode: "",
+    iecName: "",
+    origin: "",
+    dischargePort: ""
+  }
 
   constructor(
     public documentService: DocumentService,
@@ -119,6 +169,7 @@ export class BOEComponent implements OnInit {
           }
         });
         this.FILTER_VALUE_LIST = this.item1;
+        this.BILL_OF_ENTRY_Table(this.FILTER_VALUE_LIST);
         console.log(res, 'yuyuyuyuyuyuyuuy')
       },
       (err) => console.log(err)
@@ -159,8 +210,7 @@ export class BOEComponent implements OnInit {
   }
 
   exportToExcel() {
-    const ws: xlsx.WorkSheet =
-      xlsx.utils.table_to_sheet(this.epltable.nativeElement);
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new BillofEntryFormat(this.FILTER_VALUE_LIST).get());
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'BOE.xlsx');
@@ -205,40 +255,70 @@ export class BOEComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
     }, 200);
   }
 
   toSave(data, index) {
     this.optionsVisibility[index] = false;
     console.log(data);
-    this.documentService.updateBoe(data, data._id).subscribe(
-      (data) => {
-        console.log("king123");
-        console.log(data);
-        this.toastr.success('Bill Of Entry row is updated')
-        // this.router.navigate(["home/view-document/sb"]);
-        //this.router.navigate(['/login'], { queryParams: { registered: true }});
-      },
-      (error) => {
-        console.log("error");
-      }
+    this.documentService.updateBoe(data, data._id).subscribe((data) => {
+      console.log("king123");
+      console.log(data);
+      this.toastr.success('Bill Of Entry row is updated')
+    }, (error) => {
+      console.log("error");
+    }
     );
   }
 
-  toEdit(index) {
-    this.optionsVisibility[index] = true;
+  toSaveNew(data, id, EditSummaryPagePanel: any) {
+    console.log(data);
+    this.documentService.updateBoe(data, id).subscribe((data) => {
+      console.log(data);
+      this.toastr.success('Bill Of Entry data updated');
+      this.ngOnInit();
+      EditSummaryPagePanel?.displayHidden
+    }, (error) => {
+      console.log('error');
+    });
+  }
+
+  SELECTED_SHIPPING_VALUE: any = '';
+  toEdit(data: any) {
+    this.SELECTED_SHIPPING_VALUE = '';
+    this.SELECTED_SHIPPING_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.SHIPPING_BILL_EDIT_FORM_DATA = {
+      boeDate: this.SELECTED_SHIPPING_VALUE['boeDate'],
+      commercialNumber: this.SELECTED_SHIPPING_VALUE['commercialNumber'],
+      boeNumber: this.SELECTED_SHIPPING_VALUE['boeNumber'],
+      benneName: this.SELECTED_SHIPPING_VALUE['benneName'],
+      currency: this.SELECTED_SHIPPING_VALUE['currency'],
+      invoiceAmount: this.SELECTED_SHIPPING_VALUE['invoiceAmount'],
+      balanceAmount: this.SELECTED_SHIPPING_VALUE['balanceAmount'] != '-1' ? this.SELECTED_SHIPPING_VALUE['balanceAmount'] : this.SELECTED_SHIPPING_VALUE['invoiceAmount'],
+      adCode: this.SELECTED_SHIPPING_VALUE['adCode'],
+      adBillNo: this.SELECTED_SHIPPING_VALUE['adBillNo'],
+      iecCode: this.SELECTED_SHIPPING_VALUE['iecCode'],
+      iecName: this.SELECTED_SHIPPING_VALUE['iecName'],
+      origin: this.SELECTED_SHIPPING_VALUE['origin'],
+      dischargePort: this.SELECTED_SHIPPING_VALUE['dischargePort']
+    }
+    // this.optionsVisibility[index] = true;
     this.toastr.warning('Bill Of Entry Row Is In Edit Mode');
   }
-  handleDelete(id, index: any) {
-    console.log(id, index, 'dfsfhsfgsdfgdss');
+
+  handleDelete(data: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
-    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, { maxWidth: "400px", data: dialogData });
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", dialogResult)
+      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], id, index)
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
       }
     });
   }
@@ -289,7 +369,9 @@ export class BOEComponent implements OnInit {
       // this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.blCopyDoc, name: 'Bl Copy', status: false })
       this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS.push({ doc: element?.CI_DETAILS?.commercialDoc, name: 'Commercial', status: false })
     });
+    this.BILL_OF_ENTRY_Table(this.FILTER_VALUE_LIST);
   }
+
   tickdoc(event: any, index: any) {
     if (event?.target.checked) {
       this.SHIPPING_BILL_ALL_RELATED_DOCUMENTS[index]['status'] = true
@@ -374,4 +456,102 @@ export class BOEComponent implements OnInit {
     }
     return arrayBuffer;
   }
+
+  BILL_OF_ENTRY_Table(data: any) {
+    this.FILTER_VALUE_LIST_NEW['items'] = [];
+    this.removeEmpty(data).then(async (newdata: any) => {
+      await newdata?.forEach(async (element) => {
+        await this.FILTER_VALUE_LIST_NEW['items'].push({
+          PipoNo: this.getPipoNumber(element['pipo']),
+          date: element['boeDate'],
+          CINUMBER: element['commercialNumber'],
+          BOENUMBER: element['boeNumber'],
+          buyerName: element['benneName'],
+          Currency: element['currency'],
+          BOEAMOUNT: element['invoiceAmount'],
+          balanceAvai: element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['invoiceAmount'],
+          isExpand: false,
+          disabled: element['deleteflag'] != '-1' ? false : true,
+          RoleType: this.USER_DATA?.result?.RoleCheckbox,
+          Expansion_Items: [{
+            adCode: element['adCode'],
+            adBillNo: element['adBillNo'],
+            IECCODE: element['iecCode'],
+            IECNAME: element['iecName'],
+            ORIGIN: element['origin'],
+            DISCHARGEPORT: element['dischargePort']
+          }]
+        })
+      });
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
+      this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
+    });
+  }
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+
+  async removeEmpty(data: any) {
+    await data.forEach(element => {
+      for (const key in element) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+          element[key] = 'NF'
+        }
+      }
+    });
+    return await new Promise(async (resolve, reject) => { await resolve(data) });
+  }
+  SB_NO: any = ''
+  getSbNo(data: any) {
+    this.SB_NO = data?.item?.sbno
+  }
+}
+
+class BillofEntryFormat {
+  data: any = [];
+  constructor(data: any) {
+    this.data = data;
+  }
+
+  get() {
+    var temp: any = [];
+    this.data?.forEach(element => {
+      temp.push({
+        PipoNo: this.getPipoNumber(element['pipo']),
+        date: element['boeDate'],
+        "CI NUMBER": element['commercialNumber'],
+        "BOE NUMBER": element['boeNumber'],
+        buyerName: element['benneName'],
+        Currency: element['currency'],
+        "BOE AMOUNT": element['invoiceAmount'],
+        balanceAvai: element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['invoiceAmount'],
+        adCode: element['adCode'],
+        adBillNo: element['adBillNo'],
+        IECCODE: element['iecCode'],
+        IECNAME: element['iecName'],
+        ORIGIN: element['origin'],
+        "DISCHARGE PORT": element['dischargePort']
+      })
+    });
+    return temp;
+  }
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+
+  ARRAY_TO_STRING(array, key) {
+    return array[key]?.join(',')
+  }
+
 }

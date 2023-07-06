@@ -63,6 +63,57 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
     Currency: [],
     DATE: []
   };
+  FILTER_VALUE_LIST_NEW: any = {
+    header: [
+      "Pipo No.",
+      "DATE",
+      "BOE Number",
+      "Party Name",
+      "Bank Name",
+      "Currency",
+      "TT Amount",
+      "Ref No.",
+      "Available Balance",
+      "Action"],
+    items: [],
+    Expansion_header: [
+      "Branch",
+      "Description",
+      "Payment Date",
+      "Commission/Bank Charges",
+      "Payment Amount",
+      "Conversion Date",
+      "Conversion Rate",
+      "Converted Amount",
+      "Payment Type"
+    ],
+    Expansion_Items: [],
+    Objectkeys: [],
+    ExpansionKeys: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-1"
+    ],
+    eventId: ''
+  }
+
+  EDIT_FORM_DATA: any = {
+    date: "",
+    beneficiaryName: "",
+    currency: "",
+    amount: "",
+    billNo: "",
+    BalanceAvail: "",
+  }
+  
   constructor(
     private toastr: ToastrService,
     private userService: UserService,
@@ -87,6 +138,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       (res: any) => {
         console.log(res), (this.item = res.data);
         console.log('king', this.item);
+        this.item1=[];
         for (let value of this.item) {
           if (value['file'] == 'import') {
             console.log('avvvvvvvvvv', value);
@@ -128,12 +180,11 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
           this.item1[i].convertedAmount = cv != "NaN" ? cv : null;
         });
         this.FILTER_VALUE_LIST = this.item1;
+        this.ForexAdviceTable(this.item1);
         console.log('sjsjs', this.item1);
-      },
-      (err) => console.log(err)
+      },(err) => console.log(err)
     );
-    this.userService.getTeam().subscribe(
-      (data) => {
+    this.userService.getTeam().subscribe((data) => {
         console.log('llllllllllllllllllllllllllllllll');
         console.log(data['data'][0]);
         this.location = data['data'][0]['location'];
@@ -145,36 +196,28 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         this.commodity = this.commodity.filter(
           (value, index) => this.commodity.indexOf(value) === index
         );
-      },
-      (error) => {
+      },(error) => {
         console.log('error');
       }
     );
 
-    this.documentService.getMaster(1).subscribe(
-      (res: any) => {
+    this.documentService.getMaster(1).subscribe((res: any) => {
         console.log('Master Data File', res);
         this.item5 = res.data;
-        this.merging();
+        // this.merging();
         this.item5.forEach((element, i) => {
           this.origin[i] = element.countryOfFinaldestination;
         });
         this.origin = this.origin.filter((value, index) => this.origin.indexOf(value) === index);
         console.log('Master Country', this.origin);
-      },
-      (err) => console.log(err)
+      },(err) => console.log(err)
     );
 
-    this.documentService.getPipo().subscribe(
-      (res: any) => {
+    this.documentService.getPipo().subscribe((res: any) => {
         console.log('Data fetched successfully', res), (this.item3 = res.data);
-      },
-      (err) => console.log(err)
+      },(err) => console.log(err)
     );
-
     this.USER_DATA = await this.userService.getUserDetail();
-
-
   }
 
   getPipoNumbers(data) {
@@ -182,6 +225,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       return x.pi_poNo;
     });
   }
+  
   toSave(data, index) {
     this.optionsVisibility[index] = false;
     console.log('Shailendra', data);
@@ -195,20 +239,76 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       }
     );
   }
+  
   filter(value, key) {
     this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length == 0) {
       this.FILTER_VALUE_LIST = this.item1;
     }
   }
+  
+  ForexAdviceTable(data: any) {
+    this.FILTER_VALUE_LIST_NEW['items'] = [];
+    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
+    this.removeEmpty(data).then(async (newdata: any) => {
+      await newdata?.forEach(async (element) => {
+        await this.FILTER_VALUE_LIST_NEW['items'].push({
+          PipoNo: this.getPipoNumber(element['pipo']),
+          date: element['date'],
+          boeno: element['sbno'],
+          beneficiaryName: element['beneficiaryName'],
+          BankName: element['BankName']?.value,
+          currency: element['currency'],
+          amount: element['amount'],
+          billNo: element['billNo'],
+          BalanceAvail: element['BalanceAvail'] != undefined ? element['BalanceAvail'] : element['amount'],
+          Expansion_Items: [{
+            Branch: element['location'],
+            Description: element['commodity'],
+            RecievedDate: element['recievedDate'],
+            CommissionBankCharges: element['commision'],
+            RecievedAmountUSD: element['recUSD'],
+            ConversionDate: element['conversionDate'],
+            ConversionRate: element['exchangeRate'],
+            ConvertedAmount: element['convertedAmount'],
+            PaymentType: element['PaymentType'],
+          }],
+          isExpand: false,
+          disabled: element['deleteflag'] != '-1' ? false : true,
+          RoleType: this.USER_DATA?.result?.RoleCheckbox
+        })
+      });
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
+      this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
+    });
+  }
+
+  async removeEmpty(data: any) {
+    await data.forEach(element => {
+      for (const key in element) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+          element[key] = 'NF'
+        }
+      }
+    });
+    return await new Promise(async (resolve, reject) => { await resolve(data) });
+  }
+
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+  
   resetFilter() {
     this.FILTER_VALUE_LIST = this.item1;
   }
-  toEdit(index) {
-    this.optionsVisibility[index] = true;
-    this.toastr.warning('Forex Advice Row Is In Edit Mode');
-  }
-
+ 
   newIrAdvice() {
     console.log('upload');
     this.sharedData.changeretunurl('home/inward-remittance-advice');
@@ -226,66 +326,57 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
       { file: 'import', document: 'orAdvice' },
     ]);
   }
+  
+  // merging() {
+  //   let filterForexData: any = [];
+  //   if (this.item5 && this.item5.length) {
+  //     for (let irData of this.item1) {
+  //       console.log('irdata', irData);
+  //       for (let shippingdata of this.item5) {
+  //         console.log('shipping', shippingdata);
+  //         for (let i = 0; i <= irData.sbNo.length; i++) {
+  //           console.log('index of shipping Bill', irData.sbNo[i]);
+  //           if (irData.sbNo[i] == shippingdata.sbno) {
+  //             const newVal = { ...irData };
+  //             console.log('Line no. 211', newVal);
+  //             let sbBalance = shippingdata.fobValue;
+  //             let irAmount = irData.amount
+  //             let availableBalance = irAmount - sbBalance;
+  //             if (availableBalance <= 0) {
+  //               newVal['BalanceAvail'] = 0;
+  //             } else {
+  //               newVal['BalanceAvail'] = availableBalance;
+  //             }
+  //             console.log('Forex data Value', newVal);
+  //             filterForexData.push(newVal);
+  //           }
+  //         }
+  //       }
+  //     }
+  //     for (let irData of this.item1) {
+  //       console.log("229", irData.sbNo.length)
+  //       if (irData.sbNo.length == 0) {
+  //         const newVal = { ...irData };
+  //         let availableBal = irData.amount
+  //         newVal['BalanceAvail'] = availableBal;
+  //         filterForexData.push(newVal);
+  //         console.log('235', filterForexData);
+  //       }
+  //     }
 
-  exportToExcel() {
-    const ws: xlsx.WorkSheet = xlsx.utils.table_to_sheet(
-      this.epltable.nativeElement
-    );
-    const wb: xlsx.WorkBook = xlsx.utils.book_new();
-    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
-    xlsx.writeFile(wb, 'Forex Advice.xlsx');
-  }
-
-  merging() {
-    let filterForexData: any = [];
-    if (this.item5 && this.item5.length) {
-      for (let irData of this.item1) {
-        console.log('irdata', irData);
-        for (let shippingdata of this.item5) {
-          console.log('shipping', shippingdata);
-          for (let i = 0; i <= irData.sbNo.length; i++) {
-            console.log('index of shipping Bill', irData.sbNo[i]);
-            if (irData.sbNo[i] == shippingdata.sbno) {
-              const newVal = { ...irData };
-              console.log('Line no. 211', newVal);
-              let sbBalance = shippingdata.fobValue;
-              let irAmount = irData.amount
-              let availableBalance = irAmount - sbBalance;
-              if (availableBalance <= 0) {
-                newVal['BalanceAvail'] = 0;
-              } else {
-                newVal['BalanceAvail'] = availableBalance;
-              }
-              console.log('Forex data Value', newVal);
-              filterForexData.push(newVal);
-            }
-          }
-        }
-      }
-      for (let irData of this.item1) {
-        console.log("229", irData.sbNo.length)
-        if (irData.sbNo.length == 0) {
-          const newVal = { ...irData };
-          let availableBal = irData.amount
-          newVal['BalanceAvail'] = availableBal;
-          filterForexData.push(newVal);
-          console.log('235', filterForexData);
-        }
-      }
-
-    } else {
-      for (let ir of this.item1) {
-        const newVal = { ...ir };
-        let availableBal = ir.amount
-        newVal['BalanceAvail'] = availableBal;
-        filterForexData.push(newVal);
-        console.log('245', filterForexData);
-      }
-    }
-    this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET = filterForexData;
-    this.item6 = filterForexData
-    console.log("Full data", this.item6, this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET)
-  }
+  //   } else {
+  //     for (let ir of this.item1) {
+  //       const newVal = { ...ir };
+  //       let availableBal = ir.amount
+  //       newVal['BalanceAvail'] = availableBal;
+  //       filterForexData.push(newVal);
+  //       console.log('245', filterForexData);
+  //     }
+  //   }
+  //   this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET = filterForexData;
+  //   this.item6 = filterForexData
+  //   console.log("Full data", this.item6, this.documentService.OUTWARD_REMITTANCE_ADVICE_SHEET)
+  // }
 
   openIradvice(content) {
     this.modalService
@@ -314,19 +405,49 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
     }, 200);
   }
 
-  handleDelete(id, index: any) {
-    console.log(id, index, 'dfsfhsfgsdfgdss');
+  toSaveNew(data, id, EditSummaryPagePanel: any) {
+    console.log(data);
+    this.documentService.updateOrAdvice(data, id).subscribe((data) => {
+      console.log(data);
+      this.toastr.success('Forex Advice Row Is Updated Successfully.');
+      this.ngOnInit();
+      EditSummaryPagePanel?.displayHidden
+    }, (error) => {
+      console.log('error');
+    });
+  }
+
+  SELECTED_VALUE: any = '';
+  toEdit(data: any) {
+    this.SELECTED_VALUE = '';
+    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.EDIT_FORM_DATA = {
+      date: this.SELECTED_VALUE['date'],
+      partyName: this.SELECTED_VALUE['partyName'],
+      beneficiaryName: this.SELECTED_VALUE['beneficiaryName'],
+      currency: this.SELECTED_VALUE['currency'],
+      amount: this.SELECTED_VALUE['amount'],
+      billNo: this.SELECTED_VALUE['billNo'],
+      BalanceAvail: this.SELECTED_VALUE['BalanceAvail'] != undefined ? this.SELECTED_VALUE['BalanceAvail'] : this.SELECTED_VALUE['amount'],
+    }
+    this.toastr.warning('Forex Advice Row Is In Edit Mode');
+  }
+
+  handleDelete(data: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
-    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, { maxWidth: "400px", data: dialogData });
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", dialogResult)
+      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], id, index)
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
       }
     });
   }
@@ -355,6 +476,69 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         this.ngOnInit();
       });
     }
+  }
+  
+  exportToExcel() {
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new ForexAdviceFormat(this.FILTER_VALUE_LIST).get());
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, 'Forex Advice.xlsx');
+  }
+
+}
+
+class ForexAdviceFormat {
+  data: any = [];
+  constructor(data: any) {
+    this.data = data;
+  }
+
+  get() {
+    var temp: any = [];
+    this.data?.forEach(element => {
+      temp.push({
+        PipoNo: this.getPipoNumber(element['pipo']),
+        date: element['date'],
+        boenp: element['boeno'],
+        "Party Name": element['partyName'],
+        beneficiaryName: this.getBuyerName(element['beneficiaryName']),
+        BankName: element['BankName']?.value,
+        currency: element['currency'],
+        amount: element['amount'],
+        billNo: element['billNo'],
+        From: element['origin'],
+        Branch: element['location'],
+        Description: element['commodity'],
+        RecievedDate: element['recievedDate'],
+        CommissionBankCharges: element['commision'],
+        RecievedAmountUSD: element['recUSD'],
+        ConversionDate: element['conversionDate'],
+        ConversionRate: element['exchangeRate'],
+        ConvertedAmount: element['convertedAmount'],
+        PaymentType: element['PaymentType'],
+        BalanceAvail: element['BalanceAvail'] != undefined ? element['BalanceAvail'] : element['amount'],
+      })
+    });
+    return temp;
+  }
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+
+  getBuyerName(buyerName: any) {
+    let temp: any = [];
+    buyerName.forEach(element => {
+      temp.push(element);
+    });
+    return temp.join(',')
+  }
+
+  ARRAY_TO_STRING(array, key) {
+    return array[key]?.join(',')
   }
 
 }

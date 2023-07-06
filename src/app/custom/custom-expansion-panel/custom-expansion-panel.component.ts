@@ -15,8 +15,11 @@ export class CustomExpansionPanelComponent implements OnInit {
 
   @Input('Expansionitems') Expansionitems: any = [];
   @Input('Expansionheader') Expansionheader: any = [];
+  @Input('Expansionheader2') Expansionheader2: any = [];
   @Input('ExpansionTitle') ExpansionTitle: any = '';
+  @Input('ExpansionTitle2') ExpansionTitle2: any = '';
   @Input('ExpansionKeys') ExpansionKeys: any = [];
+  @Input('ExpansionKeys2') ExpansionKeys2: any = [];
   @Input('ExpansionShowHide') Expansion: boolean = true;
   @Input('ActionRequired') ActionRequired: boolean = true;
   
@@ -58,9 +61,14 @@ export class CustomExpansionPanelComponent implements OnInit {
   }
   
   TrClick(data: any, index: any) {
+     console.log('gvfyfghjhgjhgjhgjhgjhgjhgjhghjghjghj')
     this.event.emit({ item: data, index: index });
   }
   TrClickEvent(data: any, index: any){
     this.TrEvent.emit({ item: data, index: index });
+  }
+  OBJECT_LENGTH(data:any){
+  console.log(typeof data,'jhjyujhujyghguygjhhgjtj')
+    return Object.keys(data);
   }
 }

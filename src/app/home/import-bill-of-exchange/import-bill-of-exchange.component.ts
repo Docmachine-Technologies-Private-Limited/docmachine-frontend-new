@@ -22,14 +22,14 @@ import * as data1 from '../../currency.json';
 
 export class ImportBillOfExchangeComponent implements OnInit {
 
-  @ViewChild('importbillOfExchange', {static: false}) importbillOfExchange: ElementRef;
+  @ViewChild('billOfExchange', { static: false }) billOfExchange: ElementRef;
   public item: any = [];
   public viewData: any;
   public closeResult: string;
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
-  USER_DATA:any=[];
+  USER_DATA: any = [];
   filtervisible: boolean = false;
   FILTER_VALUE_LIST: any = [];
   ALL_FILTER_DATA: any = {
@@ -39,6 +39,32 @@ export class ImportBillOfExchangeComponent implements OnInit {
     Currency: [],
     DATE: []
   };
+  FILTER_VALUE_LIST_NEW: any = {
+    header: [
+      "Pipo No.",
+      "DATE",
+      "Bill Of Ex. No.",
+      "Beneficiary Name",
+      "Action"],
+    items: [],
+    Expansion_header: [],
+    Expansion_Items: [],
+    Objectkeys: [],
+    ExpansionKeys: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1"
+    ],
+    eventId: ''
+  }
+  EDIT_FORM_DATA: any = {
+    billOfExchangeDate: '',
+    billExchangeNumber: '',
+    buyerName: '',
+  }
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -48,67 +74,108 @@ export class ImportBillOfExchangeComponent implements OnInit {
     private userService: UserService,
     private sharedData: SharedDataService,
     public wininfo: WindowInformationService,
-    public AprrovalPendingRejectService:AprrovalPendingRejectTransactionsService,
+    public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
   ) {
   }
   async ngOnInit() {
-    this.wininfo.set_controller_of_width(270,'.content-wrap');
+    this.wininfo.set_controller_of_width(270, '.content-wrap');
     this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA);
     for (let index = 0; index < data1['default']?.length; index++) {
       this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
     }
-    console.log("this.USER_DATA", this.USER_DATA);
     this.item = [];
     this.documentService.getBillExchangefile("import").subscribe(
       (res: any) => {
-        this.item=res?.data;
-        this.FILTER_VALUE_LIST= this.item;
+        this.item = res?.data;
+        this.FILTER_VALUE_LIST = this.item;
         for (let value of res.data) {
-          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency)==false) {
+          if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
             this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
           }
           value?.buyerName.forEach(element => {
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element)==false && element!='' && element!=undefined) {
+            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
               this.ALL_FILTER_DATA['Buyer_Name'].push(element);
             }
           });
-          if ( this.ALL_FILTER_DATA['Bill_Of_Exchange_No'].includes(value?.billExchangeNumber)==false) {
+          if (this.ALL_FILTER_DATA['Bill_Of_Exchange_No'].includes(value?.billExchangeNumber) == false) {
             this.ALL_FILTER_DATA['Bill_Of_Exchange_No'].push(value?.billExchangeNumber);
           }
-          if ( this.ALL_FILTER_DATA['DATE'].includes(value?.billOfExchangeDate)==false) {
+          if (this.ALL_FILTER_DATA['DATE'].includes(value?.billOfExchangeDate) == false) {
             this.ALL_FILTER_DATA['DATE'].push(value?.billOfExchangeDate);
           }
-      }
-        console.log(res,'getBillExchangefile');
+        }
+        this.BillOfExchangeTable(this.item)
+        console.log(res, 'getBillExchangefile');
       },
       (err) => console.log(err)
-      );
-    }
-    filter(value, key) {
-      this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
-      if (this.FILTER_VALUE_LIST.length== 0) {
-        this.FILTER_VALUE_LIST = this.item;
+    );
+  }
+  
+  BillOfExchangeTable(data: any) {
+    this.FILTER_VALUE_LIST_NEW['items'] = [];
+    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
+    this.removeEmpty(data).then(async (newdata: any) => {
+      await newdata?.forEach(async (element) => {
+        await this.FILTER_VALUE_LIST_NEW['items'].push({
+          PipoNo: this.getPipoNumber(element['pipo']),
+          billOfExchangeDate: element['billOfExchangeDate'],
+          billExchangeNumber: element['billExchangeNumber'],
+          buyerName: element['buyerName'],
+          isExpand: false,
+          disabled: element['deleteflag'] != '-1' ? false : true,
+          RoleType: this.USER_DATA?.result?.RoleCheckbox
+        })
+      });
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+    });
+  }
+
+  async removeEmpty(data: any) {
+    await data.forEach(element => {
+      for (const key in element) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+          element[key] = 'NF'
+        }
       }
-    }
-    resetFilter() {
+    });
+    return await new Promise(async (resolve, reject) => { await resolve(data) });
+  }
+
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+   (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+  
+  filter(value, key) {
+    this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
+    if (this.FILTER_VALUE_LIST.length == 0) {
       this.FILTER_VALUE_LIST = this.item;
     }
-  openLetterOfCredit(content) {
+  }
+  resetFilter() {
+    this.FILTER_VALUE_LIST = this.item;
+  }
+  openBillofExchange(content) {
     this.modalService
-      .open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'})
+      .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
       .result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
   }
 
   private getDismissReason(reason: any): string {
-
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -125,11 +192,11 @@ export class ImportBillOfExchangeComponent implements OnInit {
   }
 
   viewpdf(a) {
-    this.viewData=''
+    this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
     }, 200);
-}
+  }
 
   toSave(data, index) {
     this.optionsVisibility[index] = false;
@@ -138,73 +205,129 @@ export class ImportBillOfExchangeComponent implements OnInit {
       (data) => {
         console.log('king123');
         this.toastr.success('Bill Of Exchange updated successfully.');
-
       },
       (error) => {
         // this.toastr.error('Invalid inputs, please check!');
         console.log('error');
       }
     );
-
-
   }
 
   newCredit() {
-    // this.sharedData.changeretunurl('/home/import-bill-of-exchange')
-    this.router.navigate(['/home/upload', {file: 'import', document: 'import-billOfExchange'}]);
+    this.sharedData.changeretunurl('home/bill-of-exchange')
+    this.router.navigate(['home/upload', { file: 'export', document: 'billOfExchange' }]);
   }
 
-  exportToExcel() {
-    const ws: xlsx.WorkSheet =
-      xlsx.utils.table_to_sheet(this.importbillOfExchange.nativeElement);
-    const wb: xlsx.WorkBook = xlsx.utils.book_new();
-    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
-    xlsx.writeFile(wb, 'billOfExchange.xlsx');
+  toSaveNew(data, id, EditSummaryPagePanel: any) {
+    console.log(data);
+    this.documentService.updateBillExchange(data, id).subscribe((data) => {
+      console.log(data);
+      this.toastr.success('Bill Of Exchange Row Is Updated Successfully.');
+      this.ngOnInit();
+      EditSummaryPagePanel?.displayHidden
+    }, (error) => {
+      console.log('error');
+    });
   }
-
-  toEdit(index) {
-    this.optionsVisibility[index] = true;
-    this.toastr.warning('Bill of Exchange Is In Edit Mode');
+  
+  SELECTED_VALUE: any = '';
+  toEdit(data: any) {
+    this.SELECTED_VALUE = '';
+    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.EDIT_FORM_DATA = {
+      billOfExchangeDate: this.SELECTED_VALUE['billOfExchangeDate'],
+      billExchangeNumber: this.SELECTED_VALUE['billExchangeNumber'],
+      buyerName: this.SELECTED_VALUE['buyerName'],
+    }
+    this.toastr.warning('Bill Of Exchange Row Is In Edit Mode');
   }
-  handleDelete(id,index:any) {
-    console.log(id,index,'dfsfhsfgsdfgdss');
+  
+  handleDelete(data: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
-    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {maxWidth: "400px",data: dialogData});
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", dialogResult)
+      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'],id,index)
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
       }
     });
   }
 
-  deleteByRoleType(RoleCheckbox:string,id:any,index:any){
-    if (RoleCheckbox==''){
-      this.documentService.deleteById({id:id,tableName:'billofexchanges'}).subscribe((res) => {
+  deleteByRoleType(RoleCheckbox: string, id: any, index: any) {
+    if (RoleCheckbox == '') {
+      this.documentService.deleteById({ id: id, tableName: 'billofexchanges' }).subscribe((res) => {
         console.log(res)
         if (res) {
           this.ngOnInit()
         }
-    }, (err) => console.log(err))
-    } else if (RoleCheckbox=='Maker' || RoleCheckbox=='Checker' || RoleCheckbox=='Approver'){
-      var approval_data:any={
-        id:id,
-        tableName:'billofexchanges',
-        deleteflag:'-1',
-        userdetails:this.USER_DATA['result'],
-        status:'pending',
-        dummydata:this.item[index],
-        Types:'deletion',
-        TypeOfPage:'summary',
-        FileType:this.USER_DATA?.result?.sideMenu
+      }, (err) => console.log(err))
+    } else if (RoleCheckbox == 'Maker' || RoleCheckbox == 'Checker' || RoleCheckbox == 'Approver') {
+      var approval_data: any = {
+        id: id,
+        tableName: 'billofexchanges',
+        deleteflag: '-1',
+        userdetails: this.USER_DATA['result'],
+        status: 'pending',
+        dummydata: this.item[index],
+        Types: 'deletion',
+        TypeOfPage: 'summary',
+        FileType: this.USER_DATA?.result?.sideMenu
       }
-      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox,id,index,approval_data,()=>{
+      this.AprrovalPendingRejectService.deleteByRole_PI_PO_Type(RoleCheckbox, id, index, approval_data, () => {
         this.ngOnInit();
       });
     }
   }
 
+  exportToExcel() {
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new BillOfExchangeFormat(this.FILTER_VALUE_LIST).get());
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, 'billOfExchange.xlsx');
+  }
+}
+
+class BillOfExchangeFormat {
+  data: any = [];
+  constructor(data: any) {
+    this.data = data;
+  }
+
+  get() {
+    var temp: any = [];
+    this.data?.forEach(element => {
+      temp.push({
+        PipoNo: this.getPipoNumber(element['pipo']),
+        billOfExchangeDate: element['billOfExchangeDate'],
+        billExchangeNumber: element['billExchangeNumber'],
+        buyerName: this.getBuyerName(element['buyerName']),
+      })
+    });
+    return temp;
+  }
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+   (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+  
+  getBuyerName(buyerName: any) {
+    let temp: any = [];
+    buyerName.forEach(element => {
+      temp.push(element);
+    });
+    return temp.join(',')
+  }
+
+  ARRAY_TO_STRING(array, key) {
+    return array[key]?.join(',')
+  }
 }
 
 

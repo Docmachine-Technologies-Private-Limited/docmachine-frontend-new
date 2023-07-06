@@ -148,6 +148,73 @@ export class PipoDocumentsComponent implements OnInit {
   page: number = 0
   limit: number = 10
 
+  FILTER_VALUE_LIST_NEW: any = {
+    header: [
+      "DATE",
+      "INVOICE NUMBER",
+      "INVOICE DATE",
+      "SELLER NAMES",
+      "INVOICE CURRENCY",
+      "INVOICE VALUE - USD",
+      "BRANCH",
+      "COMMODITY",
+      "BALANCE IF ANY",
+      "Action"],
+    items: [],
+    Expansion_header: [
+      "BOE NO",
+      "BOE DATE",
+      "REGION",
+      "FOB VALUE",
+      "PORT CODE",
+      "BOE Balance Amount",
+      "Freight Charges"
+    ],
+    Expansion_header2: [
+      "TT DATE",
+      "TT USD",
+      "Payment Date",
+      "Amount",
+      "Currency",
+      "CCY Rate",
+      "INR Amount",
+      "ORM REF NUMBER/ID",
+      "TOTAL DEDUCTIONS/DAMGES/USD",
+      "FINAL AMOUNT - USD",
+      "DEBIT NOTE STATUS",
+      "STATUS OF BOE SUBMISSION IN BANK"
+    ],
+    Expansion_Items: [],
+    Expansion_Items2: [],
+    Objectkeys: [],
+    ExpansionKeys: [],
+    ExpansionKeys2: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-2",
+      "col-td-th-1"
+    ],
+    eventId: 1
+  }
+
+  EDIT_FORM_DATA: any = {
+    date: "",
+    sbno: "",
+    buyerName: "",
+    BankName: "",
+    currency: "",
+    amount: "",
+    billNo: "",
+    BalanceAvail: "",
+  }
+
   constructor(
     @Inject(PLATFORM_ID) public platformId,
     private formBuilder: FormBuilder,
@@ -208,28 +275,26 @@ export class PipoDocumentsComponent implements OnInit {
       this.USER_DATA = user;
       console.log("this.USER_DATA", this.USER_DATA)
     });
-    this.documentService.getBoe(1).subscribe(
-      (res: any) => {
-        console.log(res), (this.item4 = res.data);
-        console.log('data', this.item4);
-      },
+    this.documentService.getBoe(1).subscribe((res: any) => {
+      console.log(res), (this.item4 = res.data);
+      console.log('data', this.item4);
+    },
       (err) => console.log(err)
     );
 
     if (this.id) {
-      this.documentService.getPipo().subscribe(
-        (res: any) => {
-          console.log('Data fetched successfully', res);
-          this.item = res.data;
-          console.log(this.item);
-          this.pipoDataService.setPipoData(res.data, 'import');
-          this.pipoDataService.pipo$.subscribe((data) => {
-            for (let value of data) {
-              this.item1.push(value);
-              this.mergeBoe();
-            }
-          });
-        },
+      this.documentService.getPipo().subscribe((res: any) => {
+        console.log('Data fetched successfully', res);
+        this.item = res.data;
+        console.log(this.item);
+        this.pipoDataService.setPipoData(res.data, 'import');
+        this.pipoDataService.pipo$.subscribe((data) => {
+          for (let value of data) {
+            this.item1.push(value);
+            this.mergeBoe();
+          }
+        });
+      },
         (err) => console.log(err)
       );
 
@@ -246,27 +311,26 @@ export class PipoDocumentsComponent implements OnInit {
         }
       );
     } else {
-      this.documentService.getPipo().subscribe(
-        (res: any) => {
-          console.log('Data fetched successfully', res);
-          this.item = res.data;
-          console.log(this.item);
-          this.pipoDataService.setPipoData(res.data, 'import');
-          this.pipoDataService.pipo$.subscribe((data) => {
-            for (let value of data) {
-              this.item1.push(value);
-              this.mergeBoe();
-            }
-          });
-        },
+      this.documentService.getPipo().subscribe((res: any) => {
+        console.log('Data fetched successfully', res);
+        this.item = res.data;
+        console.log(this.item);
+        this.pipoDataService.setPipoData(res.data, 'import');
+        this.pipoDataService.pipo$.subscribe((data) => {
+          for (let value of data) {
+            this.item1.push(value);
+            this.mergeBoe();
+          }
+          this.PIPOTable(this.item1);
+        });
+      },
         (err) => console.log(err)
       );
 
-      this.userService.getBene(1).subscribe(
-        (res: any) => {
-          (this.benneDetail = res.data),
-            console.log('Benne Detail', this.benneDetail);
-        },
+      this.userService.getBene(1).subscribe((res: any) => {
+        (this.benneDetail = res.data),
+          console.log('Benne Detail', this.benneDetail);
+      },
         (err) => console.log('Error', err)
       );
     }
@@ -368,15 +432,12 @@ export class PipoDocumentsComponent implements OnInit {
   }
 
   getTransactions(selectedRowValues) {
-    this.documentService
-      .getTask({ pi_poNo: selectedRowValues, file: 'advance' })
-      .subscribe(
-        (res: any) => {
-          this.allTransactions = res.task;
-          console.log('ALL TRANSACTIONS', this.allTransactions);
-        },
-        (err) => console.log(err)
-      );
+    this.documentService.getTask({ pi_poNo: selectedRowValues, file: 'advance' }).subscribe((res: any) => {
+      this.allTransactions = res.task;
+      console.log('ALL TRANSACTIONS', this.allTransactions);
+    },
+      (err) => console.log(err)
+    );
   }
 
   toggleClick(a) {
@@ -492,6 +553,70 @@ export class PipoDocumentsComponent implements OnInit {
     );
   }
 
+  getInvoicesNew(data:any,panel:any) {
+    if (data!=null && data!=undefined) {
+      console.log(this.item3[data?.index].pi_poNo);
+      this.showInvoice = true;
+      this.router.navigate([
+        'home/pipo-doc',
+        {
+          id: this.item3[data?.index].pi_poNo,
+          page: 'details',
+          index: data?.index,
+          pipo_id: this.item3[data?.index]._id
+        },
+      ]);
+      console.log('SELECTED', this.item3[data?.index]);
+      console.log('INDEX', data?.index);
+      console.log(this.item3[data?.index].doc);
+      this.pipoData = this.item3[data?.index];
+      this.payTerm = this.pipoData.paymentTerm;
+      console.log(this.pipoData, 'payment check');
+      console.log(this.pipoData.paymentTerm);
+      this.documentType = this.pipoData.document;
+      this.lastIndex = data?.index;
+      this.pipoNo = this.item3[data?.index].pi_poNo;
+      this.beneValue = this.pipoData.benneName;
+      this.docTog = false;
+      this.buttonToggle = false;
+      this.buttonToggle1 = false;
+      this.buyer = false;
+      this.letterToggle = false;
+      this.uploadIsurance = false;
+      if (this.pipoData.document == 'PO') {
+        this.pipourl1 = this.item3[data?.index].doc1;
+      } else if (this.pipoData.document == 'PI') {
+        this.pipourl1 = this.item3[data?.index].doc;
+      }
+  
+      this.file1 = this.item3[data?.index].file;
+      this.id = this.item3[data?.index]._id;
+  
+      //this.docu = this.item3[data?.index].doc;
+      this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.item3[data?.index].doc
+      );
+  
+      this.z = this.payTerm.length;
+      console.log(this.z);
+      if (this.payTerm.length > 1) {
+        console.log('1');
+        this.i = 1;
+        for (let j = 1; j < this.payTerm.length; j++) {
+          this.onAddCourse(1);
+        }
+      }
+      panel?.displayShow
+      return (
+        (this.selectedRow = this.item3[data?.index]),
+        (this.showInvoice = true),
+        (this.tableWidth = '30%'),
+        (this.greaterAmount = parseInt(this.selectedRow.amount))
+      );
+    }
+    return null;
+  }
+  
   pipoClick() {
     console.log('upload');
     this.router.navigate(['home/upload', { file: 'import', document: 'pipo' }]);
@@ -931,14 +1056,6 @@ export class PipoDocumentsComponent implements OnInit {
       );
   }
 
-
-  viewpdf(a) {
-    this.viewData = ''
-    setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
-    }, 200);
-  }
-
   private getDismissReason(reason: any): string {
 
     if (reason === ModalDismissReasons.ESC) {
@@ -948,6 +1065,130 @@ export class PipoDocumentsComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  PIPOTable(data: any) {
+    this.FILTER_VALUE_LIST_NEW['items'] = [];
+    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
+    this.removeEmpty(data).then(async (newdata: any) => {
+      await newdata?.forEach(async (element) => {
+        let boedata: any = [];
+        (element?.boeRef != 'NF' ? element?.boeRef : [{
+          BOENO: "NF",
+          BOEDATE: "NF",
+          REGION: "NF",
+          FOBVALUE: "NF",
+          PORTCODE: "NF",
+          BOEBalanceAmount: "NF",
+          FreightCharges: "NF"
+
+        }])?.forEach(boeelement => {
+          boedata.push({
+            BOENO: boeelement['boeNumber'],
+            BOEDATE: boeelement['boeDate'],
+            REGION: boeelement['origin'],
+            FOBVALUE: boeelement['invoiceAmount'],
+            PORTCODE: boeelement['iecCode'],
+            BOEBalanceAmount: boeelement['balanceAmount'],
+            FreightCharges: boeelement['freightAmount']
+          })
+        });
+        let advice: any = [];
+        (element?.AdviceRef != 'NF' ? element?.AdviceRef : [{
+          TTDATE: 'NF',
+          TTUSD: 'NF',
+          PaymentDate: 'NF',
+          Amount: "NF",
+          Currency: "NF",
+          CCYRate: "NF",
+          INRAmount: "NF",
+          ORMREFNUMBERID: "NF",
+          TOTALDEDUCTIONSDAMGESUSD: "NF",
+          FINALAMOUNTUSD: "NF",
+          DEBITNOTESTATUS: "NF",
+          STATUSOFBOESUBMISSIONINBANK: "NF",
+        }])?.forEach(adviceelement => {
+          advice.push({
+            TTDATE: adviceelement['date'],
+            TTUSD: adviceelement['amount'],
+            PaymentDate: adviceelement['amount'],
+            Amount: adviceelement['amount'],
+            Currency: adviceelement['currency'],
+            CCYRate: adviceelement['amount'],
+            INRAmount: adviceelement['amount'],
+            ORMREFNUMBERID: adviceelement['billNo'],
+            TOTALDEDUCTIONSDAMGESUSD: adviceelement['amount'],
+            FINALAMOUNTUSD: adviceelement['amount'],
+            DEBITNOTESTATUS: adviceelement['amount'],
+            STATUSOFBOESUBMISSIONINBANK: adviceelement['amount'],
+          })
+        });
+        await this.FILTER_VALUE_LIST_NEW['items'].push({
+          DATE: element['date'],
+          INVOICENUMBER: element['pi_poNo'],
+          INVOICEDATE: element['purchasedate'],
+          SELLERNAMES: element['benneName'],
+          INVOICECURRENCY: element['currency'],
+          INVOICEVALUEUSD: element['amount'],
+          BRANCH: element['location'],
+          COMMODITY: element['commodity'],
+          BALANCEIFANY: element['balanceAmount']!='-1'?element['balanceAmount']:element['amount'],
+          Expansion_Items: boedata,
+          Expansion_Items2: advice,
+          isExpand: false,
+          isExpand2: false,
+          disabled: element['deleteflag'] != '-1' ? false : true,
+          RoleType: this.USER_DATA?.result?.RoleCheckbox
+        })
+      });
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'isExpand2')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items2')
+      this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
+      this.FILTER_VALUE_LIST_NEW['ExpansionKeys2'] = await this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'].length != 0 ? Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'][0]) : []
+      console.log(this.FILTER_VALUE_LIST_NEW, 'this.FILTER_VALUE_LIST_NEW')
+    });
+  }
+
+  async removeEmpty(data: any) {
+    await data.forEach(element => {
+      for (const key in element) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+          element[key] = 'NF'
+        }
+      }
+    });
+    return await new Promise(async (resolve, reject) => { await resolve(data) });
+  }
+
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+
+  viewpdf(a) {
+    this.viewData = ''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.item3[a?.index]['doc']);
+    }, 200);
+  }
+
+  toSaveNew(data, id, EditSummaryPagePanel: any) {
+    console.log(data);
+    this.userService.updatePipo(data, id).subscribe((data) => {
+      console.log(data);
+      this.toastr.success('PI/PO Row Is Updated Successfully.');
+      this.ngOnInit();
+      EditSummaryPagePanel?.displayHidden
+    }, (error) => {
+      console.log('error');
+    });
   }
 
   toSave(data, index) {
@@ -964,9 +1205,21 @@ export class PipoDocumentsComponent implements OnInit {
     );
   }
 
-  toEdit(index) {
-    this.optionsVisibility[index] = true;
-    this.toastr.warning('PI/PO Is In Edit Mode');
+  SELECTED_VALUE: any = '';
+  toEdit(data: any) {
+    this.SELECTED_VALUE = '';
+    this.SELECTED_VALUE = this.item3[data?.index];
+    this.EDIT_FORM_DATA = {
+      date: this.SELECTED_VALUE['date'],
+      sbno: this.SELECTED_VALUE['sbno'],
+      buyerName: this.SELECTED_VALUE['buyerName'],
+      BankName: this.SELECTED_VALUE['BankName'],
+      currency: this.SELECTED_VALUE['currency'],
+      amount: this.SELECTED_VALUE['amount'],
+      billNo: this.SELECTED_VALUE['billNo'],
+      BalanceAvail: this.SELECTED_VALUE['BalanceAvail'] != undefined ? this.SELECTED_VALUE['BalanceAvail'] : this.SELECTED_VALUE['amount'],
+    }
+    this.toastr.warning('PI/PO Row Is In Edit Mode');
   }
 
   exportToExcel() {
@@ -978,15 +1231,17 @@ export class PipoDocumentsComponent implements OnInit {
     xlsx.writeFile(wb, 'Import -pipo.xlsx');
   }
 
-  handleDelete(id, index: any) {
-    console.log(id, index, 'dfsfhsfgsdfgdss');
+  handleDelete(data: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
-    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, { maxWidth: "400px", data: dialogData });
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", dialogResult)
+      console.log("---->", this.item3[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], id, index)
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.item3[data?.index]?._id, this.item3[data?.index])
       }
     });
   }

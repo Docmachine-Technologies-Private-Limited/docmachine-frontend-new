@@ -160,13 +160,6 @@ body {
     color: #0a3049;
 }
 
-.middle_datatable table tr td {
-    font-size: 11px !important;
-    padding: 3px 10px;
-    color: #777;
-    font-family: Poppins, sans-serif;
-    font-weight: 500;
-}
 
 .content {
     min-height: inherit !important;

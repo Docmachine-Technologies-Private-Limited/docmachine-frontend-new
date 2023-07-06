@@ -2,15 +2,6 @@
     font-family: "Poppins", sans-serif;
 }
 
-// .fa-circle {
-//     font-size: 24px;
-//     color: #dfd9df;
-//     margin-left: 34px;
-// }
-// .fa-check-circle{
-//     font-size: 22px;
-//     color: #49A2D7;
-// }
 .arrow {
     display: inline-block;
     width: 7px;
@@ -2549,8 +2540,50 @@ table {
     color: #999999;
     margin: 0 11px;
 }
-.none{
+
+.none {
     pointer-events: none;
     opacity: .7;
-  }
-  
+}
+
+.content-wrap {
+    margin: auto;
+}
+
+.import_export_sec {
+    margin: auto;
+    margin-left: 0;
+}
+
+.filter_section_top {
+    display: grid;
+    width: 99%;
+    background-color: #f6f6f6;
+    margin: 10px auto;
+    border-radius: 10px;
+    box-shadow: 0 0 2px 2px #dbdbdb;
+    padding-right: 20px;
+}
+
+.middle_datatable .support {
+    height: calc(100vh - 159px);
+}
+
+.table-padding {
+    background-color: transparent !important;
+    box-shadow: none;
+}
+
+.content-wrap.scroll-bar-main {
+    overflow: hidden;
+    padding: 0;
+}
+
+.heading_common_tag {
+    display: inline-block;
+    width: 100%;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #333;
+    margin-left: 20px;
+}

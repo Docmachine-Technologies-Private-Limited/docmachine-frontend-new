@@ -1,11 +1,12 @@
 <div class="content-wrap pb-2 scroll-bar-main">
-    <div class="import_export_sec">
-        <h3 class="heading_common_tag">Import Commercial Invoices</h3>
-    </div>
     <main id="content" class="content table-padding" role="main">
         <div class="filter_section_top">
-            <div class="row">
-                <div class="col-md-4 col-sm-4 col-12"></div>
+            <div class="row m-0">
+                <div style="margin: auto;margin-left: 0;">
+                    <div class="import_export_sec">
+                        <h3 class="heading_common_tag">Commercial Invoices</h3>
+                    </div>
+                </div>
                 <div class="col-md-8 col-sm-8 col-12">
                     <div class="filter_right_new padding_new_top">
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
@@ -74,9 +75,7 @@
                                 <i></i>
                             </div>
                         </div>
-                        <button class="upload-button btn btn-success"
-                            [disabled]="this.USER_DATA?.result?.Role_Type!='Approver'? false : true"
-                            (click)="newDest()">
+                        <button class="upload-button btn btn-success" (click)="newDest()">
                             <span class="add_icon"></span> ADD NEW
                         </button>
                     </div>
@@ -84,7 +83,13 @@
             </div>
         </div>
         <div class="analytics">
-            <div style="width: 100%" class="analytics_top" #commercial>
+            <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
+            [items]="this.FILTER_VALUE_LIST_NEW?.items"
+            [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
+            [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewpdf($event)"
+            (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
+        </custom-expansion-panel>
+            <!-- <div style="width: 100%" class="analytics_top" #commercial>
                 <div style="width: 100%" class="row">
                     <div class="" id="container">
                         <section class="middle_datatable">
@@ -92,13 +97,12 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr class="table-tr">
-                                            <th scope="col" class="col-td-th-3">DATE</th>
+                                            <th scope="col" class="col-td-th-3"><span class="pl-3"
+                                                    style="margin-left: 9px;">DATE</span></th>
                                             <th scope="col" class="col-td-th-3">PI/PO No.</th>
+                                            <th scope="col" class="col-td-th-3">SB No.</th>
                                             <th scope="col" class="col-td-th-3">Commercial Invoice No.</th>
-                                            <th scope="col" class="col-td-th-3">Beneficiary Name</th>
-                                            <th scope="col" class="col-td-th-3">Advance No.</th>
-                                            <th scope="col" class="col-td-th-3">Advance Currency</th>
-                                            <th scope="col" class="col-td-th-3">Advance Amount</th>
+                                            <th scope="col" class="col-td-th-3">Buyer Name</th>
                                             <th scope="col" class="col-td-th-3">Action</th>
                                         </tr>
                                     </thead>
@@ -108,6 +112,7 @@
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
                                             <td class="col-td-th-3">{{ data.commercialDate }}</td>
                                             <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
+                                            <td class="col-td-th-3">{{data.sbNo}}</td>
                                             <td class="col-td-th-3">
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.commercialNumber}}
@@ -118,10 +123,8 @@
                                                         [(ngModel)]="data.commercialNumber">
                                                 </div>
                                             </td>
+
                                             <td class="col-td-th-3">{{data.buyerName}}</td>
-                                            <td class="col-td-th-3">{{data.AdvanceNo}}</td>
-                                            <td class="col-td-th-3">{{data.AdvanceCurrency}}</td>
-                                            <td class="col-td-th-3">{{data.AdvanceAmount}}</td>
                                             <td class="col-td-th-3">
                                                 <a title="view" class="PopupOpen" popup-close="VIEW_DOCUMENTS" (click)="viewpdf(data)"><i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS"
                                                     aria-hidden="true"></i></a>
@@ -138,21 +141,82 @@
                                                 </button>
                                             </td>
                                         </tr>
+
                                     </tbody>
                                 </table>
                             </div>
                         </section>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </main>
 </div>
-
 <app-custom-model [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
-    id="VIEW_DOCUMENTS" name="Shipping Bill">
+    id="PDF_VIEW" name="Commercial Invoices">
     <div class="p-2">
-        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Shipping Bill" [src]="viewData" width="100%"
+        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Commercial Invoices" [src]="viewData" width="100%"
         height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>
+
+<app-custom-model *ngIf="this.SELECTED_VALUE!=''"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'63vw !important'}" class="p-2 mt-2"
+    id="EditSummaryPage" [name]="'Commercial Invoices Update || Commercial Invoices No. : '+this.SELECTED_VALUE?.commercialNumber"
+    #EditSummaryPagePanel>
+    <div class="ml-0 p-3 col-12">
+        <div class="container-fluid m-auto p-0">
+            <div class="content_white_background" style="height: auto;">
+                <main id="content" class="table-padding" role="main" style="border-radius: 10px;">
+                    <div class="new_document_list1">
+                        <div class="d-flex col-12 p-0 pt-3" id="FromClientRequest" style="flex-direction: column;">
+                            <div class="row col-12 mt-0 p-0">
+                                <div class="row col-12 p-0">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">DATE</label>
+                                        <ng-custom-input type="date" [(ngInput)]="this.EDIT_FORM_DATA.commercialDate"
+                                            placeHolderText="O R DATE"></ng-custom-input>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Commercial Invoice No.</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.commercialNumber"
+                                            placeHolderText="Commercial Invoice No."></ng-custom-input>
+                                    </div>
+                                </div>
+                                <div class="row col-12 p-0">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Advance No.</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.AdvanceAmount"
+                                            placeHolderText="Advance No."></ng-custom-input>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Advance Currency</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.AdvanceCurrency"
+                                            placeHolderText="Advance Currency"></ng-custom-input>
+                                    </div>
+                                </div>
+                                <div class="row col-12 p-0">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Advance Amount</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.AdvanceAmount"
+                                            placeHolderText="Advance Amount"></ng-custom-input>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Beneficiary Name</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.buyerName"
+                                            placeHolderText="Beneficiary Name"></ng-custom-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-12 mt-0 p-0 pl-2 pb-2">
+                                <button class="btn btn-primary"
+                                    (click)="toSaveNew(this.EDIT_FORM_DATA,this.SELECTED_VALUE?._id,EditSummaryPagePanel)">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
     </div>
 </app-custom-model>

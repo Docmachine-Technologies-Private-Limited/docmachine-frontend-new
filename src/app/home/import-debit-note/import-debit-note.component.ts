@@ -19,7 +19,7 @@ import * as data1 from '../../currency.json';
   styleUrls: ['./import-debit-note.component.scss']
 })
 export class ImportDebitNoteComponent implements OnInit {
-  @ViewChild('importdebitnotes', { static: false }) importdebitnotes: ElementRef;
+  @ViewChild('debitnotes', { static: false }) debitnotes: ElementRef;
   public item: any;
   public item1: any = [];
   public viewData: any;
@@ -28,8 +28,8 @@ export class ImportDebitNoteComponent implements OnInit {
   public pipoData: any;
   public id: any;
   public item2: any;
-  filtervisible: boolean = false;
   USER_DATA: any = [];
+  filtervisible: boolean = false
   FILTER_VALUE_LIST: any = [];
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
@@ -38,6 +38,40 @@ export class ImportDebitNoteComponent implements OnInit {
     Currency: [],
     DATE: []
   };
+
+  FILTER_VALUE_LIST_NEW: any = {
+    header: [
+      "Pipo No.",
+      "DATE",
+      "D N No.",
+      "D N Amount",
+      "CURRENCY",
+      "Beneficiary Name",
+      "Action"],
+    items: [],
+    Expansion_header: [],
+    Expansion_Items: [],
+    Objectkeys: [],
+    ExpansionKeys: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1"
+    ],
+    eventId: ''
+  }
+
+  EDIT_FORM_DATA: any = {
+    date: '',
+    debitNoteNumber: '',
+    totalDebitAmount: '',
+    currency: '',
+    buyerName: '',
+  }
 
   constructor(
     private documentService: DocumentService,
@@ -50,9 +84,9 @@ export class ImportDebitNoteComponent implements OnInit {
     public wininfo: WindowInformationService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
     public dialog: MatDialog,
+
   ) {
   }
-
   async ngOnInit() {
     this.FILTER_VALUE_LIST = [];
     this.wininfo.set_controller_of_width(270, '.content-wrap')
@@ -71,9 +105,11 @@ export class ImportDebitNoteComponent implements OnInit {
             if (this.ALL_FILTER_DATA['PI_PO_No'].includes(value?.currency) == false) {
               this.ALL_FILTER_DATA['PI_PO_No'].push(this.getPipoNumbers(value));
             }
-            if (this.ALL_FILTER_DATA['Buyer_Name'].includes(value?.buyerName[0]) == false) {
-              this.ALL_FILTER_DATA['Buyer_Name'].push(value?.buyerName[0]);
-            }
+            value?.buyerName.forEach(element => {
+              if (this.ALL_FILTER_DATA['Buyer_Name'].includes(element) == false && element != '' && element != undefined) {
+                this.ALL_FILTER_DATA['Buyer_Name'].push(element);
+              }
+            });
             if (this.ALL_FILTER_DATA['D_N_No'].includes(value?.debitNoteNumber) == false) {
               this.ALL_FILTER_DATA['D_N_No'].push(value?.debitNoteNumber);
             }
@@ -82,14 +118,94 @@ export class ImportDebitNoteComponent implements OnInit {
             }
           }
         }
+        this.DebitNoteTable(this.item1)
         console.log(res, 'yuyuyuyuyuyuyuuy')
       },
       (err) => console.log(err)
     );
 
   }
+
+  DebitNoteTable(data: any) {
+    this.FILTER_VALUE_LIST_NEW['items'] = [];
+    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
+    this.removeEmpty(data).then(async (newdata: any) => {
+      await newdata?.forEach(async (element) => {
+        await this.FILTER_VALUE_LIST_NEW['items'].push({
+          PipoNo: this.getPipoNumber(element['pipo']),
+          date: element['date'],
+          debitNoteNumber: element['debitNoteNumber'],
+          DebitAmount: element['totalDebitAmount'],
+          currency: element['currency'],
+          buyerName: element['buyerName'],
+          isExpand: false,
+          disabled: element['deleteflag'] != '-1' ? false : true,
+          RoleType: this.USER_DATA?.result?.RoleCheckbox
+        })
+      });
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+    });
+  }
+
+  async removeEmpty(data: any) {
+    await data.forEach(element => {
+      for (const key in element) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+          element[key] = 'NF'
+        }
+      }
+    });
+    return await new Promise(async (resolve, reject) => { await resolve(data) });
+  }
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+   (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+  getPipoNumbers(data) {
+    return data.pipo.map((x) => {
+      return x.pi_poNo;
+    });
+  }
+
+  openDebitNote(content) {
+    this.modalService
+      .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
+  }
+
+  private getDismissReason(reason: any): string {
+
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  viewDN(a) {
+    this.viewData = ''
+    setTimeout(() => {
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['doc']);
+    }, 200);
+  }
+
+
   filter(value, key) {
-    this.FILTER_VALUE_LIST = this.item1.filter((item) => item[key].indexOf(value) != -1);
+    this.FILTER_VALUE_LIST = this.item1.filter((item: any) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length == 0) {
       this.FILTER_VALUE_LIST = this.item1;
     }
@@ -97,53 +213,69 @@ export class ImportDebitNoteComponent implements OnInit {
   resetFilter() {
     this.FILTER_VALUE_LIST = this.item1;
   }
-
-  exportToExcel() {
-    const ws: xlsx.WorkSheet =
-      xlsx.utils.table_to_sheet(this.importdebitnotes.nativeElement);
-    const wb: xlsx.WorkBook = xlsx.utils.book_new();
-    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
-    xlsx.writeFile(wb, 'importdebitnotes.xlsx');
-  }
-
-
-  newDebit() {
-    console.log('upload');
-    this.sharedData.changeretunurl('home/importDebit')
-    this.router.navigate(['home/upload', { file: 'import', document: 'debitNote' }]);
+  onclick() {
+    this.filtervisible = !this.filtervisible
   }
 
   toSave(data, index) {
     this.optionsVisibility[index] = false;
     console.log(data);
-    this.documentService.updateDebit(data, data._id).subscribe(
-      (data) => {
-        console.log('king123');
-        this.toastr.success('Debit Note Row Is Updated Successfully.');
-
-      },
-      (error) => {
-        // this.toastr.error('Invalid inputs, please check!');
-        console.log('error');
-      }
-    );
-
-
+    this.documentService.updateDebit(data, data._id).subscribe((data) => {
+      console.log('king123');
+      this.toastr.success('Debit Note Row Is Updated Successfully.');
+    }, (error) => {
+      console.log('error');
+    });
   }
 
-  toEdit(index) {
-    this.optionsVisibility[index] = true;
+  toSave2(data) {
+    console.log(data);
+    this.documentService.updateDebit(data, data._id).subscribe((data) => {
+      this.toastr.success('Debit Note Row Is Updated Successfully.');
+    }, (error) => {
+      console.log('error');
+    });
+  }
+
+  toSaveNew(data, id, EditSummaryPagePanel: any) {
+    console.log(data);
+    this.documentService.updateDebit(data, id).subscribe((data) => {
+      console.log(data);
+      this.toastr.success('Debit Note Row Is Updated Successfully.');
+      this.ngOnInit();
+      EditSummaryPagePanel?.displayHidden
+    }, (error) => {
+      console.log('error');
+    });
+  }
+
+
+  EDIT_DATE: any = [];
+  SELECTED_VALUE: any = '';
+  toEdit(data: any) {
+    this.SELECTED_VALUE = '';
+    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.EDIT_FORM_DATA = {
+      date: this.SELECTED_VALUE['date'],
+      debitNoteNumber: this.SELECTED_VALUE['debitNoteNumber'],
+      totalDebitAmount: this.SELECTED_VALUE['totalDebitAmount'],
+      currency: this.SELECTED_VALUE['currency'],
+      buyerName: this.SELECTED_VALUE['buyerName'],
+    }
     this.toastr.warning('Debit Note Row Is In Edit Mode');
   }
-  handleDelete(id, index: any) {
-    console.log(id, index, 'dfsfhsfgsdfgdss');
+
+  handleDelete(data: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
-    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, { maxWidth: "400px", data: dialogData });
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", dialogResult)
+      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], id, index)
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
       }
     });
   }
@@ -174,40 +306,58 @@ export class ImportDebitNoteComponent implements OnInit {
     }
   }
 
-  getPipoNumbers(data) {
-    return data.pipo.map((x) => {
-      return x.pi_poNo;
+  newDebit() {
+    console.log('upload');
+    this.sharedData.changeretunurl('home/debit-note')
+    this.router.navigate(['home/upload', { file: 'export', document: 'debitNote' }]);
+  }
+
+  exportToExcel() {
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new DeditNoteFormat(this.FILTER_VALUE_LIST).getDeditNote());
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, 'debitnotes.xlsx');
+  }
+}
+
+class DeditNoteFormat {
+  data: any = [];
+  constructor(data: any) {
+    this.data = data;
+  }
+
+  getDeditNote() {
+    var temp: any = [];
+    this.data?.forEach(element => {
+      temp.push({
+        PipoNo: this.getPipoNumber(element['pipo']),
+        date: element['date'],
+        debitNoteNumber: element['debitNoteNumber'],
+        DebitAmount: element['totalDebitAmount'],
+        currency: element['currency'],
+        buyerName: this.getBuyerName(element['buyerName']),
+      })
     });
+    return temp;
+  }
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+   (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
   }
 
-  viewpdf(a) {
-    this.viewData = ''
-    setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['doc']);
-    }, 200);
+  getBuyerName(buyerName: any) {
+    let temp: any = [];
+    buyerName.forEach(element => {
+      temp.push(element);
+    });
+    return temp.join(',')
   }
 
-  openDebitNote(content) {
-    this.modalService
-      .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
+  ARRAY_TO_STRING(array, key) {
+    return array[key]?.join(',')
   }
 
-  private getDismissReason(reason: any): string {
-
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
 }

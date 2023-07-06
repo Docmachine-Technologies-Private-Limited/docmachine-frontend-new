@@ -1,11 +1,13 @@
 <div class="content-wrap pb-2 scroll-bar-main">
-    <div class="import_export_sec">
-        <h3 class="heading_common_tag">PIPO Documents</h3>
-    </div>
+   
     <main id="content" class="table-padding" role="main">
         <div class="filter_section_top">
-            <div class="row">
-                <div class="col-md-4 col-sm-4 col-12"></div>
+            <div class="row m-0">
+                <div style="margin: auto;margin-left: 0;">
+                    <div class="import_export_sec">
+                        <h3 class="heading_common_tag">PIPO Documents ({{this.FILTER_VALUE_LIST_NEW?.items?.length}})</h3>
+                    </div>
+                </div>
                 <div class="col-md-8 col-sm-8 col-12">
                     <div class="filter_right_new padding_new_top">
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
@@ -76,8 +78,22 @@
                 </div>
             </div>
         </div>
-        <div style="width: 100%" class="analytics" *ngIf="!showInvoice" #piposummery>
-            <div style="width: 100%;margin: auto;" class="row">
+        <div style="width: 100%" class="analytics" #piposummery>
+            <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="true"
+            [eventId]="this.FILTER_VALUE_LIST_NEW?.eventId"
+            [items]="this.FILTER_VALUE_LIST_NEW?.items"
+            [Expansionheader]="this.FILTER_VALUE_LIST_NEW?.Expansion_header"
+            [Expansionheader2]="this.FILTER_VALUE_LIST_NEW?.Expansion_header2"
+            [ExpansionKeys]="this.FILTER_VALUE_LIST_NEW?.ExpansionKeys"
+            [ExpansionKeys2]="this.FILTER_VALUE_LIST_NEW?.ExpansionKeys2"
+            [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
+            ExpansionTitle="Bill of Entry Details"
+            ExpansionTitle2="Outward Remittance Advice Details"
+            (event)="getInvoicesNew($event,OTHER_PANEL)"
+            [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewpdf($event)"
+            (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
+        </custom-expansion-panel>
+            <!-- <div style="width: 100%;margin: auto;" class="row">
                 <div class="" id="container">
                     <section class="middle_datatable">
                         <div class="widget-body p-0 support table-wrapper">
@@ -123,7 +139,6 @@
                                             {{data.date}}
                                         </td>
                                         <td class="sb-no" (click)="getInvoices(data, i)">{{data.pi_poNo}}</td>
-                                        <!-- <td class="col-td-th-3"> <span *ngIf='data.document == "PI"'> Proforma Invoice</span> <span *ngIf='data.document != "PI"'> Purchase Order</span></td> -->
                                         <td class="col-td-th-3">{{data.purchasedate}}</td>
                                         <td class="col-td-th-3">
                                             {{data.benneName}}
@@ -283,10 +298,21 @@
                         </div>
                     </section>
                 </div>
-            </div>
+            </div> -->
         </div>
+    </main>
+</div>
+<app-custom-model [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
+    id="PDF_VIEW" name="PI / PO Documents">
+    <div class="p-2">
+        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="PI / PO Documents" [src]="viewData" width="100%"
+        height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>
 
-
+<app-custom-model [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
+    id="OTHER_PANEL_OPEN" name="PI / PO Documents" #OTHER_PANEL>
+    <div class="p-2">
         <div *ngIf="showInvoice && !toggle">
             <div class="table_top">
                 <div style="width: 70%;border-right: 0.5px solid rgba(0, 0, 0, 0.2); margin-left: 40px;">
@@ -311,14 +337,11 @@
                     <span style="font-size: 16px; color: RGB(50, 62, 74);">{{pipoNo}}</span>
                 </div>
                 <div style="width: 100%; margin-right: 10%">
-                    <!-- <i style="font-size: 18px; color: rgb(227, 227, 227); margin-left: 10px; float: right; padding-top: 3px;"
-                        class="fas fa-plus-circle"></i> -->
                     <img src="./assets/circulplus.png" style=" margin-left: 10px; float: right; height:25px;
                         width:25px ;cursor: pointer;" alt="">
                     <span *ngFor="let data of item1 | slice: 0:3; let i = index" style="float: right; cursor: pointer; margin-left: 10px;"><img class="image"
                             src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="24px"
                             width="24px" /></span>
-                    <!-------style="padding-left: 1%" class="pc1"-->
                 </div>
                 <div style="margin-right: 8%">
                     <img src="../../../assets/cross.png" (click)="hide3()" style="width: 20px; height: 20px;
@@ -328,16 +351,12 @@
 
             <div class="p-8 bc">
                 <div class="side_document_list">
-                    <!---class="col-12 mb-lg ph-38"-->
                     <div id="profile" class="profile_class" *ngFor="let data of item1; let i = index" [ngClass]="lastIndex == i ? 'activeBtn' : ''" (click)="getInvoices(data, i)">
-                        <!----------class="row p-2 bb hhu"-->
                         <div class="" style="display: flex; padding-top: 10px;">
-                            <!-----------class="ph-10 fl"-->
                             <img class="image" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px" /><img class="image image2" src="./assets/images/cc1d1196dbafb374fe2d91e177dc16f8517532d6.png" height="30px" width="30px"
                             />
                         </div>
                         <div class="" style="width: 100%; padding: 3%">
-                            <!-----class="fr pt-2"-->
                             <span class="fl fs16" style="color: RGB(50, 62, 74); font-size: 16px;">{{ data.pi_poNo
                                 }}</span><span class="fr fs12" style="float: right; color: RGB(141, 151, 165); font-size: 12px;">
                                 {{ data.date }}</span>
@@ -345,16 +364,12 @@
                         </div>
                     </div>
                 </div>
-                <!-- People collaborated -->
-
-                <!-- Invoices -->
                 <div class="invoices_tab">
                     <div class="invoices_inner">
                         <div class="tabbed">
                             <input [attr.data-index]="1" type="radio" id="1" name="css-tabs" checked />
                             <input [attr.data-index]="2" type="radio" id="2" name="css-tabs" />
                             <input [attr.data-index]="3" type="radio" id="3" name="css-tabs" />
-                            <!-- <input [attr.data-index]="3" type="radio" id="3" name="css-tabs" /> -->
                             <ul class="tabs">
                                 <div>
                                     <ul class="tabs">
@@ -368,9 +383,6 @@
                                             <label for="3">
                                                 Transactions & Tasks</label>
                                         </li>
-                                        <!-- <li (click)="toggleStep1()" class="tab" [attr.data-index]="3">
-                                                                <label for="3">Transaction and Task</label>
-                                                            </li> -->
                                     </ul>
                                 </div>
                             </ul>
@@ -397,14 +409,11 @@
                                                 well
                                                 along with the Advance remmitance
                                                 transaction.</a>
-
                                         </div>
-
                                     </div>
                                     <div style="margin: 13px 0px 10px 30px; display: flex;">
                                         <div *ngFor="let pay of payTerm;">
                                             <div *ngIf='pay.type == "Direct Import"'>
-
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px;" (click)=openDoc(pay.type)>{{pay.type}}</button>
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px;" (click)=openDoc(pay.type)>Buyer’s Credit</button>
                                             </div>
@@ -412,12 +421,9 @@
 
                                                 <button class="button1" style="height: 39px !important; margin-left: 42px; padding: 0px 38px;" (click)=openDoc(pay.type)>Create {{pay.type}}</button>
                                             </div>
-
                                         </div>
-
                                     </div>
                                     <div *ngIf='buttonToggle1' style="margin: 13px 0px 10px 30px;">
-
                                         <div style="margin-left:10px" class="form-check">
                                             <label class="form-check-label">
                                                 <input class="form-check-input" type="checkbox"
@@ -432,9 +438,7 @@
                                         <button class="button2" style="height: 30px !important; margin-right: 5px;" (click)='openSubDoc("usance")'>Usance</button>
                                         <button class="button2" style="height: 30px !important; margin-right: 5px;" (click)='openSubDoc("sight")'>Sight</button>
                                     </div>
-                                    <div *ngIf='letterToggle' style="margin: 10px 0px 10px 30px;">
-
-                                        Do you have LC Issuance Copy? <br>
+                                    <div *ngIf='letterToggle' style="margin: 10px 0px 10px 30px;">Do you have LC Issuance Copy? <br>
                                         <button class="button2" style="height: 30px !important; margin-right: 5px;" (click)='openSubLetter("yes")'>Yes</button>
                                         <button class="button2" style="height: 30px !important; margin-right: 5px;" (click)='openSubLetter("no")'>No, Create</button>
 
@@ -454,15 +458,9 @@
                                         <form method="POST" style="margin-top: 10px; margin-bottom: 10px;">
                                             <div>
                                                 <input class="customfile1" (error)="onUploadError($event)" placeholder="Choose File" (init)="onUploadInit($event)" (success)="onUploadSuccess($event)" *ngIf="type === 'directive'" [dropzone]="config1">
-                                                <!--<p class="choose">Choose File</p> -->
-
                                             </div>
-
-
                                         </form>
                                     </div>
-
-
                                 </div>
 
                                 <div style="border-bottom: 1px solid RGBA(0, 0, 0, 0.12);">
@@ -798,30 +796,6 @@
                                             <button class="button1" (click)='viewClick("lcUsance"); open(content)'>View</button>
                                         </div>
                                     </div>
-                                    <!-- <div *ngIf='pipoData.deliveryOrder'
-                                        style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 28px; height: 30px;">
-                                        &nbsp;
-                                    </div>
-                                    <div *ngIf='pipoData.deliveryOrder' style="display: flex;">
-                                        <div style="align-items: center; width: 4%; margin-left: 20px;">
-                                            <i class="fas fa-check-circle" style="color: #49A2D7;"></i>
-                                        </div>
-                                        <div style="align-items: center; width: 68%;">
-                                            <p
-                                                style="color: RGBA(0, 0, 0, 0.84); font-size: 14px; margin-bottom: -4px;">
-                                                Delivery Order Uploaded</p>
-                                            <p style="color: RGBA(0, 0, 0, 0.54); font-size: 14px; margin-bottom: 5px;">
-                                                Submitted
-                                                on 13th
-                                                Oct 2021</p>
-
-                                        </div>
-                                        <div style="align-items: center; width: 14%;">
-                                            <button class="button1"
-                                                (click)='viewClick("commercialInvoice")'>View</button>
-                                        </div>
-                                    </div> -->
-
                                     <div *ngIf='pipoData.deliveryOrder' style="border-left: 1px solid RGBA(0, 0, 0, 0.12);margin: 0px 0px 10px 63px; height: 32px;">
                                         &nbsp;
                                     </div>
@@ -1011,45 +985,9 @@
                                                         {{course.amount}}</td>
                                                 </tr>
                                             </table>
-                                            <!-- <div *ngFor="let course of payTerm; let i = index"
-                                                style="display: flex; margin-bottom: 10px;">
-                                                <div style="flex-direction:row; margin-right: 20px; width: 100px;">
-                                                    <span style="color: #707683; font-size: 14px;">Date</span> <br>
-                                                    <a class="h11">
-                                                        {{course.date}}</a>
-                                                </div>
-                                                <div
-                                                    style="flex-direction:row;border-radius: 5px; margin-right: 20px; width: 200px;">
-                                                    <span style="color: #707683; font-size: 14px;">Description</span>
-                                                    <br>
-                                                    <a
-                                                        style="outline: none; border: 1px solid #DEDEDE; width: 180px; border-radius: 5px; padding: 5px;">
-                                                        {{course.description}}</a>
-                                                </div>
-                                                <div
-                                                    style="flex-direction:row; margin-right: 20px; border-radius: 5px; width: 200px;">
-                                                    <span style="color: #707683; font-size: 14px;">Type</span> <br>
-
-                                                    <a
-                                                        style="outline: none; border: 1px solid #DEDEDE; width: 150px; border-radius: 5px; height: 30px; background-color: #E9E9E9; padding: 5px;">{{course.type}}</a>
-                                                </div>
-                                                <div
-                                                    style="flex-direction:row; margin-right: 20px; border-radius: 5px; width: 100px;">
-                                                    <span style="color: #707683; font-size: 14px;">Amount</span> <br>
-                                                    <a
-                                                        style="outline: none; border: 1px solid #DEDEDE; width: 80px; border-radius: 5px; padding: 5px;">{{course.amount}}</a>
-                                                </div>
-
-
-                                            </div> -->
                                         </div>
                                     </div>
-
-
-
                                 </div>
-
-
                             </div>
 
                             <!----------------ADD A DOCUMENT ----------------------------------------->
@@ -1064,47 +1002,12 @@
                                         <div style="width: 54%; font-size: 17px; padding-left: 30px; margin-left:20px; margin-top:25px; margin-bottom:20px; color: RGB(73, 162, 215);">
                                             Document
                                         </div>
-
-                                        <!-- <div style="background-color: #49A2D7;" class="customDropdown">
-                                            <span
-                                                style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
-                                                <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Attach a
-                                                Document</span>
-                                            <span class="dropIco"
-                                                style="margin-left: 5px; color: #ffffff !important;;"><i id="down3"
-                                                    class="fas fa-angle-down"></i>
-                                                <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                                            </span>
-                                            <div class="dropdown-content1" style="min-width: 220px; margin-left: 0px;">
-                                                //<p (click)='selectDoc("Shipping Bill")'><a>New Shipping Bill</a></p>
-                                                <p (click)='selectDoc("Bill of Entry")'><a>New Bill of Entry</a></p>
-                                                <p (click)='selectDoc("blCopy")'><a>New Airway Bill/BL Copy</a></p>
-                                                <p (click)='selectDoc("commercialInvoice")'><a>New Commercial
-                                                        Invoice</a></p>
-                                                <p (click)='selectDoc("creditNote")'><a>New Credit Note</a></p>
-                                                <p (click)='selectDoc("debitNote")'><a>New Debit Note</a></p>
-                                                <p (click)='selectDoc("agreement")'><a>Agreement</a></p>
-                                                <p (click)='selectDoc("lcCopy")'><a>Lc Copy</a></p>
-                                                <p (click)='selectDoc("deliveryOrder")'><a>Delivery Order</a></p>
-                                                <p (click)='selectDoc("insuranceCopy")'><a>Insurance Copy</a></p>
-                                                <p (click)='selectDoc("billOfExchange")'><a>Bill of Exchange</a></p>
-                                                <p (click)='selectDoc("tryPartyAgreement")'><a>Tri Party Agreement</a>
-                                                </p>
-                                                <p (click)='selectDoc("opinionReport")'><a>Opinion Report</a></p>
-                                                <p (click)='selectDoc("caCb")'><a>15 CA/CB</a></p>
-                                                <p (click)='selectDoc("caCertificate")'><a>CA Certificate</a></p>
-                                            </div>
-                                        </div>  -->
-
                                         <div class="customDropdown" style="width: 206px; height: 42px;float: right;margin-left: 172px;
                                      padding-top: 10px; background-color: #49A2D7;border: 1px solid #49A2D7 !important;border-radius: 5px;margin-top: 20px;
                                      margin-bottom: 20px;">
                                             <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
                                             <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Attach a
                                             Document</span>
-                                            <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
-                                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                                        </span> -->
                                             <span class="dropIco" style="margin-left: 10px;margin-top: 10px; color: #ffffff !important;"><i id="down3"
                                             class="fas fa-angle-down"></i>
                                          <i id="up3" style="display: none" class="fas fa-angle-up"></i>
@@ -1123,7 +1026,6 @@
                                                 <a style="min-width:100%;" (click)='selectDoc("caCb")'>15 CA/CB</a>
                                                 <a style="min-width:100%;" (click)='selectDoc("caCertificate")'>CA Certificate</a>
                                             </div>
-
                                         </div>
                                     </div>
                                     <div style="width: 100%; margin-left: 20px;">
@@ -1178,32 +1080,10 @@
                                     <div style="width: 54%; font-size: 17px; padding-left: 30px; margin-left:20px; margin-top:25px; margin-bottom:20px; color: RGB(73, 162, 215);">
                                         All Transactions
                                     </div>
-
-                                    <!-- <div style="background-color: #49A2D7;" class="customDropdown">
-                                        <span
-                                            style="color: #ffffff !important; padding-right: 5px; border-right: 1px solid #ffffff;">
-                                            <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Create New
-                                            Transaction</span>
-                                        <span class="dropIco" style="margin-left: 5px; color: #ffffff !important;;"><i
-                                                id="down3" class="fas fa-angle-down"></i>
-                                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                                        </span>
-                                        <div class="dropdown-content1" style="min-width: 220px; margin-left: 0px;">
-                                            <p (click)="openDoc('Advance Payment')"><a>Advance Outward Remittance</a>
-                                            </p>
-                                            <p (click)="openDoc('Direct Import')"><a>Direct Import Payment</a></p>
-                                            <p><a>Bill Under Collection</a></p>
-                                            <p><a>Buyers Credit Request</a></p>
-                                        </div>
-                                    </div>
-                                     -->
                                     <div class="customDropdown" style="width: 236px;height: 42px;float: right;margin-left: 142px;padding-top: 10px;background-color: #49A2D7;border: 1px solid #49A2D7 !important;border-radius: 5px;margin-top: 20px;margin-bottom: 20px;">
                                         <span style="color: #ffffff !important; padding-right: 5px; background-color: #49A2D7; border-right: 1px solid #ffffff;">
                                             <i style="margin-right: 5px;" class="fas fa-plus-circle"></i>Create New
                                             Transaction</span>
-                                        <!-- <span class="dropIco"><i id="down3" class="fas fa-angle-down"></i>
-                                            <i id="up3" style="display: none" class="fas fa-angle-up"></i>
-                                        </span> -->
                                         <span class="dropIco" style="margin-left: 10px;margin-top: 10px; color: #ffffff !important;"><i id="down3"
                                             class="fas fa-angle-down"></i>
                                          <i id="up3" style="display: none" class="fas fa-angle-up"></i>
@@ -1506,7 +1386,6 @@
                                         </div>
                                         <a *ngIf='z>1' (click)='removeAddress(i)'><i style="margin-top: 30px; "
                                                 class="fas fa-times"></i></a>
-
                                     </div>
                                 </div>
                                 <div class="row col-md-12" style="margin-top: 10px; margin-bottom: 10px;">
@@ -1516,19 +1395,10 @@
                                 </div>
                             </tr>
                         </div>
-
                         <button type="submit" class="button22">Update</button> <span class="button22" (click)='cancel()' style="margin-left: 20px;"> Cancel </span>
                     </div>
                 </form>
             </div>
         </div>
-
-    </main>
-</div>
-<app-custom-model [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
-    id="VIEW_DOCUMENTS" name="Shipping Bill">
-    <div class="p-2">
-        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Shipping Bill" [src]="viewData" width="100%"
-        height="500px"></app-pdf-viewer>
     </div>
 </app-custom-model>

@@ -1,18 +1,19 @@
 <div class="content-wrap pb-2 scroll-bar-main">
-    <div class="import_export_sec">
-        <h3 class="heading_common_tag">Import Debit Note Documents</h3>
-    </div>
     <main id="content" class="content table-padding" role="main">
         <div class="filter_section_top">
-            <div class="row">
-                <div class="col-md-4 col-sm-4 col-12"></div>
+            <div class="row m-0">
+                <div style="margin: auto;margin-left: 0;">
+                    <div class="import_export_sec">
+                        <h3 class="heading_common_tag">Debit Note Documents ({{this.FILTER_VALUE_LIST?.length}})</h3>
+                    </div>
+                </div>
                 <div class="col-md-8 col-sm-8 col-12">
                     <div class="filter_right_new padding_new_top">
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
                                 class="ex_icon"></span>Export</button>
                         <div class="filter_posit">
                             <button (click)="filter_Popup.style.display='block'" type="button"
-                                class="btn btn-secondary filter-popup"><span class="fi_icon"></span>Filter</button>
+                                class="btn btn-secondary"><span class="fi_icon"></span>Filter</button>
                             <div style="display: none;" class="bg-white filter_main_sec mt-2" #filter_Popup
                                 appFilterToggle>
                                 <form class="select_filter_options">
@@ -82,36 +83,35 @@
                                 <i></i>
                             </div>
                         </div>
-                        <button class="upload-button btn btn-success" [routerLink]="['/home/ImportDebit']">
+                        <button class="upload-button btn btn-success" [routerLink]="['/home/ExportDebit']">
                             <span class="add_icon"></span> ADD NEW
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="analytics">
-            <div style="width: 100%" class="analytics_top" #importdebitnotes>
-                <!-- *ngIf="!showInvoice" -->
+            <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
+                [items]="this.FILTER_VALUE_LIST_NEW?.items"
+                [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
+                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewDN($event)"
+                (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
+            </custom-expansion-panel>
+            <!-- <div style="width: 100%" class="analytics_top" #debitnotes>
                 <div style="width: 100%" class="row">
-                    <div style="width: 100%;" class="" id="container">
-                        <!-- *ngIf="!showInvoice" -->
+                    <div class="" id="container">
                         <section class="middle_datatable">
                             <div class="widget-body p-0 support table-wrapper">
-                                <table class="table table-hover">
-                                    <!-- *ngIf='pipo' -->
+                               <table class="table table-hover">
                                     <thead>
                                         <tr class="table-tr">
-                                            <!-- <th class="rect">
-                                          <img src="./assets/Rectangle-13.png" />
-                                      </th> -->
-                                            <th scope="col" class="col-td-th-3"><span class="pl-3"
-                                                    style="margin-left: 9px;">DATE</span></th>
+                                            <th scope="col" class="col-td-th-3">DATE</th>
                                             <th scope="col" class="col-td-th-3">PI/PO no.</th>
+                                            <th scope="col" class="col-td-th-3">CI no.</th>
                                             <th scope="col" class="col-td-th-3">D N No.</th>
                                             <th scope="col" class="col-td-th-3">D N Amount</th>
                                             <th scope="col" class="col-td-th-3">Currency</th>
-                                            <th scope="col" class="col-td-th-3">Beneficiary Name</th>
+                                            <th scope="col" class="col-td-th-3">Buyer Name</th>
                                             <th scope="col" class="col-td-th-3">Action</th>
                                         </tr>
                                     </thead>
@@ -119,51 +119,23 @@
                                         <tr class="table-tr" *ngFor="let data of this.FILTER_VALUE_LIST; let i = index"
                                             [ngClass]="this.AprrovalPendingRejectService.truefalse(data['deleteflag']=='0') ||
                                         this.AprrovalPendingRejectService.truefalse(this.USER_DATA?.result?.Role_Type!='Approver')">
-                                            <td class="col-td-th-3">{{ data.date }}</td>
-                                            <td class="col-td-th-3"> {{ getPipoNumbers(data) }} </td>
+                                            <td class="col-td-th-3" [innerHTML]="data.date"></td>
+                                            <td class="col-td-th-3" [innerHTML]="getPipoNumbers(data)"></td>
+                                            <td class="col-td-th-3" [innerHTML]="data.commercialNumber"></td>
+                                            <td class="col-td-th-3" [innerHTML]="data.debitNoteNumber"></td>
+                                            <td class="col-td-th-3" [innerHTML]="data.totalDebitAmount"></td>
+                                            <td class="col-td-th-3" [innerHTML]="data.currency"></td>
+                                            <td class="col-td-th-3" [innerHTML]="data.buyerName"></td>
                                             <td class="col-td-th-3">
-                                                <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.debitNoteNumber}}
-                                                </div>
-                                                <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="debitNoteNumber"
-                                                        type="text" placeholder="Debit Note Number"
-                                                        [(ngModel)]="data.debitNoteNumber">
-                                                </div>
-                                            </td>
-                                            <td class="col-td-th-3">
-                                                <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.totalDebitAmount}}
-                                                </div>
-                                                <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="totalDebitAmount"
-                                                        type="text" placeholder="Total Debit Amount"
-                                                        [(ngModel)]="data.totalDebitAmount">
-                                                </div>
-                                            </td>
-                                            <td class="col-td-th-3">
-                                                <div *ngIf="!optionsVisibility[i]">
-                                                    {{data.currency}}
-                                                </div>
-                                                <div *ngIf="optionsVisibility[i]">
-                                                    <input class="tblInput form-control" name="currency" type="text"
-                                                        placeholder="Currency" [(ngModel)]="data.currency">
-                                                </div>
-                                            </td>
-                                            <td class="col-td-th-3">{{data.buyerName}}</td>
-                                            <td class="col-td-th-3">
-                                                <a title="view" class="PopupOpen" popup-close="VIEW_DOCUMENTS" (click)="viewpdf(data)"><i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS"
+                                                <a title="view" class="PopupOpen" popup-close="VIEW_DOCUMENTS" (click)="viewDN(data)"><i class="fa fa-eye PopupOpen" popup-close="VIEW_DOCUMENTS"
                                                     aria-hidden="true"></i></a>
-                                                <button title="Save" class="savBtn bgnone" *ngIf="optionsVisibility[i]"
-                                                    (click)="toSave(data, i)"><i class="fa fa-floppy-o"
-                                                        aria-hidden="true"></i></button>
-                                                <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
-                                                    (click)="toEdit(i)"><i class="fa fa-pencil-square-o"
-                                                        aria-hidden="true"></i></button>
-                                                <button title="Edit" class="savBtn bgnone" *ngIf="!optionsVisibility[i]"
-                                                    (click)="handleDelete(data._id,i)"><a title="Delete"
-                                                        href="javascript:void(0)"><i class="fa fa-trash-o"
-                                                            aria-hidden="true"></i></a>
+                                                <button title="Edit" class="savBtn bgnone" 
+                                                    (click)="toEdit(i);edittable.style.display='flex'"><i
+                                                        class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                                <button title="Delete" class="savBtn bgnone"
+                                                     (click)="handleDelete(data._id,i)"><a
+                                                        title="Delete" href="javascript:void(0)"><i
+                                                            class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                 </button>
                                             </td>
                                         </tr>
@@ -173,15 +145,71 @@
                         </section>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </main>
 </div>
 
 <app-custom-model [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
-    id="VIEW_DOCUMENTS" name="Shipping Bill">
+    id="PDF_VIEW" name="Debit Note">
     <div class="p-2">
-        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Shipping Bill" [src]="viewData" width="100%"
-        height="500px"></app-pdf-viewer>
+        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Debit Note" [src]="viewData" width="100%"
+            height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>
+
+<app-custom-model modalbodyheight="55vh" *ngIf="this.SELECTED_VALUE!=''"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="60vh"
+    id="EditSummaryPage" [name]="'Debit Note Update || Debit Note No. : '+this.SELECTED_VALUE?.debitNoteNumber"
+    #EditSummaryPagePanel>
+    <div class="ml-0 p-3 col-12">
+        <div class="container-fluid m-auto p-0">
+            <div class="content_white_background" style="height: auto;">
+                <main id="content" class="table-padding" role="main" style="border-radius: 10px;">
+                    <div class="new_document_list1">
+                        <div class="d-flex col-12 p-0 pt-3" id="FromClientRequest" style="flex-direction: column;">
+                            <div class="row col-12 mt-0 p-0">
+                                <div class="row col-12 p-0">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">DATE</label>
+                                        <ng-custom-input type="date" [(ngInput)]="this.EDIT_FORM_DATA.date"
+                                            placeHolderText="SB DATE"></ng-custom-input>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Debit Note Number</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.debitNoteNumber"
+                                            placeHolderText="Debit Note Number"></ng-custom-input>
+                                    </div>
+                                </div>
+                                <div class="row col-12 p-0">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Debit Note Amount</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.totalDebitAmount"
+                                            placeHolderText="Debit Note Amount"></ng-custom-input>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Currency</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.currency"
+                                            placeHolderText="Currency"></ng-custom-input>
+                                    </div>
+                                </div>
+                                <div class="row col-12 p-0">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">BUYER NAME</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.buyerName"
+                                            placeHolderText="BUYER NAME"></ng-custom-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-12 mt-0 p-0 pl-2 pb-2">
+                                <button class="btn btn-primary"
+                                    (click)="toSaveNew(this.EDIT_FORM_DATA,this.SELECTED_VALUE?._id,EditSummaryPagePanel)">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
     </div>
 </app-custom-model>

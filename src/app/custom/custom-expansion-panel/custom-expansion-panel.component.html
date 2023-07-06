@@ -3,6 +3,7 @@
         <thead class="custom-expansion-thead" [ngClass]="{'thead-not-length':items.length==0}">
             <tr class="table-tr">
                 <th scope="col" class="col-td-th-0" *ngIf="this.Expansion==true">#</th>
+                <th scope="col" class="col-td-th-0" *ngIf="this.Expansion==true && this.Expansionheader2.length!=0">#</th>
                 <th scope="col" class="col-td-th-1" [ngClass]="this.TableHeaderClass[i]"
                     *ngFor="let item of header;let i=index">{{item}}</th>
             </tr>
@@ -11,27 +12,32 @@
             <div class="overflow-expansion-panel">
                 <custom-table-expansion-panel>
                     <div class="table-type" *ngFor="let item of items;let i=index"
-                        [ngClass]="{'table-active':item.isExpand==true}">
-                        <tr class="table-tr added-active custom-expansion-panel-tr" title="click arrow icon see more details..." (click)="TrClickEvent(item,i)">
-                            <td title="Data Show and Hide" scope="col" class="col-td-th-0"
-                                *ngIf="this.Expansion==true"
+                        [ngClass]="{'table-active':item?.isExpand==true || item?.isExpand2==true}">
+                        <tr class="table-tr custom-expansion-panel-tr"
+                            [ngClass]="{'added-active':item?.isExpand==true || item?.isExpand2==true}"
+                            title="click arrow icon see more details..." (click)="TrClickEvent(item,i)">
+                            <td title="Data Show and Hide" scope="col" class="col-td-th-0" *ngIf="this.Expansion==true"
                                 (click)="CollapseAll(items,'isExpand',i);item.isExpand=!item.isExpand;">
                                 <span *ngIf="item.isExpand==true" class="fa fa-chevron-up"></span>
                                 <span *ngIf="item.isExpand==false" class="fa fa-chevron-down"></span>
                             </td>
-                            <td scope="col" class="col-td-th-1" (click)="eventId!='' && i==eventId?TrClick(item,i):''" [ngClass]="this.TableHeaderClass[i]"
-                                *ngFor="let objectitem of this.Keys;let i=index">
+                            <td title="Data Show and Hide" scope="col" class="col-td-th-0" *ngIf="this.Expansion==true && this.Expansionheader2.length!=0"
+                                (click)="CollapseAll(items,'isExpand2',i);item.isExpand2=!item.isExpand2;">
+                                <span *ngIf="item.isExpand2==true" class="fa fa-chevron-up"></span>
+                                <span *ngIf="item.isExpand2==false" class="fa fa-chevron-down"></span>
+                            </td>
+                            <td scope="col" class="col-td-th-1" (click)="eventId!='' && j==eventId?TrClick(item,i):''"
+                                [ngClass]="this.TableHeaderClass[j]" *ngFor="let objectitem of this.Keys;let j=index">
                                 {{item[objectitem]}}</td>
                             <td scope="col" class="col-td-th-1"
                                 *ngIf="item.disabled==false && item.RoleType!='Approver' && this.ActionRequired==true">
-                                <a title="View" (click)="View(item,i)" class="PopupOpen"
-                                    popup-close="PDF_VIEW">
-                                    <i class="fa fa-eye PopupOpen" popup-close="PDF_VIEW"
-                                        aria-hidden="true"></i>
+                                <a title="View" (click)="View(item,i)" class="PopupOpen" popup-close="PDF_VIEW">
+                                    <i class="fa fa-eye PopupOpen" popup-close="PDF_VIEW" aria-hidden="true"></i>
                                 </a>
                                 <a title="Edit" popup-close="EditSummaryPage" (click)="Edit(item,i)"
                                     class="savBtn bgnone PopupOpen">
-                                    <i class="fa fa-pencil-square-o PopupOpen" popup-close="EditSummaryPage" aria-hidden="true"></i>
+                                    <i class="fa fa-pencil-square-o PopupOpen" popup-close="EditSummaryPage"
+                                        aria-hidden="true"></i>
                                 </a>
                                 <a title="Delete" (click)="Delete(item,i)" class="savBtn bgnone"><i
                                         class="fa fa-trash-o" aria-hidden="true"></i> </a>
@@ -61,11 +67,45 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="table-tr" *ngIf="ExpansionKeys.length!=0">
+                                            <tr class="table-tr" *ngIf="ExpansionKeys.length!=0 && item?.Expansion_Items?.length==1">
                                                 <td scope="col" class="col-td-th-0">{{(i+1)}}</td>
                                                 <td scope="col" class="col-td-th-1"
                                                     *ngFor="let Expansionitemsobjectitem of this.ExpansionKeys;let i=index">
-                                                    {{item?.Expansion_Items[Expansionitemsobjectitem]}}</td>
+                                                    {{item?.Expansion_Items[0][Expansionitemsobjectitem]}}</td>
+                                            </tr>
+                                            <div *ngIf="ExpansionKeys.length!=0 && item?.Expansion_Items.length!=1">
+                                                <tr class="table-tr" *ngFor="let itemloop of item?.Expansion_Items;let j=index">
+                                                    <td scope="col" class="col-td-th-0">{{(j+1)}}</td>
+                                                    <td scope="col" class="col-td-th-1" *ngFor="let Expansionitemsobjectitem of this.ExpansionKeys;let i=index">
+                                                        {{itemloop[Expansionitemsobjectitem]}}</td>
+                                                </tr>
+                                            </div>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </tr>
+                        <tr class="table-tr table-tr-1 tr-box-shadow" *ngIf="this.Expansion==true && this.Expansionheader2.length!=0"
+                            [ngClass]="{'Table-Show':item.isExpand2==true,'Table-Hide':item.isExpand2==false}">
+                            <div class="expansion-panel-inner">
+                                <div class="header">
+                                    <h5>{{ExpansionTitle2}}</h5>
+                                </div>
+                                <div class="center-panel">
+                                    <table class="table table-style">
+                                        <thead>
+                                            <tr class="table-tr">
+                                                <th scope="col" class="col-td-th-0">#</th>
+                                                <th scope="col" class="col-td-th-1"
+                                                    *ngFor="let Expansionheaderitem of Expansionheader2;let i=index">
+                                                    {{Expansionheaderitem}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-tr" *ngFor="let itemloop of item?.Expansion_Items2;let j=index">
+                                                <td scope="col" class="col-td-th-0">{{(j+1)}}</td>
+                                                <td scope="col" class="col-td-th-1" *ngFor="let Expansionitemsobjectitem of this.ExpansionKeys2;let i=index">
+                                                    {{itemloop[Expansionitemsobjectitem]}}</td>
                                             </tr>
                                         </tbody>
                                     </table>

@@ -19,17 +19,15 @@ import * as data1 from '../../currency.json';
   styleUrls: ['./import-commercial.component.scss']
 })
 export class ImportCommercialComponent implements OnInit {
-
-
-  @ViewChild('importcommercial', { static: false }) importcommercial: ElementRef;
+  @ViewChild('commercial', { static: false }) commercial: ElementRef;
   public item: any = [];
   public viewData: any;
   public closeResult: string;
   public optionsVisibility: any = [];
   public pipoData: any;
   public id: any;
-  filtervisible: boolean = false;
   USER_DATA: any = [];
+  filtervisible: boolean = false;
   FILTER_VALUE_LIST: any = [];
   ALL_FILTER_DATA: any = {
     PI_PO_No: [],
@@ -38,7 +36,41 @@ export class ImportCommercialComponent implements OnInit {
     Currency: [],
     DATE: []
   };
-
+  FILTER_VALUE_LIST_NEW: any = {
+    header: [
+      "Pipo No.",
+      "DATE",
+      "Commercial Invoice No.",
+      "Advance No.",
+      "Advance Currency",
+      "Advance Amount",
+      "Beneficiary Name",
+      "Action"],
+    items: [],
+    Expansion_header: [],
+    Expansion_Items: [],
+    Objectkeys: [],
+    ExpansionKeys: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1"
+    ],
+    eventId: ''
+  }
+  EDIT_FORM_DATA: any = {
+    commercialDate: '',
+    commercialNumber: '',
+    AdvanceNo: "",
+    AdvanceCurrency: "",
+    AdvanceAmount:"",
+    buyerName: '',
+  }
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
@@ -56,10 +88,10 @@ export class ImportCommercialComponent implements OnInit {
   async ngOnInit() {
     this.wininfo.set_controller_of_width(270, '.content-wrap')
     this.USER_DATA = await this.userService.getUserDetail();
+    console.log("this.USER_DATA", this.USER_DATA)
     for (let index = 0; index < data1['default']?.length; index++) {
       this.ALL_FILTER_DATA['Currency'].push(data1['default'][index]['value']);
     }
-    console.log("this.USER_DATA", this.USER_DATA)
     this.item = [];
     this.documentService.getCommercial().subscribe(
       (res: any) => {
@@ -84,11 +116,55 @@ export class ImportCommercialComponent implements OnInit {
           }
         }
         this.FILTER_VALUE_LIST = this.item;
+        this.CommercialTable(this.item)
       },
       (err) => console.log(err)
     );
-
   }
+
+  CommercialTable(data: any) {
+    this.FILTER_VALUE_LIST_NEW['items'] = [];
+    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
+    this.removeEmpty(data).then(async (newdata: any) => {
+      await newdata?.forEach(async (element) => {
+        await this.FILTER_VALUE_LIST_NEW['items'].push({
+          PipoNo: this.getPipoNumber(element['pipo']),
+          commercialDate: element['commercialDate'],
+          commercialNumber: element['commercialNumber'],
+          AdvanceNo: element['AdvanceNo'],
+          AdvanceCurrency: element['AdvanceCurrency'],
+          AdvanceAmount: element['AdvanceAmount'],
+          buyerName: element['buyerName'],
+          isExpand: false,
+          disabled: element['deleteflag'] != '-1' ? false : true,
+          RoleType: this.USER_DATA?.result?.RoleCheckbox
+        })
+      });
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+    });
+  }
+
+  async removeEmpty(data: any) {
+    await data.forEach(element => {
+      for (const key in element) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+          element[key] = 'NF'
+        }
+      }
+    });
+    return await new Promise(async (resolve, reject) => { await resolve(data) });
+  }
+
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+   (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+
   filter(value, key) {
     this.FILTER_VALUE_LIST = this.item.filter((item) => item[key].indexOf(value) != -1);
     if (this.FILTER_VALUE_LIST.length == 0) {
@@ -98,6 +174,7 @@ export class ImportCommercialComponent implements OnInit {
   resetFilter() {
     this.FILTER_VALUE_LIST = this.item;
   }
+
   openCreditNote(content) {
     this.modalService
       .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
@@ -131,7 +208,7 @@ export class ImportCommercialComponent implements OnInit {
   viewpdf(a) {
     this.viewData = ''
     setTimeout(() => {
-      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(a['commercialDoc']);
+      this.viewData = this.sanitizer.bypassSecurityTrustResourceUrl(this.FILTER_VALUE_LIST[a?.index]['commercialDoc']);
     }, 200);
   }
 
@@ -142,41 +219,55 @@ export class ImportCommercialComponent implements OnInit {
       (data) => {
         console.log('king123');
         this.toastr.success('Commercial invoie updated successfully.');
-
-      },
-      (error) => {
-        // this.toastr.error('Invalid inputs, please check!');
+      }, (error) => {
         console.log('error');
       }
     );
   }
+  
+  toSaveNew(data, id, EditSummaryPagePanel: any) {
+    console.log(data);
+    this.documentService.updateCommercial(data, id).subscribe((data) => {
+      console.log(data);
+      this.toastr.success('Commercial Invoie Row Is Updated Successfully.');
+      this.ngOnInit();
+      EditSummaryPagePanel?.displayHidden
+    }, (error) => {
+      console.log('error');
+    });
+  }
 
   newDest() {
-    this.sharedData.changeretunurl('home/import-commercial')
-    this.router.navigate(['home/upload', { file: 'import', document: 'import-commercial' }]);
+    this.sharedData.changeretunurl('home/commercial')
+    this.router.navigate(['home/upload', { file: 'export', document: 'commercial' }]);
   }
 
-  exportToExcel() {
-    const ws: xlsx.WorkSheet =
-      xlsx.utils.table_to_sheet(this.importcommercial.nativeElement);
-    const wb: xlsx.WorkBook = xlsx.utils.book_new();
-    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
-    xlsx.writeFile(wb, 'Commercial.xlsx');
+  SELECTED_VALUE: any = '';
+  toEdit(data: any) {
+    this.SELECTED_VALUE = '';
+    this.SELECTED_VALUE = this.FILTER_VALUE_LIST[data?.index];
+    this.EDIT_FORM_DATA = {
+      commercialDate: this.SELECTED_VALUE['commercialDate'],
+      commercialNumber: this.SELECTED_VALUE['commercialNumber'],
+      AdvanceNo: this.SELECTED_VALUE['AdvanceNo'],
+      AdvanceCurrency: this.SELECTED_VALUE['AdvanceCurrency'],
+      AdvanceAmount: this.SELECTED_VALUE['AdvanceAmount'],
+      buyerName: this.SELECTED_VALUE['buyerName'],
+    }
+    this.toastr.warning('Commercial Invoie Row Is In Edit Mode');
   }
 
-  toEdit(index) {
-    this.optionsVisibility[index] = true;
-    this.toastr.warning('Commercial Invoice Is In Edit Mode');
-  }
-  handleDelete(id, index: any) {
-    console.log(id, index, 'dfsfhsfgsdfgdss');
+  handleDelete(data: any) {
     const message = `Are you sure you want to delete this?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
-    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, { maxWidth: "400px", data: dialogData });
+    const dialogRef = this.dialog.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("---->", dialogResult)
+      console.log("---->", this.FILTER_VALUE_LIST[data?.index], dialogResult)
       if (dialogResult) {
-        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], id, index)
+        this.deleteByRoleType(this.USER_DATA['result']['RoleCheckbox'], this.FILTER_VALUE_LIST[data?.index]?._id, this.FILTER_VALUE_LIST[data?.index])
       }
     });
   }
@@ -206,4 +297,54 @@ export class ImportCommercialComponent implements OnInit {
       });
     }
   }
+
+  exportToExcel() {
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(new CommercialFormat(this.FILTER_VALUE_LIST).get());
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, 'Commercial.xlsx');
+  }
+}
+
+class CommercialFormat {
+  data: any = [];
+  constructor(data: any) {
+    this.data = data;
+  }
+
+  get() {
+    var temp: any = [];
+    this.data?.forEach(element => {
+      temp.push({
+        PipoNo: this.getPipoNumber(element['pipo']),
+        commercialDate: element['commercialDate'],
+        commercialNumber: element['commercialNumber'],
+        AdvanceNo: element['AdvanceNo'],
+        AdvanceCurrency: element['AdvanceCurrency'],
+        AdvanceAmount: element['AdvanceAmount'],
+        buyerName: this.getBuyerName(element['buyerName']),
+      })
+    });
+    return temp;
+  }
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+   (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
+
+  getBuyerName(buyerName: any) {
+    let temp: any = [];
+    buyerName.forEach(element => {
+      temp.push(element);
+    });
+    return temp.join(',')
+  }
+
+  ARRAY_TO_STRING(array, key) {
+    return array[key]?.join(',')
+  }
+
 }

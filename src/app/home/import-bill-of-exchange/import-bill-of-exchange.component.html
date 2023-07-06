@@ -1,11 +1,13 @@
 <div class="content-wrap pb-2 scroll-bar-main">
-    <div class="import_export_sec">
-        <h3 class="heading_common_tag">Import Bill Of Exchange</h3>
-    </div>
+    
     <main id="content" class="content table-padding" role="main">
         <div class="filter_section_top">
-            <div class="row">
-                <div class="col-md-4 col-sm-4 col-12"></div>
+            <div class="row m-0">
+                <div style="margin: auto;margin-left: 0;">
+                    <div class="import_export_sec">
+                        <h3 class="heading_common_tag">Bill Of Exchange Documents ({{this.FILTER_VALUE_LIST?.length}})</h3>
+                    </div>
+                </div>
                 <div class="col-md-8 col-sm-8 col-12">
                     <div class="filter_right_new padding_new_top">
                         <button type="button" class="btn btn-primary" (click)="exportToExcel()"><span
@@ -82,7 +84,13 @@
             </div>
         </div>
         <div class="analytics">
-            <div style="width: 100%" class="analytics_top" #billOfExchange>
+            <custom-expansion-panel [header]="this.FILTER_VALUE_LIST_NEW?.header" [ExpansionShowHide]="false"
+            [items]="this.FILTER_VALUE_LIST_NEW?.items"
+            [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass"
+            [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" (ViewChanges)="viewpdf($event)"
+            (EditChanges)="toEdit($event)" (DeleteChanges)="handleDelete($event)">
+        </custom-expansion-panel>
+            <!-- <div style="width: 100%" class="analytics_top" #billOfExchange>
                 <div style="width: 100%" class="row">
                     <div class="" id="container">
                         <section class="middle_datatable">
@@ -94,8 +102,9 @@
                                                     style="margin-left: 9px;">DATE</span></th>
                                             <th scope="col" class="col-td-th-3">PI/PO No.</th>
                                             <th scope="col" class="col-td-th-3">Bill Of Exchange No.</th>
-                                            <th scope="col" class="col-td-th-3">Beneficiary Name</th>
+                                            <th scope="col" class="col-td-th-3">Buyer Name</th>
                                             <th scope="col" class="col-td-th-3">Action</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -108,6 +117,7 @@
                                                 <div *ngIf="!optionsVisibility[i]">
                                                     {{data.billExchangeNumber}}
                                                 </div>
+
                                                 <div *ngIf="optionsVisibility[i]">
                                                     <input class="tblInput form-control" name="billExchangeNumber"
                                                         type="text" placeholder="Bill Exchange Number"
@@ -131,21 +141,67 @@
                                                 </button>
                                             </td>
                                         </tr>
+
                                     </tbody>
                                 </table>
                             </div>
                         </section>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </main>
 </div>
 
 <app-custom-model [customstyle]="{'margin':'auto !important','margin-top': '32px !important'}" class="p-2" height="95vh"
-    id="VIEW_DOCUMENTS" name="Shipping Bill">
+    id="PDF_VIEW" name="Bill Of Exchange Documents">
     <div class="p-2">
-        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Shipping Bill" [src]="viewData" width="100%"
+        <app-pdf-viewer *ngIf="viewData!=''" [downloadShow]="false" name="Bill Of Exchange Documents" [src]="viewData" width="100%"
         height="500px"></app-pdf-viewer>
+    </div>
+</app-custom-model>
+
+
+<app-custom-model *ngIf="this.SELECTED_VALUE!=''"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'63vw !important'}" class="p-2 mt-2"
+    id="EditSummaryPage" [name]="'Bill Of Exchange Documents Update || Bill Of Exchange Documents No. : '+this.SELECTED_VALUE?.billExchangeNumber"
+    #EditSummaryPagePanel>
+    <div class="ml-0 p-3 col-12">
+        <div class="container-fluid m-auto p-0">
+            <div class="content_white_background" style="height: auto;">
+                <main id="content" class="table-padding" role="main" style="border-radius: 10px;">
+                    <div class="new_document_list1">
+                        <div class="d-flex col-12 p-0 pt-3" id="FromClientRequest" style="flex-direction: column;">
+                            <div class="row col-12 mt-0 p-0">
+                                <div class="row col-12 p-0">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">DATE</label>
+                                        <ng-custom-input type="date" [(ngInput)]="this.EDIT_FORM_DATA.billOfExchangeDate"
+                                            placeHolderText="O R DATE"></ng-custom-input>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Bill Of Exchange No.</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.billExchangeNumber"
+                                            placeHolderText="Bill Of Exchange No."></ng-custom-input>
+                                    </div>
+                                </div>
+                                <div class="row col-12 p-0">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Beneficiary Name</label>
+                                        <ng-custom-input type="text" [(ngInput)]="this.EDIT_FORM_DATA.buyerName"
+                                            placeHolderText="Beneficiary Name"></ng-custom-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-12 mt-0 p-0 pl-2 pb-2">
+                                <button class="btn btn-primary"
+                                    (click)="toSaveNew(this.EDIT_FORM_DATA,this.SELECTED_VALUE?._id,EditSummaryPagePanel)">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
     </div>
 </app-custom-model>
