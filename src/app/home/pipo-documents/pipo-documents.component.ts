@@ -553,8 +553,8 @@ export class PipoDocumentsComponent implements OnInit {
     );
   }
 
-  getInvoicesNew(data:any,panel:any) {
-    if (data!=null && data!=undefined) {
+  getInvoicesNew(data: any, panel: any) {
+    if (data != null && data != undefined) {
       console.log(this.item3[data?.index].pi_poNo);
       this.showInvoice = true;
       this.router.navigate([
@@ -588,15 +588,15 @@ export class PipoDocumentsComponent implements OnInit {
       } else if (this.pipoData.document == 'PI') {
         this.pipourl1 = this.item3[data?.index].doc;
       }
-  
+
       this.file1 = this.item3[data?.index].file;
       this.id = this.item3[data?.index]._id;
-  
+
       //this.docu = this.item3[data?.index].doc;
       this.docu = this.sanitizer.bypassSecurityTrustResourceUrl(
         this.item3[data?.index].doc
       );
-  
+
       this.z = this.payTerm.length;
       console.log(this.z);
       if (this.payTerm.length > 1) {
@@ -616,7 +616,7 @@ export class PipoDocumentsComponent implements OnInit {
     }
     return null;
   }
-  
+
   pipoClick() {
     console.log('upload');
     this.router.navigate(['home/upload', { file: 'import', document: 'pipo' }]);
@@ -1132,7 +1132,7 @@ export class PipoDocumentsComponent implements OnInit {
           INVOICEVALUEUSD: element['amount'],
           BRANCH: element['location'],
           COMMODITY: element['commodity'],
-          BALANCEIFANY: element['balanceAmount']!='-1'?element['balanceAmount']:element['amount'],
+          BALANCEIFANY: element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['amount'],
           Expansion_Items: boedata,
           Expansion_Items2: advice,
           isExpand: false,
@@ -1141,14 +1141,16 @@ export class PipoDocumentsComponent implements OnInit {
           RoleType: this.USER_DATA?.result?.RoleCheckbox
         })
       });
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'isExpand2')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
-      this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items2')
-      this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
-      this.FILTER_VALUE_LIST_NEW['ExpansionKeys2'] = await this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'].length != 0 ? Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'][0]) : []
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'isExpand2')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items2')
+        this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
+        this.FILTER_VALUE_LIST_NEW['ExpansionKeys2'] = await this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'].length != 0 ? Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'][0]) : []
+      }
       console.log(this.FILTER_VALUE_LIST_NEW, 'this.FILTER_VALUE_LIST_NEW')
     });
   }
@@ -1271,5 +1273,4 @@ export class PipoDocumentsComponent implements OnInit {
       });
     }
   }
-
 }

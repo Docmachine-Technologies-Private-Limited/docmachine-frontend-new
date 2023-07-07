@@ -153,7 +153,6 @@ body {
     padding: 3px 10px;
     font-weight: 600 !important;
     font-family: Poppins, sans-serif;
-    color: #0a3049;
 }
 
 .middle_datatable table tr th span {
@@ -209,36 +208,33 @@ body {
 }
 
 .filter_right_new .btn-success {
-    background: #51AEE5;
+    background: #672fa4;
     border-radius: 5px;
     opacity: 1;
-    border: 1px solid #51AEE5;
-    font-size: 15px;
+    border: 1px solid #672fa4;
+    font-size: 10px;
     font-weight: 500;
     height: 38px;
 }
 
 .filter_right_new .btn-secondary {
-    background: #fff;
+    background: #672fa4;
     border-radius: 5px;
     opacity: 1;
-    border: 1px solid #E1E1E1;
-    font-size: 14px;
+    border: 1px solid #672fa4;
+    font-size: 10px;
     font-weight: 500;
     height: 38px;
-    color: #999999;
-    margin: 0 11px;
 }
 
 .filter_right_new .btn-primary {
-    background: #fff;
+    background: #672fa4;
     border-radius: 5px;
     opacity: 1;
-    border: 1px solid #E1E1E1;
-    font-size: 14px;
+    border: 1px solid #672fa4;
+    font-size: 10px;
     font-weight: 500;
     height: 38px;
-    color: #999999;
 }
 
 .ex_icon {
@@ -364,7 +360,7 @@ body {
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
-.filter_right_new .btn-primary:hover {
+/* .filter_right_new .btn-primary:hover {
     color: #a5a5a5;
     background-color: #ffffff;
     border: 1px solid #E1E1E1;
@@ -374,7 +370,7 @@ body {
     color: #a5a5a5;
     background-color: #ffffff;
     border: 1px solid #E1E1E1;
-}
+} */
 
 .filter_right_new.padding_new_top {
     padding-top: 15px;

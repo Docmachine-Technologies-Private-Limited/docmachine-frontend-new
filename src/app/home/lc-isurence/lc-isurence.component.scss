@@ -943,14 +943,15 @@ table {
 .analytics .support {
   overflow: hidden;
 }
-.header-panel{
+
+.header-panel {
   display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 0.8%;
-    padding-left: 1%;
-    padding-bottom: 0.8%;
-    border-bottom: 1px solid black;
-    width: 99%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.8%;
+  padding-left: 1%;
+  padding-bottom: 0.8%;
+  border-bottom: 1px solid black;
+  width: 99%;
 }

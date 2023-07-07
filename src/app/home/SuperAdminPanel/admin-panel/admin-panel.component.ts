@@ -30,7 +30,12 @@ export class SuperAdminPanelComponent implements OnInit {
   pending: boolean;
   declined: boolean;
   SUBCRIPTION_DATA: any = [];
-  SUBCRIPTION_CHANGES: any = FormGroup
+  SUBCRIPTION_CHANGES: any = FormGroup;
+  AllCompanyId: any = [];
+  OrgAllCompanyId: any = [];
+  AlldeletebyCollectionName: any = [];
+  OrgAlldeletebyCollectionName: any = [];
+
   constructor(public route?: ActivatedRoute, public formBuilder?: FormBuilder,
     public userService?: UserService,
     public sanitizer?: DomSanitizer, public toastr?: ToastrService,
@@ -45,9 +50,9 @@ export class SuperAdminPanelComponent implements OnInit {
       Login_Limit: ['', Validators.required],
       Role_Type: ['', Validators.required],
       Subscription: ['', Validators.required],
-      DMS:['', Validators.required],
-      Teasury:['', Validators.required],
-      Transaction:['', Validators.required],
+      DMS: ['', Validators.required],
+      Teasury: ['', Validators.required],
+      Transaction: ['', Validators.required],
     });
   }
 
@@ -66,6 +71,23 @@ export class SuperAdminPanelComponent implements OnInit {
     this.loaddata();
     this.ApprovalRejectDelete(null, 'approved')
     console.log(this.USER_DEATILS, 'this.USER_DEATILS')
+
+    this.userService?.getAllCompanyId().then((res: any) => {
+      this.AllCompanyId = res?.data;
+      this.OrgAllCompanyId = res?.data;
+      this.AlldeletebyCollectionName = [];
+      this.OrgAlldeletebyCollectionName = [];
+      res?.data?.forEach(element => {
+        this.AlldeletebyCollectionName[element?._id] = [];
+        this.OrgAlldeletebyCollectionName[element?._id] = [];
+        res?.CollectionName.forEach(CollectionNameelement => {
+          this.AlldeletebyCollectionName[element?._id].push(({ id: element?._id, teamname: element?.teamName, name: CollectionNameelement }));
+          this.OrgAlldeletebyCollectionName[element?._id].push(({ id: element?._id, teamname: element?.teamName, name: CollectionNameelement }));
+        });
+      });
+      console.log(res, this.AlldeletebyCollectionName, this.OrgAlldeletebyCollectionName, 'getAllCompanyId')
+    })
+
   }
   loaddata() {
     this.SUBCRIPTION_DATA = [];
@@ -181,7 +203,7 @@ export class SuperAdminPanelComponent implements OnInit {
   }
   initialName(words) {
     'use strict'
-    return words?.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'');
+    return words?.split(/\s/).reduce((response, word) => response += word.slice(0, 1), '');
   }
 
   public SubtractDates(startDate: Date, endDate: Date): any {
@@ -346,38 +368,92 @@ export class SuperAdminPanelComponent implements OnInit {
       Login_Limit: [data?.Login_Limit, Validators.required],
       Role_Type: [data?.Role_Type, Validators.required],
       Subscription: [data?.Subscription, Validators.required],
-      DMS:[data?.DMS, Validators.required],
-      Teasury:[data?.Teasury, Validators.required],
-      Transaction:[data?.Transaction, Validators.required],
+      DMS: [data?.DMS, Validators.required],
+      Teasury: [data?.Teasury, Validators.required],
+      Transaction: [data?.Transaction, Validators.required],
     });
   }
   SUBCRIPTION_Submit(form_value: any, displayHidden: any) {
     console.log(form_value, displayHidden, 'SUBCRIPTION_Submit')
     if (this.SUBCRIPTION_ID != '' && this.SUBCRIPTION_ID != undefined && this.SUBCRIPTION_ID != null) {
       this.docserivce?.updateUserById(this.SUBCRIPTION_ID, form_value?.value).subscribe((res: any) => {
-        console.log(res,'SUBCRIPTION_Submit');
-        this.docserivce?.updateUserByCompanyId(this.SELECTED_SUBCRIPTION_DATA?.companyId,{
-         DMS:form_value?.value?.DMS,
-         Teasury:form_value?.value?.Teasury,
-         Transaction:form_value?.value?.Transaction,
+        console.log(res, 'SUBCRIPTION_Submit');
+        this.docserivce?.updateUserByCompanyId(this.SELECTED_SUBCRIPTION_DATA?.companyId, {
+          DMS: form_value?.value?.DMS,
+          Teasury: form_value?.value?.Teasury,
+          Transaction: form_value?.value?.Transaction,
         }).subscribe((res: any) => {
-         console.log(res,'SUBCRIPTION_Submit');
-           this.toastr?.success('Updated Succesfully...');
-           this.ngOnInit()
-           this.SUBCRIPTION_ID='';
-           displayHidden.PopUpOpenClose.nativeElement.style.display='none';
-       });
-     })
+          console.log(res, 'SUBCRIPTION_Submit');
+          this.toastr?.success('Updated Succesfully...');
+          this.ngOnInit()
+          this.SUBCRIPTION_ID = '';
+          displayHidden.PopUpOpenClose.nativeElement.style.display = 'none';
+        });
+      })
     } else {
       this.toastr?.error('Id not found...');
     }
   }
-  Transaction_Checked(event:any){
+  Transaction_Checked(event: any) {
     if (event?.target?.checked) {
       this.SUBCRIPTION_CHANGES.controls.DMS.setValue(true)
-    }else{
+    } else {
       this.SUBCRIPTION_CHANGES.controls.DMS.setValue(false)
     }
+  }
+  SearchCompanyId(val: any) {
+    this.AllCompanyId = this.OrgAllCompanyId.filter((items: any) => items?.teamName?.toLowerCase()?.includes(val?.value?.toLowerCase()) || items?._id?.toLowerCase()?.includes(val?.value?.toLowerCase()));
+    if (val?.value == '' || this.AllCompanyId?.length == 0) {
+      this.AllCompanyId = this.OrgAllCompanyId;
+    }
+  }
+  DeleteCompanyIdData(val: any,compnayname:any) {
+    const message = `Are you sure you want to delete this all table data from ${compnayname}?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef: any = this.dialog?.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.userService?.DeleteAllCompanyIddata(val).then((res: any) => {
+          this.toastr?.success('Successfully delete all data...')
+        }).catch((error) => {
+          this.toastr?.error('something find wrong....')
+        })
+      }
+    });
+  }
+  SearchCompanyIdCollectionName(val: any) {
+    this.OrgAllCompanyId.forEach(element => {
+      this.AlldeletebyCollectionName[element?._id] = this.OrgAlldeletebyCollectionName[element?._id].filter((items: any) => 
+      items?.name?.toLowerCase()?.includes(val?.value?.toLowerCase()) 
+      || items?.teamname?.toLowerCase()?.includes(val?.value?.toLowerCase())
+      || items?.id?.toLowerCase()?.includes(val?.value?.toLowerCase()));
+    });
+    if (val?.value == '') {
+      this.AlldeletebyCollectionName = this.OrgAlldeletebyCollectionName;
+    }
+  }
+  
+  DeleteCompanyIdCollectionNameData(val: any, name: any,compnayname:any) {
+    const message = `Are you sure you want to delete this table (${name}) data  from ${compnayname}?`;
+    const dialogData = new ConfirmDialogModel("Confirm Action", message);
+    const dialogRef: any = this.dialog?.open(ConfirmDialogBoxComponent, {
+      maxWidth: "400px",
+      data: dialogData
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("---->", dialogResult)
+      if (dialogResult) {
+        this.userService?.DeletebyCollectionName(val, name).then((res: any) => {
+          this.toastr?.success('Successfully delete all data...')
+        }).catch((error) => {
+          this.toastr?.error('something find wrong....')
+        })
+      }
+    });
   }
 }
 

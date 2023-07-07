@@ -72,7 +72,7 @@ export class PendingPanelComponent implements OnInit {
             console.log("king123")
             console.log(responsedata)
             this.ngOnInit();
-            this.SendMailText(this.DATA_CREATE[index]?.data);
+            this.SendMailText(this.DATA_CREATE[index]?.data,'New Buyer Name added : ' );
             this.toastr.success('Successfully Accpeted data...')
           }, error => {
             console.log("error")
@@ -93,11 +93,11 @@ export class PendingPanelComponent implements OnInit {
       }).subscribe((res: any) => {
         console.log(res, 'dfsdfhsdfdsjhdsfgdsfds')
         if (data?.deleteflag == '2') {
-          this.userserivce.creatBuyer(this.DATA_CREATE[index]?.data).subscribe(responsedata => {
+          this.userserivce.creatBene(this.DATA_CREATE[index]?.data).subscribe(responsedata => {
             console.log("king123")
             console.log(responsedata)
             this.ngOnInit();
-            this.SendMailText(this.DATA_CREATE[index]?.data);
+            this.SendMailText(this.DATA_CREATE[index]?.data,'New Beneficiary Name added : ' );
             this.toastr.success('Successfully Accpeted data...')
           }, error => {
             console.log("error")
@@ -181,9 +181,9 @@ export class PendingPanelComponent implements OnInit {
       this.CustomConfirmDialogModel.ConfirmDialogModel('Pdf View', 'Pdf not found!', null);
     }
   }
-  SendMailText(data: any) {
+  SendMailText(data: any,text:any) {
     console.log(data, 'sendMail')
-    this.documentService.SendMailNormal({ data: data, subject: 'New Buyer Name added : ' + data[Object.keys(data)[0]] }).subscribe((res2) => {
+    this.documentService.SendMailNormal({ data: data, subject: text+ data[Object.keys(data)[0]] }).subscribe((res2) => {
       this.toastr.success('Message sent your email id successfully!');
     },
       (err) => console.log("ERROR")

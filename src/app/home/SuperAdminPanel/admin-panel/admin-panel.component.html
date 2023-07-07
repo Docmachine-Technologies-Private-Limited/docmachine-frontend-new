@@ -19,8 +19,6 @@
                 <table class="table">
                     <thead>
                         <tr class="table-tr">
-                            <!-- <th scope="col" class="col-td-th-1"><input type="checkbox" class="form-control" name="" id="">
-                            </th> -->
                             <th scope="col" class="td-th-w-1">Name | Email</th>
                             <th scope="col" class="col-td-th-3">Status</th>
                             <th scope="col" class="col-td-th-3">Role Type</th>
@@ -31,7 +29,6 @@
                     </thead>
                     <tbody>
                         <tr class="table-tr" *ngFor="let item of this.filterdata?.UserDetails;let i=index">
-                            <!-- <td class="col-td-th-1"><input type="checkbox" class="form-control" name="" id=""></td> -->
                             <td class="td-th-w-1" *ngIf="item?.imageUrl!=undefined"><img [src]="item?.imageUrl" class="img-icon">{{item?.fullName}} | {{item?.emailId}}</td>
                             <td class="td-th-w-1" *ngIf="item?.imageUrl==undefined"><span class="img-text">{{item?.fullName!=''?this.initialName(item?.fullName):''}}</span>{{item?.fullName}} | {{item?.emailId}}</td>
                             <td class="col-td-th-3">
@@ -88,7 +85,6 @@
                             <td class="col-td-th-3">{{item?.Subscription}}</td>
                             <td class="td-th-w-2">{{ item?.LastLogin!=undefined?item?.LastLogin+' ago':'Not found..'}}</td>
                             <td class="col-td-th-3 btn-td">
-                                <!-- <button class="btn btn-primary PopupOpen"  popup-close="MEMBER_VIEW" (click)="View(i)"><i class="fa fa-eye PopupOpen" popup-close="MEMBER_VIEW" aria-hidden="true"></i></button> -->
                                 <button class="btn btn-primary" (click)="deleteMember(item?.email)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                             </td>
                         </tr>
@@ -268,6 +264,84 @@
                 </div>
             </div>
             </mat-tab>
+            <!-- <mat-tab label="Delete-Data-By-CompanyId">
+                <div class="top-panel">
+                    <div class="left-panel">
+                        <label for="" class="label-text">Total Teams : <span>{{this.AllCompanyId?.length}}</span></label>
+                    </div>
+                    <div class="right-panel col-5">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control border-radius" placeholder="Search customer by name or email"
+                                aria-label="Recipient's username" aria-describedby="button-addon2" (keypress)="SearchCompanyId($event.target)">
+                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="center-panel">
+                    <table class="table">
+                        <thead>
+                            <tr class="table-tr">
+                                <th scope="col" class="col-td-th-300">Name</th>
+                                <th scope="col" class="col-td-th-300">Company Id</th>
+                                <th scope="col" class="col-td-th-3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-tr" *ngFor="let item of this.AllCompanyId;let i=index">
+                                <td class="col-td-th-300">{{item?.teamName}}</td>
+                                <td class="col-td-th-300">{{item?._id}}</td>
+                                <td class="col-td-th-3 btn-td">
+                                    <button class="btn btn-primary" (click)="DeleteCompanyIdData(item?._id,item?.teamName)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </mat-tab> -->
+            <mat-tab label="Delete-Data-By-Table">
+                <div class="top-panel">
+                    <div class="left-panel">
+                        <label for="" class="label-text">Total Table : <span>{{this.AllCompanyId?.length}}</span></label>
+                    </div>
+                    <div class="right-panel col-5">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control border-radius" placeholder="Search customer by name or email"
+                                aria-label="Recipient's username" aria-describedby="button-addon2" (keypress)="SearchCompanyIdCollectionName($event.target)">
+                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="center-panel">
+                   <div *ngFor="let item of this.AllCompanyId;let i=index">
+                   <div class="card-table-data" *ngIf="this.AlldeletebyCollectionName[item?._id].length!=0">
+                   <div class="row m-0">
+                     <h5>{{item?.teamName}}</h5>
+                     <button class="btn btn-primary btn-right" title="delete overall data" (click)="DeleteCompanyIdData(item?._id,item?.teamName)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                   </div>
+                    <table class="table">
+                        <thead>
+                            <tr class="table-tr">
+                                <th scope="col" class="col-td-th-300">Name</th>
+                                <th scope="col" class="col-td-th-300">Table Name</th>
+                                <th scope="col" class="col-td-th-300">Company Id</th>
+                                <th scope="col" class="col-td-th-3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-tr" *ngFor="let collectionitem of this.AlldeletebyCollectionName[item?._id];let i=index">
+                                <td class="col-td-th-300">{{collectionitem?.teamname}}</td>
+                                <td class="col-td-th-300">{{collectionitem?.name}}</td>
+                                <td class="col-td-th-300">{{collectionitem?.id}}</td>
+                                <td class="col-td-th-3 btn-td">
+                                    <button class="btn btn-primary" (click)="DeleteCompanyIdCollectionNameData(collectionitem?.id,collectionitem?.name,collectionitem?.teamname)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                   </div>
+                   </div>
+                </div>
+            </mat-tab>
           </mat-tab-group>
         <div class="footer-panel"></div>
     </div>
@@ -365,44 +439,9 @@ height="400px" id="SUBCRIPTION_CHANGES"
     </form>
     </div>
 </app-custom-model>
-<!-- <ng-custom-card-model
+
+<ng-custom-card-model
     [customstyle]="{'margin':'auto !important','max-width': '530px !important','margin-top': '50px !important'}"
     class="p-2" height="400px" id="SUBCRIPTION_CHANGES">
-    <div class="Userlist" *ngIf="this.index_Selected!=''">
-     <div class="col-12">
-        <div class="display">
-            <div class="display-item">
-                <div class="card seamus">
-                    <div class="card-top"></div>
-                    <div class="card-profile">
-                        <div class="profile-image" *ngIf="this.filterdata.UserDetails[this.index_Selected]?.imageUrl!=undefined" [title]="this.filterdata.UserDetails[this.index_Selected]?.isLoggin==true?'User Active':'User Not Active'" [ngClass]="{'border-active':this.filterdata.UserDetails[this.index_Selected]?.isLoggin==true,'border-inactive':this.filterdata.UserDetails[this.index_Selected]?.isLoggin==false}">
-                            <img  [src]="this.filterdata.UserDetails[this.index_Selected]?.imageUrl" alt="" srcset="">
-                        </div>
-                        <div class="profile-image" *ngIf="this.filterdata.UserDetails[this.index_Selected]?.imageUrl==undefined" 
-                        [title]="this.filterdata.UserDetails[this.index_Selected]?.isLoggin==true?'User Active':'User Not Active'">
-                            <span  class="img-text">{{this.initialName(this.filterdata.UserDetails[this.index_Selected]?.fullName)}}</span>
-                        </div>
-                    </div>
-                    <div class="card-info">
-                        <div class="info-title">
-                            <h2>{{this.filterdata.UserDetails[this.index_Selected]?.fullName }}</h2>
-                            <h3>{{this.filterdata.UserDetails[this.index_Selected]?.emailId }}</h3>
-                            <h4>{{this.filterdata.UserDetails[this.index_Selected]?.role }}</h4>
-                        </div>
-                        <div class="info-follow">
-                            <div class="follow-followers">
-                                <span style="font-size: 16px;">{{this.filterdata.UserDetails[this.index_Selected]?.companyName }}</span><br />
-                                <span style="font-weight: 700;">Company Name</span>
-                            </div>
-                            <div class="follow-following">
-                                <span style="font-size: 16px;">{{this.filterdata.UserDetails[this.index_Selected]?.companyId }}</span><br />
-                                <span style="font-weight: 700;">Company Id</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-</ng-custom-card-model> -->
+   
+</ng-custom-card-model>

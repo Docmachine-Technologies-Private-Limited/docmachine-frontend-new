@@ -12,9 +12,9 @@
     width: 99%;
     background-color: #f6f6f6;
     margin: 10px auto;
-    border-radius: 10px;
+    border-radius: 40px;
     box-shadow: 0 0 2px 2px #dbdbdb;
-    padding-right: 20px;
+    padding: 7px;
 }
 
 .middle_datatable .support {
@@ -29,4 +29,9 @@
 .content-wrap.scroll-bar-main {
     overflow: hidden;
     padding: 0;
+}
+
+.filter_right_new.padding_new_top {
+    display: flex;
+    gap: 10px;
 }

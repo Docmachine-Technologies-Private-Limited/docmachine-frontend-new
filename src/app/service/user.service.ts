@@ -67,7 +67,7 @@ export class UserService implements OnInit {
       httpOptions
     );
   }
-  
+
   Rolelogin(data: any) {
     let authToken: any = this.loadFromLocalStorage();
     console.log(authToken, data);
@@ -499,6 +499,15 @@ export class UserService implements OnInit {
       httpOptions
     );
   }
+  
+  deleteBene(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/bene/delete`,{id: id},httpOptions).toPromise();
+  }
 
   getBeneByName(name) {
     this.loadFromLocalStorage();
@@ -514,9 +523,7 @@ export class UserService implements OnInit {
       ).toPromise();
 
   }
-
-
-
+  
   public creatBuyer(buyer) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -578,7 +585,16 @@ export class UserService implements OnInit {
       httpOptions
     );
   }
-
+  
+  deleteBuyer(id) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/buyer/delete`,{id: id},httpOptions).toPromise();
+  }
+  
   getBuyerByName(name) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -637,7 +653,7 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/member/UPDATE_USER_MEMBER`, { email: id, member: member }, httpOptions);
   }
-  
+
   public UploadS3Buket(data: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -646,7 +662,7 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/documents/uploadFiletoS3Bucket`, data, httpOptions);
   }
-  
+
   public getReadS3File(data: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -655,7 +671,7 @@ export class UserService implements OnInit {
     };
     return this.http.post(`${this.api_base}/documents/getReadS3File`, data, httpOptions);
   }
-  
+
   public getMemeber(id) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -749,9 +765,38 @@ export class UserService implements OnInit {
     };
     return this.http.get(`${this.api_base}/user/getAllUserMember`, httpOptions).toPromise();
   }
+
+  getAllCompanyId() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.get(`${this.api_base}/companyinfo/getAllCompanyId`, httpOptions).toPromise();
+  }
+
+  DeleteAllCompanyIddata(id: any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/companyinfo/deletealldata`, { companyId: id }, httpOptions).toPromise();
+  }
+
+  DeletebyCollectionName(id: any, name: any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(`${this.api_base}/companyinfo/deletebyCollectionName`, { companyId: id, CollectionName: name }, httpOptions).toPromise();
+  }
+
   Url_Change_Authorization(name_url: any) {
     this.router.navigate([name_url]);
   }
+
   RoleBaseSingUp(data: any) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
@@ -761,6 +806,7 @@ export class UserService implements OnInit {
     // return this.http.post(`${this.api_base}/authenticate/signup`, { user: data});
     return this.http.post(`${this.api_base}/RoleBaseSingInSingUp/SingUp`, data, httpOptions);
   }
+
   public RoleBaseSingUpupdateEmail(data, email) {
     return this.http.put(`${this.api_base}/authenticate/RoleBase_Update_Email`, {
       data: data,

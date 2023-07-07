@@ -2,7 +2,7 @@
   position: relative;
   display: inline-block;
   padding: 0;
-  border-radius: 3px;
+  border-radius: 35px;
   background: white;
   box-shadow: 0 2px 2px #00000024, 0 3px 1px -2px #0000001f, 0 1px 5px #0003;
   text-align: left;
@@ -75,6 +75,8 @@
   min-height: auto !important;
   max-height: 200px;
   overflow: auto;
+  border-radius: 5px;
+  color: #6322e2;
 }
 
 .custom-dropdown.custom-dropdown-active .dropdown::-webkit-scrollbar {
@@ -88,6 +90,7 @@
   background: transparent;
   font-size: 11px;
   color: black;
+  padding-left: 20px;
 }
 
 .clear-input {

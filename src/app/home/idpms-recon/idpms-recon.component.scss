@@ -303,7 +303,7 @@ p {
 }
 
 .table-panel {
-    width: 100%;
+    width: calc(100vw - 220px);
     margin: auto auto auto 0;
     height: calc(100% - 105px);
     overflow: auto;

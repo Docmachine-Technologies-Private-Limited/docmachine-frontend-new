@@ -1,63 +1,125 @@
 <div class="content-wrap pb-2 scroll-bar-main">
-    <div class="import_export_sec">
-        <div class="row">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="Dashbord_sec">
-                    <h2 class="title_dash" *ngIf="file == 'import'">Beneficiary details</h2>
-                    <h2 class="title_dash" *ngIf="file == 'export'">Buyer details</h2>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="float_right_page">
-                    <div *ngIf="file == 'import'">
-                        <button class="upload-button" (click)="open(content,content3)">Add Beneficiary<span>+</span>
-                        </button>
+    <main id="content" class="content table-padding" role="main">
+        <div class="filter_section_top p-2">
+            <div class="row m-0">
+                <div style="margin: auto;margin-left: 0;">
+                    <div class="import_export_sec">
+                        <h3 class="heading_common_tag mb-0" *ngIf="file == 'import'">Beneficiary details</h3>
+                        <h3 class="heading_common_tag mb-0" *ngIf="file == 'export'">Buyer details</h3>
                     </div>
+
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="content_white_background">
-        <main id="content" class="content table-padding" role="main">
-            <div class="filter_section_top">
-                <div class="row">
-                    <div class="col-md-4 col-sm-4 col-12"></div>
-                    <div class="col-md-8 col-sm-8 col-12">
-                        <div *ngIf="file == 'export'">
-                            <button class="upload-button" (click)="open1(content1,content2)">
-                                Add Buyer +
-                            </button>
+                <div class="col-md-8 col-sm-8 col-12">
+                    <div class="filter_right_new padding_new_top p-0">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="float_right_page">
+                                <div *ngIf="file == 'import' && this.USER_DATA?.role!='member'">
+                                    <button class="btn btn-primary PopupOpen" popup-close="CreateNewBeneficiary">Add
+                                        Beneficiary<span>+</span></button>
+                                </div>
+                                <div *ngIf="file == 'import' && this.USER_DATA?.role=='member'">
+                                    <button class="btn btn-primary PopupOpen"
+                                        popup-close="CreateNewBeneficiaryMember">Add Beneficiary<span>+</span></button>
+                                </div>
+                                <div *ngIf="file == 'export' && this.USER_DATA?.role!='member'">
+                                    <button class="btn btn-primary PopupOpen" popup-close="CreateNewBuyer">Add Buyer +
+                                    </button>
+                                </div>
+                                <div *ngIf="file == 'export' && this.USER_DATA?.role=='member'">
+                                    <button class="btn btn-primary PopupOpen"
+                                        popup-close="CreateNewBuyerwithConsignee">Add Buyer + </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div *ngIf="file == 'import'" class="analytics" style="width: 100%">
-                <div style="width: 100%" class="analytics_top">
-                    <div class="padding">
-                        <section class="box-shadow middle_datatable">
-                            <div class="widget-body p-0 support table-wrapper">
+        </div>
+        <div class="analytics" #epltable>
+            <custom-expansion-panel *ngIf="file == 'import'" [header]="this.FILTER_VALUE_LIST_NEW?.header"
+                [ExpansionShowHide]="false" [items]="this.FILTER_VALUE_LIST_NEW?.items"
+                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys"
+                (EditChanges)="clickbenetable($event,EditBeneSubmitPanel)"
+                [ViewButton]="false"
+                (DeleteChanges)="clickdeletebenetable($event,EditBeneSubmitPanel)"
+                [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass">
+            </custom-expansion-panel>
+            <custom-expansion-panel *ngIf="file == 'export'" [header]="this.FILTER_VALUE_LIST_NEW?.header"
+                [Keys]="this.FILTER_VALUE_LIST_NEW?.Objectkeys" [ExpansionShowHide]="false"
+                [items]="this.FILTER_VALUE_LIST_NEW?.items"
+                [ViewButton]="false"
+                (EditChanges)="clickbuyertable($event,EditBuyerSubmitPanel)"
+                (DeleteChanges)="clickdeletebuyertable($event,EditBeneSubmitPanel)"
+                [TableHeaderClass]="this.FILTER_VALUE_LIST_NEW?.TableHeaderClass">
+            </custom-expansion-panel>
+        </div>
+        <!-- <div *ngIf="file == 'import'" class="analytics" style="width: 100%">
+            <div style="width: 100%" class="analytics_top">
+                <div class="padding">
+                    <section class="box-shadow middle_datatable">
+                        <div class="widget-body p-0 support table-wrapper">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr class="table-tr">
+                                        <th class="col-td-th-1"></th>
+                                        <th scope="col" class="col-td-th-3"><span class="pl-3">Name</span></th>
+                                        <th scope="col" class="col-td-th-3">Bank Name</th>
+                                        <th scope="col" class="col-td-th-3">Account Number</th>
+                                        <th scope="col" class="col-td-th-3">IBAN</th>
+                                        <th scope="col" class="col-td-th-3">Sort Code</th>
+                                        <th scope="col" class="col-td-th-3"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="table-tr" *ngFor="let data of item2">
+                                        <td class="col-td-th-1"><input type="radio" /></td>
+                                        <td class="col-td-th-3">{{ data.benneName }}</td>
+                                        <td class="col-td-th-3">{{ data.beneBankName }}</td>
+                                        <td class="col-td-th-3">{{ data.beneAccNo }}</td>
+                                        <td class="col-td-th-3">{{ data.iban }}</td>
+                                        <td class="col-td-th-3">{{ data.sortCode }}</td>
+                                        <td class="col-td-th-3" [routerLink]="'/home/editBene/' + data._id">
+                                            <img width="18px" src="../../../assets/dot3.png" alt="" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="file == 'export'" class="analytics" style="width: 100%">
+            <div style="width: 100%" class="analytics-side">
+                <div class="middle_datatable">
+                    <div class="">
+                        <section class="box-shadow">
+                            <div class="support table-wrapper">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr class="table-tr">
                                             <th class="col-td-th-1"></th>
-                                            <th scope="col" class="col-td-th-3"><span class="pl-3">Name</span></th>
-                                            <th scope="col" class="col-td-th-3">Bank Name</th>
-                                            <th scope="col" class="col-td-th-3">Account Number</th>
-                                            <th scope="col" class="col-td-th-3">IBAN</th>
-                                            <th scope="col" class="col-td-th-3">Sort Code</th>
+                                            <th scope="col" class="col-td-th-3"><span class="pl-3">Buyer Name</span></th>
+                                            <th scope="col" class="col-td-th-3">Buyer Address</th>
+                                            <th scope="col" class="col-td-th-3"><span class="pl-3">Consignee Name</span></th>
+                                            <th scope="col" class="col-td-th-3">Consignee Address</th>
+                                            <th scope="col" class="col-td-th-3"><span class="pl-3">Buyer Bank</span></th>
+                                            <th scope="col" class="col-td-th-3">Buyer Bank Address</th>
                                             <th scope="col" class="col-td-th-3"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="table-tr" *ngFor="let data of item2">
                                             <td class="col-td-th-1"><input type="radio" /></td>
-                                            <td class="col-td-th-3">{{ data.benneName }}</td>
-                                            <td class="col-td-th-3">{{ data.beneBankName }}</td>
-                                            <td class="col-td-th-3">{{ data.beneAccNo }}</td>
-                                            <td class="col-td-th-3">{{ data.iban }}</td>
-                                            <td class="col-td-th-3">{{ data.sortCode }}</td>
-                                            <td class="col-td-th-3" [routerLink]="'/home/editBene/' + data._id">
-                                                <img width="18px" src="../../../assets/dot3.png" alt="" />
+                                            <td class="col-td-th-3">{{ data.buyerName }}</td>
+                                            <td class="col-td-th-3">{{ data.buyerAdrs }}</td>
+                                            <td class="col-td-th-3">{{ data.ConsigneeName }}</td>
+                                            <td class="col-td-th-3">{{ data.ConsigneeAddress }}</td>
+                                            <td class="col-td-th-3">{{ data.buyerbank }}</td>
+                                            <td class="col-td-th-3">{{ data.buyerbankaddress }}</td>
+                                            <td class="col-td-th-3" [routerLink]="'/home/editBuyer/' + data._id">
+                                                <img style="width: 10px; width: 10px"
+                                                    src="../../../assets/3-dots.png" alt="" />
                                             </td>
                                         </tr>
                                     </tbody>
@@ -67,337 +129,316 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="file == 'export'" class="analytics" style="width: 100%">
-                <div style="width: 100%" class="analytics-side">
-                    <div class="middle_datatable">
-                        <div class="">
-                            <section class="box-shadow">
-                                <div class="support table-wrapper">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr class="table-tr">
-                                                <th class="col-td-th-1"></th>
-                                                <th scope="col" class="col-td-th-3"><span class="pl-3">Buyer Name</span></th>
-                                                <th scope="col" class="col-td-th-3">Buyer Address</th>
-                                                <th scope="col" class="col-td-th-3"><span class="pl-3">Consignee Name</span></th>
-                                                <th scope="col" class="col-td-th-3">Consignee Address</th>
-                                                <th scope="col" class="col-td-th-3"><span class="pl-3">Buyer Bank</span></th>
-                                                <th scope="col" class="col-td-th-3">Buyer Bank Address</th>
-                                                <th scope="col" class="col-td-th-3"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="table-tr" *ngFor="let data of item2">
-                                                <td class="col-td-th-1"><input type="radio" /></td>
-                                                <td class="col-td-th-3">{{ data.buyerName }}</td>
-                                                <td class="col-td-th-3">{{ data.buyerAdrs }}</td>
-                                                <td class="col-td-th-3">{{ data.ConsigneeName }}</td>
-                                                <td class="col-td-th-3">{{ data.ConsigneeAddress }}</td>
-                                                <td class="col-td-th-3">{{ data.buyerbank }}</td>
-                                                <td class="col-td-th-3">{{ data.buyerbankaddress }}</td>
-                                                <td class="col-td-th-3" [routerLink]="'/home/editBuyer/' + data._id">
-                                                    <img style="width: 10px; width: 10px"
-                                                        src="../../../assets/3-dots.png" alt="" />
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </section>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+        </div> -->
+    </main>
 </div>
-<ng-template #content let-modal>
-    <div class="modal-body">
-        <div class="row no-gutter">
-            <div class="col-md-7 bg-dark" style="margin: 10px">
-                <div class="login d-flex py-5" style="padding: 0px !important">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-10 col-xl-7 mrg">
-                                <h6 class="display-5">Create New Beneficiary</h6>
-                                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                                    <div class="form-group mb-3">
-                                        <label>Name</label>
-                                        <input style="width: 350px" formControlName="benneName"
-                                            placeholder="Beneficiary/ Customer name" required=""
-                                            class="form-control rounded-pill" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Address</label>
-                                        <input style="width: 350px" formControlName="beneAdrs"
-                                            placeholder="Ex: street address, City. PIN" required=""
-                                            class="form-control rounded-pill password password1" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Bank Name</label>
-                                        <input style="width: 350px" formControlName="beneBankName" id="password1"
-                                            type="" placeholder="Ex: 23489234324" required=""
-                                            class="form-control rounded-pill" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Account No</label>
-                                        <input style="width: 350px" formControlName="beneAccNo" id="password1" type=""
-                                            placeholder="Ex: 23489234324" required=""
-                                            class="form-control rounded-pill" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>IBAN</label>
-                                        <p class="sl">
-                                            * Mandatory for remittances to Middle-East countries and Europe
-                                        </p>
-                                        <input style="width: 350px" formControlName="iban" id="password1" type=""
-                                            placeholder="Ex: 238923 23423423" required=""
-                                            class="form-control rounded-pill" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Beneficiary’s bank’s (any one) SWIFT code**</label>
-                                        <input style="width: 350px" formControlName="beneBankSwiftCode" type=""
-                                            placeholder="Ex: 1234566" required="" class="form-control rounded-pill" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Beneficiary’s bank’s address including country</label>
-                                        <input style="width: 350px" formControlName="beneBankAdress" id="inputEmail"
-                                            type="text" placeholder="Ex: street address, City. PIN" required=""
-                                            class="form-control rounded-pill email" />
-                                    </div>
 
-                                    <div class="form-group mb-3">
-                                        <label>Intermediary Bank details (if applicable) SWIFT
-                                            code**</label>
-                                        <input style="width: 350px" formControlName="interBankSwiftCode"
-                                            placeholder="Ex: CC/OD/PC/PCFC/EBRD/BP/EEFC-USD/EUR/GBP/CHF/JPY ETC"
-                                            required="" class="form-control rounded-pill" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Intermediary Bank Name (if any)</label>
-                                        <input style="width: 350px" formControlName="interBankName" id="inputEmail"
-                                            type="text" placeholder="Ex: Western union" required=""
-                                            class="form-control rounded-pill" />
-                                    </div>
-
-                                    <div class="form-group mb-3">
-                                        <label>Sort Code</label>
-                                        <input style="width: 350px" formControlName="sortCode" placeholder="Ex: ESEIEC."
-                                            required="" class="form-control rounded-pill" />
-                                    </div>
-
-                                    <button type="submit" class="btn">Create</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End -->
-                </div>
+<app-custom-model modalbodyheight="55vh"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="60vh"
+    id="CreateNewBeneficiary" [name]="'Create New Beneficiary'" #CreateNewBeneficiaryPanel>
+    <div class="col-12">
+        <form [formGroup]="loginForm" class="pb-2" (ngSubmit)="onSubmit(CreateNewBeneficiaryPanel)">
+            <div class="form-group mb-3">
+                <label>Name</label>
+                <input formControlName="benneName" placeholder="Beneficiary/ Customer name" required=""
+                    class="form-control" />
             </div>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #content1 let-modal>
-    <div class="modal-body">
-        <div class="row no-gutter">
-            <div class="col-12 bg-dark" style="margin: 10px">
-                <div class="login d-flex py-5" style="padding: 0px !important">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12">
-                                <h6 class="display-5">Create New Buyer</h6>
-                                <form [formGroup]="buyerForm" (ngSubmit)="onSubmitBuyer()">
-                                    <div class="form-group col-10 mb-3">
-                                        <label>Buyer Name</label>
-                                        <input formControlName="buyerName"
-                                            placeholder="Buyer’s name" required="" class="form-control" />
-                                    </div>
-                                    <div class="form-group col-10 mb-3">
-                                        <label>Buyer Address</label>
-                                        <input formControlName="buyerAdrs"
-                                            placeholder="Ex: street address, City. PIN" required=""
-                                            class="form-control" />
-                                    </div>
-                                    <div class="form-group col-10 mb-3">
-                                        <label>Consignee Name</label>
-                                        <input formControlName="ConsigneeName"
-                                            placeholder="Enter Consignee Name" required=""
-                                            class="form-control" />
-                                    </div>
-                                    <div class="form-group col-10 mb-3">
-                                        <label>Consignee Address</label>
-                                        <input formControlName="ConsigneeAddress"
-                                            placeholder="Ex: Consignee street address, City. PIN" required=""
-                                            class="form-control" />
-                                    </div>
-                                    <div class="form-group col-10 mb-3">
-                                        <label>BUYER BANK NAME</label>
-                                        <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST" bindLabel="value"
-                                        [multiple]="false"
-                                        placeholder="Select Bank Name"
-                                        formControlName="buyerbank"
-                                        bindValue="value"></ng-select>
-                                    </div>
-                                    <div class="form-group col-10 mb-3">
-                                        <label>BANK ADDRESS</label>
-                                        <input formControlName="buyerbankaddress"
-                                            placeholder="Ex: street address, City. PIN" required=""
-                                            class="form-control" />
-                                    </div>
-                                    <button type="submit" class="btn">Create</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End -->
-                </div>
+            <div class="form-group mb-3">
+                <label>Address</label>
+                <input formControlName="beneAdrs" placeholder="Ex: street address, City. PIN" required=""
+                    class="form-control password password1" />
             </div>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #content2 let-modal>
-    <div class="modal-body">
-        <div class="row no-gutter">
-            <div class="col-12 bg-dark" style="margin: 10px">
-                <div class="login d-flex py-5" style="padding: 0px !important">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12">
-                                <h6 class="display-5">Create New Buyer with Consignee</h6>
-                                <form [formGroup]="buyerForm" (ngSubmit)="onSubmitBuyerMember()">
-                                    <div class="form-group col-10 mb-3">
-                                        <label>Buyer Name</label>
-                                        <input formControlName="buyerName"
-                                            placeholder="Buyer’s name" required="" class="form-control" />
-                                    </div>
-                                    <div class="form-group col-10 mb-3">
-                                        <label>Buyer Address</label>
-                                        <input formControlName="buyerAdrs"
-                                            placeholder="Ex: street address, City. PIN" required=""
-                                            class="form-control" />
-                                    </div>
-                                    <div class="form-group col-10 mb-3">
-                                        <label>Consignee Name</label>
-                                        <input formControlName="ConsigneeName"
-                                            placeholder="Enter Consignee Name" required=""
-                                            class="form-control" />
-                                    </div>
-                                    <div class="form-group col-10 mb-3">
-                                        <label>Consignee Address</label>
-                                        <input formControlName="ConsigneeAddress"
-                                            placeholder="Ex: Consignee street address, City. PIN" required=""
-                                            class="form-control" />
-                                    </div>
-                                    <div class="form-group col-10 mb-3">
-                                        <label>BUYER BANK NAME</label>
-                                        <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST" bindLabel="value"
-                                        [multiple]="false"
-                                        placeholder="Select Bank Name"
-                                        formControlName="buyerbank"
-                                        bindValue="value"></ng-select>
-                                    </div>
-                                    <div class="form-group col-10 mb-3">
-                                        <label>BANK ADDRESS</label>
-                                        <input formControlName="buyerbankaddress"
-                                            placeholder="Ex: street address, City. PIN" required=""
-                                            class="form-control" />
-                                    </div>
-                                    <button type="submit" class="btn">Create</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="form-group mb-3">
+                <label>Bank Name</label>
+                <input formControlName="beneBankName" id="password1" type="" placeholder="Ex: 23489234324" required=""
+                    class="form-control" />
             </div>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #content3 let-modal>
-    <div class="modal-body">
-        <div class="row no-gutter">
-            <div class="col-md-7 bg-dark" style="margin: 10px">
-                <div class="login d-flex py-5" style="padding: 0px !important">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-10 col-xl-7 mrg">
-                                <h6 class="display-5">Create New Beneficiary</h6>
-                                <form [formGroup]="loginForm" (ngSubmit)="onSubmitBeneficiaryMember()">
-                                    <div class="form-group mb-3">
-                                        <label>Name</label>
-                                        <input style="width: 350px" formControlName="benneName"
-                                            placeholder="Beneficiary/ Customer name" required=""
-                                            class="form-control rounded-pill" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Address</label>
-                                        <input style="width: 350px" formControlName="beneAdrs"
-                                            placeholder="Ex: street address, City. PIN" required=""
-                                            class="form-control rounded-pill password password1" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Bank Name</label>
-                                        <input style="width: 350px" formControlName="beneBankName" id="password1"
-                                            type="" placeholder="Ex: 23489234324" required=""
-                                            class="form-control rounded-pill" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Account No</label>
-                                        <input style="width: 350px" formControlName="beneAccNo" id="password1" type=""
-                                            placeholder="Ex: 23489234324" required=""
-                                            class="form-control rounded-pill" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>IBAN</label>
-                                        <p class="sl">
-                                            * Mandatory for remittances to Middle-East countries and Europe
-                                        </p>
-                                        <input style="width: 350px" formControlName="iban" id="password1" type=""
-                                            placeholder="Ex: 238923 23423423" required=""
-                                            class="form-control rounded-pill" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Beneficiary’s bank’s (any one) SWIFT code**</label>
-                                        <input style="width: 350px" formControlName="beneBankSwiftCode" type=""
-                                            placeholder="Ex: 1234566" required="" class="form-control rounded-pill" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Beneficiary’s bank’s address including country</label>
-                                        <input style="width: 350px" formControlName="beneBankAdress" id="inputEmail"
-                                            type="text" placeholder="Ex: street address, City. PIN" required=""
-                                            class="form-control rounded-pill email" />
-                                    </div>
-
-                                    <div class="form-group mb-3">
-                                        <label>Intermediary Bank details (if applicable) SWIFT
-                                            code**</label>
-                                        <input style="width: 350px" formControlName="interBankSwiftCode"
-                                            placeholder="Ex: CC/OD/PC/PCFC/EBRD/BP/EEFC-USD/EUR/GBP/CHF/JPY ETC"
-                                            required="" class="form-control rounded-pill" />
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label>Intermediary Bank Name (if any)</label>
-                                        <input style="width: 350px" formControlName="interBankName" id="inputEmail"
-                                            type="text" placeholder="Ex: Western union" required=""
-                                            class="form-control rounded-pill" />
-                                    </div>
-
-                                    <div class="form-group mb-3">
-                                        <label>Sort Code</label>
-                                        <input style="width: 350px" formControlName="sortCode" placeholder="Ex: ESEIEC."
-                                            required="" class="form-control rounded-pill" />
-                                    </div>
-
-                                    <button type="submit" class="btn">Create</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End -->
-                </div>
+            <div class="form-group mb-3">
+                <label>Account No</label>
+                <input formControlName="beneAccNo" id="password1" type="" placeholder="Ex: 23489234324" required=""
+                    class="form-control" />
             </div>
-        </div>
+            <div class="form-group mb-3">
+                <label>IBAN</label>
+                <p class="sl">
+                    * Mandatory for remittances to Middle-East countries and Europe
+                </p>
+                <input formControlName="iban" id="password1" type="" placeholder="Ex: 238923 23423423" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Beneficiary’s bank’s (any one) SWIFT code**</label>
+                <input formControlName="beneBankSwiftCode" type="" placeholder="Ex: 1234566" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Beneficiary’s bank’s address including country</label>
+                <input formControlName="beneBankAdress" id="inputEmail" type="text"
+                    placeholder="Ex: street address, City. PIN" required="" class="form-control email" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Intermediary Bank details (if applicable) SWIFT
+                    code**</label>
+                <input formControlName="interBankSwiftCode"
+                    placeholder="Ex: CC/OD/PC/PCFC/EBRD/BP/EEFC-USD/EUR/GBP/CHF/JPY ETC" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Intermediary Bank Name (if any)</label>
+                <input formControlName="interBankName" id="inputEmail" type="text" placeholder="Ex: Western union"
+                    required="" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Sort Code</label>
+                <input formControlName="sortCode" placeholder="Ex: ESEIEC." required="" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
     </div>
-</ng-template>
+</app-custom-model>
+
+<app-custom-model modalbodyheight="55vh"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="60vh"
+    id="CreateNewBuyer" [name]="'Create New Buyer'" #CreateNewBuyerPanel>
+    <div class="col-12">
+        <form class="pb-2" [formGroup]="buyerForm" (ngSubmit)="onSubmitBuyer(CreateNewBuyerPanel)">
+            <div class="form-group mb-3">
+                <label>Buyer Name</label>
+                <input formControlName="buyerName" placeholder="Buyer’s name" required="" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Buyer Address</label>
+                <input formControlName="buyerAdrs" placeholder="Ex: street address, City. PIN" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Consignee Name</label>
+                <input formControlName="ConsigneeName" placeholder="Enter Consignee Name" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Consignee Address</label>
+                <input formControlName="ConsigneeAddress" placeholder="Ex: Consignee street address, City. PIN"
+                    required="" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>BUYER BANK NAME</label>
+                <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST" bindLabel="value"
+                    [multiple]="false" placeholder="Select Bank Name" formControlName="buyerbank"
+                    bindValue="value"></ng-select>
+            </div>
+            <div class="form-group mb-3">
+                <label>BANK ADDRESS</label>
+                <input formControlName="buyerbankaddress" placeholder="Ex: street address, City. PIN" required=""
+                    class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+</app-custom-model>
+
+<app-custom-model modalbodyheight="55vh"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="60vh"
+    id="CreateNewBuyerwithConsignee" [name]="'Create New Buyer with Consignee'" #EditSummaryPagePanel>
+    <div class="col-12">
+        <form [formGroup]="buyerForm" class="pb-2" (ngSubmit)="onSubmitBuyerMember()">
+            <div class="form-group mb-3">
+                <label>Buyer Name</label>
+                <input formControlName="buyerName" placeholder="Buyer’s name" required="" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Buyer Address</label>
+                <input formControlName="buyerAdrs" placeholder="Ex: street address, City. PIN" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Consignee Name</label>
+                <input formControlName="ConsigneeName" placeholder="Enter Consignee Name" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Consignee Address</label>
+                <input formControlName="ConsigneeAddress" placeholder="Ex: Consignee street address, City. PIN"
+                    required="" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>BUYER BANK NAME</label>
+                <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST" bindLabel="value"
+                    [multiple]="false" placeholder="Select Bank Name" formControlName="buyerbank"
+                    bindValue="value"></ng-select>
+            </div>
+            <div class="form-group mb-3">
+                <label>BANK ADDRESS</label>
+                <input formControlName="buyerbankaddress" placeholder="Ex: street address, City. PIN" required=""
+                    class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+</app-custom-model>
+
+<app-custom-model modalbodyheight="55vh"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="60vh"
+    id="CreateNewBeneficiaryMember" [name]="'Create New Beneficiary as Member'" #EditSummaryPagePanel>
+    <div class="col-12">
+        <form [formGroup]="loginForm" class="pb-2" (ngSubmit)="onSubmitBeneficiaryMember()">
+            <div class="form-group mb-3">
+                <label>Name</label>
+                <input formControlName="benneName" placeholder="Beneficiary/ Customer name" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Address</label>
+                <input formControlName="beneAdrs" placeholder="Ex: street address, City. PIN" required=""
+                    class="form-control password password1" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Bank Name</label>
+                <input formControlName="beneBankName" id="password1" type="" placeholder="Ex: 23489234324" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Account No</label>
+                <input formControlName="beneAccNo" id="password1" type="" placeholder="Ex: 23489234324" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>IBAN</label>
+                <p class="sl">
+                    * Mandatory for remittances to Middle-East countries and Europe
+                </p>
+                <input formControlName="iban" id="password1" type="" placeholder="Ex: 238923 23423423" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Beneficiary’s bank’s (any one) SWIFT code**</label>
+                <input formControlName="beneBankSwiftCode" type="" placeholder="Ex: 1234566" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Beneficiary’s bank’s address including country</label>
+                <input formControlName="beneBankAdress" id="inputEmail" type="text"
+                    placeholder="Ex: street address, City. PIN" required="" class="form-control email" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Intermediary Bank details (if applicable) SWIFT
+                    code**</label>
+                <input formControlName="interBankSwiftCode"
+                    placeholder="Ex: CC/OD/PC/PCFC/EBRD/BP/EEFC-USD/EUR/GBP/CHF/JPY ETC" required=""
+                    class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label>Intermediary Bank Name (if any)</label>
+                <input formControlName="interBankName" id="inputEmail" type="text" placeholder="Ex: Western union"
+                    required="" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Sort Code</label>
+                <input formControlName="sortCode" placeholder="Ex: ESEIEC." required="" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+</app-custom-model>
+
+<app-custom-model modalbodyheight="55vh"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="60vh"
+    id="EditBeneSubmit" [name]="'Edit Beneficiary Details'" #EditBeneSubmitPanel>
+    <div class="col-12">
+        <form #values="ngForm" class="pb-2" (ngSubmit)="onEditBeneSubmit(this.TABLE_BENE_SELECTED_VALUE?._id,values,EditBeneSubmitPanel)">
+            <div class="form-group mb-3">
+                <label>Name</label>
+                <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.benneName" placeholder="Beneficiary/ Customer name"
+                    required="" class="form-control" name="benneName">
+            </div>
+            <div class="form-group mb-3">
+                <label>Address</label>
+                <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.beneAdrs"
+                    placeholder="Ex: street address, City. PIN" required=""
+                    class="form-control password password1" name="beneAdrs">
+            </div>
+            <div class="form-group mb-3">
+                <label>Bank Name</label>
+                <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.beneBankName" id="password1" type=""
+                    placeholder="Ex: 23489234324" required=""
+                    class="form-control" name="beneBankName">
+            </div>
+            <div class="form-group mb-3">
+                <label>Account No</label>
+                <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.beneAccNo" id="password1" type=""
+                    placeholder="Ex: 23489234324" required=""
+                    class="form-control" name="beneAccNo">
+            </div>
+            <div class="form-group mb-3">
+                <label>IBAN</label>
+                <p class="sl">* Mandatory for remittances to Middle-East countries and
+                    Europe</p>
+                <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.iban" id="password1" type=""
+                    placeholder="Ex: 238923 23423423" required=""
+                    class="form-control" name="iban">
+            </div>
+            <div class="form-group mb-3">
+                <label>Beneficiary’s bank’s (any one) SWIFT code**</label>
+                <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.beneBankSwiftCode" type=""
+                    placeholder="Ex: 1234566" required="" class="form-control"
+                    name="beneBankSwiftCode">
+            </div>
+            <div class="form-group mb-3">
+                <label>Beneficiary’s bank’s address including country</label>
+                <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.beneBankAdress" id="inputEmail" type="text"
+                    placeholder="Ex: street address, City. PIN" required=""
+                    class="form-control email" name="beneBankAdress">
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Intermediary Bank details (if applicable) SWIFT code**</label>
+                <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.interBankSwiftCode"
+                    placeholder="Ex: CC/OD/PC/PCFC/EBRD/BP/EEFC-USD/EUR/GBP/CHF/JPY ETC"
+                    required="" class="form-control" name="interBankSwiftCode">
+            </div>
+            <div class="form-group mb-3">
+                <label>Intermediary Bank Name (if any)</label>
+                <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.interBankName" id="inputEmail" type="text"
+                    placeholder="Ex: Western union" required=""
+                    class="form-control" name="interBankName">
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Sort Code</label>
+                <input [(ngModel)]="this.TABLE_BENE_SELECTED_VALUE.sortCode" placeholder="Ex: ESEIEC." required=""
+                    class="form-control" name="sortCode">
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</app-custom-model>
+
+<app-custom-model modalbodyheight="55vh"
+    [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+    EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="60vh"
+    id="EditBuyerSubmit" [name]="'Edit Buyer Details'" #EditBuyerSubmitPanel>
+    <div class="col-12">
+        <form #buyervalues="ngForm" class="pb-2" (ngSubmit)="onEditBuyerSubmit(this.TABLE_BUYER_SELECTED_VALUE?._id,buyervalues,EditBuyerSubmitPanel)">
+            <div class="form-group mb-3">
+                <label>Name</label>
+                <input [(ngModel)]="this.TABLE_BUYER_SELECTED_VALUE.buyerName" placeholder="Buyer name" required=""
+                    class="form-control" name="buyerName">
+            </div>
+            <div class="form-group mb-3">
+                <label>Address</label>
+                <input [(ngModel)]="this.TABLE_BUYER_SELECTED_VALUE.buyerAdrs"
+                    placeholder="Ex: street address, City. PIN" required=""
+                    class="form-control" name="buyerAdrs">
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</app-custom-model>

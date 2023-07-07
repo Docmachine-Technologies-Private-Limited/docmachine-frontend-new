@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="filter_section_top" *ngIf="!showInvoice">
+        <div class="filter_section_top p-2" *ngIf="!showInvoice">
             <div class="row m-0">
                 <div style="margin: auto;margin-left: 0;">
                     <div class="import_export_sec">
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div style="margin: auto; margin-right: 0;">
-                    <div class="filter_right_new padding_new_top" style="display: flex;gap: 20px;">
+                    <div class="filter_right_new padding_new_top p-0" style="display: flex;gap: 20px;">
                         <app-ng-dropdown-custom placeHolderText="Search sb no." class="PopupOpen"
                             popup-close="SHIPPING_BILL_ALL_RELATED_DOCUMENTS" width="300px" [items]="this.item1"
                             bindLabel="sbno" (modelChanges)="SbSearch($event?.sbno)" (keyEvent)="SbSearch($event)"

@@ -29,17 +29,16 @@
                             <td scope="col" class="col-td-th-1" (click)="eventId!='' && j==eventId?TrClick(item,i):''"
                                 [ngClass]="this.TableHeaderClass[j]" *ngFor="let objectitem of this.Keys;let j=index">
                                 {{item[objectitem]}}</td>
-                            <td scope="col" class="col-td-th-1"
-                                *ngIf="item.disabled==false && item.RoleType!='Approver' && this.ActionRequired==true">
-                                <a title="View" (click)="View(item,i)" class="PopupOpen" popup-close="PDF_VIEW">
+                            <td scope="col" class="col-td-th-1" *ngIf="item.disabled==false && item.RoleType!='Approver' && this.ActionRequired==true">
+                                <a title="View" *ngIf="this.ViewButton==true" (click)="View(item,i)" class="PopupOpen" popup-close="PDF_VIEW">
                                     <i class="fa fa-eye PopupOpen" popup-close="PDF_VIEW" aria-hidden="true"></i>
                                 </a>
-                                <a title="Edit" popup-close="EditSummaryPage" (click)="Edit(item,i)"
+                                <a title="Edit" *ngIf="this.EditButton==true" popup-close="EditSummaryPage" (click)="Edit(item,i)"
                                     class="savBtn bgnone PopupOpen">
                                     <i class="fa fa-pencil-square-o PopupOpen" popup-close="EditSummaryPage"
                                         aria-hidden="true"></i>
                                 </a>
-                                <a title="Delete" (click)="Delete(item,i)" class="savBtn bgnone"><i
+                                <a title="Delete" *ngIf="this.DeleteButton==true" (click)="Delete(item,i)" class="savBtn bgnone"><i
                                         class="fa fa-trash-o" aria-hidden="true"></i> </a>
                             </td>
                             <td scope="col" class="col-td-th-1"

@@ -181,9 +181,9 @@
 .custom-expansion-panel .table .added-active {
     background-color: #EFE5FD !important;
     color: #6322e2;
-    border-radius: unset!important;
-    border-top-left-radius: 10px!important;
-    border-top-right-radius: 10px!important;
+    border-radius: unset !important;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
     box-shadow: none !important;
 }
 
@@ -192,6 +192,16 @@
     margin-top: -7px;
     box-shadow: none;
     border-radius: unset;
-    border-bottom-left-radius: 10px!important;
-    border-bottom-right-radius: 10px!important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+}
+
+.custom-expansion-panel ::-webkit-scrollbar-track {
+    box-shadow: 0 0 3px 0px #1c39d9;
+    border-radius: 10px;
+}
+
+.custom-expansion-panel ::-webkit-scrollbar-thumb {
+    background-color: #8757dd;
+    border-radius: 10px;
 }

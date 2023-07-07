@@ -11,6 +11,9 @@ export class CustomExpansionPanelComponent implements OnInit {
   @Input('items') items: any = [];
   @Input('Keys') Keys: any = [];
   @Input('eventId') eventId: any = '';
+  @Input('ViewButton') ViewButton: boolean = true;
+  @Input('EditButton') EditButton: boolean = true;
+  @Input('DeleteButton') DeleteButton: boolean = true;
   @Input('TableHeaderClass') TableHeaderClass: any = [];
 
   @Input('Expansionitems') Expansionitems: any = [];

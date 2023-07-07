@@ -163,17 +163,17 @@ export class IdpmsReconComponent implements OnInit {
       const tempObject = {
         userId: this.applicant,
         bank: this.bankSelection,
-        sbNo: item['Shipping Bill No'],
-        sbDate: new Date((item['Shipping Bill Date'] - 25569) * 24 * 60 * 60 * 1000),
+        boeno: item['BOE Number'],
+        boeDate: new Date((item['BOE Date'] - 25569) * 24 * 60 * 60 * 1000),
         adCode: item['AD Code'],
         portCode: item['Port Code'],
-        edpmsStatus: item['STATUS'],
+        idpmsStatus: item['BOE STATUS'],
         adRefNo: item['adBillNo'],
         sbAmount: item['sbAmount'],
         sbBalanceAmount: this.getSBbalanceAmount(item['pipo'], item['sbAmount']),
         sbCurrency: item['sbCurrency'],
-        statusMeaning: this.getStatusMeaning(item['STATUS']),
-        systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['Shipping Bill No']),
+        statusMeaning: this.getStatusMeaning(item['BOE STATUS']),
+        systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['BOE Number']),
         docAvailable: item['systemStatus'] === 'Available' ? true : false,
         action: this.getAction(item['systemStatus']),
         sbdata: item['sbdata']
@@ -553,7 +553,7 @@ export class IdpmsReconComponent implements OnInit {
       (err) => console.log(err)
     );
 
-    await this.documentService.getMaster(1).subscribe((res: any) => {
+    await this.documentService.getBoe(1).subscribe((res: any) => {
       this.masterSB = res?.data;
       console.log('getMaster:', res);
       this.documentService.getIDPMSbyLimit(this.LIMIT).subscribe((res: any) => {
