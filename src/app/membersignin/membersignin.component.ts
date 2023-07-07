@@ -21,14 +21,14 @@ export class MembersigninComponent implements OnInit {
   fullName: any;
   companyId: any;
   companyName: any;
-  SNAPSHOT_DATA: any=[];
-  COMPANY_DETAILS: any=[];
+  SNAPSHOT_DATA: any = [];
+  COMPANY_DETAILS: any = [];
   constructor(private formBuilder: FormBuilder, private userService: UserService,
     private router: Router, private route: ActivatedRoute, private toastr: ToastrService) { }
   ngOnInit(): void {
     this.token = this.route.snapshot.params['id'];
-    let val:any = jwt_decode.default(this.token);
-    this.SNAPSHOT_DATA=val;
+    let val: any = jwt_decode.default(this.token);
+    this.SNAPSHOT_DATA = val;
     console.log(val);
     this.email = val['email'];
     this.fullName = val['name'];
@@ -38,9 +38,9 @@ export class MembersigninComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
     });
-    this.userService.getTeamByUser(this.SNAPSHOT_DATA['teamId']).subscribe((res: any)=>{
-      console.log(res,'getTeamByUser');
-      this.COMPANY_DETAILS=res.data[0];
+    this.userService.getTeamByUser(this.SNAPSHOT_DATA['teamId']).subscribe((res: any) => {
+      console.log(res, 'getTeamByUser');
+      this.COMPANY_DETAILS = res.data[0];
     })
   }
   get f() { return this.resetForm.controls; }
@@ -61,7 +61,10 @@ export class MembersigninComponent implements OnInit {
     this.resetForm.value.Subscription = this.SNAPSHOT_DATA['UnderSubscription']
     this.resetForm.value.RoleCheckbox = this.SNAPSHOT_DATA['UnderSubscriptionCheckBox']
     this.resetForm.value.companyName = this.COMPANY_DETAILS?.teamName;
-    console.log(this.resetForm.value,'this.resetForm.value')
+    this.resetForm.value.DMS = this.SNAPSHOT_DATA['DMS'];
+    this.resetForm.value.Teasury = this.SNAPSHOT_DATA['Teasury'];
+    this.resetForm.value.Transaction = this.SNAPSHOT_DATA['Transaction'];
+    console.log(this.resetForm.value, 'this.resetForm.value')
     this.userService.register(this.resetForm.value)
       .subscribe(
         data => {

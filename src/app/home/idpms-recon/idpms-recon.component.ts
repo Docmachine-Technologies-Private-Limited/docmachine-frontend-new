@@ -96,7 +96,7 @@ export class IdpmsReconComponent implements OnInit {
       this.masterTeam = res?.data[0]?.bankDetails;
       this.masterTeam.forEach((acc: any) => this.bankAccounts.push(acc?.bank));
     })
-    await this.documentService.getclearedEDPMS(this.LIMIT).subscribe((cleareddata: any) => {
+    await this.documentService.getclearedIDPMS(this.LIMIT).subscribe((cleareddata: any) => {
       this.GET_EDMPS_CLEARED = this.addSBdata(cleareddata?.data);
       this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
       this.SB_NO_LIST2 = [];
@@ -114,7 +114,7 @@ export class IdpmsReconComponent implements OnInit {
       for (let index = 0; index < lenforloop; index++) {
         this.pageSizeOptionsList2.push(10 * (index + 1))
       }
-      console.log(cleareddata, 'getclearedEDPMS')
+      console.log(cleareddata, 'getclearedIDPMS')
     })
     await this.documentService.Hide_InnerLoader();
   }
@@ -140,7 +140,7 @@ export class IdpmsReconComponent implements OnInit {
   }
 
   saveData() {
-    this.documentService.createEDPMS(this.preparePayload()).subscribe((res: any) => {
+    this.documentService.createIDPMS(this.preparePayload()).subscribe((res: any) => {
       console.log('create edpms res: ', res);
       this.edpmsData = res?.data;
       this.pageSizeOptionsList = [];
@@ -263,11 +263,11 @@ export class IdpmsReconComponent implements OnInit {
     console.log("onUploadSuccess ARGS", args);
     this.masterExcelData = args[1].data;
     await this.getData();
-    await this.compareEDPMS()
+    await this.compareIDPMS()
     console.log("onUploadSuccess DATA", this.masterExcelData);
   }
 
-  async compareEDPMS() {
+  async compareIDPMS() {
     await this.gatherSBdata();
     await this.saveData();
   }
@@ -459,9 +459,9 @@ export class IdpmsReconComponent implements OnInit {
     }
 
     if (data?.doc) {
-      this.pipoArrayListdata2.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata2.push({ status: true, text: 'BOE doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata2.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=boe', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata2.push({ status: false, text: 'BOE doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=boe', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
@@ -493,9 +493,9 @@ export class IdpmsReconComponent implements OnInit {
     }
 
     if (data?.doc) {
-      this.pipoArrayListdata3.push({ status: true, text: 'Sb doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
+      this.pipoArrayListdata3.push({ status: true, text: 'BOE doc', buttontext: 'View', doc: data?.doc, popup_close: 'pdf_view' })
     } else {
-      this.pipoArrayListdata3.push({ status: false, text: 'Sb doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=boe', popup_close: 'pdf_upload' })
+      this.pipoArrayListdata3.push({ status: false, text: 'BOE doc', buttontext: 'Upload', url: this.documentService?.AppConfig?.FRONT_END_URL + 'home/upload;file=import;document=boe', popup_close: 'pdf_upload' })
     }
 
     if (data?.blCopyDoc) {
@@ -556,7 +556,7 @@ export class IdpmsReconComponent implements OnInit {
     await this.documentService.getMaster(1).subscribe((res: any) => {
       this.masterSB = res?.data;
       console.log('getMaster:', res);
-      this.documentService.getEDPMSbyLimit(this.LIMIT).subscribe((res: any) => {
+      this.documentService.getIDPMSbyLimit(this.LIMIT).subscribe((res: any) => {
         this.SB_NO_LIST = [];
         this.GET_EDMPS = this.addSBdata(res?.data);
         var temp: any = [];
@@ -589,7 +589,7 @@ export class IdpmsReconComponent implements OnInit {
       console.log(err);
     });
 
-    await this.documentService.getIrAdvice('').subscribe((res: any) => {
+    await this.documentService.getOrAdvice('').subscribe((res: any) => {
       this.masterIR = res?.data;
       console.log('getIrAdvice:', res);
     }, err => {
@@ -599,7 +599,7 @@ export class IdpmsReconComponent implements OnInit {
   }
 
   async PAGINATION_EVENT(event: any) {
-    await this.documentService.getEDPMSbyLimit(event?.pageSize).subscribe((res: any) => {
+    await this.documentService.getIDPMSbyLimit(event?.pageSize).subscribe((res: any) => {
       console.log(event, res, 'PAGINATION_EVENT')
       this.SB_NO_LIST = [];
       this.GET_EDMPS = this.addSBdata(res?.data);
@@ -617,7 +617,7 @@ export class IdpmsReconComponent implements OnInit {
     })
   }
   async PAGINATION_EVENT2(event: any) {
-    this.documentService.getclearedEDPMS(event?.pageSize).subscribe((cleareddata: any) => {
+    this.documentService.getclearedIDPMS(event?.pageSize).subscribe((cleareddata: any) => {
       this.GET_EDMPS_CLEARED = this.addSBdata(cleareddata?.data);
       this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
       this.SB_NO_LIST2 = [];

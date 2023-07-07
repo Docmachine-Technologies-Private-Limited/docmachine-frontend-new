@@ -296,6 +296,49 @@ export class DocumentService {
     return this.http.post(url,{limit:limit},httpOptions);
   }
   
+  createIDPMS(payload) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    return this.http.post(
+      `${this.api_base}/idpms/addIDPMS`,
+      payload,
+      httpOptions
+    );
+  }
+
+  getIDPMS() {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/idpms/getIDPMS`;
+    return this.http.get(url, httpOptions);
+  }
+  
+  getIDPMSbyLimit(limit:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/idpms/getIDPMSbylimit`;
+    return this.http.post(url,{limit:limit},httpOptions);
+  }
+  
+  getclearedIDPMS(limit:any) {
+    this.loadFromLocalStorage();
+    console.log(this.authToken);
+    const httpOptions = {
+      headers: new HttpHeaders({ Authorization: this.authToken }),
+    };
+    let url = `${this.api_base}/idpms/getcleared`;
+    return this.http.post(url,{limit:limit},httpOptions);
+  }
+  
   getMaster(user) {
     this.loadFromLocalStorage();
     console.log(this.authToken);
