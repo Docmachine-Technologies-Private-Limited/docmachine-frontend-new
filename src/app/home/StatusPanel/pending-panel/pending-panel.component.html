@@ -43,7 +43,7 @@
               Types:item['Types']
             },i)">Reject</button>
               <button type="submit" class="btn btn-primary PopupOpen" popup-close="Documents_View"
-                (click)="openView(item,i)">View</button>
+                (click)="openView(item,i,CreateBuyerBeneficiaryMember)">View</button>
             </div>
             <div class="column flex-display"
               *ngIf="this.USER_DETAILS?.RoleCheckbox==='Checker' && item['status']!='Verify'">
@@ -62,10 +62,10 @@
               deleteflag:'0',
               Types:item['Types']
             },i)">Reject</button>
-              <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary PopupOpen" [attr.popup-close]="'Documents_View'"
-                (click)="openView(item,i)">View</button>
-              <button type="submit" *ngIf="item?.Types!='downloadPDF'" class="btn btn-primary PopupOpen" [attr.popup-close]="'Documents_View'"
-                (click)="openView(item,i)">View</button>
+              <button type="submit" *ngIf="item?.Types=='downloadPDF'" class="btn btn-primary PopupOpen"
+                [attr.popup-close]="'Documents_View'" (click)="openView(item,i,CreateBuyerBeneficiaryMember)">View</button>
+              <button type="submit" *ngIf="item?.Types!='downloadPDF'" class="btn btn-primary PopupOpen"
+                [attr.popup-close]="'Documents_View'" (click)="openView(item,i,CreateBuyerBeneficiaryMember)">View</button>
             </div>
           </td>
         </tr>
@@ -73,3 +73,83 @@
     </table>
   </div>
 </div>
+
+<app-custom-model modalbodyheight="55vh" 
+  [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
+  EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="60vh"
+  id="CreateNewBeneficiaryMember" [name]="this.BENE_DATA!=''?'Create New Beneficiary as Member':'Create New Buyer as Member'" #CreateBuyerBeneficiaryMember>
+  <div class="col-12" *ngIf="this.BENE_DATA!=''">
+    <div class="form-group mb-3">
+      <label>Name</label>
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.benneName" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Bank Name</label>
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.beneBankName" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Account Number</label>
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.beneAccNo" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>IBAN</label>
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.iban" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Sort Code</label>
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.sortCode" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Bene Bank Name</label>
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.beneBankName" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Bene Bank Adress</label>
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.beneBankAdress"
+        class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Bene Bank Swift Code</label>
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.beneBankSwiftCode"
+        class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Inter Bank Name</label>
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.interBankName" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Inter Bank Swift Code</label>
+      <input disabled="true" placeholder="Buyer’s name" [value]="this.BENE_DATA?.interBankSwiftCode"
+        class="form-control" />
+    </div>
+  </div>
+  <div class="col-12" *ngIf="this.BUYER_DATA!=''">
+    <div class="form-group mb-3">
+      <label>Buyer Name</label>
+      <input [value]="this.BUYER_DATA?.buyerName" placeholder="Buyer’s name" disabled="true" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Buyer Address</label>
+      <input [value]="this.BUYER_DATA?.buyerAdrs" placeholder="Buyer’s name" disabled="true" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Consignee Name</label>
+      <input [value]="this.BUYER_DATA?.ConsigneeName" placeholder="Buyer’s name" disabled="true" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Consignee Address</label>
+      <input [value]="this.BUYER_DATA?.ConsigneeAddress" placeholder="Buyer’s name" disabled="true"
+        class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Buyer Bank</label>
+      <input [value]="this.BUYER_DATA?.buyerbank" placeholder="Buyer’s name" disabled="true" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+      <label>Buyer Bank Address</label>
+      <input [value]="this.BUYER_DATA?.buyerbankaddress" placeholder="Buyer’s name" disabled="true"
+        class="form-control" />
+    </div>
+  </div>
+</app-custom-model>
+

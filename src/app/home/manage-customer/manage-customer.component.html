@@ -299,8 +299,9 @@
             </div>
             <div class="form-group mb-3">
                 <label>Bank Name</label>
-                <input formControlName="beneBankName" id="password1" type="" placeholder="Ex: 23489234324" required=""
-                    class="form-control" />
+                <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST" bindLabel="value"
+                [multiple]="false" placeholder="Select Bank Name" formControlName="beneBankName"
+                bindValue="value"></ng-select>
             </div>
             <div class="form-group mb-3">
                 <label>Account No</label>

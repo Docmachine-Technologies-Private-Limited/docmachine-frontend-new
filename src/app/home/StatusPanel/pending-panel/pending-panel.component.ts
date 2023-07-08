@@ -18,6 +18,9 @@ import { ToastrService } from 'ngx-toastr';
 export class PendingPanelComponent implements OnInit {
   DATA_CREATE: any = [];
   USER_DETAILS: any = [];
+  BENE_DATA: any = '';
+  BUYER_DATA: any = '';
+
   constructor(public wininfo: WindowInformationService, public CustomConfirmDialogModel: CustomConfirmDialogModelComponent,
     public mergerpdf: MergePdfService,
     public pdfmerge: MergePdfListService,
@@ -72,7 +75,7 @@ export class PendingPanelComponent implements OnInit {
             console.log("king123")
             console.log(responsedata)
             this.ngOnInit();
-            this.SendMailText(this.DATA_CREATE[index]?.data,'New Buyer Name added : ' );
+            this.SendMailText(this.DATA_CREATE[index]?.data, 'New Buyer Name added : ');
             this.toastr.success('Successfully Accpeted data...')
           }, error => {
             console.log("error")
@@ -97,7 +100,7 @@ export class PendingPanelComponent implements OnInit {
             console.log("king123")
             console.log(responsedata)
             this.ngOnInit();
-            this.SendMailText(this.DATA_CREATE[index]?.data,'New Beneficiary Name added : ' );
+            this.SendMailText(this.DATA_CREATE[index]?.data, 'New Beneficiary Name added : ');
             this.toastr.success('Successfully Accpeted data...')
           }, error => {
             console.log("error")
@@ -137,7 +140,7 @@ export class PendingPanelComponent implements OnInit {
         TransactionTableName: 'ExportTransaction',
         TransactionTableId: data?.Tableid
       }
-      this.RejectedData(index,download)[this.DATA_CREATE[index]['tableName']]();
+      this.RejectedData(index, download)[this.DATA_CREATE[index]['tableName']]();
     } else {
       this.CustomConfirmDialogModel.InputConfirmDialogModel('Please insert your comments', 'Comments', (res: any) => {
         data['status'] = 'Rejected'
@@ -150,7 +153,7 @@ export class PendingPanelComponent implements OnInit {
       });
     }
   }
-  async openView(item: any, index: any) {
+  async openView(item: any, index: any, panel: any) {
     console.log(item, 'sdfgsfhsdgfdfsd')
     var temp: any = [];
     if (item != undefined && item != '') {
@@ -167,8 +170,24 @@ export class PendingPanelComponent implements OnInit {
         } else {
           this.CustomConfirmDialogModel.ConfirmDialogModel('Pdf View', "Sorry's documents not found!", null);
         }
-
-      } else {
+      } else if (item?.Types === 'BuyerAddition') {
+        try {
+          this.BENE_DATA = ''
+          this.BUYER_DATA = item?.data;
+          panel.displayShow;
+        } catch (error) {
+          console.log(error, 'errror')
+        }
+      } else if (item?.Types === 'BeneficiaryAddition') {
+        try {
+          this.BUYER_DATA = '';
+          this.BENE_DATA = item?.data
+          panel.displayShow;
+        } catch (error) {
+          console.log(error, 'errror')
+        }
+      }
+      else {
         try {
           await this.pdfmerge._multiple_merge_pdf([item['dummydata']['doc'] != '' ? item['dummydata']['doc'] : item['dummydata']['doc1']]).then(async (merge: any) => {
             this.CustomConfirmDialogModel.IframeConfirmDialogModel('View', [merge?.pdfurl], this.DATA_CREATE[index]?.status == 'Approved' ? true : false, null as any);
@@ -181,9 +200,9 @@ export class PendingPanelComponent implements OnInit {
       this.CustomConfirmDialogModel.ConfirmDialogModel('Pdf View', 'Pdf not found!', null);
     }
   }
-  SendMailText(data: any,text:any) {
+  SendMailText(data: any, text: any) {
     console.log(data, 'sendMail')
-    this.documentService.SendMailNormal({ data: data, subject: text+ data[Object.keys(data)[0]] }).subscribe((res2) => {
+    this.documentService.SendMailNormal({ data: data, subject: text + data[Object.keys(data)[0]] }).subscribe((res2) => {
       this.toastr.success('Message sent your email id successfully!');
     },
       (err) => console.log("ERROR")
@@ -248,29 +267,29 @@ export class PendingPanelComponent implements OnInit {
           await this.ngOnInit();
         });
       },
-      "Inward-Remitance-Dispoal-Realization":()=>{
-        this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit();this.toastr.success('Successfully Rejected data...')});
+      "Inward-Remitance-Dispoal-Realization": () => {
+        this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit(); this.toastr.success('Successfully Rejected data...') });
       },
-      "Inward-Remitance-Dispoal":()=>{
-        this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit();this.toastr.success('Successfully Rejected data...')});
+      "Inward-Remitance-Dispoal": () => {
+        this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit(); this.toastr.success('Successfully Rejected data...') });
       },
-      "Packing-Credit-Request":()=>{
-        this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit();this.toastr.success('Successfully Rejected data...')});
+      "Packing-Credit-Request": () => {
+        this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit(); this.toastr.success('Successfully Rejected data...') });
       },
-      "Export-Direct-Dispatch":()=>{
+      "Export-Direct-Dispatch": () => {
         this.documentService.setDownloadStatus(download).subscribe(async (res: any) => {
           var rejecteddata: any = this.DATA_CREATE[index]['RejectData']
           this.documentService.getDataAnyTable(rejecteddata?.tableName, rejecteddata?.data?.SbRef).subscribe((res) => {
             const sum = parseFloat(res[0]?.balanceAvai) + parseFloat(rejecteddata?.data?.Total_FIRX_Amount);
-            this.documentService.UpdateAnyTable(rejecteddata?.tableName, rejecteddata?.data?.SbRef, { balanceAvai: sum,firxdetails:[] }).subscribe((data) => {
+            this.documentService.UpdateAnyTable(rejecteddata?.tableName, rejecteddata?.data?.SbRef, { balanceAvai: sum, firxdetails: [] }).subscribe((data) => {
               this.toastr.success('Successfully Rejected data...')
             })
           })
           await this.ngOnInit();
         });
       },
-      "":()=>{
-        this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit();this.toastr.success('Successfully Rejected data...')});
+      "": () => {
+        this.documentService.setDownloadStatus(download).subscribe(async (res: any) => { await this.ngOnInit(); this.toastr.success('Successfully Rejected data...') });
       },
     }
   }
