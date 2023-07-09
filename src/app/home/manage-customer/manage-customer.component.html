@@ -265,13 +265,13 @@
             </div>
             <div class="form-group mb-3">
                 <label>BUYER BANK NAME</label>
-                <app-ng-dropdown-custom formControlName="buyerbank" placeHolderText="Select PI/PO or shipping bill"
+                <!-- <app-ng-dropdown-custom formControlName="buyerbank" placeHolderText="Select PI/PO or shipping bill"
                     [items]="this.BANK_NAME_LIST" bindLabel="value" [multiple]="false"
                     (modelChanges)="buyerForm.value.buyerbank=$event?.value">
-                </app-ng-dropdown-custom>
-                <!-- <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST" bindLabel="value"
+                </app-ng-dropdown-custom> -->
+                <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST" bindLabel="value"
                     [multiple]="false" placeholder="Select Bank Name" formControlName="buyerbank"
-                    bindValue="value"></ng-select> -->
+                    bindValue="value"></ng-select>
             </div>
             <div class="form-group mb-3">
                 <label>BANK ADDRESS</label>
