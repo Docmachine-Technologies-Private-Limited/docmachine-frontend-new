@@ -20,9 +20,7 @@ export class IdpmsReconTableComponent implements OnInit {
     public wininfo: WindowInformationService) { }
 
   ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270,'.content-wrap')
-    this.userService.getTeam()
-      .subscribe((res: any) => {
+    this.userService.getTeam().subscribe((res: any) => {
         this.masterTeam = res?.data[0]?.bankDetails;
         this.masterTeam.forEach( (acc:any) => this.bankAccounts.push(acc?.bank));
         console.log('banks:', this.bankAccounts);
@@ -30,7 +28,7 @@ export class IdpmsReconTableComponent implements OnInit {
         console.log(err);
        });
 
-    this.documentService.getEDPMS().subscribe( (res: any) => {
+    this.documentService.getIDPMS().subscribe( (res: any) => {
       this.edpmsData = res?.data;
       console.log("Edpms Data", this.edpmsData)
     }, err => {
@@ -46,13 +44,13 @@ export class IdpmsReconTableComponent implements OnInit {
 
   actionEvent(act, sbNo) {
     if(act === 'Upload Documents') {
-      this.router.navigateByUrl('/home/upload;file=export;document=pipo');
+      this.router.navigateByUrl('/home/upload;file=import;document=pipo');
     } else if (act === 'Create Documents') {
       this.router.navigate(['/home/bill-lodgement', {sbNo: sbNo}]);
     }
   }
 
   openNew(){
-    this.router.navigateByUrl('/home/edpms-recon');
+    this.router.navigateByUrl('/home/idpms-recon');
   }
 }

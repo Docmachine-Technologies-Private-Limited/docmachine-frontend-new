@@ -27,8 +27,8 @@ export class IdpmsReconComponent implements OnInit {
   width: any = 0;
 
   masterTeam: any = [];
-  masterSB: any = [];
-  masterIR: any = [];
+  masterboe: any = [];
+  masterOR: any = [];
   masterPIPO: any = [];
   masterExcelData: any = [];
   bankAccounts: any = [];
@@ -37,7 +37,7 @@ export class IdpmsReconComponent implements OnInit {
   applicant: any = [];
   blMaster: any = [];
   tasksMaster: any = [];
-  edpmsData: any = [];
+  idpmsData: any = [];
   pipoArrayListdata: any = []
   pipoArrayListdata2: any = [];
   pipoArrayListdata3: any = [];
@@ -45,8 +45,8 @@ export class IdpmsReconComponent implements OnInit {
   GET_EDMPS_CLEARED: any = [];
   FILTER_EDPMS_DATA: any = [];
   FILTER_EDPMS_CLEARED_DATA: any = [];
-  SB_NO_LIST: any = [];
-  SB_NO_LIST2: any = [];
+  boe_NO_LIST: any = [];
+  boe_NO_LIST2: any = [];
   LIMIT: number = 10;
   pageSizeOptionsList: any = [];
   pageSizeOptionsList2: any = [];
@@ -97,17 +97,17 @@ export class IdpmsReconComponent implements OnInit {
       this.masterTeam.forEach((acc: any) => this.bankAccounts.push(acc?.bank));
     })
     await this.documentService.getclearedIDPMS(this.LIMIT).subscribe((cleareddata: any) => {
-      this.GET_EDMPS_CLEARED = this.addSBdata(cleareddata?.data);
+      this.GET_EDMPS_CLEARED = this.addboedata(cleareddata?.data);
       this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
-      this.SB_NO_LIST2 = [];
+      this.boe_NO_LIST2 = [];
       var temp: any = [];
       this.GET_EDMPS_CLEARED.forEach(element => {
-        if (this.SB_NO_LIST2.includes(element?.sbNo) == false) {
-          temp.push(element?.sbNo)
+        if (this.boe_NO_LIST2.includes(element?.boeno) == false) {
+          temp.push(element?.boeno)
         }
       });
       temp.forEach(element => {
-        this.SB_NO_LIST2.push({ value: element })
+        this.boe_NO_LIST2.push({ value: element })
       });
       this.pageSizeOptionsList2 = [];
       let lenforloop: number = parseInt(cleareddata?.TotalLength) / 10;
@@ -142,13 +142,13 @@ export class IdpmsReconComponent implements OnInit {
   saveData() {
     this.documentService.createIDPMS(this.preparePayload()).subscribe((res: any) => {
       console.log('create edpms res: ', res);
-      this.edpmsData = res?.data;
+      this.idpmsData = res?.data;
       this.pageSizeOptionsList = [];
       let lenforloop: number = parseInt(res?.TotalLength) / 10;
       for (let index = 0; index < lenforloop; index++) {
         this.pageSizeOptionsList.push(10 * (index + 1))
       }
-      this.SBdata();
+      this.boedata();
       // this.router.navigateByUrl('/home/edpms-recon-table');
     }, err => {
       console.log('create EDPMS error: ', err)
@@ -163,42 +163,45 @@ export class IdpmsReconComponent implements OnInit {
       const tempObject = {
         userId: this.applicant,
         bank: this.bankSelection,
-        boeno: item['BOE Number'],
+        boeno: (item['BOE Number']).toString(),
         boeDate: new Date((item['BOE Date'] - 25569) * 24 * 60 * 60 * 1000),
-        adCode: item['AD Code'],
-        portCode: item['Port Code'],
+        adCode: (item['AD Code']).toString(),
+        ShippingPortal: (item['BOE Number']).toString(),
+        ImportAgency: item['Import Agency'],
+        IEPAN: item['IE PAN'],
+        IECode: item['IE Code'],
+        IEName: item['IE Name'],
+        IEAddress: item['IE Address'],
+        portCode: (item['Port Code']).toString(),
         idpmsStatus: item['BOE STATUS'],
-        adRefNo: item['adBillNo'],
-        sbAmount: item['sbAmount'],
-        sbBalanceAmount: this.getSBbalanceAmount(item['pipo'], item['sbAmount']),
-        sbCurrency: item['sbCurrency'],
+        boeAmount: (0).toString(),
+        boeBalanceAmount: this.getboebalanceAmount(item['pipo'], 0).toString(),
         statusMeaning: this.getStatusMeaning(item['BOE STATUS']),
-        systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['BOE Number']),
+        systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], 0, (item['BOE Number']).toString()),
         docAvailable: item['systemStatus'] === 'Available' ? true : false,
         action: this.getAction(item['systemStatus']),
-        sbdata: item['sbdata']
       };
       payload.push(tempObject);
     });
     return payload
   }
 
-  getSystemStatus(status, pipo, sbAmount, sbNo) {
+  getSystemStatus(status, pipo, boeAmount, boeNo) {
     if (!(status === 'Available')) {
       return 'DOC NOT AVAILABLE IN SYSTEM'
-    } else if (this.getSBbalanceAmount(pipo, sbAmount) > 0) {
+    } else if (this.getboebalanceAmount(pipo, boeAmount) > 0) {
       return 'PARTIALLY REALISED'
     } else if (this.checkIfBLDone(pipo)) {
       return 'SUBMITTED & BANK REF NO. RECEIVED'
-    } else if (this.checkifDownloaded(sbNo)) {
+    } else if (this.checkifDownloaded(boeNo)) {
       return 'SUBMITTED BUT BANK REF NOT RECEIVED'
     } else {
       return 'NOT SUBMITTED TO BANK'
     }
   }
 
-  checkifDownloaded(sbNo) {
-    if (this.tasksMaster?.some((task: any) => task?.task?.some((t: any) => t?.sbNumbers?.contains(sbNo)))) {
+  checkifDownloaded(boeNo) {
+    if (this.tasksMaster?.some((task: any) => task?.task?.some((t: any) => t?.boeNumbers?.contains(boeNo)))) {
       return true
     } else {
       return false
@@ -226,9 +229,9 @@ export class IdpmsReconComponent implements OnInit {
     return actionStatus
   }
 
-  getSBbalanceAmount(pipo, total) {
+  getboebalanceAmount(pipo, total) {
     let paidAmount = 0;
-    this.masterIR.forEach((ir: any) => {
+    this.masterOR.forEach((ir: any) => {
       if (pipo === ir?.pipo[0]) {
         paidAmount = paidAmount + parseInt(ir?.amount, 10)
       }
@@ -244,7 +247,7 @@ export class IdpmsReconComponent implements OnInit {
     } else if (status === 'PENDING_PAYMENT') {
       return 'Lodgement done'
     } else {
-      return 'EDPMS Status is not clear'
+      return 'IDPMS Status is not clear'
     }
   }
 
@@ -268,15 +271,15 @@ export class IdpmsReconComponent implements OnInit {
   }
 
   async compareIDPMS() {
-    await this.gatherSBdata();
+    await this.gatherboedata();
     await this.saveData();
   }
 
-  async gatherSBdata() {
+  async gatherboedata() {
     await this.masterExcelData.forEach((data, i) => {
       var index = -1;
-      for (let j = 0; j < this.masterSB.length; j++) {
-        if (this.masterSB[j] && this.masterSB[j].sbno && this.masterSB[j].sbno == data['Shipping Bill No']) {
+      for (let j = 0; j < this.masterboe.length; j++) {
+        if (this.masterboe[j] && this.masterboe[j].boeNumber && this.masterboe[j].boeNumber == data['BOE Number']) {
           index = j;
           break;
         }
@@ -284,11 +287,11 @@ export class IdpmsReconComponent implements OnInit {
       console.log("index:", index);
       if (index !== -1) {
         this.masterExcelData[i]['systemStatus'] = 'Available';
-        this.masterExcelData[i]['sbAmount'] = this.masterSB[index]?.fobValue;
-        this.masterExcelData[i]['sbCurrency'] = this.masterSB[index]?.fobCurrency;
-        this.masterExcelData[i]['adBillNo'] = this.masterSB[index]?.adBillNo;
-        this.masterExcelData[i]['pipo'] = this.masterSB[index]?.pipo[0];
-        this.masterExcelData[i]['sbdata'] = this.masterSB[index];
+        this.masterExcelData[i]['boeAmount'] = this.masterboe[index]?.invoiceAmount;
+        this.masterExcelData[i]['boeCurrency'] = this.masterboe[index]?.currency;
+        this.masterExcelData[i]['adCode'] = this.masterboe[index]?.adCode;
+        this.masterExcelData[i]['pipo'] = this.masterboe[index]?.pipo[0];
+        this.masterExcelData[i]['boedata'] = this.masterboe[index];
       } else {
         this.masterExcelData[i]['systemStatus'] = 'NOT_AVAILABLE';
       }
@@ -296,42 +299,42 @@ export class IdpmsReconComponent implements OnInit {
     console.log('this.masterExcelData', this.masterExcelData);
   }
 
-  async SBdata() {
-    await this.edpmsData.forEach((data, i) => {
+  async boedata() {
+    await this.idpmsData.forEach((data, i) => {
       var index = -1;
-      for (let j = 0; j < this.masterSB.length; j++) {
-        if (this.masterSB[j] && this.masterSB[j]?.sbno && this.masterSB[j]?.sbno == data?.sbNo) {
+      for (let j = 0; j < this.masterboe.length; j++) {
+        if (this.masterboe[j] && this.masterboe[j]?.boeNumber && this.masterboe[j]?.boeNumber == data?.boeNumber) {
           index = j;
           break;
         }
       }
       console.log("index:", index);
       if (index !== -1) {
-        this.edpmsData[i]['sbdata'] = this.masterSB[index];
+        this.idpmsData[i]['boedata'] = this.masterboe[index];
       } else {
-        this.edpmsData[i]['sbdata'] = [];
+        this.idpmsData[i]['boedata'] = [];
       }
     });
-    console.log('this.edpmsData', this.edpmsData);
+    console.log('this.idpmsData', this.idpmsData);
   }
 
-  addSBdata(edpmsdata: any) {
+  addboedata(edpmsdata: any) {
     edpmsdata.forEach((data, i) => {
       var index = -1;
-      for (let j = 0; j < this.masterSB.length; j++) {
-        if (this.masterSB[j] && this.masterSB[j]?.sbno && this.masterSB[j]?.sbno == data?.sbNo) {
+      for (let j = 0; j < this.masterboe.length; j++) {
+        if (this.masterboe[j] && this.masterboe[j]?.boeNumber && this.masterboe[j]?.boeNumber == data?.boeNumber) {
           index = j;
           break;
         }
       }
       console.log("index:", index);
       if (index !== -1) {
-        edpmsdata[i]['sbdata'] = this.masterSB[index];
+        edpmsdata[i]['boedata'] = this.masterboe[index];
       } else {
-        edpmsdata[i]['sbdata'] = [];
+        edpmsdata[i]['boedata'] = [];
       }
     });
-    console.log('this.edpmsData', edpmsdata);
+    console.log('this.idpmsData', edpmsdata);
     return edpmsdata;
   }
 
@@ -447,7 +450,7 @@ export class IdpmsReconComponent implements OnInit {
   clicktable2(data: any) {
     this.pipoArrayListdata2 = [];
     console.log(data, 'sdfsdfdf')
-    if (data?.pipo!=undefined && data?.doc!=undefined && data?.blCopyDoc!=undefined && data?.commercialDoc!=undefined && data?.packingDoc!=undefined) {
+    if (data?.pipo != undefined && data?.doc != undefined && data?.blCopyDoc != undefined && data?.commercialDoc != undefined && data?.packingDoc != undefined) {
       this.SUBMIT_BUTTON = false
     } else {
       this.SUBMIT_BUTTON = true;
@@ -518,14 +521,14 @@ export class IdpmsReconComponent implements OnInit {
   }
 
   EDMPS_Search(value: any) {
-    this.FILTER_EDPMS_DATA = this.GET_EDMPS.filter((item: any) => item?.sbNo?.includes(value));
+    this.FILTER_EDPMS_DATA = this.GET_EDMPS.filter((item: any) => item?.boeNumber?.includes(value));
     if (this.FILTER_EDPMS_DATA.length == 0) {
       this.FILTER_EDPMS_DATA = this.GET_EDMPS;
     }
   }
 
   EDMPS_Search2(value: any) {
-    this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED.filter((item: any) => item?.sbNo?.includes(value));
+    this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED.filter((item: any) => item?.boeNumber?.includes(value));
     if (this.FILTER_EDPMS_CLEARED_DATA.length == 0) {
       this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
     }
@@ -554,29 +557,29 @@ export class IdpmsReconComponent implements OnInit {
     );
 
     await this.documentService.getBoe(1).subscribe((res: any) => {
-      this.masterSB = res?.data;
-      console.log('getMaster:', res);
-      this.documentService.getIDPMSbyLimit(this.LIMIT).subscribe((res: any) => {
-        this.SB_NO_LIST = [];
-        this.GET_EDMPS = this.addSBdata(res?.data);
+      this.masterboe = res?.data;
+      this.documentService.getIDPMSbyLimit(this.LIMIT).subscribe((IDPMSres: any) => {
+        console.log('getMaster:', IDPMSres, res);
+        this.boe_NO_LIST = [];
+        this.GET_EDMPS = this.addboedata(IDPMSres?.data);
         var temp: any = [];
-        this.GET_EDMPS.forEach(element => {
-          if (this.SB_NO_LIST.includes(element?.sbNo) == false) {
-            temp.push(element?.sbNo)
+        IDPMSres?.data?.forEach(element => {
+          if (this.boe_NO_LIST.includes(element?.boeno) == false) {
+            temp.push(element?.boeno)
           }
         });
         temp.forEach(element => {
-          this.SB_NO_LIST.push({ value: element })
+          this.boe_NO_LIST.push({ value: element })
         });
         this.FILTER_EDPMS_DATA = this.GET_EDMPS;
-        console.log(this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
+        console.log(this.GET_EDMPS, this.boe_NO_LIST, 'getEDPMS')
 
         this.pageSizeOptionsList = [];
-        let lenforloop: number = parseInt(res?.TotalLength) / 10;
+        let lenforloop: number = parseInt(IDPMSres?.TotalLength) / 10;
         for (let index = 0; index < lenforloop; index++) {
           this.pageSizeOptionsList.push(10 * (index + 1))
         }
-        console.log(res, this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
+        console.log(IDPMSres, this.GET_EDMPS, this.boe_NO_LIST, 'getEDPMS')
       })
     }, (err: any) => {
       console.log(err);
@@ -590,7 +593,7 @@ export class IdpmsReconComponent implements OnInit {
     });
 
     await this.documentService.getOrAdvice('').subscribe((res: any) => {
-      this.masterIR = res?.data;
+      this.masterOR = res?.data;
       console.log('getIrAdvice:', res);
     }, err => {
       console.log(err);
@@ -601,34 +604,34 @@ export class IdpmsReconComponent implements OnInit {
   async PAGINATION_EVENT(event: any) {
     await this.documentService.getIDPMSbyLimit(event?.pageSize).subscribe((res: any) => {
       console.log(event, res, 'PAGINATION_EVENT')
-      this.SB_NO_LIST = [];
-      this.GET_EDMPS = this.addSBdata(res?.data);
+      this.boe_NO_LIST = [];
+      this.GET_EDMPS = this.addboedata(res?.data);
       var temp: any = [];
       this.GET_EDMPS.forEach(element => {
-        if (this.SB_NO_LIST.includes(element?.sbNo) == false) {
-          temp.push(element?.sbNo)
+        if (this.boe_NO_LIST.includes(element?.boeno) == false) {
+          temp.push(element?.boeno)
         }
       });
       temp.forEach(element => {
-        this.SB_NO_LIST.push({ value: element })
+        this.boe_NO_LIST.push({ value: element })
       });
       this.FILTER_EDPMS_DATA = this.GET_EDMPS;
-      console.log(this.GET_EDMPS, this.SB_NO_LIST, 'getEDPMS')
+      console.log(this.GET_EDMPS, this.boe_NO_LIST, 'getEDPMS')
     })
   }
   async PAGINATION_EVENT2(event: any) {
     this.documentService.getclearedIDPMS(event?.pageSize).subscribe((cleareddata: any) => {
-      this.GET_EDMPS_CLEARED = this.addSBdata(cleareddata?.data);
+      this.GET_EDMPS_CLEARED = this.addboedata(cleareddata?.data);
       this.FILTER_EDPMS_CLEARED_DATA = this.GET_EDMPS_CLEARED;
-      this.SB_NO_LIST2 = [];
+      this.boe_NO_LIST2 = [];
       var temp: any = [];
       this.GET_EDMPS_CLEARED.forEach(element => {
-        if (this.SB_NO_LIST2.includes(element?.sbNo) == false) {
-          temp.push(element?.sbNo)
+        if (this.boe_NO_LIST2.includes(element?.boeno) == false) {
+          temp.push(element?.boeno)
         }
       });
       temp.forEach(element => {
-        this.SB_NO_LIST2.push({ value: element })
+        this.boe_NO_LIST2.push({ value: element })
       });
       console.log(cleareddata, 'getclearedEDPMS')
     })

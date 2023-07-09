@@ -92,6 +92,7 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
       }
     }
   }
+  
   filterdropdown($event: any, val: any) {
     var uq_id: any = $($event.target).parent().attr('id')
     this.FILTER_DROPDOWN = this.items.filter((item: any) => item[this.LABLE_BIND_LIST[uq_id]?.bindLabel]?.toLowerCase()?.indexOf(val.toLowerCase()) != -1);
@@ -100,6 +101,15 @@ export class NgDropdownCustomComponent implements OnInit, ControlValueAccessor {
       this.FILTER_DROPDOWN = this.items;
     }
   }
+  
+  filterdropdownKeyPress($event: any, val: any) {
+    this.keyEvent.emit(val);
+    this.modelChanges.emit(val);
+    if (this.FILTER_DROPDOWN.length == 0) {
+      this.FILTER_DROPDOWN = this.items;
+    }
+  }
+  
   clearInput(inputid) {
     $(inputid).val('');
     this.modelChanges.emit('');

@@ -36,9 +36,9 @@
                                                         <th scope="col" class="col-td-th-3">#</th>
                                                         <th scope="col" class="col-td-th-3">Boe No.</th>
                                                         <th scope="col" class="col-td-th-3">Boe Date</th>
+                                                        <th scope="col" class="col-td-th-3">AD Code</th>
                                                         <th scope="col" class="col-td-th-3">Shipping Portal</th>
                                                         <th scope="col" class="col-td-th-3">Import Agency</th>
-                                                        <th scope="col" class="col-td-th-3">AD Code</th>
                                                         <th scope="col" class="col-td-th-3">IE PAN</th>
                                                         <th scope="col" class="col-td-th-3">IE Code</th>
                                                         <th scope="col" class="col-td-th-3">IE Name</th>
@@ -52,36 +52,43 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr class="table-tr tableclick"
-                                                        *ngFor="let row of edpmsData; let i = index"
-                                                        (click)="clicktable(row?.sbdata)">
+                                                        *ngFor="let row of idpmsData; let i = index"
+                                                        (click)="clicktable(row?.boedata)">
                                                         <th class="col-td-th-3">
                                                             {{(i+1)}}
                                                         </th>
                                                         <th class="col-td-th-3">
-                                                            {{row?.sbNo}}
+                                                            {{row?.boeno}}
                                                         </th>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbDate | date: 'dd/MM/yyyy'}}
+                                                            {{row?.boeDate | date: 'dd/MM/yyyy'}}
                                                         </td>
                                                         <td class="col-td-th-3">
                                                             {{row?.adCode}}
                                                         </td>
                                                         <td class="col-td-th-3">
+                                                            {{row?.ShippingPortal}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.ImportAgency}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.IEPAN}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.IECode}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.IEName}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.IEAddress}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
                                                             {{row?.portCode}}
                                                         </td>
-
                                                         <td class="col-td-th-3">
-                                                            {{row?.edpmsStatus}}
-                                                        </td>
-
-                                                        <td class="col-td-th-3">
-                                                            {{row?.adRefNo}}
-                                                        </td>
-                                                        <td class="col-td-th-3">
-                                                            {{row?.sbAmount}}
-                                                        </td>
-                                                        <td class="col-td-th-3">
-                                                            {{row?.sbBalanceAmount}}
+                                                            {{row?.idpmsStatus}}
                                                         </td>
                                                         <td class="col-td-th-3">
                                                             {{row?.systemStatus}}
@@ -115,7 +122,7 @@
                             <button type="submit" [disabled]="this.SUBMIT_BUTTON" class="btn btn-primary">Writeoff</button>
                             <button type="submit" [disabled]="this.SUBMIT_BUTTON" routerLink="/home/direct-dispatch" class="btn btn-primary">Submit D2B</button>
                         </div>
-                        <app-ng-dropdown-custom style="margin-left:30px" placeHolderText="Search sb no." width="170px" [items]="this.SB_NO_LIST"
+                        <app-ng-dropdown-custom style="margin-left:30px" placeHolderText="Search boe no." width="170px" [items]="this.boe_NO_LIST"
                             (modelChanges)="EDMPS_Search($event?.value)" (keyEvent)="EDMPS_Search($event)"
                             bindLabel="value" [multiple]="false" #buyerNameSelection>
                         </app-ng-dropdown-custom>
@@ -155,35 +162,42 @@
                                                 <tbody>
                                                     <tr class="table-tr tableclick"
                                                         *ngFor="let row of this.FILTER_EDPMS_DATA; let i = index"
-                                                        (click)="clicktable2(row?.sbdata)">
+                                                        (click)="clicktable2(row?.boedata)">
                                                         <th class="col-td-th-3">
                                                             {{(i+1)}}
                                                         </th>
                                                         <th class="col-td-th-3">
-                                                            {{row?.sbNo}}
+                                                            {{row?.boeno}}
                                                         </th>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbDate | date: 'dd/MM/yyyy'}}
+                                                            {{row?.boeDate | date: 'dd/MM/yyyy'}}
                                                         </td>
                                                         <td class="col-td-th-3">
                                                             {{row?.adCode}}
                                                         </td>
                                                         <td class="col-td-th-3">
+                                                            {{row?.ShippingPortal}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.ImportAgency}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.IEPAN}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.IECode}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.IEName}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.IEAddress}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
                                                             {{row?.portCode}}
                                                         </td>
-
                                                         <td class="col-td-th-3">
-                                                            {{row?.edpmsStatus}}
-                                                        </td>
-
-                                                        <td class="col-td-th-3">
-                                                            {{row?.adRefNo}}
-                                                        </td>
-                                                        <td class="col-td-th-3">
-                                                            {{row?.sbAmount}}
-                                                        </td>
-                                                        <td class="col-td-th-3">
-                                                            {{row?.sbBalanceAmount}}
+                                                            {{row?.idpmsStatus}}
                                                         </td>
                                                         <td class="col-td-th-3">
                                                             {{row?.systemStatus}}
@@ -212,7 +226,7 @@
                             <custom-status-progress-bar (event)="dumpfun($event)"
                             [data]="this.pipoArrayListdata3"></custom-status-progress-bar>
                         </div>
-                        <app-ng-dropdown-custom placeHolderText="Search sb no." width="170px" [items]="this.SB_NO_LIST2"
+                        <app-ng-dropdown-custom placeHolderText="Search boe no." width="170px" [items]="this.boe_NO_LIST2"
                             (modelChanges)="EDMPS_Search2($event?.value)" (keyEvent)="EDMPS_Search2($event)"
                             bindLabel="value" [multiple]="false" #buyerNameSelection>
                         </app-ng-dropdown-custom>
@@ -233,49 +247,64 @@
                                                 <thead>
                                                     <tr class="table-tr">
                                                         <th scope="col" class="col-td-th-3">#</th>
-                                                        <th scope="col" class="col-td-th-3">BOE Bill No.</th>
-                                                        <th scope="col" class="col-td-th-3">BOE Bill Date</th>
+                                                        <th scope="col" class="col-td-th-3">Boe No.</th>
+                                                        <th scope="col" class="col-td-th-3">Boe Date</th>
+                                                        <th scope="col" class="col-td-th-3">Shipping Portal</th>
+                                                        <th scope="col" class="col-td-th-3">Import Agency</th>
                                                         <th scope="col" class="col-td-th-3">AD Code</th>
+                                                        <th scope="col" class="col-td-th-3">IE PAN</th>
+                                                        <th scope="col" class="col-td-th-3">IE Code</th>
+                                                        <th scope="col" class="col-td-th-3">IE Name</th>
+                                                        <th scope="col" class="col-td-th-3">IE Address</th>
                                                         <th scope="col" class="col-td-th-3">Port Code</th>
-                                                        <th scope="col" class="col-td-th-3">IDPMS STATUS</th>
-                                                        <th scope="col" class="col-td-th-3">AD Ref No.</th>
-                                                        <th scope="col" class="col-td-th-3">BOE Amount</th>
-                                                        <th scope="col" class="col-td-th-3">BOE Balance amount</th>
+                                                        <th scope="col" class="col-td-th-3">EDPMS STATUS</th>
+                                                        <th scope="col" class="col-td-th-3">System Status</th>
+                                                        <th scope="col" class="col-td-th-3">Doc Available</th>
                                                         <th scope="col" class="col-td-th-3">Status</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr class="table-tr tableclick"
                                                         *ngFor="let row of this.FILTER_EDPMS_CLEARED_DATA; let i = index"
-                                                        (click)="clicktable3(row?.sbdata)">
+                                                        (click)="clicktable3(row?.boedata)">
                                                         <th class="col-td-th-3">
                                                             {{(i+1)}}
                                                         </th>
                                                         <th class="col-td-th-3">
-                                                            {{row?.sbNo}}
+                                                            {{row?.boeno}}
                                                         </th>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbDate | date: 'dd/MM/yyyy'}}
+                                                            {{row?.boeDate | date: 'dd/MM/yyyy'}}
                                                         </td>
                                                         <td class="col-td-th-3">
                                                             {{row?.adCode}}
                                                         </td>
                                                         <td class="col-td-th-3">
+                                                            {{row?.ShippingPortal}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.ImportAgency}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.IEPAN}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.IECode}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.IEName}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
+                                                            {{row?.IEAddress}}
+                                                        </td>
+                                                        <td class="col-td-th-3">
                                                             {{row?.portCode}}
                                                         </td>
-
                                                         <td class="col-td-th-3">
-                                                            {{row?.edpmsStatus}}
-                                                        </td>
-
-                                                        <td class="col-td-th-3">
-                                                            {{row?.adRefNo}}
+                                                            {{row?.idpmsStatus}}
                                                         </td>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbAmount}}
-                                                        </td>
-                                                        <td class="col-td-th-3">
-                                                            {{row?.sbBalanceAmount}}
+                                                            {{row?.systemStatus}}
                                                         </td>
                                                         <td class="col-td-th-3">
                                                             {{row?.cleared}}
