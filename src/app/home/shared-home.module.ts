@@ -47,7 +47,7 @@ import { NgCustomCardModelComponent } from "../custom/ng-custom-card-model/ng-cu
 import { LetterheadComponent } from "../custom/letterhead/ExportLetterHead/letterhead.component";
 import { ImportLetterheadComponent } from "../custom/letterhead/ImportLetterHead/ImportLetterhead.component";
 import { CustomHoverPanelComponent } from '../custom/custom-hover-panel/custom-hover-panel.component';
-import {CustomConfirmDialogModelComponent} from '../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component'
+import { CustomConfirmDialogModelComponent } from '../custom/custom-confirm-dialog-model/custom-confirm-dialog-model.component'
 import { NgCustomInputComponent } from "../custom/ng-custom-input/ng-custom-input.component";
 import { CustomStatusProgressBarComponent } from "../custom/custom-status-progress-bar/custom-status-progress-bar.component";
 import { MatPaginatorModule } from '@angular/material/paginator'
@@ -55,6 +55,8 @@ import { CustomExpansionPanelComponent } from "../custom/custom-expansion-panel/
 import { CustomTableExpansionPanelComponent } from "../custom/custom-expansion-panel/custom-table-expansion-panel/custom-table-expansion-panel.component";
 import { CustomJPXSchedulerComponent } from "../custom-jpxscheduler/custom-jpxscheduler.component";
 import { jqxSchedulerModule } from 'jqwidgets-ng/jqxscheduler';
+import { CustomComponentsUploadComponent } from "../custom/custom-components-upload/custom-components-upload.component";
+import { UploadPopUpComponent } from "../components/Upload/upload-pop-up/upload-pop-up.component";
 
 @NgModule({
   declarations: [
@@ -89,7 +91,9 @@ import { jqxSchedulerModule } from 'jqwidgets-ng/jqxscheduler';
     CustomStatusProgressBarComponent,
     CustomExpansionPanelComponent,
     CustomTableExpansionPanelComponent,
-    CustomJPXSchedulerComponent
+    CustomJPXSchedulerComponent,
+    CustomComponentsUploadComponent,
+    UploadPopUpComponent
   ],
   imports: [
     CommonModule,
@@ -156,7 +160,9 @@ import { jqxSchedulerModule } from 'jqwidgets-ng/jqxscheduler';
     CustomExpansionPanelComponent,
     CustomTableExpansionPanelComponent,
     CustomJPXSchedulerComponent,
-    jqxSchedulerModule
+    jqxSchedulerModule,
+    CustomComponentsUploadComponent,
+    UploadPopUpComponent
   ],
 })
 export class SharedHomeModule { }

@@ -295,6 +295,7 @@ export class ViewDocumentComponent implements OnInit {
         document: 'sb',
       },
     ]);
+    // this.router.navigate(['/home/upload/Export/Shippingbill']);
   }
 
   getTransactions(selectedRowValues) {

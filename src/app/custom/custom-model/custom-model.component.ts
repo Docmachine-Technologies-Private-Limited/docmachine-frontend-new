@@ -36,6 +36,8 @@ export class CustomModelComponent implements OnInit {
   @ViewChild('PopUpOpenClose') PopUpOpenClose: ElementRef;
   @Input('buttondisabled') buttondisabled: boolean = false;
   @Input('HeaderEventButton') HeaderEventButton: any = '';
+  @Input('minimizedisabled') minimizedisabled: boolean = true;
+  @Input('removebg') removebg: boolean = true;
 
   footerbuttontext: any = [];
   
@@ -46,7 +48,7 @@ export class CustomModelComponent implements OnInit {
   }
 
   get displayHidden() {
-    return $('.upload-modal#'+this.id).css('display','none');
+    return $('.upload-modal#'+this.id).css('display', 'none');
   }
   
   get displayShow() {

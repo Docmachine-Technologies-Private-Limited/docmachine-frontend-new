@@ -1,0 +1,22 @@
+<app-custom-model [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}"
+    [FooterButton]="false" EventButton="false" [customstyle]="{'max-width':'63vw !important'}" class="p-2 mt-2"
+    [id]="this.id" [minimizedisabled]="false" [removebg]="false" #Uploaddocuments>
+    <div class="p-2">
+        <div class="col-12">
+            <div class="card">
+                <div class="row m-0">
+                    <h3 class="m-auto ml-2" style="margin-left: 0 !important;">Upload Files</h3>
+                    <button type="button" style="margin-right: 0 !important;" class="btn btn-primary m-auto mr-2 remove-upload" (click)="removeAll(dropzonecontainer)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                </div>
+                <div class="drop_box">
+                    <dropzone class="dropzone-container" [config]="config" [message]="'Click or drag images here to upload'" (error)="onUploadError($event)"
+                        (init)="onUploadInit($event);removeAll(dropzonecontainer)" (sending)="submit($event)" (success)="onUploadSuccess($event,Uploaddocuments,dropzonecontainer)"
+                        #dropzonecontainer></dropzone>
+                    <h5>Drag and Drop files here</h5>
+                    <p>Files Supported: PDF, XSLS, Image, Scanner</p>
+                    <p>Maximum Size: 5MB</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-custom-model>

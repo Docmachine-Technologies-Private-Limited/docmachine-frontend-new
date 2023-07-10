@@ -241,7 +241,6 @@ export class UploadComponent implements OnInit {
       (message) => (this.retururl = message)
     );
     this.api_base = documentService.api_base;
-    console.log(this.api_base);
     this.loadFromLocalStorage();
     console.log(this.authToken);
     this.headers = {

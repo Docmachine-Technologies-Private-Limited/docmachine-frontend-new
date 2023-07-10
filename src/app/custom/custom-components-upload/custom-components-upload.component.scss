@@ -1,0 +1,8 @@
+.new-upload-ui ::ng-deep .field{
+    background-color: transparent;
+    border-radius: 10px;
+    box-shadow: 0 0 2px 2px #d3d3d3;
+    overflow: auto;
+    width: calc(100vw - 300px);
+    height: 80vh;
+}

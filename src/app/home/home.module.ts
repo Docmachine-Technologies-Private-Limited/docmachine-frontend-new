@@ -103,6 +103,19 @@ import { ForwardContractSummaryComponent } from './Import/Treasury/ForwardContra
 import { RoleBasedSingUpComponent } from "../RoleBased/role-based-sing-up/role-based-sing-up.component";
 import { AddAdvanceOutwardRemittanceA2Component } from "./Import/add-advance-outward-remittance-a2/add-advance-outward-remittance-a2.component";
 import { CustomJPXSchedulerComponent } from "../custom-jpxscheduler/custom-jpxscheduler.component";
+import { ShippingBillComponent } from '../components/Upload/Export/shipping-bill/shipping-bill.component';
+import { CreditNoteComponent } from '../components/Upload/Export/credit-note/credit-note.component';
+import { InsurancedocumentsComponent } from '../components/Upload/Export/insurancedocuments/insurancedocuments.component';
+import { LetterofCreditComponent } from '../components/Upload/Export/letterof-credit/letterof-credit.component';
+import { MasterServiceAgreementsComponent } from '../components/Upload/Export/master-service-agreements/master-service-agreements.component';
+import { TripartyAgreementsComponent } from '../components/Upload/Export/triparty-agreements/triparty-agreements.component';
+import { OpinionReportsComponent } from '../components/Upload/Export/opinion-reports/opinion-reports.component';
+import { InwardRemittanceAdviceComponent } from '../components/Upload/Export/inward-remittance-advice/inward-remittance-advice.component';
+import { AirwayBlCopyComponent } from '../components/Upload/Export/airway-bl-copy/airway-bl-copy.component';
+import { BillOfExchangesComponent } from '../components/Upload/Export/bill-of-exchanges/bill-of-exchanges.component';
+import { DestructionCertificatesComponent } from '../components/Upload/Export/destruction-certificates/destruction-certificates.component';
+import { PackingListInvoicesComponent } from '../components/Upload/Export/packing-list-invoices/packing-list-invoices.component';
+import { CommercialInvoicesComponent } from '../components/Upload/Export/commercial-invoices/commercial-invoices.component';
 
 @NgModule({
   declarations: [
@@ -155,7 +168,20 @@ import { CustomJPXSchedulerComponent } from "../custom-jpxscheduler/custom-jpxsc
     BuyerCreditPanelComponent,
     ForwardContractAddComponent,
     ForwardContractSummaryComponent,
-    RoleBasedSingUpComponent
+    RoleBasedSingUpComponent,
+    ShippingBillComponent,
+    CreditNoteComponent,
+    InsurancedocumentsComponent,
+    LetterofCreditComponent,
+    MasterServiceAgreementsComponent,
+    TripartyAgreementsComponent,
+    OpinionReportsComponent,
+    InwardRemittanceAdviceComponent,
+    AirwayBlCopyComponent,
+    BillOfExchangesComponent,
+    DestructionCertificatesComponent,
+    PackingListInvoicesComponent,
+    CommercialInvoicesComponent
   ],
   imports: [
     SharedHomeModule,
@@ -645,6 +671,17 @@ import { CustomJPXSchedulerComponent } from "../custom-jpxscheduler/custom-jpxsc
           { path: "SuperAdminPanel", pathMatch: "full", component: SuperAdminPanelComponent, canActivate: [SuperGuard] },
           { path: "AdminPanel", pathMatch: "full", component: AdminPanelComponent, canActivate: [AdminGuard] },
           { path: "RoleBase", component: RoleBasedSingUpComponent, pathMatch: "full", canActivate: [SuperGuard] },
+          
+          { path: "upload/Export/Shippingbill", component: ShippingBillComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/Insurancedocuments", component: InsurancedocumentsComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/LetterofCredit", component: LetterofCreditComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/MasterServiceAgreements", component: MasterServiceAgreementsComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/TripartyAgreements", component: TripartyAgreementsComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/AirwayBlCopy", component: AirwayBlCopyComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/BillOfExchanges", component: BillOfExchangesComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/DestructionCertificates", component: DestructionCertificatesComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/PackingListInvoices", component: PackingListInvoicesComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/CommercialInvoices", component: CommercialInvoicesComponent, canActivate: [MemberGuard] }
         ],
       },
     ]),
