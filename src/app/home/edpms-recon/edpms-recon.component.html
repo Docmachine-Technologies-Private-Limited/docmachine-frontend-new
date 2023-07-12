@@ -22,7 +22,7 @@
                                 (click)="fileInputClick($event)" #uploadfile />
                             <button class="btn btn-primary m-0">Upload .xls</button>
                         </form>
-
+                        <button class="btn btn-primary m-0" [disabled]="edpmsData.length!=0?false:true" (click)="onSubmit()">Submit</button>
                     </div>
                     <div class="table-panel">
                         <div class="col-12 p-0" #debitnotes>
@@ -75,10 +75,10 @@
                                                             {{row?.adRefNo}}
                                                         </td>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbAmount}}
+                                                            {{row?.sbdata?.fobValue}}
                                                         </td>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbBalanceAmount}}
+                                                            {{row?.sbdata?.balanceAvai}}
                                                         </td>
                                                         <td class="col-td-th-3">
                                                             {{row?.systemStatus}}
@@ -174,10 +174,10 @@
                                                             {{row?.adRefNo}}
                                                         </td>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbAmount}}
+                                                            {{row?.sbdata?.fobValue}}
                                                         </td>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbBalanceAmount}}
+                                                            {{row?.sbdata?.balanceAvai}}
                                                         </td>
                                                         <td class="col-td-th-3">
                                                             {{row?.systemStatus}}
@@ -266,10 +266,10 @@
                                                             {{row?.adRefNo}}
                                                         </td>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbAmount}}
+                                                            {{row?.sbdata?.fobValue}}
                                                         </td>
                                                         <td class="col-td-th-3">
-                                                            {{row?.sbBalanceAmount}}
+                                                            {{row?.sbdata?.balanceAvai}}
                                                         </td>
                                                         <td class="col-td-th-3">
                                                             {{row?.cleared}}

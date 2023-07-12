@@ -22,7 +22,7 @@
                                 (click)="fileInputClick($event)" #uploadfile />
                             <button class="btn btn-primary m-0">Upload .xls</button>
                         </form>
-
+                        <button class="btn btn-primary m-0" [disabled]="idpmsData.length!=0?false:true" (click)="onSubmit()">Submit</button>
                     </div>
                     <div class="table-panel">
                         <div class="col-12 p-0" #debitnotes>

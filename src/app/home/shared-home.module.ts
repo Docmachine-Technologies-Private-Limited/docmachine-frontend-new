@@ -57,6 +57,7 @@ import { CustomJPXSchedulerComponent } from "../custom-jpxscheduler/custom-jpxsc
 import { jqxSchedulerModule } from 'jqwidgets-ng/jqxscheduler';
 import { CustomComponentsUploadComponent } from "../custom/custom-components-upload/custom-components-upload.component";
 import { UploadPopUpComponent } from "../components/Upload/upload-pop-up/upload-pop-up.component";
+import { DynamicErrorComponent } from "../components/dynamic-error/dynamic-error.component";
 
 @NgModule({
   declarations: [
@@ -93,7 +94,8 @@ import { UploadPopUpComponent } from "../components/Upload/upload-pop-up/upload-
     CustomTableExpansionPanelComponent,
     CustomJPXSchedulerComponent,
     CustomComponentsUploadComponent,
-    UploadPopUpComponent
+    UploadPopUpComponent,
+    DynamicErrorComponent
   ],
   imports: [
     CommonModule,
@@ -162,7 +164,8 @@ import { UploadPopUpComponent } from "../components/Upload/upload-pop-up/upload-
     CustomJPXSchedulerComponent,
     jqxSchedulerModule,
     CustomComponentsUploadComponent,
-    UploadPopUpComponent
+    UploadPopUpComponent,
+    DynamicErrorComponent
   ],
 })
 export class SharedHomeModule { }

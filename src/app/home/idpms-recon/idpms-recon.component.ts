@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../service/user.service';
-import { forkJoin, timer } from "rxjs";
+import { async, forkJoin, timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { DocumentService } from '../../service/document.service';
 import { Router } from '@angular/router';
 import { WindowInformationService } from '../../service/window-information.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-idpms-recon',
@@ -55,6 +56,7 @@ export class IdpmsReconComponent implements OnInit {
     private userService: UserService,
     public documentService: DocumentService,
     public router: Router,
+    public toastr: ToastrService,
     public wininfo: WindowInformationService
   ) {
     this.api_base = userService.api_base;
@@ -149,7 +151,7 @@ export class IdpmsReconComponent implements OnInit {
         this.pageSizeOptionsList.push(10 * (index + 1))
       }
       this.boedata();
-      // this.router.navigateByUrl('/home/edpms-recon-table');
+      this.toastr.success('Successfully upload file in your system...')
     }, err => {
       console.log('create EDPMS error: ', err)
     })
@@ -175,9 +177,9 @@ export class IdpmsReconComponent implements OnInit {
         portCode: (item['Port Code']).toString(),
         idpmsStatus: item['BOE STATUS'],
         boeAmount: (0).toString(),
-        boeBalanceAmount: this.getboebalanceAmount(item['pipo'], 0).toString(),
+        boeBalanceAmount: this.getboebalanceAmount(item['BOE Number'])?.balanceAmount != undefined ? this.getboebalanceAmount(item['BOE Number'])?.balanceAmount?.toString() : '-1',
         statusMeaning: this.getStatusMeaning(item['BOE STATUS']),
-        systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], 0, (item['BOE Number']).toString()),
+        systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], 0, (item['BOE Number']).toString(), item['boedata']),
         docAvailable: item['systemStatus'] === 'Available' ? true : false,
         action: this.getAction(item['systemStatus']),
       };
@@ -186,17 +188,29 @@ export class IdpmsReconComponent implements OnInit {
     return payload
   }
 
-  getSystemStatus(status, pipo, boeAmount, boeNo) {
-    if (!(status === 'Available')) {
-      return 'DOC NOT AVAILABLE IN SYSTEM'
-    } else if (this.getboebalanceAmount(pipo, boeAmount) > 0) {
+  getSystemStatus(status, pipo, boeAmount, boeNo, boedata) {
+    if (status != 'Available') {
+      let temp: any = ''
+      if (parseInt(boedata?.balanceAvai) == 0) {
+        temp = 'SUBMITTED TO BANK'
+      } else {
+        temp = 'DOC NOT AVAILABLE IN SYSTEM'
+      }
+      return temp;
+    } else if (parseInt(boedata?.balanceAvai) > 0) {
       return 'PARTIALLY REALISED'
     } else if (this.checkIfBLDone(pipo)) {
       return 'SUBMITTED & BANK REF NO. RECEIVED'
     } else if (this.checkifDownloaded(boeNo)) {
       return 'SUBMITTED BUT BANK REF NOT RECEIVED'
     } else {
-      return 'NOT SUBMITTED TO BANK'
+      let temp: any = ''
+      if (parseInt(boedata?.balanceAvai) == 0) {
+        temp = 'SUBMITTED TO BANK'
+      } else {
+        temp = 'NOT SUBMITTED TO BANK'
+      }
+      return temp
     }
   }
 
@@ -229,14 +243,8 @@ export class IdpmsReconComponent implements OnInit {
     return actionStatus
   }
 
-  getboebalanceAmount(pipo, total) {
-    let paidAmount = 0;
-    this.masterOR.forEach((ir: any) => {
-      if (pipo === ir?.pipo[0]) {
-        paidAmount = paidAmount + parseInt(ir?.amount, 10)
-      }
-    });
-    return parseInt(total, 10) - paidAmount
+  getboebalanceAmount(boeno) {
+    return this.masterboe?.filter((item: any) => item?.boeNumber == boeno)[0]
   }
 
   getStatusMeaning(status) {
@@ -266,34 +274,40 @@ export class IdpmsReconComponent implements OnInit {
     console.log("onUploadSuccess ARGS", args);
     this.masterExcelData = args[1].data;
     await this.getData();
-    await this.compareIDPMS()
+    await this.compareIDPMS(false)
     console.log("onUploadSuccess DATA", this.masterExcelData);
   }
 
-  async compareIDPMS() {
-    await this.gatherboedata();
-    await this.saveData();
+  async onSubmit() {
+    await this.getData();
+    await this.compareIDPMS(true)
   }
 
-  async gatherboedata() {
-    await this.masterExcelData.forEach((data, i) => {
-      var index = -1;
-      for (let j = 0; j < this.masterboe.length; j++) {
-        if (this.masterboe[j] && this.masterboe[j].boeNumber && this.masterboe[j].boeNumber == data['BOE Number']) {
-          index = j;
-          break;
+  async compareIDPMS(bool: boolean) {
+    await this.gatherboedata(bool);
+  }
+
+  async gatherboedata(bool: boolean) {
+    await this.documentService.getBoe(1).subscribe(async (res: any) => {
+      this.masterboe = res?.data;
+      await this.masterExcelData.forEach((data, i) => {
+        var index = -1;
+        let boeexit: any = this.masterboe.filter((item: any) => item?.boeNumber?.includes(data['BOE Number']));
+        if (boeexit.length != 0) {
+          this.masterExcelData[i]['systemStatus'] = 'Available';
+          this.masterExcelData[i]['boeAmount'] = this.masterboe[index]?.invoiceAmount;
+          this.masterExcelData[i]['boeCurrency'] = this.masterboe[index]?.currency;
+          this.masterExcelData[i]['adCode'] = this.masterboe[index]?.adCode;
+          this.masterExcelData[i]['pipo'] = this.masterboe[index]?.pipo[0];
+          this.masterExcelData[i]['boedata'] = this.masterboe[index];
+        } else {
+          this.masterExcelData[i]['systemStatus'] = 'NOT_AVAILABLE';
         }
-      }
-      console.log("index:", index);
-      if (index !== -1) {
-        this.masterExcelData[i]['systemStatus'] = 'Available';
-        this.masterExcelData[i]['boeAmount'] = this.masterboe[index]?.invoiceAmount;
-        this.masterExcelData[i]['boeCurrency'] = this.masterboe[index]?.currency;
-        this.masterExcelData[i]['adCode'] = this.masterboe[index]?.adCode;
-        this.masterExcelData[i]['pipo'] = this.masterboe[index]?.pipo[0];
-        this.masterExcelData[i]['boedata'] = this.masterboe[index];
-      } else {
-        this.masterExcelData[i]['systemStatus'] = 'NOT_AVAILABLE';
+      });
+      await this.preparePayload();
+      this.idpmsData = await this.preparePayload();
+      if (bool == true) {
+        await this.saveData();
       }
     });
     console.log('this.masterExcelData', this.masterExcelData);

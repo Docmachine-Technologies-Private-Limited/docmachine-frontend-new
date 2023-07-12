@@ -1,0 +1,12 @@
+<div *ngIf="formName?.controls[fieldName]?.invalid && (formName?.controls[fieldName]?.dirty || formName?.controls[fieldName]?.touched)"
+    class="alert alert-danger">
+    <p *ngIf="formName?.controls[fieldName]?.errors?.['required']">
+        {{fieldName}} is required.
+    </p>
+    <p *ngIf="formName?.controls[fieldName]?.errors?.['minlength']">
+        {{fieldName}} must be at least 4 characters long.
+    </p>
+    <p *ngIf="formName?.controls[fieldName]?.errors?.['forbiddenName']">
+        {{fieldName}} cannot be Bob.
+    </p>
+</div>

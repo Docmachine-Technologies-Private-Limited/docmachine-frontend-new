@@ -9,8 +9,15 @@
                 </div>
                 <div class="col-md-8 col-sm-8 col-12">
                     <div class="filter_right_new padding_new_top p-0">
-                        <button class="upload-button btn btn-success PopupOpen" popup-close="Shippingbill"><i
-                                class="fa fa-upload PopupOpen" aria-hidden="true" popup-close="Shippingbill"></i>
+                        <ng-select class="custom"
+                            *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length==0"
+                            [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                            bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
+                            (change)="clickPipo($event)">
+                        </ng-select>
+                        <button class="upload-button btn btn-success PopupOpen" [disabled]="this.btndisabled"
+                            popup-close="Shippingbill"><i class="fa fa-upload PopupOpen" aria-hidden="true"
+                                popup-close="Shippingbill"></i>
                             Upload</button>
                     </div>
                 </div>
@@ -20,179 +27,70 @@
             <app-pdf-viewer class="pt-3" [downloadShow]="false" [src]="publicUrl" width="100%"
                 Newheight="700px"></app-pdf-viewer>
             <div class="form-container-fluid">
-                <form class="pb-2" #values="ngForm" (ngSubmit)="onSubmit(values)">
-                    <div class="col-12 division-panel">
-                        <p class="sub-text">SB DETAILS</p>
-                        <div class="form-group mb-3">
-                            <label>SB DATE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.sbdate" name="sbdate" type="date"
-                                class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>SB NUMBER</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.sbno" type="text" name="sbno" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>PORT CODE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.portCode" type="text" name="portCode"
-                                class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>AD BILL NUMBER</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.adBillNo" type="text" name="adBillNo"
-                                class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>AD CODE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.adCode" type="text" name="adCode"
-                                class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>IEC CODE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.ieccode" type="text" name="ieccode"
-                                class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>IEC NAME</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.iecName" type="text" name="iecName"
-                                class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>LEO DATE</label>
-                            <input formControlName="iban" [(ngModel)]="this.UPLOAD_FORM.leodate" type="date"
-                                name="leodate" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>PROCESSING STATUS</label>
-                            <input formControlName="beneBankSwiftCode" [(ngModel)]="this.UPLOAD_FORM.processingStaus"
-                                type="text" name="processingStaus" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-12 division-panel">
-                        <p class="sub-text">FOB and FREIGHT</p>
-                        <div class="form-group mb-3">
-                            <label>FOB CURRENCY</label>
-                            <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                                bindLabel="type" [multiple]="false" placeholder="Select PI/PO" name="fobCurrency"
-                                [(ngModel)]="this.UPLOAD_FORM.fobCurrency">
-                            </ng-select>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>FOB VALUE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.fobValue" type="text" name="fobValue"
-                                class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>REALIZED FOB VALUE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.realizedFobValue" type="text" name="realizedFobValue"
-                                class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>EQUIVALENT FOB VALUE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.equivalentFobValue" type="text"
-                                name="equivalentFobValue" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>FREIGHT CURRENCY</label>
-                            <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                                bindLabel="type" [multiple]="false" placeholder="Select PI/PO" name="freightCurrency"
-                                [(ngModel)]="this.UPLOAD_FORM.freightCurrency">
-                            </ng-select>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>FREIGHT VALUE</label>
-                            <input formControlName="beneBankSwiftCode"
-                                [(ngModel)]="this.UPLOAD_FORM.realizedfreightValue" type="text"
-                                name="realizedfreightValue" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-12 division-panel">
-                        <p class="sub-text">INSURANCE</p>
-                        <div class="form-group mb-3">
-                            <label>INSURANCE CURRENCY</label>
-                            <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                                bindLabel="type" [multiple]="false" placeholder="Select PI/PO" name="insuranceCurrency"
-                                [(ngModel)]="this.UPLOAD_FORM.insuranceCurrency">
-                            </ng-select>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>INSURANCE VALUE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.insuranceValue" type="text" name="insuranceValue"
-                                class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>Realized INSURANCE VALUE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.realizedInsuranceValue" type="text"
-                                name="realizedInsuranceValue" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-12 division-panel">
-                        <p class="sub-text">Additional</p>
-                        <div class="form-group mb-3">
-                            <label>BANKING CHARGES</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.bankingCharges" type="text" name="bankingCharges"
-                                class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>PAYMENT LAST DATE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.expectedPaymentlastdate" type="date"
-                                name="expectedPaymentlastdate" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>ADDED DATE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.AddedDate" type="date" name="AddedDate"
-                                class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>MODIFIED DATE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.modifiedDate" type="date" name="modifiedDate"
-                                class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>EXPORTER LOCATION CODE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.exporterLocationCode" type="text"
-                                name="exporterLocationCode" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>COUNTRY OF FINAL DESTINATION</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.countryOfFinaldestination" type="text"
-                                name="countryOfFinaldestination" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>Buyer NAME</label>
-                            <ng-select class="custom" *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
-                            bindLabel="value" [multiple]="false" placeholder="Select buyer Name" ngModel name="buyerName">
-                          </ng-select>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>CONSIGNEE NAME</label>
-                            <ng-select class="custom" *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
-                                bindLabel="value" [multiple]="false" placeholder="Select Consignee Name" ngModel
-                                name="buyerName">
-                            </ng-select>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>EXCHANGE RATE</label>
-                            <input [(ngModel)]="this.UPLOAD_FORM.exchangeRate" type="text" name="exchangeRate"
-                                class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-12 division-panel" *ngFor="let item of this.UPLOAD_FORM.invoices;let i=index">
-                        <p class="sub-text">INVOICE ({{i+1}})</p>
-                        <div class="form-group mb-3">
-                            <label>INVOICE NO.</label>
-                            <input [(ngModel)]="item.invoiceno" type="text" name="invoiceno" class="form-control" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>CURRENCY</label>
-                            <ng-select class="custom" *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                                bindLabel="type" [multiple]="false" placeholder="Select PI/PO" name="currency"
-                                [(ngModel)]="item.currency"></ng-select>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label>AMOUNT</label>
-                            <input [(ngModel)]="item.amount" type="text" name="amount" class="form-control" />
-                        </div>
+                <form class="col-12 division-panel" [formGroup]="dynamicFormGroup"
+                    (ngSubmit)="onSubmit(dynamicFormGroup)">
+                    <div class="col-12" *ngFor="let field of fields">
+                        <ng-container [ngSwitch]="field.type">
+                            <div class="form-group mb-3" *ngSwitchCase="'text'">
+                                <label>{{field.label}}</label>
+                                <input [(ngModel)]="field.value" formC [type]="field.type" [name]="field.fieldName"
+                                    class="form-control" />
+                            </div>
+                            <div class="form-group mb-3" *ngSwitchCase="'date'">
+                                <label>{{field.label}}</label>
+                                <input [(ngModel)]="field.value" [type]="field.type" [name]="field.fieldName"
+                                    class="form-control" />
+                            </div>
+                            <div class="form-group mb-3" *ngSwitchCase="'currency'">
+                                <label>{{field.label}}</label>
+                                <ng-select *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                                    bindLabel="type" [multiple]="false" placeholder="Select PI/PO"
+                                    [name]="field.fieldName" [(ngModel)]="field.value">
+                                </ng-select>
+                            </div>
+                            <div class="form-group mb-3" *ngSwitchCase="'buyer'">
+                                <label>{{field.label}}</label>
+                                <ng-select *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
+                                    bindLabel="value" [multiple]="false" placeholder="Select buyer Name"
+                                    [name]="field.fieldName" [(ngModel)]="field.value">
+                                </ng-select>
+                            </div>
+                            <div class="form-group mb-3" *ngSwitchCase="'consignee'">
+                                <label>{{field.label}}</label>
+                                <ng-select *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
+                                    bindLabel="value" [multiple]="false" placeholder="Select Consignee Name"
+                                    [name]="field.fieldName" [(ngModel)]="field.value">
+                                </ng-select>
+                            </div>
+                            <div class="form-group mb-3" *ngSwitchCase="'formArray'">
+                                <label>{{field.label}} || {{field.fieldName}}</label>
+                                <div [formArrayName]="field.fieldName">
+                                    <div *ngFor="let invoice of field?.formGroup; let i=index" [formGroupName]="i">
+                                         <ng-container [ngSwitch]="invoice.type">
+                                            <div class="form-group mb-3" *ngSwitchCase="'text'">
+                                                <label>{{invoice.label}} || value : {{invoice.value}}</label>
+                                                <input [(ngModel)]="invoice.value" [type]="invoice.type" [name]="invoice.fieldName"
+                                                    class="form-control" />
+                                            </div>
+                                            <div class="form-group mb-3" *ngSwitchCase="'date'">
+                                                <label>{{invoice.label}}</label>
+                                                <input [(ngModel)]="invoice.value" [type]="invoice.type" [name]="invoice.fieldName"
+                                                    class="form-control" />
+                                            </div>
+                                            <div class="form-group mb-3" *ngSwitchCase="'currency'">
+                                                <label>{{invoice.label}}</label>
+                                                <ng-select *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                                                    bindLabel="type" [multiple]="false" placeholder="Select PI/PO"
+                                                    [name]="invoice.fieldName" [(ngModel)]="invoice.value">
+                                                </ng-select>
+                                            </div>
+                                        </ng-container>
+                                     <dynamic-error [formName]="dynamicFormGroup?.controls[field.fieldName]" [fieldName]="invoice.fieldName"></dynamic-error> 
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <dynamic-error [formName]="dynamicFormGroup" [fieldName]="field.fieldName"></dynamic-error>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

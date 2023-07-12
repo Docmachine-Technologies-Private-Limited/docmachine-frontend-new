@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../service/user.service';
-import { forkJoin, timer } from "rxjs";
+import { async, forkJoin, timer } from "rxjs";
 import { takeWhile } from "rxjs/operators";
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { DocumentService } from '../../service/document.service';
 import { Router } from '@angular/router';
 import { WindowInformationService } from '../../service/window-information.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edpms-recon',
@@ -55,6 +56,7 @@ export class EdpmsReconComponent implements OnInit {
     private userService: UserService,
     public documentService: DocumentService,
     public router: Router,
+    public toastr: ToastrService,
     public wininfo: WindowInformationService
   ) {
     this.api_base = userService.api_base;
@@ -149,7 +151,7 @@ export class EdpmsReconComponent implements OnInit {
         this.pageSizeOptionsList.push(10 * (index + 1))
       }
       this.SBdata();
-      // this.router.navigateByUrl('/home/edpms-recon-table');
+      this.toastr.success('Successfully upload file in your system...')
     }, err => {
       console.log('create EDPMS error: ', err)
     })
@@ -160,6 +162,7 @@ export class EdpmsReconComponent implements OnInit {
     let payload: any = [];
     console.log('create edpms res: ', this.masterExcelData);
     this.masterExcelData.forEach((item: any) => {
+      console.log(item?.sbdata, 'jguhgjhghjgdfjsfsdfdsfdsfd')
       const tempObject = {
         userId: this.applicant,
         bank: this.bankSelection,
@@ -170,10 +173,10 @@ export class EdpmsReconComponent implements OnInit {
         edpmsStatus: item['STATUS'],
         adRefNo: item['adBillNo'],
         sbAmount: item['sbAmount'],
-        sbBalanceAmount: this.getSBbalanceAmount(item['pipo'], item['sbAmount']),
+        sbBalanceAmount: this.getSBAmount(item['Shipping Bill No'])?.balanceAvai,
         sbCurrency: item['sbCurrency'],
         statusMeaning: this.getStatusMeaning(item['STATUS']),
-        systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['Shipping Bill No']),
+        systemStatus: this.getSystemStatus(item['systemStatus'], item['pipo'], item['sbAmount'], item['Shipping Bill No'], item?.sbdata),
         docAvailable: item['systemStatus'] === 'Available' ? true : false,
         action: this.getAction(item['systemStatus']),
         sbdata: item['sbdata']
@@ -183,22 +186,34 @@ export class EdpmsReconComponent implements OnInit {
     return payload
   }
 
-  getSystemStatus(status, pipo, sbAmount, sbNo) {
-    if (!(status === 'Available')) {
-      return 'DOC NOT AVAILABLE IN SYSTEM'
-    } else if (this.getSBbalanceAmount(pipo, sbAmount) > 0) {
+  getSystemStatus(status, pipo, sbAmount, sbNo, sbdata: any) {
+    if (status != 'Available') {
+      let temp: any = ''
+      if (parseInt(sbdata?.balanceAvai) == 0) {
+        temp = 'SUBMITTED TO BANK'
+      } else {
+        temp = 'DOC NOT AVAILABLE IN SYSTEM'
+      }
+      return temp;
+    } else if (parseInt(sbdata?.balanceAvai) > 0) {
       return 'PARTIALLY REALISED'
     } else if (this.checkIfBLDone(pipo)) {
       return 'SUBMITTED & BANK REF NO. RECEIVED'
     } else if (this.checkifDownloaded(sbNo)) {
       return 'SUBMITTED BUT BANK REF NOT RECEIVED'
     } else {
-      return 'NOT SUBMITTED TO BANK'
+      let temp: any = ''
+      if (parseInt(sbdata?.balanceAvai) == 0) {
+        temp = 'SUBMITTED TO BANK'
+      } else {
+        temp = 'NOT SUBMITTED TO BANK'
+      }
+      return temp
     }
   }
 
   checkifDownloaded(sbNo) {
-    if (this.tasksMaster?.some((task: any) => task?.task?.some((t: any) => t?.sbNumbers?.contains(sbNo)))) {
+    if (this.tasksMaster?.some((task: any) => task?.task?.some((t: any) => t?.sbNumbers?.includes(sbNo)))) {
       return true
     } else {
       return false
@@ -209,7 +224,7 @@ export class EdpmsReconComponent implements OnInit {
     if (pipo == undefined) {
       return false;
     }
-    if (this.blMaster?.some((bl: any) => bl?.pipo?.contains(pipo))) {
+    if (this.blMaster?.some((bl: any) => bl?.pipo?.includes(pipo?.pi_poNo)==true)) {
       return true
     } else {
       return false
@@ -234,6 +249,10 @@ export class EdpmsReconComponent implements OnInit {
       }
     });
     return parseInt(total, 10) - paidAmount
+  }
+
+  getSBAmount(sbno: any) {
+    return this.masterSB?.filter((item: any) => item?.sbno == sbno)[0]
   }
 
   getStatusMeaning(status) {
@@ -263,37 +282,46 @@ export class EdpmsReconComponent implements OnInit {
     console.log("onUploadSuccess ARGS", args);
     this.masterExcelData = args[1].data;
     await this.getData();
-    await this.compareEDPMS()
+    await this.compareEDPMS(false);
     console.log("onUploadSuccess DATA", this.masterExcelData);
   }
-
-  async compareEDPMS() {
-    await this.gatherSBdata();
-    await this.saveData();
+  
+  async onSubmit(){
+    await this.getData();
+    await this.compareEDPMS(true)
   }
 
-  async gatherSBdata() {
-    await this.masterExcelData.forEach((data, i) => {
-      var index = -1;
-      for (let j = 0; j < this.masterSB.length; j++) {
-        if (this.masterSB[j] && this.masterSB[j].sbno && this.masterSB[j].sbno == data['Shipping Bill No']) {
-          index = j;
-          break;
+  async compareEDPMS(bool:boolean) {
+    await this.gatherSBdata(bool);
+  }
+
+  async gatherSBdata(bool:boolean) {
+    await this.documentService.getMaster(1).subscribe(async (res: any) => {
+      this.masterSB = res?.data;
+      await this.masterExcelData.forEach((data, i) => {
+        let sbexit: any = this.masterSB.filter((item: any) => item?.sbno?.includes(data['Shipping Bill No']));
+        console.log('sbexit:', res, sbexit, data['Shipping Bill No']);
+        if (sbexit.length != 0) {
+          this.masterExcelData[i]['systemStatus'] = 'Available';
+          this.masterExcelData[i]['sbAmount'] = sbexit[0]?.fobValue;
+          this.masterExcelData[i]['sbCurrency'] = sbexit[0]?.fobCurrency;
+          this.masterExcelData[i]['adBillNo'] = sbexit[0]?.adBillNo;
+          this.masterExcelData[i]['pipo'] = sbexit[0]?.pipo[0];
+          this.masterExcelData[i]['sbBalanceAmount'] = sbexit[0]?.balanceAvai;
+          this.masterExcelData[i]['sbdata'] = sbexit[0];
+        } else {
+          this.masterExcelData[i]['systemStatus'] = 'NOT_AVAILABLE';
         }
+      });
+      await this.preparePayload();
+      this.edpmsData = await this.preparePayload();
+      if (bool==true) {
+        await this.saveData();        
       }
-      console.log("index:", index);
-      if (index !== -1) {
-        this.masterExcelData[i]['systemStatus'] = 'Available';
-        this.masterExcelData[i]['sbAmount'] = this.masterSB[index]?.fobValue;
-        this.masterExcelData[i]['sbCurrency'] = this.masterSB[index]?.fobCurrency;
-        this.masterExcelData[i]['adBillNo'] = this.masterSB[index]?.adBillNo;
-        this.masterExcelData[i]['pipo'] = this.masterSB[index]?.pipo[0];
-        this.masterExcelData[i]['sbdata'] = this.masterSB[index];
-      } else {
-        this.masterExcelData[i]['systemStatus'] = 'NOT_AVAILABLE';
-      }
+      console.log('this.masterExcelData', this.masterExcelData);
+    }, (err: any) => {
+      console.log(err);
     });
-    console.log('this.masterExcelData', this.masterExcelData);
   }
 
   async SBdata() {
@@ -308,6 +336,7 @@ export class EdpmsReconComponent implements OnInit {
       console.log("index:", index);
       if (index !== -1) {
         this.edpmsData[i]['sbdata'] = this.masterSB[index];
+        this.edpmsData[i]['sbBalanceAmount'] = this.masterSB[index]?.balanceAvai;
       } else {
         this.edpmsData[i]['sbdata'] = [];
       }
@@ -447,7 +476,7 @@ export class EdpmsReconComponent implements OnInit {
   clicktable2(data: any) {
     this.pipoArrayListdata2 = [];
     console.log(data, 'sdfsdfdf')
-    if (data?.pipo!=undefined && data?.doc!=undefined && data?.blCopyDoc!=undefined && data?.commercialDoc!=undefined && data?.packingDoc!=undefined) {
+    if (data?.pipo != undefined && data?.doc != undefined && data?.blCopyDoc != undefined && data?.commercialDoc != undefined && data?.packingDoc != undefined) {
       this.SUBMIT_BUTTON = false
     } else {
       this.SUBMIT_BUTTON = true;
