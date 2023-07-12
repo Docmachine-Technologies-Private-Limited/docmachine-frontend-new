@@ -211,7 +211,9 @@ export class LetterOfCreditExportLCComponent implements OnInit {
   letterOfCredit() {
     console.log('upload');
     //this.sharedData.changeretunurl('home/letterofcredit-lc')
-    this.router.navigate(['home/upload', { file: 'export', document: 'lcCopy' }]);
+    // this.router.navigate(['home/upload', { file: 'export', document: 'lcCopy' }]);
+    this.router.navigate(['/home/upload/Export/LetterofCredit']);
+    
   }
 
   toSave(data, index) {

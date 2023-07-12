@@ -226,7 +226,8 @@ export class OtherDocumentsComponent implements OnInit {
   }
 
   newComme() {
-    this.router.navigate(['home/upload', { file: 'export', document: 'packingList' }]);
+    // this.router.navigate(['home/upload', { file: 'export', document: 'packingList' }]);
+    this.router.navigate(['/home/upload/Export/PackingListInvoices']);
   }
 
   toSaveNew(data, id, EditSummaryPagePanel: any) {

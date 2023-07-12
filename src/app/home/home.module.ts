@@ -681,7 +681,9 @@ import { CommercialInvoicesComponent } from '../components/Upload/Export/commerc
           { path: "upload/Export/BillOfExchanges", component: BillOfExchangesComponent, canActivate: [MemberGuard] },
           { path: "upload/Export/DestructionCertificates", component: DestructionCertificatesComponent, canActivate: [MemberGuard] },
           { path: "upload/Export/PackingListInvoices", component: PackingListInvoicesComponent, canActivate: [MemberGuard] },
-          { path: "upload/Export/CommercialInvoices", component: CommercialInvoicesComponent, canActivate: [MemberGuard] }
+          { path: "upload/Export/CommercialInvoices", component: CommercialInvoicesComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/OpinionReports", component: OpinionReportsComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/InwardRemittanceAdvice", component: InwardRemittanceAdviceComponent, canActivate: [MemberGuard] }
         ],
       },
     ]),

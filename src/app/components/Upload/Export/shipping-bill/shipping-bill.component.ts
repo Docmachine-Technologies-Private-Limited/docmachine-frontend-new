@@ -31,14 +31,19 @@ export class ShippingBillComponent implements OnInit {
   };
   pipourl1: any = '';
   pipoArr: any = [];
-  dynamicFormGroup: FormGroup;
+  dynamicFormGroup?: any | FormGroup;
   fields: any = [];
-  model = {
-    name: '',
-    lastName: '',
-    address: '',
-    age: '',
-  };
+  model = {};
+  SHIPPING_BILL_LIST: any = [];
+  BUYER_LIST: any = [];
+  CommercialNumber: any = [];
+  COMMERCIAL_LIST: any = [];
+  commerciallist: any = [];
+  SHIPPING_BUNDEL: any = [];
+  SUBMIT_ERROR: boolean = false;
+  INDEX: number = 0;
+  MAX_DATA_SIZE: number = 2;
+
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -268,6 +273,7 @@ export class ShippingBillComponent implements OnInit {
         invoices: {
           type: "formArray",
           label: "Invoices Info",
+          GroupLabel: ['Invoices 1'],
           rules: {
             required: true,
           },
@@ -312,58 +318,57 @@ export class ShippingBillComponent implements OnInit {
 
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
-  onSubmit(value: any) {
-    console.log(value, 'value')
-    let invoices: any = [];
-    value.form.value.file = 'export';
-    // for (let i = 0; i < this.UPLOAD_FORM?.invoices?.length; i++) {
-    //   invoices.push({
-    //     sno: value.form.value[`sno${i + 1}`],
-    //     invoiceno: value.form.value[`invoiceno${i + 1}`],
-    //     amount: value.form.value[`amount${i + 1}`],
-    //     currency: value.form.value[`currency${i + 1}`],
-    //   });
-    // }
-    // console.log(invoices);
-    // value.form.value.invoices = invoices.length != 0 ? invoices : this.INVOICE_LIST;
-    // value.form.value.fobCurrency = value.form.value.fobCurrency?.type != undefined ? value.form.value.fobCurrency.type : value.form.value.fobCurrency;
-    // value.form.value.freightCurrency = value.form.value.freightCurrency?.type != undefined ? value.form.value.freightCurrency.type : value.form.value.freightCurrency;
-    // value.form.value.insuranceCurrency = value.form.value.insuranceCurrency?.type != undefined ? value.form.value.insuranceCurrency.type : value.form.value.insuranceCurrency;
-    // value.form.value.currency = value.form.value.currency?.type != undefined ? value.form.value.currency.type : value.form.value.currency;
-    // value.form.value.consigneeName = value.form.value.consigneeName?.value != undefined ? value.form.value.consigneeName.value : value.form.value.consigneeName;
-    // value.form.value.buyerName = value.form.value.buyerName?.value != undefined ? [value.form.value.buyerName.value] : [value.form.value.buyerName];
-    // value.form.value.pipo = this.pipoArr;
-    // value.form.value.doc = this.pipourl1?.doc;
-    console.log('buyername', value);
-    // this.documentService.getInvoice_No({
-    //   sbno: value.form.value.sbno
-    // }, 'masterrecord').subscribe((resp: any) => {
-    //   console.log('getInvoice_No', resp)
-    //   if (resp?.data.length == 0) {
-    //     this.documentService.addMasterBySb(value.form.value).subscribe((res: any) => {
-    //       console.log('Shippingbill updated Successfully');
-    //       let updatedData: any = ''
-    //       updatedData = {
-    //         "sbRef": [
-    //           res?.data._id,
-    //         ],
-    //       }
-    //       this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1.doc, updatedData).subscribe((data) => {
-    //         console.log(data);
-    //         this.toastr.success('shipping Bill added successfully.');
-    //         this.router.navigate(['/home/view-document/sb']);
-    //       }, (error) => {
-    //         console.log('error');
-    //       }
-    //       );
-    //     }, (error) => {
-    //       console.log('error');
-    //     }
-    //     );
-    //   } else {
-    //     this.toastr.error(`Please check this sb no. : ${value.form.value.sbno} already exit...`);
-    //   }
-    // })
+  onSubmit(e: any) {
+    console.log(e, 'value')
+    if (e.status == 'VALID') {
+      this.SUBMIT_ERROR = false;
+      let invoices: any = [];
+      e.value.file = 'export';
+      for (let i = 0; i < e?.invoices?.length; i++) {
+        invoices = Object.assign(e?.invoices[i], invoices)
+      }
+      console.log(invoices);
+      e.value.invoices = invoices.length != 0 ? invoices : this.INVOICE_LIST;
+      e.value.fobCurrency = e.value.fobCurrency?.type != undefined ? e.value.fobCurrency.type : e.value.fobCurrency;
+      e.value.freightCurrency = e.value.freightCurrency?.type != undefined ? e.value.freightCurrency.type : e.value.freightCurrency;
+      e.value.insuranceCurrency = e.value.insuranceCurrency?.type != undefined ? e.value.insuranceCurrency.type : e.value.insuranceCurrency;
+      e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+      e.value.consigneeName = e.value.consigneeName?.value != undefined ? e.value.consigneeName.value : e.value.consigneeName;
+      e.value.buyerName = e.value.buyerName?.value != undefined ? [e.value.buyerName.value] : [e.value.buyerName];
+      e.value.pipo = this.pipoArr;
+      e.value.doc = this.pipourl1?.doc;
+      this.documentService.getInvoice_No({
+        sbno: e.value.sbno
+      }, 'masterrecord').subscribe((resp: any) => {
+        console.log('getInvoice_No', resp)
+        if (resp?.data.length == 0) {
+          this.documentService.addMasterBySb(e.value).subscribe((res: any) => {
+            console.log('Shippingbill updated Successfully');
+            let updatedData: any = ''
+            updatedData = {
+              "sbRef": [
+                res?.data._id,
+              ],
+            }
+            this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1.doc, updatedData).subscribe((data) => {
+              console.log(data);
+              this.toastr.success('shipping Bill added successfully.');
+              this.router.navigate(['/home/view-document/sb']);
+            }, (error) => {
+              console.log('error');
+            }
+            );
+          }, (error) => {
+            console.log('error');
+          }
+          );
+        } else {
+          this.toastr.error(`Please check this sb no. : ${e.value.sbno} already exit...`);
+        }
+      })
+    } else {
+      this.SUBMIT_ERROR = true
+    }
   }
 
   clickPipo(event: any) {
@@ -371,6 +376,21 @@ export class ShippingBillComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
+      if (this.BUYER_LIST.includes(event?.id[1]) == false) {
+        this.BUYER_LIST.push(event?.id[1])
+      }
+      this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
+      this.COMMERCIAL_LIST = [];
+      this.pipoDataService.getShippingNo(event?._id, 'export');
+      this.SHIPPING_BILL_LIST = [];
+      for (let j = 0; j < this.SHIPPING_BUNDEL.length; j++) {
+        if (this.SHIPPING_BUNDEL[j]?.id == event?._id) {
+          this.SHIPPING_BILL_LIST.push({
+            sbno: this.SHIPPING_BUNDEL[j]?.sbno,
+            _id: this.SHIPPING_BUNDEL[j]?.SB_ID
+          });
+        }
+      }
     } else {
       this.btndisabled = true;
     }
@@ -392,26 +412,27 @@ export class ShippingBillComponent implements OnInit {
         formGroupFields[field] = new FormControl(fieldProps.value, Validators.required);
         this.fields.push({ ...fieldProps, fieldName: field });
       } else {
-        let control: any = fieldProps?.formGroup?.map(r =>
-          new FormGroup(Object.entries(r).reduce((acc, [k, v]) => {
-            let vk: any = v;
-            acc[k] = new FormControl(vk?.value || "", Validators.required);
-            return acc;
-          }, {})));
-        formGroupFields[field] = control[0];
-        console.log(id, fieldProps, control, this.fields, 'hghjgjhghjgjh')
-        let control2: any = fieldProps?.formGroup?.map(r => {
-          var temp: any = [];
-          for (let field_1 of Object.keys(r)) {
-            temp.push({ ...r[field_1], fieldName: field_1 })
+        var temp: any = [];
+        var tempFormGroup: any = [];
+        let count: number = 0;
+        fieldProps?.formGroup.forEach(element => {
+          for (let field2 of Object.keys(element)) {
+            temp.push({ ...element[field2], fieldName: field2, index: count });
+            tempFormGroup.push(new FormGroup({ [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false }, Validators.required) }));
+            count++;
           }
-          return temp;
         });
-        fieldProps['formGroup'] = control2[0];
+        fieldProps['NewformGroup'] = temp;
+        formGroupFields[field] = new FormArray(tempFormGroup);
         this.fields.push({ ...fieldProps, fieldName: field });
+        console.log(id, fieldProps, tempFormGroup, this.fields, 'hghjgjhghjgjh')
       }
     }
     console.log(this.fields, 'hghjgjhghjgjh')
     return formGroupFields;
+  }
+
+  setFormValue(value: any, index: any, name1: any, name2: any) {
+    this.dynamicFormGroup.controls[name1]?.controls[index]?.controls[name2]?.setValue(value)
   }
 }

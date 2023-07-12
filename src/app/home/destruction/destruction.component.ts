@@ -274,8 +274,9 @@ export class DestructionComponent implements OnInit {
   }
 
   newDest() {
-    this.sharedData.changeretunurl('home/destruction')
-    this.router.navigate(['home/upload', { file: 'export', document: 'destruction' }]);
+    // this.sharedData.changeretunurl('home/destruction')
+    // this.router.navigate(['home/upload', { file: 'export', document: 'destruction' }]);
+    this.router.navigate(['/home/upload/Export/DestructionCertificates']);
   }
 
   exportToExcel() {

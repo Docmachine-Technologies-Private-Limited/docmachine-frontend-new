@@ -251,9 +251,10 @@ export class InsuranceDocumentComponent implements OnInit {
   }
 
   newInsurance() {
-    console.log('upload');
-    this.sharedData.changeretunurl('home/insurance-document')
-    this.router.navigate(['home/upload', { file: 'export', document: 'insuranceCopy' }]);
+    // console.log('upload');
+    // this.sharedData.changeretunurl('home/insurance-document')
+    // this.router.navigate(['home/upload', { file: 'export', document: 'insuranceCopy' }]);
+    this.router.navigate(['/home/upload/Export/Insurancedocuments']);
   }
 
   SELECTED_VALUE: any = '';

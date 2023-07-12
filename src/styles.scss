@@ -687,6 +687,12 @@ input {
   color: black !important;
 }
 
+.table thead th {
+  color: black !important;
+  background-color: transparent !important;
+}
+
+
 h1,
 h2,
 h3,
@@ -697,18 +703,6 @@ label {
   color: black;
 }
 
-// .filter_section_top {
-//   display: grid;
-//   width: 99%;
-//   background-color: #f6f6f6;
-//   margin: 10px auto;
-//   border-radius: 40px;
-//   box-shadow: 0 0 2px 2px #dbdbdb;
-//   padding: 7px !important;
-// }
-
-// .filter_right_new.padding_new_top {
-//   padding: 0 !important;
-//   display: flex;
-//   gap: 10px;
-// }
+.row>* {
+  width: auto !important;
+}

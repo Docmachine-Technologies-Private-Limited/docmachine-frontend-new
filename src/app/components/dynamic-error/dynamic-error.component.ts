@@ -9,6 +9,7 @@ import { FormGroup } from '@angular/forms';
 export class DynamicErrorComponent implements OnInit {
   @Input() formName: FormGroup;
   @Input() fieldName: any;
+  @Input('SUBMIT_ERROR') SUBMIT_ERROR: boolean=false;
   
   constructor() { }
 

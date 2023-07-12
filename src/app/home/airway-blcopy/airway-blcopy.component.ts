@@ -263,8 +263,9 @@ export class AirwayBLCopyComponent implements OnInit {
   }
 
   newCredit() {
-    this.sharedData.changeretunurl('home/airway-bl-copy')
-    this.router.navigate(['home/upload', { file: 'export', document: 'blCopy' }]);
+    // this.sharedData.changeretunurl('home/airway-bl-copy')
+    // this.router.navigate(['home/upload', { file: 'export', document: 'blCopy' }]);
+    this.router.navigate(['/home/upload/Export/AirwayBlCopy']);
   }
 
   deleteByRoleType(RoleCheckbox: string, id: any, index: any) {

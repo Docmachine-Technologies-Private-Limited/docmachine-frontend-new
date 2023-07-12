@@ -81,7 +81,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     AuthorizationComponent,
     JoinPipePipe,
     ResetOTPComponent,
-    RoleVerifyEmailComponent,
+    RoleVerifyEmailComponent
   ],
   providers: [
     WindowInformationService,

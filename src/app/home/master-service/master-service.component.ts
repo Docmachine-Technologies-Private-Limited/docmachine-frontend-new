@@ -235,8 +235,9 @@ export class MasterServiceComponent implements OnInit {
   }
 
   masterSer() {
-    this.sharedData.changeretunurl('home/master-services')
-    this.router.navigate(['home/upload', { file: 'export', document: 'agreement' }]);
+    // this.sharedData.changeretunurl('home/master-services')
+    // this.router.navigate(['home/upload', { file: 'export', document: 'agreement' }]);
+    this.router.navigate(['/home/upload/Export/MasterServiceAgreements']);
   }
 
   SELECTED_VALUE: any = '';

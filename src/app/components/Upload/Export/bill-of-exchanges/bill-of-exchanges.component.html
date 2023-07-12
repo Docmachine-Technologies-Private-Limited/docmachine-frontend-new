@@ -1,1 +1,111 @@
-<p>bill-of-exchanges works!</p>
+<div class="content-wrap pb-2 scroll-bar-main">
+    <main id="content" class="content table-padding" role="main">
+        <div class="filter_section_top">
+            <div class="row m-0">
+                <div style="margin: auto;margin-left: 0;">
+                    <div class="import_export_sec">
+                        <h3 class="heading_common_tag">Upload/Export/Bill Of Exchange</h3>
+                    </div>
+                </div>
+                <div class="col-md-8 col-sm-8 col-12">
+                    <div class="filter_right_new padding_new_top p-0">
+                        <ng-select class="custom"
+                            *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length==0"
+                            [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
+                            bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
+                            (change)="clickPipo($event)">
+                        </ng-select>
+                        <button class="upload-button btn btn-success PopupOpen" [disabled]="this.btndisabled"
+                            popup-close="Shippingbill"><i class="fa fa-upload PopupOpen" aria-hidden="true"
+                                popup-close="Shippingbill"></i>
+                            Upload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="upload-panel" *ngIf="publicUrl!=''">
+            <app-pdf-viewer class="pt-3" [downloadShow]="false" [src]="publicUrl" width="100%"
+                Newheight="700px"></app-pdf-viewer>
+            <div class="form-container-fluid">
+                <form class="col-12 division-panel" [formGroup]="dynamicFormGroup"
+                    (ngSubmit)="onSubmit(dynamicFormGroup)">
+                    <div class="col-12" *ngFor="let field of fields">
+                        <ng-container [ngSwitch]="field.type">
+                            <div class="form-group mb-3" *ngSwitchCase="'text'">
+                                <label>{{field.label}}</label>
+                                <input [(ngModel)]="field.value" formC [type]="field.type" [name]="field.fieldName"
+                                    class="form-control" />
+                            </div>
+                            <div class="form-group mb-3" *ngSwitchCase="'date'">
+                                <label>{{field.label}}</label>
+                                <input [(ngModel)]="field.value" [type]="field.type" [name]="field.fieldName"
+                                    class="form-control" />
+                            </div>
+                            <div class="form-group mb-3" *ngSwitchCase="'currency'">
+                                <label>{{field.label}}</label>
+                                <ng-select *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
+                                    bindLabel="type" [multiple]="false" placeholder="Select PI/PO"
+                                    [name]="field.fieldName" [(ngModel)]="field.value">
+                                </ng-select>
+                            </div>
+                            <div class="form-group mb-3" *ngSwitchCase="'ShippingBill'">
+                                <label>{{field.label}}</label>
+                                <ng-select *ngIf="this.SHIPPING_BILL_LIST?.length!=0" [items]="this.SHIPPING_BILL_LIST"
+                                    bindLabel="sbno" bindValue="_id" [multiple]="false" placeholder="Select buyer Name"
+                                    [name]="field.fieldName" [(ngModel)]="field.value">
+                                </ng-select>
+                            </div>
+                            <div class="form-group mb-3" *ngSwitchCase="'buyer'">
+                                <label>{{field.label}}</label>
+                                <ng-select *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
+                                    bindLabel="value" [multiple]="false" placeholder="Select buyer Name"
+                                    [name]="field.fieldName" [(ngModel)]="field.value">
+                                </ng-select>
+                            </div>
+                            <div class="form-group mb-3" *ngSwitchCase="'consignee'">
+                                <label>{{field.label}}</label>
+                                <ng-select *ngIf="this.BUYER_DETAILS?.length!=0" [items]="this.BUYER_DETAILS"
+                                    bindLabel="value" [multiple]="false" placeholder="Select Consignee Name"
+                                    [name]="field.fieldName" [(ngModel)]="field.value">
+                                </ng-select>
+                            </div>
+                            <div class="form-group mb-3" *ngSwitchCase="'formArray'">
+                                <label>{{field.label}} || {{field.fieldName}}</label>
+                                <div [formArrayName]="field.fieldName">
+                                    <div *ngFor="let invoice of field?.formGroup; let i=index" [formGroupName]="i">
+                                        <ng-container [ngSwitch]="invoice.type">
+                                            <div class="form-group mb-3" *ngSwitchCase="'text'">
+                                                <label>{{invoice.label}} || value : {{invoice.value}}</label>
+                                                <input [(ngModel)]="invoice.value" [type]="invoice.type"
+                                                    [name]="invoice.fieldName" class="form-control" />
+                                            </div>
+                                            <div class="form-group mb-3" *ngSwitchCase="'date'">
+                                                <label>{{invoice.label}}</label>
+                                                <input [(ngModel)]="invoice.value" [type]="invoice.type"
+                                                    [name]="invoice.fieldName" class="form-control" />
+                                            </div>
+                                            <div class="form-group mb-3" *ngSwitchCase="'currency'">
+                                                <label>{{invoice.label}}</label>
+                                                <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                                                    [items]="this.CURRENCY_LIST" bindLabel="type" [multiple]="false"
+                                                    placeholder="Select PI/PO" [name]="invoice.fieldName"
+                                                    [(ngModel)]="invoice.value">
+                                                </ng-select>
+                                            </div>
+                                        </ng-container>
+                                        <dynamic-error [formName]="dynamicFormGroup?.controls[field.fieldName]"
+                                            [fieldName]="invoice.fieldName"></dynamic-error>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR" [formName]="dynamicFormGroup" [fieldName]="field.fieldName"></dynamic-error>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+<upload-popup id="Shippingbill" url="member/uploadImage" (event)="response($event)"></upload-popup>

@@ -11,7 +11,7 @@
                     <div class="filter_right_new padding_new_top p-0">
                         <ng-select class="custom"
                             *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length==0"
-                            [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                            [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME"
                             bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
                             (change)="clickPipo($event)">
                         </ng-select>
@@ -29,11 +29,11 @@
             <div class="form-container-fluid">
                 <form class="col-12 division-panel" [formGroup]="dynamicFormGroup"
                     (ngSubmit)="onSubmit(dynamicFormGroup)">
-                    <div class="col-12" *ngFor="let field of fields">
+                    <div class="col-12 p-0" *ngFor="let field of fields">
                         <ng-container [ngSwitch]="field.type">
                             <div class="form-group mb-3" *ngSwitchCase="'text'">
                                 <label>{{field.label}}</label>
-                                <input [(ngModel)]="field.value" formC [type]="field.type" [name]="field.fieldName"
+                                <input [(ngModel)]="field.value" [type]="field.type" [name]="field.fieldName"
                                     class="form-control" />
                             </div>
                             <div class="form-group mb-3" *ngSwitchCase="'date'">
@@ -45,6 +45,13 @@
                                 <label>{{field.label}}</label>
                                 <ng-select *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
                                     bindLabel="type" [multiple]="false" placeholder="Select PI/PO"
+                                    [name]="field.fieldName" [(ngModel)]="field.value">
+                                </ng-select>
+                            </div>
+                            <div class="form-group mb-3" *ngSwitchCase="'ShippingBill'">
+                                <label>{{field.label}}</label>
+                                <ng-select *ngIf="this.SHIPPING_BILL_LIST?.length!=0" [items]="this.SHIPPING_BILL_LIST"
+                                    bindLabel="sbno" bindValue="_id" [multiple]="false" placeholder="Select buyer Name"
                                     [name]="field.fieldName" [(ngModel)]="field.value">
                                 </ng-select>
                             </div>
@@ -63,34 +70,55 @@
                                 </ng-select>
                             </div>
                             <div class="form-group mb-3" *ngSwitchCase="'formArray'">
-                                <label>{{field.label}} || {{field.fieldName}}</label>
+                                <label>{{field.label}}</label>
                                 <div [formArrayName]="field.fieldName">
-                                    <div *ngFor="let invoice of field?.formGroup; let i=index" [formGroupName]="i">
-                                         <ng-container [ngSwitch]="invoice.type">
-                                            <div class="form-group mb-3" *ngSwitchCase="'text'">
-                                                <label>{{invoice.label}} || value : {{invoice.value}}</label>
-                                                <input [(ngModel)]="invoice.value" [type]="invoice.type" [name]="invoice.fieldName"
-                                                    class="form-control" />
-                                            </div>
-                                            <div class="form-group mb-3" *ngSwitchCase="'date'">
-                                                <label>{{invoice.label}}</label>
-                                                <input [(ngModel)]="invoice.value" [type]="invoice.type" [name]="invoice.fieldName"
-                                                    class="form-control" />
-                                            </div>
-                                            <div class="form-group mb-3" *ngSwitchCase="'currency'">
-                                                <label>{{invoice.label}}</label>
-                                                <ng-select *ngIf="this.CURRENCY_LIST?.length!=0" [items]="this.CURRENCY_LIST"
-                                                    bindLabel="type" [multiple]="false" placeholder="Select PI/PO"
-                                                    [name]="invoice.fieldName" [(ngModel)]="invoice.value">
-                                                </ng-select>
-                                            </div>
-                                        </ng-container>
-                                     <dynamic-error [formName]="dynamicFormGroup?.controls[field.fieldName]" [fieldName]="invoice.fieldName"></dynamic-error> 
+                                    <div class="division-panel"
+                                        *ngFor="let GroupLabelItem of field?.GroupLabel;let labelIndex=index;">
+                                        <label>{{GroupLabelItem}}</label>
+                                        <div *ngFor="let formGroupItem of field?.NewformGroup | customSlicePipe:labelIndex:4; let i=index;"
+                                            [formGroupName]="formGroupItem?.index">
+                                            <ng-container [ngSwitch]="formGroupItem.type">
+                                                <div class="form-group mb-3" *ngSwitchCase="'text'">
+                                                    <label>{{formGroupItem.label}}</label>
+                                                    <input [(ngModel)]="formGroupItem.value" [type]="formGroupItem.type"
+                                                        [name]="formGroupItem.fieldName"
+                                                        [attr.demo]="formGroupItem.fieldName"
+                                                        class="form-control" />
+                                                </div>
+                                                <div class="form-group mb-3" *ngSwitchCase="'date'">
+                                                    <label>{{formGroupItem.label}}</label>
+                                                    <input [(ngModel)]="formGroupItem.value" [type]="formGroupItem.type"
+                                                        [name]="formGroupItem.fieldName" class="form-control" />
+                                                </div>
+                                                <div class="form-group mb-3" *ngSwitchCase="'currency'">
+                                                    <label>{{formGroupItem.label}}</label>
+                                                    <ng-select *ngIf="this.CURRENCY_LIST?.length!=0"
+                                                        [items]="this.CURRENCY_LIST" bindLabel="type" [multiple]="false"
+                                                        placeholder="Select PI/PO" [name]="formGroupItem.fieldName"
+                                                        [(ngModel)]="formGroupItem.value">
+                                                    </ng-select>
+                                                </div>
+                                                <div class="form-group mb-3" *ngSwitchCase="'buyer'">
+                                                    <label>{{formGroupItem.label}}</label>
+                                                    <ng-select *ngIf="this.BUYER_DETAILS?.length!=0"
+                                                        [items]="this.BUYER_DETAILS" bindLabel="value"
+                                                        [multiple]="false" placeholder="Select buyer Name"
+                                                        [name]="formGroupItem.fieldName"
+                                                        (change)="this.setFormValue($event.Address,(formGroupItem?.index+1),field?.fieldName,formGroupItem?.InputBindValue)"
+                                                        [(ngModel)]="formGroupItem.value">
+                                                    </ng-select>
+                                                </div>
+                                            </ng-container>
+                                            <dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR"
+                                                [formName]="dynamicFormGroup?.controls[field.fieldName]?.controls[formGroupItem?.index]"
+                                                [fieldName]="formGroupItem.fieldName"></dynamic-error>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </ng-container>
-                        <dynamic-error [formName]="dynamicFormGroup" [fieldName]="field.fieldName"></dynamic-error>
+                        <dynamic-error [SUBMIT_ERROR]="this.SUBMIT_ERROR" [formName]="dynamicFormGroup"
+                            [fieldName]="field.fieldName"></dynamic-error>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

@@ -37,14 +37,8 @@ export class PipoDataService {
   }
 
   getPipoList = (type) => {
-    this.PI_PO_NUMBER_LIST = {
-      PI_PO_BUYER_NAME: [],
-      PI_PO_BENNE_NAME: [],
-      PIPO_TRANSACTION: []
-    };
     return new Promise((resolve, reject) => {
-      this.documentService.getPipo().subscribe(
-        (res: any) => {
+      this.documentService.getPipo().subscribe((res: any) => {
           console.log(res, 'resssss.................')
           let temppipo: any = new PipoDisplayListView(res.data, type);
           this.pipolistModelSubsciber.next(temppipo.pipoModelList);
@@ -52,6 +46,14 @@ export class PipoDataService {
           console.log(temppipo, 'temppipo')
           this.pipolistModelSubsciber.subscribe((pipo_lits: any) => {
             var data: any = pipo_lits;
+            this.PI_PO_NUMBER_LIST = {
+              PI_PO_BUYER_NAME: [],
+              PI_PO_BENNE_NAME: [],
+              PIPO_TRANSACTION: []
+            };
+            this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME']=[];
+            this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME']=[];
+            
             for (let index = 0; index < data.length; index++) {
               if (data[index]?.buyerName != '' || data[index].pi_poNo != '') {
                 this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'].push({

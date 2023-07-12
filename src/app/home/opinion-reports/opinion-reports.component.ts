@@ -214,8 +214,9 @@ export class OpinionReportsComponent implements OnInit {
 
   newOpinion() {
     console.log('upload');
-    this.sharedData.changeretunurl('home/opinion-report')
-    this.router.navigate(['home/upload', { file: 'export', document: 'opinionReport' }]);
+    // this.sharedData.changeretunurl('home/opinion-report')
+    // this.router.navigate(['home/upload', { file: 'export', document: 'opinionReport' }]);
+    this.router.navigate(['/home/upload/Export/OpinionReports']);
   }
 
   toSave(data, index) {

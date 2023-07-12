@@ -215,8 +215,9 @@ export class BillOfExchangeComponent implements OnInit {
   }
 
   newCredit() {
-    this.sharedData.changeretunurl('home/bill-of-exchange')
-    this.router.navigate(['home/upload', { file: 'export', document: 'billOfExchange' }]);
+    // this.sharedData.changeretunurl('home/bill-of-exchange')
+    // this.router.navigate(['home/upload', { file: 'export', document: 'billOfExchange' }]);
+    this.router.navigate(['/home/upload/Export/BillOfExchanges']);
   }
 
   toSaveNew(data, id, EditSummaryPagePanel: any) {

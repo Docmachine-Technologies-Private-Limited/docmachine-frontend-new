@@ -232,8 +232,9 @@ export class CommercialComponent implements OnInit {
   }
 
   newDest() {
-    this.sharedData.changeretunurl('home/commercial')
-    this.router.navigate(['home/upload', { file: 'export', document: 'commercial' }]);
+    // this.sharedData.changeretunurl('home/commercial')
+    // this.router.navigate(['home/upload', { file: 'export', document: 'commercial' }]);
+    this.router.navigate(['/home/upload/Export/CommercialInvoices']);
   }
 
   SELECTED_VALUE: any = '';

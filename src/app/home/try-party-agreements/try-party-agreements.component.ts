@@ -241,9 +241,9 @@ export class TryPartyAgreementsComponent implements OnInit {
   }
 
   triParty() {
-    this.sharedData.changeretunurl('home/try-party')
-    this.router.navigate(['home/upload', { file: 'export', document: 'tryPartyAgreement' }]);
-
+    // this.sharedData.changeretunurl('home/try-party')
+    // this.router.navigate(['home/upload', { file: 'export', document: 'tryPartyAgreement' }]);
+    this.router.navigate(['/home/upload/Export/TripartyAgreements']);
   }
 
   SELECTED_VALUE: any = '';
