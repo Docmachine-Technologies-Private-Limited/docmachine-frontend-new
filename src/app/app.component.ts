@@ -137,7 +137,8 @@ export class AppComponent implements OnInit, OnDestroy {
       this.userInactive.next(undefined);
       this.authservice.logout();
       this.router.navigate(['/login']);
-    }, 300000);
+    }, 7200000);
+    // 300000
   }
   addMinutes(minutes) {
     return new Date(new Date().getTime() + minutes * 60000);

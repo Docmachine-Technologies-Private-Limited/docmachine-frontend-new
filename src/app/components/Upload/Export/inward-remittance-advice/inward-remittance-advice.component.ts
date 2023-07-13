@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ShippingBill } from '../../../../../model/shippingBill.model';
+import { IRAdvice } from '../../../../../model/irAdvice.model';
 import { UserService } from '../../../../service/user.service';
 import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
@@ -55,7 +55,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     private fb: FormBuilder,
-    public validator:UploadServiceValidatorService,
+    public validator: UploadServiceValidatorService,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -113,7 +113,9 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     this.publicUrl = '';
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
-      this.pipourl1 = args[1].data;
+      this.pipourl1 = args[1].publicUrl;
+      let res: any = new IRAdvice(args[1].data);
+      console.log(res,'sdfjhksdjhdkfjsdhfsdkfhsd')
       this.buildForm({
         BankName: {
           type: "Bank",
