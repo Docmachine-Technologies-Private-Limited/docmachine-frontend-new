@@ -8,6 +8,7 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     public toastr: ToastrService,
     public router: Router,
     private fb: FormBuilder,
+    public validator:UploadServiceValidatorService,
     public userService: UserService) { }
 
   async ngOnInit() {
@@ -146,7 +148,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
           }
         },
         date: {
-          type: "text",
+          type: "date",
           value: "",
           label: "TT Date",
           rules: {
@@ -162,7 +164,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
           }
         },
         recievedDate: {
-          type: "text",
+          type: "date",
           value: "",
           label: "Recieved Date",
           rules: {
@@ -178,7 +180,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
           }
         },
         conversionDate: {
-          type: "text",
+          type: "date",
           value: "",
           label: "Conversion Date",
           rules: {
@@ -286,7 +288,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       if (this.BUYER_LIST.includes(event?.id[1]) == false) {
         this.BUYER_LIST.push(event?.id[1])
       }
-      this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);    
+      this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
     } else {
       this.btndisabled = true;
     }
@@ -306,13 +308,13 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       let id: any = field;
       const fieldProps = model[field];
       if (fieldProps?.type != "formArray") {
-        formGroupFields[field] = new FormControl(fieldProps.value, Validators.required);
+        formGroupFields[field] = new FormControl(fieldProps.value, this.validator.getMAX_MIN_LENGTH()[fieldProps?.type]);
         this.fields.push({ ...fieldProps, fieldName: field });
       } else {
         let control: any = fieldProps?.formGroup?.map(r =>
           new FormGroup(Object.entries(r).reduce((acc, [k, v]) => {
             let vk: any = v;
-            acc[k] = new FormControl(vk?.value || "", Validators.required);
+            acc[k] = new FormControl(vk?.value || "", this.validator.getMAX_MIN_LENGTH()[vk?.type]);
             return acc;
           }, {})));
         formGroupFields[field] = control[0];

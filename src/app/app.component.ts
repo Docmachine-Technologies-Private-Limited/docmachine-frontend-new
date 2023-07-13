@@ -59,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
               let token = this.authGuard.loadFromLocalStorage();
               if (this.sessionstorage.get('PERMISSION') != null && this.sessionstorage.get('PERMISSION') != "") {
                 var session: any = JSON.parse(this.sessionstorage.get('PERMISSION'));
-                if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId || !this.getTokenExit(this.userData?.LoginToken,token))) {
+                if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId || !this.getTokenExit(this.userData?.LoginToken, token))) {
                   this.authservice.logout();
                   this.router.navigate(['/login']);
                 }
@@ -87,7 +87,7 @@ export class AppComponent implements OnInit, OnDestroy {
       let token = this.authGuard.loadFromLocalStorage();
       if (this.sessionstorage.get('PERMISSION') != null && this.sessionstorage.get('PERMISSION') != "") {
         var session: any = JSON.parse(this.sessionstorage.get('PERMISSION'));
-        if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId || !this.getTokenExit(this.userData?.LoginToken,token))) {
+        if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId || !this.getTokenExit(this.userData?.LoginToken, token))) {
           this.authservice.logout();
           this.router.navigate(['/login']);
         }
@@ -116,7 +116,7 @@ export class AppComponent implements OnInit, OnDestroy {
       let token = this.authGuard.loadFromLocalStorage();
       if (this.sessionstorage.get('PERMISSION') != null && this.sessionstorage.get('PERMISSION') != "") {
         var session: any = JSON.parse(this.sessionstorage.get('PERMISSION'));
-        if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId || !this.getTokenExit(this.userData?.LoginToken,token))) {
+        if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId || !this.getTokenExit(this.userData?.LoginToken, token))) {
           this.authservice.logout();
           this.router.navigate(['/login']);
         }
@@ -137,7 +137,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.userInactive.next(undefined);
       this.authservice.logout();
       this.router.navigate(['/login']);
-    }, 7200000);
+    }, 300000);
   }
   addMinutes(minutes) {
     return new Date(new Date().getTime() + minutes * 60000);

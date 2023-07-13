@@ -5,5 +5,5 @@ export const AppConfig = {
   SOCKET_ENDPONT: 'https://devapi.bharathexim.com',
   ROLE_URL:'https://role.bharathexim.com',
   FRONT_END_URL:'https://devapp.bharathexim.com/',
-  S3_BUCKET_URL:'https://devassets.bharathexim.com/'
+  S3_BUCKET_URL:'https://devapp.bharathexim.com/'
 };

@@ -60,6 +60,7 @@ import { UploadPopUpComponent } from "../components/Upload/upload-pop-up/upload-
 import { DynamicErrorComponent } from "../components/dynamic-error/dynamic-error.component";
 import { CustomSlicePipePipe } from "../custom/custom-pipe/custom-slice-pipe/custom-slice-pipe.pipe";
 import { UploadComponentsComponent } from "../components/Upload/upload-components/upload-components.component";
+import { UploadServiceValidatorService } from "../components/Upload/service/upload-service-validator.service";
 
 @NgModule({
   declarations: [
@@ -118,7 +119,7 @@ import { UploadComponentsComponent } from "../components/Upload/upload-component
     jqxSchedulerModule
   ],
   entryComponents: [ModalContentComponent1],
-  providers: [ConfirmDialogService, NgbModal, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService],
+  providers: [ConfirmDialogService, NgbModal, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
     FilternewPipe,
