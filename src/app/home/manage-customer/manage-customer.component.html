@@ -136,7 +136,8 @@
     EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="60vh"
     id="CreateNewBeneficiary" [name]="'Create New Beneficiary'" #CreateNewBeneficiaryPanel>
     <div class="col-12">
-        <form [formGroup]="loginForm" class="pb-2" (ngSubmit)="onSubmit(CreateNewBeneficiaryPanel)">
+        <upload-components id="CreateNewBeneficiary" (SubmitEvent)="onSubmit($event,CreateNewBeneficiaryPanel)"></upload-components>
+        <!-- <form [formGroup]="loginForm" class="pb-2" (ngSubmit)="onSubmit(CreateNewBeneficiaryPanel)">
             <div class="form-group mb-3">
                 <label>Name</label>
                 <input formControlName="benneName" placeholder="Beneficiary/ Customer name" required=""
@@ -193,93 +194,25 @@
                 <input formControlName="sortCode" placeholder="Ex: ESEIEC." required="" class="form-control" />
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
-        </form>
+        </form> -->
     </div>
 </app-custom-model>
 
 <app-custom-model modalbodyheight="55vh"
     [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
-    EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="60vh"
+    EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="63vh"
     id="CreateNewBuyer" [name]="'Create New Buyer'" #CreateNewBuyerPanel>
     <div class="col-12">
-        <form class="pb-2" [formGroup]="buyerForm" (ngSubmit)="onSubmitBuyer(CreateNewBuyerPanel)">
-            <div class="form-group mb-3">
-                <label>Buyer Name</label>
-                <input formControlName="buyerName" placeholder="Buyer’s name" required="" class="form-control" />
-            </div>
-            <div class="form-group mb-3">
-                <label>Buyer Address</label>
-                <input formControlName="buyerAdrs" placeholder="Ex: street address, City. PIN" required=""
-                    class="form-control" />
-            </div>
-            <div class="form-group mb-3">
-                <label>Consignee Name</label>
-                <input formControlName="ConsigneeName" placeholder="Enter Consignee Name" required=""
-                    class="form-control" />
-            </div>
-            <div class="form-group mb-3">
-                <label>Consignee Address</label>
-                <input formControlName="ConsigneeAddress" placeholder="Ex: Consignee street address, City. PIN"
-                    required="" class="form-control" />
-            </div>
-            <div class="form-group mb-3">
-                <label>BUYER BANK NAME</label>
-                <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST" bindLabel="value"
-                    [multiple]="false" placeholder="Select Bank Name" formControlName="buyerbank"
-                    bindValue="value"></ng-select>
-            </div>
-            <div class="form-group mb-3">
-                <label>BANK ADDRESS</label>
-                <input formControlName="buyerbankaddress" placeholder="Ex: street address, City. PIN" required=""
-                    class="form-control" />
-            </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-        </form>
+        <upload-components id="CreateNewBuyer" (SubmitEvent)="onSubmitBuyer($event,CreateNewBuyerPanel)"></upload-components>
     </div>
 </app-custom-model>
 
 <app-custom-model modalbodyheight="55vh"
     [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
-    EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="60vh"
+    EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="63vh"
     id="CreateNewBuyerwithConsignee" [name]="'Create New Buyer with Consignee'" #EditSummaryPagePanel>
     <div class="col-12">
-        <form [formGroup]="buyerForm" class="pb-2" (ngSubmit)="onSubmitBuyerMember()">
-            <div class="form-group mb-3">
-                <label>Buyer Name</label>
-                <input formControlName="buyerName" placeholder="Buyer’s name" required="" class="form-control" />
-            </div>
-            <div class="form-group mb-3">
-                <label>Buyer Address</label>
-                <input formControlName="buyerAdrs" placeholder="Ex: street address, City. PIN" required=""
-                    class="form-control" />
-            </div>
-            <div class="form-group mb-3">
-                <label>Consignee Name</label>
-                <input formControlName="ConsigneeName" placeholder="Enter Consignee Name" required=""
-                    class="form-control" />
-            </div>
-            <div class="form-group mb-3">
-                <label>Consignee Address</label>
-                <input formControlName="ConsigneeAddress" placeholder="Ex: Consignee street address, City. PIN"
-                    required="" class="form-control" />
-            </div>
-            <div class="form-group mb-3">
-                <label>BUYER BANK NAME</label>
-                <!-- <app-ng-dropdown-custom formControlName="buyerbank" placeHolderText="Select PI/PO or shipping bill"
-                    [items]="this.BANK_NAME_LIST" bindLabel="value" [multiple]="false"
-                    (modelChanges)="buyerForm.value.buyerbank=$event?.value">
-                </app-ng-dropdown-custom> -->
-                <ng-select *ngIf="this.BANK_NAME_LIST?.length!=0" [items]="this.BANK_NAME_LIST" bindLabel="value"
-                    [multiple]="false" placeholder="Select Bank Name" formControlName="buyerbank"
-                    bindValue="value"></ng-select>
-            </div>
-            <div class="form-group mb-3">
-                <label>BANK ADDRESS</label>
-                <input formControlName="buyerbankaddress" placeholder="Ex: street address, City. PIN" required=""
-                    class="form-control" />
-            </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-        </form>
+        <upload-components id="CreateNewBuyerwithConsignee" (SubmitEvent)="onSubmitBuyerMember($event)"></upload-components>
     </div>
 </app-custom-model>
 
@@ -288,7 +221,8 @@
     EventButton="false" [customstyle]="{'max-width':'55vw !important'}" class="p-2 mt-2" height="60vh"
     id="CreateNewBeneficiaryMember" [name]="'Create New Beneficiary as Member'" #EditSummaryPagePanel>
     <div class="col-12">
-        <form [formGroup]="loginForm" class="pb-2" (ngSubmit)="onSubmitBeneficiaryMember()">
+        <upload-components id="CreateNewBeneficiaryMember" (SubmitEvent)="onSubmitBeneficiaryMember($event)"></upload-components>
+        <!-- <form [formGroup]="loginForm" class="pb-2" (ngSubmit)="onSubmitBeneficiaryMember()">
             <div class="form-group mb-3">
                 <label>Name</label>
                 <input formControlName="benneName" placeholder="Beneficiary/ Customer name" required=""
@@ -347,7 +281,7 @@
                 <input formControlName="sortCode" placeholder="Ex: ESEIEC." required="" class="form-control" />
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
-        </form>
+        </form> -->
     </div>
 </app-custom-model>
 

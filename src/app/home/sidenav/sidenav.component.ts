@@ -34,7 +34,7 @@ export class SidenavComponent implements OnInit {
   userData: any = [];
   TRANSACTION_DASHBOARD_LIST: any = {
     Export: ["Packing-Credit-Request", "Export-Direct-Dispatch", "Inward-Remitance-Dispoal", "Inward-Remitance-Dispoal-Realization"],
-    Import:["Import-Direct-Payment","Advance-Remittance-flow"]
+    Import: ["Import-Direct-Payment", "Advance-Remittance-flow"]
   };
 
   constructor(
@@ -46,17 +46,17 @@ export class SidenavComponent implements OnInit {
     private toastr: ToastrService,
     private sharedData: SharedDataService) {
     this.userService.getUserDetail().then((user: any) => {
-        this.userData = user['result'];
-        console.log("userData", this.userData)
+      this.userData = user['result'];
+      console.log("userData", this.userData)
     });
   }
 
   userDataListener;
 
   async ngOnInit() {
-    
+
     this.userDataListener = this.userService.userDataListener$
-   await this.userDataListener.subscribe((data: any) => {
+    await this.userDataListener.subscribe((data: any) => {
       console.log("-----------> page calleddd")
       console.log(data)
       if (data != '' && data != null && data != undefined) {
@@ -64,7 +64,7 @@ export class SidenavComponent implements OnInit {
       }
     });
 
-   this.id = await this.userService.getUserDetail();
+    this.id = await this.userService.getUserDetail();
     console.log("this.id", this.id)
     this.documentService.EXPORT_IMPORT[(this.id['result']['Subscription']) == 'both' ? this.id['result']['sideMenu'] : (this.id['result']['Subscription']).toLowerCase()] = true;
     console.log(this.documentService.EXPORT_IMPORT, 'sdfhsdgfdjshdgf')
@@ -89,29 +89,31 @@ export class SidenavComponent implements OnInit {
     this.documentService.showInvoice = false;
   }
 
-  public logout() {
-    this.authservice.logout();
-    this.router.navigate(["login"]);
-
+  UserLoginLogOut() {
+    this.userService.loginlogout(false).subscribe((res: any) => {
+      console.log(res, 'loginlogout');
+      this.userService.authToken = null;
+      this.router.navigate(["login"]);
+      sessionStorage.clear();
+      localStorage.clear();
+    })
   }
-  removeTwo() {
-    this.userService.delete('this.authcode')
-      .subscribe(
-        data => {
-          console.log("king123")
-          console.log(data)
 
-          if (data['status'] == 200) {
-            this.toastr.success(data['message']);
-          }
-          else {
-            this.toastr.error(data['message']);
-          }
-        },
-        error => {
-          this.toastr.error('something wrong, please check the details!');
-          console.log("error")
-        });
+  removeTwo() {
+    this.userService.delete('this.authcode').subscribe(data => {
+      console.log("king123")
+      console.log(data)
+      if (data['status'] == 200) {
+        this.toastr.success(data['message']);
+      }
+      else {
+        this.toastr.error(data['message']);
+      }
+    },
+      error => {
+        this.toastr.error('something wrong, please check the details!');
+        console.log("error")
+      });
   }
   typeChange(type1, type2) {
     this.router.navigate(['/home/dashboardTask'])

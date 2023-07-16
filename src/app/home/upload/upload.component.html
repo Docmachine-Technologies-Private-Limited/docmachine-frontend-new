@@ -52,7 +52,7 @@
                 <div class="form-group">
                   <label for="exampleInputPassword1"> Choose the type of document</label>
                   <select class="form-control p-3"
-                    [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0?true:false"
+                    [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0?true:false"
                     *ngIf="this.USER_DATA?.Subscription=='both'" aria-label="Default select example"
                     [(ngModel)]="documentType1" name="" id="">
                     <option value="">Select Import/Export</option>
@@ -60,7 +60,7 @@
                     <option *ngIf="this.USER_DATA?.sideMenu=='export'" value="export">Export</option>
                   </select>
                   <select class="form-control p-3"
-                    [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0?true:false"
+                    [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0?true:false"
                     *ngIf="this.USER_DATA?.Subscription!='both'" aria-label="Default select example"
                     [(ngModel)]="documentType1" name="" id="">
                     <option value="">Select {{this.USER_DATA?.Subscription}}</option>
@@ -74,7 +74,7 @@
                   <label *ngIf='documentType1 == "import" || documentType1 == "export"'>
                     Now you selected {{documentType1}}, select Type of {{documentType1}} document </label>
                   <select class="form-control p-3"
-                    [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0?true:false"
+                    [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0?true:false"
                     aria-label="Default select example" *ngIf='documentType1 == "import"' [(ngModel)]="documentType"
                     name="" id="" (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
                     <option value="">Document Type</option>
@@ -97,7 +97,7 @@
                     <option value="import-commercial">Commercial Invoice</option>
                   </select>
                   <select class="form-control p-3"
-                    [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0?true:false"
+                    [disabled]="this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0?true:false"
                     aria-label="Default select example" *ngIf='documentType1 == "export"' [(ngModel)]="documentType"
                     name="" id="" (change)="LOAD_PIPO_LIST_BUYER(documentType1)">
                     <option value="">Document Type</option>
@@ -140,12 +140,12 @@
                 <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
                   PI/PO*</label>
                 <ng-select class="custom"
-                  *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length==0"
+                  *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length==0"
                   [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME" bindLabel="pi_po_buyerName"
                   [selectableGroup]="true" placeholder="Select PI/PO" [(ngModel)]="this.PIPO_LIST"
                   (change)="clickPipo(CommercialNumber?.selectedItems,documentType)" #CommercialNumber>
                 </ng-select>
-                <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0"
+                <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0"
                   [items]="[]" [multiple]="true" bindLabel="pi_po_buyerName"
                   [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION" #CommercialNumber disabled>
                 </ng-select>
@@ -163,13 +163,13 @@
                 <label style="flex-direction:row; font-size: 16px; color: #303030; margin-right: 14px;">Select
                   PI/PO*</label>
                 <ng-select class="custom"
-                  *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length==0"
+                  *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length!=0 && this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length==0"
                   [items]="this.pipoDataService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME" bindLabel="pi_po_buyerName"
                   [selectableGroup]="true" placeholder="Select PI/PO"
                   (change)="clickPipo(CommercialNumber?.selectedItems,documentType)" #CommercialNumber>
                 </ng-select>
 
-                <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION.length!=0"
+                <ng-select class="custom" *ngIf="this.pipoDataService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length!=0"
                   [items]="[]" bindLabel="pi_po_buyerName" [multiple]="true"
                   [(ngModel)]="this.pipoDataService.PI_PO_NUMBER_LIST.PIPO_TRANSACTION" #CommercialNumber disabled>
                 </ng-select>

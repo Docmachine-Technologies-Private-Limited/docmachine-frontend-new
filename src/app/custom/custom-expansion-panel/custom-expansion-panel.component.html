@@ -3,9 +3,10 @@
         <thead class="custom-expansion-thead" [ngClass]="{'thead-not-length':items.length==0}">
             <tr class="table-tr">
                 <th scope="col" class="col-td-th-0" *ngIf="this.Expansion==true">#</th>
-                <th scope="col" class="col-td-th-0" *ngIf="this.Expansion==true && this.Expansionheader2.length!=0">#</th>
+                <th scope="col" class="col-td-th-0" *ngIf="this.Expansion==true && this.Expansionheader2.length!=0">#
+                </th>
                 <th scope="col" class="col-td-th-1" [ngClass]="this.TableHeaderClass[i]"
-                    *ngFor="let item of header;let i=index">{{item}}</th>
+                    *ngFor="let item of header;let i=index" [innerHTML]="item"></th>
             </tr>
         </thead>
         <tbody class="custom-expansion-tbody" *ngIf="items.length!=0">
@@ -21,25 +22,28 @@
                                 <span *ngIf="item.isExpand==true" class="fa fa-chevron-up"></span>
                                 <span *ngIf="item.isExpand==false" class="fa fa-chevron-down"></span>
                             </td>
-                            <td title="Data Show and Hide" scope="col" class="col-td-th-0" *ngIf="this.Expansion==true && this.Expansionheader2.length!=0"
+                            <td title="Data Show and Hide" scope="col" class="col-td-th-0"
+                                *ngIf="this.Expansion==true && this.Expansionheader2.length!=0"
                                 (click)="CollapseAll(items,'isExpand2',i);item.isExpand2=!item.isExpand2;">
                                 <span *ngIf="item.isExpand2==true" class="fa fa-chevron-up"></span>
                                 <span *ngIf="item.isExpand2==false" class="fa fa-chevron-down"></span>
                             </td>
                             <td scope="col" class="col-td-th-1" (click)="eventId!='' && j==eventId?TrClick(item,i):''"
-                                [ngClass]="this.TableHeaderClass[j]" *ngFor="let objectitem of this.Keys;let j=index">
-                                {{item[objectitem]}}</td>
-                            <td scope="col" class="col-td-th-1" *ngIf="item.disabled==false && item.RoleType!='Approver' && this.ActionRequired==true">
-                                <a title="View" *ngIf="this.ViewButton==true" (click)="View(item,i)" class="PopupOpen" popup-close="PDF_VIEW">
+                                [ngClass]="this.TableHeaderClass[j]" *ngFor="let objectitem of this.Keys;let j=index"
+                                [innerHTML]="item[objectitem]"></td>
+                            <td scope="col" class="col-td-th-1"
+                                *ngIf="item.disabled==false && item.RoleType!='Approver' && this.ActionRequired==true">
+                                <a title="View" *ngIf="this.ViewButton==true" (click)="View(item,i)" class="PopupOpen"
+                                    popup-close="PDF_VIEW">
                                     <i class="fa fa-eye PopupOpen" popup-close="PDF_VIEW" aria-hidden="true"></i>
                                 </a>
-                                <a title="Edit" *ngIf="this.EditButton==true" popup-close="EditSummaryPage" (click)="Edit(item,i)"
-                                    class="savBtn bgnone PopupOpen">
+                                <a title="Edit" *ngIf="this.EditButton==true" popup-close="EditSummaryPage"
+                                    (click)="Edit(item,i)" class="savBtn bgnone PopupOpen">
                                     <i class="fa fa-pencil-square-o PopupOpen" popup-close="EditSummaryPage"
                                         aria-hidden="true"></i>
                                 </a>
-                                <a title="Delete" *ngIf="this.DeleteButton==true" (click)="Delete(item,i)" class="savBtn bgnone"><i
-                                        class="fa fa-trash-o" aria-hidden="true"></i> </a>
+                                <a title="Delete" *ngIf="this.DeleteButton==true" (click)="Delete(item,i)"
+                                    class="savBtn bgnone"><i class="fa fa-trash-o" aria-hidden="true"></i> </a>
                             </td>
                             <td scope="col" class="col-td-th-1"
                                 *ngIf="item.disabled==true && item.RoleType!='Approver'">
@@ -61,22 +65,26 @@
                                             <tr class="table-tr">
                                                 <th scope="col" class="col-td-th-0">#</th>
                                                 <th scope="col" class="col-td-th-1"
-                                                    *ngFor="let Expansionheaderitem of Expansionheader;let i=index">
-                                                    {{Expansionheaderitem}}</th>
+                                                    *ngFor="let Expansionheaderitem of Expansionheader;let i=index"
+                                                    [innerHTML]="Expansionheaderitem"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="table-tr" *ngIf="ExpansionKeys.length!=0 && item?.Expansion_Items?.length==1">
+                                            <tr class="table-tr"
+                                                *ngIf="ExpansionKeys.length!=0 && item?.Expansion_Items?.length==1">
                                                 <td scope="col" class="col-td-th-0">{{(i+1)}}</td>
                                                 <td scope="col" class="col-td-th-1"
-                                                    *ngFor="let Expansionitemsobjectitem of this.ExpansionKeys;let i=index">
-                                                    {{item?.Expansion_Items[0][Expansionitemsobjectitem]}}</td>
+                                                    *ngFor="let Expansionitemsobjectitem of this.ExpansionKeys;let i=index"
+                                                    [innerHTML]="item?.Expansion_Items[0][Expansionitemsobjectitem]">
+                                                </td>
                                             </tr>
                                             <div *ngIf="ExpansionKeys.length!=0 && item?.Expansion_Items.length!=1">
-                                                <tr class="table-tr" *ngFor="let itemloop of item?.Expansion_Items;let j=index">
+                                                <tr class="table-tr"
+                                                    *ngFor="let itemloop of item?.Expansion_Items;let j=index">
                                                     <td scope="col" class="col-td-th-0">{{(j+1)}}</td>
-                                                    <td scope="col" class="col-td-th-1" *ngFor="let Expansionitemsobjectitem of this.ExpansionKeys;let i=index">
-                                                        {{itemloop[Expansionitemsobjectitem]}}</td>
+                                                    <td scope="col" class="col-td-th-1"
+                                                        *ngFor="let Expansionitemsobjectitem of this.ExpansionKeys;let i=index"
+                                                        [innerHTML]="itemloop[Expansionitemsobjectitem]"></td>
                                                 </tr>
                                             </div>
                                         </tbody>
@@ -84,7 +92,8 @@
                                 </div>
                             </div>
                         </tr>
-                        <tr class="table-tr table-tr-1 tr-box-shadow" *ngIf="this.Expansion==true && this.Expansionheader2.length!=0"
+                        <tr class="table-tr table-tr-1 tr-box-shadow"
+                            *ngIf="this.Expansion==true && this.Expansionheader2.length!=0"
                             [ngClass]="{'Table-Show':item.isExpand2==true,'Table-Hide':item.isExpand2==false}">
                             <div class="expansion-panel-inner">
                                 <div class="header">
@@ -96,15 +105,18 @@
                                             <tr class="table-tr">
                                                 <th scope="col" class="col-td-th-0">#</th>
                                                 <th scope="col" class="col-td-th-1"
-                                                    *ngFor="let Expansionheaderitem of Expansionheader2;let i=index">
-                                                    {{Expansionheaderitem}}</th>
+                                                    *ngFor="let Expansionheaderitem of Expansionheader2;let i=index"
+                                                    [innerHTML]="Expansionheaderitem">
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="table-tr" *ngFor="let itemloop of item?.Expansion_Items2;let j=index">
+                                            <tr class="table-tr"
+                                                *ngFor="let itemloop of item?.Expansion_Items2;let j=index">
                                                 <td scope="col" class="col-td-th-0">{{(j+1)}}</td>
-                                                <td scope="col" class="col-td-th-1" *ngFor="let Expansionitemsobjectitem of this.ExpansionKeys2;let i=index">
-                                                    {{itemloop[Expansionitemsobjectitem]}}</td>
+                                                <td scope="col" class="col-td-th-1"
+                                                    *ngFor="let Expansionitemsobjectitem of this.ExpansionKeys2;let i=index"
+                                                    [innerHTML]="itemloop[Expansionitemsobjectitem]"></td>
                                             </tr>
                                         </tbody>
                                     </table>

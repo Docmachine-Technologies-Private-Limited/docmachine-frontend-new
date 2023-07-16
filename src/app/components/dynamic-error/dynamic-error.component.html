@@ -6,6 +6,9 @@
     <p *ngIf="formName?.controls[fieldName]?.errors?.['minlength']">
         {{fieldName}} must be at least 4 characters long.
     </p>
+    <p *ngIf="formName?.controls[fieldName]?.errors?.['maxlength']">
+        {{fieldName}} must be at least 4 characters long.
+    </p>
     <p *ngIf="formName?.controls[fieldName]?.errors?.['forbiddenName']">
         {{fieldName}} cannot be Bob.
     </p>

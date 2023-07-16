@@ -1,0 +1,34 @@
+<div class="content-wrap pb-2 scroll-bar-main">
+    <main id="content" class="content table-padding" role="main">
+        <div class="filter_section_top">
+            <div class="row m-0">
+                <div style="margin: auto;margin-left: 0;">
+                    <div class="import_export_sec">
+                        <h3 class="heading_common_tag">Upload/Import/Destruction certificate</h3>
+                    </div>
+                </div>
+                <div class="col-md-8 col-sm-8 col-12">
+                    <div class="filter_right_new padding_new_top p-0">
+                        <ng-select class="custom"
+                            *ngIf="this.documentService.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length!=0 && this.documentService.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION?.length==0"
+                            [items]="this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME"
+                            bindLabel="pi_po_buyerName" [selectableGroup]="true" placeholder="Select PI/PO"
+                            (change)="clickPipo($event)">
+                        </ng-select>
+                        <button class="upload-button btn btn-success PopupOpen" [disabled]="this.btndisabled"
+                            popup-close="Shippingbill"><i class="fa fa-upload PopupOpen" aria-hidden="true"
+                                popup-close="Shippingbill"></i>
+                            Upload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="upload-panel" *ngIf="publicUrl!=''">
+            <app-pdf-viewer class="pt-3" [downloadShow]="false" [src]="publicUrl" width="100%"
+                Newheight="700px"></app-pdf-viewer>
+                <upload-components id="Importdestructioncertificates" (SubmitEvent)="onSubmit($event)"></upload-components>
+        </div>
+    </main>
+</div>
+
+<upload-popup id="Shippingbill" url="member/uploadImage" (event)="response($event)"></upload-popup>

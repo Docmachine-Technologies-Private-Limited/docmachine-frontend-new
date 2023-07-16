@@ -69,6 +69,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       "DATE",
       "SB Number",
       "Party Name",
+      "Buyer Name",
       "Bank Name",
       "Currency",
       "TT Amount",

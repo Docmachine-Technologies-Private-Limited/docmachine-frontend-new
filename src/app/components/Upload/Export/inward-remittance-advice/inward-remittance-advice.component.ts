@@ -6,15 +6,15 @@ import { DocumentService } from '../../../../service/document.service';
 import { DateFormatService } from '../../../../DateFormat/date-format.service';
 import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 
 @Component({
   selector: 'app-inward-remittance-advice',
   templateUrl: './inward-remittance-advice.component.html',
-  styleUrls: ['./inward-remittance-advice.component.scss']
+  styleUrls: ['./inward-remittance-advice.component.scss','../../commoncss/common.component.scss']
 })
 export class InwardRemittanceAdviceComponent implements OnInit {
   publicUrl: any = '';
@@ -25,15 +25,8 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   ConsigneeNameList: any = [];
   btndisabled: boolean = true;
   PIPO_DATA: any = [];
-  INVOICE_LIST: any = {
-    sno: '1',
-    invoiceno: '',
-    amount: '',
-    currency: ''
-  };
   pipourl1: any = '';
   pipoArr: any = [];
-  dynamicFormGroup: FormGroup;
   fields: any = [];
   model = {};
   SHIPPING_BILL_LIST: any = [];
@@ -43,10 +36,6 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR: boolean = false;
-  origin: any = [];
-  commodity: any = [];
-  location: any = [];
-  bankDetail: any = [];
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -54,60 +43,19 @@ export class InwardRemittanceAdviceComponent implements OnInit {
     public pipoDataService: PipoDataService,
     public toastr: ToastrService,
     public router: Router,
-    private fb: FormBuilder,
     public validator: UploadServiceValidatorService,
+    public route: ActivatedRoute,
     public userService: UserService) { }
 
   async ngOnInit() {
     this.CURRENCY_LIST = this.documentService.getCurrencyList();
-    this.userService.getBuyer(1).subscribe((res: any) => {
-      res.data?.forEach(element => {
-        if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-          this.ConsigneeNameList.push({ value: element?.ConsigneeName })
-        }
-        this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
-      });
-      console.log('Benne Detail111', this.ConsigneeNameList, this.BUYER_DETAILS);
-    }, (err) => console.log('Error', err));
-    this.documentService.getMaster(1).subscribe((res: any) => {
-      console.log('Master Data File', res);
-      res.data.forEach((element, i) => {
-        element?.pipo.forEach((ele, j) => {
-          this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
-        });
-        this.origin[i] = { value: element.countryOfFinaldestination, id: element?._id };
-      });
-      console.log('Master Country', this.SHIPPING_BUNDEL, this.origin);
-    }, (err) => console.log(err));
-    this.userService.getTeam().subscribe((data) => {
-      console.log(data['data'][0]);
-      this.location = [];
-      this.commodity = [];
-
-      data['data'][0]['location']?.forEach(element => {
-        this.location.push({ value: element?.loc })
-      });
-      data['data'][0]['commodity']?.forEach(element => {
-        this.commodity.push({ value: element?.como })
-      });
-      console.log(this.location);
-      console.log(this.commodity);
-      for (let index = 0; index < data['data'][0]['bankDetails'].length; index++) {
-        this.bankDetail.push({ value: data['data'][0]['bankDetails'][index]?.bank, id: data['data'][0]['bankDetails'][index]?.BankUniqueId })
-      }
-    },
-      (error) => {
-        console.log('error');
-      }
-    );
-    await this.pipoDataService.getPipoList('export').then(async (data) => {
-      console.log(data, 'data..................')
-      this.pipoDataService.pipolistModel$.subscribe((data) => {
-        this.PIPO_DATA = data;
-        console.log(data, 'data2222..................')
-      });
-    });
+    var temp_pipo: any = this.route.snapshot.paramMap.get('pipo')?.split(',');
+    if (temp_pipo?.length != 0) {
+      this.btndisabled = false;
+    }
+    await this.documentService.getPipoListNo('export', temp_pipo);
   }
+
 
   response(args: any) {
     this.publicUrl = '';
@@ -115,8 +63,8 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].publicUrl;
       let res: any = new IRAdvice(args[1].data);
-      console.log(res,'sdfjhksdjhdkfjsdhfsdkfhsd')
-      this.buildForm({
+      console.log(res, 'sdfjhksdjhdkfjsdhfsdkfhsd')
+      this.validator.buildForm({
         BankName: {
           type: "Bank",
           value: "",
@@ -125,9 +73,17 @@ export class InwardRemittanceAdviceComponent implements OnInit {
             required: true,
           }
         },
+        date: {
+          type: "date",
+          value: res?.date,
+          label: "TT Date",
+          rules: {
+            required: true,
+          }
+        },
         billNo: {
           type: "text",
-          value: "",
+          value: res?.billNo,
           label: "FOREX ADVICE No.",
           rules: {
             required: true,
@@ -135,7 +91,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         },
         currency: {
           type: "currency",
-          value: "",
+          value: res?.currency,
           label: "Currency*",
           rules: {
             required: true,
@@ -143,23 +99,15 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         },
         partyName: {
           type: "buyer",
-          value: "",
+          value: res?.partyName,
           label: "PARTY NAME",
           rules: {
             required: true,
           }
         },
-        date: {
-          type: "date",
-          value: "",
-          label: "TT Date",
-          rules: {
-            required: true,
-          }
-        },
         amount: {
-          type: "text",
-          value: "",
+          type: "number",
+          value: res?.amount,
           label: "TT AMOUNT",
           rules: {
             required: true,
@@ -167,15 +115,15 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         },
         recievedDate: {
           type: "date",
-          value: "",
+          value: res?.recievedDate,
           label: "Recieved Date",
           rules: {
             required: true,
           }
         },
         commision: {
-          type: "text",
-          value: "",
+          type: "number",
+          value: res?.commision,
           label: "Commission",
           rules: {
             required: true,
@@ -183,15 +131,15 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         },
         conversionDate: {
           type: "date",
-          value: "",
+          value: res?.conversionDate,
           label: "Conversion Date",
           rules: {
             required: true,
           }
         },
         exchangeRate: {
-          type: "text",
-          value: "",
+          type: "number",
+          value: res?.exchangeRate,
           label: "Exchange Rate",
           rules: {
             required: true,
@@ -199,7 +147,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         },
         location: {
           type: "location",
-          value: "",
+          value: res?.location,
           label: "Location",
           rules: {
             required: true,
@@ -207,7 +155,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         },
         commodity: {
           type: "commodity",
-          value: "",
+          value: res?.commodity,
           label: "Commodity",
           rules: {
             required: true,
@@ -215,7 +163,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
         },
         origin: {
           type: "origin",
-          value: "",
+          value: res?.origin,
           label: "Origin",
           rules: {
             required: true,
@@ -229,8 +177,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
             required: true,
           }
         },
-
-      });
+      }, 'InwardRemittanceAdvice');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
@@ -238,48 +185,65 @@ export class InwardRemittanceAdviceComponent implements OnInit {
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    if (e.status == 'VALID') {
-      this.SUBMIT_ERROR = false;
-      // e.value.file = 'export';
-      // e.value.pipo = this.pipoArr;
-      // e.value.doc = this.pipourl1;
-      // e.value.buyerName = this.BUYER_LIST;
-      // e.value.currency = e.value?.currency?.type;
-      // this.documentService.getInvoice_No({
-      //   masterServiceNumber: e.value.masterServiceNumber
-      // }, 'masterservices').subscribe((resp: any) => {
-      //   console.log('creditNoteNumber Invoice_No', resp)
-      //   if (resp.data.length == 0) {
-      //     this.documentService.addMasterService(e.value).subscribe(
-      //       (res: any) => {
-      //         this.toastr.success(`Master Service Document Added Successfully`);
-      //         let updatedData = {
-      //           "MasterServiceRef": [
-      //             res.data._id,
-      //           ],
-      //         }
-      //         this.userService
-      //           .updateManyPipo(this.pipoArr, 'export', this.pipourl1, updatedData)
-      //           .subscribe(
-      //             (data) => {
-      //               console.log('king123');
-      //               console.log(data);
-      //               this.router.navigate(['/home/master-services']);
-      //             },
-      //             (error) => {
-      //               console.log('error');
-      //             }
-      //           );
-      //       },
-      //       (err) => console.log('Error adding pipo')
-      //     );
-      //   } else {
-      //     this.toastr.error(`Please check this sb no. : ${e.value.masterServiceNumber} already exit...`);
-      //   }
-      // });
-    } else {
-      this.SUBMIT_ERROR = true
+    this.SUBMIT_ERROR = false;
+    var temp: any = [];
+    for (let index = 0; index < this.documentService?.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION.length; index++) {
+      const element = this.documentService?.PI_PO_NUMBER_LIST?.PIPO_TRANSACTION[index];
+      temp.push(element?._id)
     }
+    e.value.file = 'export';
+    e.value.pipo = temp.length != 0 ? temp : this.pipoArr;
+    e.value.doc = this.pipourl1;
+    e.value.buyerName = this.BUYER_LIST;
+    e.value.partyName = e.value.partyName?.value != undefined ? e.value.partyName.value : e.value.partyName;
+    e.value.currency = e.value.currency?.type != undefined ? e.value.currency.type : e.value.currency;
+    e.value.PaymentType = e.value.PaymentType?.value != undefined ? e.value.PaymentType.value : e.value.PaymentType;
+    e.value.commodity = e.value.commodity?.value != undefined ? e.value.commodity.value : e.value.commodity;
+    e.value.location = e.value.location?.value != undefined ? e.value.location.value : e.value.location;
+    e.value.origin = e.value.origin?.value != undefined ? e.value.origin.value : e.value.origin;
+
+    console.log('doc', temp, this.pipourl1);
+    console.log('onSubmitIrAdvice', e.value);
+    this.documentService.getInvoice_No({
+      billNo: e.value.billNo
+    }, 'iradvices').subscribe((resp: any) => {
+      console.log('creditNoteNumber Invoice_No', resp)
+      if (resp.data.length == 0) {
+        this.documentService.addIrAdvice(e.value).subscribe((data: any) => {
+          console.log('addIrAdvice', data);
+          let updatedData = {
+            "MasterServiceRef": [
+              data?.data._id,
+            ],
+            "AdviceRef": [
+              data?.data._id,
+            ]
+          }
+          this.userService.updateManyPipo(this.pipoArr, 'export', this.pipourl1, updatedData).subscribe((data) => {
+            this.toastr.success('Firex Document added successfully.');
+            this.router.navigate(['/home/inward-remittance-advice']);
+            var Transaction_id: any = this.route.snapshot.paramMap.get('Transaction_id');
+            if (Transaction_id != '') {
+              this.documentService.UpdateTransaction({ id: Transaction_id, data: { irRef: e.value } }).subscribe((res: any) => {
+                this.toastr.success('Firex Document added successfully.');
+                this.router.navigate(['/home/inward-remittance-advice']);
+              });
+            } else {
+              this.toastr.success('Firex Document added successfully.');
+              this.router.navigate(['/home/inward-remittance-advice']);
+            }
+          }, (error) => {
+            console.log('error');
+          });
+        },
+          (error) => {
+            console.log('error');
+          }
+        );
+      } else {
+        this.toastr.error(`Please check this Firex Document no. : ${e.value.billNo} already exit...`);
+      }
+    });
   }
 
   clickPipo(event: any) {
@@ -287,52 +251,11 @@ export class InwardRemittanceAdviceComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      if (this.BUYER_LIST.includes(event?.id[1]) == false) {
-        this.BUYER_LIST.push(event?.id[1])
-      }
+      this.BUYER_LIST[0]=(event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
     } else {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
-  }
-
-  buildForm(model: any) {
-    this.fields = [];
-    const formGroupFields = this.getFormControlsFields(model);
-    this.dynamicFormGroup = new FormGroup(formGroupFields);
-    console.log(this.dynamicFormGroup, 'dynamicFormGroup')
-  }
-
-  getFormControlsFields(model: any) {
-    const formGroupFields = {};
-    for (let field of Object.keys(model)) {
-      let id: any = field;
-      const fieldProps = model[field];
-      if (fieldProps?.type != "formArray") {
-        formGroupFields[field] = new FormControl(fieldProps.value, this.validator.getMAX_MIN_LENGTH()[fieldProps?.type]);
-        this.fields.push({ ...fieldProps, fieldName: field });
-      } else {
-        let control: any = fieldProps?.formGroup?.map(r =>
-          new FormGroup(Object.entries(r).reduce((acc, [k, v]) => {
-            let vk: any = v;
-            acc[k] = new FormControl(vk?.value || "", this.validator.getMAX_MIN_LENGTH()[vk?.type]);
-            return acc;
-          }, {})));
-        formGroupFields[field] = control[0];
-        console.log(id, fieldProps, control, this.fields, 'hghjgjhghjgjh')
-        let control2: any = fieldProps?.formGroup?.map(r => {
-          var temp: any = [];
-          for (let field_1 of Object.keys(r)) {
-            temp.push({ ...r[field_1], fieldName: field_1 })
-          }
-          return temp;
-        });
-        fieldProps['formGroup'] = control2[0];
-        this.fields.push({ ...fieldProps, fieldName: field });
-      }
-    }
-    console.log(this.fields, 'hghjgjhghjgjh')
-    return formGroupFields;
   }
 }

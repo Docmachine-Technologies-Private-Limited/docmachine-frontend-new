@@ -116,6 +116,25 @@ import { BillOfExchangesComponent } from '../components/Upload/Export/bill-of-ex
 import { DestructionCertificatesComponent } from '../components/Upload/Export/destruction-certificates/destruction-certificates.component';
 import { PackingListInvoicesComponent } from '../components/Upload/Export/packing-list-invoices/packing-list-invoices.component';
 import { CommercialInvoicesComponent } from '../components/Upload/Export/commercial-invoices/commercial-invoices.component';
+import { DebitNotesComponent } from "../components/Upload/Export/debit-note/debit-note.component";
+import { PIPOSComponent } from "../components/Upload/Export/pipos/pipos.component";
+
+import { ImportPIPOSComponent } from "../components/Upload/Import/import-pipos/import-pipos.component";
+import { BOEComponent } from "./../components/Upload/Import/import-BOE/boe.component";
+import { ImportCreditNoteComponent } from '../components/Upload/Import/import-credit-note/import-credit-note.component';
+import { ImportInsurancedocumentsComponent } from '../components/Upload/Import/import-insurancedocuments/import-insurancedocuments.component';
+import { ImportLetterofCreditComponent } from '../components/Upload/Import/import-letterof-credit/import-letterof-credit.component';
+import { ImportMasterServiceAgreementsComponent } from '../components/Upload/Import/import-master-service-agreements/import-master-service-agreements.component';
+import { ImportTripartyAgreementsComponent } from '../components/Upload/Import/import-triparty-agreements/import-triparty-agreements.component';
+import { ImportOpinionReportComponent } from '../components/Upload/Import/import-opinion-reports/import-opinion-reports.component';
+import { ImportOutwardRemittanceAdviceComponent } from '../components/Upload/Import/import-outward-remittance-advice/import-inward-remittance-advice.component';
+import { ImportAirwayBlCopyComponent } from '../components/Upload/Import/import-airway-bl-copy/import-airway-bl-copy.component';
+import { ImportBillOfExchangesComponent } from '../components/Upload/Import/import-bill-of-exchanges/import-bill-of-exchanges.component';
+import { ImportDestructionCertificatesComponent } from '../components/Upload/Import/import-destruction-certificates/import-destruction-certificates.component';
+import { ImportPackingListInvoicesComponent } from '../components/Upload/Import/import-packing-list-invoices/import-packing-list-invoices.component';
+import { ImportCommercialInvoicesComponent } from '../components/Upload/Import/import-commercial-invoices/import-commercial-invoices.component';
+import { ImportDebitNotesComponent } from "../components/Upload/Import/import-debit-note/import-debit-note.component";
+import { UploadServiceValidatorService } from "../components/Upload/service/upload-service-validator.service";
 
 @NgModule({
   declarations: [
@@ -181,7 +200,25 @@ import { CommercialInvoicesComponent } from '../components/Upload/Export/commerc
     BillOfExchangesComponent,
     DestructionCertificatesComponent,
     PackingListInvoicesComponent,
-    CommercialInvoicesComponent
+    CommercialInvoicesComponent,
+    DebitNotesComponent,
+    PIPOSComponent,
+    ImportPIPOSComponent,
+    BOEComponent,
+    ImportCreditNoteComponent,
+    ImportInsurancedocumentsComponent,
+    ImportLetterofCreditComponent,
+    ImportTripartyAgreementsComponent,
+    ImportOpinionReportComponent,
+    ImportOutwardRemittanceAdviceComponent,
+    ImportAirwayBlCopyComponent,
+    ImportBillOfExchangesComponent,
+    ImportDestructionCertificatesComponent,
+    ImportPackingListInvoicesComponent,
+    ImportCommercialInvoicesComponent,
+    ImportDebitNotesComponent,
+    ImportMasterServiceAgreementsComponent,
+    ImportOpinionReportComponent
   ],
   imports: [
     SharedHomeModule,
@@ -671,7 +708,8 @@ import { CommercialInvoicesComponent } from '../components/Upload/Export/commerc
           { path: "SuperAdminPanel", pathMatch: "full", component: SuperAdminPanelComponent, canActivate: [SuperGuard] },
           { path: "AdminPanel", pathMatch: "full", component: AdminPanelComponent, canActivate: [AdminGuard] },
           { path: "RoleBase", component: RoleBasedSingUpComponent, pathMatch: "full", canActivate: [SuperGuard] },
-          
+
+          // Export Upload
           { path: "upload/Export/Shippingbill", component: ShippingBillComponent, canActivate: [MemberGuard] },
           { path: "upload/Export/Insurancedocuments", component: InsurancedocumentsComponent, canActivate: [MemberGuard] },
           { path: "upload/Export/LetterofCredit", component: LetterofCreditComponent, canActivate: [MemberGuard] },
@@ -683,7 +721,29 @@ import { CommercialInvoicesComponent } from '../components/Upload/Export/commerc
           { path: "upload/Export/PackingListInvoices", component: PackingListInvoicesComponent, canActivate: [MemberGuard] },
           { path: "upload/Export/CommercialInvoices", component: CommercialInvoicesComponent, canActivate: [MemberGuard] },
           { path: "upload/Export/OpinionReports", component: OpinionReportsComponent, canActivate: [MemberGuard] },
-          { path: "upload/Export/InwardRemittanceAdvice", component: InwardRemittanceAdviceComponent, canActivate: [MemberGuard] }
+          { path: "upload/Export/InwardRemittanceAdvice", component: InwardRemittanceAdviceComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/InwardRemittanceAdvice/:id?", component: InwardRemittanceAdviceComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/CreditNoteDocument", component: CreditNoteComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/DebitNoteDocument", component: DebitNotesComponent, canActivate: [MemberGuard] },
+          { path: "upload/Export/PIPO", component: PIPOSComponent, canActivate: [MemberGuard] },
+
+          // Import Upload
+          { path: "upload/Import/Boe", component: BOEComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/Insurancedocuments", component: ImportInsurancedocumentsComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/LetterofCredit", component: ImportLetterofCreditComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/MasterServiceAgreements", component: ImportMasterServiceAgreementsComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/TripartyAgreements", component: ImportTripartyAgreementsComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/AirwayBlCopy", component: ImportAirwayBlCopyComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/BillOfExchanges", component: ImportBillOfExchangesComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/DestructionCertificates", component: ImportDestructionCertificatesComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/PackingListInvoices", component: ImportPackingListInvoicesComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/CommercialInvoices", component: ImportCommercialInvoicesComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/OpinionReports", component: ImportOpinionReportComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/OutwardRemittanceAdvice", component: ImportOutwardRemittanceAdviceComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/OutwardRemittanceAdvice/:id?", component: ImportOutwardRemittanceAdviceComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/CreditNoteDocument", component: ImportCreditNoteComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/DebitNoteDocument", component: ImportDebitNotesComponent, canActivate: [MemberGuard] },
+          { path: "upload/Import/PIPO", component: ImportPIPOSComponent, canActivate: [MemberGuard] },
         ],
       },
     ]),
@@ -695,5 +755,7 @@ import { CommercialInvoicesComponent } from '../components/Upload/Export/commerc
   exports: [MatProgressBarModule, MatTabsModule, SharedHomeModule],
 })
 export class HomeModule {
-
+  constructor(public validator: UploadServiceValidatorService) {
+    validator.loaddata()
+  }
 }

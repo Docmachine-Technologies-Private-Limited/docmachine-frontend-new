@@ -15,6 +15,8 @@ import { SocketIoService } from './service/SocketIo/socket-io.service';
 
 import { Observable, Observer, fromEvent, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { PipoDataService } from './service/homeservices/pipo.service';
+import { UploadServiceValidatorService } from './components/Upload/service/upload-service-validator.service';
 
 @Component({
   selector: 'app-root',
@@ -38,10 +40,13 @@ export class AppComponent implements OnInit, OnDestroy {
     public toastr: ToastrService,
     public elRef: ElementRef,
     public socketioservice: SocketIoService,
+    public validator: PipoDataService,
+    public Uploadvalidator: UploadServiceValidatorService,
     public authGuard: AuthGuard) {
     this.translate.setDefaultLang('en');
     this.createOnline$().subscribe(isOnline => this.isOnline = isOnline);
     this.setTimeoutNew();
+    this.validator.getPipoListNo('export', '');
     console.log(sessionstorage.get('PERMISSION'), 'asdfsdfsdfsdfdfdfsdfd')
     router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
@@ -51,8 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
         } else {
           let token = this.authGuard.loadFromLocalStorage();
           if (token == null) {
-            this.authservice.logout();
-            this.router.navigate(['/login']);
+            this.logoutUser();
           } else {
             this.userService.getUserDetail().then((user: any) => {
               this.userData = user?.result
@@ -60,25 +64,27 @@ export class AppComponent implements OnInit, OnDestroy {
               if (this.sessionstorage.get('PERMISSION') != null && this.sessionstorage.get('PERMISSION') != "") {
                 var session: any = JSON.parse(this.sessionstorage.get('PERMISSION'));
                 if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId || !this.getTokenExit(this.userData?.LoginToken, token))) {
-                  this.authservice.logout();
-                  this.router.navigate(['/login']);
+                  this.logoutUser();
                 }
               } else {
-                this.authservice.logout();
-                this.router.navigate(['/login']);
+                 this.logoutUser();
               }
               if (token != null) {
                 const jwtToken: any = jwt_decode.default(token);
                 const timeout = jwtToken.exp - new Date().getTime();
                 setTimeout(() => {
-                  this.authservice.logout();
-                  this.router.navigate(['/login']);
+                  this.logoutUser();
                   this.toastr?.warning('Your token expired....')
                 }, timeout);
                 console.log('AppConfig', AppConfig, jwtToken.exp, timeout);
               }
             });
           }
+        }
+        let token = this.authGuard.loadFromLocalStorage();
+        if (token != null) {
+          this.doc.getPipoListNo('export', []);
+          this.Uploadvalidator.loaddata();
         }
       }
     });
@@ -88,17 +94,14 @@ export class AppComponent implements OnInit, OnDestroy {
       if (this.sessionstorage.get('PERMISSION') != null && this.sessionstorage.get('PERMISSION') != "") {
         var session: any = JSON.parse(this.sessionstorage.get('PERMISSION'));
         if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId || !this.getTokenExit(this.userData?.LoginToken, token))) {
-          this.authservice.logout();
-          this.router.navigate(['/login']);
+          this.logoutUser();
         }
       } else {
-        this.authservice.logout();
-        this.router.navigate(['/login']);
+        this.logoutUser();
       }
     }).catch((error: any) => {
       if (error.status == 401) {
-        this.authservice.logout();
-        this.router.navigate(['/login']);
+        this.logoutUser();
       }
     });
   }
@@ -117,17 +120,14 @@ export class AppComponent implements OnInit, OnDestroy {
       if (this.sessionstorage.get('PERMISSION') != null && this.sessionstorage.get('PERMISSION') != "") {
         var session: any = JSON.parse(this.sessionstorage.get('PERMISSION'));
         if ((this.userData?.role != session?.role || this.userData?.emailId != session?.emailId || !this.getTokenExit(this.userData?.LoginToken, token))) {
-          this.authservice.logout();
-          this.router.navigate(['/login']);
+          this.logoutUser();
         }
       } else {
-        this.authservice.logout();
-        this.router.navigate(['/login']);
+        this.logoutUser();
       }
     }).catch((error: any) => {
       if (error.status == 401) {
-        this.authservice.logout();
-        this.router.navigate(['/login']);
+        this.logoutUser();
       }
     });
   };
@@ -135,9 +135,8 @@ export class AppComponent implements OnInit, OnDestroy {
   setTimeoutNew() {
     this.userActivity = setTimeout(() => {
       this.userInactive.next(undefined);
-      this.authservice.logout();
-      this.router.navigate(['/login']);
-    }, 7200000);
+      this.logoutUser();
+    }, 300000);
     // 300000
   }
   addMinutes(minutes) {
@@ -189,5 +188,14 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
     return bool;
+  }
+  logoutUser(){
+    this.userService.loginlogout(false).subscribe((res: any) => {
+      console.log(res, 'loginlogout');
+      this.userService.authToken = null;
+      this.router.navigate(["login"]);
+      sessionStorage.clear();
+      localStorage.clear();
+    })
   }
 }

@@ -8,38 +8,20 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
   selector: 'app-packing-list-invoices',
   templateUrl: './packing-list-invoices.component.html',
-  styleUrls: ['./packing-list-invoices.component.scss']
+  styleUrls: ['./packing-list-invoices.component.scss','../../commoncss/common.component.scss']
 })
 export class PackingListInvoicesComponent implements OnInit {
   publicUrl: any = '';
   UPLOAD_FORM: any = [];
-  CURRENCY_LIST: any = [];
-  BUYER_DETAILS: any = [];
-  BUYER_ADDRESS_DETAILS: any = [];
-  ConsigneeNameList: any = [];
   btndisabled: boolean = true;
-  PIPO_DATA: any = [];
-  INVOICE_LIST: any = {
-    sno: '1',
-    invoiceno: '',
-    amount: '',
-    currency: ''
-  };
   pipourl1: any = '';
   pipoArr: any = [];
-  dynamicFormGroup: FormGroup;
-  fields: any = [];
-  model = {};
-  SHIPPING_BILL_LIST: any = [];
   BUYER_LIST: any = [];
-  CommercialNumber: any = [];
-  COMMERCIAL_LIST: any = [];
-  commerciallist: any = [];
-  SHIPPING_BUNDEL: any = [];
   SUBMIT_ERROR:boolean=false;
   
   constructor(public sanitizer: DomSanitizer,
@@ -48,35 +30,10 @@ export class PackingListInvoicesComponent implements OnInit {
     public pipoDataService: PipoDataService,
     public toastr: ToastrService,
     public router: Router,
-    private fb: FormBuilder,
+    public validator: UploadServiceValidatorService,
     public userService: UserService) { }
 
   async ngOnInit() {
-    this.CURRENCY_LIST = this.documentService.getCurrencyList();
-    this.userService.getBuyer(1).subscribe((res: any) => {
-      res.data?.forEach(element => {
-        if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-          this.ConsigneeNameList.push({ value: element?.ConsigneeName })
-        }
-        this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
-      });
-      console.log('Benne Detail111', this.ConsigneeNameList, this.BUYER_DETAILS);
-    }, (err) => console.log('Error', err));
-    this.documentService.getMaster(1).subscribe((res: any) => {
-      console.log('Master Data File', res);
-      res.data.forEach((element, i) => {
-        element?.pipo.forEach((ele, j) => {
-          this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
-        });
-      });
-    }, (err) => console.log(err));
-    await this.pipoDataService.getPipoList('export').then(async (data) => {
-      console.log(data, 'data..................')
-      this.pipoDataService.pipolistModel$.subscribe((data) => {
-        this.PIPO_DATA = data;
-        console.log(data, 'data2222..................')
-      });
-    });
   }
 
   response(args: any) {
@@ -84,7 +41,7 @@ export class PackingListInvoicesComponent implements OnInit {
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
-      this.buildForm({
+      this.validator.buildForm({
         sbNo: {
           type: "ShippingBill",
           value: "",
@@ -117,7 +74,7 @@ export class PackingListInvoicesComponent implements OnInit {
             required: true,
           }
         }
-      });
+      },'ExportPackingList');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
@@ -128,7 +85,7 @@ export class PackingListInvoicesComponent implements OnInit {
     if (e.status == 'VALID') {
       this.SUBMIT_ERROR=false;
       e.value.file = 'export';
-      let selectedBOE = this.SHIPPING_BILL_LIST.filter((item: any) => item?._id === e?.value?.sbNo)[0];
+      let selectedBOE = this.validator.SHIPPING_BILL_LIST.filter((item: any) => item?._id === e?.value?.sbNo)[0];
       e.value.pipo = this.pipoArr;
       console.log('pipoarrya', this.pipoArr);
       e.value.packingDoc = this.pipourl1;
@@ -191,7 +148,7 @@ export class PackingListInvoicesComponent implements OnInit {
             (err) => console.log('Error adding pipo')
           );
         } else {
-          this.toastr.error(`Please check this sb no. : ${e.value.packingListNumber} already exit...`);
+          this.toastr.error(`Please check this packing-list no. : ${e.value.packingListNumber} already exit...`);
         }
       });
     } else {
@@ -204,18 +161,15 @@ export class PackingListInvoicesComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      if (this.BUYER_LIST.includes(event?.id[1]) == false) {
-        this.BUYER_LIST.push(event?.id[1])
-      }
+      this.BUYER_LIST[0]=(event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.COMMERCIAL_LIST = [];
       this.pipoDataService.getShippingNo(event?._id, 'export');
-      this.SHIPPING_BILL_LIST = [];
-      for (let j = 0; j < this.SHIPPING_BUNDEL.length; j++) {
-        if (this.SHIPPING_BUNDEL[j]?.id == event?._id) {
-          this.SHIPPING_BILL_LIST.push({
-            sbno: this.SHIPPING_BUNDEL[j]?.sbno,
-            _id: this.SHIPPING_BUNDEL[j]?.SB_ID
+      this.validator.SHIPPING_BILL_LIST = [];
+      for (let j = 0; j < this.validator.SHIPPING_BUNDEL.length; j++) {
+        if (this.validator.SHIPPING_BUNDEL[j]?.id == event?._id) {
+          this.validator.SHIPPING_BILL_LIST.push({
+            sbno: this.validator.SHIPPING_BUNDEL[j]?.sbno,
+            _id: this.validator.SHIPPING_BUNDEL[j]?.SB_ID
           });
         }
       }
@@ -225,42 +179,4 @@ export class PackingListInvoicesComponent implements OnInit {
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
 
-  buildForm(model: any) {
-    this.fields=[];
-    const formGroupFields = this.getFormControlsFields(model);
-    this.dynamicFormGroup = new FormGroup(formGroupFields);
-    console.log(this.dynamicFormGroup, 'dynamicFormGroup')
-  }
-
-  getFormControlsFields(model: any) {
-    const formGroupFields = {};
-    for (let field of Object.keys(model)) {
-      let id: any = field;
-      const fieldProps = model[field];
-      if (fieldProps?.type != "formArray") {
-        formGroupFields[field] = new FormControl(fieldProps.value, Validators.required);
-        this.fields.push({ ...fieldProps, fieldName: field });
-      } else {
-        let control: any = fieldProps?.formGroup?.map(r =>
-          new FormGroup(Object.entries(r).reduce((acc, [k, v]) => {
-            let vk: any = v;
-            acc[k] = new FormControl(vk?.value || "", Validators.required);
-            return acc;
-          }, {})));
-        formGroupFields[field] = control[0];
-        console.log(id, fieldProps, control, this.fields, 'hghjgjhghjgjh')
-        let control2: any = fieldProps?.formGroup?.map(r => {
-          var temp: any = [];
-          for (let field_1 of Object.keys(r)) {
-            temp.push({ ...r[field_1], fieldName: field_1 })
-          }
-          return temp;
-        });
-        fieldProps['formGroup'] = control2[0];
-        this.fields.push({ ...fieldProps, fieldName: field });
-      }
-    }
-    console.log(this.fields, 'hghjgjhghjgjh')
-    return formGroupFields;
-  }
 }

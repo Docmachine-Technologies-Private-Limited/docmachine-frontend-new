@@ -50,7 +50,8 @@ import { JoinPipePipe } from './join-pipe.pipe';
 import { ResetOTPComponent } from './forgot-password/reset-otp/reset-otp.component';
 import { BehaviorSubjectListService } from "./home/CommanSubjectApi/BehaviorSubjectListService/BehaviorSubjectList.service";
 import { RoleVerifyEmailComponent } from './RoleVerifyEmail/role-verify-email/role-verify-email.component';
-
+import { UploadServiceValidatorService } from "./components/Upload/service/upload-service-validator.service";
+import { PipoDataService } from "./service/homeservices/pipo.service";
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
   url: "https://httpbin.org/post",
@@ -100,7 +101,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   imports: [
     BrowserModule,
     RouterModule,
-    ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
     DropzoneModule,

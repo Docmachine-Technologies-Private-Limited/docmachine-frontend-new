@@ -8,11 +8,12 @@ import { PipoDataService } from '../../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UploadServiceValidatorService } from '../../service/upload-service-validator.service';
 
 @Component({
   selector: 'app-triparty-agreements',
   templateUrl: './triparty-agreements.component.html',
-  styleUrls: ['./triparty-agreements.component.scss']
+  styleUrls: ['./triparty-agreements.component.scss','../../commoncss/common.component.scss']
 })
 export class TripartyAgreementsComponent implements OnInit {
   publicUrl: any = '';
@@ -50,35 +51,11 @@ export class TripartyAgreementsComponent implements OnInit {
     public pipoDataService: PipoDataService,
     public toastr: ToastrService,
     public router: Router,
-    private fb: FormBuilder,
+    public validator: UploadServiceValidatorService,
     public userService: UserService) { }
 
   async ngOnInit() {
-    this.CURRENCY_LIST = this.documentService.getCurrencyList();
-    this.userService.getBuyer(1).subscribe((res: any) => {
-      res.data?.forEach(element => {
-        if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
-          this.ConsigneeNameList.push({ value: element?.ConsigneeName })
-        }
-        this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
-      });
-      console.log('Benne Detail111', this.ConsigneeNameList, this.BUYER_DETAILS);
-    }, (err) => console.log('Error', err));
-    this.documentService.getMaster(1).subscribe((res: any) => {
-      console.log('Master Data File', res);
-      res.data.forEach((element, i) => {
-        element?.pipo.forEach((ele, j) => {
-          this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
-        });
-      });
-    }, (err) => console.log(err));
-    await this.pipoDataService.getPipoList('export').then(async (data) => {
-      console.log(data, 'data..................')
-      this.pipoDataService.pipolistModel$.subscribe((data) => {
-        this.PIPO_DATA = data;
-        console.log(data, 'data2222..................')
-      });
-    });
+
   }
 
   response(args: any) {
@@ -86,7 +63,7 @@ export class TripartyAgreementsComponent implements OnInit {
     setTimeout(() => {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
-      this.buildForm({
+      this.validator.buildForm({
         triPartyAgreementDate: {
           type: "date",
           value: "",
@@ -193,16 +170,14 @@ export class TripartyAgreementsComponent implements OnInit {
             }
           ]
         }
-      });
+      },'ExportTryPartyAgreements');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
     console.log(args, 'sdfhsdfkjsdfhsdkfsdhfkdjsfhsdk')
   }
   onSubmit(e: any) {
     console.log(e, 'value')
-    if (e.status == 'VALID') {
-      this.SUBMIT_ERROR = false;
-      e.value.file = 'export';
+    e.value.file = 'export';
       e.value.pipo = this.pipoArr;
       e.value.doc = this.pipourl1;
       e.value.buyerName = this.BUYER_LIST;
@@ -232,9 +207,6 @@ export class TripartyAgreementsComponent implements OnInit {
           this.toastr.error(`Please check this sb no. : ${e.value.triPartyAgreementNumber} already exit...`);
         }
       });
-    } else {
-      this.SUBMIT_ERROR = true
-    }
   }
 
   clickPipo(event: any) {
@@ -242,9 +214,7 @@ export class TripartyAgreementsComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      if (this.BUYER_LIST.includes(event?.id[1]) == false) {
-        this.BUYER_LIST.push(event?.id[1])
-      }
+      this.BUYER_LIST[0]=(event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.COMMERCIAL_LIST = [];
       this.pipoDataService.getShippingNo(event?._id, 'export');
@@ -261,45 +231,5 @@ export class TripartyAgreementsComponent implements OnInit {
       this.btndisabled = true;
     }
     console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
-  }
-
-  buildForm(model: any) {
-    this.fields = [];
-    const formGroupFields = this.getFormControlsFields(model);
-    this.dynamicFormGroup = new FormGroup(formGroupFields);
-    console.log(this.dynamicFormGroup, 'dynamicFormGroup')
-  }
-
-  getFormControlsFields(model: any) {
-    const formGroupFields = {};
-    for (let field of Object.keys(model)) {
-      let id: any = field;
-      const fieldProps = model[field];
-      if (fieldProps?.type != "formArray") {
-        formGroupFields[field] = new FormControl(fieldProps.value, Validators.required);
-        this.fields.push({ ...fieldProps, fieldName: field });
-      } else {
-        var temp: any = [];
-        var tempFormGroup: any = [];
-        let count: number = 0;
-        fieldProps?.formGroup.forEach(element => {
-          for (let field2 of Object.keys(element)) {
-            temp.push({ ...element[field2], fieldName: field2, index: count });
-            tempFormGroup.push(new FormGroup({ [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false }, Validators.required) }));
-            count++;
-          }
-        });
-        fieldProps['NewformGroup'] = temp;
-        formGroupFields[field] = new FormArray(tempFormGroup);
-        this.fields.push({ ...fieldProps, fieldName: field });
-        console.log(id, fieldProps, tempFormGroup, this.fields, 'hghjgjhghjgjh')
-      }
-    }
-    console.log(this.fields, 'hghjgjhghjgjh')
-    return formGroupFields;
-  }
-
-  setFormValue(value: any, index: any, name1: any, name2: any) {
-    this.dynamicFormGroup.controls[name1]?.controls[index]?.controls[name2]?.setValue(value)
   }
 }

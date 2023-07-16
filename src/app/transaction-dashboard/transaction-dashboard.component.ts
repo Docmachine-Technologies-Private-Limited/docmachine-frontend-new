@@ -384,5 +384,13 @@ export class TransactionDashboardComponent implements OnInit {
     }
     this.router.navigate(['home/' + url, this.Newtemp]);
   }
+  
+  getPipoNumber(pipo: any) {
+    let temp: any = [];
+    (pipo != 'NF' ? pipo : []).forEach(element => {
+      temp.push(element?.pi_poNo);
+    });
+    return temp.join(',')
+  }
 
 }

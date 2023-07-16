@@ -57,10 +57,11 @@ import { CustomJPXSchedulerComponent } from "../custom-jpxscheduler/custom-jpxsc
 import { jqxSchedulerModule } from 'jqwidgets-ng/jqxscheduler';
 import { CustomComponentsUploadComponent } from "../custom/custom-components-upload/custom-components-upload.component";
 import { UploadPopUpComponent } from "../components/Upload/upload-pop-up/upload-pop-up.component";
-import { DynamicErrorComponent } from "../components/dynamic-error/dynamic-error.component";
 import { CustomSlicePipePipe } from "../custom/custom-pipe/custom-slice-pipe/custom-slice-pipe.pipe";
 import { UploadComponentsComponent } from "../components/Upload/upload-components/upload-components.component";
 import { UploadServiceValidatorService } from "../components/Upload/service/upload-service-validator.service";
+import { DynamicErrorComponent } from "../components/dynamic-error/dynamic-error.component";
+import { InnerDynamicErrorComponent } from "../components/Upload/upload-components/inner-dynamic-error/inner-dynamic-error.component";
 
 @NgModule({
   declarations: [
@@ -100,13 +101,15 @@ import { UploadServiceValidatorService } from "../components/Upload/service/uplo
     UploadPopUpComponent,
     DynamicErrorComponent,
     CustomSlicePipePipe,
-    UploadComponentsComponent
+    UploadComponentsComponent,
+    InnerDynamicErrorComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     DropzoneModule,
     DragDropModule,
+    ReactiveFormsModule,
     MatProgressBarModule,
     MatTabsModule,
     PdfViewerModule,
@@ -172,7 +175,8 @@ import { UploadServiceValidatorService } from "../components/Upload/service/uplo
     UploadPopUpComponent,
     DynamicErrorComponent,
     CustomSlicePipePipe,
-    UploadComponentsComponent
+    UploadComponentsComponent,
+    InnerDynamicErrorComponent
   ],
 })
 export class SharedHomeModule { }

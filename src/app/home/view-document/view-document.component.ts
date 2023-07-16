@@ -288,14 +288,14 @@ export class ViewDocumentComponent implements OnInit {
   }
   newShipping() {
     this.sharedData.changeretunurl('home/view-document/sb');
-    this.router.navigate([
-      'home/upload',
-      {
-        file: 'export',
-        document: 'sb',
-      },
-    ]);
-    // this.router.navigate(['/home/upload/Export/Shippingbill']);
+    // this.router.navigate([
+    //   'home/upload',
+    //   {
+    //     file: 'export',
+    //     document: 'sb',
+    //   },
+    // ]);
+    this.router.navigate(['/home/upload/Export/Shippingbill']);
   }
 
   getTransactions(selectedRowValues) {

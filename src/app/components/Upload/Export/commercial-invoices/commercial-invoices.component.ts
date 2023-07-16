@@ -12,7 +12,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 @Component({
   selector: 'app-commercial-invoices',
   templateUrl: './commercial-invoices.component.html',
-  styleUrls: ['./commercial-invoices.component.scss']
+  styleUrls: ['./commercial-invoices.component.scss','../../commoncss/common.component.scss']
 })
 export class CommercialInvoicesComponent implements OnInit {
   publicUrl: any = '';
@@ -195,9 +195,7 @@ export class CommercialInvoicesComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      if (this.BUYER_LIST.includes(event?.id[1]) == false) {
-        this.BUYER_LIST.push(event?.id[1])
-      }
+      this.BUYER_LIST[0]=(event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.COMMERCIAL_LIST = [];
       this.pipoDataService.getShippingNo(event?._id, 'export');

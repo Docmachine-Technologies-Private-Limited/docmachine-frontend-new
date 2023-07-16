@@ -193,13 +193,13 @@
                     <a class="button white-btn table-btn PopupOpen" popup-close="TransactionView"
                       (click)="transactionview(item);">View..</a>
                     <button type="submit" [hidden]="this.TRANSACTION_NAME!='Inward-Remitance-Dispoal'" class="btn btn-primary"
-                    (click)="navigationByUrlParam('upload',item?._id,{MoreDetails:{Url_Redirect:{file:'export',document:'irAdvice',Transaction_id:'',pipo:getPipoListString(item?.pipo)}}})">Upload IRN</button>
+                    (click)="navigationByUrlParam('upload/Export/InwardRemittanceAdvice',item?._id,{MoreDetails:{Url_Redirect:{Transaction_id:'',pipo:getPipoNumber(item?.pipo)}}})">Upload IRN</button>
                     <button type="submit" [hidden]="this.TRANSACTION_NAME!='Import-Direct-Payment'" class="btn btn-primary"
                     (click)="navigationByUrlParam('upload',item?._id,item)">Upload ORN</button>
                     <button type="submit" [hidden]="this.TRANSACTION_NAME!='Advance-Remittance-flow'" class="btn btn-primary"
                     (click)="navigationByUrlParam('upload',item?._id,item)">Upload ORN</button>
                     <button type="submit" [hidden]="this.TRANSACTION_NAME!='Inward-Remitance-Dispoal'" class="btn btn-primary"
-                    (click)="navigationByUrlParam('upload',item?._id,{MoreDetails:{Url_Redirect:{file:'export',document:'EBRC',Transaction_id:'',pipo:getPipoListString(item?.pipo)}}})">Upload EBRC</button>
+                    (click)="navigationByUrlParam('upload',item?._id,{MoreDetails:{Url_Redirect:{file:'export',document:'EBRC',Transaction_id:'',pipo:getPipoNumber(item?.pipo)}}})">Upload EBRC</button>
                     <button type="submit" [hidden]="this.TRANSACTION_NAME!='Export-Direct-Dispatch'" class="btn btn-primary"
                     (click)="navigationByUrlParam('upload',item?._id,item)">Upload EBDRN</button>
                     <button type="submit" [hidden]="this.TRANSACTION_NAME!='Inward-Remitance-Dispoal-Realization' || this.TRANSACTION_NAME!='Packing-Credit-Request'" class="btn btn-primary"

@@ -73,3 +73,14 @@
 .custom {
     width: 300px;
 }
+
+.custom ::ng-deep .ng-select .ng-select-container{
+    color: #333;
+    background-color: #fff;
+    border-radius: 0;
+    border: 1px solid #ccc;
+    min-height: 36px;
+    align-items: center;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}

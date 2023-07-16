@@ -9,6 +9,7 @@ import { AprrovalPendingRejectTransactionsService } from "../../service/aprroval
 import { ToastrService } from "ngx-toastr";
 import { ConfirmDialogBoxComponent, ConfirmDialogModel } from "../confirm-dialog-box/confirm-dialog-box.component";
 import { MatDialog } from "@angular/material/dialog";
+import { UploadServiceValidatorService } from "../../components/Upload/service/upload-service-validator.service";
 @Component({
   selector: "app-manage-customer",
   templateUrl: "./manage-customer.component.html",
@@ -61,6 +62,7 @@ export class ManageCustomerComponent implements OnInit {
     public wininfo: WindowInformationService,
     private toastr: ToastrService,
     public dialog: MatDialog,
+    public validator: UploadServiceValidatorService,
     public AprrovalPendingRejectService: AprrovalPendingRejectTransactionsService,
   ) { }
 
@@ -79,11 +81,211 @@ export class ManageCustomerComponent implements OnInit {
           console.log(data["data"], 'getBene');
           this.item2 = data["data"];
           this.BuyerBeneficiaryTable(this.item2)
-        },
-          (error) => {
-            console.log("errrrror");
+        },(error) => {console.log("errrrror")});
+        
+        this.loginForm = this.formBuilder.group({
+          benneName: ['', Validators.required],
+          beneAdrs: ['', Validators.required],
+          beneBankName: ['', Validators.required],
+          beneAccNo: ['', Validators.required],
+          beneBankAdress: ['', Validators.required],
+          beneBankSwiftCode: ['', Validators.required],
+          sortCode: ['', Validators.required],
+          iban: ['', Validators.required],
+          interBankSwiftCode: ['', Validators.required],
+          interBankName: ['', Validators.required],
+        });
+        this.validator.BANK_NAME_LIST = this.documentService.getBankNameList();
+        this.validator.buildForm({
+          benneName: {
+            type: "text",
+            value: "",
+            label: "Beneficiary Name",
+            placeholderText: 'Beneficiary name',
+            rules: {
+              required: true,
+            }
+          },
+          beneAdrs: {
+            type: "text",
+            typeOf: 'Address',
+            value: "",
+            label: "Beneficiary Address",
+            placeholderText: 'Ex: street address, City. PIN',
+            rules: {
+              required: true,
+            }
+          },
+          beneBankName: {
+            type: "BankList",
+            value: "",
+            label: "Beneficiary Bank Name",
+            placeholderText: 'Enter Bank Name',
+            rules: {
+              required: true,
+            }
+          },
+          beneAccNo: {
+            type: "text",
+            typeOf: 'Address',
+            value: "",
+            label: "Beneficiary Account No.",
+            placeholderText: '',
+            rules: {
+              required: true,
+            }
+          },
+          beneBankAdress: {
+            type: "text",
+            typeOf: 'Address',
+            value: "",
+            label: "Beneficiary’s bank’s address including country",
+            placeholderText: 'Ex: street address, City. PIN',
+            rules: {
+              required: true,
+            }
+          },
+          beneBankSwiftCode: {
+            type: "text",
+            value: "",
+            label: "Beneficiary’s bank’s (any one) SWIFT code*",
+            placeholderText: '',
+            rules: {
+              required: true,
+            }
+          },
+          sortCode: {
+            type: "text",
+            value: "",
+            label: "Sort Code",
+            placeholderText: '',
+            rules: {
+              required: true,
+            }
+          },
+          iban: {
+            type: "text",
+            value: "",
+            label: "IBAN",
+            placeholderText: '',
+            rules: {
+              required: true,
+            }
+          },
+          interBankSwiftCode: {
+            type: "text",
+            value: "",
+            label: "Intermediary Bank details (if applicable) SWIFT Code",
+            placeholderText: '',
+            rules: {
+              required: true,
+            }
+          },
+          interBankName: {
+            type: "BankList",
+            value: "",
+            label: "Intermediary Bank Name (if any)",
+            placeholderText: '',
+            rules: {
+              required: true,
+            }
           }
-        );
+        },'CreateNewBeneficiary');
+        this.validator.buildForm({
+          benneName: {
+            type: "text",
+            value: "",
+            label: "Beneficiary Name",
+            placeholderText: 'Beneficiary name',
+            rules: {
+              required: true,
+            }
+          },
+          beneAdrs: {
+            type: "text",
+            typeOf: 'Address',
+            value: "",
+            label: "Beneficiary Address",
+            placeholderText: 'Ex: street address, City. PIN',
+            rules: {
+              required: true,
+            }
+          },
+          beneBankName: {
+            type: "BankList",
+            value: "",
+            label: "Beneficiary Bank Name",
+            placeholderText: 'Enter Bank Name',
+            rules: {
+              required: true,
+            }
+          },
+          beneAccNo: {
+            type: "text",
+            typeOf: 'Address',
+            value: "",
+            label: "Beneficiary Account No.",
+            placeholderText: '',
+            rules: {
+              required: true,
+            }
+          },
+          beneBankAdress: {
+            type: "text",
+            typeOf: 'Address',
+            value: "",
+            label: "Beneficiary’s bank’s address including country",
+            placeholderText: 'Ex: street address, City. PIN',
+            rules: {
+              required: true,
+            }
+          },
+          beneBankSwiftCode: {
+            type: "text",
+            value: "",
+            label: "Beneficiary’s bank’s (any one) SWIFT code*",
+            placeholderText: '',
+            rules: {
+              required: true,
+            }
+          },
+          sortCode: {
+            type: "text",
+            value: "",
+            label: "Sort Code",
+            placeholderText: '',
+            rules: {
+              required: true,
+            }
+          },
+          iban: {
+            type: "text",
+            value: "",
+            label: "IBAN",
+            placeholderText: '',
+            rules: {
+              required: true,
+            }
+          },
+          interBankSwiftCode: {
+            type: "text",
+            value: "",
+            label: "Intermediary Bank details (if applicable) SWIFT Code",
+            placeholderText: '',
+            rules: {
+              required: true,
+            }
+          },
+          interBankName: {
+            type: "BankList",
+            value: "",
+            label: "Intermediary Bank Name (if any)",
+            placeholderText: '',
+            rules: {
+              required: true,
+            }
+          }
+        },'CreateNewBeneficiaryMember');
       }
       else if (this.file === "export") {
         this.FILTER_VALUE_LIST_NEW['header'] = [
@@ -111,25 +313,132 @@ export class ManageCustomerComponent implements OnInit {
             console.log("errrrror");
           }
           );
+        this.validator.BANK_NAME_LIST = this.documentService.getBankNameList();
+        this.validator.buildForm({
+          buyerName: {
+            type: "text",
+            value: "",
+            label: "Buyer Name",
+            placeholderText: 'Buyer’s name',
+            rules: {
+              required: true,
+            }
+          },
+          buyerAdrs: {
+            type: "text",
+            typeOf: 'Address',
+            value: "",
+            label: "Buyer Address",
+            placeholderText: 'Ex: street address, City. PIN',
+            rules: {
+              required: true,
+            }
+          },
+          ConsigneeName: {
+            type: "text",
+            value: "",
+            label: "Consignee Name",
+            placeholderText: 'Enter Consignee Name',
+            rules: {
+              required: true,
+            }
+          },
+          ConsigneeAddress: {
+            type: "text",
+            typeOf: 'Address',
+            value: "",
+            label: "Consignee Address",
+            placeholderText: 'Ex: Consignee street address, City. PIN',
+            rules: {
+              required: true,
+            }
+          },
+          buyerbank: {
+            type: "BankList",
+            value: "",
+            label: "BUYER BANK NAME",
+            placeholderText: 'Select Bank Name',
+            rules: {
+              required: true,
+            }
+          },
+          buyerbankaddress: {
+            type: "text",
+            typeOf: 'Address',
+            value: "",
+            label: "BANK ADDRESS",
+            placeholderText: 'Ex: street address, City. PIN',
+            rules: {
+              required: true,
+            }
+          }
+        },'CreateNewBuyer');
+        this.validator.buildForm({
+          buyerName: {
+            type: "text",
+            value: "",
+            label: "Buyer Name",
+            placeholderText: 'Buyer’s name',
+            rules: {
+              required: true,
+            }
+          },
+          buyerAdrs: {
+            type: "text",
+            typeOf: 'Address',
+            value: "",
+            label: "Buyer Address",
+            placeholderText: 'Ex: street address, City. PIN',
+            rules: {
+              required: true,
+            }
+          },
+          ConsigneeName: {
+            type: "text",
+            value: "",
+            label: "Consignee Name",
+            placeholderText: 'Enter Consignee Name',
+            rules: {
+              required: true,
+            }
+          },
+          ConsigneeAddress: {
+            type: "text",
+            typeOf: 'Address',
+            value: "",
+            label: "Consignee Address",
+            placeholderText: 'Ex: Consignee street address, City. PIN',
+            rules: {
+              required: true,
+            }
+          },
+          buyerbank: {
+            type: "BankList",
+            value: "",
+            label: "BUYER BANK NAME",
+            placeholderText: 'Select Bank Name',
+            rules: {
+              required: true,
+            }
+          },
+          buyerbankaddress: {
+            type: "text",
+            typeOf: 'Address',
+            value: "",
+            label: "BANK ADDRESS",
+            placeholderText: 'Ex: street address, City. PIN',
+            rules: {
+              required: true,
+            }
+          }
+        },'CreateNewBuyerwithConsignee');
       }
-    });
+    },);
     this.userService.getUserDetail().then((status: any) => {
       this.USER_DATA = status['result'];
       console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
     });
-    this.loginForm = this.formBuilder.group({
-      benneName: ['', Validators.required],
-      beneAdrs: ['', Validators.required],
-      beneBankName: ['', Validators.required],
-      beneAccNo: ['', Validators.required],
-      beneBankAdress: ['', Validators.required],
-      beneBankSwiftCode: ['', Validators.required],
-      sortCode: ['', Validators.required],
-      iban: ['', Validators.required],
-      interBankSwiftCode: ['', Validators.required],
-      interBankName: ['', Validators.required],
-    });
-
+    
     this.buyerForm = this.formBuilder.group({
       buyerName: ['', Validators.required],
       buyerAdrs: ['', Validators.required],
@@ -139,6 +448,7 @@ export class ManageCustomerComponent implements OnInit {
       ConsigneeAddress: ['', Validators.required]
     });
     this.BANK_NAME_LIST = this.documentService.getBankNameList();
+
     console.log(this.BANK_NAME_LIST, 'BANK_NAME_LIST')
   }
 
@@ -198,8 +508,8 @@ export class ManageCustomerComponent implements OnInit {
     return await new Promise(async (resolve, reject) => { await resolve(data) });
   }
 
-  onSubmit(panel:any) {
-    this.userService.creatBene(this.loginForm.value).subscribe(data => {
+  onSubmit(e:any,panel: any) {
+    this.userService.creatBene(e.value).subscribe(data => {
       console.log("king123")
       console.log(data)
       panel?.displayHidden;
@@ -209,8 +519,8 @@ export class ManageCustomerComponent implements OnInit {
     });
   }
 
-  onSubmitBuyer(panel:any) {
-    this.userService.creatBuyer(this.buyerForm.value).subscribe(data => {
+  onSubmitBuyer(e:any,panel: any) {
+    this.userService.creatBuyer(e?.value).subscribe(data => {
       console.log("king123")
       console.log(data)
       panel?.displayHidden;
@@ -262,14 +572,14 @@ export class ManageCustomerComponent implements OnInit {
     }
   }
 
-  onSubmitBuyerMember() {
+  onSubmitBuyerMember(e: any) {
     let approval_data = {
       id: 'BuyerMember' + '_' + this.guid(),
       tableName: '',
       deleteflag: '-1',
       userdetails: this.USER_DATA,
       status: 'pending',
-      data: this.buyerForm.value,
+      data: e?.value,
       Types: 'BuyerAddition',
       TypeOfPage: 'BuyerAddition',
       FileType: this.USER_DATA?.sideMenu
@@ -281,14 +591,14 @@ export class ManageCustomerComponent implements OnInit {
     });
   }
 
-  onSubmitBeneficiaryMember() {
+  onSubmitBeneficiaryMember(e:any) {
     let approval_data = {
       id: 'BeneficiaryMember' + '_' + this.guid(),
       tableName: '',
       deleteflag: '-1',
       userdetails: this.USER_DATA,
       status: 'pending',
-      data: this.loginForm.value,
+      data: e.value,
       Types: 'BeneficiaryAddition',
       TypeOfPage: 'BeneficiaryAddition',
       FileType: this.USER_DATA?.sideMenu
