@@ -7,8 +7,6 @@ import { PipoDataService } from '../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../service/upload-service-validator.service';
-import $ from 'jquery';
-import { AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'upload-components',
