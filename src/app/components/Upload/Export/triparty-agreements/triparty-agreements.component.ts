@@ -100,7 +100,7 @@ export class TripartyAgreementsComponent implements OnInit {
           type: "formArray",
           label: "Party Name and Address",
           GroupLabel: ['Party Name and Address 1', 'Party Name and Address 2', 'Party Name and Address 3'],
-          DivisionLength: 2,
+          MAX_LIMIT: 2,
           rules: {
             required: true,
           },

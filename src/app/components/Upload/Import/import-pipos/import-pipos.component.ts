@@ -204,7 +204,7 @@ export class ImportPIPOSComponent implements OnInit {
             },
           }]
         },
-      }, 'PIPO_EXPORT');
+      }, 'PIPO_IMPORT');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 

@@ -19,7 +19,7 @@
         <div class="upload-panel" *ngIf="publicUrl!=''">
             <app-pdf-viewer class="pt-3" [downloadShow]="false" [src]="publicUrl" width="100%"
                 Newheight="700px"></app-pdf-viewer>
-            <upload-components [AddNewRequried]="true" (SubmitEvent)="onSubmit($event)" id="PIPO_EXPORT"></upload-components>
+            <upload-components [AddNewRequried]="true" (SubmitEvent)="onSubmit($event)" id="PIPO_IMPORT"></upload-components>
         </div>
     </main>
 </div>

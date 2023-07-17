@@ -83,7 +83,7 @@ export class UploadServiceValidatorService {
           }
           this.BUYER_DETAILS.push({ value: element.buyerName, id: element?._id, Address: element?.buyerAdrs })
         });
-        console.log('Benne Detail111', this.ConsigneeNameList, this.BUYER_DETAILS);
+        console.log('getBuyer Details', this.ConsigneeNameList, this.BUYER_DETAILS);
       }, (err) => console.log('Error', err));
       this.documentService.getMaster(1).subscribe((res: any) => {
         console.log('Master Data File', res);

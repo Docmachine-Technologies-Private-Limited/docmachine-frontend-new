@@ -128,7 +128,7 @@ export class ImportMasterServiceAgreementsComponent implements OnInit {
           (err) => console.log('Error adding pipo')
         );
       } else {
-        this.toastr.error(`Please check this sb no. : ${e.value.masterServiceNumber} already exit...`);
+        this.toastr.error(`Please check this master-services no. : ${e.value.masterServiceNumber} already exit...`);
       }
     });
   }
@@ -140,17 +140,6 @@ export class ImportMasterServiceAgreementsComponent implements OnInit {
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST[0]=(event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.COMMERCIAL_LIST = [];
-      this.pipoDataService.getShippingNo(event?._id, 'export');
-      this.SHIPPING_BILL_LIST = [];
-      for (let j = 0; j < this.SHIPPING_BUNDEL.length; j++) {
-        if (this.SHIPPING_BUNDEL[j]?.id == event?._id) {
-          this.SHIPPING_BILL_LIST.push({
-            sbno: this.SHIPPING_BUNDEL[j]?.sbno,
-            _id: this.SHIPPING_BUNDEL[j]?.SB_ID
-          });
-        }
-      }
     } else {
       this.btndisabled = true;
     }

@@ -85,15 +85,15 @@ export class PackingListInvoicesComponent implements OnInit {
     if (e.status == 'VALID') {
       this.SUBMIT_ERROR=false;
       e.value.file = 'export';
-      let selectedBOE = this.validator.SHIPPING_BILL_LIST.filter((item: any) => item?._id === e?.value?.sbNo)[0];
+      let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.SB_ID === e?.value?.sbNo)[0];
       e.value.pipo = this.pipoArr;
       console.log('pipoarrya', this.pipoArr);
       e.value.packingDoc = this.pipourl1;
       console.log('pipodoc', this.pipourl1);
       e.value.buyerName = this.BUYER_LIST;
       e.value.currency = e.value?.currency?.type;
-      e.value.sbNo = selectedBOE?.sbno;
-      e.value.sbRef = [selectedBOE?._id];      
+      e.value.sbNo = selectedShippingBill?.sbno;
+      e.value.sbRef = [selectedShippingBill?._id];      
       this.documentService.getInvoice_No({
         packingListNumber: e.value.packingListNumber
       }, 'packinglists').subscribe((resp: any) => {
@@ -110,8 +110,8 @@ export class PackingListInvoicesComponent implements OnInit {
               }
               this.documentService.updateMasterBySb(
                 updatedDataSB,
-                selectedBOE?.sbno,
-                selectedBOE?._id
+                selectedShippingBill?.sbno,
+                selectedShippingBill?._id
               ).subscribe((data) => {
                 console.log('updateMasterBySbupdateMasterBySb', data);
               }, (error) => {
@@ -128,8 +128,8 @@ export class PackingListInvoicesComponent implements OnInit {
                     this.documentService
                       .updateMasterBySb(
                         e.value,
-                        selectedBOE?.sbno,
-                        selectedBOE?._id
+                        selectedShippingBill?.sbno,
+                        selectedShippingBill?._id
                       ).subscribe(
                         (data) => {
                           console.log('king123');
@@ -167,10 +167,7 @@ export class PackingListInvoicesComponent implements OnInit {
       this.validator.SHIPPING_BILL_LIST = [];
       for (let j = 0; j < this.validator.SHIPPING_BUNDEL.length; j++) {
         if (this.validator.SHIPPING_BUNDEL[j]?.id == event?._id) {
-          this.validator.SHIPPING_BILL_LIST.push({
-            sbno: this.validator.SHIPPING_BUNDEL[j]?.sbno,
-            _id: this.validator.SHIPPING_BUNDEL[j]?.SB_ID
-          });
+          this.validator.SHIPPING_BILL_LIST.push(this.validator.SHIPPING_BUNDEL[j]);
         }
       }
     } else {
