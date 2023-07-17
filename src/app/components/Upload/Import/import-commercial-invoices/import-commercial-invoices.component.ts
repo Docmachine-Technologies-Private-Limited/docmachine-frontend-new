@@ -76,7 +76,7 @@ export class ImportCommercialInvoicesComponent implements OnInit {
           value:"",
           label: "Advance No.",
           rules: {
-            required: true,
+            required: false,
           }
         },
         AdvanceCurrency: {
@@ -84,7 +84,7 @@ export class ImportCommercialInvoicesComponent implements OnInit {
           value: "",
           label: "Advance Currency*",
           rules: {
-            required: true,
+            required: false,
           }
         },
         AdvanceAmount: {
@@ -92,11 +92,12 @@ export class ImportCommercialInvoicesComponent implements OnInit {
           value: "",
           label: "Advance Amount",
           rules: {
-            required: true,
+            required: false,
           }
         },
         commercialNumber: {
-          type: "number",
+          type: "text",
+          typeOf:'ALPHA_NUMERIC',
           value: "",
           label: "Commercial Invoice Number*",
           rules: {

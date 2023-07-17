@@ -150,7 +150,7 @@ export class ImportPIPOSComponent implements OnInit {
           value: "",
           label: "PC reference number",
           rules: {
-            required: true,
+            required: false,
           }
         },
         dueDate: {
@@ -158,7 +158,7 @@ export class ImportPIPOSComponent implements OnInit {
           value: "",
           label: "Due date",
           rules: {
-            required: true,
+            required: false,
           }
         },  
         paymentTerm: {

@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { PipoDataService } from '../../../service/homeservices/pipo.service';
 import { async, from } from 'rxjs';
 import { UserService } from '../../../service/user.service';
@@ -207,7 +207,9 @@ export class UploadServiceValidatorService {
       undefined: rule?.required == true ? [Validators.required] : [],
       MatchedValue: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
-      NotRequired: []
+      NotRequired: [],
+      ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20),alphaNumericValidator] :
+        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20),alphaNumericValidator]
     }
   }
 
@@ -323,4 +325,10 @@ export function hasDuplicate(data: any): ValidatorFn {
       return null;
     }
   };
+}
+
+export function alphaNumericValidator(control: FormControl): ValidationErrors | null {
+  const ALPHA_NUMERIC_REGEX = /^[a-zA-Z0-9_]*$/;
+  const ALPHA_NUMERIC_VALIDATION_ERROR = { alphaNumericError: 'only alpha numeric values are allowed' }
+  return ALPHA_NUMERIC_REGEX.test(control.value) ? null : ALPHA_NUMERIC_VALIDATION_ERROR;
 }
