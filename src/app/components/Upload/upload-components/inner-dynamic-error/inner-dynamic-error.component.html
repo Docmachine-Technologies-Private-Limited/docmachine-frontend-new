@@ -9,6 +9,9 @@
     <p *ngIf="formName?.controls[fieldName]?.errors?.['alphaNumericError']!=undefined">
         {{formName?.controls[fieldName]?.errors?.['alphaNumericError']}}
     </p>
+    <p *ngIf="formName?.controls[fieldName]?.errors?.['alphaError']!=undefined">
+        {{formName?.controls[fieldName]?.errors?.['alphaError']}}
+    </p>
     <p *ngIf="formName?.controls[fieldName]?.errors?.['minlength']">
         {{fieldName}} must be at least {{formName?.controls[fieldName]?.errors?.['minlength']?.requiredLength}} characters long.
     </p>

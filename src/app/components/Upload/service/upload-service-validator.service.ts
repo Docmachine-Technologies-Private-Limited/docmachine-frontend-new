@@ -183,8 +183,8 @@ export class UploadServiceValidatorService {
 
   setRequired(minLength: any, maxLength: any, rule: any) {
     return {
-      text: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
-        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)],
+      text: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20),alphaNumericValidator] :
+        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20),alphaNumericValidator],
       date: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)],
       Address: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
@@ -331,4 +331,10 @@ export function alphaNumericValidator(control: FormControl): ValidationErrors | 
   const ALPHA_NUMERIC_REGEX = /^[a-zA-Z0-9_]*$/;
   const ALPHA_NUMERIC_VALIDATION_ERROR = { alphaNumericError: 'only alpha numeric values are allowed' }
   return ALPHA_NUMERIC_REGEX.test(control.value) ? null : ALPHA_NUMERIC_VALIDATION_ERROR;
+}
+
+export function alphaValidator(control: FormControl): ValidationErrors | null {
+  const ALPHA_REGEX = /^[a-zA-Z_]*$/;
+  const ALPHA_VALIDATION_ERROR = { alphaError: 'only alphabets values are allowed' }
+  return ALPHA_REGEX.test(control.value) ? null : ALPHA_VALIDATION_ERROR;
 }
