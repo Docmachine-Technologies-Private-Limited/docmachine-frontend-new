@@ -52,18 +52,18 @@ export class AirwayBlCopyComponent implements OnInit {
       this.publicUrl = this.sanitizer.bypassSecurityTrustResourceUrl(args[1].publicUrl);
       this.pipourl1 = args[1].data;
       this.validator.buildForm({
-        airwayBlCopyNumber: {
-          type: "text",
-          value: "",
-          label: "Airway / BlCopy Number*",
-          rules: {
-            required: true,
-          }
-        },
         sbNo: {
           type: "ShippingBill",
           value: "",
           label: "Select Shipping Bill",
+          rules: {
+            required: true,
+          }
+        },
+        airwayBlCopyNumber: {
+          type: "text",
+          value: "",
+          label: "Airway / BlCopy Number*",
           rules: {
             required: true,
           }
@@ -77,7 +77,7 @@ export class AirwayBlCopyComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'export';
-    let selectedShippingBill = this.SHIPPING_BILL_LIST.filter((item: any) => item?._id === e?.value?.sbNo)[0];
+    let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?._id === e?.value?.sbNo)[0];
     console.log('this is console of blcopy', e.value);
     e.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
@@ -150,15 +150,11 @@ export class AirwayBlCopyComponent implements OnInit {
       console.log('Array List', this.pipoArr);
       this.BUYER_LIST[0]=(event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
-      this.COMMERCIAL_LIST = [];
       this.pipoDataService.getShippingNo(event?._id, 'export');
       this.validator.SHIPPING_BILL_LIST = [];
       for (let j = 0; j < this.validator.SHIPPING_BUNDEL.length; j++) {
         if (this.validator.SHIPPING_BUNDEL[j]?.id == event?._id) {
-          this.validator.SHIPPING_BILL_LIST.push({
-            sbno: this.SHIPPING_BUNDEL[j]?.sbno,
-            _id: this.SHIPPING_BUNDEL[j]?.SB_ID
-          });
+          this.validator.SHIPPING_BILL_LIST.push(this.validator.SHIPPING_BUNDEL[j]);
         }
       }
     } else {

@@ -12,7 +12,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 @Component({
   selector: 'app-shipping-bill',
   templateUrl: './shipping-bill.component.html',
-  styleUrls: ['./shipping-bill.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./shipping-bill.component.scss', '../../commoncss/common.component.scss']
 })
 export class ShippingBillComponent implements OnInit {
   publicUrl: any = '';
@@ -48,7 +48,7 @@ export class ShippingBillComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
- 
+
   }
 
   response(args: any) {
@@ -187,6 +187,7 @@ export class ShippingBillComponent implements OnInit {
           type: "text",
           value: this.UPLOAD_FORM['iecName'],
           label: "IEC NAME",
+          maxLength: 200,
           rules: {
             required: true,
           }
@@ -227,22 +228,6 @@ export class ShippingBillComponent implements OnInit {
           type: "text",
           value: this.UPLOAD_FORM['portCode'],
           label: "PORT CODE",
-          rules: {
-            required: true,
-          }
-        },
-        realizedfreightCurrency: {
-          type: "currency",
-          value: this.UPLOAD_FORM['realizedfreightCurrency'],
-          label: "FREIGHT Currency",
-          rules: {
-            required: true,
-          }
-        },
-        realizedfreightValue: {
-          type: "text",
-          value: this.UPLOAD_FORM['realizedfreightValue'],
-          label: "FREIGHT VALUE",
           rules: {
             required: true,
           }
@@ -349,7 +334,7 @@ export class ShippingBillComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0]=(event?.id[1])
+      this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
     } else {
       this.btndisabled = true;

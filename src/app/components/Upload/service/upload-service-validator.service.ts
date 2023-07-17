@@ -46,6 +46,13 @@ export class UploadServiceValidatorService {
     this.CURRENCY_LIST = this.documentService.getCurrencyList();
     let USER_DATA: any = await this.userService.getUserDetail();
     console.log("USER_DATA loaddata", USER_DATA)
+    this.SHIPPING_BUNDEL = [];
+    this.origin = [];
+    this.BUYER_DETAILS = [];
+    this.ConsigneeNameList = [];
+    this.BENEFICIARY_DETAILS = [];
+    this.location = [];
+    this.commodity = [];
 
     if (USER_DATA?.result?.sideMenu == 'import') {
       this.userService.getBene(1).subscribe((res: any) => {
@@ -81,7 +88,7 @@ export class UploadServiceValidatorService {
       this.documentService.getMaster(1).subscribe((res: any) => {
         console.log('Master Data File', res);
         res.data.forEach((element, i) => {
-          element?.pipo.forEach((ele, j) => {
+          element?.pipo?.forEach((ele, j) => {
             this.SHIPPING_BUNDEL.push({ pipo: ele, id: ele?._id, sbno: element?.sbno, SB_ID: element?._id });
           });
           this.origin[i] = { value: element?.countryOfFinaldestination, id: element?._id };
@@ -92,9 +99,6 @@ export class UploadServiceValidatorService {
 
     this.userService.getTeam().subscribe((data) => {
       console.log(data['data'][0]);
-      this.location = [];
-      this.commodity = [];
-
       data['data'][0]['location']?.forEach(element => {
         this.location.push({ value: element?.loc })
       });
@@ -110,6 +114,7 @@ export class UploadServiceValidatorService {
       }
     }, (error) => { console.log('error'); });
   }
+
   async buildForm(model: any, id: any) {
     this.fields[id] = [];
     const formGroupFields = await this.getFormControlsFields(model, id);
@@ -122,10 +127,10 @@ export class UploadServiceValidatorService {
     const formGroupFields = {};
     for (let field of Object.keys(model)) {
       let id: any = field;
-      const fieldProps:any = model[field];
+      const fieldProps: any = model[field];
       if (fieldProps?.type != "formArray") {
         formGroupFields[field] = new FormControl(fieldProps.value,
-          this.setRequired(fieldProps?.minLength, fieldProps?.maxLength)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
+          this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
         this.fields[formid].push({ ...fieldProps, fieldName: field });
       } else {
         var temp: any = [];
@@ -136,7 +141,7 @@ export class UploadServiceValidatorService {
             temp.push({ ...element[field2], fieldName: field2, index: count });
             tempFormGroup.push(new FormGroup({
               [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false },
-                this.setRequired(element[field2]?.minLength, element[field2]?.maxLength)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
+                this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
             }));
             count++;
           }
@@ -176,27 +181,31 @@ export class UploadServiceValidatorService {
     };
   }
 
-  setRequired(minLength: any, maxLength: any) {
+  setRequired(minLength: any, maxLength: any, rule: any) {
     return {
-      text: [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)],
-      date: [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)],
-      Address: [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(200)],
-      number: [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(1), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)],
-      buyer: [Validators.required],
-      ShippingBill: [Validators.required],
-      consignee: [Validators.required],
-      commodity: [Validators.required],
-      origin: [Validators.required],
-      location: [Validators.required],
-      PaymentType: [Validators.required],
-      Bank: [Validators.required],
-      BankList: [Validators.required],
-      currency: [Validators.required],
-      CommericalNo: [Validators.required],
-      typedocument: [Validators.required],
-      PaymentTermType: [Validators.required],
-      undefined: [Validators.required],
-      MatchedValue: [Validators.required],
+      text: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
+        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)],
+      date: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
+        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)],
+      Address: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
+        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(200)],
+      number: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
+        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)],
+      buyer: [rule?.required == true ? Validators.required : ''],
+      ShippingBill: rule?.required == true ? [Validators.required] : [],
+      consignee: rule?.required == true ? [Validators.required] : [],
+      commodity: rule?.required == true ? [Validators.required] : [],
+      origin: rule?.required == true ? [Validators.required] : [],
+      location: rule?.required == true ? [Validators.required] : [],
+      PaymentType: rule?.required == true ? [Validators.required] : [],
+      Bank: rule?.required == true ? [Validators.required] : [],
+      BankList: rule?.required == true ? [Validators.required] : [],
+      currency: rule?.required == true ? [Validators.required] : [],
+      CommericalNo: rule?.required == true ? [Validators.required] : [],
+      typedocument: rule?.required == true ? [Validators.required] : [],
+      PaymentTermType: rule?.required == true ? [Validators.required] : [],
+      undefined: rule?.required == true ? [Validators.required] : [],
+      MatchedValue: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: []
     }
@@ -240,7 +249,7 @@ export class UploadServiceValidatorService {
         this.fields[formid][index]['NewformGroup'].push({ ...element[field2], fieldName: field2, index: count });
         tempFormGroup.push(new FormGroup({
           [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false },
-            this.setRequired(element[field2]?.minLength, element[field2]?.maxLength)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
+            this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
         }));
         count++;
       }
@@ -308,7 +317,7 @@ export class UploadServiceValidatorService {
 export function hasDuplicate(data: any): ValidatorFn {
   return (formArray: FormArray | any): { [key: string]: any } | null | any => {
     if (formArray?.controls?.[data?.index]?.controls?.[data?.key]?.value != formArray?.controls?.[data?.equalindex]?.controls?.[data?.equalkey]?.value) {
-      formArray?.controls?.[data?.equalindex]?.controls?.[data?.equalkey]?.setErrors({matched:data?.errormsg})
+      formArray?.controls?.[data?.equalindex]?.controls?.[data?.equalkey]?.setErrors({ matched: data?.errormsg })
       return null;
     } else {
       return null;
