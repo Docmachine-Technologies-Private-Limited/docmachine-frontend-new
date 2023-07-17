@@ -7,7 +7,7 @@ import {
 } from "ngx-dropzone-wrapper";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import { MatBadgeModule} from '@angular/material/badge'; 
 import { ConfirmDialogService } from "../confirm-dialog/confirm-dialog.service";
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -62,6 +62,8 @@ import { UploadComponentsComponent } from "../components/Upload/upload-component
 import { UploadServiceValidatorService } from "../components/Upload/service/upload-service-validator.service";
 import { DynamicErrorComponent } from "../components/dynamic-error/dynamic-error.component";
 import { InnerDynamicErrorComponent } from "../components/Upload/upload-components/inner-dynamic-error/inner-dynamic-error.component";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 
 @NgModule({
   declarations: [
@@ -119,7 +121,10 @@ import { InnerDynamicErrorComponent } from "../components/Upload/upload-componen
     MatRadioModule,
     ModalModule.forRoot(),
     MatPaginatorModule,
-    jqxSchedulerModule
+    jqxSchedulerModule,
+    MatBadgeModule,
+    MatButtonModule, 
+    MatIconModule
   ],
   entryComponents: [ModalContentComponent1],
   providers: [ConfirmDialogService, NgbModal, SharedDataService, PipoDataService, TreeViewComponent, MergePdfService,UploadServiceValidatorService],
@@ -176,7 +181,10 @@ import { InnerDynamicErrorComponent } from "../components/Upload/upload-componen
     DynamicErrorComponent,
     CustomSlicePipePipe,
     UploadComponentsComponent,
-    InnerDynamicErrorComponent
+    InnerDynamicErrorComponent,
+    MatBadgeModule,
+    MatButtonModule, 
+    MatIconModule
   ],
 })
 export class SharedHomeModule { }

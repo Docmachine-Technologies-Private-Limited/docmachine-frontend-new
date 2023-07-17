@@ -44,27 +44,16 @@ footer {
   color: #9ba4b0;
 }
 
-// .sidebar-content {
-//     font-size: 14px;
-//     margin-left: 15px !important;
-//     padding-left: 35px !important;
-//     margin-right: 15px !important;
-//     color: #fff !important;
-//     border-radius: 5px;
-// }
 .manage-content {
   font-size: 14px;
   margin-left: 15px !important;
   padding-left: 35px !important;
   margin-right: 15px !important;
   color: #fff !important;
-  // background-color: #49a2d7 !important;
   border-radius: 5px;
 }
 
 .manage-li {
-  //  background-color: #49a2d7 !important;
-  //margin-left: 5px;
   border-radius: 5px;
 }
 
@@ -125,7 +114,6 @@ input {
   height: 35px;
   margin-top: 16px;
   padding-left: 50px !important;
-  // background-image: url("../../../assets//icon/other/search.png");
   background-repeat: no-repeat;
   background-size: 15px 15px;
   background-position: 20px center;
@@ -206,9 +194,6 @@ a {
   font-size: 11px;
 }
 
-// .nothing{
-//   background-color: rgb(17, 75, 114) !important;
-// }
 .b-color1 {
   background-color: #49A2D7;
 }
@@ -822,35 +807,6 @@ body {
   width: 100%;
 }
 
-.import_export_button {
-  display: inline-block;
-  float: right;
-  border: 1px solid #22343f !important;
-  border-radius: 50px;
-  opacity: 1;
-  padding: 5px 5px;
-  margin: 0 0 15px 0;
-}
-
-.import_export_button button {
-  height: 25px !important;
-  font-size: 11px !important;
-  display: inline-block;
-  background: none;
-  border: none;
-  color: #51aee5;
-  font-size: 15px;
-  margin: 0;
-  padding: 4px 23px;
-}
-
-
-.import_export_button button:hover {
-  background: #51AEE5;
-  color: #fff;
-  border-radius: 50px;
-}
-
 .btn-panel {
   margin-top: 16px;
 }
@@ -981,9 +937,9 @@ body {
 
 .nav-item h6 {
   font-size: 11px;
-  padding: 5px !important;
   border-radius: 40px;
-  padding-left: 10px !important;
+  padding: 5px 5px 5px 10px!important;
+  margin-top: 10px;
 }
 
 .hide {
@@ -1025,4 +981,41 @@ body {
 .profile-panel:last-child {
   border-top: 1px solid #cec9c9;
   padding-top: 5px;
+}
+
+
+.import_export_button {
+  display: inline-block;
+  border: 1px solid #7f8183 !important;
+  border-radius: 50px;
+  opacity: 1;
+  padding: 5px;
+  margin: 0 0 15px;
+  background: white;
+}
+
+.import_export_button button {
+  height: 25px !important;
+  font-size: 11px !important;
+  display: inline-block;
+  background: none;
+  border: none;
+  color: #51aee5;
+  font-size: 15px;
+  margin: 0;
+  padding: 4px 23px;
+}
+
+
+.import_export_button button:hover {
+  background: #51AEE5;
+  color: #fff;
+  border-radius: 50px;
+}
+
+.toggle-import-export {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto 0 auto auto;
 }

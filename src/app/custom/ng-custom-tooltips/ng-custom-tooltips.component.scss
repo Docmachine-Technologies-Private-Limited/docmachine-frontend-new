@@ -53,8 +53,8 @@
 }
 
 .tooltips-modal {
-    max-width: 100%;
-    width: 100%;
+    max-width: max-content;
+    width: auto;
     left: auto;
     right: 5px;
     top: 62px;
@@ -88,4 +88,15 @@
     border-top-right-radius: 0;
     height: 40px;
     margin-bottom: 5px;
+}
+
+.close-tooltips-div{
+    margin: auto;
+    display: flex;
+    padding: 0;
+    align-items: center;
+    justify-content: unset;
+    position: absolute;
+    right: 5px;
+    top: 12px;
 }

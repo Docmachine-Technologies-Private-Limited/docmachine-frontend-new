@@ -190,7 +190,7 @@ export class PipoDocumentsComponent implements OnInit {
     ExpansionKeys: [],
     ExpansionKeys2: [],
     TableHeaderClass: [
-      "col-td-th-1",
+      "col-td-th-0",
       "col-td-th-2",
       "col-td-th-1",
       "col-td-th-1",
@@ -261,7 +261,6 @@ export class PipoDocumentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.wininfo.set_controller_of_width(270, '.content-wrap')
     this.id = this.route.snapshot.params['id'];
     this.pipo_id = this.route.snapshot.params['pipo_id'];
     console.log(this.id, this.pipo_id);

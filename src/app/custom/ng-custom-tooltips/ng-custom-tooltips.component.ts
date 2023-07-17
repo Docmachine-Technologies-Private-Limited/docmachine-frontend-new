@@ -10,7 +10,8 @@ declare var $: any;
     provide: NG_VALUE_ACCESSOR,
     multi: true,
     useExisting: forwardRef(() => NgCustomTooltipsComponent)
-  }]
+  }],
+  host: { '(document:click)': 'onClick($event)' },
 })
 export class NgCustomTooltipsComponent implements OnInit {
   @Input('name') name: any;
@@ -30,20 +31,27 @@ export class NgCustomTooltipsComponent implements OnInit {
   @Output('ModelChange') ModelChange = new EventEmitter<any>();
   @Input('condition') condition: any = '';
   @Output('footerbutton') footerbutton = new EventEmitter<any>();
-  @ViewChild('PopUpOpenClose')PopUpOpenClose:ElementRef;
+  @ViewChild('PopUpOpenClose') PopUpOpenClose: ElementRef;
 
   footerbuttontext: any = [];
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
+  constructor(private _eref: ElementRef) { }
+
   ngOnInit(): void {
     this.footerbuttontext[this.id] = this.condition;
   }
 
   get displayHidden() {
-    return $('upload-modal')
+    return $('.tooltips-modal#' + this.id).css('display', 'none')
   }
+
+  get displayShow() {
+    return $('.tooltips-modal#' + this.id).css('display', 'block')
+  }
+
   ClosePopup() {
     this.ModelChange.emit('null');
   }
+
   OKBUTTON(PopUpOpenClose: any) {
     if (this.condition == true) {
       this.footerbutton.emit(this.condition);
@@ -52,67 +60,9 @@ export class NgCustomTooltipsComponent implements OnInit {
       this.footerbutton.emit(false);
     }
   }
-  @HostListener('document:mousedown', ['$event'])
-  onGlobalClick(event): void {
-    // var panel_id: any = $(event.target).attr('tooltips-close');
-    // var ClassList: any = []
-    // for (let index = 0; index < event?.target?.classList.length; index++) {
-    //   ClassList.push(event?.target?.classList[index])
-    // }
-    // if (ClassList.length == 0) {
-    //   ClassList = event.target.className.split(' ')
-    // }
-    // if (ClassList?.includes('Tooltips') == true || ClassList?.includes('ng-option-label') == true) {
-    //   if ($(this.elementRef.nativeElement).attr('id') === panel_id) {
-    //     this.elementRef.nativeElement.style.display = 'flex';
-    //   }
-    // }
-    // var btnClassList: any = []
-    // for (let index = 0; index < event?.target?.classList.length; index++) {
-    //   btnClassList.push(event?.target?.classList[index])
-    // }
-    // if (ClassList.length == 0) {
-    //   btnClassList = event.target.className.split(' ')
-    // }
-    // if (btnClassList.includes('close-tooltips') || btnClassList.includes('Tooltips-Close')) {
-    //   if ($(this.elementRef.nativeElement).attr('id') === panel_id) {
-    //     this.elementRef.nativeElement.style.display = 'none';
-    //   }
-    // }
-    // if ($(this.elementRef.nativeElement).attr('id') != panel_id) {
-    //   this.elementRef.nativeElement.style.display = 'none';
-    // }
-  }
-  @HostListener('document:click', ['$event'])
-  onClick(event): void {
-  // console.log(event.target,'event.target')
-  // var panel_id: any = $(event.target).attr('tooltips-close');
-  // var ClassList: any = []
-  // for (let index = 0; index < event?.target?.classList.length; index++) {
-  //   ClassList.push(event?.target?.classList[index])
-  // }
-  // if (ClassList.length == 0) {
-  //   ClassList = event.target.className.split(' ')
-  // }
-  // if (ClassList?.includes('Tooltips') == true || ClassList?.includes('ng-option-label') == true) {
-  //   if ($(this.elementRef.nativeElement).attr('id') === panel_id) {
-  //     this.elementRef.nativeElement.style.display = 'flex';
-  //   }
-  // }
-  // var btnClassList: any = []
-  // for (let index = 0; index < event?.target?.classList.length; index++) {
-  //   btnClassList.push(event?.target?.classList[index])
-  // }
-  // if (ClassList.length == 0) {
-  //   btnClassList = event.target.className.split(' ')
-  // }
-  // if (btnClassList.includes('close-tooltips') || btnClassList.includes('Tooltips-Close')) {
-  //   if ($(this.elementRef.nativeElement).attr('id') === panel_id) {
-  //     this.elementRef.nativeElement.style.display = 'none';
-  //   }
-  // }
-  // if ($(this.elementRef.nativeElement).attr('id') != panel_id) {
-  //   this.elementRef.nativeElement.style.display = 'none';
-  // }
+
+  onClick(event) {
+    if (!this._eref.nativeElement.contains(event.target))
+      this.displayHidden;
   }
 }

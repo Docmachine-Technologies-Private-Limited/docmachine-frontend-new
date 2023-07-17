@@ -12,7 +12,7 @@
         <tbody class="custom-expansion-tbody" *ngIf="items.length!=0">
             <div class="overflow-expansion-panel">
                 <custom-table-expansion-panel>
-                    <div class="table-type" *ngFor="let item of items;let i=index"
+                    <div class="table-type text-large custom-mat-badge" matBadge="New" matBadgeOverlap="false" matBadgeColor="accent" *ngFor="let item of items;let i=index"
                         [ngClass]="{'table-active':item?.isExpand==true || item?.isExpand2==true}">
                         <tr class="table-tr custom-expansion-panel-tr"
                             [ngClass]="{'added-active':item?.isExpand==true || item?.isExpand2==true}"

@@ -65,7 +65,7 @@
     max-height: 100%;
     margin-top: 15px;
     margin-bottom: 10px;
-    color: #6322e2;
+    color: black;
     background-color: white;
 }
 
@@ -204,4 +204,23 @@
 .custom-expansion-panel ::-webkit-scrollbar-thumb {
     background-color: #8757dd;
     border-radius: 10px;
+}
+
+.custom-expansion-panel .custom-mat-badge {
+    margin-top: 11px;
+}
+
+.custom-expansion-panel .text-large .mat-badge-content {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    margin: auto;
+    right: 10px;
+    height: auto;
+    width: auto;
+    background: #500383;
+    font-size: 10px;
+    color: white;
 }

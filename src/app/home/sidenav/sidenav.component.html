@@ -15,33 +15,7 @@
       <nav class="navbar-dashboard">
         <div class="container-fluid p-0">
           <div class="d-flex">
-            <div class="col-5">
-              <input id="main-search" type="text " placeholder="Type to search. . . " />
-            </div>
-            <div class="col-custom mr-0">
-              <div class="import_export_button m-auto"
-                *ngIf="this.userData['role']!='manager' && this.userData['role']!='admin'">
-                <div *ngIf="this.userData?.Subscription=='Export'">
-                  <button type="button" (click)="typeChange('export','import')" class="type_active">
-                    <span class="icon_top "></span>Export
-                  </button>
-                </div>
-                <div *ngIf="this.userData?.Subscription=='Import'">
-                  <button type="button" (click)="typeChange('import','export')" class="type_active">
-                    <span class="icon_top"></span>Import </button>
-                </div>
-                <div *ngIf="this.userData?.Subscription=='both'">
-                  <button type="button" (click)="typeChange('import','export')"
-                    [ngClass]="userData?.sideMenu == 'import' ? 'type_active' : 'type_inactive'">
-                    <span class="icon_top"></span>Import </button>
-                  <button type="button" (click)="typeChange('export','import')"
-                    [ngClass]="userData?.sideMenu == 'export' ? 'type_active' : 'type_inactive'">
-                    <span class="icon_top "></span>Export
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="col-custom mr-4">
+           <div class="col-custom mr-4">
               <div class="language_options_right">
                 <div class="language_options ">
                   <select style="cursor: pointer " class="dropdown " name="cars " id="cars ">
@@ -73,8 +47,30 @@
   </div>
   <div class="wrapper d-flex align-items-stretch">
     <nav id="sidebar">
-   
-      <div class="p-0 pt-5" id="sidebar1">
+      <div class="p-0 pt-3" id="sidebar1">
+        <div class="toggle-import-export mr-0" 
+        *ngIf="this.userData['role']!='manager' && this.userData['role']!='admin'">
+          <div class="import_export_button m-auto">
+            <div *ngIf="this.userData?.Subscription=='Export'">
+              <button type="button" (click)="typeChange('export','import')" class="type_active">
+                <span class="icon_top "></span>Export
+              </button>
+            </div>
+            <div *ngIf="this.userData?.Subscription=='Import'">
+              <button type="button" (click)="typeChange('import','export')" class="type_active">
+                <span class="icon_top"></span>Import </button>
+            </div>
+            <div *ngIf="this.userData?.Subscription=='both'">
+              <button type="button" (click)="typeChange('import','export')"
+                [ngClass]="userData?.sideMenu == 'import' ? 'type_active' : 'type_inactive'">
+                <span class="icon_top"></span>Import </button>
+              <button type="button" (click)="typeChange('export','import')"
+                [ngClass]="userData?.sideMenu == 'export' ? 'type_active' : 'type_inactive'">
+                <span class="icon_top "></span>Export
+              </button>
+            </div>
+          </div>
+        </div>
         <a *ngIf="this.userData['role']!='manager'" [routerLink]="['/home/dashboardTask']" class="sidebar-content"
           style="color: black;
           padding-left: 0;
@@ -85,7 +81,7 @@
           width: 200px !important;
           border-radius: 0px;
           padding: 5px;
-          font-weight: 600;">
+          font-weight: 600;margin-top: 10px;">
           <span class="icon side-icon"><img style="width: 17px;filter: hue-rotate(358deg);"
               src="./assets/new-img/dashboard.svg" /> Dashboard</span>
         </a>
