@@ -12,7 +12,7 @@ import { UploadServiceValidatorService } from '../../service/upload-service-vali
 @Component({
   selector: 'app-airway-bl-copy',
   templateUrl: './airway-bl-copy.component.html',
-  styleUrls: ['./airway-bl-copy.component.scss','../../commoncss/common.component.scss']
+  styleUrls: ['./airway-bl-copy.component.scss', '../../commoncss/common.component.scss']
 })
 export class AirwayBlCopyComponent implements OnInit {
   publicUrl: any = '';
@@ -31,8 +31,8 @@ export class AirwayBlCopyComponent implements OnInit {
   COMMERCIAL_LIST: any = [];
   commerciallist: any = [];
   SHIPPING_BUNDEL: any = [];
-  SUBMIT_ERROR:boolean=false;
-  
+  SUBMIT_ERROR: boolean = false;
+
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
     public date_format: DateFormatService,
@@ -43,7 +43,7 @@ export class AirwayBlCopyComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-  
+
   }
 
   response(args: any) {
@@ -68,7 +68,7 @@ export class AirwayBlCopyComponent implements OnInit {
             required: true,
           }
         },
-      },'AirwayBlCopy');
+      }, 'AirwayBlCopy');
       console.log(this.UPLOAD_FORM, 'UPLOAD_FORM')
     }, 200);
 
@@ -77,7 +77,7 @@ export class AirwayBlCopyComponent implements OnInit {
   onSubmit(e: any) {
     console.log(e, 'value')
     e.value.file = 'export';
-    let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?._id === e?.value?.sbNo)[0];
+    let selectedShippingBill = this.validator?.SHIPPING_BUNDEL?.filter((item: any) => item?.SB_ID === e?.value?.sbNo)[0];
     console.log('this is console of blcopy', e.value);
     e.value.pipo = this.pipoArr;
     console.log('pipoarrya', this.pipoArr);
@@ -148,7 +148,7 @@ export class AirwayBlCopyComponent implements OnInit {
       this.btndisabled = false;
       this.pipoArr = [event?._id]
       console.log('Array List', this.pipoArr);
-      this.BUYER_LIST[0]=(event?.id[1])
+      this.BUYER_LIST[0] = (event?.id[1])
       this.BUYER_LIST = this.BUYER_LIST?.filter(n => n);
       this.pipoDataService.getShippingNo(event?._id, 'export');
       this.validator.SHIPPING_BILL_LIST = [];
@@ -160,6 +160,6 @@ export class AirwayBlCopyComponent implements OnInit {
     } else {
       this.btndisabled = true;
     }
-    console.log(event, 'sdfsdfdsfdfdsfdsfdsfdsf')
+    console.log(event, this.validator.SHIPPING_BILL_LIST, 'sdfsdfdsfdfdsfdsfdsfdsf')
   }
 }

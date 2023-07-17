@@ -49,7 +49,7 @@
                 <div class="form-group mb-3" *ngSwitchCase="'ShippingBill'">
                     <label>{{field.label}}</label>
                     <ng-select *ngIf="this.validator?.SHIPPING_BILL_LIST?.length!=0"
-                        [items]="this.validator?.SHIPPING_BILL_LIST" bindLabel="sbno" bindValue="_id" [multiple]="false"
+                        [items]="this.validator?.SHIPPING_BILL_LIST" bindLabel="sbno" bindValue="SB_ID" [multiple]="false"
                         [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
