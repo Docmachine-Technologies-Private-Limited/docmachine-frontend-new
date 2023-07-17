@@ -123,6 +123,7 @@ export class ImportBillOfExchangeComponent implements OnInit {
           billOfExchangeDate: element['billOfExchangeDate'],
           billExchangeNumber: element['billExchangeNumber'],
           buyerName: element['buyerName'],
+          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
           RoleType: this.USER_DATA?.result?.RoleCheckbox
@@ -132,6 +133,7 @@ export class ImportBillOfExchangeComponent implements OnInit {
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
       }
     });
   }

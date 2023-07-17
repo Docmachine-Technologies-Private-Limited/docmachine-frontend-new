@@ -6,7 +6,7 @@ import { CustomExpansionPanelService } from './custom-expansion-panel.service';
   templateUrl: './custom-expansion-panel.component.html',
   styleUrls: ['./custom-expansion-panel.component.scss']
 })
-export class CustomExpansionPanelComponent implements OnInit {
+export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   @Input('header') header: any = [];
   @Input('items') items: any = [];
   @Input('Keys') Keys: any = [];
@@ -25,17 +25,21 @@ export class CustomExpansionPanelComponent implements OnInit {
   @Input('ExpansionKeys2') ExpansionKeys2: any = [];
   @Input('ExpansionShowHide') Expansion: boolean = true;
   @Input('ActionRequired') ActionRequired: boolean = true;
-  
+
   @Output('ViewChanges') ViewChanges: any = new EventEmitter();
   @Output('EditChanges') EditChanges: any = new EventEmitter();
   @Output('DeleteChanges') DeleteChanges: any = new EventEmitter();
   @Output('event') event: any = new EventEmitter();
   @Output('TrEvent') TrEvent: any = new EventEmitter();
   @Output('ArrowEvent') ArrowEvent: any = new EventEmitter();
-  
+  PAGINATOR_DATA: any = [];
+  ORIGNAL_DATA: any = [];
+  PAGINATOR_TABLE_DATA: any = [];
+
   constructor(public exp_service: CustomExpansionPanelService) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+
   }
 
   CollapseAll(data: any, key: any, i: any) {
@@ -62,16 +66,46 @@ export class CustomExpansionPanelComponent implements OnInit {
     this.event.emit(null)
     this.EditChanges.emit({ item: data, index: index });
   }
-  
+
   TrClick(data: any, index: any) {
-     console.log('gvfyfghjhgjhgjhgjhgjhgjhgjhghjghjghj')
+    console.log('gvfyfghjhgjhgjhgjhgjhgjhgjhghjghjghj')
     this.event.emit({ item: data, index: index });
   }
-  TrClickEvent(data: any, index: any){
+  TrClickEvent(data: any, index: any) {
     this.TrEvent.emit({ item: data, index: index });
   }
-  OBJECT_LENGTH(data:any){
-  console.log(typeof data,'jhjyujhujyghguygjhhgjtj')
+  OBJECT_LENGTH(data: any) {
+    console.log(typeof data, 'jhjyujhujyghguygjhhgjtj')
     return Object.keys(data);
+  }
+
+  PAGINATION_EVENT(event: any) {
+    this.updatetabledata(event)
+    console.log(event, this.ORIGNAL_DATA, this.items, 'PAGINATION_EVENT');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    let changesdata: any = changes;
+    this.ORIGNAL_DATA = changesdata?.items?.currentValue;
+
+    console.log(changes, this.ORIGNAL_DATA, 'ngOnChanges');
+    setTimeout(() => {
+      this.PAGINATOR_DATA = [];
+      let lenforloop: number = parseInt(changesdata?.items?.currentValue?.length) / 10;
+      for (let index = 0; index < lenforloop; index++) {
+        this.PAGINATOR_DATA.push(10 * (index + 1))
+      }
+      this.PAGINATOR_DATA[this.PAGINATOR_DATA.length - 1] = changesdata?.items?.currentValue?.length;
+      if (this.ORIGNAL_DATA.length != 0) {
+        this.updatetabledata({ pageIndex: 0, pageSize: this.PAGINATOR_DATA[0], length: this.ORIGNAL_DATA.length })
+      }
+    }, 300);
+  }
+  updatetabledata(event) {
+    this.PAGINATOR_TABLE_DATA = [];
+    for (let index = event?.pageIndex; index < event?.pageSize; index++) {
+      const element = this.ORIGNAL_DATA[index];
+      this.PAGINATOR_TABLE_DATA.push(element)
+    }
   }
 }

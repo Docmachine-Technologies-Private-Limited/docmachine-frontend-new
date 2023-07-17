@@ -262,6 +262,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
           amount: element['amount'],
           billNo: element['billNo'],
           BalanceAvail: element['BalanceAvail'] != undefined ? element['BalanceAvail'] : element['amount'],
+          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           Expansion_Items: [{
             Branch: element['location'],
             Description: element['commodity'],
@@ -284,6 +285,7 @@ export class ImportOutwardRemittanceSheetComponent implements OnInit {
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
         this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
       }
     });
   }

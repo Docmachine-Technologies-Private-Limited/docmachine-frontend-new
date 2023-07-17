@@ -1,3 +1,7 @@
+.custom-expansion-panel {
+    flex-direction: column;
+}
+
 .custom-expansion-panel .table-tr {
     cursor: pointer;
 }
@@ -139,16 +143,17 @@
 }
 
 .custom-expansion-panel .table .custom-expansion-tbody {
-    height: calc(100vh - 200px);
+    height: calc(100vh - 240px);
     overflow: auto;
 }
 
 .custom-expansion-panel .custom-expansion-table {
     width: 99% !important;
     max-width: 100%;
-    background-color: white;
+    background-color: #fff;
     margin: auto !important;
-    border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     box-shadow: 0 0 5px 3px #e1e0e0;
 }
 
@@ -223,4 +228,28 @@
     background: #500383;
     font-size: 10px;
     color: white;
+}
+
+.custom-expansion-panel .text-large.accent .mat-badge-content {
+    background: #500383;
+}
+
+.custom-expansion-panel .text-large.warn .mat-badge-content {
+    background: #FF9800;
+    color: #fffbfb;
+}
+
+.pagination {
+    margin-top: auto;
+    width: 100%;
+    margin-top: 0px;
+}
+
+.pagination ::ng-deep .mat-paginator {
+    background: #fff;
+    width: 99%;
+    margin: auto;
+    box-shadow: 4px 5px 10px 0px #b5b3b3;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }

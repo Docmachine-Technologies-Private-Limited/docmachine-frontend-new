@@ -2537,6 +2537,9 @@ export class DocumentService {
       this.Inner_loading = false;
     }, 300);
   }
+  getDateStatus(date: any) {
+    return new Date().toLocaleDateString() === new Date(date).toLocaleDateString();
+  }
 }
 
 

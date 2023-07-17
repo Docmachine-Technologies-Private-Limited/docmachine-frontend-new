@@ -1080,7 +1080,6 @@ export class PipoDocumentsComponent implements OnInit {
           PORTCODE: "NF",
           BOEBalanceAmount: "NF",
           FreightCharges: "NF"
-
         }])?.forEach(boeelement => {
           boedata.push({
             BOENO: boeelement['boeNumber'],
@@ -1134,6 +1133,7 @@ export class PipoDocumentsComponent implements OnInit {
           BALANCEIFANY: element['balanceAmount'] != '-1' ? element['balanceAmount'] : element['amount'],
           Expansion_Items: boedata,
           Expansion_Items2: advice,
+          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
           isExpand: false,
           isExpand2: false,
           disabled: element['deleteflag'] != '-1' ? false : true,
@@ -1146,7 +1146,8 @@ export class PipoDocumentsComponent implements OnInit {
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'RoleType')
         this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items')
-        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items2')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items2');
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
         this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
         this.FILTER_VALUE_LIST_NEW['ExpansionKeys2'] = await this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'].length != 0 ? Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items2'][0]) : []
       }
