@@ -32,6 +32,21 @@
                         [name]="field.fieldName" [(ngModel)]="field.value">
                     </ng-select>
                 </div>
+                <div class="form-group mb-3" *ngSwitchCase="'BuySell'">
+                    <label>{{field.label}}</label>
+                    <ng-select [items]="[{value:'Buy'},{value:'Sell'}]" bindLabel="value"
+                        [multiple]="false" [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                        (change)="this.setValue($event?.value,field?.InputBindValue)"
+                        [name]="field.fieldName" [(ngModel)]="field.value">
+                    </ng-select>
+                </div>
+                <div class="form-group mb-3" *ngSwitchCase="'Underlying'">
+                    <label>{{field.label}}</label>
+                    <ng-select [items]="[{value:'Pending'},{value:'Utilized'},{value:'Partially Utilized'},{value:'Cancelled'}]" bindLabel="value"
+                        [multiple]="false" [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
+                        [name]="field.fieldName" [(ngModel)]="field.value">
+                    </ng-select>
+                </div>
                 <div class="form-group mb-3" *ngSwitchCase="'CommericalNo'">
                     <label>{{field.label}}</label>
                     <ng-select *ngIf="this.validator?.COMMERICAL_NO?.length!=0 && field?.autofillrequired==undefined" [items]="this.validator?.COMMERICAL_NO"

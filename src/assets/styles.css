@@ -208,30 +208,30 @@ body {
 }
 
 .filter_right_new .btn-success {
-    background: #672fa4;
+    background: #2d3b42 !important;
     border-radius: 5px;
     opacity: 1;
-    border: 1px solid #672fa4;
+    border: 1px solid #2d3b42 !important;
     font-size: 10px;
     font-weight: 500;
     height: 38px;
 }
 
 .filter_right_new .btn-secondary {
-    background: #672fa4;
+    background: #2d3b42 !important;
     border-radius: 5px;
     opacity: 1;
-    border: 1px solid #672fa4;
+    border: 1px solid #2d3b42 !important;
     font-size: 10px;
     font-weight: 500;
     height: 38px;
 }
 
 .filter_right_new .btn-primary {
-    background: #672fa4;
+    background: #2d3b42 !important;
     border-radius: 5px;
     opacity: 1;
-    border: 1px solid #672fa4;
+    border: 1px solid #2d3b42 !important;
     font-size: 10px;
     font-weight: 500;
     height: 38px;

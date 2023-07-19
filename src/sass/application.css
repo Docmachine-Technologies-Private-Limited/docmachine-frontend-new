@@ -80,7 +80,7 @@ body {
     font-size: 1rem;
     font-weight: 300;
     line-height: 1.55;
-    color: #0a0a09;
+    color: black !important;
     text-align: left;
     background: #F0F2FC;
 }

@@ -26,7 +26,8 @@ export class DocumentService {
   public PI_PO_NUMBER_LIST: any = {
     PI_PO_BUYER_NAME: [],
     PI_PO_BENNE_NAME: [],
-    PIPO_TRANSACTION: []
+    PIPO_TRANSACTION: [],
+    PIPO_NO:[]
   };
   constructor(public http: HttpClient, private router: Router,) {
     this.api_base = AppConfig?.BASE_URL;
@@ -49,7 +50,8 @@ export class DocumentService {
     this.PI_PO_NUMBER_LIST = {
       PI_PO_BUYER_NAME: [],
       PI_PO_BENNE_NAME: [],
-      PIPO_TRANSACTION: []
+      PIPO_TRANSACTION: [],
+      PIPO_NO:[]
     };
 
     this.getPipoNoList().subscribe((res: any) => {
@@ -58,6 +60,7 @@ export class DocumentService {
       this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'] = [];
       this.PI_PO_NUMBER_LIST['PI_PO_BENNE_NAME'] = [];
       this.PI_PO_NUMBER_LIST['PIPO_TRANSACTION'] = [];
+      this.PI_PO_NUMBER_LIST['PIPO_NO'] = data;
       for (let index = 0; index < data.length; index++) {
         if (data[index]?.buyerName != '' || data[index].pi_poNo != '') {
           this.PI_PO_NUMBER_LIST['PI_PO_BUYER_NAME'].push({

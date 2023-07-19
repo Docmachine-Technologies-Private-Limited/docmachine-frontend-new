@@ -126,7 +126,7 @@
 }
 
 .custom-expansion-panel .table-type .custom-expansion-panel-tr:hover {
-    background-color: #672fa4 !important;
+    background-color: #2d3b42 !important;
     transition: 0.3s background-color cubic-bezier(0.86, 0, 0.07, 1);
 }
 
@@ -158,7 +158,7 @@
 }
 
 .custom-expansion-panel .table .custom-expansion-thead {
-    background: #672fa4;
+    background: #2d3b42;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     color: #fff !important;
@@ -173,7 +173,7 @@
 }
 
 .custom-expansion-panel .table .thead-not-length {
-    background: #672fa4;
+    background: #2d3b42;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     color: #fff !important;
@@ -207,7 +207,7 @@
 }
 
 .custom-expansion-panel ::-webkit-scrollbar-thumb {
-    background-color: #8757dd;
+    background-color: #2d3b42;
     border-radius: 10px;
 }
 
@@ -225,13 +225,13 @@
     right: 10px;
     height: auto;
     width: auto;
-    background: #500383;
+    background: #2d3b42;
     font-size: 10px;
     color: white;
 }
 
 .custom-expansion-panel .text-large.accent .mat-badge-content {
-    background: #500383;
+    background: #2d3b42;
 }
 
 .custom-expansion-panel .text-large.warn .mat-badge-content {
@@ -252,4 +252,22 @@
     box-shadow: 4px 5px 10px 0px #b5b3b3;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+
+.OTHER_BUTTON {
+    background: transparent;
+    outline: none;
+    border: none;
+    color: black;
+}
+
+.custom-expansion-panel .table-type .custom-expansion-panel-tr:hover .OTHER_BUTTON {
+    color: white;
+}
+
+.pagination ::ng-deep .mat-paginator .mat-button,
+.pagination ::ng-deep .mat-paginator .mat-icon-button,
+.pagination ::ng-deep .mat-paginator .mat-stroked-button,
+.pagination ::ng-deep .mat-paginator .mat-flat-button {
+    background-color: transparent !important;
 }

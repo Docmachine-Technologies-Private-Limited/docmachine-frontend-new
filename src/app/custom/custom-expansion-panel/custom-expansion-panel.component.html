@@ -12,8 +12,8 @@
         <tbody class="custom-expansion-tbody" *ngIf="this.PAGINATOR_TABLE_DATA.length!=0">
             <div class="overflow-expansion-panel">
                 <custom-table-expansion-panel>
-                    <div class="table-type text-large custom-mat-badge" [matBadge]="item?.ITEMS_STATUS!=undefined?item?.ITEMS_STATUS:''"
-                        matBadgeOverlap="false"
+                    <div class="table-type text-large custom-mat-badge"
+                        [matBadge]="item?.ITEMS_STATUS!=undefined?item?.ITEMS_STATUS:''" matBadgeOverlap="false"
                         *ngFor="let item of this.PAGINATOR_TABLE_DATA;let i=index"
                         [ngClass]="{'table-active':item?.isExpand==true || item?.isExpand2==true,'accent':item?.ITEMS_STATUS=='New','warn':item?.ITEMS_STATUS=='Old'}">
                         <tr class="table-tr custom-expansion-panel-tr"
@@ -33,6 +33,12 @@
                             <td scope="col" class="col-td-th-1" (click)="eventId!='' && j==eventId?TrClick(item,i):''"
                                 [ngClass]="this.TableHeaderClass[j]" *ngFor="let objectitem of this.Keys;let j=index"
                                 [innerHTML]="item[objectitem]"></td>
+
+                            <td title="Data Show and Hide" scope="col" class="col-td-th-0"
+                                *ngFor="let buttonitem of item?.OTHER_BUTTON">
+                                <p type="button" class="OTHER_BUTTON PopupOpen" [attr.popup-close]="buttonitem?.popupid"
+                                    (click)="buttonitem?.callback(i,{data:item,index:i})" [ngClass]="buttonitem?.className"></p>
+                            </td>
                             <td scope="col" class="col-td-th-1"
                                 *ngIf="item?.disabled==false && item?.RoleType!='Approver' && this.ActionRequired==true">
                                 <a title="View" *ngIf="this.ViewButton==true" (click)="View(item,i)" class="PopupOpen"
@@ -127,14 +133,13 @@
                         </tr>
                     </div>
                 </custom-table-expansion-panel>
-              
+
             </div>
         </tbody>
     </table>
     <div class="pagination" *ngIf="this.PAGINATOR_DATA.length!=0">
-        <mat-paginator [length]="this.items.length" [pageSize]="10"
-            [pageSizeOptions]="this.PAGINATOR_DATA" (page)="this.PAGINATION_EVENT($event)"
-            aria-label="Select page">
+        <mat-paginator [length]="this.items.length" [pageSize]="10" [pageSizeOptions]="this.PAGINATOR_DATA"
+            (page)="this.PAGINATION_EVENT($event)" aria-label="Select page">
         </mat-paginator>
     </div>
 </div>

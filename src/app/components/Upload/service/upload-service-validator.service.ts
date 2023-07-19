@@ -206,6 +206,8 @@ export class UploadServiceValidatorService {
       PaymentTermType: rule?.required == true ? [Validators.required] : [],
       undefined: rule?.required == true ? [Validators.required] : [],
       MatchedValue: rule?.required == true ? [Validators.required] : [],
+      Underlying:rule?.required == true ? [Validators.required] : [],
+      BuySell:rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
       ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20),alphaNumericValidator] :

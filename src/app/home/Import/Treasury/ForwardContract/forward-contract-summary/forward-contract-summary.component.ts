@@ -3,6 +3,7 @@ import { DocumentService } from '../../../../../service/document.service';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { ToastrService } from 'ngx-toastr';
 import * as xlsx from 'xlsx';
+import { UploadServiceValidatorService } from '../../../../../components/Upload/service/upload-service-validator.service';
 
 @Component({
   selector: 'app-forward-contract-summary',
@@ -17,13 +18,59 @@ export class ForwardContractSummaryComponent implements OnInit {
   authToken: any;
   headers: any
   CancellationFORM_DATA: any = {
-    CancellationDate:'',
+    CancellationDate: '',
     CancellationAmount: '',
     CancellationRate: '',
   }
+  FILTER_VALUE_LIST_NEW: any = {
+    header: [
+      "Booking Date",
+      "Forward Ref No.",
+      "Buy/Sell",
+      "Currency",
+      "Booking Amount",
+      "Available Amount",
+      "From Date",
+      "To Date",
+      "Cancellation",
+      "Utilized",
+      "Upload Documents",
+      "Action"],
+    items: [],
+    Expansion_header: [
+      "Utilized Amount",
+      "Cancellation Date",
+      "Cancellation Amount",
+      "Cancellation rate",
+      "Net Rate",
+      "Underlying",
+      "Booked under Facility",
+      "Import/Export",
+      "Status",
+    ],
+    Expansion_Items: [],
+    Objectkeys: [],
+    ExpansionKeys: [],
+    TableHeaderClass: [
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1",
+      "col-td-th-1"
+    ],
+    eventId: ''
+  }
+
   @ViewChild('epltable', { static: false }) epltable: ElementRef;
 
   constructor(public documentService: DocumentService,
+    public validator: UploadServiceValidatorService,
     private toastr: ToastrService) {
     this.api_base = documentService.api_base;
     this.loadFromLocalStorage();
@@ -56,12 +103,113 @@ export class ForwardContractSummaryComponent implements OnInit {
     this.ForwardContract_DATA = [];
     this.documentService.ForwardContractget().subscribe((res: any) => {
       this.ForwardContract_DATA = res?.data;
+      this.forwardContractTable(res?.data);
       console.log(res, 'ForwardContract')
     })
   }
-  EDIT(index: any, data: any) {
-    this.EDIT_DATA['index'] = index;
-    this.EDIT_DATA['data'] = data;
+
+  forwardContractTable(data: any) {
+    this.FILTER_VALUE_LIST_NEW['items'] = [];
+    this.FILTER_VALUE_LIST_NEW['Expansion_Items'] = [];
+    this.removeEmpty(data).then(async (newdata: any) => {
+      await newdata?.forEach(async (element) => {
+        await this.FILTER_VALUE_LIST_NEW['items'].push({
+          BookingDate: element['BookingDate'],
+          ForwardRefNo: element['ForwardRefNo'],
+          BuySell: element['BuySell'],
+          Currency: element['Currency'],
+          BookingAmount: element['BookingAmount'],
+          AvailableAmount: element['AvailableAmount'],
+          FromDate: element['FromDate'],
+          ToDate: element['ToDate'],
+          id: element['_id'],
+          Expansion_Items: [{
+            UtilizedAmount: element['UtilizedAmount'],
+            CancellationDate: element['CancellationDate'],
+            CancellationAmount: element['CancellationAmount'],
+            CancellationRate: element['CancellationRate'],
+            BookedUnderFacility: element['BookedUnderFacility'],
+            ImportExport: element['ImportExport'],
+            NetRate: element['NetRate'],
+            Underlying: element['Underlying'],
+            Status: element['Status'],
+          }],
+          OTHER_BUTTON: [
+            {
+              type: 'button', popupid: 'EDIT_DOCUMENTS', className: 'fa fa-pencil-square-o', callback: (i, item: any) => {
+                this.upload(i, item);
+                this.validator.buildForm({
+                  CancellationDate: {
+                    type: "date",
+                    value: "",
+                    label: "Cancellation Date",
+                    rules: {
+                      required: true,
+                    },
+                  },
+                  CancellationAmount: {
+                    type: "text",
+                    value: "",
+                    label: "Cancellation Amount",
+                    rules: {
+                      required: true,
+                    },
+                  },
+                  CancellationRate: {
+                    type: "text",
+                    value: "",
+                    label: "Cancellation rate",
+                    rules: {
+                      required: true,
+                    },
+                  }
+                }, 'ForwardContractCancellationUpdate');
+                console.log(item, 'asdasdasdasdsad')
+              }
+            },
+            {
+              type: 'button', popupid: 'EDIT_DOCUMENTS', className: 'fa fa-pencil-square-o', callback: (item: any) => {
+                this.upload(item?._id, item);
+                console.log(item, 'asdasdasdasdsad')
+              }
+            },
+            {
+              type: 'button', popupid: 'UPLOAD_DOCUMENTS', className: 'fa fa-upload', callback: (item: any) => {
+                this.upload(item?._id, item);
+                console.log(item, 'asdasdasdasdsad')
+              }
+            }],
+          ITEMS_STATUS: this.documentService.getDateStatus(element?.createdAt) == true ? 'New' : 'Old',
+          isExpand: false,
+          disabled: false
+        })
+      });
+      if (this.FILTER_VALUE_LIST_NEW['items']?.length != 0) {
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0])?.filter((item: any) => item != 'isExpand')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'disabled')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'OTHER_BUTTON')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'ITEMS_STATUS')
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'id');
+        this.FILTER_VALUE_LIST_NEW['Objectkeys'] = await this.FILTER_VALUE_LIST_NEW['Objectkeys']?.filter((item: any) => item != 'Expansion_Items');
+        this.FILTER_VALUE_LIST_NEW['ExpansionKeys'] = await Object.keys(this.FILTER_VALUE_LIST_NEW['items'][0]['Expansion_Items'][0])
+      }
+    });
+  }
+  async removeEmpty(data: any) {
+    await data.forEach(element => {
+      for (const key in element) {
+        if (element[key] == '' || element[key] == null || element[key] == undefined) {
+          element[key] = 'NF'
+        }
+      }
+    });
+    return await new Promise(async (resolve, reject) => { await resolve(data) });
+  }
+
+  EDIT(data: any) {
+    this.EDIT_DATA['index'] = data?.index;
+    this.EDIT_DATA['data'] = data?.item;
+    console.log(data, 'edit')
   }
   public onUploadInit(args: any): void {
     this.width = 0
@@ -84,31 +232,44 @@ export class ForwardContractSummaryComponent implements OnInit {
     this.authToken = token;
     return this.authToken;
   }
+
   upload(index: any, data: any) {
     this.EDIT_DATA['index'] = index;
     this.EDIT_DATA['data'] = data;
   }
+
   PDF_VIEW_URL: any = ''
-  VIEW_DOCUMENTS(index: any, data: any) {
-    this.EDIT_DATA['index'] = index;
-    this.EDIT_DATA['data'] = data;
+  VIEW_DOCUMENTS(data: any) {
+    this.EDIT_DATA['index'] = data?.index;
+    this.EDIT_DATA['data'] = data?.item;
     this.PDF_VIEW_URL = ''
     setTimeout(() => { this.PDF_VIEW_URL = data?.document }, 100)
-    console.log(this.EDIT_DATA, 'sdfsdfsdfsdfsd')
+    console.log(this.EDIT_DATA, data, 'sdfsdfsdfsdfsd')
   }
-  UploadDocuments() {
-    this.documentService.ForwardContract_update({ id: this.EDIT_DATA?.index, data: { document: this.PDF_URL_UPLOAD } }).subscribe((ForwardContract: any) => {
+
+  UploadDocuments(panel:any) {
+    this.documentService.ForwardContract_update({ id: this.ForwardContract_DATA[this.EDIT_DATA?.index]?._id, data: { document: this.PDF_URL_UPLOAD } }).subscribe((ForwardContract: any) => {
       console.log(ForwardContract, 'ForwardContract')
       this.toastr.success('ForwardContract updated documents successfully....')
       this.getForwardContract()
+      panel.displayHidden;
     })
   }
+  
   exportToExcel() {
-    const ws: xlsx.WorkSheet =
-      xlsx.utils.table_to_sheet(this.epltable.nativeElement);
+    const ws: xlsx.WorkSheet = xlsx.utils.json_to_sheet(this.ForwardContract_DATA);
     const wb: xlsx.WorkBook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
     xlsx.writeFile(wb, 'ForwardContract.xlsx');
   }
-  Cancellation_FORM_DATA_Update_Form(value: any) {}
+  
+  Cancellation_FORM_DATA_Update_Form(value: any,panel:any) {
+    this.documentService.ForwardContract_update({ id: this.ForwardContract_DATA[this.EDIT_DATA?.index]?._id, data: value?.value }).subscribe((ForwardContract: any) => {
+      console.log(ForwardContract, 'ForwardContract')
+      this.toastr.success('ForwardContract updated data successfully....')
+      this.getForwardContract();
+      panel.displayHidden;
+    })
+  }
+  
 }

@@ -64,6 +64,7 @@ import { DynamicErrorComponent } from "../components/dynamic-error/dynamic-error
 import { InnerDynamicErrorComponent } from "../components/Upload/upload-components/inner-dynamic-error/inner-dynamic-error.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
+import { LcInsuranceFormatComponent } from "./new-lc-insurance/lc-insurance-format/lc-insurance-format.component";
 
 @NgModule({
   declarations: [
@@ -104,7 +105,8 @@ import { MatIconModule } from "@angular/material/icon";
     DynamicErrorComponent,
     CustomSlicePipePipe,
     UploadComponentsComponent,
-    InnerDynamicErrorComponent
+    InnerDynamicErrorComponent,
+    LcInsuranceFormatComponent
   ],
   imports: [
     CommonModule,
@@ -184,7 +186,8 @@ import { MatIconModule } from "@angular/material/icon";
     InnerDynamicErrorComponent,
     MatBadgeModule,
     MatButtonModule, 
-    MatIconModule
+    MatIconModule,
+    LcInsuranceFormatComponent
   ],
 })
 export class SharedHomeModule { }

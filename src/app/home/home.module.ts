@@ -135,6 +135,7 @@ import { ImportPackingListInvoicesComponent } from '../components/Upload/Import/
 import { ImportCommercialInvoicesComponent } from '../components/Upload/Import/import-commercial-invoices/import-commercial-invoices.component';
 import { ImportDebitNotesComponent } from "../components/Upload/Import/import-debit-note/import-debit-note.component";
 import { UploadServiceValidatorService } from "../components/Upload/service/upload-service-validator.service";
+import { NewLcInsuranceComponent } from "./new-lc-insurance/new-lc-insurance.component";
 
 @NgModule({
   declarations: [
@@ -218,7 +219,8 @@ import { UploadServiceValidatorService } from "../components/Upload/service/uplo
     ImportCommercialInvoicesComponent,
     ImportDebitNotesComponent,
     ImportMasterServiceAgreementsComponent,
-    ImportOpinionReportComponent
+    ImportOpinionReportComponent,
+    NewLcInsuranceComponent
   ],
   imports: [
     SharedHomeModule,
@@ -260,7 +262,12 @@ import { UploadServiceValidatorService } from "../components/Upload/service/uplo
           { path: "direct-import-payment", loadChildren: () => import('./direct-import-payment/direct-import-payment.module').then(mod => mod.DirectImportPaymentModule), canActivate: [MemberGuard] },
           { path: "a2cum-application-yesbank", loadChildren: () => import('./yesBank/a2cum-application-yes-bank/a2cum-application-yes-bank.module').then(mod => mod.A2cumApplicationYesBankModule), canActivate: [MemberGuard] },
           { path: "fbg-waiver", loadChildren: () => import('./yesBank/advance-fbg-wavier/fbg-wavier.module').then(mod => mod.FbgWavierModule), canActivate: [MemberGuard] },
-          { path: "lc-isurance", loadChildren: () => import('./lc-isurence/lc-isurance.module').then(mod => mod.LcIsuranceModule), canActivate: [MemberGuard] },
+          {
+            path: "lc-isurance", component: NewLcInsuranceComponent,
+            pathMatch: "full",
+            canActivate: [MemberGuard]
+          },
+          { path: "lc-isurance1", loadChildren: () => import('./lc-isurence/lc-isurance.module').then(mod => mod.LcIsuranceModule), canActivate: [MemberGuard] },
           { path: "buyer-credit", loadChildren: () => import('./buyers-credit-request/buyers-credit-request-module').then(mod => mod.BuyersCreditRequestModule), canActivate: [MemberGuard] },
           { path: "bill-under-collection", loadChildren: () => import('./bill-under-collection/bill-under-collection.module').then(mod => mod.BillUnderCollectionModule), canActivate: [MemberGuard] },
           { path: "pipo-export", loadChildren: () => import('./pipo-doc-export/pipo-doc-export.module').then(mod => mod.PipoDocExportModule), canActivate: [MemberGuard] },

@@ -1,0 +1,15 @@
+#FromClientRequest ::ng-deep .division-panel {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+::ng-deep upload-components {
+    width: 100%;
+}
+
+::ng-deep upload-components button {
+    width: 100px;
+    height: 40px;
+    margin-top: 27px;
+    margin-left: 26px;
+}

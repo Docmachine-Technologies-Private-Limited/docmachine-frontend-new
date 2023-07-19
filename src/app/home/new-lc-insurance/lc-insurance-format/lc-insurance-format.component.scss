@@ -1,0 +1,212 @@
+.lc-insurance-panel {
+    flex-direction: column;
+    color: black;
+}
+
+.lc-insurance-panel .table-tr {
+    cursor: pointer;
+}
+
+.lc-insurance-panel .table-style {
+    border-radius: 10px;
+    padding: 10px !important;
+    width: 100%;
+    margin: auto;
+    background-color: transparent;
+}
+
+.lc-insurance-panel table .table-tr {
+    cursor: pointer;
+}
+
+.lc-insurance-panel table .table-tr-1 {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 0.5rem;
+    box-shadow: none;
+    transition: opacity 1s ease-in-out;
+}
+
+.lc-insurance-panel .header h5 {
+    margin: auto;
+    color: #6322e2;
+}
+
+.lc-insurance-panel .center-panel {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    width: 100%;
+}
+
+.lc-insurance-panel .table-active {
+    background: #fbfbfb;
+    transition: opacity .5s ease-in-out;
+}
+
+.lc-insurance-panel .Table-Hide {
+    opacity: 0;
+    display: none !important;
+    height: 0;
+}
+
+.lc-insurance-panel .Table-Show {
+    opacity: 1;
+    display: flex;
+}
+
+.lc-insurance-panel .table tbody tr {
+    font-weight: 400;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0;
+    min-height: 70px;
+    max-height: 100%;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    color: black;
+    background-color: white;
+    border: 0;
+
+}
+
+.lc-insurance-panel .table thead,
+.lc-insurance-panel .table tbody {
+    width: 100%;
+    margin: 0 auto auto 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.expansion-panel-inner {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 80vw;
+    max-width: 100%;
+    overflow: auto;
+}
+
+.lc-insurance-panel .col-td-th-0 {
+    width: 80px;
+    min-width: auto;
+    border: 0 !important;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    word-break: break-all;
+}
+
+.lc-insurance-panel .table th,
+.lc-insurance-panel .table td {
+    min-width: auto !important;
+    font-size: 11px;
+    text-align: left;
+}
+
+.lc-insurance-panel .disabled {
+    pointer-events: none;
+}
+
+.lc-insurance-panel .error-p {
+    color: red;
+    font-weight: 600;
+    margin: auto;
+    font-size: 10px;
+}
+
+.lc-insurance-panel .table-type .lc-insurance-panel-tr {
+    transition: 0.3s height cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.lc-insurance-panel .table-type .lc-insurance-panel-tr:hover {
+    background-color: #672fa4 !important;
+    transition: 0.3s background-color cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.lc-insurance-panel .table-type .lc-insurance-panel-tr:hover td {
+    color: white;
+}
+
+.lc-insurance-panel .table-type .lc-insurance-panel-tr:hover .error-p {
+    color: white;
+}
+
+.lc-insurance-panel .table-tr {
+    border-bottom: 0;
+}
+
+.lc-insurance-panel .table .custom-expansion-tbody {
+    height: calc(100vh - 240px);
+    overflow: auto;
+}
+
+.lc-insurance-panel .lc-insurance-table {
+    width: 99% !important;
+    max-width: 100%;
+    background-color: #fff;
+    margin: auto !important;
+    border-collapse: collapse;
+    margin-top: 10px !important;
+}
+
+.lc-insurance-panel .table .custom-expansion-thead tr th {
+    color: #fff !important;
+}
+
+.lc-insurance-panel .contenteditable {
+    border: none;
+    border-bottom: 1.5px solid black;
+    display: inline-block;
+    min-width: 150px;
+    outline: none;
+    resize: none;
+}
+
+.lc-insurance-panel .contenteditable1 textarea {
+    outline: none;
+    border: none;
+    outline: none;
+    width: 100%;
+    resize: none;
+}
+
+.lc-insurance-panel p {
+    margin-bottom: 5px;
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+}
+
+.lc-insurance-panel h6 {
+    text-align: center;
+}
+
+.lc-insurance-panel .col-td-1 {
+    width: 100px;
+    border: none;
+    border: 1px solid black;
+}
+
+.lc-insurance-panel .col-td-2 {
+    width: 130px;
+    border: none;
+    border: 1px solid black;
+}
+
+.lc-insurance-panel .col-td-3 {
+    width: 415px;
+    border: none;
+    border: 1px solid black;
+}

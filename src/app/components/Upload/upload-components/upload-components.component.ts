@@ -49,6 +49,10 @@ export class UploadComponentsComponent implements OnInit {
   setFormValue(value: any, index: any, name1: any, name2: any) {
     this.validator.dynamicFormGroup[this.id]?.controls[name1]?.controls[index]?.controls[name2]?.setValue(value)
   }
+  
+  setValue(value: any, name1: any) {
+    this.validator.dynamicFormGroup[this.id]?.controls[name1]?.setValue(value)
+  }
 
   addFormArray(key1: any, index: any, data: any, GroupLabel: any) {
     this.validator.buildNewFormArray(key1, index, data['formGroup'][0], this.id, GroupLabel, data).then((res: any) => {

@@ -30,6 +30,8 @@ export class AppComponent implements OnInit, OnDestroy {
   DelayTime: any = '';
   isOnline: boolean = true;
   WithoutAuthorization: any = ['RoleVerifyEmail', 'verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
+  SET_TIMEOUT_TIME: number = 300000;
+
   constructor(
     private translate: TranslateService,
     private router: Router,
@@ -67,7 +69,7 @@ export class AppComponent implements OnInit, OnDestroy {
                   this.logoutUser();
                 }
               } else {
-                 this.logoutUser();
+                this.logoutUser();
               }
               if (token != null) {
                 const jwtToken: any = jwt_decode.default(token);
@@ -133,12 +135,15 @@ export class AppComponent implements OnInit, OnDestroy {
   };
 
   setTimeoutNew() {
-    this.userActivity = setTimeout(() => {
-      this.userInactive.next(undefined);
-      this.logoutUser();
-    }, 300000);
-    // 300000
+    if (this.SET_TIMEOUT_TIME != 0) {
+      this.userActivity = setTimeout(() => {
+        this.userInactive.next(undefined);
+        this.logoutUser();
+        this.SET_TIMEOUT_TIME = 0;
+      }, this.SET_TIMEOUT_TIME);
+    }
   }
+
   addMinutes(minutes) {
     return new Date(new Date().getTime() + minutes * 60000);
   }
@@ -189,7 +194,7 @@ export class AppComponent implements OnInit, OnDestroy {
     });
     return bool;
   }
-  logoutUser(){
+  logoutUser() {
     this.userService.loginlogout(false).subscribe((res: any) => {
       console.log(res, 'loginlogout');
       this.userService.authToken = null;
