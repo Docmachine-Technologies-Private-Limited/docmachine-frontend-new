@@ -4,13 +4,16 @@
         {{fieldName}} is required.
     </p>
     <p *ngIf="formName?.controls[fieldName]?.errors?.['matched']!=undefined">
-        {{formName?.controls[fieldName]?.errors?.['matched']}} && is not matched.
+        {{formName?.controls[fieldName]?.errors?.['matched']}}
     </p>
     <p *ngIf="formName?.controls[fieldName]?.errors?.['alphaNumericError']!=undefined">
         {{formName?.controls[fieldName]?.errors?.['alphaNumericError']}}
     </p>
     <p *ngIf="formName?.controls[fieldName]?.errors?.['alphaError']!=undefined">
         {{formName?.controls[fieldName]?.errors?.['alphaError']}}
+    </p>
+    <p *ngIf="formName?.controls[fieldName]?.errors?.['emailError']!=undefined">
+        {{formName?.controls[fieldName]?.errors?.['emailError']}}
     </p>
     <p *ngIf="formName?.controls[fieldName]?.errors?.['minlength']">
         {{fieldName}} must be at least {{formName?.controls[fieldName]?.errors?.['minlength']?.requiredLength}} characters long.

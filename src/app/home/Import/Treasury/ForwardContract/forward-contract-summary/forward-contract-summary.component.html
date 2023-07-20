@@ -296,10 +296,9 @@
 <app-custom-model modalbodyheight="80vh"
     [modalbodystyle]="{'display':'flex','flex-direction':'row','justify-content':'center'}" [FooterButton]="false"
     EventButton="false" [customstyle]="{'max-width':'95vw !important'}" class="p-2 mt-2" height="90vh" id="EditSummaryPage"
-    name="Forward Contract Update">
+    name="Forward Contract Update" #EditSummaryPagePanel>
     <div class="col-12">
-        <forward-contract-add style="width: 100%;" *ngIf="this.EDIT_DATA?.index!=''" id="EditSummaryPage"
-            [data]="this.EDIT_DATA"></forward-contract-add>
+        <upload-components style="width: 100%;" id="EditForwardContract" (SubmitEvent)="UpdateForm($event,EditSummaryPagePanel)"></upload-components>
     </div>
 </app-custom-model>
 

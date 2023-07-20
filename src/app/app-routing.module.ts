@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { Routes, RouterModule, Router} from "@angular/router";
+import { Routes, RouterModule, Router } from "@angular/router";
 import { PageNotFoundComponent } from "./shared/components";
 
 import { SignupRoutingModule } from "./signup/signup-routing.module";
@@ -7,7 +7,7 @@ import { SigninRoutingModule } from "./signIn/signin-routing.module";
 import { ForgotPasswordComponent } from "./forgot-password/forgot-password.component";
 import { CreateTeamComponent } from "./create-team/create-team.component";
 import { AddMemberComponent } from "./add-member/add-member.component";
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { CreateTeam1Component } from "./create-team1/create-team1.component";
 import { UpdatePasswordComponent } from "./update-password/update-password.component";
@@ -21,6 +21,7 @@ import { AuthorizationComponent } from "./Authorization/authorization/authorizat
 import { AdminGuard } from "./service/RolePermission/Admin/admin.guard";
 import { ResetOTPComponent } from "./forgot-password/reset-otp/reset-otp.component";
 import { RoleVerifyEmailComponent } from "./RoleVerifyEmail/role-verify-email/role-verify-email.component";
+import { SharedHomeModule } from "./home/shared-home.module";
 
 const routes: Routes = [
   {
@@ -28,9 +29,10 @@ const routes: Routes = [
     redirectTo: "login",
     pathMatch: "full",
   },
-  { path: "home",
+  {
+    path: "home",
     loadChildren: () => import('../app/home/home.module').then(mod => mod.HomeModule),
-},
+  },
   {
     path: "forgotpassword",
     component: ForgotPasswordComponent,
@@ -61,14 +63,14 @@ const routes: Routes = [
     component: RoleVerifyEmailComponent,
     pathMatch: "full",
   },
-  { path: "authorization",component: AuthorizationComponent},
-  { path: "createTeam", component: CreateTeam1Component,canActivate:[AdminGuard] },
-  { path: "addMember", component: AddMemberComponent, pathMatch: "full",canActivate:[AdminGuard] },
+  { path: "authorization", component: AuthorizationComponent },
+  { path: "createTeam", component: CreateTeam1Component, canActivate: [AdminGuard] },
+  { path: "addMember", component: AddMemberComponent, pathMatch: "full", canActivate: [AdminGuard] },
   { path: "newUser", component: NewUserComponent, pathMatch: "full" },
   { path: "notVerified", component: NotVerifiedComponent, pathMatch: "full" },
   { path: "membersignin/:id", component: MembersigninComponent, pathMatch: "full" },
   { path: "pdf", component: PdfComponent, pathMatch: "full" },
-  { path: "**",component: PageNotFoundComponent},
+  { path: "**", component: PageNotFoundComponent },
 ];
 
 @NgModule({
@@ -77,11 +79,12 @@ const routes: Routes = [
     SignupRoutingModule,
     SigninRoutingModule,
     MatDialogModule,
+    SharedHomeModule
   ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {
-  constructor(public router:Router){
+  constructor(public router: Router) {
   }
 
 }

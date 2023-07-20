@@ -272,4 +272,12 @@ export class ForwardContractSummaryComponent implements OnInit {
     })
   }
   
+  UpdateForm(value: any,panel:any){
+    this.documentService.ForwardContract_update({ id: this.ForwardContract_DATA[this.EDIT_DATA?.index]?._id, data: value?.value }).subscribe((ForwardContract: any) => {
+      console.log(ForwardContract, 'ForwardContract')
+      this.toastr.success('ForwardContract updated data successfully....')
+      this.getForwardContract();
+      panel.displayHidden;
+    })
+  }
 }

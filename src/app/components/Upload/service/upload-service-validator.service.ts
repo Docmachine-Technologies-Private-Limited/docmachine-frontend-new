@@ -37,7 +37,8 @@ export class UploadServiceValidatorService {
   commodity: any = [];
   location: any = [];
   bankDetail: any = [];
-
+  Id:any='';
+  
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
     public userService: UserService) { }
@@ -130,7 +131,7 @@ export class UploadServiceValidatorService {
       const fieldProps: any = model[field];
       if (fieldProps?.type != "formArray") {
         formGroupFields[field] = new FormControl(fieldProps.value,
-          this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
+          this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules,formid)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
         this.fields[formid].push({ ...fieldProps, fieldName: field });
       } else {
         var temp: any = [];
@@ -141,7 +142,7 @@ export class UploadServiceValidatorService {
             temp.push({ ...element[field2], fieldName: field2, index: count });
             tempFormGroup.push(new FormGroup({
               [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false },
-                this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
+                this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules,formid)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
             }));
             count++;
           }
@@ -149,7 +150,7 @@ export class UploadServiceValidatorService {
         fieldProps['NewformGroup'] = temp;
         fieldProps['RemoveListIndex'] = [{ START_INDEX: -1, LAST_INDEX: -1 }];
         if (fieldProps?.AutoFill == true && fieldProps?.AutoFill != undefined) {
-          formGroupFields[field] = await new FormArray(tempFormGroup, hasDuplicate(fieldProps?.EqualList));
+          formGroupFields[field] = await new FormArray(tempFormGroup, hasDuplicateFormArray(fieldProps?.EqualList));
           this.fields[formid].push({ ...fieldProps, fieldName: field });
           console.log(id, fieldProps, tempFormGroup, this.fields[formid], 'hghjgjhghjgjh if')
         } else {
@@ -159,7 +160,7 @@ export class UploadServiceValidatorService {
         }
       }
     }
-    console.log(this.fields, 'hghjgjhghjgjh')
+    console.log(this.fields, formGroupFields, 'hghjgjhghjgjh')
     return formGroupFields;
   }
 
@@ -181,7 +182,7 @@ export class UploadServiceValidatorService {
     };
   }
 
-  setRequired(minLength: any, maxLength: any, rule: any) {
+  setRequired(minLength: any, maxLength: any, rule: any,formid:any) {
     return {
       text: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)],
@@ -206,12 +207,20 @@ export class UploadServiceValidatorService {
       PaymentTermType: rule?.required == true ? [Validators.required] : [],
       undefined: rule?.required == true ? [Validators.required] : [],
       MatchedValue: rule?.required == true ? [Validators.required] : [],
-      Underlying:rule?.required == true ? [Validators.required] : [],
-      BuySell:rule?.required == true ? [Validators.required] : [],
+      Underlying: rule?.required == true ? [Validators.required] : [],
+      BuySell: rule?.required == true ? [Validators.required] : [],
       AdvanceInfo: [],
       NotRequired: [],
-      ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20),alphaNumericValidator] :
-        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20),alphaNumericValidator]
+      ALPHA_NUMERIC: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), alphaNumericValidator] :
+        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), alphaNumericValidator],
+      email: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(100)] :
+        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(100)],
+      password: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
+        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)],
+      confirmPassword: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), hasDuplicateControl({ key: 'confirmPassword', equalkey: 'password' }, this.dynamicFormGroup,formid)] :
+        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), hasDuplicateControl({ key: 'confirmPassword', equalkey: 'password' }, this.dynamicFormGroup,formid)],
+      checkbox: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
+        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)]
     }
   }
 
@@ -253,7 +262,7 @@ export class UploadServiceValidatorService {
         this.fields[formid][index]['NewformGroup'].push({ ...element[field2], fieldName: field2, index: count });
         tempFormGroup.push(new FormGroup({
           [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false },
-            this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
+            this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules,formid)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
         }));
         count++;
       }
@@ -316,9 +325,13 @@ export class UploadServiceValidatorService {
       }
     });
   }
+
+  setInputVisibilty(formid: any, index: any, key, value: any) {
+    this.fields[formid][index][key] = value;
+  }
 }
 
-export function hasDuplicate(data: any): ValidatorFn {
+export function hasDuplicateFormArray(data: any): ValidatorFn {
   return (formArray: FormArray | any): { [key: string]: any } | null | any => {
     if (formArray?.controls?.[data?.index]?.controls?.[data?.key]?.value != formArray?.controls?.[data?.equalindex]?.controls?.[data?.equalkey]?.value) {
       formArray?.controls?.[data?.equalindex]?.controls?.[data?.equalkey]?.setErrors({ matched: data?.errormsg })
@@ -328,6 +341,26 @@ export function hasDuplicate(data: any): ValidatorFn {
     }
   };
 }
+
+export function hasDuplicateControl(data: any, forms: any,id:any): ValidationErrors {
+  return (formArray: FormControl | any): { [key: string]: any } | null | any => {
+    console.log(formArray, forms, 'formArray')
+    if (forms[id] != undefined) {
+      if (forms[id]?.controls[data?.key] != undefined && forms[id]?.controls[data?.equalkey] != undefined) {
+        if (forms[id]?.controls[data?.key]?.value != forms[id]?.controls[data?.equalkey]?.value) {
+          return {matched:'Password and Confirm Password must be match.'};
+        } else {
+          return null;
+        }
+      }else{
+        return null;
+      }
+    }else{
+      return null;
+    }
+  };
+}
+
 
 export function alphaNumericValidator(control: FormControl): ValidationErrors | null {
   const ALPHA_NUMERIC_REGEX = /^[a-zA-Z0-9_]*$/;
@@ -339,4 +372,56 @@ export function alphaValidator(control: FormControl): ValidationErrors | null {
   const ALPHA_REGEX = /^[a-zA-Z_]*$/;
   const ALPHA_VALIDATION_ERROR = { alphaError: 'only alphabets values are allowed' }
   return ALPHA_REGEX.test(control.value) ? null : ALPHA_VALIDATION_ERROR;
+}
+
+export function EmailValidator(control: FormControl): ValidationErrors | null {
+  const EMAIL_REGEX = /^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$/;
+  const EMAIL_VALIDATION_ERROR = { emailError: 'Please insert/enter a valid email address.' }
+  return EMAIL_REGEX.test(control.value) ? null : EMAIL_VALIDATION_ERROR;
+}
+
+export function PasswordValidator(control: FormControl): ValidationErrors | null {
+  const EMAIL_REGEX = /^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$/;
+  const EMAIL_VALIDATION_ERROR = { emailError: 'Please insert/enter a valid email address.' }
+  return EMAIL_REGEX.test(control.value) ? null : EMAIL_VALIDATION_ERROR;
+}
+
+export function ConfirmedValidator(controlName: string, matchingControlName: string) {
+  return (formGroup: FormGroup) => {
+    const control = formGroup.controls[controlName];
+    const matchingControl = formGroup.controls[matchingControlName];
+    if (matchingControl.errors && !matchingControl.errors.confirmedValidator) {
+      return;
+    }
+    if (control.value !== matchingControl.value) {
+      matchingControl.setErrors({ confirmedValidator: 'Password and Confirm Password must be match.' });
+    } else {
+      matchingControl.setErrors(null);
+    }
+  }
+}
+
+// PasswordStrengthValidator
+export const PasswordStrengthValidator = function (control: AbstractControl): ValidationErrors | null {
+  let value: string = control.value || '';
+  if (!value) {
+    return null
+  }
+  let upperCaseCharacters = /[A-Z]+/g
+  if (upperCaseCharacters.test(value) === false) {
+    return { passwordStrength: `text has to contine Upper case characters,current value ${value}` };
+  }
+  let lowerCaseCharacters = /[a-z]+/g
+  if (lowerCaseCharacters.test(value) === false) {
+    return { passwordStrength: `text has to contine lower case characters,current value ${value}` };
+  }
+  let numberCharacters = /[0-9]+/g
+  if (numberCharacters.test(value) === false) {
+    return { passwordStrength: `text has to contine number characters,current value ${value}` };
+  }
+  let specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/
+  if (specialCharacters.test(value) === false) {
+    return { passwordStrength: `text has to contine special character,current value ${value}` };
+  }
+  return null;
 }

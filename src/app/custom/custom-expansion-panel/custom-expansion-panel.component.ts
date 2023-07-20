@@ -68,14 +68,12 @@ export class CustomExpansionPanelComponent implements OnInit, OnChanges {
   }
 
   TrClick(data: any, index: any) {
-    console.log('gvfyfghjhgjhgjhgjhgjhgjhgjhghjghjghj')
     this.event.emit({ item: data, index: index });
   }
   TrClickEvent(data: any, index: any) {
     this.TrEvent.emit({ item: data, index: index });
   }
   OBJECT_LENGTH(data: any) {
-    console.log(typeof data, 'jhjyujhujyghguygjhhgjtj')
     return Object.keys(data);
   }
 

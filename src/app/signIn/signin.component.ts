@@ -8,6 +8,7 @@ import { DocumentService } from '../service/document.service';
 import { AuthGuard } from '../service/authguard.service';
 import { AppConfig } from '../../environments/environment';
 import { StorageEncryptionDecryptionService } from '../Storage/storage-encryption-decryption.service';
+import { UploadServiceValidatorService } from '../components/Upload/service/upload-service-validator.service';
 
 @Component({
   selector: 'app-detail',
@@ -34,6 +35,7 @@ export class SigninComponent implements OnInit {
     public documentService: DocumentService,
     private router: Router, public authGuard: AuthGuard,
     public sessionstorage: StorageEncryptionDecryptionService,
+    public validator: UploadServiceValidatorService,
     private toastr: ToastrService, private modalService: NgbModal) {
   }
 
@@ -44,14 +46,40 @@ export class SigninComponent implements OnInit {
       this.router.navigate(["/home/dashboardTask"]);
     }
     this.password = 'password';
-    this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
     this.setTextAnimation(0.1, 6, 2, 'ease', '#ffffff', true);
-    // this.documentService.loading=false
+    this.validator.buildForm({
+      email: {
+        type: "email",
+        value: "",
+        label: "",
+        rules: {
+          required: true,
+        },
+      },
+      password: {
+        type: "password",
+        value: "",
+        label: "",
+        showhide: false,
+        rules: {
+          required: true,
+        },
+      },
+      otp: {
+        type: "number",
+        value: "",
+        label: "",
+        visible: false,
+        rules: {
+          required: false,
+        },
+        style: {
+          'border-radius': '30px',
+          'padding': '20px'
+        }
+      }
+    }, 'UserLoginPage');
   }
-
 
   get f() {
     return this.loginForm.controls;
@@ -72,13 +100,14 @@ export class SigninComponent implements OnInit {
     this.isDisabled = false;
   }
 
-  onSubmit() {
-    this.userService.getUserbyEmail({ emailId: this.loginForm?.value?.email }).subscribe((resany: any) => {
-      console.log(resany, 'sdfksdfhsdkfjshskdfsdfsdfds')
+  onSubmit(e: any) {
+    console.log(e, 'sdfksdfhsdkfjshskdfsdfsdfds')
+    this.value = e?.value?.otp;
+    this.userService.getUserbyEmail({ emailId: e.value?.email }).subscribe((resany: any) => {
       if (this.rolebaseddata.includes(resany?.result?.role)) {
         let tempdata: any = {
-          emailId: this.loginForm?.value?.email,
-          password: this.loginForm?.value?.password
+          emailId: e.value?.email,
+          password: e.value?.password
         }
         this.userService.Rolelogin(tempdata).subscribe((res: any) => {
           console.log(res, 'hfhffgffg')
@@ -97,12 +126,12 @@ export class SigninComponent implements OnInit {
         if (!this.value) {
           this.submitted = true
           this.isDisabled = true;
-          if (this.loginForm.invalid) {
+          if (e.invalid) {
             this.toastr.error('Invalid inputs, please check again!');
             this.isDisabled = false;
             return;
           }
-          this.userService.login(this.loginForm.value).subscribe(data => {
+          this.userService.login(e.value).subscribe(data => {
             this.userService.addLoginData(data);
             this.data = data;
             console.log(this.data, 'oppppppppppppppppppppppppppppppp');
@@ -112,6 +141,7 @@ export class SigninComponent implements OnInit {
                 this.router.navigate(['/2FA']);
               } else {
                 this.otp = true;
+                this.validator.setInputVisibilty('UserLoginPage', 2, 'visible', true);
                 this.userService.getUser().subscribe(data1 => {
                   console.log(data1), 'sdfsdhdsgfjdsfhgsdfjsfgdsjfd';
                   this.data1 = data1
@@ -183,12 +213,12 @@ export class SigninComponent implements OnInit {
     this.submitted = false
     this.isDisabled = false;
     this.value = a
+    console.log(a, 'sdfsdfsdfsdfdsfsdfdsfsdfdf')
   }
 
   onSignup() {
     this.isVisible = true;
     this.router.navigate(['/signup'])
-
   }
 
   open(content) {
@@ -222,5 +252,9 @@ export class SigninComponent implements OnInit {
       path.style["animation"] = `${duration}s svg-text-anim ${mode} ${timingFunction}`;
       path.style["animation-delay"] = `${i * delay}s`;
     }
+  }
+  dump(panel: any) {
+    panel?.onClickButton
+    console.log(panel, 'sdfsdsdfdf')
   }
 }

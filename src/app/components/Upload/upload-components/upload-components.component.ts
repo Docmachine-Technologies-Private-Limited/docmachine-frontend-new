@@ -7,6 +7,7 @@ import { PipoDataService } from '../../../service/homeservices/pipo.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UploadServiceValidatorService } from '../service/upload-service-validator.service';
+import $ from 'jquery';
 
 @Component({
   selector: 'upload-components',
@@ -18,6 +19,9 @@ export class UploadComponentsComponent implements OnInit {
   @Input('id') id: any = '';
   @Input('AddNewRequried') AddNewRequried: boolean = false;
   @Output('SubmitEvent') SubmitEvent: any = new EventEmitter();
+  @Input('HIDE_BACKGROUND') HIDE_BACKGROUND: boolean = true;
+  @Input('HIDE_SUBMIT_BUTTON') HIDE_SUBMIT_BUTTON: boolean = true;
+  @Input('KEY_ENTER_ENABLED') KEY_ENTER_ENABLED: any = false;
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -32,14 +36,15 @@ export class UploadComponentsComponent implements OnInit {
 
   }
 
-  onSubmit(event: any, e: any,type:any) {
+  get onClickButton() {
+    return $('.submit-button#' + this.id).click();
+  }
+  
+  onSubmit(event: any, e: any, type: any) {
     console.log(e, 'value')
     event.preventDefault();
     if (e.status == 'VALID') {
       this.SUBMIT_ERROR = false;
-      if (type=='') {
-        
-      }
       this.SubmitEvent.emit(e);
     } else {
       this.SUBMIT_ERROR = true;
@@ -49,7 +54,7 @@ export class UploadComponentsComponent implements OnInit {
   setFormValue(value: any, index: any, name1: any, name2: any) {
     this.validator.dynamicFormGroup[this.id]?.controls[name1]?.controls[index]?.controls[name2]?.setValue(value)
   }
-  
+
   setValue(value: any, name1: any) {
     this.validator.dynamicFormGroup[this.id]?.controls[name1]?.setValue(value)
   }
