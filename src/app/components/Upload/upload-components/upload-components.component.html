@@ -382,8 +382,8 @@
                                                 [style]="this.ADD_NEW_BUTTON_VISIBLE==true?'width: 85% !important;':''"
                                                 [items]="this.validator.BANK_NAME_LIST_GLOABL" bindLabel="value"
                                                 [multiple]="false"
-                                                [placeholder]="field?.placeholderText!=undefined?field.placeholderText:''"
-                                                [name]="field.fieldName" [(ngModel)]="field.value">
+                                                [placeholder]="formGroupItem?.placeholderText!=undefined?formGroupItem.placeholderText:''"
+                                                [name]="formGroupItem.fieldName" [(ngModel)]="formGroupItem.value">
                                             </ng-select>
                                             <button type="button" class="btn btn-primary PopupOpen"
                                                 popup-close="Add_New_Bank_Name"
