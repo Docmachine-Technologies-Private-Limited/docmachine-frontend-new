@@ -30,7 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
   DelayTime: any = '';
   isOnline: boolean = true;
   WithoutAuthorization: any = ['RoleVerifyEmail', 'verifyEmail', 'updatePassword', 'membersignin', 'signup', 'forgotpassword', 'resetOTP', '2FA', 'notVerified', 'authorization', 'newUser'];
-  SET_TIMEOUT_TIME: number = 300000;
+  SET_TIMEOUT_TIME: number = 7200000;
 
   constructor(
     private translate: TranslateService,
