@@ -1,0 +1,52 @@
+.container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 0;
+    margin-bottom: 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    gap: 10px;
+}
+
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    height: 20px;
+    display: flex;
+    width: 20px;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,.54);
+    align-items: center;
+    justify-content: center;
+}
+
+.checkmark-border-color{
+    border-color: #ffd740;
+    transition: transform ease .28s,background-color ease .28s;
+}
+
+.container .checkmark-after {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ffd740;
+    margin: auto;
+    transition: transform ease .28s,background-color ease .28s;
+}
+
+.radio-container{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    margin-left: 15px;
+    gap: 10px;
+}

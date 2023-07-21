@@ -14,7 +14,6 @@ export class OpenPopUpDirective {
   constructor(private elementRef: ElementRef,
     private renderer: Renderer2,
     public wininfo: WindowInformationService) {
-    console.log(elementRef, 'dfsdfsdfdsfdfsdf')
   }
 
   @HostListener('window:mouseenter', ['$event']) mouseover(event: any) {

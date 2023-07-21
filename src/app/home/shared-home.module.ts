@@ -66,6 +66,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { LcInsuranceFormatComponent } from "./new-lc-insurance/lc-insurance-format/lc-insurance-format.component";
 import { TemplateMainPageComponent } from '../components/template-main-page/template-main-page.component';
+import { CustomCheckboxComponent } from "../custom/custom-checkbox/custom-checkbox.component";
+import { CustomRadioComponent } from "../custom/custom-radio/custom-radio.component";
 
 @NgModule({
   declarations: [
@@ -108,7 +110,9 @@ import { TemplateMainPageComponent } from '../components/template-main-page/temp
     UploadComponentsComponent,
     InnerDynamicErrorComponent,
     LcInsuranceFormatComponent,
-    TemplateMainPageComponent
+    TemplateMainPageComponent,
+    CustomCheckboxComponent,
+    CustomRadioComponent
   ],
   imports: [
     CommonModule,
@@ -190,7 +194,9 @@ import { TemplateMainPageComponent } from '../components/template-main-page/temp
     MatButtonModule, 
     MatIconModule,
     LcInsuranceFormatComponent,
-    TemplateMainPageComponent
+    TemplateMainPageComponent,
+    CustomCheckboxComponent,
+    CustomRadioComponent
   ],
 })
 export class SharedHomeModule { }

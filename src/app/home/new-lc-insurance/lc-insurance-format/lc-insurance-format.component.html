@@ -1,11 +1,9 @@
-<div class="d-flex lc-insurance-panel"  *ngIf="this.dynamicFormGroup!=undefined">
-    <form [formGroup]="this.dynamicFormGroup" onsubmit="return false;">
+<div class="d-flex lc-insurance-panel" *ngIf="this.data?.length!=0">
         <h6>APPLICATION AND GUARANTEE FOR ISSUE OF IRREVOCABLE DOCUMENTARY LETTER OF CREDIT</h6>
-        <p class="mt-2">The Branch Head, <input class="contenteditable" [(ngModel)]="this.fields[0].value" [name]="this.fields[0].fieldName"/>BANK LTD,</p>
+        <p class="mt-2">The Branch Head, <input class="contenteditable" />BANK LTD,</p>
         <p>Branch</p>
         <p>Dear Sir,</p>
-        <p>I/We request you to establish with your correspondents in <input class="contenteditable"
-             [(ngModel)]="this.fields[1].value" [name]="this.fields[1].fieldName"/> (Country) Documentary
+        <p>I/We request you to establish with your correspondents in <input class="contenteditable" /> (Country) Documentary
             credit as per details below:</p>
         <table class="table lc-insurance-table mt-2">
             <thead class="lc-insurance-thead">
@@ -13,101 +11,139 @@
                     <td class="col-td-1">40A:*** </td>
                     <td class="col-td-2">TYPE OF L/C</td>
                     <td class="col-td-3">IRREVOCABLE</td>
+                    <td class="col-td-1">Action</td>
                 </tr>
                 <tr>
                     <td class="col-td-1">31D :***</td>
                     <td class="col-td-2">DATE & PLACE OF EXPIRY:</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[2].value" [name]="this.fields[2].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[0].value"
+                            [name]="this.data[0].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">50 :*** </td>
                     <td class="col-td-2">NAME AND ADDRESS OF THE APPLICANT</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[3].value" [name]="this.fields[3].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[1].value"
+                            [name]="this.data[1].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">59 :*** </td>
                     <td class="col-td-2">NAME AND ADDRESS OF THE BENEFICIARY</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[4].value" [name]="this.fields[4].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[2].value"
+                            [name]="this.data[2].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">32B:*** </td>
                     <td class="col-td-2">CURRENCY & AMOUNT OF CREDIT IN FIGURES AND IN</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[5].value" [name]="this.fields[5].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[3].value"
+                            [name]="this.data[3].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">39A:*** </td>
                     <td class="col-td-2">PERCENTAGE CREDIT AMOUNT TOLERANCE</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[6].value" [name]="this.fields[6].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[4].value"
+                            [name]="this.data[4].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">39B:*** </td>
                     <td class="col-td-2">MAXIMUM CREDIT AMOUNT</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[7].value" [name]="this.fields[7].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[5].value"
+                            [name]="this.data[5].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">39C:*** </td>
                     <td class="col-td-2">ADDITIONAL AMOUNTS COVERED (USANCE INTEREST)</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[8].value" [name]="this.fields[8].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[8].value"
+                            [name]="this.data[8].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">41a : (A/D):*** </td>
                     <td class="col-td-2">CREDIT AVAILABLE WITH CREDIT AVAILABLE BY </td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[9].value" [name]="this.fields[9].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[9].value"
+                            [name]="this.data[9].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">42c:*** </td>
                     <td class="col-td-2">DRAFTS AT</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[10].value" [name]="this.fields[10].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[10].value"
+                            [name]="this.data[10].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">42a:*** </td>
                     <td class="col-td-2">DRAWEE</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[11].value" [name]="this.fields[11].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[11].value"
+                            [name]="this.data[11].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">43P:*** </td>
                     <td class="col-td-2">PARTIAL SHIPMENTS</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[12].value" [name]="this.fields[12].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[12].value"
+                            [name]="this.data[12].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">43T:*** </td>
                     <td class="col-td-2">TRANSHIPMENTS</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[13].value" [name]="this.fields[13].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[13].value"
+                            [name]="this.data[13].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">44A:*** </td>
                     <td class="col-td-2">TYPE OF L/C</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[14].value" [name]="this.fields[14].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[14].value"
+                            [name]="this.data[14].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">44B:*** </td>
                     <td class="col-td-2">SHIPMENT TO</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[15].value" [name]="this.fields[15].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[15].value"
+                            [name]="this.data[15].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">44C:*** </td>
                     <td class="col-td-2">LATEST DATE OF SHIPMENT</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[16].value" [name]="this.fields[16].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[16].value"
+                            [name]="this.data[16].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">45A:*** </td>
                     <td class="col-td-2">QUANTITY AND DESCRIPTION OF GOODS (BRIEF DETAILS) </td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[17].value" [name]="this.fields[17].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[17].value"
+                            [name]="this.data[17].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">***</td>
                     <td class="col-td-2">IMPORT LICENCE/OGL DETAILS</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[18].value" [name]="this.fields[18].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[18].value"
+                            [name]="this.data[18].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">***</td>
                     <td class="col-td-2">IMPORT EXPORT CODE NO.</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[19].value" [name]="this.fields[19].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[19].value"
+                            [name]="this.data[19].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">46A:*** </td>
                     <td class="col-td-2">DOCUMENTS REQUIRED</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[21].value" [name]="this.fields[21].fieldName"></textarea>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[21].value"
+                            [name]="this.data[21].fieldName"></textarea>
                         SIGNED DRAFTS FOR 100% OF THE INVOICE VALUE. SIGNED
                         COMMERCIAL INVOICE (S) IN COPIES
                         FULL SET OF SIGNED “CLEAN” "ON BOARD" OCEAN BILLS OF LADING MADE OUT TO ORDER AND BLANK ENDORSED
@@ -152,11 +188,13 @@
                         SHIPMENT.
                         (ANY OTHER DOCUMENTS AS MAY BE REQUIRED )
                     </td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">47 A:T</td>
                     <td class="col-td-2">ADDITIONAL CONDITIONS</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[22].value" [name]="this.fields[22].fieldName"></textarea>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[22].value"
+                            [name]="this.data[22].fieldName"></textarea>
                         SEPARATE DRAFT AND INVOICE FOR INTEREST AMOUNT REQUIRED
                         INVOICE SHOULD QUOTE IMPORT LICENCE/OGL REFERENCE AND CERTIFY THAT THE GOODS SUPPLIED ARE AS PER
                         PURCHASE
@@ -172,33 +210,44 @@
                         MARKED ORIGINAL AND SIGNED.
                         OTHERS, PLEASE SPECIFY
                     </td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">71 B:*** </td>
                     <td class="col-td-2">
                         SPECIFY IF ANY CHARGES ARE TO BENEFICIARY’S ACCOUNT
                     </td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[23].value" [name]="this.fields[23].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[23].value"
+                            [name]="this.data[23].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">48:*** </td>
                     <td class="col-td-2">PERIOD OF PRESENTATION OF DOCUMENTS</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[24].value" [name]="this.fields[24].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[24].value"
+                            [name]="this.data[24].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">49:*** </td>
                     <td class="col-td-2">CONFIRMATION INSTRUCTIONS</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[25].value" [name]="this.fields[25].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[25].value"
+                            [name]="this.data[25].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">57a</td>
                     <td class="col-td-2">“ADVISE THROUGH” BANK</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[26].value" [name]="this.fields[26].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[26].value"
+                            [name]="this.data[26].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
                 <tr>
                     <td class="col-td-1">72:</td>
                     <td class="col-td-2">SENDER TO RECEIVER INFORMATION</td>
-                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.fields[27].value" [name]="this.fields[27].fieldName"></textarea></td>
+                    <td class="col-td-3 contenteditable1"> <textarea [(ngModel)]="this.data[27].value"
+                            [name]="this.data[27].fieldName"></textarea></td>
+                    <td class="col-td-1"><button class="PopupOpen" popup-close="AutofillLCTable">edit</button></td>
                 </tr>
             </thead>
         </table>
@@ -379,5 +428,5 @@
             </div>
         </div>
         <p>*Applicable when the application /declaration /undertaking is signed on behalf of the firm / company</p>
-    </form>
 </div>
+

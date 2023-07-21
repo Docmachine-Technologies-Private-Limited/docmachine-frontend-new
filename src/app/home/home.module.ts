@@ -762,7 +762,5 @@ import { NewLcInsuranceComponent } from "./new-lc-insurance/new-lc-insurance.com
   exports: [MatProgressBarModule, MatTabsModule, SharedHomeModule],
 })
 export class HomeModule {
-  constructor(public validator: UploadServiceValidatorService) {
-    validator.loaddata()
-  }
+ 
 }

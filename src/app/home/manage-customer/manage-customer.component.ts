@@ -24,7 +24,6 @@ export class ManageCustomerComponent implements OnInit {
   buyerForm: FormGroup;
   closeResult: string;
   file: any;
-  BANK_NAME_LIST: any = [];
   USER_DATA: any = [];
   FILTER_VALUE_LIST_NEW: any = {
     header: [
@@ -67,7 +66,7 @@ export class ManageCustomerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe(async (params) => {
       this.file = this.route.snapshot.params['id'];
       if (this.file === "import") {
         this.FILTER_VALUE_LIST_NEW['header'] = [
@@ -95,7 +94,8 @@ export class ManageCustomerComponent implements OnInit {
           interBankSwiftCode: ['', Validators.required],
           interBankName: ['', Validators.required],
         });
-        this.validator.BANK_NAME_LIST = this.documentService.getBankNameList();
+        this.validator.BANK_NAME_LIST_GLOABL = await this.documentService.getBankNameList();
+        console.log("USER_DATA loaddata", this.validator.BANK_NAME_LIST_GLOABL)
         this.validator.buildForm({
           benneName: {
             type: "text",
@@ -313,7 +313,6 @@ export class ManageCustomerComponent implements OnInit {
             console.log("errrrror");
           }
           );
-        this.validator.BANK_NAME_LIST = this.documentService.getBankNameList();
         this.validator.buildForm({
           buyerName: {
             type: "text",
@@ -433,7 +432,7 @@ export class ManageCustomerComponent implements OnInit {
           }
         },'CreateNewBuyerwithConsignee');
       }
-    },);
+    });
     this.userService.getUserDetail().then((status: any) => {
       this.USER_DATA = status['result'];
       console.log(this.USER_DATA, this.USER_DATA?.sideMenu, 'USER_DETAILS');
@@ -447,9 +446,6 @@ export class ManageCustomerComponent implements OnInit {
       ConsigneeName: ['', Validators.required],
       ConsigneeAddress: ['', Validators.required]
     });
-    this.BANK_NAME_LIST = this.documentService.getBankNameList();
-
-    console.log(this.BANK_NAME_LIST, 'BANK_NAME_LIST')
   }
 
   BuyerBeneficiaryTable(data: any) {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Injectable, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../../../service/user.service';
 import { DocumentService } from '../../../service/document.service';
@@ -22,6 +22,7 @@ export class UploadComponentsComponent implements OnInit {
   @Input('HIDE_BACKGROUND') HIDE_BACKGROUND: boolean = true;
   @Input('HIDE_SUBMIT_BUTTON') HIDE_SUBMIT_BUTTON: boolean = true;
   @Input('KEY_ENTER_ENABLED') KEY_ENTER_ENABLED: any = false;
+  @Input('ADD_NEW_BUTTON_VISIBLE') ADD_NEW_BUTTON_VISIBLE: any = '';
 
   constructor(public sanitizer: DomSanitizer,
     public documentService: DocumentService,
@@ -33,13 +34,13 @@ export class UploadComponentsComponent implements OnInit {
     public userService: UserService) { }
 
   async ngOnInit() {
-
+    console.log(this.validator)
   }
 
   get onClickButton() {
     return $('.submit-button#' + this.id).click();
   }
-  
+
   onSubmit(event: any, e: any, type: any) {
     console.log(e, 'value')
     event.preventDefault();
@@ -73,7 +74,6 @@ export class UploadComponentsComponent implements OnInit {
 
   AUTOFILL_INPUT_NAME_LIST: any = [];
   ORM_SELECTION(event: any, index: any, data: any, AUTOFILL_INPUT_NAME_LIST: any) {
-    console.log('ORM_SELECTION', data)
     if (event.target.checked) {
       this.validator.ORM_SELECTION_DATA = data;
       AUTOFILL_INPUT_NAME_LIST.forEach(element => {
@@ -90,9 +90,44 @@ export class UploadComponentsComponent implements OnInit {
   }
 
   autofillCommerical(Commericaldata: any, AUTOFILL_INPUT_NAME_LIST: any) {
-    console.log('ORM_SELECTION', Commericaldata)
     AUTOFILL_INPUT_NAME_LIST.forEach(element => {
       this.validator.dynamicFormGroup[this.id]?.controls[element?.name]?.controls[element?.index]?.controls[element?.input]?.setValue(Commericaldata?.data[element?.key])
     });
+  }
+
+  CreateFormBank() {
+    this.validator.buildForm({
+      BankName: {
+        type: "text",
+        value: "",
+        label: "Bank Name",
+        placeholderText: 'Bank Name',
+        rules: {
+          required: true,
+        },
+        maxLength: 200
+      },
+    }, 'AddNewBankName');
+  }
+
+  addNewBank(e: any,panel:any) {
+    this.documentService.addNewBankInfo({ value: e?.value?.BankName, BankUniqueId: this.initialName(this.removeAllSpecialChar(e?.value?.BankName)) }).subscribe(async (res: any) => {
+      this.validator.BANK_NAME_LIST_GLOABL = await this.documentService.getBankNameList();
+      this.toastr.success(res?.message);
+      panel?.displayHidden;
+    })
+  }
+
+  initialName(words) {
+    'use strict'
+    return words
+      .replace(/\b(\w)\w+/g, '$1_')
+      .replace(/\s/g, '')
+      .replace(/\.$/, '')
+      .toUpperCase();
+  }
+
+  removeAllSpecialChar(string: any) {
+    return string?.replace(/[^a-zA-Z ]/g, "");
   }
 }

@@ -1,0 +1,11 @@
+<ng-container *ngFor="let item of items;let i=index">
+    <div class="radio-container">
+        <label class="container">
+            <span class="checkmark" [ngClass]="{'checkmark-border-color':item?.isToggle==true}"><span
+                    class="checkmark-after" *ngIf="item?.isToggle==true"></span></span>
+            <input type="radio" [value]="item?.value" [ngModel]="value"
+                (ngModelChange)="change($event,i);item.isToggle=!item?.isToggle" name="radio" />
+            {{item?.text}}
+        </label>
+    </div>
+</ng-container>

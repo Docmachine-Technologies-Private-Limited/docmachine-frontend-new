@@ -1,19 +1,17 @@
 import { Injectable, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { PipoDataService } from '../../../service/homeservices/pipo.service';
-import { async, from } from 'rxjs';
 import { UserService } from '../../../service/user.service';
 import { DocumentService } from '../../../service/document.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UploadServiceValidatorService {
+export class UploadServiceValidatorService implements OnInit {
   dynamicFormGroup: any = [];
   fields: any = [];
   model = {};
   SHIPPING_BILL_LIST: any = [];
-  BANK_NAME_LIST: any = [];
   COMMERICAL_NO: any = [];
   ORM_BY_PARTY_NAME: any = [];
   ORM_SELECTION_DATA: any = [];
@@ -37,16 +35,20 @@ export class UploadServiceValidatorService {
   commodity: any = [];
   location: any = [];
   bankDetail: any = [];
-  Id:any='';
-  
+  Id: any = '';
+  BANK_NAME_LIST_GLOABL: any = [];
+
   constructor(public pipoDataService: PipoDataService,
     public documentService: DocumentService,
-    public userService: UserService) { }
+    public userService: UserService) {
+  }
+
+  ngOnInit(): void {
+  }
 
   async loaddata() {
     this.CURRENCY_LIST = this.documentService.getCurrencyList();
     let USER_DATA: any = await this.userService.getUserDetail();
-    console.log("USER_DATA loaddata", USER_DATA)
     this.SHIPPING_BUNDEL = [];
     this.origin = [];
     this.BUYER_DETAILS = [];
@@ -98,7 +100,7 @@ export class UploadServiceValidatorService {
       }, (err) => console.log(err));
     }
 
-    this.userService.getTeam().subscribe((data) => {
+    this.userService.getTeam().subscribe(async (data) => {
       console.log(data['data'][0]);
       data['data'][0]['location']?.forEach(element => {
         this.location.push({ value: element?.loc })
@@ -118,10 +120,19 @@ export class UploadServiceValidatorService {
 
   async buildForm(model: any, id: any) {
     this.fields[id] = [];
+    console.log("BANK_NAME_LIST_GLOABL", this.BANK_NAME_LIST_GLOABL)
     const formGroupFields = await this.getFormControlsFields(model, id);
     this.dynamicFormGroup[id] = await new FormGroup(formGroupFields);
-    console.log(this.dynamicFormGroup, 'dynamicFormGroup')
+    console.log(this.dynamicFormGroup, 'dynamicFormGroup');
     return await this.dynamicFormGroup;
+  }
+
+
+  setBankList(data: any) {
+    this.BANK_NAME_LIST_GLOABL=[];
+    setTimeout(() => {
+      this.BANK_NAME_LIST_GLOABL = data;
+    }, 200);
   }
 
   async getFormControlsFields(model: any, formid: any) {
@@ -131,7 +142,7 @@ export class UploadServiceValidatorService {
       const fieldProps: any = model[field];
       if (fieldProps?.type != "formArray") {
         formGroupFields[field] = new FormControl(fieldProps.value,
-          this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules,formid)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
+          this.setRequired(fieldProps?.minLength, fieldProps?.maxLength, fieldProps?.rules, formid)[fieldProps?.typeOf != undefined ? fieldProps?.typeOf : fieldProps?.type]);
         this.fields[formid].push({ ...fieldProps, fieldName: field });
       } else {
         var temp: any = [];
@@ -142,7 +153,7 @@ export class UploadServiceValidatorService {
             temp.push({ ...element[field2], fieldName: field2, index: count });
             tempFormGroup.push(new FormGroup({
               [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false },
-                this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules,formid)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
+                this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules, formid)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
             }));
             count++;
           }
@@ -182,7 +193,7 @@ export class UploadServiceValidatorService {
     };
   }
 
-  setRequired(minLength: any, maxLength: any, rule: any,formid:any) {
+  setRequired(minLength: any, maxLength: any, rule: any, formid: any) {
     return {
       text: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)],
@@ -217,8 +228,8 @@ export class UploadServiceValidatorService {
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(100)],
       password: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)],
-      confirmPassword: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), hasDuplicateControl({ key: 'confirmPassword', equalkey: 'password' }, this.dynamicFormGroup,formid)] :
-        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), hasDuplicateControl({ key: 'confirmPassword', equalkey: 'password' }, this.dynamicFormGroup,formid)],
+      confirmPassword: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), hasDuplicateControl({ key: 'confirmPassword', equalkey: 'password' }, this.dynamicFormGroup, formid)] :
+        [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20), hasDuplicateControl({ key: 'confirmPassword', equalkey: 'password' }, this.dynamicFormGroup, formid)],
       checkbox: rule?.required == true ? [Validators.required, minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)] :
         [minLength != undefined ? Validators.minLength(minLength) : Validators.minLength(0), maxLength != undefined ? Validators.maxLength(maxLength) : Validators.maxLength(20)]
     }
@@ -262,7 +273,7 @@ export class UploadServiceValidatorService {
         this.fields[formid][index]['NewformGroup'].push({ ...element[field2], fieldName: field2, index: count });
         tempFormGroup.push(new FormGroup({
           [field2]: new FormControl({ value: element[field2]?.value || "", disabled: element[field2]?.disabled != undefined ? true : false },
-            this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules,formid)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
+            this.setRequired(element[field2]?.minLength, element[field2]?.maxLength, element[field2]?.rules, formid)[element[field2]?.typeOf != undefined ? element[field2]?.typeOf : element[field2]?.type])
         }));
         count++;
       }
@@ -342,20 +353,20 @@ export function hasDuplicateFormArray(data: any): ValidatorFn {
   };
 }
 
-export function hasDuplicateControl(data: any, forms: any,id:any): ValidationErrors {
+export function hasDuplicateControl(data: any, forms: any, id: any): ValidationErrors {
   return (formArray: FormControl | any): { [key: string]: any } | null | any => {
     console.log(formArray, forms, 'formArray')
     if (forms[id] != undefined) {
       if (forms[id]?.controls[data?.key] != undefined && forms[id]?.controls[data?.equalkey] != undefined) {
         if (forms[id]?.controls[data?.key]?.value != forms[id]?.controls[data?.equalkey]?.value) {
-          return {matched:'Password and Confirm Password must be match.'};
+          return { matched: 'Password and Confirm Password must be match.' };
         } else {
           return null;
         }
-      }else{
+      } else {
         return null;
       }
-    }else{
+    } else {
       return null;
     }
   };

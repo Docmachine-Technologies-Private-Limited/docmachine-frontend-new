@@ -38,6 +38,7 @@ export class CustomModelComponent implements OnInit {
   @Input('HeaderEventButton') HeaderEventButton: any = '';
   @Input('minimizedisabled') minimizedisabled: boolean = true;
   @Input('removebg') removebg: boolean = true;
+  @Input('RemoveBgTop') RemoveBgTop: boolean = true;
 
   footerbuttontext: any = [];
   

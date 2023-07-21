@@ -1,5 +1,5 @@
 <div class="modal dropdown-controller upload-modal" [id]="id" tabindex="-1" CommonDirective
-  style="background-color: #0000004d;" role="dialog" #PopUpOpenClose>
+  [style]="RemoveBgTop==true?'background-color: #0000004d;':'background: transparent;'" role="dialog" #PopUpOpenClose>
   <div [class]="'col-12 mt-2 '+id" Minimize_Maximize_PopUp [id]="id" role="document" [style.width]="width"
     [style.height]="height" [style]="customstyle" style="height: 63vh;margin: auto !important;">
     <div [ngClass]="{'modal-content':removebg==true}">

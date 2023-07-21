@@ -166,10 +166,53 @@ table .table-tr-1 {
     margin: 0 0px !important;
 }
 
-.tr-box-shadow{
+.tr-box-shadow {
     box-shadow: 0px 0px 2px 2px #bcbbbb;
 }
 
 .AcceptReject .col-td-th-1 {
     width: 50px;
+}
+
+.question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0px 0px 2px 2px gainsboro;
+    border-radius: 10px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.question-list label {
+    width: 100%;
+    background-color: #628282;
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: white;
+    padding-left: 20px;
+}
+
+.grid-templeate {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 10px;
+}
+
+::ng-deep app-custom-model #AutofillLCTable .AutofillLCTable {
+    height: 98vh;
+    margin: auto !important;
+    max-width: 41vw !important;
+    position: absolute;
+    right: -20px;
+    top: 60px;
+}
+
+::ng-deep app-custom-model #AutofillLCTable.dropdown-controller{
+    position: absolute !important;
+    right: 0 !important;
+    left: unset !important;
+    width: 560px !important;
+    background-color: transparent !important;
 }
