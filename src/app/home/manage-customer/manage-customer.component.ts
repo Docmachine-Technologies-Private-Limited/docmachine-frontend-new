@@ -286,8 +286,11 @@ export class ManageCustomerComponent implements OnInit {
             }
           }
         },'CreateNewBeneficiaryMember');
+        
       }
       else if (this.file === "export") {
+        this.validator.BANK_NAME_LIST_GLOABL = await this.documentService.getBankNameList();
+        console.log("USER_DATA loaddata", this.validator.BANK_NAME_LIST_GLOABL)
         this.FILTER_VALUE_LIST_NEW['header'] = [
           "Buyer Name",
           "Buyer Address",
@@ -505,6 +508,8 @@ export class ManageCustomerComponent implements OnInit {
   }
 
   onSubmit(e:any,panel: any) {
+    e.value.beneBankName=e?.value?.beneBankName?.value!=undefined?e?.value?.beneBankName?.value:e?.value?.beneBankName;
+    e.value.interBankName=e?.value?.interBankName?.value!=undefined?e?.value?.interBankName?.value:e?.value?.beneBankName
     this.userService.creatBene(e.value).subscribe(data => {
       console.log("king123")
       console.log(data)
@@ -516,6 +521,7 @@ export class ManageCustomerComponent implements OnInit {
   }
 
   onSubmitBuyer(e:any,panel: any) {
+    e.value.buyerbank=e?.value?.buyerbank?.value!=undefined?e?.value?.buyerbank?.value:e?.value?.buyerbank;
     this.userService.creatBuyer(e?.value).subscribe(data => {
       console.log("king123")
       console.log(data)
@@ -569,6 +575,7 @@ export class ManageCustomerComponent implements OnInit {
   }
 
   onSubmitBuyerMember(e: any) {
+    e.value.buyerbank=e?.value?.buyerbank?.value!=undefined?e?.value?.buyerbank?.value:e?.value?.buyerbank;
     let approval_data = {
       id: 'BuyerMember' + '_' + this.guid(),
       tableName: '',
@@ -588,6 +595,8 @@ export class ManageCustomerComponent implements OnInit {
   }
 
   onSubmitBeneficiaryMember(e:any) {
+    e.value.beneBankName=e?.value?.beneBankName?.value!=undefined?e?.value?.beneBankName?.value:e?.value?.beneBankName;
+    e.value.interBankName=e?.value?.interBankName?.value!=undefined?e?.value?.interBankName?.value:e?.value?.beneBankName
     let approval_data = {
       id: 'BeneficiaryMember' + '_' + this.guid(),
       tableName: '',
