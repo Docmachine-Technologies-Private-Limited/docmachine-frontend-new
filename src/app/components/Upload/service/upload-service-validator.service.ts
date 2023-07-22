@@ -53,8 +53,8 @@ export class UploadServiceValidatorService implements OnInit {
   async loaddata() {
     return new Promise(async (reslove, reject) => {
       let token = this.authGuard.loadFromLocalStorage();
-      if (token!=undefined) {
-        this.documentService.getPipoListNo('export', []);
+      if (token != undefined) {
+       
         this.CURRENCY_LIST = this.documentService.getCurrencyList();
         let USER_DATA: any = await this.userService.getUserDetail();
         this.SHIPPING_BUNDEL = [];
@@ -65,6 +65,10 @@ export class UploadServiceValidatorService implements OnInit {
         this.location = [];
         this.commodity = [];
         if (USER_DATA?.result?.sideMenu == 'import') {
+          if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length ||
+            (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BENNE_NAME?.length == 0)) {
+            this.documentService.getPipoListNo('export', []);
+          }
           await this.userService.getBene(1).subscribe((res: any) => {
             res.data?.forEach(element => {
               if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
@@ -87,6 +91,10 @@ export class UploadServiceValidatorService implements OnInit {
           }, (err) => console.log(err));
           await reslove(true)
         } else if (USER_DATA?.result?.sideMenu == 'export') {
+          if (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length != this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length ||
+            (this.documentService?.PI_PO_NUMBER_LIST?.PIPO_NO?.length == 0 || this.documentService?.PI_PO_NUMBER_LIST?.PI_PO_BUYER_NAME?.length == 0)) {
+            this.documentService.getPipoListNo('export', []);
+          }
           await this.userService.getBuyer(1).subscribe((res: any) => {
             res.data?.forEach(element => {
               if (element?.ConsigneeName != undefined && element?.ConsigneeName != '') {
@@ -144,7 +152,7 @@ export class UploadServiceValidatorService implements OnInit {
         const formGroupFields = await this.getFormControlsFields(model, id);
         this.dynamicFormGroup[id] = await new FormGroup(formGroupFields?.formGroupFields);
         this.FIELDS_DATA[id] = formGroupFields?.fields;
-        console.log(this.dynamicFormGroup,formGroupFields, 'dynamicFormGroup');
+        console.log(this.dynamicFormGroup, formGroupFields, 'dynamicFormGroup');
         await this.dynamicFormGroup;
       }
     })

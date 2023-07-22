@@ -145,22 +145,6 @@ export class ImportPIPOSComponent implements OnInit {
             required: true,
           }
         },
-        pcRefNo: {
-          type: "text",
-          value: "",
-          label: "PC reference number",
-          rules: {
-            required: false,
-          }
-        },
-        dueDate: {
-          type: "date",
-          value: "",
-          label: "Due date",
-          rules: {
-            required: false,
-          }
-        },  
         paymentTerm: {
           type: "formArray",
           label: "Payment Terms",

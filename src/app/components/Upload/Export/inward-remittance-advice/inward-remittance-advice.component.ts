@@ -166,15 +166,7 @@ export class InwardRemittanceAdviceComponent implements OnInit {
           value: res?.origin,
           label: "Origin",
           rules: {
-            required: true,
-          }
-        },
-        PaymentType: {
-          type: "PaymentType",
-          value: "",
-          label: "Payment Type*",
-          rules: {
-            required: true,
+            required: false,
           }
         },
       }, 'InwardRemittanceAdvice');
